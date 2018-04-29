@@ -109,7 +109,7 @@ namespace Kagami.Library.Objects
 
       public bool IsTrue => dictionary.Count > 0;
 
-      public IIterator GetIterator(bool lazy) => new CollectionProxy(this).GetIterator(lazy);
+      public IIterator GetIterator(bool lazy) => lazy ? (IIterator)new LazyDictionaryIterator(this) : new DictionaryIterator(this);
 
       public IMaybe<IObject> Next(int index) => when(keys.Length < index, () => dictionary[keys[index]]);
 
@@ -224,5 +224,7 @@ namespace Kagami.Library.Objects
          else
             return Nil.NilValue;
       }
+
+      public IObject[] KeyArray => dictionary.KeyArray();
    }
 }

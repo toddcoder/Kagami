@@ -64,7 +64,6 @@
     <Compile Include="Classes\DelClass.cs" />
     <Compile Include="Classes\DictionaryClass.cs" />
     <Compile Include="Classes\EndClass.cs" />
-    <Compile Include="Classes\FlexRangeClass.cs" />
     <Compile Include="Classes\FloatClass.cs" />
     <Compile Include="Classes\ICollectionClass.cs" />
     <Compile Include="Classes\InfinityClass.cs" />
@@ -175,7 +174,6 @@
     <Compile Include="Nodes\Symbols\EqualSymbol.cs" />
     <Compile Include="Nodes\Symbols\Expression.cs" />
     <Compile Include="Nodes\Symbols\FieldSymbol.cs" />
-    <Compile Include="Nodes\Symbols\FlexRangeSymbol.cs" />
     <Compile Include="Nodes\Symbols\FloatDivideSymbol.cs" />
     <Compile Include="Nodes\Symbols\FloatSymbol.cs" />
     <Compile Include="Nodes\Symbols\FormatSymbol.cs" />
@@ -248,7 +246,6 @@
     <Compile Include="Objects\Char.cs" />
     <Compile Include="Objects\Class.cs" />
     <Compile Include="Objects\CollectionFunctions.cs" />
-    <Compile Include="Objects\CollectionProxy.cs" />
     <Compile Include="Objects\Comparer.cs" />
     <Compile Include="Objects\Complex.cs" />
     <Compile Include="Objects\Constructor.cs" />
@@ -256,11 +253,11 @@
     <Compile Include="Objects\DataType.cs" />
     <Compile Include="Objects\Del.cs" />
     <Compile Include="Objects\Dictionary.cs" />
+    <Compile Include="Objects\DictionaryIterator.cs" />
     <Compile Include="Objects\DistinctAction.cs" />
     <Compile Include="Objects\End.cs" />
     <Compile Include="Objects\Ended.cs" />
     <Compile Include="Objects\Failed.cs" />
-    <Compile Include="Objects\FlexRange.cs" />
     <Compile Include="Objects\Float.cs" />
     <Compile Include="Objects\IBoolean.cs" />
     <Compile Include="Objects\ICollection.cs" />
@@ -290,6 +287,7 @@
     <Compile Include="Objects\KeyValue.cs" />
     <Compile Include="Objects\Lambda.cs" />
     <Compile Include="Objects\Lazy.cs" />
+    <Compile Include="Objects\LazyDictionaryIterator.cs" />
     <Compile Include="Objects\LazyIterator.cs" />
     <Compile Include="Objects\List.cs" />
     <Compile Include="Objects\ListIterator.cs" />
@@ -363,7 +361,6 @@
     <Compile Include="Operations\MultipleOperandOperation.cs" />
     <Compile Include="Operations\NewDataComparisand.cs" />
     <Compile Include="Operations\NewDataType.cs" />
-    <Compile Include="Operations\NewFlexRange.cs" />
     <Compile Include="Operations\NewKeyValue.cs" />
     <Compile Include="Operations\NewList.cs" />
     <Compile Include="Operations\NewObject.cs" />
@@ -463,7 +460,6 @@
     <Compile Include="Parsers\Expressions\ExpressionInMiddleParser.cs" />
     <Compile Include="Parsers\Expressions\ExpressionParser.cs" />
     <Compile Include="Parsers\Expressions\FieldParser.cs" />
-    <Compile Include="Parsers\Expressions\FlexRangeParser.cs" />
     <Compile Include="Parsers\Expressions\FormatParser.cs" />
     <Compile Include="Parsers\Expressions\HexadecimalParser.cs" />
     <Compile Include="Parsers\Expressions\IfAsAndParser.cs" />

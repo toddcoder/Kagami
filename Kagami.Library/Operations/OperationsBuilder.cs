@@ -293,8 +293,6 @@ namespace Kagami.Library.Operations
 
       public void NewRational() => add(new NewRational());
 
-      public void NewFlexRange(int count) => add(new NewFlexRange(count));
-
       public void NewKeyValue() => add(new NewKeyValue());
 
       public void NewValue(string className, Func<Arguments, IObject> initiallizer) => add(new NewValue(className, initiallizer));

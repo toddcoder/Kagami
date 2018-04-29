@@ -50,7 +50,6 @@ namespace Kagami.Library.Parsers.Expressions
             else
                yield return new SuperParser(builder);
 
-            yield return new FlexRangeParser(builder);
             yield return new LazyParser(builder);
             yield return new KeywordValueParser(builder);
             yield return new ClassReferenceParser(builder);

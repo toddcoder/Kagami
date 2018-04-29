@@ -48,14 +48,12 @@ namespace Kagami.Library.Runtime
          classes["Any"] = new AnyClass();
          classes["Placeholder"] = new PlaceholderClass();
          classes["Range"] = new RangeClass();
-         classes["CollectionProxy"] = new CollectionProxyClass();
          classes["Dictionary"] = new DictionaryClass();
          classes["InternalList"] = new InternalListClass();
          classes["Unmatched"] = new UnmatchedClass();
          classes["Complex"] = new ComplexClass();
          classes["Rational"] = new RationalClass();
          classes["Long"] = new LongClass();
-         classes["FlexRange"] = new FlexRangeClass();
          classes["Lazy"] = new LazyClass();
          classes["YieldingFunctionInvokable"] = new YieldingFunctionInvokableClass();
          classes["Del"] = new DelClass();
