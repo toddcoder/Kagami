@@ -43,7 +43,7 @@ namespace Kagami.Library.Objects
 
       public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
-	   public bool IsTrue => value != 0;
+      public bool IsTrue => value != 0;
 
       public (INumeric, INumeric) Compatible(INumeric obj)
       {
@@ -114,7 +114,15 @@ namespace Kagami.Library.Objects
 
       public int CompareTo(object obj) => CompareTo((Int)obj);
 
-      public String Format(string format) => value.FormatAs(format);
+      public String Format(string format)
+      {
+         if (format.StartsWith("b"))
+            return Convert.ToString(value, 2);
+         else if (format.StartsWith("o"))
+            return Convert.ToString(value, 8);
+         else
+            return value.FormatAs(format);
+      }
 
       public Boolean IsEven => value % 2 == 0;
 
@@ -126,17 +134,19 @@ namespace Kagami.Library.Objects
          {
             if ((value & 1) == 0)
                return value == 2;
-
-            var num = 3;
-            while (num*num<=value)
+            else
             {
-               if (value % num == 0)
-                  return false;
+               var num = 3;
+               while (num * num <= value)
+               {
+                  if (value % num == 0)
+                     return false;
 
-               num += 2;
+                  num += 2;
+               }
+
+               return value != 1;
             }
-
-            return value != 1;
          }
       }
 
@@ -144,11 +154,13 @@ namespace Kagami.Library.Objects
       {
          if (value <= 1)
             return 1;
-
-         var num = 1;
-         for (var index = 2; index <= value; index++)
-            num *= index;
-         return num;
+         else
+         {
+            var num = 1;
+            for (var index = 2; index <= value; index++)
+               num *= index;
+            return num;
+         }
       }
 
       public IRangeItem Successor => (Int)(value + 1);

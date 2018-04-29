@@ -7,7 +7,7 @@ namespace Kagami.Library.Parsers.Expressions
 {
    public class FormatParser : SymbolParser
    {
-      public override string Pattern => "^ /(|s|) /('$' ['cdefgnprxs'] ('-'? /d+)? ('.' /d+)?)";
+      public override string Pattern => "^ /(|s|) /('$' ['cdefgnprxsbo'] ('-'? /d+)? ('.' /d+)?)";
 
       public FormatParser(ExpressionBuilder builder) : base(builder) { }
 
