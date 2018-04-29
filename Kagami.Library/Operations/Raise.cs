@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Standard.Types.Maybe;
@@ -12,15 +13,16 @@ namespace Kagami.Library.Operations
       {
          if (x is INumeric n1 && y is INumeric n2)
          {
+            var count = n2.AsInt32();
             if (n1.IsInt || n2.IsByte)
             {
-               var count = n2.AsInt32();
                if (n1.IsInt || n2.IsByte)
                {
                   var accum = 1;
                   var amount = n1.AsInt32();
                   for (var i = 0; i < count; i++)
                      accum *= amount;
+
                   return Int.Object(accum).Matched();
                }
                else
@@ -29,8 +31,18 @@ namespace Kagami.Library.Operations
                   var amount = n1.AsDouble();
                   for (var i = 0; i < count; i++)
                      accum *= amount;
+
                   return Float.Object(accum).Matched();
                }
+            }
+            else if (n1.IsLong)
+            {
+               var accum = BigInteger.One;
+               var amount = n1.AsBigInteger();
+               for (var i = 0; i < count; i++)
+                  accum *= amount;
+
+               return Long.Object(accum).Matched();
             }
 
             var dx = n1.AsDouble();

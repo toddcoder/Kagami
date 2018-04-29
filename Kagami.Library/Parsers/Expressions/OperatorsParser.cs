@@ -113,6 +113,9 @@ namespace Kagami.Library.Parsers.Expressions
             case "**":
                builder.Add(new OpenRangeSymbol());
                break;
+            case "<>":
+               builder.Add(new CompareSymbol());
+               break;
             default:
                state.RollBackTransaction();
                return notMatched<Unit>();

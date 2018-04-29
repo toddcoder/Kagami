@@ -16,6 +16,7 @@ namespace Kagami.Library.Parsers.Expressions
       public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
       {
          state.BeginTransaction();
+
          var result =
             from parameters in ParseParameters(state, tokens)
             from scanned in state.Scan("^ /(|s|) /('->' | '=>')", Color.Whitespace, Color.Structure)
@@ -25,11 +26,14 @@ namespace Kagami.Library.Parsers.Expressions
          {
             builder.Add(lambdaSymbol);
             state.CommitTransaction();
+
             return Unit.Matched();
          }
-
-         state.RollBackTransaction();
-         return original.Unmatched<Unit>();
+         else
+         {
+            state.RollBackTransaction();
+            return original.Unmatched<Unit>();
+         }
       }
 
       static IMatched<Block> getLambdaBlock(bool isExpression, ParseState state, Bits32<ExpressionFlags> flags)
@@ -38,11 +42,11 @@ namespace Kagami.Library.Parsers.Expressions
          {
             if (getExpression(state, flags).If(out var expression, out var exOriginal))
                return new Block(new ExpressionStatement(expression, true)) { Index = state.Index }.Matched();
-
-            return exOriginal.Unmatched<Block>();
+            else
+               return exOriginal.Unmatched<Block>();
          }
-
-         return getBlock(state);
+         else
+            return getBlock(state);
       }
    }
 }

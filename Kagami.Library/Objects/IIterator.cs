@@ -85,6 +85,8 @@ namespace Kagami.Library.Objects
 
       IObject Group(Lambda lambda);
 
+      Boolean One(Lambda predicate);
+
       Boolean None(Lambda predicate);
 
       Boolean Any(Lambda predicate);

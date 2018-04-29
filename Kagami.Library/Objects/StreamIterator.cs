@@ -177,6 +177,8 @@ namespace Kagami.Library.Objects
 
       public IObject Group(Lambda lambda) => iterator.Group(lambda);
 
+      public Boolean One(Lambda predicate) => iterator.One(predicate);
+
       public Boolean None(Lambda predicate) => iterator.None(predicate);
 
       public Boolean Any(Lambda predicate) => iterator.Any(predicate);

@@ -380,7 +380,22 @@ namespace Kagami.Library.Objects
          return collectionClass.Revert(new List<IObject> { collectionClass.Revert(ifTrue), collectionClass.Revert(ifFalse) });
       }
 
-      public IObject Group(Lambda lambda) => Unassigned.Value;
+      public virtual IObject Group(Lambda lambda) => Unassigned.Value;
+
+      public Boolean One(Lambda predicate)
+      {
+         var one = false;
+         foreach (var value in List())
+            if (predicate.Invoke(value).IsTrue)
+            {
+               if (one)
+                  return new Boolean(false);
+               else
+                  one = true;
+            }
+
+         return new Boolean(true);
+      }
 
       public Boolean None(Lambda predicate)
       {

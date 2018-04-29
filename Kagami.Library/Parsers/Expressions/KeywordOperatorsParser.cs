@@ -9,7 +9,7 @@ namespace Kagami.Library.Parsers.Expressions
       public KeywordOperatorsParser(ExpressionBuilder builder) : base(builder) { }
 
       public override string Pattern => "^ /(|s|) /('to' | 'til' | 'by' | 'if' | 'map' | 'join' | 'sort' |" +
-         "'foldl' | 'foldr' | 'all' | 'any' | 'none' | 'zip' | 'downto' | 'skip' | 'take' | 'band' | 'bor' |" +
+         "'foldl' | 'foldr' | 'all' | 'any' | 'none' | 'one' | 'zip' | 'downto' | 'skip' | 'take' | 'band' | 'bor' |" +
          " 'bxor' | 'bsl' | 'bsr' | 'while' | 'until') /b";
 
       public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -38,6 +38,7 @@ namespace Kagami.Library.Parsers.Expressions
                   case "all":
                   case "any":
                   case "none":
+                  case "one":
                   case "zip":
                      builder.Add(new SendBinaryMessageSymbol(keyword, Precedence.ChainedOperator));
                      break;

@@ -147,10 +147,7 @@ namespace Kagami.Library.Objects
 
       public IObject Ln() => (Float)Math.Log(AsDouble());
 
-      public IObject Exp()
-      {
-         return (Float)Math.Exp(AsDouble());
-      }
+      public IObject Exp() => (Float)Math.Exp(AsDouble());
 
       public IObject Abs() => (Long)BigInteger.Abs(value);
 

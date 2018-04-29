@@ -241,7 +241,7 @@ namespace Kagami.Library.Classes
             "reducer".Function("init", "with"), "reducer", "count", "map", "if", "ifNot", "skip", "skip".Function("while"),
             "skip".Function("until"), "take", "take".Function("while"), "take".Function("until"), "index", "indexes",
             "zip".Function("on", "with"), "zip", "min".get(), "max".get(), "first", "first".Function("with"), "last", "last".Function("with"),
-            "split".Function("with"), "split".Function("count"), "group", "none", "any", "all", "sum", "average", "product", "cross",
+            "split".Function("with"), "split".Function("count"), "group", "one", "none", "any", "all", "sum", "average", "product", "cross",
             "by", "distinct", "span".Function("with"), "span".Function("count")));
 
          dynamicInvoke = (obj, msg) =>
@@ -300,6 +300,7 @@ namespace Kagami.Library.Classes
          registerMessage("split".Function("with"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Split(l)));
          registerMessage("split".Function("count"), (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.Split(j.Value)));
          registerMessage("group", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Group(l)));
+         registerMessage("one", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.One(l)));
          registerMessage("none", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.None(l)));
          registerMessage("any", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Any(l)));
          registerMessage("all", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.All(l)));
@@ -409,7 +410,7 @@ namespace Kagami.Library.Classes
 
       protected void compareMessages()
       {
-         registerMessage("<=>", (o, m) => (Int)((IObjectCompare)o).Compare(m.Arguments[0]));
+         registerMessage("<>", (o, m) => (Int)((IObjectCompare)o).Compare(m.Arguments[0]));
       }
    }
 }

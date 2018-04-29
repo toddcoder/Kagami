@@ -2,6 +2,7 @@
 using Standard.Types.Maybe;
 using Standard.Types.Strings;
 using static Kagami.Library.Parsers.ParserFunctions;
+using static Kagami.Library.Parsers.Statements.FunctionParser;
 using static Standard.Types.Maybe.MaybeFunctions;
 
 namespace Kagami.Library.Parsers.Statements
@@ -28,7 +29,7 @@ namespace Kagami.Library.Parsers.Statements
          else
             functionName = functionName.get();
 
-         if (FunctionParser.GetAnyParameters(needsParameters, state).If(out var parameters, out var original))
+         if (GetAnyParameters(needsParameters, state).If(out var parameters, out var original))
          {
             var fullFunctionName = parameters.FullFunctionName(functionName);
             if (traitClass.RegisterSignature(new Signature(fullFunctionName, parameters.Length)).If(out var _, out var exception))

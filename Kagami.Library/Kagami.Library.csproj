@@ -161,6 +161,7 @@
     <Compile Include="Nodes\Symbols\CharSymbol.cs" />
     <Compile Include="Nodes\Symbols\ClassSymbol.cs" />
     <Compile Include="Nodes\Symbols\CommaSymbol.cs" />
+    <Compile Include="Nodes\Symbols\CompareSymbol.cs" />
     <Compile Include="Nodes\Symbols\ComplexSymbol.cs" />
     <Compile Include="Nodes\Symbols\ComprehensionSymbol.cs" />
     <Compile Include="Nodes\Symbols\ConcatenationSymbol.cs" />
