@@ -9,6 +9,7 @@ using Kagami.Library.Runtime;
 using Standard.Types.Collections;
 using Standard.Types.Enumerables;
 using Standard.Types.Maybe;
+using Standard.Types.RegularExpressions;
 using Standard.Types.Strings;
 using static Kagami.Library.AllExceptions;
 using static Standard.Types.Maybe.MaybeFunctions;
@@ -51,6 +52,8 @@ namespace Kagami.Library.Parsers.Statements
 
       public Statement[] Statements { get; set; } = new Statement[0];
 
+      static bool isPrivate(string identifier) => identifier.IsMatch("^ '_' -(> '_$')");
+
       Block modifyBlock(Block originalBlock, bool standard)
       {
          userClass.RegisterParameters(parameters);
@@ -80,7 +83,7 @@ namespace Kagami.Library.Parsers.Statements
                      var function = Function.Getter(fieldName);
                      statements.Add(function);
                      var (functionName, _, block, _, invokable, _) = function;
-                     if (!fieldName.StartsWith("_") && !userClass.RegisterMethod(functionName, new Lambda(invokable), true))
+                     if (!isPrivate(fieldName) && !userClass.RegisterMethod(functionName, new Lambda(invokable), true))
                         throw needsOverride(functionName);
 
                      functions.Add((invokable, block, true));
@@ -90,7 +93,7 @@ namespace Kagami.Library.Parsers.Statements
                         function = Function.Setter(fieldName);
                         statements.Add(function);
                         (functionName, _, block, _, invokable, _) = function;
-                        if (!fieldName.StartsWith("_") && !userClass.RegisterMethod(functionName, new Lambda(invokable), true))
+                        if (!isPrivate(fieldName) && !userClass.RegisterMethod(functionName, new Lambda(invokable), true))
                            throw needsOverride(functionName);
 
                         functions.Add((invokable, block, true));
@@ -104,7 +107,7 @@ namespace Kagami.Library.Parsers.Statements
                {
                   var (functionName, funcParameters, block, _, invokable, overriding) = function;
                   functionName = funcParameters.FullFunctionName(functionName);
-                  if (!functionName.StartsWith("_"))
+                  if (!isPrivate(functionName))
                      if (userClass.RegisterMethod(functionName, new Lambda(invokable), overriding))
                         functions.Add((invokable, block, overriding));
                      else
@@ -117,7 +120,7 @@ namespace Kagami.Library.Parsers.Statements
                {
                   var (functionName, funcParameters, block, _, invokable, overriding) = matchFunction;
                   functionName = funcParameters.FullFunctionName(functionName);
-                  if (!functionName.StartsWith("_"))
+                  if (!isPrivate(functionName))
                      if (userClass.RegisterMethod(functionName, new Lambda(invokable), overriding))
                         functions.Add((invokable, block, overriding));
                      else
