@@ -200,6 +200,8 @@
     <Compile Include="Nodes\Symbols\ListSymbol.cs" />
     <Compile Include="Nodes\Symbols\LongSymbol.cs" />
     <Compile Include="Nodes\Symbols\MatchMapSymbol.cs" />
+    <Compile Include="Nodes\Symbols\MaxSymbol.cs" />
+    <Compile Include="Nodes\Symbols\MinSymbol.cs" />
     <Compile Include="Nodes\Symbols\ObjectSymbol.cs" />
     <Compile Include="Nodes\Symbols\OpenRangeSymbol.cs" />
     <Compile Include="Nodes\Symbols\OperatorSymbol.cs" />

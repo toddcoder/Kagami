@@ -10,7 +10,7 @@ namespace Kagami.Library.Parsers.Expressions
 
       public override string Pattern => "^ /(|s|) /('to' | 'til' | 'by' | 'if' | 'map' | 'join' | 'sort' |" +
          "'foldl' | 'foldr' | 'all' | 'any' | 'none' | 'one' | 'zip' | 'downto' | 'skip' | 'take' | 'band' | 'bor' |" +
-         " 'bxor' | 'bsl' | 'bsr' | 'while' | 'until') /b";
+         " 'bxor' | 'bsl' | 'bsr' | 'while' | 'until' | 'min' | 'max') /b";
 
       public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
       {
@@ -78,6 +78,12 @@ namespace Kagami.Library.Parsers.Expressions
                   case "while":
                   case "until":
                      builder.Add(new SendBinaryMessageSymbol("take".Function(keyword), Precedence.ChainedOperator));
+                     break;
+                  case "min":
+                     builder.Add(new MinSymbol());
+                     break;
+                  case "max":
+                     builder.Add(new MaxSymbol());
                      break;
                   default:
                      return $"Keyword internal error for {keyword}".FailedMatch<Unit>();
