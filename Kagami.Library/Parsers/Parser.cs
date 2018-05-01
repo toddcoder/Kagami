@@ -32,7 +32,7 @@ namespace Kagami.Library.Parsers
          {
             var index = state.Index;
             var parsed = Parse(state, new Token[0]);
-            (var parsedType, _, _) = parsed.Values;
+            var (parsedType, _, _) = parsed.Values;
             switch (parsedType)
             {
                case MatchType.Matched:
@@ -48,7 +48,7 @@ namespace Kagami.Library.Parsers
          }
 
          var matcher = new Matcher();
-         (var type, var match, var exception) = matcher.MatchOne(state.CurrentSource, state.RealizePattern(Pattern), IgnoreCase,
+         var (type, match, exception) = matcher.MatchOne(state.CurrentSource, state.RealizePattern(Pattern), IgnoreCase,
             Multiline).Values;
          switch (type)
          {

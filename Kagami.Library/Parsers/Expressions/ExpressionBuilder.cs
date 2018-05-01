@@ -13,6 +13,7 @@ namespace Kagami.Library.Parsers.Expressions
       List<Symbol> symbols;
       List<Symbol> ordered;
       Bits32<ExpressionFlags> flags;
+      IMaybe<Symbol> lastSymbol;
 
       public ExpressionBuilder(Bits32<ExpressionFlags> flags)
       {
@@ -20,6 +21,7 @@ namespace Kagami.Library.Parsers.Expressions
          symbols = new List<Symbol>();
          ordered = new List<Symbol>();
          this.flags = flags;
+         lastSymbol = none<Symbol>();
       }
 
       public Bits32<ExpressionFlags> Flags
@@ -31,6 +33,7 @@ namespace Kagami.Library.Parsers.Expressions
       public IResult<Unit> Add(Symbol symbol)
       {
          ordered.Add(symbol);
+         lastSymbol = symbol.Some();
 
          while (stack.IsPending(symbol))
             if (stack.Pop().If(out var poppedSymbol, out var exception))
@@ -75,5 +78,7 @@ namespace Kagami.Library.Parsers.Expressions
          symbols.Clear();
          ordered.Clear();
       }
+
+      public IMaybe<Symbol> LastSymbol => lastSymbol;
    }
 }

@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using Kagami.Library.Nodes.Statements;
+using Kagami.Library.Nodes.Symbols;
 using Standard.Types.Maybe;
 using Standard.Types.Numbers;
 using static Standard.Types.Maybe.MaybeFunctions;
@@ -14,6 +15,7 @@ namespace Kagami.Library.Parsers.Expressions
       protected InfixParser infixParser;
       protected PostfixParser postfixParser;
       protected ConjunctionParsers conjunctionParsers;
+      protected int whateverCount;
 
       public ExpressionParser(Bits32<ExpressionFlags> flags) : base(false) => this.flags = flags;
 
@@ -30,6 +32,7 @@ namespace Kagami.Library.Parsers.Expressions
          infixParser = new InfixParser(builder);
          postfixParser = new PostfixParser(builder);
          conjunctionParsers = new ConjunctionParsers(builder);
+         whateverCount = 0;
 
          if (getTerm(state).If(out _, out var isNotMatched, out var exception))
          {
@@ -63,7 +66,15 @@ namespace Kagami.Library.Parsers.Expressions
 
             if (builder.ToExpression().If(out var expression, out exception))
             {
-               Expression = expression;
+               if (whateverCount > 0)
+               {
+                  var lambda = new LambdaSymbol(whateverCount,
+                     new Block(new ExpressionStatement(expression, true)) { Index = expression.Index });
+                  Expression = new Expression(lambda);
+               }
+               else
+                  Expression = expression;
+
                return Unit.Matched();
             }
             else
@@ -100,7 +111,11 @@ namespace Kagami.Library.Parsers.Expressions
       protected IMatched<Unit> getValue(ParseState state)
       {
          if (valuesParser.Scan(state).If(out _, out var original))
+         {
+            if (builder.LastSymbol.If(out var lastSymbol) && lastSymbol is WhateverSymbol whatever)
+               whatever.Count = whateverCount++;
             return Unit.Matched();
+         }
          else if (original.IsFailedMatch)
             return valuesParser.Scan(state);
          else

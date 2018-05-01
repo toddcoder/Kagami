@@ -238,6 +238,7 @@
     <Compile Include="Nodes\Symbols\SuperSymbol.cs" />
     <Compile Include="Nodes\Symbols\Symbol.cs" />
     <Compile Include="Nodes\Symbols\SymbolSymbol.cs" />
+    <Compile Include="Nodes\Symbols\WhateverSymbol.cs" />
     <Compile Include="Nodes\Symbols\WhenSymbol.cs" />
     <Compile Include="Objects\Accepted.cs" />
     <Compile Include="Objects\Any.cs" />
@@ -502,6 +503,7 @@
     <Compile Include="Parsers\Expressions\TwoKeywordOperatorsParser.cs" />
     <Compile Include="Parsers\Expressions\UnknownFieldParser.cs" />
     <Compile Include="Parsers\Expressions\UserOperatorParser.cs" />
+    <Compile Include="Parsers\Expressions\WhateverParser.cs" />
     <Compile Include="Parsers\Expressions\ZeroParameterLambdaParser.cs" />
     <Compile Include="Parsers\Expressions\NameValueParser.cs" />
     <Compile Include="Parsers\Expressions\NegateParser.cs" />

@@ -22,6 +22,12 @@ namespace Kagami.Library.Nodes.Symbols
          block = (Block)expression;
       }
 
+      public LambdaSymbol(int unknownFieldCount, Block block)
+      {
+         parameters = new Parameters(unknownFieldCount);
+         this.block = block;
+      }
+
       public override void Generate(OperationsBuilder builder)
       {
          var invokable = new LambdaInvokable(parameters, ToString());
