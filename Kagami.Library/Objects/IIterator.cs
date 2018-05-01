@@ -108,5 +108,9 @@ namespace Kagami.Library.Objects
       IObject Span(Lambda predicate);
 
       IObject Span(int count);
+
+      IObject Shuffle();
+
+      IObject Shuffle(int count);
    }
 }

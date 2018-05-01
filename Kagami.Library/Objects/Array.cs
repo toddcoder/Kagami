@@ -148,5 +148,23 @@ namespace Kagami.Library.Objects
 
          return new Array(newList);
       }
+
+      public IObject Pop()
+      {
+         if (list.Count > 0)
+            return Some.Object(RemoveAt(list.Count - 1));
+         else
+            return Nil.NilValue;
+      }
+
+      public IObject Unshift(IObject value) => InsertAt(0, value);
+
+      public IObject Shift()
+      {
+         if (list.Count > 0)
+            return Some.Object(RemoveAt(0));
+         else
+            return Nil.NilValue;
+      }
    }
 }

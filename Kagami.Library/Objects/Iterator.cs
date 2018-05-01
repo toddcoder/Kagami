@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Kagami.Library.Classes;
 using Kagami.Library.Runtime;
 using Standard.Types.Collections;
+using Standard.Types.Dates.Now;
 using Standard.Types.Enumerables;
 using Standard.Types.Maybe;
 using static Kagami.Library.Objects.CollectionFunctions;
@@ -59,6 +61,7 @@ namespace Kagami.Library.Objects
             item = collection.Next(i++);
             if (item.If(out var obj))
                yield return obj;
+
             if (i % 1000 == 0 && Machine.Current.Context.Cancelled())
                yield break;
          } while (item.IsSome);
@@ -454,25 +457,25 @@ namespace Kagami.Library.Objects
 
       public IObject By(int count)
       {
-         if (count <= 1)
-            return collectionClass.Revert(List());
-
-         var outer = new List<IObject>();
-         var inner = new List<IObject>();
-         foreach (var value in List())
+         if (count > 1)
          {
-            inner.Add(value);
-            if (inner.Count == count)
+            var outer = new List<IObject>();
+            var inner = new List<IObject>();
+            foreach (var value in List())
             {
-               outer.Add(collectionClass.Revert(inner));
-               inner.Clear();
+               inner.Add(value);
+               if (inner.Count == count)
+               {
+                  outer.Add(collectionClass.Revert(inner));
+                  inner.Clear();
+               }
             }
-         }
 
-         if (inner.Count == count)
             outer.Add(collectionClass.Revert(inner));
-
-         return collectionClass.Revert(outer);
+            return collectionClass.Revert(outer);
+         }
+         else
+            return collectionClass.Revert(List());
       }
 
       public virtual IObject Distinct() => collectionClass.Revert(List().Distinct());
@@ -509,6 +512,33 @@ namespace Kagami.Library.Objects
                isFalse.Add(value);
 
          return collectionClass.Revert(new List<IObject> { collectionClass.Revert(isTrue), collectionClass.Revert(isFalse) });
+      }
+
+      public IObject Shuffle()
+      {
+         var array = List().ToArray();
+         return shuffle(array, array.Length);
+      }
+
+      public IObject Shuffle(int count)
+      {
+         var array = List().ToArray();
+         return shuffle(array, count);
+      }
+
+      IObject shuffle(IObject[] array, int count)
+      {
+         var result = new Hash<int, IObject>();
+         var random = new Random(NowServer.Now.Millisecond);
+         for (var i = 0; i < count; i++)
+         {
+            var key = random.Next(array.Length);
+            while (result.ContainsKey(key))
+               key = random.Next(array.Length);
+            result[key] = array[key];
+         }
+
+         return collectionClass.Revert(result.ValueArray());
       }
    }
 }

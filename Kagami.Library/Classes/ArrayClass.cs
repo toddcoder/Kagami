@@ -22,6 +22,10 @@ namespace Kagami.Library.Classes
          messages["[]="] = (obj, msg) => function<Array>(obj, a => a[((Int)msg.Arguments[0]).Value] = msg.Arguments[1]);
          messages["indexed".get()] = (obj, msg) => function<Array>(obj, a => a.IndexedValues);
          messages["~"] = (obj, msg) => function<Array, Array>(obj, msg, (a1, a2) => a1.Concatenate(a2));
+         registerMessage("push", (obj, msg) => function<Array, IObject>(obj, msg, (a, v) => a.Append(v)));
+         registerMessage("pop", (obj, msg) => function<Array>(obj, a => a.Pop()));
+         registerMessage("unshift", (obj, msg) => function<Array, IObject>(obj, msg, (a, v) => a.Unshift(v)));
+         registerMessage("shift", (obj, msg) => function<Array>(obj, a => a.Shift()));
       }
 
       public override void RegisterClassMessages()

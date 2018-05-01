@@ -240,9 +240,10 @@ namespace Kagami.Library.Classes
             "foldl", "foldr".Function("init", "with"), "foldr", "reducel".Function("init", "with"), "reducel",
             "reducer".Function("init", "with"), "reducer", "count", "map", "if", "ifNot", "skip", "skip".Function("while"),
             "skip".Function("until"), "take", "take".Function("while"), "take".Function("until"), "index", "indexes",
-            "zip".Function("on", "with"), "zip", "min".get(), "max".get(), "first", "first".Function("with"), "last", "last".Function("with"),
-            "split".Function("with"), "split".Function("count"), "group", "one", "none", "any", "all", "sum", "average", "product", "cross",
-            "by", "distinct", "span".Function("with"), "span".Function("count")));
+            "zip".Function("on", "with"), "zip", "min".get(), "max".get(), "first", "first".Function("with"), "last",
+            "last".Function("with"),
+            "split".Function("with"), "split".Function("count"), "group", "one", "none", "any", "all", "sum", "average", "product",
+            "cross", "by", "distinct", "span".Function("with"), "span".Function("count"), "shuffle", "shuffle".Function("count")));
 
          dynamicInvoke = (obj, msg) =>
          {
@@ -312,6 +313,8 @@ namespace Kagami.Library.Classes
          registerMessage("distinct", (obj, msg) => iteratorFunc(obj, i => i.Distinct()));
          registerMessage("span".Function("with"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Span(l)));
          registerMessage("span".Function("count"), (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.Span(j.Value)));
+         registerMessage("shuffle", (obj, msg) => iteratorFunc(obj, i => i.Shuffle()));
+         registerMessage("shuffle".Function("count"), (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.Shuffle(j.Value)));
       }
 
       public virtual bool MatchCompatible(BaseClass otherClass) => Name == otherClass.Name;

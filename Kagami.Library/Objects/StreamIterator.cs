@@ -200,5 +200,9 @@ namespace Kagami.Library.Objects
       public IObject Span(Lambda predicate) => iterator.Span(predicate);
 
       public IObject Span(int count) => iterator.Span(count);
+
+      public IObject Shuffle() => iterator.Shuffle();
+
+      public IObject Shuffle(int count) => iterator.Shuffle(count);
    }
 }
