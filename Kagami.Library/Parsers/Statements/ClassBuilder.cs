@@ -74,9 +74,34 @@ namespace Kagami.Library.Parsers.Statements
          foreach (var statement in originalBlock)
             switch (statement)
             {
-               case AssignToNewField2 assignToNewField:
+               case AssignToNewField assignToNewField:
                {
-                  var (mutable, comparisand, _) = assignToNewField;
+                  var (mutable, fieldName, _) = assignToNewField;
+                  var function = Function.Getter(fieldName);
+                  statements.Add(function);
+                  var (functionName, _, block, _, invokable, _) = function;
+                  if (!isPrivate(fieldName) && !userClass.RegisterMethod(functionName, new Lambda(invokable), true))
+                     throw needsOverride(functionName);
+
+                  functions.Add((invokable, block, true));
+
+                  if (mutable)
+                  {
+                     function = Function.Setter(fieldName);
+                     statements.Add(function);
+                     (functionName, _, block, _, invokable, _) = function;
+                     if (!isPrivate(fieldName) && !userClass.RegisterMethod(functionName, new Lambda(invokable), true))
+                        throw needsOverride(functionName);
+
+                     functions.Add((invokable, block, true));
+                  }
+
+                  statements.Add(statement);
+               }
+                  break;
+               case AssignToNewField2 assignToNewField2:
+               {
+                  var (mutable, comparisand, _) = assignToNewField2;
                   if (comparisand.Symbols[0] is PlaceholderSymbol placeholder)
                   {
                      var fieldName = placeholder.Name;

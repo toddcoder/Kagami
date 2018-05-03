@@ -28,6 +28,7 @@ namespace Kagami.Library.Parsers
       public const string REGEX_FUNCTION_NAME = "((" + REGEX_INVOKABLE + ") | (['~`!@#$%^&*+=|\\;<>//?-']+) | '[]') '='?";
       public const string REGEX_EOL = "/r /n | /r | /n";
       public const string REGEX_ANTICIPATE_END = "(> " + REGEX_EOL + ")";
+      public const string REGEX_OPERATORS = "['-+*//\\%<=>!.~|?#@&^,.:']";
 
       public static IMatched<char> fromHex(string text)
       {
@@ -682,6 +683,111 @@ namespace Kagami.Library.Parsers
             return getSingleLine(state, false);
          else
             return getBlock(state);
+      }
+
+      public static IMatched<Symbol> getOperator(ParseState state, string source, Bits32<ExpressionFlags> flags, bool whitespace)
+      {
+         var symbol = notMatched<Symbol>();
+         switch (source)
+         {
+            case "+":
+               symbol = new AddSymbol().Matched<Symbol>();
+               break;
+            case "-":
+               symbol = new SubtractSymbol().Matched<Symbol>();
+               break;
+            case "*":
+               symbol = new MultiplySymbol().Matched<Symbol>();
+               break;
+            case "/":
+               if (whitespace)
+                  symbol = new FloatDivideSymbol().Matched<Symbol>();
+               else
+                  symbol = new RationalSymbol().Matched<Symbol>();
+               break;
+            case "//":
+               symbol = new IntDivideSymbol().Matched<Symbol>();
+               break;
+            case "/:":
+               symbol = new SendBinaryMessageSymbol("foldl", Precedence.ChainedOperator).Matched<Symbol>();
+               break;
+            case @":\":
+               symbol = new SendBinaryMessageSymbol("foldr", Precedence.ChainedOperator).Matched<Symbol>();
+               break;
+            case "%":
+               symbol = new RemainderSymbol().Matched<Symbol>();
+               break;
+            case "%%":
+               symbol = new RemainderZero().Matched<Symbol>();
+               break;
+            case "^":
+               symbol = new RaiseSymbol().Matched<Symbol>();
+               break;
+            case "==":
+               symbol = new EqualSymbol().Matched<Symbol>();
+               break;
+            case "!=":
+               symbol = new NotEqualSymbol().Matched<Symbol>();
+               break;
+            case ">":
+               symbol = new GreaterThanSymbol().Matched<Symbol>();
+               break;
+            case ">=":
+               symbol = new GreaterThanEqualSymbol().Matched<Symbol>();
+               break;
+            case "<":
+               symbol = new LessThanSymbol().Matched<Symbol>();
+               break;
+            case "<=":
+               symbol = new LessThanEqualSymbol().Matched<Symbol>();
+               break;
+            case "++":
+               symbol = new RangeSymbol(true).Matched<Symbol>();
+               break;
+            case "+-":
+               symbol = new RangeSymbol(false).Matched<Symbol>();
+               break;
+            case "--":
+               symbol = new RangeSymbol(true, true).Matched<Symbol>();
+               break;
+            case "::":
+               symbol = new ConsSymbol().Matched<Symbol>();
+               break;
+            case "\\":
+               symbol = new FormatSymbol().Matched<Symbol>();
+               break;
+            case ",":
+               if (flags[ExpressionFlags.OmitComma])
+                  return notMatched<Symbol>();
+               else
+               {
+                  state.Scan("^ /(/s*)", Color.Whitespace);
+                  symbol = new CommaSymbol().Matched<Symbol>();
+               }
+
+               break;
+            case "~":
+               symbol = new ConcatenationSymbol().Matched<Symbol>();
+               break;
+            case "<<":
+            case ">>":
+               symbol = new SendBinaryMessageSymbol(source, Precedence.Shift).Matched<Symbol>();
+               break;
+            case "=>":
+               symbol = new KeyValueSymbol().Matched<Symbol>();
+               break;
+            case "|>":
+               symbol = new PipelineSymbol().Matched<Symbol>();
+               break;
+            case "**":
+               symbol = new OpenRangeSymbol().Matched<Symbol>();
+               break;
+            case "<>":
+               symbol = new CompareSymbol().Matched<Symbol>();
+               break;
+         }
+
+         return symbol;
       }
    }
 }

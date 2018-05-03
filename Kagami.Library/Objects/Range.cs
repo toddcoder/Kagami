@@ -101,9 +101,20 @@ namespace Kagami.Library.Objects
 
       public bool ExpandForArray => true;
 
-      public Boolean In(IObject comparisand) => list(this).Any(i => ((IRangeItem)i).Compare(comparisand) == 0);
+      public Boolean In(IObject comparisand)
+      {
+         if (comparisand is IObjectCompare oc && startObj is IObjectCompare left)
+            if (left.Compare(comparisand) >= 0)
+               return false;
+            else if (inclusive)
+               return oc.Compare(stopObj) <= 0;
+            else
+               return oc.Compare(stopObj) < 0;
+         else
+            return false;
+      }
 
-      public Boolean NotIn(IObject comparisand) => list(this).All(i => ((IRangeItem)i).Compare(comparisand) != 0);
+      public Boolean NotIn(IObject comparisand) => !In(comparisand).IsTrue;
 
       public IObject Times(int count) => this;
 

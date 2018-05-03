@@ -13,6 +13,7 @@ namespace Kagami.Library.Parsers.Expressions
          get
          {
             yield return new UserOperatorParser(builder);
+            yield return new ZipOperatorParser(builder);
             yield return new OperatorsParser(builder);
             yield return new InParser(builder);
             yield return new TwoKeywordOperatorsParser(builder);
