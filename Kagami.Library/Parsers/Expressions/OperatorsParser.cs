@@ -22,6 +22,7 @@ namespace Kagami.Library.Parsers.Expressions
          {
             builder.Add(symbol);
             state.CommitTransaction();
+
             return Unit.Matched();
          }
          else

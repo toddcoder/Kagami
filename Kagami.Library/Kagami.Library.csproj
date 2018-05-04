@@ -177,6 +177,7 @@
     <Compile Include="Nodes\Symbols\FieldSymbol.cs" />
     <Compile Include="Nodes\Symbols\FloatDivideSymbol.cs" />
     <Compile Include="Nodes\Symbols\FloatSymbol.cs" />
+    <Compile Include="Nodes\Symbols\FoldSymbol.cs" />
     <Compile Include="Nodes\Symbols\FormatSymbol.cs" />
     <Compile Include="Nodes\Symbols\GetSliceSymbol.cs" />
     <Compile Include="Nodes\Symbols\GreaterThanEqualSymbol.cs" />
@@ -199,6 +200,7 @@
     <Compile Include="Nodes\Symbols\LazySymbol.cs" />
     <Compile Include="Nodes\Symbols\ListSymbol.cs" />
     <Compile Include="Nodes\Symbols\LongSymbol.cs" />
+    <Compile Include="Nodes\Symbols\MapOperatorSymbol.cs" />
     <Compile Include="Nodes\Symbols\MatchMapSymbol.cs" />
     <Compile Include="Nodes\Symbols\MaxSymbol.cs" />
     <Compile Include="Nodes\Symbols\MinSymbol.cs" />
@@ -465,6 +467,7 @@
     <Compile Include="Parsers\Expressions\ExpressionInMiddleParser.cs" />
     <Compile Include="Parsers\Expressions\ExpressionParser.cs" />
     <Compile Include="Parsers\Expressions\FieldParser.cs" />
+    <Compile Include="Parsers\Expressions\FoldOperatorParser.cs" />
     <Compile Include="Parsers\Expressions\FormatParser.cs" />
     <Compile Include="Parsers\Expressions\HexadecimalParser.cs" />
     <Compile Include="Parsers\Expressions\IfAsAndParser.cs" />
@@ -483,6 +486,7 @@
     <Compile Include="Parsers\Expressions\IteratorParser.cs" />
     <Compile Include="Parsers\Expressions\LazyParser.cs" />
     <Compile Include="Parsers\Expressions\ListParser.cs" />
+    <Compile Include="Parsers\Expressions\MapOperatorParser.cs" />
     <Compile Include="Parsers\Expressions\MatchMapParser.cs" />
     <Compile Include="Parsers\Expressions\NotParser.cs" />
     <Compile Include="Parsers\Expressions\OctalParser.cs" />
