@@ -1,4 +1,5 @@
 ﻿using Kagami.Library.Operations;
+using static Kagami.Library.Nodes.NodeFunctions;
 
 namespace Kagami.Library.Nodes.Symbols
 {
@@ -15,7 +16,7 @@ namespace Kagami.Library.Nodes.Symbols
 
       public override void Generate(OperationsBuilder builder)
       {
-         if (NodeFunctions.operatorLambda(operatorSymbol, builder).If(out var lambda, out var exception))
+         if (operatorLambda(operatorSymbol, builder).If(out var lambda, out var exception))
          {
             builder.PushObject(lambda);
             builder.SendMessage(left ? "foldl" : "foldr", 1);

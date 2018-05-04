@@ -1,4 +1,7 @@
-﻿namespace Kagami.Library.Classes
+﻿using Kagami.Library.Objects;
+using static Kagami.Library.Classes.ClassFunctions;
+
+namespace Kagami.Library.Classes
 {
    public class RationalClass : BaseClass
    {
@@ -11,6 +14,9 @@
          messageNumberMessages();
          compareMessages();
          numericConversionMessages();
+
+         registerMessage("numerator".get(), (obj, msg) => function<Rational>(obj, r => Long.Object(r.Numerator)));
+         registerMessage("denominator".get(), (obj, msg) => function<Rational>(obj, r => Long.Object(r.Denominator)));
       }
    }
 }

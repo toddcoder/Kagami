@@ -126,7 +126,7 @@ namespace Kagami.Library.Objects
       public IObject Raise(INumeric other)
       {
          var rhs = other.AsRational();
-         (var n, var d) = rhs;
+         var (n, d) = rhs;
          return (Rational)(BigInteger.Pow(numerator, (int)n), BigInteger.Pow(denominator, (int)d));
       }
 
@@ -135,7 +135,7 @@ namespace Kagami.Library.Objects
       public IObject Divide(INumeric other)
       {
          var rhs = other.AsRational();
-         (var n, var d) = rhs;
+         var (n, d) = rhs;
          return (Rational)(numerator * d, denominator * n);
       }
 
@@ -144,21 +144,21 @@ namespace Kagami.Library.Objects
       public IObject Add(INumeric other)
       {
          var rhs = other.AsRational();
-         (var n, var d) = rhs;
+         var (n, d) = rhs;
          return (Rational)(numerator * d + n * denominator, denominator * d);
       }
 
       public IObject Subtract(INumeric other)
       {
          var rhs = other.AsRational();
-         (var n, var d) = rhs;
+         var (n, d) = rhs;
          return (Rational)(numerator * d - n * denominator, denominator * d);
       }
 
       public IObject Multiply(INumeric other)
       {
          var rhs = other.AsRational();
-         (var n, var d) = rhs;
+         var (n, d) = rhs;
          return (Rational)(numerator * n, denominator * d);
       }
 
