@@ -340,7 +340,7 @@ namespace Kagami.Library.Operations
             invokable.Address = operations.Count;
             block.Generate(this);
             var lastOperation = operations[operations.Count - 1];
-            if (!(lastOperation is Return) && !(lastOperation is NoOp))
+            if (!(lastOperation is Return)/* && !(lastOperation is NoOp)*/)
                operations.Add(new Return(false));
          }
 
@@ -350,7 +350,7 @@ namespace Kagami.Library.Operations
             invokable.Address = operations.Count;
             symbol.Generate(this);
             var lastOperation = operations[operations.Count - 1];
-            if (!(lastOperation is Return) && !(lastOperation is NoOp))
+            if (!(lastOperation is Return)/* && !(lastOperation is NoOp)*/)
                operations.Add(new Return(false));
          }
 

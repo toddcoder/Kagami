@@ -27,9 +27,9 @@ namespace Kagami.Library.Classes
       {
          base.RegisterClassMessages();
 
-         messages["min".get()] = (cls, msg) => Int.Object(int.MinValue);
-         messages["max".get()] = (cls, msg) => Int.Object(int.MaxValue);
-         messages["parse"] = (cls, msg) => Int.Object(int.Parse(msg.Arguments[0].AsString));
+         classMessages["min".get()] = (cls, msg) => Int.Object(int.MinValue);
+         classMessages["max".get()] = (cls, msg) => Int.Object(int.MaxValue);
+         classMessages["parse"] = (cls, msg) => Int.Object(int.Parse(msg.Arguments[0].AsString));
       }
    }
 }
