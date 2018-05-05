@@ -209,7 +209,7 @@ namespace Kagami.Library.Objects
             }
          }
 
-         return new Array(list);
+         return new Tuple(list.ToArray());
       }
 
       public IObject Int()
