@@ -243,5 +243,10 @@ namespace Kagami.Library.Objects
          else
             return Nil.NilValue;
       }
+
+      public Array SplitOn(string on)
+      {
+         return new Array(value.Split(new[] { on }, StringSplitOptions.None).Select(Object));
+      }
    }
 }

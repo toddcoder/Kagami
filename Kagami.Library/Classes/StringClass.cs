@@ -74,6 +74,7 @@ namespace Kagami.Library.Classes
          messages["float"] = (obj, msg) => function<String>(obj, s => s.Float());
          messages["byte"] = (obj, msg) => function<String>(obj, s => s.Byte());
          messages["long"] = (obj, msg) => function<String>(obj, s => s.Long());
+         messages["split".Function("on")] = (obj, msg) => function<String, String>(obj, msg, (s1, s2) => s1.SplitOn(s2.Value));
       }
 
       public override void RegisterClassMessages()
