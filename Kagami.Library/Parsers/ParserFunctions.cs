@@ -708,10 +708,10 @@ namespace Kagami.Library.Parsers
             case "//":
                symbol = new IntDivideSymbol().Matched<Symbol>();
                break;
-            case "/:":
+            case "<!":
                symbol = new SendBinaryMessageSymbol("foldl", Precedence.ChainedOperator).Matched<Symbol>();
                break;
-            case @":\":
+            case "!>":
                symbol = new SendBinaryMessageSymbol("foldr", Precedence.ChainedOperator).Matched<Symbol>();
                break;
             case "%":
