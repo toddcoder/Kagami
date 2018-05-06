@@ -247,6 +247,28 @@ namespace Kagami.Library.Runtime
 
       public FrameGroup PopFrames() => PopFramesUntil(f => f.FrameType == FrameType.Function);
 
+      public FrameGroup PeekFrames(Predicate<Frame> predicate)
+      {
+         var frames = new List<Frame>();
+         foreach (var frame in stack)
+         {
+            frames.Add(frame);
+            if (predicate(frame))
+               break;
+         }
+
+         return new FrameGroup(frames.ToArray());
+      }
+
+      public IMaybe<Frame> FunctionFrame()
+      {
+         foreach (var frame in stack)
+            if (frame.FrameType == FrameType.Function)
+               return frame.Some();
+
+         return none<Frame>();
+      }
+
       public FrameGroup PopFramesUntil(Predicate<Frame> predicate)
       {
          var frames = new List<Frame>();

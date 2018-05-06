@@ -2,6 +2,7 @@
 using Kagami.Library.Runtime;
 using Standard.Types.Maybe;
 using static Kagami.Library.AllExceptions;
+using static Kagami.Library.Operations.OperationFunctions;
 using static Standard.Types.Maybe.MaybeFunctions;
 
 namespace Kagami.Library.Operations
@@ -15,19 +16,11 @@ namespace Kagami.Library.Operations
          var frames = machine.PopFrames();
          if (frames.FunctionFrame.If(out var frame))
          {
+            //frame.UndeferAll();
             var returnAddress = frame.Address;
             if (returnTopOfStack)
                if (rtn.If(out var v, out var isNotMatched, out var exception))
-               {
-                  IObject v2;
-                  if (v is IPristineCopy pc)
-                     v2 = pc.Copy();
-                  else
-                     v2 = v;
-                  if (v2 is ICopyFields cf)
-                     cf.CopyFields(frames.Fields);
-                  rtn = v2.Matched();
-               }
+                  rtn = copyFields(v, frames).Matched();
                else if (isNotMatched)
                   return failedMatch<IObject>(emptyStack());
                else

@@ -244,7 +244,8 @@ namespace Kagami.Library.Classes
             "zip".Function("on", "with"), "zip", "min".get(), "max".get(), "first", "first".Function("with"), "last",
             "last".Function("with"),
             "split".Function("with"), "split".Function("count"), "group", "one", "none", "any", "all", "sum", "average", "product",
-            "cross", "by", "distinct", "span".Function("with"), "span".Function("count"), "shuffle", "shuffle".Function("count")));
+            "cross", "by", "distinct", "span".Function("with"), "span".Function("count"), "shuffle", "shuffle".Function("count"),
+            "array", "list", "tuple"));
 
          dynamicInvoke = (obj, msg) =>
          {
@@ -316,6 +317,9 @@ namespace Kagami.Library.Classes
          registerMessage("span".Function("count"), (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.Span(j.Value)));
          registerMessage("shuffle", (obj, msg) => iteratorFunc(obj, i => i.Shuffle()));
          registerMessage("shuffle".Function("count"), (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.Shuffle(j.Value)));
+         registerMessage("array", (obj, msg) => iteratorFunc(obj, i => i.ToArray()));
+         registerMessage("list", (obj, msg) => iteratorFunc(obj, i => i.ToList()));
+         registerMessage("tuple", (obj, msg) => iteratorFunc(obj, i => i.ToTuple()));
       }
 
       public virtual bool MatchCompatible(BaseClass otherClass) => Name == otherClass.Name;

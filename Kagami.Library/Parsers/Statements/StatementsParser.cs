@@ -26,8 +26,9 @@ namespace Kagami.Library.Parsers.Statements
                yield return new MatchFunctionParser();
                yield return new MatchParser();
                yield return new YieldParser();
-               yield return new ReturnParser();
                yield return new ReturnNothingParser();
+               yield return new ReturnParser();
+               yield return new DeferParser();
                yield return new AssignToNewFieldParser();
                yield return new AssignToNewFieldParser2();
                yield return new AssignToMatchParser();

@@ -112,5 +112,11 @@ namespace Kagami.Library.Objects
       IObject Shuffle();
 
       IObject Shuffle(int count);
+
+      Array ToArray();
+
+      List ToList();
+
+      Tuple ToTuple();
    }
 }

@@ -1,4 +1,5 @@
 ﻿using Kagami.Library.Objects;
+using Kagami.Library.Runtime;
 using Standard.Types.Maybe;
 using static Kagami.Library.Objects.ObjectFunctions;
 
@@ -27,6 +28,19 @@ namespace Kagami.Library.Operations
       public static IObject sendMessage(IObject obj, string message, params IObject[] arguments)
       {
          return classOf(obj).SendMessage(obj, message, new Arguments(arguments));
+      }
+
+      public static IObject copyFields(IObject obj, FrameGroup frameGroup)
+      {
+         IObject value;
+         if (obj is IPristineCopy pc)
+            value = pc.Copy();
+         else
+            value = obj;
+         if (value is ICopyFields cf)
+            cf.CopyFields(frameGroup.Fields);
+
+         return value;
       }
    }
 }

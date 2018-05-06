@@ -60,5 +60,13 @@ namespace Kagami.Library.Nodes.Statements
       public override string ToString() => statements.Listify("\r\n");
 
       IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+      public void Add(Statement statement) => statements.Add(statement);
+
+      public void AddReturnIf()
+      {
+         if (!(statements[statements.Count - 1] is ReturnNothing))
+            statements.Add(new ReturnNothing());
+      }
    }
 }

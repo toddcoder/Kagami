@@ -14,6 +14,7 @@ namespace Kagami.Library.Classes
          base.RegisterMessages();
 
          collectionMessages();
+         messages["tuple"] = (obj, msg) => function<Tuple>(obj, t => t);
 
          messages["first".get()] = (obj, msg) => function<Tuple>(obj, t => t[0]);
          messages["second".get()] = (obj, msg) => function<Tuple>(obj, t => t[1]);

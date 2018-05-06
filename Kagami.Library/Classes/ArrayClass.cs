@@ -15,6 +15,7 @@ namespace Kagami.Library.Classes
          base.RegisterMessages();
 
          collectionMessages();
+         messages["array"] = (obj, msg) => function<Array>(obj, a => a);
          mutableCollectionMessages();
          sliceableMessages();
 

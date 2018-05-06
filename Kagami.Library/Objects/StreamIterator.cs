@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Standard.Types.Collections;
 using Standard.Types.Maybe;
 using static Standard.Types.Maybe.MaybeFunctions;
@@ -41,7 +42,7 @@ namespace Kagami.Library.Objects
          var item = none<IObject>();
          do
          {
-            item = iterator.Next();
+            item = Next();
             if (item.If(out var obj))
                yield return obj;
          } while (item.IsSome);
@@ -49,7 +50,7 @@ namespace Kagami.Library.Objects
 
       public IMaybe<IObject> Next()
       {
-         foreach (var value in list())
+         if (iterator.Next().If(out var value))
          {
             var status = Accepted.New(value);
 
@@ -204,5 +205,11 @@ namespace Kagami.Library.Objects
       public IObject Shuffle() => iterator.Shuffle();
 
       public IObject Shuffle(int count) => iterator.Shuffle(count);
+
+      public Array ToArray() => new Array(List());
+
+      public List ToList() => Objects.List.NewList(List());
+
+      public Tuple ToTuple() => new Tuple(List().ToArray());
    }
 }

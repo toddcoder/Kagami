@@ -526,6 +526,12 @@ namespace Kagami.Library.Objects
          return shuffle(array, count);
       }
 
+      public Array ToArray() => new Array(List());
+
+      public List ToList() => Objects.List.NewList(List());
+
+      public Tuple ToTuple() => new Tuple(List().ToArray());
+
       IObject shuffle(IObject[] array, int count)
       {
          var result = new Hash<int, IObject>();

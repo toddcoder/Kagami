@@ -123,6 +123,7 @@
     <Compile Include="Nodes\Statements\ConditionalWhile.cs" />
     <Compile Include="Nodes\Statements\DataType.cs" />
     <Compile Include="Nodes\Statements\DataTypeCode.cs" />
+    <Compile Include="Nodes\Statements\Defer.cs" />
     <Compile Include="Nodes\Statements\EndOfLine.cs" />
     <Compile Include="Nodes\Statements\Exit.cs" />
     <Compile Include="Nodes\Statements\ExpressionStatement.cs" />
@@ -544,6 +545,7 @@
     <Compile Include="Parsers\Statements\DataComparisandParser.cs" />
     <Compile Include="Parsers\Statements\DataTypeParser.cs" />
     <Compile Include="Parsers\Statements\DefAssignParser.cs" />
+    <Compile Include="Parsers\Statements\DeferParser.cs" />
     <Compile Include="Parsers\Statements\ElseIfParser.cs" />
     <Compile Include="Parsers\Statements\ElseParser.cs" />
     <Compile Include="Parsers\Statements\EndingInExpressionParser.cs" />

@@ -16,6 +16,7 @@ namespace Kagami.Library.Classes
          base.RegisterMessages();
 
          collectionMessages();
+         messages["list"] = (obj, msg) => function<List>(obj, l => l);
 
          messages["head".get()] = (obj, msg) => function<List>(obj, l => someOf(l.Head));
          messages["tail".get()] = (obj, msg) => function<List>(obj, l => l.Tail);
