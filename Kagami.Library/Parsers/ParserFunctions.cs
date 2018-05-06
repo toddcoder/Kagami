@@ -788,6 +788,9 @@ namespace Kagami.Library.Parsers
             case "&":
                symbol = new FilterSymbol().Matched<Symbol>();
                break;
+            case "!":
+               symbol = new MapOperatorBinarySymbol().Matched<Symbol>();
+               break;
          }
 
          return symbol;

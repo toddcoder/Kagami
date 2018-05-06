@@ -202,6 +202,7 @@
     <Compile Include="Nodes\Symbols\LazySymbol.cs" />
     <Compile Include="Nodes\Symbols\ListSymbol.cs" />
     <Compile Include="Nodes\Symbols\LongSymbol.cs" />
+    <Compile Include="Nodes\Symbols\MapOperatorBinarySymbol.cs" />
     <Compile Include="Nodes\Symbols\MapOperatorSymbol.cs" />
     <Compile Include="Nodes\Symbols\MatchMapSymbol.cs" />
     <Compile Include="Nodes\Symbols\MaxSymbol.cs" />
