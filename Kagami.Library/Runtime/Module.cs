@@ -64,6 +64,7 @@ namespace Kagami.Library.Runtime
          classes["Symbol"] = new SymbolClass();
          classes["Infinity"] = new InfinityClass();
          classes["OpenRange"] = new OpenRangeClass();
+         classes["KeyValue"] = new KeyValueClass();
       }
 
       public IMaybe<BaseClass> Class(string name) => classes.Map(name);

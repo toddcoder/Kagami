@@ -40,7 +40,7 @@ namespace Kagami.Library.Operations
       public override string ToString()
       {
          if (assign)
-            return $"match";
+            return "match";
          else
             return $"match({mutable.Extend("mutable", "immutable")}, {strict.Extend("strict", "loose")})";
       }

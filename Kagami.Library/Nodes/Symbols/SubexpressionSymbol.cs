@@ -23,6 +23,8 @@ namespace Kagami.Library.Nodes.Symbols
          builder.NoOp();
       }
 
+      public Expression Expression => expression;
+
       public override Precedence Precedence => Precedence.Value;
 
       public override Arity Arity => Arity.Nullary;

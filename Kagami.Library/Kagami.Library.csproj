@@ -175,6 +175,7 @@
     <Compile Include="Nodes\Symbols\EqualSymbol.cs" />
     <Compile Include="Nodes\Symbols\Expression.cs" />
     <Compile Include="Nodes\Symbols\FieldSymbol.cs" />
+    <Compile Include="Nodes\Symbols\FilterSymbol.cs" />
     <Compile Include="Nodes\Symbols\FloatDivideSymbol.cs" />
     <Compile Include="Nodes\Symbols\FloatSymbol.cs" />
     <Compile Include="Nodes\Symbols\FoldSymbol.cs" />

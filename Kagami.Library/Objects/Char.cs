@@ -2,6 +2,7 @@
 using Standard.Types.Collections;
 using Standard.Types.RegularExpressions;
 using Standard.Types.Strings;
+using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
@@ -44,9 +45,39 @@ namespace Kagami.Library.Objects
 
       public String Repeat(int count) => value.Repeat(count);
 
-      public Char Add(int count) => (char)(value + count);
+      public Char Add(IObject c)
+      {
+         switch (c)
+         {
+            case Char ch:
+               return add(ch.value);
+            case Int count:
+               return add(count.Value);
+            default:
+               throw incompatibleClasses(c, "Char or Int");
+         }
+      }
 
-      public Char Subtract(int count) => (char)(value - count);
+      public Char Subtract(IObject c)
+      {
+         switch (c)
+         {
+            case Char ch:
+               return subtract(ch.value);
+            case Int count:
+               return subtract(count.Value);
+            default:
+               throw incompatibleClasses(c, "Char or Int");
+         }
+      }
+
+      public Char add(int count) => (char)(value + count);
+
+      public Char add(char ch) => (char)(value + ch);
+
+      public Char subtract(int count) => (char)(value - count);
+
+      public Char subtract(char ch) => (char)(value - ch);
 
       public Char Upper() => char.ToUpper(value);
 

@@ -785,6 +785,9 @@ namespace Kagami.Library.Parsers
             case "<>":
                symbol = new CompareSymbol().Matched<Symbol>();
                break;
+            case "&":
+               symbol = new FilterSymbol().Matched<Symbol>();
+               break;
          }
 
          return symbol;

@@ -19,7 +19,7 @@ namespace Kagami.Library.Nodes.Statements
          expression.Generate(builder);
          builder.Peek(Index);
          comparisand.Generate(builder);
-         builder.Match();
+         builder.Match(true, false);
          builder.Drop();
       }
 

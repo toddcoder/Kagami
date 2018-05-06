@@ -16,15 +16,17 @@ namespace Kagami.Library.Parsers.Expressions
 
          if (getExpression(state, "^ /(/s*) /'}'", builder.Flags, Color.Whitespace, Color.Operator)
             .If(out var expression, out var original))
-         {
-            if (expression.Symbols[0] is LambdaSymbol lambdaSymbol)
+            switch (expression.Symbols[0])
             {
-               builder.Add(new MapOperatorSymbol(lambdaSymbol));
-               return Unit.Matched();
+               case LambdaSymbol lambdaSymbol:
+                  builder.Add(new MapOperatorSymbol(lambdaSymbol));
+                  return Unit.Matched();
+               case SubexpressionSymbol subexpression when subexpression.Expression.Symbols[0] is LambdaSymbol innerLambdaSymbol:
+                  builder.Add(new MapOperatorSymbol(innerLambdaSymbol));
+                  return Unit.Matched();
+               default:
+                  return "Lambda required".FailedMatch<Unit>();
             }
-            else
-               return "Lambd required".FailedMatch<Unit>();
-         }
          else
             return original.UnmatchedOnly<Unit>();
       }
