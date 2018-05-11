@@ -29,6 +29,10 @@ namespace Kagami.Library.Nodes.Statements
             builder.Return(true);
       }
 
+      public Expression Expression => expression;
+
+      public bool ReturnExpression => returnExpression;
+
       public override string ToString() => $"{returnExpression.Extend("return ")}{expression}";
    }
 }

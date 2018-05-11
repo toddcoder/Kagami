@@ -12,13 +12,14 @@ namespace Kagami.Library.Parsers.Statements
 {
    public class FunctionParser : StatementParser
    {
-      public override string Pattern => $"^ /('override' /s+)? /('fn' | 'op') /(/s+) (/({REGEX_CLASS_GETTING}) /'.')?" +
+      public override string Pattern => $"^ /('override' /s+)? /('fn' | 'op' | 'def') /(/s+) (/({REGEX_CLASS_GETTING}) /'.')?" +
          $" /({REGEX_FUNCTION_NAME}) /'('?";
 
       public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
       {
          var overriding = tokens[1].Text.StartsWith("override");
          var isOperator = tokens[2].Text == "op";
+         var isMacro = tokens[2].Text == "def";
 
          var trait = false;
          var className = tokens[4].Text;
@@ -49,19 +50,30 @@ namespace Kagami.Library.Parsers.Statements
          state.CreateYieldFlag();
 
          if (GetAnyParameters(needsParameters, state).If(out var parameters, out var original))
+         {
             if (state.CurrentSource.StartsWith("("))
                return getCurriedFunction(state, functionName, parameters, overriding, className, trait).Map(f =>
                {
-                  state.AddStatement(f);
+                  if (isMacro)
+                     state.RegisterMacro(f);
+                  else
+                     state.AddStatement(f);
+
                   return Unit.Matched();
                });
             else
                return getAnyBlock(state).Map(block =>
                {
                   var yielding = state.RemoveYieldFlag();
-                  state.AddStatement(new Function(functionName, parameters, block, yielding, overriding, className) { Trait = trait });
+                  var function = new Function(functionName, parameters, block, yielding, overriding, className) { Trait = trait };
+                  if (isMacro)
+                     state.RegisterMacro(function);
+                  else
+                     state.AddStatement(function);
+
                   return Unit.Matched();
                });
+         }
          else
             return original.Unmatched<Unit>();
       }

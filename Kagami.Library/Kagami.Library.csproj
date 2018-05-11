@@ -202,6 +202,7 @@
     <Compile Include="Nodes\Symbols\LazySymbol.cs" />
     <Compile Include="Nodes\Symbols\ListSymbol.cs" />
     <Compile Include="Nodes\Symbols\LongSymbol.cs" />
+    <Compile Include="Nodes\Symbols\MacroInvokeSymbol.cs" />
     <Compile Include="Nodes\Symbols\MapOperatorBinarySymbol.cs" />
     <Compile Include="Nodes\Symbols\MapOperatorSymbol.cs" />
     <Compile Include="Nodes\Symbols\MatchMapSymbol.cs" />
@@ -368,6 +369,7 @@
     <Compile Include="Operations\IntDivide.cs" />
     <Compile Include="Operations\InternalListOperation.cs" />
     <Compile Include="Operations\Invoke.cs" />
+    <Compile Include="Operations\MacroParameters.cs" />
     <Compile Include="Operations\MultipleOperandOperation.cs" />
     <Compile Include="Operations\NewDataComparisand.cs" />
     <Compile Include="Operations\NewDataType.cs" />
@@ -416,6 +418,7 @@
     <Compile Include="Operations\PushExitFrame.cs" />
     <Compile Include="Operations\PushFloat.cs" />
     <Compile Include="Operations\PushFrame.cs" />
+    <Compile Include="Operations\PushFrameWithArguments.cs" />
     <Compile Include="Operations\PushFrameWithValue.cs" />
     <Compile Include="Operations\PushInt.cs" />
     <Compile Include="Operations\PushNil.cs" />
@@ -432,6 +435,7 @@
     <Compile Include="Operations\Rotate.cs" />
     <Compile Include="Operations\SendMessage.cs" />
     <Compile Include="Operations\Peek.cs" />
+    <Compile Include="Operations\SetFields.cs" />
     <Compile Include="Operations\SetX.cs" />
     <Compile Include="Operations\Some.cs" />
     <Compile Include="Operations\Stop.cs" />

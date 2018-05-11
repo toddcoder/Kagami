@@ -1,4 +1,5 @@
 ﻿using Kagami.Library.Invokables;
+using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
@@ -30,6 +31,11 @@ namespace Kagami.Library.Nodes
             var invokable = new LambdaInvokable(new Parameters(2), $"$0 {operatorSymbol} $1");
             return builder.RegisterInvokable(invokable, expression, true).Map(i => new Lambda(invokable));
          });
+      }
+
+      public static void generateMacro(Function function, OperationsBuilder builder)
+      {
+
       }
    }
 }

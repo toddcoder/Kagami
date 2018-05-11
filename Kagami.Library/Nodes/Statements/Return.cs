@@ -9,12 +9,7 @@ namespace Kagami.Library.Nodes.Statements
 
       public Return(Expression expression) => this.expression = expression;
 
-      public override void Generate(OperationsBuilder builder)
-      {
-         expression.Generate(builder);
-         builder.Peek(Index);
-         builder.Return(true);
-      }
+      public override void Generate(OperationsBuilder builder) => builder.Return(expression, this);
 
       public override string ToString() => $"return {expression}";
    }

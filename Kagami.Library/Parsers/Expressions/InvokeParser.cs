@@ -17,8 +17,13 @@ namespace Kagami.Library.Parsers.Expressions
 
          if (getArgumentsPlusLambda(state, builder.Flags).If(out var tuple, out var original))
          {
-            (var arguments, var possibleLambda) = tuple;
-            builder.Add(new InvokeSymbol(functionName, arguments, possibleLambda));
+            var (arguments, possibleLambda) = tuple;
+
+            if (state.Macro(functionName).If(out var function))
+               builder.Add(new MacroInvokeSymbol(function, arguments, possibleLambda));
+            else
+               builder.Add(new InvokeSymbol(functionName, arguments, possibleLambda));
+
             return Unit.Matched();
          }
          else

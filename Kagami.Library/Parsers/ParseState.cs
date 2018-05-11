@@ -31,6 +31,7 @@ namespace Kagami.Library.Parsers
       IMaybe<int> exceptionIndex;
       Stack<bool> yieldingStack;
       Hash<string, Expression> defExpressions;
+      Hash<string, Function> macros;
 
       public ParseState(string source)
       {
@@ -47,6 +48,7 @@ namespace Kagami.Library.Parsers
          exceptionIndex = none<int>();
          yieldingStack = new Stack<bool>();
          defExpressions = new Hash<string, Expression>();
+         macros = new Hash<string, Function>();
       }
 
       public IMaybe<int> ExceptionIndex
@@ -158,10 +160,8 @@ namespace Kagami.Library.Parsers
 
       public void Move(Token[] tokens)
       {
-         if (tokens.Length == 0)
-            return;
-
-         Move(tokens[0].Length);
+         if (tokens.Length != 0)
+            Move(tokens[0].Length);
       }
 
       public Token[] Tokens => tokens.ToArray();
@@ -239,5 +239,9 @@ namespace Kagami.Library.Parsers
       public void RegisiterDefExpression(string fieldName, Expression expression) => defExpressions[fieldName] = expression;
 
       public IMaybe<Expression> DefExpression(string fieldName) => defExpressions.Map(fieldName);
+
+      public void RegisterMacro(Function function) => macros[function.FullFunctionName] = function;
+
+      public IMaybe<Function> Macro(string fullFunctionName) => macros.Map(fullFunctionName);
    }
 }

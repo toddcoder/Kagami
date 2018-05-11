@@ -21,6 +21,8 @@ namespace Kagami.Library.Operations
       Hash<int, Block> blocks;
       Hash<LabelType, Stack<string>> labelStack;
       Set<string> registeredBlocks;
+      Stack<MacroParameters> macroParameters;
+      Stack<string> returnLabels;
 
       public OperationsBuilder()
       {
@@ -31,6 +33,8 @@ namespace Kagami.Library.Operations
          blocks = new Hash<int, Block>();
          labelStack = new AutoHash<LabelType, Stack<string>>(type => new Stack<string>());
          registeredBlocks = new Set<string>();
+         macroParameters = new Stack<MacroParameters>();
+         returnLabels = new Stack<string>();
       }
 
       public IResult<int> RegisterInvokable(IInvokable invokable, Block block, bool overriding)
@@ -247,6 +251,8 @@ namespace Kagami.Library.Operations
 
       public void PushFrameWithValue() => add(new PushFrameWithValue());
 
+      public void PushFrameWithArguments() => add(new PushFrameWithArguments());
+
       public void PopFrame() => add(new PopFrame());
 
       public void PopFrameWithValue() => add(new PopFrameWithValue());
@@ -329,6 +335,8 @@ namespace Kagami.Library.Operations
 
       public void NewOpenRange() => add(new NewOpenRange());
 
+      public void SetFields(Parameters parameters) => add(new SetFields(parameters));
+
       public IResult<Operations> ToOperations(ParseState state)
       {
          operations.Add(new Stop());
@@ -367,6 +375,49 @@ namespace Kagami.Library.Operations
          }
 
          return new Operations(operations.ToArray()).Success();
+      }
+
+      public void BeginMacro(Parameters parameters, Expression[] arguments, string returnLabel = "")
+      {
+         var macroParameter = new MacroParameters();
+         macroParameter.Assign(parameters, arguments);
+         macroParameters.Push(macroParameter);
+         returnLabels.Push(returnLabel);
+      }
+
+      public void EndMacro()
+      {
+         macroParameters.Pop();
+         returnLabels.Pop();
+      }
+
+      public void Field(Symbol symbol)
+      {
+         foreach (var macroParameter in macroParameters)
+            if (macroParameter.Replace(symbol, this))
+               return;
+
+         if (symbol is FieldSymbol fieldSymbol)
+            GetField(fieldSymbol.FieldName);
+      }
+
+      public void ReturnNothing()
+      {
+         if (returnLabels.Count == 0)
+            Return(false);
+         else
+            GoTo(returnLabels.Peek());
+      }
+
+      public void Return(Expression expression, Statement statement)
+      {
+         expression.Generate(this);
+         Peek(statement.Index);
+
+         if (returnLabels.Count == 0)
+            Return(true);
+         else
+            GoTo(returnLabels.Peek());
       }
    }
 }

@@ -4,6 +4,7 @@ using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Operations;
 using Kagami.Library.Parsers.Expressions;
 using Standard.Types.Enumerables;
+using Standard.Types.Maybe;
 using static Standard.Types.Maybe.MaybeFunctions;
 
 namespace Kagami.Library.Nodes.Statements
@@ -67,6 +68,15 @@ namespace Kagami.Library.Nodes.Statements
       {
          if (!(statements[statements.Count - 1] is ReturnNothing))
             statements.Add(new ReturnNothing());
+      }
+
+      public IMaybe<Expression> ExpressionStatement(bool returns)
+      {
+         if (statements.Count > 0 && statements[0] is ExpressionStatement expressionStatement &&
+            expressionStatement.ReturnExpression == returns)
+            return expressionStatement.Expression.Some();
+         else
+            return none<Expression>();
       }
    }
 }
