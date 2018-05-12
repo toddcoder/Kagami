@@ -65,8 +65,8 @@ namespace Kagami.Library.Classes
             Machine.Fields.SetBindings(bindings, false, false);
             return Boolean.True;
          }
-
-         return Boolean.False;
+         else
+            return Boolean.False;
       }
 
       public static IObject msgNumberFunction(IObject x, Func<IMessageNumber, IObject> func) => func((IMessageNumber)x);

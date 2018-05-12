@@ -96,7 +96,7 @@ namespace Kagami.Playground
             case Library.Parsers.Color.NumberPart:
                return Color.Green;
             case Library.Parsers.Color.Operator:
-               return Color.Black;
+               return Color.BlueViolet;
             case Library.Parsers.Color.Identifier:
                return Color.Blue;
             case Library.Parsers.Color.Structure:

@@ -9,15 +9,15 @@ namespace Kagami.Library.Operations
    public class MacroParameters
    {
       Hash<string, Expression> values;
-      string tupleName;
-      List<Expression> tuple;
+/*      string tupleName;
+      List<Expression> tuple;*/
       Hash<string, IInvokable> defaults;
 
       public MacroParameters()
       {
          values = new Hash<string, Expression>();
-         tupleName = "";
-         tuple = new List<Expression>();
+/*         tupleName = "";
+         tuple = new List<Expression>();*/
          defaults = new Hash<string, IInvokable>();
       }
 
@@ -25,7 +25,7 @@ namespace Kagami.Library.Operations
       {
          var length = Math.Min(arguments.Length, parameters.Length);
          var lastValue = new Expression(new NilSymbol());
-         var lastName = "";
+         //var lastName = "";
          var variadic = false;
 
          for (var i = 0; i < length && !variadic; i++)
@@ -33,7 +33,7 @@ namespace Kagami.Library.Operations
             var parameter = parameters[i];
             lastValue = arguments[i];
             values[parameter.Name] = lastValue;
-            lastName = parameter.Name;
+            //lastName = parameter.Name;
             variadic = parameter.Variadic;
          }
 
@@ -43,8 +43,8 @@ namespace Kagami.Library.Operations
             for (var i = length; i < arguments.Length; i++)
                list.Add(arguments[i]);
 
-            tupleName = lastName;
-            tuple = list;
+/*            tupleName = lastName;
+            tuple = list;*/
          }
          else if (length < parameters.Length)
             for (var i = length; i < parameters.Length; i++)
@@ -60,8 +60,8 @@ namespace Kagami.Library.Operations
             for (var i = length; i < arguments.Length; i++)
                list.Add(arguments[i]);
 
-            tupleName = lastName;
-            tuple = list;
+/*            tupleName = lastName;
+            tuple = list;*/
          }
       }
 

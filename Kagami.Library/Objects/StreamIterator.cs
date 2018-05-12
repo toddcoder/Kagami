@@ -176,7 +176,7 @@ namespace Kagami.Library.Objects
 
       public IObject Split(int count) => iterator.Split(count);
 
-      public IObject Group(Lambda lambda) => iterator.Group(lambda);
+      public IObject GroupBy(Lambda lambda) => iterator.GroupBy(lambda);
 
       public Boolean One(Lambda predicate) => iterator.One(predicate);
 

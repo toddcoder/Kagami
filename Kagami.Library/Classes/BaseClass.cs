@@ -243,7 +243,7 @@ namespace Kagami.Library.Classes
             "skip".Function("until"), "take", "take".Function("while"), "take".Function("until"), "index", "indexes",
             "zip".Function("on", "with"), "zip", "min".get(), "max".get(), "first", "first".Function("with"), "last",
             "last".Function("with"),
-            "split".Function("with"), "split".Function("count"), "group", "one", "none", "any", "all", "sum", "average", "product",
+            "split".Function("with"), "split".Function("count"), "groupBy", "one", "none", "any", "all", "sum", "average", "product",
             "cross", "by", "distinct", "span".Function("with"), "span".Function("count"), "shuffle", "shuffle".Function("count"),
             "array", "list", "tuple"));
 
@@ -302,7 +302,7 @@ namespace Kagami.Library.Classes
          registerMessage("last".Function("with"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Last(l)));
          registerMessage("split".Function("with"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Split(l)));
          registerMessage("split".Function("count"), (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.Split(j.Value)));
-         registerMessage("group", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Group(l)));
+         registerMessage("groupBy", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.GroupBy(l)));
          registerMessage("one", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.One(l)));
          registerMessage("none", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.None(l)));
          registerMessage("any", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Any(l)));

@@ -48,7 +48,10 @@ namespace Kagami.Library.Parsers.Expressions
             if (builder.Flags[ExpressionFlags.Comparisand])
                yield return new InternalListParser(builder);
             else
+            {
+               yield return new ComparisandParser(builder);
                yield return new SuperParser(builder);
+            }
 
             yield return new LazyParser(builder);
             yield return new KeywordValueParser(builder);

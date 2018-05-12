@@ -248,5 +248,7 @@ namespace Kagami.Library.Objects
       {
          return new Array(value.Split(new[] { on }, StringSplitOptions.None).Select(Object));
       }
+
+      public String Subtract(string substring) => value.Replace(substring, "");
    }
 }

@@ -791,9 +791,48 @@ namespace Kagami.Library.Parsers
             case "!":
                symbol = new MapOperatorBinarySymbol().Matched<Symbol>();
                break;
+            case "|=":
+               symbol = new MatchSymbol().Matched<Symbol>();
+               break;
          }
 
          return symbol;
+      }
+
+      public static IMatched<Expression> getTerm(ParseState state, ExpressionFlags flags)
+      {
+         var builder = new ExpressionBuilder(flags);
+         var prefixParser = new PrefixParser(builder);
+         var valuesParser = new ValuesParser(builder);
+         var postfixParser = new PostfixParser(builder);
+
+         var isNotMatched = false;
+         System.Exception exception = null;
+
+         while (state.More)
+            if (prefixParser.Scan(state).If(out _, out isNotMatched, out exception)) { }
+            else if (isNotMatched)
+               break;
+            else
+               return failedMatch<Expression>(exception);
+
+         if (valuesParser.Scan(state).If(out _, out isNotMatched, out exception)) { }
+         else if (isNotMatched)
+            return failedMatch<Expression>(invalidSyntax());
+         else
+            return failedMatch<Expression>(exception);
+
+         while (state.More)
+            if (postfixParser.Scan(state).If(out _, out isNotMatched, out exception)) { }
+            else if (isNotMatched)
+               break;
+            else
+               return failedMatch<Expression>(exception);
+
+         if (builder.ToExpression().If(out var expression, out exception))
+            return expression.Matched();
+         else
+            return failedMatch<Expression>(exception);
       }
    }
 }

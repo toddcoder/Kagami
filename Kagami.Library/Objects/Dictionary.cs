@@ -41,6 +41,12 @@ namespace Kagami.Library.Objects
 
       public Dictionary() : this(new IObject[0]) { }
 
+      public Dictionary(Hash<IObject, IObject> hash)
+      {
+         dictionary = hash;
+         keys = new IObject[0];
+      }
+
       public IMaybe<IObject> DefaultValue { get; set; } = none<IObject>();
 
       public IMaybe<Lambda> DefaultLambda { get; set; } = none<Lambda>();

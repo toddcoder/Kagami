@@ -231,7 +231,16 @@ namespace Kagami.Library.Objects
 
       public virtual IObject IfNot(Lambda predicate) => collectionClass.Revert(List().Where(value => !predicate.Invoke(value).IsTrue));
 
-      public virtual IObject Skip(int count) => collectionClass.Revert(List().Skip(count));
+      public virtual IObject Skip(int count)
+      {
+         if (count > -1)
+            return collectionClass.Revert(List().Skip(count));
+         else
+         {
+            var list = List().ToList();
+            return collectionClass.Revert(list.Take(list.Count + count));
+         }
+      }
 
       public virtual IObject SkipWhile(Lambda predicate)
       {
@@ -243,7 +252,16 @@ namespace Kagami.Library.Objects
          return collectionClass.Revert(List().SkipWhile(value => !predicate.Invoke(value).IsTrue));
       }
 
-      public virtual IObject Take(int count) => collectionClass.Revert(List().Take(count));
+      public virtual IObject Take(int count)
+      {
+         if (count > -1)
+            return collectionClass.Revert(List().Take(count));
+         else
+         {
+            var list = List().ToList();
+            return collectionClass.Revert(list.Skip(list.Count + count));
+         }
+      }
 
       public virtual IObject TakeWhile(Lambda predicate)
       {
@@ -383,7 +401,22 @@ namespace Kagami.Library.Objects
          return collectionClass.Revert(new List<IObject> { collectionClass.Revert(ifTrue), collectionClass.Revert(ifFalse) });
       }
 
-      public virtual IObject Group(Lambda lambda) => Unassigned.Value;
+      public virtual IObject GroupBy(Lambda lambda)
+      {
+         var hash = new AutoHash<IObject, List<IObject>>(o => new List<IObject>()) { AutoAddDefault = true };
+         foreach (var item in List())
+         {
+            var key = lambda.Invoke(item);
+            hash[key].Add(item);
+         }
+
+         var result = new Hash<IObject, IObject>();
+
+         foreach (var key in hash.KeyArray())
+            result[key] = collectionClass.Revert(hash[key]);
+
+         return new Dictionary(result);
+      }
 
       public Boolean One(Lambda predicate)
       {
@@ -471,7 +504,8 @@ namespace Kagami.Library.Objects
                }
             }
 
-            outer.Add(collectionClass.Revert(inner));
+            if (inner.Count > 0)
+               outer.Add(collectionClass.Revert(inner));
             return collectionClass.Revert(outer);
          }
          else

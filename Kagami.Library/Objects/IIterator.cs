@@ -83,7 +83,7 @@ namespace Kagami.Library.Objects
 
       IObject Split(int count);
 
-      IObject Group(Lambda lambda);
+      IObject GroupBy(Lambda lambda);
 
       Boolean One(Lambda predicate);
 

@@ -29,7 +29,7 @@ namespace Kagami.Library.Nodes.Statements
             builder.AddRaw(op);
 
          builder.Peek(Index);
-         builder.AssignField(fieldName, true);
+         builder.AssignField(fieldName, false);
       }
 
       public override string ToString()
