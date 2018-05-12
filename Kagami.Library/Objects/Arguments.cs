@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Standard.Types.Collections;
 using Standard.Types.Enumerables;
+using Standard.Types.Exceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
@@ -53,7 +54,18 @@ namespace Kagami.Library.Objects
 
       public int Length => arguments.Length;
 
-      public IObject this[int index] => arguments[index];
+      public IObject this[int index]
+      {
+         get
+         {
+            if (index >= arguments.Length)
+               throw "Argument missing".Throws();
+            else if (index < 0)
+               throw "Malformed argument request".Throws();
+            else
+               return arguments[index];
+         }
+      }
 
       public string FullFunctionName(string name) => name.Function(labels.KeyArray());
 

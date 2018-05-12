@@ -17,8 +17,8 @@ namespace Kagami.Library.Objects
       {
          if (++index < count)
             return new Skipped();
-
-         return status;
+         else
+            return status;
       }
 
       public IEnumerable<IObject> Execute(IIterator iterator)

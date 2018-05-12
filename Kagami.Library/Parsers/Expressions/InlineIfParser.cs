@@ -16,13 +16,13 @@ namespace Kagami.Library.Parsers.Expressions
 
          var result =
             from ifTrue in getExpression(state, builder.Flags | ExpressionFlags.OmitColon)
-            from scanned in state.Scan("^ /(|s|) /':'", Color.Whitespace, Color.Structure)
+            from scanned in state.Scan("^ /(|s|) /':'", Color.Whitespace, Color.Operator)
             from ifFalse in getExpression(state, builder.Flags)
             select (ifTrue, ifFalse);
 
          if (result.If(out var tuple, out var original))
          {
-            (var ifTrue, var ifFalse) = tuple;
+            var (ifTrue, ifFalse) = tuple;
             builder.Add(new InlineIfSymbol(ifTrue, ifFalse));
 
             return Unit.Matched();

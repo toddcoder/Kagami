@@ -566,6 +566,22 @@ namespace Kagami.Library.Objects
 
       public Tuple ToTuple() => new Tuple(List().ToArray());
 
+      public Dictionary ToDictionary(Lambda keyLambda, Lambda valueLambda)
+      {
+         var hash = new Hash<IObject, IObject>();
+
+         foreach (var item in List())
+         {
+            var key = keyLambda.Invoke(item);
+            var value = valueLambda.Invoke(item);
+            hash[key] = value;
+         }
+
+         return new Dictionary(hash);
+      }
+
+      public IObject ToDictionary() => Array.CreateObject(List());
+
       IObject shuffle(IObject[] array, int count)
       {
          var result = new Hash<int, IObject>();

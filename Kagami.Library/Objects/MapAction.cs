@@ -15,8 +15,8 @@ namespace Kagami.Library.Objects
          {
             if (status.IsAccepted)
                return Accepted.New(lambda.Invoke(status.Object));
-
-            return status;
+            else
+               return status;
          }
          catch (Exception exception)
          {

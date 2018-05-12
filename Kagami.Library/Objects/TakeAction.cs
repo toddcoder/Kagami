@@ -19,11 +19,11 @@ namespace Kagami.Library.Objects
          {
             if (++index < count)
                return status;
-
-            return new Ended();
+            else
+               return new Ended();
          }
-
-         return status;
+         else
+            return status;
       }
 
       public IEnumerable<IObject> Execute(IIterator iterator)

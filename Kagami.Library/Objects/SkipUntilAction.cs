@@ -19,8 +19,8 @@ namespace Kagami.Library.Objects
          {
             if (!predicate.Invoke(status.Object).IsTrue)
                return new Skipped();
-
-            skipping = false;
+            else
+               skipping = false;
          }
 
          return status;

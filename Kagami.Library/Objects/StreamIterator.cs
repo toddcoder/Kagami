@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Kagami.Library.Runtime;
 using Standard.Types.Collections;
+using Standard.Types.Enumerables;
 using Standard.Types.Maybe;
 using static Standard.Types.Maybe.MaybeFunctions;
 
@@ -21,17 +23,17 @@ namespace Kagami.Library.Objects
 
       public string ClassName => "StreamIterator";
 
-      public string AsString => "";
+      public string AsString => actions.Listify(" ");
 
-      public string Image => "";
+      public string Image => AsString;
 
-      public int Hash => 0;
+      public int Hash => actions.GetHashCode();
 
       public bool IsEqualTo(IObject obj) => false;
 
-	   public bool Match(IObject comparisand, Hash<string, IObject> bindings) => false;
+      public bool Match(IObject comparisand, Hash<string, IObject> bindings) => false;
 
-	   public bool IsTrue => true;
+      public bool IsTrue => true;
 
       public ICollection Collection => iterator.Collection;
 
@@ -50,23 +52,27 @@ namespace Kagami.Library.Objects
 
       public IMaybe<IObject> Next()
       {
-         if (iterator.Next().If(out var value))
-         {
-            var status = Accepted.New(value);
-
-            foreach (var action in actions)
+         while (!Machine.Current.Context.Cancelled())
+            if (iterator.Next().If(out var value))
             {
-               status = action.Next(status);
-               if (status.IsSkipped)
-                  continue;
+               var status = Accepted.New(value);
 
-               if (status.IsEnded)
-                  return none<IObject>();
+               foreach (var action in actions)
+               {
+                  status = action.Next(status);
+                  if (status.IsSkipped)
+                     break;
+                  else if (status.IsEnded)
+                     return none<IObject>();
+               }
 
                if (status.IsAccepted)
                   return status.Object.Some();
+               else if (status.IsEnded)
+                  return none<IObject>();
             }
-         }
+            else
+               return none<IObject>();
 
          return none<IObject>();
       }
@@ -79,7 +85,7 @@ namespace Kagami.Library.Objects
 
       public String Join(string connector) => iterator.Join(connector);
 
-      public IObject Sort(Lambda lambda, bool ascending) => iterator.Sort(lambda, @ascending);
+      public IObject Sort(Lambda lambda, bool ascending) => iterator.Sort(lambda, ascending);
 
       public IObject Sort(bool ascending) => iterator.Sort(@ascending);
 
@@ -120,12 +126,14 @@ namespace Kagami.Library.Objects
       {
          if (count > -1)
             return new SkipAction(count);
-
-         var length = collection.Length.Value;
-         if (length == -1)
-            return new SkipAction(-count);
-
-         return new TakeAction(length + count);
+         else
+         {
+            var length = collection.Length.Value;
+            if (length == -1)
+               return new SkipAction(-count);
+            else
+               return new TakeAction(length + count);
+         }
       }
 
       public IObject Skip(int count) => Copy(getSkipAction(Collection, count));
@@ -138,12 +146,14 @@ namespace Kagami.Library.Objects
       {
          if (count > -1)
             return new TakeAction(count);
-
-         var length = collection.Length.Value;
-         if (length == -1)
-            return new TakeAction(-count);
-
-         return new SkipAction(length + count);
+         else
+         {
+            var length = collection.Length.Value;
+            if (length == -1)
+               return new TakeAction(-count);
+            else
+               return new SkipAction(length + count);
+         }
       }
 
       public IObject Take(int count) => Copy(getTakeAction(Collection, count));
@@ -211,5 +221,21 @@ namespace Kagami.Library.Objects
       public List ToList() => Objects.List.NewList(List());
 
       public Tuple ToTuple() => new Tuple(List().ToArray());
+
+      public Dictionary ToDictionary(Lambda keyLambda, Lambda valueLambda)
+      {
+         var hash = new Hash<IObject, IObject>();
+
+         foreach (var item in List())
+         {
+            var key = keyLambda.Invoke(item);
+            var value = valueLambda.Invoke(item);
+            hash[key] = value;
+         }
+
+         return new Dictionary(hash);
+      }
+
+      public IObject ToDictionary() => Array.CreateObject(List());
    }
 }

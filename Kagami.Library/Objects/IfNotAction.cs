@@ -17,11 +17,11 @@ namespace Kagami.Library.Objects
             {
                if (!predicate.Invoke(status.Object).IsTrue)
                   return status;
-
-               return new Skipped();
+               else
+                  return new Skipped();
             }
-
-            return status;
+            else
+               return status;
          }
          catch (Exception exception)
          {

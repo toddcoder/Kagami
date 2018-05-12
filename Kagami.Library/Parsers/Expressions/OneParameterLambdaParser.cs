@@ -7,7 +7,7 @@ namespace Kagami.Library.Parsers.Expressions
 {
    public class OneParameterLambdaParser : LambdaParser
    {
-      public override string Pattern => $"^ /(|s|) /({REGEX_FIELD}) /b (> |s| ('->' | '=>'))";
+      public override string Pattern => $"^ /(|s|) /({REGEX_FIELD}) /b (> |s| ('->' | '=>' [/r/n]+))";
 
       public OneParameterLambdaParser(ExpressionBuilder builder) : base(builder) { }
 

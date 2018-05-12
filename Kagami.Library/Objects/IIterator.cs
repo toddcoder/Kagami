@@ -118,5 +118,9 @@ namespace Kagami.Library.Objects
       List ToList();
 
       Tuple ToTuple();
+
+      Dictionary ToDictionary(Lambda keyLambda, Lambda valueLambda);
+
+      IObject ToDictionary();
    }
 }

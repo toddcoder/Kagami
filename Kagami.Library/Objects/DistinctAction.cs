@@ -15,8 +15,8 @@ namespace Kagami.Library.Objects
          {
             if (existing.Contains(status.Object))
                return new Skipped();
-
-            existing.Add(status.Object);
+            else
+               existing.Add(status.Object);
          }
 
          return status;

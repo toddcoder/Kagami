@@ -5,7 +5,7 @@ namespace Kagami.Library.Parsers.Expressions
 {
    public class ZeroParameterLambdaParser : LambdaParser
    {
-      public override string Pattern => "^ (> (|s|) ('->' | '=>'))";
+      public override string Pattern => "^ (> (|s|) ('->' | '=>' [/r/n]+))";
 
       public ZeroParameterLambdaParser(ExpressionBuilder builder) : base(builder) { }
 
