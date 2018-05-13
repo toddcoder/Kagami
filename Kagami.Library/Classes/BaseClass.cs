@@ -68,7 +68,7 @@ namespace Kagami.Library.Classes
          registerMessage("string".get(), (obj, msg) => String.Object(obj.AsString));
          registerMessage("image".get(), (obj, msg) => String.Object(obj.Image));
          registerMessage("hash".get(), (obj, msg) => Int.Object(obj.Hash));
-         registerMessage("equalTo", (obj, msg) => Boolean.Object(obj.IsEqualTo(msg.Arguments[0])));
+         registerMessage("equals", (obj, msg) => Boolean.Object(obj.IsEqualTo(msg.Arguments[0])));
          registerMessage("className".get(), (obj, msg) => String.Object(obj.ClassName));
          registerMessage("class".get(), (obj, msg) => new Class(obj.ClassName));
          registerMessage("match", match);

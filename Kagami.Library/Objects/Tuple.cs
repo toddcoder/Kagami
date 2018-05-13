@@ -130,7 +130,7 @@ namespace Kagami.Library.Objects
          get
          {
             var self = this;
-            return $"({items.Select((o, i) => self.getItemString(i)).Listify()})";
+            return items.Select((o, i) => self.getItemString(i)).Listify(" ");
          }
       }
 

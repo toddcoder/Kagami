@@ -65,6 +65,7 @@ namespace Kagami.Library.Runtime
          classes["Infinity"] = new InfinityClass();
          classes["OpenRange"] = new OpenRangeClass();
          classes["KeyValue"] = new KeyValueClass();
+         classes["Regex"] = new RegexClass();
       }
 
       public IMaybe<BaseClass> Class(string name) => classes.Map(name);

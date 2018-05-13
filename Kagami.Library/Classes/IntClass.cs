@@ -29,7 +29,15 @@ namespace Kagami.Library.Classes
 
          classMessages["min".get()] = (cls, msg) => Int.Object(int.MinValue);
          classMessages["max".get()] = (cls, msg) => Int.Object(int.MaxValue);
-         classMessages["parse"] = (cls, msg) => Int.Object(int.Parse(msg.Arguments[0].AsString));
+         classMessages["parse"] = (cls, msg) => parse(msg.Arguments[0].AsString);
+      }
+
+      public static IObject parse(string value)
+      {
+         if (int.TryParse(value.Replace("_", ""), out var number))
+            return Some.Object(Int.Object(number));
+         else
+            return Nil.NilValue;
       }
    }
 }

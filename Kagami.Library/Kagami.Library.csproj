@@ -84,6 +84,7 @@
     <Compile Include="Classes\PlaceholderClass.cs" />
     <Compile Include="Classes\RangeClass.cs" />
     <Compile Include="Classes\RationalClass.cs" />
+    <Compile Include="Classes\RegexClass.cs" />
     <Compile Include="Classes\Signature.cs" />
     <Compile Include="Classes\SliceClass.cs" />
     <Compile Include="Classes\SomeClass.cs" />
@@ -231,12 +232,14 @@
     <Compile Include="Nodes\Symbols\RaiseSymbol.cs" />
     <Compile Include="Nodes\Symbols\RangeSymbol.cs" />
     <Compile Include="Nodes\Symbols\RationalSymbol.cs" />
+    <Compile Include="Nodes\Symbols\RegexSymbol.cs" />
     <Compile Include="Nodes\Symbols\RemainderZero.cs" />
     <Compile Include="Nodes\Symbols\RemainderSymbol.cs" />
     <Compile Include="Nodes\Symbols\SendBinaryMessageSymbol.cs" />
     <Compile Include="Nodes\Symbols\SendOperatorMessage.cs" />
     <Compile Include="Nodes\Symbols\SendMessageSymbol.cs" />
     <Compile Include="Nodes\Symbols\SetSliceSymbol.cs" />
+    <Compile Include="Nodes\Symbols\SkipTakeOperatorSymbol.cs" />
     <Compile Include="Nodes\Symbols\SomeSymbol.cs" />
     <Compile Include="Nodes\Symbols\StringListSymbol.cs" />
     <Compile Include="Nodes\Symbols\StringSymbol.cs" />
@@ -316,6 +319,7 @@
     <Compile Include="Objects\Range.cs" />
     <Compile Include="Objects\RangeIterator.cs" />
     <Compile Include="Objects\Rational.cs" />
+    <Compile Include="Objects\Regex.cs" />
     <Compile Include="Objects\SkipAction.cs" />
     <Compile Include="Objects\Skipped.cs" />
     <Compile Include="Objects\SkipUntilAction.cs" />
@@ -495,7 +499,7 @@
     <Compile Include="Parsers\Expressions\IteratorParser.cs" />
     <Compile Include="Parsers\Expressions\LazyParser.cs" />
     <Compile Include="Parsers\Expressions\ListParser.cs" />
-    <Compile Include="Parsers\Expressions\MapOperatorParser.cs" />
+    <Compile Include="Parsers\Expressions\SkipTakeOperatorParser.cs" />
     <Compile Include="Parsers\Expressions\MatchMapParser.cs" />
     <Compile Include="Parsers\Expressions\NotParser.cs" />
     <Compile Include="Parsers\Expressions\OctalParser.cs" />
@@ -508,6 +512,8 @@
     <Compile Include="Parsers\Expressions\OneParameterLambdaParser.cs" />
     <Compile Include="Parsers\Expressions\PostfixOperatorsParser.cs" />
     <Compile Include="Parsers\Expressions\AlternateStringParser.cs" />
+    <Compile Include="Parsers\Expressions\RegexParser.cs" />
+    <Compile Include="Parsers\Expressions\RegexParsingType.cs" />
     <Compile Include="Parsers\Expressions\SendMessageAssignParser.cs" />
     <Compile Include="Parsers\Expressions\SeparatedKeywordOperatorsParser.cs" />
     <Compile Include="Parsers\Expressions\SliceParser.cs" />

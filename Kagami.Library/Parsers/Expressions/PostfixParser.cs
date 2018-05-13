@@ -15,7 +15,7 @@ namespace Kagami.Library.Parsers.Expressions
             yield return new PostfixOperatorsParser(builder);
             yield return new PostfixInvokeParser(builder);
             yield return new IndexParser(builder);
-            yield return new MapOperatorParser(builder);
+            yield return new SkipTakeOperatorParser(builder);
 
             if (!builder.Flags[ExpressionFlags.OmitSendMessageAssign])
                yield return new SendMessageAssignParser(builder);

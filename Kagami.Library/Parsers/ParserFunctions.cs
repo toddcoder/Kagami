@@ -230,7 +230,7 @@ namespace Kagami.Library.Parsers
 
       public static IMatched<Expression[]> getArguments(ParseState state, Bits32<ExpressionFlags> flags)
       {
-         if (state.Scan("^ /')'", Color.Structure).If(out _, out var isNotMatched, out var scanException))
+         if (state.Scan("^ /[')]}']", Color.Structure).If(out _, out var isNotMatched, out var scanException))
             return new Expression[0].Matched();
          else if (!isNotMatched)
             return failedMatch<Expression[]>(scanException);
@@ -246,11 +246,11 @@ namespace Kagami.Library.Parsers
                case MatchType.Matched:
                   arguments.Add(expression);
                   var (nextType, next, nextException) =
-                     state.Scan("^ /(/s*) /[',)]']", Color.Whitespace, Color.Structure).Values;
+                     state.Scan("^ /(/s*) /[',)]}']", Color.Whitespace, Color.Structure).Values;
                   switch (nextType)
                   {
                      case MatchType.Matched:
-                        if (next.EndsWith(")") || next.EndsWith("]"))
+                        if (next.EndsWith(")") || next.EndsWith("]") || next.EndsWith("}"))
                            return arguments.ToArray().Matched();
 
                         break;
@@ -793,6 +793,9 @@ namespace Kagami.Library.Parsers
                break;
             case "|=":
                symbol = new MatchSymbol().Matched<Symbol>();
+               break;
+            case "=~":
+               symbol = new SendBinaryMessageSymbol("match".Function("input"), Precedence.Boolean, true).Matched<Symbol>();
                break;
          }
 

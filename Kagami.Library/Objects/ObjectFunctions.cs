@@ -57,6 +57,8 @@ namespace Kagami.Library.Objects
                   return false;
             case InternalList internalList:
                return internalList.In(source);
+            case Regex regex:
+               return regex.IsMatch(source.AsString).IsTrue;
             default:
                if (classOf(source).MatchCompatible(classOf(comparisand)))
                   return equalifier(source, (T)comparisand);

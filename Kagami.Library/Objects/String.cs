@@ -13,8 +13,8 @@ using static Standard.Types.Maybe.MaybeFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct String : IObject, IObjectCompare, IComparable<String>, IEquatable<String>, IFormattable, ICollection, IComparable,
-      ISliceable
+   public struct String : IObject, IComparable<String>, IEquatable<String>, IFormattable, ICollection, IComparable, ISliceable,
+      IRangeItem
    {
       public static implicit operator String(string value) => new String(value);
 
@@ -90,6 +90,15 @@ namespace Kagami.Library.Objects
       }
 
       public IObject Set(IObject index, IObject value) => throw immutableValue(ClassName);
+
+      public Char this[int index]
+      {
+         get
+         {
+            index = wrapIndex(index, value.Length);
+            return value[index];
+         }
+      }
 
       public bool ExpandForArray => false;
 
@@ -244,11 +253,19 @@ namespace Kagami.Library.Objects
             return Nil.NilValue;
       }
 
-      public Array SplitOn(string on)
+      public Tuple SplitRegex(Regex regex) => regex.Split(value);
+
+      public Tuple SplitOn(string on)
       {
-         return new Array(value.Split(new[] { on }, StringSplitOptions.None).Select(Object));
+         return new Tuple(value.Split(new[] { on }, StringSplitOptions.None).Select(Object).ToArray());
       }
 
       public String Subtract(string substring) => value.Replace(substring, "");
+
+      public IRangeItem Successor => (String)value.Succ();
+
+      public IRangeItem Predecessor => (String)value.Pred();
+
+      public Range Range() => new Range(this, (String)"z".Repeat(value.Length), true);
    }
 }
