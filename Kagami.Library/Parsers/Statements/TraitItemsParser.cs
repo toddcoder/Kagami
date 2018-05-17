@@ -15,6 +15,7 @@ namespace Kagami.Library.Parsers.Statements
          {
             yield return new FunctionParser { TraitName = traitClass.Name };
             yield return new SignatureParser(traitClass);
+            yield return new IncludeTraitParser(traitClass);
          }
       }
    }

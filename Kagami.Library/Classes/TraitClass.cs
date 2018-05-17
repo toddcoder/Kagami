@@ -72,5 +72,23 @@ namespace Kagami.Library.Classes
 
          return Unit.Success();
       }
+
+      public IResult<Unit> CopyFrom(TraitClass sourceTraitClass)
+      {
+         foreach (var signature in sourceTraitClass.signatures.ValueArray())
+            if (RegisterSignature(signature).IfNot(out var exception))
+               return failure<Unit>(exception);
+
+         foreach (var (functionName, invokable) in sourceTraitClass.invokables)
+            if (RegisterInvokable(functionName, invokable).If(out _, out var exception))
+            {
+               if (signatures.ContainsKey(functionName))
+                  signatures.Remove(functionName);
+            }
+            else
+               return failure<Unit>(exception);
+
+         return Unit.Success();
+      }
    }
 }

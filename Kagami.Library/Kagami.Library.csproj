@@ -570,6 +570,7 @@
     <Compile Include="Parsers\Statements\ForParser2.cs" />
     <Compile Include="Parsers\Statements\FunctionParser.cs" />
     <Compile Include="Parsers\Statements\IfParser.cs" />
+    <Compile Include="Parsers\Statements\IncludeTraitParser.cs" />
     <Compile Include="Parsers\Statements\MatchFunctionParser.cs" />
     <Compile Include="Parsers\Statements\MatchParser.cs" />
     <Compile Include="Parsers\Statements\ConditionalAssignParser.cs" />
