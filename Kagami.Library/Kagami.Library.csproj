@@ -598,6 +598,7 @@
     <Compile Include="Parsers\TokenTransaction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Putter.cs" />
+    <Compile Include="Runtime\DebugState.cs" />
     <Compile Include="Runtime\ExecutionContext.cs" />
     <Compile Include="Runtime\Field.cs" />
     <Compile Include="Runtime\Fields.cs" />

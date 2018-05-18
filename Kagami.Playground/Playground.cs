@@ -6,9 +6,12 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Kagami.Library;
+using Kagami.Library.Objects;
+using Kagami.Library.Runtime;
 using Standard.Computer;
 using Standard.ObjectGraphs;
 using Standard.Types.Arrays;
+using Standard.Types.Collections;
 using Standard.Types.Dates;
 using Standard.Types.Maybe;
 using Standard.Types.Numbers;
@@ -46,6 +49,7 @@ namespace Kagami.Playground
       IMaybe<int> exceptionIndex;
       bool cancelled;
       int[] tabStops;
+      Hash<string, IObject> watch;
 
       public Playground()
       {
@@ -110,13 +114,6 @@ namespace Kagami.Playground
                manual = !manual;
                ((ToolStripMenuItem)s).Checked = manual;
             }, "^F5");
-/*
-            menus.Menu("Build", "Debug", (s, evt) =>
-            {
-               this.debugging = !this.debugging;
-               ((ToolStripMenuItem)s).Checked = this.debugging;
-            }, "F6");
-*/
             menus.Menu("Build", "Dump operations", (s, evt) =>
             {
                dumpOperations = !dumpOperations;
@@ -136,6 +133,10 @@ namespace Kagami.Playground
             menus.Menu("Insert", "Triple quotes", (s, evt) => insertText("\"\"\"\n\"\"\"", -3), "^Q");
             menus.Menu("Insert", "Set", (s, evt) => insertText("«»", -1), "^D9");
 
+            menus.Menu("&Debug");
+            menus.Menu("Debug", "Step Into", (s, evt) => stepInto(), "F11");
+            menus.Menu("Debug", "Step Over", (s, evt) => stepOver(), "F10");
+
             menus.CreateMainMenu(this);
             menus.StandardContextEdit(document);
 
@@ -150,6 +151,7 @@ namespace Kagami.Playground
             stopwatch = new Stopwatch();
             exceptionIndex = none<int>();
             cancelled = false;
+            watch = new Hash<string, IObject>();
             if (playgroundConfiguration.LastFile != null)
                document.Open(playgroundConfiguration.LastFile);
          }
@@ -242,6 +244,10 @@ namespace Kagami.Playground
             }
          }
       }
+
+      void stepInto() => Machine.Current?.Step(true, watch);
+
+      void stepOver() => Machine.Current?.Step(false, watch);
 
       int getRemainingLineIndex(int index)
       {
@@ -398,6 +404,8 @@ namespace Kagami.Playground
 
       void paintResults(PaintEventArgs e)
       {
+         var font = new Font(textEditor.Font, FontStyle.Bold);
+
          try
          {
             Colorizer.StopTextBoxUpdate(textEditor);
@@ -412,8 +420,6 @@ namespace Kagami.Playground
                   array2[lineFromCharIndex2] = textEditor.GetPositionFromCharIndex(result.Key).Y;
                }
                catch { }
-
-            var font = textEditor.Font;
             for (var lineNumber = lineFromCharIndex1; lineNumber < textEditor.Lines.Length; ++lineNumber)
             {
                var str = array1[lineNumber];
@@ -460,6 +466,7 @@ namespace Kagami.Playground
          catch { }
          finally
          {
+            font?.Dispose();
             Colorizer.ResumeTextBoxUpdate(textEditor);
          }
       }

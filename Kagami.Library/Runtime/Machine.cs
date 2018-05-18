@@ -4,6 +4,7 @@ using System.Linq;
 using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
+using Standard.Types.Collections;
 using Standard.Types.Enumerables;
 using Standard.Types.Exceptions;
 using Standard.Types.Maybe;
@@ -28,6 +29,7 @@ namespace Kagami.Library.Runtime
       Operations.Operations operations;
       bool running;
       Lazy<TableMaker> table;
+      DebugState debugState;
 
       public Machine(IContext context)
       {
@@ -37,6 +39,7 @@ namespace Kagami.Library.Runtime
          running = false;
          table = new Lazy<TableMaker>(() =>
             new TableMaker(("Address", Justification.Left), ("Operation", Justification.Left), ("Stack", Justification.Left)));
+         debugState = DebugState.Starting;
       }
 
       public IContext Context => context;
@@ -334,6 +337,45 @@ namespace Kagami.Library.Runtime
             return failure<Field>(fieldNotFound(fieldName));
          else
             return failure<Field>(exception);
+      }
+
+      public void BeginDebugging()
+      {
+         debugState = DebugState.Active;
+         stack.Clear();
+         stack.Push(new Frame());
+         operations.Goto(0);
+      }
+
+      public IResult<DebugState> Step(bool into, Hash<string, IObject> watch)
+      {
+         if (debugState == DebugState.Starting)
+            BeginDebugging();
+
+         while (!context.Cancelled() && operations.More && debugState == DebugState.Active)
+            if (operations.Current.If(out var operation))
+            {
+               var currentAddress = operations.Address;
+               switch (operation)
+               {
+                  case EndOfLine _:
+                     return debugState.Success();
+                  default:
+                     if (operation.Execute(this).If(out var result, out var original) && running && result.ClassName != "Void")
+                        stack.Peek().Push(result);
+                     else if (original.IsFailedMatch)
+                        return failure<DebugState>(original.Exception);
+
+                     break;
+               }
+
+               if (operation.Increment && currentAddress == operations.Address)
+                  operations.Advance(1);
+            }
+            else
+               return failure<DebugState>(addressOutOfRange());
+
+         return debugState.Success();
       }
    }
 }
