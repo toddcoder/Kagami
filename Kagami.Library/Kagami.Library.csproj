@@ -485,6 +485,7 @@
     <Compile Include="Parsers\Expressions\FoldOperatorParser.cs" />
     <Compile Include="Parsers\Expressions\FormatParser.cs" />
     <Compile Include="Parsers\Expressions\HexadecimalParser.cs" />
+    <Compile Include="Parsers\Expressions\HexExpParser.cs" />
     <Compile Include="Parsers\Expressions\IfAsAndParser.cs" />
     <Compile Include="Parsers\Expressions\ImageParser.cs" />
     <Compile Include="Parsers\Expressions\IndexParser.cs" />
