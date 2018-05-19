@@ -16,7 +16,7 @@ namespace Kagami.Library.Parsers.Statements
          state.BeginTransaction();
          if (IgnoreIndentation || SingleLine || state.Scan($"^ /({state.Indentation.FriendlyString()})", Color.Whitespace).IsMatched)
          {
-            (var type, _, var exception) = base.Scan(state).Values;
+            var (type, _, exception) = base.Scan(state).Values;
             switch (type)
             {
                case MatchType.Matched:

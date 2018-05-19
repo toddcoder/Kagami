@@ -99,7 +99,7 @@ namespace Kagami.Library.Runtime
             return failure<Unit>(fieldNotFound(fieldName));
       }
 
-      public IEnumerator<(string, Field)> GetEnumerator()
+      public IEnumerator<(string fieldName, Field field)> GetEnumerator()
       {
          foreach (var item in fields)
             yield return (item.Key, item.Value);

@@ -337,6 +337,8 @@ namespace Kagami.Library.Operations
 
       public void SetFields(Parameters parameters) => add(new SetFields(parameters));
 
+      public void Break() => add(new Break());
+
       public IResult<Operations> ToOperations(ParseState state)
       {
          operations.Add(new Stop());

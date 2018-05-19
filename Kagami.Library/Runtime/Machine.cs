@@ -358,7 +358,7 @@ namespace Kagami.Library.Runtime
                var currentAddress = operations.Address;
                switch (operation)
                {
-                  case EndOfLine _:
+                  case Break _:
                      return debugState.Success();
                   default:
                      if (operation.Execute(this).If(out var result, out var original) && running && result.ClassName != "Void")

@@ -30,8 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Standard.Types">
-      <HintPath>C:\Enterprise\Standard7\Standard.Types.dll</HintPath>
+    <Reference Include="Standard.Types, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Standard\Standard.Types.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -349,6 +350,7 @@
     <Compile Include="Operations\BAnd.cs" />
     <Compile Include="Operations\BNot.cs" />
     <Compile Include="Operations\BOr.cs" />
+    <Compile Include="Operations\Break.cs" />
     <Compile Include="Operations\BShiftLeft.cs" />
     <Compile Include="Operations\BShiftRight.cs" />
     <Compile Include="Operations\BXor.cs" />
@@ -598,6 +600,8 @@
     <Compile Include="Parsers\TokenTransaction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Putter.cs" />
+    <Compile Include="Runtime\Breakpoint.cs" />
+    <Compile Include="Runtime\BreakpointType.cs" />
     <Compile Include="Runtime\DebugState.cs" />
     <Compile Include="Runtime\ExecutionContext.cs" />
     <Compile Include="Runtime\Field.cs" />

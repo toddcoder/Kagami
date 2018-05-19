@@ -52,7 +52,10 @@ namespace Kagami.Library
          var statements = state.Statements();
          var builder = new OperationsBuilder();
          foreach (var statement in statements)
+         {
             statement.Generate(builder);
+            statement.AddBreak(builder);
+         }
 
          if (builder.ToOperations(state).If(out var operations, out var exception))
          {

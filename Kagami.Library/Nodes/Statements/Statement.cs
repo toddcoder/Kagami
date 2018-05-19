@@ -8,5 +8,7 @@ namespace Kagami.Library.Nodes.Statements
       public static implicit operator Statement(Symbol symbol) => new ExpressionStatement(new Expression(symbol), true);
 
       public abstract void Generate(OperationsBuilder builder);
+
+      public void AddBreak(OperationsBuilder builder) => builder.Break();
    }
 }
