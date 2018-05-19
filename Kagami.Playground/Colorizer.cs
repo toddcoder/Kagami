@@ -80,7 +80,17 @@ namespace Kagami.Playground
          }
       }
 
-      static bool isItalic(Library.Parsers.Color color) => color == Library.Parsers.Color.Identifier;
+      static bool isItalic(Library.Parsers.Color color)
+      {
+         switch (color)
+         {
+            case Library.Parsers.Color.Identifier:
+            case Library.Parsers.Color.Label:
+               return true;
+            default:
+               return false;
+         }
+      }
 
       static Color getBackColor() => Color.White;
 
@@ -124,7 +134,7 @@ namespace Kagami.Playground
             case Library.Parsers.Color.Class:
                return Color.DarkGreen;
             case Library.Parsers.Color.Label:
-               return Color.Gray;
+               return Color.DimGray;
             case Library.Parsers.Color.Type:
                return Color.DarkCyan;
             default:

@@ -22,7 +22,7 @@ namespace Kagami.Library.Classes
          compareMessages();
          rangeMessages();
 
-         messages["~"] = (obj, msg) => function<String, String>(obj, msg, (s1, s2) => s1.Concatenate(s2.Value));
+         messages["~"] = (obj, msg) => function<String, IObject>(obj, msg, (s1, s2) => s1.Concatenate(s2.AsString));
          messages["[]"] = (obj, msg) => function<String, Int>(obj, msg, (s, i) => s[i.Value]);
          messages["length".get()] = (obj, msg) => function<String>(obj, s => s.Length);
          messages["upper"] = (obj, msg) => function<String>(obj, s => s.Upper());

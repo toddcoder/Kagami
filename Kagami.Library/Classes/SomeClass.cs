@@ -16,6 +16,7 @@ namespace Kagami.Library.Classes
          messages["isNil".get()] = (obj, msg) => function<Some>(obj, s => (Boolean)s.IsNil);
          messages["map"] = (obj, msg) => function<Some, Lambda>(obj, msg, (s, l) => s.Map(l));
          messages["flatMap"] = (obj, msg) => function<Some, Lambda, Lambda>(obj, msg, (s, l1, l2) => s.FlatMap(l1, l2));
+         messages["defaultTo"] = (obj, msg) => function<Some, IObject>(obj, msg, (s, o) => s.Value);
       }
 
       public override bool AssignCompatible(BaseClass otherClass) => otherClass is SomeClass || otherClass is NilClass;

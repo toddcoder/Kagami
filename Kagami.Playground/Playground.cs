@@ -28,9 +28,9 @@ namespace Kagami.Playground
    {
       const string PLAYGROUND_FONT_NAME = "Consolas";
       const float PLAYGROUND_FONT_SIZE = 14f;
-      const string PLAYGROUND_CONFIGURATION_FILE1 = @"C:\Enterprise\Configurations\Kagami\Kagami.configuration";
-      const string PLAYGROUND_CONFIGURATION_FILE2 = @"C:\Kagami\Kagami.configuration";
-      const string PLAYGROUND_PACKAGE_FOLDER = @"C:\Enterprise\Configurations\Kagami\Packages";
+      const string PLAYGROUND_CONFIGURATION_FILE1 = @"E:\Configurations\Kagami\Kagami.configuration";
+      const string PLAYGROUND_CONFIGURATION_FILE2 = @"E:\Configurations\Kagami\Kagami.configuration";
+      const string PLAYGROUND_PACKAGE_FOLDER = @"E:\Enterprise\Configurations\Kagami\Packages";
 
       Document document;
       TextBoxConsole outputConsole;
