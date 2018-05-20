@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using Kagami.Library.Invokables;
@@ -528,6 +529,23 @@ namespace Kagami.Library.Parsers
          return accum;
       }
 
+      public static double convertFloat(string source, int baseValue, string possible)
+      {
+         var left = convert(source.TakeUntil("."), baseValue, possible);
+
+         var right = source.SkipUntil(".").Skip(1);
+         var accum = 0.0;
+         for (var i = 0; i < right.Length; i++)
+         {
+            var exponent = i + 1;
+            var raised = Math.Pow(baseValue, exponent);
+            var index = possible.IndexOf(right[i]);
+            accum += 1.0 / (raised / index);
+         }
+
+         return (double)left + accum;
+      }
+
       public static IMatched<Unit> getNumber(ExpressionBuilder builder, string type, string source)
       {
          switch (type)
@@ -644,7 +662,7 @@ namespace Kagami.Library.Parsers
       public static IMatched<IMaybe<Expression>> getAnd(ParseState state)
       {
          var builder = new ExpressionBuilder(ExpressionFlags.OmitIf);
-         var parser = new IfAsAndParser(builder);
+         var parser =  new IfAsAndParser(builder);
          if (parser.Scan(state).If(out _, out var isNotMatched, out var exception))
             if (builder.ToExpression().If(out var expression, out exception))
                return expression.Some().Matched();
@@ -816,7 +834,7 @@ namespace Kagami.Library.Parsers
          var postfixParser = new PostfixParser(builder);
 
          var isNotMatched = false;
-         System.Exception exception = null;
+         Exception exception = null;
 
          while (state.More)
             if (prefixParser.Scan(state).If(out _, out isNotMatched, out exception)) { }

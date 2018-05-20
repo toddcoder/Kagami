@@ -546,6 +546,7 @@
     <Compile Include="Parsers\Parser.cs" />
     <Compile Include="Parsers\ParserFunctions.cs" />
     <Compile Include="Parsers\ParseState.cs" />
+    <Compile Include="Parsers\Statements\AliasParser.cs" />
     <Compile Include="Parsers\Statements\AssignToFieldParser.cs" />
     <Compile Include="Parsers\Statements\AssignToMatchParser.cs" />
     <Compile Include="Parsers\Statements\AssignToNewFieldParser2.cs" />

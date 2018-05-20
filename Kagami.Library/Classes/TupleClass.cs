@@ -1,7 +1,7 @@
 ﻿using Kagami.Library.Objects;
 using Standard.Types.Exceptions;
+using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Classes.ClassFunctions;
-using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Classes
 {
@@ -36,7 +36,7 @@ namespace Kagami.Library.Classes
             case Int i:
                return tuple[i.Value];
             case String s:
-               return someOf(tuple[s.Value]);
+               return tuple[s.Value];
             default:
                throw "Invalid index".Throws();
          }
@@ -52,7 +52,10 @@ namespace Kagami.Library.Classes
          {
             var tuple = (Tuple)obj;
             var name = message.Name.unget();
-            return tuple[name].FlatMap(v => new Some(v), () => Nil.NilValue);
+            if (tuple.ContainsName(name))
+               return tuple[name];
+            else
+               throw messageNotFound(this, name);
          }
       }
    }

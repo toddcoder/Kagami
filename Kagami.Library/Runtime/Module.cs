@@ -114,5 +114,16 @@ namespace Kagami.Library.Runtime
       }
 
       public bool OperatorExists(string name) => operators.Contains(name);
+
+      public IResult<Unit> Alias(string alias, string className)
+      {
+         if (classes.ContainsKey(className))
+         {
+            classes[alias] = classes[className];
+            return Unit.Success();
+         }
+         else
+            return failure<Unit>(classNotFound(className));
+      }
    }
 }

@@ -150,5 +150,9 @@ namespace Kagami.Library
       public static string messageUnassignedd() => "Unassigned";
 
       public static Exception unassigned() => messageUnassignedd().Throws();
+
+      public static string messageKeyNotFound(IObject key) => $"Key {key.Image} not found";
+
+      public static Exception keyNotFound(IObject key) => messageKeyNotFound(key).Throws();
    }
 }

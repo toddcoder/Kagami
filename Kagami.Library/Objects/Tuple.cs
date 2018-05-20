@@ -4,6 +4,7 @@ using System.Linq;
 using Standard.Types.Collections;
 using Standard.Types.Enumerables;
 using Standard.Types.Maybe;
+using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Standard.Types.Arrays.ArrayFunctions;
 using static Standard.Types.Maybe.MaybeFunctions;
@@ -85,12 +86,14 @@ namespace Kagami.Library.Objects
 
       public IObject this[int index] => items[wrapIndex(index, items.Length)];
 
-      public IMaybe<IObject> this[string name]
+      public IObject this[string name]
       {
          get
          {
-            var self = this;
-            return names.Map(name, index => self.items[index]);
+            if (names.ContainsKey(name))
+               return items[names[name]];
+            else
+               throw keyNotFound((String)name);
          }
       }
 

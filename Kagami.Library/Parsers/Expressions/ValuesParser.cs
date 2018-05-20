@@ -21,8 +21,8 @@ namespace Kagami.Library.Parsers.Expressions
             yield return new ListParser(builder);
             yield return new AnyParser(builder);
             yield return new FloatParser(builder);
-            yield return new HexadecimalParser(builder);
             yield return new HexExpParser(builder);
+            yield return new HexadecimalParser(builder);
             yield return new OctalParser(builder);
             yield return new BinaryParser(builder);
             yield return new ByteParser(builder);

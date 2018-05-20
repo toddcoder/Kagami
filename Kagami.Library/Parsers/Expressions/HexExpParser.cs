@@ -10,7 +10,7 @@ namespace Kagami.Library.Parsers.Expressions
 {
    public class HexExpParser : SymbolParser
    {
-      public override string Pattern => "^ /(|s|) /'0x' /([/d '_a-f']+) /'p' /(['-+']? /d+)? /'i'?";
+      public override string Pattern => "^ /(|s|) /'0x' /([/d '_a-f']+ '.' [/d '_a-f']+) (/'p' /(['-+']? /d+))? /'i'?";
 
       public HexExpParser(ExpressionBuilder builder) : base(builder) { }
 
@@ -20,14 +20,24 @@ namespace Kagami.Library.Parsers.Expressions
          var type = tokens[6].Text;
          state.Colorize(tokens, Color.Whitespace, Color.NumberPart, Color.Number, Color.NumberPart, Color.Number, Color.NumberPart);
 
-         var prefix = source.TakeUntil("p");
-         var suffix = source.SkipUntil("p").Skip(1);
+         var prefix = source.Contains("p") ? source.TakeUntil("p") : source;
+         var suffix = source.Contains("p") ? source.SkipUntil("p").Skip(1) : "";
 
-         var left = convert(prefix, 16, "0123456789abcdef");
-         if (int.TryParse(suffix, out var right))
+         var left = convertFloat(prefix, 16, "0123456789abcdef");
+
+         if (suffix.IsEmpty())
+         {
+            if (type == "i")
+               builder.Add(new ComplexSymbol(left));
+            else
+               builder.Add(new FloatSymbol(left));
+
+            return Unit.Matched();
+         }
+         else if (int.TryParse(suffix, out var right))
          {
             var raised = Math.Pow(2, right);
-            var result = (double)left * raised;
+            var result = left * raised;
             if (type == "i")
                builder.Add(new ComplexSymbol(result));
             else
