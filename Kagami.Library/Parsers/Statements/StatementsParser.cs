@@ -35,6 +35,7 @@ namespace Kagami.Library.Parsers.Statements
                yield return new DefAssignParser();
                yield return new DataTypeParser();
                yield return new AliasParser();
+               yield return new LoopParser();
             }
 
             yield return new AssignToFieldParser { SingleLine = singleLine };

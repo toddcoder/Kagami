@@ -134,6 +134,7 @@
     <Compile Include="Nodes\Statements\Function.cs" />
     <Compile Include="Nodes\Statements\If.cs" />
     <Compile Include="Nodes\Statements\ConditionalAssign.cs" />
+    <Compile Include="Nodes\Statements\Loop.cs" />
     <Compile Include="Nodes\Statements\MatchFunction.cs" />
     <Compile Include="Nodes\Statements\MetaClass.cs" />
     <Compile Include="Nodes\Statements\NoOp.cs" />
@@ -576,6 +577,7 @@
     <Compile Include="Parsers\Statements\FunctionParser.cs" />
     <Compile Include="Parsers\Statements\IfParser.cs" />
     <Compile Include="Parsers\Statements\IncludeTraitParser.cs" />
+    <Compile Include="Parsers\Statements\LoopParser.cs" />
     <Compile Include="Parsers\Statements\MatchFunctionParser.cs" />
     <Compile Include="Parsers\Statements\MatchParser.cs" />
     <Compile Include="Parsers\Statements\ConditionalAssignParser.cs" />
@@ -596,6 +598,7 @@
     <Compile Include="Parsers\Statements\TraitItemsParser.cs" />
     <Compile Include="Parsers\Statements\TraitNameParser.cs" />
     <Compile Include="Parsers\Statements\TraitParser.cs" />
+    <Compile Include="Parsers\Statements\UntilParser.cs" />
     <Compile Include="Parsers\Statements\WhileParser.cs" />
     <Compile Include="Parsers\Statements\YieldParser.cs" />
     <Compile Include="Parsers\Token.cs" />
