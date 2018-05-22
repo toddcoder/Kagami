@@ -4,7 +4,7 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class MatchSymbol : Symbol
    {
-      public override void Generate(OperationsBuilder builder) => builder.SendMessage("match", 1);
+      public override void Generate(OperationsBuilder builder) => builder.Match(true, false);
 
       public override Precedence Precedence => Precedence.Boolean;
 

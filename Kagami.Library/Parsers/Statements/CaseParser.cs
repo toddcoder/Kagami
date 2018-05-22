@@ -73,7 +73,9 @@ namespace Kagami.Library.Parsers.Statements
 
             var builder = new ExpressionBuilder(ExpressionFlags.Standard);
             builder.Add(new FieldSymbol(fieldName));
-            builder.Add(new SendMessageSymbol("match", Precedence.SendMessage, comparisand));
+            builder.Add(comparisand);
+            //builder.Add(new SendMessageSymbol("match", Precedence.SendMessage, comparisand));
+            builder.Add(new MatchSymbol());
             if (and.If(out var a))
                builder.Add(a);
 

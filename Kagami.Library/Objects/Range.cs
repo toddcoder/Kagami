@@ -104,7 +104,7 @@ namespace Kagami.Library.Objects
       public Boolean In(IObject comparisand)
       {
          if (comparisand is IObjectCompare oc && startObj is IObjectCompare left)
-            if (left.Compare(comparisand) >= 0)
+            if (left.Compare(comparisand) > 0)
                return false;
             else if (inclusive)
                return oc.Compare(stopObj) <= 0;

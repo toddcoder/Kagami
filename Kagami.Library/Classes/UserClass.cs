@@ -76,7 +76,7 @@ namespace Kagami.Library.Classes
       {
          foreach (var item in fields)
          {
-            (var fieldName, var field) = item;
+            var (fieldName, field) = item;
             if (fieldName.StartsWith("__$") || field.Value is IInvokableObject)
                continue;
 

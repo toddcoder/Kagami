@@ -230,6 +230,7 @@
     <Compile Include="Nodes\Symbols\InvokableExpressionSymbol.cs" />
     <Compile Include="Nodes\Symbols\PlaceholderSymbol.cs" />
     <Compile Include="Nodes\Symbols\Precedence.cs" />
+    <Compile Include="Nodes\Symbols\PushObjectSymbol.cs" />
     <Compile Include="Nodes\Symbols\RaiseSymbol.cs" />
     <Compile Include="Nodes\Symbols\RangeSymbol.cs" />
     <Compile Include="Nodes\Symbols\RationalSymbol.cs" />

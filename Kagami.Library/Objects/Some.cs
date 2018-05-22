@@ -33,9 +33,9 @@ namespace Kagami.Library.Objects
 
       public bool IsNil => false;
 
-      public IObject Map(Lambda lambda) => Unassigned.Value;
+      public IObject Map(Lambda lambda) => lambda.Invoke(value);
 
-      public IObject FlatMap(Lambda ifSome, Lambda ifNil) => Unassigned.Value;
+      public IObject FlatMap(Lambda ifSome, Lambda ifNil) => ifSome.Invoke(value);
 
       public bool IsTrue => true;
 

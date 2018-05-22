@@ -28,7 +28,7 @@ namespace Kagami.Library.Objects
 
       public IObject Map(Lambda lambda) => this;
 
-      public IObject FlatMap(Lambda ifSome, Lambda ifNil) => Unassigned.Value;
+      public IObject FlatMap(Lambda ifSome, Lambda ifNil) => ifNil.Invoke();
 
       public bool IsTrue => false;
 
