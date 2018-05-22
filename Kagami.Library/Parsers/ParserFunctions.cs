@@ -723,9 +723,9 @@ namespace Kagami.Library.Parsers
                else
                   symbol = new RationalSymbol().Matched<Symbol>();
                break;
-            case "//":
+/*            case "//":
                symbol = new IntDivideSymbol().Matched<Symbol>();
-               break;
+               break;*/
             case "<!":
                symbol = new SendBinaryMessageSymbol("foldl", Precedence.ChainedOperator).Matched<Symbol>();
                break;

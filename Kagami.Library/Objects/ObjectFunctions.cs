@@ -164,6 +164,22 @@ namespace Kagami.Library.Objects
 
       public static bool userObjectMatch(UserObject obj, IObject comparisand, Hash<string, IObject> bindings)
       {
+         if (classOf(obj).RespondsTo("match"))
+         {
+            var objectHash = bindings.ToHash(i => String.Object(i.Key), i => i.Value);
+            var dictionary = new Dictionary(objectHash);
+            if (sendMessage(obj, "match", dictionary).IsTrue)
+            {
+               var resultHash = dictionary.InternalHash;
+               foreach (var (key, value) in resultHash)
+                  bindings[key.AsString] = value;
+
+               return true;
+            }
+            else
+               return false;
+         }
+         else
          return match(obj, comparisand, (uo1, uo2) =>
          {
             foreach (var parameter in obj.Parameters)
