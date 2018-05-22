@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Standard.Types.Collections;
 using Standard.Types.Enumerables;
+using Standard.Types.Exceptions;
 using Standard.Types.Maybe;
 using static Kagami.Library.Objects.CollectionFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
@@ -29,10 +30,19 @@ namespace Kagami.Library.Objects
       }
 
       List<IObject> list;
+      int arrayID;
 
-      public Array(IEnumerable<IObject> objects) => list = objects.ToList();
+      public Array(IEnumerable<IObject> objects)
+      {
+         list = objects.ToList();
+         arrayID = uniqueObjectID();
+      }
 
-      public Array(IObject value) => list = new List<IObject> { value };
+      public Array(IObject value)
+      {
+         list = new List<IObject> { value };
+         arrayID = uniqueObjectID();
+      }
 
       public string ClassName => "Array";
 
@@ -48,8 +58,8 @@ namespace Kagami.Library.Objects
       {
          if (a1.Length.Value != a2.Length.Value)
             return false;
-
-         return a1.list.Zip(a2.list, (i1, i2) => i1.Match(i2, bindings)).All(b => b);
+         else
+            return a1.list.Zip(a2.list, (i1, i2) => i1.Match(i2, bindings)).All(b => b);
       }, bindings);
 
       public bool IsTrue => list.Count > 0;
@@ -65,6 +75,9 @@ namespace Kagami.Library.Objects
          get => list[wrapIndex(index, list.Count)];
          set
          {
+            if (value is Array array && array.arrayID == arrayID)
+               throw "Can't assign an array item to itself".Throws();
+
             index = wrapIndex(index, list.Count);
             if (value is Del)
                list.RemoveAt(index);
@@ -130,6 +143,7 @@ namespace Kagami.Library.Objects
       {
          var obj = this[index];
          list.RemoveAt(index);
+
          return obj;
       }
 
