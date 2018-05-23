@@ -208,6 +208,7 @@
     <Compile Include="Nodes\Symbols\MacroInvokeSymbol.cs" />
     <Compile Include="Nodes\Symbols\MapOperatorBinarySymbol.cs" />
     <Compile Include="Nodes\Symbols\MapOperatorSymbol.cs" />
+    <Compile Include="Nodes\Symbols\MatchOnDictionarySymbol.cs" />
     <Compile Include="Nodes\Symbols\MatchMapSymbol.cs" />
     <Compile Include="Nodes\Symbols\MatchSymbol.cs" />
     <Compile Include="Nodes\Symbols\MaxSymbol.cs" />
@@ -379,6 +380,7 @@
     <Compile Include="Operations\InternalListOperation.cs" />
     <Compile Include="Operations\Invoke.cs" />
     <Compile Include="Operations\MacroParameters.cs" />
+    <Compile Include="Operations\MatchOnDictionary.cs" />
     <Compile Include="Operations\MultipleOperandOperation.cs" />
     <Compile Include="Operations\NewDataComparisand.cs" />
     <Compile Include="Operations\NewDataType.cs" />
