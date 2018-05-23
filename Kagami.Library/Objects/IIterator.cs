@@ -122,5 +122,7 @@ namespace Kagami.Library.Objects
       Dictionary ToDictionary(Lambda keyLambda, Lambda valueLambda);
 
       IObject ToDictionary();
+
+      IObject Each(Lambda action);
    }
 }

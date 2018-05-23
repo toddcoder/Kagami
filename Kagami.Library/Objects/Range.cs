@@ -97,7 +97,7 @@ namespace Kagami.Library.Objects
 
       public IMaybe<IObject> Peek(int index) => none<IObject>();
 
-      public Int Length => 0;
+      public Int Length => list(this).Count();
 
       public bool ExpandForArray => true;
 
@@ -121,5 +121,7 @@ namespace Kagami.Library.Objects
       public IObject Add(int increment) => new Range(this, increment);
 
       public IObject Subtract(int increment) => new Range(this, -increment);
+
+      public Range Reverse() => new Range((IRangeItem)stop, start, true, -increment);
    }
 }

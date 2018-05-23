@@ -52,6 +52,7 @@ namespace Kagami.Library.Parsers.Statements
          }
 
          Module.Global.ForwardReference(className);
+
          state.SkipEndOfLine();
          if (getBlock(state).If(out var block, out var original))
          {

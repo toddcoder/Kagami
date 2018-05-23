@@ -582,6 +582,13 @@ namespace Kagami.Library.Objects
 
       public IObject ToDictionary() => Array.CreateObject(List());
 
+      public IObject Each(Lambda action)
+      {
+         foreach (var item in List())
+            action.Invoke(item);
+         return this;
+      }
+
       IObject shuffle(IObject[] array, int count)
       {
          var result = new Hash<int, IObject>();

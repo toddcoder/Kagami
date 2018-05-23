@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using System.Linq;
+using Kagami.Library.Nodes.Symbols;
 using Standard.Types.Maybe;
 using Standard.Types.Strings;
 using static Kagami.Library.Parsers.ParserFunctions;
@@ -10,11 +11,12 @@ namespace Kagami.Library.Parsers.Expressions
    {
       public IndexParser(ExpressionBuilder builder) : base(builder) { }
 
-      public override string Pattern => "^ /'['";
+      public override string Pattern => "^ /'[' /'+'?";
 
       public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
       {
-         state.Colorize(tokens, Color.Structure);
+         var insert = tokens[2].Text == "+";
+         state.Colorize(tokens, Color.Structure, Color.Structure);
 
          return getArguments(state, builder.Flags).Map(e =>
          {
@@ -25,7 +27,15 @@ namespace Kagami.Library.Parsers.Expressions
                   opSource = opSource.SkipWhile(" ").Take(1);
                   var operation = matchOperator(opSource)
                      .FlatMap(o => o.Some(), none<Operations.Operation>, _ => none<Operations.Operation>());
-                  builder.Add(new IndexSetterSymbol(e, expression, operation));
+                  if (operation.IsNone && insert)
+                  {
+                     var list = e.ToList();
+                     list.Add(expression);
+                     builder.Add(new SendMessageSymbol("insert".Function("at", "value"), Precedence.PostfixOperator,
+                        none<LambdaSymbol>(), none<Operations.Operation>(), list.ToArray()));
+                  }                  else
+                     builder.Add(new IndexSetterSymbol(e, expression, operation));
+
                   return Unit.Matched();
                }
                else

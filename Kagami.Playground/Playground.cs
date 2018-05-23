@@ -447,7 +447,7 @@ namespace Kagami.Playground
                   var num1 = textEditor.GetPositionFromCharIndex(textEditor.GetFirstCharIndexFromLine(lineNumber)).Y + size.Height / 2;
                   var index1 = matcher.FirstGroup.Length - 1;
                   var tabStop1 = tabStops[index1];
-                  using (var pen = new Pen(Color.LightGray, 3f))
+                  using (var pen = new Pen(Color.LightGray, 1f))
                   {
                      pen.CustomEndCap = new AdjustableArrowCap(3f, 3f, true);
                      e.Graphics.DrawLine(pen, x1, num1, x1 + tabStop1, num1);

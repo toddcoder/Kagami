@@ -33,6 +33,7 @@ namespace Kagami.Library.Parsers.Statements
                addMatchElse(ifStatement);
                state.AddStatement(ifStatement);
                state.Regress();
+
                return Unit.Matched();
             }
             else
