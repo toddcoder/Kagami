@@ -37,6 +37,7 @@ namespace Kagami.Library.Classes
          classMessages["cr".get()] = (cls, msg) => (Char)'\r';
          classMessages["lf".get()] = (cls, msg) => (Char)'\n';
          classMessages["tab".get()] = (cls, msg) => (Char)'\t';
+         classMessages["fromOrd"] = (cls, msg) => new Char((char)((Int)msg.Arguments[0]).Value);
       }
    }
 }

@@ -16,7 +16,6 @@ namespace Kagami.Library.Nodes.Statements
       Block block;
       bool overriding;
       string className;
-      FunctionInvokable invokable;
 
       public MatchFunction(string functionName, Parameters parameters, If ifStatement, bool overriding, string className)
       {
@@ -27,9 +26,11 @@ namespace Kagami.Library.Nodes.Statements
          this.className = className;
       }
 
+      public IInvokable getInvokable() => new FunctionInvokable(functionName, parameters, ToString());
+
       public override void Generate(OperationsBuilder builder)
       {
-         invokable = new FunctionInvokable(functionName, parameters, ToString());
+         var invokable = getInvokable();
          var lambda = new Lambda(invokable);
          if (builder.RegisterInvokable(invokable, block, overriding).If(out _, out var exception))
          {
@@ -58,7 +59,7 @@ namespace Kagami.Library.Nodes.Statements
          parameters = this.parameters;
          block = this.block;
          yielding = false;
-         invokable = this.invokable;
+         invokable = getInvokable();
          overriding = this.overriding;
       }
    }
