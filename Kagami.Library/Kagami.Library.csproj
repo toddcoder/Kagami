@@ -82,6 +82,7 @@
     <Compile Include="Classes\NameValueClass.cs" />
     <Compile Include="Classes\NilClass.cs" />
     <Compile Include="Classes\OpenRangeClass.cs" />
+    <Compile Include="Classes\PatternClass.cs" />
     <Compile Include="Classes\PlaceholderClass.cs" />
     <Compile Include="Classes\RangeClass.cs" />
     <Compile Include="Classes\RationalClass.cs" />
@@ -208,7 +209,7 @@
     <Compile Include="Nodes\Symbols\MacroInvokeSymbol.cs" />
     <Compile Include="Nodes\Symbols\MapOperatorBinarySymbol.cs" />
     <Compile Include="Nodes\Symbols\MapOperatorSymbol.cs" />
-    <Compile Include="Nodes\Symbols\MatchOnDictionarySymbol.cs" />
+    <Compile Include="Nodes\Symbols\PatternSymbol.cs" />
     <Compile Include="Nodes\Symbols\MatchMapSymbol.cs" />
     <Compile Include="Nodes\Symbols\MatchSymbol.cs" />
     <Compile Include="Nodes\Symbols\MaxSymbol.cs" />
@@ -319,6 +320,7 @@
     <Compile Include="Objects\ObjectFunctions.cs" />
     <Compile Include="Objects\OpenRange.cs" />
     <Compile Include="Objects\OpenRangeIterator.cs" />
+    <Compile Include="Objects\Pattern.cs" />
     <Compile Include="Objects\Placeholder.cs" />
     <Compile Include="Objects\Range.cs" />
     <Compile Include="Objects\RangeIterator.cs" />
@@ -380,7 +382,6 @@
     <Compile Include="Operations\InternalListOperation.cs" />
     <Compile Include="Operations\Invoke.cs" />
     <Compile Include="Operations\MacroParameters.cs" />
-    <Compile Include="Operations\MatchOnDictionary.cs" />
     <Compile Include="Operations\MultipleOperandOperation.cs" />
     <Compile Include="Operations\NewDataComparisand.cs" />
     <Compile Include="Operations\NewDataType.cs" />
@@ -472,6 +473,7 @@
     <Compile Include="Parsers\Expressions\BNotParser.cs" />
     <Compile Include="Parsers\Expressions\BooleanParser.cs" />
     <Compile Include="Parsers\Expressions\ByteParser.cs" />
+    <Compile Include="Parsers\Expressions\CaseExpressionParser.cs" />
     <Compile Include="Parsers\Expressions\CharParser.cs" />
     <Compile Include="Parsers\Expressions\ClassReferenceParser.cs" />
     <Compile Include="Parsers\Expressions\ComparisandParser.cs" />
@@ -506,6 +508,7 @@
     <Compile Include="Parsers\Expressions\IteratorParser.cs" />
     <Compile Include="Parsers\Expressions\LazyParser.cs" />
     <Compile Include="Parsers\Expressions\ListParser.cs" />
+    <Compile Include="Parsers\Expressions\MatchExpressionParser.cs" />
     <Compile Include="Parsers\Expressions\SkipTakeOperatorParser.cs" />
     <Compile Include="Parsers\Expressions\MatchMapParser.cs" />
     <Compile Include="Parsers\Expressions\NotParser.cs" />

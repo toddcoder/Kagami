@@ -821,9 +821,9 @@ namespace Kagami.Library.Parsers
             case "!!":
                symbol = new SendBinaryMessageSymbol("defaultTo", Precedence.Concatenate).Matched<Symbol>();
                break;
-            case "|":
+/*            case "|":
                symbol = new MatchOnDictionarySymbol().Matched<Symbol>();
-               break;
+               break;*/
          }
 
          return symbol;

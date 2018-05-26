@@ -24,17 +24,28 @@ namespace Kagami.Library.Operations
       public override IMatched<IObject> Execute(Machine machine, IObject x, IObject y)
       {
          var bindings = new Hash<string, IObject>();
-         if (x.Match(y, bindings))
+         switch (y)
          {
-            if (assign)
-               machine.CurrentFrame.Fields.AssignBindings(bindings);
-            else
-               machine.CurrentFrame.Fields.SetBindings(bindings, mutable, strict);
+            case Pattern pattern:
+               var cases = pattern.Cases;
+               foreach (var(comparisand, lambda) in cases)
+                  if (x.Match(comparisand, bindings))
+                     return lambda.Invoke().Matched();
 
-            return Boolean.True.Matched();
+               return "No match".FailedMatch<IObject>();
+            default:
+               if (x.Match(y, bindings))
+               {
+                  if (assign)
+                     machine.CurrentFrame.Fields.AssignBindings(bindings);
+                  else
+                     machine.CurrentFrame.Fields.SetBindings(bindings, mutable, strict);
+
+                  return Boolean.True.Matched();
+               }
+               else
+                  return Boolean.False.Matched();
          }
-         else
-            return Boolean.False.Matched();
       }
 
       public override string ToString()

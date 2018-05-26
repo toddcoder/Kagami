@@ -59,6 +59,8 @@ namespace Kagami.Library.Objects
                return internalList.In(source);
             case Regex regex:
                return regex.IsMatch(source.AsString).IsTrue;
+            case Pattern pattern:
+               return pattern.Match(source, bindings);
             default:
                if (classOf(source).MatchCompatible(classOf(comparisand)))
                   return equalifier(source, (T)comparisand);
@@ -102,6 +104,8 @@ namespace Kagami.Library.Objects
                }
                else
                   return false;
+            case Pattern pattern:
+               return pattern.Match(source, bindings);
             default:
                return equalifier(source, comparisand);
          }

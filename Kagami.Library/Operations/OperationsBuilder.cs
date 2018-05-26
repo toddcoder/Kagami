@@ -339,8 +339,6 @@ namespace Kagami.Library.Operations
 
       public void Break() => add(new Break());
 
-      public void MatchOnDictionary() => add(new MatchOnDictionary());
-
       public IResult<Operations> ToOperations(ParseState state)
       {
          operations.Add(new Stop());
