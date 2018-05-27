@@ -140,6 +140,7 @@
     <Compile Include="Nodes\Statements\MatchFunction.cs" />
     <Compile Include="Nodes\Statements\MetaClass.cs" />
     <Compile Include="Nodes\Statements\NoOp.cs" />
+    <Compile Include="Nodes\Statements\OpenPackage.cs" />
     <Compile Include="Nodes\Statements\Pass.cs" />
     <Compile Include="Nodes\Statements\Print.cs" />
     <Compile Include="Nodes\Statements\Put.cs" />
@@ -392,6 +393,7 @@
     <Compile Include="Operations\NewOpenRange.cs" />
     <Compile Include="Operations\NewRational.cs" />
     <Compile Include="Operations\NewValue.cs" />
+    <Compile Include="Operations\OpenPackage.cs" />
     <Compile Include="Operations\Pipeline.cs" />
     <Compile Include="Operations\PopExitFrame.cs" />
     <Compile Include="Operations\PopFrameWithValue.cs" />
@@ -594,6 +596,7 @@
     <Compile Include="Parsers\Statements\MatchFunctionParser.cs" />
     <Compile Include="Parsers\Statements\MatchParser.cs" />
     <Compile Include="Parsers\Statements\ConditionalAssignParser.cs" />
+    <Compile Include="Parsers\Statements\OpenPackageParser.cs" />
     <Compile Include="Parsers\Statements\ParentClassParser.cs" />
     <Compile Include="Parsers\Statements\PassParser.cs" />
     <Compile Include="Parsers\Statements\PrintLnParser.cs" />

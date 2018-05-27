@@ -1,6 +1,7 @@
 ﻿using System;
 using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
+using Kagami.Library.Packages;
 using Kagami.Library.Runtime;
 using Standard.Types.Maybe;
 using static Kagami.Library.AllExceptions;
@@ -16,7 +17,8 @@ namespace Kagami.Library.Operations
          if (invokable is YieldingFunctionInvokable yfi)
             InvokeYieldingInvokable(machine, yfi, arguments);
          else
-            InvokeInvokable(machine, invokable, arguments, invokableObject is IProvidesFields pf && pf.ProvidesFields ? pf.Fields : new Fields());
+            InvokeInvokable(machine, invokable, arguments,
+               invokableObject is IProvidesFields pf && pf.ProvidesFields ? pf.Fields : new Fields());
       }
 
       static void InvokeYieldingInvokable(Machine machine, YieldingFunctionInvokable invokable, Arguments arguments)
@@ -66,15 +68,19 @@ namespace Kagami.Library.Operations
             switch (type)
             {
                case MatchType.Matched:
-                  if (field.Value is IInvokableObject io)
+                  switch (field.Value)
                   {
-                     InvokeInvokableObject(machine, io, arguments);
-                     increment = io.Invokable is YieldingFunctionInvokable;
+                     case IInvokableObject io:
+                        InvokeInvokableObject(machine, io, arguments);
+                        increment = io.Invokable is YieldingFunctionInvokable;
 
-                     return notMatched<IObject>();
+                        return notMatched<IObject>();
+                     case PackageFunction pf:
+                        increment = true;
+                        return pf.Invoke(arguments).Matched();
+                     default:
+                        return failedMatch<IObject>(incompatibleClasses(field.Value, "Invokable object"));
                   }
-                  else
-                     return failedMatch<IObject>(incompatibleClasses(field.Value, "Invokable object"));
                case MatchType.NotMatched:
                   return failedMatch<IObject>(fieldNotFound(fieldName));
                case MatchType.FailedMatch:

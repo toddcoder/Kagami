@@ -30,6 +30,7 @@ namespace Kagami.Library.Runtime
       bool running;
       Lazy<TableMaker> table;
       DebugState debugState;
+      GlobalFrame globalFrame;
 
       public Machine(IContext context)
       {
@@ -40,6 +41,7 @@ namespace Kagami.Library.Runtime
          table = new Lazy<TableMaker>(() =>
             new TableMaker(("Address", Justification.Left), ("Operation", Justification.Left), ("Stack", Justification.Left)));
          debugState = DebugState.Starting;
+         globalFrame = new GlobalFrame();
       }
 
       public IContext Context => context;
@@ -54,10 +56,13 @@ namespace Kagami.Library.Runtime
             table.Value.Add(address.ToString("D5"), message().Truncate(80), StackImage.Truncate(80));
       }
 
+      public GlobalFrame GlobalFrame => globalFrame;
+
       public IResult<Unit> Execute()
       {
          stack.Clear();
-         stack.Push(new GlobalFrame());
+         globalFrame = new GlobalFrame();
+         stack.Push(globalFrame);
          operations.Goto(0);
          running = true;
 

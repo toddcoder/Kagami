@@ -13,6 +13,7 @@ namespace Kagami.Library.Parsers.Statements
          get
          {
             yield return new EndOfLineParser();
+
             if (!singleLine)
             {
                yield return new ClassParser();
@@ -36,6 +37,7 @@ namespace Kagami.Library.Parsers.Statements
                yield return new DataTypeParser();
                yield return new AliasParser();
                yield return new LoopParser();
+               yield return new OpenPackageParser();
             }
 
             yield return new AssignToFieldParser { SingleLine = singleLine };
@@ -43,9 +45,9 @@ namespace Kagami.Library.Parsers.Statements
             if (!singleLine)
                yield return new FunctionParser();
 
-            yield return new PrintParser { SingleLine = singleLine };
+/*            yield return new PrintParser { SingleLine = singleLine };
             yield return new PrintLnParser { SingleLine = singleLine };
-            yield return new PutParser { SingleLine = singleLine };
+            yield return new PutParser { SingleLine = singleLine };*/
 
             if (!singleLine)
             {

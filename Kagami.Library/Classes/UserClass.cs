@@ -58,7 +58,7 @@ namespace Kagami.Library.Classes
             signatures[item.Key] = item.Value;
       }
 
-      public bool RegisterMethod(string fullFunctionName, Lambda lambda, bool overriding)
+      public virtual bool RegisterMethod(string fullFunctionName, Lambda lambda, bool overriding)
       {
          if (messages.ContainsKey(fullFunctionName) && !overriding)
             return false;
