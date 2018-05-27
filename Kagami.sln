@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kagami.Library", "Kagami.Li
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kagami.Playground", "Kagami.Playground\Kagami.Playground.csproj", "{11BB8466-99A3-439C-8814-881105F84F4F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kagami.Drawing", "Kagami.Drawing\Kagami.Drawing.csproj", "{992CA2AD-10DB-4DC6-9EF2-EB991C2B45FB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{11BB8466-99A3-439C-8814-881105F84F4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11BB8466-99A3-439C-8814-881105F84F4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11BB8466-99A3-439C-8814-881105F84F4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{992CA2AD-10DB-4DC6-9EF2-EB991C2B45FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{992CA2AD-10DB-4DC6-9EF2-EB991C2B45FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{992CA2AD-10DB-4DC6-9EF2-EB991C2B45FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{992CA2AD-10DB-4DC6-9EF2-EB991C2B45FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
