@@ -57,7 +57,7 @@ namespace Kagami.Library.Runtime
       public IResult<Unit> Execute()
       {
          stack.Clear();
-         stack.Push(new Frame());
+         stack.Push(new GlobalFrame());
          operations.Goto(0);
          running = true;
 

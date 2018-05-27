@@ -1,4 +1,5 @@
 ﻿using Kagami.Library.Classes;
+using Kagami.Library.Packages;
 using Standard.Types.Collections;
 using Standard.Types.Maybe;
 using static Kagami.Library.AllExceptions;
@@ -67,6 +68,9 @@ namespace Kagami.Library.Runtime
          classes["KeyValue"] = new KeyValueClass();
          classes["Regex"] = new RegexClass();
          classes["Pattern"] = new PatternClass();
+         classes["PackageFunction"] = new PackageFunctionClass();
+         classes["Sys"] = new SysClass();
+         classes["Math"] = new MathClass();
       }
 
       public IMaybe<BaseClass> Class(string name) => classes.Map(name);

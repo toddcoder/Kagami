@@ -253,5 +253,11 @@ namespace Kagami.Library.Operations
                return $"{value}.0";
          }
       }
+
+      public static double Asinh(double x) => Math.Log(x + Math.Sqrt(x * x + 1));
+
+      public static double Acosh(double x)=> Math.Log(x + Math.Sqrt(x * x - 1));
+
+      public static double Atanh(double x) => Math.Log((1 + x) / (1 - x)) / 2.0;
    }
 }

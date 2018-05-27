@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using Kagami.Library.Operations;
 using Standard.Types.Booleans;
 using Standard.Types.Collections;
 using Standard.Types.Objects;
@@ -160,6 +161,18 @@ namespace Kagami.Library.Objects
       public IObject Atan() => (Complex)CComplex.Atan(value);
 
       public IObject Atan2(INumeric other) => throw messageNotFound(classOf(this), "atan2");
+
+      public IObject Sinh() => (Float)Math.Sinh(AsDouble());
+
+      public IObject Cosh() => (Float)Math.Cosh(AsDouble());
+
+      public IObject Tanh() => (Float)Math.Tanh(AsDouble());
+
+      public IObject Asinh() => (Float)NumericFunctions.Asinh(AsDouble());
+
+      public IObject Acosh() => (Float)NumericFunctions.Acosh(AsDouble());
+
+      public IObject Atanh() => (Float)NumericFunctions.Atanh(AsDouble());
 
       public IObject Sqrt() => (Complex)CComplex.Sqrt(value);
 

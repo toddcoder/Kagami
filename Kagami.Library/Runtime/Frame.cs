@@ -14,13 +14,13 @@ namespace Kagami.Library.Runtime
 {
    public class Frame
    {
-      Stack<IObject> stack;
-      IMaybe<IObject> returnValue;
-      int address;
-      Fields fields;
-      Arguments arguments;
-      FrameType frameType;
-      bool parametersSet;
+      protected Stack<IObject> stack;
+      protected IMaybe<IObject> returnValue;
+      protected int address;
+      protected Fields fields;
+      protected Arguments arguments;
+      protected FrameType frameType;
+      protected bool parametersSet;
 
       public Frame(int address, Arguments arguments)
       {

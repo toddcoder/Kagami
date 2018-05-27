@@ -378,6 +378,12 @@ namespace Kagami.Library.Classes
          registerMessage("asin", (obj, msg) => msgNumberFunction(obj, mn => mn.Asin()));
          registerMessage("acos", (obj, msg) => msgNumberFunction(obj, mn => mn.Acos()));
          registerMessage("atan", (obj, msg) => msgNumberFunction(obj, mn => mn.Atan()));
+         registerMessage("sinh", (obj, msg) => msgNumberFunction(obj, mn => mn.Sinh()));
+         registerMessage("cosh", (obj, msg) => msgNumberFunction(obj, mn => mn.Cosh()));
+         registerMessage("tanh", (obj, msg) => msgNumberFunction(obj, mn => mn.Tanh()));
+         registerMessage("asinh", (obj, msg) => msgNumberFunction(obj, mn => mn.Asinh()));
+         registerMessage("acosh", (obj, msg) => msgNumberFunction(obj, mn => mn.Acosh()));
+         registerMessage("atanh", (obj, msg) => msgNumberFunction(obj, mn => mn.Atanh()));
          registerMessage("atan2", (obj, msg) => msgNumberFunction(obj, msg, (x, y) => x.Atan2(y)));
          registerMessage("sqrt", (obj, msg) => msgNumberFunction(obj, mn => mn.Sqrt()));
          registerMessage("log", (obj, msg) => msgNumberFunction(obj, mn => mn.Log()));

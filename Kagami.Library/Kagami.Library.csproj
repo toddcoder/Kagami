@@ -82,6 +82,7 @@
     <Compile Include="Classes\NameValueClass.cs" />
     <Compile Include="Classes\NilClass.cs" />
     <Compile Include="Classes\OpenRangeClass.cs" />
+    <Compile Include="Classes\PackageFunctionClass.cs" />
     <Compile Include="Classes\PatternClass.cs" />
     <Compile Include="Classes\PlaceholderClass.cs" />
     <Compile Include="Classes\RangeClass.cs" />
@@ -462,6 +463,13 @@
     <Compile Include="Operations\TwoNumericOperation.cs" />
     <Compile Include="Operations\TwoOperandOperation.cs" />
     <Compile Include="Operations\Yield.cs" />
+    <Compile Include="Packages\Math.cs" />
+    <Compile Include="Packages\MathClass.cs" />
+    <Compile Include="Packages\PackageClass.cs" />
+    <Compile Include="Packages\PackageFunction.cs" />
+    <Compile Include="Packages\Package.cs" />
+    <Compile Include="Packages\Sys.cs" />
+    <Compile Include="Packages\SysClass.cs" />
     <Compile Include="Parsers\Color.cs" />
     <Compile Include="Parsers\Expressions\AlternateStringType.cs" />
     <Compile Include="Parsers\Expressions\AndParser.cs" />
@@ -620,6 +628,7 @@
     <Compile Include="Runtime\Frame.cs" />
     <Compile Include="Runtime\FrameGroup.cs" />
     <Compile Include="Runtime\FrameType.cs" />
+    <Compile Include="Runtime\GlobalFrame.cs" />
     <Compile Include="Runtime\IContext.cs" />
     <Compile Include="Runtime\Machine.cs" />
     <Compile Include="Runtime\Module.cs" />

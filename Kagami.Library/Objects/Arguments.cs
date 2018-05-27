@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Standard.Types.Collections;
 using Standard.Types.Enumerables;
 using Standard.Types.Exceptions;
@@ -6,7 +8,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct Arguments : IObject
+   public struct Arguments : IObject, IEnumerable<IObject>
    {
       public static Arguments Append(Arguments arguments, IObject item)
       {
@@ -70,5 +72,13 @@ namespace Kagami.Library.Objects
       public string FullFunctionName(string name) => name.Function(labels.KeyArray());
 
       public IObject[] Value => arguments;
+
+      public IEnumerator<IObject> GetEnumerator()
+      {
+         foreach (var argument in arguments)
+            yield return argument;
+      }
+
+      IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
    }
 }

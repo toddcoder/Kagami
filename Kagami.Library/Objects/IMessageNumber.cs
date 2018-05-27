@@ -34,6 +34,18 @@
 
       IObject Atan2(INumeric other);
 
+      IObject Sinh();
+
+      IObject Cosh();
+
+      IObject Tanh();
+
+      IObject Asinh();
+
+      IObject Acosh();
+
+      IObject Atanh();
+
       IObject Sqrt();
 
       IObject Log();
