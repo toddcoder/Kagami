@@ -1,6 +1,8 @@
 ﻿using Kagami.Library.Objects;
 using Standard.Types.Collections;
+using static Kagami.Drawing.DrawingFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
+using static Kagami.Library.Operations.NumericFunctions;
 
 namespace Kagami.Drawing
 {
@@ -32,5 +34,15 @@ namespace Kagami.Drawing
       public IObject X => x;
 
       public IObject Y => y;
+
+      public Point Offset(IObject x, IObject y)
+      {
+         var newX = add(this.x, x);
+         var newY = add(this.y, y);
+
+         return new Point(newX, newY);
+      }
+
+      public Boolean IsEmpty => isZero(x) && isZero(y);
    }
 }

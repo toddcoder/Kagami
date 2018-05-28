@@ -35,6 +35,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,15 +48,23 @@
   <ItemGroup>
     <Compile Include="Drawing.cs" />
     <Compile Include="DrawingClass.cs" />
+    <Compile Include="DrawingFunctions.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="PointClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rectangle.cs" />
+    <Compile Include="RectangleClass.cs" />
+    <Compile Include="Size.cs" />
+    <Compile Include="SizeClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Kagami.Library\Kagami.Library.csproj">
       <Project>{bbf33b73-9d27-4cb7-ac3f-df39b9a566b1}</Project>
       <Name>Kagami.Library</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

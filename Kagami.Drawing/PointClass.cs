@@ -1,5 +1,6 @@
 ﻿using Kagami.Library;
 using Kagami.Library.Classes;
+using Kagami.Library.Objects;
 using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Drawing
@@ -14,6 +15,8 @@ namespace Kagami.Drawing
 
          messages["x".get()] = (obj, msg) => function<Point>(obj, p => p.X);
          messages["y".get()] = (obj, msg) => function<Point>(obj, p => p.Y);
+         messages["offset"] = (obj, msg) => function<Point, IObject, IObject>(obj, msg, (p, x, y) => p.Offset(x, y));
+         messages["isEmpty".get()] = (obj, msg) => function<Point>(obj, p => p.IsEmpty);
       }
    }
 }

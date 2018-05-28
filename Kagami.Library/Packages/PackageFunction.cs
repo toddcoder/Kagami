@@ -5,7 +5,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Packages
 {
-   public class PackageFunction : IObject
+   public class PackageFunction : IObject, IEquatable<PackageFunction>
    {
       protected Package package;
       protected string name;
@@ -36,6 +36,24 @@ namespace Kagami.Library.Packages
       {
          var message = new Message(name, arguments);
          return function(package, message);
+      }
+
+      public bool Equals(PackageFunction other)
+      {
+         return Equals(package, other.package) && string.Equals(name, other.name) && Equals(function, other.function);
+      }
+
+      public override bool Equals(object obj) => obj.GetType() == GetType() && Equals((PackageFunction)obj);
+
+      public override int GetHashCode()
+      {
+         unchecked
+         {
+            var hashCode = package != null ? package.GetHashCode() : 0;
+            hashCode = hashCode * 397 ^ (name != null ? name.GetHashCode() : 0);
+            hashCode = hashCode * 397 ^ (function != null ? function.GetHashCode() : 0);
+            return hashCode;
+         }
       }
    }
 }
