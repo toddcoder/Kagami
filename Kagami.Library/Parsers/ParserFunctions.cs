@@ -28,7 +28,7 @@ namespace Kagami.Library.Parsers
       public const string REGEX_ASSIGN_OPS = "'+' | '-' | '*' | '////' | '//' | '%' | '^'";
       public const string REGEX_FUNCTION_NAME = "((" + REGEX_INVOKABLE + ") | (['~`!@#$%^&*+=|\\;<>//?-']+) | '[]') '='?";
       public const string REGEX_EOL = "/r /n | /r | /n";
-      public const string REGEX_ANTICIPATE_END = "(> " + REGEX_EOL + ")";
+      public const string REGEX_ANTICIPATE_END = "(> (" + REGEX_EOL + ") | $)";
       public const string REGEX_OPERATORS = "['-+*//\\%<=>!.~|?#@&^,.:']";
 
       public static IMatched<char> fromHex(string text)

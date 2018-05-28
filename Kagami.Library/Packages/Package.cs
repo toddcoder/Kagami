@@ -26,5 +26,7 @@ namespace Kagami.Library.Packages
       public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
       public bool IsTrue => true;
+
+      public abstract void LoadTypes(Module module);
    }
 }

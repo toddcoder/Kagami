@@ -50,6 +50,7 @@ namespace Kagami.Playground
       bool cancelled;
       int[] tabStops;
       Hash<string, IObject> watch;
+      FolderName packageFolder;
 
       public Playground()
       {
@@ -86,6 +87,8 @@ namespace Kagami.Playground
          {
             labelStatus.Text = exception.Message;
          }
+
+         packageFolder = playgroundConfiguration.PackageFolder;
 
          outputConsole = new TextBoxConsole(this, textConsole, playgroundConfiguration.FontName, playgroundConfiguration.FontSize,
             TextBoxConsole.ConsoleColorType.Quick);
@@ -188,6 +191,7 @@ namespace Kagami.Playground
                var complier = new Compiler(textEditor.Text, kagamiConfiguration, context);
                if (complier.Generate().If(out var machine, out var exception))
                {
+                  machine.PackageFolder = packageFolder.FullPath;
                   if (execute)
                      if (machine.Execute().IfNot(out exception))
                      {

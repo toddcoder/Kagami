@@ -382,5 +382,7 @@ namespace Kagami.Library.Runtime
 
          return debugState.Success();
       }
+
+      public string PackageFolder { get; set; } = "";
    }
 }

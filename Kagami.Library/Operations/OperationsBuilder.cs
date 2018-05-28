@@ -341,6 +341,8 @@ namespace Kagami.Library.Operations
 
       public void OpenPackage(string packageName) => add(new OpenPackage(packageName));
 
+      public void ImportPackage(string packageName) => add(new ImportPackage(packageName));
+
       public IResult<Operations> ToOperations(ParseState state)
       {
          operations.Add(new Stop());

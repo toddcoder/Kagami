@@ -16,6 +16,11 @@ namespace Kagami.Library.Packages
 
       public override string ClassName => "Sys";
 
+      public override void LoadTypes(Module module)
+      {
+         module.RegisterClass(new SysClass());
+      }
+
       public Float Rand() => random.NextDouble();
 
       public String Println(Arguments arguments)

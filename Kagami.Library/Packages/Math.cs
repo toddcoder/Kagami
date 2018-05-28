@@ -1,5 +1,6 @@
 ﻿using Kagami.Library.Objects;
 using Kagami.Library.Operations;
+using Kagami.Library.Runtime;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Operations.NumericFunctions;
 
@@ -14,6 +15,11 @@ namespace Kagami.Library.Packages
       }
 
       public override string ClassName => "Math";
+
+      public override void LoadTypes(Module module)
+      {
+         module.RegisterClass(new MathClass());
+      }
 
       public IObject Sin(IObject obj) => function(obj, d => System.Math.Sin(d), n => n.Sin());
 
