@@ -15,7 +15,7 @@ namespace Kagami.Library.Operations
          if (machine.Pop().If(out var y, out var exception) && machine.Pop().If(out var x, out exception))
             if (x is Boolean bx)
                if (y is Boolean by)
-                  return Execute(machine, bx.Value, by.Value).Map(Boolean.Object);
+                  return Execute(machine, bx.Value, by.Value).Map(Boolean.BooleanObject);
                else
                   return failedMatch<IObject>(incompatibleClasses(y, "Boolean"));
             else

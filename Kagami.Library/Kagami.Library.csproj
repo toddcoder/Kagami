@@ -344,7 +344,9 @@
     <Compile Include="Objects\Tuple.cs" />
     <Compile Include="Objects\Unassigned.cs" />
     <Compile Include="Objects\Unmatched.cs" />
+    <Compile Include="Objects\UserCompare.cs" />
     <Compile Include="Objects\UserObject.cs" />
+    <Compile Include="Objects\UserRangeItem.cs" />
     <Compile Include="Objects\Void.cs" />
     <Compile Include="Objects\YieldReturn.cs" />
     <Compile Include="Operations\Add.cs" />

@@ -7,5 +7,7 @@
       IRangeItem Predecessor { get; }
 
       Range Range();
+
+      IObject Object { get; }
    }
 }

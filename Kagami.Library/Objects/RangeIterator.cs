@@ -23,7 +23,7 @@ namespace Kagami.Library.Objects
          {
             var result = current;
             current = range.NextValue(current);
-            return ((IObject)result).Some();
+            return result.Object.Some();
          }
          else
             return none<IObject>();
@@ -41,7 +41,7 @@ namespace Kagami.Library.Objects
       {
          while (range.Compare(current, stop))
          {
-            yield return (IObject)current;
+            yield return current.Object;
 
             current = range.NextValue(current);
          }

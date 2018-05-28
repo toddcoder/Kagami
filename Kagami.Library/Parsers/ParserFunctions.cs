@@ -815,7 +815,7 @@ namespace Kagami.Library.Parsers
             case "|=":
                symbol = new MatchSymbol().Matched<Symbol>();
                break;
-            case "=~":
+            case "~~":
                symbol = new SendBinaryMessageSymbol("match".Function("input"), Precedence.Boolean, true).Matched<Symbol>();
                break;
             case "!!":

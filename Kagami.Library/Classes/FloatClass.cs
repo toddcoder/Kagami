@@ -28,14 +28,14 @@ namespace Kagami.Library.Classes
          classMessages["pi".get()] = (cls, msg) => (Float)Math.PI;
          classMessages["nan".get()] = (cls, msg) => (Float)double.NaN;
          classMessages["parse"] = (cls, msg) => parse(msg.Arguments[0].AsString);
-         classMessages["max".get()] = (cls, msg) => Float.Object(double.MaxValue);
-         classMessages["min".get()] = (cls, msg) => Float.Object(double.MinValue);
+         classMessages["max".get()] = (cls, msg) => Float.FloatObject(double.MaxValue);
+         classMessages["min".get()] = (cls, msg) => Float.FloatObject(double.MinValue);
       }
 
       public static IObject parse(string value)
       {
          if (double.TryParse(value.Replace("_", ""), out var number))
-            return Some.Object(Float.Object(number));
+            return Some.Object(Float.FloatObject(number));
          else
             return Nil.NilValue;
       }

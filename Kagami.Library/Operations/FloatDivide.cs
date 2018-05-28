@@ -14,7 +14,7 @@ namespace Kagami.Library.Operations
             var dx = n1.AsDouble();
             var dy = n2.AsDouble();
 
-            return Float.Object(dx / dy).Matched();
+            return Float.FloatObject(dx / dy).Matched();
          }
          else
             return sendMessage(x, "/", y).Matched();

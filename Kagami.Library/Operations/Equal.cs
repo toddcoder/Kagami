@@ -6,7 +6,7 @@ namespace Kagami.Library.Operations
 {
    public class Equal : TwoOperandOperation
    {
-      public override IMatched<IObject> Execute(Machine machine, IObject x, IObject y) => Boolean.Object(x.IsEqualTo(y)).Matched();
+      public override IMatched<IObject> Execute(Machine machine, IObject x, IObject y) => Boolean.BooleanObject(x.IsEqualTo(y)).Matched();
 
       public override string ToString() => "equal";
    }

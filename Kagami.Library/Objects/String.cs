@@ -18,9 +18,9 @@ namespace Kagami.Library.Objects
    {
       public static implicit operator String(string value) => new String(value);
 
-      public static IObject Object(string value) => new String(value);
+      public static IObject StringObject(string value) => new String(value);
 
-      public static IObject Empty => Object("");
+      public static IObject Empty => StringObject("");
 
       string value;
 
@@ -44,6 +44,8 @@ namespace Kagami.Library.Objects
 
       public int Compare(IObject obj) => CompareTo((String)obj);
 
+      public IObject Object => this;
+
       public int CompareTo(String other) => value.CompareTo(other.value);
 
       public bool Equals(String other) => string.Equals(value, other.value);
@@ -61,13 +63,13 @@ namespace Kagami.Library.Objects
       public IMaybe<IObject> Next(int index)
       {
          var self = this;
-         return when(index < value.Length, () => Char.Object(self.value[index]));
+         return when(index < value.Length, () => Char.CharObject(self.value[index]));
       }
 
       public IMaybe<IObject> Peek(int index)
       {
          var self = this;
-         return when(index < value.Length, () => Char.Object(self.value[index]));
+         return when(index < value.Length, () => Char.CharObject(self.value[index]));
       }
 
       public Int Length => value.Length;
@@ -257,7 +259,7 @@ namespace Kagami.Library.Objects
 
       public Tuple SplitOn(string on)
       {
-         return new Tuple(value.Split(new[] { on }, StringSplitOptions.None).Select(Object).ToArray());
+         return new Tuple(value.Split(new[] { on }, StringSplitOptions.None).Select(StringObject).ToArray());
       }
 
       public String Subtract(string substring) => value.Replace(substring, "");

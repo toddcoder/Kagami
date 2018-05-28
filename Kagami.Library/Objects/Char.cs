@@ -11,7 +11,7 @@ namespace Kagami.Library.Objects
    {
       public static implicit operator Char(char value) => new Char(value);
 
-      public static IObject Object(char value) => new Char(value);
+      public static IObject CharObject(char value) => new Char(value);
 
       char value;
 
@@ -34,6 +34,8 @@ namespace Kagami.Library.Objects
 	   public bool IsTrue => value > 0;
 
       public int Compare(IObject obj) => CompareTo((Char)obj);
+
+      public IObject Object => this;
 
       public int CompareTo(Char other) => value.CompareTo(other.value);
 

@@ -14,7 +14,7 @@ namespace Kagami.Text
          base.RegisterMessages();
 
          registerPackageFunction("StringBuffer", (obj, msg) => function<Text>(obj, t => t.StringBuffer()));
-         registerPackageFunction("StringBuffer".Function("initialValue"),
+         registerPackageFunction("StringBuffer".Function("init"),
             (obj, msg) => function<Text, String>(obj, msg, (t, s) => t.StringBuffer(s.Value)));
       }
    }

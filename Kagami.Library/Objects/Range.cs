@@ -21,9 +21,9 @@ namespace Kagami.Library.Objects
       public Range(IRangeItem start, IObjectCompare stop, bool inclusive, int increment = 1) : this()
       {
          this.start = start;
-         startObj = (IObject)this.start;
+            startObj = this.start.Object;
          this.stop = stop;
-         stopObj = (IObject)this.stop;
+         stopObj = this.stop.Object;
          this.inclusive = inclusive;
          this.increment = increment;
          if (this.increment > 0)

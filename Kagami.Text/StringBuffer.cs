@@ -40,5 +40,11 @@ namespace Kagami.Text
       }
 
       public Int Length => builder.Length;
+
+      public StringBuffer Clear()
+      {
+         builder.Clear();
+         return this;
+      }
    }
 }

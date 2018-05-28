@@ -10,8 +10,8 @@ namespace Kagami.Library.Packages
    {
       public Math()
       {
-         fields.New("pi", Float.Object(System.Math.PI));
-         fields.New("e", Float.Object(System.Math.E));
+         fields.New("pi", Float.FloatObject(System.Math.PI));
+         fields.New("e", Float.FloatObject(System.Math.E));
       }
 
       public override string ClassName => "Math";
@@ -38,7 +38,7 @@ namespace Kagami.Library.Packages
          switch (x)
          {
             case INumeric nx when y is INumeric ny:
-               return Float.Object(System.Math.Atan2(nx.AsDouble(), ny.AsDouble()));
+               return Float.FloatObject(System.Math.Atan2(nx.AsDouble(), ny.AsDouble()));
             case INumeric _:
                throw unableToConvert(y.AsString, "Float");
             default:
@@ -74,11 +74,11 @@ namespace Kagami.Library.Packages
                return mn.Sign();
             case INumeric n:
                if (n.IsNegative)
-                  return Int.Object(-1);
+                  return Int.IntObject(-1);
                else if (n.IsZero)
-                  return Int.Object(0);
+                  return Int.IntObject(0);
                else
-                  return Int.Object(1);
+                  return Int.IntObject(1);
             default:
                throw notNumeric(obj);
          }
@@ -107,7 +107,7 @@ namespace Kagami.Library.Packages
             case IMessageNumber mn:
                return mn.Ceiling();
             case INumeric n:
-               return Float.Object(System.Math.Ceiling(n.AsDouble()));
+               return Float.FloatObject(System.Math.Ceiling(n.AsDouble()));
             default:
                throw notNumeric(obj);
          }
@@ -120,7 +120,7 @@ namespace Kagami.Library.Packages
             case IMessageNumber mn:
                return mn.Ceiling();
             case INumeric n:
-               return Float.Object(System.Math.Floor(n.AsDouble()));
+               return Float.FloatObject(System.Math.Floor(n.AsDouble()));
             default:
                throw notNumeric(obj);
          }
@@ -133,7 +133,7 @@ namespace Kagami.Library.Packages
             case IMessageNumber mn:
                return mn.Round(new Int(size));
             case INumeric n:
-               return Float.Object(System.Math.Round(n.AsDouble(), size));
+               return Float.FloatObject(System.Math.Round(n.AsDouble(), size));
             default:
                throw notNumeric(obj);
          }

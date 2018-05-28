@@ -6,7 +6,7 @@ namespace Kagami.Library.Operations
 {
    public class AsString : OneOperandOperation
    {
-      public override IMatched<IObject> Execute(Machine machine, IObject value) => String.Object(value.AsString).Matched();
+      public override IMatched<IObject> Execute(Machine machine, IObject value) => String.StringObject(value.AsString).Matched();
 
       public override string ToString() => "string";
    }

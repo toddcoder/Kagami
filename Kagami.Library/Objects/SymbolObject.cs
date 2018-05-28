@@ -26,6 +26,8 @@ namespace Kagami.Library.Objects
 
       public int Compare(IObject obj) => compareObjects(this, obj, (x, y) => x.name.CompareTo(y.name));
 
+      public IObject Object => this;
+
       public bool Equals(SymbolObject other) => string.Equals(name, other.name);
 
       public override bool Equals(object obj) => IsEqualTo((IObject)obj);

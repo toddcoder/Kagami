@@ -170,7 +170,7 @@ namespace Kagami.Library.Objects
       {
          if (classOf(obj).RespondsTo("match"))
          {
-            var objectHash = bindings.ToHash(i => String.Object(i.Key), i => i.Value);
+            var objectHash = bindings.ToHash(i => String.StringObject(i.Key), i => i.Value);
             var dictionary = new Dictionary(objectHash);
             if (sendMessage(obj, "match", dictionary).IsTrue)
             {

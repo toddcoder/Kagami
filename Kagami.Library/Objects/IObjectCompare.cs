@@ -3,5 +3,7 @@
    public interface IObjectCompare
    {
       int Compare(IObject obj);
+
+      IObject Object { get; }
    }
 }

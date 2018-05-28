@@ -15,11 +15,11 @@ namespace Kagami.Library.Operations
          switch (x)
          {
             case Int i:
-               return Int.Object(-i.Value).Matched();
+               return Int.IntObject(-i.Value).Matched();
             case Float f:
-               return Float.Object(-f.Value).Matched();
+               return Float.FloatObject(-f.Value).Matched();
             case Long l:
-               return Long.Object(-l.Value).Matched();
+               return Long.LongObject(-l.Value).Matched();
             case Complex c:
                return c.Negate().Matched();
             case Rational r:

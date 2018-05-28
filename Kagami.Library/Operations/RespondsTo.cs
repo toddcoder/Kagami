@@ -16,7 +16,7 @@ namespace Kagami.Library.Operations
       public override IMatched<IObject> Execute(Machine machine)
       {
          if (machine.Peek().If(out var value))
-            return Boolean.Object(classOf(value).RespondsTo(message)).Matched();
+            return Boolean.BooleanObject(classOf(value).RespondsTo(message)).Matched();
          else
             return failedMatch<IObject>(emptyStack());
       }

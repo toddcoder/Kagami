@@ -27,7 +27,7 @@ namespace Kagami.Library.Operations
 
       public override IMatched<IObject> Execute(Machine machine)
       {
-         return getValue(pop, machine, className).Map(value => Boolean.Object(value.ClassName == className));
+         return getValue(pop, machine, className).Map(value => Boolean.BooleanObject(value.ClassName == className));
       }
 
       public override string ToString() => $"is.class({className}{pop.Extend(", pop")})";

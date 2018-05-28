@@ -24,6 +24,8 @@ namespace Kagami.Library.Operations
                return new Range(start, stop, inclusive).Matched<IObject>();
             case Range range when y is Int increment:
                return new Range(range, increment).Matched<IObject>();
+            case UserObject userObject when y is UserObject stop:
+               return new Range(new UserRangeItem(userObject), new UserCompare(stop), inclusive).Matched<IObject>();
             default:
                return failedMatch<IObject>(incompatibleClasses(x, "RangeItem"));
          }

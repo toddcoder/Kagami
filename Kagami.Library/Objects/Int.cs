@@ -11,11 +11,11 @@ namespace Kagami.Library.Objects
    {
       public static implicit operator Int(int value) => new Int(value);
 
-      public static IObject Object(int value) => new Int(value);
+      public static IObject IntObject(int value) => new Int(value);
 
-      public static IObject Zero => Object(0);
+      public static IObject Zero => IntObject(0);
 
-      public static IObject One => Object(1);
+      public static IObject One => IntObject(1);
 
       int value;
 
@@ -103,6 +103,8 @@ namespace Kagami.Library.Objects
       public bool IsRational => false;
 
       public int Compare(IObject obj) => compatibleCompare(this, obj);
+
+      public IObject Object => this;
 
       public int CompareTo(Int other) => value.CompareTo(other.value);
 

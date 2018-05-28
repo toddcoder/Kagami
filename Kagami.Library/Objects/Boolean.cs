@@ -8,11 +8,11 @@ namespace Kagami.Library.Objects
    {
       public static implicit operator Boolean(bool value) => new Boolean(value);
 
-      public static IObject Object(bool value) => new Boolean(value);
+      public static IObject BooleanObject(bool value) => new Boolean(value);
 
-      public static IObject True => Object(true);
+      public static IObject True => BooleanObject(true);
 
-      public static IObject False => Object(false);
+      public static IObject False => BooleanObject(false);
 
       bool value;
 
@@ -35,6 +35,8 @@ namespace Kagami.Library.Objects
 	   public bool IsTrue => value;
 
       public int Compare(IObject obj) => CompareTo((Boolean)obj);
+
+      public IObject Object => this;
 
       public int CompareTo(Boolean other) => value.CompareTo(other.value);
 

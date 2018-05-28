@@ -11,7 +11,7 @@ namespace Kagami.Library.Operations
          var ix = x.AsInt32();
          var iy = y.AsInt32();
 
-         return Int.Object(ix / iy).Matched();
+         return Int.IntObject(ix / iy).Matched();
       }
 
       public override string ToString() => "int.divide";

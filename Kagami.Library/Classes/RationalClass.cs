@@ -15,8 +15,8 @@ namespace Kagami.Library.Classes
          compareMessages();
          numericConversionMessages();
 
-         registerMessage("numerator".get(), (obj, msg) => function<Rational>(obj, r => Long.Object(r.Numerator)));
-         registerMessage("denominator".get(), (obj, msg) => function<Rational>(obj, r => Long.Object(r.Denominator)));
+         registerMessage("numerator".get(), (obj, msg) => function<Rational>(obj, r => Long.LongObject(r.Numerator)));
+         registerMessage("denominator".get(), (obj, msg) => function<Rational>(obj, r => Long.LongObject(r.Denominator)));
       }
    }
 }

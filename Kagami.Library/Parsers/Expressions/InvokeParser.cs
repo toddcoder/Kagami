@@ -1,6 +1,7 @@
 ﻿using Kagami.Library.Nodes.Symbols;
 using Standard.Types.Maybe;
 using static Kagami.Library.Parsers.ParserFunctions;
+using static Standard.Types.Maybe.MaybeFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
 {
@@ -13,6 +14,9 @@ namespace Kagami.Library.Parsers.Expressions
       public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
       {
          var functionName = tokens[2].Text;
+         if (functionName == @"\/")
+            return notMatched<Unit>();
+
          state.Colorize(tokens, Color.Whitespace, Color.Invokable, Color.Structure);
 
          if (getArgumentsPlusLambda(state, builder.Flags).If(out var tuple, out var original))

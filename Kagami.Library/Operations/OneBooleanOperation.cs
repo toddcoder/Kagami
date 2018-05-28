@@ -14,7 +14,7 @@ namespace Kagami.Library.Operations
       {
          if (machine.Pop().If(out var value, out var exception))
             if (value is Boolean b)
-               return Execute(machine, b.Value).Map(Boolean.Object);
+               return Execute(machine, b.Value).Map(Boolean.BooleanObject);
             else
                return failedMatch<IObject>(incompatibleClasses(value, "Boolean"));
          else

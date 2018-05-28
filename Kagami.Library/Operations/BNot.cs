@@ -11,7 +11,7 @@ namespace Kagami.Library.Operations
       public override IMatched<IObject> Execute(Machine machine, IObject value)
       {
          if (value is Int i)
-            return Int.Object(~i.Value).Matched();
+            return Int.IntObject(~i.Value).Matched();
          else
             return failedMatch<IObject>(incompatibleClasses(value, "Int"));
       }

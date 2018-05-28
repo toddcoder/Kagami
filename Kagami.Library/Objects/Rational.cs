@@ -11,7 +11,7 @@ namespace Kagami.Library.Objects
    {
       public static implicit operator Rational((BigInteger numerator, BigInteger denominator) values) => new Rational(values);
 
-      public static IObject Object((BigInteger numerator, BigInteger denominator) values) => new Rational(values);
+      public static IObject RationalObject((BigInteger numerator, BigInteger denominator) values) => new Rational(values);
 
       public static implicit operator Rational(Float value) => (Rational)value.ToRational();
 
@@ -106,6 +106,8 @@ namespace Kagami.Library.Objects
       public bool IsTrue => numerator != 0;
 
       public int Compare(IObject obj) => compatibleCompare(this, obj);
+
+      public IObject Object => this;
 
       public IRangeItem Successor => (IRangeItem)Add((Rational)(BigInteger.One, BigInteger.Zero));
 

@@ -36,7 +36,7 @@ namespace Kagami.Library.Objects
 
       public override int GetHashCode() => Hash;
 
-      public IObject Key => String.Object(name);
+      public IObject Key => String.StringObject(name);
 
       public IObject Value => value;
 

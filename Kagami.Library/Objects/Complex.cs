@@ -18,7 +18,7 @@ namespace Kagami.Library.Objects
 
       public static implicit operator Complex(CComplex value) => new Complex(value);
 
-      public static IObject Object((double real, double imaginary) values) => new Complex(values.real, values.imaginary);
+      public static IObject ComplexObject((double real, double imaginary) values) => new Complex(values.real, values.imaginary);
 
       CComplex value;
 
@@ -120,6 +120,8 @@ namespace Kagami.Library.Objects
       public bool IsTrue => !IsZero;
 
       public int Compare(IObject obj) => compatibleCompare(this, obj);
+
+      public IObject Object => this;
 
       public int CompareTo(Complex other) => Math.Sign(value.Real*other.value.Real * value.Imaginary * other.value.Imaginary);
 

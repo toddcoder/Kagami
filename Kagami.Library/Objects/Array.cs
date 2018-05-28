@@ -66,6 +66,8 @@ namespace Kagami.Library.Objects
 
       public int Compare(IObject obj) => compareCollections(this, obj);
 
+      public IObject Object => this;
+
       public int CompareTo(Array other) => compareCollections(this, other);
 
       public bool Equals(Array other) => isEqualTo(this, other);
@@ -153,7 +155,7 @@ namespace Kagami.Library.Objects
          return this;
       }
 
-      public Array IndexedValues => new Array(list.Select((o, i) => (IObject)new Tuple(Int.Object(i), o)));
+      public Array IndexedValues => new Array(list.Select((o, i) => (IObject)new Tuple(Int.IntObject(i), o)));
 
       public IObject Concatenate(Array array)
       {

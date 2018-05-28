@@ -23,7 +23,7 @@ namespace Kagami.Library.Operations
                   for (var i = 0; i < count; i++)
                      accum *= amount;
 
-                  return Int.Object(accum).Matched();
+                  return Int.IntObject(accum).Matched();
                }
                else
                {
@@ -32,7 +32,7 @@ namespace Kagami.Library.Operations
                   for (var i = 0; i < count; i++)
                      accum *= amount;
 
-                  return Float.Object(accum).Matched();
+                  return Float.FloatObject(accum).Matched();
                }
             }
             else if (n1.IsLong)
@@ -42,13 +42,13 @@ namespace Kagami.Library.Operations
                for (var i = 0; i < count; i++)
                   accum *= amount;
 
-               return Long.Object(accum).Matched();
+               return Long.LongObject(accum).Matched();
             }
 
             var dx = n1.AsDouble();
             var dy = n2.AsDouble();
 
-            return Float.Object(Math.Pow(dx, dy)).Matched();
+            return Float.FloatObject(Math.Pow(dx, dy)).Matched();
          }
          else
             return sendMessage(x, "^", y).Matched();

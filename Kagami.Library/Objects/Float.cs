@@ -11,9 +11,9 @@ namespace Kagami.Library.Objects
    {
       public static implicit operator Float(double value) => new Float(value);
 
-      public static IObject Object(double value) => new Float(value);
+      public static IObject FloatObject(double value) => new Float(value);
 
-      public static IObject Zero => Object(0.0);
+      public static IObject Zero => FloatObject(0.0);
 
       double value;
 
@@ -125,6 +125,8 @@ namespace Kagami.Library.Objects
       }
 
       public int Compare(IObject obj) => compatibleCompare(this, obj);
+
+      public IObject Object => this;
 
       public int CompareTo(Float other) => value.CompareTo(other.value);
 

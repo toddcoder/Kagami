@@ -11,7 +11,7 @@ namespace Kagami.Library.Objects
    {
       public static implicit operator Byte(byte value) => new Byte(value);
 
-      public static IObject Object(byte value) => new Byte(value);
+      public static IObject ByteObject(byte value) => new Byte(value);
 
       byte value;
 
@@ -93,6 +93,8 @@ namespace Kagami.Library.Objects
 	   public bool IsTrue => value > 0;
 
       public int Compare(IObject obj) => compatibleCompare(this, obj);
+
+      public IObject Object => this;
 
       public int CompareTo(Byte other) => value.CompareTo(other.value);
 

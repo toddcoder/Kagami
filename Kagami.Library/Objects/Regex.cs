@@ -11,14 +11,14 @@ namespace Kagami.Library.Objects
    {
       public static Tuple getTuple(Matcher.Match match)
       {
-         return new Tuple(array(String.Object(match.Text), Int.Object(match.Index), Int.Object(match.Length), getTuple(match.Groups)));
+         return new Tuple(array(String.StringObject(match.Text), Int.IntObject(match.Index), Int.IntObject(match.Length), getTuple(match.Groups)));
       }
 
       public static IObject getTuple(Matcher.Group[] groups)
       {
          var objects = groups.Select(g =>
          {
-            var innerArray = array(String.Object(g.Text), Int.Object(g.Index), Int.Object(g.Length));
+            var innerArray = array(String.StringObject(g.Text), Int.IntObject(g.Index), Int.IntObject(g.Length));
             var innerTuple = new Tuple(innerArray);
             return (IObject)innerTuple;
          }).ToArray();
@@ -51,7 +51,8 @@ namespace Kagami.Library.Objects
          get
          {
             var builder = new StringBuilder("/");
-            builder.Append(pattern);
+            matcher.IsMatch("", pattern);
+            builder.Append(matcher.Pattern);
             if (ignoreCase || multiline || global)
                builder.Append(";");
             if (ignoreCase)
@@ -93,11 +94,11 @@ namespace Kagami.Library.Objects
       {
          if (global)
             if (isMatch(input))
-               return new Tuple(matcher.AllMatches.Select(m => String.Object(m.Text)).ToArray());
+               return new Tuple(matcher.AllMatches.Select(m => String.StringObject(m.Text)).ToArray());
             else
                return Tuple.Empty;
          else if (isMatch(input))
-            return Some.Object(String.Object(matcher.AllMatches[0].Text));
+            return Some.Object(String.StringObject(matcher.AllMatches[0].Text));
          else
             return Nil.NilValue;
       }
@@ -114,7 +115,22 @@ namespace Kagami.Library.Objects
 
       public Tuple Split(string input)
       {
-         return new Tuple(input.Split(pattern, ignoreCase, multiline).Select(String.Object).ToArray());
+         return new Tuple(input.Split(pattern, ignoreCase, multiline).Select(String.StringObject).ToArray());
       }
+
+      public Regex Concatenate(IObject obj)
+      {
+         switch (obj)
+         {
+            case Regex regex:
+               return new Regex(pattern + regex.pattern, ignoreCase, multiline, global);
+            case String str:
+               return new Regex(pattern + str.Value, ignoreCase, multiline, global);
+            default:
+               return new Regex(pattern + obj.AsString, ignoreCase, multiline, global);
+         }
+      }
+
+      public Regex Concatenate(string otherPattern) => new Regex(pattern + otherPattern, ignoreCase, multiline, global);
    }
 }

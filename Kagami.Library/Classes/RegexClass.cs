@@ -17,6 +17,7 @@ namespace Kagami.Library.Classes
             function<Regex, String, String>(obj, msg, (r, s1, s2) => r.Replace(s1.Value, s2.Value));
          messages["matchString"] = (obj, msg) => function<Regex, String>(obj, msg, (r, s) => r.MatchString(s.Value));
          messages["split"] = (obj, msg) => function<Regex, String>(obj, msg, (r, s) => r.Split(s.Value));
+         messages["~"] = (obj, msg) => function<Regex, IObject>(obj, msg, (r1, r2) => r1.Concatenate(r2));
       }
    }
 }

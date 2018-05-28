@@ -65,18 +65,18 @@ namespace Kagami.Library.Classes
 
       public virtual void RegisterMessages()
       {
-         registerMessage("string".get(), (obj, msg) => String.Object(obj.AsString));
-         registerMessage("image".get(), (obj, msg) => String.Object(obj.Image));
-         registerMessage("hash".get(), (obj, msg) => Int.Object(obj.Hash));
-         registerMessage("equals", (obj, msg) => Boolean.Object(obj.IsEqualTo(msg.Arguments[0])));
-         registerMessage("className".get(), (obj, msg) => String.Object(obj.ClassName));
+         registerMessage("string".get(), (obj, msg) => String.StringObject(obj.AsString));
+         registerMessage("image".get(), (obj, msg) => String.StringObject(obj.Image));
+         registerMessage("hash".get(), (obj, msg) => Int.IntObject(obj.Hash));
+         registerMessage("equals", (obj, msg) => Boolean.BooleanObject(obj.IsEqualTo(msg.Arguments[0])));
+         registerMessage("className".get(), (obj, msg) => String.StringObject(obj.ClassName));
          registerMessage("class".get(), (obj, msg) => new Class(obj.ClassName));
          registerMessage("match", match);
       }
 
       public virtual void RegisterClassMessages()
       {
-         registerClassMessage("name".get(), (cls, msg) => String.Object(Name));
+         registerClassMessage("name".get(), (cls, msg) => String.StringObject(Name));
       }
 
       public virtual void RegisterMessage(string name, Func<IObject, Message, IObject> func) => messages[name] = func;

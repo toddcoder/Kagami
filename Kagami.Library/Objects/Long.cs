@@ -7,11 +7,11 @@ using static Kagami.Library.Operations.NumericFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct Long : IObject, INumeric, IComparable<Long>, IEquatable<Long>, IRangeItem, IMessageNumber, IComparable
+   public  struct Long : IObject, INumeric, IComparable<Long>, IEquatable<Long>, IRangeItem, IMessageNumber, IComparable
    {
       public static implicit operator Long(BigInteger value) => new Long(value);
 
-      public static IObject Object(BigInteger value) => new Long(value);
+      public static IObject LongObject(BigInteger value) => new Long(value);
 
       BigInteger value;
 
@@ -103,6 +103,8 @@ namespace Kagami.Library.Objects
       public bool Equals(Long other) => value == other.value;
 
       public int Compare(IObject obj) => compatibleCompare(this, obj);
+
+      public IObject Object => this;
 
       public IRangeItem Successor => (Long)(value + 1);
 

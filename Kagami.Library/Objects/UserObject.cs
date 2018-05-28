@@ -49,6 +49,6 @@ namespace Kagami.Library.Objects
 
       public bool Match(IObject comparisand, Hash<string, IObject> bindings) => userObjectMatch(this, comparisand, bindings);
 
-      public bool IsTrue => Boolean.Object(fields.Length > 0).IsTrue;
+      public bool IsTrue => Boolean.BooleanObject(fields.Length > 0).IsTrue;
    }
 }

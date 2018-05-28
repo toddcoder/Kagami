@@ -12,7 +12,7 @@ namespace Kagami.Library.Operations
       {
          if (x is Int xInt)
             if (y is Int yInt)
-               return Execute(machine, xInt.Value, yInt.Value).Map(Int.Object);
+               return Execute(machine, xInt.Value, yInt.Value).Map(Int.IntObject);
             else
                return failedMatch<IObject>(incompatibleClasses(y, "Int"));
          else
