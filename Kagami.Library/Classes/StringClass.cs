@@ -29,8 +29,8 @@ namespace Kagami.Library.Classes
          messages["lower"] = (obj, msg) => function<String>(obj, s => s.Lower());
          messages["title"] = (obj, msg) => function<String>(obj, s => s.Title());
          messages["capital"] = (obj, msg) => function<String>(obj, s => s.Title());
-         messages["isPrefix"] = (obj, msg) => function<String, String>(obj, msg, (s1, s2) => s1.IsPrefix(s2.Value));
-         messages["isSuffix"] = (obj, msg) => function<String, String>(obj, msg, (s1, s2) => s1.IsSuffix(s2.Value));
+         messages["leftIs"] = (obj, msg) => function<String, String>(obj, msg, (s1, s2) => s1.IsPrefix(s2.Value));
+         messages["rightIs"] = (obj, msg) => function<String, String>(obj, msg, (s1, s2) => s1.IsSuffix(s2.Value));
          messages["in"] = (obj, msg) => function<String, IObject>(obj, msg, (s1, s2) => s1.In(s2));
          messages["notIn"] = (obj, msg) => function<String, IObject>(obj, msg, (s1, s2) => s1.NotIn(s2));
          messages["replace".Function("find", "new")] =
