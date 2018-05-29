@@ -4,6 +4,7 @@ using Standard.Types.Collections;
 using Standard.Types.Enumerables;
 using Standard.Types.Maybe;
 using Standard.Types.Numbers;
+using static Kagami.Library.Objects.CollectionFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Standard.Types.Maybe.MaybeFunctions;
 
@@ -148,6 +149,8 @@ namespace Kagami.Library.Objects
       public Boolean NotIn(IObject key) => !dictionary.ContainsKey(key);
 
       public IObject Times(int count) => this;
+
+      public IObject Flatten() => flatten(this);
 
       public IObject Swap(IObject key1, IObject key2)
       {

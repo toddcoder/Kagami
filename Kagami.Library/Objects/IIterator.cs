@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Kagami.Library.Classes;
 using Standard.Types.Maybe;
 
 namespace Kagami.Library.Objects
@@ -6,6 +7,8 @@ namespace Kagami.Library.Objects
    public interface IIterator
    {
       ICollection Collection { get; }
+
+      ICollectionClass CollectionClass { get; }
 
       bool IsLazy { get; }
 

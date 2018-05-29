@@ -46,6 +46,8 @@ namespace Kagami.Library.Objects
 
       public ICollection Collection => collection;
 
+      public ICollectionClass CollectionClass => collectionClass;
+
       public virtual bool IsLazy => false;
 
       public virtual IMaybe<IObject> Next() => collection.Next(index++);

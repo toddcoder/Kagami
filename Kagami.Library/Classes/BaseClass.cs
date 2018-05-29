@@ -218,6 +218,7 @@ namespace Kagami.Library.Classes
          registerMessage("in", (obj, msg) => collectionFunc<IObject>(obj, msg, (c, i) => c.In(i)));
          registerMessage("notIn", (obj, msg) => collectionFunc<IObject>(obj, msg, (c, i) => c.NotIn(i)));
          registerMessage("*", (obj, msg) => collectionFunc<Int>(obj, msg, (c, i) => c.Times(i.Value)));
+         registerMessage("flatten", (obj, msg) => collectionFunc(obj, c => c.Flatten()));
 
          loadIteratorMessages();
       }
@@ -228,6 +229,7 @@ namespace Kagami.Library.Classes
          registerMessage("append", (obj, msg) => function<IObject, IObject>(obj, msg, (o, v) => ((IMutableCollection)o).Append(v)));
          registerMessage(">>", (obj, msg) => function<IObject, IObject>(obj, msg, (o, v) => ((IMutableCollection)o).Remove(v)));
          registerMessage("remove", (obj, msg) => function<IObject, IObject>(obj, msg, (o, v) => ((IMutableCollection)o).Remove(v)));
+         registerMessage("-", (obj, msg) => function<IObject, IObject>(obj, msg, (o, v) => ((IMutableCollection)o).Remove(v)));
          registerMessage("remove".Function("at"),
             (obj, msg) => function<IObject, Int>(obj, msg, (o, i) => ((IMutableCollection)o).RemoveAt(i.Value)));
          registerMessage("insert".Function("at", "value"),

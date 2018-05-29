@@ -25,19 +25,19 @@ namespace Kagami.Library.Operations
          increment = false;
 
          if (machine.Pop().If(out var value, out var exception))
-            if (value is IOptional o)
+            switch (value)
             {
-               if (predicate(o))
+               case IOptional o when predicate(o):
                   if (machine.GoTo(address))
                      return returnIfTrue(value);
                   else
                      return failedMatch<IObject>(badAddress(address));
-
-               increment = true;
-               return returnIfFalse(value);
+               case IOptional _:
+                  increment = true;
+                  return returnIfFalse(value);
+               default:
+                  return failedMatch<IObject>(incompatibleClasses(value, "Optional"));
             }
-            else
-               return failedMatch<IObject>(incompatibleClasses(value, "Optional"));
          else
             return failedMatch<IObject>(exception);
       }

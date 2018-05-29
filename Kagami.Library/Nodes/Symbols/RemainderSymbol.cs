@@ -10,6 +10,6 @@ namespace Kagami.Library.Nodes.Symbols
 
       public override Arity Arity => Arity.Binary;
 
-      public override string ToString() => @"\";
+      public override string ToString() => "%";
    }
 }

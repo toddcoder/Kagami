@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Kagami.Library.Classes;
 using Kagami.Library.Runtime;
 using Standard.Types.Collections;
 using Standard.Types.Enumerables;
@@ -36,6 +37,8 @@ namespace Kagami.Library.Objects
       public bool IsTrue => true;
 
       public ICollection Collection => iterator.Collection;
+
+      public ICollectionClass CollectionClass => iterator.CollectionClass;
 
       public bool IsLazy => true;
 

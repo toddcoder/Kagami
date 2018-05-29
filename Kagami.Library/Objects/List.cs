@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Standard.Types.Collections;
 using Standard.Types.Maybe;
+using static Kagami.Library.Objects.CollectionFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Standard.Types.Maybe.MaybeFunctions;
 
@@ -156,6 +157,8 @@ namespace Kagami.Library.Objects
       public Boolean NotIn(IObject item) => list(this).All(i => !i.IsEqualTo(item));
 
       public IObject Times(int count) => this;
+
+      public IObject Flatten() => flatten(this);
 
       public IObject Concatenate(List other)
       {

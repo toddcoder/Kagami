@@ -32,7 +32,7 @@ namespace Kagami.Library.Objects
       public override IMaybe<IObject> Peek()
       {
          if (range.Compare(current, stop))
-            return ((IObject)current).Some();
+            return current.Object.Some();
          else
             return none<IObject>();
       }

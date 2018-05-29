@@ -8,6 +8,7 @@ using Standard.Types.Maybe;
 using Standard.Types.Objects;
 using Standard.Types.Strings;
 using static Kagami.Library.AllExceptions;
+using static Kagami.Library.Objects.CollectionFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Standard.Types.Maybe.MaybeFunctions;
 
@@ -117,6 +118,8 @@ namespace Kagami.Library.Objects
       }
 
       public IObject Times(int count) => (String)value.Repeat(count);
+
+      public IObject Flatten() => flatten(this);
 
       public String Repeat(int count) => value.Repeat(count);
 

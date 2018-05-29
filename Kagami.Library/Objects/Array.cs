@@ -127,6 +127,8 @@ namespace Kagami.Library.Objects
          return new Array(result);
       }
 
+      public IObject Flatten() => flatten(this);
+
       public void Add(IObject obj) => list.Add(obj);
 
       public IObject Append(IObject obj)

@@ -2,6 +2,7 @@
 using Kagami.Library.Classes;
 using Standard.Types.Collections;
 using Standard.Types.Maybe;
+using static Kagami.Library.Objects.CollectionFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Standard.Types.Maybe.MaybeFunctions;
 
@@ -92,6 +93,8 @@ namespace Kagami.Library.Objects
          else
             return obj;
       }
+
+      public IObject Flatten() => flatten(this);
 
       public string ClassName => obj.ClassName;
 

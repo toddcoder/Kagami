@@ -5,6 +5,7 @@ using Standard.Types.Collections;
 using Standard.Types.Exceptions;
 using Standard.Types.Maybe;
 using static Kagami.Library.AllExceptions;
+using static Kagami.Library.Objects.CollectionFunctions;
 using static Standard.Types.Maybe.MaybeFunctions;
 
 namespace Kagami.Library.Invokables
@@ -100,5 +101,7 @@ namespace Kagami.Library.Invokables
       public Boolean NotIn(IObject item) => !cached.Contains(item);
 
       public IObject Times(int count) => this;
+
+      public IObject Flatten() => flatten(this);
    }
 }

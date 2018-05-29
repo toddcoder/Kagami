@@ -5,6 +5,7 @@ using Standard.Types.Collections;
 using Standard.Types.Enumerables;
 using Standard.Types.Maybe;
 using static Kagami.Library.AllExceptions;
+using static Kagami.Library.Objects.CollectionFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Standard.Types.Arrays.ArrayFunctions;
 using static Standard.Types.Maybe.MaybeFunctions;
@@ -211,5 +212,7 @@ namespace Kagami.Library.Objects
 
          return new Tuple(result.ToArray());
       }
+
+      public IObject Flatten() => flatten(this);
    }
 }
