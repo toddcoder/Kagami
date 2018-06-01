@@ -1,7 +1,6 @@
 ﻿using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Standard.Types.Booleans;
-using Standard.Types.Collections;
 using Standard.Types.Maybe;
 
 namespace Kagami.Library.Operations
@@ -23,29 +22,7 @@ namespace Kagami.Library.Operations
 
       public override IMatched<IObject> Execute(Machine machine, IObject x, IObject y)
       {
-         var bindings = new Hash<string, IObject>();
-         switch (y)
-         {
-            case Pattern pattern:
-               var cases = pattern.Cases;
-               foreach (var(comparisand, lambda) in cases)
-                  if (x.Match(comparisand, bindings))
-                     return lambda.Invoke().Matched();
-
-               return "No match".FailedMatch<IObject>();
-            default:
-               if (x.Match(y, bindings))
-               {
-                  if (assign)
-                     machine.CurrentFrame.Fields.AssignBindings(bindings);
-                  else
-                     machine.CurrentFrame.Fields.SetBindings(bindings, mutable, strict);
-
-                  return Boolean.True.Matched();
-               }
-               else
-                  return Boolean.False.Matched();
-         }
+         return machine.GlobalFrame.Sys.Match(mutable, strict, x, y, assign).Match();
       }
 
       public override string ToString()

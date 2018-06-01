@@ -6,8 +6,15 @@ namespace Kagami.Library.Runtime
    {
       public GlobalFrame()
       {
-         fields.New("sys", new Sys());
-         fields.New("math", new Math());
+         Sys = new Sys();
+         fields.New("sys", Sys);
+
+         Math = new Math();
+         fields.New("math", Math);
       }
+
+      public Sys Sys { get; }
+
+      public Math Math { get; }
    }
 }

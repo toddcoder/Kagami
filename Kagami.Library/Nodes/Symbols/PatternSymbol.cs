@@ -18,7 +18,7 @@ namespace Kagami.Library.Nodes.Symbols
          foreach (var (expression1, expression2) in items)
          {
             expression1.Generate(builder);
-            var invokable = new LambdaInvokable(Parameters.Empty, ToString());
+            var invokable = new LambdaInvokable(Parameters.Empty, expression2.ToString());
             if (builder.RegisterInvokable(invokable, expression2, true).If(out _, out var exception))
                builder.PushObject(new Lambda(invokable));
             else

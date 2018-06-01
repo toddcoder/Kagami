@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kagami.Drawing", "Kagami.Dr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kagami.Text", "Kagami.Text\Kagami.Text.csproj", "{0F7CC9F8-FD96-4F5D-94B3-F9EB6A415CB6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kagami.Collections", "Kagami.Collections\Kagami.Collections.csproj", "{BD63F325-2648-4AAC-B272-B8C6E136BC4C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{0F7CC9F8-FD96-4F5D-94B3-F9EB6A415CB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F7CC9F8-FD96-4F5D-94B3-F9EB6A415CB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F7CC9F8-FD96-4F5D-94B3-F9EB6A415CB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD63F325-2648-4AAC-B272-B8C6E136BC4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD63F325-2648-4AAC-B272-B8C6E136BC4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD63F325-2648-4AAC-B272-B8C6E136BC4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD63F325-2648-4AAC-B272-B8C6E136BC4C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

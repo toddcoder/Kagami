@@ -2,8 +2,12 @@
 using System.Linq;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
+using Standard.Types.Collections;
 using Standard.Types.Dates.Now;
 using Standard.Types.Enumerables;
+using Standard.Types.Maybe;
+using static Standard.Types.Maybe.MaybeFunctions;
+using Boolean = Kagami.Library.Objects.Boolean;
 using String = Kagami.Library.Objects.String;
 
 namespace Kagami.Library.Packages
@@ -55,6 +59,54 @@ namespace Kagami.Library.Packages
       {
          Machine.Current.Context.PrintLine(obj.Image);
          return obj;
+      }
+
+      public IResult<IObject> Match(bool mutable, bool strict, IObject x, IObject y, bool assign)
+      {
+         if (y is Pattern pattern)
+            return MatchToPattern(pattern, x, mutable, strict);
+         else
+         {
+            var bindings = new Hash<string, IObject>();
+            if (x.Match(y, bindings))
+            {
+               if (assign)
+                  Machine.Current.CurrentFrame.Fields.AssignBindings(bindings);
+               else
+                  Machine.Current.CurrentFrame.Fields.SetBindings(bindings, mutable, strict);
+
+               return Boolean.True.Success();
+            }
+            else
+               return Boolean.False.Success();
+         }
+      }
+
+      public IResult<IObject> MatchToPattern(Pattern pattern, IObject source, bool mutable, bool strict)
+      {
+         try
+         {
+            var cases = pattern.Cases;
+            foreach (var (comparisand, lambda) in cases)
+            {
+               var frame = new Frame();
+               Machine.Current.PushFrame(frame);
+               var bindings = new Hash<string, IObject>();
+               if (source.Match(comparisand, bindings))
+               {
+                  frame.Fields.SetBindings(bindings, mutable, strict);
+                  var result = lambda.Invoke();
+                  frame.Pop();
+                  return result.Success();
+               }
+            }
+
+            return "No match".Failure<IObject>();
+         }
+         catch (Exception exception)
+         {
+            return failure<IObject>(exception);
+         }
       }
    }
 }

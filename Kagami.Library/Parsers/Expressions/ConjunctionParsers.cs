@@ -12,7 +12,7 @@ namespace Kagami.Library.Parsers.Expressions
       {
          get
          {
-            yield return new MatchMapParser(builder);
+            //yield return new MatchMapParser(builder);
             if (!builder.Flags[ExpressionFlags.OmitComprehension])
                yield return new ComprehensionParser(builder);
             if (!builder.Flags[ExpressionFlags.OmitAnd])
