@@ -22,6 +22,11 @@ namespace Kagami.Library.Objects
             return new Tuple(x, y);
       }
 
+      public static IObject NewTupleNamed(string nameX, IObject x, string nameY, IObject y)
+      {
+         return new Tuple(array((IObject)new KeyValue(nameX, x), new KeyValue(nameY, y)));
+      }
+
       public static Tuple Empty => new Tuple(new IObject[0]);
 
       IObject[] items;
@@ -152,7 +157,7 @@ namespace Kagami.Library.Objects
       public bool IsEqualTo(IObject obj)
       {
          return obj is Tuple t && items.Length == t.items.Length &&
-            items.Zip(t.items, (t1, t2) => (x: t1, y: t2)).All(tu => tu.x.IsEqualTo(tu.y));
+            Enumerable.Zip(items, t.items, (t1, t2) => (x: t1, y: t2)).All(tu => tu.x.IsEqualTo(tu.y));
       }
 
       public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, (t1, t2) =>
@@ -160,7 +165,7 @@ namespace Kagami.Library.Objects
          if (t1.Length.Value != t2.Length.Value)
             return false;
          else
-            return t1.items.Zip(t2.items, (i1, i2) => i1.Match(i2, bindings)).All(b => b);
+            return Enumerable.Zip(t1.items, t2.items, (i1, i2) => i1.Match(i2, bindings)).All(b => b);
       }, bindings);
 
       public bool IsTrue => items.Length > 0;
