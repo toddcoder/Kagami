@@ -5,6 +5,7 @@ using Kagami.Library.Nodes;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
+using Kagami.Library.Packages;
 using Kagami.Library.Parsers;
 using Standard.Types.Collections;
 using Standard.Types.Maybe;
@@ -102,6 +103,12 @@ namespace Kagami.Library.Operations
       public string PopLabel(LabelType type) => labelStack[type].Pop();
 
       public void Label(LabelType type) => Label(PeekLabel(type));
+
+      public void CallSysFunction0(Func<Sys, IResult<IObject>> func) => add(new CallSysFunction0(func));
+
+      public void CallSysFunction1(Func<Sys, IObject, IResult<IObject>> func) => add(new CallSysFunction1(func));
+
+      public void CallSysFunction2(Func<Sys, IObject, IObject, IResult<IObject>> func) => add(new CallSysFunction2(func));
 
       public void PushInt(int value) => add(new PushInt(value));
 

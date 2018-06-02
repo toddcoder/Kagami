@@ -364,6 +364,9 @@
     <Compile Include="Operations\BShiftLeft.cs" />
     <Compile Include="Operations\BShiftRight.cs" />
     <Compile Include="Operations\BXor.cs" />
+    <Compile Include="Operations\CallSysFunction0.cs" />
+    <Compile Include="Operations\CallSysFunction1.cs" />
+    <Compile Include="Operations\CallSysFunction2.cs" />
     <Compile Include="Operations\Compare.cs" />
     <Compile Include="Operations\Drop.cs" />
     <Compile Include="Operations\Dup.cs" />

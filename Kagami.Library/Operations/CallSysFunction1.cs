@@ -1,0 +1,19 @@
+﻿using System;
+using Kagami.Library.Objects;
+using Kagami.Library.Packages;
+using Kagami.Library.Runtime;
+using Standard.Types.Maybe;
+
+namespace Kagami.Library.Operations
+{
+   public class CallSysFunction1 : OneOperandOperation
+   {
+      Func<Sys, IObject, IResult<IObject>> func;
+
+      public CallSysFunction1(Func<Sys, IObject, IResult<IObject>> func) => this.func = func;
+
+      public override IMatched<IObject> Execute(Machine machine, IObject value) => func(machine.GlobalFrame.Sys, value).Match();
+
+      public override string ToString() => "call.sys.func1";
+   }
+}
