@@ -282,9 +282,7 @@ namespace Kagami.Library.Operations
 
       public void IsClass(string className, bool pop) => add(new IsClass(className, pop));
 
-      public void Match(bool mutable, bool strict) => add(new Match(mutable, strict));
-
-      public void Match() => add(new Match());
+      public void Match(bool mutable, bool strict) => CallSysFunction2((sys, x, y) => sys.Match(mutable, strict, x, y, false));
 
       public void Drop() => add(new Drop());
 
