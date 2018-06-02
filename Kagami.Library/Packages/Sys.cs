@@ -89,9 +89,9 @@ namespace Kagami.Library.Packages
             var cases = pattern.Cases;
             foreach (var (comparisand, lambda) in cases)
             {
+               var bindings = new Hash<string, IObject>();
                var frame = new Frame();
                Machine.Current.PushFrame(frame);
-               var bindings = new Hash<string, IObject>();
                if (source.Match(comparisand, bindings))
                {
                   frame.Fields.SetBindings(bindings, mutable, strict);
@@ -99,6 +99,8 @@ namespace Kagami.Library.Packages
                   frame.Pop();
                   return result.Success();
                }
+
+               frame.Pop();
             }
 
             return "No match".Failure<IObject>();

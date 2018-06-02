@@ -40,7 +40,7 @@ namespace Kagami.Library.Nodes.Statements
          builder.SendMessage("next", 0);
          builder.GoToIfNil(endLabel);
          builder.Swap();
-         builder.Match(true, false);
+         builder.Match(true, false, false);
          builder.GoToIfTrue(backToTopLabel);
 
          builder.PopFrame();

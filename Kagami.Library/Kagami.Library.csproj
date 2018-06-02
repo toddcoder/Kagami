@@ -320,6 +320,7 @@
     <Compile Include="Objects\NameValue.cs" />
     <Compile Include="Objects\Nil.cs" />
     <Compile Include="Objects\ObjectCollection.cs" />
+    <Compile Include="Objects\ObjectExtensions.cs" />
     <Compile Include="Objects\ObjectFunctions.cs" />
     <Compile Include="Objects\OpenRange.cs" />
     <Compile Include="Objects\OpenRangeIterator.cs" />
@@ -525,7 +526,7 @@
     <Compile Include="Parsers\Expressions\IteratorParser.cs" />
     <Compile Include="Parsers\Expressions\LazyParser.cs" />
     <Compile Include="Parsers\Expressions\ListParser.cs" />
-    <Compile Include="Parsers\Expressions\MatchExpressionParser.cs" />
+    <Compile Include="Parsers\Expressions\PatternParser.cs" />
     <Compile Include="Parsers\Expressions\SkipTakeOperatorParser.cs" />
     <Compile Include="Parsers\Expressions\MatchMapParser.cs" />
     <Compile Include="Parsers\Expressions\NotParser.cs" />

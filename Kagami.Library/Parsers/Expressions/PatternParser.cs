@@ -5,9 +5,9 @@ using static Standard.Types.Maybe.MaybeFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
 {
-   public class MatchExpressionParser : SymbolParser
+   public class PatternParser : SymbolParser
    {
-      public MatchExpressionParser(ExpressionBuilder builder) : base(builder) { }
+      public PatternParser(ExpressionBuilder builder) : base(builder) { }
 
       public override string Pattern => "^ /(|s|) /'(' (> '|')";
 
@@ -30,9 +30,7 @@ namespace Kagami.Library.Parsers.Expressions
                else if (isNotMatched)
                   return "Open pattern".FailedMatch<Unit>();
                else
-               {
                   return failedMatch<Unit>(exception);
-               }
             }
             else
                return failedMatch<Unit>(exception);

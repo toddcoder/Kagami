@@ -20,8 +20,8 @@ namespace Kagami.Library.Operations
             var message = $"{value.Image} | {value.ClassName}";
             machine.Context.Peek(message, index);
          }
-         return
-            notMatched<IObject>();
+
+         return notMatched<IObject>();
       }
    }
 }

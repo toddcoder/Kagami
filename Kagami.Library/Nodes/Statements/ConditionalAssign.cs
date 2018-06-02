@@ -30,7 +30,7 @@ namespace Kagami.Library.Nodes.Statements
          builder.PushFrame();
          expression.Generate(builder);
          comparisand.Generate(builder);
-         builder.Match(mutable, true);
+         builder.Match(mutable, true, true);
          builder.GoToIfFalse(elseBlock.IsSome ? elseLabel : endLabel);
 
          builder.PushFrame();

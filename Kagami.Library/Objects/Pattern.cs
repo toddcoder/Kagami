@@ -14,7 +14,7 @@ namespace Kagami.Library.Objects
 
       public string AsString => cases.Select(c => $"{c.comparisand.AsString} = {c.lambda.AsString}").Listify(" ");
 
-      public string Image => $"|{cases.Select(c => $"{c.comparisand.Image} = {c.lambda.Image}").Listify("|")}";
+      public string Image => $"(|{cases.Select(c => $"{c.comparisand.Image} = {c.lambda.Image}").Listify("|")})";
 
       public int Hash => cases.GetHashCode();
 

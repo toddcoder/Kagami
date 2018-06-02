@@ -23,7 +23,7 @@ namespace Kagami.Library.Nodes.Symbols
          builder.PushFrameWithValue();
 
          comparisand.Generate(builder);
-         builder.Match(true, false);
+         builder.Match(true, false, false);
          builder.GoToIfFalse(elseLabel);
          expression.Generate(builder);
          builder.GoTo(endLabel);

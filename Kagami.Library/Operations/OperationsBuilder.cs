@@ -42,17 +42,16 @@ namespace Kagami.Library.Operations
       {
          if (invokables.ContainsKey(invokable.Index) && !overriding)
             return $"Invokable {invokable.Image} already registered".Failure<int>();
+         else
+         {
+            var index = invokables.Count;
+            invokable.Index = index;
+            invokables[index] = invokable;
+            blocks[index] = block;
+            registeredBlocks.Add(block.ToString());
 
-/*         if (registeredBlocks.Contains(block.ToString()))
-            return (-1).Success();*/
-
-         var index = invokables.Count;
-         invokable.Index = index;
-         invokables[index] = invokable;
-         blocks[index] = block;
-         registeredBlocks.Add(block.ToString());
-
-         return index.Success();
+            return index.Success();
+         }
       }
 
       public IResult<int> RegisterInvokable(IInvokable invokable, Expression expression, bool overriding)
@@ -104,11 +103,11 @@ namespace Kagami.Library.Operations
 
       public void Label(LabelType type) => Label(PeekLabel(type));
 
-      public void CallSysFunction0(Func<Sys, IResult<IObject>> func) => add(new CallSysFunction0(func));
+      public void CallSysFunction0(Func<Sys, IResult<IObject>> func, string image) => add(new CallSysFunction0(func, image));
 
-      public void CallSysFunction1(Func<Sys, IObject, IResult<IObject>> func) => add(new CallSysFunction1(func));
+      public void CallSysFunction1(Func<Sys, IObject, IResult<IObject>> func, string image) => add(new CallSysFunction1(func, image));
 
-      public void CallSysFunction2(Func<Sys, IObject, IObject, IResult<IObject>> func) => add(new CallSysFunction2(func));
+      public void CallSysFunction2(Func<Sys, IObject, IObject, IResult<IObject>> func, string image) => add(new CallSysFunction2(func, image));
 
       public void PushInt(int value) => add(new PushInt(value));
 
@@ -282,7 +281,10 @@ namespace Kagami.Library.Operations
 
       public void IsClass(string className, bool pop) => add(new IsClass(className, pop));
 
-      public void Match(bool mutable, bool strict) => CallSysFunction2((sys, x, y) => sys.Match(mutable, strict, x, y, false));
+      public void Match(bool mutable, bool strict, bool assign)
+      {
+         CallSysFunction2((sys, x, y) => sys.Match(mutable, strict, x, y, assign), $"sys.match({mutable.Image()}, {strict.Image()}, x, y, assign)");
+      }
 
       public void Drop() => add(new Drop());
 
