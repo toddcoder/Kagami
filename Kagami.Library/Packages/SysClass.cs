@@ -16,6 +16,7 @@ namespace Kagami.Library.Packages
          registerPackageFunction("put", (obj, msg) => function<Sys>(obj, sys => sys.Put(msg.Arguments)));
          registerPackageFunction("readln", (obj, msg) => function<Sys>(obj, sys => sys.Readln()));
          registerPackageFunction("peek", (obj, msg) => function<Sys>(obj, sys => sys.Peek(msg.Arguments[0])));
+         registerPackageFunction("ticks", (obj,msg)=>function<Sys>(obj,sys=>sys.Ticks()));
       }
    }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Standard.Types.Collections;
@@ -104,6 +105,24 @@ namespace Kagami.Library.Packages
             }
 
             return "No match".Failure<IObject>();
+         }
+         catch (Exception exception)
+         {
+            return failure<IObject>(exception);
+         }
+      }
+
+      public Long Ticks() => new Long(DateTime.Now.Ticks);
+
+      public IResult<IObject> NewParameterlessObject(string className, string fieldName)
+      {
+         try
+         {
+            var userObject = new UserObject(className, new Fields(), Parameters.Empty);
+            if (Machine.Current.CurrentFrame.Fields.New(fieldName, userObject).IfNot(out var exception))
+               return failure<IObject>(exception);
+            else
+               return userObject.Success<IObject>();
          }
          catch (Exception exception)
          {

@@ -1,6 +1,9 @@
 ﻿using Kagami.Library.Nodes.Symbols;
 using Standard.Types.Maybe;
+using Standard.Types.RegularExpressions;
+using Standard.Types.Strings;
 using static Kagami.Library.Parsers.ParserFunctions;
+using static Standard.Types.Maybe.MaybeFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
 {
@@ -12,15 +15,20 @@ namespace Kagami.Library.Parsers.Expressions
 
       public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
       {
-         state.Colorize(tokens, Color.Structure);
-
-         if (getArguments(state, builder.Flags).If(out var arguments, out var original))
-         {
-            builder.Add(new SkipTakeOperatorSymbol(arguments));
-            return Unit.Matched();
-         }
+         if (state.Source.Take(state.Index).IsMatch("/s+ $"))
+            return notMatched<Unit>();
          else
-            return original.UnmatchedOnly<Unit>();
+         {
+            state.Colorize(tokens, Color.Structure);
+
+            if (getArguments(state, builder.Flags).If(out var arguments, out var original))
+            {
+               builder.Add(new SkipTakeOperatorSymbol(arguments));
+               return Unit.Matched();
+            }
+            else
+               return original.UnmatchedOnly<Unit>();
+         }
       }
    }
 }
