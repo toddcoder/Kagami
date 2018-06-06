@@ -62,7 +62,7 @@ namespace Kagami.Library.Packages
          return obj;
       }
 
-      public IResult<IObject> Match(bool mutable, bool strict, IObject x, IObject y, bool assign)
+      public IResult<IObject> Match(bool mutable, bool strict, IObject x, IObject y)
       {
          if (y is Pattern pattern)
             return MatchToPattern(pattern, x, mutable, strict);
@@ -71,9 +71,9 @@ namespace Kagami.Library.Packages
             var bindings = new Hash<string, IObject>();
             if (x.Match(y, bindings))
             {
-               if (assign)
-                  Machine.Current.CurrentFrame.Fields.AssignBindings(bindings);
-               else
+/*               if (assign)
+                  Machine.Current.CurrentFrame.Fields.AssignBindings(bindings, mutable);
+               else*/
                   Machine.Current.CurrentFrame.Fields.SetBindings(bindings, mutable, strict);
 
                return Boolean.True.Success();

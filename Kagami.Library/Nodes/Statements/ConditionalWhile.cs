@@ -33,7 +33,7 @@ namespace Kagami.Library.Nodes.Statements
          comparisand.Generate(builder);
          builder.Peek(Index);
 
-         builder.Match(mutable, true, true);
+         builder.Match(mutable, true);
          builder.GoToIfFalse(endLabel);
 
          builder.PushExitFrame(exitLabel);

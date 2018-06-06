@@ -29,7 +29,7 @@ namespace Kagami.Library.Nodes.Statements
             var parameterName = i++.ToString().get();
             builder.GetField(parameterName);
             builder.PushObject(comparisand);
-            builder.Match(false, false, false);
+            builder.Match(false, false);
             builder.GoToIfFalse(failedMatchLabel);
          }
 

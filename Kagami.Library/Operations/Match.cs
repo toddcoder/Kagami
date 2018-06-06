@@ -22,7 +22,7 @@ namespace Kagami.Library.Operations
 
       public override IMatched<IObject> Execute(Machine machine, IObject x, IObject y)
       {
-         return machine.GlobalFrame.Sys.Match(mutable, strict, x, y, assign).Match();
+         return machine.GlobalFrame.Sys.Match(mutable, strict, x, y).Match();
       }
 
       public override string ToString()

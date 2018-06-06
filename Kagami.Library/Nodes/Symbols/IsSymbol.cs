@@ -11,7 +11,7 @@ namespace Kagami.Library.Nodes.Symbols
       public override void Generate(OperationsBuilder builder)
       {
          comparisand.Generate(builder);
-         builder.Match(true, false, false);
+         builder.Match(true, false);
       }
 
       public override Precedence Precedence => Precedence.ChainedOperator;

@@ -120,7 +120,7 @@ namespace Kagami.Library.Runtime
                New(binding.Key, binding.Value, mutable);
       }
 
-      public void AssignBindings(Hash<string, IObject> bindings)
+/*      public void AssignBindings(Hash<string, IObject> bindings, bool mutable)
       {
          foreach (var binding in bindings)
             if (Find(binding.Key, true).If(out var field, out var isNotMatched, out var exception))
@@ -129,10 +129,10 @@ namespace Kagami.Library.Runtime
                else
                   throw immutableField(binding.Key);
             else if (isNotMatched)
-               throw fieldNotFound(binding.Key);
+               New(binding.Key, binding.Value, mutable);
             else
                throw exception;
-      }
+      }*/
 
       public bool Equals(Fields other)
       {
