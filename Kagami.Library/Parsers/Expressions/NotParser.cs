@@ -11,7 +11,7 @@ namespace Kagami.Library.Parsers.Expressions
 
       public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
       {
-         state.Colorize(tokens, Color.Whitespace, Color.Keyword);
+         state.Colorize(tokens, Color.Whitespace, Color.Operator);
          builder.Add(new NotSymbol());
 
          return Unit.Matched();

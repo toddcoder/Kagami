@@ -15,7 +15,7 @@ namespace Kagami.Library.Parsers.Expressions
       {
          var word1 = tokens[1].Text;
          var word2 = tokens[3].Text;
-         state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Keyword);
+         state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Operator);
 
          switch (word1)
          {

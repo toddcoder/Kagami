@@ -128,13 +128,14 @@ namespace Kagami.Playground
                ((ToolStripMenuItem)s).Checked = tracing;
             }, "^T");
             menus.Menu("&Insert");
-            menus.Menu("Insert", "println", (s, evt) => insertText("println ", 0, 0), "^P");
-            menus.Menu("Insert", "println interpolated", (s, evt) => insertText("println $\"\"", -1, 0), "^%P");
-            menus.Menu("Insert", "print", (s, evt) => insertText("print ", 0, 0));
-            menus.Menu("Insert", "put", (s, evt) => insertText("put ", 0, 0));
-            menus.Menu("Insert", "peek", (s, evt) => surround("peek(", ")"), "^K");
+            menus.Menu("Insert", "open sys", (s, evt) => insertText("open sys\n\n", 0, 0), "^%S");
+            menus.Menu("Insert", "open math", (s, evt) => insertText("open math\n\n", 0, 0), "^%M");
+            menus.Menu("Insert", "println()", (s, evt) => insertText("println()", -1, 0), "^P");
+            menus.Menu("Insert", "println() interpolated", (s, evt) => insertText("println($\"\")", -2, 0), "^%P");
+            menus.Menu("Insert", "print()", (s, evt) => insertText("print()", -1, 0));
+            menus.Menu("Insert", "put()", (s, evt) => insertText("put()", -1, 0));
+            menus.Menu("Insert", "peek()", (s, evt) => surround("peek(", ")"), "^K");
             menus.Menu("Insert", "Triple quotes", (s, evt) => insertText("\"\"\"\n\"\"\"", -3), "^Q");
-            menus.Menu("Insert", "Set", (s, evt) => insertText("«»", -1), "^D9");
 
             menus.Menu("&Debug");
             menus.Menu("Debug", "Step Into", (s, evt) => stepInto(), "F11");

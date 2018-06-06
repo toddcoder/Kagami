@@ -21,7 +21,7 @@ namespace Kagami.Library.Parsers.Expressions
             var keyword = tokens[2].Text;
             if (keyword != "if" || !builder.Flags[ExpressionFlags.OmitIf])
             {
-               state.Colorize(tokens, Color.Whitespace, Color.Keyword);
+               state.Colorize(tokens, Color.Whitespace, Color.Operator);
 
                switch (keyword)
                {
