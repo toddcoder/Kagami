@@ -1,5 +1,6 @@
 ﻿using Kagami.Library.Nodes.Symbols;
 using Standard.Types.Maybe;
+using static Kagami.Library.Nodes.NodeFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Standard.Types.Maybe.MaybeFunctions;
 
@@ -16,22 +17,48 @@ namespace Kagami.Library.Parsers.Expressions
          var functionName = tokens[2].Text;
          if (functionName == @"\/")
             return notMatched<Unit>();
-
-         state.Colorize(tokens, Color.Whitespace, Color.Invokable, Color.Structure);
-
-         if (getArgumentsPlusLambda(state, builder.Flags).If(out var tuple, out var original))
-         {
-            var (arguments, possibleLambda) = tuple;
-
-            if (state.Macro(functionName).If(out var function))
-               builder.Add(new MacroInvokeSymbol(function, arguments, possibleLambda));
-            else
-               builder.Add(new InvokeSymbol(functionName, arguments, possibleLambda));
-
-            return Unit.Matched();
-         }
          else
-            return original.Unmatched<Unit>();
+         {
+            state.Colorize(tokens, Color.Whitespace, Color.Invokable, Color.Structure);
+
+            if (getArgumentsPlusLambda(state, builder.Flags).If(out var tuple, out var original))
+            {
+               var (arguments, possibleLambda) = tuple;
+
+               if (state.BlockFollows())
+               {
+                  if (state.Advance().If(out _, out var unitMatched))
+                  {
+                     var tempObjectField = newLabel("object");
+                     var outerBuilder = new ExpressionBuilder(ExpressionFlags.Standard);
+                     var setPropertyParser = new SetPropertyParser(builder, tempObjectField, outerBuilder);
+                     while (state.More)
+                        if (setPropertyParser.Scan(state).If(out _, out var isNotMatched, out var exception)) { }
+                        else if (isNotMatched)
+                           break;
+                        else
+                           return failedMatch<Unit>(exception);
+
+                     state.Regress();
+
+                     if (outerBuilder.ToExpression().If(out var outerExpression, out var outerException))
+                        builder.Add(new NewObjectSymbol(tempObjectField, functionName, outerExpression));
+                     else
+                        return failedMatch<Unit>(outerException);
+                  }
+                  else
+                     return unitMatched;
+               }
+               else if (state.Macro(functionName).If(out var function))
+                  builder.Add(new MacroInvokeSymbol(function, arguments, possibleLambda));
+               else
+                  builder.Add(new InvokeSymbol(functionName, arguments, possibleLambda));
+
+               return Unit.Matched();
+            }
+            else
+               return original.Unmatched<Unit>();
+         }
       }
    }
 }

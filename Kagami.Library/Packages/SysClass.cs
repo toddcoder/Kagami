@@ -1,4 +1,5 @@
-﻿using static Kagami.Library.Classes.ClassFunctions;
+﻿using Kagami.Library.Objects;
+using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Packages
 {
@@ -16,7 +17,9 @@ namespace Kagami.Library.Packages
          registerPackageFunction("put", (obj, msg) => function<Sys>(obj, sys => sys.Put(msg.Arguments)));
          registerPackageFunction("readln", (obj, msg) => function<Sys>(obj, sys => sys.Readln()));
          registerPackageFunction("peek", (obj, msg) => function<Sys>(obj, sys => sys.Peek(msg.Arguments[0])));
-         registerPackageFunction("ticks", (obj,msg)=>function<Sys>(obj,sys=>sys.Ticks()));
+         registerPackageFunction("ticks", (obj, msg) => function<Sys>(obj, sys => sys.Ticks()));
+         registerPackageFunction("fst", (obj, msg) => function<Sys, Tuple>(obj, msg, (sys, t) => sys.First(t)));
+         registerPackageFunction("snd", (obj, msg) => function<Sys, Tuple>(obj, msg, (sys, t) => sys.Second(t)));
       }
    }
 }

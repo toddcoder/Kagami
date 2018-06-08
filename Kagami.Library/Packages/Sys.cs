@@ -10,6 +10,7 @@ using Standard.Types.Maybe;
 using static Standard.Types.Maybe.MaybeFunctions;
 using Boolean = Kagami.Library.Objects.Boolean;
 using String = Kagami.Library.Objects.String;
+using Tuple = Kagami.Library.Objects.Tuple;
 
 namespace Kagami.Library.Packages
 {
@@ -129,5 +130,9 @@ namespace Kagami.Library.Packages
             return failure<IObject>(exception);
          }
       }
+
+      public IObject First(Tuple tuple) => tuple[0];
+
+      public IObject Second(Tuple tuple) => tuple[1];
    }
 }
