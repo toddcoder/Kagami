@@ -88,6 +88,7 @@
     <Compile Include="Classes\RangeClass.cs" />
     <Compile Include="Classes\RationalClass.cs" />
     <Compile Include="Classes\RegexClass.cs" />
+    <Compile Include="Classes\RuntimeFunctionClass.cs" />
     <Compile Include="Classes\Signature.cs" />
     <Compile Include="Classes\SliceClass.cs" />
     <Compile Include="Classes\SomeClass.cs" />
@@ -295,6 +296,7 @@
     <Compile Include="Objects\IIterator.cs" />
     <Compile Include="Objects\IKeyValue.cs" />
     <Compile Include="Objects\ILazyStatus.cs" />
+    <Compile Include="Objects\IMayInvoke.cs" />
     <Compile Include="Objects\IMessageNumber.cs" />
     <Compile Include="Objects\IMutableCollection.cs" />
     <Compile Include="Objects\Infinity.cs" />
@@ -333,6 +335,7 @@
     <Compile Include="Objects\RangeIterator.cs" />
     <Compile Include="Objects\Rational.cs" />
     <Compile Include="Objects\Regex.cs" />
+    <Compile Include="Objects\RuntimeFunction.cs" />
     <Compile Include="Objects\SkipAction.cs" />
     <Compile Include="Objects\Skipped.cs" />
     <Compile Include="Objects\SkipUntilAction.cs" />

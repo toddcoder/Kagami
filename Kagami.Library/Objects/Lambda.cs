@@ -59,5 +59,10 @@ namespace Kagami.Library.Objects
       public Fields Fields => fields;
 
       public Lambda Clone() => new Lambda(invokable);
+
+      public IObject Join(Lambda otherLambda)
+      {
+         return new RuntimeFunction(args => otherLambda.Invoke(Invoke(args)), $"{Image} >> {otherLambda.Image}");
+      }
    }
 }

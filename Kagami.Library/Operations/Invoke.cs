@@ -78,6 +78,9 @@ namespace Kagami.Library.Operations
                      case PackageFunction pf:
                         increment = true;
                         return pf.Invoke(arguments).Matched();
+                     case IMayInvoke mi:
+                        increment = true;
+                        return mi.Invoke(arguments.Value).Matched();
                      default:
                         return failedMatch<IObject>(incompatibleClasses(field.Value, "Invokable object"));
                   }

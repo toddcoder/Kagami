@@ -13,6 +13,7 @@ namespace Kagami.Library.Classes
          base.RegisterMessages();
 
          messages["invoke"] = (obj, msg) => function<Lambda>(obj, l => invoke(l, msg.Arguments));
+         messages[">>"] = (obj, msg) => function<Lambda, Lambda>(obj, msg, (l1, l2) => l1.Join(l2));
       }
 
       protected static IObject invoke(Lambda lambda, Arguments arguments)
