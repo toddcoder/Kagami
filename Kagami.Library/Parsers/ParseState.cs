@@ -244,6 +244,6 @@ namespace Kagami.Library.Parsers
 
       public IMaybe<Function> Macro(string fullFunctionName) => macros.Map(fullFunctionName);
 
-      public bool BlockFollows() => CurrentSource.IsMatch($"^ (/r /n | /r | /n) {indentation.Escape()} [' /t']+", multiline: true);
+      public bool BlockFollows() => CurrentSource.IsMatch($"^ (/r /n | /r | /n) '{indentation}' [' /t']+", multiline: true);
    }
 }

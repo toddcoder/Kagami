@@ -49,7 +49,7 @@ namespace Kagami.Library.Objects
          this.tail = Single(tail);
       }
 
-      public bool IsString { get; set; } = false;
+      public bool IsString { get; set; }
 
       public IMaybe<IObject> Head => head;
 
@@ -167,5 +167,22 @@ namespace Kagami.Library.Objects
 
          return NewList(left);
       }
+
+      static IObject getItem(List list, int currentIndex, int expectedIndex)
+      {
+         if (list.IsEmpty)
+            return Unassigned.Value;
+         else
+         {
+            if (currentIndex < expectedIndex)
+               return getItem(list.Tail, currentIndex + 1, expectedIndex);
+            else if (list.Head.If(out var head))
+               return head;
+            else
+               return Unassigned.Value;
+         }
+      }
+
+      public IObject this[int index] => getItem(this, 0, index);
    }
 }
