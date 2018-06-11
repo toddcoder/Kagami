@@ -1,27 +1,27 @@
 ﻿using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
+using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using static Kagami.Library.Nodes.NodeFunctions;
 
 namespace Kagami.Library.Nodes.Symbols
 {
-   public class ComprehensionSymbol : Symbol
+   public class SeqSymbol : Symbol
    {
       Block block;
       string image;
 
-      public ComprehensionSymbol(Block block, string image)
-      {
-         this.block = block;
-         this.image = image;
-      }
+      public SeqSymbol(Block block) => this.block = block;
 
       public override void Generate(OperationsBuilder builder)
       {
-         var functionName = $"__$comprehension{id()}";
-         var yieldingInvokable = new YieldingInvokable(functionName, Parameters.Empty, image);
-         if (builder.RegisterInvokable(yieldingInvokable, block, true).If(out _, out var exception))
-            builder.PushObject(yieldingInvokable);
+         image = $"seq {block}";
+         var invokable = new YieldingInvokable(newLabel("seq"), Parameters.Empty, image);
+         if (builder.RegisterInvokable(invokable, block, false).If(out _, out var exception))
+         {
+            var lambda = new Lambda(invokable);
+            builder.PushObject(lambda);
+         }
          else
             throw exception;
       }

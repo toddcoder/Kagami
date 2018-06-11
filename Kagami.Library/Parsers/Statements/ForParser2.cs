@@ -21,7 +21,7 @@ namespace Kagami.Library.Parsers.Statements
             select (comparisand, source, block);
          if (result.If(out var tuple, out var original))
          {
-            (var comparisand, var source, var block) = tuple;
+            var (comparisand, source, block) = tuple;
             state.AddStatement(new For2(comparisand, source, block));
             return Unit.Matched();
          }

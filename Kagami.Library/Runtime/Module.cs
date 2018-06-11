@@ -56,7 +56,7 @@ namespace Kagami.Library.Runtime
          classes["Rational"] = new RationalClass();
          classes["Long"] = new LongClass();
          classes["Lazy"] = new LazyClass();
-         classes["YieldingFunctionInvokable"] = new YieldingFunctionInvokableClass();
+         classes["YieldingInvokable"] = new YieldingInvokableClass();
          classes["Del"] = new DelClass();
          classes["Slice"] = new SliceClass();
          classes["End"] = new EndClass();

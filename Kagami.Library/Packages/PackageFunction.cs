@@ -5,7 +5,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Packages
 {
-   public class PackageFunction : IObject, IEquatable<PackageFunction>
+   public class PackageFunction : IObject, IEquatable<PackageFunction>, IMayInvoke
    {
       protected Package package;
       protected string name;
@@ -55,5 +55,7 @@ namespace Kagami.Library.Packages
             return hashCode;
          }
       }
+
+      public IObject Invoke(IObject[] arguments) => Invoke(new Arguments(arguments));
    }
 }

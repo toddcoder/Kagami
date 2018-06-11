@@ -14,14 +14,14 @@ namespace Kagami.Library.Operations
       public static void InvokeInvokableObject(Machine machine, IInvokableObject invokableObject, Arguments arguments)
       {
          var invokable = invokableObject.Invokable;
-         if (invokable is YieldingFunctionInvokable yfi)
+         if (invokable is YieldingInvokable yfi)
             InvokeYieldingInvokable(machine, yfi, arguments);
          else
             InvokeInvokable(machine, invokable, arguments,
                invokableObject is IProvidesFields pf && pf.ProvidesFields ? pf.Fields : new Fields());
       }
 
-      static void InvokeYieldingInvokable(Machine machine, YieldingFunctionInvokable invokable, Arguments arguments)
+      static void InvokeYieldingInvokable(Machine machine, YieldingInvokable invokable, Arguments arguments)
       {
          invokable.Arguments = arguments;
          var iterator = invokable.GetIterator(false);
@@ -72,7 +72,7 @@ namespace Kagami.Library.Operations
                   {
                      case IInvokableObject io:
                         InvokeInvokableObject(machine, io, arguments);
-                        increment = io.Invokable is YieldingFunctionInvokable;
+                        increment = io.Invokable is YieldingInvokable;
 
                         return notMatched<IObject>();
                      case PackageFunction pf:

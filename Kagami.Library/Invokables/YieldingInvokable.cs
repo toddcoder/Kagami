@@ -10,12 +10,12 @@ using static Standard.Types.Maybe.MaybeFunctions;
 
 namespace Kagami.Library.Invokables
 {
-   public class YieldingFunctionInvokable : IInvokable, ICollection, IObject
+   public class YieldingInvokable : IInvokable, ICollection, IObject
    {
       string functionName;
       List<IObject> cached;
 
-      public YieldingFunctionInvokable(string functionName, Parameters parameters, string image)
+      public YieldingInvokable(string functionName, Parameters parameters, string image)
       {
          this.functionName = functionName;
          Parameters = parameters;
@@ -31,7 +31,7 @@ namespace Kagami.Library.Invokables
 
       public Parameters Parameters { get; }
 
-      public string ClassName => "YieldingFunctionInvokable";
+      public string ClassName => "YieldingInvokable";
 
       public string AsString => functionName;
 
@@ -41,7 +41,7 @@ namespace Kagami.Library.Invokables
 
       public int Hash => functionName.GetHashCode();
 
-      public bool IsEqualTo(IObject obj) => obj is YieldingFunctionInvokable yfi && functionName == yfi.functionName;
+      public bool IsEqualTo(IObject obj) => obj is YieldingInvokable yfi && functionName == yfi.functionName;
 
       public bool Match(IObject comparisand, Hash<string, IObject> bindings) => false;
 

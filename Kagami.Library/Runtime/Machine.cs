@@ -4,6 +4,7 @@ using System.Linq;
 using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
+using Kagami.Library.Packages;
 using Standard.Types.Collections;
 using Standard.Types.Enumerables;
 using Standard.Types.Exceptions;
@@ -97,7 +98,7 @@ namespace Kagami.Library.Runtime
          var returnAddress = Address + increment;
          var frame = new Frame(returnAddress, fields);
 
-         if (invokable is YieldingFunctionInvokable yfi)
+         if (invokable is YieldingInvokable yfi)
             yfi.Arguments = arguments;
 
          PushFrame(frame);
@@ -115,7 +116,7 @@ namespace Kagami.Library.Runtime
          var returnAddress = Address + increment;
          var frame = new Frame(returnAddress, arguments);
 
-         if (invokable is YieldingFunctionInvokable yfi)
+         if (invokable is YieldingInvokable yfi)
             yfi.Arguments = arguments;
 
          PushFrame(frame);
@@ -126,7 +127,7 @@ namespace Kagami.Library.Runtime
             return failedMatch<IObject>(badAddress(invokable.Address));
       }
 
-      public IMatched<IObject> Invoke(YieldingFunctionInvokable invokable)
+      public IMatched<IObject> Invoke(YieldingInvokable invokable)
       {
          var frames = invokable.Frames;
          if (frames.FunctionFrame.If(out var frame))
@@ -161,6 +162,8 @@ namespace Kagami.Library.Runtime
                         return Invoke(io.Invokable, arguments);
                      case IInvokable invokable:
                         return Invoke(invokable, arguments);
+                     case PackageFunction pf:
+                        return pf.Invoke(arguments).Matched();
                      default:
                         return failedMatch<IObject>(incompatibleClasses(value, "Invokable"));
                   }

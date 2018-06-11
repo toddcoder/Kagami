@@ -101,7 +101,7 @@
     <Compile Include="Classes\UnmatchedClass.cs" />
     <Compile Include="Classes\UserClass.cs" />
     <Compile Include="Classes\VoidClass.cs" />
-    <Compile Include="Classes\YieldingFunctionInvokableClass.cs" />
+    <Compile Include="Classes\YieldingInvokableClass.cs" />
     <Compile Include="CommonExtensions.cs" />
     <Compile Include="CommonFunctions.cs" />
     <Compile Include="Compiler.cs" />
@@ -114,7 +114,7 @@
     <Compile Include="Invokables\LambdaInvokable.cs" />
     <Compile Include="Invokables\Parameter.cs" />
     <Compile Include="Invokables\Parameters.cs" />
-    <Compile Include="Invokables\YieldingFunctionInvokable.cs" />
+    <Compile Include="Invokables\YieldingInvokable.cs" />
     <Compile Include="Nodes\IOperationsGenerator.cs" />
     <Compile Include="Nodes\LabelType.cs" />
     <Compile Include="Nodes\Node.cs" />
@@ -251,6 +251,7 @@
     <Compile Include="Nodes\Symbols\SendBinaryMessageSymbol.cs" />
     <Compile Include="Nodes\Symbols\SendOperatorMessage.cs" />
     <Compile Include="Nodes\Symbols\SendMessageSymbol.cs" />
+    <Compile Include="Nodes\Symbols\SeqSymbol.cs" />
     <Compile Include="Nodes\Symbols\SetSliceSymbol.cs" />
     <Compile Include="Nodes\Symbols\SkipTakeOperatorSymbol.cs" />
     <Compile Include="Nodes\Symbols\SomeSymbol.cs" />
@@ -534,6 +535,7 @@
     <Compile Include="Parsers\Expressions\LazyParser.cs" />
     <Compile Include="Parsers\Expressions\ListParser.cs" />
     <Compile Include="Parsers\Expressions\PatternParser.cs" />
+    <Compile Include="Parsers\Expressions\SeqParser.cs" />
     <Compile Include="Parsers\Expressions\SetPropertyParser.cs" />
     <Compile Include="Parsers\Expressions\SkipTakeOperatorParser.cs" />
     <Compile Include="Parsers\Expressions\MatchMapParser.cs" />

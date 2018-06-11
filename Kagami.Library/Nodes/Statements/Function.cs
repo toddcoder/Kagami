@@ -73,7 +73,7 @@ namespace Kagami.Library.Nodes.Statements
       public IInvokable GetInvokable()
       {
          if (yielding)
-            return new YieldingFunctionInvokable(functionName, parameters, ToString());
+            return new YieldingInvokable(functionName, parameters, ToString());
          else
             return new FunctionInvokable(functionName, parameters, ToString());
       }

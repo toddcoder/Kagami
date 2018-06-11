@@ -61,7 +61,6 @@ namespace Kagami.Library.Parsers.Expressions
             yield return new SymbolObjectParser(builder);
             yield return new WhateverParser(builder);
             yield return new RegexParser(builder);
-            //yield return new NewObjectParser(builder);
             yield return new FieldParser(builder);
          }
       }

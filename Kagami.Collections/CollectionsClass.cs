@@ -13,7 +13,8 @@ namespace Kagami.Collections
       {
          base.RegisterMessages();
 
-         registerPackageFunction("Set", (obj, msg) => function<Collections>(obj, c => c.Set((ICollection)msg.Arguments[0])));
+         registerPackageFunction("Set", (obj, msg) => function<Collections>(obj, c => c.Set(msg.Arguments.Value)));
+         registerPackageFunction("Set".Function("of"), (obj, msg) => function<Collections>(obj, c => c.Set((ICollection)msg.Arguments[0])));
          registerPackageFunction("Set".Function("set"), (obj, msg) => function<Collections, Set>(obj, msg, (c, s) => c.Set(s)));
       }
    }

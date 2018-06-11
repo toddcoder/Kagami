@@ -17,6 +17,8 @@ namespace Kagami.Collections
 
        public Set Set(ICollection collection) => new Set(collection.GetIterator(false).List().ToArray());
 
+       public Set Set(IObject[] objects) => new Set(objects);
+
        public Set Set(Set otherSet) => new Set(otherSet);
     }
 }
