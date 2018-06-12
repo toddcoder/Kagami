@@ -14,8 +14,8 @@ namespace Kagami.Library.Operations
       public static void InvokeInvokableObject(Machine machine, IInvokableObject invokableObject, Arguments arguments)
       {
          var invokable = invokableObject.Invokable;
-         if (invokable is YieldingInvokable yfi)
-            InvokeYieldingInvokable(machine, yfi, arguments);
+         if (invokable is YieldingInvokable yi)
+            InvokeYieldingInvokable(machine, yi, arguments);
          else
             InvokeInvokable(machine, invokable, arguments,
                invokableObject is IProvidesFields pf && pf.ProvidesFields ? pf.Fields : new Fields());

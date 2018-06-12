@@ -153,8 +153,11 @@ namespace Kagami.Library.Objects
 
       public static string userObjectString(UserObject obj)
       {
-         return
-            $"object{obj.ObjectID} {obj.ClassName}({obj.Parameters.Select(p => $"{p.Name} = {obj.Fields[p.Name].Image}").Listify()})";
+         if (classOf(obj).RespondsTo("string".get()))
+            return sendMessage(obj, "string".get()).AsString;
+         else
+            return
+               $"object{obj.ObjectID} {obj.ClassName}({obj.Parameters.Select(p => $"{p.Name} = {obj.Fields[p.Name].Image}").Listify()})";
       }
 
       public static bool isEqualTo(UserObject obj, IObject other)
@@ -184,17 +187,17 @@ namespace Kagami.Library.Objects
                return false;
          }
          else
-         return match(obj, comparisand, (uo1, uo2) =>
-         {
-            foreach (var parameter in obj.Parameters)
+            return match(obj, comparisand, (uo1, uo2) =>
             {
-               var name = parameter.Name;
-               if (obj.Fields.ContainsKey(name) && uo2.Fields[name] is Placeholder ph)
-                  bindings[ph.Name] = obj.Fields[name];
-            }
+               foreach (var parameter in obj.Parameters)
+               {
+                  var name = parameter.Name;
+                  if (obj.Fields.ContainsKey(name) && uo2.Fields[name] is Placeholder ph)
+                     bindings[ph.Name] = obj.Fields[name];
+               }
 
-            return true;
-         }, bindings);
+               return true;
+            }, bindings);
       }
 
       public static string stringOf(IObject obj)
