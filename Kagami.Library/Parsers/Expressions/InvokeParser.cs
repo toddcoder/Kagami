@@ -27,6 +27,7 @@ namespace Kagami.Library.Parsers.Expressions
 
                if (state.BlockFollows())
                {
+                  state.Scan("^ /':'", Color.Structure);
                   if (state.Advance().If(out _, out var unitMatched))
                   {
                      var tempObjectField = newLabel("object");

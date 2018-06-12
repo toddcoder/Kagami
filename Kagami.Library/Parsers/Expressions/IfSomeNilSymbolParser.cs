@@ -5,9 +5,9 @@ using static Standard.Types.Maybe.MaybeFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
 {
-   public class MatchMapParser : SymbolParser
+   public class IfSomeNilSymbolParser : SymbolParser
    {
-      public MatchMapParser(ExpressionBuilder builder) : base(builder) { }
+      public IfSomeNilSymbolParser(ExpressionBuilder builder) : base(builder) { }
 
       public override string Pattern => "^ /(|s|) /'||'";
 
@@ -17,17 +17,10 @@ namespace Kagami.Library.Parsers.Expressions
 
          state.Colorize(tokens, Color.Whitespace, Color.Structure);
 
-         var result =
-            from comparisand in getExpression(state, ExpressionFlags.Comparisand | ExpressionFlags.OmitConjunction)
-            from arrow in state.Scan("^ /(|s+|) /'||'", Color.Whitespace, Color.Structure)
-            from expression in getExpression(state, builder.Flags)
-            select (comparisand, expression);
-
-         if (result.If(out var tuple, out var isNotMatched, out var exception))
+         if (getExpression(state, builder.Flags).If(out var expression, out var isNotMatched, out var exception))
          {
             state.CommitTransaction();
-            var (comparisand, expression) = tuple;
-            builder.Add(new MatchMapSymbol(comparisand, expression));
+            builder.Add(new IfSomeNilSymbol(expression));
 
             return Unit.Matched();
          }
