@@ -50,7 +50,7 @@ namespace Kagami.Library.Classes
 
       public void InheritFrom(UserClass parentClass)
       {
-         base.RegisterMessages();
+         //base.RegisterMessages();
 
          foreach (var item in parentClass.messages)
             messages[item.Key] = item.Value;
