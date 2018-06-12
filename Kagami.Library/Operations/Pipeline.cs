@@ -10,10 +10,15 @@ namespace Kagami.Library.Operations
    {
       public override IMatched<IObject> Execute(Machine machine, IObject x, IObject y)
       {
-         if (y is Lambda lambda)
-            return lambda.Invoke(x).Matched();
-         else
-            return failedMatch<IObject>(incompatibleClasses(y, "Lambda"));
+         switch (y)
+         {
+            case Lambda lambda:
+               return lambda.Invoke(x).Matched();
+            case IMayInvoke mi:
+               return mi.Invoke(x).Matched();
+            default:
+               return failedMatch<IObject>(incompatibleClasses(y, "Lambda"));
+         }
       }
 
       public override string ToString() => "pipeline";

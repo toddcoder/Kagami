@@ -12,7 +12,7 @@ namespace Kagami.Library.Parsers.Statements
 {
    public class FunctionParser : StatementParser
    {
-      public override string Pattern => $"^ /('override' /s+)? /('fn' | 'op' | 'def') /(/s+) (/({REGEX_CLASS_GETTING}) /'.')?" +
+      public override string Pattern => $"^ /('override' /s+)? /('func' | 'op' | 'def') /(/s+) (/({REGEX_CLASS_GETTING}) /'.')?" +
          $" /({REGEX_FUNCTION_NAME}) /'('?";
 
       public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)

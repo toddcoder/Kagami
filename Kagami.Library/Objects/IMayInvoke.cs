@@ -2,6 +2,6 @@
 {
    public interface IMayInvoke
    {
-      IObject Invoke(IObject[] arguments);
+      IObject Invoke(params IObject[] arguments);
    }
 }

@@ -117,7 +117,7 @@ namespace Kagami.Library.Nodes.Statements
 
       public override string ToString()
       {
-         return $"{overriding.Extend("override ")}{yielding.Extend("co")}fn {functionName}({parameters}) ...";
+         return $"{overriding.Extend("override ")}{yielding.Extend("co")}func {functionName}({parameters}) ...";
       }
    }
 }
