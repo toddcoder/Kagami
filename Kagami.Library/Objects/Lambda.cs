@@ -8,9 +8,9 @@ namespace Kagami.Library.Objects
 {
    public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields, IPristineCopy, IProvidesFields
    {
-      IInvokable invokable;
-      Fields fields;
-      bool providesFields;
+      protected IInvokable invokable;
+      protected Fields fields;
+      protected bool providesFields;
 
       public Lambda(IInvokable invokable)
       {
@@ -21,13 +21,13 @@ namespace Kagami.Library.Objects
 
       public string ClassName => "Lambda";
 
-      public string AsString => invokable.ToString();
+      public virtual string AsString => invokable.ToString();
 
-      public string Image => invokable.Image;
+      public virtual string Image => invokable.Image;
 
-      public int Hash => invokable.GetHashCode();
+      public virtual int Hash => invokable.GetHashCode();
 
-      public bool IsEqualTo(IObject obj) => obj is Lambda l && invokable.Index == l.invokable.Index;
+      public virtual bool IsEqualTo(IObject obj) => obj is Lambda l && invokable.Index == l.invokable.Index;
 
       public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
@@ -39,7 +39,7 @@ namespace Kagami.Library.Objects
 
       public override int GetHashCode() => Hash;
 
-      public IObject Copy() => new Lambda(invokable);
+      public virtual IObject Copy() => new Lambda(invokable);
 
       public void CopyFields(Fields fields)
       {
@@ -49,7 +49,7 @@ namespace Kagami.Library.Objects
 
       public IInvokable Invokable => invokable;
 
-      public IObject Invoke(params IObject[] arguments)
+      public virtual IObject Invoke(params IObject[] arguments)
       {
          return Machine.Current.Invoke(invokable, new Arguments(arguments), fields, 0).Value;
       }

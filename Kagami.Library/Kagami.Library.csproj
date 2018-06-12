@@ -303,6 +303,7 @@
     <Compile Include="Objects\IMutableCollection.cs" />
     <Compile Include="Objects\Infinity.cs" />
     <Compile Include="Objects\Int.cs" />
+    <Compile Include="Objects\InternalLambda.cs" />
     <Compile Include="Objects\InternalList.cs" />
     <Compile Include="Objects\INumeric.cs" />
     <Compile Include="Objects\IObject.cs" />
