@@ -3,13 +3,14 @@ using Kagami.Library.Objects;
 using Standard.Types.Collections;
 using Standard.Types.Enumerables;
 using Standard.Types.Maybe;
+using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.CollectionFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Standard.Types.Maybe.MaybeFunctions;
 
 namespace Kagami.Collections
 {
-   public class Set : IObject, ICollection
+   public class Set : IObject, ICollection, IObjectCompare
    {
       Set<IObject> set;
 
@@ -91,5 +92,22 @@ namespace Kagami.Collections
          set.Clear();
          return this;
       }
+
+      public int Compare(IObject obj)
+      {
+         switch (obj)
+         {
+            case Set otherSet when set.IsStrictSubsetOf(otherSet.set):
+               return -1;
+            case Set otherSet when set.IsSubsetOf(otherSet.set):
+               return 0;
+            case Set _:
+               return 1;
+            default:
+               throw unableToConvert(obj.Image, "Set");
+         }
+      }
+
+      public IObject Object => this;
    }
 }

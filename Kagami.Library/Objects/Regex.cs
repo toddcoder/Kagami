@@ -9,12 +9,18 @@ namespace Kagami.Library.Objects
 {
    public struct Regex : IObject
    {
-      public static Tuple getTuple(Matcher.Match match)
+/*      static Tuple getTuple(Matcher.Match match)
       {
-         return new Tuple(array(String.StringObject(match.Text), Int.IntObject(match.Index), Int.IntObject(match.Length), getTuple(match.Groups)));
-      }
+         return new Tuple(array(String.StringObject(match.Text), Int.IntObject(match.Index), Int.IntObject(match.Length),
+            getTuple(match.Groups)));
+      }*/
 
-      public static IObject getTuple(Matcher.Group[] groups)
+/*      static Tuple getTextTuple(Matcher.Match match)
+      {
+         return new Tuple(array(String.StringObject(match.Text), getTextTuple(match.Groups)));
+      }*/
+
+      static IObject getTuple(Matcher.Group[] groups)
       {
          var objects = groups.Select(g =>
          {
@@ -26,18 +32,27 @@ namespace Kagami.Library.Objects
          return new Tuple(objects);
       }
 
+      static IObject getTextTuple(Matcher.Group[] groups)
+      {
+         return new Tuple(groups.Select(g => String.StringObject(g.Text)).ToArray());
+      }
+
+      static IObject getTuple(bool textOnly, Matcher.Match match) => textOnly ? getTextTuple(match.Groups) : getTuple(match.Groups);
+
       string pattern;
       bool ignoreCase;
       bool multiline;
       bool global;
+      bool textOnly;
       Matcher matcher;
 
-      public Regex(string pattern, bool ignoreCase, bool multiline, bool global) : this()
+      public Regex(string pattern, bool ignoreCase, bool multiline, bool global, bool textOnly) : this()
       {
          this.pattern = pattern;
          this.ignoreCase = ignoreCase;
          this.multiline = multiline;
          this.global = global;
+         this.textOnly = textOnly;
 
          matcher = new Matcher();
       }
@@ -61,6 +76,8 @@ namespace Kagami.Library.Objects
                builder.Append("m");
             if (global)
                builder.Append("g");
+            if (textOnly)
+               builder.Append("t");
             builder.Append("/");
 
             return builder.ToString();
@@ -81,11 +98,14 @@ namespace Kagami.Library.Objects
       {
          if (global)
             if (isMatch(input))
-               return new Tuple(matcher.AllMatches.Select(m => (IObject)getTuple(m)).ToArray());
+            {
+               var self = this;
+               return new Tuple(matcher.AllMatches.Select(m => getTuple(self.textOnly, m)).ToArray());
+            }
             else
                return Tuple.Empty;
          else if (isMatch(input))
-            return Some.Object(getTuple(matcher.AllMatches[0]));
+            return Some.Object(getTuple(textOnly, matcher.AllMatches[0]));
          else
             return Nil.NilValue;
       }
@@ -123,14 +143,14 @@ namespace Kagami.Library.Objects
          switch (obj)
          {
             case Regex regex:
-               return new Regex(pattern + regex.pattern, ignoreCase, multiline, global);
+               return new Regex(pattern + regex.pattern, ignoreCase, multiline, global, textOnly);
             case String str:
-               return new Regex(pattern + str.Value, ignoreCase, multiline, global);
+               return new Regex(pattern + str.Value, ignoreCase, multiline, global, textOnly);
             default:
-               return new Regex(pattern + obj.AsString, ignoreCase, multiline, global);
+               return new Regex(pattern + obj.AsString, ignoreCase, multiline, global, textOnly);
          }
       }
 
-      public Regex Concatenate(string otherPattern) => new Regex(pattern + otherPattern, ignoreCase, multiline, global);
+      public Regex Concatenate(string otherPattern) => new Regex(pattern + otherPattern, ignoreCase, multiline, global, textOnly);
    }
 }

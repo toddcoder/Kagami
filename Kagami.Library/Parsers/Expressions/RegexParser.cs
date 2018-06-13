@@ -19,6 +19,7 @@ namespace Kagami.Library.Parsers.Expressions
          var ignoreCase = false;
          var multiline = false;
          var global = false;
+         var textOnly = false;
 
          while (state.More)
          {
@@ -32,7 +33,7 @@ namespace Kagami.Library.Parsers.Expressions
                      case '\\':
                         state.AddToken(Color.Structure);
                         state.Move(1);
-                        builder.Add(new RegexSymbol(pattern.ToString(), ignoreCase, multiline, global));
+                        builder.Add(new RegexSymbol(pattern.ToString(), ignoreCase, multiline, global, textOnly));
 
                         return Unit.Matched();
                      case '\'':
@@ -132,10 +133,14 @@ namespace Kagami.Library.Parsers.Expressions
                      case 'G':
                         global = true;
                         break;
+                     case 't':
+                     case 'T':
+                        textOnly = true;
+                        break;
                      case '\\':
                         state.AddToken(Color.Structure);
                         state.Move(1);
-                        builder.Add(new RegexSymbol(pattern.ToString(), ignoreCase, multiline, global));
+                        builder.Add(new RegexSymbol(pattern.ToString(), ignoreCase, multiline, global, textOnly));
                         return Unit.Matched();
                      default:
                         return $"Didn't understand option '{ch}'".FailedMatch<Unit>();

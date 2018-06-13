@@ -7,9 +7,9 @@ namespace Kagami.Library.Nodes.Symbols
    {
       Regex regex;
 
-      public RegexSymbol(string pattern, bool ignoreCase, bool multiline, bool global)
+      public RegexSymbol(string pattern, bool ignoreCase, bool multiline, bool global, bool textOnly)
       {
-         regex = new Regex(pattern, ignoreCase, multiline, global);
+         regex = new Regex(pattern, ignoreCase, multiline, global, textOnly);
       }
 
       public override void Generate(OperationsBuilder builder) => builder.PushObject(regex);
