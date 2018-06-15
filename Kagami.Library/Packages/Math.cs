@@ -1,8 +1,10 @@
-﻿using Kagami.Library.Objects;
+﻿using System;
+using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using Kagami.Library.Runtime;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Operations.NumericFunctions;
+using Byte = Kagami.Library.Objects.Byte;
 
 namespace Kagami.Library.Packages
 {
@@ -138,5 +140,23 @@ namespace Kagami.Library.Packages
                throw notNumeric(obj);
          }
       }
+
+      public T XConvert<T>(IObject obj, Func<INumeric, T> func)
+         where T : INumeric
+      {
+         return obj is INumeric n ? func(n) : throw incompatibleClasses(obj, nameof(T));
+      }
+
+      public Int XInt(IObject source) => XConvert<Int>(source, n => n.AsInt32());
+
+      public Float XFloat(IObject source) => XConvert<Float>(source, n => n.AsDouble());
+
+      public Byte XByte(IObject source) => XConvert<Byte>(source, n => n.AsByte());
+
+      public Long XLong(IObject source) => XConvert<Long>(source, n => n.AsBigInteger());
+
+      public Complex XComplex(IObject source) => XConvert<Complex>(source, n => n.AsComplex());
+
+      public Rational XRational(IObject source) => XConvert<Rational>(source, n => n.AsRational());
    }
 }

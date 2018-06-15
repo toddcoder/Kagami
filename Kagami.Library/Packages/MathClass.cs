@@ -33,6 +33,12 @@ namespace Kagami.Library.Packages
          registerPackageFunction("floor", (obj, msg) => function<Math, IObject>(obj, msg, (m, n) => m.Floor(n)));
          registerPackageFunction("ceil", (obj, msg) => function<Math, IObject>(obj, msg, (m, n) => m.Ceiling(n)));
          registerPackageFunction("round", (obj, msg) => function<Math, IObject, Int>(obj, msg, (m, n, i) => m.Round(n, i.Value)));
+         registerPackageFunction("int", (obj, msg) => function<Math, IObject>(obj, msg, (m, n) => m.XInt(n)));
+         registerPackageFunction("float", (obj, msg) => function<Math, IObject>(obj, msg, (m, n) => m.XFloat(n)));
+         registerPackageFunction("byte", (obj, msg) => function<Math, IObject>(obj, msg, (m, n) => m.XByte(n)));
+         registerPackageFunction("long", (obj, msg) => function<Math, IObject>(obj, msg, (m, n) => m.XLong(n)));
+         registerPackageFunction("complex", (obj, msg) => function<Math, IObject>(obj, msg, (m, n) => m.XComplex(n)));
+         registerPackageFunction("rational", (obj, msg) => function<Math, IObject>(obj, msg, (m, n) => m.XRational(n)));
       }
    }
 }
