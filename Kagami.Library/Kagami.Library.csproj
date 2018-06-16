@@ -70,6 +70,7 @@
     <Compile Include="Classes\InfinityClass.cs" />
     <Compile Include="Classes\IntClass.cs" />
     <Compile Include="Classes\InternalListClass.cs" />
+    <Compile Include="Classes\IParse.cs" />
     <Compile Include="Classes\IteratorClass.cs" />
     <Compile Include="Classes\KeyCollectingHash.cs" />
     <Compile Include="Classes\KeyValueClass.cs" />

@@ -1,10 +1,13 @@
 ﻿using System;
+using Kagami.Library.Classes;
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using Kagami.Library.Runtime;
+using Standard.Types.Exceptions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Operations.NumericFunctions;
 using Byte = Kagami.Library.Objects.Byte;
+using String = Kagami.Library.Objects.String;
 
 namespace Kagami.Library.Packages
 {
@@ -142,9 +145,25 @@ namespace Kagami.Library.Packages
       }
 
       public T XConvert<T>(IObject obj, Func<INumeric, T> func)
-         where T : INumeric
+         where T : IObject
       {
-         return obj is INumeric n ? func(n) : throw incompatibleClasses(obj, nameof(T));
+         var className = typeof(T).Name;
+         switch (obj)
+         {
+            case INumeric n:
+               return func(n);
+            case String s:
+               if (Module.Global.Class(className).If(out var baseClass))
+                  if (baseClass is IParse parse)
+                     return (T)parse.Parse(s.Value);
+                  else
+                     throw $"Cannot convert to {className}".Throws();
+               else
+                  throw incompatibleClasses(obj, className);
+
+            default:
+               throw incompatibleClasses(obj, className);
+         }
       }
 
       public Int XInt(IObject source) => XConvert<Int>(source, n => n.AsInt32());

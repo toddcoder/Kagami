@@ -1,10 +1,11 @@
 ﻿using System;
 using Kagami.Library.Objects;
+using Standard.Types.Strings;
 using static Kagami.Library.Operations.NumericFunctions;
 
 namespace Kagami.Library.Classes
 {
-   public class FloatClass : BaseClass
+   public class FloatClass : BaseClass, IParse
    {
       public override string Name => "Float";
 
@@ -39,5 +40,7 @@ namespace Kagami.Library.Classes
          else
             return Nil.NilValue;
       }
+
+      public IObject Parse(string source) => Float.FloatObject(source.ToDouble());
    }
 }

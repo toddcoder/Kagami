@@ -1,9 +1,10 @@
 ﻿using Kagami.Library.Objects;
+using Standard.Types.Strings;
 using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Classes
 {
-   public class IntClass : BaseClass
+   public class IntClass : BaseClass, IParse
    {
       public override string Name => "Int";
 
@@ -39,5 +40,7 @@ namespace Kagami.Library.Classes
          else
             return Nil.NilValue;
       }
+
+      public IObject Parse(string source) => Int.IntObject(source.ToInt());
    }
 }
