@@ -29,6 +29,8 @@ namespace Kagami.Library.Runtime
             var field = fields[name];
             if (field.Value is Unassigned && getting)
                return failedMatch<Field>(fieldUnassigned(name));
+            else if (field.Value is Reference r)
+               return r.Field.Matched();
             else
                return field.Matched();
          }

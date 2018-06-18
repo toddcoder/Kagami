@@ -328,7 +328,10 @@ namespace Kagami.Library.Runtime
             {
                if (field.Value is Unassigned || classOf(field.Value).AssignCompatible(classOf(value)))
                {
-                  field.Value = value;
+                  if (field.Value is Reference r)
+                     r.Field.Value = value;
+                  else
+                     field.Value = value;
                   return field.Success();
                }
                else
@@ -336,7 +339,10 @@ namespace Kagami.Library.Runtime
             }
             else if (field.Value is Unassigned || overriden)
             {
-               field.Value = value;
+               if (field.Value is Reference r)
+                  r.Field.Value = value;
+               else
+                  field.Value = value;
                return field.Success();
             }
             else

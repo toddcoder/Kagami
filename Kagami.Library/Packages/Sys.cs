@@ -7,6 +7,7 @@ using Standard.Types.Collections;
 using Standard.Types.Dates.Now;
 using Standard.Types.Enumerables;
 using Standard.Types.Maybe;
+using static Kagami.Library.AllExceptions;
 using static Standard.Types.Maybe.MaybeFunctions;
 using Boolean = Kagami.Library.Objects.Boolean;
 using String = Kagami.Library.Objects.String;
@@ -134,5 +135,11 @@ namespace Kagami.Library.Packages
       public IObject First(Tuple tuple) => tuple[0];
 
       public IObject Second(Tuple tuple) => tuple[1];
+
+      public IResult<IObject> GetReference(string fieldName)
+      {
+         return Machine.Current.Find(fieldName, true).FlatMap(f => new Reference(f).Success<IObject>(),
+            () => failure<IObject>(fieldNotFound(fieldName)), failure<IObject>);
+      }
    }
 }

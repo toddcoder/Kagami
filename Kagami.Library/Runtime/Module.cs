@@ -72,6 +72,7 @@ namespace Kagami.Library.Runtime
          classes["Sys"] = new SysClass();
          classes["Math"] = new MathClass();
          classes["RuntimeFunction"] = new RuntimeFunctionClass();
+         classes["Reference"] = new ReferenceClass();
       }
 
       public IMaybe<BaseClass> Class(string name) => classes.Map(name);
