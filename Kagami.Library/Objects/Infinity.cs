@@ -73,5 +73,7 @@ namespace Kagami.Library.Objects
       public int Compare(IObject obj) => positive ? -1 : 1;
 
       public IObject Object => this;
+
+      public Boolean Between(IObject min, IObject max) => between(this, min, max);
    }
 }

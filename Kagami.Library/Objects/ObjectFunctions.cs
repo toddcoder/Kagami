@@ -312,5 +312,7 @@ namespace Kagami.Library.Objects
          else
             throw incompatibleClasses(y, typeof(T).Name);
       }
+
+      public static bool between(IObjectCompare obj, IObject min, IObject max) => obj.Compare(min) >= 0 && obj.Compare(max) <= 0;
    }
 }

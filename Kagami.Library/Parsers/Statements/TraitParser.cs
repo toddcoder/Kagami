@@ -16,7 +16,7 @@ namespace Kagami.Library.Parsers.Statements
          state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Class);
 
          var traitClass = new TraitClass(traitName);
-         if (Module.Global.RegisterTrait(traitClass).If(out var _, out var exception))
+         if (Module.Global.RegisterTrait(traitClass).If(out _, out var exception))
          {
             var traitItemsParser = new TraitItemsParser(traitClass);
             if (state.Advance().If(out _, out var original))

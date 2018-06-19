@@ -109,5 +109,7 @@ namespace Kagami.Collections
       }
 
       public IObject Object => this;
+
+      public Boolean Between(IObject min, IObject max) => between(this, min, max);
    }
 }

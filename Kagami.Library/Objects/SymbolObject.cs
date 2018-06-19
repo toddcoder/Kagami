@@ -28,6 +28,8 @@ namespace Kagami.Library.Objects
 
       public IObject Object => this;
 
+      public Boolean Between(IObject min, IObject max) => between(this, min, max);
+
       public bool Equals(SymbolObject other) => string.Equals(name, other.name);
 
       public override bool Equals(object obj) => IsEqualTo((IObject)obj);

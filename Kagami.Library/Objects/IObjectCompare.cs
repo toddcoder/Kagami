@@ -5,5 +5,7 @@
       int Compare(IObject obj);
 
       IObject Object { get; }
+
+      Boolean Between(IObject min, IObject max);
    }
 }

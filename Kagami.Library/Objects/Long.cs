@@ -106,6 +106,8 @@ namespace Kagami.Library.Objects
 
       public IObject Object => this;
 
+      public Boolean Between(IObject min, IObject max) => between(this, min, max);
+
       public IRangeItem Successor => (Long)(value + 1);
 
       public IRangeItem Predecessor => (Long)(value - 1);

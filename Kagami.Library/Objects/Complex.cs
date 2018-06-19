@@ -123,6 +123,8 @@ namespace Kagami.Library.Objects
 
       public IObject Object => this;
 
+      public Boolean Between(IObject min, IObject max) => between(this, min, max);
+
       public int CompareTo(Complex other) => Math.Sign(value.Real*other.value.Real * value.Imaginary * other.value.Imaginary);
 
       public bool Equals(Complex other) => value.Equals(other.value);

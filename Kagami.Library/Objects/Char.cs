@@ -37,6 +37,8 @@ namespace Kagami.Library.Objects
 
       public IObject Object => this;
 
+      public Boolean Between(IObject min, IObject max) => between(this, min, max);
+
       public int CompareTo(Char other) => value.CompareTo(other.value);
 
       public bool Equals(Char other) => value == other.value;

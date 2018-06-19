@@ -19,5 +19,7 @@ namespace Kagami.Library.Objects
       }
 
       public IObject Object => userObject;
+
+      public Boolean Between(IObject min, IObject max) => between(this, min, max);
    }
 }

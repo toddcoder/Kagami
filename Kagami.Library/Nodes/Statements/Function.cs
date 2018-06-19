@@ -98,21 +98,23 @@ namespace Kagami.Library.Nodes.Statements
             throw exception;
 
          if (className.IsNotEmpty())
-/*            if (Trait)
+            if (Trait)
             {
                if (Module.Global.Trait(className).If(out var trait))
+               {
                   if (trait.RegisterInvokable(functionName, invokable).IfNot(out _, out exception))
                      throw exception;
+               }
                else
                   throw traitNotFound(className);
             }
             else
-            {*/
+            {
                if (Module.Global.Class(className).If(out var cls))
                   cls.RegisterMessage(functionName, (obj, msg) => BaseClass.Invoke(obj, msg.Arguments, lambda));
                else
                   throw classNotFound(className);
-            //}
+            }
       }
 
       public override string ToString()
