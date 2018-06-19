@@ -13,7 +13,7 @@ namespace Kagami.Library.Parsers.Statements
 
       public SignatureParser(TraitClass traitClass) => this.traitClass = traitClass;
 
-      public override string Pattern => $"^ /'req' /(/s+) /({REGEX_FUNCTION_NAME}) /'('?";
+      public override string Pattern => $"^ /'abstract' /(/s+) /({REGEX_FUNCTION_NAME}) /'('?";
 
       public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
       {
