@@ -209,14 +209,14 @@ namespace Kagami.Playground
                      }
 
                   stopwatch.Stop();
-                  var state = textEditor.StopAutoscrolling();
+                  var state = textEditor.StopAutoscrollingAlways();
                   try
                   {
                      colorizer.Colorize(complier.Tokens);
                   }
                   finally
                   {
-                     textEditor.ResumeAutoscrolling(state);
+                     textEditor.ResumeAutoscrollingAlways(state);
                   }
 
                   if (exceptionIndex.If(out var index))

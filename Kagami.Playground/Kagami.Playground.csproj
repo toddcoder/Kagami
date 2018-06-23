@@ -32,6 +32,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Standard.Applications, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Standard\Standard.Applications.dll</HintPath>
+    </Reference>
     <Reference Include="Standard.Computer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Standard\Standard.Computer.dll</HintPath>
@@ -76,6 +80,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ExceptionData.cs" />
+    <Compile Include="ExRichTextBoxExtensions.cs" />
     <Compile Include="Playground.cs">
       <SubType>Form</SubType>
     </Compile>

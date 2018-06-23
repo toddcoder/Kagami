@@ -20,8 +20,7 @@ namespace Kagami.Library.Operations
       {
          assemblyCache = new AutoHash<string, Assembly>(packageName =>
          {
-            var upperPackageName = packageName.ToUpper1();
-            var fullPath = System.IO.Path.Combine(Machine.Current.PackageFolder, $"Kagami.{upperPackageName}.dll");
+            var fullPath = System.IO.Path.Combine(Machine.Current.PackageFolder, $"Kagami.{packageName}.dll");
             var assembly = Assembly.LoadFile(fullPath);
             return assembly;
          }, true);
@@ -33,11 +32,22 @@ namespace Kagami.Library.Operations
 
       public override IMatched<IObject> Execute(Machine machine)
       {
-         var upperPackageName = packageName.ToUpper1();
-         var assembly = assemblyCache[packageName];
-         var type = assembly.GetType($"Kagami.{upperPackageName}.{upperPackageName}");
+         var ns = packageName.ToUpper1();
+         var packageClassName = ns.Copy();
+         var assemblyName = ns.Copy();
+         switch (ns)
+         {
+            case "Io":
+               ns = "IO";
+               packageClassName = "IO";
+               assemblyName = "IO";
+               break;
+         }
+
+         var assembly = assemblyCache[assemblyName];
+         var type = assembly.GetType($"Kagami.{ns}.{packageClassName}");
          if (type is null)
-            return failedMatch<IObject>(classNotFound(upperPackageName));
+            return failedMatch<IObject>(classNotFound(ns));
          else
          {
             var package = (Package)Activator.CreateInstance(type, null);

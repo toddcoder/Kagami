@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kagami.Text", "Kagami.Text\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kagami.Collections", "Kagami.Collections\Kagami.Collections.csproj", "{BD63F325-2648-4AAC-B272-B8C6E136BC4C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kagami.IO", "Kagami.IO\Kagami.IO.csproj", "{7488FC4E-403C-45F6-9E71-EA7902B3C17A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{BD63F325-2648-4AAC-B272-B8C6E136BC4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD63F325-2648-4AAC-B272-B8C6E136BC4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD63F325-2648-4AAC-B272-B8C6E136BC4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7488FC4E-403C-45F6-9E71-EA7902B3C17A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7488FC4E-403C-45F6-9E71-EA7902B3C17A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7488FC4E-403C-45F6-9E71-EA7902B3C17A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7488FC4E-403C-45F6-9E71-EA7902B3C17A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
