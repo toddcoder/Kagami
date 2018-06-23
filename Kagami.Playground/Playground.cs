@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -19,7 +18,6 @@ using Standard.Types.RegularExpressions;
 using Standard.Types.Strings;
 using Standard.WinForms.Consoles;
 using Standard.WinForms.Documents;
-using static Standard.Types.Arrays.ArrayFunctions;
 using static Standard.Types.Maybe.MaybeFunctions;
 
 namespace Kagami.Playground
@@ -48,7 +46,6 @@ namespace Kagami.Playground
       bool tracing;
       IMaybe<int> exceptionIndex;
       bool cancelled;
-      int[] tabStops;
       Hash<string, IObject> watch;
       FolderName packageFolder;
 
@@ -99,8 +96,7 @@ namespace Kagami.Playground
 
          try
          {
-            tabStops = array(32, 64, 96, 128);
-            textEditor.SelectionTabs = tabStops;
+            textEditor.SetTabs(32, 64, 96, 128);
             document = new Document(this, textEditor, ".kagami", "Kagami", playgroundConfiguration.FontName,
                playgroundConfiguration.FontSize);
             document.StandardMenus();
@@ -144,8 +140,10 @@ namespace Kagami.Playground
             menus.CreateMainMenu(this);
             menus.StandardContextEdit(document);
 
+            textEditor.SetLeftMargin(70);
             textEditor.ReassignHandle();
             textEditor.Paint += (s, evt) => paintResults(evt);
+            textEditor.AnnotationFont = new Font(textEditor.Font, FontStyle.Bold);
 
             locked = false;
             manual = false;
@@ -208,7 +206,15 @@ namespace Kagami.Playground
                      }
 
                   stopwatch.Stop();
-                  colorizer.Colorize(complier.Tokens);
+                  var state = textEditor.StopAutoscrolling();
+                  try
+                  {
+                     colorizer.Colorize(complier.Tokens);
+                  }
+                  finally
+                  {
+                     textEditor.ResumeAutoscrolling(state);
+                  }
 
                   if (exceptionIndex.If(out var index))
                   {
@@ -409,70 +415,35 @@ namespace Kagami.Playground
 
       void paintResults(PaintEventArgs e)
       {
-         var font = new Font(textEditor.Font, FontStyle.Bold);
-
          try
          {
-            Colorizer.StopTextBoxUpdate(textEditor);
-            var lineFromCharIndex1 = textEditor.GetLineFromCharIndex(textEditor.GetCharIndexFromPosition(new Point(0, 0)));
-            var array1 = Enumerable.Range(0, textEditor.Lines.Length).Select(l => "").ToArray();
-            var array2 = Enumerable.Range(0, textEditor.Lines.Length).Select(l => 0.0f).ToArray();
+            textEditor.StopUpdating();
+            var peeks = new Hash<int, string>();
             foreach (var result in context.Peeks)
                try
                {
-                  var lineFromCharIndex2 = textEditor.GetLineFromCharIndex(result.Key);
-                  array1[lineFromCharIndex2] = lineFromCharIndex2 >= lineFromCharIndex1 ? result.Value.VisibleWhitespace(false) : "";
-                  array2[lineFromCharIndex2] = textEditor.GetPositionFromCharIndex(result.Key).Y;
+                  var lineIndex = textEditor.GetLineFromCharIndex(result.Key);
+                  peeks[lineIndex] = result.Value;
                }
                catch { }
-            for (var lineNumber = lineFromCharIndex1; lineNumber < textEditor.Lines.Length; ++lineNumber)
+            foreach (var (lineNumber, _, _) in textEditor.VisibleLines)
             {
-               var str = array1[lineNumber];
-               var line = textEditor.Lines[lineNumber];
-               var sizeF1 = e.Graphics.MeasureString(line, font);
-               var y = array2[lineNumber];
-               if (str.IsNotEmpty())
+               if (peeks.ContainsKey(lineNumber))
                {
-                  var sizeF2 = e.Graphics.MeasureString(str, font);
-                  var val1 = textEditor.ClientRectangle.Width - sizeF1.Width;
-                  sizeF2.Width = Math.Min(val1, sizeF2.Width) - 0.0f;
-                  var point = new PointF(e.Graphics.ClipBounds.Width - sizeF2.Width, y);
-                  var rect = new RectangleF(point.X, point.Y + 1f, sizeF2.Width, sizeF2.Height - 2f);
-                  e.Graphics.FillRectangle(Brushes.LightGreen, rect);
-                  using (var pen = new Pen(SystemColors.ButtonShadow, 1f))
-                     e.Graphics.DrawRectangle(pen, getRectangle(rect));
-                  var format = new StringFormat(StringFormatFlags.LineLimit);
-                  e.Graphics.DrawString(str, font, Brushes.Black, point, format);
+                  var str = peeks[lineNumber];
+                  textEditor.AnnotateAt(e.Graphics, lineNumber, str, Color.Black, Color.LightGreen, Color.Black);
                }
 
-               var size = getSize(e.Graphics.MeasureString("\t", font));
-               if (line.Matches("^ /(/t1%4)").If(out var matcher))
-               {
-                  var x1 = 8;
-                  var num1 = textEditor.GetPositionFromCharIndex(textEditor.GetFirstCharIndexFromLine(lineNumber)).Y + size.Height / 2;
-                  var index1 = matcher.FirstGroup.Length - 1;
-                  var tabStop1 = tabStops[index1];
-                  using (var pen = new Pen(Color.LightGray, 1f))
-                  {
-                     pen.CustomEndCap = new AdjustableArrowCap(3f, 3f, true);
-                     e.Graphics.DrawLine(pen, x1, num1, x1 + tabStop1, num1);
-                  }
-
-                  using (var pen = new Pen(Color.LightGray, 1f))
-                     for (var index2 = 0; index2 < index1; ++index2)
-                     {
-                        var tabStop2 = tabStops[index2];
-                        var num2 = x1 + tabStop2;
-                        e.Graphics.DrawLine(pen, num2, num1 - 8, num2, num1 + 8);
-                     }
-               }
+               textEditor.DrawTabLines(e.Graphics);
+               textEditor.DrawLineNumbers(e.Graphics, Color.Black, Color.LightGreen);
+               if (textEditor.SelectionLength == 0)
+                  textEditor.DrawCurrentLineBar(e.Graphics, Color.Black, Color.White, alpha: 0);
             }
          }
          catch { }
          finally
          {
-            font?.Dispose();
-            Colorizer.ResumeTextBoxUpdate(textEditor);
+            textEditor.ResumeUpdating();
          }
       }
 
@@ -640,5 +611,7 @@ namespace Kagami.Playground
             e.Handled = true;
          }
       }
+
+      void textEditor_SelectionChanged(object sender, EventArgs e) => textEditor.Invalidate();
    }
 }

@@ -48,6 +48,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Standard\Standard.WinForms.Consoles.dll</HintPath>
     </Reference>
+    <Reference Include="Standard.WinForms.Controls">
+      <HintPath>..\..\..\Standard\Standard.WinForms.Controls.dll</HintPath>
+    </Reference>
     <Reference Include="Standard.WinForms.Documents, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Standard\Standard.WinForms.Documents.dll</HintPath>

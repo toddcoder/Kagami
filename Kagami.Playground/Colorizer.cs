@@ -18,21 +18,21 @@ namespace Kagami.Playground
       [DllImport("user32.dll")]
       public static extern int SendMessage(IntPtr hWnd, int msg, bool wParam, int lParam);
 
-      public static void StopTextBoxUpdate(RichTextBox textBox) => SendMessage(textBox.Handle, WM_SETREDRAW, false, 0);
+/*      public static void StopTextBoxUpdate(RichTextBox textBox) => SendMessage(textBox.Handle, WM_SETREDRAW, false, 0);
 
-      public static void ResumeTextBoxUpdate(RichTextBox textBox) => SendMessage(textBox.Handle, WM_SETREDRAW, true, 0);
+      public static void ResumeTextBoxUpdate(RichTextBox textBox) => SendMessage(textBox.Handle, WM_SETREDRAW, true, 0);*/
 
       public Colorizer(RichTextBox textBox) => this.textBox = textBox;
 
       public void Colorize(IEnumerable<Token> tokens)
       {
-         var selectionStart = textBox.SelectionStart;
-         var selectionLength = textBox.SelectionLength;
+/*         var selectionStart = textBox.SelectionStart;
+         var selectionLength = textBox.SelectionLength;*/
          var font = textBox.Font;
          using (var boldFont = new Font(textBox.Font, FontStyle.Bold))
          using (var italicFont = new Font(textBox.Font, FontStyle.Italic))
          {
-            StopTextBoxUpdate(textBox);
+            //StopTextBoxUpdate(textBox);
             textBox.SelectAll();
             textBox.SelectionColor = Color.Black;
             textBox.SelectionBackColor = Color.White;
@@ -45,9 +45,9 @@ namespace Kagami.Playground
             }
 
             markText("/s+ (/r /n | /r | /n)", Color.PaleVioletRed);
-            textBox.SelectionStart = selectionStart;
-            textBox.SelectionLength = selectionLength;
-            ResumeTextBoxUpdate(textBox);
+/*            textBox.SelectionStart = selectionStart;
+            textBox.SelectionLength = selectionLength;*/
+            //ResumeTextBoxUpdate(textBox);
             textBox.Refresh();
          }
       }
