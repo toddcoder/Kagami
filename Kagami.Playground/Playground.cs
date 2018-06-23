@@ -415,7 +415,6 @@ namespace Kagami.Playground
       {
          try
          {
-            textEditor.StopUpdating();
             var peeks = new Hash<int, string>();
             foreach (var result in context.Peeks)
                try
@@ -424,11 +423,14 @@ namespace Kagami.Playground
                   peeks[lineIndex] = result.Value;
                }
                catch { }
-            foreach (var (lineNumber, _, _) in textEditor.VisibleLines)
+
+            foreach (var (lineNumber, line, _) in textEditor.VisibleLines)
             {
                if (peeks.ContainsKey(lineNumber))
                {
                   var str = peeks[lineNumber];
+                  str = sizedAnnotation(e.Graphics, line, str, textEditor.ClientSize.Width, textEditor.Font,
+                     textEditor.AnnotationFont);
                   textEditor.AnnotateAt(e.Graphics, lineNumber, str, Color.Black, Color.LightGreen, Color.Black);
                }
 
@@ -445,9 +447,33 @@ namespace Kagami.Playground
             }
          }
          catch { }
-         finally
+      }
+
+      static int getWidth(Graphics graphics, string text, Font font) => (int)graphics.MeasureString(text, font).Width;
+
+      static string sizedAnnotation(Graphics graphics, string line, string annotation, int width, Font font, Font annotationFont)
+      {
+         var diff = 80;
+         var lineWidth = getWidth(graphics, line, font);
+         var remainingWidth = width - lineWidth - diff;
+         var dots = "…";
+         if (remainingWidth <= diff)
+            return dots;
+         else
          {
-            textEditor.ResumeUpdating();
+            var annotationWidth = getWidth(graphics, annotation, annotationFont);
+            if (annotationWidth <= remainingWidth)
+               return annotation;
+            else
+            {
+               while (annotationWidth > remainingWidth)
+               {
+                  annotation = annotation.Skip(-2) + dots;
+                  annotationWidth = getWidth(graphics, annotation, annotationFont);
+               }
+
+               return annotation;
+            }
          }
       }
 

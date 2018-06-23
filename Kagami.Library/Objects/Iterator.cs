@@ -57,14 +57,14 @@ namespace Kagami.Library.Objects
       public virtual IEnumerable<IObject> List()
       {
          var item = none<IObject>();
-         var i = 0;
+         index = 0;
          do
          {
-            item = collection.Next(i++);
+            item = Next();
             if (item.If(out var obj))
                yield return obj;
 
-            if (i % 1000 == 0 && Machine.Current.Context.Cancelled())
+            if (index % 1000 == 0 && Machine.Current.Context.Cancelled())
                yield break;
          } while (item.IsSome);
       }
