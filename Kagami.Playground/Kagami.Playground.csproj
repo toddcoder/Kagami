@@ -75,6 +75,7 @@
     <Compile Include="DrawableRichTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ExceptionData.cs" />
     <Compile Include="Playground.cs">
       <SubType>Form</SubType>
     </Compile>

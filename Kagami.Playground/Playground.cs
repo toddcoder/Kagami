@@ -48,6 +48,7 @@ namespace Kagami.Playground
       bool cancelled;
       Hash<string, IObject> watch;
       FolderName packageFolder;
+      IMaybe<ExceptionData> exceptionData;
 
       public Playground()
       {
@@ -96,6 +97,7 @@ namespace Kagami.Playground
 
          try
          {
+            exceptionData = none<ExceptionData>();
             textEditor.SetTabs(32, 64, 96, 128);
             document = new Document(this, textEditor, ".kagami", "Kagami", playgroundConfiguration.FontName,
                playgroundConfiguration.FontSize);
@@ -142,7 +144,7 @@ namespace Kagami.Playground
 
             textEditor.SetLeftMargin(70);
             textEditor.ReassignHandle();
-            textEditor.Paint += (s, evt) => paintResults(evt);
+            textEditor.Paint += (s, evt) => paint(evt);
             textEditor.AnnotationFont = new Font(textEditor.Font, FontStyle.Bold);
 
             locked = false;
@@ -185,6 +187,7 @@ namespace Kagami.Playground
                stopwatch.Reset();
                stopwatch.Start();
                exceptionIndex = none<int>();
+               exceptionData = none<ExceptionData>();
 
                var kagamiConfiguration = new CompilerConfiguration { ShowOperations = dumpOperations, Tracing = tracing };
                var complier = new Compiler(textEditor.Text, kagamiConfiguration, context);
@@ -242,7 +245,6 @@ namespace Kagami.Playground
                      if (remainingLineLength > -1)
                         showException(index, remainingLineLength);
                   }
-
                }
             }
             catch (Exception exception)
@@ -278,12 +280,8 @@ namespace Kagami.Playground
 
       void showException(int index, int length)
       {
-         var selectionStart = textEditor.SelectionStart;
-         var selectionLength = textEditor.SelectionLength;
-         textEditor.Select(index, length);
-         textEditor.SelectionColor = Color.White;
-         textEditor.SelectionBackColor = Color.Red;
-         textEditor.Select(selectionStart, selectionLength);
+         exceptionData = new ExceptionData(index, length).Some();
+         textEditor.Invalidate();
       }
 
       void duplicate()
@@ -413,7 +411,7 @@ namespace Kagami.Playground
 
       void moveSelectionRelative(int amount = 1) => textEditor.SelectionStart += amount;
 
-      void paintResults(PaintEventArgs e)
+      void paint(PaintEventArgs e)
       {
          try
          {
@@ -438,6 +436,12 @@ namespace Kagami.Playground
                textEditor.DrawLineNumbers(e.Graphics, Color.Black, Color.LightGreen);
                if (textEditor.SelectionLength == 0)
                   textEditor.DrawCurrentLineBar(e.Graphics, Color.Black, Color.White, alpha: 0);
+
+               if (exceptionData.If(out var data))
+               {
+                  var rectangle = textEditor.RectangleFrom(e.Graphics, data.Index, data.Length, false);
+                  textEditor.DrawWavyUnderline(e.Graphics, rectangle, Color.Red);
+               }
             }
          }
          catch { }
@@ -447,15 +451,10 @@ namespace Kagami.Playground
          }
       }
 
-      static Rectangle getRectangle(RectangleF rect)
-      {
-         return new Rectangle((int)rect.Left, (int)rect.Top, (int)rect.Width, (int)rect.Height);
-      }
-
-      static Size getSize(SizeF size) => new Size((int)size.Width, (int)size.Height);
-
       void textEditor_TextChanged(object sender, EventArgs e)
       {
+         exceptionData = none<ExceptionData>();
+
          if (document != null)
          {
             update(!manual, false);
