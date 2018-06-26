@@ -20,6 +20,7 @@ namespace Kagami.Library.Packages
          registerPackageFunction("ticks", (obj, msg) => function<Sys>(obj, sys => sys.Ticks()));
          registerPackageFunction("fst", (obj, msg) => function<Sys, Tuple>(obj, msg, (sys, t) => sys.First(t)));
          registerPackageFunction("snd", (obj, msg) => function<Sys, Tuple>(obj, msg, (sys, t) => sys.Second(t)));
+         registerPackageFunction("id".get(), (obj, msg) => function<Sys>(obj, sys => sys.ID));
       }
    }
 }

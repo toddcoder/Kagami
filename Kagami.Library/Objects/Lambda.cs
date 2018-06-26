@@ -62,7 +62,7 @@ namespace Kagami.Library.Objects
 
       public IObject Join(Lambda otherLambda)
       {
-         return new RuntimeFunction(args => otherLambda.Invoke(Invoke(args)), $"{Image} >> {otherLambda.Image}");
+         return new RuntimeLambda(args => otherLambda.Invoke(Invoke(args)), 1, $"{Image} >> {otherLambda.Image}");
       }
    }
 }

@@ -11,8 +11,8 @@ namespace Kagami.Library.Classes
       {
          base.RegisterMessages();
 
-         messages["invoke"] = (obj, msg) => function<RuntimeFunction>(obj, rf => rf.Invoke(msg.Arguments.Value));
-         messages[">>"] = (obj, msg) => function<RuntimeFunction, Lambda>(obj, msg, (rf, l) => rf.Join(l));
+         messages["invoke"] = (obj, msg) => function<RuntimeLambda>(obj, rf => rf.Invoke(msg.Arguments.Value));
+         messages[">>"] = (obj, msg) => function<RuntimeLambda, Lambda>(obj, msg, (rf, l) => rf.Join(l));
       }
    }
 }

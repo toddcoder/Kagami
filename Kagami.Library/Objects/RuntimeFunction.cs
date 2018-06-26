@@ -3,6 +3,7 @@ using Standard.Types.Collections;
 
 namespace Kagami.Library.Objects
 {
+   [Obsolete("Use RuntimeLambda")]
    public class RuntimeFunction : IObject, IMayInvoke
    {
       Func<IObject[], IObject> func;

@@ -19,9 +19,15 @@ namespace Kagami.Library.Packages
    {
       Random random;
 
-      public Sys() => random = new Random(NowServer.Now.Millisecond);
+      public Sys()
+      {
+         random = new Random(NowServer.Now.Millisecond);
+         fields.New("id", new RuntimeLambda(args => args[0], 1, "x -> x"));
+      }
 
       public override string ClassName => "Sys";
+
+      public IObject ID => fields["id"];
 
       public override void LoadTypes(Module module)
       {
