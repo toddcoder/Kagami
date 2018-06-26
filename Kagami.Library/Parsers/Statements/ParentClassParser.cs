@@ -5,17 +5,15 @@ using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Statements
 {
-   public class ParentClassParser : Parser
+   public class ParentClassParser : StatementParser
    {
-      public ParentClassParser() : base(true) { }
+      public override string Pattern => $"^ /'inherits' /(|s+|) /({REGEX_CLASS}) /'('?";
 
-      public override string Pattern => $"^ /(|s+|) /'of' /(|s+|) /({REGEX_CLASS}) /'('?";
-
-      public override IMatched<Unit> Parse(ParseState state, Token[] tokens)
+      public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
       {
-         var parentClassName = tokens[4].Text;
-         var hasArguments = tokens[5].Text == "(";
-         state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Class, Color.Structure);
+         var parentClassName = tokens[3].Text;
+         var hasArguments = tokens[4].Text == "(";
+         state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Class, Color.Structure);
 
          if (hasArguments)
          {

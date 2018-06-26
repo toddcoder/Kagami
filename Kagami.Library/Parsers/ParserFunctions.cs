@@ -736,10 +736,10 @@ namespace Kagami.Library.Parsers
                symbol = new SendBinaryMessageSymbol("foldr", Precedence.ChainedOperator).Matched<Symbol>();
                break;
             case "%":
-               symbol = new RemainderSymbol().Matched<Symbol>();
+               symbol = new SendBinaryMessageSymbol("any", Precedence.ChainedOperator).Matched<Symbol>();
                break;
             case "%%":
-               symbol = new RemainderZero().Matched<Symbol>();
+               symbol = new SendBinaryMessageSymbol("all", Precedence.ChainedOperator).Matched<Symbol>();
                break;
             case "^":
                symbol = new RaiseSymbol().Matched<Symbol>();

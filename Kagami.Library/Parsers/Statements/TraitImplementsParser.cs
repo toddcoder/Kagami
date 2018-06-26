@@ -5,17 +5,17 @@ using static Standard.Types.Maybe.MaybeFunctions;
 
 namespace Kagami.Library.Parsers.Statements
 {
-   public class TraitImplementsParser : Parser
+   public class TraitImplementsParser : StatementParser
    {
       Hash<string, TraitClass> traits;
 
-      public TraitImplementsParser(Hash<string, TraitClass> traits) : base(true) => this.traits = traits;
+      public TraitImplementsParser(Hash<string, TraitClass> traits) => this.traits = traits;
 
-      public override string Pattern => "^ /(/s+) /'implements' /b";
+      public override string Pattern => "^ /'implements' /b";
 
-      public override IMatched<Unit> Parse(ParseState state, Token[] tokens)
+      public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
       {
-         state.Colorize(tokens, Color.Whitespace, Color.Keyword);
+         state.Colorize(tokens, Color.Keyword);
 
          while (state.More)
          {
@@ -32,6 +32,7 @@ namespace Kagami.Library.Parsers.Statements
          }
 
          return Unit.Matched();
+
       }
    }
 }

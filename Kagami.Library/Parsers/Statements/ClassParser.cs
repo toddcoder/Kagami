@@ -31,6 +31,9 @@ namespace Kagami.Library.Parsers.Statements
          else
             parameters = Parameters.Empty;
 
+         state.SkipEndOfLine();
+
+         state.Advance();
          var parentClassParser = new ParentClassParser();
 
          var parentClassName = "";
@@ -38,7 +41,10 @@ namespace Kagami.Library.Parsers.Statements
          if (parentClassParser.Scan(state).If(out _, out var isNotMatched, out var exception))
             (parentClassName, _, arguments) = parentClassParser.Parent;
          else if (!isNotMatched)
+         {
+            state.Regress();
             return failedMatch<Unit>(exception);
+         }
 
          var traits = new Hash<string, TraitClass>();
          while (state.More)
@@ -48,8 +54,14 @@ namespace Kagami.Library.Parsers.Statements
             else if (isNotMatched)
                break;
             else
+            {
+               state.Regress();
                return failedMatch<Unit>(exception);
+            }
          }
+
+         state.SkipEndOfLine();
+         state.Regress();
 
          Module.Global.ForwardReference(className);
 
