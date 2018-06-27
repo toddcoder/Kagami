@@ -127,5 +127,7 @@ namespace Kagami.Library.Objects
       IObject ToDictionary();
 
       IObject Each(Lambda action);
+
+      IObject Rotate(int count);
    }
 }

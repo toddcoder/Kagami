@@ -247,5 +247,7 @@ namespace Kagami.Library.Objects
             action.Invoke(item);
          return this;
       }
+
+      public IObject Rotate(int count) => iterator.Rotate(count);
    }
 }

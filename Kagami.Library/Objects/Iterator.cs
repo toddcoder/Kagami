@@ -591,6 +591,30 @@ namespace Kagami.Library.Objects
          return this;
       }
 
+      public IObject Rotate(int count)
+      {
+         var postfix = new List<IObject>();
+         var item = Next();
+         for (var i = 0; i < count; i++)
+         {
+            if (item.If(out var obj))
+               postfix.Add(obj);
+            item = Next();
+         }
+
+         var result = new List<IObject>();
+
+         while (item.If(out var obj))
+         {
+            result.Add(obj);
+            item = Next();
+         }
+
+         result.AddRange(postfix);
+
+         return collectionClass.Revert(result);
+      }
+
       IObject shuffle(IObject[] array, int count)
       {
          var result = new Hash<int, IObject>();

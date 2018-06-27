@@ -247,7 +247,7 @@ namespace Kagami.Library.Classes
             "last".Function("with"),
             "split", "split".Function("count"), "groupBy", "one", "none", "any", "all", "sum", "average", "product",
             "cross", "by", "distinct", "span".Function("with"), "span".Function("count"), "shuffle", "shuffle".Function("count"),
-            "array", "list", "tuple", "dictionary".Function("key", "value"), "dictionary", "each"));
+            "array", "list", "tuple", "dictionary".Function("key", "value"), "dictionary", "each", "rotate"));
 
          dynamicInvoke = (obj, msg) =>
          {
@@ -325,6 +325,7 @@ namespace Kagami.Library.Classes
          registerMessage("dictionary".Function("key", "value"), (obj, msg) => iteratorFunc<Lambda, Lambda>(obj, msg, (i, l1, l2) => i.ToDictionary(l1, l2)));
          registerMessage("dictionary", (obj, msg) => iteratorFunc(obj, i => i.ToDictionary()));
          registerMessage("each", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Each(l)));
+         registerMessage("rotate", (obj, msg) => iteratorFunc<Int>(obj, msg, (i, c) => i.Rotate(c.Value)));
       }
 
       public virtual bool MatchCompatible(BaseClass otherClass) => Name == otherClass.Name;
