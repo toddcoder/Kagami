@@ -431,7 +431,8 @@ namespace Kagami.Library.Classes
       protected void compareMessages()
       {
          registerMessage("<>", (o, m) => (Int)((IObjectCompare)o).Compare(m.Arguments[0]));
-         registerMessage("is".Function("between", "and"), (o, m) => ((IObjectCompare)o).Between(m.Arguments[0], m.Arguments[1]));
+         registerMessage("is".Function("between", "and"), (o, m) => ((IObjectCompare)o).Between(m.Arguments[0], m.Arguments[1], true));
+         registerMessage("is".Function("between", "until"), (o, m) => ((IObjectCompare)o).Between(m.Arguments[0], m.Arguments[1], false));
       }
    }
 }

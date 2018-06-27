@@ -6,6 +6,6 @@
 
       IObject Object { get; }
 
-      Boolean Between(IObject min, IObject max);
+      Boolean Between(IObject min, IObject max, bool inclusive);
    }
 }
