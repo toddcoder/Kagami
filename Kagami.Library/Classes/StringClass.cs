@@ -61,16 +61,16 @@ namespace Kagami.Library.Classes
          messages["truncate".Function("width", "ellipses")] = (obj, msg) =>
             function<String, Int, Boolean>(obj, msg, (s, w, e) => s.Truncate(w.Value, e.Value));
          messages["truncate".Function("width")] = (obj, msg) => function<String, Int>(obj, msg, (s, w) => s.Truncate(w.Value));
-         messages["find".Function("of", "startAt", "reverse")] = (obj, msg) =>
-            function<String, String, Int, Boolean>(obj, msg, (s, u, i, r) => s.Position(u.Value, i.Value, r.Value));
-         messages["find".Function("of", "startAt")] = (obj, msg) =>
-            function<String, String, Int>(obj, msg, (s, u, i) => s.Position(u.Value, i.Value, false));
-         messages["find".Function("of", "reverse")] = (obj, msg) =>
-            function<String, String, Boolean>(obj, msg, (s, u, r) => s.Position(u.Value, 0, r.Value));
+         messages["find".Function("string", "startAt", "reverse")] = (obj, msg) =>
+            function<String, String, Int, Boolean>(obj, msg, (s, u, i, r) => s.Find(u.Value, i.Value, r.Value));
+         messages["find".Function("string", "startAt")] = (obj, msg) =>
+            function<String, String, Int>(obj, msg, (s, u, i) => s.Find(u.Value, i.Value, false));
+         messages["find".Function("string", "reverse")] = (obj, msg) =>
+            function<String, String, Boolean>(obj, msg, (s, u, r) => s.Find(u.Value, 0, r.Value));
          messages["find"] = (obj, msg) =>
-            function<String, String>(obj, msg, (s, u) => s.Position(u.Value, 0, false));
+            function<String, String>(obj, msg, (s, u) => s.Find(u.Value, 0, false));
          messages["find".Function("all")] = (obj, msg) =>
-            function<String, String>(obj, msg, (s, u) => s.Positions(u.Value));
+            function<String, String>(obj, msg, (s, u) => s.FindAll(u.Value));
          messages["int"] = (obj, msg) => function<String>(obj, s => s.Int());
          messages["float"] = (obj, msg) => function<String>(obj, s => s.Float());
          messages["byte"] = (obj, msg) => function<String>(obj, s => s.Byte());

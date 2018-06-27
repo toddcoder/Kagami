@@ -187,7 +187,7 @@ namespace Kagami.Library.Objects
             return Nil.NilValue;
       }
 
-      public IObject Position(IObject item, int startIndex, bool reverse)
+      public IObject Find(IObject item, int startIndex, bool reverse)
       {
          var index = reverse ? list.LastIndexOf(item, startIndex) : list.IndexOf(item, startIndex);
 
@@ -197,7 +197,7 @@ namespace Kagami.Library.Objects
             return Some.Object((Int)index);
       }
 
-      public IObject Positions(IObject item)
+      public IObject FindAll(IObject item)
       {
          var result = new List<IObject>();
          var index = 0;

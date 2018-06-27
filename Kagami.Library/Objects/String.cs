@@ -200,7 +200,7 @@ namespace Kagami.Library.Objects
 
       public String Truncate(int width, bool ellipses = true) => value.Truncate(width, ellipses);
 
-      public IObject Position(string substring, int startIndex, bool reverse)
+      public IObject Find(string substring, int startIndex, bool reverse)
       {
          var index = reverse ? value.LastIndexOf(substring, startIndex, StringComparison.Ordinal)
             : value.IndexOf(substring, startIndex, StringComparison.Ordinal);
@@ -211,7 +211,7 @@ namespace Kagami.Library.Objects
             return Some.Object((Int)index);
       }
 
-      public IObject Positions(string substring)
+      public IObject FindAll(string substring)
       {
          var list = new List<IObject>();
          var index = 0;
