@@ -186,5 +186,32 @@ namespace Kagami.Library.Objects
          else
             return Nil.NilValue;
       }
+
+      public IObject Position(IObject item, int startIndex, bool reverse)
+      {
+         var index = reverse ? list.LastIndexOf(item, startIndex) : list.IndexOf(item, startIndex);
+
+         if (index == -1)
+            return Nil.NilValue;
+         else
+            return Some.Object((Int)index);
+      }
+
+      public IObject Positions(IObject item)
+      {
+         var result = new List<IObject>();
+         var index = 0;
+         while (index > -1)
+         {
+            index = list.IndexOf(item, index);
+            if (index > -1)
+            {
+               result.Add((Int)index);
+               index++;
+            }
+         }
+
+         return new Tuple(result.ToArray());
+      }
    }
 }

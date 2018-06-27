@@ -27,6 +27,16 @@ namespace Kagami.Library.Classes
          registerMessage("pop", (obj, msg) => function<Array>(obj, a => a.Pop()));
          registerMessage("unshift", (obj, msg) => function<Array, IObject>(obj, msg, (a, v) => a.Unshift(v)));
          registerMessage("shift", (obj, msg) => function<Array>(obj, a => a.Shift()));
+         messages["find".Function("of", "startAt", "reverse")] = (obj, msg) =>
+            function<Array, IObject, Int, Boolean>(obj, msg, (a, o, i, r) => a.Position(o, i.Value, r.Value));
+         messages["find".Function("of", "startAt")] = (obj, msg) =>
+            function<Array, IObject, Int>(obj, msg, (a, o, i) => a.Position(o, i.Value, false));
+         messages["find".Function("of", "reverse")] = (obj, msg) =>
+            function<Array, IObject, Boolean>(obj, msg, (a, o, r) => a.Position(o, 0, r.Value));
+         messages["find"] = (obj, msg) =>
+            function<Array, IObject>(obj, msg, (a, o) => a.Position(o, 0, false));
+         messages["find".Function("all")] = (obj, msg) =>
+            function<Array, IObject>(obj, msg, (a, o) => a.Positions(o));
       }
 
       public override void RegisterClassMessages()
