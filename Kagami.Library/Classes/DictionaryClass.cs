@@ -46,6 +46,7 @@ namespace Kagami.Library.Classes
          messages["clear"] = (obj, msg) => function<Dictionary>(obj, d => d.Clear());
          messages["update".Function("key", "value")] =
             (obj, msg) => function<Dictionary, IObject, IObject>(obj, msg, (d, k, v) => d.Update(k, v));
+         messages["merge"] = (obj, msg) => function<Dictionary, Dictionary>(obj, msg, (d1, d2) => d1.Merge(d2));
       }
 
       public override void RegisterClassMessages()

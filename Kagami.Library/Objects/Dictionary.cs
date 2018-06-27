@@ -235,5 +235,13 @@ namespace Kagami.Library.Objects
       }
 
       public IObject[] KeyArray => dictionary.KeyArray();
+
+      public Dictionary Merge(Dictionary other)
+      {
+         foreach (var (key, value) in other.InternalHash)
+            this[key] = value;
+
+         return this;
+      }
    }
 }
