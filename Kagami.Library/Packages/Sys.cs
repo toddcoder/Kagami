@@ -79,11 +79,7 @@ namespace Kagami.Library.Packages
             var bindings = new Hash<string, IObject>();
             if (x.Match(y, bindings))
             {
-/*               if (assign)
-                  Machine.Current.CurrentFrame.Fields.AssignBindings(bindings, mutable);
-               else*/
-                  Machine.Current.CurrentFrame.Fields.SetBindings(bindings, mutable, strict);
-
+               Machine.Current.CurrentFrame.Fields.SetBindings(bindings, mutable, strict);
                return Boolean.True.Success();
             }
             else
