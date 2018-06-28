@@ -133,7 +133,9 @@ namespace Kagami.Library.Objects
 
       public String Title() => value.ToTitleCase();
 
-      public String Capital() => value.ToUpper1();
+      public String Upper1() => value.ToUpper1();
+
+      public String Lower1() => value.ToLower1();
 
       public Boolean IsPrefix(string substring) => value.StartsWith(substring);
 

@@ -575,7 +575,7 @@ namespace Kagami.Library.Parsers
                else
                   return failedMatch<Unit>(unableToConvert(source, "Complex"));
             case "f":
-               if (double.TryParse(source, out var real))
+               if (Double.TryParse(source, out var real))
                {
                   builder.Add(new FloatSymbol(real));
                   return Unit.Matched();
@@ -863,6 +863,19 @@ namespace Kagami.Library.Parsers
             return expression.Matched();
          else
             return failedMatch<Expression>(exception);
+      }
+
+      public static IMatched<Block> getLambdaBlock(bool isExpression, ParseState state, Bits32<ExpressionFlags> flags)
+      {
+         if (isExpression)
+         {
+            if (getExpression(state, flags).If(out var expression, out var exOriginal))
+               return new Block(new ExpressionStatement(expression, true)) { Index = state.Index }.Matched();
+            else
+               return exOriginal.Unmatched<Block>();
+         }
+         else
+            return getBlock(state);
       }
    }
 }

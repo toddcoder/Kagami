@@ -258,6 +258,7 @@
     <Compile Include="Nodes\Symbols\SetSliceSymbol.cs" />
     <Compile Include="Nodes\Symbols\SkipTakeOperatorSymbol.cs" />
     <Compile Include="Nodes\Symbols\SomeSymbol.cs" />
+    <Compile Include="Nodes\Symbols\StringArraySymbol.cs" />
     <Compile Include="Nodes\Symbols\StringListSymbol.cs" />
     <Compile Include="Nodes\Symbols\StringSymbol.cs" />
     <Compile Include="Nodes\Symbols\SubexpressionSymbol.cs" />
@@ -542,6 +543,7 @@
     <Compile Include="Parsers\Expressions\IteratorParser.cs" />
     <Compile Include="Parsers\Expressions\LazyParser.cs" />
     <Compile Include="Parsers\Expressions\ListParser.cs" />
+    <Compile Include="Parsers\Expressions\MatchLambdaParser.cs" />
     <Compile Include="Parsers\Expressions\PatternParser.cs" />
     <Compile Include="Parsers\Expressions\RefParser.cs" />
     <Compile Include="Parsers\Expressions\SeqParser.cs" />
@@ -564,6 +566,7 @@
     <Compile Include="Parsers\Expressions\SendMessageAssignParser.cs" />
     <Compile Include="Parsers\Expressions\SeparatedKeywordOperatorsParser.cs" />
     <Compile Include="Parsers\Expressions\SliceParser.cs" />
+    <Compile Include="Parsers\Expressions\StringArrayParser.cs" />
     <Compile Include="Parsers\Expressions\SubexpressionParser2.cs" />
     <Compile Include="Parsers\Expressions\SuperParser.cs" />
     <Compile Include="Parsers\Expressions\SymbolObjectParser.cs" />

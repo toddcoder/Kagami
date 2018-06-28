@@ -1,8 +1,6 @@
 ﻿using Kagami.Library.Invokables;
-using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Standard.Types.Maybe;
-using Standard.Types.Numbers;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
@@ -34,19 +32,6 @@ namespace Kagami.Library.Parsers.Expressions
             state.RollBackTransaction();
             return original.Unmatched<Unit>();
          }
-      }
-
-      static IMatched<Block> getLambdaBlock(bool isExpression, ParseState state, Bits32<ExpressionFlags> flags)
-      {
-         if (isExpression)
-         {
-            if (getExpression(state, flags).If(out var expression, out var exOriginal))
-               return new Block(new ExpressionStatement(expression, true)) { Index = state.Index }.Matched();
-            else
-               return exOriginal.Unmatched<Block>();
-         }
-         else
-            return getBlock(state);
       }
    }
 }

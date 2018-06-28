@@ -14,6 +14,7 @@ namespace Kagami.Library.Parsers.Expressions
          {
             yield return new ZeroParameterLambdaParser(builder);
             yield return new OneParameterLambdaParser(builder);
+            yield return new MatchLambdaParser(builder);
             yield return new MultiParameterLambdaParser(builder);
             yield return new PartialLambdaParser(builder);
          }

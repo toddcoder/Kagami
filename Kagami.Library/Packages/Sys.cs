@@ -143,5 +143,7 @@ namespace Kagami.Library.Packages
          return Machine.Current.Find(fieldName, true).FlatMap(f => new Reference(f).Success<IObject>(),
             () => failure<IObject>(fieldNotFound(fieldName)), failure<IObject>);
       }
+
+      public IObject Tuple(IObject value) => new Tuple(value);
    }
 }

@@ -9,17 +9,6 @@ namespace Kagami.Library.Objects
 {
    public struct Regex : IObject
    {
-/*      static Tuple getTuple(Matcher.Match match)
-      {
-         return new Tuple(array(String.StringObject(match.Text), Int.IntObject(match.Index), Int.IntObject(match.Length),
-            getTuple(match.Groups)));
-      }*/
-
-/*      static Tuple getTextTuple(Matcher.Match match)
-      {
-         return new Tuple(array(String.StringObject(match.Text), getTextTuple(match.Groups)));
-      }*/
-
       static IObject getTuple(Matcher.Group[] groups)
       {
          var objects = groups.Select(g =>

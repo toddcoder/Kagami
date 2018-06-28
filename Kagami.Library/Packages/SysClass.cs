@@ -21,6 +21,7 @@ namespace Kagami.Library.Packages
          registerPackageFunction("fst", (obj, msg) => function<Sys, Tuple>(obj, msg, (sys, t) => sys.First(t)));
          registerPackageFunction("snd", (obj, msg) => function<Sys, Tuple>(obj, msg, (sys, t) => sys.Second(t)));
          registerPackageFunction("id".get(), (obj, msg) => function<Sys>(obj, sys => sys.ID));
+         registerPackageFunction("Tuple", (obj, msg) => function<Sys>(obj, sys => sys.Tuple(msg.Arguments[0])));
       }
    }
 }
