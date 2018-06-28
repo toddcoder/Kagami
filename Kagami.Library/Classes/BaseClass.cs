@@ -369,7 +369,7 @@ namespace Kagami.Library.Classes
          registerMessage("-(", (obj, msg) => msgNumberFunction(obj, mn => mn.Negate()));
          registerMessage("sign", (obj, msg) => msgNumberFunction(obj, mn => mn.Sign()));
          registerMessage("^", (obj, msg) => msgNumberFunction(obj, msg, (x, y) => x.Raise(y)));
-         registerMessage("%", (obj, msg) => msgNumberFunction(obj, msg, (x, y) => x.Remainder(y)));
+         registerMessage("mod", (obj, msg) => msgNumberFunction(obj, msg, (x, y) => x.Remainder(y)));
          registerMessage("/", (obj, msg) => msgNumberFunction(obj, msg, (x, y) => x.Divide(y)));
          registerMessage("/%", (obj, msg) => msgNumberFunction(obj, msg, (x, y) => x.DivRem(y)));
          registerMessage("+", (obj, msg) => msgNumberFunction(obj, msg, (x, y) => x.Add(y)));
@@ -431,8 +431,8 @@ namespace Kagami.Library.Classes
       protected void compareMessages()
       {
          registerMessage("<>", (o, m) => (Int)((IObjectCompare)o).Compare(m.Arguments[0]));
-         registerMessage("is".Function("between", "and"), (o, m) => ((IObjectCompare)o).Between(m.Arguments[0], m.Arguments[1], true));
-         registerMessage("is".Function("between", "until"), (o, m) => ((IObjectCompare)o).Between(m.Arguments[0], m.Arguments[1], false));
+         registerMessage("between".Function("", "and"), (o, m) => ((IObjectCompare)o).Between(m.Arguments[0], m.Arguments[1], true));
+         registerMessage("between".Function("", "until"), (o, m) => ((IObjectCompare)o).Between(m.Arguments[0], m.Arguments[1], false));
       }
    }
 }

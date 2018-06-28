@@ -34,18 +34,18 @@ namespace Kagami.Library.Classes
          messages["rightIs"] = (obj, msg) => function<String, String>(obj, msg, (s1, s2) => s1.IsSuffix(s2.Value));
          messages["in"] = (obj, msg) => function<String, IObject>(obj, msg, (s1, s2) => s1.In(s2));
          messages["notIn"] = (obj, msg) => function<String, IObject>(obj, msg, (s1, s2) => s1.NotIn(s2));
-         messages["replace".Function("find", "new")] =
+         messages["replace".Function("", "new")] =
             (obj, msg) => function<String, String, String>(obj, msg, (s, o, n) => s.Replace(o.Value, n.Value));
          messages["lstrip"] = (obj, msg) => function<String>(obj, s => s.LStrip());
          messages["rstrip"] = (obj, msg) => function<String>(obj, s => s.RStrip());
          messages["strip"] = (obj, msg) => function<String>(obj, s => s.Strip());
-         messages["center".Function("width", "padding")] = (obj, msg) =>
+         messages["center".Function("", "padding")] = (obj, msg) =>
             function<String, Int, Char>(obj, msg, (s, w, p) => s.Center(w.Value, p.Value));
          messages["center"] = (obj, msg) => function<String, Int>(obj, msg, (s, w) => s.Center(w.Value));
-         messages["ljust".Function("width", "padding")] = (obj, msg) =>
+         messages["ljust".Function("", "padding")] = (obj, msg) =>
             function<String, Int, Char>(obj, msg, (s, w, p) => s.LJust(w.Value, p.Value));
          messages["ljust"] = (obj, msg) => function<String, Int>(obj, msg, (s, w) => s.LJust(w.Value));
-         messages["rjust".Function("width", "padding")] = (obj, msg) =>
+         messages["rjust".Function("", "padding")] = (obj, msg) =>
             function<String, Int, Char>(obj, msg, (s, w, p) => s.RJust(w.Value, p.Value));
          messages["rjust"] = (obj, msg) => function<String, Int>(obj, msg, (s, w) => s.RJust(w.Value));
          messages["isEmpty".get()] = (obj, msg) => function<String>(obj, s => s.IsEmpty);
@@ -59,14 +59,14 @@ namespace Kagami.Library.Classes
          messages["isTitle".get()] = (obj, msg) => function<String>(obj, s => s.IsTitle);
          messages["translate".Function("from", "to")] = (obj, msg) =>
             function<String, String, String>(obj, msg, (s, f, t) => s.Translate(f.Value, t.Value));
-         messages["truncate".Function("width", "ellipses")] = (obj, msg) =>
+         messages["truncate".Function("", "ellipses")] = (obj, msg) =>
             function<String, Int, Boolean>(obj, msg, (s, w, e) => s.Truncate(w.Value, e.Value));
-         messages["truncate".Function("width")] = (obj, msg) => function<String, Int>(obj, msg, (s, w) => s.Truncate(w.Value));
-         messages["find".Function("string", "startAt", "reverse")] = (obj, msg) =>
+         messages["truncate"] = (obj, msg) => function<String, Int>(obj, msg, (s, w) => s.Truncate(w.Value));
+         messages["find".Function("", "startAt", "reverse")] = (obj, msg) =>
             function<String, String, Int, Boolean>(obj, msg, (s, u, i, r) => s.Find(u.Value, i.Value, r.Value));
-         messages["find".Function("string", "startAt")] = (obj, msg) =>
+         messages["find".Function("", "startAt")] = (obj, msg) =>
             function<String, String, Int>(obj, msg, (s, u, i) => s.Find(u.Value, i.Value, false));
-         messages["find".Function("string", "reverse")] = (obj, msg) =>
+         messages["find".Function("", "reverse")] = (obj, msg) =>
             function<String, String, Boolean>(obj, msg, (s, u, r) => s.Find(u.Value, 0, r.Value));
          messages["find"] = (obj, msg) =>
             function<String, String>(obj, msg, (s, u) => s.Find(u.Value, 0, false));

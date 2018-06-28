@@ -53,7 +53,7 @@ namespace Kagami.Library.Invokables
 
       public string FullFunctionName(string name)
       {
-         if (parameters.Any(p => p.ExternalName.IsNotEmpty()))
+         if (parameters.Any(p => p.Label.IsNotEmpty()))
             return name.Function(parameters.Select(p => p.NameForFunction).ToArray());
          else
             return name;

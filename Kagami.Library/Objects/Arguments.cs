@@ -22,22 +22,12 @@ namespace Kagami.Library.Objects
       public static Arguments Empty = new Arguments(new IObject[] { });
 
       IObject[] arguments;
-      Hash<string, int> labels;
-      Hash<int, string> indexes;
+      string[] labels;
 
       public Arguments(params IObject[] arguments) : this()
       {
-         this.arguments = arguments;
-         labels = new Hash<string, int>();
-         indexes = new Hash<int, string>();
-
-         for (var i = 0; i < arguments.Length; i++)
-            if (arguments[i] is NameValue nv)
-            {
-               this.arguments[i] = nv.Value;
-               labels[nv.Name] = i;
-               indexes[i] = nv.Name;
-            }
+         this.arguments = arguments.Select(a => a is NameValue nv ? nv.Value : a).ToArray();
+         labels = arguments.Select(a => a is NameValue nv ? nv.Name : "").ToArray();
       }
 
       public string ClassName => "Arguments";
@@ -69,7 +59,7 @@ namespace Kagami.Library.Objects
          }
       }
 
-      public string FullFunctionName(string name) => name.Function(labels.KeyArray());
+      public string FullFunctionName(string name) => name.Function(labels);
 
       public IObject[] Value => arguments;
 
