@@ -79,8 +79,7 @@ namespace Kagami.Library.Objects
          get => list[wrapIndex(index, list.Count)];
          set
          {
-            if (value is Array array && array.arrayID == arrayID)
-               throw "Can't assign an array item to itself".Throws();
+            throwIfSelf(value);
 
             index = wrapIndex(index, list.Count);
             if (value is Del)
@@ -88,6 +87,12 @@ namespace Kagami.Library.Objects
             else
                list[index] = value;
          }
+      }
+
+      void throwIfSelf(IObject value)
+      {
+         if (value is Array array && array.arrayID == arrayID)
+            throw "Can't assign an array item to itself".Throws();
       }
 
       public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new Iterator(this);
@@ -135,6 +140,7 @@ namespace Kagami.Library.Objects
 
       public IObject Append(IObject obj)
       {
+         throwIfSelf(obj);
          list.Add(obj);
          return this;
       }
@@ -155,6 +161,7 @@ namespace Kagami.Library.Objects
 
       public IObject InsertAt(int index, IObject obj)
       {
+         throwIfSelf(obj);
          list.Insert(index, obj);
          return this;
       }

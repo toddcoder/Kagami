@@ -15,7 +15,7 @@ namespace Kagami.Library.Parsers.Expressions
          var type = tokens[4].Text;
          state.Colorize(tokens, Color.Whitespace, Color.NumberPart, Color.Number, Color.NumberPart);
 
-         var number = convert(source, 16, "0123456789abcdef");
+         var number = convert(source.Replace("_", ""), 16, "0123456789abcdef");
          return getNumber(builder, type, number);
       }
    }

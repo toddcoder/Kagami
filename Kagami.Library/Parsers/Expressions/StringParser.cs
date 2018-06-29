@@ -112,6 +112,17 @@ namespace Kagami.Library.Parsers.Expressions
 
                   text.Append('u');
                   break;
+               case '{':
+                  if (escaped)
+                  {
+                     hex = true;
+                     hexText.Clear();
+                     escaped = false;
+                     break;
+                  }
+
+                  text.Append('{');
+                  break;
                default:
                   if (hex)
                      if (ch.Between('0').And('9') || ch.Between('a').And('f') && hexText.Length < 6)

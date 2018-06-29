@@ -177,5 +177,26 @@ namespace Kagami.Library.Packages
       public Complex XComplex(IObject source) => XConvert<Complex>(source, n => n.AsComplex());
 
       public Rational XRational(IObject source) => XConvert<Rational>(source, n => n.AsRational());
+
+      public IObject Hypot(IObject x, IObject y)
+      {
+         switch (x)
+         {
+            case IMessageNumber xNumber when y is IMessageNumber yNumber:
+               var two = (Int)2;
+               var xSquared = (IMessageNumber)xNumber.Raise(two);
+               var ySquared = (INumeric)yNumber.Raise(two);
+               var sum = (IMessageNumber)xSquared.Add(ySquared);
+
+               return sum.Sqrt();
+            case INumeric xNumeric when y is INumeric yNumeric:
+               var xDouble = xNumeric.AsDouble();
+               var yDouble = yNumeric.AsDouble();
+
+               return Float.FloatObject(System.Math.Sqrt(xDouble * xDouble + yDouble * yDouble));
+            default:
+               throw incompatibleClasses(x, "Number");
+         }
+      }
    }
 }

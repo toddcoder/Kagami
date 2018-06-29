@@ -1,5 +1,7 @@
-﻿using Standard.Types.Enumerables;
+﻿using System.Linq;
+using Standard.Types.Enumerables;
 using Standard.Types.RegularExpressions;
+using Standard.Types.Strings;
 
 namespace Kagami.Library
 {
@@ -13,7 +15,7 @@ namespace Kagami.Library
 
       public static string Function(this string baseName, params string[] segments)
       {
-         if (segments.Length == 0)
+         if (segments.Length == 0 || segments.All(s => s.IsEmpty()))
             return baseName;
          else
             return $"{baseName}${segments.Listify("$")}";
