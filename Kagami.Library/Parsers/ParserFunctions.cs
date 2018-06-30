@@ -575,7 +575,7 @@ namespace Kagami.Library.Parsers
                else
                   return failedMatch<Unit>(unableToConvert(source, "Complex"));
             case "f":
-               if (Double.TryParse(source, out var real))
+               if (double.TryParse(source, out var real))
                {
                   builder.Add(new FloatSymbol(real));
                   return Unit.Matched();
@@ -662,7 +662,7 @@ namespace Kagami.Library.Parsers
       public static IMatched<IMaybe<Expression>> getAnd(ParseState state)
       {
          var builder = new ExpressionBuilder(ExpressionFlags.OmitIf);
-         var parser =  new IfAsAndParser(builder);
+         var parser = new IfAsAndParser(builder);
          if (parser.Scan(state).If(out _, out var isNotMatched, out var exception))
             if (builder.ToExpression().If(out var expression, out exception))
                return expression.Some().Matched();
@@ -788,7 +788,11 @@ namespace Kagami.Library.Parsers
 
                break;
             case "~":
-               symbol = new ConcatenationSymbol().Matched<Symbol>();
+               if (flags[ExpressionFlags.OmitConcatenate])
+                  return notMatched<Symbol>();
+               else
+                  symbol = new ConcatenationSymbol().Matched<Symbol>();
+
                break;
             case "<<":
             case ">>":
@@ -876,6 +880,36 @@ namespace Kagami.Library.Parsers
          }
          else
             return getBlock(state);
+      }
+
+      public static IMatched<(int, int, IMaybe<Expression>, IMaybe<Expression>)> getSkipTakeItem(ParseState state)
+      {
+         var parser = new SkipTakeItemParser();
+         return parser.Scan(state).Map(u => (parser.Skip, parser.Take, parser.Prefix, parser.Suffix));
+      }
+
+      public static IMatched<SkipTakeItem[]> getSkipTakeItems(ParseState state)
+      {
+         var list = new List<SkipTakeItem>();
+         while (state.More && getSkipTakeItem(state).If(out var tuple))
+         {
+            var (skip, take, prefix, suffix) = tuple;
+            list.Add(new SkipTakeItem(skip, take, prefix, suffix));
+            if (state.Scan("^ /'}'", Color.Structure).IsMatched)
+               break;
+
+            if (state.Scan("^ /(|s|) /',' /(|s|)", Color.Whitespace, Color.Structure, Color.Whitespace)
+               .If(out _, out var isNotMatched, out var exception)) { }
+            else if (isNotMatched)
+               return "Expected ,".FailedMatch<SkipTakeItem[]>();
+            else
+               return failedMatch<SkipTakeItem[]>(exception);
+         }
+
+         if (list.Count == 0)
+            return notMatched<SkipTakeItem[]>();
+         else
+            return list.ToArray().Matched();
       }
    }
 }

@@ -13,7 +13,7 @@ namespace Kagami.Library.Classes
 
          messages["match".Function("input")] = (obj, msg) => function<Regex, String>(obj, msg, (r, s) => r.Match(s.Value));
          messages["isMatch"] = (obj, msg) => function<Regex, String>(obj, msg, (r, s) => r.IsMatch(s.Value));
-         messages["replace".Function("input", "with")] = (obj, msg) =>
+         messages["replace".Function("", "with")] = (obj, msg) =>
             function<Regex, String, String>(obj, msg, (r, s1, s2) => r.Replace(s1.Value, s2.Value));
          messages["matchString"] = (obj, msg) => function<Regex, String>(obj, msg, (r, s) => r.MatchString(s.Value));
          messages["split"] = (obj, msg) => function<Regex, String>(obj, msg, (r, s) => r.Split(s.Value));

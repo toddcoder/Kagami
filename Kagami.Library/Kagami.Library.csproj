@@ -256,6 +256,7 @@
     <Compile Include="Nodes\Symbols\SendMessageSymbol.cs" />
     <Compile Include="Nodes\Symbols\SeqSymbol.cs" />
     <Compile Include="Nodes\Symbols\SetSliceSymbol.cs" />
+    <Compile Include="Nodes\Symbols\SkipTakeItem.cs" />
     <Compile Include="Nodes\Symbols\SkipTakeOperatorSymbol.cs" />
     <Compile Include="Nodes\Symbols\SomeSymbol.cs" />
     <Compile Include="Nodes\Symbols\StringArraySymbol.cs" />
@@ -548,6 +549,7 @@
     <Compile Include="Parsers\Expressions\RefParser.cs" />
     <Compile Include="Parsers\Expressions\SeqParser.cs" />
     <Compile Include="Parsers\Expressions\SetPropertyParser.cs" />
+    <Compile Include="Parsers\Expressions\SkipTakeItemParser.cs" />
     <Compile Include="Parsers\Expressions\SkipTakeOperatorParser.cs" />
     <Compile Include="Parsers\Expressions\IfSomeNilSymbolParser.cs" />
     <Compile Include="Parsers\Expressions\NotParser.cs" />

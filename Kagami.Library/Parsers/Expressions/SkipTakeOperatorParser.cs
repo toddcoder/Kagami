@@ -21,7 +21,7 @@ namespace Kagami.Library.Parsers.Expressions
          {
             state.Colorize(tokens, Color.Structure);
 
-            if (getArguments(state, builder.Flags).If(out var arguments, out var original))
+            if (getSkipTakeItems(state).If(out var arguments, out var original))
             {
                builder.Add(new SkipTakeOperatorSymbol(arguments));
                return Unit.Matched();

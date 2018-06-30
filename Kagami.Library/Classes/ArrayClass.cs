@@ -45,6 +45,7 @@ namespace Kagami.Library.Classes
 
          classMessages["repeat".Function("value", "times")] = (bc, msg) =>
             classFunc<ArrayClass, IObject, Int>(bc, msg, (ac, v, t) => Array.Repeat(v, t.Value));
+         classMessages["empty".get()] = (bc, msg) => classFunc<ArrayClass>(bc, ac => Array.Empty);
       }
    }
 }

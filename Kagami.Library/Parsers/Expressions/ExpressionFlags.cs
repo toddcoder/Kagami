@@ -15,6 +15,7 @@ namespace Kagami.Library.Parsers.Expressions
       OmitComprehension = 64,
       OmitAnd = 128,
       OmitConjunction = 256,
-      OmitSendMessageAssign = 512
+      OmitSendMessageAssign = 512,
+      OmitConcatenate = 1024
    }
 }
