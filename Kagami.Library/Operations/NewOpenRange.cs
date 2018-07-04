@@ -11,15 +11,23 @@ namespace Kagami.Library.Operations
    {
       public override IMatched<IObject> Execute(Machine machine, IObject x, IObject y)
       {
-         switch (y)
+         switch (x)
          {
-            case Lambda lambda:
-               return new OpenRange(x, lambda).Matched<IObject>();
-            case INumeric _:
-               var internalLambda = new InternalLambda(o => sendMessage(o[0], "+", y));
-               return new OpenRange(x, internalLambda).Matched<IObject>();
+            case Int i:
+               return new Sequence(i.Value, y).Matched<IObject>();
+            case Sequence seq:
+               return new Sequence(seq, y).Matched<IObject>();
             default:
-               return failedMatch<IObject>(incompatibleClasses(y, "Lambda"));
+               switch (y)
+               {
+                  case Lambda lambda:
+                     return new OpenRange(x, lambda).Matched<IObject>();
+                  case INumeric _:
+                     var internalLambda = new InternalLambda(o => sendMessage(o[0], "+", y));
+                     return new OpenRange(x, internalLambda).Matched<IObject>();
+                  default:
+                     return failedMatch<IObject>(incompatibleClasses(y, "Lambda"));
+               }
          }
       }
 

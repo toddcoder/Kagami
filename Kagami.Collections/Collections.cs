@@ -20,5 +20,7 @@ namespace Kagami.Collections
        public Set Set(IObject[] objects) => new Set(objects);
 
        public Set Set(Set otherSet) => new Set(otherSet);
+
+       public SequenceIterator Sequence(int n, int m, int c) => new SequenceIterator(n, m, c);
     }
 }

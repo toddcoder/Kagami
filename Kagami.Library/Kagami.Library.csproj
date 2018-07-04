@@ -348,6 +348,7 @@
     <Compile Include="Objects\RuntimeFunction.cs" />
     <Compile Include="Objects\RuntimeInvokable.cs" />
     <Compile Include="Objects\RuntimeLambda.cs" />
+    <Compile Include="Objects\Sequence.cs" />
     <Compile Include="Objects\SkipAction.cs" />
     <Compile Include="Objects\Skipped.cs" />
     <Compile Include="Objects\SkipUntilAction.cs" />
@@ -649,6 +650,7 @@
     <Compile Include="Parsers\Statements\TraitNameParser.cs" />
     <Compile Include="Parsers\Statements\TraitParser.cs" />
     <Compile Include="Parsers\Statements\UntilParser.cs" />
+    <Compile Include="Parsers\Statements\UsePackageParser.cs" />
     <Compile Include="Parsers\Statements\WhileParser.cs" />
     <Compile Include="Parsers\Statements\YieldParser.cs" />
     <Compile Include="Parsers\Token.cs" />

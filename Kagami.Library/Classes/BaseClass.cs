@@ -72,6 +72,7 @@ namespace Kagami.Library.Classes
          registerMessage("className".get(), (obj, msg) => String.StringObject(obj.ClassName));
          registerMessage("class".get(), (obj, msg) => new Class(obj.ClassName));
          registerMessage("match", match);
+         messages["isNumber".get()] = (obj, msg) => Boolean.False;
       }
 
       public virtual void RegisterClassMessages()
@@ -193,6 +194,7 @@ namespace Kagami.Library.Classes
          registerMessage("ceil", (obj, msg) => function(obj, x => x, x => Math.Ceiling(x), x => x, x => (Float)x.Ceiling(), "ceil"));
          registerMessage("floor", (obj, msg) => function(obj, x => x, x => Math.Floor(x), x => x, x => (Float)x.Floor(), "floor"));
          registerMessage("frac", (obj, msg) => function(obj, x => 0, x => x - (int)x, x => 0, x => (Float)x.Fraction(), "frac"));
+         messages["isNumber".get()] = (obj, msg) => Boolean.True;
       }
 
       protected void numericConversionMessages()
@@ -239,9 +241,9 @@ namespace Kagami.Library.Classes
       void loadIteratorMessages()
       {
          alternateMessages.AddRange(array("collection".get(), "isLazy".get(), "next", "peek", "reverse", "join",
-            "sort".Function("with", "asc"), "sort".Function("with"), "sort".Function("asc"), "sort", "foldl".Function("init", "with"),
-            "foldl", "foldr".Function("init", "with"), "foldr", "reducel".Function("init", "with"), "reducel",
-            "reducer".Function("init", "with"), "reducer", "count", "map", "if", "ifNot", "skip", "skip".Function("while"),
+            "sort".Function("with", "asc"), "sort".Function("with"), "sort".Function("asc"), "sort", "foldl".Function("", "with"),
+            "foldl", "foldr".Function("", "with"), "foldr", "reducel".Function("", "with"), "reducel",
+            "reducer".Function("", "with"), "reducer", "count", "map", "if", "ifNot", "skip", "skip".Function("while"),
             "skip".Function("until"), "take", "take".Function("while"), "take".Function("until"), "index", "indexes",
             "zip".Function("on", "with"), "zip", "min".get(), "max".get(), "first", "first".Function("with"), "last",
             "last".Function("with"),
@@ -269,16 +271,16 @@ namespace Kagami.Library.Classes
          registerMessage("sort".Function("with"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Sort(l, true)));
          registerMessage("sort".Function("asc"), (obj, msg) => iteratorFunc<Boolean>(obj, msg, (i, b) => i.Sort(b.Value)));
          registerMessage("sort", (obj, msg) => iteratorFunc(obj, i => i.Sort(true)));
-         registerMessage("foldl".Function("init", "with"),
+         registerMessage("foldl".Function("", "with"),
             (obj, msg) => iteratorFunc<IObject, Lambda>(obj, msg, (i, o, l) => i.FoldLeft(o, l)));
          registerMessage("foldl", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.FoldLeft(l)));
-         registerMessage("foldr".Function("init", "with"),
+         registerMessage("foldr".Function("", "with"),
             (obj, msg) => iteratorFunc<IObject, Lambda>(obj, msg, (i, o, l) => i.FoldRight(o, l)));
          registerMessage("foldr", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.FoldRight(l)));
-         registerMessage("reducel".Function("init", "with"),
+         registerMessage("reducel".Function("", "with"),
             (obj, msg) => iteratorFunc<IObject, Lambda>(obj, msg, (i, o, l) => i.ReduceLeft(o, l)));
          registerMessage("reducel", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.ReduceLeft(l)));
-         registerMessage("reducer".Function("init", "with"),
+         registerMessage("reducer".Function("", "with"),
             (obj, msg) => iteratorFunc<IObject, Lambda>(obj, msg, (i, o, l) => i.ReduceRight(o, l)));
          registerMessage("reducer", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.ReduceRight(l)));
          registerMessage("count", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Count(l)));

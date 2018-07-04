@@ -16,6 +16,8 @@ namespace Kagami.Collections
          registerPackageFunction("Set", (obj, msg) => function<Collections>(obj, c => c.Set(msg.Arguments.Value)));
          registerPackageFunction("Set".Function("of"), (obj, msg) => function<Collections>(obj, c => c.Set((ICollection)msg.Arguments[0])));
          registerPackageFunction("Set".Function("set"), (obj, msg) => function<Collections, Set>(obj, msg, (c, s) => c.Set(s)));
+         registerPackageFunction("sequence".Function("count", "factor", "offset"),
+            (obj, msg) => function<Collections, Int, Int, Int>(obj, msg, (coll, c, f, o) => coll.Sequence(c.Value, f.Value, o.Value)));
       }
    }
 }

@@ -39,6 +39,7 @@ namespace Kagami.Library.Parsers.Statements
                yield return new LoopParser();
                yield return new ImportPackageParser();
                yield return new OpenPackageParser();
+               yield return new UsePackageParser();
             }
 
             yield return new AssignToFieldParser { SingleLine = singleLine };
