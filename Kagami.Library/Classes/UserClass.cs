@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
@@ -50,8 +51,6 @@ namespace Kagami.Library.Classes
 
       public void InheritFrom(UserClass parentClass)
       {
-         //base.RegisterMessages();
-
          foreach (var item in parentClass.messages)
             messages[item.Key] = item.Value;
          foreach (var item in parentClass.signatures)
@@ -138,6 +137,23 @@ namespace Kagami.Library.Classes
             return sendMessage(uo, message);
          else
             throw "No metaobject".Throws();
+      }
+
+      public override bool RespondsTo(string message)
+      {
+         if (base.RespondsTo(message))
+            return true;
+         else
+            return messages.ContainsKey("missing");
+      }
+
+      public override IObject DynamicInvoke(IObject obj, Message message)
+      {
+         var originalMessage = String.StringObject(message.Name);
+         var args = message.Arguments.ToArray();
+         var tuple = new Tuple(args);
+
+         return sendMessage(obj, "missing", originalMessage, tuple);
       }
    }
 }

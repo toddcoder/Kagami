@@ -73,6 +73,8 @@ namespace Kagami.Library.Classes
          registerMessage("class".get(), (obj, msg) => new Class(obj.ClassName));
          registerMessage("match", match);
          messages["isNumber".get()] = (obj, msg) => Boolean.False;
+         registerMessage("send",
+            (obj, msg) => function<IObject, String>(obj, msg, (o, n) => sendMessage(o, n.Value, msg.Arguments.Pass(1))));
       }
 
       public virtual void RegisterClassMessages()

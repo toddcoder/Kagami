@@ -70,5 +70,15 @@ namespace Kagami.Library.Objects
       }
 
       IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+      public Arguments Pass(int count) => new Arguments(arguments.Skip(count).ToArray());
+
+      public Arguments Prepend(IObject prefix)
+      {
+         var list = arguments.ToList();
+         list.Insert(0, prefix);
+
+         return new Arguments(list.ToArray());
+      }
    }
 }

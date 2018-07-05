@@ -276,5 +276,9 @@ namespace Kagami.Library.Objects
       public IRangeItem Predecessor => (String)value.Pred();
 
       public Range Range() => new Range(this, (String)"z".Repeat(value.Length), true);
+
+      public String Get() => value.get();
+
+      public String Set() => value.set();
    }
 }

@@ -79,6 +79,8 @@ namespace Kagami.Library.Classes
          messages["split".Function("regex")] = (obj, msg) => function<String, Regex>(obj, msg, (s, r) => s.SplitRegex(r));
          messages["split".Function("on")] = (obj, msg) => function<String, String>(obj, msg, (s1, s2) => s1.SplitOn(s2.Value));
          messages["-"] = (obj, msg) => function<String, String>(obj, msg, (s1, s2) => s1.Subtract(s2.Value));
+         messages["get"] = (obj, msg) => function<String>(obj, s => s.Get());
+         messages["set"] = (obj, msg) => function<String>(obj, s => s.Set());
       }
 
       public override void RegisterClassMessages()
