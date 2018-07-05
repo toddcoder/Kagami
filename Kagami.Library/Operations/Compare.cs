@@ -1,8 +1,7 @@
 ﻿using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Standard.Types.Maybe;
-using static Kagami.Library.AllExceptions;
-using static Standard.Types.Maybe.MaybeFunctions;
+using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Operations
 {
@@ -13,7 +12,7 @@ namespace Kagami.Library.Operations
          if (x is IObjectCompare cx)
             return Int.IntObject(cx.Compare(y)).Matched();
          else
-            return failedMatch<IObject>(incompatibleClasses(y, x.ClassName));
+            return sendMessage(x, "<>", y).Matched();
       }
 
       public override string ToString() => "compare";
