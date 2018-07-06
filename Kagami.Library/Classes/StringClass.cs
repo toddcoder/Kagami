@@ -36,6 +36,8 @@ namespace Kagami.Library.Classes
          messages["notIn"] = (obj, msg) => function<String, IObject>(obj, msg, (s1, s2) => s1.NotIn(s2));
          messages["replace".Function("", "new")] =
             (obj, msg) => function<String, String, String>(obj, msg, (s, o, n) => s.Replace(o.Value, n.Value));
+         messages["replace".Function("all", "new")] =
+            (obj, msg) => function<String, String, String>(obj, msg, (s, o, n) => s.ReplaceAll(o.Value, n.Value));
          messages["lstrip"] = (obj, msg) => function<String>(obj, s => s.LStrip());
          messages["rstrip"] = (obj, msg) => function<String>(obj, s => s.RStrip());
          messages["strip"] = (obj, msg) => function<String>(obj, s => s.Strip());
@@ -81,6 +83,10 @@ namespace Kagami.Library.Classes
          messages["-"] = (obj, msg) => function<String, String>(obj, msg, (s1, s2) => s1.Subtract(s2.Value));
          messages["get"] = (obj, msg) => function<String>(obj, s => s.Get());
          messages["set"] = (obj, msg) => function<String>(obj, s => s.Set());
+         messages["partition"] = (obj, msg) => function<String, String>(obj, msg, (s1, s2) => s1.Partition(s2.Value));
+         messages["partition".Function("right")] = (obj, msg) => function<String, String>(obj, msg, (s1, s2) => s1.RPartition(s2.Value));
+         messages["partition".Function("regex")] = (obj, msg) => function<String, Regex>(obj, msg, (s, r) => s.Partition(r));
+         messages["partition".Function("rightRegex")] = (obj, msg) => function<String, Regex>(obj, msg, (s, r) => s.RPartition(r));
       }
 
       public override void RegisterClassMessages()

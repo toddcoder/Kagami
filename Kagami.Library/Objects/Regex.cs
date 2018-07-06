@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Text;
 using Standard.Types.Collections;
+using Standard.Types.Maybe;
 using Standard.Types.RegularExpressions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Standard.Types.Arrays.ArrayFunctions;
@@ -141,5 +142,13 @@ namespace Kagami.Library.Objects
       }
 
       public Regex Concatenate(string otherPattern) => new Regex(pattern + otherPattern, ignoreCase, multiline, global, textOnly);
+
+      public IMatched<Matcher.Match> MatchOne(string input) => input.MatchOne(pattern, ignoreCase, multiline);
+
+      public string Pattern => pattern;
+
+      public bool IgnoreCase => ignoreCase;
+
+      public bool Multiline => multiline;
    }
 }

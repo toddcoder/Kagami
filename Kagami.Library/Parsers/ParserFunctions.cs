@@ -25,7 +25,7 @@ namespace Kagami.Library.Parsers
       public const string REGEX_INVOKABLE = "['A-Za-z_'] ['A-Za-z_0-9']*";
       public const string REGEX_CLASS = "['A-Z'] ['A-Za-z_0-9']*";
       public const string REGEX_CLASS_GETTING = REGEX_CLASS + "('.' " + REGEX_CLASS + ")?";
-      public const string REGEX_ASSIGN_OPS = "'+' | '-' | '*' | '////' | '//' | '%' | '^'";
+      public const string REGEX_ASSIGN_OPS = "'+' | '-' | '*' | '////' | '//' | '^'";
       public const string REGEX_FUNCTION_NAME = "((" + REGEX_INVOKABLE + ") | (['~`!@#$%^&*+=|\\;<>//?-']+) | '[]') '='?";
       public const string REGEX_EOL = "/r /n | /r | /n";
       public const string REGEX_ANTICIPATE_END = "(> (" + REGEX_EOL + ") | $)";
@@ -115,8 +115,6 @@ namespace Kagami.Library.Parsers
                return new FloatDivide().Matched<Operation>();
             case "//":
                return new IntDivide().Matched<Operation>();
-            case "%":
-               return new Remainder().Matched<Operation>();
             case "^":
                return new Raise().Matched<Operation>();
             default:

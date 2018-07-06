@@ -6,6 +6,7 @@ using System.Text;
 using Standard.Types.Collections;
 using Standard.Types.Maybe;
 using Standard.Types.Objects;
+using Standard.Types.RegularExpressions;
 using Standard.Types.Strings;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.CollectionFunctions;
@@ -145,7 +146,15 @@ namespace Kagami.Library.Objects
 
       public Boolean NotIn(string substring) => !value.Contains(substring);*/
 
-      public String Replace(string old, string @new) => value.Replace(old, @new);
+      public String Replace(string old, string @new)
+      {
+         if (value.Find(old).If(out var index))
+            return value.Take(index) + @new + value.Skip(index + old.Length);
+         else
+            return new String(value);
+      }
+
+      public String ReplaceAll(string old, string @new) => value.Replace(old, @new);
 
       public String LStrip() => value.TrimStart();
 
@@ -280,5 +289,62 @@ namespace Kagami.Library.Objects
       public String Get() => value.get();
 
       public String Set() => value.set();
+
+      public Tuple Partition(string delimiter)
+      {
+         if (value.Find(delimiter).If(out var index))
+            return getTuple3(value.Take(index), delimiter, value.Skip(index + delimiter.Length));
+         else
+            return getTuple3(value, "", "");
+      }
+
+      public Tuple RPartition(string delimiter)
+      {
+         var array = value.FindAll(delimiter).ToArray();
+         if (array.Length == 0)
+            return getTuple3(value, "", "");
+         else
+         {
+            var index = array[array.Length - 1];
+            return getTuple3(value.Take(index), delimiter, value.Skip(index + delimiter.Length));
+         }
+      }
+
+      public Tuple Partition(Regex regex)
+      {
+         var matcher = new Matcher();
+         if (matcher.IsMatch(value, regex.Pattern, regex.IgnoreCase, regex.Multiline))
+         {
+            var match = matcher.GetMatch(0);
+            var left = value.Take(match.Index);
+            var delimiter = match.Text;
+            var right = value.Skip(match.Index + match.Length);
+
+            return getTuple3(left, delimiter, right);
+         }
+         else
+            return getTuple3(value, "", "");
+      }
+
+      public Tuple RPartition(Regex regex)
+      {
+         var matcher = new Matcher();
+         if (matcher.IsMatch(value, regex.Pattern, regex.IgnoreCase, regex.Multiline))
+         {
+            var match = matcher.GetMatch(matcher.MatchCount - 1);
+            var left = value.Take(match.Index);
+            var delimiter = match.Text;
+            var right = value.Skip(match.Index + match.Length);
+
+            return getTuple3(left, delimiter, right);
+         }
+         else
+            return getTuple3(value, "", "");
+      }
+
+      static Tuple getTuple3(string left, string middle, string right)
+      {
+         return new Tuple(new[] { StringObject(left), StringObject(middle), StringObject(right) });
+      }
    }
 }
