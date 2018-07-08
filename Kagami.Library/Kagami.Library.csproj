@@ -321,6 +321,7 @@
     <Compile Include="Objects\ISliceable.cs" />
     <Compile Include="Objects\IStreamAction.cs" />
     <Compile Include="Objects\Iterator.cs" />
+    <Compile Include="Objects\ITextFinding.cs" />
     <Compile Include="Objects\KeyValue.cs" />
     <Compile Include="Objects\Lambda.cs" />
     <Compile Include="Objects\Lazy.cs" />

@@ -3,12 +3,13 @@ using System.Text;
 using Standard.Types.Collections;
 using Standard.Types.Maybe;
 using Standard.Types.RegularExpressions;
+using Standard.Types.Strings;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Standard.Types.Arrays.ArrayFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct Regex : IObject
+   public struct Regex : IObject, ITextFinding
    {
       static IObject getTuple(Matcher.Group[] groups)
       {
@@ -123,9 +124,77 @@ namespace Kagami.Library.Objects
 
       public Boolean IsMatch(string input) => matcher.IsMatch(input, pattern, ignoreCase, multiline);
 
+      public IObject Find(string input, int startIndex, bool reverse)
+      {
+         if (input.MatchOne(pattern, ignoreCase, multiline).If(out var match))
+            return Some.Object(Int.IntObject(match.Index));
+         else
+            return Nil.NilValue;
+      }
+
+      public Tuple FindAll(string input)
+      {
+         return input.MatchAll(pattern, ignoreCase, multiline)
+            .FlatMap(matches => new Tuple(matches.Select(m => Int.IntObject(m.Index)).ToArray()), () => Tuple.Empty);
+      }
+
+      public String Replace(string input, string replacement, bool reverse)
+      {
+         if (reverse)
+         {
+            if (matcher.IsMatch(input, pattern, ignoreCase, multiline))
+            {
+               var matchIndex = matcher.MatchCount - 1;
+               var match = matcher.GetMatch(matchIndex);
+               var result = match.Text.Substitute(pattern, replacement, ignoreCase, multiline);
+               matcher[matchIndex] = result;
+
+               return matcher.ToString();
+            }
+            else
+               return input;
+         }
+         else
+            return input.Substitute(pattern, replacement, 1, ignoreCase, multiline);
+      }
+
+      public String ReplaceAll(string input, string replacement) => input.Substitute(pattern, replacement, ignoreCase, multiline);
+
       public Tuple Split(string input)
       {
          return new Tuple(input.Split(pattern, ignoreCase, multiline).Select(String.StringObject).ToArray());
+      }
+
+      public Tuple Partition(string input, bool reverse)
+      {
+         if (reverse)
+         {
+            if (matcher.IsMatch(input, pattern, ignoreCase, multiline))
+            {
+               var match = matcher.GetMatch(matcher.MatchCount - 1);
+               var left = input.Take(match.Index);
+               var delimiter = match.Text;
+               var right = input.Skip(match.Index + match.Length);
+
+               return Tuple.Tuple3(left, delimiter, right);
+            }
+            else
+               return Tuple.Tuple3(input, "", "");
+         }
+         else
+         {
+            if (matcher.IsMatch(input, pattern, ignoreCase, multiline))
+            {
+               var match = matcher.GetMatch(0);
+               var left = input.Take(match.Index);
+               var delimiter = match.Text;
+               var right = input.Skip(match.Index + match.Length);
+
+               return Tuple.Tuple3(left, delimiter, right);
+            }
+            else
+               return Tuple.Tuple3(input, "", "");
+         }
       }
 
       public Regex Concatenate(IObject obj)

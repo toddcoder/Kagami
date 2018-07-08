@@ -29,6 +29,11 @@ namespace Kagami.Library.Objects
 
       public static Tuple Empty => new Tuple(new IObject[0]);
 
+      public static Tuple Tuple3(string left, string middle, string right)
+      {
+         return new Tuple(new[] { String.StringObject(left), String.StringObject(middle), String.StringObject(right) });
+      }
+
       IObject[] items;
       Hash<string, int> names;
       Hash<int, string> indexes;

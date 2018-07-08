@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Standard.Types.Collections;
 using Standard.Types.RegularExpressions;
 using Standard.Types.Strings;
@@ -7,7 +8,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct Char : IObject, IComparable<Char>, IEquatable<Char>, IRangeItem
+   public struct Char : IObject, IComparable<Char>, IEquatable<Char>, IRangeItem, ITextFinding
    {
       public static implicit operator Char(char value) => new Char(value);
 
@@ -110,5 +111,61 @@ namespace Kagami.Library.Objects
       public Range Range() => new Range((Char)'a', this, false);
 
       public Int Ord => value;
+
+      public IObject Find(string input, int startIndex, bool reverse)
+      {
+         int index;
+         if (reverse)
+            index = input.LastIndexOf(value, startIndex);
+         else
+            index = input.IndexOf(value, startIndex);
+
+         if (index > -1)
+            return Some.Object((Int)index);
+         else
+            return Nil.NilValue;
+      }
+
+      public Tuple FindAll(string input)
+      {
+         return new Tuple(input.FindAll(value.ToString()).Select(Int.IntObject).ToArray());
+      }
+
+      public String Replace(string input, string replacement, bool reverse)
+      {
+         int index;
+         if (reverse)
+            index = input.LastIndexOf(value);
+         else
+            index = input.IndexOf(value);
+
+         if (index > -1)
+            return input.Take(index) + replacement + input.Skip(index + 1);
+         else
+            return input;
+      }
+
+      public String ReplaceAll(string input, string replacement) => input.Replace(value.ToString(), replacement);
+
+      public Tuple Split(string input) => new Tuple(input.Split(value).Select(String.StringObject).ToArray());
+
+      public Tuple Partition(string input, bool reverse)
+      {
+         if (reverse)
+         {
+            var index = input.LastIndexOf(value);
+            if (index > -1)
+               return Tuple.Tuple3(input.Take(index), value.ToString(), input.Skip(index + 1));
+            else
+               return Tuple.Tuple3(input, "", "");
+         }
+         else
+         {
+            if (input.Find(value.ToString()).If(out var index))
+               return Tuple.Tuple3(input.Take(index), value.ToString(), input.Skip(index + 1));
+            else
+               return Tuple.Tuple3(input, "", "");
+         }
+      }
    }
 }

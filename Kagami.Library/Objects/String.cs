@@ -16,7 +16,7 @@ using static Standard.Types.Maybe.MaybeFunctions;
 namespace Kagami.Library.Objects
 {
    public struct String : IObject, IComparable<String>, IEquatable<String>, IFormattable, ICollection, IComparable, ISliceable,
-      IRangeItem
+      IRangeItem, ITextFinding
    {
       public static implicit operator String(string value) => new String(value);
 
@@ -142,10 +142,6 @@ namespace Kagami.Library.Objects
 
       public Boolean IsSuffix(string substring) => value.EndsWith(substring);
 
-/*      public Boolean In(string substring) => value.Contains(substring);
-
-      public Boolean NotIn(string substring) => !value.Contains(substring);*/
-
       public String Replace(string old, string @new)
       {
          if (value.Find(old).If(out var index))
@@ -154,7 +150,60 @@ namespace Kagami.Library.Objects
             return new String(value);
       }
 
-      public String ReplaceAll(string old, string @new) => value.Replace(old, @new);
+      public Tuple FindAll(ITextFinding textFinding) => textFinding.FindAll(value);
+
+      public Tuple FindAll(string input) => new Tuple(input.FindAll(value).Select(Objects.Int.IntObject).ToArray());
+
+      public String Replace(ITextFinding textFinding, string replacement, bool reverse)
+      {
+         return textFinding.Replace(value, replacement, reverse);
+      }
+
+      public String Replace(string input, string replacement, bool reverse)
+      {
+         int index;
+         if (reverse)
+            index = input.LastIndexOf(value, StringComparison.Ordinal);
+         else
+            index = input.IndexOf(value, StringComparison.Ordinal);
+
+         if (index > -1)
+            return input.Take(index) + replacement + input.Skip(index + value.Length);
+         else
+            return input;
+      }
+
+      public String ReplaceAll(ITextFinding textFinding, string replacement) => textFinding.ReplaceAll(value, replacement);
+
+      public String ReplaceAll(string input, string replacement) => input.Replace(value, replacement);
+
+      public Tuple Split(ITextFinding textFinding) => textFinding.Split(value);
+
+      public Tuple Split(string input)
+      {
+         return new Tuple(input.Split(new[] { value }, StringSplitOptions.None).Select(StringObject).ToArray());
+      }
+
+      public Tuple Partition(ITextFinding textFinding, bool reverse) => textFinding.Partition(value, reverse);
+
+      public Tuple Partition(string input, bool reverse)
+      {
+         if (reverse)
+         {
+            var index = input.LastIndexOf(value, StringComparison.Ordinal);
+            if (index > -1)
+               return Tuple.Tuple3(input.Take(index), value, input.Skip(index + value.Length));
+            else
+               return Tuple.Tuple3(input, "", "");
+         }
+         else
+         {
+            if (input.Find(value).If(out var index))
+               return Tuple.Tuple3(input.Take(index), value, input.Skip(index + value.Length));
+            else
+               return Tuple.Tuple3(input, "", "");
+         }
+      }
 
       public String LStrip() => value.TrimStart();
 
@@ -211,32 +260,25 @@ namespace Kagami.Library.Objects
 
       public String Truncate(int width, bool ellipses = true) => value.Truncate(width, ellipses);
 
-      public IObject Find(string substring, int startIndex, bool reverse)
+      public IObject Find(ITextFinding textFinding, int startIndex, bool reverse) => textFinding.Find(value, startIndex, reverse);
+
+      public IObject Find(string input, int startIndex, bool reverse)
       {
-         var index = reverse ? value.LastIndexOf(substring, startIndex, StringComparison.Ordinal)
-            : value.IndexOf(substring, startIndex, StringComparison.Ordinal);
+         int index;
+         if (reverse)
+         {
+            if (startIndex == 0)
+               index = input.LastIndexOf(value, StringComparison.Ordinal);
+            else
+               index = input.LastIndexOf(value, startIndex, StringComparison.Ordinal);
+         }
+         else
+            index = input.IndexOf(value, startIndex, StringComparison.Ordinal);
 
          if (index == -1)
             return Nil.NilValue;
          else
             return Some.Object((Int)index);
-      }
-
-      public IObject FindAll(string substring)
-      {
-         var list = new List<IObject>();
-         var index = 0;
-         while (index > -1)
-         {
-            index = value.IndexOf(substring, index, StringComparison.Ordinal);
-            if (index > -1)
-            {
-               list.Add((Int)index);
-               index++;
-            }
-         }
-
-         return new Tuple(list.ToArray());
       }
 
       public IObject Int()

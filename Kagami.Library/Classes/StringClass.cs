@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Kagami.Library.Objects;
 using Standard.Types.Enumerables;
 using static Kagami.Library.Classes.ClassFunctions;
+using Boolean = Kagami.Library.Objects.Boolean;
 using String = Kagami.Library.Objects.String;
 using Char = Kagami.Library.Objects.Char;
 
@@ -21,6 +23,7 @@ namespace Kagami.Library.Classes
          sliceableMessages();
          compareMessages();
          rangeMessages();
+         textFindingMessages();
 
          messages["~"] = (obj, msg) => function<String, IObject>(obj, msg, (s1, s2) => s1.Concatenate(s2.AsString));
          messages["[]"] = (obj, msg) => function<String, Int>(obj, msg, (s, i) => s[i.Value]);
@@ -34,10 +37,10 @@ namespace Kagami.Library.Classes
          messages["rightIs"] = (obj, msg) => function<String, String>(obj, msg, (s1, s2) => s1.IsSuffix(s2.Value));
          messages["in"] = (obj, msg) => function<String, IObject>(obj, msg, (s1, s2) => s1.In(s2));
          messages["notIn"] = (obj, msg) => function<String, IObject>(obj, msg, (s1, s2) => s1.NotIn(s2));
-         messages["replace".Function("", "new")] =
+/*         messages["replace".Function("", "new")] =
             (obj, msg) => function<String, String, String>(obj, msg, (s, o, n) => s.Replace(o.Value, n.Value));
          messages["replace".Function("all", "new")] =
-            (obj, msg) => function<String, String, String>(obj, msg, (s, o, n) => s.ReplaceAll(o.Value, n.Value));
+            (obj, msg) => function<String, String, String>(obj, msg, (s, o, n) => s.ReplaceAll(o.Value, n.Value));*/
          messages["lstrip"] = (obj, msg) => function<String>(obj, s => s.LStrip());
          messages["rstrip"] = (obj, msg) => function<String>(obj, s => s.RStrip());
          messages["strip"] = (obj, msg) => function<String>(obj, s => s.Strip());
@@ -64,7 +67,7 @@ namespace Kagami.Library.Classes
          messages["truncate".Function("", "ellipses")] = (obj, msg) =>
             function<String, Int, Boolean>(obj, msg, (s, w, e) => s.Truncate(w.Value, e.Value));
          messages["truncate"] = (obj, msg) => function<String, Int>(obj, msg, (s, w) => s.Truncate(w.Value));
-         messages["find".Function("", "startAt", "reverse")] = (obj, msg) =>
+/*         messages["find".Function("", "startAt", "reverse")] = (obj, msg) =>
             function<String, String, Int, Boolean>(obj, msg, (s, u, i, r) => s.Find(u.Value, i.Value, r.Value));
          messages["find".Function("", "startAt")] = (obj, msg) =>
             function<String, String, Int>(obj, msg, (s, u, i) => s.Find(u.Value, i.Value, false));
@@ -73,20 +76,20 @@ namespace Kagami.Library.Classes
          messages["find"] = (obj, msg) =>
             function<String, String>(obj, msg, (s, u) => s.Find(u.Value, 0, false));
          messages["find".Function("all")] = (obj, msg) =>
-            function<String, String>(obj, msg, (s, u) => s.FindAll(u.Value));
+            function<String, String>(obj, msg, (s, u) => s.FindAll(u.Value));*/
          messages["int"] = (obj, msg) => function<String>(obj, s => s.Int());
          messages["float"] = (obj, msg) => function<String>(obj, s => s.Float());
          messages["byte"] = (obj, msg) => function<String>(obj, s => s.Byte());
          messages["long"] = (obj, msg) => function<String>(obj, s => s.Long());
-         messages["split".Function("regex")] = (obj, msg) => function<String, Regex>(obj, msg, (s, r) => s.SplitRegex(r));
-         messages["split".Function("on")] = (obj, msg) => function<String, String>(obj, msg, (s1, s2) => s1.SplitOn(s2.Value));
+/*         messages["split".Function("regex")] = (obj, msg) => function<String, Regex>(obj, msg, (s, r) => s.SplitRegex(r));
+         messages["split".Function("on")] = (obj, msg) => function<String, String>(obj, msg, (s1, s2) => s1.SplitOn(s2.Value));*/
          messages["-"] = (obj, msg) => function<String, String>(obj, msg, (s1, s2) => s1.Subtract(s2.Value));
          messages["get"] = (obj, msg) => function<String>(obj, s => s.Get());
          messages["set"] = (obj, msg) => function<String>(obj, s => s.Set());
-         messages["partition"] = (obj, msg) => function<String, String>(obj, msg, (s1, s2) => s1.Partition(s2.Value));
+/*         messages["partition"] = (obj, msg) => function<String, String>(obj, msg, (s1, s2) => s1.Partition(s2.Value));
          messages["partition".Function("right")] = (obj, msg) => function<String, String>(obj, msg, (s1, s2) => s1.RPartition(s2.Value));
          messages["partition".Function("regex")] = (obj, msg) => function<String, Regex>(obj, msg, (s, r) => s.Partition(r));
-         messages["partition".Function("rightRegex")] = (obj, msg) => function<String, Regex>(obj, msg, (s, r) => s.RPartition(r));
+         messages["partition".Function("rightRegex")] = (obj, msg) => function<String, Regex>(obj, msg, (s, r) => s.RPartition(r));*/
       }
 
       public override void RegisterClassMessages()
@@ -102,5 +105,55 @@ namespace Kagami.Library.Classes
       }
 
       public IObject Revert(IEnumerable<IObject> list) => String.StringObject(list.Select(i => i.AsString).Listify(""));
+
+      protected void textFindingMessages()
+      {
+         IObject apply(IObject obj, Message msg, Func<String, ITextFinding, IObject> func)
+         {
+            var input = (String)obj;
+            var textFinding = (ITextFinding)msg.Arguments[0];
+
+            return func(input, textFinding);
+         }
+
+         IObject apply1<T>(IObject obj, Message msg, Func<String, ITextFinding, T, IObject> func)
+            where T : IObject
+         {
+            var input = (String)obj;
+            var textFinding = (ITextFinding)msg.Arguments[0];
+            var arg1 = (T)msg.Arguments[1];
+
+            return func(input, textFinding, arg1);
+         }
+
+         IObject apply2<T1, T2>(IObject obj, Message msg, Func<String, ITextFinding, T1, T2, IObject> func)
+            where T1 : IObject
+            where T2 : IObject
+         {
+            var input = (String)obj;
+            var textFinding = (ITextFinding)msg.Arguments[0];
+            var arg1 = (T1)msg.Arguments[1];
+            var arg2 = (T2)msg.Arguments[2];
+
+            return func(input, textFinding, arg1, arg2);
+         }
+
+         registerMessage("find", (obj, msg) => apply(obj, msg, (s, tf) => s.Find(tf, 0, false)));
+         registerMessage("find".Function("", "startAt"),
+            (obj, msg) => apply1<Int>(obj, msg, (s, tf, i) => s.Find(tf, i.Value, false)));
+         registerMessage("find".Function("", "reverse"),
+            (obj, msg) => apply1<Boolean>(obj, msg, (s, tf, b) => s.Find(tf, 0, b.Value)));
+         registerMessage("find".Function("", "startAt", "reverse"),
+            (obj, msg) => apply2<Int, Boolean>(obj, msg, (s, tf, i, b) => s.Find(tf, i.Value, b.Value)));
+         registerMessage("find".Function("all"), (obj, msg) => apply(obj, msg, (s, tf) => s.FindAll(tf)));
+         registerMessage("replace".Function("", "new"), (obj, msg) => apply1<String>(obj, msg, (s1, tf, s2) => s1.Replace(tf, s2.Value, false)));
+         registerMessage("replace".Function("", "new", "reverse"),
+            (obj, msg) => apply2<String, Boolean>(obj, msg, (s1, tf, s2, b) => s1.Replace(tf, s2.Value, b.Value)));
+         registerMessage("replace".Function("all", "new"),
+            (obj, msg) => apply1<String>(obj, msg, (s1, tf, s2) => s1.ReplaceAll(tf, s2.Value)));
+         registerMessage("split".Function("on"), (obj, msg) => apply(obj, msg, (s, tf) => s.Split(tf)));
+         registerMessage("partition", (obj, msg) => apply(obj, msg, (s, tf) => s.Partition(tf, false)));
+         registerMessage("partition".Function("", "reverse"), (obj, msg) => apply1<Boolean>(obj, msg, (s, tf, b) => s.Partition(tf, b.Value)));
+      }
    }
 }

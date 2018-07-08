@@ -326,7 +326,8 @@ namespace Kagami.Library.Classes
          registerMessage("array", (obj, msg) => iteratorFunc(obj, i => i.ToArray()));
          registerMessage("list", (obj, msg) => iteratorFunc(obj, i => i.ToList()));
          registerMessage("tuple", (obj, msg) => iteratorFunc(obj, i => i.ToTuple()));
-         registerMessage("dictionary".Function("key", "value"), (obj, msg) => iteratorFunc<Lambda, Lambda>(obj, msg, (i, l1, l2) => i.ToDictionary(l1, l2)));
+         registerMessage("dictionary".Function("key", "value"),
+            (obj, msg) => iteratorFunc<Lambda, Lambda>(obj, msg, (i, l1, l2) => i.ToDictionary(l1, l2)));
          registerMessage("dictionary", (obj, msg) => iteratorFunc(obj, i => i.ToDictionary()));
          registerMessage("each", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Each(l)));
          registerMessage("rotate", (obj, msg) => iteratorFunc<Int>(obj, msg, (i, c) => i.Rotate(c.Value)));
@@ -436,7 +437,8 @@ namespace Kagami.Library.Classes
       {
          registerMessage("<>", (o, m) => (Int)((IObjectCompare)o).Compare(m.Arguments[0]));
          registerMessage("between".Function("", "and"), (o, m) => ((IObjectCompare)o).Between(m.Arguments[0], m.Arguments[1], true));
-         registerMessage("between".Function("", "until"), (o, m) => ((IObjectCompare)o).Between(m.Arguments[0], m.Arguments[1], false));
+         registerMessage("between".Function("", "until"),
+            (o, m) => ((IObjectCompare)o).Between(m.Arguments[0], m.Arguments[1], false));
       }
    }
 }
