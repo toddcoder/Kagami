@@ -8,7 +8,11 @@
 
       String Replace(string input, string replacement, bool reverse);
 
+      String Replace(string input, Lambda lambda, bool reverse);
+
       String ReplaceAll(string input, string replacement);
+
+      String ReplaceAll(string input, Lambda lambda);
 
       Tuple Split(string input);
 

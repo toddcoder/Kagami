@@ -158,7 +158,57 @@ namespace Kagami.Library.Objects
             return input.Substitute(pattern, replacement, 1, ignoreCase, multiline);
       }
 
+      public String Replace(string input, Lambda lambda, bool reverse)
+      {
+         if (reverse)
+         {
+            if (matcher.IsMatch(input, pattern, ignoreCase, multiline))
+            {
+               var matchIndex = matcher.MatchCount - 1;
+               var match = matcher.GetMatch(matchIndex);
+               var replacement = lambda.Invoke((String)match.Text, (Int)match.Index, (Int)match.Length);
+               var result = match.Text.Substitute(pattern, replacement.AsString, ignoreCase, multiline);
+               matcher[matchIndex] = result;
+
+               return matcher.ToString();
+            }
+            else
+               return input;
+         }
+         else
+         {
+            if (matcher.IsMatch(input, pattern, ignoreCase, multiline))
+            {
+               var match = matcher.GetMatch(0);
+               var replacement = lambda.Invoke((String)match.Text, (Int)match.Index, (Int)match.Length);
+               var result = match.Text.Substitute(pattern, replacement.AsString, ignoreCase, multiline);
+               matcher[0] = result;
+
+               return matcher.ToString();
+            }
+            else
+               return input;
+         }
+      }
+
       public String ReplaceAll(string input, string replacement) => input.Substitute(pattern, replacement, ignoreCase, multiline);
+
+      public String ReplaceAll(string input, Lambda lambda)
+      {
+         if (matcher.IsMatch(input, pattern, ignoreCase, multiline))
+         {
+            for (var i = 0; i < matcher.MatchCount; i++)
+            {
+               var match = matcher.GetMatch(i);
+               var replacement = lambda.Invoke((String)match.Text, (Int)match.Index, (Int)match.Length);
+               matcher[i] = replacement.AsString;
+            }
+
+            return matcher.ToString();
+         }
+         else
+            return input;
+      }
 
       public Tuple Split(string input)
       {

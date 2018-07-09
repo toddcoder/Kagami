@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 using Standard.Types.Collections;
 using Standard.Types.RegularExpressions;
 using Standard.Types.Strings;
@@ -145,7 +146,46 @@ namespace Kagami.Library.Objects
             return input;
       }
 
+      public String Replace(string input, Lambda lambda, bool reverse)
+      {
+         int index;
+         if (reverse)
+            index = input.LastIndexOf(value);
+         else
+            index = input.IndexOf(value);
+
+         if (index > -1)
+         {
+            var text = input.Skip(index);
+            var length = text.Length;
+            var replacement = lambda.Invoke((String)text, (Int)index, (Int)length);
+
+            return input.Take(index) + replacement + input.Skip(index + 1);
+         }
+         else
+            return input;
+      }
+
       public String ReplaceAll(string input, string replacement) => input.Replace(value.ToString(), replacement);
+
+      public String ReplaceAll(string input, Lambda lambda)
+      {
+         var builder = new StringBuilder();
+         var index = input.IndexOf(value);
+         var start = 0;
+         while (index > -1)
+         {
+            var replacement = lambda.Invoke((Char)value, (Int)index, Int.One);
+            builder.Append(input.Skip(start));
+            builder.Append(replacement.AsString);
+            start = index + 1;
+            index = input.IndexOf(value);
+         }
+
+         builder.Append(input.Skip(start));
+
+         return builder.ToString();
+      }
 
       public Tuple Split(string input) => new Tuple(input.Split(value).Select(String.StringObject).ToArray());
 

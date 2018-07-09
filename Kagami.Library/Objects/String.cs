@@ -173,9 +173,52 @@ namespace Kagami.Library.Objects
             return input;
       }
 
+      public String Replace(ITextFinding textFinding, Lambda lambda, bool reverse) => textFinding.Replace(value, lambda, reverse);
+
+      public String Replace(string input, Lambda lambda, bool reverse)
+      {
+         int index;
+         if (reverse)
+            index = input.LastIndexOf(value, StringComparison.Ordinal);
+         else
+            index = input.IndexOf(value, StringComparison.Ordinal);
+
+         if (index > -1)
+         {
+            var text = input.Skip(index);
+            var length = text.Length;
+            var replacement = lambda.Invoke((String)text, (Int)index, (Int)length);
+
+            return input.Take(index) + replacement + input.Skip(index + value.Length);
+         }
+         else
+            return input;
+      }
+
       public String ReplaceAll(ITextFinding textFinding, string replacement) => textFinding.ReplaceAll(value, replacement);
 
       public String ReplaceAll(string input, string replacement) => input.Replace(value, replacement);
+
+      public String ReplaceAll(ITextFinding textFinding, Lambda lambda) => textFinding.ReplaceAll(value, lambda);
+
+      public String ReplaceAll(string input, Lambda lambda)
+      {
+         var builder = new StringBuilder();
+         var index = input.IndexOf(value);
+         var start = 0;
+         while (index > -1)
+         {
+            var replacement = lambda.Invoke((String)value, (Int)index, (Int)value.Length);
+            builder.Append(input.Skip(start));
+            builder.Append(replacement.AsString);
+            start = index + value.Length;
+            index = input.IndexOf(value);
+         }
+
+         builder.Append(input.Skip(start));
+
+         return builder.ToString();
+      }
 
       public Tuple Split(ITextFinding textFinding) => textFinding.Split(value);
 
