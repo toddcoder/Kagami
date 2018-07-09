@@ -70,6 +70,7 @@ namespace Kagami.Library.Classes
          messages["-"] = (obj, msg) => function<String, String>(obj, msg, (s1, s2) => s1.Subtract(s2.Value));
          messages["get"] = (obj, msg) => function<String>(obj, s => s.Get());
          messages["set"] = (obj, msg) => function<String>(obj, s => s.Set());
+         messages["swapCase"] = (obj, msg) => function<String>(obj, s => s.SwapCase());
       }
 
       public override void RegisterClassMessages()
