@@ -6,6 +6,7 @@ using Kagami.Library.Runtime;
 using Standard.Types.Exceptions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Operations.NumericFunctions;
+using static Kagami.Library.Parsers.ParserFunctions;
 using Byte = Kagami.Library.Objects.Byte;
 using String = Kagami.Library.Objects.String;
 
@@ -197,6 +198,16 @@ namespace Kagami.Library.Packages
             default:
                throw incompatibleClasses(x, "Number");
          }
+      }
+
+      public Long StringToLong(string value, int baseNum)
+      {
+         return new Long(convert(value.Replace("_", ""), baseNum, "0123456789abcdefghijklmnopqrstuvwxyz"));
+      }
+
+      public Float StringToFloat(string value, int baseNum)
+      {
+         return new Float(convertFloat(value.Replace("_", ""), baseNum, "0123456789abcdefghijklmnopqrstuvwxyz"));
       }
    }
 }

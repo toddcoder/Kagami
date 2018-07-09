@@ -40,6 +40,10 @@ namespace Kagami.Library.Packages
          registerPackageFunction("complex", (obj, msg) => function<Math, IObject>(obj, msg, (m, n) => m.XComplex(n)));
          registerPackageFunction("rational", (obj, msg) => function<Math, IObject>(obj, msg, (m, n) => m.XRational(n)));
          registerPackageFunction("hypot", (obj, msg) => function<Math, IObject, IObject>(obj, msg, (m, x, y) => m.Hypot(x, y)));
+         registerPackageFunction("string".Function("toLong", "base"),
+            (obj, msg) => function<Math, String, Int>(obj, msg, (m, s, i) => m.StringToLong(s.Value, i.Value)));
+         registerPackageFunction("string".Function("toFloat", "base"),
+            (obj, msg) => function<Math, String, Int>(obj, msg, (m, s, i) => m.StringToFloat(s.Value, i.Value)));
       }
    }
 }
