@@ -73,6 +73,8 @@ namespace Kagami.Library.Runtime
          classes["Math"] = new MathClass();
          classes["RuntimeFunction"] = new RuntimeFunctionClass();
          classes["Reference"] = new ReferenceClass();
+         classes["Group"] = new RegexGroupClass();
+         classes["Match"] = new RegexMatchClass();
       }
 
       public IMaybe<BaseClass> Class(string name) => classes.Map(name);

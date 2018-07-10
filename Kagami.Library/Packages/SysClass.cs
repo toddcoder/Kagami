@@ -22,6 +22,8 @@ namespace Kagami.Library.Packages
          registerPackageFunction("snd", (obj, msg) => function<Sys, Tuple>(obj, msg, (sys, t) => sys.Second(t)));
          registerPackageFunction("id".get(), (obj, msg) => function<Sys>(obj, sys => sys.ID));
          registerPackageFunction("Tuple", (obj, msg) => function<Sys>(obj, sys => sys.Tuple(msg.Arguments[0])));
+         registerPackageFunction("Group", (obj, msg) => function<Sys>(obj, sys => sys.RegexGroup(msg.Arguments)));
+         registerPackageFunction("Match", (obj, msg) => function<Sys>(obj, sys => sys.RegexMatch(msg.Arguments)));
       }
    }
 }

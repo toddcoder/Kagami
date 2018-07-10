@@ -61,6 +61,8 @@ namespace Kagami.Library.Objects
                return regex.IsMatch(source.AsString).IsTrue;
             case Pattern pattern:
                return pattern.Match(source, bindings);
+            case IProcessPlaceholders _:
+               return processPlaceholdersMatch(source, comparisand, bindings);
             default:
                if (classOf(source).MatchCompatible(classOf(comparisand)))
                   return equalifier(source, (T)comparisand);
@@ -106,6 +108,8 @@ namespace Kagami.Library.Objects
                   return false;
             case Pattern pattern:
                return pattern.Match(source, bindings);
+            case IProcessPlaceholders _:
+               return processPlaceholdersMatch(source, comparisand, bindings);
             default:
                return equalifier(source, comparisand);
          }
@@ -198,6 +202,26 @@ namespace Kagami.Library.Objects
 
                return true;
             }, bindings);
+      }
+
+      public static bool processPlaceholdersMatch(IObject obj, IObject comparisand, Hash<string, IObject> bindings)
+      {
+         if (obj is IProcessPlaceholders ppInternals && comparisand is IProcessPlaceholders ppPassed)
+         {
+            foreach (var (key, value) in ppInternals.Internals)
+               if (ppPassed.Passed.ContainsKey(key))
+               {
+                  var passedValue = ppPassed.Passed[key];
+                  if (!value.Match(passedValue, bindings))
+                     return false;
+               }
+               else
+                  return false;
+
+            return true;
+         }
+         else
+            return false;
       }
 
       public static string stringOf(IObject obj)

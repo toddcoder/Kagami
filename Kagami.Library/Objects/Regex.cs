@@ -2,34 +2,15 @@
 using System.Text;
 using Standard.Types.Collections;
 using Standard.Types.Maybe;
+using Standard.Types.Numbers;
 using Standard.Types.RegularExpressions;
 using Standard.Types.Strings;
 using static Kagami.Library.Objects.ObjectFunctions;
-using static Standard.Types.Arrays.ArrayFunctions;
 
 namespace Kagami.Library.Objects
 {
    public struct Regex : IObject, ITextFinding
    {
-      static IObject getTuple(Matcher.Group[] groups)
-      {
-         var objects = groups.Select(g =>
-         {
-            var innerArray = array(String.StringObject(g.Text), Int.IntObject(g.Index), Int.IntObject(g.Length));
-            var innerTuple = new Tuple(innerArray);
-            return (IObject)innerTuple;
-         }).ToArray();
-
-         return new Tuple(objects);
-      }
-
-      static IObject getTextTuple(Matcher.Group[] groups)
-      {
-         return new Tuple(groups.Select(g => String.StringObject(g.Text)).ToArray());
-      }
-
-      static IObject getTuple(bool textOnly, Matcher.Match match) => textOnly ? getTextTuple(match.Groups) : getTuple(match.Groups);
-
       string pattern;
       bool ignoreCase;
       bool multiline;
@@ -89,14 +70,11 @@ namespace Kagami.Library.Objects
       {
          if (global)
             if (isMatch(input))
-            {
-               var self = this;
-               return new Tuple(matcher.AllMatches.Select(m => getTuple(self.textOnly, m)).ToArray());
-            }
+               return new Tuple(matcher.AllMatches.Select(m => (IObject)new RegexMatch(m)).ToArray());
             else
                return Tuple.Empty;
          else if (isMatch(input))
-            return Some.Object(getTuple(textOnly, matcher.AllMatches[0]));
+            return Some.Object(new RegexMatch(matcher.GetMatch(0)));
          else
             return Nil.NilValue;
       }
@@ -109,7 +87,7 @@ namespace Kagami.Library.Objects
             else
                return Tuple.Empty;
          else if (isMatch(input))
-            return Some.Object(String.StringObject(matcher.AllMatches[0].Text));
+            return Some.Object(String.StringObject(matcher.GetMatch(0).Text));
          else
             return Nil.NilValue;
       }
@@ -126,8 +104,11 @@ namespace Kagami.Library.Objects
 
       public IObject Find(string input, int startIndex, bool reverse)
       {
-         if (input.MatchOne(pattern, ignoreCase, multiline).If(out var match))
-            return Some.Object(Int.IntObject(match.Index));
+         if (input.MatchAll(pattern, ignoreCase, multiline).If(out var matches))
+            if (startIndex.Between(0).Until(matches.Length))
+               return Some.Object(Int.IntObject(matches[startIndex].Index));
+            else
+               return Nil.NilValue;
          else
             return Nil.NilValue;
       }

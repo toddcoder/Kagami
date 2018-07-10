@@ -145,5 +145,30 @@ namespace Kagami.Library.Packages
       }
 
       public IObject Tuple(IObject value) => new Tuple(value);
+
+      public RegexGroup RegexGroup(Arguments arguments)
+      {
+         var passed = new Hash<string, IObject>
+         {
+            ["text"] = arguments[0],
+            ["index"] = arguments[1],
+            ["length"] = arguments[2]
+         };
+
+         return new RegexGroup(passed);
+      }
+
+      public RegexMatch RegexMatch(Arguments arguments)
+      {
+         var passed = new Hash<string, IObject>
+         {
+            ["text"] = arguments[0],
+            ["index"] = arguments[1],
+            ["length"] = arguments[2],
+            ["groups"] = arguments[3]
+         };
+
+         return new RegexMatch(passed);
+      }
    }
 }

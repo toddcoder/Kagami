@@ -90,6 +90,8 @@
     <Compile Include="Classes\RationalClass.cs" />
     <Compile Include="Classes\ReferenceClass.cs" />
     <Compile Include="Classes\RegexClass.cs" />
+    <Compile Include="Classes\RegexGroupClass.cs" />
+    <Compile Include="Classes\RegexMatchClass.cs" />
     <Compile Include="Classes\RuntimeFunctionClass.cs" />
     <Compile Include="Classes\Signature.cs" />
     <Compile Include="Classes\SliceClass.cs" />
@@ -316,6 +318,7 @@
     <Compile Include="Objects\IObjectCompare.cs" />
     <Compile Include="Objects\IOptional.cs" />
     <Compile Include="Objects\IPristineCopy.cs" />
+    <Compile Include="Objects\IProcessPlaceholders.cs" />
     <Compile Include="Objects\IProvidesFields.cs" />
     <Compile Include="Objects\IRangeItem.cs" />
     <Compile Include="Objects\ISliceable.cs" />
@@ -346,6 +349,8 @@
     <Compile Include="Objects\Rational.cs" />
     <Compile Include="Objects\Reference.cs" />
     <Compile Include="Objects\Regex.cs" />
+    <Compile Include="Objects\RegexGroup.cs" />
+    <Compile Include="Objects\RegexMatch.cs" />
     <Compile Include="Objects\RuntimeFunction.cs" />
     <Compile Include="Objects\RuntimeInvokable.cs" />
     <Compile Include="Objects\RuntimeLambda.cs" />
