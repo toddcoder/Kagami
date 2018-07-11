@@ -9,6 +9,7 @@ using static Kagami.Library.Operations.NumericFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 using Byte = Kagami.Library.Objects.Byte;
 using String = Kagami.Library.Objects.String;
+using Tuple = Kagami.Library.Objects.Tuple;
 
 namespace Kagami.Library.Packages
 {
@@ -208,6 +209,45 @@ namespace Kagami.Library.Packages
       public Float StringToFloat(string value, int baseNum)
       {
          return new Float(convertFloat(value.Replace("_", ""), baseNum, "0123456789abcdefghijklmnopqrstuvwxyz"));
+      }
+
+      public Tuple Frexp(double number)
+      {
+         var bits = BitConverter.DoubleToInt64Bits(number);
+         var realMantissa = 1.0d;
+         if (double.IsNaN(number) || number + number == number || double.IsInfinity(number))
+            return getFrexpResult(number, 0);
+
+         var negative = bits < 0;
+         var exponent = (int)(bits >> 52 & 0x7ffL);
+         var mantissa = bits & 0xfffffffffffffL;
+         if (exponent == 0)
+            exponent++;
+         else
+            mantissa |= 1L << 52;
+
+         exponent -= 1075;
+         realMantissa = mantissa;
+
+         while (realMantissa > 1.0)
+         {
+            mantissa >>= 1;
+            realMantissa /= 2.0;
+            exponent++;
+         }
+
+         if (negative)
+            realMantissa *= -1;
+
+         return getFrexpResult(realMantissa, exponent);
+      }
+
+      static Tuple getFrexpResult(double mantissa, int exponent)
+      {
+         var m = Float.FloatObject(mantissa);
+         var e = Int.IntObject(exponent);
+
+         return new Tuple(m, e);
       }
    }
 }

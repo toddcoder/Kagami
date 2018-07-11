@@ -197,6 +197,10 @@ namespace Kagami.Library.Classes
          registerMessage("floor", (obj, msg) => function(obj, x => x, x => Math.Floor(x), x => x, x => (Float)x.Floor(), "floor"));
          registerMessage("frac", (obj, msg) => function(obj, x => 0, x => x - (int)x, x => 0, x => (Float)x.Fraction(), "frac"));
          messages["isNumber".get()] = (obj, msg) => Boolean.True;
+         registerMessage("isZero".get(), (obj, msg) => function(obj, numeric => (Boolean)numeric.IsZero));
+         registerMessage("isPositive".get(), (obj, msg) => function(obj, numeric => (Boolean)numeric.IsPositive));
+         registerMessage("isNegative".get(), (obj, msg) => function(obj, numeric => (Boolean)numeric.IsNegative));
+         registerMessage("isPrimitive".get(), (obj, msg) => function(obj, numeric => (Boolean)numeric.IsPrimitive));
       }
 
       protected void numericConversionMessages()

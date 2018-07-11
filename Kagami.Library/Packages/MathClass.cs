@@ -44,6 +44,7 @@ namespace Kagami.Library.Packages
             (obj, msg) => function<Math, String, Int>(obj, msg, (m, s, i) => m.StringToLong(s.Value, i.Value)));
          registerPackageFunction("string".Function("toFloat", "base"),
             (obj, msg) => function<Math, String, Int>(obj, msg, (m, s, i) => m.StringToFloat(s.Value, i.Value)));
+         registerPackageFunction("frexp", (obj, msg) => function<Math, Float>(obj, msg, (m, f) => m.Frexp(f.Value)));
       }
    }
 }
