@@ -62,6 +62,7 @@
     <Compile Include="Classes\ComplexClass.cs" />
     <Compile Include="Classes\DataComparisandClass.cs" />
     <Compile Include="Classes\DataTypeClass.cs" />
+    <Compile Include="Classes\DateClass.cs" />
     <Compile Include="Classes\DelClass.cs" />
     <Compile Include="Classes\DictionaryClass.cs" />
     <Compile Include="Classes\EndClass.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="Classes\InfinityClass.cs" />
     <Compile Include="Classes\IntClass.cs" />
     <Compile Include="Classes\InternalListClass.cs" />
+    <Compile Include="Classes\IntervalClass.cs" />
     <Compile Include="Classes\IParse.cs" />
     <Compile Include="Classes\IteratorClass.cs" />
     <Compile Include="Classes\KeyCollectingHash.cs" />
@@ -182,6 +184,7 @@
     <Compile Include="Nodes\Symbols\ComprehensionSymbol.cs" />
     <Compile Include="Nodes\Symbols\ConcatenationSymbol.cs" />
     <Compile Include="Nodes\Symbols\ConsSymbol.cs" />
+    <Compile Include="Nodes\Symbols\DateSymbol.cs" />
     <Compile Include="Nodes\Symbols\DelSymbol.cs" />
     <Compile Include="Nodes\Symbols\EmptyArraySymbol.cs" />
     <Compile Include="Nodes\Symbols\EmptyDictionarySymbol.cs" />
@@ -288,6 +291,7 @@
     <Compile Include="Objects\Constructor.cs" />
     <Compile Include="Objects\DataComparisand.cs" />
     <Compile Include="Objects\DataType.cs" />
+    <Compile Include="Objects\Date.cs" />
     <Compile Include="Objects\Del.cs" />
     <Compile Include="Objects\Dictionary.cs" />
     <Compile Include="Objects\DictionaryIterator.cs" />
@@ -313,6 +317,7 @@
     <Compile Include="Objects\Int.cs" />
     <Compile Include="Objects\InternalLambda.cs" />
     <Compile Include="Objects\InternalList.cs" />
+    <Compile Include="Objects\Interval.cs" />
     <Compile Include="Objects\INumeric.cs" />
     <Compile Include="Objects\IObject.cs" />
     <Compile Include="Objects\IObjectCompare.cs" />
@@ -523,6 +528,7 @@
     <Compile Include="Parsers\Expressions\ComprehensionParser.cs" />
     <Compile Include="Parsers\Expressions\ConjunctionParsers.cs" />
     <Compile Include="Parsers\Expressions\ConstantsParser.cs" />
+    <Compile Include="Parsers\Expressions\DateParser.cs" />
     <Compile Include="Parsers\Expressions\EmptyValueParser.cs" />
     <Compile Include="Parsers\Expressions\EndingInExpressionParser.cs" />
     <Compile Include="Parsers\Expressions\EndingInValueParser.cs" />

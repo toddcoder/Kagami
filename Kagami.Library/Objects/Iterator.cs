@@ -514,6 +514,38 @@ namespace Kagami.Library.Objects
             return collectionClass.Revert(List());
       }
 
+      public IObject Window(int count)
+      {
+         if (count > 1)
+         {
+            var list = List().ToList();
+            if (list.Count >= count)
+            {
+               var lastIndex = list.Count - 1;
+               var outerList = new List<IObject>();
+               var escape = false;
+               for (var i = 0; i < list.Count && !escape; i++)
+               {
+                  var innerList = new List<IObject>();
+                  for (var j = i; j < i + count; j++)
+                  {
+                     innerList.Add(list[j]);
+                     if (j == lastIndex)
+                        escape = true;
+                  }
+                  var result = collectionClass.Revert(innerList);
+                  outerList.Add(result);
+               }
+
+               return collectionClass.Revert(outerList);
+            }
+            else
+               return collectionClass.Revert(list);
+         }
+         else
+            return collectionClass.Revert(List());
+      }
+
       public virtual IObject Distinct() => collectionClass.Revert(List().Distinct());
 
       public IObject Span(Lambda predicate)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using Standard.Types.Collections;
+using Standard.Types.Dates.DateIncrements;
 using Standard.Types.Objects;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Operations.NumericFunctions;
@@ -172,5 +173,15 @@ namespace Kagami.Library.Objects
       public IRangeItem Predecessor => (Int)(value - 1);
 
       public Range Range() => new Range((Int)0, this, false);
+
+      public Interval Millisecond => value.Millisecond();
+
+      public Interval Second => value.Second();
+
+      public Interval Minute => value.Minute();
+
+      public Interval Hour => value.Hour();
+
+      public Interval Day => value.Day();
    }
 }

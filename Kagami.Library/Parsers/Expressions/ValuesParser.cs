@@ -33,9 +33,9 @@ namespace Kagami.Library.Parsers.Expressions
             yield return new AlternateStringParser(builder);
             yield return new InterpolatedStringParser(builder);
             yield return new StringArrayParser(builder);
+            yield return new DateParser(builder);
             yield return new StringParser(builder);
             yield return new CharParser(builder);
-            //yield return new PeekParser(builder);
 
             if (!builder.Flags[ExpressionFlags.Subset])
             {

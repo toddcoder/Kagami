@@ -106,6 +106,8 @@ namespace Kagami.Library.Objects
 
       IObject By(int count);
 
+      IObject Window(int count);
+
       IObject Distinct();
 
       IObject Span(Lambda predicate);

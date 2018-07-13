@@ -254,7 +254,7 @@ namespace Kagami.Library.Classes
             "zip".Function("on", "with"), "zip", "min".get(), "max".get(), "first", "first".Function("with"), "last",
             "last".Function("with"),
             "split", "split".Function("count"), "groupBy", "one", "none", "any", "all", "sum", "average", "product",
-            "cross", "by", "distinct", "span".Function("with"), "span".Function("count"), "shuffle", "shuffle".Function("count"),
+            "cross", "by", "window", "distinct", "span".Function("with"), "span".Function("count"), "shuffle", "shuffle".Function("count"),
             "array", "list", "tuple", "dictionary".Function("key", "value"), "dictionary", "each", "rotate"));
 
          dynamicInvoke = (obj, msg) =>
@@ -322,6 +322,7 @@ namespace Kagami.Library.Classes
          registerMessage("product", (obj, msg) => iteratorFunc(obj, i => (IObject)i.Product()));
          registerMessage("cross", (obj, msg) => iteratorFunc<IObject>(obj, msg, (i, c) => i.Cross((ICollection)c)));
          registerMessage("by", (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.By(j.Value)));
+         registerMessage("window", (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.Window(j.Value)));
          registerMessage("distinct", (obj, msg) => iteratorFunc(obj, i => i.Distinct()));
          registerMessage("span".Function("with"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Span(l)));
          registerMessage("span".Function("count"), (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.Span(j.Value)));

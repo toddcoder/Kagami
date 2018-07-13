@@ -209,6 +209,8 @@ namespace Kagami.Library.Objects
 
       public IObject By(int count) => iterator.By(count);
 
+      public IObject Window(int count) => iterator.Window(count);
+
       public IObject Distinct() => Copy(new DistinctAction());
 
       public IObject Span(Lambda predicate) => iterator.Span(predicate);
