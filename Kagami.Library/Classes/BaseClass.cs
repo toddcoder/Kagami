@@ -251,7 +251,7 @@ namespace Kagami.Library.Classes
             "foldl", "foldr".Function("", "with"), "foldr", "reducel".Function("", "with"), "reducel",
             "reducer".Function("", "with"), "reducer", "count", "map", "if", "ifNot", "skip", "skip".Function("while"),
             "skip".Function("until"), "take", "take".Function("while"), "take".Function("until"), "index", "indexes",
-            "zip".Function("on", "with"), "zip", "min".get(), "max".get(), "first", "first".Function("with"), "last",
+            "zip".Function("", "with"), "zip", "min".get(), "max".get(), "first", "first".Function("with"), "last",
             "last".Function("with"),
             "split", "split".Function("count"), "groupBy", "one", "none", "any", "all", "sum", "average", "product",
             "cross", "by", "window", "distinct", "span".Function("with"), "span".Function("count"), "shuffle", "shuffle".Function("count"),
@@ -272,7 +272,7 @@ namespace Kagami.Library.Classes
          registerMessage("peek", (obj, msg) => iteratorFunc(obj, i => i.Peek().FlatMap(s => new Some(s), () => Nil.NilValue)));
          registerMessage("reverse", (obj, msg) => iteratorFunc(obj, i => i.Reverse()));
          registerMessage("join", (obj, msg) => iteratorFunc<String>(obj, msg, (i, s) => i.Join(s.Value)));
-         registerMessage("sort".Function("with", "asc"),
+         registerMessage("sort".Function("", "asc"),
             (obj, msg) => iteratorFunc<Lambda, Boolean>(obj, msg, (i, l, b) => i.Sort(l, b.Value)));
          registerMessage("sort".Function("with"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Sort(l, true)));
          registerMessage("sort".Function("asc"), (obj, msg) => iteratorFunc<Boolean>(obj, msg, (i, b) => i.Sort(b.Value)));
@@ -301,7 +301,7 @@ namespace Kagami.Library.Classes
          registerMessage("take".Function("until"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.TakeUntil(l)));
          registerMessage("index", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Index(l)));
          registerMessage("indexes", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Indexes(l)));
-         registerMessage("zip".Function("on", "with"),
+         registerMessage("zip".Function("", "with"),
             (obj, msg) => iteratorFunc<IObject, Lambda>(obj, msg, (i, c, l) => i.Zip((ICollection)c, l)));
          registerMessage("zip", (obj, msg) => iteratorFunc<IObject>(obj, msg, (i, c) => i.Zip((ICollection)c)));
          registerMessage("min".get(), (obj, msg) => iteratorFunc(obj, i => i.Min()));

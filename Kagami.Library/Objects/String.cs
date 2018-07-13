@@ -49,7 +49,7 @@ namespace Kagami.Library.Objects
 
       public Boolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
 
-      public int CompareTo(String other) => value.CompareTo(other.value);
+      public int CompareTo(String other) => string.Compare(value, other.value, StringComparison.Ordinal);
 
       public bool Equals(String other) => string.Equals(value, other.value);
 

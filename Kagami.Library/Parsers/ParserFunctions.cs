@@ -745,6 +745,9 @@ namespace Kagami.Library.Parsers
             case "+%":
                symbol = new SendBinaryMessageSymbol("take", Precedence.ChainedOperator).Matched<Symbol>();
                break;
+            case "*%":
+               symbol = new SendBinaryMessageSymbol("zip", Precedence.ChainedOperator).Matched<Symbol>();
+               break;
             case "^":
                symbol = new RaiseSymbol().Matched<Symbol>();
                break;
