@@ -175,7 +175,11 @@ namespace Kagami.Library.Objects
 
       public IObject Min() => iterator.Min();
 
+      public IObject Min(Lambda lambda) => iterator.Min(lambda);
+
       public IObject Max() => iterator.Max();
+
+      public IObject Max(Lambda lambda) => iterator.Max(lambda);
 
       public IObject First() => iterator.First();
 

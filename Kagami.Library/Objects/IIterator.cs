@@ -72,7 +72,11 @@ namespace Kagami.Library.Objects
 
       IObject Min();
 
+      IObject Min(Lambda lambda);
+
       IObject Max();
+
+      IObject Max(Lambda lambda);
 
       IObject First();
 

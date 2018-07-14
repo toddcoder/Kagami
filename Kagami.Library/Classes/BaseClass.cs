@@ -251,9 +251,9 @@ namespace Kagami.Library.Classes
             "foldl", "foldr".Function("", "with"), "foldr", "reducel".Function("", "with"), "reducel",
             "reducer".Function("", "with"), "reducer", "count", "map", "if", "ifNot", "skip", "skip".Function("while"),
             "skip".Function("until"), "take", "take".Function("while"), "take".Function("until"), "index", "indexes",
-            "zip".Function("", "with"), "zip", "min".get(), "max".get(), "first", "first".Function("with"), "last",
+            "zip".Function("", "with"), "zip", "min".get(), "min", "max".get(), "max", "first", "first".Function("with"), "last",
             "last".Function("with"),
-            "split", "split".Function("count"), "groupBy", "one", "none", "any", "all", "sum", "average", "product",
+            "split", "split".Function("count"), "group".Function("by"), "one", "none", "any", "all", "sum", "average", "product",
             "cross", "by", "window", "distinct", "span".Function("with"), "span".Function("count"), "shuffle", "shuffle".Function("count"),
             "array", "list", "tuple", "dictionary".Function("key", "value"), "dictionary", "each", "rotate"));
 
@@ -305,14 +305,16 @@ namespace Kagami.Library.Classes
             (obj, msg) => iteratorFunc<IObject, Lambda>(obj, msg, (i, c, l) => i.Zip((ICollection)c, l)));
          registerMessage("zip", (obj, msg) => iteratorFunc<IObject>(obj, msg, (i, c) => i.Zip((ICollection)c)));
          registerMessage("min".get(), (obj, msg) => iteratorFunc(obj, i => i.Min()));
+         registerMessage("min", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Min(l)));
          registerMessage("max".get(), (obj, msg) => iteratorFunc(obj, i => i.Max()));
+         registerMessage("max", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Max(l)));
          registerMessage("first", (obj, msg) => iteratorFunc(obj, i => i.First()));
          registerMessage("first".Function("with"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.First(l)));
          registerMessage("last", (obj, msg) => iteratorFunc(obj, i => i.Last()));
          registerMessage("last".Function("with"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Last(l)));
          registerMessage("split", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Split(l)));
          registerMessage("split".Function("count"), (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.Split(j.Value)));
-         registerMessage("groupBy", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.GroupBy(l)));
+         registerMessage("group".Function("by"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.GroupBy(l)));
          registerMessage("one", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.One(l)));
          registerMessage("none", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.None(l)));
          registerMessage("any", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Any(l)));

@@ -7,6 +7,7 @@ using Standard.Types.Collections;
 using Standard.Types.Dates.Now;
 using Standard.Types.Enumerables;
 using Standard.Types.Maybe;
+using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.CollectionFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Operations.NumericFunctions;
@@ -335,6 +336,41 @@ namespace Kagami.Library.Objects
          return result;
       }
 
+      public IObject Min(Lambda lambda)
+      {
+         var result = Unassigned.Value;
+         if (lambda.Invokable.Parameters.Length == 2)
+         {
+            foreach (var value in List())
+               if (result is Unassigned)
+                  result = value;
+               else if (((Int)lambda.Invoke(value, result)).Value < 0)
+                  result = value;
+         }
+         else
+         {
+            var list = List().ToList();
+            result = list[0];
+            var compareResult = lambda.Invoke(result);
+            foreach (var value in list.Skip(1))
+            {
+               var valueResult = lambda.Invoke(value);
+               if (valueResult is IObjectCompare oc)
+               {
+                  if (oc.Compare(compareResult) < 0)
+                  {
+                     result = value;
+                     compareResult = valueResult;
+                  }
+               }
+               else
+                  throw incompatibleClasses(valueResult, "Object compare");
+            }
+         }
+
+         return result;
+      }
+
       public IObject Max()
       {
          var result = Unassigned.Value;
@@ -350,6 +386,41 @@ namespace Kagami.Library.Objects
                }
             else if (value is IObjectCompare oc && oc.Compare(result) > 0)
                result = value;
+
+         return result;
+      }
+
+      public IObject Max(Lambda lambda)
+      {
+         var result = Unassigned.Value;
+         if (lambda.Invokable.Parameters.Length == 2)
+         {
+            foreach (var value in List())
+               if (result is Unassigned)
+                  result = value;
+               else if (((Int)lambda.Invoke(value, result)).Value < 0)
+                  result = value;
+         }
+         else
+         {
+            var list = List().ToList();
+            result = list[0];
+            var compareResult = lambda.Invoke(result);
+            foreach (var value in list.Skip(1))
+            {
+               var valueResult = lambda.Invoke(value);
+               if (valueResult is IObjectCompare oc)
+               {
+                  if (oc.Compare(compareResult) > 0)
+                  {
+                     result = value;
+                     compareResult = valueResult;
+                  }
+               }
+               else
+                  throw incompatibleClasses(valueResult, "Object compare");
+            }
+         }
 
          return result;
       }
@@ -533,6 +604,7 @@ namespace Kagami.Library.Objects
                      if (j == lastIndex)
                         escape = true;
                   }
+
                   var result = collectionClass.Revert(innerList);
                   outerList.Add(result);
                }
