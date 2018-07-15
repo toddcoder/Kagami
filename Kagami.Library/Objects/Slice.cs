@@ -3,7 +3,6 @@ using System.Linq;
 using Kagami.Library.Classes;
 using Standard.Types.Collections;
 using Standard.Types.Maybe;
-using static Kagami.Library.Objects.CollectionFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Standard.Types.Maybe.MaybeFunctions;
 
@@ -70,8 +69,6 @@ namespace Kagami.Library.Objects
       }
 
       public IObject Times(int count) => ((ICollection)Reverted()).Times(count);
-
-      public IObject Flatten() => flatten(this);
 
       public IObject Assign(IObject value)
       {

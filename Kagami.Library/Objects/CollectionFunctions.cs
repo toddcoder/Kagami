@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using static Kagami.Library.AllExceptions;
 
 namespace Kagami.Library.Objects
@@ -57,28 +56,5 @@ namespace Kagami.Library.Objects
             throw incompatibleClasses(right, typeof(T).Name);
       }
 
-      public static IObject flatten(ICollection collection)
-      {
-         var iterator = collection.GetIterator(false);
-         var list = flatten(iterator, ((IObject)collection).ClassName).ToList();
-         return iterator.CollectionClass.Revert(list);
-      }
-
-      static IEnumerable<IObject> flatten(IIterator iterator, string className)
-      {
-         var item = iterator.Next();
-         while (item.If(out var i))
-         {
-            if (i.ClassName == className)
-            {
-               var innerIterator = ((ICollection)i).GetIterator(false);
-               foreach (var inner in flatten(innerIterator, className)) yield return inner;
-            }
-            else
-               yield return i;
-
-            item = iterator.Next();
-         }
-      }
    }
 }

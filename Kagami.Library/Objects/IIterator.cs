@@ -139,5 +139,7 @@ namespace Kagami.Library.Objects
       IObject Permutation(int count);
 
       IObject Combination(int count);
+
+      IObject Flatten();
    }
 }

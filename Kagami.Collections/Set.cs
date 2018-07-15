@@ -4,7 +4,6 @@ using Standard.Types.Collections;
 using Standard.Types.Enumerables;
 using Standard.Types.Maybe;
 using static Kagami.Library.AllExceptions;
-using static Kagami.Library.Objects.CollectionFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Standard.Types.Maybe.MaybeFunctions;
 
@@ -51,8 +50,6 @@ namespace Kagami.Collections
       public Boolean NotIn(IObject item) => !set.Contains(item);
 
       public IObject Times(int count) => this;
-
-      public IObject Flatten() => flatten(this);
 
       public Set Append(IObject item)
       {
@@ -111,5 +108,19 @@ namespace Kagami.Collections
       public IObject Object => this;
 
       public Boolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
+
+      public Set XOr(Set other) => Union(other).Difference(Intersection(other));
+
+      public Set Classify(Lambda lambda)
+      {
+         var classified = new AutoHash<IObject, Set>(k => new Set(), true);
+         foreach (var item in set)
+         {
+            var key = lambda.Invoke(item);
+            classified[key].Append(item);
+         }
+
+         return new Set(classified.ValueArray().Select(s => (IObject)s).ToArray());
+      }
    }
 }

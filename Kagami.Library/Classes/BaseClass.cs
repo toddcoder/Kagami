@@ -226,7 +226,6 @@ namespace Kagami.Library.Classes
          registerMessage("in", (obj, msg) => collectionFunc<IObject>(obj, msg, (c, i) => c.In(i)));
          registerMessage("notIn", (obj, msg) => collectionFunc<IObject>(obj, msg, (c, i) => c.NotIn(i)));
          registerMessage("*", (obj, msg) => collectionFunc<Int>(obj, msg, (c, i) => c.Times(i.Value)));
-         registerMessage("flatten", (obj, msg) => collectionFunc(obj, c => c.Flatten()));
 
          loadIteratorMessages();
       }
@@ -255,7 +254,7 @@ namespace Kagami.Library.Classes
             "last".Function("with"),
             "split", "split".Function("count"), "group".Function("by"), "one", "none", "any", "all", "sum", "average", "product",
             "cross", "by", "window", "distinct", "span".Function("with"), "span".Function("count"), "shuffle", "shuffle".Function("count"),
-            "array", "list", "tuple", "dictionary".Function("key", "value"), "dictionary", "each", "rotate", "permutation", "combination"));
+            "array", "list", "tuple", "dictionary".Function("key", "value"), "dictionary", "each", "rotate", "permutation", "combination", "flatten"));
 
          dynamicInvoke = (obj, msg) =>
          {
@@ -340,6 +339,7 @@ namespace Kagami.Library.Classes
          registerMessage("rotate", (obj, msg) => iteratorFunc<Int>(obj, msg, (i, c) => i.Rotate(c.Value)));
          registerMessage("permutation", (obj, msg) => iteratorFunc<Int>(obj, msg, (i, c) => i.Permutation(c.Value)));
          registerMessage("combination", (obj, msg) => iteratorFunc<Int>(obj, msg, (i, c) => i.Combination(c.Value)));
+         registerMessage("flatten", (obj, msg) => iteratorFunc(obj, i => i.Flatten()));
       }
 
       public virtual bool MatchCompatible(BaseClass otherClass) => Name == otherClass.Name;

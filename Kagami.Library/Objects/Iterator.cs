@@ -777,6 +777,23 @@ namespace Kagami.Library.Objects
          return collectionClass.Revert(result.Select(l => collectionClass.Revert(l)));
       }
 
+      static IEnumerable<IObject> flatten(IIterator iterator)
+      {
+         var className = ((IObject)iterator.Collection).ClassName;
+
+         while (iterator.Next().If(out var item))
+            if (item.ClassName == className)
+            {
+               var innerIterator = ((ICollection)item).GetIterator(false);
+               foreach (var inner in flatten(innerIterator))
+                  yield return inner;
+            }
+            else
+               yield return item;
+      }
+
+      public IObject Flatten() => collectionClass.Revert(flatten(this));
+
       IObject shuffle(IObject[] array, int count)
       {
          var result = new Hash<int, IObject>();

@@ -4,7 +4,6 @@ using Standard.Types.Collections;
 using Standard.Types.Enumerables;
 using Standard.Types.Maybe;
 using Standard.Types.Numbers;
-using static Kagami.Library.Objects.CollectionFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Standard.Types.Maybe.MaybeFunctions;
 
@@ -28,6 +27,8 @@ namespace Kagami.Library.Objects
 
       Hash<IObject, IObject> dictionary;
       IObject[] keys;
+      IMaybe<Lambda> defaultLambda;
+      int parameterCount;
 
       public Dictionary(IEnumerable<IObject> items)
       {
@@ -38,6 +39,8 @@ namespace Kagami.Library.Objects
                dictionary[kv.Key] = kv.Value;
 
          keys = new IObject[0];
+         parameterCount = 0;
+         defaultLambda = none<Lambda>();
       }
 
       public Dictionary() : this(new IObject[0]) { }
@@ -46,11 +49,22 @@ namespace Kagami.Library.Objects
       {
          dictionary = hash;
          keys = new IObject[0];
+         parameterCount = 0;
+         defaultLambda = none<Lambda>();
       }
 
       public IMaybe<IObject> DefaultValue { get; set; } = none<IObject>();
 
-      public IMaybe<Lambda> DefaultLambda { get; set; } = none<Lambda>();
+      public IMaybe<Lambda> DefaultLambda
+      {
+         get => defaultLambda;
+         set
+         {
+            defaultLambda = value;
+            parameterCount = defaultLambda.FlatMap(l => l.Invokable.Parameters.Length, () => 0);
+         }
+
+      }
 
       public Boolean Caching { get; set; } = false;
 
@@ -64,9 +78,20 @@ namespace Kagami.Library.Objects
                dictionary[key] = dv;
             return dv;
          }
-         else if (DefaultLambda.If(out var lambda))
+         else if (defaultLambda.If(out var lambda))
          {
-            var value = lambda.Invoke(key);
+            IObject value;
+            switch (parameterCount)
+            {
+               case 1:
+                  value = lambda.Invoke(key);
+                  break;
+               case 2:
+                  value = lambda.Invoke(this, key);
+                  break;
+               default:
+                  return Unassigned.Value;
+            }
             if (Caching.IsTrue)
                dictionary[key] = value;
             return value;
@@ -149,8 +174,6 @@ namespace Kagami.Library.Objects
       public Boolean NotIn(IObject key) => !dictionary.ContainsKey(key);
 
       public IObject Times(int count) => this;
-
-      public IObject Flatten() => flatten(this);
 
       public IObject Swap(IObject key1, IObject key2)
       {

@@ -55,6 +55,8 @@ namespace Kagami.Library.Classes
 
          classMessages["new".Function("default", "caching")] = (cls, msg) => classFunc<DictionaryClass, IObject, Boolean>(cls, msg,
             (dc, d, c) => Dictionary.New(d, c));
+         classMessages["new".Function("default")] = (cls, msg) => classFunc<DictionaryClass, IObject>(cls, msg,
+            (dc, d) => Dictionary.New(d, false));
       }
    }
 }
