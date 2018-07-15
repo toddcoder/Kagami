@@ -719,6 +719,64 @@ namespace Kagami.Library.Objects
          return collectionClass.Revert(result);
       }
 
+      static void rotateRight(List<IObject> list, int count)
+      {
+         var temp = list[count - 1];
+         list.RemoveAt(count - 1);
+         list.Insert(0, temp);
+      }
+
+      IEnumerable<List<IObject>> permutate(List<IObject> list, int count)
+      {
+         if (count == 1)
+            yield return list;
+         else
+            for (var i = 0; i < count; i++)
+               foreach (var perm in permutate(list, count - 1))
+               {
+                  yield return perm;
+
+                  rotateRight(list, count);
+               }
+      }
+
+      public IObject Permutation(int count)
+      {
+         var list = List().ToList();
+         var enumerable = permutate(list, count).Select(l => collectionClass.Revert(l));
+
+         return collectionClass.Revert(enumerable);
+      }
+
+      static void rotateLeft(List<IObject> list, int start, int count)
+      {
+         var temp = list[start];
+         list.RemoveAt(start);
+         list.Insert(start + count - 1, temp);
+      }
+
+      static IEnumerable<List<IObject>> combinations(List<IObject> list, int start, int count, int choose)
+      {
+         if (choose == 0)
+            yield return list;
+         else
+            for (var i = 0; i < count; i++)
+            {
+               foreach (var combo in combinations(list, start + 1, count - 1 - i, choose - 1))
+                  yield return combo;
+
+               rotateLeft(list, start, count);
+            }
+      }
+
+      public IObject Combination(int count)
+      {
+         var list = List().ToList();
+         var result = combinations(list, 0, list.Count, count);
+
+         return collectionClass.Revert(result.Select(l => collectionClass.Revert(l)));
+      }
+
       IObject shuffle(IObject[] array, int count)
       {
          var result = new Hash<int, IObject>();

@@ -255,5 +255,9 @@ namespace Kagami.Library.Objects
       }
 
       public IObject Rotate(int count) => iterator.Rotate(count);
+
+      public IObject Permutation(int count) => iterator.Permutation(count);
+
+      public IObject Combination(int count) => iterator.Combination(count);
    }
 }

@@ -135,5 +135,9 @@ namespace Kagami.Library.Objects
       IObject Each(Lambda action);
 
       IObject Rotate(int count);
+
+      IObject Permutation(int count);
+
+      IObject Combination(int count);
    }
 }
