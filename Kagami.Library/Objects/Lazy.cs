@@ -25,17 +25,20 @@ namespace Kagami.Library.Objects
          {
             var result = Machine.Current.Invoke(invokable, Arguments.Empty, 0).Value;
             value = result.Some();
+
             return result;
          }
       }
 
-      public string ClassName => value.FlatMap(v => v.ClassName, () => "Lazy");
+      public IObject Value => getValue();
+
+      public string ClassName => getValue().ClassName;
 
       public string AsString => getValue().AsString;
 
-      public string Image => value.FlatMap(v => v.Image, () => "pending");
+      public string Image => getValue().Image;
 
-      public int Hash => value.FlatMap(v => v.Hash, () => "pending".GetHashCode());
+      public int Hash => getValue().Hash;
 
       public bool IsEqualTo(IObject obj) => getValue().IsEqualTo(obj);
 
