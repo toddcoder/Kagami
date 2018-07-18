@@ -141,5 +141,7 @@ namespace Kagami.Library.Objects
       IObject Combination(int count);
 
       IObject Flatten();
+
+      IObject Copy();
    }
 }

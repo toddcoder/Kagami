@@ -261,5 +261,7 @@ namespace Kagami.Library.Objects
       public IObject Combination(int count) => iterator.Combination(count);
 
       public IObject Flatten() => iterator.Flatten();
+
+      public IObject Copy() => iterator.Copy();
    }
 }

@@ -794,6 +794,8 @@ namespace Kagami.Library.Objects
 
       public IObject Flatten() => collectionClass.Revert(flatten(this));
 
+      public IObject Copy() => collectionClass.Revert(List());
+
       IObject shuffle(IObject[] array, int count)
       {
          var result = new Hash<int, IObject>();
