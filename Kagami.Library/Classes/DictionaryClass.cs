@@ -17,7 +17,7 @@ namespace Kagami.Library.Classes
 
          messages["[]"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, k) => d[k]);
          messages["[]="] = (obj, msg) => function<Dictionary>(obj, d => d[msg.Arguments[0]] = msg.Arguments[1]);
-         messages["[]?"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, k) => d.Get(k));
+         messages["[?]"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, k) => d.Get(k));
          messages["default".get()] = (obj, msg) => function<Dictionary>(obj, d =>
          {
             if (d.DefaultValue.If(out var dv))
@@ -57,6 +57,7 @@ namespace Kagami.Library.Classes
             (dc, d, c) => Dictionary.New(d, c));
          classMessages["new".Function("default")] = (cls, msg) => classFunc<DictionaryClass, IObject>(cls, msg,
             (dc, d) => Dictionary.New(d, false));
+         classMessages["empty".get()] = (cls, msg) => classFunc<DictionaryClass>(cls, dc => Dictionary.Empty);
       }
    }
 }

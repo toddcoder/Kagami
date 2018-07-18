@@ -15,6 +15,14 @@ namespace Kagami.Library.Classes
          compareMessages();
       }
 
+      public override void RegisterClassMessages()
+      {
+         base.RegisterClassMessages();
+
+         classMessages["min".get()] = (bc, msg) => (Byte)byte.MinValue;
+         classMessages["max".get()] = (bc, msg) => (Byte)byte.MaxValue;
+      }
+
       public IObject Parse(string source) => Byte.ByteObject(source.ToByte());
    }
 }

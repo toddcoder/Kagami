@@ -543,6 +543,7 @@
     <Compile Include="Parsers\Expressions\HexExpParser.cs" />
     <Compile Include="Parsers\Expressions\IfAsAndParser.cs" />
     <Compile Include="Parsers\Expressions\ImageParser.cs" />
+    <Compile Include="Parsers\Expressions\IndexOptionalParser.cs" />
     <Compile Include="Parsers\Expressions\IndexParser.cs" />
     <Compile Include="Parsers\Expressions\InfixParser.cs" />
     <Compile Include="Parsers\Expressions\InlineIfParser.cs" />

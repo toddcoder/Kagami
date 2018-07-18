@@ -14,6 +14,7 @@ namespace Kagami.Library.Parsers.Expressions
          {
             yield return new PostfixOperatorsParser(builder);
             yield return new PostfixInvokeParser(builder);
+            yield return new IndexOptionalParser(builder);
             yield return new IndexParser(builder);
             yield return new SkipTakeOperatorParser(builder);
 

@@ -3,10 +3,10 @@
    public enum Precedence
    {
       Value = 0,
-      Indexer = 1,
-      SendMessage = 1,
+      //Indexer = 1,
+      //SendMessage = 1,
       PrefixOperator = 2,
-      Invoke = 3,
+      //Invoke = 3,
       KeyValue = 4,
       PostfixOperator = 5,
       Raise = 6,

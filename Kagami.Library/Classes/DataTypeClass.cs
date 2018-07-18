@@ -81,5 +81,23 @@ namespace Kagami.Library.Classes
                return Nil.NilValue;
          }));
       }
+
+      public override void RegisterClassMessages()
+      {
+         base.RegisterClassMessages();
+
+         registerClassMessage("fromOrdinal", (bc, msg) => classFunc<DataTypeClass, IObject>(bc, msg, (td, ord) =>
+         {
+            if (td.ordinals.ContainsKey(ord))
+            {
+               var name = td.ordinals[ord];
+               return new Some(dataType.GetDataComparisand(name, msg.Arguments.Value.Skip(1).ToArray()));
+            }
+            else
+               return Nil.NilValue;
+         }));
+      }
+
+      public override bool ClassRespondsTo(string message) => classMessages.ContainsKey(message);
    }
 }

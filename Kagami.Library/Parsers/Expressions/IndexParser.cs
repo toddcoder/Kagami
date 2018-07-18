@@ -33,7 +33,8 @@ namespace Kagami.Library.Parsers.Expressions
                      list.Add(expression);
                      builder.Add(new SendMessageSymbol("insert".Function("at", "value"), Precedence.PostfixOperator,
                         none<LambdaSymbol>(), none<Operations.Operation>(), list.ToArray()));
-                  }                  else
+                  }
+                  else
                      builder.Add(new IndexSetterSymbol(e, expression, operation));
 
                   return Unit.Matched();
