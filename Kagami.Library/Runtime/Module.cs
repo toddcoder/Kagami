@@ -77,6 +77,7 @@ namespace Kagami.Library.Runtime
          classes["Match"] = new RegexMatchClass();
          classes["Date"] = new DateClass();
          classes["Interval"] = new IntervalClass();
+         classes["TypeConstraint"] = new TypeConstraintClass();
       }
 
       public IMaybe<BaseClass> Class(string name) => classes.Map(name);

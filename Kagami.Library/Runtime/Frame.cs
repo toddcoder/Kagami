@@ -6,6 +6,8 @@ using Kagami.Library.Objects;
 using Standard.Types.Enumerables;
 using Standard.Types.Maybe;
 using Standard.Types.Strings;
+using static Kagami.Library.AllExceptions;
+using static Kagami.Library.Objects.ObjectFunctions;
 using static Standard.Types.Maybe.AttemptFunctions;
 using static Standard.Types.Maybe.MaybeFunctions;
 using Tuple = Kagami.Library.Objects.Tuple;
@@ -98,6 +100,8 @@ namespace Kagami.Library.Runtime
                if (!fields.ContainsKey(parameter.Name))
                   fields.New(parameter.Name, parameter.Mutable).Force();
                lastValue = arguments[i];
+               if (parameter.TypeConstraint.If(out var typeConstraint) && !typeConstraint.Matches(classOf(lastValue)))
+                  throw incompatibleClasses(lastValue, typeConstraint.AsString);
                fields.Assign(parameter.Name, lastValue, true).Force();
                lastName = parameter.Name;
                variadic = parameter.Variadic;
@@ -123,6 +127,8 @@ namespace Kagami.Library.Runtime
                      value = Machine.Current.Invoke(invokable, Arguments.Empty, 0).Value;
                   else
                      value = Unassigned.Value;
+                  if (parameter.TypeConstraint.If(out var typeConstraint) && !typeConstraint.Matches(classOf(value)))
+                     throw incompatibleClasses(value, typeConstraint.AsString);
                   fields.Assign(parameter.Name, value, true).Force();
                }
             else if (length < arguments.Length)

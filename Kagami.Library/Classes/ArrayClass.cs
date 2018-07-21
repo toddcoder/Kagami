@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using Kagami.Library.Objects;
+using Standard.Types.Exceptions;
+using Standard.Types.Maybe;
 using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Classes
@@ -46,6 +48,15 @@ namespace Kagami.Library.Classes
          classMessages["repeat".Function("value", "times")] = (bc, msg) =>
             classFunc<ArrayClass, IObject, Int>(bc, msg, (ac, v, t) => Array.Repeat(v, t.Value));
          classMessages["empty".get()] = (bc, msg) => classFunc<ArrayClass>(bc, ac => Array.Empty);
+         classMessages["typed"] = (bc, msg) => getTypedArray(msg);
+      }
+
+      static Array getTypedArray(Message message)
+      {
+         if (message.Arguments[0] is TypeConstraint typeConstraint)
+            return new Array(new IObject[0]) { TypeConstraint = typeConstraint.Some() };
+         else
+            throw "Type constraint for array required".Throws();
       }
    }
 }

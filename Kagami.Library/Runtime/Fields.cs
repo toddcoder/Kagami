@@ -27,12 +27,15 @@ namespace Kagami.Library.Runtime
          else if (fields.ContainsKey(name))
          {
             var field = fields[name];
-            if (field.Value is Unassigned && getting)
-               return failedMatch<Field>(fieldUnassigned(name));
-            else if (field.Value is Reference r)
-               return r.Field.Matched();
-            else
-               return field.Matched();
+            switch (field.Value)
+            {
+               case Unassigned _ when getting:
+                  return failedMatch<Field>(fieldUnassigned(name));
+               case Reference r:
+                  return r.Field.Matched();
+               default:
+                  return field.Matched();
+            }
          }
          else
             return notMatched<Field>();
@@ -64,11 +67,15 @@ namespace Kagami.Library.Runtime
          if (Find(name, false).If(out var field, out var original))
             if (field.Mutable)
             {
-               if (field.Value is Unassigned || classOf(field.Value).AssignCompatible(classOf(value)))
+               var baseClass = classOf(value);
+               if (field.Value is Unassigned || field.Value is TypeConstraint tc && tc.Matches(baseClass) ||
+                  classOf(field.Value).AssignCompatible(baseClass))
                {
                   field.Value = value;
                   return field.Success();
                }
+               else if (field.Value is TypeConstraint tc2)
+                  return failure<Field>(incompatibleClasses(value, tc2.AsString));
                else
                   return failure<Field>(incompatibleClasses(value, field.Value.ClassName));
             }
@@ -116,6 +123,7 @@ namespace Kagami.Library.Runtime
             {
                if (strict)
                   throw immutableField(binding.Key);
+
                Assign(binding.Key, binding.Value);
             }
             else

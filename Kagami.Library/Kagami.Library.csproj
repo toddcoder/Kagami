@@ -103,6 +103,7 @@
     <Compile Include="Classes\SymbolClass.cs" />
     <Compile Include="Classes\TraitClass.cs" />
     <Compile Include="Classes\TupleClass.cs" />
+    <Compile Include="Classes\TypeConstraintClass.cs" />
     <Compile Include="Classes\UnassignedClass.cs" />
     <Compile Include="Classes\UnmatchedClass.cs" />
     <Compile Include="Classes\UserClass.cs" />
@@ -272,6 +273,7 @@
     <Compile Include="Nodes\Symbols\SuperSymbol.cs" />
     <Compile Include="Nodes\Symbols\Symbol.cs" />
     <Compile Include="Nodes\Symbols\SymbolSymbol.cs" />
+    <Compile Include="Nodes\Symbols\TypeConstraintSymbol.cs" />
     <Compile Include="Nodes\Symbols\WhateverSymbol.cs" />
     <Compile Include="Nodes\Symbols\WhenSymbol.cs" />
     <Compile Include="Nodes\Symbols\ZipLambdaSymbol.cs" />
@@ -373,6 +375,7 @@
     <Compile Include="Objects\TakeUntilAction.cs" />
     <Compile Include="Objects\TakeWhileAction.cs" />
     <Compile Include="Objects\Tuple.cs" />
+    <Compile Include="Objects\TypeConstraint.cs" />
     <Compile Include="Objects\Unassigned.cs" />
     <Compile Include="Objects\Unmatched.cs" />
     <Compile Include="Objects\UserCompare.cs" />
@@ -587,6 +590,7 @@
     <Compile Include="Parsers\Expressions\SuperParser.cs" />
     <Compile Include="Parsers\Expressions\SymbolObjectParser.cs" />
     <Compile Include="Parsers\Expressions\TwoKeywordOperatorsParser.cs" />
+    <Compile Include="Parsers\Expressions\TypeConstraintParser.cs" />
     <Compile Include="Parsers\Expressions\UnknownFieldParser.cs" />
     <Compile Include="Parsers\Expressions\UserOperatorParser.cs" />
     <Compile Include="Parsers\Expressions\WhateverParser.cs" />

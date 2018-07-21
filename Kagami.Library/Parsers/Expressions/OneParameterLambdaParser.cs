@@ -1,4 +1,5 @@
 ﻿using Kagami.Library.Invokables;
+using Kagami.Library.Objects;
 using Standard.Types.Maybe;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Standard.Types.Maybe.MaybeFunctions;
@@ -16,7 +17,7 @@ namespace Kagami.Library.Parsers.Expressions
          var name = tokens[2].Text;
          state.Colorize(tokens, Color.Whitespace, Color.Identifier);
 
-         return new Parameters(new[] { new Parameter(false, "", name, none<IInvokable>(), false), }).Matched();
+         return new Parameters(new[] { new Parameter(false, "", name, none<IInvokable>(), none<TypeConstraint>(), false), }).Matched();
       }
    }
 }

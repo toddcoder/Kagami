@@ -326,7 +326,9 @@ namespace Kagami.Library.Runtime
          if (Find(fieldName, getting).If(out var field, out var isNotMatched, out var exception))
             if (field.Mutable)
             {
-               if (field.Value is Unassigned || classOf(field.Value).AssignCompatible(classOf(value)))
+               var baseClass = classOf(value);
+               if (field.Value is Unassigned || field.Value is TypeConstraint tc && tc.Matches(baseClass) ||
+                  classOf(field.Value).AssignCompatible(baseClass))
                {
                   if (field.Value is Reference r)
                      r.Field.Value = value;
@@ -334,6 +336,8 @@ namespace Kagami.Library.Runtime
                      field.Value = value;
                   return field.Success();
                }
+               else if (field.Value is TypeConstraint tc2)
+                  return failure<Field>(incompatibleClasses(value, tc2.AsString));
                else
                   return failure<Field>(incompatibleClasses(value, field.Value.ClassName));
             }

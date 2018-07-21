@@ -5,6 +5,7 @@ using Standard.Types.Collections;
 using Standard.Types.Enumerables;
 using Standard.Types.Exceptions;
 using Standard.Types.Maybe;
+using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.CollectionFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Standard.Types.Maybe.MaybeFunctions;
@@ -31,17 +32,20 @@ namespace Kagami.Library.Objects
 
       List<IObject> list;
       int arrayID;
+      IMaybe<TypeConstraint> typeConstraint;
 
       public Array(IEnumerable<IObject> objects)
       {
          list = objects.ToList();
          arrayID = uniqueObjectID();
+         typeConstraint = none<TypeConstraint>();
       }
 
       public Array(IObject value)
       {
          list = new List<IObject> { value };
          arrayID = uniqueObjectID();
+         typeConstraint = none<TypeConstraint>();
       }
 
       public string ClassName => "Array";
@@ -74,6 +78,18 @@ namespace Kagami.Library.Objects
 
       public bool Equals(Array other) => isEqualTo(this, other);
 
+      public IMaybe<TypeConstraint> TypeConstraint
+      {
+         get => typeConstraint;
+         set => typeConstraint = value;
+      }
+
+      void assertType(IObject value)
+      {
+         if (typeConstraint.If(out var tc) && !tc.Matches(classOf(value)))
+            throw incompatibleClasses(value, tc.AsString);
+      }
+
       public IObject this[int index]
       {
          get => list[wrapIndex(index, list.Count)];
@@ -85,7 +101,10 @@ namespace Kagami.Library.Objects
             if (value is Del)
                list.RemoveAt(index);
             else
+            {
+               assertType(value);
                list[index] = value;
+            }
          }
       }
 
@@ -112,6 +131,7 @@ namespace Kagami.Library.Objects
       public IObject Set(IObject index, IObject value)
       {
          var intIndex = wrapIndex(((Int)index).Value, list.Count);
+         assertType(value);
          list[intIndex] = value;
 
          return this;
@@ -134,12 +154,18 @@ namespace Kagami.Library.Objects
          return new Array(result);
       }
 
-      public void Add(IObject obj) => list.Add(obj);
+      public void Add(IObject obj)
+      {
+         assertType(obj);
+         list.Add(obj);
+      }
 
       public IObject Append(IObject obj)
       {
          throwIfSelf(obj);
+         assertType(obj);
          list.Add(obj);
+
          return this;
       }
 
@@ -160,7 +186,9 @@ namespace Kagami.Library.Objects
       public IObject InsertAt(int index, IObject obj)
       {
          throwIfSelf(obj);
+         assertType(obj);
          list.Insert(index, obj);
+
          return this;
       }
 
@@ -168,6 +196,19 @@ namespace Kagami.Library.Objects
 
       public IObject Concatenate(Array array)
       {
+         if (typeConstraint.If(out var thisConstraint))
+         {
+            if (array.typeConstraint.If(out var otherConstraint))
+            {
+               if (!thisConstraint.IsEqualTo(otherConstraint))
+                  throw "Incompatible type constraints".Throws();
+            }
+            else
+               throw "Expected type constraint in RHS array".Throws();
+         }
+         else if (array.typeConstraint.IsSome)
+            throw "RHS array has a type constraint".Throws();
+
          var newList = new List<IObject>(list);
          newList.AddRange(array.list);
 

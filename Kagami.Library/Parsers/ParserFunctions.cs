@@ -342,7 +342,7 @@ namespace Kagami.Library.Parsers
          return state.Scan("^ /(/s* 'var' /s+)?", Color.Keyword).Map(s => s.IsNotEmpty());
       }
 
-      static IMatched<string> parseExternalName(ParseState state)
+      static IMatched<string> parseLabel(ParseState state)
       {
          return state.Scan($"^ (/(/s*) /({REGEX_FIELD}) /':')?", Color.Whitespace, Color.Label, Color.Structure)
             .Map(s => s.TakeUntil(":").Trim());
@@ -351,6 +351,21 @@ namespace Kagami.Library.Parsers
       static IMatched<string> parseParameterName(ParseState state)
       {
          return state.Scan($"^ /(/s* {REGEX_FIELD}) /b", Color.Identifier).Map(s => s.Trim());
+      }
+
+      static IMatched<IMaybe<TypeConstraint>> parseTypeConstraint(ParseState state)
+      {
+         var builder = new ExpressionBuilder(ExpressionFlags.Standard);
+         var typeConstraintParser = new TypeConstraintParser(builder);
+         if (typeConstraintParser.Scan(state).If(out var _, out var isNotMatched, out var exception))
+         {
+            var typeConstraint = (TypeConstraint)((IConstant)builder.Ordered.ToArray()[0]).Object;
+            return typeConstraint.Some().Matched();
+         }
+         else if (isNotMatched)
+            return none<TypeConstraint>().Matched();
+         else
+            return failedMatch<IMaybe<TypeConstraint>>(exception);
       }
 
       static IMatched<bool> parseVaraidic(ParseState state)
@@ -389,11 +404,12 @@ namespace Kagami.Library.Parsers
       static IMatched<Parameter> getParameter(ParseState state, bool defaultRequired) =>
          from reference in parseReference(state)
          from mutable in parseMutable(state)
-         from externalName in parseExternalName(state)
+         from label in parseLabel(state)
          from name in parseParameterName(state)
+         from typeConstraint in parseTypeConstraint(state)
          from variadic in parseVaraidic(state)
          from defaultValue in parseDefaultValue(state, defaultRequired)
-         select new Parameter(mutable, externalName, name, defaultValue, reference) { Variadic = variadic };
+         select new Parameter(mutable, label, name, defaultValue, typeConstraint, reference) { Variadic = variadic };
 
       public static IMatched<Block> getAnyBlock(ParseState state)
       {

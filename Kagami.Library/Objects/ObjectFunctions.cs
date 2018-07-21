@@ -63,6 +63,8 @@ namespace Kagami.Library.Objects
                return pattern.Match(source, bindings);
             case IProcessPlaceholders _:
                return processPlaceholdersMatch(source, comparisand, bindings);
+            case TypeConstraint typeConstraint:
+               return typeConstraint.Matches(classOf(source));
             default:
                if (classOf(source).MatchCompatible(classOf(comparisand)))
                   return equalifier(source, (T)comparisand);
@@ -110,6 +112,8 @@ namespace Kagami.Library.Objects
                return pattern.Match(source, bindings);
             case IProcessPlaceholders _:
                return processPlaceholdersMatch(source, comparisand, bindings);
+            case TypeConstraint typeConstraint:
+               return typeConstraint.Matches(classOf(source));
             default:
                return equalifier(source, comparisand);
          }
