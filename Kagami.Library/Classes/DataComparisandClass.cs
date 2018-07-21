@@ -32,5 +32,13 @@ namespace Kagami.Library.Classes
          else
             return base.MatchCompatible(otherClass);
       }
+
+      public override bool AssignCompatible(BaseClass otherClass)
+      {
+         if (otherClass is DataComparisandClass dataComparisandClass)
+            return className == dataComparisandClass.className;
+         else
+            return false;
+      }
    }
 }

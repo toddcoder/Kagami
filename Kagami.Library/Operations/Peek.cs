@@ -17,7 +17,10 @@ namespace Kagami.Library.Operations
       {
          if (machine.CurrentFrame.Peek().If(out var value))
          {
+            var currentAddress = machine.Address;
             var message = $"{value.Image} | {value.ClassName}";
+            if (currentAddress != machine.Address)
+               machine.GoTo(currentAddress);
             machine.Context.Peek(message, index);
          }
 

@@ -4,6 +4,7 @@ using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Runtime;
 using Standard.Types.Maybe;
+using Standard.Types.RegularExpressions;
 using Standard.Types.Strings;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Standard.Types.Maybe.MaybeFunctions;
@@ -41,7 +42,7 @@ namespace Kagami.Library.Parsers.Statements
          var needsParameters = type == "(";
          if (needsParameters)
          {
-            if (functionName.EndsWith("="))
+            if (functionName.IsMatch("^ /w+ '=' $"))
                functionName = functionName.Skip(-1).set();
          }
          else

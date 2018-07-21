@@ -13,7 +13,7 @@ namespace Kagami.Library.Parsers.Statements
 
       public StaticParser(ClassBuilder classBuilder) => this.classBuilder = classBuilder;
 
-      public override string Pattern => $"^ /'static' /({REGEX_EOL})";
+      public override string Pattern => $"^ /'object' /({REGEX_EOL})";
 
       public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
       {

@@ -20,7 +20,7 @@ namespace Kagami.Library.Objects
 
       public InternalList(IEnumerable<IObject> objects) => list = new List<IObject>(objects);
 
-      public IEnumerable<IObject> List => list;
+      public List<IObject> List => list;
 
       public string ClassName => "InternalList";
 

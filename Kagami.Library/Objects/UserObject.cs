@@ -41,7 +41,7 @@ namespace Kagami.Library.Objects
 
       public string AsString => userObjectString(this);
 
-      public string Image => userObjectString(this);
+      public string Image => userObjectImage(this);
 
       public int Hash => objectID;
 
