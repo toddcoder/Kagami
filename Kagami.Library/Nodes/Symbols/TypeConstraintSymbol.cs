@@ -12,7 +12,11 @@ namespace Kagami.Library.Nodes.Symbols
 
       public TypeConstraintSymbol(IEnumerable<BaseClass> list) => typeConstraint = new TypeConstraint(list.ToArray());
 
-      public override void Generate(OperationsBuilder builder) => builder.PushObject(typeConstraint);
+      public override void Generate(OperationsBuilder builder)
+      {
+         typeConstraint.RefreshClasses();
+         builder.PushObject(typeConstraint);
+      }
 
       public override Precedence Precedence => Precedence.Value;
 

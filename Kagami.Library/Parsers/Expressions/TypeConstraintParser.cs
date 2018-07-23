@@ -27,6 +27,8 @@ namespace Kagami.Library.Parsers.Expressions
                name = name.TrimStart();
                if (Module.Global.Class(name).If(out var baseClass))
                   list.Add(baseClass);
+               else if (Module.Global.Forwarded(name))
+                  list.Add(new ForwardedClass(name));
                else
                   return failedMatch<Unit>(classNotFound(name));
             }

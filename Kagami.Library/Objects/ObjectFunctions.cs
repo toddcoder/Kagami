@@ -179,9 +179,13 @@ namespace Kagami.Library.Objects
 
       public static bool isEqualTo(UserObject obj, IObject other)
       {
-         if (other is UserObject otherObject)
-            return obj.ClassName == otherObject.ClassName && obj.Fields.Where(f => f.fieldName != "self")
-               .Equals(otherObject.Fields.Where(f => f.fieldName != "self"));
+         if (classOf(obj).RespondsTo("isEqualTo"))
+            return sendMessage(obj, "isEqualTo", other).IsTrue;
+         else if (other is UserObject otherUserObject && obj.ClassName == otherUserObject.ClassName)
+         {
+            var fields = otherUserObject.Fields;
+            return obj.Fields.All(f => fields.ContainsKey(f.fieldName) && f.field.Value.IsEqualTo(fields[f.fieldName]));
+         }
          else
             return false;
       }

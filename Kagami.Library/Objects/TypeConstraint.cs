@@ -1,7 +1,9 @@
 ﻿using System.Linq;
 using Kagami.Library.Classes;
+using Kagami.Library.Runtime;
 using Standard.Types.Collections;
 using Standard.Types.Enumerables;
+using Standard.Types.Exceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
@@ -11,6 +13,19 @@ namespace Kagami.Library.Objects
       BaseClass[] comparisands;
 
       public TypeConstraint(BaseClass[] comparisands) : this() => this.comparisands = comparisands;
+
+      public void RefreshClasses()
+      {
+         for (var i = 0; i < comparisands.Length; i++)
+         {
+            var comparisand = comparisands[i];
+            if (comparisand is ForwardedClass forwardedClass)
+               if (Module.Global.Class(forwardedClass.Name).If(out var actualClass))
+                  comparisands[i] = actualClass;
+               else
+                  throw $"Expected {forwardedClass.Name} to exist".Throws();
+         }
+      }
 
       public string ClassName => "TypeConstraint";
 

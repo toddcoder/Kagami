@@ -67,6 +67,7 @@
     <Compile Include="Classes\DictionaryClass.cs" />
     <Compile Include="Classes\EndClass.cs" />
     <Compile Include="Classes\FloatClass.cs" />
+    <Compile Include="Classes\ForwardedClass.cs" />
     <Compile Include="Classes\ICollectionClass.cs" />
     <Compile Include="Classes\InfinityClass.cs" />
     <Compile Include="Classes\IntClass.cs" />
