@@ -666,6 +666,8 @@ namespace Kagami.Library.Objects
          return shuffle(array, count);
       }
 
+      public IObject Collect() => collectionClass.Revert(List());
+
       public Array ToArray() => new Array(List());
 
       public List ToList() => Objects.List.NewList(List());

@@ -1,11 +1,13 @@
-﻿using Kagami.Library.Objects;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Kagami.Library.Objects;
 using Standard.Types.Exceptions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Classes
 {
-   public class TupleClass : BaseClass
+   public class TupleClass : BaseClass, ICollectionClass
    {
       public override string Name => "Tuple";
 
@@ -58,5 +60,7 @@ namespace Kagami.Library.Classes
                throw messageNotFound(this, name);
          }
       }
+
+      public IObject Revert(IEnumerable<IObject> list) => new Tuple(list.ToArray());
    }
 }

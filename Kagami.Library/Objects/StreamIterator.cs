@@ -34,7 +34,7 @@ namespace Kagami.Library.Objects
 
       public bool Match(IObject comparisand, Hash<string, IObject> bindings) => false;
 
-      public bool IsTrue => true;
+      public bool IsTrue { get; } = true;
 
       public ICollection Collection => iterator.Collection;
 
@@ -224,6 +224,8 @@ namespace Kagami.Library.Objects
       public IObject Shuffle() => iterator.Shuffle();
 
       public IObject Shuffle(int count) => iterator.Shuffle(count);
+
+      public IObject Collect() => iterator.Collect();
 
       public Array ToArray() => new Array(List());
 

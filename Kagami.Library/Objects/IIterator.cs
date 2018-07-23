@@ -122,6 +122,8 @@ namespace Kagami.Library.Objects
 
       IObject Shuffle(int count);
 
+      IObject Collect();
+
       Array ToArray();
 
       List ToList();
