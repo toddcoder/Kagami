@@ -113,7 +113,7 @@ namespace Kagami.Library.Objects
 
       public int Hash => value.GetHashCode();
 
-      public bool IsEqualTo(IObject obj) => obj is Complex c && IsEqualTo(c);
+      public bool IsEqualTo(IObject obj) => obj is Complex c && value == c.value;
 
       public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 

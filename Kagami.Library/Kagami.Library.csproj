@@ -542,6 +542,7 @@
     <Compile Include="Parsers\Expressions\ExpressionParser.cs" />
     <Compile Include="Parsers\Expressions\FieldParser.cs" />
     <Compile Include="Parsers\Expressions\FoldOperatorParser.cs" />
+    <Compile Include="Parsers\Expressions\ForExpressionParser.cs" />
     <Compile Include="Parsers\Expressions\FormatParser.cs" />
     <Compile Include="Parsers\Expressions\HexadecimalParser.cs" />
     <Compile Include="Parsers\Expressions\HexExpParser.cs" />

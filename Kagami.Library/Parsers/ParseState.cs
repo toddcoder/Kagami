@@ -97,7 +97,15 @@ namespace Kagami.Library.Parsers
       public void AddStatement(Statement statement)
       {
          statement.Index = index;
-         statements.Add(statement);
+
+         if (ForExpression.If(out var tuple))
+         {
+            var (fieldName, expression) = tuple;
+            statements.Add(new For2(new PlaceholderSymbol(fieldName), expression, new Block(statement)));
+            ForExpression = none<(string, Expression)>();
+         }
+         else
+            statements.Add(statement);
       }
 
       public void AddToken(int index, int length, Color color)
@@ -245,5 +253,7 @@ namespace Kagami.Library.Parsers
       public IMaybe<Function> Macro(string fullFunctionName) => macros.Map(fullFunctionName);
 
       public bool BlockFollows() => CurrentSource.IsMatch($"^ ':' (/r /n | /r | /n) '{indentation}' [' /t']+", multiline: true);
+
+      public IMaybe<(string, Expression)> ForExpression { get; set; } = none<(string, Expression)>();
    }
 }
