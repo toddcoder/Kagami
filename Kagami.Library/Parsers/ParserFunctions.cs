@@ -741,28 +741,28 @@ namespace Kagami.Library.Parsers
                symbol = new IntDivideSymbol().Matched<Symbol>();
                break;*/
             case "<!":
-               symbol = new SendBinaryMessageSymbol("foldl", Precedence.ChainedOperator).Matched<Symbol>();
+               symbol = new SendBinaryMessageSymbol("foldl", Precedence.Boolean).Matched<Symbol>();
                break;
             case "<%":
                symbol = new SendBinaryMessageSymbol("sort".Function("with"), Precedence.ChainedOperator).Matched<Symbol>();
                break;
             case "!>":
-               symbol = new SendBinaryMessageSymbol("foldr", Precedence.ChainedOperator).Matched<Symbol>();
+               symbol = new SendBinaryMessageSymbol("foldr", Precedence.Boolean).Matched<Symbol>();
                break;
             case "%":
-               symbol = new SendBinaryMessageSymbol("any", Precedence.ChainedOperator).Matched<Symbol>();
+               symbol = new SendBinaryMessageSymbol("any", Precedence.Boolean).Matched<Symbol>();
                break;
             case "%%":
-               symbol = new SendBinaryMessageSymbol("all", Precedence.ChainedOperator).Matched<Symbol>();
+               symbol = new SendBinaryMessageSymbol("all", Precedence.Boolean).Matched<Symbol>();
                break;
             case "-%":
-               symbol = new SendBinaryMessageSymbol("skip", Precedence.ChainedOperator).Matched<Symbol>();
+               symbol = new SendBinaryMessageSymbol("skip", Precedence.Boolean).Matched<Symbol>();
                break;
             case "+%":
-               symbol = new SendBinaryMessageSymbol("take", Precedence.ChainedOperator).Matched<Symbol>();
+               symbol = new SendBinaryMessageSymbol("take", Precedence.Boolean).Matched<Symbol>();
                break;
             case "*%":
-               symbol = new SendBinaryMessageSymbol("zip", Precedence.ChainedOperator).Matched<Symbol>();
+               symbol = new SendBinaryMessageSymbol("zip", Precedence.Boolean).Matched<Symbol>();
                break;
             case "^":
                symbol = new RaiseSymbol().Matched<Symbol>();
