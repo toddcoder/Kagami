@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
+using Kagami.Library.Classes;
 using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Standard.Types.Collections;
-using Standard.Types.Dates.Now;
 using Standard.Types.Enumerables;
 using Standard.Types.Maybe;
 using static Kagami.Library.AllExceptions;
@@ -17,11 +17,8 @@ namespace Kagami.Library.Packages
 {
    public class Sys : Package
    {
-      Random random;
-
       public Sys()
       {
-         random = new Random(NowServer.Now.Millisecond);
          fields.New("id", new RuntimeLambda(args => args[0], 1, "x -> x"));
       }
 
@@ -32,9 +29,10 @@ namespace Kagami.Library.Packages
       public override void LoadTypes(Module module)
       {
          module.RegisterClass(new SysClass());
+         module.RegisterClass(new RegexMatchClass());
+         module.RegisterClass(new RegexGroupClass());
+         module.RegisterClass(new RandomClass());
       }
-
-      public Float Rand() => random.NextDouble();
 
       public String Println(Arguments arguments)
       {
@@ -170,5 +168,9 @@ namespace Kagami.Library.Packages
 
          return new RegexMatch(passed);
       }
+
+      public XRandom Random() => new XRandom();
+
+      public XRandom Random(int seed) => new XRandom(seed);
    }
 }

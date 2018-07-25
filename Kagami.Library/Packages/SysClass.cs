@@ -11,7 +11,6 @@ namespace Kagami.Library.Packages
       {
          base.RegisterMessages();
 
-         registerPackageFunction("rand", (obj, msg) => function<Sys>(obj, sys => sys.Rand()));
          registerPackageFunction("println", (obj, msg) => function<Sys>(obj, sys => sys.Println(msg.Arguments)));
          registerPackageFunction("print", (obj, msg) => function<Sys>(obj, sys => sys.Print(msg.Arguments)));
          registerPackageFunction("put", (obj, msg) => function<Sys>(obj, sys => sys.Put(msg.Arguments)));
@@ -24,6 +23,9 @@ namespace Kagami.Library.Packages
          registerPackageFunction("Tuple", (obj, msg) => function<Sys>(obj, sys => sys.Tuple(msg.Arguments[0])));
          registerPackageFunction("Group", (obj, msg) => function<Sys>(obj, sys => sys.RegexGroup(msg.Arguments)));
          registerPackageFunction("Match", (obj, msg) => function<Sys>(obj, sys => sys.RegexMatch(msg.Arguments)));
+         registerPackageFunction("Random", (obj, msg) => function<Sys>(obj, sys => sys.Random()));
+         registerPackageFunction("Random".Function("seed"),
+            (obj, msg) => function<Sys, Int>(obj, msg, (sys, i) => sys.Random(i.Value)));
       }
    }
 }

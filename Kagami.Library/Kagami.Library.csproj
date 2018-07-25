@@ -512,8 +512,10 @@
     <Compile Include="Packages\PackageClass.cs" />
     <Compile Include="Packages\PackageFunction.cs" />
     <Compile Include="Packages\Package.cs" />
+    <Compile Include="Packages\RandomClass.cs" />
     <Compile Include="Packages\Sys.cs" />
     <Compile Include="Packages\SysClass.cs" />
+    <Compile Include="Packages\XRandom.cs" />
     <Compile Include="Parsers\Color.cs" />
     <Compile Include="Parsers\Expressions\AlternateStringType.cs" />
     <Compile Include="Parsers\Expressions\AndParser.cs" />
