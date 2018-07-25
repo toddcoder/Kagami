@@ -6,6 +6,7 @@ using System.Text;
 using Standard.Types.Collections;
 using Standard.Types.Maybe;
 using Standard.Types.Objects;
+using Standard.Types.RegularExpressions;
 using Standard.Types.Strings;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
@@ -244,6 +245,14 @@ namespace Kagami.Library.Objects
          }
       }
 
+      public Int Count(ITextFinding textFinding) => textFinding.Count(value);
+
+      public Int Count(string input) => input.FindAll(value).Count();
+
+      public Int Count(ITextFinding textFinding, Lambda lambda) => textFinding.Count(value, lambda);
+
+      public Int Count(string input, Lambda lambda) => input.FindAll(value).Count(i => lambda.Invoke(Objects.Int.IntObject(i)).IsTrue);
+
       public String LStrip() => value.TrimStart();
 
       public String RStrip() => value.TrimEnd();
@@ -385,5 +394,7 @@ namespace Kagami.Library.Objects
 
          return builder.ToString();
       }
+
+      public Tuple Fields => new Tuple(value.Split("/s+").Select(StringObject).ToArray());
    }
 }

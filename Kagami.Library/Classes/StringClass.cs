@@ -71,6 +71,7 @@ namespace Kagami.Library.Classes
          messages["get"] = (obj, msg) => function<String>(obj, s => s.Get());
          messages["set"] = (obj, msg) => function<String>(obj, s => s.Set());
          messages["swapCase"] = (obj, msg) => function<String>(obj, s => s.SwapCase());
+         messages["fields".get()] = (obj, msg) => function<String>(obj, s => s.Fields);
       }
 
       public override void RegisterClassMessages()
@@ -140,6 +141,8 @@ namespace Kagami.Library.Classes
          registerMessage("split".Function("on"), (obj, msg) => apply(obj, msg, (s, tf) => s.Split(tf)));
          registerMessage("partition", (obj, msg) => apply(obj, msg, (s, tf) => s.Partition(tf, false)));
          registerMessage("partition".Function("", "reverse"), (obj, msg) => apply1<Boolean>(obj, msg, (s, tf, b) => s.Partition(tf, b.Value)));
+         registerMessage("count", (obj, msg) => apply(obj, msg, (s, tf) => s.Count(tf)));
+         registerMessage("count".Function("with"), (obj, msg) => apply1<Lambda>(obj, msg, (s, tf, l) => s.Count(tf, l)));
       }
    }
 }

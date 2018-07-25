@@ -228,6 +228,26 @@ namespace Kagami.Library.Objects
          }
       }
 
+      public Int Count(string input) => matcher.IsMatch(input, pattern, ignoreCase, multiline) ? matcher.MatchCount : 0;
+
+      public Int Count(string input, Lambda lambda)
+      {
+         if (matcher.IsMatch(input, pattern, ignoreCase, multiline))
+         {
+            var count = 0;
+            for (var i = 0; i < matcher.MatchCount; i++)
+            {
+               var match = matcher.GetMatch(i);
+               if (lambda.Invoke((String)match.Text, (Int)match.Index, (Int)match.Length).IsTrue)
+                  count++;
+            }
+
+            return count;
+         }
+         else
+            return 0;
+      }
+
       public Regex Concatenate(IObject obj)
       {
          switch (obj)

@@ -207,5 +207,17 @@ namespace Kagami.Library.Objects
                return Tuple.Tuple3(input, "", "");
          }
       }
+
+      public Int Count(string input)
+      {
+         var self = this;
+         return input.Count(c => c == self.value);
+      }
+
+      public Int Count(string input, Lambda lambda)
+      {
+         var self = this;
+         return input.Count(c => lambda.Invoke(self).IsTrue);
+      }
    }
 }

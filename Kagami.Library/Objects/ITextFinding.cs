@@ -17,5 +17,9 @@
       Tuple Split(string input);
 
       Tuple Partition(string input, bool reverse);
+
+      Int Count(string input);
+
+      Int Count(string input, Lambda lambda);
    }
 }
