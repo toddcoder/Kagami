@@ -125,6 +125,8 @@ namespace Kagami.Library.Objects
 
       public Boolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
 
+      public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
+
       public int CompareTo(Complex other) => Math.Sign(value.Real*other.value.Real * value.Imaginary * other.value.Imaginary);
 
       public bool Equals(Complex other) => value.Equals(other.value);

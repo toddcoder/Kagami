@@ -70,6 +70,8 @@ namespace Kagami.Library.Objects
 
       public IObject Times(int count) => ((ICollection)Reverted()).Times(count);
 
+      public IIterator GetIndexedIterator() => new IndexedIterator(this);
+
       public IObject Assign(IObject value)
       {
          if (value is ICollection collection)

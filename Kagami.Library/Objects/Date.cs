@@ -51,6 +51,8 @@ namespace Kagami.Library.Objects
             return false;
       }
 
+      public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
+
       public Int Year => value.Year;
 
       public Int Month => value.Month;

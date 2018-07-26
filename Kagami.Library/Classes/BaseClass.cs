@@ -226,6 +226,7 @@ namespace Kagami.Library.Classes
          registerMessage("in", (obj, msg) => collectionFunc<IObject>(obj, msg, (c, i) => c.In(i)));
          registerMessage("notIn", (obj, msg) => collectionFunc<IObject>(obj, msg, (c, i) => c.NotIn(i)));
          registerMessage("*", (obj, msg) => collectionFunc<Int>(obj, msg, (c, i) => c.Times(i.Value)));
+         registerMessage("indexed", (obj, msg) => collectionFunc(obj, c => (IObject)c.GetIndexedIterator()));
 
          loadIteratorMessages();
       }
@@ -453,6 +454,9 @@ namespace Kagami.Library.Classes
          registerMessage("between".Function("", "and"), (o, m) => ((IObjectCompare)o).Between(m.Arguments[0], m.Arguments[1], true));
          registerMessage("between".Function("", "until"),
             (o, m) => ((IObjectCompare)o).Between(m.Arguments[0], m.Arguments[1], false));
+         registerMessage("after".Function("", "and"), (o, m) => ((IObjectCompare)o).After(m.Arguments[0], m.Arguments[1], true));
+         registerMessage("after".Function("", "until"),
+            (o, m) => ((IObjectCompare)o).After(m.Arguments[0], m.Arguments[1], false));
       }
    }
 }

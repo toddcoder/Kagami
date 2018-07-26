@@ -74,6 +74,8 @@ namespace Kagami.Library.Objects
 
       public Boolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
 
+      public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
+
       public int CompareTo(Array other) => compareCollections(this, other);
 
       public bool Equals(Array other) => isEqualTo(this, other);
@@ -154,6 +156,8 @@ namespace Kagami.Library.Objects
          return new Array(result);
       }
 
+      public IIterator GetIndexedIterator() => new IndexedIterator(this);
+
       public void Add(IObject obj)
       {
          assertType(obj);
@@ -191,8 +195,6 @@ namespace Kagami.Library.Objects
 
          return this;
       }
-
-      public Array IndexedValues => new Array(list.Select((o, i) => (IObject)new Tuple(Int.IntObject(i), o)));
 
       public IObject Concatenate(Array array)
       {

@@ -100,5 +100,7 @@ namespace Kagami.Library.Invokables
       public Boolean NotIn(IObject item) => !cached.Contains(item);
 
       public IObject Times(int count) => this;
+
+      public IIterator GetIndexedIterator() => new IndexedIterator(this);
    }
 }

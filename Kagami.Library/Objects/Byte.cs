@@ -98,6 +98,8 @@ namespace Kagami.Library.Objects
 
       public Boolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
 
+      public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
+
       public int CompareTo(Byte other) => value.CompareTo(other.value);
 
       public bool Equals(Byte other) => value == other.value;

@@ -49,6 +49,8 @@ namespace Kagami.Library.Objects
 
       public Boolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
 
+      public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
+
       public int CompareTo(String other) => string.Compare(value, other.value, StringComparison.Ordinal);
 
       public bool Equals(String other) => string.Equals(value, other.value);
@@ -120,6 +122,8 @@ namespace Kagami.Library.Objects
       }
 
       public IObject Times(int count) => (String)value.Repeat(count);
+
+      public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
       public String Repeat(int count) => value.Repeat(count);
 

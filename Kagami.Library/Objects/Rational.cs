@@ -111,6 +111,8 @@ namespace Kagami.Library.Objects
 
       public Boolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
 
+      public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
+
       public IRangeItem Successor => (IRangeItem)Add((Rational)(BigInteger.One, BigInteger.Zero));
 
       public IRangeItem Predecessor => (IRangeItem)Subtract((Rational)(BigInteger.One, BigInteger.Zero));

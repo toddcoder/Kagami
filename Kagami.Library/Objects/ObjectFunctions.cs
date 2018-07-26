@@ -361,5 +361,13 @@ namespace Kagami.Library.Objects
          else
             return obj.Compare(min) >= 0 && obj.Compare(max) < 0;
       }
+
+      public static bool after(IObjectCompare obj, IObject min, IObject max, bool inclusive)
+      {
+         if (inclusive)
+            return obj.Compare(min) > 0 && obj.Compare(max) <= 0;
+         else
+            return obj.Compare(min) > 0 && obj.Compare(max) < 0;
+      }
    }
 }

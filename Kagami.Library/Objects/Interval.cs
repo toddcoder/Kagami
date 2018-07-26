@@ -51,6 +51,8 @@ namespace Kagami.Library.Objects
             return false;
       }
 
+      public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
+
       public IRangeItem Successor => (Interval)value.Add(1.Second());
 
       public IRangeItem Predecessor => (Interval)value.Add(-1.Second());

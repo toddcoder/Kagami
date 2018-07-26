@@ -19,5 +19,7 @@ namespace Kagami.Library.Objects
       Boolean NotIn(IObject item);
 
       IObject Times(int count);
+
+      IIterator GetIndexedIterator();
    }
 }

@@ -316,6 +316,7 @@
     <Compile Include="Objects\IMayInvoke.cs" />
     <Compile Include="Objects\IMessageNumber.cs" />
     <Compile Include="Objects\IMutableCollection.cs" />
+    <Compile Include="Objects\IndexedIterator.cs" />
     <Compile Include="Objects\Infinity.cs" />
     <Compile Include="Objects\Int.cs" />
     <Compile Include="Objects\InternalLambda.cs" />

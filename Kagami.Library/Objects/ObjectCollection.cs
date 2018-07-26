@@ -93,6 +93,8 @@ namespace Kagami.Library.Objects
             return obj;
       }
 
+      public IIterator GetIndexedIterator() => new IndexedIterator(this);
+
       public string ClassName => obj.ClassName;
 
       public string AsString => obj.AsString;

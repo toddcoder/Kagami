@@ -157,6 +157,8 @@ namespace Kagami.Library.Objects
 
       public IObject Times(int count) => this;
 
+      public IIterator GetIndexedIterator() => new IndexedIterator(this);
+
       public IObject Concatenate(List other)
       {
          var left = GetIterator(false).List().ToList();

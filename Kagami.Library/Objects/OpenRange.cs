@@ -49,5 +49,7 @@ namespace Kagami.Library.Objects
       public Boolean NotIn(IObject item) => false;
 
       public IObject Times(int count) => this;
+
+      public IIterator GetIndexedIterator() => new IndexedIterator(this);
    }
 }

@@ -221,5 +221,7 @@ namespace Kagami.Library.Objects
 
          return new Tuple(result.ToArray());
       }
+
+      public IIterator GetIndexedIterator() => new IndexedIterator(this);
    }
 }

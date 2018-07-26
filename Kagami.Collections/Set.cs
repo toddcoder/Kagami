@@ -51,6 +51,8 @@ namespace Kagami.Collections
 
       public IObject Times(int count) => this;
 
+      public IIterator GetIndexedIterator() => new IndexedIterator(this);
+
       public Set Append(IObject item)
       {
          set.Add(item);
@@ -108,6 +110,8 @@ namespace Kagami.Collections
       public IObject Object => this;
 
       public Boolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
+
+      public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
 
       public Set XOr(Set other) => Union(other).Difference(Intersection(other));
 

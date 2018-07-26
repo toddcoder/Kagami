@@ -48,6 +48,8 @@ namespace Kagami.IO
 
       public IObject Times(int count) => this;
 
+      public IIterator GetIndexedIterator() => new IndexedIterator(this);
+
       public IObject Flatten() => this;
 
       public String Text => fileName.Text;

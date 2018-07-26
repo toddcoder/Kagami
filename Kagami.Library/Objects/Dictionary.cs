@@ -175,6 +175,8 @@ namespace Kagami.Library.Objects
 
       public IObject Times(int count) => this;
 
+      public IIterator GetIndexedIterator() => new IndexedIterator(this);
+
       public IObject Swap(IObject key1, IObject key2)
       {
          var value1 = getValue(key1);

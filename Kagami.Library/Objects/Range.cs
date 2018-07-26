@@ -118,6 +118,8 @@ namespace Kagami.Library.Objects
 
       public IObject Times(int count) => this;
 
+      public IIterator GetIndexedIterator() => new IndexedIterator(this);
+
       public IObject Add(int increment) => new Range(this, increment);
 
       public IObject Subtract(int increment) => new Range(this, -increment);
