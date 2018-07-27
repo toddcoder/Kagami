@@ -566,6 +566,7 @@
     <Compile Include="Parsers\Expressions\IteratorParser.cs" />
     <Compile Include="Parsers\Expressions\LazyParser.cs" />
     <Compile Include="Parsers\Expressions\ListParser.cs" />
+    <Compile Include="Parsers\Expressions\MapExpressionParser.cs" />
     <Compile Include="Parsers\Expressions\MatchLambdaParser.cs" />
     <Compile Include="Parsers\Expressions\PatternParser.cs" />
     <Compile Include="Parsers\Expressions\RefParser.cs" />

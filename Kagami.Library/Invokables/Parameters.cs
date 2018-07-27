@@ -18,7 +18,7 @@ namespace Kagami.Library.Invokables
 
       Parameter[] parameters;
 
-      public Parameters(Parameter[] parameters) => this.parameters = parameters;
+      public Parameters(params Parameter[] parameters) => this.parameters = parameters;
 
       public Parameters() : this(new Parameter[0]) { }
 

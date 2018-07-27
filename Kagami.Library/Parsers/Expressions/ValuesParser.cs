@@ -38,6 +38,7 @@ namespace Kagami.Library.Parsers.Expressions
             yield return new StringParser(builder);
             yield return new CharParser(builder);
             yield return new ForExpressionParser(builder);
+            yield return new MapExpressionParser(builder);
 
             if (!builder.Flags[ExpressionFlags.Subset])
             {

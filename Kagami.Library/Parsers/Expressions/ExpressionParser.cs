@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Nodes.Statements;
+﻿using Kagami.Library.Invokables;
+using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Standard.Types.Maybe;
 using Standard.Types.Numbers;
@@ -66,7 +67,29 @@ namespace Kagami.Library.Parsers.Expressions
 
             if (builder.ToExpression().If(out var expression, out exception))
             {
-               if (whateverCount > 0)
+               if (state.MapExpression.If(out var mapExpression))
+               {
+                  var (fieldName, symbol) = mapExpression;
+                  if (getMessageWithLambda(fieldName, symbol, "map", expression).If(out var newExpression, out exception))
+                  {
+                     Expression = newExpression;
+                     state.MapExpression = none<(string, Symbol)>();
+                  }
+                  else
+                     return failedMatch<Unit>(exception);
+               }
+               else if (state.IfExpression.If(out var ifExpression))
+               {
+                  var (fieldName, symbol) = ifExpression;
+                  if (getMessageWithLambda(fieldName, symbol, "if", expression).If(out var newExpression, out exception))
+                  {
+                     Expression = newExpression;
+                     state.IfExpression = none<(string, Symbol)>();
+                  }
+                  else
+                     return failedMatch<Unit>(exception);
+               }
+               else if (whateverCount > 0)
                {
                   var lambda = new LambdaSymbol(whateverCount,
                      new Block(new ExpressionStatement(expression, true)) { Index = expression.Index });
@@ -85,6 +108,20 @@ namespace Kagami.Library.Parsers.Expressions
             return "Invalid expression syntax".FailedMatch<Unit>();
          else
             return failedMatch<Unit>(exception);
+      }
+
+      static IResult<Expression> getMessageWithLambda(string fieldName, Symbol symbol, string messageName, Expression expression)
+      {
+         var parameter = Parameter.New(false, fieldName);
+         var parameters = new Parameters(parameter);
+         var lambdaSymbol = new LambdaSymbol(parameters, new Block(new Return(expression)));
+         var sendMessage = new SendMessageSymbol(messageName, Precedence.PostfixOperator, lambdaSymbol.Some());
+
+         var builder = new ExpressionBuilder(ExpressionFlags.Standard);
+         builder.Add(symbol);
+         builder.Add(sendMessage);
+
+         return builder.ToExpression();
       }
 
       protected static IMatched<Unit> getOutfixOperator(ParseState state, Parser parser)
