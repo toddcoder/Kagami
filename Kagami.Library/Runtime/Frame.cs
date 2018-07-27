@@ -8,6 +8,7 @@ using Standard.Types.Maybe;
 using Standard.Types.Strings;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
+using static Kagami.Library.Operations.OperationFunctions;
 using static Standard.Types.Maybe.AttemptFunctions;
 using static Standard.Types.Maybe.MaybeFunctions;
 using Tuple = Kagami.Library.Objects.Tuple;
@@ -109,7 +110,8 @@ namespace Kagami.Library.Runtime
 
             if (variadic)
             {
-               var tupleList = new List<IObject> { lastValue };
+               var iterator = getIterator(lastValue, false);
+               var tupleList = iterator.FlatMap(i => i.List().ToList(), e => new List<IObject> { lastValue });
                for (var i = length; i < arguments.Length; i++)
                   tupleList.Add(arguments[i]);
                var tuple = new Tuple(tupleList.ToArray());
