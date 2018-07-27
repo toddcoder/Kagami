@@ -259,5 +259,9 @@ namespace Kagami.Library.Parsers
       public IMaybe<(string, Symbol)> MapExpression { get; set; } = new None<(string, Symbol)>();
 
       public IMaybe<(string, Symbol)> IfExpression { get; set; } = new None<(string, Symbol)>();
+
+      public IMaybe<(string, Symbol)> LeftZipExpression { get; set; } = new None<(string, Symbol)>();
+
+      public IMaybe<(string, Symbol)> RightZipExpression { get; set; } = new None<(string, Symbol)>();
    }
 }

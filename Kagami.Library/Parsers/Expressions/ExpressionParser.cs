@@ -89,6 +89,20 @@ namespace Kagami.Library.Parsers.Expressions
                   else
                      return failedMatch<Unit>(exception);
                }
+               else if (state.LeftZipExpression.If(out var leftTuple) && state.RightZipExpression.If(out var rightTuple))
+               {
+                  var (leftFieldName, leftSymbol) = leftTuple;
+                  var (rightFieldName, rightSymbol) = rightTuple;
+                  if (getDualMessageWithLambda(leftFieldName, rightFieldName, leftSymbol, rightSymbol, "zip".Function("", "with"),
+                     expression).If(out var newExpression, out exception))
+                  {
+                     Expression = newExpression;
+                     state.LeftZipExpression = none<(string, Symbol)>();
+                     state.RightZipExpression = none<(string, Symbol)>();
+                  }
+                  else
+                     return failedMatch<Unit>(exception);
+               }
                else if (whateverCount > 0)
                {
                   var lambda = new LambdaSymbol(whateverCount,
@@ -119,6 +133,23 @@ namespace Kagami.Library.Parsers.Expressions
 
          var builder = new ExpressionBuilder(ExpressionFlags.Standard);
          builder.Add(symbol);
+         builder.Add(sendMessage);
+
+         return builder.ToExpression();
+      }
+
+      static IResult<Expression> getDualMessageWithLambda(string leftName, string rightName, Symbol leftSymbol, Symbol rightSymbol,
+         string messageName, Expression expression)
+      {
+         var leftParameter = Parameter.New(false, leftName);
+         var rightParameter = Parameter.New(false, rightName);
+         var parameters = new Parameters(leftParameter, rightParameter);
+         var lambdaSymbol = new LambdaSymbol(parameters, new Block(new Return(expression)));
+         var sendMessage = new SendMessageSymbol(messageName, Precedence.PostfixOperator, lambdaSymbol.Some(),
+            new Expression(rightSymbol));
+
+         var builder = new ExpressionBuilder(ExpressionFlags.Standard);
+         builder.Add(leftSymbol);
          builder.Add(sendMessage);
 
          return builder.ToExpression();

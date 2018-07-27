@@ -7,7 +7,7 @@ namespace Kagami.Library.Parsers.Expressions
 {
    public class MapExpressionParser : SymbolParser
    {
-      public override string Pattern => "^ /(|s|) /['!&']";
+      public override string Pattern => "^ /(|s|) /['!&*']";
 
       public MapExpressionParser(ExpressionBuilder builder) : base(builder) { }
 
@@ -20,10 +20,21 @@ namespace Kagami.Library.Parsers.Expressions
          {
             var fieldName = newLabel("item");
             var tuple = (fieldName, symbol).Some();
-            if (source == "!")
-               state.MapExpression = tuple;
-            else
-               state.IfExpression = tuple;
+            switch (source)
+            {
+               case "!":
+                  state.MapExpression = tuple;
+                  break;
+               case "&":
+                  state.IfExpression = tuple;
+                  break;
+               case "*":
+                  if (state.LeftZipExpression.IsNone)
+                     state.LeftZipExpression = tuple;
+                  else
+                     state.RightZipExpression = tuple;
+                  break;
+            }
 
             builder.Add(new FieldSymbol(fieldName));
             return Unit.Matched();
