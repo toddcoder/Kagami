@@ -5,6 +5,7 @@ using System.Numerics;
 using System.Text;
 using Standard.Types.Collections;
 using Standard.Types.Maybe;
+using Standard.Types.Numbers;
 using Standard.Types.Objects;
 using Standard.Types.RegularExpressions;
 using Standard.Types.Strings;
@@ -400,5 +401,30 @@ namespace Kagami.Library.Objects
       }
 
       public Tuple Fields => new Tuple(value.Split("/s+").Select(StringObject).ToArray());
+
+      public IObject Words(int count)
+      {
+         var matcher = new Matcher();
+         if (matcher.IsMatch(value, "/w+"))
+         {
+            var index = -1;
+            var length = 0;
+            var list = new List<string>();
+            for (var i = 0; i < matcher.MatchCount.MinOf(count); i++)
+            {
+               list.Add(matcher[i]);
+               var match = matcher.GetMatch(i);
+               index = match.Index;
+               length = match.Length;
+            }
+
+            var remainder = value.Skip(index + length);
+            list.Add(remainder.TrimStart());
+
+            return Some.Object(new Tuple(list.Select(StringObject).ToArray()));
+         }
+         else
+            return Nil.NilValue;
+      }
    }
 }

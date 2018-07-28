@@ -55,6 +55,7 @@
     <Compile Include="Classes\BaseClass.cs" />
     <Compile Include="Classes\BindingClass.cs" />
     <Compile Include="Classes\BooleanClass.cs" />
+    <Compile Include="Classes\ByteArrayClass.cs" />
     <Compile Include="Classes\ByteClass.cs" />
     <Compile Include="Classes\CharClass.cs" />
     <Compile Include="Classes\ClassFunctions.cs" />
@@ -174,6 +175,7 @@
     <Compile Include="Nodes\Symbols\BShiftLeft.cs" />
     <Compile Include="Nodes\Symbols\BShiftRight.cs" />
     <Compile Include="Nodes\Symbols\BXorSymbol.cs" />
+    <Compile Include="Nodes\Symbols\ByteArraySymbol.cs" />
     <Compile Include="Nodes\Symbols\ByteSymbol.cs" />
     <Compile Include="Nodes\Symbols\CallSysFunctionSymbol0.cs" />
     <Compile Include="Nodes\Symbols\CallSysFunctionSymbol1.cs" />
@@ -286,6 +288,7 @@
     <Compile Include="Objects\Binding.cs" />
     <Compile Include="Objects\Boolean.cs" />
     <Compile Include="Objects\Byte.cs" />
+    <Compile Include="Objects\ByteArray.cs" />
     <Compile Include="Objects\Char.cs" />
     <Compile Include="Objects\Class.cs" />
     <Compile Include="Objects\CollectionFunctions.cs" />

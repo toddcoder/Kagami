@@ -55,7 +55,10 @@ namespace Kagami.Library.Parsers.Expressions
                   if (mutable)
                      return "Mutable not implemented yet".FailedMatch<Unit>();
                   else if (binary)
-                     return "Byte array not implemented yet".FailedMatch<Unit>();
+                  {
+                     builder.Add(new ByteArraySymbol(text.ToString()));
+                     return Unit.Matched();
+                  }
                   else
                   {
                      builder.Add(new StringSymbol(text.ToString()));

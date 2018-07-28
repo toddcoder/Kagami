@@ -78,6 +78,7 @@ namespace Kagami.Library.Runtime
          classes["Date"] = new DateClass();
          classes["Interval"] = new IntervalClass();
          classes["TypeConstraint"] = new TypeConstraintClass();
+         classes["ByteArray"] = new ByteArrayClass();
       }
 
       public IMaybe<BaseClass> Class(string name) => classes.Map(name);

@@ -72,6 +72,7 @@ namespace Kagami.Library.Classes
          messages["set"] = (obj, msg) => function<String>(obj, s => s.Set());
          messages["swapCase"] = (obj, msg) => function<String>(obj, s => s.SwapCase());
          messages["fields".get()] = (obj, msg) => function<String>(obj, s => s.Fields);
+         messages["words"] = (obj, msg) => function<String, Int>(obj, msg, (s, i) => s.Words(i.Value));
       }
 
       public override void RegisterClassMessages()
