@@ -16,7 +16,6 @@ namespace Kagami.Library.Operations
          var frames = machine.PopFrames();
          if (frames.FunctionFrame.If(out var frame))
          {
-            //frame.UndeferAll();
             var returnAddress = frame.Address;
             if (returnTopOfStack)
                if (rtn.If(out var v, out var isNotMatched, out var exception))

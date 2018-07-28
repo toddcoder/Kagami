@@ -17,6 +17,12 @@ namespace Kagami.Library.Runtime
          functionFrameIndex = Array.FindIndex(frames, f => f.FrameType == FrameType.Function);
       }
 
+      public FrameGroup(Frame[] frames, int functionFrameIndex)
+      {
+         this.frames = frames;
+         this.functionFrameIndex = functionFrameIndex;
+      }
+
       public FrameGroup()
       {
          frames = new Frame[0];
@@ -30,6 +36,14 @@ namespace Kagami.Library.Runtime
       }
 
       public IMaybe<Frame> FunctionFrame => when(functionFrameIndex > -1, () => frames[functionFrameIndex]);
+
+      public int FunctionFrameIndex
+      {
+         get => functionFrameIndex;
+         set => functionFrameIndex = value;
+      }
+
+      public int Count => frames.Length;
 
       public IMaybe<Frame> ExitFrame => frames.FirstOrNone(f => f.FrameType == FrameType.Exit);
 

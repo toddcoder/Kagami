@@ -42,5 +42,13 @@ namespace Kagami.Library.Operations
 
          return value;
       }
+
+      public static IObject copyFields(IObject obj)
+      {
+         var frames = Machine.Current.PeekFrames(f => f.FrameType == FrameType.Function);
+         if (frames.FunctionFrameIndex == -1)
+            frames.FunctionFrameIndex = frames.Count - 1;
+         return copyFields(obj, frames);
+      }
    }
 }
