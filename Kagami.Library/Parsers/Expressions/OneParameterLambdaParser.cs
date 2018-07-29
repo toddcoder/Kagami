@@ -17,7 +17,8 @@ namespace Kagami.Library.Parsers.Expressions
          var name = tokens[2].Text;
          state.Colorize(tokens, Color.Whitespace, Color.Identifier);
 
-         return new Parameters(new[] { new Parameter(false, "", name, none<IInvokable>(), none<TypeConstraint>(), false), }).Matched();
+         return new Parameters(new[] { new Parameter(false, "", name, none<IInvokable>(), none<TypeConstraint>(), false, false) })
+            .Matched();
       }
    }
 }

@@ -26,6 +26,7 @@ namespace Kagami.Library.Packages
          registerPackageFunction("Random", (obj, msg) => function<Sys>(obj, sys => sys.Random()));
          registerPackageFunction("Random".Function("seed"),
             (obj, msg) => function<Sys, Int>(obj, msg, (sys, i) => sys.Random(i.Value)));
+         registerPackageFunction("Complex", (obj, msg) => function<Sys, IObject, IObject>(obj, msg, (s, o1, o2) => s.Complex(o1, o2)));
       }
    }
 }

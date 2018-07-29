@@ -434,6 +434,7 @@
     <Compile Include="Operations\NewDataComparisand.cs" />
     <Compile Include="Operations\NewDataType.cs" />
     <Compile Include="Operations\NewKeyValue.cs" />
+    <Compile Include="Operations\NewLambda.cs" />
     <Compile Include="Operations\NewList.cs" />
     <Compile Include="Operations\NewObject.cs" />
     <Compile Include="Operations\NewOpenRange.cs" />

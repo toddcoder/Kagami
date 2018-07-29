@@ -172,5 +172,22 @@ namespace Kagami.Library.Packages
       public XRandom Random() => new XRandom();
 
       public XRandom Random(int seed) => new XRandom(seed);
+
+      public Complex Complex(IObject real, IObject imaginary)
+      {
+         if (real is INumeric rNumeric)
+         {
+            var doubleR = rNumeric.AsDouble();
+            if (imaginary is INumeric iNumeric)
+            {
+               var doubleI = iNumeric.AsDouble();
+               return new Complex(doubleR, doubleI);
+            }
+            else
+               throw notNumeric(imaginary);
+         }
+         else
+            throw notNumeric(real);
+      }
    }
 }

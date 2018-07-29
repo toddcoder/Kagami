@@ -348,6 +348,11 @@ namespace Kagami.Library.Parsers
             .Map(s => s.TakeUntil(":").Trim());
       }
 
+      static IMatched<bool> parseCapturing(ParseState state)
+      {
+         return state.Scan("^ /(/s* '+')?", Color.Structure).Map(s => s.IsNotEmpty());
+      }
+
       static IMatched<string> parseParameterName(ParseState state)
       {
          return state.Scan($"^ /(/s* {REGEX_FIELD}) /b", Color.Identifier).Map(s => s.Trim());
@@ -405,11 +410,12 @@ namespace Kagami.Library.Parsers
          from reference in parseReference(state)
          from mutable in parseMutable(state)
          from label in parseLabel(state)
+         from capturing in parseCapturing(state)
          from name in parseParameterName(state)
          from typeConstraint in parseTypeConstraint(state)
          from variadic in parseVaraidic(state)
          from defaultValue in parseDefaultValue(state, defaultRequired)
-         select new Parameter(mutable, label, name, defaultValue, typeConstraint, reference) { Variadic = variadic };
+         select new Parameter(mutable, label, name, defaultValue, typeConstraint, reference, capturing) { Variadic = variadic };
 
       public static IMatched<Block> getAnyBlock(ParseState state)
       {

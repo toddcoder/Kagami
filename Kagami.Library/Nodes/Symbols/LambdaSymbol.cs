@@ -1,6 +1,5 @@
 ﻿using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
-using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 
 namespace Kagami.Library.Nodes.Symbols
@@ -33,7 +32,7 @@ namespace Kagami.Library.Nodes.Symbols
          var invokable = new LambdaInvokable(parameters, ToString());
          if (builder.RegisterInvokable(invokable, block, true).If(out _, out var exception))
          {
-            builder.PushObject(new Lambda(invokable));
+            builder.NewLambda(invokable);
             builder.Peek(Index);
          }
          else

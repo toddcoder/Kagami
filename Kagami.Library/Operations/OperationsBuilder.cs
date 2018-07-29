@@ -243,6 +243,8 @@ namespace Kagami.Library.Operations
 
       public void NewList() => add(new NewList());
 
+      public void NewLambda(IInvokable invokable) => add(new NewLambda(invokable));
+
       //public void OneTuple() => add(new OneTuple());
 
       //public void ToTuple() => add(new ToTuple());

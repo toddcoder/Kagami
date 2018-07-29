@@ -10,7 +10,7 @@ namespace Kagami.Library.Invokables
    {
       public static Parameter New(bool mutable, string name)
       {
-         return new Parameter(mutable, "", name, none<IInvokable>(), none<TypeConstraint>(), false);
+         return new Parameter(mutable, "", name, none<IInvokable>(), none<TypeConstraint>(), false, false);
       }
 
       bool mutable;
@@ -19,9 +19,10 @@ namespace Kagami.Library.Invokables
       IMaybe<IInvokable> defaultValue;
       IMaybe<TypeConstraint> typeConstraint;
       bool reference;
+      bool capturing;
 
       public Parameter(bool mutable, string label, string name, IMaybe<IInvokable> defaultValue, IMaybe<TypeConstraint> typeConstraint,
-         bool reference)
+         bool reference, bool capturing)
       {
          this.mutable = mutable;
          this.label = label;
@@ -29,6 +30,7 @@ namespace Kagami.Library.Invokables
          this.defaultValue = defaultValue;
          this.typeConstraint = typeConstraint;
          this.reference = reference;
+         this.capturing = capturing;
       }
 
       public bool Mutable => mutable;
@@ -44,6 +46,8 @@ namespace Kagami.Library.Invokables
       public bool Reference => reference;
 
       public bool Variadic { get; set; }
+
+      public bool Capturing => capturing;
 
       public bool Equals(Parameter other)
       {
@@ -64,6 +68,7 @@ namespace Kagami.Library.Invokables
             hashCode = hashCode * 397 ^ (defaultValue?.GetHashCode() ?? 0);
             hashCode = hashCode * 397 ^ typeConstraint.FlatMap(tc => tc.Hash, () => 0);
             hashCode = hashCode * 397 ^ reference.GetHashCode();
+            hashCode = hashCode * 397 ^ capturing.GetHashCode();
             return hashCode;
          }
       }

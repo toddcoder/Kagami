@@ -103,6 +103,7 @@ namespace Kagami.Library.Runtime
                lastValue = arguments[i];
                if (parameter.TypeConstraint.If(out var typeConstraint) && !typeConstraint.Matches(classOf(lastValue)))
                   throw incompatibleClasses(lastValue, typeConstraint.AsString);
+
                fields.Assign(parameter.Name, lastValue, true).Force();
                lastName = parameter.Name;
                variadic = parameter.Variadic;
@@ -131,6 +132,7 @@ namespace Kagami.Library.Runtime
                      value = Unassigned.Value;
                   if (parameter.TypeConstraint.If(out var typeConstraint) && !typeConstraint.Matches(classOf(value)))
                      throw incompatibleClasses(value, typeConstraint.AsString);
+
                   fields.Assign(parameter.Name, value, true).Force();
                }
             else if (length < arguments.Length)

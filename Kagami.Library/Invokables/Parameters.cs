@@ -17,8 +17,13 @@ namespace Kagami.Library.Invokables
       public static Parameters Empty => new Parameters();
 
       Parameter[] parameters;
+      Parameter[] capturingParameters;
 
-      public Parameters(params Parameter[] parameters) => this.parameters = parameters;
+      public Parameters(params Parameter[] parameters)
+      {
+         this.parameters = parameters.Where(p => !p.Capturing).ToArray();
+         capturingParameters = parameters.Where(p => p.Capturing).ToArray();
+      }
 
       public Parameters() : this(new Parameter[0]) { }
 
@@ -40,6 +45,8 @@ namespace Kagami.Library.Invokables
       public int Length => parameters.Length;
 
       public Parameter[] GetParameters() => parameters;
+
+      public Parameter[] GetCapturingParameters() => capturingParameters;
 
       public Parameter this[int index] => parameters[index];
 

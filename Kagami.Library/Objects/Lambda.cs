@@ -2,6 +2,7 @@
 using Kagami.Library.Invokables;
 using Kagami.Library.Runtime;
 using Standard.Types.Collections;
+using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
@@ -63,6 +64,26 @@ namespace Kagami.Library.Objects
       public IObject Join(Lambda otherLambda)
       {
          return new RuntimeLambda(args => otherLambda.Invoke(Invoke(args)), 1, $"{Image} >> {otherLambda.Image}");
+      }
+
+      public void Capture()
+      {
+         var parameters = invokable.Parameters;
+         foreach (var parameter in parameters.GetCapturingParameters())
+         {
+            var fieldName = parameter.Name;
+            if (Machine.Current.Find(fieldName, true).If(out var field))
+            {
+               if (!fields.ContainsKey(fieldName))
+                  fields.New(fieldName, parameter.Mutable);
+               var value = field.Value;
+               if (parameter.TypeConstraint.If(out var typeConstraint) && !typeConstraint.Matches(classOf(value)))
+                  throw incompatibleClasses(value, typeConstraint.AsString);
+
+               fields.Assign(fieldName, value, true).Force();
+               providesFields = true;
+            }
+         }
       }
    }
 }

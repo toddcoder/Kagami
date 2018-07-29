@@ -1,7 +1,6 @@
 ﻿using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Standard.Types.Maybe;
-using static Kagami.Library.Operations.OperationFunctions;
 
 namespace Kagami.Library.Operations
 {
@@ -13,8 +12,8 @@ namespace Kagami.Library.Operations
 
       public override IMatched<IObject> Execute(Machine machine)
       {
-         if (obj is ICopyFields || obj is IPristineCopy)
-            obj = copyFields(obj);
+         if (obj is Lambda lambda)
+            lambda.Capture();
          return obj.Matched();
       }
 
