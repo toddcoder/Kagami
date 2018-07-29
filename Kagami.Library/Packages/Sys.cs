@@ -77,7 +77,17 @@ namespace Kagami.Library.Packages
             var bindings = new Hash<string, IObject>();
             if (x.Match(y, bindings))
             {
-               Machine.Current.CurrentFrame.Fields.SetBindings(bindings, mutable, strict);
+/*               Machine.Current.CurrentFrame.Fields.SetBindings(bindings, mutable, strict);
+               return Boolean.True.Success();*/
+               if (strict)
+               {
+                  foreach (var (key, value) in bindings)
+                     if (Machine.Current.Find(key, true).If(out var field) && mutable == field.Mutable)
+                        field.Value = value;
+               }
+               else
+                  Machine.Current.CurrentFrame.Fields.SetBindings(bindings, mutable, strict);
+
                return Boolean.True.Success();
             }
             else
