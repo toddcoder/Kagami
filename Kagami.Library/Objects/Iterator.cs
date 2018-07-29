@@ -218,6 +218,8 @@ namespace Kagami.Library.Objects
          return collectionClass.Revert(result);
       }
 
+      public Int Count(IObject item) => List().Count(i => i.IsEqualTo(item));
+
       public Int Count(Lambda predicate)
       {
          var count = 0;

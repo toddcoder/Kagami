@@ -108,6 +108,8 @@ namespace Kagami.Library.Objects
 
       public IObject ReduceRight(Lambda lambda) => iterator.ReduceRight(lambda);
 
+      public Int Count(IObject item) => iterator.Count(item);
+
       public Int Count(Lambda predicate) => iterator.Count(predicate);
 
       public IObject Copy(IStreamAction action)

@@ -142,8 +142,8 @@ namespace Kagami.Library.Classes
          registerMessage("split".Function("on"), (obj, msg) => apply(obj, msg, (s, tf) => s.Split(tf)));
          registerMessage("partition", (obj, msg) => apply(obj, msg, (s, tf) => s.Partition(tf, false)));
          registerMessage("partition".Function("", "reverse"), (obj, msg) => apply1<Boolean>(obj, msg, (s, tf, b) => s.Partition(tf, b.Value)));
-         registerMessage("count", (obj, msg) => apply(obj, msg, (s, tf) => s.Count(tf)));
-         registerMessage("count".Function("with"), (obj, msg) => apply1<Lambda>(obj, msg, (s, tf, l) => s.Count(tf, l)));
+         registerMessage("count".Function("string"), (obj, msg) => apply(obj, msg, (s, tf) => s.Count(tf)));
+         registerMessage("count".Function("string", "with"), (obj, msg) => apply1<Lambda>(obj, msg, (s, tf, l) => s.Count(tf, l)));
       }
    }
 }

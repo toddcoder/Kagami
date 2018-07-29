@@ -42,6 +42,8 @@ namespace Kagami.Library.Objects
 
       IObject ReduceRight(Lambda lambda);
 
+      Int Count(IObject item);
+
       Int Count(Lambda predicate);
 
       IObject Map(Lambda lambda);
