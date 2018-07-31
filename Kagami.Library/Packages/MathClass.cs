@@ -45,6 +45,8 @@ namespace Kagami.Library.Packages
          registerPackageFunction("string".Function("toFloat", "base"),
             (obj, msg) => function<Math, String, Int>(obj, msg, (m, s, i) => m.StringToFloat(s.Value, i.Value)));
          registerPackageFunction("frexp", (obj, msg) => function<Math, Float>(obj, msg, (m, f) => m.Frexp(f.Value)));
+         registerPackageFunction("pi".get(), (obj, msg) => function<Math>(obj, m => m.Pi));
+         registerPackageFunction("e".get(), (obj, msg) => function<Math>(obj, m => m.E));
       }
    }
 }

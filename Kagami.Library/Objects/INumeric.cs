@@ -52,5 +52,7 @@ namespace Kagami.Library.Objects
       (BigInteger, BigInteger) AsRational();
 
       bool IsRational { get; }
+
+      String ZFill(int count);
    }
 }

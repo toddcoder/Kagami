@@ -93,6 +93,8 @@ namespace Kagami.Library.Objects
 
       public bool IsRational => true;
 
+      public String ZFill(int count) => $"{zfill(numerator.ToString(), count)}/{zfill(denominator.ToString(), count)}";
+
       public string AsString => $"{numerator}/{denominator}";
 
       public string Image => AsString;

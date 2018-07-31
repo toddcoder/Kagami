@@ -24,11 +24,12 @@ namespace Kagami.Library.Objects
 
       public Complex(CComplex value) : this() => this.value = value;
 
-      public Complex(double real, double imaginary, bool isPolar = false) : this() => value = isPolar ? CComplex.FromPolarCoordinates(real, imaginary) : new CComplex(real, imaginary);
+      public Complex(double real, double imaginary, bool isPolar = false) : this() =>
+         value = isPolar ? CComplex.FromPolarCoordinates(real, imaginary) : new CComplex(real, imaginary);
 
       public Complex(Float number) : this() => value = new CComplex(number.Value, 0.0);
 
-      public Complex(double number): this() => value = new CComplex(0.0, number);
+      public Complex(double number) : this() => value = new CComplex(0.0, number);
 
       public CComplex Value => value;
 
@@ -107,6 +108,9 @@ namespace Kagami.Library.Objects
 
       public bool IsRational => false;
 
+      public String ZFill(int count) =>
+         $"{zfill(value.Real.ToString(), count)}{(value.Imaginary >= 0.0).Extend("+")}{zfill(value.Imaginary.ToString(), count)}";
+
       public string AsString => $"{value.Real}{(value.Imaginary >= 0.0).Extend("+")}{value.Imaginary}i";
 
       public string Image => $"{floatImage(value.Real)}{(value.Imaginary >= 0.0).Extend("+")}{floatImage(value.Imaginary)}i";
@@ -127,7 +131,7 @@ namespace Kagami.Library.Objects
 
       public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
 
-      public int CompareTo(Complex other) => Math.Sign(value.Real*other.value.Real * value.Imaginary * other.value.Imaginary);
+      public int CompareTo(Complex other) => Math.Sign(value.Real * other.value.Real * value.Imaginary * other.value.Imaginary);
 
       public bool Equals(Complex other) => value.Equals(other.value);
 
@@ -154,7 +158,7 @@ namespace Kagami.Library.Objects
 
       public IObject Multiply(INumeric other) => (Complex)CComplex.Multiply(value, other.AsComplex());
 
-      public IObject Sin()=> (Complex)CComplex.Sin(value);
+      public IObject Sin() => (Complex)CComplex.Sin(value);
 
       public IObject Cos() => (Complex)CComplex.Cos(value);
 
@@ -201,4 +205,3 @@ namespace Kagami.Library.Objects
       public int CompareTo(object obj) => CompareTo((Complex)obj);
    }
 }
- 

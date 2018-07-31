@@ -249,5 +249,9 @@ namespace Kagami.Library.Packages
 
          return new Tuple(m, e);
       }
+
+      public Float Pi => (Float)fields["pi"];
+
+      public Float E => (Float)fields["e"];
    }
 }

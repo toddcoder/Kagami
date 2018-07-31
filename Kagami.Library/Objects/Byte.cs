@@ -80,6 +80,8 @@ namespace Kagami.Library.Objects
 
       public bool IsRational => false;
 
+      public String ZFill(int count) => zfill(value.ToString(), count);
+
       public string AsString => ((char)value).ToString();
 
       public string Image => $"{value}b";

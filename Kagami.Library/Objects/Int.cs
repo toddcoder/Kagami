@@ -103,6 +103,8 @@ namespace Kagami.Library.Objects
 
       public bool IsRational => false;
 
+      public String ZFill(int count) => zfill(AsString, count);
+
       public int Compare(IObject obj) => compatibleCompare(this, obj);
 
       public IObject Object => this;

@@ -201,6 +201,7 @@ namespace Kagami.Library.Classes
          registerMessage("isPositive".get(), (obj, msg) => function(obj, numeric => (Boolean)numeric.IsPositive));
          registerMessage("isNegative".get(), (obj, msg) => function(obj, numeric => (Boolean)numeric.IsNegative));
          registerMessage("isPrimitive".get(), (obj, msg) => function(obj, numeric => (Boolean)numeric.IsPrimitive));
+         registerMessage("zfill", (obj, msg) => function<IObject, Int>(obj, msg, (numeric, i) => ((INumeric)numeric).ZFill(i.Value)));
       }
 
       protected void numericConversionMessages()

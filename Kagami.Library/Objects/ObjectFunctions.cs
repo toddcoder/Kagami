@@ -7,6 +7,7 @@ using Kagami.Library.Runtime;
 using Standard.Types.Collections;
 using Standard.Types.Enumerables;
 using Standard.Types.Maybe;
+using Standard.Types.Strings;
 using static Kagami.Library.AllExceptions;
 
 namespace Kagami.Library.Objects
@@ -368,6 +369,18 @@ namespace Kagami.Library.Objects
             return obj.Compare(min) > 0 && obj.Compare(max) <= 0;
          else
             return obj.Compare(min) > 0 && obj.Compare(max) < 0;
+      }
+
+      public static string zfill(string number, int count)
+      {
+         var sign = "";
+         if (number.StartsWith("-"))
+         {
+            sign = "-";
+            number = number.Skip(1);
+         }
+
+         return $"{sign}{number.PadLeft(count, '0')}";
       }
    }
 }

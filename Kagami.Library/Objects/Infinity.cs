@@ -58,6 +58,8 @@ namespace Kagami.Library.Objects
 
       public bool IsRational => false;
 
+      public String ZFill(int count) => AsString;
+
       public string AsString => "_";
 
       public string Image => "_";
