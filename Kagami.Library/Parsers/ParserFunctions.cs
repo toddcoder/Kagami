@@ -245,7 +245,7 @@ namespace Kagami.Library.Parsers
                case MatchType.Matched:
                   arguments.Add(expression);
                   var (nextType, next, nextException) =
-                     state.Scan("^ /(/s*) /[',)]}'] /(/s*)", Color.Whitespace, Color.Structure, Color.Whitespace).Values;
+                     state.Scan("^ /(/s*) /[',)]}']", Color.Whitespace, Color.Structure).Values;
                   switch (nextType)
                   {
                      case MatchType.Matched:

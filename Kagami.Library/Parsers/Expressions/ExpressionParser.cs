@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Invokables;
+﻿using System.Linq;
+using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Standard.Types.Maybe;
@@ -70,7 +71,12 @@ namespace Kagami.Library.Parsers.Expressions
                if (state.MapExpression.If(out var mapExpression))
                {
                   var (fieldName, symbol) = mapExpression;
-                  if (getMessageWithLambda(fieldName, symbol, "map", expression).If(out var newExpression, out exception))
+                  if (!keep(fieldName))
+                  {
+                     Expression = expression;
+                     return Unit.Matched();
+                  }
+                  else if (getMessageWithLambda(fieldName, symbol, "map", expression).If(out var newExpression, out exception))
                   {
                      Expression = newExpression;
                      state.MapExpression = none<(string, Symbol)>();
@@ -81,7 +87,12 @@ namespace Kagami.Library.Parsers.Expressions
                else if (state.IfExpression.If(out var ifExpression))
                {
                   var (fieldName, symbol) = ifExpression;
-                  if (getMessageWithLambda(fieldName, symbol, "if", expression).If(out var newExpression, out exception))
+                  if (!keep(fieldName))
+                  {
+                     Expression = expression;
+                     return Unit.Matched();
+                  }
+                  else if (getMessageWithLambda(fieldName, symbol, "if", expression).If(out var newExpression, out exception))
                   {
                      Expression = newExpression;
                      state.IfExpression = none<(string, Symbol)>();
@@ -93,7 +104,12 @@ namespace Kagami.Library.Parsers.Expressions
                {
                   var (leftFieldName, leftSymbol) = leftTuple;
                   var (rightFieldName, rightSymbol) = rightTuple;
-                  if (getDualMessageWithLambda(leftFieldName, rightFieldName, leftSymbol, rightSymbol, "zip".Function("", "with"),
+                  if (!keep(leftFieldName) || !keep(rightFieldName))
+                  {
+                     Expression = expression;
+                     return Unit.Matched();
+                  }
+                  else if (getDualMessageWithLambda(leftFieldName, rightFieldName, leftSymbol, rightSymbol, "zip".Function("", "with"),
                      expression).If(out var newExpression, out exception))
                   {
                      Expression = newExpression;
@@ -122,6 +138,31 @@ namespace Kagami.Library.Parsers.Expressions
             return "Invalid expression syntax".FailedMatch<Unit>();
          else
             return failedMatch<Unit>(exception);
+      }
+
+/*      IMatched<(string, Symbol)> getIteratorExpression(IMaybe<(string, Symbol)> source, string message, Expression expression)
+      {
+         if (source.If(out var tuple))
+         {
+            var (fieldName, symbol) = tuple;
+            if (keep(fieldName) && getMessageWithLambda(fieldName, symbol, message, expression)
+               .If(out var newExpression, out var exception))
+            {
+               Expression = newExpression;
+               return 
+            }
+         }
+         else
+            return notMatched<(string, Symbol)>();
+      }*/
+
+      bool keep(string fieldName)
+      {
+         var exp = builder.Ordered.ToArray();
+         if (exp.Length != 1)
+            return true;
+         else
+            return !(exp[0] is FieldSymbol fieldSymbol) || fieldSymbol.FieldName != fieldName;
       }
 
       static IResult<Expression> getMessageWithLambda(string fieldName, Symbol symbol, string messageName, Expression expression)
