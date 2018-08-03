@@ -263,6 +263,7 @@
     <Compile Include="Nodes\Symbols\SendBinaryMessageSymbol.cs" />
     <Compile Include="Nodes\Symbols\SendOperatorMessage.cs" />
     <Compile Include="Nodes\Symbols\SendMessageSymbol.cs" />
+    <Compile Include="Nodes\Symbols\SendPrefixMessage.cs" />
     <Compile Include="Nodes\Symbols\SeqSymbol.cs" />
     <Compile Include="Nodes\Symbols\SetSliceSymbol.cs" />
     <Compile Include="Nodes\Symbols\SkipTakeItem.cs" />
@@ -573,6 +574,7 @@
     <Compile Include="Parsers\Expressions\MapExpressionParser.cs" />
     <Compile Include="Parsers\Expressions\MatchLambdaParser.cs" />
     <Compile Include="Parsers\Expressions\PatternParser.cs" />
+    <Compile Include="Parsers\Expressions\RangePrefixParser.cs" />
     <Compile Include="Parsers\Expressions\RefParser.cs" />
     <Compile Include="Parsers\Expressions\SeqParser.cs" />
     <Compile Include="Parsers\Expressions\SetPropertyParser.cs" />

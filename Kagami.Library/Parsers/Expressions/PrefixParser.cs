@@ -16,6 +16,7 @@ namespace Kagami.Library.Parsers.Expressions
             yield return new ImageParser(builder);
             yield return new IteratorParser(builder);
             yield return new NotParser(builder);
+            yield return new RangePrefixParser(builder);
             yield return new BNotParser(builder);
          }
       }
