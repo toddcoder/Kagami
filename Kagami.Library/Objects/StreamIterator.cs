@@ -225,7 +225,7 @@ namespace Kagami.Library.Objects
 
       public IObject Shuffle() => iterator.Shuffle();
 
-      public IObject Shuffle(int count) => iterator.Shuffle(count);
+      public IObject Random() => iterator.Random();
 
       public IObject Collect() => iterator.Collect();
 

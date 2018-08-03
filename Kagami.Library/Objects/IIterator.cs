@@ -122,7 +122,7 @@ namespace Kagami.Library.Objects
 
       IObject Shuffle();
 
-      IObject Shuffle(int count);
+      IObject Random();
 
       IObject Collect();
 

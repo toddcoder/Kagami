@@ -662,10 +662,13 @@ namespace Kagami.Library.Objects
          return shuffle(array, array.Length);
       }
 
-      public IObject Shuffle(int count)
+      public IObject Random()
       {
          var array = List().ToArray();
-         return shuffle(array, count);
+         var random = new Random(NowServer.Now.Millisecond);
+         var i = random.Next(array.Length);
+
+         return array[i];
       }
 
       public IObject Collect() => collectionClass.Revert(List());

@@ -6,7 +6,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct Date : IObject, IRangeItem
+   public struct Date : IObject, IRangeItem, IFormattable
    {
       public static implicit operator Date(DateTime dateTime) => new Date(dateTime);
 
@@ -89,5 +89,7 @@ namespace Kagami.Library.Objects
                throw incompatibleClasses(obj, "Interval or Date");
          }
       }
+
+      public String Format(string format) => value.ToString(format);
    }
 }

@@ -254,9 +254,8 @@ namespace Kagami.Library.Classes
             "skip".Function("until"), "take", "take".Function("while"), "take".Function("until"), "index", "indexes",
             "zip".Function("", "with"), "zip", "min".get(), "min", "max".get(), "max", "first", "first".Function("with"), "last",
             "last".Function("with"),
-            "split", "split".Function("count"), "group".Function("by"), "one", "none", "any", "all", "sum", "average", "product",
-            "cross", "by", "window", "distinct", "span".Function("with"), "span".Function("count"), "shuffle",
-            "shuffle".Function("count"),
+            "split", "split".Function("count"), "random", "group".Function("by"), "one", "none", "any", "all", "sum", "average",
+            "product", "cross", "by", "window", "distinct", "span".Function("with"), "span".Function("count"), "shuffle",
             "array", "list", "tuple", "dictionary".Function("key", "value"), "dictionary", "each", "rotate", "permutation",
             "combination", "flatten",
             "copy", "revert"));
@@ -334,7 +333,7 @@ namespace Kagami.Library.Classes
          registerMessage("span".Function("with"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Span(l)));
          registerMessage("span".Function("count"), (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.Span(j.Value)));
          registerMessage("shuffle", (obj, msg) => iteratorFunc(obj, i => i.Shuffle()));
-         registerMessage("shuffle".Function("count"), (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.Shuffle(j.Value)));
+         registerMessage("random", (obj, msg) => iteratorFunc(obj, i => i.Random()));
          registerMessage("array", (obj, msg) => iteratorFunc(obj, i => i.ToArray()));
          registerMessage("list", (obj, msg) => iteratorFunc(obj, i => i.ToList()));
          registerMessage("tuple", (obj, msg) => iteratorFunc(obj, i => i.ToTuple()));
