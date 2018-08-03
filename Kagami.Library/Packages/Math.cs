@@ -69,6 +69,19 @@ namespace Kagami.Library.Packages
 
       public IObject Log(IObject obj) => function(obj, d => System.Math.Log10(d), n => n.Log());
 
+      public IObject Log(IObject x, IObject y)
+      {
+         switch (x)
+         {
+            case INumeric numeric when y is INumeric baseNumeric:
+               return Float.FloatObject(System.Math.Log(numeric.AsDouble(), baseNumeric.AsDouble()));
+            case INumeric _:
+               throw incompatibleClasses(y, "Float");
+            default:
+               throw incompatibleClasses(x, "Float");
+         }
+      }
+
       public IObject Ln(IObject obj) => function(obj, d => System.Math.Log(d), n => n.Ln());
 
       public IObject Exp(IObject obj) => function(obj, d => System.Math.Exp(d), n => n.Exp());

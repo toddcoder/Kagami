@@ -26,6 +26,8 @@ namespace Kagami.Library.Packages
          registerPackageFunction("atanh", (obj, msg) => function<Math, IObject>(obj, msg, (m, n) => m.Atanh(n)));
          registerPackageFunction("sqrt", (obj, msg) => function<Math, IObject>(obj, msg, (m, n) => m.Sqrt(n)));
          registerPackageFunction("log", (obj, msg) => function<Math, IObject>(obj, msg, (m, n) => m.Log(n)));
+         registerPackageFunction("log".Function("", "of"),
+            (obj, msg) => function<Math, IObject, IObject>(obj, msg, (m, n1, n2) => m.Log(n1, n2)));
          registerPackageFunction("ln", (obj, msg) => function<Math, IObject>(obj, msg, (m, n) => m.Ln(n)));
          registerPackageFunction("exp", (obj, msg) => function<Math, IObject>(obj, msg, (m, n) => m.Exp(n)));
          registerPackageFunction("sign", (obj, msg) => function<Math, IObject>(obj, msg, (m, n) => m.Sign(n)));
