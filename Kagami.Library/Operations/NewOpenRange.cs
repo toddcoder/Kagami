@@ -14,20 +14,23 @@ namespace Kagami.Library.Operations
          switch (x)
          {
             case Int i:
-               return new Sequence(i.Value, y).Matched<IObject>();
-            case Sequence seq:
-               return new Sequence(seq, y).Matched<IObject>();
-            default:
                switch (y)
                {
-                  case Lambda lambda:
-                     return new OpenRange(x, lambda).Matched<IObject>();
+                  case Lambda lambda1:
+                     return new OpenRange(x, lambda1).Matched<IObject>();
                   case INumeric _:
                      var internalLambda = new InternalLambda(o => sendMessage(o[0], "+", y));
                      return new OpenRange(x, internalLambda).Matched<IObject>();
                   default:
-                     return failedMatch<IObject>(incompatibleClasses(y, "Lambda"));
+                     return new Sequence(i.Value, y).Matched<IObject>();
                }
+            case Sequence seq:
+               return new Sequence(seq, y).Matched<IObject>();
+            default:
+               if (y is Lambda lambda2)
+                  return new OpenRange(x, lambda2).Matched<IObject>();
+               else
+                  return failedMatch<IObject>(incompatibleClasses(y, "Lambda"));
          }
       }
 
