@@ -40,7 +40,7 @@ namespace Kagami.Library.Nodes.Symbols
          builder.SendMessage("[]=", arguments.Length + 1);
       }
 
-      public override Precedence Precedence => Precedence.PostfixOperator;
+      public override Precedence Precedence => Precedence.SendMessage;
 
       public override Arity Arity => Arity.Postfix;
 

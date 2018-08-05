@@ -4,9 +4,10 @@
    {
       Value = 0,
       //Indexer = 1,
-      //SendMessage = 1,
+      SendMessage = 1,
       PrefixOperator = 2,
       //Invoke = 3,
+      //SendMessage = 3,
       KeyValue = 4,
       PostfixOperator = 5,
       Raise = 6,

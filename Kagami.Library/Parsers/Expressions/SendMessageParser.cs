@@ -13,7 +13,7 @@ namespace Kagami.Library.Parsers.Expressions
 
       public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
       {
-         var precedence = tokens[2].Text == "." ? Precedence.PostfixOperator : Precedence.ChainedOperator;
+         var precedence = tokens[2].Text == "." ? Precedence.SendMessage : Precedence.ChainedOperator;
          var messageName = tokens[3].Text;
          var parameterDelimiter = tokens[4].Text;
          var parseArguments = true;

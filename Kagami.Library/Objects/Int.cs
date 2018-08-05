@@ -187,5 +187,7 @@ namespace Kagami.Library.Objects
       public Interval Hour => value.Hour();
 
       public Interval Day => value.Day();
+
+      public Char Char() => new Char((char)value);
    }
 }

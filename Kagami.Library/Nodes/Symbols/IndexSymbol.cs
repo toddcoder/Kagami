@@ -9,7 +9,7 @@ namespace Kagami.Library.Nodes.Symbols
 
       public IndexSymbol(Expression[] arguments) => this.arguments = arguments;
 
-      public override Precedence Precedence => Precedence.PostfixOperator;
+      public override Precedence Precedence => Precedence.SendMessage;
 
       public override Arity Arity => Arity.Postfix;
 

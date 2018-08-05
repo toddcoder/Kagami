@@ -17,7 +17,7 @@ namespace Kagami.Library.Parsers.Expressions
 
       public override IMatched<Unit> Prefix(ParseState state, Token[] tokens)
       {
-         precedence = tokens[2].Text == "." ? Precedence.PostfixOperator : Precedence.ChainedOperator;
+         precedence = tokens[2].Text == "." ? Precedence.SendMessage : Precedence.ChainedOperator;
          messageName = tokens[3].Text;
          operationSource = tokens[5].Text;
          state.Colorize(tokens, Color.Whitespace, Color.Structure, Color.Message, Color.Whitespace, Color.Operator,

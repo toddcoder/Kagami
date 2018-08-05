@@ -25,7 +25,7 @@ namespace Kagami.Library.Nodes.Symbols
             throw exception;
       }
 
-      public override Precedence Precedence => Precedence.PostfixOperator;
+      public override Precedence Precedence => Precedence.SendMessage;
 
       public override Arity Arity => Arity.Postfix;
 
