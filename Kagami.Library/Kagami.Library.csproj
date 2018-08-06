@@ -660,6 +660,7 @@
     <Compile Include="Parsers\Statements\MatchFunctionParser.cs" />
     <Compile Include="Parsers\Statements\MatchParser.cs" />
     <Compile Include="Parsers\Statements\ConditionalAssignParser.cs" />
+    <Compile Include="Parsers\Statements\ModuleParser.cs" />
     <Compile Include="Parsers\Statements\OpenPackageParser.cs" />
     <Compile Include="Parsers\Statements\ParentClassParser.cs" />
     <Compile Include="Parsers\Statements\PassParser.cs" />
