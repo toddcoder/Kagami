@@ -7,6 +7,7 @@ using Standard.Types.Collections;
 using Standard.Types.Exceptions;
 using Standard.Types.Maybe;
 using Standard.Types.Strings;
+using static Kagami.Library.Classes.ClassFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Standard.Types.Maybe.MaybeFunctions;
 
@@ -106,7 +107,11 @@ namespace Kagami.Library.Classes
          }
       }
 
-      public override void RegisterMessages() { }
+      public override void RegisterMessages()
+      {
+         registerMessage("send",
+            (obj, msg) => function<IObject, String>(obj, msg, (o, n) => sendMessage(o, n.Value, msg.Arguments.Pass(1))));
+      }
 
       public IMatched<Signature> MatchImplemented(IEnumerable<Signature> traitSignatures)
       {
