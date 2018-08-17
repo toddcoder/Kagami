@@ -152,8 +152,8 @@ namespace Kagami.Library.Runtime
          if (Pop().If(out var value, out var exception))
             if (value is Arguments arguments)
             {
-               var fullFunctionName = arguments.FullFunctionName(fieldName);
-               if (Find(fullFunctionName, true).If(out var field, out var isNotMatched, out exception))
+               var selector = arguments.Selector(fieldName);
+               if (Find(selector).If(out var field, out var isNotMatched, out exception))
                {
                   value = field.Value;
                   switch (value)
@@ -169,7 +169,7 @@ namespace Kagami.Library.Runtime
                   }
                }
                else if (isNotMatched)
-                  return failedMatch<IObject>(fieldNotFound(fullFunctionName));
+                  return failedMatch<IObject>(fieldNotFound(selector));
                else
                   return failedMatch<IObject>(exception);
             }
@@ -320,6 +320,37 @@ namespace Kagami.Library.Runtime
 
          return notMatched<Field>();
       }
+
+      public IResult<Unit> FindByPattern(string pattern, List<Field> list)
+      {
+         foreach (var frame in stack)
+            if (frame.Fields.FindByPattern(pattern, list).IfNot(out var exception))
+               return failure<Unit>(exception);
+
+         return Unit.Success();
+      }
+
+      public IMatched<Field> Find(Selector selector) => findExact(selector).Or(findEquivalent(selector).Or(findTypeless(selector)));
+
+      IMatched<Field> findExact(Selector selector) => Find(selector.Image, true);
+
+      IMatched<Field> findEquivalent(Selector selector)
+      {
+         var count = selector.SelectorItems.Length;
+         var iterator = new BitIterator(count);
+         foreach (var bools in iterator)
+         {
+            var newSelector = selector.Equivalent(bools);
+            if (findExact(newSelector).If(out var matched, out var isNotMatched, out var exception))
+               return matched.Matched();
+            else if (!isNotMatched)
+               return failedMatch<Field>(exception);
+         }
+
+         return notMatched<Field>();
+      }
+
+      IMatched<Field> findTypeless(Selector selector) => Find(selector.LabelsOnly().Image, true);
 
       public IResult<Field> Assign(string fieldName, IObject value, bool getting, bool overriden = false)
       {

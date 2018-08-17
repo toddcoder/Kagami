@@ -4,7 +4,7 @@ using Standard.Types.Maybe;
 
 namespace Kagami.Library.Objects
 {
-   public interface IIterator
+   public interface IIterator : IEquivalentClass
    {
       ICollection Collection { get; }
 

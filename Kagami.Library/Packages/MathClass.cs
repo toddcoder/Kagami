@@ -26,7 +26,7 @@ namespace Kagami.Library.Packages
          registerPackageFunction("atanh", (obj, msg) => function<Math, IObject>(obj, msg, (m, n) => m.Atanh(n)));
          registerPackageFunction("sqrt", (obj, msg) => function<Math, IObject>(obj, msg, (m, n) => m.Sqrt(n)));
          registerPackageFunction("log", (obj, msg) => function<Math, IObject>(obj, msg, (m, n) => m.Log(n)));
-         registerPackageFunction("log".Function("", "of"),
+         registerPackageFunction("log".Selector("<Number>", "of:<Int>"),
             (obj, msg) => function<Math, IObject, IObject>(obj, msg, (m, n1, n2) => m.Log(n1, n2)));
          registerPackageFunction("ln", (obj, msg) => function<Math, IObject>(obj, msg, (m, n) => m.Ln(n)));
          registerPackageFunction("exp", (obj, msg) => function<Math, IObject>(obj, msg, (m, n) => m.Exp(n)));
@@ -42,9 +42,9 @@ namespace Kagami.Library.Packages
          registerPackageFunction("complex", (obj, msg) => function<Math, IObject>(obj, msg, (m, n) => m.XComplex(n)));
          registerPackageFunction("rational", (obj, msg) => function<Math, IObject>(obj, msg, (m, n) => m.XRational(n)));
          registerPackageFunction("hypot", (obj, msg) => function<Math, IObject, IObject>(obj, msg, (m, x, y) => m.Hypot(x, y)));
-         registerPackageFunction("string".Function("toLong", "base"),
+         registerPackageFunction("string".Selector("toLong:<String>", "base:<Int>"),
             (obj, msg) => function<Math, String, Int>(obj, msg, (m, s, i) => m.StringToLong(s.Value, i.Value)));
-         registerPackageFunction("string".Function("toFloat", "base"),
+         registerPackageFunction("string".Selector("toFloat:<String>", "base:<Int>"),
             (obj, msg) => function<Math, String, Int>(obj, msg, (m, s, i) => m.StringToFloat(s.Value, i.Value)));
          registerPackageFunction("frexp", (obj, msg) => function<Math, Float>(obj, msg, (m, f) => m.Frexp(f.Value)));
          registerPackageFunction("pi".get(), (obj, msg) => function<Math>(obj, m => m.Pi));

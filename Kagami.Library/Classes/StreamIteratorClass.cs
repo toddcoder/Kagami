@@ -15,5 +15,7 @@ namespace Kagami.Library.Classes
 
          iteratorMessages();
       }
+
+      public BaseClass Equivalent() => new CollectionClass();
    }
 }

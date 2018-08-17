@@ -267,5 +267,7 @@ namespace Kagami.Library.Objects
       public IObject Flatten() => iterator.Flatten();
 
       public IObject Copy() => iterator.Copy();
+
+      public BaseClass Equivalent() => new CollectionClass();
    }
 }

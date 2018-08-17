@@ -4,7 +4,7 @@ using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Classes
 {
-   public class IntClass : BaseClass, IParse
+   public class IntClass : BaseClass, IParse, IEquivalentClass
    {
       public override string Name => "Int";
 
@@ -53,5 +53,9 @@ namespace Kagami.Library.Classes
       }
 
       public IObject Parse(string source) => Int.IntObject(source.ToInt());
+
+      public override bool IsNumeric => true;
+
+      public BaseClass Equivalent() => new NumberClass();
    }
 }

@@ -14,9 +14,9 @@ namespace Kagami.Collections
          base.RegisterMessages();
 
          registerPackageFunction("Set", (obj, msg) => function<Collections>(obj, c => c.Set(msg.Arguments.Value)));
-         registerPackageFunction("Set".Function("of"), (obj, msg) => function<Collections>(obj, c => c.Set((ICollection)msg.Arguments[0])));
-         registerPackageFunction("Set".Function("set"), (obj, msg) => function<Collections, Set>(obj, msg, (c, s) => c.Set(s)));
-         registerPackageFunction("sequence".Function("count", "factor", "offset"),
+         registerPackageFunction("Set".Selector("of:<Collection>"), (obj, msg) => function<Collections>(obj, c => c.Set((ICollection)msg.Arguments[0])));
+         registerPackageFunction("Set".Selector("set:<Set>"), (obj, msg) => function<Collections, Set>(obj, msg, (c, s) => c.Set(s)));
+         registerPackageFunction("sequence".Selector("count:<Int>", "factor:<Int>", "offset:<Int>"),
             (obj, msg) => function<Collections, Int, Int, Int>(obj, msg, (coll, c, f, o) => coll.Sequence(c.Value, f.Value, o.Value)));
       }
    }

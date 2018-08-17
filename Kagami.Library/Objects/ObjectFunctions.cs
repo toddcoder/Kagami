@@ -6,9 +6,13 @@ using Kagami.Library.Classes;
 using Kagami.Library.Runtime;
 using Standard.Types.Collections;
 using Standard.Types.Enumerables;
+using Standard.Types.Exceptions;
 using Standard.Types.Maybe;
+using Standard.Types.RegularExpressions;
 using Standard.Types.Strings;
 using static Kagami.Library.AllExceptions;
+using static Kagami.Library.Parsers.ParserFunctions;
+using static Standard.Types.Maybe.MaybeFunctions;
 
 namespace Kagami.Library.Objects
 {
@@ -381,6 +385,53 @@ namespace Kagami.Library.Objects
          }
 
          return $"{sign}{number.PadLeft(count, '0')}";
+      }
+
+      public static Selector parseSelector(string source)
+      {
+         var matcher = new Matcher();
+         if (matcher.IsMatch(source, $"^ /({REGEX_FUNCTION_NAME}) '(' /@"))
+         {
+            var name = matcher.FirstGroup;
+            var rest = matcher.SecondGroup.TakeUntil(")");
+            var sourceItems = rest.Split("/s* ',' /s*");
+            var items = sourceItems.Select(parseSelectorItem).ToArray();
+
+            return new Selector(name, items, source);
+         }
+         else
+            throw $"Can't convert {source} into a Selector".Throws();
+      }
+
+      public static SelectorItem parseSelectorItem(string source)
+      {
+         var label = "";
+         var typeConstraint = none<TypeConstraint>();
+
+         var matcher = new Matcher();
+         if (matcher.IsMatch(source, $"^ /({REGEX_FIELD}) ':' /@"))
+         {
+            label = matcher.FirstGroup;
+            source = matcher.SecondGroup;
+         }
+
+         if (matcher.IsMatch(source, "^ '<' /(-['>']+) '>'"))
+         {
+            var classNames = matcher.FirstGroup.Split("/s+");
+            var classes = classNames.Select(cn => Module.Global.Class(cn).Required(messageClassNotFound(cn))).ToArray();
+            typeConstraint = new TypeConstraint(classes).Some();
+         }
+
+         return new SelectorItem(label, typeConstraint);
+      }
+
+      public static string selectorImage(string name, SelectorItem[] selectorItems) => $"{name}({selectorItems.Listify(",")})";
+
+      public static Selector selector(string name, string[] labels, IObject[] objects)
+      {
+         var enumerable = labels.Zip(objects, (l, o) => $"{l.Extend(after: ":")}<{o.ClassName}>");
+         var selectItems = enumerable.Select(parseSelectorItem).ToArray();
+         return new Selector(name, selectItems, selectorImage(name, selectItems));
       }
    }
 }

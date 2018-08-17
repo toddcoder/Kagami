@@ -750,7 +750,7 @@ namespace Kagami.Library.Parsers
                symbol = new SendBinaryMessageSymbol("foldl", Precedence.Boolean).Matched<Symbol>();
                break;
             case "<%":
-               symbol = new SendBinaryMessageSymbol("sort".Function("with"), Precedence.ChainedOperator).Matched<Symbol>();
+               symbol = new SendBinaryMessageSymbol("sort".Selector("<Lambda>"), Precedence.ChainedOperator).Matched<Symbol>();
                break;
             case "!>":
                symbol = new SendBinaryMessageSymbol("foldr", Precedence.Boolean).Matched<Symbol>();
@@ -849,7 +849,7 @@ namespace Kagami.Library.Parsers
                symbol = new MatchSymbol().Matched<Symbol>();
                break;
             case "~~":
-               symbol = new SendBinaryMessageSymbol("match".Function("input"), Precedence.Boolean, true).Matched<Symbol>();
+               symbol = new SendBinaryMessageSymbol("match".Selector("input:<String>"), Precedence.Boolean, true).Matched<Symbol>();
                break;
             case "!!":
                symbol = new SendBinaryMessageSymbol("defaultTo", Precedence.Concatenate).Matched<Symbol>();

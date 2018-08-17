@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using Kagami.Library.Objects;
 using Standard.Types.Maybe;
 using Standard.Types.Strings;
@@ -73,7 +74,19 @@ namespace Kagami.Library.Invokables
          }
       }
 
-      public string NameForFunction => label.DefaultTo("");
+      public string NameForFunction
+      {
+         get
+         {
+            var builder = new StringBuilder();
+            if (label.IsNotEmpty())
+               builder.Append($"{label}:");
+            if (typeConstraint.If(out var tc))
+               builder.Append(tc.Image);
+
+            return builder.ToString();
+         }
+      }
 
       public override string ToString()
       {

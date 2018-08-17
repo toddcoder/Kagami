@@ -63,8 +63,8 @@ namespace Kagami.Library.Operations
          increment = false;
          if (value is Arguments arguments)
          {
-            var fullFieldName = arguments.FullFunctionName(fieldName);
-            var (type, field, exception) = machine.Find(fullFieldName, true).Values;
+            var selector = arguments.Selector(fieldName);
+            var (type, field, exception) = machine.Find(selector).Values;
             switch (type)
             {
                case MatchType.Matched:

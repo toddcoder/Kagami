@@ -24,5 +24,7 @@ namespace Kagami.Library.Classes
          messages["isEmpty".get()] = (obj, msg) => function<List>(obj, l => Boolean.BooleanObject(l.IsEmpty));
          messages["[]"] = (obj, msg) => function<List, Int>(obj, msg, (l, i) => l[i.Value]);
       }
+
+      public BaseClass Equivalent() => new CollectionClass();
    }
 }

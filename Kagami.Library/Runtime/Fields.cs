@@ -6,6 +6,7 @@ using Kagami.Library.Objects;
 using Standard.Types.Collections;
 using Standard.Types.Enumerables;
 using Standard.Types.Maybe;
+using Standard.Types.RegularExpressions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Standard.Types.Maybe.MaybeFunctions;
@@ -39,6 +40,19 @@ namespace Kagami.Library.Runtime
          }
          else
             return notMatched<Field>();
+      }
+
+      public IResult<Unit> FindByPattern(string pattern, List<Field> list, int depth = 0)
+      {
+         if (depth > MAX_DEPTH)
+            return "Exceeded max depth".Failure<Unit>();
+         else
+         {
+            foreach (var key in fields.KeyArray().Where(k=>k.IsMatch(pattern)))
+               list.Add(fields[key]);
+
+            return Unit.Success();
+         }
       }
 
       public IResult<Field> New(string name, IObject value, bool mutable = false, bool visible = true)

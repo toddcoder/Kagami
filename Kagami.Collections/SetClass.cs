@@ -31,5 +31,7 @@ namespace Kagami.Collections
       }
 
       public IObject Revert(IEnumerable<IObject> list) => new Set(list.ToArray());
+
+      public BaseClass Equivalent() => new CollectionClass();
    }
 }

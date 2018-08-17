@@ -59,7 +59,7 @@ namespace Kagami.Library.Objects
          }
       }
 
-      public string FullFunctionName(string name) => name.Function(labels);
+      public Selector Selector(string name) => selector(name, labels, arguments);
 
       public IObject[] Value => arguments;
 

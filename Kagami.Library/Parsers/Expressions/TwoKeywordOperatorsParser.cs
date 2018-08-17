@@ -27,7 +27,7 @@ namespace Kagami.Library.Parsers.Expressions
                {
                   case "while":
                   case "until":
-                     message = word1.Function(word2);
+                     message = word1.Selector($"{word2}:");
                      break;
                }
                break;

@@ -79,6 +79,8 @@ namespace Kagami.Library.Runtime
          classes["Interval"] = new IntervalClass();
          classes["TypeConstraint"] = new TypeConstraintClass();
          classes["ByteArray"] = new ByteArrayClass();
+         classes["Selector"] = new SelectorClass();
+         classes["Number"] = new NumberClass();
       }
 
       public IMaybe<BaseClass> Class(string name) => classes.Map(name);

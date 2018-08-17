@@ -5,7 +5,7 @@ using static Kagami.Library.Operations.NumericFunctions;
 
 namespace Kagami.Library.Classes
 {
-   public class FloatClass : BaseClass, IParse
+   public class FloatClass : BaseClass, IParse, IEquivalentClass
    {
       public override string Name => "Float";
 
@@ -42,5 +42,9 @@ namespace Kagami.Library.Classes
       }
 
       public IObject Parse(string source) => Float.FloatObject(source.ToDouble());
+
+      public override bool IsNumeric => true;
+
+      public BaseClass Equivalent() => new NumberClass();
    }
 }

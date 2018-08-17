@@ -28,15 +28,15 @@ namespace Kagami.Library.Classes
          registerMessage("pop", (obj, msg) => function<Array>(obj, a => a.Pop()));
          registerMessage("unshift", (obj, msg) => function<Array, IObject>(obj, msg, (a, v) => a.Unshift(v)));
          registerMessage("shift", (obj, msg) => function<Array>(obj, a => a.Shift()));
-         messages["find".Function("", "startAt", "reverse")] = (obj, msg) =>
+         messages["find".Selector("<Array>", "startAt:<Int>", "reverse:<Boolean>")] = (obj, msg) =>
             function<Array, IObject, Int, Boolean>(obj, msg, (a, o, i, r) => a.Find(o, i.Value, r.Value));
-         messages["find".Function("", "startAt")] = (obj, msg) =>
+         messages["find".Selector("<Array>", "startAt:<Int>")] = (obj, msg) =>
             function<Array, IObject, Int>(obj, msg, (a, o, i) => a.Find(o, i.Value, false));
-         messages["find".Function("", "reverse")] = (obj, msg) =>
+         messages["find".Selector("<Array>", "reverse:<Boolean>")] = (obj, msg) =>
             function<Array, IObject, Boolean>(obj, msg, (a, o, r) => a.Find(o, 0, r.Value));
          messages["find"] = (obj, msg) =>
             function<Array, IObject>(obj, msg, (a, o) => a.Find(o, 0, false));
-         messages["find".Function("all")] = (obj, msg) =>
+         messages["find".Selector("all:<Array>")] = (obj, msg) =>
             function<Array, IObject>(obj, msg, (a, o) => a.FindAll(o));
       }
 
@@ -44,7 +44,7 @@ namespace Kagami.Library.Classes
       {
          base.RegisterClassMessages();
 
-         classMessages["repeat".Function("value", "times")] = (bc, msg) =>
+         classMessages["repeat".Selector("value:", "times:<Int>")] = (bc, msg) =>
             classFunc<ArrayClass, IObject, Int>(bc, msg, (ac, v, t) => Array.Repeat(v, t.Value));
          classMessages["empty".get()] = (bc, msg) => classFunc<ArrayClass>(bc, ac => Array.Empty);
          classMessages["typed"] = (bc, msg) => getTypedArray(msg);
@@ -57,5 +57,7 @@ namespace Kagami.Library.Classes
          else
             throw "Type constraint for array required".Throws();
       }
+
+      public BaseClass Equivalent() => new CollectionClass();
    }
 }

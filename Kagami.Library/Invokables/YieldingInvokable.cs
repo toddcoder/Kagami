@@ -11,18 +11,18 @@ namespace Kagami.Library.Invokables
 {
    public class YieldingInvokable : IInvokable, ICollection, IObject
    {
-      string functionName;
+      Selector selector;
       List<IObject> cached;
 
-      public YieldingInvokable(string functionName, Parameters parameters, string image)
+      public YieldingInvokable(Selector selector, Parameters parameters, string image)
       {
-         this.functionName = functionName;
+         this.selector = selector;
          Parameters = parameters;
          Image = image;
          cached = new List<IObject>();
       }
 
-      public string FunctionName => functionName;
+      public Selector Selector => selector;
 
       public int Index { get; set; } = -1;
 
@@ -32,15 +32,15 @@ namespace Kagami.Library.Invokables
 
       public string ClassName => "YieldingInvokable";
 
-      public string AsString => functionName;
+      public string AsString => selector.AsString;
 
       public string Image { get; }
 
       public bool Constructing => false;
 
-      public int Hash => functionName.GetHashCode();
+      public int Hash => selector.Hash;
 
-      public bool IsEqualTo(IObject obj) => obj is YieldingInvokable yfi && functionName == yfi.functionName;
+      public bool IsEqualTo(IObject obj) => obj is YieldingInvokable yfi && selector.IsEqualTo(yfi.selector);
 
       public bool Match(IObject comparisand, Hash<string, IObject> bindings) => false;
 

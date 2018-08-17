@@ -131,7 +131,7 @@ namespace Kagami.Library.Parsers.Statements
                case Function function when standard:
                {
                   var (functionName, funcParameters, block, _, invokable, overriding) = function;
-                  functionName = funcParameters.FullFunctionName(functionName);
+                  functionName = funcParameters.Selector(functionName);
                   if (!isPrivate(functionName))
                      if (userClass.RegisterMethod(functionName, new Lambda(invokable), overriding))
                         functions.Add((invokable, block, overriding));
@@ -144,7 +144,7 @@ namespace Kagami.Library.Parsers.Statements
                case MatchFunction matchFunction when standard:
                {
                   var (functionName, funcParameters, block, _, invokable, overriding) = matchFunction;
-                  functionName = funcParameters.FullFunctionName(functionName);
+                  functionName = funcParameters.Selector(functionName);
                   if (!isPrivate(functionName))
                      if (userClass.RegisterMethod(functionName, new Lambda(invokable), overriding))
                         functions.Add((invokable, block, overriding));
@@ -169,7 +169,7 @@ namespace Kagami.Library.Parsers.Statements
       public IMatched<Unit> Constructor(Parameters parameters, Block block, bool standard)
       {
          var invokable = new ConstructorInvokable(className, parameters);
-         var fullFunctionName = parameters.FullFunctionName(className);
+         var fullFunctionName = parameters.Selector(className);
          if (constructorInvokables.ContainsKey(fullFunctionName))
             return $"Constructor {fullFunctionName} already exists".FailedMatch<Unit>();
          else

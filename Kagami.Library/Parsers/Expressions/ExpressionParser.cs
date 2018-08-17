@@ -109,7 +109,7 @@ namespace Kagami.Library.Parsers.Expressions
                      Expression = expression;
                      return Unit.Matched();
                   }
-                  else if (getDualMessageWithLambda(leftFieldName, rightFieldName, leftSymbol, rightSymbol, "zip".Function("", "with"),
+                  else if (getDualMessageWithLambda(leftFieldName, rightFieldName, leftSymbol, rightSymbol, "zip".Selector("<Collection>", "<Lambda>"),
                      expression).If(out var newExpression, out exception))
                   {
                      Expression = newExpression;

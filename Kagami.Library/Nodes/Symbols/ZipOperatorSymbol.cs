@@ -14,7 +14,7 @@ namespace Kagami.Library.Nodes.Symbols
          if (operatorLambda(operatorSymbol, builder).If(out var lambda, out var exception))
          {
             builder.PushObject(lambda);
-            builder.SendMessage("zip".Function("on", "with"), 2);
+            builder.SendMessage("zip".Selector("<Collection>", "<Lambda>"), 2);
          }
          else
             throw exception;

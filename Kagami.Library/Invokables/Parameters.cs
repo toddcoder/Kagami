@@ -2,8 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Kagami.Library.Objects;
 using Standard.Types.Enumerables;
-using Standard.Types.Strings;
 
 namespace Kagami.Library.Invokables
 {
@@ -58,12 +58,14 @@ namespace Kagami.Library.Invokables
 
       public override string ToString() => parameters.Listify();
 
-      public string FullFunctionName(string name)
+/*      public string FullFunctionName(string name)
       {
          if (parameters.Any(p => p.Label.IsNotEmpty()))
-            return name.Function(parameters.Select(p => p.NameForFunction).ToArray());
+            return name.Selector(parameters.Select(p=>p.NameForFunction)) name.Function(parameters.Select(p => p.NameForFunction).ToArray());
          else
             return name;
-      }
+      }*/
+
+      public Selector Selector(string name) => name.Selector(parameters.Select(p => p.NameForFunction).ToArray());
    }
 }

@@ -11,9 +11,9 @@ namespace Kagami.Library.Classes
       {
          base.RegisterMessages();
 
-         messages["match".Function("input")] = (obj, msg) => function<Regex, String>(obj, msg, (r, s) => r.Match(s.Value));
+         messages["match".Selector("<String>")] = (obj, msg) => function<Regex, String>(obj, msg, (r, s) => r.Match(s.Value));
          messages["isMatch"] = (obj, msg) => function<Regex, String>(obj, msg, (r, s) => r.IsMatch(s.Value));
-         messages["replace".Function("", "new")] = (obj, msg) =>
+         messages["replace".Selector("<String>", "<String>")] = (obj, msg) =>
             function<Regex, String, String>(obj, msg, (r, s1, s2) => r.Replace(s1.Value, s2.Value));
          messages["matchString"] = (obj, msg) => function<Regex, String>(obj, msg, (r, s) => r.MatchString(s.Value));
          messages["split"] = (obj, msg) => function<Regex, String>(obj, msg, (r, s) => r.Split(s.Value));

@@ -23,9 +23,9 @@ namespace Kagami.Library.Operations
             switch (y)
             {
                case Arguments arguments when x is Class:
-                  return classOf(x).SendClassMessage(arguments.FullFunctionName(message), arguments).Matched();
+                  return classOf(x).SendClassMessage(arguments.Selector(message), arguments).Matched();
                case Arguments arguments:
-                  return classOf(x).SendMessage(x, arguments.FullFunctionName(message), arguments).Matched();
+                  return classOf(x).SendMessage(x, arguments.Selector(message), arguments).Matched();
                default:
                   return failedMatch<IObject>(incompatibleClasses(y, "Arguments"));
             }

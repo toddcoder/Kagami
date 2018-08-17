@@ -3,7 +3,7 @@ using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Classes
 {
-   public class ComplexClass : BaseClass
+   public class ComplexClass : BaseClass, IEquivalentClass
    {
       public override string Name => "Complex";
 
@@ -17,5 +17,9 @@ namespace Kagami.Library.Classes
          messages["real".get()] = (obj, msg) => function<Complex>(obj, c => c.Real);
          messages["imaginary".get()] = (obj, msg) => function<Complex>(obj, c => c.Imaginary);
       }
+
+      public override bool IsNumeric => true;
+
+      public BaseClass Equivalent() => new NumberClass();
    }
 }

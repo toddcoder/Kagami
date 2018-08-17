@@ -1,17 +1,19 @@
-﻿namespace Kagami.Library.Invokables
+﻿using Kagami.Library.Objects;
+
+namespace Kagami.Library.Invokables
 {
 	public class FunctionInvokable : IInvokable
 	{
-		protected string functionName;
+	   protected Selector selector;
 
-		public FunctionInvokable(string functionName, Parameters parameters, string image)
+		public FunctionInvokable(Selector selector, Parameters parameters, string image)
 		{
-			this.functionName = functionName;
+		   this.selector = selector;
 			Parameters = parameters;
 			Image = image;
 		}
 
-		public string FunctionName => functionName;
+	   public Selector Selector => selector;
 
 		public int Index { get; set; } = -1;
 

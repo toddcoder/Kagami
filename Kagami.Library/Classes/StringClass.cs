@@ -40,13 +40,13 @@ namespace Kagami.Library.Classes
          messages["lstrip"] = (obj, msg) => function<String>(obj, s => s.LStrip());
          messages["rstrip"] = (obj, msg) => function<String>(obj, s => s.RStrip());
          messages["strip"] = (obj, msg) => function<String>(obj, s => s.Strip());
-         messages["center".Function("", "padding")] = (obj, msg) =>
+         messages["center".Selector("<Int>", "<Char>")] = (obj, msg) =>
             function<String, Int, Char>(obj, msg, (s, w, p) => s.Center(w.Value, p.Value));
          messages["center"] = (obj, msg) => function<String, Int>(obj, msg, (s, w) => s.Center(w.Value));
-         messages["ljust".Function("", "padding")] = (obj, msg) =>
+         messages["ljust".Selector("<Int>", "<Char>")] = (obj, msg) =>
             function<String, Int, Char>(obj, msg, (s, w, p) => s.LJust(w.Value, p.Value));
          messages["ljust"] = (obj, msg) => function<String, Int>(obj, msg, (s, w) => s.LJust(w.Value));
-         messages["rjust".Function("", "padding")] = (obj, msg) =>
+         messages["rjust".Selector("<In>", "<Char>")] = (obj, msg) =>
             function<String, Int, Char>(obj, msg, (s, w, p) => s.RJust(w.Value, p.Value));
          messages["rjust"] = (obj, msg) => function<String, Int>(obj, msg, (s, w) => s.RJust(w.Value));
          messages["isEmpty".get()] = (obj, msg) => function<String>(obj, s => s.IsEmpty);
@@ -58,9 +58,9 @@ namespace Kagami.Library.Classes
          messages["isUpper".get()] = (obj, msg) => function<String>(obj, s => s.IsUpper);
          messages["isSpace".get()] = (obj, msg) => function<String>(obj, s => s.IsSpace);
          messages["isTitle".get()] = (obj, msg) => function<String>(obj, s => s.IsTitle);
-         messages["translate".Function("from", "to")] = (obj, msg) =>
+         messages["translate".Selector("from:<String>", "to:<String>")] = (obj, msg) =>
             function<String, String, String>(obj, msg, (s, f, t) => s.Translate(f.Value, t.Value));
-         messages["truncate".Function("", "ellipses")] = (obj, msg) =>
+         messages["truncate".Selector("<Int>", "<Boolean>")] = (obj, msg) =>
             function<String, Int, Boolean>(obj, msg, (s, w, e) => s.Truncate(w.Value, e.Value));
          messages["truncate"] = (obj, msg) => function<String, Int>(obj, msg, (s, w) => s.Truncate(w.Value));
          messages["int"] = (obj, msg) => function<String>(obj, s => s.Int());
@@ -122,28 +122,30 @@ namespace Kagami.Library.Classes
          }
 
          registerMessage("find", (obj, msg) => apply(obj, msg, (s, tf) => s.Find(tf, 0, false)));
-         registerMessage("find".Function("", "startAt"),
+         registerMessage("find".Selector("", "startAt:<Int>"),
             (obj, msg) => apply1<Int>(obj, msg, (s, tf, i) => s.Find(tf, i.Value, false)));
-         registerMessage("find".Function("", "reverse"),
+         registerMessage("find".Selector("", "reverse:<Boolean>"),
             (obj, msg) => apply1<Boolean>(obj, msg, (s, tf, b) => s.Find(tf, 0, b.Value)));
-         registerMessage("find".Function("", "startAt", "reverse"),
+         registerMessage("find".Selector("", "startAt:<Boolean>", "reverse:<Boolean>"),
             (obj, msg) => apply2<Int, Boolean>(obj, msg, (s, tf, i, b) => s.Find(tf, i.Value, b.Value)));
-         registerMessage("find".Function("all"), (obj, msg) => apply(obj, msg, (s, tf) => s.FindAll(tf)));
-         registerMessage("replace".Function("", "new"), (obj, msg) => apply1<String>(obj, msg, (s1, tf, s2) => s1.Replace(tf, s2.Value, false)));
-         registerMessage("replace".Function("", "new", "reverse"),
+         registerMessage("find".Selector("all:"), (obj, msg) => apply(obj, msg, (s, tf) => s.FindAll(tf)));
+         registerMessage("replace".Selector("", "new:<String>"), (obj, msg) => apply1<String>(obj, msg, (s1, tf, s2) => s1.Replace(tf, s2.Value, false)));
+         registerMessage("replace".Selector("", "new:<String>", "reverse:<Boolean>"),
             (obj, msg) => apply2<String, Boolean>(obj, msg, (s1, tf, s2, b) => s1.Replace(tf, s2.Value, b.Value)));
-         registerMessage("replace".Function("all", "new"),
+         registerMessage("replace".Selector("all:", "new"),
             (obj, msg) => apply1<String>(obj, msg, (s1, tf, s2) => s1.ReplaceAll(tf, s2.Value)));
-         registerMessage("replace".Function("", "with"), (obj, msg) => apply1<Lambda>(obj, msg, (s, tf, l) => s.Replace(tf, l, false)));
-         registerMessage("replace".Function("", "with", "reverse"),
+         registerMessage("replace".Selector("", "with:<Lambda>"), (obj, msg) => apply1<Lambda>(obj, msg, (s, tf, l) => s.Replace(tf, l, false)));
+         registerMessage("replace".Selector("", "with:<Lambda>", "reverse:<Boolean>"),
             (obj, msg) => apply2<Lambda, Boolean>(obj, msg, (s, tf, l, b) => s.Replace(tf, l, b.Value)));
-         registerMessage("replace".Function("all", "with"),
+         registerMessage("replace".Selector("all:", "with:<Lambda>"),
             (obj, msg) => apply1<Lambda>(obj, msg, (s, tf, l) => s.ReplaceAll(tf, l)));
-         registerMessage("split".Function("on"), (obj, msg) => apply(obj, msg, (s, tf) => s.Split(tf)));
+         registerMessage("split".Selector("on:"), (obj, msg) => apply(obj, msg, (s, tf) => s.Split(tf)));
          registerMessage("partition", (obj, msg) => apply(obj, msg, (s, tf) => s.Partition(tf, false)));
-         registerMessage("partition".Function("", "reverse"), (obj, msg) => apply1<Boolean>(obj, msg, (s, tf, b) => s.Partition(tf, b.Value)));
-         registerMessage("count".Function("string"), (obj, msg) => apply(obj, msg, (s, tf) => s.Count(tf)));
-         registerMessage("count".Function("string", "with"), (obj, msg) => apply1<Lambda>(obj, msg, (s, tf, l) => s.Count(tf, l)));
+         registerMessage("partition".Selector("", "reverse:<Boolean>"), (obj, msg) => apply1<Boolean>(obj, msg, (s, tf, b) => s.Partition(tf, b.Value)));
+         registerMessage("count".Selector("<String>"), (obj, msg) => apply(obj, msg, (s, tf) => s.Count(tf)));
+         registerMessage("count".Selector("<String>", "<Lambda>"), (obj, msg) => apply1<Lambda>(obj, msg, (s, tf, l) => s.Count(tf, l)));
       }
+
+      public BaseClass Equivalent() => new CollectionClass();
    }
 }

@@ -180,7 +180,7 @@ namespace Kagami.Library.Objects
 
       public override int GetHashCode() => Hash;
 
-      public string FullFunctionName(string name) => name.Function(names.KeyArray());
+      //public string FullFunctionName(string name) => name.Function(names.KeyArray());
 
       public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new Iterator(this);
 

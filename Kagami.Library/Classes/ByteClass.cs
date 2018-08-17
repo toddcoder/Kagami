@@ -3,7 +3,7 @@ using Standard.Types.Strings;
 
 namespace Kagami.Library.Classes
 {
-   public class ByteClass : BaseClass, IParse
+   public class ByteClass : BaseClass, IParse, IEquivalentClass
    {
       public override string Name => "Byte";
 
@@ -24,5 +24,9 @@ namespace Kagami.Library.Classes
       }
 
       public IObject Parse(string source) => Byte.ByteObject(source.ToByte());
+
+      public override bool IsNumeric => true;
+
+      public BaseClass Equivalent() => new NumberClass();
    }
 }

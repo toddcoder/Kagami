@@ -22,7 +22,7 @@ namespace Kagami.Library.Nodes.Statements
          return new Function(fieldName.set(), parameters, Block.Setter(fieldName, parameters[0].Name), false, false, "");
       }
 
-      protected string functionName;
+      protected Selector selector;
       protected Parameters parameters;
       protected Block block;
       protected bool yielding;
@@ -32,7 +32,7 @@ namespace Kagami.Library.Nodes.Statements
 
       public Function(string functionName, Parameters parameters, Block block, bool yielding, bool overriding, string className)
       {
-         this.functionName = functionName;
+         selector = parameters.Selector(functionName);
          this.parameters = parameters;
          this.block = block;
          this.yielding = yielding;
@@ -41,10 +41,10 @@ namespace Kagami.Library.Nodes.Statements
          this.className = className;
       }
 
-      public void Deconstruct(out string functionName, out Parameters parameters, out Block block, out bool yielding,
+      public void Deconstruct(out Selector selector, out Parameters parameters, out Block block, out bool yielding,
          out IInvokable invokable, out bool overriding)
       {
-         functionName = this.functionName;
+         selector = this.selector;
          parameters = this.parameters;
          block = this.block;
          yielding = this.yielding;
@@ -52,7 +52,7 @@ namespace Kagami.Library.Nodes.Statements
          overriding = this.overriding;
       }
 
-      public string FunctionName => functionName;
+      public Selector Selector => selector;
 
       public Parameters Parameters => parameters;
 
@@ -73,12 +73,10 @@ namespace Kagami.Library.Nodes.Statements
       public IInvokable GetInvokable()
       {
          if (yielding)
-            return new YieldingInvokable(functionName, parameters, ToString());
+            return new YieldingInvokable(selector, parameters, ToString());
          else
-            return new FunctionInvokable(functionName, parameters, ToString());
+            return new FunctionInvokable(selector, parameters, ToString());
       }
-
-      public string FullFunctionName => parameters.FullFunctionName(functionName);
 
       public override void Generate(OperationsBuilder builder)
       {
@@ -86,7 +84,7 @@ namespace Kagami.Library.Nodes.Statements
          lambda = new Lambda(invokable);
          if (builder.RegisterInvokable(invokable, block, overriding).If(out _, out var exception))
          {
-            var fullFunctionName = FullFunctionName;
+            string fullFunctionName = selector;
             fullFunctionName = className.IsNotEmpty() ? $"{className}.{fullFunctionName}" : fullFunctionName;
             if (!overriding)
                builder.NewField(fullFunctionName, false, true);
@@ -102,7 +100,7 @@ namespace Kagami.Library.Nodes.Statements
             {
                if (Module.Global.Trait(className).If(out var trait))
                {
-                  if (trait.RegisterInvokable(functionName, invokable).IfNot(out _, out exception))
+                  if (trait.RegisterInvokable(selector, invokable).IfNot(out _, out exception))
                      throw exception;
                }
                else
@@ -111,7 +109,7 @@ namespace Kagami.Library.Nodes.Statements
             else
             {
                if (Module.Global.Class(className).If(out var cls))
-                  cls.RegisterMessage(functionName, (obj, msg) => BaseClass.Invoke(obj, msg.Arguments, lambda));
+                  cls.RegisterMessage(selector, (obj, msg) => BaseClass.Invoke(obj, msg.Arguments, lambda));
                else
                   throw classNotFound(className);
             }
@@ -119,7 +117,7 @@ namespace Kagami.Library.Nodes.Statements
 
       public override string ToString()
       {
-         return $"{overriding.Extend("override ")}{yielding.Extend("co")}func {functionName}({parameters}) ...";
+         return $"{overriding.Extend("override ")}{yielding.Extend("co")}func {selector.Image} ...";
       }
    }
 }

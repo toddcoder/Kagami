@@ -31,7 +31,7 @@ namespace Kagami.Library.Parsers.Statements
 
          if (GetAnyParameters(needsParameters, state).If(out var parameters, out var original))
          {
-            var fullFunctionName = parameters.FullFunctionName(functionName);
+            var fullFunctionName = parameters.Selector(functionName);
             if (traitClass.RegisterSignature(new Signature(fullFunctionName, parameters.Length)).If(out var _, out var exception))
                return Unit.Matched();
             else

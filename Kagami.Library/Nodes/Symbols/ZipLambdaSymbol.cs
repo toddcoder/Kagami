@@ -11,7 +11,7 @@ namespace Kagami.Library.Nodes.Symbols
       public override void Generate(OperationsBuilder builder)
       {
          expression.Generate(builder);
-         builder.SendMessage("zip".Function("on", "with"), 2);
+         builder.SendMessage("zip".Selector("<Collection>", "<Lambda>"), 2);
       }
 
       public override Precedence Precedence => Precedence.ChainedOperator;

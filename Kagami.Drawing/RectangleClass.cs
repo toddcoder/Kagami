@@ -23,11 +23,11 @@ namespace Kagami.Drawing
          messages["bottom".get()] = (obj, msg) => function<Rectangle>(obj, r => r.Bottom);
          messages["right".get()] = (obj, msg) => function<Rectangle>(obj, r => r.Right);
          messages["in"] = (obj, msg) => function<Rectangle, IObject>(obj, msg, (r, o) => r.In(o));
-         messages["in".Function("point")] = (obj, msg) => function<Rectangle, Point>(obj, msg, (r, p) => r.In(p));
-         messages["in".Function("rectangle")] = (obj, msg) => function<Rectangle, Rectangle>(obj, msg, (r1, r2) => r1.In(r2));
+         messages["in".Selector("<Point>")] = (obj, msg) => function<Rectangle, Point>(obj, msg, (r, p) => r.In(p));
+         messages["in".Selector("<Rectangle>")] = (obj, msg) => function<Rectangle, Rectangle>(obj, msg, (r1, r2) => r1.In(r2));
          messages["notIn"] = (obj, msg) => function<Rectangle, IObject>(obj, msg, (r, o) => r.NotIn(o));
-         messages["notIn".Function("point")] = (obj, msg) => function<Rectangle, Point>(obj, msg, (r, p) => r.NotIn(p));
-         messages["notIn".Function("rectangle")] = (obj, msg) => function<Rectangle, Rectangle>(obj, msg, (r1, r2) => r1.NotIn(r2));
+         messages["notIn".Selector("<Point>")] = (obj, msg) => function<Rectangle, Point>(obj, msg, (r, p) => r.NotIn(p));
+         messages["notIn".Selector("<Rectangle>")] = (obj, msg) => function<Rectangle, Rectangle>(obj, msg, (r1, r2) => r1.NotIn(r2));
       }
    }
 }

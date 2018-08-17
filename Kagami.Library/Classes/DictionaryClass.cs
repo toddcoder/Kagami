@@ -44,7 +44,7 @@ namespace Kagami.Library.Classes
          messages["notIn"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, k) => d.NotIn(k));
          messages["swap"] = (obj, msg) => function<Dictionary, IObject, IObject>(obj, msg, (d, k1, k2) => d.Swap(k1, k2));
          messages["clear"] = (obj, msg) => function<Dictionary>(obj, d => d.Clear());
-         messages["update".Function("key", "value")] =
+         messages["update".Selector("key:", "value:")] =
             (obj, msg) => function<Dictionary, IObject, IObject>(obj, msg, (d, k, v) => d.Update(k, v));
          messages["merge"] = (obj, msg) => function<Dictionary, Dictionary>(obj, msg, (d1, d2) => d1.Merge(d2));
       }
@@ -53,9 +53,9 @@ namespace Kagami.Library.Classes
       {
          base.RegisterClassMessages();
 
-         classMessages["new".Function("default", "caching")] = (cls, msg) => classFunc<DictionaryClass, IObject, Boolean>(cls, msg,
+         classMessages["new".Selector("default:", "caching:<Boolean>")] = (cls, msg) => classFunc<DictionaryClass, IObject, Boolean>(cls, msg,
             (dc, d, c) => Dictionary.New(d, c));
-         classMessages["new".Function("default")] = (cls, msg) => classFunc<DictionaryClass, IObject>(cls, msg,
+         classMessages["new".Selector("default:")] = (cls, msg) => classFunc<DictionaryClass, IObject>(cls, msg,
             (dc, d) => Dictionary.New(d, false));
          classMessages["empty".get()] = (cls, msg) => classFunc<DictionaryClass>(cls, dc => Dictionary.Empty);
       }

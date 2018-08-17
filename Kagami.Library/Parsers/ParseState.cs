@@ -248,7 +248,7 @@ namespace Kagami.Library.Parsers
 
       public IMaybe<Expression> DefExpression(string fieldName) => defExpressions.Map(fieldName);
 
-      public void RegisterMacro(Function function) => macros[function.FullFunctionName] = function;
+      public void RegisterMacro(Function function) => macros[function.Selector] = function;
 
       public IMaybe<Function> Macro(string fullFunctionName) => macros.Map(fullFunctionName);
 

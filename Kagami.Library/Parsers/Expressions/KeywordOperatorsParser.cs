@@ -43,7 +43,7 @@ namespace Kagami.Library.Parsers.Expressions
                      builder.Add(new SendBinaryMessageSymbol(keyword, Precedence.ChainedOperator));
                      break;
                   case "sort":
-                     builder.Add(new SendBinaryMessageSymbol("sort".Function("with"), Precedence.ChainedOperator));
+                     builder.Add(new SendBinaryMessageSymbol("sort".Selector("<Lambda>"), Precedence.ChainedOperator));
                      break;
                   case "foldl":
                      builder.Add(new SendBinaryMessageSymbol("foldl", Precedence.ChainedOperator));
@@ -77,7 +77,7 @@ namespace Kagami.Library.Parsers.Expressions
                      break;
                   case "while":
                   case "until":
-                     builder.Add(new SendBinaryMessageSymbol("take".Function(keyword), Precedence.ChainedOperator));
+                     builder.Add(new SendBinaryMessageSymbol("take".Selector($"{keyword}:"), Precedence.ChainedOperator));
                      break;
                   case "min":
                      builder.Add(new MinSymbol());

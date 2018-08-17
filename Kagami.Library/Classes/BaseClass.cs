@@ -239,24 +239,24 @@ namespace Kagami.Library.Classes
          registerMessage(">>", (obj, msg) => function<IObject, IObject>(obj, msg, (o, v) => ((IMutableCollection)o).Remove(v)));
          registerMessage("remove", (obj, msg) => function<IObject, IObject>(obj, msg, (o, v) => ((IMutableCollection)o).Remove(v)));
          registerMessage("-", (obj, msg) => function<IObject, IObject>(obj, msg, (o, v) => ((IMutableCollection)o).Remove(v)));
-         registerMessage("remove".Function("at"),
+         registerMessage("remove".Selector("at:<Int>"),
             (obj, msg) => function<IObject, Int>(obj, msg, (o, i) => ((IMutableCollection)o).RemoveAt(i.Value)));
-         registerMessage("insert".Function("at", "value"),
+         registerMessage("insert".Selector("at:<Int>", "value:"),
             (obj, msg) => function<IObject, Int, IObject>(obj, msg, (o, i, v) => ((IMutableCollection)o).InsertAt(i.Value, v)));
       }
 
       void loadIteratorMessages()
       {
-         alternateMessages.AddRange(array("collection".get(), "isLazy".get(), "next", "peek", "reverse", "join",
-            "sort".Function("with", "asc"), "sort".Function("with"), "sort".Function("asc"), "sort", "foldl".Function("", "with"),
-            "foldl", "foldr".Function("", "with"), "foldr", "reducel".Function("", "with"), "reducel",
-            "reducer".Function("", "with"), "reducer", "count", "map", "if", "ifNot", "skip", "skip".Function("while"),
-            "skip".Function("until"), "take", "take".Function("while"), "take".Function("until"), "index", "indexes",
-            "zip".Function("", "with"), "zip", "min".get(), "min", "max".get(), "max", "first", "first".Function("with"), "last",
-            "last".Function("with"),
-            "split", "split".Function("count"), "random", "group".Function("by"), "one", "none", "any", "all", "sum", "average",
-            "product", "cross", "by", "window", "distinct", "span".Function("with"), "span".Function("count"), "shuffle",
-            "array", "list", "tuple", "dictionary".Function("key", "value"), "dictionary", "each", "rotate", "permutation",
+         alternateMessages.AddRange(array<string>("collection".get(), "isLazy".get(), "next", "peek", "reverse", "join",
+            "sort".Selector("<Lambda>", "asc:<Boolean>"), "sort".Selector("<Lambda>"), "sort".Selector("<Boolean>"), "sort", "foldl".Selector("", "<Lambda>"),
+            "foldl", "foldr".Selector("", "<Lambda>"), "foldr", "reducel".Selector("", "<Lambda>"), "reducel",
+            "reducer".Selector("", "<Lambda>"), "reducer", "count", "map", "if", "ifNot", "skip", "skip".Selector("while:<Lambda>"),
+            "skip".Selector("until:<Lambda>"), "take", "take".Selector("while:<Lambda>"), "take".Selector("until:<Lambda>"), "index", "indexes",
+            "zip".Selector("<Collection>", "<Lambda>"), "zip", "min".get(), "min", "max".get(), "max", "first", "first".Selector("<Lambda>"), "last",
+            "last".Selector("<Lambda>"),
+            "split", "split".Selector("<Int>"), "random", "group".Selector("by:<Lambda>"), "one", "none", "any", "all", "sum", "average",
+            "product", "cross", "by", "window", "distinct", "span".Selector("<Lambda>"), "span".Selector("<Int>"), "shuffle",
+            "array", "list", "tuple", "dictionary".Selector("key:<Lambda>", "value:<Lambda>"), "dictionary", "each", "rotate", "permutation",
             "combination", "flatten",
             "copy", "revert"));
 
@@ -275,37 +275,37 @@ namespace Kagami.Library.Classes
          registerMessage("peek", (obj, msg) => iteratorFunc(obj, i => i.Peek().FlatMap(s => new Some(s), () => Nil.NilValue)));
          registerMessage("reverse", (obj, msg) => iteratorFunc(obj, i => i.Reverse()));
          registerMessage("join", (obj, msg) => iteratorFunc<String>(obj, msg, (i, s) => i.Join(s.Value)));
-         registerMessage("sort".Function("", "asc"),
+         registerMessage("sort".Selector("<Lambda>", "asc:<Boolean>"),
             (obj, msg) => iteratorFunc<Lambda, Boolean>(obj, msg, (i, l, b) => i.Sort(l, b.Value)));
-         registerMessage("sort".Function("with"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Sort(l, true)));
-         registerMessage("sort".Function("asc"), (obj, msg) => iteratorFunc<Boolean>(obj, msg, (i, b) => i.Sort(b.Value)));
+         registerMessage("sort".Selector("<Lambda>"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Sort(l, true)));
+         registerMessage("sort".Selector("<Boolean>"), (obj, msg) => iteratorFunc<Boolean>(obj, msg, (i, b) => i.Sort(b.Value)));
          registerMessage("sort", (obj, msg) => iteratorFunc(obj, i => i.Sort(true)));
-         registerMessage("foldl".Function("", "with"),
+         registerMessage("foldl".Selector("", "<Lambda>"),
             (obj, msg) => iteratorFunc<IObject, Lambda>(obj, msg, (i, o, l) => i.FoldLeft(o, l)));
          registerMessage("foldl", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.FoldLeft(l)));
-         registerMessage("foldr".Function("", "with"),
+         registerMessage("foldr".Selector("", "<Lambda>"),
             (obj, msg) => iteratorFunc<IObject, Lambda>(obj, msg, (i, o, l) => i.FoldRight(o, l)));
          registerMessage("foldr", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.FoldRight(l)));
-         registerMessage("reducel".Function("", "with"),
+         registerMessage("reducel".Selector("", "<Lambda>"),
             (obj, msg) => iteratorFunc<IObject, Lambda>(obj, msg, (i, o, l) => i.ReduceLeft(o, l)));
          registerMessage("reducel", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.ReduceLeft(l)));
-         registerMessage("reducer".Function("", "with"),
+         registerMessage("reducer".Selector("", "with"),
             (obj, msg) => iteratorFunc<IObject, Lambda>(obj, msg, (i, o, l) => i.ReduceRight(o, l)));
          registerMessage("reducer", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.ReduceRight(l)));
          registerMessage("count", (obj, msg) => iteratorFunc<IObject>(obj, msg, (i, o) => i.Count(o)));
-         registerMessage("count".Function("with"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Count(l)));
+         registerMessage("count".Selector("<Lambda>"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Count(l)));
          registerMessage("map", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Map(l)));
          registerMessage("if", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.If(l)));
          registerMessage("ifNot", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.IfNot(l)));
          registerMessage("skip", (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.Skip(j.Value)));
-         registerMessage("skip".Function("while"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.SkipWhile(l)));
-         registerMessage("skip".Function("until"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.SkipUntil(l)));
+         registerMessage("skip".Selector("while:<Lambda>"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.SkipWhile(l)));
+         registerMessage("skip".Selector("until:<Lambda>"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.SkipUntil(l)));
          registerMessage("take", (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.Take(j.Value)));
-         registerMessage("take".Function("while"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.TakeWhile(l)));
-         registerMessage("take".Function("until"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.TakeUntil(l)));
+         registerMessage("take".Selector("while:<Lambda>"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.TakeWhile(l)));
+         registerMessage("take".Selector("until:<Lambda>"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.TakeUntil(l)));
          registerMessage("index", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Index(l)));
          registerMessage("indexes", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Indexes(l)));
-         registerMessage("zip".Function("", "with"),
+         registerMessage("zip".Selector("<Collection>", "<Lambda>"),
             (obj, msg) => iteratorFunc<IObject, Lambda>(obj, msg, (i, c, l) => i.Zip((ICollection)c, l)));
          registerMessage("zip", (obj, msg) => iteratorFunc<IObject>(obj, msg, (i, c) => i.Zip((ICollection)c)));
          registerMessage("min".get(), (obj, msg) => iteratorFunc(obj, i => i.Min()));
@@ -313,12 +313,12 @@ namespace Kagami.Library.Classes
          registerMessage("max".get(), (obj, msg) => iteratorFunc(obj, i => i.Max()));
          registerMessage("max", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Max(l)));
          registerMessage("first", (obj, msg) => iteratorFunc(obj, i => i.First()));
-         registerMessage("first".Function("with"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.First(l)));
+         registerMessage("first".Selector("<Lambda>"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.First(l)));
          registerMessage("last", (obj, msg) => iteratorFunc(obj, i => i.Last()));
-         registerMessage("last".Function("with"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Last(l)));
+         registerMessage("last".Selector("<Lambda>"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Last(l)));
          registerMessage("split", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Split(l)));
-         registerMessage("split".Function("count"), (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.Split(j.Value)));
-         registerMessage("group".Function("by"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.GroupBy(l)));
+         registerMessage("split".Selector("<Int>"), (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.Split(j.Value)));
+         registerMessage("group".Selector("by:<Lambda>"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.GroupBy(l)));
          registerMessage("one", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.One(l)));
          registerMessage("none", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.None(l)));
          registerMessage("any", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Any(l)));
@@ -330,14 +330,14 @@ namespace Kagami.Library.Classes
          registerMessage("by", (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.By(j.Value)));
          registerMessage("window", (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.Window(j.Value)));
          registerMessage("distinct", (obj, msg) => iteratorFunc(obj, i => i.Distinct()));
-         registerMessage("span".Function("with"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Span(l)));
-         registerMessage("span".Function("count"), (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.Span(j.Value)));
+         registerMessage("span".Selector("<Lambda>"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Span(l)));
+         registerMessage("span".Selector("<Int>"), (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.Span(j.Value)));
          registerMessage("shuffle", (obj, msg) => iteratorFunc(obj, i => i.Shuffle()));
          registerMessage("random", (obj, msg) => iteratorFunc(obj, i => i.Random()));
          registerMessage("array", (obj, msg) => iteratorFunc(obj, i => i.ToArray()));
          registerMessage("list", (obj, msg) => iteratorFunc(obj, i => i.ToList()));
          registerMessage("tuple", (obj, msg) => iteratorFunc(obj, i => i.ToTuple()));
-         registerMessage("dictionary".Function("key", "value"),
+         registerMessage("dictionary".Selector("key:<Lambda>", "value:<Lambda>"),
             (obj, msg) => iteratorFunc<Lambda, Lambda>(obj, msg, (i, l1, l2) => i.ToDictionary(l1, l2)));
          registerMessage("dictionary", (obj, msg) => iteratorFunc(obj, i => i.ToDictionary()));
          registerMessage("each", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Each(l)));
@@ -452,12 +452,14 @@ namespace Kagami.Library.Classes
       protected void compareMessages()
       {
          registerMessage("<>", (o, m) => (Int)((IObjectCompare)o).Compare(m.Arguments[0]));
-         registerMessage("between".Function("", "and"), (o, m) => ((IObjectCompare)o).Between(m.Arguments[0], m.Arguments[1], true));
-         registerMessage("between".Function("", "until"),
+         registerMessage("between".Selector("", "and:"), (o, m) => ((IObjectCompare)o).Between(m.Arguments[0], m.Arguments[1], true));
+         registerMessage("between".Selector("", "until:"),
             (o, m) => ((IObjectCompare)o).Between(m.Arguments[0], m.Arguments[1], false));
-         registerMessage("after".Function("", "and"), (o, m) => ((IObjectCompare)o).After(m.Arguments[0], m.Arguments[1], true));
-         registerMessage("after".Function("", "until"),
+         registerMessage("after".Selector("", "and:"), (o, m) => ((IObjectCompare)o).After(m.Arguments[0], m.Arguments[1], true));
+         registerMessage("after".Selector("", "until:"),
             (o, m) => ((IObjectCompare)o).After(m.Arguments[0], m.Arguments[1], false));
       }
+
+      public virtual bool IsNumeric => false;
    }
 }

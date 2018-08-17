@@ -70,5 +70,17 @@ namespace Kagami.Library.Objects
       public bool Matches(BaseClass baseClass) => comparisands.Any(c => c.AssignCompatible(baseClass));
 
       public bool IsTrue => true;
+
+      public TypeConstraint Equivalent()
+      {
+         var equivalents = new BaseClass[comparisands.Length];
+         for (var i = 0; i < comparisands.Length; i++)
+            if (comparisands[i] is IEquivalentClass equivalent)
+               equivalents[i] = equivalent.Equivalent();
+            else
+               equivalents[i] = comparisands[i];
+
+         return new TypeConstraint(equivalents);
+      }
    }
 }

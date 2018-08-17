@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using Kagami.Library.Objects;
 using Standard.Types.Enumerables;
 using Standard.Types.RegularExpressions;
 using Standard.Types.Strings;
+using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library
 {
@@ -13,12 +16,26 @@ namespace Kagami.Library
 
       public static string set(this string name) => $"__${name}=";
 
+      [Obsolete("Use selectors")]
       public static string Function(this string baseName, params string[] segments)
       {
          if (segments.Length == 0 || segments.All(s => s.IsEmpty()))
             return baseName;
          else
             return $"{baseName}${segments.Listify("$")}";
+      }
+
+      public static Selector Selector(this string baseName, params string[] selectorItemSources)
+      {
+         if (selectorItemSources.Length == 0)
+            return new Selector(baseName);
+         else
+         {
+            var selectorItems = selectorItemSources.Select(parseSelectorItem).ToArray();
+            var image = $"{baseName}({selectorItemSources.Listify(",")})";
+
+            return new Selector(baseName, selectorItems, image);
+         }
       }
    }
 }
