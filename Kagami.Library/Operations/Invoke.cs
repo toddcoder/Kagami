@@ -85,7 +85,7 @@ namespace Kagami.Library.Operations
                         return failedMatch<IObject>(incompatibleClasses(field.Value, "Invokable object"));
                   }
                case MatchType.NotMatched:
-                  return failedMatch<IObject>(fieldNotFound(fieldName));
+                  return failedMatch<IObject>(fieldNotFound(selector.Image));
                case MatchType.FailedMatch:
                   return failedMatch<IObject>(exception);
                default:

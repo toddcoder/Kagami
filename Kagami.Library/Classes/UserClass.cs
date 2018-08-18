@@ -131,9 +131,9 @@ namespace Kagami.Library.Classes
 
       public override void RegisterClassMessages() { }
 
-      public override bool ClassRespondsTo(string message)
+      public override bool ClassRespondsTo(Selector selector)
       {
-         return metaObject.FlatMap(uo => classOf(uo).RespondsTo(message), () => false);
+         return metaObject.FlatMap(uo => classOf(uo).RespondsTo(selector), () => false);
       }
 
       public override IObject ClassDynamicInvoke(Message message)
@@ -144,9 +144,9 @@ namespace Kagami.Library.Classes
             throw "No metaobject".Throws();
       }
 
-      public override bool RespondsTo(string message)
+      public override bool RespondsTo(Selector selector)
       {
-         if (base.RespondsTo(message))
+         if (base.RespondsTo(selector))
             return true;
          else
             return messages.ContainsKey("missing");
@@ -154,7 +154,7 @@ namespace Kagami.Library.Classes
 
       public override IObject DynamicInvoke(IObject obj, Message message)
       {
-         var originalMessage = String.StringObject(message.Name);
+         var originalMessage = String.StringObject(message.Selector.Name);
          var args = message.Arguments.ToArray();
          var tuple = new Tuple(args);
 

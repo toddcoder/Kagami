@@ -44,16 +44,16 @@ namespace Kagami.Library.Classes
          }
       }
 
-      public override bool DynamicRespondsTo(string message) => true;
+      public override bool DynamicRespondsTo(Selector selector) => true;
 
       public override IObject DynamicInvoke(IObject obj, Message message)
       {
-         if (base.DynamicRespondsTo(message.Name))
+         if (base.DynamicRespondsTo(message.Selector))
             return base.DynamicInvoke(obj, message);
          else
          {
             var tuple = (Tuple)obj;
-            var name = message.Name.unget();
+            var name = message.Selector.Name.unget();
             if (tuple.ContainsName(name))
                return tuple[name];
             else

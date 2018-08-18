@@ -126,42 +126,42 @@ namespace Kagami.Library.Objects
 
       public static IObject sendMessage(IObject obj, Message message) => classOf(obj).SendMessage(obj, message);
 
-      public static IObject sendMessage(IObject obj, string messageName, Arguments arguments)
+      public static IObject sendMessage(IObject obj, Selector selector, Arguments arguments)
       {
-         return classOf(obj).SendMessage(obj, messageName, arguments);
+         return classOf(obj).SendMessage(obj, selector, arguments);
       }
 
-      public static IObject sendMessage(IObject obj, string messageName, params IObject[] arguments)
+      public static IObject sendMessage(IObject obj, Selector selector, params IObject[] arguments)
       {
-         return sendMessage(obj, messageName, new Arguments(arguments));
+         return sendMessage(obj, selector, new Arguments(arguments));
       }
 
       public static IObject sendMessage(IObject obj, Message message, Func<IObject> defaultFunc)
       {
          var cls = classOf(obj);
-         if (cls.RespondsTo(message.Name))
+         if (cls.RespondsTo(message.Selector))
             return cls.SendMessage(obj, message);
          else
             return defaultFunc();
       }
 
-      public static IObject sendMessage(IObject obj, string messageName, Func<IObject> defaultFunc, Arguments arguments)
+      public static IObject sendMessage(IObject obj, Selector selector, Func<IObject> defaultFunc, Arguments arguments)
       {
          var cls = classOf(obj);
-         if (cls.RespondsTo(messageName))
-            return cls.SendMessage(obj, messageName, arguments);
+         if (cls.RespondsTo(selector))
+            return cls.SendMessage(obj, selector, arguments);
          else
             return defaultFunc();
       }
 
-      public static IObject sendMessage(IObject obj, string messageName, Func<IObject> defaultFunc, params IObject[] arguments)
+      public static IObject sendMessage(IObject obj, Selector selector, Func<IObject> defaultFunc, params IObject[] arguments)
       {
-         return sendMessage(obj, messageName, defaultFunc, new Arguments(arguments));
+         return sendMessage(obj, selector, defaultFunc, new Arguments(arguments));
       }
 
-      public static IObject sendMessage(IObject obj, string messageName, IObject argument)
+      public static IObject sendMessage(IObject obj, Selector selector, IObject argument)
       {
-         return sendMessage(obj, messageName, new Arguments(argument));
+         return sendMessage(obj, selector, new Arguments(argument));
       }
 
       public static string userObjectString(UserObject obj)
@@ -389,8 +389,11 @@ namespace Kagami.Library.Objects
 
       public static Selector parseSelector(string source)
       {
+         if (!source.EndsWith(")"))
+            source = $"{source}()";
+
          var matcher = new Matcher();
-         if (matcher.IsMatch(source, $"^ /({REGEX_FUNCTION_NAME}) '(' /@"))
+         if (matcher.IsMatch(source, $"^ /(('__$')? {REGEX_FUNCTION_NAME}) '(' /@"))
          {
             var name = matcher.FirstGroup;
             var rest = matcher.SecondGroup.TakeUntil(")");

@@ -18,24 +18,24 @@ namespace Kagami.Library.Classes
 {
    public abstract class BaseClass
    {
-      protected Hash<string, Func<IObject, Message, IObject>> messages;
-      protected Hash<string, Func<BaseClass, Message, IObject>> classMessages;
+      protected SelectorHash<Func<IObject, Message, IObject>> messages;
+      protected SelectorHash<Func<BaseClass, Message, IObject>> classMessages;
       protected bool registered;
       protected bool classRegistered;
-      protected Set<string> alternateMessages;
+      protected Set<Selector> alternateMessages;
       protected Func<IObject, Message, IObject> dynamicInvoke;
       protected Func<Message, IObject> classDynamicInvoke;
       protected Fields classFields;
 
       public BaseClass()
       {
-         messages = new Hash<string, Func<IObject, Message, IObject>>();
-         classMessages = new Hash<string, Func<BaseClass, Message, IObject>>();
+         messages = new SelectorHash<Func<IObject, Message, IObject>>();
+         classMessages = new SelectorHash<Func<BaseClass, Message, IObject>>();
          registered = false;
          classRegistered = false;
-         alternateMessages = new Set<string>();
-         dynamicInvoke = (obj, msg) => throw messageNotFound(classOf(obj), msg.Name);
-         classDynamicInvoke = msg => throw messageNotFound(this, msg.Name);
+         alternateMessages = new Set<Selector>();
+         dynamicInvoke = (obj, msg) => throw messageNotFound(classOf(obj), msg.Selector);
+         classDynamicInvoke = msg => throw messageNotFound(this, msg.Selector);
          classFields = new Fields();
       }
 
@@ -47,20 +47,20 @@ namespace Kagami.Library.Classes
 
       public virtual IObject ClassDynamicInvoke(Message message) => classDynamicInvoke(message);
 
-      public virtual bool DynamicRespondsTo(string message) => alternateMessages.Contains(message);
+      public virtual bool DynamicRespondsTo(Selector selector) => alternateMessages.Contains(selector);
 
-      public virtual bool ClassDynamicRespondsTo(string message) => false;
+      public virtual bool ClassDynamicRespondsTo(Selector selector) => false;
 
-      protected void registerMessage(string name, Func<IObject, Message, IObject> function)
+      protected void registerMessage(Selector selector, Func<IObject, Message, IObject> function)
       {
-         if (!messages.ContainsKey(name))
-            messages[name] = function;
+         if (!messages.ContainsKey(selector))
+            messages[selector] = function;
       }
 
-      protected void registerClassMessage(string name, Func<BaseClass, Message, IObject> function)
+      protected void registerClassMessage(Selector selector, Func<BaseClass, Message, IObject> function)
       {
-         if (!classMessages.ContainsKey(name))
-            classMessages[name] = function;
+         if (!classMessages.ContainsKey(selector))
+            classMessages[selector] = function;
       }
 
       public virtual void RegisterMessages()
@@ -82,9 +82,9 @@ namespace Kagami.Library.Classes
          registerClassMessage("name".get(), (cls, msg) => String.StringObject(Name));
       }
 
-      public virtual void RegisterMessage(string name, Func<IObject, Message, IObject> func) => messages[name] = func;
+      public virtual void RegisterMessage(Selector selector, Func<IObject, Message, IObject> func) => messages[selector] = func;
 
-      public void RegisterClassMessage(string name, Func<BaseClass, Message, IObject> func) => classMessages[name] = func;
+      public void RegisterClassMessage(Selector selector, Func<BaseClass, Message, IObject> func) => classMessages[selector] = func;
 
       protected virtual void registerIfUnregistered()
       {
@@ -104,46 +104,46 @@ namespace Kagami.Library.Classes
          }
       }
 
-      public virtual bool RespondsTo(string message)
+      public virtual bool RespondsTo(Selector selector)
       {
          registerIfUnregistered();
 
-         return messages.ContainsKey(message) || DynamicRespondsTo(message);
+         return messages.ContainsKey(selector) || DynamicRespondsTo(selector);
       }
 
-      public virtual bool ClassRespondsTo(string message)
+      public virtual bool ClassRespondsTo(Selector selector)
       {
          registerClassIfUnregistered();
 
-         return classMessages.ContainsKey(message) || ClassDynamicRespondsTo(message);
+         return classMessages.ContainsKey(selector) || ClassDynamicRespondsTo(selector);
       }
 
       public virtual bool UserDefined => false;
 
       IObject invokeMessage(IObject obj, Message message)
       {
-         var messageName = message.Name;
+         var selector = message.Selector;
 
-         if (RespondsTo(messageName))
-            if (messages.ContainsKey(messageName))
-               return messages[messageName](obj, message);
+         if (RespondsTo(selector))
+            if (messages.ContainsKey(selector))
+               return messages[selector](obj, message);
             else
                return DynamicInvoke(obj, message);
          else
-            throw messageNotFound(classOf(obj), messageName);
+            throw messageNotFound(classOf(obj), selector);
       }
 
       IObject invokeClassMessage(Message message)
       {
-         var messageName = message.Name;
+         var selector = message.Selector;
 
-         if (ClassRespondsTo(messageName))
-            if (classMessages.ContainsKey(messageName))
-               return classMessages[messageName](this, message);
+         if (ClassRespondsTo(selector))
+            if (classMessages.ContainsKey(selector))
+               return classMessages[selector](this, message);
             else
                return ClassDynamicInvoke(message);
          else
-            throw messageNotFound(this, messageName);
+            throw messageNotFound(this, selector);
       }
 
       public IObject SendMessage(IObject obj, Message message)
@@ -152,9 +152,9 @@ namespace Kagami.Library.Classes
          return invokeMessage(obj, message);
       }
 
-      public IObject SendMessage(IObject obj, string message, Arguments arguments)
+      public IObject SendMessage(IObject obj, Selector selector, Arguments arguments)
       {
-         return SendMessage(obj, new Message(message, arguments));
+         return SendMessage(obj, new Message(selector, arguments));
       }
 
       public IObject SendClassMessage(Message message)
@@ -163,7 +163,7 @@ namespace Kagami.Library.Classes
          return invokeClassMessage(message);
       }
 
-      public IObject SendClassMessage(string message, Arguments arguments) => SendClassMessage(new Message(message, arguments));
+      public IObject SendClassMessage(Selector selector, Arguments arguments) => SendClassMessage(new Message(selector, arguments));
 
       protected void numericMessages()
       {
@@ -247,7 +247,7 @@ namespace Kagami.Library.Classes
 
       void loadIteratorMessages()
       {
-         alternateMessages.AddRange(array<string>("collection".get(), "isLazy".get(), "next", "peek", "reverse", "join",
+         alternateMessages.AddRange(array<Selector>("collection".get(), "isLazy".get(), "next", "peek", "reverse", "join",
             "sort".Selector("<Lambda>", "asc:<Boolean>"), "sort".Selector("<Lambda>"), "sort".Selector("<Boolean>"), "sort", "foldl".Selector("", "<Lambda>"),
             "foldl", "foldr".Selector("", "<Lambda>"), "foldr", "reducel".Selector("", "<Lambda>"), "reducel",
             "reducer".Selector("", "<Lambda>"), "reducer", "count", "map", "if", "ifNot", "skip", "skip".Selector("while:<Lambda>"),

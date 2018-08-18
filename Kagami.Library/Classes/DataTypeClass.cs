@@ -36,11 +36,11 @@ namespace Kagami.Library.Classes
          }
       }
 
-      public override void RegisterMessage(string name, Func<IObject, Message, IObject> func)
+      public override void RegisterMessage(Selector selector, Func<IObject, Message, IObject> func)
       {
-         base.RegisterMessage(name, func);
+         base.RegisterMessage(selector, func);
 
-         RegisterDataComparisandMethod(name, func);
+         RegisterDataComparisandMethod(selector, func);
       }
 
       public void RegisterDataComparisandMethod(string name, Func<IObject, Message, IObject> func)
@@ -53,16 +53,16 @@ namespace Kagami.Library.Classes
          }
       }
 
-      public override bool DynamicRespondsTo(string message)
+      public override bool DynamicRespondsTo(Selector selector)
       {
-         var name = message.StartsWith("__$") ? message.Skip(3) : message;
+         var name = selector.Name.StartsWith("__$") ? selector.Name.Skip(3) : selector.Name;
          return dataComparisands.ContainsKey(name);
       }
 
       public override IObject DynamicInvoke(IObject obj, Message message)
       {
          var dt = (DataType)obj;
-         var name = message.Name.StartsWith("__$") ? message.Name.Skip(3) : message.Name;
+         var name = message.Selector.Name.StartsWith("__$") ? message.Selector.Name.Skip(3) : message.Selector.Name;
          return dt.GetDataComparisand(name, message.Arguments.Value);
       }
 
@@ -98,6 +98,6 @@ namespace Kagami.Library.Classes
          }));
       }
 
-      public override bool ClassRespondsTo(string message) => classMessages.ContainsKey(message);
+      public override bool ClassRespondsTo(Selector selector) => classMessages.ContainsKey(selector);
    }
 }

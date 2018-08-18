@@ -11,7 +11,7 @@ namespace Kagami.Library.Classes
 
       public override void RegisterMessages() { }
 
-      public override bool DynamicRespondsTo(string message) => throw unassigned();
+      public override bool DynamicRespondsTo(Selector selector) => throw unassigned();
 
       public override IObject DynamicInvoke(IObject obj, Message message) => throw unassigned();
    }

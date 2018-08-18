@@ -8,17 +8,17 @@ namespace Kagami.Library.Packages
 {
    public abstract class PackageClass : BaseClass
    {
-      Hash<string, Func<IObject, Message, IObject>> functions;
+      SelectorHash<Func<IObject, Message, IObject>> functions;
 
       public PackageClass()
       {
-         functions = new Hash<string, Func<IObject, Message, IObject>>();
+         functions = new SelectorHash<Func<IObject, Message, IObject>>();
       }
 
-      protected void registerPackageFunction(string name, Func<IObject, Message, IObject> function)
+      protected void registerPackageFunction(Selector selector, Func<IObject, Message, IObject> function)
       {
-         registerMessage(name, function);
-         functions[name] = function;
+         registerMessage(selector, function);
+         functions[selector] = function;
       }
 
       public void CopyToGlobalFrame(Package package)
