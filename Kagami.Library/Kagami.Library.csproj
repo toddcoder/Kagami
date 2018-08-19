@@ -102,6 +102,7 @@
     <Compile Include="Classes\RuntimeFunctionClass.cs" />
     <Compile Include="Classes\SelectorClass.cs" />
     <Compile Include="Classes\SelectorHash.cs" />
+    <Compile Include="Classes\SelectorSet.cs" />
     <Compile Include="Classes\Signature.cs" />
     <Compile Include="Classes\SliceClass.cs" />
     <Compile Include="Classes\SomeClass.cs" />

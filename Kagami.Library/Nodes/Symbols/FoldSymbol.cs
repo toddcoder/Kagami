@@ -19,7 +19,7 @@ namespace Kagami.Library.Nodes.Symbols
          if (operatorLambda(operatorSymbol, builder).If(out var lambda, out var exception))
          {
             builder.PushObject(lambda);
-            builder.SendMessage(left ? "foldl" : "foldr", 1);
+            builder.SendMessage(left ? "foldl()" : "foldr()", 1);
          }
          else
             throw exception;

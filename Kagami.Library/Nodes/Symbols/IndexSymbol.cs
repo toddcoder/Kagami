@@ -13,7 +13,7 @@ namespace Kagami.Library.Nodes.Symbols
 
       public override Arity Arity => Arity.Postfix;
 
-      public override void Generate(OperationsBuilder builder) => builder.SendMessage("[]", arguments);
+      public override void Generate(OperationsBuilder builder) => builder.SendMessage("[]()", arguments);
 
       public override string ToString() => $"[{arguments.Listify()}]";
    }

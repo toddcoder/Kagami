@@ -81,6 +81,7 @@ namespace Kagami.Library.Runtime
          classes["ByteArray"] = new ByteArrayClass();
          classes["Selector"] = new SelectorClass();
          classes["Number"] = new NumberClass();
+         classes["Collection"] = new CollectionClass();
       }
 
       public IMaybe<BaseClass> Class(string name) => classes.Map(name);

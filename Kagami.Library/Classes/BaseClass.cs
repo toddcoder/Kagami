@@ -1,7 +1,6 @@
 ﻿using System;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
-using Standard.Types.Collections;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Classes.ClassFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
@@ -22,7 +21,7 @@ namespace Kagami.Library.Classes
       protected SelectorHash<Func<BaseClass, Message, IObject>> classMessages;
       protected bool registered;
       protected bool classRegistered;
-      protected Set<Selector> alternateMessages;
+      protected SelectorSet alternateMessages;
       protected Func<IObject, Message, IObject> dynamicInvoke;
       protected Func<Message, IObject> classDynamicInvoke;
       protected Fields classFields;
@@ -33,7 +32,7 @@ namespace Kagami.Library.Classes
          classMessages = new SelectorHash<Func<BaseClass, Message, IObject>>();
          registered = false;
          classRegistered = false;
-         alternateMessages = new Set<Selector>();
+         alternateMessages = new SelectorSet();
          dynamicInvoke = (obj, msg) => throw messageNotFound(classOf(obj), msg.Selector);
          classDynamicInvoke = msg => throw messageNotFound(this, msg.Selector);
          classFields = new Fields();
@@ -247,7 +246,7 @@ namespace Kagami.Library.Classes
 
       void loadIteratorMessages()
       {
-         alternateMessages.AddRange(array<Selector>("collection".get(), "isLazy".get(), "next", "peek", "reverse", "join",
+         alternateMessages.AddRange(array<string>("collection".get(), "isLazy".get(), "next", "peek", "reverse", "join",
             "sort".Selector("<Lambda>", "asc:<Boolean>"), "sort".Selector("<Lambda>"), "sort".Selector("<Boolean>"), "sort", "foldl".Selector("", "<Lambda>"),
             "foldl", "foldr".Selector("", "<Lambda>"), "foldr", "reducel".Selector("", "<Lambda>"), "reducel",
             "reducer".Selector("", "<Lambda>"), "reducer", "count", "map", "if", "ifNot", "skip", "skip".Selector("while:<Lambda>"),

@@ -28,9 +28,9 @@ namespace Kagami.Library.Nodes.Symbols
          {
             expressions[i].Generate(builder);
             builder.String();
-            builder.SendMessage("~", 1);
+            builder.SendMessage("~()", 1);
             builder.PushString(suffixes[i]);
-            builder.SendMessage("~", 1);
+            builder.SendMessage("~()", 1);
          }
       }
 

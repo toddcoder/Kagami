@@ -190,17 +190,17 @@ namespace Kagami.Library.Operations
 
       public void AssignField(string name, bool overriding) => add(new AssignField(name, overriding));
 
-      public void SendMessage(string message, params Expression[] arguments)
+      public void SendMessage(Selector selector, params Expression[] arguments)
       {
          foreach (var argument in arguments)
             argument.Generate(this);
-         SendMessage(message, arguments.Length);
+         SendMessage(selector, arguments.Length);
       }
 
-      public void SendMessage(string message, int count)
+      public void SendMessage(Selector selector, int count)
       {
          ToArguments(count);
-         add(new SendMessage(message));
+         add(new SendMessage(selector));
       }
 
       public void Negate() => add(new Negate());

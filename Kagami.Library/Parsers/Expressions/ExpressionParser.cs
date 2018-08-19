@@ -2,6 +2,7 @@
 using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
+using Kagami.Library.Objects;
 using Standard.Types.Maybe;
 using Standard.Types.Numbers;
 using static Standard.Types.Maybe.MaybeFunctions;
@@ -165,12 +166,12 @@ namespace Kagami.Library.Parsers.Expressions
             return !(exp[0] is FieldSymbol fieldSymbol) || fieldSymbol.FieldName != fieldName;
       }
 
-      static IResult<Expression> getMessageWithLambda(string fieldName, Symbol symbol, string messageName, Expression expression)
+      static IResult<Expression> getMessageWithLambda(string fieldName, Symbol symbol, Selector selector, Expression expression)
       {
          var parameter = Parameter.New(false, fieldName);
          var parameters = new Parameters(parameter);
          var lambdaSymbol = new LambdaSymbol(parameters, new Block(new Return(expression)));
-         var sendMessage = new SendMessageSymbol(messageName, Precedence.SendMessage, lambdaSymbol.Some());
+         var sendMessage = new SendMessageSymbol(selector, Precedence.SendMessage, lambdaSymbol.Some());
 
          var builder = new ExpressionBuilder(ExpressionFlags.Standard);
          builder.Add(symbol);
@@ -180,13 +181,13 @@ namespace Kagami.Library.Parsers.Expressions
       }
 
       static IResult<Expression> getDualMessageWithLambda(string leftName, string rightName, Symbol leftSymbol, Symbol rightSymbol,
-         string messageName, Expression expression)
+         Selector selector, Expression expression)
       {
          var leftParameter = Parameter.New(false, leftName);
          var rightParameter = Parameter.New(false, rightName);
          var parameters = new Parameters(leftParameter, rightParameter);
          var lambdaSymbol = new LambdaSymbol(parameters, new Block(new Return(expression)));
-         var sendMessage = new SendMessageSymbol(messageName, Precedence.SendMessage, lambdaSymbol.Some(),
+         var sendMessage = new SendMessageSymbol(selector, Precedence.SendMessage, lambdaSymbol.Some(),
             new Expression(rightSymbol));
 
          var builder = new ExpressionBuilder(ExpressionFlags.Standard);

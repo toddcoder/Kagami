@@ -23,7 +23,7 @@ namespace Kagami.Library.Nodes.Symbols
          {
             builder.Dup();
             builder.SetX();
-            builder.SendMessage("[]", arguments);
+            builder.SendMessage("[]()", arguments);
             value.Generate(builder);
             builder.AddRaw(op);
             builder.GetX();
@@ -37,7 +37,7 @@ namespace Kagami.Library.Nodes.Symbols
             builder.GetX();
          else
             value.Generate(builder);
-         builder.SendMessage("[]=", arguments.Length + 1);
+         builder.SendMessage("[]=()", arguments.Length + 1);
       }
 
       public override Precedence Precedence => Precedence.SendMessage;

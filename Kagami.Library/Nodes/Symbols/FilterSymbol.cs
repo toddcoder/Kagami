@@ -6,7 +6,7 @@ namespace Kagami.Library.Nodes.Symbols
    {
       public override void Generate(OperationsBuilder builder)
       {
-         builder.SendMessage("if", 1);
+         builder.SendMessage("if()", 1);
       }
 
       public override Precedence Precedence => Precedence.Boolean;

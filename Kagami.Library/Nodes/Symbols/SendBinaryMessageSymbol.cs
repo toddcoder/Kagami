@@ -1,16 +1,17 @@
-﻿using Kagami.Library.Operations;
+﻿using Kagami.Library.Objects;
+using Kagami.Library.Operations;
 
 namespace Kagami.Library.Nodes.Symbols
 {
    public class SendBinaryMessageSymbol : Symbol
    {
-      string messageName;
+      Selector selector;
       Precedence precedence;
       bool swap;
 
-      public SendBinaryMessageSymbol(string messageName, Precedence precedence, bool swap=false)
+      public SendBinaryMessageSymbol(Selector selector, Precedence precedence, bool swap=false)
       {
-         this.messageName = messageName;
+         this.selector = selector;
          this.precedence = precedence;
          this.swap = swap;
       }
@@ -19,13 +20,13 @@ namespace Kagami.Library.Nodes.Symbols
       {
          if (swap)
             builder.Swap();
-         builder.SendMessage(messageName, 1);
+         builder.SendMessage(selector, 1);
       }
 
       public override Precedence Precedence => precedence;
 
       public override Arity Arity => Arity.Binary;
 
-      public override string ToString() => messageName;
+      public override string ToString() => selector.Image;
    }
 }

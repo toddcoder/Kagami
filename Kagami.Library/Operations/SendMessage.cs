@@ -10,11 +10,11 @@ namespace Kagami.Library.Operations
 {
    public class SendMessage : TwoOperandOperation
    {
-      string message;
+      Selector selector;
 
-      public SendMessage(string message) => this.message = message;
+      public SendMessage(Selector selector) => this.selector = selector;
 
-      public override string ToString() => $"send.message({message})";
+      public override string ToString() => $"send.message({selector.Image})";
 
       public override IMatched<IObject> Execute(Machine machine, IObject x, IObject y)
       {
@@ -23,9 +23,9 @@ namespace Kagami.Library.Operations
             switch (y)
             {
                case Arguments arguments when x is Class:
-                  return classOf(x).SendClassMessage(arguments.Selector(message), arguments).Matched();
+                  return classOf(x).SendClassMessage(selector, arguments).Matched();
                case Arguments arguments:
-                  return classOf(x).SendMessage(x, arguments.Selector(message), arguments).Matched();
+                  return classOf(x).SendMessage(x, selector, arguments).Matched();
                default:
                   return failedMatch<IObject>(incompatibleClasses(y, "Arguments"));
             }

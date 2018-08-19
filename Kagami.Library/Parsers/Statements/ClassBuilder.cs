@@ -130,21 +130,19 @@ namespace Kagami.Library.Parsers.Statements
                   break;
                case Function function when standard:
                {
-                  var (functionName, funcParameters, block, _, invokable, overriding) = function;
-                  functionName = funcParameters.Selector(functionName);
-                  if (!isPrivate(functionName))
-                     if (userClass.RegisterMethod(functionName, new Lambda(invokable), overriding))
+                  var (selector, _, block, _, invokable, overriding) = function;
+                  if (!isPrivate(selector))
+                     if (userClass.RegisterMethod(selector, new Lambda(invokable), overriding))
                         functions.Add((invokable, block, overriding));
                      else
-                        throw needsOverride(functionName);
+                        throw needsOverride(selector);
 
                   statements.Add(statement);
                }
                   break;
                case MatchFunction matchFunction when standard:
                {
-                  var (functionName, funcParameters, block, _, invokable, overriding) = matchFunction;
-                  functionName = funcParameters.Selector(functionName);
+                  var (functionName, _, block, _, invokable, overriding) = matchFunction;
                   if (!isPrivate(functionName))
                      if (userClass.RegisterMethod(functionName, new Lambda(invokable), overriding))
                         functions.Add((invokable, block, overriding));

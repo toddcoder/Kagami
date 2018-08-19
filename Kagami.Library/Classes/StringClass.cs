@@ -46,7 +46,7 @@ namespace Kagami.Library.Classes
          messages["ljust".Selector("<Int>", "<Char>")] = (obj, msg) =>
             function<String, Int, Char>(obj, msg, (s, w, p) => s.LJust(w.Value, p.Value));
          messages["ljust"] = (obj, msg) => function<String, Int>(obj, msg, (s, w) => s.LJust(w.Value));
-         messages["rjust".Selector("<In>", "<Char>")] = (obj, msg) =>
+         messages["rjust".Selector("<Int>", "<Char>")] = (obj, msg) =>
             function<String, Int, Char>(obj, msg, (s, w, p) => s.RJust(w.Value, p.Value));
          messages["rjust"] = (obj, msg) => function<String, Int>(obj, msg, (s, w) => s.RJust(w.Value));
          messages["isEmpty".get()] = (obj, msg) => function<String>(obj, s => s.IsEmpty);

@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Operations;
+﻿using Kagami.Library.Objects;
+using Kagami.Library.Operations;
 using Standard.Types.Enumerables;
 using Standard.Types.Maybe;
 using Standard.Types.Strings;
@@ -8,16 +9,16 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class SendMessageSymbol : Symbol
    {
-      string messageName;
+      Selector selector;
       Precedence precedence;
       IMaybe<LambdaSymbol> lambda;
       IMaybe<Operation> operation;
       Expression[] arguments;
 
-      public SendMessageSymbol(string messageName, Precedence precedence, IMaybe<LambdaSymbol> lambda, IMaybe<Operation> operation,
+      public SendMessageSymbol(Selector selector, Precedence precedence, IMaybe<LambdaSymbol> lambda, IMaybe<Operation> operation,
          params Expression[] arguments)
       {
-         this.messageName = messageName;
+         this.selector = selector;
          this.precedence = precedence;
          this.lambda = lambda;
          this.operation = operation;
@@ -38,7 +39,7 @@ namespace Kagami.Library.Nodes.Symbols
          if (operation.IsSome)
          {
             builder.Dup();
-            var getter = messageName.Skip(-1);
+            var getter = selector.NewName(selector.Name.Skip(-1));
             builder.SendMessage(getter, 0);
          }
 
@@ -58,7 +59,7 @@ namespace Kagami.Library.Nodes.Symbols
             count = arguments.Length;
 
          builder.Peek(Index);
-         builder.SendMessage(messageName, count);
+         builder.SendMessage(selector, count);
          builder.NoOp();
       }
 
@@ -66,6 +67,6 @@ namespace Kagami.Library.Nodes.Symbols
 
       public override Arity Arity => Arity.Nullary;
 
-      public override string ToString() => $"{(precedence == Precedence.SendMessage ? "." : "@")}{messageName}({arguments.Listify()})";
+      public override string ToString() => $"{(precedence == Precedence.SendMessage ? "." : "@")}{selector.Image}({arguments.Listify()})";
    }
 }

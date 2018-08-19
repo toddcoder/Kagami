@@ -27,21 +27,21 @@ namespace Kagami.Library.Nodes.Symbols
          }
 
          builder.PushInt(skip);
-         builder.SendMessage("skip", 1);
+         builder.SendMessage("skip()", 1);
 
          if (take != 0)
          {
             builder.PushInt(take);
-            builder.SendMessage("take", 1);
+            builder.SendMessage("take()", 1);
          }
 
          if (prefix.IsSome)
-            builder.SendMessage("~", 1);
+            builder.SendMessage("~()", 1);
 
          if (suffix.If(out var s))
          {
             s.Generate(builder);
-            builder.SendMessage("~", 1);
+            builder.SendMessage("~()", 1);
          }
       }
    }

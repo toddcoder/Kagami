@@ -8,7 +8,7 @@ namespace Kagami.Library.Nodes.Symbols
 
       public GetSliceSymbol(Expression expression) => this.expression = expression;
 
-      public override void Generate(OperationsBuilder builder) => builder.SendMessage("$", expression);
+      public override void Generate(OperationsBuilder builder) => builder.SendMessage("$()", expression);
 
       public override Precedence Precedence => Precedence.ChainedOperator;
 

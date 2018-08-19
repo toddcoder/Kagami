@@ -11,7 +11,7 @@ namespace Kagami.Library.Nodes.Statements
 {
    public class MatchFunction : Statement
    {
-      string functionName;
+      Selector selector;
       Parameters parameters;
       Block block;
       bool overriding;
@@ -19,14 +19,14 @@ namespace Kagami.Library.Nodes.Statements
 
       public MatchFunction(string functionName, Parameters parameters, If ifStatement, bool overriding, string className)
       {
-         this.functionName = functionName;
+         selector = parameters.Selector(functionName);
          this.parameters = parameters;
          block = new Block(ifStatement);
          this.overriding = overriding;
          this.className = className;
       }
 
-      public IInvokable getInvokable() => new FunctionInvokable(functionName, parameters, ToString());
+      public IInvokable getInvokable() => new FunctionInvokable(selector, parameters, ToString());
 
       public override void Generate(OperationsBuilder builder)
       {
@@ -35,27 +35,27 @@ namespace Kagami.Library.Nodes.Statements
          if (builder.RegisterInvokable(invokable, block, overriding).If(out _, out var exception))
          {
             if (!overriding)
-               builder.NewField(functionName, false, true);
+               builder.NewField(selector, false, true);
             builder.PushObject(lambda);
             builder.Peek(Index);
-            builder.AssignField(functionName, overriding);
+            builder.AssignField(selector, overriding);
          }
          else
             throw exception;
 
          if (className.IsNotEmpty())
             if (Module.Global.Class(className).If(out var cls))
-               cls.RegisterMessage(functionName, (obj, msg) => BaseClass.Invoke(obj, msg.Arguments, lambda));
+               cls.RegisterMessage(selector, (obj, msg) => BaseClass.Invoke(obj, msg.Arguments, lambda));
             else
                throw classNotFound(className);
       }
 
-      public override string ToString() => $"{overriding.Extend("override ")}match {functionName}() ...";
+      public override string ToString() => $"{overriding.Extend("override ")}match {selector.Image}() ...";
 
-      public void Deconstruct(out string functionName, out Parameters parameters, out Block block, out bool yielding,
+      public void Deconstruct(out Selector selector, out Parameters parameters, out Block block, out bool yielding,
          out IInvokable invokable, out bool overriding)
       {
-         functionName = this.functionName;
+         selector = this.selector;
          parameters = this.parameters;
          block = this.block;
          yielding = false;

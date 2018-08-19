@@ -40,6 +40,8 @@ namespace Kagami.Library.Objects
          return new Selector(name, items, $"{name}({items.Select(i => i.ToString()).Listify(",")})");
       }
 
+      public Selector NewName(string newName) => new Selector(newName, selectorItems, selectorImage(newName, selectorItems));
+
       public string ClassName => "Selector";
 
       public string AsString => image;
