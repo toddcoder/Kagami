@@ -9,6 +9,7 @@ using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using Kagami.Library.Parsers.Expressions;
 using Kagami.Library.Parsers.Statements;
+using Kagami.Library.Runtime;
 using Standard.Types.Maybe;
 using Standard.Types.Numbers;
 using Standard.Types.Strings;
@@ -360,15 +361,28 @@ namespace Kagami.Library.Parsers
 
       static IMatched<IMaybe<TypeConstraint>> parseTypeConstraint(ParseState state)
       {
-         var builder = new ExpressionBuilder(ExpressionFlags.Standard);
-         var typeConstraintParser = new TypeConstraintParser(builder);
-         if (typeConstraintParser.Scan(state).If(out var _, out var isNotMatched, out var exception))
+         if (state.Scan($"^ /(|s|) /({REGEX_CLASS}) /b", Color.Whitespace, Color.Class).If(out var className, out var isNotMatched, out var exception))
          {
-            var typeConstraint = (TypeConstraint)((IConstant)builder.Ordered.ToArray()[0]).Object;
-            return typeConstraint.Some().Matched();
+            className = className.TrimStart();
+            if (Module.Global.Class(className).If(out var baseClass))
+               return new TypeConstraint(new[] { baseClass }).Some().Matched();
+            else
+               return failedMatch<IMaybe<TypeConstraint>>(classNotFound(className));
          }
          else if (isNotMatched)
-            return none<TypeConstraint>().Matched();
+         {
+            var builder = new ExpressionBuilder(ExpressionFlags.Standard);
+            var typeConstraintParser = new TypeConstraintParser(builder);
+            if (typeConstraintParser.Scan(state).If(out var _, out isNotMatched, out exception))
+            {
+               var typeConstraint = (TypeConstraint)((IConstant)builder.Ordered.ToArray()[0]).Object;
+               return typeConstraint.Some().Matched();
+            }
+            else if (isNotMatched)
+               return none<TypeConstraint>().Matched();
+            else
+               return failedMatch<IMaybe<TypeConstraint>>(exception);
+         }
          else
             return failedMatch<IMaybe<TypeConstraint>>(exception);
       }

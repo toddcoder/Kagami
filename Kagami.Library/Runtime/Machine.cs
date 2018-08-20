@@ -330,7 +330,7 @@ namespace Kagami.Library.Runtime
          return Unit.Success();
       }
 
-      public IMatched<Field> Find(Selector selector) => findExact(selector).Or(findEquivalent(selector).Or(findTypeless(selector)));
+      public IMatched<Field> Find(Selector selector) => findExact(selector).Or(findEquivalent(selector).Or(findTypeless(selector).Or(findField(selector))));
 
       IMatched<Field> findExact(Selector selector) => Find(selector.Image, true);
 
@@ -351,6 +351,8 @@ namespace Kagami.Library.Runtime
       }
 
       IMatched<Field> findTypeless(Selector selector) => Find(selector.LabelsOnly().Image, true);
+
+      IMatched<Field> findField(Selector selector) => Find(selector.Name, true);
 
       public IResult<Field> Assign(string fieldName, IObject value, bool getting, bool overriden = false)
       {

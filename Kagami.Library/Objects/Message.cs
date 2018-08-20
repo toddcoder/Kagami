@@ -11,21 +11,21 @@ namespace Kagami.Library.Objects
 
       public Message(Selector selector, Arguments arguments) : this()
       {
-         this.selector = selector;
          this.arguments = arguments;
+         this.selector = arguments.Selector(selector.Name);
       }
 
       public Message(Selector selector, params IObject[] arguments) : this()
       {
-         this.selector = selector;
          this.arguments = new Arguments(arguments);
+         this.selector = this.arguments.Selector(selector.Name);
       }
 
-      public Message(Selector selector) : this()
+/*      public Message(Selector selector) : this()
       {
          this.selector = selector;
          arguments = Arguments.Empty;
-      }
+      }*/
 
       public Selector Selector => selector;
 

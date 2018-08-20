@@ -584,6 +584,7 @@
     <Compile Include="Parsers\Expressions\PatternParser.cs" />
     <Compile Include="Parsers\Expressions\RangePrefixParser.cs" />
     <Compile Include="Parsers\Expressions\RefParser.cs" />
+    <Compile Include="Parsers\Expressions\SelectorParser.cs" />
     <Compile Include="Parsers\Expressions\SeqParser.cs" />
     <Compile Include="Parsers\Expressions\SetPropertyParser.cs" />
     <Compile Include="Parsers\Expressions\SkipTakeItemParser.cs" />
