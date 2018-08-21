@@ -21,6 +21,6 @@ namespace Kagami.Library.Classes
 
       public IObject Revert(IEnumerable<IObject> list) => new ByteArray(list.Select(o => (Byte)o).Select(b => b.Value).ToArray());
 
-      public BaseClass Equivalent() => new CollectionClass();
+      public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
    }
 }

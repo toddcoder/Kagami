@@ -4,7 +4,7 @@ using Char = Kagami.Library.Objects.Char;
 
 namespace Kagami.Library.Classes
 {
-   public class CharClass : BaseClass
+   public class CharClass : BaseClass, IEquivalentClass
    {
       public override string Name => "Char";
 
@@ -39,5 +39,7 @@ namespace Kagami.Library.Classes
          classMessages["tab".get()] = (cls, msg) => (Char)'\t';
          classMessages["fromOrd"] = (cls, msg) => new Char((char)((Int)msg.Arguments[0]).Value);
       }
+
+      public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("TextFinding");
    }
 }

@@ -4,12 +4,18 @@ using Kagami.Library.Runtime;
 using Standard.Types.Collections;
 using Standard.Types.Enumerables;
 using Standard.Types.Exceptions;
+using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
 {
    public struct TypeConstraint : IObject
    {
+      public static TypeConstraint FromList(params string[] classNames)
+      {
+         return new TypeConstraint(classNames.Select(cn => Module.Global.Class(cn).Required(messageClassNotFound(cn))).ToArray());
+      }
+
       BaseClass[] comparisands;
 
       public TypeConstraint(BaseClass[] comparisands) : this() => this.comparisands = comparisands;
@@ -71,16 +77,23 @@ namespace Kagami.Library.Objects
 
       public bool IsTrue => true;
 
+      public TypeConstraint Merge(TypeConstraint other)
+      {
+         var set = new Set<string>();
+         set.AddRange(comparisands.Select(bc => bc.Name));
+         set.AddRange(other.comparisands.Select(bc => bc.Name));
+
+         return FromList(set.ToArray());
+      }
+
       public TypeConstraint Equivalent()
       {
-         var equivalents = new BaseClass[comparisands.Length];
-         for (var i = 0; i < comparisands.Length; i++)
-            if (comparisands[i] is IEquivalentClass equivalent)
-               equivalents[i] = equivalent.Equivalent();
-            else
-               equivalents[i] = comparisands[i];
+         var result = this;
+         foreach (var comparisand in comparisands)
+            if (comparisand is IEquivalentClass equivalent)
+               result = result.Merge(equivalent.TypeConstraint());
 
-         return new TypeConstraint(equivalents);
+         return result;
       }
    }
 }

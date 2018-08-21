@@ -25,6 +25,6 @@ namespace Kagami.Library.Classes
          messages["[]"] = (obj, msg) => function<List, Int>(obj, msg, (l, i) => l[i.Value]);
       }
 
-      public BaseClass Equivalent() => new CollectionClass();
+      public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
    }
 }

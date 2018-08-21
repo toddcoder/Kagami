@@ -3,7 +3,7 @@ using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Classes
 {
-   public class RegexClass : BaseClass
+   public class RegexClass : BaseClass, IEquivalentClass
    {
       public override string Name => "Regex";
 
@@ -19,5 +19,7 @@ namespace Kagami.Library.Classes
          messages["split"] = (obj, msg) => function<Regex, String>(obj, msg, (r, s) => r.Split(s.Value));
          messages["~"] = (obj, msg) => function<Regex, IObject>(obj, msg, (r1, r2) => r1.Concatenate(r2));
       }
+
+      public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("TextFinding");
    }
 }

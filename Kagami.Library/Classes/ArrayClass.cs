@@ -58,6 +58,6 @@ namespace Kagami.Library.Classes
             throw "Type constraint for array required".Throws();
       }
 
-      public BaseClass Equivalent() => new CollectionClass();
+      public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
    }
 }

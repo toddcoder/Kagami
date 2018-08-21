@@ -109,6 +109,7 @@
     <Compile Include="Classes\StreamIteratorClass.cs" />
     <Compile Include="Classes\StringClass.cs" />
     <Compile Include="Classes\SymbolClass.cs" />
+    <Compile Include="Classes\TextFindingClass.cs" />
     <Compile Include="Classes\TraitClass.cs" />
     <Compile Include="Classes\TupleClass.cs" />
     <Compile Include="Classes\TypeConstraintClass.cs" />

@@ -17,5 +17,7 @@ namespace Kagami.Library.Classes
       }
 
       public BaseClass Equivalent() => new CollectionClass();
+
+      public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
    }
 }

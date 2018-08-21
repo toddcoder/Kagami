@@ -63,6 +63,6 @@ namespace Kagami.Library.Classes
 
       public IObject Revert(IEnumerable<IObject> list) => new Tuple(list.ToArray());
 
-      public BaseClass Equivalent() => new CollectionClass();
+      public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
    }
 }

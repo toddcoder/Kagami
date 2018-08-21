@@ -25,14 +25,14 @@ namespace Kagami.Library.Nodes.Symbols
          this.arguments = arguments;
       }
 
-      public SendMessageSymbol(string messageName, Precedence precedence, params Expression[] arguments) :
-         this(messageName, precedence, none<LambdaSymbol>(), none<Operation>(), arguments) { }
+      public SendMessageSymbol(Selector selector, Precedence precedence, params Expression[] arguments) :
+         this(selector, precedence, none<LambdaSymbol>(), none<Operation>(), arguments) { }
 
-      public SendMessageSymbol(string messageName, Precedence precedence, IMaybe<Operation> operation, params Expression[] arguments) :
-         this(messageName, precedence, none<LambdaSymbol>(), operation, arguments) { }
+      public SendMessageSymbol(Selector selector, Precedence precedence, IMaybe<Operation> operation, params Expression[] arguments) :
+         this(selector, precedence, none<LambdaSymbol>(), operation, arguments) { }
 
-      public SendMessageSymbol(string messageName, Precedence precedence, IMaybe<LambdaSymbol> lambda, params Expression[] arguments) :
-         this(messageName, precedence, lambda, none<Operation>(), arguments) { }
+      public SendMessageSymbol(Selector selector, Precedence precedence, IMaybe<LambdaSymbol> lambda, params Expression[] arguments) :
+         this(selector, precedence, lambda, none<Operation>(), arguments) { }
 
       public override void Generate(OperationsBuilder builder)
       {

@@ -199,5 +199,7 @@ namespace Kagami.Library.Packages
          else
             throw notNumeric(real);
       }
+
+      public Selector Selector(string source) => source;
    }
 }

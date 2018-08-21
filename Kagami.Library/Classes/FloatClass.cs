@@ -45,6 +45,6 @@ namespace Kagami.Library.Classes
 
       public override bool IsNumeric => true;
 
-      public BaseClass Equivalent() => new NumberClass();
+      public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Number");
    }
 }

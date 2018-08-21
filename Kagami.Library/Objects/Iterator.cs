@@ -818,6 +818,6 @@ namespace Kagami.Library.Objects
          return collectionClass.Revert(result.ValueArray());
       }
 
-      public BaseClass Equivalent() => new CollectionClass();
+      public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
    }
 }
