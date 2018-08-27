@@ -397,10 +397,16 @@ namespace Kagami.Library.Objects
          {
             var name = matcher.FirstGroup;
             var rest = matcher.SecondGroup.TakeUntil(")");
-            var sourceItems = rest.Split("/s* ',' /s*");
-            var items = sourceItems.Select(parseSelectorItem).ToArray();
+	         SelectorItem[] items;
+	         if (rest.IsEmpty())
+		         items = new SelectorItem[0];
+	         else
+	         {
+		         var sourceItems = rest.Split("/s* ',' /s*");
+		         items = sourceItems.Select(parseSelectorItem).ToArray();
+	         }
 
-            return new Selector(name, items, source);
+	         return new Selector(name, items, source);
          }
          else
             throw $"Can't convert {source} into a Selector".Throws();

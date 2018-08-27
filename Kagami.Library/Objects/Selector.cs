@@ -58,10 +58,35 @@ namespace Kagami.Library.Objects
 
       public bool Equals(Selector other) => image == other.image;
 
-      public Selector Equivalent(bool[] bools)
+      public Selector Equivalent(bool[] booleans)
       {
-         var items = selectorItems.Select((si, i) => bools[i]? si.Equivalent(): si).ToArray();
+         var items = selectorItems.Select((si, i) => booleans[i] ? si.Equivalent(): si).ToArray();
          return new Selector(name, items, selectorImage(name, items));
       }
+
+	   public bool IsEquivalentTo(Selector otherSelector)
+	   {
+		   if (LabelsOnly().image == otherSelector.LabelsOnly().image)
+		   {
+			   var otherItems = otherSelector.selectorItems;
+			   var length = selectorItems.Length;
+			   if (length == otherItems.Length)
+			   {
+				   for (var i = 0; i < length; i++)
+				   {
+					   var left = selectorItems[i];
+					   var right = otherItems[i];
+					   if (right.TypeConstraint.If(out var tc) && !left.TypeConstraint.Required("Type required").IsEquivalentTo(tc))
+						   return false;
+				   }
+
+				   return true;
+			   }
+			   else
+				   return false;
+		   }
+		   else
+			   return false;
+	   }
    }
 }

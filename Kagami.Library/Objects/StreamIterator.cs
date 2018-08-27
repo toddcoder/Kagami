@@ -90,7 +90,7 @@ namespace Kagami.Library.Objects
 
       public IObject Sort(Lambda lambda, bool ascending) => iterator.Sort(lambda, ascending);
 
-      public IObject Sort(bool ascending) => iterator.Sort(@ascending);
+      public IObject Sort(bool ascending) => iterator.Sort(ascending);
 
       public IObject FoldLeft(IObject initialValue, Lambda lambda) => iterator.FoldLeft(initialValue, lambda);
 

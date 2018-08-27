@@ -87,12 +87,10 @@ namespace Kagami.Library.Nodes.Statements
             string fullFunctionName = selector;
             fullFunctionName = className.IsNotEmpty() ? $"{className}.{fullFunctionName}" : fullFunctionName;
             if (!overriding)
-               builder.NewField(fullFunctionName, false, true);
+               builder.NewSelector(selector, false, true);
             builder.PushObject(lambda);
-            //builder.Dup();
             builder.Peek(Index);
-            builder.AssignField(fullFunctionName, overriding);
-            //builder.AssignField(selector.Name, overriding);
+            builder.AssignSelector(selector, overriding);
          }
          else
             throw exception;

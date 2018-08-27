@@ -1,5 +1,4 @@
-﻿using System;
-using Kagami.Library.Invokables;
+﻿using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using Kagami.Library.Packages;
 using Kagami.Library.Runtime;
@@ -64,33 +63,28 @@ namespace Kagami.Library.Operations
          if (value is Arguments arguments)
          {
             var selector = arguments.Selector(fieldName);
-            var (type, field, exception) = machine.Find(selector).Values;
-            switch (type)
-            {
-               case MatchType.Matched:
-                  switch (field.Value)
-                  {
-                     case IInvokableObject io:
-                        InvokeInvokableObject(machine, io, arguments);
-                        increment = io.Invokable is YieldingInvokable;
+	         var ((isFound, field), (isFailure, exception)) = machine.Find(selector);
+	         if (isFound)
+		         switch (field.Value)
+		         {
+			         case IInvokableObject io:
+				         InvokeInvokableObject(machine, io, arguments);
+				         increment = io.Invokable is YieldingInvokable;
 
-                        return notMatched<IObject>();
-                     case PackageFunction pf:
-                        increment = true;
-                        return pf.Invoke(arguments).Matched();
-                     case IMayInvoke mi:
-                        increment = true;
-                        return mi.Invoke(arguments.Value).Matched();
-                     default:
-                        return failedMatch<IObject>(incompatibleClasses(field.Value, "Invokable object"));
-                  }
-               case MatchType.NotMatched:
-                  return failedMatch<IObject>(fieldNotFound(selector.Image));
-               case MatchType.FailedMatch:
-                  return failedMatch<IObject>(exception);
-               default:
-                  throw new ArgumentOutOfRangeException();
-            }
+				         return notMatched<IObject>();
+			         case PackageFunction pf:
+				         increment = true;
+				         return pf.Invoke(arguments).Matched();
+			         case IMayInvoke mi:
+				         increment = true;
+				         return mi.Invoke(arguments.Value).Matched();
+			         default:
+				         return failedMatch<IObject>(incompatibleClasses(field.Value, "Invokable object"));
+		         }
+	         else if (isFailure)
+		         return failedMatch<IObject>(exception);
+				else
+		         return failedMatch<IObject>(fieldNotFound(selector.Image));
          }
          else
             return failedMatch<IObject>(incompatibleClasses(value, "Arguments"));

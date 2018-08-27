@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Kagami.Library.Classes;
 using Kagami.Library.Runtime;
 using Standard.Types.Collections;
@@ -9,12 +11,14 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct TypeConstraint : IObject
+   public struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
    {
       public static TypeConstraint FromList(params string[] classNames)
       {
          return new TypeConstraint(classNames.Select(cn => Module.Global.Class(cn).Required(messageClassNotFound(cn))).ToArray());
       }
+
+      public static TypeConstraint SingleType(BaseClass baseClass) => new TypeConstraint(new[] { baseClass });
 
       BaseClass[] comparisands;
 
@@ -95,5 +99,30 @@ namespace Kagami.Library.Objects
 
          return result;
       }
+
+      public IEnumerator<TypeConstraint> GetEnumerator()
+      {
+         foreach (var comparisand in comparisands)
+            yield return SingleType(comparisand);
+      }
+
+      IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+	   public bool IsEquivalentTo(TypeConstraint typeConstraint)
+	   {
+		   var baseClass = comparisands[0];
+		   if (typeConstraint.comparisands.Contains(baseClass))
+			   return true;
+		   else if (baseClass is IEquivalentClass equivalentClass)
+		   {
+			   foreach (var comparisand in equivalentClass.TypeConstraint().comparisands)
+				   if (typeConstraint.comparisands.Contains(comparisand))
+					   return true;
+
+			   return true;
+		   }
+		   else
+			   return false;
+	   }
    }
 }

@@ -188,6 +188,8 @@ namespace Kagami.Library.Objects
 
       public Interval Day => value.Day();
 
+	   public Interval Week => (7 * value).Day();
+
       public Char Char() => new Char((char)value);
    }
 }

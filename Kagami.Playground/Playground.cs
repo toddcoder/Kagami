@@ -190,15 +190,15 @@ namespace Kagami.Playground
                exceptionData = none<ExceptionData>();
 
                var kagamiConfiguration = new CompilerConfiguration { ShowOperations = dumpOperations, Tracing = tracing };
-               var complier = new Compiler(textEditor.Text, kagamiConfiguration, context);
-               if (complier.Generate().If(out var machine, out var exception))
+               var compiler = new Compiler(textEditor.Text, kagamiConfiguration, context);
+               if (compiler.Generate().If(out var machine, out var exception))
                {
                   machine.PackageFolder = packageFolder.FullPath;
                   if (execute)
                      if (machine.Execute().IfNot(out exception))
                      {
                         textWriter.WriteLine(exception.Message);
-                        exceptionIndex = complier.ExceptionIndex;
+                        exceptionIndex = compiler.ExceptionIndex;
                         if (exceptionIndex.IsNone)
                            exceptionIndex = textEditor.SelectionStart.Some();
                      }
@@ -212,7 +212,7 @@ namespace Kagami.Playground
                   var state = textEditor.StopAutoscrollingAlways();
                   try
                   {
-                     colorizer.Colorize(complier.Tokens);
+                     colorizer.Colorize(compiler.Tokens);
                   }
                   finally
                   {
@@ -226,7 +226,7 @@ namespace Kagami.Playground
                         showException(index, remainingLineLength);
                   }
 
-                  if (dumpOperations && complier.Operations.If(out var operations))
+                  if (dumpOperations && compiler.Operations.If(out var operations))
                      textWriter.WriteLine(operations);
 
                   document.Clean();
@@ -236,7 +236,7 @@ namespace Kagami.Playground
                else
                {
                   textWriter.WriteLine(exception.Message);
-                  exceptionIndex = complier.ExceptionIndex;
+                  exceptionIndex = compiler.ExceptionIndex;
                   if (exceptionIndex.IsNone)
                      exceptionIndex = textEditor.SelectionStart.Some();
                   if (exceptionIndex.If(out var index))
@@ -612,10 +612,10 @@ namespace Kagami.Playground
 
       void Playground_FormClosing(object sender, FormClosingEventArgs e)
       {
-         if (document.FileName.If(out var fileName) && !((FileName)fileName).Exists())
+         if (document.FileName.If(out var fileName) && ((FileName)fileName).Exists())
             try
             {
-               configurationFile = PLAYGROUND_CONFIGURATION_FILE1;
+               //configurationFile = PLAYGROUND_CONFIGURATION_FILE1;
                playgroundConfiguration.LastFile = fileName;
                playgroundConfiguration.DefaultFolder = FolderName.Current;
                playgroundConfiguration.FontName = textEditor.Font.Name;

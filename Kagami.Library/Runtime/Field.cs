@@ -16,5 +16,7 @@ namespace Kagami.Library.Runtime
          Mutable = Mutable,
          Visible = Visible
       };
+
+		public Fields Fields { get; set; }
    }
 }

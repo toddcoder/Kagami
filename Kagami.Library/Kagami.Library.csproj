@@ -405,6 +405,7 @@
     <Compile Include="Operations\ArgumentsOperation.cs" />
     <Compile Include="Operations\AssignField.cs" />
     <Compile Include="Operations\AssignMetaObject.cs" />
+    <Compile Include="Operations\AssignSelector.cs" />
     <Compile Include="Operations\AsString.cs" />
     <Compile Include="Operations\BAnd.cs" />
     <Compile Include="Operations\BNot.cs" />
@@ -449,6 +450,7 @@
     <Compile Include="Operations\NewObject.cs" />
     <Compile Include="Operations\NewOpenRange.cs" />
     <Compile Include="Operations\NewRational.cs" />
+    <Compile Include="Operations\NewSelector.cs" />
     <Compile Include="Operations\NewValue.cs" />
     <Compile Include="Operations\OpenPackage.cs" />
     <Compile Include="Operations\Pipeline.cs" />

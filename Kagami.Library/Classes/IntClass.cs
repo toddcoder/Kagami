@@ -32,6 +32,8 @@ namespace Kagami.Library.Classes
          messages["hours".get()] = (obj, msg) => function<Int>(obj, i => i.Hour);
          messages["day".get()] = (obj, msg) => function<Int>(obj, i => i.Day);
          messages["days".get()] = (obj, msg) => function<Int>(obj, i => i.Day);
+         messages["week".get()] = (obj, msg) => function<Int>(obj, i => i.Week);
+         messages["weeks".get()] = (obj, msg) => function<Int>(obj, i => i.Week);
          messages["char"] = (obj, msg) => function<Int>(obj, i => i.Char());
       }
 

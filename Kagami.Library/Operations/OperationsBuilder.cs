@@ -188,7 +188,11 @@ namespace Kagami.Library.Operations
 
       public void NewField(string name, bool mutable, bool visible) => add(new NewField(name, mutable, visible));
 
+	   public void NewSelector(Selector selector, bool mutable, bool visible) => add(new NewSelector(selector, mutable, visible));
+
       public void AssignField(string name, bool overriding) => add(new AssignField(name, overriding));
+
+	   public void AssignSelector(Selector selector, bool overriding) => add(new AssignSelector(selector, overriding));
 
       public void SendMessage(Selector selector, params Expression[] arguments)
       {

@@ -27,12 +27,18 @@ namespace Kagami.Library.Packages
          var fields = globalFrame.Fields;
 
          foreach (var (functionName, func) in functions)
-            if (!functionName.StartsWith("_") && !fields.ContainsKey(functionName))
-               fields.New(functionName, new PackageFunction(package, functionName, func));
+         {
+	         Selector selector = functionName;
+	         if (!functionName.StartsWith("_") && !fields.ContainsKey(selector))
+		         fields.New(selector, new PackageFunction(package, functionName, func));
+         }
 
          foreach (var (fieldName, field) in package.Fields)
-            if (!fieldName.StartsWith("_") && !fields.ContainsKey(fieldName))
-               fields.New(fieldName, field);
+         {
+	         Selector selector = fieldName;
+	         if (!fieldName.StartsWith("_") && !fields.ContainsKey(selector))
+		         fields.New(selector, field);
+         }
       }
    }
 }

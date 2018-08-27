@@ -1,30 +1,29 @@
 ﻿using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
-using Standard.Types.Booleans;
 using Standard.Types.Maybe;
 using static Standard.Types.Maybe.MaybeFunctions;
 
 namespace Kagami.Library.Operations
 {
-	public class AssignField : OneOperandOperation
+	public class AssignSelector : OneOperandOperation
 	{
-		string name;
+		Selector selector;
 		bool overriding;
 
-		public AssignField(string name, bool overriding)
+		public AssignSelector(Selector selector, bool overriding)
 		{
-			this.name = name;
+			this.selector = selector;
 			this.overriding = overriding;
 		}
 
 		public override IMatched<IObject> Execute(Machine machine, IObject value)
 		{
-			if (machine.Assign(name, value, false, overriding).If(out _, out var exception))
+			if (machine.Assign(selector, value, overriding).If(out _, out var exception))
 				return notMatched<IObject>();
 			else
 				return failedMatch<IObject>(exception);
 		}
 
-		public override string ToString() => $"assign.field({name}{overriding.Extend(", override")})";
+		public override string ToString() => $"assign.selector({selector.Image}, {overriding})";
 	}
 }

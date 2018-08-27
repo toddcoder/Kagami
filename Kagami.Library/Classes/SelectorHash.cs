@@ -1,54 +1,58 @@
-﻿using Kagami.Library.Objects;
-using Kagami.Library.Runtime;
+﻿using System.Collections.Generic;
+using Kagami.Library.Objects;
 using Standard.Types.Collections;
 
 namespace Kagami.Library.Classes
 {
    public class SelectorHash<TValue> : Hash<string, TValue>
    {
-      public TValue this[Selector key]
-      {
-         get
+	   AutoHash<string, List<string>> buckets;
+
+	   public SelectorHash() => buckets = new AutoHash<string, List<string>>(key => new List<string>(), true);
+
+	   public TValue this[Selector selector]
+	   {
+		   get
          {
-            if (base.ContainsKey(key.Image))
-               return base[key.Image];
+            if (base.ContainsKey(selector.Image))
+               return base[selector.Image];
             else
             {
-               var count = key.SelectorItems.Length;
-               var iterator = new BitIterator(count);
-               foreach (var bools in iterator)
-               {
-                  var newSelector = key.Equivalent(bools);
-                  if (base.ContainsKey(newSelector))
-                     return base[newSelector.Image];
-               }
+	            var labelsOnlyImage = selector.LabelsOnly().Image;
+	            if (buckets.ContainsKey(labelsOnlyImage))
+		            foreach (var bucket in buckets[labelsOnlyImage])
+		            {
+			            Selector matchSelector = bucket;
+			            if (selector.IsEquivalentTo(matchSelector))
+				            return base[matchSelector.Image];
+		            }
 
-               var labelsOnly = key.LabelsOnly();
-
-               return base[labelsOnly.Image];
+	            return base[labelsOnlyImage];
             }
          }
-         set => base[key.Image] = value;
-      }
+		   set
+		   {
+			   base[selector.Image] = value;
+				buckets[selector.LabelsOnly()].Add(selector.Image);
+		   }
+	   }
 
-      public bool ContainsKey(Selector selector)
+	   public bool ContainsKey(Selector selector)
       {
          if (base.ContainsKey(selector.Image))
             return true;
          else
          {
-            var count = selector.SelectorItems.Length;
-            var iterator = new BitIterator(count);
-            foreach (var bools in iterator)
-            {
-               var newSelector = selector.Equivalent(bools);
-               if (base.ContainsKey(newSelector))
-                  return true;
-            }
+	         var labelsOnlyImage = selector.LabelsOnly().Image;
+	         if (buckets.ContainsKey(labelsOnlyImage))
+		         foreach (var bucket in buckets[labelsOnlyImage])
+		         {
+			         Selector matchSelector = bucket;
+			         if (selector.IsEquivalentTo(matchSelector))
+				         return true;
+		         }
 
-            var labelsOnly = selector.LabelsOnly();
-
-            return base.ContainsKey(labelsOnly.Image);
+	         return base.ContainsKey(labelsOnlyImage);
          }
       }
    }

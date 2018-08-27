@@ -25,6 +25,7 @@ namespace Kagami.Library.Operations
                   {
                      packageClass.RegisterMessages();
                      packageClass.CopyToGlobalFrame(package);
+
                      return notMatched<IObject>();
                   }
                   else
