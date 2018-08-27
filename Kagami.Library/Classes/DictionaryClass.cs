@@ -16,8 +16,8 @@ namespace Kagami.Library.Classes
          mutableCollectionMessages();
 
          messages["[]"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, k) => d[k]);
-         messages["[]="] = (obj, msg) => function<Dictionary>(obj, d => d[msg.Arguments[0]] = msg.Arguments[1]);
-         messages["[?]"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, k) => d.Get(k));
+         messages["[]=".Selector("", "")] = (obj, msg) => function<Dictionary>(obj, d => d[msg.Arguments[0]] = msg.Arguments[1]);
+         messages["get"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, k) => d.Get(k));
          messages["default".get()] = (obj, msg) => function<Dictionary>(obj, d =>
          {
             if (d.DefaultValue.If(out var dv))

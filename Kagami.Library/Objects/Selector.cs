@@ -88,5 +88,7 @@ namespace Kagami.Library.Objects
 		   else
 			   return false;
 	   }
+
+	   public override string ToString() => image;
    }
 }
