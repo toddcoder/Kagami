@@ -612,7 +612,7 @@ namespace Kagami.Playground
 
       void Playground_FormClosing(object sender, FormClosingEventArgs e)
       {
-         if (document.FileName.If(out var fileName) && ((FileName)fileName).Exists())
+/*         if (document.FileName.If(out var fileName) && ((FileName)fileName).Exists())
             try
             {
                //configurationFile = PLAYGROUND_CONFIGURATION_FILE1;
@@ -625,7 +625,7 @@ namespace Kagami.Playground
             catch (Exception exception)
             {
                MessageBox.Show(exception.Message);
-            }
+            }*/
       }
 
       void Playground_KeyUp(object sender, KeyEventArgs e)
