@@ -181,15 +181,15 @@ namespace Kagami.Library.Parsers.Statements
       {
          foreach (var item in constructorInvokables)
          {
-            var functionName = item.Key;
+            Selector selector = item.Key;
             var (invokable, block) = item.Value;
             if (builder.RegisterInvokable(invokable, block, true).IfNot(out var exception))
                throw exception;
 
-            builder.NewField(functionName, false, true);
+            builder.NewSelector(selector, false, true);
             builder.PushObject(new Constructor(invokable));
             builder.Peek(index);
-            builder.AssignField(functionName, true);
+            builder.AssignSelector(selector, true);
          }
 
          foreach (var function in functions)

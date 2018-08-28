@@ -34,11 +34,8 @@ namespace Kagami.Library.Packages
          }
 
          foreach (var (fieldName, field) in package.Fields)
-         {
-	         Selector selector = fieldName;
-	         if (!fieldName.StartsWith("_") && !fields.ContainsKey(selector))
-		         fields.New(selector, field);
-         }
+	         if (!fieldName.StartsWith("_") && !fields.ContainsKey(fieldName))
+		         fields.New(fieldName, field);
       }
    }
 }

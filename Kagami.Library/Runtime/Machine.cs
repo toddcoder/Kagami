@@ -337,7 +337,7 @@ namespace Kagami.Library.Runtime
 				if (frame.Fields.ContainsSelector(labelsOnly))
 				{
 					var match = frame.Fields.Find(selector);
-					if (match.If(out var field))
+					if (match.If(out var field) && field != null)
 						field.Fields = frame.Fields;
 					return match;
 				}
