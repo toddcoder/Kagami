@@ -49,6 +49,8 @@ namespace Kagami.Library.Packages
          registerPackageFunction("frexp", (obj, msg) => function<Math, Float>(obj, msg, (m, f) => m.Frexp(f.Value)));
          registerPackageFunction("pi".get(), (obj, msg) => function<Math>(obj, m => m.Pi));
          registerPackageFunction("e".get(), (obj, msg) => function<Math>(obj, m => m.E));
+	      registerPackageFunction("degrees", (obj, msg) => function<Math, Float>(obj, msg, (m, n) => m.Degrees(n.Value)));
+	      registerPackageFunction("radians", (obj, msg) => function<Math, Float>(obj, msg, (m, n) => m.Radians(n.Value)));
       }
    }
 }

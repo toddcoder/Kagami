@@ -266,5 +266,9 @@ namespace Kagami.Library.Packages
       public Float Pi => (Float)fields["pi"];
 
       public Float E => (Float)fields["e"];
+
+	   public Float Radians(double degrees) => System.Math.PI / 180 * degrees;
+
+	   public Float Degrees(double radians) => 180 / System.Math.PI * radians;
    }
 }
