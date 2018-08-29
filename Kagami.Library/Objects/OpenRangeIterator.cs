@@ -3,7 +3,7 @@ using Standard.Types.Maybe;
 
 namespace Kagami.Library.Objects
 {
-   public class OpenRangeIterator : LazyIterator
+   public class OpenRangeIterator : Iterator
    {
       IObject seed;
       IObject current;
