@@ -7,7 +7,7 @@ namespace Kagami.Library.Parsers.Expressions
 {
    public class MapExpressionParser : SymbolParser
    {
-      public override string Pattern => "^ /(|s|) /['!&*']";
+      public override string Pattern => "^ /(|s|) /['!&*'] -(> /s+)";
 
       public MapExpressionParser(ExpressionBuilder builder) : base(builder) { }
 
