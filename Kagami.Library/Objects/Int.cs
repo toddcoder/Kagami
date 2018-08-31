@@ -2,7 +2,6 @@
 using System.Numerics;
 using Standard.Types.Collections;
 using Standard.Types.Dates.DateIncrements;
-using Standard.Types.Objects;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Operations.NumericFunctions;
 
@@ -123,17 +122,9 @@ namespace Kagami.Library.Objects
 
       public int CompareTo(object obj) => CompareTo((Int)obj);
 
-      public String Format(string format)
-      {
-         if (format.StartsWith("b"))
-            return Convert.ToString(value, 2);
-         else if (format.StartsWith("o"))
-            return Convert.ToString(value, 8);
-         else
-            return value.FormatAs(format);
-      }
+      public String Format(string format) => formatNumber(value, format);
 
-      public Boolean IsEven => value % 2 == 0;
+	   public Boolean IsEven => value % 2 == 0;
 
       public Boolean IsOdd => value % 2 != 0;
 

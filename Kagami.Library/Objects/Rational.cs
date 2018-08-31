@@ -123,12 +123,9 @@ namespace Kagami.Library.Objects
 
       public int CompareTo(Rational other) => (numerator * other.denominator - other.numerator * denominator).Sign;
 
-      public String Format(string format)
-      {
-         return $"{numerator.ToString(format)}/{denominator.ToString(format)}";
-      }
+      public String Format(string format) => $"{numerator.ToString(format)}/{denominator.ToString(format)}";
 
-      public IObject Negate() => (Rational)(-numerator, denominator);
+	   public IObject Negate() => (Rational)(-numerator, denominator);
 
       public IObject Sign() => (Rational)(numerator.Sign, denominator.Sign);
 
