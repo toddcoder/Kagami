@@ -35,7 +35,7 @@ namespace Kagami.Library.Nodes.Statements
          if (builder.RegisterInvokable(invokable, block, overriding).If(out _, out var exception))
          {
             if (!overriding)
-               builder.NewField(selector, false, true);
+               builder.NewSelector(selector, false, true);
             builder.PushObject(lambda);
             builder.Peek(Index);
             builder.AssignField(selector, overriding);
