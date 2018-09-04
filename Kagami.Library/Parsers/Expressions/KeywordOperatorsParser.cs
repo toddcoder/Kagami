@@ -77,7 +77,8 @@ namespace Kagami.Library.Parsers.Expressions
                      break;
                   case "while":
                   case "until":
-                     builder.Add(new SendBinaryMessageSymbol("take".Selector($"{keyword}:"), Precedence.ChainedOperator));
+	                  builder.Add(new SendBinaryMessageSymbol("take".Selector($"{keyword}:<Lambda>"), Precedence.ChainedOperator, false,
+		                  keyword));
                      break;
                   case "min":
                      builder.Add(new MinSymbol());

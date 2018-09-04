@@ -440,6 +440,7 @@
     <Compile Include="Operations\IntDivide.cs" />
     <Compile Include="Operations\InternalListOperation.cs" />
     <Compile Include="Operations\Invoke.cs" />
+    <Compile Include="Operations\ArgumentLabel.cs" />
     <Compile Include="Operations\MacroParameters.cs" />
     <Compile Include="Operations\MultipleOperandOperation.cs" />
     <Compile Include="Operations\NewDataComparisand.cs" />
