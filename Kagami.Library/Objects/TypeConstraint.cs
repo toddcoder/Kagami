@@ -119,7 +119,7 @@ namespace Kagami.Library.Objects
 				   if (typeConstraint.comparisands.Contains(comparisand))
 					   return true;
 
-			   return true;
+			   return false;
 		   }
 		   else
 			   return false;
