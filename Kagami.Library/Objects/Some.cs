@@ -33,9 +33,16 @@ namespace Kagami.Library.Objects
 
       public bool IsNil => false;
 
-      public IObject Map(Lambda lambda) => lambda.Invoke(value);
+      public IObject Map(Lambda lambda)
+      {
+	      var result = lambda.Invoke(value);
+	      if (result is Some some)
+		      return some;
+	      else
+		      return new Some(result);
+      }
 
-      public IObject FlatMap(Lambda ifSome, Lambda ifNil) => ifSome.Invoke(value);
+	   public IObject FlatMap(Lambda ifSome, Lambda ifNil) => ifSome.Invoke(value);
 
       public bool IsTrue => true;
 

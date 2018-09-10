@@ -6,89 +6,99 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct Selector : IObject, IEquatable<Selector>
-   {
-      public static implicit operator Selector(string source) => parseSelector(source);
+	public struct Selector : IObject, IEquatable<Selector>
+	{
+		public static implicit operator Selector(string source) => parseSelector(source);
 
-      public static implicit operator string(Selector selector) => selector.image;
+		public static implicit operator string(Selector selector) => selector.image;
 
-      string name;
-      SelectorItem[] selectorItems;
-      string image;
+		string name;
+		SelectorItem[] selectorItems;
+		string image;
 
-      public Selector(string name, SelectorItem[] selectorItems, string image) : this()
-      {
-         this.name = name;
-         this.selectorItems = selectorItems;
-         this.image = image;
-      }
+		public Selector(string name, SelectorItem[] selectorItems, string image) : this()
+		{
+			this.name = name;
+			this.selectorItems = selectorItems;
+			this.image = image;
 
-      public Selector(string name) : this()
-      {
-         this.name = name;
-         selectorItems = new SelectorItem[0];
-         image = $"{name}()";
-      }
+			AnyVariadic = selectorItems.Any(si => si.SelectorItemType == SelectorItemType.Variadic);
+			AnyDefault = selectorItems.Any(si => si.SelectorItemType == SelectorItemType.Default);
+		}
 
-      public string Name => name;
+		public Selector(string name) : this()
+		{
+			this.name = name;
+			selectorItems = new SelectorItem[0];
+			image = $"{name}()";
 
-      public SelectorItem[] SelectorItems => selectorItems;
+			AnyVariadic = false;
+			AnyDefault = false;
+		}
 
-      public Selector LabelsOnly()
-      {
-         var items = selectorItems.Select(si => si.LabelOnly()).ToArray();
-         return new Selector(name, items, $"{name}({items.Select(i => i.ToString()).Listify(",")})");
-      }
+		public string Name => name;
 
-      public Selector NewName(string newName) => new Selector(newName, selectorItems, selectorImage(newName, selectorItems));
+		public SelectorItem[] SelectorItems => selectorItems;
 
-      public string ClassName => "Selector";
+		public bool AnyVariadic { get; }
 
-      public string AsString => image;
+		public bool AnyDefault { get; }
 
-      public string Image => image;
+		public Selector LabelsOnly()
+		{
+			var items = selectorItems.Select(si => si.LabelOnly()).ToArray();
+			return new Selector(name, items, $"{name}({items.Select(i => i.ToString()).Listify(",")})");
+		}
 
-      public int Hash => image.GetHashCode();
+		public Selector NewName(string newName) => new Selector(newName, selectorItems, selectorImage(newName, selectorItems));
 
-      public bool IsEqualTo(IObject obj) => obj is Selector s && Equals(s);
+		public string ClassName => "Selector";
 
-      public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
+		public string AsString => image;
 
-      public bool IsTrue => true;
+		public string Image => image;
 
-      public bool Equals(Selector other) => image == other.image;
+		public int Hash => image.GetHashCode();
 
-      public Selector Equivalent(bool[] booleans)
-      {
-         var items = selectorItems.Select((si, i) => booleans[i] ? si.Equivalent(): si).ToArray();
-         return new Selector(name, items, selectorImage(name, items));
-      }
+		public bool IsEqualTo(IObject obj) => obj is Selector s && Equals(s);
 
-	   public bool IsEquivalentTo(Selector otherSelector)
-	   {
-		   if (LabelsOnly().image == otherSelector.LabelsOnly().image)
-		   {
-			   var otherItems = otherSelector.selectorItems;
-			   var length = selectorItems.Length;
-			   if (length == otherItems.Length)
-			   {
-				   for (var i = 0; i < length; i++)
-				   {
-					   var left = selectorItems[i];
-					   var right = otherItems[i];
-					   if (right.TypeConstraint.If(out var tc) && !left.TypeConstraint.Required("Type required").IsEquivalentTo(tc))
-						   return false;
-				   }
+		public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
-				   return true;
-			   }
-			   else
-				   return false;
-		   }
-		   else
-			   return false;
-	   }
+		public bool IsTrue => true;
 
-	   public override string ToString() => image;
-   }
+		public bool Equals(Selector other) => image == other.image;
+
+		public Selector Equivalent(bool[] booleans)
+		{
+			var items = selectorItems.Select((si, i) => booleans[i] ? si.Equivalent() : si).ToArray();
+			return new Selector(name, items, selectorImage(name, items));
+		}
+
+		public bool IsEquivalentTo(Selector otherSelector)
+		{
+			if (LabelsOnly().image == otherSelector.LabelsOnly().image)
+			{
+				var otherItems = otherSelector.selectorItems;
+				var length = selectorItems.Length;
+				if (length == otherItems.Length)
+				{
+					for (var i = 0; i < length; i++)
+					{
+						var left = selectorItems[i];
+						var right = otherItems[i];
+						if (right.TypeConstraint.If(out var tc) && !left.TypeConstraint.Required("Type required").IsEquivalentTo(tc))
+							return false;
+					}
+
+					return true;
+				}
+				else
+					return false;
+			}
+			else
+				return false;
+		}
+
+		public override string ToString() => image;
+	}
 }

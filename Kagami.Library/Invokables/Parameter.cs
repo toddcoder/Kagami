@@ -83,6 +83,10 @@ namespace Kagami.Library.Invokables
                builder.Append($"{label}:");
             if (typeConstraint.If(out var tc))
                builder.Append(tc.Image);
+	         if (Variadic)
+		         builder.Append("...");
+				else if (defaultValue.IsSome)
+		         builder.Append("=");
 
             return builder.ToString();
          }

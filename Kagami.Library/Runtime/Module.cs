@@ -83,6 +83,7 @@ namespace Kagami.Library.Runtime
          classes["Number"] = new NumberClass();
          classes["Collection"] = new CollectionClass();
          classes["TextFinding"] = new TextFindingClass();
+	      classes["SkipTake"] = new SkipTakeClass();
       }
 
       public IMaybe<BaseClass> Class(string name) => classes.Map(name);

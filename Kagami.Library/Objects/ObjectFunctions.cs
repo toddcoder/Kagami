@@ -425,14 +425,26 @@ namespace Kagami.Library.Objects
 				source = matcher.SecondGroup;
 			}
 
-			if (matcher.IsMatch(source, "^ '<' /(-['>']+) '>'"))
+			if (matcher.IsMatch(source, "^ '<' /(-['>']+) '>' /@"))
 			{
 				var classNames = matcher.FirstGroup.Split("/s+");
 				var classes = classNames.Select(cn => Module.Global.Class(cn).Required(messageClassNotFound(cn))).ToArray();
 				typeConstraint = new TypeConstraint(classes).Some();
+				source = matcher.SecondGroup.Trim();
 			}
 
-			return new SelectorItem(label, typeConstraint);
+			var selectorItemType = SelectorItemType.Normal;
+			switch (source)
+			{
+            case "...":
+	            selectorItemType = SelectorItemType.Variadic;
+					break;
+            case "=":
+	            selectorItemType = SelectorItemType.Default;
+					break;
+			}
+
+			return new SelectorItem(label, typeConstraint, selectorItemType);
 		}
 
 		public static string selectorImage(string name, SelectorItem[] selectorItems) => $"{name}({selectorItems.Listify(",")})";

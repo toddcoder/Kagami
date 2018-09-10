@@ -104,6 +104,7 @@
     <Compile Include="Classes\SelectorHash.cs" />
     <Compile Include="Classes\SelectorSet.cs" />
     <Compile Include="Classes\Signature.cs" />
+    <Compile Include="Classes\SkipTakeClass.cs" />
     <Compile Include="Classes\SliceClass.cs" />
     <Compile Include="Classes\SomeClass.cs" />
     <Compile Include="Classes\StreamIteratorClass.cs" />
@@ -273,7 +274,13 @@
     <Compile Include="Nodes\Symbols\SendPrefixMessage.cs" />
     <Compile Include="Nodes\Symbols\SeqSymbol.cs" />
     <Compile Include="Nodes\Symbols\SetSliceSymbol.cs" />
+    <Compile Include="Nodes\Symbols\SkipTakeRestSymbol.cs" />
+    <Compile Include="Nodes\Symbols\SkipTakeRestInitSymbol.cs" />
+    <Compile Include="Nodes\Symbols\SkipTakeSymbol.cs" />
+    <Compile Include="Nodes\Symbols\SkipTakeInitSymbol.cs" />
+    <Compile Include="Nodes\Symbols\SkipTakeInitLiteralSymbol.cs" />
     <Compile Include="Nodes\Symbols\SkipTakeItem.cs" />
+    <Compile Include="Nodes\Symbols\SkipTakeLiteralSymbol.cs" />
     <Compile Include="Nodes\Symbols\SkipTakeOperatorSymbol.cs" />
     <Compile Include="Nodes\Symbols\SomeSymbol.cs" />
     <Compile Include="Nodes\Symbols\StringArraySymbol.cs" />
@@ -376,9 +383,11 @@
     <Compile Include="Objects\RuntimeLambda.cs" />
     <Compile Include="Objects\Selector.cs" />
     <Compile Include="Objects\SelectorItem.cs" />
+    <Compile Include="Objects\SelectorItemType.cs" />
     <Compile Include="Objects\Sequence.cs" />
     <Compile Include="Objects\SkipAction.cs" />
     <Compile Include="Objects\Skipped.cs" />
+    <Compile Include="Objects\SkipTake.cs" />
     <Compile Include="Objects\SkipUntilAction.cs" />
     <Compile Include="Objects\SkipWhileAction.cs" />
     <Compile Include="Objects\Slice.cs" />
@@ -452,6 +461,7 @@
     <Compile Include="Operations\NewOpenRange.cs" />
     <Compile Include="Operations\NewRational.cs" />
     <Compile Include="Operations\NewSelector.cs" />
+    <Compile Include="Operations\NewSkipTake.cs" />
     <Compile Include="Operations\NewValue.cs" />
     <Compile Include="Operations\OpenPackage.cs" />
     <Compile Include="Operations\Pipeline.cs" />
@@ -609,6 +619,7 @@
     <Compile Include="Parsers\Expressions\RegexParsingType.cs" />
     <Compile Include="Parsers\Expressions\SendMessageAssignParser.cs" />
     <Compile Include="Parsers\Expressions\SeparatedKeywordOperatorsParser.cs" />
+    <Compile Include="Parsers\Expressions\SkipTakeOperatorParser2.cs" />
     <Compile Include="Parsers\Expressions\SliceParser.cs" />
     <Compile Include="Parsers\Expressions\StringArrayParser.cs" />
     <Compile Include="Parsers\Expressions\SubexpressionParser2.cs" />
