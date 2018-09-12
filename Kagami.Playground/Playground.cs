@@ -29,8 +29,9 @@ namespace Kagami.Playground
       const string PLAYGROUND_CONFIGURATION_FILE1 = @"E:\Configurations\Kagami\Kagami.configuration";
       const string PLAYGROUND_CONFIGURATION_FILE2 = @"E:\Configurations\Kagami\Kagami.configuration";
       const string PLAYGROUND_PACKAGE_FOLDER = @"E:\Enterprise\Configurations\Kagami\Packages";
+	   const string KAGAMI_EXCEPTION_PROMPT = "Kagami exception >>> ";
 
-      Document document;
+	   Document document;
       TextBoxConsole outputConsole;
       TextWriter textWriter;
       TextReader textReader;
@@ -50,12 +51,9 @@ namespace Kagami.Playground
       FolderName packageFolder;
       IMaybe<ExceptionData> exceptionData;
 
-      public Playground()
-      {
-         InitializeComponent();
-      }
+      public Playground() => InitializeComponent();
 
-      void Playground_Load(object sender, EventArgs e)
+	   void Playground_Load(object sender, EventArgs e)
       {
          try
          {
@@ -197,7 +195,7 @@ namespace Kagami.Playground
                   if (execute)
                      if (machine.Execute().IfNot(out exception))
                      {
-                        textWriter.WriteLine(exception.Message);
+                        textWriter.WriteLine(KAGAMI_EXCEPTION_PROMPT + exception.Message);
                         exceptionIndex = compiler.ExceptionIndex;
                         if (exceptionIndex.IsNone)
                            exceptionIndex = textEditor.SelectionStart.Some();
@@ -235,7 +233,7 @@ namespace Kagami.Playground
                }
                else
                {
-                  textWriter.WriteLine(exception.Message);
+                  textWriter.WriteLine(KAGAMI_EXCEPTION_PROMPT + exception.Message);
                   exceptionIndex = compiler.ExceptionIndex;
                   if (exceptionIndex.IsNone)
                      exceptionIndex = textEditor.SelectionStart.Some();
@@ -249,7 +247,7 @@ namespace Kagami.Playground
             }
             catch (Exception exception)
             {
-               textWriter.WriteLine(exception.Message);
+               textWriter.WriteLine(KAGAMI_EXCEPTION_PROMPT + exception.Message);
             }
             finally
             {

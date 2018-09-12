@@ -316,7 +316,7 @@ namespace Kagami.Library.Operations
 
       public void NewKeyValue() => add(new NewKeyValue());
 
-      public void NewValue(string className, Func<Arguments, IObject> initiallizer) => add(new NewValue(className, initiallizer));
+      public void NewValue(string className, Func<Arguments, IObject> initializer) => add(new NewValue(className, initializer));
 
       public void AssignMetaObject(string className, string metaClassName) => add(new AssignMetaObject(className, metaClassName));
 

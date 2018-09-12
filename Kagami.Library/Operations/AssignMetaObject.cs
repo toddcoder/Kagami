@@ -22,7 +22,8 @@ namespace Kagami.Library.Operations
       {
          if (Module.Global.Class(className).If(out var targetClass))
          {
-            if (Machine.Current.Find(metaClassName, true)
+	         var selector = metaClassName.Selector(0);
+            if (Machine.Current.Find(selector)
                .If(out var field, out var isNotMatched, out var exception))
             {
                if (field.Value is IInvokableObject io)

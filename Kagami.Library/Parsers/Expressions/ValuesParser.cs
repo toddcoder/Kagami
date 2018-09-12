@@ -46,7 +46,7 @@ namespace Kagami.Library.Parsers.Expressions
                   yield return new NameValueParser(builder);
 
                yield return new BindingParser(builder);
-
+	            yield return new InitializeParser(builder);
                yield return new InvokeParser(builder);
             }
 
