@@ -34,11 +34,10 @@ namespace Kagami.Playground
                textBox.Select(token.Index, token.Length);
                textBox.SelectionColor = getForeColor(token.Color);
                textBox.SelectionBackColor = getBackColor();
-               textBox.SelectionFont = !isItalic(token.Color) ? (!isBold(token.Color) ? font : boldFont) : italicFont;
+               textBox.SelectionFont = !isItalic(token.Color) ? !isBold(token.Color) ? font : boldFont : italicFont;
             }
 
             markText("/s+ (/r /n | /r | /n)", Color.PaleVioletRed);
-            //textBox.Refresh();
          }
       }
 
