@@ -410,18 +410,17 @@ namespace Kagami.Library.Runtime
 			{
 				var fields = field.Fields;
 				if (field.Mutable)
-				{
-					if (field.Value is Unassigned)
+					switch (field.Value)
 					{
-						field.Value = value;
-						fields.SetBucket(selector);
-						return field.Success();
+						case Unassigned _:
+							field.Value = value;
+							fields.SetBucket(selector);
+							return field.Success();
+						case TypeConstraint tc2:
+							return failure<Field>(incompatibleClasses(selector, tc2.AsString));
+						default:
+							return failure<Field>(incompatibleClasses(selector, field.Value.ClassName));
 					}
-					else if (field.Value is TypeConstraint tc2)
-						return failure<Field>(incompatibleClasses(selector, tc2.AsString));
-					else
-						return failure<Field>(incompatibleClasses(selector, field.Value.ClassName));
-				}
 				else if (field.Value is Unassigned || overriden)
 				{
 					field.Value = value;

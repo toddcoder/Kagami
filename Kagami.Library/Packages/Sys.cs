@@ -201,5 +201,10 @@ namespace Kagami.Library.Packages
       }
 
       public Selector Selector(string source) => source;
+
+	   public Dictionary XFields()
+	   {
+		   return new Dictionary(Machine.Current.CurrentFrame.Fields.ToHash(t => String.StringObject(t.fieldName), t => t.field.Value));
+	   }
    }
 }

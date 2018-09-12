@@ -267,6 +267,8 @@ namespace Kagami.Library.Runtime
       {
          foreach (var item in sourceFields.fields)
             fields[item.Key] = item.Value.Clone();
+	      foreach (var (key, value) in sourceFields.buckets)
+		      buckets[key] = value;
       }
 
 	   public void SetBucket(Selector selector) => buckets[selector.LabelsOnly()].Add(selector);
