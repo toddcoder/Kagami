@@ -219,8 +219,15 @@ namespace Kagami.Library.Objects
 					foreach (var parameter in obj.Parameters)
 					{
 						var name = parameter.Name;
-						if (obj.Fields.ContainsKey(name) && uo2.Fields[name] is Placeholder ph)
-							bindings[ph.Name] = obj.Fields[name];
+						if (uo1.Fields.ContainsKey(name) && uo2.Fields.ContainsKey(name))
+						{
+							var value1 = uo1.Fields[name];
+							var value2 = uo2.Fields[name];
+							if (!value1.Match(value2, bindings))
+								return false;
+						}
+						else
+							return false;
 					}
 
 					return true;
