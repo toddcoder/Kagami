@@ -17,6 +17,7 @@ namespace Kagami.Library.Parsers.Expressions
             yield return new IndexOptionalParser(builder);
             yield return new IndexParser(builder);
             yield return new SkipTakeOperatorParser2(builder);
+	         yield return new WhereParser(builder);
 
             if (!builder.Flags[ExpressionFlags.OmitSendMessageAssign])
                yield return new SendMessageAssignParser(builder);
