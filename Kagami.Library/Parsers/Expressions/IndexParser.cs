@@ -20,7 +20,7 @@ namespace Kagami.Library.Parsers.Expressions
 
          return getArguments(state, builder.Flags).Map(e =>
          {
-            if (state.Scan($"^ /(|s|) /({REGEX_ASSIGN_OPS})? /'='", Color.Whitespace, Color.Operator, Color.Structure)
+            if (state.Scan($"^ /(|s|) /({REGEX_ASSIGN_OPS})? /'=' -(> '=')", Color.Whitespace, Color.Operator, Color.Structure)
                .If(out var opSource, out var isNotMatched, out var exception))
                if (getExpression(state, builder.Flags).If(out var expression, out var original))
                {

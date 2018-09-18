@@ -400,6 +400,7 @@
     <Compile Include="Objects\TakeAction.cs" />
     <Compile Include="Objects\TakeUntilAction.cs" />
     <Compile Include="Objects\TakeWhileAction.cs" />
+    <Compile Include="Objects\TextFindingFunctions.cs" />
     <Compile Include="Objects\Tuple.cs" />
     <Compile Include="Objects\TypeConstraint.cs" />
     <Compile Include="Objects\Unassigned.cs" />

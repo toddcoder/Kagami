@@ -11,6 +11,7 @@ using Standard.Types.RegularExpressions;
 using Standard.Types.Strings;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
+using static Kagami.Library.Objects.TextFindingFunctions;
 using static Standard.Types.Maybe.MaybeFunctions;
 
 namespace Kagami.Library.Objects
@@ -154,109 +155,42 @@ namespace Kagami.Library.Objects
 
       public Tuple FindAll(ITextFinding textFinding) => textFinding.FindAll(value);
 
-      public Tuple FindAll(string input) => new Tuple(input.FindAll(value).Select(Objects.Int.IntObject).ToArray());
+	   public Tuple FindAll(string input) => findAll(value, input);
 
       public String Replace(ITextFinding textFinding, string replacement, bool reverse)
       {
          return textFinding.Replace(value, replacement, reverse);
       }
 
-      public String Replace(string input, string replacement, bool reverse)
-      {
-         int index;
-         if (reverse)
-            index = input.LastIndexOf(value, StringComparison.Ordinal);
-         else
-            index = input.IndexOf(value, StringComparison.Ordinal);
+      public String Replace(string input, string replacement, bool reverse) => replace(value, input, replacement, reverse);
 
-         if (index > -1)
-            return input.Take(index) + replacement + input.Skip(index + value.Length);
-         else
-            return input;
-      }
+	   public String Replace(ITextFinding textFinding, Lambda lambda, bool reverse) => textFinding.Replace(value, lambda, reverse);
 
-      public String Replace(ITextFinding textFinding, Lambda lambda, bool reverse) => textFinding.Replace(value, lambda, reverse);
+      public String Replace(string input, Lambda lambda, bool reverse) => replace(value, input, lambda, reverse);
 
-      public String Replace(string input, Lambda lambda, bool reverse)
-      {
-         int index;
-         if (reverse)
-            index = input.LastIndexOf(value, StringComparison.Ordinal);
-         else
-            index = input.IndexOf(value, StringComparison.Ordinal);
+	   public String ReplaceAll(ITextFinding textFinding, string replacement) => textFinding.ReplaceAll(value, replacement);
 
-         if (index > -1)
-         {
-            var text = input.Skip(index);
-            var length = text.Length;
-            var replacement = lambda.Invoke((String)text, (Int)index, (Int)length);
-
-            return input.Take(index) + replacement + input.Skip(index + value.Length);
-         }
-         else
-            return input;
-      }
-
-      public String ReplaceAll(ITextFinding textFinding, string replacement) => textFinding.ReplaceAll(value, replacement);
-
-      public String ReplaceAll(string input, string replacement) => input.Replace(value, replacement);
+	   public String ReplaceAll(string input, string replacement) => replaceAll(value, input, replacement);
 
       public String ReplaceAll(ITextFinding textFinding, Lambda lambda) => textFinding.ReplaceAll(value, lambda);
 
-      public String ReplaceAll(string input, Lambda lambda)
-      {
-         var builder = new StringBuilder();
-         var index = input.IndexOf(value);
-         var start = 0;
-         while (index > -1)
-         {
-            var replacement = lambda.Invoke((String)value, (Int)index, (Int)value.Length);
-            builder.Append(input.Skip(start));
-            builder.Append(replacement.AsString);
-            start = index + value.Length;
-            index = input.IndexOf(value);
-         }
+      public String ReplaceAll(string input, Lambda lambda) => replaceAll(value, input, lambda);
 
-         builder.Append(input.Skip(start));
+	   public Tuple Split(ITextFinding textFinding) => textFinding.Split(value);
 
-         return builder.ToString();
-      }
+      public Tuple Split(string input) => split(value, input);
 
-      public Tuple Split(ITextFinding textFinding) => textFinding.Split(value);
+	   public Tuple Partition(ITextFinding textFinding, bool reverse) => textFinding.Partition(value, reverse);
 
-      public Tuple Split(string input)
-      {
-         return new Tuple(input.Split(new[] { value }, StringSplitOptions.None).Select(StringObject).ToArray());
-      }
+      public Tuple Partition(string input, bool reverse) => partition(value, input, reverse);
 
-      public Tuple Partition(ITextFinding textFinding, bool reverse) => textFinding.Partition(value, reverse);
+	   public Int Count(ITextFinding textFinding) => textFinding.Count(value);
 
-      public Tuple Partition(string input, bool reverse)
-      {
-         if (reverse)
-         {
-            var index = input.LastIndexOf(value, StringComparison.Ordinal);
-            if (index > -1)
-               return Tuple.Tuple3(input.Take(index), value, input.Skip(index + value.Length));
-            else
-               return Tuple.Tuple3(input, "", "");
-         }
-         else
-         {
-            if (input.Find(value).If(out var index))
-               return Tuple.Tuple3(input.Take(index), value, input.Skip(index + value.Length));
-            else
-               return Tuple.Tuple3(input, "", "");
-         }
-      }
-
-      public Int Count(ITextFinding textFinding) => textFinding.Count(value);
-
-      public Int Count(string input) => input.FindAll(value).Count();
+	   public Int Count(string input) => count(value, input);
 
       public Int Count(ITextFinding textFinding, Lambda lambda) => textFinding.Count(value, lambda);
 
-      public Int Count(string input, Lambda lambda) => input.FindAll(value).Count(i => lambda.Invoke(Objects.Int.IntObject(i)).IsTrue);
+	   public Int Count(string input, Lambda lambda) => count(value, input, lambda);
 
       public String LStrip() => value.TrimStart();
 
@@ -315,26 +249,9 @@ namespace Kagami.Library.Objects
 
       public IObject Find(ITextFinding textFinding, int startIndex, bool reverse) => textFinding.Find(value, startIndex, reverse);
 
-      public IObject Find(string input, int startIndex, bool reverse)
-      {
-         int index;
-         if (reverse)
-         {
-            if (startIndex == 0)
-               index = input.LastIndexOf(value, StringComparison.Ordinal);
-            else
-               index = input.LastIndexOf(value, startIndex, StringComparison.Ordinal);
-         }
-         else
-            index = input.IndexOf(value, startIndex, StringComparison.Ordinal);
+      public IObject Find(string input, int startIndex, bool reverse) => find(value, input, startIndex, reverse);
 
-         if (index == -1)
-            return Nil.NilValue;
-         else
-            return Some.Object((Int)index);
-      }
-
-      public IObject Int()
+	   public IObject Int()
       {
          if (int.TryParse(value, out var result))
             return new Some((Int)result);

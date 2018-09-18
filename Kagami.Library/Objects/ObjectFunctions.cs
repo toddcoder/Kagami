@@ -359,6 +359,25 @@ namespace Kagami.Library.Objects
 			}
 		}
 
+		public static bool compareEnumerables<T>(IEnumerable<T> left, IEnumerable<T> right)
+		{
+			var lArray = left.ToArray();
+			var rArray = right.ToArray();
+
+			var lLength = lArray.Length;
+			var rLength = rArray.Length;
+			if (lLength != rLength)
+				return false;
+			else
+			{
+				for (var i = 0; i < lLength; i++)
+					if (!lArray[i].Equals(rArray[i]))
+						return false;
+
+				return true;
+			}
+      }
+
 		public static int compareObjects<T>(T x, IObject y, Func<T, T, int> comparer) where T : IObject
 		{
 			if (y is T ty)
