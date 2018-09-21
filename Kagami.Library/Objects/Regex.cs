@@ -79,7 +79,9 @@ namespace Kagami.Library.Objects
             return Nil.NilValue;
       }
 
-      public IObject MatchString(string input)
+	   public Boolean NotMatch(string input) => !isMatch(input);
+
+	   public IObject MatchString(string input)
       {
          if (global)
             if (isMatch(input))

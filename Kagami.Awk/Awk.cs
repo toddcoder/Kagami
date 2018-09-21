@@ -14,6 +14,6 @@ namespace Kagami.Awk
 			module.RegisterClass(new AwkRecordClass());
 		}
 
-		public Awkifier Awkify(string fileName) => new Awkifier(fileName);
+		public Awkifier Awkify(string source, bool asFile) => new Awkifier(source, asFile);
 	}
 }

@@ -566,6 +566,7 @@
     <Compile Include="Parsers\Expressions\ConjunctionParsers.cs" />
     <Compile Include="Parsers\Expressions\ConstantsParser.cs" />
     <Compile Include="Parsers\Expressions\DateParser.cs" />
+    <Compile Include="Parsers\Expressions\DollarFieldParser.cs" />
     <Compile Include="Parsers\Expressions\EmptyValueParser.cs" />
     <Compile Include="Parsers\Expressions\EndingInExpressionParser.cs" />
     <Compile Include="Parsers\Expressions\EndingInValueParser.cs" />

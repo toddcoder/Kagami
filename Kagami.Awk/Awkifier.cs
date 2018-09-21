@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Kagami.Library.Objects;
+using Kagami.Library.Runtime;
 using Standard.Computer;
 using Standard.Types.Collections;
 using Standard.Types.Enumerables;
@@ -14,7 +15,7 @@ namespace Kagami.Awk
 {
 	public class Awkifier : IObject, ICollection
 	{
-		FileName file;
+		string source;
 		Regex recordPattern;
 		Regex fieldPattern;
 		string[] records;
@@ -23,9 +24,9 @@ namespace Kagami.Awk
 		string fieldSeparator;
 		bool recordsCreated;
 
-		public Awkifier(FileName file)
+		public Awkifier(string source, bool asFile)
 		{
-			this.file = file;
+			this.source = asFile ? ((FileName)source).Text : source;
 
 			recordPattern = new Regex("(/r /n | /r | /n)", false, false, false, false);
 			fieldPattern = new Regex("/s+", false, false, false, false);
@@ -103,7 +104,7 @@ namespace Kagami.Awk
 			get
 			{
 				var hash = 17;
-				hash += 37 * file.GetHashCode();
+				hash += 37 * source.GetHashCode();
 				hash += 37 * recordPattern.Hash;
 				hash += 37 * fieldPattern.Hash;
 
@@ -113,19 +114,19 @@ namespace Kagami.Awk
 
 		public bool IsEqualTo(IObject obj)
 		{
-			return obj is Awkifier awkifier && file == awkifier.file && recordPattern.IsEqualTo(awkifier.recordPattern) &&
+			return obj is Awkifier awkifier && source == awkifier.source && recordPattern.IsEqualTo(awkifier.recordPattern) &&
 				fieldPattern.IsEqualTo(awkifier.fieldPattern);
 		}
 
 		public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
-		public bool IsTrue => file.Exists();
+		public bool IsTrue => source.IsNotEmpty();
 
 		void splitIfRecordNotCreated()
 		{
 			if (!recordsCreated)
 			{
-				records = regexSplit(file.Text, recordPattern);
+				records = regexSplit(source, recordPattern);
 				recordsCreated = true;
          }
 		}
@@ -145,9 +146,11 @@ namespace Kagami.Awk
 			if (index < records.Length)
 			{
 				split(index);
-            //var awkRecord = new AwkRecord(fields, fieldPattern, fieldSeparator);
-				//return awkRecord.Some<IObject>();
-				return new Tuple(fields.Select(String.StringObject).ToArray()).Some<IObject>();
+				var array = fields.Select(String.StringObject).ToArray();
+				var currentFields = Machine.Fields;
+				for (var i = 0; i < array.Length; i++)
+					currentFields.New($"__${i}", array[i]);
+				return new Tuple(array).Some<IObject>();
 			}
 			else
 				return none<IObject>();
