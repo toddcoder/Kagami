@@ -14,7 +14,7 @@ namespace Kagami.Library.Nodes.Symbols
          builder.Match(true, false);
       }
 
-      public override Precedence Precedence => Precedence.ChainedOperator;
+	   public override Precedence Precedence => Precedence.Boolean;
 
       public override Arity Arity => Arity.Binary;
 

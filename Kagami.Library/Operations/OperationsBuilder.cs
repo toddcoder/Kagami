@@ -207,7 +207,13 @@ namespace Kagami.Library.Operations
          add(new SendMessage(selector));
       }
 
-      public void Negate() => add(new Negate());
+	   public void NewMessage(Selector selector, int count)
+	   {
+		   ToArguments(count);
+		   add(new NewMessage(selector));
+	   }
+
+	   public void Negate() => add(new Negate());
 
       public void Image() => add(new Image());
 
