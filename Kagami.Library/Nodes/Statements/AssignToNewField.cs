@@ -1,5 +1,8 @@
 ﻿using Kagami.Library.Nodes.Symbols;
+using Kagami.Library.Objects;
 using Kagami.Library.Operations;
+using Standard.Types.Maybe;
+using static Standard.Types.Maybe.MaybeFunctions;
 using static Standard.Types.Strings.StringStreamFunctions;
 
 namespace Kagami.Library.Nodes.Statements
@@ -9,13 +12,23 @@ namespace Kagami.Library.Nodes.Statements
       bool mutable;
       string fieldName;
       Expression expression;
+	   IMaybe<TypeConstraint> typeConstraint;
 
-      public AssignToNewField(bool mutable, string fieldName, Expression expression)
+      public AssignToNewField(bool mutable, string fieldName, Expression expression, IMaybe<TypeConstraint> typeConstraint)
       {
          this.mutable = mutable;
          this.fieldName = fieldName;
          this.expression = expression;
+	      this.typeConstraint = typeConstraint;
       }
+
+	   public AssignToNewField(bool mutable, string fieldName, Expression expression)
+	   {
+		   this.mutable = mutable;
+		   this.fieldName = fieldName;
+		   this.expression = expression;
+		   typeConstraint = none<TypeConstraint>();
+	   }
 
       public bool Mutable => mutable;
 
@@ -23,7 +36,7 @@ namespace Kagami.Library.Nodes.Statements
 
       public override void Generate(OperationsBuilder builder)
       {
-         builder.NewField(fieldName, mutable, true);
+         builder.NewField(fieldName, mutable, true, typeConstraint);
          expression.Generate(builder);
          builder.Peek(Index);
          builder.AssignField(fieldName, false);

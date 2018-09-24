@@ -78,6 +78,7 @@
     <Compile Include="Classes\IntervalClass.cs" />
     <Compile Include="Classes\IParse.cs" />
     <Compile Include="Classes\IteratorClass.cs" />
+    <Compile Include="Classes\IType.cs" />
     <Compile Include="Classes\KeyCollectingHash.cs" />
     <Compile Include="Classes\KeyValueClass.cs" />
     <Compile Include="Classes\LambaClass.cs" />
@@ -603,6 +604,7 @@
     <Compile Include="Parsers\Expressions\ListParser.cs" />
     <Compile Include="Parsers\Expressions\MapExpressionParser.cs" />
     <Compile Include="Parsers\Expressions\MatchLambdaParser.cs" />
+    <Compile Include="Parsers\Expressions\MessageParser.cs" />
     <Compile Include="Parsers\Expressions\PatternParser.cs" />
     <Compile Include="Parsers\Expressions\RangePrefixParser.cs" />
     <Compile Include="Parsers\Expressions\RefParser.cs" />

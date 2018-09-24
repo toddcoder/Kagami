@@ -8,7 +8,6 @@ using Standard.Types.Enumerables;
 using Standard.Types.Maybe;
 using Standard.Types.RegularExpressions;
 using static Kagami.Library.AllExceptions;
-using static Kagami.Library.Objects.ObjectFunctions;
 using static Standard.Types.Maybe.MaybeFunctions;
 
 namespace Kagami.Library.Runtime
@@ -97,6 +96,14 @@ namespace Kagami.Library.Runtime
          return New(name, Unassigned.Value, mutable, visible);
       }
 
+	   public IResult<Field> New(string name, IMaybe<TypeConstraint> typeConstraint, bool mutable, bool visible)
+	   {
+		   return New(name, new Field
+		   {
+			   Value = Unassigned.Value, Mutable = mutable, Visible = visible, TypeConstraint = typeConstraint
+		   });
+      }
+
 	   public IResult<Field> New(Selector selector, bool mutable = false, bool visible = true)
 	   {
 		   if (fields.ContainsKey(selector))
@@ -141,17 +148,17 @@ namespace Kagami.Library.Runtime
          if (Find(name, false).If(out var field, out var original))
             if (field.Mutable)
             {
-               var baseClass = classOf(value);
+/*               var baseClass = classOf(value);
                if (field.Value is Unassigned || field.Value is TypeConstraint tc && tc.Matches(baseClass) ||
                   classOf(field.Value).AssignCompatible(baseClass))
-               {
+               {*/
                   field.Value = value;
                   return field.Success();
-               }
+               /*}
                else if (field.Value is TypeConstraint tc2)
                   return failure<Field>(incompatibleClasses(value, tc2.AsString));
                else
-                  return failure<Field>(incompatibleClasses(value, field.Value.ClassName));
+                  return failure<Field>(incompatibleClasses(value, field.Value.ClassName));*/
             }
             else if (field.Value is Unassigned || overriden)
             {

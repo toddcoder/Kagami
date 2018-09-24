@@ -10,6 +10,7 @@ using Kagami.Library.Parsers;
 using Standard.Types.Collections;
 using Standard.Types.Maybe;
 using static Kagami.Library.Nodes.NodeFunctions;
+using static Standard.Types.Maybe.MaybeFunctions;
 
 namespace Kagami.Library.Operations
 {
@@ -186,7 +187,12 @@ namespace Kagami.Library.Operations
 
       public void GetField(string name) => add(new GetField(name));
 
-      public void NewField(string name, bool mutable, bool visible) => add(new NewField(name, mutable, visible));
+      public void NewField(string name, bool mutable, bool visible, IMaybe<TypeConstraint> typeConstraint) => add(new NewField(name, mutable, visible, typeConstraint));
+
+	   public void NewField(string name, bool mutable, bool visible)
+	   {
+		   add(new NewField(name, mutable, visible, none<TypeConstraint>()));
+	   }
 
 	   public void NewSelector(Selector selector, bool mutable, bool visible) => add(new NewSelector(selector, mutable, visible));
 

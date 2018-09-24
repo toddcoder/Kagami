@@ -359,7 +359,7 @@ namespace Kagami.Library.Parsers
          return state.Scan($"^ /(/s* {REGEX_FIELD}) /b", Color.Identifier).Map(s => s.Trim());
       }
 
-      static IMatched<IMaybe<TypeConstraint>> parseTypeConstraint(ParseState state)
+      public static IMatched<IMaybe<TypeConstraint>> parseTypeConstraint(ParseState state)
       {
          if (state.Scan($"^ /(|s|) /({REGEX_CLASS}) /b", Color.Whitespace, Color.Class).If(out var className, out var isNotMatched, out var exception))
          {
