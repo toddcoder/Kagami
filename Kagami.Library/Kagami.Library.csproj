@@ -62,6 +62,7 @@
     <Compile Include="Classes\CollectionClass.cs" />
     <Compile Include="Classes\CollectionProxyClass.cs" />
     <Compile Include="Classes\ComplexClass.cs" />
+    <Compile Include="Classes\ConstructorClass.cs" />
     <Compile Include="Classes\DataComparisandClass.cs" />
     <Compile Include="Classes\DataTypeClass.cs" />
     <Compile Include="Classes\DateClass.cs" />
@@ -523,6 +524,7 @@
     <Compile Include="Operations\Remainder.cs" />
     <Compile Include="Operations\RespondsTo.cs" />
     <Compile Include="Operations\Return.cs" />
+    <Compile Include="Operations\ReturnType.cs" />
     <Compile Include="Operations\Roll.cs" />
     <Compile Include="Operations\Rotate.cs" />
     <Compile Include="Operations\SendMessage.cs" />

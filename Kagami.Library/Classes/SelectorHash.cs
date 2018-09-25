@@ -52,7 +52,7 @@ namespace Kagami.Library.Classes
 				         return true;
 		         }
 
-	         return base.ContainsKey(labelsOnlyImage);
+            return false;// base.ContainsKey(labelsOnlyImage);
          }
       }
    }

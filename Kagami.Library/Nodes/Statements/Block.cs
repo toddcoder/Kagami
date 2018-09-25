@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Kagami.Library.Nodes.Symbols;
+using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using Kagami.Library.Parsers.Expressions;
 using Standard.Types.Enumerables;
@@ -16,7 +17,7 @@ namespace Kagami.Library.Nodes.Statements
          var expressionBuilder = new ExpressionBuilder(ExpressionFlags.Standard);
          expressionBuilder.Add(new FieldSymbol(fieldName));
          if (expressionBuilder.ToExpression().If(out var expression, out var exception))
-            return new Block(new Return(expression));
+            return new Block(new Return(expression, none<TypeConstraint>()));
          else
             throw exception;
       }
@@ -35,14 +36,39 @@ namespace Kagami.Library.Nodes.Statements
       }
 
       List<Statement> statements;
+	   IMaybe<TypeConstraint> typeConstraint;
 
-      public Block(List<Statement> statements) => this.statements = statements;
+      public Block(List<Statement> statements, IMaybe<TypeConstraint> typeConstraint)
+	   {
+		   this.statements = statements;
+		   this.typeConstraint = typeConstraint;
+	   }
 
-      public Block(Statement statement) => statements = new List<Statement> { statement };
+	   public Block(List<Statement> statements)
+	   {
+		   this.statements = statements;
+		   typeConstraint = none<TypeConstraint>();
+	   }
 
-      public Block() => statements = new List<Statement>();
+      public Block(Statement statement, IMaybe<TypeConstraint> typeConstraint)
+	   {
+		   statements = new List<Statement> { statement };
+		   this.typeConstraint = typeConstraint;
+	   }
 
-      public bool Yielding { get; set; }
+	   public Block(Statement statement)
+	   {
+		   statements = new List<Statement> { statement };
+		   typeConstraint = none<TypeConstraint>();
+	   }
+
+      public Block()
+	   {
+		   statements = new List<Statement>();
+		   typeConstraint = none<TypeConstraint>();
+	   }
+
+	   public bool Yielding { get; set; }
 
       public override void Generate(OperationsBuilder builder)
       {
@@ -54,6 +80,8 @@ namespace Kagami.Library.Nodes.Statements
             builder.PushNil();
             builder.Return(true);
          }
+			else if (typeConstraint.If(out var tc))
+	         builder.ReturnType(true, tc);
       }
 
       public IEnumerator<Statement> GetEnumerator() => statements.GetEnumerator();

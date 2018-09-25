@@ -1,4 +1,5 @@
 ﻿using Kagami.Library.Nodes.Symbols;
+using Kagami.Library.Objects;
 using Standard.Types.Maybe;
 using Standard.Types.Strings;
 using static Kagami.Library.Parsers.ParserFunctions;
@@ -14,17 +15,17 @@ namespace Kagami.Library.Parsers.Expressions
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
 			var precedence = tokens[2].Text == "." ? Precedence.SendMessage : Precedence.ChainedOperator;
-			var selector = tokens[3].Text;
+			var name = tokens[3].Text;
 			var parameterDelimiter = tokens[4].Text;
 			var parseArguments = true;
 			if (parameterDelimiter.IsEmpty())
 			{
-				selector = selector.get();
+				name = name.get();
 				parseArguments = false;
 			}
-			else if (selector.EndsWith("="))
+			else if (name.EndsWith("="))
 			{
-				selector = selector.Skip(-1).set();
+				name = name.Skip(-1).set();
 				parseArguments = true;
 			}
 
@@ -32,12 +33,14 @@ namespace Kagami.Library.Parsers.Expressions
 
 			if (!parseArguments)
 			{
+				Selector selector = name;
 				builder.Add(new SendMessageSymbol(selector, precedence));
 				return Unit.Matched();
 			}
 			else if (getArgumentsPlusLambda(state, builder.Flags).If(out var tuple, out var original))
 			{
 				var (arguments, lambda) = tuple;
+				var selector = name.Selector(arguments.Length);
 				builder.Add(new SendMessageSymbol(selector, precedence, lambda, arguments));
 
 				return Unit.Matched();

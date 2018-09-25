@@ -144,15 +144,22 @@ namespace Kagami.Library.Runtime
 			GoTo(invokable.Address);
 
 			return invoke();
-		}
+      }
 
 		public IMatched<IObject> Invoke(string fieldName)
 		{
-			if (Pop().If(out var value, out var exception))
+			if (Pop().If(out var value, out var popException))
 				if (value is Arguments arguments)
 				{
-					var selector = arguments.Selector(fieldName);
-					if (Find(selector).If(out var field, out var isNotMatched, out exception))
+					var image = fieldName;
+					var ((isFound, field), (isFailure, exception)) = Find(fieldName, true);
+					if (!isFound && !isFailure)
+					{
+						var selector = arguments.Selector(fieldName);
+						image = selector.Image;
+						((isFound, field), (isFailure, exception)) = Find(fieldName);
+               }
+					if (isFound)
 					{
 						value = field.Value;
 						switch (value)
@@ -167,15 +174,15 @@ namespace Kagami.Library.Runtime
 								return failedMatch<IObject>(incompatibleClasses(value, "Invokable"));
 						}
 					}
-					else if (isNotMatched)
-						return failedMatch<IObject>(fieldNotFound(selector));
+					else if (!isFailure)
+						return failedMatch<IObject>(fieldNotFound(image));
 					else
 						return failedMatch<IObject>(exception);
 				}
 				else
 					return failedMatch<IObject>(incompatibleClasses(value, "Arguments"));
 			else
-				return failedMatch<IObject>(exception);
+				return failedMatch<IObject>(popException);
 		}
 
 		IMatched<IObject> invoke()

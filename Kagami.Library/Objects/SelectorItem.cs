@@ -38,18 +38,9 @@ namespace Kagami.Library.Objects
 			var builder = new StringBuilder();
 			if (Label.IsNotEmpty())
 				builder.Append($"{Label}:");
+			builder.Append("_");
 			if (TypeConstraint.If(out var tc))
 				builder.Append(tc.Image);
-
-/*			switch (SelectorItemType)
-			{
-				case SelectorItemType.Variadic:
-					builder.Append("...");
-					break;
-				case SelectorItemType.Default:
-					builder.Append("=");
-					break;
-			}*/
 
 			return builder.ToString();
 		}

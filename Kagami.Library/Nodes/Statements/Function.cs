@@ -13,13 +13,13 @@ namespace Kagami.Library.Nodes.Statements
    {
       public static Function Getter(string fieldName)
       {
-         return new Function(fieldName.get(), new Parameters(0), Block.Getter(fieldName), false, false, "");
+	      return new Function(fieldName.get(), new Parameters(0), Block.Getter(fieldName), false, false, "");
       }
 
       public static Function Setter(string fieldName)
       {
          var parameters = new Parameters(1);
-         return new Function(fieldName.set(), parameters, Block.Setter(fieldName, parameters[0].Name), false, false, "");
+	      return new Function(fieldName.set(), parameters, Block.Setter(fieldName, parameters[0].Name), false, false, "");
       }
 
       protected Selector selector;
@@ -34,9 +34,9 @@ namespace Kagami.Library.Nodes.Statements
       {
          selector = parameters.Selector(functionName);
          this.parameters = parameters;
-         this.block = block;
+	      this.block = block;
          this.yielding = yielding;
-         this.block.Yielding = this.yielding;
+         block.Yielding = this.yielding;
          this.overriding = overriding;
          this.className = className;
       }

@@ -84,6 +84,7 @@ namespace Kagami.Library.Runtime
          classes["Collection"] = new CollectionClass();
          classes["TextFinding"] = new TextFindingClass();
 	      classes["SkipTake"] = new SkipTakeClass();
+	      classes["Constructor"] = new ConstructorClass();
       }
 
       public IMaybe<BaseClass> Class(string name) => classes.Map(name);

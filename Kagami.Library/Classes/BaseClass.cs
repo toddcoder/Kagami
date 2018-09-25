@@ -67,14 +67,14 @@ namespace Kagami.Library.Classes
          registerMessage("string".get(), (obj, msg) => String.StringObject(obj.AsString));
          registerMessage("image".get(), (obj, msg) => String.StringObject(obj.Image));
          registerMessage("hash".get(), (obj, msg) => Int.IntObject(obj.Hash));
-         registerMessage("equals", (obj, msg) => Boolean.BooleanObject(obj.IsEqualTo(msg.Arguments[0])));
+         registerMessage("equals(_)", (obj, msg) => Boolean.BooleanObject(obj.IsEqualTo(msg.Arguments[0])));
          registerMessage("className".get(), (obj, msg) => String.StringObject(obj.ClassName));
          registerMessage("class".get(), (obj, msg) => new Class(obj.ClassName));
-         registerMessage("match", match);
+         registerMessage("match(_)", match);
          messages["isNumber".get()] = (obj, msg) => Boolean.False;
-         registerMessage("send",
+         registerMessage("send(_,_)",
             (obj, msg) => function<IObject, String>(obj, msg, (o, n) => sendMessage(o, n.Value, msg.Arguments.Pass(1))));
-	      registerMessage("respondsTo", (obj, msg) => (Boolean)classOf(obj).RespondsTo(msg.Arguments[0].AsString));
+	      registerMessage("respondsTo(_)", (obj, msg) => (Boolean)classOf(obj).RespondsTo(msg.Arguments[0].AsString));
       }
 
       public virtual void RegisterClassMessages()

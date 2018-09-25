@@ -14,445 +14,469 @@ using static Standard.Types.Maybe.MaybeFunctions;
 
 namespace Kagami.Library.Operations
 {
-   public class OperationsBuilder
-   {
-      List<Operation> operations;
-      Hash<string, int> labels;
-      Hash<int, string> addresses;
-      Hash<int, IInvokable> invokables;
-      Hash<int, Block> blocks;
-      Hash<LabelType, Stack<string>> labelStack;
-      Set<string> registeredBlocks;
-      Stack<MacroParameters> macroParameters;
-      Stack<string> returnLabels;
-
-      public OperationsBuilder()
-      {
-         operations = new List<Operation>();
-         labels = new AutoHash<string, int>(k => -1);
-         addresses = new AutoHash<int, string>(k => "");
-         invokables = new Hash<int, IInvokable>();
-         blocks = new Hash<int, Block>();
-         labelStack = new AutoHash<LabelType, Stack<string>>(type => new Stack<string>());
-         registeredBlocks = new Set<string>();
-         macroParameters = new Stack<MacroParameters>();
-         returnLabels = new Stack<string>();
-      }
+	public class OperationsBuilder
+	{
+		List<Operation> operations;
+		Hash<string, int> labels;
+		Hash<int, string> addresses;
+		Hash<int, IInvokable> invokables;
+		Hash<int, Block> blocks;
+		Hash<LabelType, Stack<string>> labelStack;
+		Set<string> registeredBlocks;
+		Stack<MacroParameters> macroParameters;
+		Stack<string> returnLabels;
+
+		public OperationsBuilder()
+		{
+			operations = new List<Operation>();
+			labels = new AutoHash<string, int>(k => -1);
+			addresses = new AutoHash<int, string>(k => "");
+			invokables = new Hash<int, IInvokable>();
+			blocks = new Hash<int, Block>();
+			labelStack = new AutoHash<LabelType, Stack<string>>(type => new Stack<string>());
+			registeredBlocks = new Set<string>();
+			macroParameters = new Stack<MacroParameters>();
+			returnLabels = new Stack<string>();
+		}
 
-      public IResult<int> RegisterInvokable(IInvokable invokable, Block block, bool overriding)
-      {
-         if (invokables.ContainsKey(invokable.Index) && !overriding)
-            return $"Invokable {invokable.Image} already registered".Failure<int>();
-         else
-         {
-            var index = invokables.Count;
-            invokable.Index = index;
-            invokables[index] = invokable;
-            blocks[index] = block;
-            registeredBlocks.Add(block.ToString());
+		public IResult<int> RegisterInvokable(IInvokable invokable, Block block, bool overriding)
+		{
+			if (invokables.ContainsKey(invokable.Index) && !overriding)
+				return $"Invokable {invokable.Image} already registered".Failure<int>();
+			else
+			{
+				var index = invokables.Count;
+				invokable.Index = index;
+				invokables[index] = invokable;
+				blocks[index] = block;
+				registeredBlocks.Add(block.ToString());
 
-            return index.Success();
-         }
-      }
+				return index.Success();
+			}
+		}
 
-      public IResult<int> RegisterInvokable(IInvokable invokable, Expression expression, bool overriding)
-      {
-         return RegisterInvokable(invokable, new Block(new ExpressionStatement(expression, true)), overriding);
-      }
+		public IResult<int> RegisterInvokable(IInvokable invokable, Expression expression, bool overriding)
+		{
+			return RegisterInvokable(invokable, new Block(new ExpressionStatement(expression, true)), overriding);
+		}
 
-      void add(Operation operation) => operations.Add(operation);
+		void add(Operation operation) => operations.Add(operation);
 
-      public void AddRaw(Operation operation) => operations.Add(operation);
+		public void AddRaw(Operation operation) => operations.Add(operation);
 
-      string add(AddressedOperation operation, string label)
-      {
-         addresses[operations.Count] = label;
-         operations.Add(operation);
+		string add(AddressedOperation operation, string label)
+		{
+			addresses[operations.Count] = label;
+			operations.Add(operation);
 
-         return label;
-      }
+			return label;
+		}
 
-      public void Merge(OperationsBuilder otherBuilder)
-      {
-         operations.AddRange(otherBuilder.operations);
-         foreach (var item in otherBuilder.addresses)
-            addresses[item.Key] = item.Value;
-         foreach (var item in labels)
-            labels[item.Key] = item.Value;
-      }
+		public void Merge(OperationsBuilder otherBuilder)
+		{
+			operations.AddRange(otherBuilder.operations);
+			foreach (var item in otherBuilder.addresses)
+				addresses[item.Key] = item.Value;
+			foreach (var item in labels)
+				labels[item.Key] = item.Value;
+		}
 
-      public void Label(string label) => labels[label] = operations.Count;
+		public void Label(string label) => labels[label] = operations.Count;
 
-      public string PushLabel(LabelType type, string name)
-      {
-         var label = newLabel(name);
-         if (labelStack.If(type, out var stack))
-            stack.Push(label);
-         else
-         {
-            stack = new Stack<string>();
-            stack.Push(label);
-            labelStack[type] = stack;
-         }
+		public string PushLabel(LabelType type, string name)
+		{
+			var label = newLabel(name);
+			if (labelStack.If(type, out var stack))
+				stack.Push(label);
+			else
+			{
+				stack = new Stack<string>();
+				stack.Push(label);
+				labelStack[type] = stack;
+			}
 
-         return label;
-      }
+			return label;
+		}
 
-      public string PeekLabel(LabelType type) => labelStack.FlatMap(type, stack => stack.Peek(), () => "");
+		public string PeekLabel(LabelType type) => labelStack.FlatMap(type, stack => stack.Peek(), () => "");
 
-      public string PopLabel(LabelType type) => labelStack[type].Pop();
+		public string PopLabel(LabelType type) => labelStack[type].Pop();
 
-      public void Label(LabelType type) => Label(PeekLabel(type));
+		public void Label(LabelType type) => Label(PeekLabel(type));
 
-      public void CallSysFunction0(Func<Sys, IResult<IObject>> func, string image) => add(new CallSysFunction0(func, image));
+		public void CallSysFunction0(Func<Sys, IResult<IObject>> func, string image) => add(new CallSysFunction0(func, image));
 
-      public void CallSysFunction1(Func<Sys, IObject, IResult<IObject>> func, string image) => add(new CallSysFunction1(func, image));
+		public void CallSysFunction1(Func<Sys, IObject, IResult<IObject>> func, string image) => add(new CallSysFunction1(func, image));
 
-      public void CallSysFunction2(Func<Sys, IObject, IObject, IResult<IObject>> func, string image) => add(new CallSysFunction2(func, image));
+		public void CallSysFunction2(Func<Sys, IObject, IObject, IResult<IObject>> func, string image) =>
+			add(new CallSysFunction2(func, image));
 
-      public void PushInt(int value) => add(new PushInt(value));
+		public void PushInt(int value) => add(new PushInt(value));
 
-      public void PushFloat(double value) => add(new PushFloat(value));
+		public void PushFloat(double value) => add(new PushFloat(value));
 
-      public void PushBoolean(bool value) => add(new PushBoolean(value));
+		public void PushBoolean(bool value) => add(new PushBoolean(value));
 
-      public void PushString(string value) => add(new PushString(value));
+		public void PushString(string value) => add(new PushString(value));
 
-      public void PushChar(char value) => add(new PushChar(value));
+		public void PushChar(char value) => add(new PushChar(value));
 
-      public void PushByte(byte value) => add(new PushByte(value));
+		public void PushByte(byte value) => add(new PushByte(value));
 
-      public void PushObject(IObject obj) => add(new PushObject(obj));
+		public void PushObject(IObject obj) => add(new PushObject(obj));
 
-      public void Print() => add(new Print());
+		public void Print() => add(new Print());
 
-      public void PrintLine() => add(new PrintLine());
+		public void PrintLine() => add(new PrintLine());
 
-      public void Put() => add(new Put());
+		public void Put() => add(new Put());
 
-      public void ReadLine() => add(new ReadLine());
+		public void ReadLine() => add(new ReadLine());
 
-      public void Add() => add(new Add());
+		public void Add() => add(new Add());
 
-      public void Subtract() => add(new Subtract());
+		public void Subtract() => add(new Subtract());
 
-      public void Multiply() => add(new Multiply());
+		public void Multiply() => add(new Multiply());
 
-      public void FloatDivide() => add(new FloatDivide());
+		public void FloatDivide() => add(new FloatDivide());
 
-      public void IntDivide() => add(new IntDivide());
+		public void IntDivide() => add(new IntDivide());
 
-      public void Remainder() => add(new Remainder());
+		public void Remainder() => add(new Remainder());
 
-      public void Raise() => add(new Raise());
+		public void Raise() => add(new Raise());
 
-      public string GoTo(string label) => add(new GoTo(), label);
+		public string GoTo(string label) => add(new GoTo(), label);
 
-      public string GoTo(LabelType type) => add(new GoTo(), PeekLabel(type));
+		public string GoTo(LabelType type) => add(new GoTo(), PeekLabel(type));
 
-      public string GoToIfTrue(string label) => add(new GoToIfTrue(), label);
+		public string GoToIfTrue(string label) => add(new GoToIfTrue(), label);
 
-      public string GoToIfFalse(string label) => add(new GoToIfFalse(), label);
+		public string GoToIfFalse(string label) => add(new GoToIfFalse(), label);
 
-      public string GoToIfSome(string label) => add(new GoToIfSome(), label);
+		public string GoToIfSome(string label) => add(new GoToIfSome(), label);
 
-      public string GoToIfNil(string label) => add(new GoToIfNil(), label);
+		public string GoToIfNil(string label) => add(new GoToIfNil(), label);
 
-      public void Compare() => add(new Compare());
+		public void Compare() => add(new Compare());
 
-      public void IsZero() => add(new IsZero());
+		public void IsZero() => add(new IsZero());
 
-      public void IsPositive() => add(new IsPositive());
+		public void IsPositive() => add(new IsPositive());
 
-      public void IsNegative() => add(new IsNegative());
+		public void IsNegative() => add(new IsNegative());
 
-      public void Stop() => add(new Stop());
+		public void Stop() => add(new Stop());
 
-      public void Invoke(string functionName, params Expression[] arguments)
-      {
-         foreach (var argument in arguments)
-            argument.Generate(this);
-         Invoke(functionName, arguments.Length);
-      }
+		public void Invoke(string functionName, params Expression[] arguments)
+		{
+			foreach (var argument in arguments)
+				argument.Generate(this);
+			Invoke(functionName, arguments.Length);
+		}
 
-      public void Invoke(string functionName, int count)
-      {
-         ToArguments(count);
-         add(new Invoke(functionName));
-      }
+		public void Invoke(string functionName, int count)
+		{
+			ToArguments(count);
+			add(new Invoke(functionName));
+		}
 
-      public void PostfixInvoke() => add(new PostfixInvoke());
+		public void PostfixInvoke() => add(new PostfixInvoke());
 
-      public void Return(bool returnTopOfStack) => add(new Return(returnTopOfStack));
+		public void Return(bool returnTopOfStack) => add(new Return(returnTopOfStack));
 
-      public void GetField(string name) => add(new GetField(name));
+		public void ReturnType(bool returnTopOfStack, TypeConstraint typeConstraint)
+		{
+			add(new ReturnType(returnTopOfStack, typeConstraint));
+		}
 
-      public void NewField(string name, bool mutable, bool visible, IMaybe<TypeConstraint> typeConstraint) => add(new NewField(name, mutable, visible, typeConstraint));
+		public void GetField(string name) => add(new GetField(name));
 
-	   public void NewField(string name, bool mutable, bool visible)
-	   {
-		   add(new NewField(name, mutable, visible, none<TypeConstraint>()));
-	   }
+		public void NewField(string name, bool mutable, bool visible, IMaybe<TypeConstraint> typeConstraint) =>
+			add(new NewField(name, mutable, visible, typeConstraint));
 
-	   public void NewSelector(Selector selector, bool mutable, bool visible) => add(new NewSelector(selector, mutable, visible));
+		public void NewField(string name, bool mutable, bool visible)
+		{
+			add(new NewField(name, mutable, visible, none<TypeConstraint>()));
+		}
 
-      public void AssignField(string name, bool overriding) => add(new AssignField(name, overriding));
+		public void NewSelector(Selector selector, bool mutable, bool visible) => add(new NewSelector(selector, mutable, visible));
 
-	   public void AssignSelector(Selector selector, bool overriding) => add(new AssignSelector(selector, overriding));
+		public void AssignField(string name, bool overriding) => add(new AssignField(name, overriding));
 
-      public void SendMessage(Selector selector, params Expression[] arguments)
-      {
-         foreach (var argument in arguments)
-            argument.Generate(this);
-         SendMessage(selector, arguments.Length);
-      }
+		public void AssignSelector(Selector selector, bool overriding) => add(new AssignSelector(selector, overriding));
 
-      public void SendMessage(Selector selector, int count)
-      {
-         ToArguments(count);
-         add(new SendMessage(selector));
-      }
+		public void SendMessage(Selector selector, params Expression[] arguments)
+		{
+			foreach (var argument in arguments)
+				argument.Generate(this);
+			SendMessage(selector, arguments.Length);
+		}
 
-	   public void NewMessage(Selector selector, int count)
-	   {
-		   ToArguments(count);
-		   add(new NewMessage(selector));
-	   }
+		public void SendMessage(Selector selector, int count)
+		{
+			ToArguments(count);
+			add(new SendMessage(selector));
+		}
 
-	   public void Negate() => add(new Negate());
+		public void NewMessage(Selector selector, int count)
+		{
+			ToArguments(count);
+			add(new NewMessage(selector));
+		}
 
-      public void Image() => add(new Image());
+		public void Negate() => add(new Negate());
 
-      public void Peek(int index) => add(new Peek(index));
+		public void Image() => add(new Image());
 
-      public void EndOfLine() => add(new EndOfLine());
+		public void Peek(int index) => add(new Peek(index));
 
-      public void String() => add(new AsString());
+		public void EndOfLine() => add(new EndOfLine());
 
-      public void Equal() => add(new Equal());
+		public void String() => add(new AsString());
 
-      public void Not() => add(new Not());
+		public void Equal() => add(new Equal());
 
-      public void Dup() => add(new Dup());
+		public void Not() => add(new Not());
 
-      public void Dup2() => add(new Dup2());
+		public void Dup() => add(new Dup());
 
-      public void Swap() => add(new Swap());
+		public void Dup2() => add(new Dup2());
 
-      public void Rotate(int count) => add(new Rotate(count));
+		public void Swap() => add(new Swap());
 
-      public void Roll(int count) => add(new Roll(count));
+		public void Rotate(int count) => add(new Rotate(count));
 
-      public void And() => add(new And());
+		public void Roll(int count) => add(new Roll(count));
 
-      public void Or() => add(new Or());
+		public void And() => add(new And());
 
-      public void NoOp() => add(new NoOp());
+		public void Or() => add(new Or());
 
-      public void Advance(int increment) => add(new Advance(increment));
+		public void NoOp() => add(new NoOp());
 
-      public void NewNameValue() => add(new NewNameValue());
+		public void Advance(int increment) => add(new Advance(increment));
 
-      public void NewInternalList() => add(new NewInternalList());
+		public void NewNameValue() => add(new NewNameValue());
 
-      public void NewTuple() => add(new NewTuple());
+		public void NewInternalList() => add(new NewInternalList());
 
-      public void NewList() => add(new NewList());
+		public void NewTuple() => add(new NewTuple());
 
-      public void NewLambda(IInvokable invokable) => add(new NewLambda(invokable));
+		public void NewList() => add(new NewList());
 
-	   public void NewSkipTake() => add(new NewSkipTake());
+		public void NewLambda(IInvokable invokable) => add(new NewLambda(invokable));
 
-      //public void OneTuple() => add(new OneTuple());
+		public void NewSkipTake() => add(new NewSkipTake());
 
-      //public void ToTuple() => add(new ToTuple());
+		//public void OneTuple() => add(new OneTuple());
 
-      /*public void ToTuple(int count)
-      {
-         PushInt(count);
-         ToTuple();
-      }*/
+		//public void ToTuple() => add(new ToTuple());
 
-      public void PushFrame() => add(new PushFrame());
+		/*public void ToTuple(int count)
+		{
+		   PushInt(count);
+		   ToTuple();
+		}*/
 
-      public void PushFrameWithValue() => add(new PushFrameWithValue());
+		public void PushFrame() => add(new PushFrame());
 
-      public void PushFrameWithArguments() => add(new PushFrameWithArguments());
+		public void PushFrameWithValue() => add(new PushFrameWithValue());
 
-      public void PopFrame() => add(new PopFrame());
+		public void PushFrameWithArguments() => add(new PushFrameWithArguments());
 
-      public void PopFrameWithValue() => add(new PopFrameWithValue());
+		public void PopFrame() => add(new PopFrame());
 
-      public void PushExitFrame(string label) => add(new PushExitFrame(), label);
+		public void PopFrameWithValue() => add(new PopFrameWithValue());
 
-      public void PopExitFrame() => add(new PopExitFrame());
+		public void PushExitFrame(string label) => add(new PushExitFrame(), label);
 
-      public void PushSkipFrame(string label) => add(new PushSkipFrame(), label);
+		public void PopExitFrame() => add(new PopExitFrame());
 
-      public void PopSkipFrame() => add(new PopSkipFrame());
+		public void PushSkipFrame(string label) => add(new PushSkipFrame(), label);
 
-      public void NewArray() => add(new NewArray());
+		public void PopSkipFrame() => add(new PopSkipFrame());
 
-      public void GetIterator(bool lazy) => add(new GetIterator(lazy));
+		public void NewArray() => add(new NewArray());
 
-      //public void EmptyTuple() => add(new EmptyTuple());
+		public void GetIterator(bool lazy) => add(new GetIterator(lazy));
 
-      public void NewRange(bool inclusive) => add(new NewRange(inclusive));
+		//public void EmptyTuple() => add(new EmptyTuple());
 
-      public void IsClass(string className, bool pop) => add(new IsClass(className, pop));
+		public void NewRange(bool inclusive) => add(new NewRange(inclusive));
 
-      public void Match(bool mutable, bool strict)
-      {
-         CallSysFunction2((sys, x, y) => sys.Match(mutable, strict, x, y), $"sys.match({mutable.Image()}, {strict.Image()}, x, y, assign)");
-      }
+		public void IsClass(string className, bool pop) => add(new IsClass(className, pop));
 
-      public void Drop() => add(new Drop());
+		public void Match(bool mutable, bool strict)
+		{
+			CallSysFunction2((sys, x, y) => sys.Match(mutable, strict, x, y),
+				$"sys.match({mutable.Image()}, {strict.Image()}, x, y, assign)");
+		}
 
-      public void Some() => add(new Some());
+		public void Drop() => add(new Drop());
 
-      public void PushNil() => add(new PushNil());
+		public void Some() => add(new Some());
 
-      public void Yield() => add(new Yield());
+		public void PushNil() => add(new PushNil());
 
-      public void NewObject(string className, Parameters parameters) => add(new NewObject(className, parameters));
+		public void Yield() => add(new Yield());
 
-      public void FieldsFromObject() => add(new FieldsFromObject());
+		public void NewObject(string className, Parameters parameters) => add(new NewObject(className, parameters));
 
-      public void NewDataType(string className) => add(new NewDataType(className));
+		public void FieldsFromObject() => add(new FieldsFromObject());
 
-      public void NewDataComparisand() => add(new NewDataComparisand());
+		public void NewDataType(string className) => add(new NewDataType(className));
 
-      public void FieldExists(string fieldName) => add(new FieldExists(fieldName));
+		public void NewDataComparisand() => add(new NewDataComparisand());
 
-      public void NewRational() => add(new NewRational());
+		public void FieldExists(string fieldName) => add(new FieldExists(fieldName));
 
-      public void NewKeyValue() => add(new NewKeyValue());
+		public void NewRational() => add(new NewRational());
 
-      public void NewValue(string className, Func<Arguments, IObject> initializer) => add(new NewValue(className, initializer));
+		public void NewKeyValue() => add(new NewKeyValue());
 
-      public void AssignMetaObject(string className, string metaClassName) => add(new AssignMetaObject(className, metaClassName));
+		public void NewValue(string className, Func<Arguments, IObject> initializer) => add(new NewValue(className, initializer));
 
-      public void Super() => add(new Super());
+		public void AssignMetaObject(string className, string metaClassName) => add(new AssignMetaObject(className, metaClassName));
 
-      public void SetX() => add(new SetX());
+		public void Super() => add(new Super());
 
-      public void GetX() => add(new GetX());
+		public void SetX() => add(new SetX());
 
-      public void RespondsTo(string message) => add(new RespondsTo(message));
+		public void GetX() => add(new GetX());
 
-      public void ToArguments(int count)
-      {
-         PushInt(count);
-         add(new ToArguments());
-      }
+		public void RespondsTo(string message) => add(new RespondsTo(message));
 
-      public void Pipeline() => add(new Pipeline());
+		public void ToArguments(int count)
+		{
+			PushInt(count);
+			add(new ToArguments());
+		}
 
-      public void BAnd() => add(new BAnd());
+		public void Pipeline() => add(new Pipeline());
 
-      public void BOr() => add(new BOr());
+		public void BAnd() => add(new BAnd());
 
-      public void BXor() => add(new BXor());
+		public void BOr() => add(new BOr());
 
-      public void BShiftLeft() => add(new BShiftLeft());
+		public void BXor() => add(new BXor());
 
-      public void BShiftRight() => add(new BShiftRight());
+		public void BShiftLeft() => add(new BShiftLeft());
 
-      public void BNot() => add(new BNot());
+		public void BShiftRight() => add(new BShiftRight());
 
-      public void NewOpenRange() => add(new NewOpenRange());
+		public void BNot() => add(new BNot());
 
-      public void SetFields(Parameters parameters) => add(new SetFields(parameters));
+		public void NewOpenRange() => add(new NewOpenRange());
 
-      public void Break() => add(new Break());
+		public void SetFields(Parameters parameters) => add(new SetFields(parameters));
 
-      public void OpenPackage(string packageName) => add(new OpenPackage(packageName));
+		public void Break() => add(new Break());
 
-      public void ImportPackage(string packageName) => add(new ImportPackage(packageName));
+		public void OpenPackage(string packageName) => add(new OpenPackage(packageName));
 
-	   public void ArgumentLabel(string label) => add(new ArgumentLabel(label));
+		public void ImportPackage(string packageName) => add(new ImportPackage(packageName));
 
-      public IResult<Operations> ToOperations(ParseState state)
-      {
-         operations.Add(new Stop());
-         for (var i = 0; i < invokables.Count; i++)
-         {
-            var invokable = invokables[i];
-            var block = blocks[i];
+		public void ArgumentLabel(string label) => add(new ArgumentLabel(label));
 
-            invokable.Address = operations.Count;
-            block.Generate(this);
-            var lastOperation = operations[operations.Count - 1];
-            if (!(lastOperation is Return)/* && !(lastOperation is NoOp)*/)
-               operations.Add(new Return(false));
-         }
+		public IResult<Operations> ToOperations(ParseState state)
+		{
+			operations.Add(new Stop());
+			for (var i = 0; i < invokables.Count; i++)
+			{
+				var invokable = invokables[i];
+				var block = blocks[i];
 
-         foreach (var symbol in state.PostGenerationSymbols)
-         {
-            var invokable = ((IInvokableObject)symbol).Invokable;
-            invokable.Address = operations.Count;
-            symbol.Generate(this);
-            var lastOperation = operations[operations.Count - 1];
-            if (!(lastOperation is Return)/* && !(lastOperation is NoOp)*/)
-               operations.Add(new Return(false));
-         }
+				invokable.Address = operations.Count;
+				block.Generate(this);
+				var lastOperation = operations[operations.Count - 1];
+				if (!(lastOperation is Return) /* && !(lastOperation is NoOp)*/)
+					operations.Add(new Return(false));
+			}
 
-         foreach (var item in addresses)
-         {
-            var address = labels[item.Value];
-            if (operations[item.Key] is AddressedOperation op)
-               if (address > -1)
-                  op.Address = address;
-               else
-                  return $"Label {item.Value} couldn't be found".Failure<Operations>();
-            else
-               return $"Addressed operation required; {operations[item.Key]} found".Failure<Operations>();
-         }
+			foreach (var symbol in state.PostGenerationSymbols)
+			{
+				var invokable = ((IInvokableObject)symbol).Invokable;
+				invokable.Address = operations.Count;
+				symbol.Generate(this);
+				var lastOperation = operations[operations.Count - 1];
+				if (!(lastOperation is Return) /* && !(lastOperation is NoOp)*/)
+					operations.Add(new Return(false));
+			}
 
-         return new Operations(operations.ToArray()).Success();
-      }
+			foreach (var item in addresses)
+			{
+				var address = labels[item.Value];
+				if (operations[item.Key] is AddressedOperation op)
+					if (address > -1)
+						op.Address = address;
+					else
+						return $"Label {item.Value} couldn't be found".Failure<Operations>();
+				else
+					return $"Addressed operation required; {operations[item.Key]} found".Failure<Operations>();
+			}
 
-      public void BeginMacro(Parameters parameters, Expression[] arguments, string returnLabel = "")
-      {
-         var macroParameter = new MacroParameters();
-         macroParameter.Assign(parameters, arguments);
-         macroParameters.Push(macroParameter);
-         returnLabels.Push(returnLabel);
-      }
+			return new Operations(operations.ToArray()).Success();
+		}
 
-      public void EndMacro()
-      {
-         macroParameters.Pop();
-         returnLabels.Pop();
-      }
+		public void BeginMacro(Parameters parameters, Expression[] arguments, string returnLabel = "")
+		{
+			var macroParameter = new MacroParameters();
+			macroParameter.Assign(parameters, arguments);
+			macroParameters.Push(macroParameter);
+			returnLabels.Push(returnLabel);
+		}
 
-      public void Field(Symbol symbol)
-      {
-         foreach (var macroParameter in macroParameters)
-            if (macroParameter.Replace(symbol, this))
-               return;
+		public void EndMacro()
+		{
+			macroParameters.Pop();
+			returnLabels.Pop();
+		}
 
-         if (symbol is FieldSymbol fieldSymbol)
-            GetField(fieldSymbol.FieldName);
-      }
+		public void Field(Symbol symbol)
+		{
+			foreach (var macroParameter in macroParameters)
+				if (macroParameter.Replace(symbol, this))
+					return;
 
-      public void ReturnNothing()
-      {
-         if (returnLabels.Count == 0)
-            Return(false);
-         else
-            GoTo(returnLabels.Peek());
-      }
+			if (symbol is FieldSymbol fieldSymbol)
+				GetField(fieldSymbol.FieldName);
+		}
 
-      public void Return(Expression expression, Statement statement)
-      {
-         expression.Generate(this);
-         Peek(statement.Index);
+		public void ReturnNothing()
+		{
+			if (returnLabels.Count == 0)
+				Return(false);
+			else
+				GoTo(returnLabels.Peek());
+		}
 
-         if (returnLabels.Count == 0)
-            Return(true);
-         else
-            GoTo(returnLabels.Peek());
-      }
-   }
+		public void Return(Expression expression, Statement statement)
+		{
+			expression.Generate(this);
+			Peek(statement.Index);
+
+			if (returnLabels.Count == 0)
+				Return(true);
+			else
+				GoTo(returnLabels.Peek());
+		}
+
+		public void Return(Expression expression, Statement statement, IMaybe<TypeConstraint> typeConstraint)
+		{
+			expression.Generate(this);
+			Peek(statement.Index);
+
+			if (returnLabels.Count == 0)
+			{
+				if (typeConstraint.If(out var tc))
+					ReturnType(true, tc);
+				else
+					Return(true);
+			}
+			else
+				GoTo(returnLabels.Peek());
+		}
+	}
 }

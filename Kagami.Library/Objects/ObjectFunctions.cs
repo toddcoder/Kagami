@@ -185,8 +185,8 @@ namespace Kagami.Library.Objects
 
 		public static bool isEqualTo(UserObject obj, IObject other)
 		{
-			if (classOf(obj).RespondsTo("isEqualTo"))
-				return sendMessage(obj, "isEqualTo", other).IsTrue;
+			if (classOf(obj).RespondsTo("isEqualTo(_)"))
+				return sendMessage(obj, "isEqualTo(_)", other).IsTrue;
 			else if (other is UserObject otherUserObject && obj.ClassName == otherUserObject.ClassName)
 			{
 				var fields = otherUserObject.Fields;
@@ -198,7 +198,7 @@ namespace Kagami.Library.Objects
 
 		public static bool userObjectMatch(UserObject obj, IObject comparisand, Hash<string, IObject> bindings)
 		{
-			if (classOf(obj).RespondsTo("match"))
+			if (classOf(obj).RespondsTo("match(_)"))
 			{
 				var objectHash = bindings.ToHash(i => String.StringObject(i.Key), i => i.Value);
 				var dictionary = new Dictionary(objectHash);
@@ -417,7 +417,7 @@ namespace Kagami.Library.Objects
 		public static Selector parseSelector(string source)
 		{
 			if (!source.EndsWith(")"))
-				source = $"{source}()";
+				source = $"{source}(_)";
 
 			var matcher = new Matcher();
 			if (matcher.IsMatch(source, $"^ /(('__$')? {REGEX_FUNCTION_NAME}) '(' /@"))
@@ -451,6 +451,9 @@ namespace Kagami.Library.Objects
 				source = matcher.SecondGroup;
 			}
 
+			if (matcher.IsMatch(source, $"^ /({REGEX_FIELD}) /b /@"))
+				source = matcher.SecondGroup;
+
 			if (matcher.IsMatch(source, "^ '<' /(-['>']+) '>' /@"))
 			{
 				var classNames = matcher.FirstGroup.Split("/s+");
@@ -477,7 +480,7 @@ namespace Kagami.Library.Objects
 
 		public static Selector selector(string name, string[] labels, IObject[] objects)
 		{
-			var enumerable = labels.Zip(objects, (l, o) => $"{l.Extend(after: ":")}<{o.ClassName}>");
+			var enumerable = labels.Zip(objects, (l, o) => $"{l.Extend(after: ":")}_<{o.ClassName}>");
 			var selectItems = enumerable.Select(parseSelectorItem).ToArray();
 			return new Selector(name, selectItems, selectorImage(name, selectItems));
 		}

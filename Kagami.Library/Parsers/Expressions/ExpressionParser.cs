@@ -170,7 +170,7 @@ namespace Kagami.Library.Parsers.Expressions
       {
          var parameter = Parameter.New(false, fieldName);
          var parameters = new Parameters(parameter);
-         var lambdaSymbol = new LambdaSymbol(parameters, new Block(new Return(expression)));
+	      var lambdaSymbol = new LambdaSymbol(parameters, new Block(new Return(expression, none<TypeConstraint>())));
          var sendMessage = new SendMessageSymbol(selector, Precedence.SendMessage, lambdaSymbol.Some());
 
          var builder = new ExpressionBuilder(ExpressionFlags.Standard);
@@ -186,7 +186,7 @@ namespace Kagami.Library.Parsers.Expressions
          var leftParameter = Parameter.New(false, leftName);
          var rightParameter = Parameter.New(false, rightName);
          var parameters = new Parameters(leftParameter, rightParameter);
-         var lambdaSymbol = new LambdaSymbol(parameters, new Block(new Return(expression)));
+	      var lambdaSymbol = new LambdaSymbol(parameters, new Block(new Return(expression, none<TypeConstraint>())));
          var sendMessage = new SendMessageSymbol(selector, Precedence.SendMessage, lambdaSymbol.Some(),
             new Expression(rightSymbol));
 

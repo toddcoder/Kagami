@@ -2,6 +2,7 @@
 using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
+using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Standard.Types.Maybe;
 using Standard.Types.RegularExpressions;
@@ -49,6 +50,7 @@ namespace Kagami.Library.Parsers.Statements
             functionName = functionName.get();
 
          state.CreateYieldFlag();
+			state.CreateReturnType();
 
          if (GetAnyParameters(needsParameters, state).If(out var parameters, out var original))
          {
@@ -66,6 +68,7 @@ namespace Kagami.Library.Parsers.Statements
                return getAnyBlock(state).Map(block =>
                {
                   var yielding = state.RemoveYieldFlag();
+	               state.RemoveReturnType();
                   var function = new Function(functionName, parameters, block, yielding, overriding, className) { Trait = trait };
                   if (isMacro)
                      state.RegisterMacro(function);
@@ -106,6 +109,7 @@ namespace Kagami.Library.Parsers.Statements
             else
             {
                state.RemoveYieldFlag();
+	            state.RemoveReturnType();
                return failedMatch<Function>(exception);
             }
          }
@@ -113,6 +117,7 @@ namespace Kagami.Library.Parsers.Statements
          if (getAnyBlock(state).If(out var block, out var original))
          {
             var yielding = state.RemoveYieldFlag();
+	         state.RemoveReturnType();
             var lambdaSymbol = none<LambdaSymbol>();
             while (parametersStack.Count > 0)
             {
@@ -120,11 +125,11 @@ namespace Kagami.Library.Parsers.Statements
                lambdaSymbol = lambdaSymbol.FlatMap(l => getLambda(parameters, l), () => new LambdaSymbol(parameters, block)).Some();
             }
 
-            if (lambdaSymbol.If(out var ls))
-               return new Function(functionName, firstParameters, new Block(new Return(new Expression(ls))), yielding,
-                  overriding, className) { Trait = trait }.Matched();
-            else
-               return notMatched<Function>();
+	         if (lambdaSymbol.If(out var ls))
+		         return new Function(functionName, firstParameters, new Block(new Return(new Expression(ls), state.GetReturnType())), yielding, overriding,
+			         className) { Trait = trait }.Matched();
+	         else
+		         return notMatched<Function>();
          }
          else
             return original.Unmatched<Function>();
@@ -132,7 +137,7 @@ namespace Kagami.Library.Parsers.Statements
 
       protected static LambdaSymbol getLambda(Parameters parameters, LambdaSymbol previousLambdaSymbol)
       {
-         return new LambdaSymbol(parameters, new Block(new Return(new Expression(previousLambdaSymbol))));
+	      return new LambdaSymbol(parameters, new Block(new Return(new Expression(previousLambdaSymbol), none<TypeConstraint>())));
       }
    }
 }

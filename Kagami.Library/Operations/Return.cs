@@ -36,7 +36,7 @@ namespace Kagami.Library.Operations
             return failedMatch<IObject>(invalidStack());
       }
 
-      bool returnTopOfStack;
+      protected bool returnTopOfStack;
 
       public Return(bool returnTopOfStack) => this.returnTopOfStack = returnTopOfStack;
 

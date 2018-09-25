@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
+using Kagami.Library.Objects;
 using Kagami.Library.Parsers.Expressions;
 using Standard.Types.Arrays;
 using Standard.Types.Collections;
@@ -30,6 +31,7 @@ namespace Kagami.Library.Parsers
       List<Symbol> postGenerationSymbols;
       IMaybe<int> exceptionIndex;
       Stack<bool> yieldingStack;
+	   Stack<IMaybe<TypeConstraint>> returnTypesStack;
       Hash<string, Expression> defExpressions;
       Hash<string, Function> macros;
 
@@ -47,6 +49,7 @@ namespace Kagami.Library.Parsers
          postGenerationSymbols = new List<Symbol>();
          exceptionIndex = none<int>();
          yieldingStack = new Stack<bool>();
+	      returnTypesStack = new Stack<IMaybe<TypeConstraint>>();
          defExpressions = new Hash<string, Expression>();
          macros = new Hash<string, Function>();
       }
@@ -236,15 +239,27 @@ namespace Kagami.Library.Parsers
 
       public void CreateYieldFlag() => yieldingStack.Push(false);
 
+	   public void CreateReturnType() => returnTypesStack.Push(none<TypeConstraint>());
+
       public void SetYieldFlag()
       {
          yieldingStack.Pop();
          yieldingStack.Push(true);
       }
 
-      public bool RemoveYieldFlag() => yieldingStack.Pop();
+	   public void SetReturnType(IMaybe<TypeConstraint> typeConstraint)
+	   {
+		   returnTypesStack.Pop();
+		   returnTypesStack.Push(typeConstraint);
+	   }
 
-      public void RegisiterDefExpression(string fieldName, Expression expression) => defExpressions[fieldName] = expression;
+	   public bool RemoveYieldFlag() => yieldingStack.Pop();
+
+	   public IMaybe<TypeConstraint> GetReturnType() => returnTypesStack.Peek();
+
+	   public void RemoveReturnType() => returnTypesStack.Pop();
+
+      public void RegisterDefExpression(string fieldName, Expression expression) => defExpressions[fieldName] = expression;
 
       public IMaybe<Expression> DefExpression(string fieldName) => defExpressions.Map(fieldName);
 

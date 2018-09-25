@@ -20,7 +20,7 @@ namespace Kagami.Library.Parsers.Statements
 
       public override IMatched<Unit> Suffix(ParseState state, Expression expression)
       {
-         state.RegisiterDefExpression(fieldName, expression);
+         state.RegisterDefExpression(fieldName, expression);
          return Unit.Matched();
       }
    }

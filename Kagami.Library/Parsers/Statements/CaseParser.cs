@@ -48,7 +48,7 @@ namespace Kagami.Library.Parsers.Statements
             case CaseType.Statement:
                return getCaseStatementBlock(state);
             case CaseType.Function:
-               return getAnyBlock(state);
+	            return getAnyBlock(state);
             case CaseType.Lambda:
                return getBlock(state);
             default:

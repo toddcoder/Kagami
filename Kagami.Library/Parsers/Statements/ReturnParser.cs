@@ -16,7 +16,7 @@ namespace Kagami.Library.Parsers.Statements
 
       public override IMatched<Unit> Suffix(ParseState state, Expression expression)
       {
-         state.AddStatement(new Return(expression));
+         state.AddStatement(new Return(expression, state.GetReturnType()));
          return Unit.Matched();
       }
    }

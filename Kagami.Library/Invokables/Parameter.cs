@@ -81,6 +81,7 @@ namespace Kagami.Library.Invokables
             var builder = new StringBuilder();
             if (label.IsNotEmpty())
                builder.Append($"{label}:");
+	         builder.Append("_");
             if (typeConstraint.If(out var tc))
                builder.Append(tc.Image);
 	         if (Variadic)
