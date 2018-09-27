@@ -20,7 +20,7 @@ namespace Kagami.Library.Parsers.Statements
 
          var result =
             from comparisand in getExpression(state, ExpressionFlags.Comparisand)
-            from scanned in state.Scan("^ /(|s|) /'='", Color.Whitespace, Color.Structure)
+            from scanned in state.Scan("^ /(|s|) /'=' -(> '=')", Color.Whitespace, Color.Structure)
             select comparisand;
          if (result.If(out comparisand, out var original))
             return Unit.Matched();

@@ -14,11 +14,11 @@ namespace Kagami.Library.Classes
 
          rangeMessages();
 
-         messages["*"] = (obj, msg) => function<Char, Int>(obj, msg, (c, i) => c.Repeat(i.Value));
-         messages["+"] = (obj, msg) => function<Char, IObject>(obj, msg, (c, i) => c.Add(i));
-         messages["-"] = (obj, msg) => function<Char, IObject>(obj, msg, (c, i) => c.Subtract(i));
-         messages["upper"] = (obj, msg) => function<Char>(obj, c => c.Upper());
-         messages["lower"] = (obj, msg) => function<Char>(obj, c => c.Lower());
+         messages["*(_)"] = (obj, msg) => function<Char, Int>(obj, msg, (c, i) => c.Repeat(i.Value));
+         messages["+(_)"] = (obj, msg) => function<Char, IObject>(obj, msg, (c, i) => c.Add(i));
+         messages["-(_)"] = (obj, msg) => function<Char, IObject>(obj, msg, (c, i) => c.Subtract(i));
+         messages["upper()"] = (obj, msg) => function<Char>(obj, c => c.Upper());
+         messages["lower()"] = (obj, msg) => function<Char>(obj, c => c.Lower());
          messages["isUpper".get()] = (obj, msg) => function<Char>(obj, c => c.IsUpper);
          messages["isLower".get()] = (obj, msg) => function<Char>(obj, c => c.IsLower);
          messages["isAlphaDigit".get()] = (obj, msg) => function<Char>(obj, c => c.IsAlphaDigit);

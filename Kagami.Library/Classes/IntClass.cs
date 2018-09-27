@@ -34,7 +34,7 @@ namespace Kagami.Library.Classes
          messages["days".get()] = (obj, msg) => function<Int>(obj, i => i.Day);
          messages["week".get()] = (obj, msg) => function<Int>(obj, i => i.Week);
          messages["weeks".get()] = (obj, msg) => function<Int>(obj, i => i.Week);
-         messages["char"] = (obj, msg) => function<Int>(obj, i => i.Char());
+         messages["char()"] = (obj, msg) => function<Int>(obj, i => i.Char());
       }
 
       public override void RegisterClassMessages()

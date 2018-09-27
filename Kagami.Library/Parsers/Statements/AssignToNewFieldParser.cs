@@ -17,6 +17,8 @@ namespace Kagami.Library.Parsers.Statements
 
 		public override IMatched<Unit> Prefix(ParseState state, Token[] tokens)
 		{
+			state.BeginTransaction();
+
 			mutable = tokens[1].Text == "var";
 			fieldName = tokens[3].Text;
 			state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Identifier);
@@ -28,9 +30,15 @@ namespace Kagami.Library.Parsers.Statements
 				return failedMatch<Unit>(exception);
 
 			if (state.Scan("^ /(|s|) /'='", Color.Whitespace, Color.Structure).If(out _, out isNotMatched, out exception))
+			{
+				state.CommitTransaction();
 				return Unit.Matched();
+			}
 			else if (isNotMatched)
+			{
+				state.RollBackTransaction();
 				return notMatched<Unit>();
+			}
 			else
 				return failedMatch<Unit>(exception);
 		}
