@@ -14,13 +14,13 @@ namespace Kagami.Library.Packages
 			for (var i = 0; i < 10; i++)
 				registerPackageFunction("println".Selector(i), (obj, msg) => function<Sys>(obj, sys => sys.Println(msg.Arguments)));
 
-			registerPackageFunction("print", (obj, msg) => function<Sys>(obj, sys => sys.Print(msg.Arguments)));
-			registerPackageFunction("put", (obj, msg) => function<Sys>(obj, sys => sys.Put(msg.Arguments)));
-			registerPackageFunction("readln", (obj, msg) => function<Sys>(obj, sys => sys.Readln()));
-			registerPackageFunction("peek", (obj, msg) => function<Sys>(obj, sys => sys.Peek(msg.Arguments[0])));
-			registerPackageFunction("ticks", (obj, msg) => function<Sys>(obj, sys => sys.Ticks()));
-			registerPackageFunction("fst", (obj, msg) => function<Sys, Tuple>(obj, msg, (sys, t) => sys.First(t)));
-			registerPackageFunction("snd", (obj, msg) => function<Sys, Tuple>(obj, msg, (sys, t) => sys.Second(t)));
+			registerPackageFunction("print(_)", (obj, msg) => function<Sys>(obj, sys => sys.Print(msg.Arguments)));
+			registerPackageFunction("put(_)", (obj, msg) => function<Sys>(obj, sys => sys.Put(msg.Arguments)));
+			registerPackageFunction("readln()", (obj, msg) => function<Sys>(obj, sys => sys.Readln()));
+			registerPackageFunction("peek(_)", (obj, msg) => function<Sys>(obj, sys => sys.Peek(msg.Arguments[0])));
+			registerPackageFunction("ticks()", (obj, msg) => function<Sys>(obj, sys => sys.Ticks()));
+			registerPackageFunction("fst(_)", (obj, msg) => function<Sys, Tuple>(obj, msg, (sys, t) => sys.First(t)));
+			registerPackageFunction("snd(_)", (obj, msg) => function<Sys, Tuple>(obj, msg, (sys, t) => sys.Second(t)));
 			registerPackageFunction("id".get(), (obj, msg) => function<Sys>(obj, sys => sys.ID));
 			registerPackageFunction("Tuple", (obj, msg) => function<Sys>(obj, sys => sys.Tuple(msg.Arguments[0])));
 			registerPackageFunction("Group", (obj, msg) => function<Sys>(obj, sys => sys.RegexGroup(msg.Arguments)));

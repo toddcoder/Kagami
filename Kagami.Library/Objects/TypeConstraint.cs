@@ -79,7 +79,13 @@ namespace Kagami.Library.Objects
 
       public bool Matches(BaseClass baseClass) => comparisands.Any(c => c.AssignCompatible(baseClass));
 
-      public bool IsTrue => true;
+		public bool Matches(TypeConstraint typeConstraint)
+		{
+			var self = this;
+			return typeConstraint.comparisands.Select(bc => self.Matches(bc)).Any();
+		}
+
+	   public bool IsTrue => true;
 
       public TypeConstraint Merge(TypeConstraint other)
       {

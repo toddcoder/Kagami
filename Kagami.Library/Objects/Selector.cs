@@ -86,7 +86,7 @@ namespace Kagami.Library.Objects
 					{
 						var left = selectorItems[i];
 						var right = otherItems[i];
-						if (right.TypeConstraint.If(out var tc) && !left.TypeConstraint.Required("Type required").IsEquivalentTo(tc))
+						if (right.TypeConstraint.If(out var tc) && !left.TypeConstraint.Required("Type required").Matches(tc))
 							return false;
 					}
 

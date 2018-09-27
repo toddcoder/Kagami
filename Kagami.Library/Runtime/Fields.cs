@@ -204,6 +204,12 @@ namespace Kagami.Library.Runtime
             yield return (item.Key, item.Value);
       }
 
+	   public void Remove(string fieldName)
+	   {
+		   if (fields.ContainsKey(fieldName))
+			   fields.Remove(fieldName);
+	   }
+
       public override string ToString() => fields.Select(i => $"{i.Key} = {i.Value.Value.Image}").Listify();
 
       public void SetBindings(Hash<string, IObject> bindings, bool mutable, bool strict)

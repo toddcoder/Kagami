@@ -157,7 +157,7 @@ namespace Kagami.Library.Runtime
 					{
 						var selector = arguments.Selector(fieldName);
 						image = selector.Image;
-						((isFound, field), (isFailure, exception)) = Find(fieldName);
+						((isFound, field), (isFailure, exception)) = Find(selector);
                }
 					if (isFound)
 					{

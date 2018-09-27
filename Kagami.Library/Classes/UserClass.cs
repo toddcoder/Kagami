@@ -58,15 +58,15 @@ namespace Kagami.Library.Classes
             signatures[item.Key] = item.Value;
       }
 
-      public virtual bool RegisterMethod(string fullFunctionName, Lambda lambda, bool overriding)
+      public virtual bool RegisterMethod(Selector selector, Lambda lambda, bool overriding)
       {
-         if (messages.ContainsKey(fullFunctionName) && !overriding)
+         if (messages.ContainsExact(selector) && !overriding)
             return false;
          else
          {
             var clone = lambda.Clone();
-            messages[fullFunctionName] = (obj, msg) => Invoke((UserObject)obj, msg.Arguments, clone);
-            signatures[fullFunctionName] = new Signature(fullFunctionName, clone.Invokable.Parameters.Length);
+            messages[selector] = (obj, msg) => Invoke((UserObject)obj, msg.Arguments, clone);
+            signatures[selector] = new Signature(selector, clone.Invokable.Parameters.Length);
 
             return true;
          }
@@ -159,6 +159,26 @@ namespace Kagami.Library.Classes
          var tuple = new Tuple(args);
 
          return sendMessage(obj, "missing", originalMessage, tuple);
+      }
+
+	   public override bool AssignCompatible(BaseClass otherClass)
+	   {
+		   if (Name == otherClass.Name)
+			   return true;
+		   else if (parentClass.If(out var pc))
+			   return pc.AssignCompatible(otherClass);
+		   else
+			   return false;
+	   }
+
+	   public override bool MatchCompatible(BaseClass otherClass)
+	   {
+		   if (Name == otherClass.Name)
+			   return true;
+		   else if (parentClass.If(out var pc))
+			   return pc.MatchCompatible(otherClass);
+		   else
+			   return false;
       }
    }
 }

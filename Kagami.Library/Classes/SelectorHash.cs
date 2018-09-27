@@ -52,8 +52,10 @@ namespace Kagami.Library.Classes
 				         return true;
 		         }
 
-            return false;// base.ContainsKey(labelsOnlyImage);
+            return base.ContainsKey(labelsOnlyImage);
          }
       }
+
+	   public bool ContainsExact(Selector selector) => base.ContainsKey(selector.Image);
    }
 }
