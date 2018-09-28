@@ -12,12 +12,12 @@ namespace Kagami.Library.Parsers.Expressions
    {
       public StringParser(ExpressionBuilder builder) : base(builder) { }
 
-      public override string Pattern => "^ /(|s|) /['@b`']? /(['\"'])";
+      public override string Pattern => "^ /(|s|) /['mb`']? /(['\"'])";
 
       public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
       {
          var prefix = tokens[2].Text;
-         var mutable = prefix == "@";
+         var mutable = prefix == "m";
          var binary = prefix == "b";
 	      var symbol = prefix == "`";
 
@@ -54,7 +54,10 @@ namespace Kagami.Library.Parsers.Expressions
                   state.Move(1);
                   state.AddToken(index, length + 1, Color.String);
                   if (mutable)
-                     return "Mutable not implemented yet".FailedMatch<Unit>();
+                  {
+	                  builder.Add(new MutStringSymbol(text.ToString()));
+	                  return Unit.Matched();
+                  }
                   else if (binary)
                   {
                      builder.Add(new ByteArraySymbol(text.ToString()));

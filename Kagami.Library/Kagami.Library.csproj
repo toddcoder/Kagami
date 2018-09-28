@@ -88,6 +88,7 @@
     <Compile Include="Classes\ListClass.cs" />
     <Compile Include="Classes\LongClass.cs" />
     <Compile Include="Classes\MessageClass.cs" />
+    <Compile Include="Classes\MutStringClass.cs" />
     <Compile Include="Classes\NameValueClass.cs" />
     <Compile Include="Classes\NilClass.cs" />
     <Compile Include="Classes\NumberClass.cs" />
@@ -241,6 +242,7 @@
     <Compile Include="Nodes\Symbols\MapOperatorBinarySymbol.cs" />
     <Compile Include="Nodes\Symbols\MapOperatorSymbol.cs" />
     <Compile Include="Nodes\Symbols\MessageSymbol.cs" />
+    <Compile Include="Nodes\Symbols\MutStringSymbol.cs" />
     <Compile Include="Nodes\Symbols\NewObjectSymbol.cs" />
     <Compile Include="Nodes\Symbols\PatternSymbol.cs" />
     <Compile Include="Nodes\Symbols\MatchMapSymbol.cs" />
@@ -368,6 +370,7 @@
     <Compile Include="Objects\Long.cs" />
     <Compile Include="Objects\MapAction.cs" />
     <Compile Include="Objects\Message.cs" />
+    <Compile Include="Objects\MutString.cs" />
     <Compile Include="Objects\NameValue.cs" />
     <Compile Include="Objects\Nil.cs" />
     <Compile Include="Objects\ObjectCollection.cs" />

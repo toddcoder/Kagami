@@ -179,29 +179,29 @@ namespace Kagami.Library.Classes
             (x, y) => x.Remainder(y), "%"));
          registerMessage("^", (obj, msg) => function(obj, msg, (x, y) => Math.Pow(x, y), (x, y) => x.Raise(y), "^"));
          registerMessage("atan2", (obj, msg) => function(obj, msg, (x, y) => Math.Atan2(y, x), (x, y) => x.Atan2(y), "atan2"));
-         registerMessage("sign", (obj, msg) => function(obj, x => Math.Sign(x), x => Math.Sign(x), x => Math.Sign(x),
-            x => (Int)x.Sign(), "sign"));
-         registerMessage("sin", (obj, msg) => function(obj, x => Math.Sin(x), x => x.Sin()));
-         registerMessage("cos", (obj, msg) => function(obj, x => Math.Cos(x), x => x.Cos()));
-         registerMessage("tan", (obj, msg) => function(obj, x => Math.Tan(x), x => x.Tan()));
-         registerMessage("asin", (obj, msg) => function(obj, x => Math.Asin(x), x => x.Asin()));
-         registerMessage("acos", (obj, msg) => function(obj, x => Math.Acos(x), x => x.Acos()));
-         registerMessage("atan", (obj, msg) => function(obj, x => Math.Atan(x), x => x.Atan()));
-         registerMessage("sqrt", (obj, msg) => function(obj, x => Math.Sqrt(x), x => x.Sqrt()));
-         registerMessage("log", (obj, msg) => function(obj, x => Math.Log10(x), x => x.Log()));
-         registerMessage("ln", (obj, msg) => function(obj, x => Math.Log(x), x => x.Ln()));
-         registerMessage("exp", (obj, msg) => function(obj, x => Math.Exp(x), x => x.Exp()));
-         registerMessage("abs",
-            (obj, msg) => function(obj, x => Math.Abs(x), x => Math.Abs(x), x => x, x => (Int)x.Abs(), "abs"));
-         registerMessage("ceil", (obj, msg) => function(obj, x => x, x => Math.Ceiling(x), x => x, x => (Float)x.Ceiling(), "ceil"));
-         registerMessage("floor", (obj, msg) => function(obj, x => x, x => Math.Floor(x), x => x, x => (Float)x.Floor(), "floor"));
-         registerMessage("frac", (obj, msg) => function(obj, x => 0, x => x - (int)x, x => 0, x => (Float)x.Fraction(), "frac"));
+         registerMessage("sign()", (obj, msg) => function(obj, x => Math.Sign(x), x => Math.Sign(x), x => Math.Sign(x),
+            x => (Int)x.Sign(), "sign()"));
+         registerMessage("sin()", (obj, msg) => function(obj, x => Math.Sin(x), x => x.Sin()));
+         registerMessage("cos()", (obj, msg) => function(obj, x => Math.Cos(x), x => x.Cos()));
+         registerMessage("tan()", (obj, msg) => function(obj, x => Math.Tan(x), x => x.Tan()));
+         registerMessage("asin()", (obj, msg) => function(obj, x => Math.Asin(x), x => x.Asin()));
+         registerMessage("acos()", (obj, msg) => function(obj, x => Math.Acos(x), x => x.Acos()));
+         registerMessage("atan()", (obj, msg) => function(obj, x => Math.Atan(x), x => x.Atan()));
+         registerMessage("sqrt()", (obj, msg) => function(obj, x => Math.Sqrt(x), x => x.Sqrt()));
+         registerMessage("log()", (obj, msg) => function(obj, x => Math.Log10(x), x => x.Log()));
+         registerMessage("ln()", (obj, msg) => function(obj, x => Math.Log(x), x => x.Ln()));
+         registerMessage("exp()", (obj, msg) => function(obj, x => Math.Exp(x), x => x.Exp()));
+         registerMessage("abs()",
+            (obj, msg) => function(obj, x => Math.Abs(x), x => Math.Abs(x), x => x, x => (Int)x.Abs(), "abs()"));
+         registerMessage("ceil()", (obj, msg) => function(obj, x => x, x => Math.Ceiling(x), x => x, x => (Float)x.Ceiling(), "ceil()"));
+         registerMessage("floor()", (obj, msg) => function(obj, x => x, x => Math.Floor(x), x => x, x => (Float)x.Floor(), "floor()"));
+         registerMessage("frac()", (obj, msg) => function(obj, x => 0, x => x - (int)x, x => 0, x => (Float)x.Fraction(), "frac()"));
          messages["isNumber".get()] = (obj, msg) => Boolean.True;
          registerMessage("isZero".get(), (obj, msg) => function(obj, numeric => (Boolean)numeric.IsZero));
          registerMessage("isPositive".get(), (obj, msg) => function(obj, numeric => (Boolean)numeric.IsPositive));
          registerMessage("isNegative".get(), (obj, msg) => function(obj, numeric => (Boolean)numeric.IsNegative));
          registerMessage("isPrimitive".get(), (obj, msg) => function(obj, numeric => (Boolean)numeric.IsPrimitive));
-         registerMessage("zfill", (obj, msg) => function<IObject, Int>(obj, msg, (numeric, i) => ((INumeric)numeric).ZFill(i.Value)));
+         registerMessage("zfill(_<Int>)", (obj, msg) => function<IObject, Int>(obj, msg, (numeric, i) => ((INumeric)numeric).ZFill(i.Value)));
       }
 
       protected void numericConversionMessages()
@@ -222,12 +222,12 @@ namespace Kagami.Library.Classes
 
       protected void collectionMessages()
       {
-         registerMessage("getIterator", (obj, msg) => collectionFunc<Boolean>(obj, msg, (c, l) => (IObject)c.GetIterator(l.Value)));
+         registerMessage("getIterator(_<Boolean>)", (obj, msg) => collectionFunc<Boolean>(obj, msg, (c, l) => (IObject)c.GetIterator(l.Value)));
          registerMessage("length".get(), (obj, msg) => collectionFunc(obj, c => c.Length));
-         registerMessage("in", (obj, msg) => collectionFunc<IObject>(obj, msg, (c, i) => c.In(i)));
-         registerMessage("notIn", (obj, msg) => collectionFunc<IObject>(obj, msg, (c, i) => c.NotIn(i)));
-         registerMessage("*", (obj, msg) => collectionFunc<Int>(obj, msg, (c, i) => c.Times(i.Value)));
-         registerMessage("indexed", (obj, msg) => collectionFunc(obj, c => (IObject)c.GetIndexedIterator()));
+         registerMessage("in(_)", (obj, msg) => collectionFunc<IObject>(obj, msg, (c, i) => c.In(i)));
+         registerMessage("notIn(_)", (obj, msg) => collectionFunc<IObject>(obj, msg, (c, i) => c.NotIn(i)));
+         registerMessage("*(_<Int>)", (obj, msg) => collectionFunc<Int>(obj, msg, (c, i) => c.Times(i.Value)));
+         registerMessage("indexed()", (obj, msg) => collectionFunc(obj, c => (IObject)c.GetIndexedIterator()));
 
          loadIteratorMessages();
       }

@@ -26,6 +26,7 @@ namespace Kagami.Library.Parsers.Statements
 
          if (state.Advance().If(out _, out var original))
          {
+				state.CreateReturnType();
             while (state.More)
             {
                var caseParser = new CaseParser(parameterName);
@@ -44,6 +45,7 @@ namespace Kagami.Library.Parsers.Statements
             if (list.Count == 0)
             {
                state.Regress();
+					state.RemoveReturnType();
                return notMatched<Unit>();
             }
             else
@@ -62,6 +64,7 @@ namespace Kagami.Library.Parsers.Statements
 
                state.AddStatement(new MatchFunction(functionName, parameters, previousIf, overriding, className));
                state.Regress();
+					state.RemoveReturnType();
 
                return Unit.Matched();
             }

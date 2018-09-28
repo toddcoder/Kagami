@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using Standard.Types.Enumerables;
 using static Kagami.Library.Nodes.NodeFunctions;
@@ -26,7 +27,7 @@ namespace Kagami.Library.Nodes.Symbols
 			foreach (var (name, value) in arguments)
 			{
 				builder.GetField(objectField);
-				var message = name.set().Selector(1);
+				Selector message = $"__${name}=(_)";
 				value.Generate(builder);
 				builder.SendMessage(message, 1);
 			}

@@ -41,13 +41,13 @@ namespace Kagami.Library.Parsers.Statements
             Color.Structure);
 
          var needsParameters = type == "(";
-         if (needsParameters)
-         {
-            if (functionName.IsMatch("^ /w+ '=' $"))
-               functionName = functionName.Skip(-1).set();
-         }
-         else
-            functionName = functionName.get();
+	      if (needsParameters)
+	      {
+		      if (functionName.IsMatch("^ /w+ '=' $"))
+			      functionName = "__$" + functionName.Skip(-1).set();
+	      }
+	      else
+		      functionName = "__$" + functionName;
 
          state.CreateYieldFlag();
 			state.CreateReturnType();
