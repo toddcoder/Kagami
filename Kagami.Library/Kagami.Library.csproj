@@ -139,11 +139,14 @@
     <Compile Include="Nodes\LabelType.cs" />
     <Compile Include="Nodes\Node.cs" />
     <Compile Include="Nodes\NodeFunctions.cs" />
+    <Compile Include="Nodes\Statements\AssignFromLoop.cs" />
     <Compile Include="Nodes\Statements\AssignToField.cs" />
+    <Compile Include="Nodes\Statements\AssignToFieldWithBlock.cs" />
     <Compile Include="Nodes\Statements\AssignToMatch.cs" />
     <Compile Include="Nodes\Statements\AssignToNewField.cs" />
     <Compile Include="Nodes\Statements\AssignToNewField2.cs" />
     <Compile Include="Nodes\Statements\Block.cs" />
+    <Compile Include="Nodes\Statements\BlockStatement.cs" />
     <Compile Include="Nodes\Statements\Class.cs" />
     <Compile Include="Nodes\Statements\ConditionalWhile.cs" />
     <Compile Include="Nodes\Statements\DataType.cs" />
@@ -668,10 +671,13 @@
     <Compile Include="Parsers\ParserFunctions.cs" />
     <Compile Include="Parsers\ParseState.cs" />
     <Compile Include="Parsers\Statements\AliasParser.cs" />
+    <Compile Include="Parsers\Statements\AssignFromBlockParser.cs" />
+    <Compile Include="Parsers\Statements\AssignFromLoopParser.cs" />
     <Compile Include="Parsers\Statements\AssignToFieldParser.cs" />
     <Compile Include="Parsers\Statements\AssignToMatchParser.cs" />
     <Compile Include="Parsers\Statements\AssignToNewFieldParser2.cs" />
     <Compile Include="Parsers\Statements\AssignToNewFieldParser.cs" />
+    <Compile Include="Parsers\Statements\BlockStatementParser.cs" />
     <Compile Include="Parsers\Statements\CaseParser.cs" />
     <Compile Include="Parsers\Statements\CaseType.cs" />
     <Compile Include="Parsers\Statements\ClassBuilder.cs" />
@@ -709,6 +715,7 @@
     <Compile Include="Parsers\Statements\PrintParser.cs" />
     <Compile Include="Parsers\Statements\PutParser.cs" />
     <Compile Include="Parsers\Statements\RecordParser.cs" />
+    <Compile Include="Parsers\Statements\ReturnFromLoopParser.cs" />
     <Compile Include="Parsers\Statements\ReturnNothingParser.cs" />
     <Compile Include="Parsers\Statements\ReturnParser.cs" />
     <Compile Include="Parsers\Statements\SignatureParser.cs" />

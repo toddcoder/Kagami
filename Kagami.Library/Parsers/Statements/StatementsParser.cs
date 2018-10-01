@@ -31,6 +31,8 @@ namespace Kagami.Library.Parsers.Statements
                yield return new ReturnParser();
                yield return new ReturnNothingParser();
                yield return new DeferParser();
+					yield return new AssignFromBlockParser();
+					yield return new AssignFromLoopParser();
                yield return new AssignToNewFieldParser();
                yield return new AssignToNewFieldParser2();
                yield return new AssignToMatchParser();
@@ -38,6 +40,7 @@ namespace Kagami.Library.Parsers.Statements
                yield return new DataTypeParser();
                yield return new AliasParser();
                yield return new LoopParser();
+					yield return new BlockStatementParser();
                yield return new ImportPackageParser();
                yield return new OpenPackageParser();
                yield return new UsePackageParser();
