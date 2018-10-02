@@ -17,17 +17,17 @@ namespace Kagami.Library.Classes
          base.RegisterMessages();
 
          collectionMessages();
-         messages["array"] = (obj, msg) => function<Array>(obj, a => a);
+         messages["array()"] = (obj, msg) => function<Array>(obj, a => a);
          mutableCollectionMessages();
          sliceableMessages();
 
-         messages["[]"] = (obj, msg) => function<Array, Int>(obj, msg, (a, i) => a[i.Value]);
-         messages["[]=".Selector(2)] = (obj, msg) => function<Array>(obj, a => a[((Int)msg.Arguments[0]).Value] = msg.Arguments[1]);
-         messages["~"] = (obj, msg) => function<Array, Array>(obj, msg, (a1, a2) => a1.Concatenate(a2));
-         registerMessage("push", (obj, msg) => function<Array, IObject>(obj, msg, (a, v) => a.Append(v)));
-         registerMessage("pop", (obj, msg) => function<Array>(obj, a => a.Pop()));
-         registerMessage("unshift", (obj, msg) => function<Array, IObject>(obj, msg, (a, v) => a.Unshift(v)));
-         registerMessage("shift", (obj, msg) => function<Array>(obj, a => a.Shift()));
+         messages["[](_)"] = (obj, msg) => function<Array, Int>(obj, msg, (a, i) => a[i.Value]);
+         messages["[]=(_,_)".Selector(2)] = (obj, msg) => function<Array>(obj, a => a[((Int)msg.Arguments[0]).Value] = msg.Arguments[1]);
+         messages["~(_)"] = (obj, msg) => function<Array, Array>(obj, msg, (a1, a2) => a1.Concatenate(a2));
+         registerMessage("push(_)", (obj, msg) => function<Array, IObject>(obj, msg, (a, v) => a.Append(v)));
+         registerMessage("pop()", (obj, msg) => function<Array>(obj, a => a.Pop()));
+         registerMessage("unshift(_)", (obj, msg) => function<Array, IObject>(obj, msg, (a, v) => a.Unshift(v)));
+         registerMessage("shift()", (obj, msg) => function<Array>(obj, a => a.Shift()));
          messages["find".Selector("<Array>", "startAt:<Int>", "reverse:<Boolean>")] = (obj, msg) =>
             function<Array, IObject, Int, Boolean>(obj, msg, (a, o, i, r) => a.Find(o, i.Value, r.Value));
          messages["find".Selector("<Array>", "startAt:<Int>")] = (obj, msg) =>

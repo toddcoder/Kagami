@@ -361,7 +361,7 @@ namespace Kagami.Library.Classes
       {
          registerMessage("succ".get(), (obj, msg) => function<IObject>(obj, o => (IObject)((IRangeItem)o).Successor));
          registerMessage("pred".get(), (obj, msg) => function<IObject>(obj, o => (IObject)((IRangeItem)o).Predecessor));
-         registerMessage("range", (obj, msg) => function<IObject>(obj, o => ((IRangeItem)o).Range()));
+         registerMessage("range()", (obj, msg) => function<IObject>(obj, o => ((IRangeItem)o).Range()));
       }
 
       public static IObject Invoke(IObject obj, Arguments arguments, Lambda lambda)

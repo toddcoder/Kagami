@@ -11,10 +11,10 @@ namespace Kagami.Library.Nodes.Symbols
          var endLabel = newLabel("end");
 
          builder.Swap();
-         builder.RespondsTo("~()");
+         builder.RespondsTo("~(_)");
          builder.GoToIfFalse(stringLabel);
          builder.Swap();
-         builder.SendMessage("~()", 1);
+         builder.SendMessage("~(_)", 1);
          builder.GoTo(endLabel);
 
          builder.Label(stringLabel);
@@ -23,7 +23,7 @@ namespace Kagami.Library.Nodes.Symbols
          builder.Swap();
          builder.String();
          builder.Swap();
-         builder.SendMessage("~()", 1);
+         builder.SendMessage("~(_)", 1);
 
          builder.Label(endLabel);
          builder.NoOp();

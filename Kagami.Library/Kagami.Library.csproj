@@ -614,6 +614,7 @@
     <Compile Include="Parsers\Expressions\MatchLambdaParser.cs" />
     <Compile Include="Parsers\Expressions\MessageParser.cs" />
     <Compile Include="Parsers\Expressions\PatternParser.cs" />
+    <Compile Include="Parsers\Expressions\RangeOperatorParser.cs" />
     <Compile Include="Parsers\Expressions\RangePrefixParser.cs" />
     <Compile Include="Parsers\Expressions\RefParser.cs" />
     <Compile Include="Parsers\Expressions\SelectorParser.cs" />
