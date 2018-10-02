@@ -155,8 +155,8 @@ namespace Kagami.Library.Parsers
 
 		public static IMatched<Block> getBlock(ParseState state) => getBlock(state, none<TypeConstraint>());
 
-
-      public static IMatched<Block> getSingleLine(ParseState state, IMaybe<TypeConstraint> typeConstraint, bool returnExpression = true)
+		public static IMatched<Block> getSingleLine(ParseState state, IMaybe<TypeConstraint> typeConstraint,
+			bool returnExpression = true)
 		{
 			var statementsParser = new StatementsParser(true) { ReturnExpression = returnExpression };
 			state.PushStatements();
@@ -373,7 +373,7 @@ namespace Kagami.Library.Parsers
 				.If(out var className, out var isNotMatched, out var exception))
 			{
 				className = className.TrimStart();
-				if (Module.Global.Class(className).If(out var baseClass))// || Module.Global.Forwarded(className))
+				if (Module.Global.Class(className).If(out var baseClass)) // || Module.Global.Forwarded(className))
 					return new TypeConstraint(new[] { baseClass }).Some().Matched();
 				else
 					return failedMatch<IMaybe<TypeConstraint>>(classNotFound(className));
@@ -933,17 +933,18 @@ namespace Kagami.Library.Parsers
 				return failedMatch<Expression>(exception);
 		}
 
-		public static IMatched<Block> getLambdaBlock(bool isExpression, ParseState state, Bits32<ExpressionFlags> flags)
+		public static IMatched<Block> getLambdaBlock(bool isExpression, ParseState state, Bits32<ExpressionFlags> flags,
+			IMaybe<TypeConstraint> typeConstraint)
 		{
 			if (isExpression)
 			{
 				if (getExpression(state, flags).If(out var expression, out var exOriginal))
-					return new Block(new ExpressionStatement(expression, true)) { Index = state.Index }.Matched();
+					return new Block(new ExpressionStatement(expression, true, typeConstraint), typeConstraint) { Index = state.Index }.Matched();
 				else
 					return exOriginal.Unmatched<Block>();
 			}
 			else
-				return getBlock(state);
+				return getBlock(state, typeConstraint);
 		}
 
 		public static IMatched<(int, int, IMaybe<Expression>, IMaybe<Expression>)> getSkipTakeItem(ParseState state)

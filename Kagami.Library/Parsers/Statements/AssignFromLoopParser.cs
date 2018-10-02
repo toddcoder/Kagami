@@ -3,6 +3,7 @@ using Kagami.Library.Nodes.Symbols;
 using Standard.Types.Maybe;
 using Standard.Types.Strings;
 using static Kagami.Library.Parsers.ParserFunctions;
+using static Standard.Types.Maybe.MaybeFunctions;
 
 namespace Kagami.Library.Parsers.Statements
 {
@@ -33,7 +34,7 @@ namespace Kagami.Library.Parsers.Statements
 				from pair in getReturn(state)
 				select (typeConstraint, block, pair);
 
-			if (result.If(out var tuple, out var original))
+			if (result.If(out var tuple, out _))
 			{
 				var (typeConstraint, block, (condition, expression)) = tuple;
 				state.AddStatement(new AssignFromLoop(isNew, mutable, fieldName, typeConstraint, block, condition, expression));
@@ -44,7 +45,7 @@ namespace Kagami.Library.Parsers.Statements
 			else
 			{
 				state.RollBackTransaction();
-				return original.UnmatchedOnly<Unit>();
+				return notMatched<Unit>();
 			}
 		}
 	}

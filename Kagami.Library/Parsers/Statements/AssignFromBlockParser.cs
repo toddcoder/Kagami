@@ -2,6 +2,7 @@
 using Standard.Types.Maybe;
 using Standard.Types.Strings;
 using static Kagami.Library.Parsers.ParserFunctions;
+using static Standard.Types.Maybe.MaybeFunctions;
 
 namespace Kagami.Library.Parsers.Statements
 {
@@ -24,7 +25,7 @@ namespace Kagami.Library.Parsers.Statements
 				from block in getBlock(state)
 				select (typeConstraint, block);
 
-			if (result.If(out var tuple, out var original))
+			if (result.If(out var tuple, out _))
 			{
 				var (typeConstraint, block) = tuple;
 				state.AddStatement(new AssignToFieldWithBlock(isNew, mutable, fieldName, typeConstraint, block));
@@ -35,7 +36,7 @@ namespace Kagami.Library.Parsers.Statements
 			else
 			{
 				state.RollBackTransaction();
-				return original.UnmatchedOnly<Unit>();
+				return notMatched<Unit>();
 			}
 		}
 	}

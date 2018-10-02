@@ -1,9 +1,7 @@
 ﻿using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Standard.Types.Maybe;
-using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
-using static Standard.Types.Maybe.MaybeFunctions;
 
 namespace Kagami.Library.Operations
 {
@@ -24,7 +22,7 @@ namespace Kagami.Library.Operations
 				if (typeConstraint.Matches(valueClass))
 					return value.Matched();
 				else
-					return failedMatch<IObject>(incompatibleClasses(value, typeConstraint.AsString));
+					return $"You must return a type {typeConstraint.AsString}, not a {valueClass.Name}".FailedMatch<IObject>();
 			}
 			else
 				return original;
