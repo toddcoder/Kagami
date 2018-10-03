@@ -110,6 +110,7 @@ namespace Kagami.Library.Parsers.Statements
             {
                state.RemoveYieldFlag();
 	            state.RemoveReturnType();
+
                return failedMatch<Function>(exception);
             }
          }
@@ -126,7 +127,7 @@ namespace Kagami.Library.Parsers.Statements
             }
 
 	         if (lambdaSymbol.If(out var ls))
-		         return new Function(functionName, firstParameters, new Block(new Return(new Expression(ls), state.GetReturnType())), yielding, overriding,
+		         return new Function(functionName, firstParameters, new Block(new Return(new Expression(ls), /*state.GetReturnType()*/none<TypeConstraint>())), yielding, overriding,
 			         className) { Trait = trait }.Matched();
 	         else
 		         return notMatched<Function>();

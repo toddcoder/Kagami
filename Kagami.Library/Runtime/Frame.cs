@@ -102,8 +102,8 @@ namespace Kagami.Library.Runtime
 					if (!fields.ContainsKey(parameter.Name))
 						fields.New(parameter.Name, parameter.Mutable).Force();
 
-/*					if (parameter.TypeConstraint.If(out var typeConstraint) && !typeConstraint.Matches(classOf(lastValue)))
-						throw incompatibleClasses(lastValue, typeConstraint.AsString);*/
+					if (parameter.TypeConstraint.If(out var typeConstraint) && !typeConstraint.Matches(classOf(lastValue)))
+						throw incompatibleClasses(lastValue, typeConstraint.AsString);
 
 					fields.Assign(parameter.Name, lastValue, true).Force();
 					lastName = parameter.Name;

@@ -14,6 +14,7 @@ namespace Kagami.Library.Parsers.Expressions
       public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
       {
          state.BeginTransaction();
+			state.CreateReturnType();
 
          var result =
             from parameters in ParseParameters(state, tokens)
@@ -24,6 +25,7 @@ namespace Kagami.Library.Parsers.Expressions
          if (result.If(out var lambdaSymbol, out var original))
          {
             builder.Add(lambdaSymbol);
+				state.RemoveReturnType();
             state.CommitTransaction();
 
             return Unit.Matched();
@@ -31,6 +33,8 @@ namespace Kagami.Library.Parsers.Expressions
          else
          {
             state.RollBackTransaction();
+				state.RemoveReturnType();
+
             return original.Unmatched<Unit>();
          }
       }
