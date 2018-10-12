@@ -101,6 +101,22 @@ namespace Kagami.Library.Parsers.Expressions
                   else
                      return failedMatch<Unit>(exception);
                }
+					else if (state.FoldExpression.If(out var foldExpression))
+               {
+	               var (fieldName, symbol) = foldExpression;
+	               if (!keep(fieldName))
+	               {
+		               Expression = expression;
+		               return Unit.Matched();
+	               }
+						else if (getMessageWithLambda(fieldName, symbol, "foldl", expression).If(out var newExpression, out exception))
+	               {
+		               Expression = newExpression;
+		               state.FoldExpression = none<(string, Symbol)>();
+	               }
+	               else
+		               return failedMatch<Unit>(exception);
+               }
                else if (state.LeftZipExpression.If(out var leftTuple) && state.RightZipExpression.If(out var rightTuple))
                {
                   var (leftFieldName, leftSymbol) = leftTuple;

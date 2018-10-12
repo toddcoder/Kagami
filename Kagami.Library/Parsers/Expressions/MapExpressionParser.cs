@@ -7,7 +7,7 @@ namespace Kagami.Library.Parsers.Expressions
 {
    public class MapExpressionParser : SymbolParser
    {
-      public override string Pattern => "^ /(|s|) /['!&*'] -(> /s+)";
+      public override string Pattern => "^ /(|s|) /['!&*%'] -(> /s+)";
 
       public MapExpressionParser(ExpressionBuilder builder) : base(builder) { }
 
@@ -34,6 +34,9 @@ namespace Kagami.Library.Parsers.Expressions
                   else
                      state.RightZipExpression = tuple;
                   break;
+               case "%":
+	               state.FoldExpression = tuple;
+						break;
             }
 
             builder.Add(new FieldSymbol(fieldName));

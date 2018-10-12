@@ -271,12 +271,14 @@ namespace Kagami.Library.Parsers
 
       public IMaybe<(string, Expression)> ForExpression { get; set; } = none<(string, Expression)>();
 
-      public IMaybe<(string, Symbol)> MapExpression { get; set; } = new None<(string, Symbol)>();
+      public IMaybe<(string, Symbol)> MapExpression { get; set; } = none<(string, Symbol)>();
 
-      public IMaybe<(string, Symbol)> IfExpression { get; set; } = new None<(string, Symbol)>();
+      public IMaybe<(string, Symbol)> IfExpression { get; set; } = none<(string, Symbol)>();
 
-      public IMaybe<(string, Symbol)> LeftZipExpression { get; set; } = new None<(string, Symbol)>();
+      public IMaybe<(string, Symbol)> LeftZipExpression { get; set; } = none<(string, Symbol)>();
 
-      public IMaybe<(string, Symbol)> RightZipExpression { get; set; } = new None<(string, Symbol)>();
+      public IMaybe<(string, Symbol)> RightZipExpression { get; set; } = none<(string, Symbol)>();
+
+	   public IMaybe<(string, Symbol)> FoldExpression { get; set; } = none<(string, Symbol)>();
    }
 }
