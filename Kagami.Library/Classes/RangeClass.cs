@@ -20,7 +20,7 @@ namespace Kagami.Library.Classes
          messages["notIn"] = (obj, msg) => function<Range, IObject>(obj, msg, (r, o) => r.NotIn(o));
          messages["+"] = (obj, msg) => function<Range, Int>(obj, msg, (r, i) => r.Add(i.Value));
          messages["-"] = (obj, msg) => function<Range, Int>(obj, msg, (r, i) => r.Subtract(i.Value));
-         messages["reverse"] = (obj, msg) => function<Range>(obj, r => r.Reverse());
+         messages["inverse()"] = (obj, msg) => function<Range>(obj, r => r.Reverse());
       }
    }
 }
