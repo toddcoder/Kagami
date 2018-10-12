@@ -234,15 +234,15 @@ namespace Kagami.Library.Classes
 
       protected void mutableCollectionMessages()
       {
-         registerMessage("<<", (obj, msg) => function<IObject, IObject>(obj, msg, (o, v) => ((IMutableCollection)o).Append(v)));
-         registerMessage("append", (obj, msg) => function<IObject, IObject>(obj, msg, (o, v) => ((IMutableCollection)o).Append(v)));
-         registerMessage(">>", (obj, msg) => function<IObject, IObject>(obj, msg, (o, v) => ((IMutableCollection)o).Remove(v)));
-         registerMessage("remove", (obj, msg) => function<IObject, IObject>(obj, msg, (o, v) => ((IMutableCollection)o).Remove(v)));
-         registerMessage("-", (obj, msg) => function<IObject, IObject>(obj, msg, (o, v) => ((IMutableCollection)o).Remove(v)));
-         registerMessage("remove".Selector("at:<Int>"),
-            (obj, msg) => function<IObject, Int>(obj, msg, (o, i) => ((IMutableCollection)o).RemoveAt(i.Value)));
-         registerMessage("insert".Selector("at:<Int>", "value:"),
-            (obj, msg) => function<IObject, Int, IObject>(obj, msg, (o, i, v) => ((IMutableCollection)o).InsertAt(i.Value, v)));
+         registerMessage("<<(_)", (obj, msg) => function<IObject, IObject>(obj, msg, (o, v) => ((IMutableCollection)o).Append(v)));
+         registerMessage("append(_)", (obj, msg) => function<IObject, IObject>(obj, msg, (o, v) => ((IMutableCollection)o).Append(v)));
+         registerMessage(">>(_)", (obj, msg) => function<IObject, IObject>(obj, msg, (o, v) => ((IMutableCollection)o).Remove(v)));
+         registerMessage("remove(_)", (obj, msg) => function<IObject, IObject>(obj, msg, (o, v) => ((IMutableCollection)o).Remove(v)));
+         registerMessage("-(_)", (obj, msg) => function<IObject, IObject>(obj, msg, (o, v) => ((IMutableCollection)o).Remove(v)));
+	      registerMessage("remove(at:_<Int>)",
+		      (obj, msg) => function<IObject, Int>(obj, msg, (o, i) => ((IMutableCollection)o).RemoveAt(i.Value)));
+	      registerMessage("insert(at:_<Int>,value:_)",
+		      (obj, msg) => function<IObject, Int, IObject>(obj, msg, (o, i, v) => ((IMutableCollection)o).InsertAt(i.Value, v)));
       }
 
       void loadIteratorMessages()

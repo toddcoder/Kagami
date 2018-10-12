@@ -66,7 +66,7 @@ namespace Kagami.Library.Objects
 
       bool isMatch(string input) => matcher.IsMatch(input, pattern, ignoreCase, multiline);
 
-      public IObject Match(string input)
+      public IObject Matches(string input)
       {
          if (global)
             if (isMatch(input))
@@ -79,7 +79,7 @@ namespace Kagami.Library.Objects
             return Nil.NilValue;
       }
 
-	   public Boolean NotMatch(string input) => !isMatch(input);
+	   public Boolean NotMatches(string input) => !isMatch(input);
 
 	   public IObject MatchString(string input)
       {

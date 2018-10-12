@@ -43,10 +43,11 @@ namespace Kagami.Library.Nodes.Symbols
             builder.SendMessage(getter, 0);
          }
 
+	      var index = 0;
          foreach (var argument in arguments)
-            argument.Generate(builder);
+	         selector.Generate(index++, argument, builder);
 
-         if (operation.If(out var op))
+	      if (operation.If(out var op))
             builder.AddRaw(op);
 
          int count;

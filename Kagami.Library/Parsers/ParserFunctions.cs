@@ -881,10 +881,10 @@ namespace Kagami.Library.Parsers
 					symbol = new MatchSymbol().Matched<Symbol>();
 					break;
 				case "~~":
-					symbol = new SendBinaryMessageSymbol("match".Selector("input:<String>"), Precedence.Boolean, true).Matched<Symbol>();
+					symbol = new SendBinaryMessageSymbol("matches(_<String>)", Precedence.Boolean, true).Matched<Symbol>();
 					break;
 				case "!~":
-					symbol = new SendBinaryMessageSymbol("notMatch".Selector("input:<String>"), Precedence.Boolean, true).Matched<Symbol>();
+					symbol = new SendBinaryMessageSymbol("notMatches(_<String>)", Precedence.Boolean, true).Matched<Symbol>();
 					break;
 				case "!!":
 					symbol = new SendBinaryMessageSymbol("defaultTo", Precedence.Concatenate).Matched<Symbol>();

@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Linq;
+using Kagami.Library.Nodes.Symbols;
+using Kagami.Library.Operations;
 using Standard.Types.Collections;
 using Standard.Types.Enumerables;
+using Standard.Types.Numbers;
+using Standard.Types.Strings;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
@@ -100,5 +104,36 @@ namespace Kagami.Library.Objects
 		}
 
 		public override string ToString() => image;
+
+		public IObject Labeled(int index, IObject obj)
+		{
+			if (index.Between(0).Until(selectorItems.Length))
+			{
+				var label = selectorItems[index].Label;
+				if (label.IsNotEmpty())
+					return new NameValue(label, obj);
+				else
+					return obj;
+			}
+			else
+				return obj;
+		}
+
+		public void Generate(int index, Expression expression, OperationsBuilder builder)
+		{
+			if (index.Between(0).Until(selectorItems.Length))
+			{
+				var label = selectorItems[index].Label;
+				if (label.IsNotEmpty())
+				{
+					builder.PushString(label);
+					expression.Generate(builder);
+					builder.NewNameValue();
+					return;
+				}
+			}
+
+			expression.Generate(builder);
+		}
 	}
 }

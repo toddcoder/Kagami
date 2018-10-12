@@ -31,8 +31,8 @@ namespace Kagami.Library.Parsers.Expressions
                   {
                      var list = e.ToList();
                      list.Add(expression);
-                     builder.Add(new SendMessageSymbol("insert".Selector("at:<Int>", "value"), Precedence.SendMessage,
-                        none<LambdaSymbol>(), none<Operations.Operation>(), list.ToArray()));
+	                  builder.Add(new SendMessageSymbol("insert(at:_<Int>,value:_)", Precedence.SendMessage, none<LambdaSymbol>(),
+		                  none<Operations.Operation>(), list.ToArray()));
                   }
                   else
                      builder.Add(new IndexSetterSymbol(e, expression, operation));
