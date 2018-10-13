@@ -1,6 +1,4 @@
-﻿using System;
-using System.Numerics;
-using Kagami.Library.Objects;
+﻿using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Standard.Types.Maybe;
 using static Kagami.Library.Objects.ObjectFunctions;
@@ -12,44 +10,7 @@ namespace Kagami.Library.Operations
       public override IMatched<IObject> Execute(Machine machine, IObject x, IObject y)
       {
          if (x is INumeric n1 && y is INumeric n2)
-         {
-            var count = n2.AsInt32();
-            if (n1.IsInt || n2.IsByte)
-            {
-               if (n1.IsInt || n2.IsByte)
-               {
-                  var accum = 1;
-                  var amount = n1.AsInt32();
-                  for (var i = 0; i < count; i++)
-                     accum *= amount;
-
-                  return Int.IntObject(accum).Matched();
-               }
-               else
-               {
-                  var accum = 1.0;
-                  var amount = n1.AsDouble();
-                  for (var i = 0; i < count; i++)
-                     accum *= amount;
-
-                  return Float.FloatObject(accum).Matched();
-               }
-            }
-            else if (n1.IsLong)
-            {
-               var accum = BigInteger.One;
-               var amount = n1.AsBigInteger();
-               for (var i = 0; i < count; i++)
-                  accum *= amount;
-
-               return Long.LongObject(accum).Matched();
-            }
-
-            var dx = n1.AsDouble();
-            var dy = n2.AsDouble();
-
-            return Float.FloatObject(Math.Pow(dx, dy)).Matched();
-         }
+	         return n1.Raise(n2).Matched();
          else
             return sendMessage(x, "^", y).Matched();
       }

@@ -1,83 +1,86 @@
 ﻿using System.Numerics;
 using Standard.Types.Collections;
 using static Kagami.Library.Objects.ObjectFunctions;
+using static Kagami.Library.Operations.NumericFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct Infinity : IObject, IObjectCompare, INumeric
-   {
-      bool positive;
+	public struct Infinity : IObject, IObjectCompare, INumeric
+	{
+		bool positive;
 
-      public Infinity(bool positive) : this() => this.positive = positive;
+		public Infinity(bool positive) : this() => this.positive = positive;
 
-      public (INumeric, INumeric) Compatible(INumeric obj) => (this, this);
+		public (INumeric, INumeric) Compatible(INumeric obj) => (this, this);
 
-      public string ClassName => "Infinity";
+		public string ClassName => "Infinity";
 
-      public bool IsZero => false;
+		public bool IsZero => false;
 
-      public bool IsPositive => positive;
+		public bool IsPositive => positive;
 
-      public bool IsNegative => !positive;
+		public bool IsNegative => !positive;
 
-      public bool IsPrimitive => false;
+		public bool IsPrimitive => false;
 
-      public INumeric ToByte() => this;
+		public INumeric ToByte() => this;
 
-      public byte AsByte() => 0;
+		public byte AsByte() => 0;
 
-      public bool IsByte => false;
+		public bool IsByte => false;
 
-      public INumeric ToInt() => this;
+		public INumeric ToInt() => this;
 
-      public int AsInt32() => 0;
+		public int AsInt32() => 0;
 
-      public bool IsInt => false;
+		public bool IsInt => false;
 
-      public INumeric ToFloat() => this;
+		public INumeric ToFloat() => this;
 
-      public double AsDouble() => 0;
+		public double AsDouble() => 0;
 
-      public bool IsFloat => false;
+		public bool IsFloat => false;
 
-      public INumeric ToLong() => this;
+		public INumeric ToLong() => this;
 
-      public BigInteger AsBigInteger() => BigInteger.Zero;
+		public BigInteger AsBigInteger() => BigInteger.Zero;
 
-      public bool IsLong => false;
+		public bool IsLong => false;
 
-      public INumeric ToComplex() => this;
+		public INumeric ToComplex() => this;
 
-      public System.Numerics.Complex AsComplex() => System.Numerics.Complex.Zero;
+		public System.Numerics.Complex AsComplex() => System.Numerics.Complex.Zero;
 
-      public bool IsComplex => false;
+		public bool IsComplex => false;
 
-      public INumeric ToRational() => this;
+		public INumeric ToRational() => this;
 
-      public (BigInteger, BigInteger) AsRational() => (BigInteger.Zero, BigInteger.One);
+		public (BigInteger, BigInteger) AsRational() => (BigInteger.Zero, BigInteger.One);
 
-      public bool IsRational => false;
+		public bool IsRational => false;
 
-      public String ZFill(int count) => AsString;
+		public String ZFill(int count) => AsString;
 
-      public string AsString => "_";
+		public IObject Raise(INumeric power) => raise(this, power);
 
-      public string Image => "_";
+		public string AsString => "_";
 
-      public int Hash => ClassName.GetHashCode();
+		public string Image => "_";
 
-      public bool IsEqualTo(IObject obj) => obj is Infinity inf && positive == inf.positive;
+		public int Hash => ClassName.GetHashCode();
 
-      public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
+		public bool IsEqualTo(IObject obj) => obj is Infinity inf && positive == inf.positive;
 
-      public bool IsTrue => true;
+		public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
-      public int Compare(IObject obj) => positive ? -1 : 1;
+		public bool IsTrue => true;
 
-      public IObject Object => this;
+		public int Compare(IObject obj) => positive ? -1 : 1;
 
-      public Boolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
+		public IObject Object => this;
 
-      public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
-   }
+		public Boolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
+
+		public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
+	}
 }

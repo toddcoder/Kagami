@@ -25,6 +25,7 @@ namespace Kagami.Library.Parsers.Statements
                yield return new IfParser();
                yield return new WhileParser();
                yield return new ForParser2();
+					yield return new RepeatParser();
                yield return new MatchFunctionParser();
                yield return new MatchParser();
                yield return new YieldParser();

@@ -169,6 +169,7 @@
     <Compile Include="Nodes\Statements\Pass.cs" />
     <Compile Include="Nodes\Statements\Print.cs" />
     <Compile Include="Nodes\Statements\Put.cs" />
+    <Compile Include="Nodes\Statements\Repeat.cs" />
     <Compile Include="Nodes\Statements\Return.cs" />
     <Compile Include="Nodes\Statements\ReturnNewObject.cs" />
     <Compile Include="Nodes\Statements\ReturnNothing.cs" />
@@ -716,6 +717,7 @@
     <Compile Include="Parsers\Statements\PrintParser.cs" />
     <Compile Include="Parsers\Statements\PutParser.cs" />
     <Compile Include="Parsers\Statements\RecordParser.cs" />
+    <Compile Include="Parsers\Statements\RepeatParser.cs" />
     <Compile Include="Parsers\Statements\ReturnFromLoopParser.cs" />
     <Compile Include="Parsers\Statements\ReturnNothingParser.cs" />
     <Compile Include="Parsers\Statements\ReturnParser.cs" />

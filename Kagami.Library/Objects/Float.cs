@@ -93,6 +93,8 @@ namespace Kagami.Library.Objects
 
       public String ZFill(int count) => zfill(AsString, count);
 
+	   public IObject Raise(INumeric power) => raise(this, power);
+
       public string AsString => value.ToString();
 
       public string Image => floatImage(value);

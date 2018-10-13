@@ -104,7 +104,9 @@ namespace Kagami.Library.Objects
 
       public String ZFill(int count) => zfill(AsString, count);
 
-      public int Compare(IObject obj) => compatibleCompare(this, obj);
+	   public IObject Raise(INumeric power) => raise(this, power);
+
+	   public int Compare(IObject obj) => compatibleCompare(this, obj);
 
       public IObject Object => this;
 

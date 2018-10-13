@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Numerics;
 using Kagami.Library.Objects;
 using Standard.Types.RegularExpressions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using Byte = Kagami.Library.Objects.Byte;
+using Complex = Kagami.Library.Objects.Complex;
 
 namespace Kagami.Library.Operations
 {
@@ -261,5 +263,20 @@ namespace Kagami.Library.Operations
       public static double Atanh(double x) => Math.Log((1 + x) / (1 - x)) / 2.0;
 
       public static bool isZero(IObject obj) => obj is INumeric n && n.IsZero;
+
+	   public static IObject raise(INumeric x, INumeric y)
+	   {
+		   if (x.IsFloat || y.IsFloat)
+			   return Float.FloatObject(Math.Pow(x.AsDouble(), y.AsDouble()));
+		   else
+		   {
+			   var accum = BigInteger.One;
+			   var amount = x.AsBigInteger();
+			   for (var i = 0; i < y.AsBigInteger(); i++)
+				   accum *= amount;
+
+			   return Long.LongObject(accum);
+		   }
+	   }
    }
 }

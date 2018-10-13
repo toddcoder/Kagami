@@ -82,6 +82,8 @@ namespace Kagami.Library.Objects
 
       public String ZFill(int count) => zfill(value.ToString(), count);
 
+	   public IObject Raise(INumeric power) => raise(this, power);
+
       public string AsString => ((char)value).ToString();
 
       public string Image => $"{value}b";
