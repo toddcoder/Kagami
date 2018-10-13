@@ -268,6 +268,15 @@ namespace Kagami.Library.Operations
 	   {
 		   if (x.IsFloat || y.IsFloat)
 			   return Float.FloatObject(Math.Pow(x.AsDouble(), y.AsDouble()));
+			else if (x.IsInt && y.IsInt)
+		   {
+			   var accum = 1;
+			   var amount = x.AsInt32();
+			   for (var i = 0; i < y.AsInt32(); i++)
+				   accum *= amount;
+
+			   return Int.IntObject(accum);
+		   }
 		   else
 		   {
 			   var accum = BigInteger.One;
