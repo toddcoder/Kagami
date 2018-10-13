@@ -7,6 +7,8 @@ using Kagami.Library.Runtime;
 using Standard.Types.Collections;
 using Standard.Types.Enumerables;
 using Standard.Types.Maybe;
+using Standard.Types.RegularExpressions;
+using Standard.Types.Strings;
 using static Kagami.Library.AllExceptions;
 using static Standard.Types.Maybe.MaybeFunctions;
 using Boolean = Kagami.Library.Objects.Boolean;
@@ -204,5 +206,42 @@ namespace Kagami.Library.Packages
 	   {
 		   return new Dictionary(Machine.Current.CurrentFrame.Fields.ToHash(t => String.StringObject(t.fieldName), t => t.field.Value));
 	   }
+
+	   public Date Date(double floating) => DateTime.FromOADate(floating);
+
+		public Regex Regex(string pattern)
+		{
+			if (pattern.Matches("';' /(['IiMmGgTt']+) $").If(out var matcher))
+			{
+				var ignoreCase = false;
+				var multiline = false;
+				var global = false;
+				var textOnly = true;
+				foreach (var option in matcher.FirstGroup)
+					switch (option)
+					{
+						case 'I':
+						case 'i':
+							ignoreCase = true;
+							break;
+						case 'M':
+						case 'm':
+							multiline = true;
+							break;
+						case 'G':
+						case 'g':
+							global = true;
+							break;
+						case 'T':
+						case 't':
+							textOnly = true;
+							break;
+					}
+				pattern = pattern.Skip(-matcher.Length);
+				return new Regex(pattern, ignoreCase, multiline, global, textOnly);
+			}
+			else
+				return new Regex(pattern, false, false, false, false);
+		}
    }
 }

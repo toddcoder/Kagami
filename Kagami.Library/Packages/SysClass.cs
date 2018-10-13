@@ -31,6 +31,8 @@ namespace Kagami.Library.Packages
 			registerPackageFunction("Complex", (obj, msg) => function<Sys, IObject, IObject>(obj, msg, (s, o1, o2) => s.Complex(o1, o2)));
 			registerPackageFunction("sel", (obj, msg) => function<Sys, String>(obj, msg, (sys, s) => sys.Selector(s.Value)));
 			registerPackageFunction("fields", (obj, msg) => function<Sys>(obj, sys => sys.XFields()));
-      }
+			registerPackageFunction("Date(_<Float>)", (obj, msg) => function<Sys, Float>(obj, msg, (sys, f) => sys.Date(f.Value)));
+			registerPackageFunction("Regex(_<String>)", (obj, msg) => function<Sys, String>(obj, msg, (sys, s) => sys.Regex(s.Value)));
+		}
 	}
 }

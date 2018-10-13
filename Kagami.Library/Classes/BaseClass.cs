@@ -498,29 +498,29 @@ namespace Kagami.Library.Classes
             return func(input, textFinding, arg1, arg2);
          }
 
-         registerMessage("find", (obj, msg) => apply(obj, msg, (s, tf) => s.Find(tf, 0, false)));
-         registerMessage("find".Selector("<TextFinding>", "startAt:<Int>"),
+         registerMessage("find(_<TextFinding>)", (obj, msg) => apply(obj, msg, (s, tf) => s.Find(tf, 0, false)));
+         registerMessage("find(_<TextFinding>,startAt:_<Int>)",
             (obj, msg) => apply1<Int>(obj, msg, (s, tf, i) => s.Find(tf, i.Value, false)));
-         registerMessage("find".Selector("<TextFinding>", "reverse:<Boolean>"),
+         registerMessage("find(_<TextFinding>,reverse:_<Boolean>)",
             (obj, msg) => apply1<Boolean>(obj, msg, (s, tf, b) => s.Find(tf, 0, b.Value)));
-         registerMessage("find".Selector("<TextFinding>", "startAt:<Boolean>", "reverse:<Boolean>"),
+         registerMessage("find(_<TextFinding>,startAt:_<Int>,reverse:_<Boolean>)",
             (obj, msg) => apply2<Int, Boolean>(obj, msg, (s, tf, i, b) => s.Find(tf, i.Value, b.Value)));
-         registerMessage("find".Selector("all:<TextFinding>"), (obj, msg) => apply(obj, msg, (s, tf) => s.FindAll(tf)));
-         registerMessage("replace".Selector("<TextFinding>", "new:<String>"), (obj, msg) => apply1<String>(obj, msg, (s1, tf, s2) => s1.Replace(tf, s2.Value, false)));
-         registerMessage("replace".Selector("<TextFinding>", "new:<String>", "reverse:<Boolean>"),
+         registerMessage("find(all:_<TextFinding>)", (obj, msg) => apply(obj, msg, (s, tf) => s.FindAll(tf)));
+         registerMessage("replace(_<TextFinding>,new:_<String>)", (obj, msg) => apply1<String>(obj, msg, (s1, tf, s2) => s1.Replace(tf, s2.Value, false)));
+         registerMessage("replace(_<TextFinding>,new:_<String>,reverse:_<Boolean>)",
             (obj, msg) => apply2<String, Boolean>(obj, msg, (s1, tf, s2, b) => s1.Replace(tf, s2.Value, b.Value)));
-         registerMessage("replace".Selector("all:<TextFinding>", "new"),
+         registerMessage("replace(all:_<TextFinding>,new:_<String>)",
             (obj, msg) => apply1<String>(obj, msg, (s1, tf, s2) => s1.ReplaceAll(tf, s2.Value)));
-         registerMessage("replace".Selector("<TextFinding>", "with:<Lambda>"), (obj, msg) => apply1<Lambda>(obj, msg, (s, tf, l) => s.Replace(tf, l, false)));
-         registerMessage("replace".Selector("<TextFinding>", "with:<Lambda>", "reverse:<Boolean>"),
+         registerMessage("replace(_<TextFinding>,with:_<Lambda>)", (obj, msg) => apply1<Lambda>(obj, msg, (s, tf, l) => s.Replace(tf, l, false)));
+         registerMessage("replace(_<TextFinding>,with:_<Lambda>,reverse:_<Boolean>)",
             (obj, msg) => apply2<Lambda, Boolean>(obj, msg, (s, tf, l, b) => s.Replace(tf, l, b.Value)));
-         registerMessage("replace".Selector("all:<TextFinding>", "with:<Lambda>"),
+         registerMessage("replace(all:_<TextFinding>,with:_<Lambda>)",
             (obj, msg) => apply1<Lambda>(obj, msg, (s, tf, l) => s.ReplaceAll(tf, l)));
-         registerMessage("split".Selector("on:<TextFinding>"), (obj, msg) => apply(obj, msg, (s, tf) => s.Split(tf)));
-         registerMessage("partition", (obj, msg) => apply(obj, msg, (s, tf) => s.Partition(tf, false)));
-         registerMessage("partition".Selector("<TextFinding>", "reverse:<Boolean>"), (obj, msg) => apply1<Boolean>(obj, msg, (s, tf, b) => s.Partition(tf, b.Value)));
-         registerMessage("count".Selector("<String>"), (obj, msg) => apply(obj, msg, (s, tf) => s.Count(tf)));
-         registerMessage("count".Selector("<String>", "<Lambda>"), (obj, msg) => apply1<Lambda>(obj, msg, (s, tf, l) => s.Count(tf, l)));
+         registerMessage("split(on:_<TextFinding>)", (obj, msg) => apply(obj, msg, (s, tf) => s.Split(tf)));
+         registerMessage("partition(_<TextFinding>)", (obj, msg) => apply(obj, msg, (s, tf) => s.Partition(tf, false)));
+         registerMessage("partition(_<TextFinding>,reverse:_<Boolean>)", (obj, msg) => apply1<Boolean>(obj, msg, (s, tf, b) => s.Partition(tf, b.Value)));
+         registerMessage("count(_<String>)", (obj, msg) => apply(obj, msg, (s, tf) => s.Count(tf)));
+         registerMessage("count(_<String>,_<Lambda>)", (obj, msg) => apply1<Lambda>(obj, msg, (s, tf, l) => s.Count(tf, l)));
       }
    }
 }

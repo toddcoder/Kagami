@@ -39,9 +39,12 @@ namespace Kagami.Library.Objects
 
       public int Hash => value.GetHashCode();
 
-      public bool IsEqualTo(IObject obj) => obj is String s && value == s.value;
+      public bool IsEqualTo(IObject obj)
+      {
+	      return obj is String s && value == s.value || obj is Regex regex && regex.IsMatch(value).IsTrue;
+      }
 
-      public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
+	   public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
       public bool IsTrue => value.Length > 0;
 
@@ -343,5 +346,13 @@ namespace Kagami.Library.Objects
          else
             return Nil.NilValue;
       }
+
+	   public MutString Append(IObject obj)
+	   {
+		   var mutString = new MutString(value);
+		   mutString.Append(obj);
+
+		   return mutString;
+	   }
    }
 }

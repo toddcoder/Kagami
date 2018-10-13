@@ -39,15 +39,15 @@ namespace Kagami.Library.Classes
          messages["lstrip()"] = (obj, msg) => function<String>(obj, s => s.LStrip());
          messages["rstrip()"] = (obj, msg) => function<String>(obj, s => s.RStrip());
          messages["strip()"] = (obj, msg) => function<String>(obj, s => s.Strip());
-         messages["center".Selector("<Int>", "<Char>")] = (obj, msg) =>
-            function<String, Int, Char>(obj, msg, (s, w, p) => s.Center(w.Value, p.Value));
-         messages["center"] = (obj, msg) => function<String, Int>(obj, msg, (s, w) => s.Center(w.Value));
-         messages["ljust".Selector("<Int>", "<Char>")] = (obj, msg) =>
+	      messages["center(_<Int>,_<Char>)"] =
+		      (obj, msg) => function<String, Int, Char>(obj, msg, (s, w, p) => s.Center(w.Value, p.Value));
+         messages["center(_<Int>)"] = (obj, msg) => function<String, Int>(obj, msg, (s, w) => s.Center(w.Value));
+         messages["ljust(_<Int>,_<Char>)"] = (obj, msg) =>
             function<String, Int, Char>(obj, msg, (s, w, p) => s.LJust(w.Value, p.Value));
-         messages["ljust"] = (obj, msg) => function<String, Int>(obj, msg, (s, w) => s.LJust(w.Value));
-         messages["rjust".Selector("<Int>", "<Char>")] = (obj, msg) =>
+         messages["ljust(_<Int>)"] = (obj, msg) => function<String, Int>(obj, msg, (s, w) => s.LJust(w.Value));
+         messages["rjust(_<Int>,_<Char>)"] = (obj, msg) =>
             function<String, Int, Char>(obj, msg, (s, w, p) => s.RJust(w.Value, p.Value));
-         messages["rjust"] = (obj, msg) => function<String, Int>(obj, msg, (s, w) => s.RJust(w.Value));
+         messages["rjust(_<Int>)"] = (obj, msg) => function<String, Int>(obj, msg, (s, w) => s.RJust(w.Value));
          messages["isEmpty".get()] = (obj, msg) => function<String>(obj, s => s.IsEmpty);
          messages["isNotEmpty".get()] = (obj, msg) => function<String>(obj, s => s.IsNotEmpty);
          messages["isAlphaDigit".get()] = (obj, msg) => function<String>(obj, s => s.IsAlphaDigit);
@@ -72,6 +72,7 @@ namespace Kagami.Library.Classes
          messages["swapCase"] = (obj, msg) => function<String>(obj, s => s.SwapCase());
          messages["fields".get()] = (obj, msg) => function<String>(obj, s => s.Fields);
          messages["words"] = (obj, msg) => function<String, Int>(obj, msg, (s, i) => s.Words(i.Value));
+	      messages["<<(_}"] = (obj, msg) => function<String, IObject>(obj, msg, (s, o) => s.Append(o));
       }
 
       public override void RegisterClassMessages()
@@ -89,5 +90,7 @@ namespace Kagami.Library.Classes
       public IObject Revert(IEnumerable<IObject> list) => String.StringObject(list.Select(i => i.AsString).Listify(""));
 
       public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection", "TextFinding");
+
+	   public override bool AssignCompatible(BaseClass otherClass) => otherClass.Name == "MutString";
    }
 }
