@@ -22,10 +22,10 @@ namespace Kagami.Library.Parsers.Expressions
 			while (state.More)
 			{
 				var result =
-					from f in state.Scan($"^ /(|s|) /({REGEX_FIELD}) /(|s|) /':'", Color.Whitespace, Color.Label, Color.Whitespace,
+					from f in state.Scan($"^ /(/s*) /({REGEX_FIELD}) /(|s|) /':'", Color.Whitespace, Color.Label, Color.Whitespace,
 						Color.Structure)
 					from e in getExpression(state, builder.Flags | ExpressionFlags.OmitComma | ExpressionFlags.OmitColon)
-					from n in state.Scan("^ /(|s|) /[',}']", Color.Whitespace, Color.Structure)
+					from n in state.Scan("^ /(/s*) /[',}']", Color.Whitespace, Color.Structure)
 					select (field: f.Trim().Skip(-1), expression: e, next: n);
 				if (result.If(out var tuple, out var isNotMatched, out var exception))
 				{

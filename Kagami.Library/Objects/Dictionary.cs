@@ -268,5 +268,14 @@ namespace Kagami.Library.Objects
 
          return this;
       }
+
+	   public Dictionary ForEach(Lambda lambda)
+	   {
+		   var keyArray = KeyArray;
+		   foreach (var key in keyArray)
+			   dictionary[key] = lambda.Invoke(key, dictionary[key]);
+
+         return this;
+	   }
    }
 }

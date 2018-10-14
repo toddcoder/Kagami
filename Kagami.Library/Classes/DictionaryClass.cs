@@ -42,23 +42,23 @@ namespace Kagami.Library.Classes
 			messages["values".get()] = (obj, msg) => function<Dictionary>(obj, d => d.Values);
 			messages["in"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, k) => d.In(k));
 			messages["notIn"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, k) => d.NotIn(k));
-			messages["swap"] = (obj, msg) => function<Dictionary, IObject, IObject>(obj, msg, (d, k1, k2) => d.Swap(k1, k2));
-			messages["clear"] = (obj, msg) => function<Dictionary>(obj, d => d.Clear());
-			messages["update".Selector("key:", "value:")] =
+			messages["swap(_,_)"] = (obj, msg) => function<Dictionary, IObject, IObject>(obj, msg, (d, k1, k2) => d.Swap(k1, k2));
+			messages["clear()"] = (obj, msg) => function<Dictionary>(obj, d => d.Clear());
+			messages["update(key:_,value:_)"] =
 				(obj, msg) => function<Dictionary, IObject, IObject>(obj, msg, (d, k, v) => d.Update(k, v));
 			messages["merge"] = (obj, msg) => function<Dictionary, Dictionary>(obj, msg, (d1, d2) => d1.Merge(d2));
-			messages["remove".Selector("at:")] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, k) => d.Remove(k));
+			messages["remove(at:_)"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, k) => d.Remove(k));
+			messages["forEach(_<Lambda>)"] = (obj, msg) => function<Dictionary, Lambda>(obj, msg, (d, l) => d.ForEach(l));
 		}
 
 		public override void RegisterClassMessages()
 		{
 			base.RegisterClassMessages();
 
-			classMessages["new".Selector("default:", "caching:<Boolean>")] = (cls, msg) => classFunc<DictionaryClass, IObject, Boolean>(
-				cls, msg,
-				(dc, d, c) => Dictionary.New(d, c));
-			classMessages["new".Selector("default:")] = (cls, msg) => classFunc<DictionaryClass, IObject>(cls, msg,
-				(dc, d) => Dictionary.New(d, false));
+			classMessages["new(default:_,caching:_<Boolean>)"] = (cls, msg) =>
+				classFunc<DictionaryClass, IObject, Boolean>(cls, msg, (dc, d, c) => Dictionary.New(d, c));
+			classMessages["new(default:_)"] =
+				(cls, msg) => classFunc<DictionaryClass, IObject>(cls, msg, (dc, d) => Dictionary.New(d, false));
 			classMessages["empty".get()] = (cls, msg) => classFunc<DictionaryClass>(cls, dc => Dictionary.Empty);
 		}
 	}
