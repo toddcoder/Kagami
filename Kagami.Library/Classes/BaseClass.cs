@@ -133,6 +133,15 @@ namespace Kagami.Library.Classes
             throw messageNotFound(classOf(obj), selector);
       }
 
+	   protected IObject invokeDirectly(IObject obj, Message message)
+	   {
+		   var result = messages[message.Selector];
+		   if (result == null)
+			   throw messageNotFound(classOf(obj), message.Selector);
+		   else
+			   return result(obj, message);
+	   }
+
       IObject invokeClassMessage(Message message)
       {
          var selector = message.Selector;

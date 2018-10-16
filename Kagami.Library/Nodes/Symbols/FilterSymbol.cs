@@ -9,7 +9,7 @@ namespace Kagami.Library.Nodes.Symbols
          builder.SendMessage("if()", 1);
       }
 
-      public override Precedence Precedence => Precedence.Boolean;
+	   public override Precedence Precedence => Precedence.ChainedOperator;
 
       public override Arity Arity => Arity.Binary;
 
