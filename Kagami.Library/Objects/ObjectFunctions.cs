@@ -457,7 +457,7 @@ namespace Kagami.Library.Objects
 			if (matcher.IsMatch(source, "^ '<' /(-['>']+) '>' /@"))
 			{
 				var classNames = matcher.FirstGroup.Split("/s+");
-				var classes = classNames.Select(cn => Module.Global.Class(cn).Required(messageClassNotFound(cn))).ToArray();
+				var classes = classNames.Select(cn => Module.Global.Class(cn, true).Required(messageClassNotFound(cn))).ToArray();
 				typeConstraint = new TypeConstraint(classes).Some();
 				source = matcher.SecondGroup.Trim();
 			}

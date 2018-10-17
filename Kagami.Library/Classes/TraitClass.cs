@@ -90,5 +90,7 @@ namespace Kagami.Library.Classes
 
          return Unit.Success();
       }
+
+	   public Hash<string, IInvokable> Invokables => invokables;
    }
 }

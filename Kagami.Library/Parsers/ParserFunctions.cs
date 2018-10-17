@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using Kagami.Library.Classes;
 using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
@@ -373,8 +374,10 @@ namespace Kagami.Library.Parsers
 				.If(out var className, out var isNotMatched, out var exception))
 			{
 				className = className.TrimStart();
-				if (Module.Global.Class(className).If(out var baseClass)) // || Module.Global.Forwarded(className))
+				if (Module.Global.Class(className).If(out var baseClass))
 					return new TypeConstraint(new[] { baseClass }).Some().Matched();
+				else if (Module.Global.Forwarded(className))
+					return new TypeConstraint(new[] { new ForwardedClass(className), }).Some().Matched();
 				else
 					return failedMatch<IMaybe<TypeConstraint>>(classNotFound(className));
 			}

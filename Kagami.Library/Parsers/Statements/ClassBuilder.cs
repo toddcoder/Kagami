@@ -26,9 +26,10 @@ namespace Kagami.Library.Parsers.Statements
       Hash<string, (ConstructorInvokable, Block)> constructorInvokables;
       List<(IInvokable, Block, bool)> functions;
       UserClass userClass;
+	   Hash<string, TraitClass> traits;
 
       public ClassBuilder(string className, Parameters parameters, string parentClassName, Expression[] parentArguments,
-         Block constructorBlock)
+         Block constructorBlock, Hash<string, TraitClass> traits)
       {
          this.className = className;
          this.parameters = parameters;
@@ -37,6 +38,7 @@ namespace Kagami.Library.Parsers.Statements
          this.constructorBlock = constructorBlock;
          constructorInvokables = new Hash<string, (ConstructorInvokable, Block)>();
          functions = new List<(IInvokable, Block, bool)>();
+	      this.traits = traits;
       }
 
       public IMatched<Unit> Register()
@@ -157,7 +159,12 @@ namespace Kagami.Library.Parsers.Statements
                   break;
             }
 
-         statements.Add(new ReturnNewObject(className, parameters));
+	      foreach (var (_, traitClass) in traits)
+	      foreach (var (funcName, invokable) in traitClass.Invokables)
+		      if (userClass.RegisterMethod(funcName, new Lambda(invokable), true))
+			      functions.Add((invokable, new Block(), true));
+
+	      statements.Add(new ReturnNewObject(className, parameters));
 
          Statements = statements.ToArray();
 

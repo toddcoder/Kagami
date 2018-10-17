@@ -68,7 +68,7 @@ namespace Kagami.Library.Parsers.Statements
          state.SkipEndOfLine();
          if (getBlock(state).If(out var block, out var original))
          {
-            var builder = new ClassBuilder(className, parameters, parentClassName, arguments, block);
+            var builder = new ClassBuilder(className, parameters, parentClassName, arguments, block, traits);
             if (builder.Register().If(out _, out var registerOriginal))
             {
                var cls = new Class(builder);

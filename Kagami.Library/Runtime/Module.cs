@@ -88,9 +88,17 @@ namespace Kagami.Library.Runtime
 	      classes["MutString"] = new MutStringClass();
       }
 
-      public IMaybe<BaseClass> Class(string name) => classes.Map(name);
+      public IMaybe<BaseClass> Class(string name, bool forwardsIncluded = false)
+      {
+	      if (classes.ContainsKey(name))
+		      return classes[name].Some();
+			else if (forwardsIncluded)
+		      return new ForwardedClass(name).Some<BaseClass>();
+	      else
+		      return none<BaseClass>();
+      }
 
-      public IMaybe<TraitClass> Trait(string name) => traits.Map(name);
+	   public IMaybe<TraitClass> Trait(string name) => traits.Map(name);
 
       public IResult<Unit> RegisterClass(BaseClass cls)
       {
