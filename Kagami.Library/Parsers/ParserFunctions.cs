@@ -802,7 +802,7 @@ namespace Kagami.Library.Parsers
 				case "+%":
 					symbol = new SendBinaryMessageSymbol("take", Precedence.ChainedOperator).Matched<Symbol>();
 					break;
-				case "*%":
+				case "++":
 					symbol = new SendBinaryMessageSymbol("zip", Precedence.ChainedOperator).Matched<Symbol>();
 					break;
 				case "^":
@@ -826,7 +826,7 @@ namespace Kagami.Library.Parsers
 				case "<=":
 					symbol = new LessThanEqualSymbol().Matched<Symbol>();
 					break;
-				case "++":
+/*				case "++":
 					symbol = new RangeSymbol(true).Matched<Symbol>();
 					break;
 				case "+-":
@@ -834,7 +834,7 @@ namespace Kagami.Library.Parsers
 					break;
 				case "--":
 					symbol = new RangeSymbol(true, true).Matched<Symbol>();
-					break;
+					break;*/
 				case "::":
 					symbol = new ConsSymbol().Matched<Symbol>();
 					break;

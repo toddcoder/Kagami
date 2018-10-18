@@ -76,9 +76,9 @@ namespace Kagami.Library.Objects
 
       public string ClassName => "Range";
 
-      public string AsString => $"{startObj.AsString} ++ {stopObj.AsString} {(increment >= 0 ? "+" : "-")} {Math.Abs(increment)}";
+      public string AsString => $"{startObj.AsString} ... {stopObj.AsString} {(increment >= 0 ? "+" : "-")} {Math.Abs(increment)}";
 
-      public string Image => $"{startObj.Image} ++ {stopObj.Image} {(increment >= 0 ? "+" : "-")} {Math.Abs(increment)}";
+      public string Image => $"{startObj.Image} ... {stopObj.Image} {(increment >= 0 ? "+" : "-")} {Math.Abs(increment)}";
 
       public int Hash => (startObj.Hash + stopObj.Hash + increment.GetHashCode()).GetHashCode();
 
