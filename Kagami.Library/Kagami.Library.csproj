@@ -210,7 +210,6 @@
     <Compile Include="Nodes\Symbols\EmptyDictionarySymbol.cs" />
     <Compile Include="Nodes\Symbols\EmptyListSymbol.cs" />
     <Compile Include="Nodes\Symbols\EmptyTupleSymbol.cs" />
-    <Compile Include="Nodes\Symbols\EndSymbol.cs" />
     <Compile Include="Nodes\Symbols\EqualSymbol.cs" />
     <Compile Include="Nodes\Symbols\Expression.cs" />
     <Compile Include="Nodes\Symbols\FieldSymbol.cs" />
