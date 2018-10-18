@@ -1,5 +1,8 @@
-﻿namespace Kagami.Library.Classes
+﻿using System;
+
+namespace Kagami.Library.Classes
 {
+	[Obsolete("Replace with selector")]
    public class Signature
    {
       string fullFunctionName;

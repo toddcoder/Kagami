@@ -18,7 +18,7 @@ namespace Kagami.Library.Classes
 		protected string className;
 		protected string parentClassName;
 		protected IMaybe<UserClass> parentClass;
-		protected Hash<string, Signature> signatures;
+		protected Set<Selector> signatures;
 		protected IMaybe<UserObject> metaObject;
 
 		public UserClass(string className, string parentClassName)
@@ -31,7 +31,7 @@ namespace Kagami.Library.Classes
 			else
 				parentClass = none<UserClass>();
 
-			signatures = new Hash<string, Signature>();
+			signatures = new Set<Selector>();
 
 			metaObject = none<UserObject>();
 		}
@@ -54,8 +54,8 @@ namespace Kagami.Library.Classes
 		{
 			foreach (var item in parentClass.messages)
 				messages[item.Key] = item.Value;
-			foreach (var item in parentClass.signatures)
-				signatures[item.Key] = item.Value;
+			foreach (var selector in parentClass.signatures)
+				signatures.Add(selector);
 		}
 
 		public virtual bool RegisterMethod(Selector selector, Lambda lambda, bool overriding)
@@ -66,7 +66,7 @@ namespace Kagami.Library.Classes
 			{
 				var clone = lambda.Clone();
 				messages[selector] = (obj, msg) => Invoke((UserObject)obj, msg.Arguments, clone);
-				signatures[selector] = new Signature(selector, clone.Invokable.Parameters.Length);
+				signatures.Add(selector);
 
 				return true;
 			}
@@ -95,14 +95,14 @@ namespace Kagami.Library.Classes
 			foreach (var parameter in parameters)
 			{
 				var name = parameter.Name;
-				var getter = name.get();
+				Selector getter = name.get();
 				messages[getter] = (obj, msg) => ((UserObject)obj).Fields[name];
-				signatures[getter] = new Signature(getter, 0);
+				signatures.Add(getter);
 				if (parameter.Mutable)
 				{
-					var setter = name.set();
+					Selector setter = name.set();
 					messages[setter] = (obj, msg) => ((UserObject)obj).Fields[name] = msg.Arguments[0];
-					signatures[setter] = new Signature(setter, 1);
+					signatures.Add(setter);
 				}
 			}
 		}
@@ -115,20 +115,13 @@ namespace Kagami.Library.Classes
 				(obj, msg) => function<IObject, String>(obj, msg, (o, n) => sendMessage(o, n.Value, msg.Arguments.Pass(1))));
 		}
 
-		public IMatched<Signature> MatchImplemented(IEnumerable<Signature> traitSignatures)
+		public IMatched<Selector> MatchImplemented(IEnumerable<Selector> traitSignatures)
 		{
 			foreach (var signature in traitSignatures)
-				if (signatures.ContainsKey(signature.FullFunctionName))
-				{
-					var localSignature = signatures[signature.FullFunctionName];
-					if (localSignature.ParameterCount != signature.ParameterCount)
-						return $"Signature for {signature.FullFunctionName} requires {signature.ParameterCount} parameters"
-							.FailedMatch<Signature>();
-				}
-				else
+				if (!signatures.Contains(signature))
 					return signature.Matched();
 
-			return notMatched<Signature>();
+			return notMatched<Selector>();
 		}
 
 		public override void RegisterClassMessages() { }

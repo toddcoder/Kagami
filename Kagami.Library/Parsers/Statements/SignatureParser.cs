@@ -1,5 +1,6 @@
 ﻿using Kagami.Library.Classes;
 using Standard.Types.Maybe;
+using Standard.Types.RegularExpressions;
 using Standard.Types.Strings;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Kagami.Library.Parsers.Statements.FunctionParser;
@@ -21,18 +22,18 @@ namespace Kagami.Library.Parsers.Statements
          var needsParameters = tokens[4].Text == "(";
          state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Invokable, Color.Structure);
 
-         if (needsParameters)
-         {
-            if (functionName.EndsWith("="))
-               functionName = functionName.Skip(-1).set();
-         }
-         else
-            functionName = functionName.get();
+	      if (needsParameters)
+	      {
+		      if (functionName.IsMatch("^ /w+ '=' $"))
+			      functionName = "__$" + functionName.Skip(-1).set();
+	      }
+	      else
+		      functionName = "__$" + functionName;
 
          if (GetAnyParameters(needsParameters, state).If(out var parameters, out var original))
          {
-            var fullFunctionName = parameters.Selector(functionName);
-            if (traitClass.RegisterSignature(new Signature(fullFunctionName, parameters.Length)).If(out var _, out var exception))
+            var selector = parameters.Selector(functionName);
+            if (traitClass.RegisterSignature(selector).If(out _, out var exception))
                return Unit.Matched();
             else
                return failedMatch<Unit>(exception);

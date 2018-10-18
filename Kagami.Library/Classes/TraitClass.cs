@@ -9,27 +9,27 @@ namespace Kagami.Library.Classes
    public class TraitClass : BaseClass
    {
       string traitName;
-      Hash<string, Signature> signatures;
+      Set<Selector> signatures;
       Hash<string, IInvokable> invokables;
       Hash<string, UserClass> implementors;
 
       public TraitClass(string traitName)
       {
          this.traitName = traitName;
-         signatures = new Hash<string, Signature>();
+	      signatures = new Set<Selector>();
          invokables = new Hash<string, IInvokable>();
          implementors = new Hash<string, UserClass>();
       }
 
       public override string Name => traitName;
 
-      public IResult<Unit> RegisterSignature(Signature signature)
+      public IResult<Unit> RegisterSignature(Selector signature)
       {
-         if (signatures.ContainsKey(signature.FullFunctionName))
-            return $"Signature {signature.FullFunctionName} already exists in trait {traitName}".Failure<Unit>();
+         if (signatures.Contains(signature))
+            return $"Signature {signature.Image} already exists in trait {traitName}".Failure<Unit>();
          else
          {
-            signatures[signature.FullFunctionName] = signature;
+	         signatures.Add(signature);
             return Unit.Success();
          }
       }
@@ -47,8 +47,8 @@ namespace Kagami.Library.Classes
 
       public IResult<Unit> RegisterImplementor(UserClass userClass)
       {
-         if (userClass.MatchImplemented(signatures.ValueArray()).If(out var signature, out var isNotMatched, out var exception))
-            return $"Signature {signature.FullFunctionName} not implemented".Failure<Unit>();
+         if (userClass.MatchImplemented(signatures).If(out var signature, out var isNotMatched, out var exception))
+            return $"Signature {signature.Image} not implemented".Failure<Unit>();
          else if (isNotMatched)
          {
             implementors[userClass.Name] = userClass;
@@ -75,14 +75,14 @@ namespace Kagami.Library.Classes
 
       public IResult<Unit> CopyFrom(TraitClass sourceTraitClass)
       {
-         foreach (var signature in sourceTraitClass.signatures.ValueArray())
+         foreach (var signature in sourceTraitClass.signatures)
             if (RegisterSignature(signature).IfNot(out var exception))
                return failure<Unit>(exception);
 
          foreach (var (functionName, invokable) in sourceTraitClass.invokables)
             if (RegisterInvokable(functionName, invokable).If(out _, out var exception))
             {
-               if (signatures.ContainsKey(functionName))
+               if (signatures.Contains(functionName))
                   signatures.Remove(functionName);
             }
             else

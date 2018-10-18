@@ -71,10 +71,14 @@ namespace Kagami.Library.Parsers.Expressions
 
 				builder.Clear();
 
+				state.CreateReturnType();
+
 				var statements = new List<Statement>
 				{
 					forStatement, new Return(new Expression(new NilSymbol()), state.GetReturnType())
 				};
+
+				state.RemoveReturnType();
 
 				builder.Add(new ComprehensionSymbol(new Block(statements), images.ToString()));
 
