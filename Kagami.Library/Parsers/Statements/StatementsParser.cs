@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using Kagami.Library.Objects;
+using Standard.Types.Maybe;
+using static Standard.Types.Maybe.MaybeFunctions;
 
 namespace Kagami.Library.Parsers.Statements
 {
@@ -63,10 +66,12 @@ namespace Kagami.Library.Parsers.Statements
                yield return new SkipParser();
             }
 
-            yield return new ExpressionStatementParser(ReturnExpression) { SingleLine = singleLine };
+            yield return new ExpressionStatementParser(ReturnExpression, TypeConstraint) { SingleLine = singleLine };
          }
       }
 
       public bool ReturnExpression { get; set; }
+
+	   public IMaybe<TypeConstraint> TypeConstraint { get; set; } = none<TypeConstraint>();
    }
 }

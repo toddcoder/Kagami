@@ -1,7 +1,9 @@
 ﻿using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Standard.Types.Maybe;
+using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
+using static Standard.Types.Maybe.MaybeFunctions;
 
 namespace Kagami.Library.Operations
 {
@@ -16,7 +18,18 @@ namespace Kagami.Library.Operations
 
 		public override IMatched<IObject> Execute(Machine machine)
 		{
-			if (base.Execute(machine).If(out var value, out var original))
+			if (machine.Peek().If(out var value))
+			{
+				var valueClass = classOf(value);
+				if (typeConstraint.Matches(valueClass))
+					return base.Execute(machine);
+				else
+					return $"You must return a type {typeConstraint.AsString}, not a {valueClass.Name}".FailedMatch<IObject>();
+			}
+			else
+				return failedMatch<IObject>(emptyStack());
+
+/*			if (base.Execute(machine).If(out var value, out var original))
 			{
 				var valueClass = classOf(value);
 				if (typeConstraint.Matches(valueClass))
@@ -25,7 +38,7 @@ namespace Kagami.Library.Operations
 					return $"You must return a type {typeConstraint.AsString}, not a {valueClass.Name}".FailedMatch<IObject>();
 			}
 			else
-				return original;
+				return original;*/
 		}
 
 		public override string ToString() => $"return.type({typeConstraint.AsString})";

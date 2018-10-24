@@ -159,7 +159,7 @@ namespace Kagami.Library.Parsers
 		public static IMatched<Block> getSingleLine(ParseState state, IMaybe<TypeConstraint> typeConstraint,
 			bool returnExpression = true)
 		{
-			var statementsParser = new StatementsParser(true) { ReturnExpression = returnExpression };
+			var statementsParser = new StatementsParser(true) { ReturnExpression = returnExpression, TypeConstraint = typeConstraint};
 			state.PushStatements();
 			if (statementsParser.Scan(state).If(out _, out var isNotMatched, out var exception))
 				if (state.PopStatements().If(out var statements, out exception))
