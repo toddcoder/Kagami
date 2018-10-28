@@ -6,12 +6,22 @@ namespace Kagami.Library.Nodes.Symbols
    public class StringSymbol : Symbol, IConstant
    {
       string value;
+	   bool isFailure;
 
-      public StringSymbol(string value) => this.value = value;
+      public StringSymbol(string value, bool isFailure = false)
+	   {
+		   this.value = value;
+		   this.isFailure = isFailure;
+	   }
 
-      public override void Generate(OperationsBuilder builder) => builder.PushString(value);
+	   public override void Generate(OperationsBuilder builder)
+	   {
+		   builder.PushString(value);
+			if (isFailure)
+				builder.Failure();
+	   }
 
-      public override Precedence Precedence => Precedence.Value;
+	   public override Precedence Precedence => Precedence.Value;
 
       public override Arity Arity => Arity.Nullary;
 

@@ -6,7 +6,7 @@ namespace Kagami.Library.Parsers.Expressions
 {
    public class PostfixOperatorsParser : SymbolParser
    {
-      public override string Pattern => "^ /(['?']1%2) -(>['?'])";
+      public override string Pattern => "^ /(['?!']1%2) -(>['?!'])";
 
       public PostfixOperatorsParser(ExpressionBuilder builder) : base(builder) { }
 
@@ -20,6 +20,9 @@ namespace Kagami.Library.Parsers.Expressions
             case "?":
                builder.Add(new SomeSymbol());
                break;
+            case "!":
+	            builder.Add(new SuccessSymbol());
+					break;
             default:
                return notMatched<Unit>();
          }

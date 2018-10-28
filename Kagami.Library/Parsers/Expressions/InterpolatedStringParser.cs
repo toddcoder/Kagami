@@ -13,10 +13,11 @@ namespace Kagami.Library.Parsers.Expressions
    {
 	   public InterpolatedStringParser(ExpressionBuilder builder) : base(builder) { }
 
-      public override string Pattern => "^ /(|s|) /'$' /[dquote]";
+      public override string Pattern => "^ /(|s|) /['$f'] /[dquote]";
 
       public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
       {
+	      var isFailure = tokens[2].Text == "f";
          state.Colorize(tokens, Color.Whitespace, Color.StringPart, Color.String);
 
          var firstString = none<string>();
@@ -44,8 +45,8 @@ namespace Kagami.Library.Parsers.Expressions
                   }
 
                   if (hex)
-                     if (fromHex(hexText.ToString()).If(out var machedChar, out var isNotMatched, out var exception))
-                        text.Append(machedChar);
+                     if (fromHex(hexText.ToString()).If(out var matchedChar, out var isNotMatched, out var exception))
+                        text.Append(matchedChar);
                      else if (isNotMatched)
                         return failedMatch<Unit>(badHex(hexText.ToString()));
                      else
@@ -59,8 +60,8 @@ namespace Kagami.Library.Parsers.Expressions
                      suffixes.Add(text.ToString());
                      var expressionsArray = expressions.ToArray();
                      var suffixesArray = suffixes.ToArray();
-                     return (Symbol)new InterpolatedStringSymbol(prefix, expressionsArray, suffixesArray);
-                  }, () => new StringSymbol(text.ToString()));
+                     return (Symbol)new InterpolatedStringSymbol(prefix, expressionsArray, suffixesArray, isFailure);
+                  }, () => new StringSymbol(text.ToString(), isFailure));
                   builder.Add(symbol);
 
                   return Unit.Matched();

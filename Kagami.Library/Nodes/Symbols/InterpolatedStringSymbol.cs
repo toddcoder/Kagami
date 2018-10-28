@@ -11,12 +11,14 @@ namespace Kagami.Library.Nodes.Symbols
       string prefix;
       Expression[] expressions;
       string[] suffixes;
+	   bool isFailure;
 
-      public InterpolatedStringSymbol(string prefix, Expression[] expressions, string[] suffixes)
+      public InterpolatedStringSymbol(string prefix, Expression[] expressions, string[] suffixes, bool isFailure)
       {
          this.prefix = prefix;
          this.expressions = expressions;
          this.suffixes = suffixes;
+	      this.isFailure = isFailure;
       }
 
       public override void Generate(OperationsBuilder builder)
@@ -28,10 +30,13 @@ namespace Kagami.Library.Nodes.Symbols
          {
             expressions[i].Generate(builder);
             builder.String();
-            builder.SendMessage("~()", 1);
+            builder.SendMessage("~(_)", 1);
             builder.PushString(suffixes[i]);
-            builder.SendMessage("~()", 1);
+            builder.SendMessage("~(_)", 1);
          }
+
+			if (isFailure)
+				builder.Failure();
       }
 
       public override Precedence Precedence => Precedence.Value;

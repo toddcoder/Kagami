@@ -69,6 +69,8 @@
     <Compile Include="Classes\DelClass.cs" />
     <Compile Include="Classes\DictionaryClass.cs" />
     <Compile Include="Classes\EndClass.cs" />
+    <Compile Include="Classes\ErrorClass.cs" />
+    <Compile Include="Classes\FailureClass.cs" />
     <Compile Include="Classes\FloatClass.cs" />
     <Compile Include="Classes\ForwardedClass.cs" />
     <Compile Include="Classes\ICollectionClass.cs" />
@@ -112,6 +114,7 @@
     <Compile Include="Classes\SomeClass.cs" />
     <Compile Include="Classes\StreamIteratorClass.cs" />
     <Compile Include="Classes\StringClass.cs" />
+    <Compile Include="Classes\SuccessClass.cs" />
     <Compile Include="Classes\SymbolClass.cs" />
     <Compile Include="Classes\TextFindingClass.cs" />
     <Compile Include="Classes\TraitClass.cs" />
@@ -298,6 +301,7 @@
     <Compile Include="Nodes\Symbols\StringSymbol.cs" />
     <Compile Include="Nodes\Symbols\SubexpressionSymbol.cs" />
     <Compile Include="Nodes\Symbols\SubtractSymbol.cs" />
+    <Compile Include="Nodes\Symbols\SuccessSymbol.cs" />
     <Compile Include="Nodes\Symbols\SuperSymbol.cs" />
     <Compile Include="Nodes\Symbols\Symbol.cs" />
     <Compile Include="Nodes\Symbols\SymbolSymbol.cs" />
@@ -330,7 +334,9 @@
     <Compile Include="Objects\DistinctAction.cs" />
     <Compile Include="Objects\End.cs" />
     <Compile Include="Objects\Ended.cs" />
+    <Compile Include="Objects\Error.cs" />
     <Compile Include="Objects\Failed.cs" />
+    <Compile Include="Objects\Failure.cs" />
     <Compile Include="Objects\Float.cs" />
     <Compile Include="Objects\IBoolean.cs" />
     <Compile Include="Objects\ICollection.cs" />
@@ -359,6 +365,7 @@
     <Compile Include="Objects\IProcessPlaceholders.cs" />
     <Compile Include="Objects\IProvidesFields.cs" />
     <Compile Include="Objects\IRangeItem.cs" />
+    <Compile Include="Objects\IResult.cs" />
     <Compile Include="Objects\ISliceable.cs" />
     <Compile Include="Objects\IStreamAction.cs" />
     <Compile Include="Objects\Iterator.cs" />
@@ -406,6 +413,7 @@
     <Compile Include="Objects\Some.cs" />
     <Compile Include="Objects\StreamIterator.cs" />
     <Compile Include="Objects\String.cs" />
+    <Compile Include="Objects\Success.cs" />
     <Compile Include="Objects\SymbolObject.cs" />
     <Compile Include="Objects\TakeAction.cs" />
     <Compile Include="Objects\TakeUntilAction.cs" />
@@ -446,6 +454,7 @@
     <Compile Include="Operations\EmptyTuple.cs" />
     <Compile Include="Operations\EndOfLine.cs" />
     <Compile Include="Operations\Equal.cs" />
+    <Compile Include="Operations\Failure.cs" />
     <Compile Include="Operations\FieldExists.cs" />
     <Compile Include="Operations\FieldsFromObject.cs" />
     <Compile Include="Operations\FloatDivide.cs" />
@@ -540,6 +549,7 @@
     <Compile Include="Operations\Some.cs" />
     <Compile Include="Operations\Stop.cs" />
     <Compile Include="Operations\Subtract.cs" />
+    <Compile Include="Operations\Success.cs" />
     <Compile Include="Operations\Super.cs" />
     <Compile Include="Operations\Swap.cs" />
     <Compile Include="Operations\ToArguments.cs" />

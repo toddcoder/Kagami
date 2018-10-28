@@ -318,7 +318,11 @@ namespace Kagami.Library.Operations
 
 		public void Some() => add(new Some());
 
+		public void Success() => add(new Success());
+
 		public void PushNil() => add(new PushNil());
+
+		public void Failure() => add(new Failure());
 
 		public void Yield() => add(new Yield());
 
