@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Objects;
+﻿using System;
+using Kagami.Library.Objects;
 using Standard.Types.Strings;
 using static Kagami.Library.Classes.ClassFunctions;
 
@@ -48,10 +49,16 @@ namespace Kagami.Library.Classes
 
       public static IObject parse(string value)
       {
-         if (int.TryParse(value.Replace("_", ""), out var number))
-            return Some.Object(Int.IntObject(number));
-         else
-            return Nil.NilValue;
+	      try
+	      {
+		      var number = int.Parse(value.Replace("_", ""));
+		      return Success.Object(Int.IntObject(number));
+
+	      }
+	      catch (Exception exception)
+	      {
+		      return Failure.Object(exception.Message);
+	      }
       }
 
       public IObject Parse(string source) => Int.IntObject(source.ToInt());

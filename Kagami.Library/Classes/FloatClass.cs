@@ -35,10 +35,16 @@ namespace Kagami.Library.Classes
 
       public static IObject parse(string value)
       {
-         if (double.TryParse(value.Replace("_", ""), out var number))
-            return Some.Object(Float.FloatObject(number));
-         else
-            return Nil.NilValue;
+	      try
+	      {
+		      var number = double.Parse(value.Replace("_", ""));
+		      return Success.Object(Float.FloatObject(number));
+
+	      }
+	      catch (Exception exception)
+	      {
+		      return Failure.Object(exception.Message);
+	      }
       }
 
       public IObject Parse(string source) => Float.FloatObject(source.ToDouble());
