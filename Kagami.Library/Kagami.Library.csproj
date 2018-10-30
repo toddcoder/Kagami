@@ -95,6 +95,7 @@
     <Compile Include="Classes\NilClass.cs" />
     <Compile Include="Classes\NumberClass.cs" />
     <Compile Include="Classes\OpenRangeClass.cs" />
+    <Compile Include="Classes\OptionalClass.cs" />
     <Compile Include="Classes\PackageFunctionClass.cs" />
     <Compile Include="Classes\PatternClass.cs" />
     <Compile Include="Classes\PlaceholderClass.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="Classes\RegexClass.cs" />
     <Compile Include="Classes\RegexGroupClass.cs" />
     <Compile Include="Classes\RegexMatchClass.cs" />
+    <Compile Include="Classes\ResultClass.cs" />
     <Compile Include="Classes\RuntimeFunctionClass.cs" />
     <Compile Include="Classes\SelectorClass.cs" />
     <Compile Include="Classes\SelectorHash.cs" />

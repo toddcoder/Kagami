@@ -89,6 +89,8 @@ namespace Kagami.Library.Runtime
 			classes["Error"] = new ErrorClass();
 			classes["Success"] = new SuccessClass();
 			classes["Failure"] = new FailureClass();
+			classes["Optional"] = new OptionalClass();
+			classes["Result"] = new ResultClass();
 		}
 
 		public IMaybe<BaseClass> Class(string name, bool forwardsIncluded = false)
