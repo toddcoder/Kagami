@@ -26,6 +26,7 @@ namespace Kagami.Library.Classes
          messages["ticks".get()] = (obj, msg) => function<Date>(obj, d => d.Ticks);
          messages["+"] = (obj, msg) => function<Date, Interval>(obj, msg, (d, i) => d.Add(i));
          messages["-"] = (obj, msg) => function<Date, IObject>(obj, msg, (d, i) => d.Subtract(i));
+	      messages["dayOfWeek".get()] = (obj, msg) => function<Date>(obj, d => d.DayOfWeek);
       }
 
       public override void RegisterClassMessages()

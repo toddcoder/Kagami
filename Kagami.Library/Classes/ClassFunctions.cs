@@ -26,6 +26,14 @@ namespace Kagami.Library.Classes
          where T3 : IObject
          where T4 : IObject => func((T1)x, (T2)message.Arguments[0], (T3)message.Arguments[1], (T4)message.Arguments[2]);
 
+	   public static IObject function<T1, T2, T3, T4, T5>(IObject x, Message message, Func<T1, T2, T3, T4, T5, IObject> func)
+		   where T1 : IObject
+		   where T2 : IObject
+		   where T3 : IObject
+		   where T4 : IObject
+		   where T5 : IObject => func((T1)x, (T2)message.Arguments[0], (T3)message.Arguments[1], (T4)message.Arguments[2],
+		   (T5)message.Arguments[3]);
+
       public static IObject classFunc<T>(BaseClass cls, Func<T, IObject> func)
          where T : BaseClass => func((T)cls);
 

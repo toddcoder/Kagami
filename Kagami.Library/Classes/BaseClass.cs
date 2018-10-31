@@ -362,9 +362,12 @@ namespace Kagami.Library.Classes
          registerMessage("collect()", (obj, msg) => iteratorFunc(obj, i => i.Collect()));
       }
 
-      public virtual bool MatchCompatible(BaseClass otherClass) => Name == otherClass.Name;
+	   public virtual bool MatchCompatible(BaseClass otherClass)
+	   {
+		   return Name == otherClass.Name;// || Machine.Current.Find($"{otherClass.Name}To{Name}").IsMatched;
+	   }
 
-      public virtual bool AssignCompatible(BaseClass otherClass) => Name == otherClass.Name;
+	   public virtual bool AssignCompatible(BaseClass otherClass) => MatchCompatible(otherClass);
 
       protected void rangeMessages()
       {

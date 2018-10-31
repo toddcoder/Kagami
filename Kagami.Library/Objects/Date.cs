@@ -91,5 +91,7 @@ namespace Kagami.Library.Objects
       }
 
       public String Format(string format) => value.ToString(format);
+
+	   public String DayOfWeek => value.DayOfWeek.ToString();
    }
 }
