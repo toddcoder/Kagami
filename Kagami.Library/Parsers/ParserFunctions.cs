@@ -159,7 +159,7 @@ namespace Kagami.Library.Parsers
 		public static IMatched<Block> getSingleLine(ParseState state, IMaybe<TypeConstraint> typeConstraint,
 			bool returnExpression = true)
 		{
-			var statementsParser = new StatementsParser(true) { ReturnExpression = returnExpression, TypeConstraint = typeConstraint};
+			var statementsParser = new StatementsParser(true) { ReturnExpression = returnExpression, TypeConstraint = typeConstraint };
 			state.PushStatements();
 			if (statementsParser.Scan(state).If(out _, out var isNotMatched, out var exception))
 				if (state.PopStatements().If(out var statements, out exception))
@@ -685,7 +685,9 @@ namespace Kagami.Library.Parsers
 
 		public static IMatched<IMaybe<LambdaSymbol>> getPossibleLambda(ParseState state, Bits32<ExpressionFlags> flags)
 		{
-			if (getAnyLambda(state, flags).If(out var lambdaSymbol, out var isNotMatched, out var exception))
+			if (state.CurrentSource.StartsWith("("))
+				return none<LambdaSymbol>().Matched();
+			else if (getAnyLambda(state, flags).If(out var lambdaSymbol, out var isNotMatched, out var exception))
 				return lambdaSymbol.Some().Matched();
 			else if (isNotMatched)
 				return none<LambdaSymbol>().Matched();
@@ -942,7 +944,8 @@ namespace Kagami.Library.Parsers
 			if (isExpression)
 			{
 				if (getExpression(state, flags).If(out var expression, out var exOriginal))
-					return new Block(new ExpressionStatement(expression, true, typeConstraint), typeConstraint) { Index = state.Index }.Matched();
+					return new Block(new ExpressionStatement(expression, true, typeConstraint), typeConstraint) { Index = state.Index }
+						.Matched();
 				else
 					return exOriginal.Unmatched<Block>();
 			}

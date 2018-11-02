@@ -28,7 +28,7 @@ namespace Kagami.Library.Invokables
 		public Parameters() : this(new Parameter[0]) { }
 
 		public Parameters(int count) :
-			this(Enumerable.Range(0, count).Select(i => Parameter.New(false, i.ToString().get())).ToArray()) { }
+			this(Enumerable.Range(0, count).Select(i => Parameter.New(false, $"__${i}")).ToArray()) { }
 
 		public bool Equals(Parameters other)
 		{
