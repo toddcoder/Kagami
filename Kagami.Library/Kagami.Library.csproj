@@ -90,6 +90,7 @@
     <Compile Include="Classes\ListClass.cs" />
     <Compile Include="Classes\LongClass.cs" />
     <Compile Include="Classes\MessageClass.cs" />
+    <Compile Include="Classes\MonadClass.cs" />
     <Compile Include="Classes\MutStringClass.cs" />
     <Compile Include="Classes\NameValueClass.cs" />
     <Compile Include="Classes\NilClass.cs" />
@@ -189,6 +190,7 @@
     <Compile Include="Nodes\Symbols\ArraySymbol.cs" />
     <Compile Include="Nodes\Symbols\BAndSymbol.cs" />
     <Compile Include="Nodes\Symbols\BindingSymbol.cs" />
+    <Compile Include="Nodes\Symbols\BindSymbol.cs" />
     <Compile Include="Nodes\Symbols\BNotSymbol.cs" />
     <Compile Include="Nodes\Symbols\BooleanSymbol.cs" />
     <Compile Include="Nodes\Symbols\BOrSymbol.cs" />
@@ -211,6 +213,7 @@
     <Compile Include="Nodes\Symbols\DateSymbol.cs" />
     <Compile Include="Nodes\Symbols\DelSymbol.cs" />
     <Compile Include="Nodes\Symbols\DoesSymbol.cs" />
+    <Compile Include="Nodes\Symbols\DoSymbol.cs" />
     <Compile Include="Nodes\Symbols\EmptyArraySymbol.cs" />
     <Compile Include="Nodes\Symbols\EmptyDictionarySymbol.cs" />
     <Compile Include="Nodes\Symbols\EmptyListSymbol.cs" />
@@ -250,6 +253,7 @@
     <Compile Include="Nodes\Symbols\MapOperatorBinarySymbol.cs" />
     <Compile Include="Nodes\Symbols\MapOperatorSymbol.cs" />
     <Compile Include="Nodes\Symbols\MessageSymbol.cs" />
+    <Compile Include="Nodes\Symbols\MonadBindSymbol.cs" />
     <Compile Include="Nodes\Symbols\MutStringSymbol.cs" />
     <Compile Include="Nodes\Symbols\NewObjectSymbol.cs" />
     <Compile Include="Nodes\Symbols\PatternSymbol.cs" />
@@ -283,6 +287,7 @@
     <Compile Include="Nodes\Symbols\RegexSymbol.cs" />
     <Compile Include="Nodes\Symbols\RemainderZero.cs" />
     <Compile Include="Nodes\Symbols\RemainderSymbol.cs" />
+    <Compile Include="Nodes\Symbols\ResultSymbol.cs" />
     <Compile Include="Nodes\Symbols\SendBinaryMessageSymbol.cs" />
     <Compile Include="Nodes\Symbols\SendOperatorMessage.cs" />
     <Compile Include="Nodes\Symbols\SendMessageSymbol.cs" />
@@ -352,6 +357,7 @@
     <Compile Include="Objects\ILazyStatus.cs" />
     <Compile Include="Objects\IMayInvoke.cs" />
     <Compile Include="Objects\IMessageNumber.cs" />
+    <Compile Include="Objects\IMonad.cs" />
     <Compile Include="Objects\IMutableCollection.cs" />
     <Compile Include="Objects\IndexedIterator.cs" />
     <Compile Include="Objects\Infinity.cs" />
@@ -464,8 +470,10 @@
     <Compile Include="Operations\GetIterator.cs" />
     <Compile Include="Operations\GetX.cs" />
     <Compile Include="Operations\GoTo.cs" />
+    <Compile Include="Operations\GoToIfFailure.cs" />
     <Compile Include="Operations\GoToIfFalse.cs" />
     <Compile Include="Operations\GotoIfSome.cs" />
+    <Compile Include="Operations\GoToIfSuccess.cs" />
     <Compile Include="Operations\GoToIfTrue.cs" />
     <Compile Include="Operations\GoToIfNil.cs" />
     <Compile Include="Operations\Image.cs" />
@@ -579,6 +587,7 @@
     <Compile Include="Parsers\Expressions\ArrayParser.cs" />
     <Compile Include="Parsers\Expressions\BinaryParser.cs" />
     <Compile Include="Parsers\Expressions\BindingParser.cs" />
+    <Compile Include="Parsers\Expressions\BindParser.cs" />
     <Compile Include="Parsers\Expressions\BNotParser.cs" />
     <Compile Include="Parsers\Expressions\BooleanParser.cs" />
     <Compile Include="Parsers\Expressions\ByteParser.cs" />
@@ -591,6 +600,7 @@
     <Compile Include="Parsers\Expressions\ConstantsParser.cs" />
     <Compile Include="Parsers\Expressions\DateParser.cs" />
     <Compile Include="Parsers\Expressions\DollarFieldParser.cs" />
+    <Compile Include="Parsers\Expressions\DoParser.cs" />
     <Compile Include="Parsers\Expressions\EmptyValueParser.cs" />
     <Compile Include="Parsers\Expressions\EndingInExpressionParser.cs" />
     <Compile Include="Parsers\Expressions\EndingInValueParser.cs" />
@@ -625,10 +635,12 @@
     <Compile Include="Parsers\Expressions\MapExpressionParser.cs" />
     <Compile Include="Parsers\Expressions\MatchLambdaParser.cs" />
     <Compile Include="Parsers\Expressions\MessageParser.cs" />
+    <Compile Include="Parsers\Expressions\MonadBindParser.cs" />
     <Compile Include="Parsers\Expressions\PatternParser.cs" />
     <Compile Include="Parsers\Expressions\RangeOperatorParser.cs" />
     <Compile Include="Parsers\Expressions\RangePrefixParser.cs" />
     <Compile Include="Parsers\Expressions\RefParser.cs" />
+    <Compile Include="Parsers\Expressions\ResultParser.cs" />
     <Compile Include="Parsers\Expressions\SelectorParser.cs" />
     <Compile Include="Parsers\Expressions\SeqParser.cs" />
     <Compile Include="Parsers\Expressions\SetPropertyParser.cs" />

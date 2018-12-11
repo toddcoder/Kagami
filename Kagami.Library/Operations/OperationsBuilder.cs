@@ -159,6 +159,10 @@ namespace Kagami.Library.Operations
 
 		public string GoToIfNil(string label) => add(new GoToIfNil(), label);
 
+		public string GoToIfSuccess(string label) => add(new GoToIfSuccess(), label);
+
+		public string GoToIfFailure(string label) => add(new GoToIfFailure(), label);
+
 		public void Compare() => add(new Compare());
 
 		public void IsZero() => add(new IsZero());

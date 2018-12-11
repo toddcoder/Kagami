@@ -534,5 +534,11 @@ namespace Kagami.Library.Classes
          registerMessage("count(_<String>)", (obj, msg) => apply(obj, msg, (s, tf) => s.Count(tf)));
          registerMessage("count(_<String>,_<Lambda>)", (obj, msg) => apply1<Lambda>(obj, msg, (s, tf, l) => s.Count(tf, l)));
       }
+
+	   protected void monadMessage()
+	   {
+		   registerMessage("bind(_<Lambda>)", (obj, msg) => ((IMonad)obj).Bind((Lambda)msg.Arguments[0]));
+         registerMessage("unit(_)", (obj, msg) => ((IMonad)obj).Unit(msg.Arguments[0]));
+	   }
    }
 }

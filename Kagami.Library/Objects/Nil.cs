@@ -4,7 +4,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct Nil : IObject, IOptional, IBoolean, IEquatable<Nil>
+   public struct Nil : IObject, IOptional, IBoolean, IEquatable<Nil>, IMonad
    {
       public static IObject NilValue => new Nil();
 
@@ -33,5 +33,9 @@ namespace Kagami.Library.Objects
       public bool IsTrue => false;
 
       public bool Equals(Nil other) => true;
+
+	   public IObject Bind(Lambda map) => this;
+
+	   public IObject Unit(IObject obj) => this;
    }
 }

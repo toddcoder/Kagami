@@ -11,6 +11,8 @@ namespace Kagami.Library.Classes
       {
          base.RegisterMessages();
 
+	      monadMessage();
+
          messages["isSome".get()] = (obj, msg) => function<Nil>(obj, n => (Boolean)n.IsSome);
          messages["isNil".get()] = (obj, msg) => function<Nil>(obj, n => (Boolean)n.IsNil);
          messages["map"] = (obj, msg) => function<Nil, Lambda>(obj, msg, (n, l) => n.Map(l));

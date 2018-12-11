@@ -30,6 +30,8 @@ namespace Kagami.Library.Invokables
 		public Parameters(int count) :
 			this(Enumerable.Range(0, count).Select(i => Parameter.New(false, $"__${i}")).ToArray()) { }
 
+		public Parameters(params string[] parameterNames) : this(parameterNames.Select(n => Parameter.New(false, n)).ToArray()) { }
+
 		public bool Equals(Parameters other)
 		{
 			return parameters.Length == other.parameters.Length &&

@@ -69,6 +69,7 @@ namespace Kagami.Library.Parsers.Expressions
             yield return new RegexParser(builder);
             yield return new RefParser(builder);
 	         yield return new DollarFieldParser(builder);
+	         yield return new DoParser(builder);
             yield return new FieldParser(builder);
          }
       }

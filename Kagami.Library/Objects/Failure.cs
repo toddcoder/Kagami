@@ -4,7 +4,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
 {
-	public struct Failure : IObject, IResult
+	public struct Failure : IObject, IResult, IMonad
 	{
 		public static IObject Object(string message) => new Failure(message);
 
@@ -40,5 +40,9 @@ namespace Kagami.Library.Objects
 		public IObject Map(Lambda lambda) => this;
 
 		public IObject FlatMap(Lambda ifSuccess, Lambda ifFailure) => ifFailure.Invoke(Error);
+
+		public IObject Bind(Lambda map) => Map(map);
+
+		public IObject Unit(IObject obj) => new Failure(Error);
 	}
 }

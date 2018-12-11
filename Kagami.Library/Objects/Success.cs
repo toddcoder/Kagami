@@ -3,7 +3,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
 {
-	public struct Success : IObject, IResult
+	public struct Success : IObject, IResult, IMonad
 	{
 		public static IObject Object(IObject value) => new Success(value);
 
@@ -34,8 +34,24 @@ namespace Kagami.Library.Objects
 
 		public bool IsFailure => false;
 
-		public IObject Map(Lambda lambda) => lambda.Invoke(Value);
+		public IObject Map(Lambda lambda)
+		{
+			var result = lambda.Invoke(Value);
+			switch (result)
+			{
+				case Success success:
+					return success;
+				case Error error:
+					return error;
+				default:
+					return new Success(result);
+			}
+		}
 
 		public IObject FlatMap(Lambda ifSuccess, Lambda ifFailure) => ifSuccess.Invoke(Value);
+
+		public IObject Bind(Lambda map) => Map(map);
+
+		public IObject Unit(IObject obj) => new Success(obj);
 	}
 }

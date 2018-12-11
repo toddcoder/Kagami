@@ -91,6 +91,7 @@ namespace Kagami.Library.Runtime
 			classes["Failure"] = new FailureClass();
 			classes["Optional"] = new OptionalClass();
 			classes["Result"] = new ResultClass();
+			classes["Monad"] = new MonadClass();
 		}
 
 		public IMaybe<BaseClass> Class(string name, bool forwardsIncluded = false)

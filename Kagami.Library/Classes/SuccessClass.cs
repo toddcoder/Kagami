@@ -11,7 +11,9 @@ namespace Kagami.Library.Classes
 		{
 			base.RegisterMessages();
 
-			messages["value".get()] = (obj, msg) => function<Success>(obj, s => s.Value);
+			monadMessage();
+
+         messages["value".get()] = (obj, msg) => function<Success>(obj, s => s.Value);
 			messages["isSuccess".get()] = (obj, msg) => function<Success>(obj, s => (Boolean)s.IsSuccess);
 			messages["isFailure".get()] = (obj, msg) => function<Success>(obj, s => (Boolean)s.IsFailure);
 			messages["map"] = (obj, msg) => function<Success, Lambda>(obj, msg, (s, l) => s.Map(l));
