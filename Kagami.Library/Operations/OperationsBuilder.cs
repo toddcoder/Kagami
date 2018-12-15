@@ -386,6 +386,12 @@ namespace Kagami.Library.Operations
 
 		public void ImportPackage(string packageName) => add(new ImportPackage(packageName));
 
+		public void TryBegin() => add(new TryBegin());
+
+		public void TryEnd() => add(new TryEnd());
+
+		public void SetErrorHandler(string label) => add(new SetErrorHandler(), label);
+
 		public void ArgumentLabel(string label) => add(new ArgumentLabel(label));
 
 		public IResult<Operations> ToOperations(ParseState state)

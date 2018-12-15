@@ -31,7 +31,7 @@ namespace Kagami.Library.Parsers
 		public const string REGEX_FUNCTION_NAME = "((" + REGEX_INVOKABLE + ") | (['~`!@#$%^&*+=|\\;<>//?-']+) | '[]') '='?";
 		public const string REGEX_EOL = "/r /n | /r | /n";
 		public const string REGEX_ANTICIPATE_END = "(> (" + REGEX_EOL + ") | $)";
-		public const string REGEX_OPERATORS = "['-+*//\\%<=>!.~|?#@&^,.:']";
+		public const string REGEX_OPERATORS = "['-+*//\\%<=>!.~|?#@&^,;.:']";
 
 		public static IMatched<char> fromHex(string text)
 		{
@@ -896,6 +896,9 @@ namespace Kagami.Library.Parsers
 					break;
 				case "><":
 					symbol = new SendBinaryMessageSymbol("join", Precedence.Concatenate).Matched<Symbol>();
+					break;
+				case ";":
+					symbol = new BindSymbol().Matched<Symbol>();
 					break;
 			}
 

@@ -124,6 +124,7 @@
     <Compile Include="Classes\TupleClass.cs" />
     <Compile Include="Classes\TypeConstraintClass.cs" />
     <Compile Include="Classes\UnassignedClass.cs" />
+    <Compile Include="Classes\UnitClass.cs" />
     <Compile Include="Classes\UnmatchedClass.cs" />
     <Compile Include="Classes\UserClass.cs" />
     <Compile Include="Classes\VoidClass.cs" />
@@ -312,6 +313,7 @@
     <Compile Include="Nodes\Symbols\SuperSymbol.cs" />
     <Compile Include="Nodes\Symbols\Symbol.cs" />
     <Compile Include="Nodes\Symbols\SymbolSymbol.cs" />
+    <Compile Include="Nodes\Symbols\TrySymbol.cs" />
     <Compile Include="Nodes\Symbols\TypeConstraintSymbol.cs" />
     <Compile Include="Nodes\Symbols\WhateverSymbol.cs" />
     <Compile Include="Nodes\Symbols\WhenSymbol.cs" />
@@ -430,6 +432,7 @@
     <Compile Include="Objects\Tuple.cs" />
     <Compile Include="Objects\TypeConstraint.cs" />
     <Compile Include="Objects\Unassigned.cs" />
+    <Compile Include="Objects\KUnit.cs" />
     <Compile Include="Objects\Unmatched.cs" />
     <Compile Include="Objects\UserCompare.cs" />
     <Compile Include="Objects\UserObject.cs" />
@@ -554,6 +557,7 @@
     <Compile Include="Operations\Rotate.cs" />
     <Compile Include="Operations\SendMessage.cs" />
     <Compile Include="Operations\Peek.cs" />
+    <Compile Include="Operations\SetErrorHandler.cs" />
     <Compile Include="Operations\SetFields.cs" />
     <Compile Include="Operations\SetX.cs" />
     <Compile Include="Operations\Some.cs" />
@@ -565,6 +569,8 @@
     <Compile Include="Operations\ToArguments.cs" />
     <Compile Include="Operations\ToTuple.cs" />
     <Compile Include="Operations\OneTupleOperation.cs" />
+    <Compile Include="Operations\TryBegin.cs" />
+    <Compile Include="Operations\TryEnd.cs" />
     <Compile Include="Operations\TwoBooleanOperation.cs" />
     <Compile Include="Operations\TwoIntOperation.cs" />
     <Compile Include="Operations\TwoNumericOperation.cs" />
@@ -668,6 +674,7 @@
     <Compile Include="Parsers\Expressions\SubexpressionParser2.cs" />
     <Compile Include="Parsers\Expressions\SuperParser.cs" />
     <Compile Include="Parsers\Expressions\SymbolObjectParser.cs" />
+    <Compile Include="Parsers\Expressions\TryParser.cs" />
     <Compile Include="Parsers\Expressions\TwoKeywordOperatorsParser.cs" />
     <Compile Include="Parsers\Expressions\TypeConstraintParser.cs" />
     <Compile Include="Parsers\Expressions\UnknownFieldParser.cs" />

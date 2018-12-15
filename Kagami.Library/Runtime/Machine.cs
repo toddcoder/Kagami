@@ -77,7 +77,13 @@ namespace Kagami.Library.Runtime
 					{
 						if (Tracing)
 							context.PrintLine(table.Value.ToString());
-						return failure<Unit>(original.Exception);
+						if (GetErrorHandler().If(out var address))
+						{
+							stack.Peek().Push(new Objects.Failure(original.Exception.Message));
+							operations.Goto(address);
+						}
+						else
+							return failure<Unit>(original.Exception);
 					}
 
 					if (operation.Increment && currentAddress == operations.Address)
@@ -144,7 +150,7 @@ namespace Kagami.Library.Runtime
 			GoTo(invokable.Address);
 
 			return invoke();
-      }
+		}
 
 		public IMatched<IObject> Invoke(string fieldName)
 		{
@@ -158,7 +164,8 @@ namespace Kagami.Library.Runtime
 						var selector = arguments.Selector(fieldName);
 						image = selector.Image;
 						((isFound, field), (isFailure, exception)) = Find(selector);
-               }
+					}
+
 					if (isFound)
 					{
 						value = field.Value;
@@ -202,7 +209,12 @@ namespace Kagami.Library.Runtime
 							if (Invoke(invoke.FieldName).If(out var returnValue, out var isNotMatched, out var exception))
 								stack.Peek().Push(returnValue);
 							else if (!isNotMatched)
-								return failedMatch<IObject>(exception);
+							{
+								if (GetErrorHandler().If(out var address))
+									operations.Goto(address);
+								else
+									return failedMatch<IObject>(exception);
+                     }
 
 							if (currentAddress == operations.Address)
 								operations.Advance(1);
@@ -298,6 +310,18 @@ namespace Kagami.Library.Runtime
 			}
 
 			return new FrameGroup(frames.ToArray());
+		}
+
+		public IResult<int> GetErrorHandler()
+		{
+			while (stack.Count > 0)
+			{
+				var frame = stack.Pop();
+				if (frame.FrameType == FrameType.Try)
+					return frame.ErrorHandler.FlatMap(i => i.Success(), () => "No error handler set".Failure<int>());
+			}
+
+			return failure<int>(emptyStack());
 		}
 
 		public void Clear() => CurrentFrame.Clear();
@@ -482,5 +506,17 @@ namespace Kagami.Library.Runtime
 		}
 
 		public string PackageFolder { get; set; } = "";
+
+		public IResult<Unit> SetErrorHandler(int address)
+		{
+			var frame = stack.FirstOrNone(f => f.FrameType == FrameType.Try);
+			if (frame.If(out var tf))
+			{
+				tf.ErrorHandler = address.Some();
+				return Unit.Success();
+			}
+			else
+				return "Try frame not found".Failure<Unit>();
+		}
 	}
 }

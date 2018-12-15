@@ -5,6 +5,7 @@
       Standard,
       Function,
       Exit,
-      Skip
+      Skip,
+		Try
    }
 }

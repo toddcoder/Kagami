@@ -17,6 +17,8 @@ namespace Kagami.Library.Runtime
 {
 	public class Frame
 	{
+		public static Frame TryFrame() => new Frame() { FrameType = FrameType.Try };
+
 		protected Stack<IObject> stack;
 		protected IMaybe<IObject> returnValue;
 		protected int address;
@@ -179,5 +181,7 @@ namespace Kagami.Library.Runtime
 		}
 
 		public void CopyFromFields(Fields sourceFields) => fields.CopyFrom(sourceFields);
+
+		public IMaybe<int> ErrorHandler { get; set; } = none<int>();
 	}
 }
