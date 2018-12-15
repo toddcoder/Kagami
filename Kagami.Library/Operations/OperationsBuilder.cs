@@ -392,6 +392,8 @@ namespace Kagami.Library.Operations
 
 		public void SetErrorHandler(string label) => add(new SetErrorHandler(), label);
 
+		public void Throw() => add(new Throw());
+
 		public void ArgumentLabel(string label) => add(new ArgumentLabel(label));
 
 		public IResult<Operations> ToOperations(ParseState state)

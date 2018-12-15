@@ -71,6 +71,7 @@ namespace Kagami.Library.Parsers.Expressions
 	         yield return new DollarFieldParser(builder);
 	         yield return new DoParser(builder);
 	         yield return new TryParser(builder);
+	         yield return new ThrowParser(builder);
             yield return new FieldParser(builder);
          }
       }

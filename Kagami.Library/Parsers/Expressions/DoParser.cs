@@ -40,7 +40,7 @@ namespace Kagami.Library.Parsers.Expressions
 		{
 			public ReturnItemParser(ExpressionBuilder builder) : base(builder) { }
 
-			public override string Pattern => "^ /'return' /(|s+|)";
+			public override string Pattern => "^ /'gather' /(|s+|)";
 
 			public Expression Expression { get; set; }
 
@@ -90,9 +90,13 @@ namespace Kagami.Library.Parsers.Expressions
 
 				state.Regress();
 
-				if (returnItemParser.Scan(state).If(out _, out original))
+				var lambdaResult =
+					from tabs in state.Scan($"^ /({state.Indentation.FriendlyString()})", Color.Whitespace)
+					from unit in returnItemParser.Scan(state)
+					select returnItemParser.Expression;
+
+				if (lambdaResult.If(out var lambdaExpression, out var originalResult))
 				{
-					var lambdaExpression = returnItemParser.Expression;
 					var (parameterName, targetExpression) = stack.Pop();
 					if (getSymbol(targetExpression, parameterName, lambdaExpression, stack).If(out var symbol, out var exception))
 					{
@@ -103,7 +107,7 @@ namespace Kagami.Library.Parsers.Expressions
 						return failedMatch<Unit>(exception);
 				}
 				else
-					return original;
+					return originalResult.ExceptionAs<Unit>();
 			}
 			else
 				return original;

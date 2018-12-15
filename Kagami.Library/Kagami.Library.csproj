@@ -313,6 +313,7 @@
     <Compile Include="Nodes\Symbols\SuperSymbol.cs" />
     <Compile Include="Nodes\Symbols\Symbol.cs" />
     <Compile Include="Nodes\Symbols\SymbolSymbol.cs" />
+    <Compile Include="Nodes\Symbols\ThrowSymbol.cs" />
     <Compile Include="Nodes\Symbols\TrySymbol.cs" />
     <Compile Include="Nodes\Symbols\TypeConstraintSymbol.cs" />
     <Compile Include="Nodes\Symbols\WhateverSymbol.cs" />
@@ -566,6 +567,7 @@
     <Compile Include="Operations\Success.cs" />
     <Compile Include="Operations\Super.cs" />
     <Compile Include="Operations\Swap.cs" />
+    <Compile Include="Operations\Throw.cs" />
     <Compile Include="Operations\ToArguments.cs" />
     <Compile Include="Operations\ToTuple.cs" />
     <Compile Include="Operations\OneTupleOperation.cs" />
@@ -674,6 +676,7 @@
     <Compile Include="Parsers\Expressions\SubexpressionParser2.cs" />
     <Compile Include="Parsers\Expressions\SuperParser.cs" />
     <Compile Include="Parsers\Expressions\SymbolObjectParser.cs" />
+    <Compile Include="Parsers\Expressions\ThrowParser.cs" />
     <Compile Include="Parsers\Expressions\TryParser.cs" />
     <Compile Include="Parsers\Expressions\TwoKeywordOperatorsParser.cs" />
     <Compile Include="Parsers\Expressions\TypeConstraintParser.cs" />

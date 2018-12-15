@@ -14,9 +14,9 @@ namespace Kagami.Library.Objects
 
 		public string ClassName => "Failure";
 
-		public string AsString => $"f\"{Error.Message.AsString}\"";
+		public string AsString => Error.Message.AsString;
 
-		public string Image => AsString;
+		public string Image => $"f\"{Error.Message.AsString}\"";
 
 		public int Hash => Error.Hash;
 

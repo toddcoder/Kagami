@@ -501,7 +501,7 @@ namespace Kagami.Library.Parsers
 				else if (original.IsFailedMatch)
 					return original;
 
-				builder.Add(new FieldSymbol($"{unknownFieldCount++}".get()));
+				builder.Add(new FieldSymbol($"__${unknownFieldCount++}"));
 				return Unit.Matched();
 			}
 
@@ -897,7 +897,7 @@ namespace Kagami.Library.Parsers
 				case "><":
 					symbol = new SendBinaryMessageSymbol("join", Precedence.Concatenate).Matched<Symbol>();
 					break;
-				case ";":
+				case ":-":
 					symbol = new BindSymbol().Matched<Symbol>();
 					break;
 			}
