@@ -100,6 +100,15 @@ namespace Kagami.Library.Nodes.Statements
 				statements.Add(new ReturnNothing());
 		}
 
+		public void AddReturnIf(Symbol symbol)
+		{
+			if (!(statements[statements.Count - 1] is Return))
+			{
+				var expression = new Expression(symbol);
+				statements.Add(new Return(expression, none<TypeConstraint>()));
+			}
+		}
+
 		public IMaybe<Expression> ExpressionStatement(bool returns)
 		{
 			if (statements.Count > 0 && statements[0] is ExpressionStatement expressionStatement &&

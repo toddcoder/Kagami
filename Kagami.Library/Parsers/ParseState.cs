@@ -142,6 +142,19 @@ namespace Kagami.Library.Parsers
 
       public void Regress() => PopIndentation();
 
+	   public IMatched<Unit> Retreat()
+	   {
+		   try
+		   {
+				PopIndentation();
+			   return Unit.Matched();
+		   }
+		   catch (Exception exception)
+		   {
+			   return failedMatch<Unit>(exception);
+		   }
+	   }
+
       public void PushIndentation(string text)
       {
          indentations.Push(indentation);

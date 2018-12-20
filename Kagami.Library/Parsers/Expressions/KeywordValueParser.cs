@@ -6,7 +6,7 @@ namespace Kagami.Library.Parsers.Expressions
 {
    public class KeywordValueParser : SymbolParser
    {
-      public override string Pattern => "^ /(|s|) /('nil' | 'true' | 'false' | 'del') /b";
+      public override string Pattern => "^ /(|s|) /('nil' | 'true' | 'false' | 'del' | 'unit') /b";
 
       public KeywordValueParser(ExpressionBuilder builder) : base(builder) { }
 
@@ -29,6 +29,9 @@ namespace Kagami.Library.Parsers.Expressions
             case "del":
                builder.Add(new DelSymbol());
                break;
+            case "unit":
+	            builder.Add(new UnitSymbol());
+					break;
             default:
                return notMatched<Unit>();
          }

@@ -316,6 +316,7 @@
     <Compile Include="Nodes\Symbols\ThrowSymbol.cs" />
     <Compile Include="Nodes\Symbols\TrySymbol.cs" />
     <Compile Include="Nodes\Symbols\TypeConstraintSymbol.cs" />
+    <Compile Include="Nodes\Symbols\UnitSymbol.cs" />
     <Compile Include="Nodes\Symbols\WhateverSymbol.cs" />
     <Compile Include="Nodes\Symbols\WhenSymbol.cs" />
     <Compile Include="Nodes\Symbols\WhereSymbol.cs" />
@@ -677,6 +678,7 @@
     <Compile Include="Parsers\Expressions\SuperParser.cs" />
     <Compile Include="Parsers\Expressions\SymbolObjectParser.cs" />
     <Compile Include="Parsers\Expressions\ThrowParser.cs" />
+    <Compile Include="Parsers\Expressions\TryBlockParser.cs" />
     <Compile Include="Parsers\Expressions\TryParser.cs" />
     <Compile Include="Parsers\Expressions\TwoKeywordOperatorsParser.cs" />
     <Compile Include="Parsers\Expressions\TypeConstraintParser.cs" />
