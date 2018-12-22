@@ -54,7 +54,10 @@ namespace Kagami.Library.Parsers.Expressions
             yield return new FormatParser(builder);
 
             if (builder.Flags[ExpressionFlags.Comparisand])
-               yield return new InternalListParser(builder);
+            {
+	            yield return new InternalListParser(builder);
+	            yield return new PlaceholderParser(builder);
+            }
             else
             {
                yield return new ComparisandParser(builder);

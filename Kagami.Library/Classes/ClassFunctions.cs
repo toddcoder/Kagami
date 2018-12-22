@@ -70,7 +70,7 @@ namespace Kagami.Library.Classes
          var result = obj.Match(message.Arguments[0], bindings);
          if (result)
          {
-            Machine.Fields.SetBindings(bindings, false, false);
+            Machine.Fields.SetBindings(bindings);
             return Boolean.True;
          }
          else

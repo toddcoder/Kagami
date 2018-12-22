@@ -12,6 +12,7 @@ using Standard.Types.Maybe;
 using Standard.Types.RegularExpressions;
 using Standard.Types.Strings;
 using static Kagami.Library.AllExceptions;
+using static Kagami.Library.CommonFunctions;
 using static Standard.Types.Maybe.MaybeFunctions;
 
 namespace Kagami.Library.Parsers.Statements
@@ -103,11 +104,12 @@ namespace Kagami.Library.Parsers.Statements
                   break;
                case AssignToNewField2 assignToNewField2:
                {
-                  var (mutable, comparisand, _) = assignToNewField2;
+                  var (comparisand, _) = assignToNewField2;
                   if (comparisand.Symbols[0] is PlaceholderSymbol placeholder)
                   {
                      var fieldName = placeholder.Name;
-                     var function = Function.Getter(fieldName);
+	                  var (bindingType, name) = fromBindingName(fieldName);
+                     var function = Function.Getter(name);
                      statements.Add(function);
                      var (functionName, _, block, _, invokable, _) = function;
                      if (!isPrivate(fieldName) && !userClass.RegisterMethod(functionName, new Lambda(invokable), true))
@@ -115,7 +117,7 @@ namespace Kagami.Library.Parsers.Statements
 
                      functions.Add((invokable, block, true));
 
-                     if (mutable)
+                     if (bindingType == BindingType.Mutable)
                      {
                         function = Function.Setter(fieldName);
                         statements.Add(function);

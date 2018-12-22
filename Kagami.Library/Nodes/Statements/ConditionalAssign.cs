@@ -7,15 +7,13 @@ namespace Kagami.Library.Nodes.Statements
 {
    public class ConditionalAssign : Statement
    {
-      bool mutable;
       Symbol comparisand;
       Expression expression;
       Block block;
       IMaybe<Block> elseBlock;
 
-      public ConditionalAssign(bool mutable, Symbol comparisand, Expression expression, Block block, IMaybe<Block> elseBlock)
+      public ConditionalAssign(Symbol comparisand, Expression expression, Block block, IMaybe<Block> elseBlock)
       {
-         this.mutable = mutable;
          this.comparisand = comparisand;
          this.expression = expression;
          this.block = block;
@@ -30,7 +28,7 @@ namespace Kagami.Library.Nodes.Statements
          builder.PushFrame();
          expression.Generate(builder);
          comparisand.Generate(builder);
-         builder.Match(mutable, false);
+         builder.Match();
          builder.GoToIfFalse(elseBlock.IsSome ? elseLabel : endLabel);
 
          builder.PushFrame();

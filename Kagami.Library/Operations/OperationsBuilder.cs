@@ -312,10 +312,9 @@ namespace Kagami.Library.Operations
 
 		public void IsClass(string className, bool pop) => add(new IsClass(className, pop));
 
-		public void Match(bool mutable, bool strict)
+		public void Match()
 		{
-			CallSysFunction2((sys, x, y) => sys.Match(mutable, strict, x, y),
-				$"sys.match({mutable.Image()}, {strict.Image()}, x, y, assign)");
+			CallSysFunction2((sys, x, y) => sys.Match(x, y), "sys.match(x, y,)");
 		}
 
 		public void Drop() => add(new Drop());

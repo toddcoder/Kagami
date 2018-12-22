@@ -64,7 +64,7 @@ namespace Kagami.Library.Objects
                   return false;
             }
 
-            Machine.Current.CurrentFrame.Fields.SetBindings(bindings, true, false);
+            Machine.Current.CurrentFrame.Fields.SetBindings(bindings);
             return true;
          }
       }

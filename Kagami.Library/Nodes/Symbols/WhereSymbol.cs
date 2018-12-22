@@ -27,7 +27,7 @@ namespace Kagami.Library.Nodes.Symbols
 				builder.GetField(fieldName);
 				builder.SendMessage(getter, 0);
 				comparisand.Generate(builder);
-				builder.Match(false, false);
+				builder.Match();
 				builder.GoToIfFalse(labelFalse);
 			}
 

@@ -8,15 +8,13 @@ namespace Kagami.Library.Parsers.Statements
 {
    public class AssignToNewFieldParser2 : EndingInExpressionParser
    {
-      bool mutable;
       Expression comparisand;
 
-      public override string Pattern => "^ /('let' | 'var') /(|s+|)";
+      public override string Pattern => "^ /'|' /(|s+|)";
 
       public override IMatched<Unit> Prefix(ParseState state, Token[] tokens)
       {
-         mutable = tokens[1].Text == "var";
-         state.Colorize(tokens, Color.Keyword, Color.Whitespace);
+         state.Colorize(tokens, Color.Structure, Color.Whitespace);
 
          var result =
             from comparisand in getExpression(state, ExpressionFlags.Comparisand)
@@ -30,7 +28,7 @@ namespace Kagami.Library.Parsers.Statements
 
       public override IMatched<Unit> Suffix(ParseState state, Expression expression)
       {
-         state.AddStatement(new AssignToNewField2(mutable, comparisand, expression));
+         state.AddStatement(new AssignToNewField2(comparisand, expression));
          return Unit.Matched();
       }
    }

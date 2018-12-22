@@ -7,12 +7,11 @@ namespace Kagami.Library.Parsers.Statements
 {
    public class ConditionalWhileParser : StatementParser
    {
-      public override string Pattern => "^ /'while' /(|s+|) /('var' | 'let') /(|s+|)";
+      public override string Pattern => "^ /'while' /(|s+|) /'|' /(|s+|)";
 
       public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
       {
-         var mutable = tokens[3].Text == "var";
-         state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Keyword, Color.Whitespace);
+         state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Structure, Color.Whitespace);
 
          var result =
             from comparisand in getExpression(state, ExpressionFlags.Comparisand)
@@ -24,7 +23,7 @@ namespace Kagami.Library.Parsers.Statements
          if (result.If(out var tuple, out var original))
          {
             var (comparisand, expression, block) = tuple;
-            state.AddStatement(new ConditionalWhile(mutable, comparisand, expression, block));
+            state.AddStatement(new ConditionalWhile(comparisand, expression, block));
 
             return Unit.Matched();
          }

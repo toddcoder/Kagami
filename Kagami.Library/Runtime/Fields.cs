@@ -7,6 +7,7 @@ using Standard.Types.Collections;
 using Standard.Types.Enumerables;
 using Standard.Types.Maybe;
 using Standard.Types.RegularExpressions;
+using Standard.Types.Strings;
 using static Kagami.Library.AllExceptions;
 using static Standard.Types.Maybe.MaybeFunctions;
 
@@ -212,7 +213,20 @@ namespace Kagami.Library.Runtime
 
       public override string ToString() => fields.Select(i => $"{i.Key} = {i.Value.Value.Image}").Listify();
 
-      public void SetBindings(Hash<string, IObject> bindings, bool mutable, bool strict)
+	   public void SetBindings(Hash<string, IObject> bindings)
+	   {
+		   foreach (var (key, value) in bindings)
+			   if (key.IsMatch("^ ['+-']"))
+			   {
+				   var mutable = key.StartsWith("+");
+				   var fieldName = key.Skip(1);
+				   New(fieldName, value, mutable);
+			   }
+			   else
+				   Assign(key, value);
+	   }
+
+/*      public void SetBindings(Hash<string, IObject> bindings, bool mutable, bool strict)
       {
          foreach (var binding in bindings)
             if (fields.ContainsKey(binding.Key))
@@ -224,7 +238,7 @@ namespace Kagami.Library.Runtime
             }
             else
                New(binding.Key, binding.Value, mutable);
-      }
+      }*/
 
 /*      public void AssignBindings(Hash<string, IObject> bindings, bool mutable)
       {

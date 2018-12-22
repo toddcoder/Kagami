@@ -6,14 +6,12 @@ namespace Kagami.Library.Nodes.Statements
 {
    public class ConditionalWhile : Statement
    {
-      bool mutable;
       Symbol comparisand;
       Expression expression;
       Block block;
 
-      public ConditionalWhile(bool mutable, Symbol comparisand, Expression expression, Block block)
+      public ConditionalWhile(Symbol comparisand, Expression expression, Block block)
       {
-         this.mutable = mutable;
          this.comparisand = comparisand;
          this.expression = expression;
          this.block = block;
@@ -33,7 +31,7 @@ namespace Kagami.Library.Nodes.Statements
          comparisand.Generate(builder);
          builder.Peek(Index);
 
-         builder.Match(mutable, false);
+         builder.Match();
          builder.GoToIfFalse(endLabel);
 
          builder.PushExitFrame(exitLabel);
@@ -52,6 +50,6 @@ namespace Kagami.Library.Nodes.Statements
          builder.NoOp();
       }
 
-      public override string ToString() => $"{(mutable ? "var" : "let")} while {comparisand} = {expression} {block}";
+      public override string ToString() => $"while | {comparisand} = {expression} {block}";
    }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using Standard.Types.Collections;
+using Standard.Types.Strings;
 
 namespace Kagami.Library.Objects
 {
@@ -15,9 +16,20 @@ namespace Kagami.Library.Objects
 
       public string AsString => name;
 
-      public string Image => $"*{name}";
+      public string Image
+      {
+	      get
+	      {
+		      if (name.StartsWith("+"))
+			      return $"var {name.Skip(1)}";
+				else if (name.StartsWith("-"))
+			      return $"let {name.Skip(1)}";
+		      else
+			      return $"* {name}";
+	      }
+      }
 
-      public int Hash => name.GetHashCode();
+	   public int Hash => name.GetHashCode();
 
       public bool IsEqualTo(IObject obj) => obj is Placeholder ph && name == ph.name;
 

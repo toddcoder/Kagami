@@ -8,12 +8,11 @@ namespace Kagami.Library.Parsers.Statements
 {
    public class ConditionalAssignParser : StatementParser
    {
-      public override string Pattern => "^ /'if' /(|s+|) /('var' | 'let') /(|s+|)";
+      public override string Pattern => "^ /'if' /(|s+|) /'|' /(|s+|)";
 
       public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
       {
-         var mutable = tokens[3].Text == "var";
-         state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Keyword, Color.Whitespace);
+         state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Structure, Color.Whitespace);
 
          var result =
             from comparisand in getExpression(state, ExpressionFlags.Comparisand)
@@ -41,7 +40,7 @@ namespace Kagami.Library.Parsers.Statements
                   return failedMatch<Unit>(exception);
             }
 
-            state.AddStatement(new ConditionalAssign(mutable, comparisand, expression, block, elseBlock));
+            state.AddStatement(new ConditionalAssign(comparisand, expression, block, elseBlock));
             return Unit.Matched();
          }
          else

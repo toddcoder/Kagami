@@ -327,6 +327,7 @@
     <Compile Include="Objects\Arguments.cs" />
     <Compile Include="Objects\Array.cs" />
     <Compile Include="Objects\Binding.cs" />
+    <Compile Include="Objects\BindingType.cs" />
     <Compile Include="Objects\Boolean.cs" />
     <Compile Include="Objects\Byte.cs" />
     <Compile Include="Objects\ByteArray.cs" />
@@ -511,7 +512,6 @@
     <Compile Include="Operations\IsNegative.cs" />
     <Compile Include="Operations\IsPositive.cs" />
     <Compile Include="Operations\IsZero.cs" />
-    <Compile Include="Operations\Match.cs" />
     <Compile Include="Operations\Multiply.cs" />
     <Compile Include="Operations\Negate.cs" />
     <Compile Include="Operations\NewArray.cs" />
@@ -646,6 +646,7 @@
     <Compile Include="Parsers\Expressions\MessageParser.cs" />
     <Compile Include="Parsers\Expressions\MonadBindParser.cs" />
     <Compile Include="Parsers\Expressions\PatternParser.cs" />
+    <Compile Include="Parsers\Expressions\PlaceholderParser.cs" />
     <Compile Include="Parsers\Expressions\RangeOperatorParser.cs" />
     <Compile Include="Parsers\Expressions\RangePrefixParser.cs" />
     <Compile Include="Parsers\Expressions\RefParser.cs" />

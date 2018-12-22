@@ -6,7 +6,7 @@ namespace Kagami.Library.Nodes.Symbols
    {
       public override void Generate(OperationsBuilder builder)
       {
-         builder.CallSysFunction2((sys, x, y) => sys.Match(true, false, x, y), "sys.match(true, false, x, y, false)");
+         builder.CallSysFunction2((sys, x, y) => sys.Match(x, y), "sys.match(x, y)");
       }
 
       public override Precedence Precedence => Precedence.Boolean;
