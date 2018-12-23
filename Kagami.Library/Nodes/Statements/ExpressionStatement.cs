@@ -2,8 +2,8 @@
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using Standard.Types.Booleans;
-using Standard.Types.Maybe;
-using static Standard.Types.Maybe.MaybeFunctions;
+using Standard.Types.Monads;
+using static Standard.Types.Monads.MonadFunctions;
 
 namespace Kagami.Library.Nodes.Statements
 {

@@ -2,9 +2,9 @@
 using System.Text;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
-using static Standard.Types.Maybe.MaybeFunctions;
+using static Standard.Types.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
 {
@@ -21,7 +21,7 @@ namespace Kagami.Library.Parsers.Expressions
 			{
 				var comprehensions = new List<(Symbol, Expression, IMaybe<Expression>, string)>();
 
-				if (getInnerComprehension(state).If(out var tuple, out var original))
+				if (getInnerComprehension(state).Out(out var tuple, out var original))
 				{
 					var (comparisand, source, ifExp) = tuple;
 					var image = $"for {comparisand} <- {source}";
@@ -33,11 +33,11 @@ namespace Kagami.Library.Parsers.Expressions
 				while (state.More)
 				{
 					var parser = new InnerComprehensionParser(builder, comprehensions);
-					if (parser.Scan(state).If(out _, out var isNotMatched, out var exception1)) { }
-					else if (isNotMatched)
-						break;
+					if (parser.Scan(state).If(out _, out var mbException)) { }
+					else if (mbException.If(out exception))
+						return failedMatch<Unit>(exception);
 					else
-						return failedMatch<Unit>(exception1);
+						break;
 				}
 
 				var stack = new Stack<(Symbol, Expression, IMaybe<Expression>, string)>();

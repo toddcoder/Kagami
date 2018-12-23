@@ -1,9 +1,9 @@
 ﻿using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
-using static Standard.Types.Maybe.MaybeFunctions;
+using static Standard.Types.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Statements
 {
@@ -23,25 +23,25 @@ namespace Kagami.Library.Parsers.Statements
 			fieldName = tokens[3].Text;
 			state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Identifier);
 
-			if (parseTypeConstraint(state).If(out typeConstraint, out var isNotMatched, out var exception)) { }
-			else if (isNotMatched)
-				typeConstraint = none<TypeConstraint>();
-			else
+			if (parseTypeConstraint(state).If(out typeConstraint, out var mbException)) { }
+			else if (mbException.If(out var exception))
 				return failedMatch<Unit>(exception);
+			else
+				typeConstraint = none<TypeConstraint>();
 
-			if (state.Scan("^ /(|s|) /'='", Color.Whitespace, Color.Structure).If(out _, out isNotMatched, out exception))
+			if (state.Scan("^ /(|s|) /'='", Color.Whitespace, Color.Structure).If(out _, out mbException))
 			{
 				state.CommitTransaction();
 				return Unit.Matched();
 			}
-			else if (isNotMatched)
+			else if (mbException.If(out var exception))
+				return failedMatch<Unit>(exception);
+			else
 			{
 				state.RollBackTransaction();
 				return notMatched<Unit>();
-			}
-			else
-				return failedMatch<Unit>(exception);
-		}
+         }
+      }
 
 		public override IMatched<Unit> Suffix(ParseState state, Expression expression)
 		{

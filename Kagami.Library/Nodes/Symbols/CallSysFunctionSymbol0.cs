@@ -2,7 +2,7 @@
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using Kagami.Library.Packages;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 
 namespace Kagami.Library.Nodes.Symbols
 {

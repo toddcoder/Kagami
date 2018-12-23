@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Kagami.Library.Nodes.Symbols;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 using Standard.Types.Strings;
 using static Kagami.Library.Parsers.ParserFunctions;
-using static Standard.Types.Maybe.MaybeFunctions;
+using static Standard.Types.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
 {
@@ -27,7 +27,7 @@ namespace Kagami.Library.Parsers.Expressions
 					from e in getExpression(state, builder.Flags | ExpressionFlags.OmitComma | ExpressionFlags.OmitColon)
 					from n in state.Scan("^ /(/s*) /[',}']", Color.Whitespace, Color.Structure)
 					select (field: f.Trim().Skip(-1), expression: e, next: n);
-				if (result.If(out var tuple, out var isNotMatched, out var exception))
+				if (result.If(out var tuple, out var mbException))
 				{
 					list.Add((tuple.field, tuple.expression));
 					if (tuple.next.Trim() == "}")
@@ -36,10 +36,10 @@ namespace Kagami.Library.Parsers.Expressions
 						return Unit.Matched();
 					}
 				}
-				else if (isNotMatched)
-					return notMatched<Unit>();
-				else
+				else if (mbException.If(out var exception))
 					return failedMatch<Unit>(exception);
+				else
+					return notMatched<Unit>();
 			}
 
 			return "Open initializer".FailedMatch<Unit>();

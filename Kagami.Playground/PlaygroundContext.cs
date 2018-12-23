@@ -3,7 +3,7 @@ using System.Windows.Forms;
 using Kagami.Library;
 using Kagami.Library.Runtime;
 using Standard.Types.Collections;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 
 namespace Kagami.Playground
 {

@@ -1,36 +1,36 @@
 ﻿using Kagami.Library.Classes;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 using Standard.Types.Strings;
 using static Kagami.Library.Objects.ObjectFunctions;
-using static Standard.Types.Maybe.MaybeFunctions;
+using static Standard.Types.Monads.MonadFunctions;
 
 namespace Kagami.Library.Operations
 {
-   public class Super : Operation
-   {
-      public override IMatched<IObject> Execute(Machine machine)
-      {
-         if (machine.Find("self", true).If(out var selfField, out var isNotMatched, out var exception))
-         {
-            var self = (UserObject)selfField.Value;
-            var selfClass = (UserClass)classOf(self);
-            var parentClassName = selfClass.ParentClassName;
-            if (parentClassName.IsEmpty())
-               return $"Class {selfClass.Name} has no parent class".FailedMatch<IObject>();
-            else
-            {
-               var superObject = new UserObject(parentClassName, self.Fields, self.Parameters);
-               return superObject.Matched<IObject>();
-            }
-         }
-         else if (isNotMatched)
-            return "self not defined".FailedMatch<IObject>();
-         else
-            return failedMatch<IObject>(exception);
-      }
+	public class Super : Operation
+	{
+		public override IMatched<IObject> Execute(Machine machine)
+		{
+			if (machine.Find("self", true).If(out var selfField, out var mbException))
+			{
+				var self = (UserObject)selfField.Value;
+				var selfClass = (UserClass)classOf(self);
+				var parentClassName = selfClass.ParentClassName;
+				if (parentClassName.IsEmpty())
+					return $"Class {selfClass.Name} has no parent class".FailedMatch<IObject>();
+				else
+				{
+					var superObject = new UserObject(parentClassName, self.Fields, self.Parameters);
+					return superObject.Matched<IObject>();
+				}
+			}
+			else if (mbException.If(out var exception))
+				return failedMatch<IObject>(exception);
+			else
+				return "self not defined".FailedMatch<IObject>();
+		}
 
-      public override string ToString() => "super";
-   }
+		public override string ToString() => "super";
+	}
 }

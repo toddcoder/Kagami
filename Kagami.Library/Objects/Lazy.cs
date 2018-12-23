@@ -1,8 +1,9 @@
 ﻿using Kagami.Library.Invokables;
 using Kagami.Library.Runtime;
 using Standard.Types.Collections;
-using Standard.Types.Maybe;
-using static Standard.Types.Maybe.MaybeFunctions;
+using Standard.Types.Exceptions;
+using Standard.Types.Monads;
+using static Standard.Types.Monads.MonadFunctions;
 
 namespace Kagami.Library.Objects
 {
@@ -19,15 +20,17 @@ namespace Kagami.Library.Objects
 
       IObject getValue()
       {
-         if (value.If(out var v))
-            return v;
-         else
-         {
-            var result = Machine.Current.Invoke(invokable, Arguments.Empty, 0).Value;
-            value = result.Some();
-
-            return result;
-         }
+	      if (value.If(out var v))
+		      return v;
+	      else if (Machine.Current.Invoke(invokable, Arguments.Empty, 0).If(out var result, out var mbException))
+	      {
+		      value = result.Some();
+		      return result;
+	      }
+	      else if (mbException.If(out var exception))
+		      throw exception;
+	      else
+		      throw "Value could not be resolved".Throws();
       }
 
       public IObject Value => getValue();

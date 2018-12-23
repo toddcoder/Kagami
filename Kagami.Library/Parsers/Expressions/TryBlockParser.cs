@@ -1,7 +1,7 @@
 ﻿using Kagami.Library.Nodes.Symbols;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
-using static Standard.Types.Maybe.MaybeFunctions;
+using static Standard.Types.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
 {
@@ -11,11 +11,11 @@ namespace Kagami.Library.Parsers.Expressions
 
 		public override string Pattern => $"^ /(|s|) /'try' /({REGEX_EOL})";
 
-      public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
 			state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace);
 
-			if (getBlock(state).If(out var block, out var original))
+			if (getBlock(state).Out(out var block, out var original))
 			{
 				block.AddReturnIf(new UnitSymbol());
 				var lambda = new LambdaSymbol(0, block);
@@ -32,6 +32,6 @@ namespace Kagami.Library.Parsers.Expressions
 			}
 			else
 				return original.ExceptionAs<Unit>();
-      }
+		}
 	}
 }

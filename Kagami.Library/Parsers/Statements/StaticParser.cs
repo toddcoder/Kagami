@@ -3,9 +3,9 @@ using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Standard.Types.Collections;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
-using static Standard.Types.Maybe.MaybeFunctions;
+using static Standard.Types.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Statements
 {
@@ -21,21 +21,21 @@ namespace Kagami.Library.Parsers.Statements
 		{
 			state.Colorize(tokens, Color.Keyword, Color.Whitespace);
 
-			if (getBlock(state).If(out var block, out var original))
+			if (getBlock(state).Out(out var block, out var original))
 			{
 				var className = classBuilder.UserClass.Name;
 				var metaClassName = $"__$meta{className}";
 				var metaClassBuilder = new ClassBuilder(metaClassName, Parameters.Empty, "", new Expression[0], block,
 					new Hash<string, TraitClass>());
-				if (metaClassBuilder.Register().If(out _, out var registerOriginal))
+				if (metaClassBuilder.Register().Out(out _, out var registerOriginal))
 				{
 					var classItemsParser = new ClassItemsParser(metaClassBuilder);
 					while (state.More)
-						if (classItemsParser.Scan(state).If(out _, out var isNotMatched, out var exception)) { }
-						else if (isNotMatched)
-							break;
-						else
+						if (classItemsParser.Scan(state).If(out _, out var mbException)) { }
+						else if (mbException.If(out var exception))
 							return failedMatch<Unit>(exception);
+						else
+							break;
 
 					var metaClass = new MetaClass(className, metaClassBuilder);
 					state.AddStatement(metaClass);

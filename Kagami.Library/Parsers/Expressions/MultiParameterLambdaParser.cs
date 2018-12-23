@@ -1,5 +1,5 @@
 ﻿using Kagami.Library.Invokables;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions

@@ -8,11 +8,11 @@ using Kagami.Library.Packages;
 using Standard.Types.Collections;
 using Standard.Types.Enumerables;
 using Standard.Types.Exceptions;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 using Standard.Types.Strings;
 using static Kagami.Library.AllExceptions;
-using static Standard.Types.Maybe.AttemptFunctions;
-using static Standard.Types.Maybe.MaybeFunctions;
+using static Standard.Types.Monads.AttemptFunctions;
+using static Standard.Types.Monads.MonadFunctions;
 
 namespace Kagami.Library.Runtime
 {
@@ -71,7 +71,7 @@ namespace Kagami.Library.Runtime
 				{
 					trace(operations.Address, () => operation.ToString());
 					var currentAddress = operations.Address;
-					if (operation.Execute(this).If(out var result, out var original) && running && result.ClassName != "Void")
+					if (operation.Execute(this).Out(out var result, out var original) && running && result.ClassName != "Void")
 						stack.Peek().Push(result);
 					else if (original.IsFailedMatch)
 					{
@@ -206,22 +206,22 @@ namespace Kagami.Library.Runtime
 						case Yield _:
 							return Yield.YieldAction(this);
 						case Invoke invoke:
-							if (Invoke(invoke.FieldName).If(out var returnValue, out var isNotMatched, out var exception))
+							if (Invoke(invoke.FieldName).If(out var returnValue, out var mbException))
 								stack.Peek().Push(returnValue);
-							else if (!isNotMatched)
+							else if (mbException.If(out var exception))
 							{
 								if (GetErrorHandler().If(out var address))
 									operations.Goto(address);
 								else
 									return failedMatch<IObject>(exception);
-                     }
+							}
 
 							if (currentAddress == operations.Address)
 								operations.Advance(1);
 							continue;
 					}
 
-					if (operation.Execute(this).If(out var result, out var original) && running)
+					if (operation.Execute(this).Out(out var result, out var original) && running)
 						stack.Peek().Push(result);
 					else if (original.IsFailedMatch)
 						return failedMatch<IObject>(original.Exception);
@@ -338,15 +338,15 @@ namespace Kagami.Library.Runtime
 		{
 			var depth = 0;
 			foreach (var frame in stack)
-				if (frame.Fields.Find(fieldName, getting).If(out var field, out var isNotMatched, out var exception))
+				if (frame.Fields.Find(fieldName, getting).If(out var field, out var mbException))
 					return field.Matched();
-				else if (isNotMatched)
+				else if (mbException.If(out var exception))
+					return failedMatch<Field>(exception);
+				else
 				{
 					if (depth++ > MAX_DEPTH)
 						return failedMatch<Field>(exceededMaxDepth());
 				}
-				else
-					return failedMatch<Field>(exception);
 
 			return notMatched<Field>();
 		}
@@ -384,9 +384,9 @@ namespace Kagami.Library.Runtime
 			foreach (var booleans in iterator)
 			{
 				var newSelector = selector.Equivalent(booleans);
-				if (findExact(newSelector).If(out var matched, out var isNotMatched, out var exception))
+				if (findExact(newSelector).If(out var matched, out var mbException))
 					return matched.Matched();
-				else if (!isNotMatched)
+				else if (mbException.If(out var exception))
 					return failedMatch<Field>(exception);
 			}
 
@@ -399,23 +399,14 @@ namespace Kagami.Library.Runtime
 
 		public IResult<Field> Assign(string fieldName, IObject value, bool getting, bool overriden = false)
 		{
-			if (Find(fieldName, getting).If(out var field, out var isNotMatched, out var exception))
+			if (Find(fieldName, getting).If(out var field, out var mbException))
 				if (field.Mutable)
 				{
-					//var baseClass = classOf(value);
-/*					if (field.Value is Unassigned || field.Value is TypeConstraint tc && tc.Matches(baseClass) ||
-						classOf(field.Value).AssignCompatible(baseClass))*/
-					{
-						if (field.Value is Reference r)
-							r.Field.Value = value;
-						else
-							field.Value = value;
-						return field.Success();
-					}
-/*					else if (field.Value is TypeConstraint tc2)
-						return failure<Field>(incompatibleClasses(value, tc2.AsString));
+					if (field.Value is Reference r)
+						r.Field.Value = value;
 					else
-						return failure<Field>(incompatibleClasses(value, field.Value.ClassName));*/
+						field.Value = value;
+					return field.Success();
 				}
 				else if (field.Value is Unassigned || overriden)
 				{
@@ -427,10 +418,10 @@ namespace Kagami.Library.Runtime
 				}
 				else
 					return failure<Field>(immutableField(fieldName));
-			else if (isNotMatched)
-				return failure<Field>(fieldNotFound(fieldName));
-			else
+			else if (mbException.If(out var exception))
 				return failure<Field>(exception);
+			else
+				return failure<Field>(fieldNotFound(fieldName));
 		}
 
 		public IResult<Field> Assign(Selector selector, IObject value, bool overriden = false)
@@ -488,7 +479,7 @@ namespace Kagami.Library.Runtime
 						case Break _:
 							return debugState.Success();
 						default:
-							if (operation.Execute(this).If(out var result, out var original) && running && result.ClassName != "Void")
+							if (operation.Execute(this).Out(out var result, out var original) && running && result.ClassName != "Void")
 								stack.Peek().Push(result);
 							else if (original.IsFailedMatch)
 								return failure<DebugState>(original.Exception);

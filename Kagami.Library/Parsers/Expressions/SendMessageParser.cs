@@ -1,6 +1,6 @@
 ﻿using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 using Standard.Types.Strings;
 using static Kagami.Library.Parsers.ParserFunctions;
 
@@ -37,7 +37,7 @@ namespace Kagami.Library.Parsers.Expressions
 				builder.Add(new SendMessageSymbol(selector, precedence));
 				return Unit.Matched();
 			}
-			else if (getArgumentsPlusLambda(state, builder.Flags).If(out var tuple, out var original))
+			else if (getArgumentsPlusLambda(state, builder.Flags).Out(out var tuple, out var original))
 			{
 				var (arguments, lambda) = tuple;
 				var selector = name.Selector(arguments.Length);

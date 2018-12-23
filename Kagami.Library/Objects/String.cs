@@ -4,7 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using Standard.Types.Collections;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 using Standard.Types.Numbers;
 using Standard.Types.Objects;
 using Standard.Types.RegularExpressions;
@@ -12,7 +12,7 @@ using Standard.Types.Strings;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Objects.TextFindingFunctions;
-using static Standard.Types.Maybe.MaybeFunctions;
+using static Standard.Types.Monads.MonadFunctions;
 
 namespace Kagami.Library.Objects
 {

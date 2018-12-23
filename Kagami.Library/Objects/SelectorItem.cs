@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 using Standard.Types.Strings;
-using static Standard.Types.Maybe.MaybeFunctions;
+using static Standard.Types.Monads.MonadFunctions;
 
 namespace Kagami.Library.Objects
 {

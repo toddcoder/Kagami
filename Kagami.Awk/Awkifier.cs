@@ -4,12 +4,12 @@ using Kagami.Library.Runtime;
 using Standard.Computer;
 using Standard.Types.Collections;
 using Standard.Types.Enumerables;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 using Standard.Types.Numbers;
 using Standard.Types.Strings;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Awk.AwkFunctions;
-using static Standard.Types.Maybe.MaybeFunctions;
+using static Standard.Types.Monads.MonadFunctions;
 
 namespace Kagami.Awk
 {

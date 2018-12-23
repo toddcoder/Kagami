@@ -1,7 +1,7 @@
 ﻿using Kagami.Library.Nodes.Symbols;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
-using static Standard.Types.Maybe.MaybeFunctions;
+using static Standard.Types.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
 {
@@ -21,9 +21,7 @@ namespace Kagami.Library.Parsers.Expressions
 			{
 				var ((matched, _), (failed, exception)) = getItem(state, builder, first);
 				if (matched)
-				{
-					if (state.Scan("^ /(|s|) /[',}']", Color.Whitespace, Color.Structure)
-						.If(out var found, out var isNotMatched, out exception))
+					if (state.Scan("^ /(|s|) /[',}']", Color.Whitespace, Color.Structure).If(out var found, out var mbException))
 					{
 						first = false;
 						if (found.Contains("}"))
@@ -32,12 +30,10 @@ namespace Kagami.Library.Parsers.Expressions
 							return Unit.Matched();
 						}
 					}
-
-					else if (isNotMatched)
-						return "Expected , or }".FailedMatch<Unit>();
-					else
+					else if (mbException.If(out exception))
 						return failedMatch<Unit>(exception);
-				}
+					else
+						return "Expected , or }".FailedMatch<Unit>();
 				else if (failed)
 					return failedMatch<Unit>(exception);
 				else
@@ -64,8 +60,7 @@ namespace Kagami.Library.Parsers.Expressions
 		{
 			var ((matched, _), (failed, exception)) = state.Scan("^ /(|s|) /'='", Color.Whitespace, Color.Structure);
 			if (matched)
-			{
-				if (getExpression(state, ExpressionFlags.OmitComma).If(out var expression, out var isNotMatched, out exception))
+				if (getExpression(state, ExpressionFlags.OmitComma).If(out var expression, out var mbException))
 				{
 					if (first)
 						builder.Add(new SkipTakeInitLiteralSymbol(expression));
@@ -73,11 +68,10 @@ namespace Kagami.Library.Parsers.Expressions
 						builder.Add(new SkipTakeLiteralSymbol(expression));
 					return true.Success();
 				}
-				else if (isNotMatched)
-					return "Expected expression".Failure<bool>();
-				else
+				else if (mbException.If(out exception))
 					return failure<bool>(exception);
-			}
+				else
+					return "Expected expression".Failure<bool>();
 			else if (failed)
 				return failure<bool>(exception);
 			else

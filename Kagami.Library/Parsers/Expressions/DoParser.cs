@@ -2,16 +2,16 @@
 using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 using Standard.Types.RegularExpressions;
 using static Kagami.Library.Parsers.ParserFunctions;
-using static Standard.Types.Maybe.MaybeFunctions;
+using static Standard.Types.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
 {
 	public class DoParser : SymbolParser
 	{
-		class BoundItemParser: EndingInExpressionParser
+		class BoundItemParser : EndingInExpressionParser
 		{
 			string fieldName;
 
@@ -69,7 +69,7 @@ namespace Kagami.Library.Parsers.Expressions
 			var returnItemParser = new ReturnItemParser(innerBuilder);
 			var stack = new Stack<(string, Expression)>();
 
-			if (state.Advance().If(out _, out var original))
+			if (state.Advance().Out(out _, out var original))
 			{
 				while (state.More)
 				{
@@ -77,15 +77,15 @@ namespace Kagami.Library.Parsers.Expressions
 						from tabs in state.Scan($"^ /({state.Indentation.FriendlyString()})", Color.Whitespace)
 						from unit in boundItemParser.Scan(state)
 						select boundItemParser.NameExpression;
-					if (result.If(out var nameExpression, out var isNotMatched, out var exception))
+					if (result.If(out var nameExpression, out var mbException))
 					{
 						stack.Push(nameExpression);
 						state.SkipEndOfLine();
 					}
-					else if (isNotMatched)
-						break;
-					else
+					else if (mbException.If(out var exception))
 						return failedMatch<Unit>(exception);
+					else
+						break;
 				}
 
 				state.Regress();
@@ -95,7 +95,7 @@ namespace Kagami.Library.Parsers.Expressions
 					from unit in returnItemParser.Scan(state)
 					select returnItemParser.Expression;
 
-				if (lambdaResult.If(out var lambdaExpression, out var originalResult))
+				if (lambdaResult.Out(out var lambdaExpression, out var originalResult))
 				{
 					var (parameterName, targetExpression) = stack.Pop();
 					if (getSymbol(targetExpression, parameterName, lambdaExpression, stack).If(out var symbol, out var exception))
@@ -113,7 +113,8 @@ namespace Kagami.Library.Parsers.Expressions
 				return original;
 		}
 
-		static IResult<Symbol> getSymbol(Expression targetExpression, string parameterName, Expression lambdaExpression, Stack<(string, Expression)> stack)
+		static IResult<Symbol> getSymbol(Expression targetExpression, string parameterName, Expression lambdaExpression,
+			Stack<(string, Expression)> stack)
 		{
 			var block = new Block(lambdaExpression);
 			var lambda = new LambdaSymbol(new Parameters(parameterName), block);

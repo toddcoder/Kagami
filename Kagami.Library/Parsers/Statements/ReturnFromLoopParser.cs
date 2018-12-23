@@ -1,6 +1,6 @@
 ﻿using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Parsers.Expressions;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Statements
@@ -20,7 +20,7 @@ namespace Kagami.Library.Parsers.Statements
 				from condition in getExpression(state, ExpressionFlags.Standard)
 				select (expression, condition);
 
-			if (result.If(out var tuple, out var original))
+			if (result.Out(out var tuple, out var original))
 			{
 				var (expression, condition) = tuple;
 				Condition = condition;

@@ -2,10 +2,10 @@
 using Kagami.Library.Objects;
 using Standard.Types.Collections;
 using Standard.Types.Enumerables;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
-using static Standard.Types.Maybe.MaybeFunctions;
+using static Standard.Types.Monads.MonadFunctions;
 
 namespace Kagami.Collections
 {

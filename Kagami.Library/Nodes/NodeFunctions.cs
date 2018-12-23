@@ -4,7 +4,7 @@ using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using Kagami.Library.Parsers.Expressions;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 using static Kagami.Library.CommonFunctions;
 
 namespace Kagami.Library.Nodes

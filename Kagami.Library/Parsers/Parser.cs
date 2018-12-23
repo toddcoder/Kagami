@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 using Standard.Types.RegularExpressions;
 using Standard.Types.Strings;
-using static Standard.Types.Maybe.MaybeFunctions;
+using static Standard.Types.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers
 {
@@ -28,46 +28,39 @@ namespace Kagami.Library.Parsers
 
       public virtual IMatched<Unit> Scan(ParseState state)
       {
+	      IMaybe<Exception> mbException;
+
          if (Pattern.IsEmpty())
          {
             var index = state.Index;
             var parsed = Parse(state, new Token[0]);
-            var (parsedType, _, _) = parsed.Values;
-            switch (parsedType)
-            {
-               case MatchType.Matched:
-                  if (UpdateIndexOnParseOnly)
-                     state.UpdateStatement(index, 1);
-                  break;
-               case MatchType.FailedMatch:
-                  state.SetExceptionIndex();
-                  break;
+	         if (parsed.If(out _, out mbException))
+	         {
+		         if (UpdateIndexOnParseOnly)
+			         state.UpdateStatement(index, 1);
             }
-
+				else if (mbException.IsSome)
+		         state.SetExceptionIndex();
             return parsed;
          }
 
-         var matcher = new Matcher();
-         var (type, match, exception) = matcher.MatchOne(state.CurrentSource, state.RealizePattern(Pattern), IgnoreCase,
-            Multiline).Values;
-         switch (type)
-         {
-            case MatchType.Matched:
-               var index = state.Index;
-               var parsed = Parse(state, GetTokens(state, match));
-               if (parsed.IsMatched && updateLastStatement)
-                  state.UpdateStatement(index, match.Length);
-               if (parsed.IsFailedMatch)
-                  state.SetExceptionIndex();
-               return parsed;
-            case MatchType.NotMatched:
-               return notMatched<Unit>();
-            case MatchType.FailedMatch:
-               state.SetExceptionIndex();
-               return failedMatch<Unit>(exception);
-            default:
-               throw new ArgumentOutOfRangeException();
+	      if (new Matcher().MatchOne(state.CurrentSource, state.RealizePattern(Pattern), IgnoreCase, Multiline).If(out var match, out mbException))
+	      {
+		      var index = state.Index;
+		      var parsed = Parse(state, GetTokens(state, match));
+		      if (parsed.IsMatched && updateLastStatement)
+			      state.UpdateStatement(index, match.Length);
+		      if (parsed.IsFailedMatch)
+			      state.SetExceptionIndex();
+		      return parsed;
          }
+			else if (mbException.If(out var exception))
+	      {
+		      state.SetExceptionIndex();
+		      return failedMatch<Unit>(exception);
+	      }
+	      else
+		      return notMatched<Unit>();
       }
 
       public virtual bool UpdateIndexOnParseOnly => false;

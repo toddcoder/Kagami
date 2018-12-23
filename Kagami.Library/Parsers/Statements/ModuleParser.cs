@@ -4,7 +4,7 @@ using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Runtime;
 using Standard.Types.Collections;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Statements
@@ -26,16 +26,17 @@ namespace Kagami.Library.Parsers.Statements
 
 			var builder = new ClassBuilder(className, parameters, parentClassName, arguments, new Block(),
 				new Hash<string, TraitClass>());
-			if (builder.Register().If(out _, out var registerOriginal))
+			if (builder.Register().Out(out _, out var registerOriginal))
 			{
 				var cls = new Class(builder);
 				state.AddStatement(cls);
 
-				if (getBlock(state).If(out var block, out var original))
+				if (getBlock(state).Out(out var block, out var original))
 				{
 					var metaClassName = $"__$meta{className}";
-					var metaClassBuilder = new ClassBuilder(metaClassName, Parameters.Empty, "", new Expression[0], block, new Hash<string, TraitClass>());
-					if (metaClassBuilder.Register().If(out _, out registerOriginal))
+					var metaClassBuilder = new ClassBuilder(metaClassName, Parameters.Empty, "", new Expression[0], block,
+						new Hash<string, TraitClass>());
+					if (metaClassBuilder.Register().Out(out _, out registerOriginal))
 					{
 						var metaClass = new MetaClass(className, metaClassBuilder);
 						state.AddStatement(metaClass);

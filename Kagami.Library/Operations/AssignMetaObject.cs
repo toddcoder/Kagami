@@ -1,9 +1,9 @@
 ﻿using Kagami.Library.Classes;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 using static Kagami.Library.AllExceptions;
-using static Standard.Types.Maybe.MaybeFunctions;
+using static Standard.Types.Monads.MonadFunctions;
 
 namespace Kagami.Library.Operations
 {
@@ -23,29 +23,27 @@ namespace Kagami.Library.Operations
          if (Module.Global.Class(className).If(out var targetClass))
          {
 	         var selector = metaClassName.Selector(0);
-            if (Machine.Current.Find(selector)
-               .If(out var field, out var isNotMatched, out var exception))
-            {
-               if (field.Value is IInvokableObject io)
-               {
-                  var invokable = io.Invokable;
-                  var result = machine.Invoke(invokable, Arguments.Empty, 0);
-                  if (result.If(out var obj, out isNotMatched, out exception))
-                  {
-                     ((UserClass)targetClass).MetaObject = ((UserObject)obj).Some();
-                     return notMatched<IObject>();
+	         if (Machine.Current.Find(selector).If(out var field, out var mbException))
+	         {
+		         if (field.Value is IInvokableObject io)
+		         {
+			         var invokable = io.Invokable;
+			         if (machine.Invoke(invokable, Arguments.Empty, 0).If(out var obj, out mbException))
+			         {
+				         ((UserClass)targetClass).MetaObject = ((UserObject)obj).Some();
+				         return notMatched<IObject>();
                   }
-                  else if (isNotMatched)
-                     return $"Couldn't construct metaobject {metaClassName}".FailedMatch<IObject>();
-                  else
-                     return failedMatch<IObject>(exception);
-               }
-            }
-            else if (isNotMatched)
-               return $"Couldn't find metaclass {metaClassName}".FailedMatch<IObject>();
-            else
-               return failedMatch<IObject>(exception);
+						else if (mbException.If(out var exception))
+				         return failedMatch<IObject>(exception);
+			         else
+				         return $"Couldn't construct metaobject {metaClassName}".FailedMatch<IObject>();
+		         }
 
+            }
+            else if (mbException.If(out var exception))
+		         return failedMatch<IObject>(exception);
+	         else
+		         return $"Couldn't find metaclass {metaClassName}".FailedMatch<IObject>();
             return notMatched<IObject>();
          }
          else

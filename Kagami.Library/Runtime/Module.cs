@@ -1,9 +1,9 @@
 ﻿using Kagami.Library.Classes;
 using Kagami.Library.Packages;
 using Standard.Types.Collections;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 using static Kagami.Library.AllExceptions;
-using static Standard.Types.Maybe.MaybeFunctions;
+using static Standard.Types.Monads.MonadFunctions;
 
 namespace Kagami.Library.Runtime
 {
@@ -38,7 +38,7 @@ namespace Kagami.Library.Runtime
 			classes["Unassigned"] = new UnassignedClass();
 			classes["Tuple"] = new TupleClass();
 			classes["NameValue"] = new NameValueClass();
-			classes["Lambda"] = new LambaClass();
+			classes["Lambda"] = new LambdaClass();
 			classes["Void"] = new VoidClass();
 			classes["Some"] = new SomeClass();
 			classes["Nil"] = new NilClass();

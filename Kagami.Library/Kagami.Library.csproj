@@ -84,7 +84,7 @@
     <Compile Include="Classes\IType.cs" />
     <Compile Include="Classes\KeyCollectingHash.cs" />
     <Compile Include="Classes\KeyValueClass.cs" />
-    <Compile Include="Classes\LambaClass.cs" />
+    <Compile Include="Classes\LambdaClass.cs" />
     <Compile Include="Classes\LazyClass.cs" />
     <Compile Include="Classes\LazyIteratorClass.cs" />
     <Compile Include="Classes\ListClass.cs" />

@@ -4,13 +4,13 @@ using System.Linq;
 using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using Standard.Types.Enumerables;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 using Standard.Types.Strings;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Operations.OperationFunctions;
-using static Standard.Types.Maybe.AttemptFunctions;
-using static Standard.Types.Maybe.MaybeFunctions;
+using static Standard.Types.Monads.AttemptFunctions;
+using static Standard.Types.Monads.MonadFunctions;
 using Tuple = Kagami.Library.Objects.Tuple;
 
 namespace Kagami.Library.Runtime
@@ -130,9 +130,14 @@ namespace Kagami.Library.Runtime
 							fields.New(parameter.Name, parameter.Mutable).Force();
 						IObject value;
 						if (defaultValue.If(out var invokable))
-							value = Machine.Current.Invoke(invokable, Arguments.Empty, 0).Value;
+						{
+							if (Machine.Current.Invoke(invokable, Arguments.Empty, 0).If(out value, out var mbException)) { }
+							else if (mbException.If(out var exception))
+								throw exception;
+						}
 						else
 							value = Unassigned.Value;
+
 						if (parameter.TypeConstraint.If(out var typeConstraint) && !typeConstraint.Matches(classOf(value)))
 							throw incompatibleClasses(value, typeConstraint.AsString);
 

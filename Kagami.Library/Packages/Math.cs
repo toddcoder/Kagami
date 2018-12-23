@@ -111,11 +111,16 @@ namespace Kagami.Library.Packages
             case IMessageNumber mn:
                return mn.Abs();
             case INumeric n:
-               if (n.IsNegative)
-                  return Negate.Evaluate(n).Value;
-               else
-                  return obj;
-            default:
+		         if (n.IsNegative)
+			         if (Negate.Evaluate(n).If(out var value, out var mbException))
+				         return value;
+			         else if (mbException.If(out var exception))
+				         throw exception;
+			         else
+				         throw notNumeric(obj);
+		         else
+			         return obj;
+	         default:
                throw notNumeric(obj);
          }
       }

@@ -1,7 +1,7 @@
 ﻿using System;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 
 namespace Kagami.Library.Operations
 {

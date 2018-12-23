@@ -1,6 +1,7 @@
 ﻿using System;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
+using Standard.Types.Objects;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Classes.ClassFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
@@ -388,17 +389,18 @@ namespace Kagami.Library.Classes
             fields.Assign("self", obj);
          }
 
-         if (Machine.Current.Invoke(lambda.Invokable, arguments, fields).If(out var value, out var isNotMatched, out var exception))
+         if (Machine.Current.Invoke(lambda.Invokable, arguments, fields).If(out var value, out var mbException))
             return value;
-         else if (isNotMatched)
-            return Void.Value;
+			else if (mbException.If(out var exception))
+	         throw exception;
          else
-            throw exception;
+	         return Void.Value;
       }
 
       public static IObject Invoke(UserClass userClass, Arguments arguments, Lambda lambda)
       {
-         return Machine.Current.Invoke(lambda.Invokable, arguments, userClass.ClassFields).Value;
+	      return Machine.Current.Invoke(lambda.Invokable, arguments, userClass.ClassFields)
+		      .RequiredCast<IObject>(() => "Return value required");
       }
 
       protected void messageNumberMessages()

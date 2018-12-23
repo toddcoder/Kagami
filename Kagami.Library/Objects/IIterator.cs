@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Kagami.Library.Classes;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 
 namespace Kagami.Library.Objects
 {

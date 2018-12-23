@@ -1,7 +1,7 @@
 ﻿using System;
 using Kagami.Library;
 using Kagami.Library.Runtime;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 using static System.Console;
 
 namespace Kagami

@@ -1,5 +1,5 @@
 ﻿using Kagami.Library.Objects;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Classes

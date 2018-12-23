@@ -2,50 +2,48 @@
 using Kagami.Library.Classes;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Runtime;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Parsers.ParserFunctions;
-using static Standard.Types.Maybe.MaybeFunctions;
+using static Standard.Types.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
 {
-   public class TypeConstraintParser : SymbolParser
-   {
-      public TypeConstraintParser(ExpressionBuilder builder) : base(builder) { }
+	public class TypeConstraintParser : SymbolParser
+	{
+		public TypeConstraintParser(ExpressionBuilder builder) : base(builder) { }
 
-      public override string Pattern => "^ /(|s|) /'<' (> ['A-Z'])";
+		public override string Pattern => "^ /(|s|) /'<' (> ['A-Z'])";
 
-      public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
-      {
-         state.Colorize(tokens, Color.Whitespace, Color.Class);
+		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+		{
+			state.Colorize(tokens, Color.Whitespace, Color.Class);
 
-         var list = new List<BaseClass>();
-         while (state.More)
-            if (state.Scan($"^ /(/s*) /({REGEX_CLASS})", Color.Whitespace, Color.Class)
-               .If(out var name, out var isNotMatched, out var exception))
-            {
-               name = name.TrimStart();
-               if (Module.Global.Class(name).If(out var baseClass))
-                  list.Add(baseClass);
-               else if (Module.Global.Forwarded(name))
-                  list.Add(new ForwardedClass(name));
-               else
-                  return failedMatch<Unit>(classNotFound(name));
-            }
-            else if (isNotMatched)
-               if (state.Scan("^ /'>'", Color.Class).If(out _, out isNotMatched, out exception))
-               {
-                  builder.Add(new TypeConstraintSymbol(list));
-                  return Unit.Matched();
-               }
-               else if (isNotMatched)
-                  return "Open type constraint".FailedMatch<Unit>();
-               else
-                  return failedMatch<Unit>(exception);
-            else
-               return failedMatch<Unit>(exception);
+			var list = new List<BaseClass>();
+			while (state.More)
+				if (state.Scan($"^ /(/s*) /({REGEX_CLASS})", Color.Whitespace, Color.Class).If(out var name, out var mbException))
+				{
+					name = name.TrimStart();
+					if (Module.Global.Class(name).If(out var baseClass))
+						list.Add(baseClass);
+					else if (Module.Global.Forwarded(name))
+						list.Add(new ForwardedClass(name));
+					else
+						return failedMatch<Unit>(classNotFound(name));
+				}
+				else if (mbException.If(out var exception))
+					return failedMatch<Unit>(exception);
+				else if (state.Scan("^ /'>'", Color.Class).If(out _, out mbException))
+				{
+					builder.Add(new TypeConstraintSymbol(list));
+					return Unit.Matched();
+				}
+				else if (mbException.If(out exception))
+					return failedMatch<Unit>(exception);
+				else
+					return "Open type constraint".FailedMatch<Unit>();
 
-         return Unit.Matched();
-      }
-   }
+			return Unit.Matched();
+		}
+	}
 }

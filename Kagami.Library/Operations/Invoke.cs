@@ -2,9 +2,9 @@
 using Kagami.Library.Objects;
 using Kagami.Library.Packages;
 using Kagami.Library.Runtime;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 using static Kagami.Library.AllExceptions;
-using static Standard.Types.Maybe.MaybeFunctions;
+using static Standard.Types.Monads.MonadFunctions;
 
 namespace Kagami.Library.Operations
 {

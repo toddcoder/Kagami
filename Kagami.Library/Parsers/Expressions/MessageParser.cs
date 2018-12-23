@@ -1,8 +1,8 @@
 ﻿using Kagami.Library.Nodes.Symbols;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 using Standard.Types.Strings;
 using static Kagami.Library.Parsers.ParserFunctions;
-using static Standard.Types.Maybe.MaybeFunctions;
+using static Standard.Types.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
 {
@@ -12,7 +12,7 @@ namespace Kagami.Library.Parsers.Expressions
 
 		public override string Pattern => $"^ /(|s|) /'?' /({REGEX_FUNCTION_NAME}) /'('?";
 
-      public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
 			var selector = tokens[3].Text;
 			var parameterDelimiter = tokens[4].Text;
@@ -35,7 +35,7 @@ namespace Kagami.Library.Parsers.Expressions
 				builder.Add(new MessageSymbol(selector, new Expression[0], none<LambdaSymbol>()));
 				return Unit.Matched();
 			}
-			else if (getArgumentsPlusLambda(state, builder.Flags).If(out var tuple, out var original))
+			else if (getArgumentsPlusLambda(state, builder.Flags).Out(out var tuple, out var original))
 			{
 				var (arguments, lambda) = tuple;
 				builder.Add(new MessageSymbol(selector, arguments, lambda));
@@ -44,6 +44,6 @@ namespace Kagami.Library.Parsers.Expressions
 			}
 			else
 				return original.Unmatched<Unit>();
-      }
+		}
 	}
 }

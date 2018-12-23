@@ -1,10 +1,11 @@
 ﻿using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
+using Standard.Types.Objects;
 using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Classes
 {
-   public class LambaClass : BaseClass
+   public class LambdaClass : BaseClass
    {
       public override string Name => "Lambda";
 
@@ -18,7 +19,8 @@ namespace Kagami.Library.Classes
 
       protected static IObject invoke(Lambda lambda, Arguments arguments)
       {
-         return Machine.Current.Invoke(lambda.Invokable, arguments, lambda.Fields).Value;
+	      return Machine.Current.Invoke(lambda.Invokable, arguments, lambda.Fields)
+		      .RequiredCast<IObject>(() => "Return value required");
       }
    }
 }

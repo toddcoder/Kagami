@@ -1,5 +1,5 @@
 ﻿using Kagami.Library.Nodes.Symbols;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
@@ -16,7 +16,7 @@ namespace Kagami.Library.Parsers.Expressions
          var source = tokens[3].Text;
          state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Operator);
 
-         if (getOperator(state, source, builder.Flags, true).If(out var symbol, out var original))
+         if (getOperator(state, source, builder.Flags, true).Out(out var symbol, out var original))
          {
             builder.Add(new FoldSymbol(prefix == "<:", symbol));
             return Unit.Matched();

@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Text;
 using Standard.Types.Collections;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 using Standard.Types.Numbers;
 using Standard.Types.RegularExpressions;
 using Standard.Types.Strings;
@@ -70,7 +70,7 @@ namespace Kagami.Library.Objects
       {
          if (global)
             if (isMatch(input))
-               return new Tuple(matcher.AllMatches.Select(m => (IObject)new RegexMatch(m)).ToArray());
+               return new Tuple(matcher.Select(m => (IObject)new RegexMatch(m)).ToArray());
             else
                return Tuple.Empty;
          else if (isMatch(input))
@@ -85,7 +85,7 @@ namespace Kagami.Library.Objects
       {
          if (global)
             if (isMatch(input))
-               return new Tuple(matcher.AllMatches.Select(m => String.StringObject(m.Text)).ToArray());
+               return new Tuple(matcher.Select(m => String.StringObject(m.Text)).ToArray());
             else
                return Tuple.Empty;
          else if (isMatch(input))

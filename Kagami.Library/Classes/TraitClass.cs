@@ -1,8 +1,8 @@
 ﻿using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using Standard.Types.Collections;
-using Standard.Types.Maybe;
-using static Standard.Types.Maybe.MaybeFunctions;
+using Standard.Types.Monads;
+using static Standard.Types.Monads.MonadFunctions;
 
 namespace Kagami.Library.Classes
 {
@@ -47,15 +47,15 @@ namespace Kagami.Library.Classes
 
       public IResult<Unit> RegisterImplementor(UserClass userClass)
       {
-         if (userClass.MatchImplemented(signatures).If(out var signature, out var isNotMatched, out var exception))
+         if (userClass.MatchImplemented(signatures).If(out var signature, out var mbException))
             return $"Signature {signature.Image} not implemented".Failure<Unit>();
-         else if (isNotMatched)
-         {
-            implementors[userClass.Name] = userClass;
-            return registerFunctions(userClass);
-         }
-         else
-            return failure<Unit>(exception);
+         else if (mbException.If(out var exception))
+		      return failure<Unit>(exception);
+	      else
+	      {
+		      implementors[userClass.Name] = userClass;
+		      return registerFunctions(userClass);
+	      }
       }
 
       public IResult<Unit> registerFunctions(UserClass userClass)

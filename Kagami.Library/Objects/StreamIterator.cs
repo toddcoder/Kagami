@@ -4,8 +4,8 @@ using Kagami.Library.Classes;
 using Kagami.Library.Runtime;
 using Standard.Types.Collections;
 using Standard.Types.Enumerables;
-using Standard.Types.Maybe;
-using static Standard.Types.Maybe.MaybeFunctions;
+using Standard.Types.Monads;
+using static Standard.Types.Monads.MonadFunctions;
 
 namespace Kagami.Library.Objects
 {

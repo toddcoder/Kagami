@@ -1,4 +1,4 @@
-﻿using Standard.Types.Maybe;
+﻿using Standard.Types.Monads;
 
 namespace Kagami.Library.Runtime
 {

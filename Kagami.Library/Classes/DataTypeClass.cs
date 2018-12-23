@@ -3,7 +3,7 @@ using System.Linq;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Standard.Types.Collections;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 using Standard.Types.Strings;
 using static Kagami.Library.Classes.ClassFunctions;
 

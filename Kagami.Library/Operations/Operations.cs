@@ -1,7 +1,7 @@
-﻿using Standard.Types.Maybe;
+﻿using Standard.Types.Monads;
 using Standard.Types.Numbers;
 using Standard.Types.Strings;
-using static Standard.Types.Maybe.MaybeFunctions;
+using static Standard.Types.Monads.MonadFunctions;
 
 namespace Kagami.Library.Operations
 {

@@ -1,5 +1,5 @@
 ﻿using Kagami.Library.Nodes.Statements;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 
 namespace Kagami.Library.Parsers.Statements
 {

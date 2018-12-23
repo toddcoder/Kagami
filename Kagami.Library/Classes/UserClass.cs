@@ -5,11 +5,11 @@ using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Standard.Types.Collections;
 using Standard.Types.Exceptions;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 using Standard.Types.Strings;
 using static Kagami.Library.Classes.ClassFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
-using static Standard.Types.Maybe.MaybeFunctions;
+using static Standard.Types.Monads.MonadFunctions;
 
 namespace Kagami.Library.Classes
 {

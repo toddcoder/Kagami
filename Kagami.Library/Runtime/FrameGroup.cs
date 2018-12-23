@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Standard.Types.Maybe;
-using static Standard.Types.Maybe.MaybeFunctions;
+using Standard.Types.Monads;
+using static Standard.Types.Monads.MonadFunctions;
 
 namespace Kagami.Library.Runtime
 {

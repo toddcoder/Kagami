@@ -8,12 +8,12 @@ using Kagami.Library.Operations;
 using Kagami.Library.Runtime;
 using Standard.Types.Collections;
 using Standard.Types.Enumerables;
-using Standard.Types.Maybe;
+using Standard.Types.Monads;
 using Standard.Types.RegularExpressions;
 using Standard.Types.Strings;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.CommonFunctions;
-using static Standard.Types.Maybe.MaybeFunctions;
+using static Standard.Types.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Statements
 {
