@@ -145,7 +145,7 @@ namespace Kagami.Library.Runtime
 
 		public IResult<Field> Assign(string name, IObject value, bool overriden = false)
 		{
-			if (Find(name, false).Out(out var field, out var original))
+			if (Machine.Current.Find(name, true).Out(out var field, out var original))
 				if (field.Mutable)
 				{
 					field.Value = value;
@@ -210,39 +210,12 @@ namespace Kagami.Library.Runtime
 				{
 					var mutable = key.StartsWith("+");
 					var fieldName = key.Skip(1);
-					New(fieldName, value, mutable);
+					if (New(fieldName, value, mutable).IfNot(out var exception))
+						throw exception;
 				}
-				else
-					Assign(key, value);
+				else if (Assign(key, value).IfNot(out var exception))
+					throw exception;
 		}
-
-/*      public void SetBindings(Hash<string, IObject> bindings, bool mutable, bool strict)
-      {
-         foreach (var binding in bindings)
-            if (fields.ContainsKey(binding.Key))
-            {
-               if (strict)
-                  throw immutableField(binding.Key);
-
-               Assign(binding.Key, binding.Value);
-            }
-            else
-               New(binding.Key, binding.Value, mutable);
-      }*/
-
-/*      public void AssignBindings(Hash<string, IObject> bindings, bool mutable)
-      {
-         foreach (var binding in bindings)
-            if (Find(binding.Key, true).If(out var field, out var isNotMatched, out var exception))
-               if (field.Mutable)
-                  Assign(binding.Key, binding.Value);
-               else
-                  throw immutableField(binding.Key);
-            else if (isNotMatched)
-               New(binding.Key, binding.Value, mutable);
-            else
-               throw exception;
-      }*/
 
 		public bool Equals(Fields other)
 		{

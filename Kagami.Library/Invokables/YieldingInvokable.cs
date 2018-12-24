@@ -54,7 +54,7 @@ namespace Kagami.Library.Invokables
 
 		public IMaybe<IObject> Next(int index)
 		{
-			if (Machine.Current.Invoke(this).If(out var result))
+			if (Machine.Current.Invoke(this).If(out var result, out var mbException))
 				switch (result)
 				{
 					case Nil _:
@@ -66,6 +66,8 @@ namespace Kagami.Library.Invokables
 					default:
 						throw incompatibleClasses(result, "YieldReturn");
 				}
+			else if (mbException.If(out var exception))
+				throw exception;
 			else
 				return none<IObject>();
 		}
