@@ -23,9 +23,9 @@ namespace Kagami.Library.Objects
 		      if (name.StartsWith("+"))
 			      return $"var {name.Skip(1)}";
 				else if (name.StartsWith("-"))
-			      return $"let {name.Skip(1)}";
+			      return name.Skip(1);
 		      else
-			      return $"* {name}";
+			      return $"current {name}";
 	      }
       }
 

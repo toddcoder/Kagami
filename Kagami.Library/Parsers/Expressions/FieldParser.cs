@@ -18,7 +18,7 @@ namespace Kagami.Library.Parsers.Expressions
          if (state.DefExpression(source).If(out var defExpression))
             builder.Add(defExpression);
          else
-            builder.Add(builder.Flags[ExpressionFlags.Comparisand] ? (Symbol)new PlaceholderSymbol(source) : new FieldSymbol(source));
+            builder.Add(builder.Flags[ExpressionFlags.Comparisand] ? (Symbol)new PlaceholderSymbol($"-{source}") : new FieldSymbol(source));
 
          return Unit.Matched();
       }

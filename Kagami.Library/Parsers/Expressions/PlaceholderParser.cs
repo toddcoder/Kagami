@@ -8,13 +8,25 @@ namespace Kagami.Library.Parsers.Expressions
 	{
 		public PlaceholderParser(ExpressionBuilder builder) : base(builder) { }
 
-		public override string Pattern => $"^ /(|s|) /('let' | 'var') /(|s+|) /({REGEX_FIELD}) /b";
+		public override string Pattern => $"^ /(|s|) /('current' | 'var') /(|s+|) /({REGEX_FIELD}) /b";
 
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
-			var mutable = tokens[2].Text == "var";
+			var mutable = tokens[2].Text;
 			var placeholderName = tokens[4].Text;
-			var name = (mutable ? "+" : "-") + placeholderName;
+			var name = "";
+			switch (mutable)
+			{
+            case "current":
+	            name = placeholderName;
+					break;
+            case "var":
+	            name = $"+{placeholderName}";
+					break;
+				default:
+					name = $"-{placeholderName}";
+					break;
+			}
 			state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Identifier);
 
 			builder.Add(new PlaceholderSymbol(name));
