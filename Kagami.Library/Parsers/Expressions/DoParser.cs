@@ -95,7 +95,7 @@ namespace Kagami.Library.Parsers.Expressions
 					from unit in returnItemParser.Scan(state)
 					select returnItemParser.Expression;
 
-				if (lambdaResult.Out(out var lambdaExpression, out var originalResult))
+				if (lambdaResult.If(out var lambdaExpression, out var mbLambdaException))
 				{
 					var (parameterName, targetExpression) = stack.Pop();
 					if (getSymbol(targetExpression, parameterName, lambdaExpression, stack).If(out var symbol, out var exception))
@@ -106,8 +106,10 @@ namespace Kagami.Library.Parsers.Expressions
 					else
 						return failedMatch<Unit>(exception);
 				}
+				else if (mbLambdaException.If(out var exception))
+					return failedMatch<Unit>(exception);
 				else
-					return originalResult.ExceptionAs<Unit>();
+					return "Missing 'gather' expression".FailedMatch<Unit>();
 			}
 			else
 				return original;
