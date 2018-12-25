@@ -145,7 +145,7 @@ namespace Kagami.Library.Runtime
 
 		public IResult<Field> Assign(string name, IObject value, bool overriden = false)
 		{
-			if (Machine.Current.Find(name, true).Out(out var field, out var original))
+			if (Find(name, false).Out(out var field, out var original))
 				if (field.Mutable)
 				{
 					field.Value = value;

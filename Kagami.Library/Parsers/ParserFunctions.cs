@@ -868,7 +868,6 @@ namespace Kagami.Library.Parsers
 			var valuesParser = new ValuesParser(builder);
 			var postfixParser = new PostfixParser(builder);
 
-			var isNotMatched = false;
 			var mbException = none<Exception>();
 			Exception exception = null;
 
@@ -880,10 +879,10 @@ namespace Kagami.Library.Parsers
 					break;
 
 			if (valuesParser.Scan(state).If(out _, out mbException)) { }
-			else if (isNotMatched)
-				return failedMatch<Expression>(invalidSyntax());
-			else
+			else if (mbException.If(out exception))
 				return failedMatch<Expression>(exception);
+			else
+				return failedMatch<Expression>(invalidSyntax());
 
 			while (state.More)
 				if (postfixParser.Scan(state).If(out _, out mbException)) { }
