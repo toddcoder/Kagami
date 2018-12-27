@@ -8,7 +8,7 @@ namespace Kagami.Library.Parsers.Expressions
 	{
 		public PlaceholderParser(ExpressionBuilder builder) : base(builder) { }
 
-		public override string Pattern => $"^ /(|s|) /('current' | 'var') /(|s+|) /({REGEX_FIELD}) /b";
+		public override string Pattern => $"^ /(|s|) /('existing' | 'var') /(|s+|) /({REGEX_FIELD}) /b";
 
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
@@ -17,7 +17,7 @@ namespace Kagami.Library.Parsers.Expressions
 			var name = "";
 			switch (mutable)
 			{
-            case "current":
+            case "existing":
 	            name = placeholderName;
 					break;
             case "var":

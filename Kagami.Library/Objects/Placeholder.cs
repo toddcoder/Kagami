@@ -25,7 +25,7 @@ namespace Kagami.Library.Objects
 				else if (name.StartsWith("-"))
 			      return name.Skip(1);
 		      else
-			      return $"current {name}";
+			      return $"existing {name}";
 	      }
       }
 
