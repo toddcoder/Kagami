@@ -253,6 +253,7 @@
     <Compile Include="Nodes\Symbols\MacroInvokeSymbol.cs" />
     <Compile Include="Nodes\Symbols\MapOperatorBinarySymbol.cs" />
     <Compile Include="Nodes\Symbols\MapOperatorSymbol.cs" />
+    <Compile Include="Nodes\Symbols\MaybeSymbol.cs" />
     <Compile Include="Nodes\Symbols\MessageSymbol.cs" />
     <Compile Include="Nodes\Symbols\MonadBindSymbol.cs" />
     <Compile Include="Nodes\Symbols\MutStringSymbol.cs" />

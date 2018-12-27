@@ -27,7 +27,7 @@ namespace Kagami.Library.Parsers.Expressions
 					name = $"-{placeholderName}";
 					break;
 			}
-			state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Identifier);
+			state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Identifier);
 
 			builder.Add(new PlaceholderSymbol(name));
 
