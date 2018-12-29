@@ -14,7 +14,7 @@ namespace Kagami.Library.Parsers.Expressions
 			var index = tokens[3].Text;
 			state.Colorize(tokens, Color.Whitespace, Color.Identifier, Color.Identifier);
 
-			builder.Add(new FieldSymbol(index.get()));
+			builder.Add(new FieldSymbol($"__${index}"));
 
 			return Unit.Matched();
 		}

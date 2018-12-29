@@ -29,7 +29,7 @@ namespace Kagami.Library.Parsers.Expressions
 				var (comparisand, block) = tuple;
 
 				var expressionBuilder = new ExpressionBuilder(ExpressionFlags.Standard);
-				expressionBuilder.Add(new FieldSymbol("0".get()));
+				expressionBuilder.Add(new FieldSymbol("__$0"));
 				expressionBuilder.Add(new MatchSymbol());
 				expressionBuilder.Add(comparisand);
 

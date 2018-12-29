@@ -644,6 +644,7 @@
     <Compile Include="Parsers\Expressions\ListParser.cs" />
     <Compile Include="Parsers\Expressions\MapExpressionParser.cs" />
     <Compile Include="Parsers\Expressions\MatchLambdaParser.cs" />
+    <Compile Include="Parsers\Expressions\MaybeParser.cs" />
     <Compile Include="Parsers\Expressions\MessageParser.cs" />
     <Compile Include="Parsers\Expressions\MonadBindParser.cs" />
     <Compile Include="Parsers\Expressions\PatternParser.cs" />

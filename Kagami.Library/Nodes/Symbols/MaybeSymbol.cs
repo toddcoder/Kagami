@@ -5,17 +5,21 @@ namespace Kagami.Library.Nodes.Symbols
 {
 	public class MaybeSymbol : Symbol
 	{
+		Expression expression;
+
+		public MaybeSymbol(Expression expression) => this.expression = expression;
+
 		public override void Generate(OperationsBuilder builder)
 		{
 			var isTrueLabel = newLabel("true");
 			var endLabel = newLabel("end");
-			builder.Swap();
+
 			builder.GoToIfTrue(isTrueLabel);
-			builder.Drop();
 			builder.PushNil();
 			builder.GoTo(endLabel);
 
 			builder.Label(isTrueLabel);
+			expression.Generate(builder);
 			builder.Some();
 
 			builder.Label(endLabel);

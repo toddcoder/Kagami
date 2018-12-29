@@ -15,9 +15,8 @@ namespace Kagami.Library.Classes
 			collectionMessages();
 			mutableCollectionMessages();
 
-			//messages["[]"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, k) => d[k]);
-			messages["[]=".Selector("", "")] = (obj, msg) => function<Dictionary>(obj, d => d[msg.Arguments[0]] = msg.Arguments[1]);
-			messages["[]"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, k) => d.Get(k));
+			messages["[]=(_,_)"] = (obj, msg) => function<Dictionary>(obj, d => d[msg.Arguments[0]] = msg.Arguments[1]);
+			messages["[](_)"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, k) => d.Get(k));
 			messages["default".get()] = (obj, msg) => function<Dictionary>(obj, d =>
 			{
 				if (d.DefaultValue.If(out var dv))
@@ -37,16 +36,16 @@ namespace Kagami.Library.Classes
 			});
 			messages["caching".get()] = (obj, msg) => function<Dictionary>(obj, d => d.Caching);
 			messages["caching".set()] = (obj, msg) => function<Dictionary, Boolean>(obj, msg, (d, b) => d.Caching = b);
-			messages[">>"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, k) => d.Delete(k));
+			messages[">>(_)"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, k) => d.Delete(k));
 			messages["keys".get()] = (obj, msg) => function<Dictionary>(obj, d => d.Keys);
 			messages["values".get()] = (obj, msg) => function<Dictionary>(obj, d => d.Values);
-			messages["in"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, k) => d.In(k));
-			messages["notIn"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, k) => d.NotIn(k));
+			messages["in(_)"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, k) => d.In(k));
+			messages["notIn(_)"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, k) => d.NotIn(k));
 			messages["swap(_,_)"] = (obj, msg) => function<Dictionary, IObject, IObject>(obj, msg, (d, k1, k2) => d.Swap(k1, k2));
 			messages["clear()"] = (obj, msg) => function<Dictionary>(obj, d => d.Clear());
 			messages["update(key:_,value:_)"] =
 				(obj, msg) => function<Dictionary, IObject, IObject>(obj, msg, (d, k, v) => d.Update(k, v));
-			messages["merge"] = (obj, msg) => function<Dictionary, Dictionary>(obj, msg, (d1, d2) => d1.Merge(d2));
+			messages["merge(_)"] = (obj, msg) => function<Dictionary, Dictionary>(obj, msg, (d1, d2) => d1.Merge(d2));
 			messages["remove(at:_)"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, k) => d.Remove(k));
 			messages["forEach(_<Lambda>)"] = (obj, msg) => function<Dictionary, Lambda>(obj, msg, (d, l) => d.ForEach(l));
 		}
