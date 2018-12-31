@@ -28,6 +28,7 @@ namespace Kagami.Library.Classes
          messages["isVowel".get()] = (obj, msg) => function<Char>(obj, c => c.IsVowel);
          messages["isConsonant".get()] = (obj, msg) => function<Char>(obj, c => c.IsConsonant);
          messages["ord".get()] = (obj, msg) => function<Char>(obj, c => c.Ord);
+         messages["byte()"] = (obj, msg) => function<Char>(obj, c => c.Byte());
       }
 
       public override void RegisterClassMessages()

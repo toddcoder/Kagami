@@ -257,7 +257,7 @@ namespace Kagami.Library.Classes
 
       void loadIteratorMessages()
       {
-         alternateMessages.AddRange(array<string>("collection".get(), "isLazy".get(), "next()", "peek()", "reverse()", "join(_<String>)",
+         alternateMessages.AddRange(array<string>("collection".get(), "isLazy".get(), "next()", "peek()", "reset()", "reverse()", "join(_<String>)",
             "sort".Selector("_<Lambda>", "asc:_<Boolean>"), "sort".Selector("_<Lambda>"), "sort".Selector("_<Boolean>"), "sort()",
 	         "foldl".Selector("_", "_<Lambda>"),
             "foldl(_)", "foldr".Selector("_", "_<Lambda>"), "foldr(_)", "reducel".Selector("_", "_<Lambda>"), "reducel(_)",
@@ -287,6 +287,7 @@ namespace Kagami.Library.Classes
          registerMessage("isLazy".get(), (obj, msg) => iteratorFunc(obj, i => (Boolean)i.IsLazy));
          registerMessage("next()", (obj, msg) => iteratorFunc(obj, i => i.Next().FlatMap(s => new Some(s), () => Nil.NilValue)));
          registerMessage("peek()", (obj, msg) => iteratorFunc(obj, i => i.Peek().FlatMap(s => new Some(s), () => Nil.NilValue)));
+         registerMessage("reset()", (obj, msg) => iteratorFunc(obj, i => i.Reset()));
          registerMessage("reverse()", (obj, msg) => iteratorFunc(obj, i => i.Reverse()));
          registerMessage("join(_<String>)", (obj, msg) => iteratorFunc<String>(obj, msg, (i, s) => i.Join(s.Value)));
          registerMessage("sort".Selector("_<Lambda>", "asc:_<Boolean>"),

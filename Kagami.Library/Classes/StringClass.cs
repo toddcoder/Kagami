@@ -73,6 +73,7 @@ namespace Kagami.Library.Classes
 			messages["fields".get()] = (obj, msg) => function<String>(obj, s => s.Fields);
 			messages["words"] = (obj, msg) => function<String, Int>(obj, msg, (s, i) => s.Words(i.Value));
 			messages["<<(_}"] = (obj, msg) => function<String, IObject>(obj, msg, (s, o) => s.Append(o));
+			messages["mutable()"] = (obj, msg) => function<String>(obj, s => s.Mutable());
 		}
 
 		public override void RegisterClassMessages()

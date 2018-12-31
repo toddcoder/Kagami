@@ -184,5 +184,7 @@ namespace Kagami.Library.Objects
 	   public Interval Week => (7 * value).Day();
 
       public Char Char() => new Char((char)value);
+
+      public Byte Byte() => new Byte((byte)value);
    }
 }

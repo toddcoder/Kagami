@@ -336,14 +336,12 @@ namespace Kagami.Library.Parsers
 				if (Module.Global.Class(className).If(out var baseClass))
 					return new TypeConstraint(new[] { baseClass }).Some().Matched();
 				else if (Module.Global.Forwarded(className))
-					return new TypeConstraint(new[] { new ForwardedClass(className), }).Some().Matched();
+					return new TypeConstraint(new[] { new ForwardedClass(className) }).Some().Matched();
 				else
 					return failedMatch<IMaybe<TypeConstraint>>(classNotFound(className));
 			}
 			else if (mbException.If(out var exception))
-			{
 				return failedMatch<IMaybe<TypeConstraint>>(exception);
-			}
 			else
 			{
 				var builder = new ExpressionBuilder(ExpressionFlags.Standard);

@@ -82,6 +82,12 @@ namespace Kagami.Library.Objects
 
       public IMaybe<IObject> Peek() => Next();
 
+      public IObject Reset()
+      {
+	      iterator.Reset();
+	      return this;
+      }
+
       public IEnumerable<IObject> List() => list();
 
       public IObject Reverse() => iterator.Reverse();

@@ -93,6 +93,7 @@ namespace Kagami.Library.Runtime
 			classes["Result"] = new ResultClass();
 			classes["Monad"] = new MonadClass();
 			classes["Unit"] = new UnitClass();
+			classes["YieldReturn"] = new YieldReturnClass();
 		}
 
 		public IMaybe<BaseClass> Class(string name, bool forwardsIncluded = false)

@@ -55,6 +55,12 @@ namespace Kagami.Library.Objects
 
       public virtual IMaybe<IObject> Peek() => collection.Peek(index);
 
+      public IObject Reset()
+      {
+	      index = 0;
+	      return this;
+      }
+
       public virtual IEnumerable<IObject> List()
       {
          var item = none<IObject>();

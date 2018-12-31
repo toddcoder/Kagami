@@ -16,6 +16,8 @@ namespace Kagami.Library.Objects
 
       IMaybe<IObject> Peek();
 
+      IObject Reset();
+
       IEnumerable<IObject> List();
 
       IObject Reverse();

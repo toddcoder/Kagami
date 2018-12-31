@@ -221,5 +221,7 @@ namespace Kagami.Library.Objects
          var self = this;
          return input.Count(c => lambda.Invoke(self).IsTrue);
       }
+
+      public Byte Byte() => new Byte((byte)value);
    }
 }

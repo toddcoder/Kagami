@@ -154,5 +154,13 @@ namespace Kagami.Library.Objects
 			mutable.Append(obj.AsString);
 			return this;
 		}
+
+		public MutString Fill(char ch, int count)
+		{
+			mutable.Clear();
+			mutable.Append(ch.Repeat(count));
+
+			return this;
+		}
 	}
 }

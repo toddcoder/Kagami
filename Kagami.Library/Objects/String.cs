@@ -354,5 +354,7 @@ namespace Kagami.Library.Objects
 
 		   return mutString;
 	   }
+
+	   public MutString Mutable() => new MutString(value);
    }
 }
