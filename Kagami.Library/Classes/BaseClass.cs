@@ -307,8 +307,8 @@ namespace Kagami.Library.Classes
          registerMessage("reducer".Selector("_", "_<Lambda>"),
             (obj, msg) => iteratorFunc<IObject, Lambda>(obj, msg, (i, o, l) => i.ReduceRight(o, l)));
          registerMessage("reducer(_)", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.ReduceRight(l)));
-         registerMessage("count(_)", (obj, msg) => iteratorFunc<IObject>(obj, msg, (i, o) => i.Count(o)));
          registerMessage("count".Selector("_<Lambda>"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Count(l)));
+         registerMessage("count(of:_)", (obj, msg) => iteratorFunc<IObject>(obj, msg, (i, o) => i.Count(o)));
          registerMessage("map(_<Lambda>)", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Map(l)));
          registerMessage("if(_<Lambda>)", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.If(l)));
          registerMessage("ifNot(_<Lambda>)", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.IfNot(l)));

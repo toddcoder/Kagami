@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Kagami.Library.Classes;
 using Standard.Types.Collections;
 using Standard.Types.Monads;
 using static Kagami.Library.Objects.ObjectFunctions;
@@ -53,6 +54,29 @@ namespace Kagami.Library.Objects
       public IMaybe<IObject> Head => head;
 
       public List Tail => tail ?? Empty;
+
+      public List Init
+      {
+	      get
+	      {
+		      var iterator = GetIterator(false);
+		      var list = iterator.List().ToList();
+		      list = list.Take(list.Count - 1).ToList();
+
+		      return NewList(list);
+	      }
+      }
+
+      public IMaybe<IObject> Last
+      {
+	      get
+	      {
+		      var iterator = GetIterator(false);
+		      var list = iterator.List().ToArray();
+
+		      return when(list.Length > 0, () => list[list.Length - 1]);
+	      }
+      }
 
       public bool IsEmpty => head.IsNone;
 

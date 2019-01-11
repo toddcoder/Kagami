@@ -20,6 +20,8 @@ namespace Kagami.Library.Classes
 
          messages["head".get()] = (obj, msg) => function<List>(obj, l => someOf(l.Head));
          messages["tail".get()] = (obj, msg) => function<List>(obj, l => l.Tail);
+         messages["init".get()] = (obj, msg) => function<List>(obj, l => l.Init);
+         messages["last".get()] = (obj, msg) => function<List>(obj, l => someOf(l.Last));
          messages["~"] = (obj, msg) => function<List, List>(obj, msg, (l1, l2) => l1.Concatenate(l2));
          messages["isEmpty".get()] = (obj, msg) => function<List>(obj, l => Boolean.BooleanObject(l.IsEmpty));
          messages["[]"] = (obj, msg) => function<List, Int>(obj, msg, (l, i) => l[i.Value]);
