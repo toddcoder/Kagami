@@ -11,7 +11,7 @@ using static Standard.Types.Monads.MonadFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct Tuple : IObject, IEquatable<Tuple>, ICollection, IKeyValue
+   public struct Tuple : IObject, IEquatable<Tuple>, ICollection
    {
       public static IObject NewTuple(IObject x, IObject y)
       {
@@ -85,12 +85,6 @@ namespace Kagami.Library.Objects
 
          denameify();
       }
-
-      public IObject Key => this[0];
-
-      IObject IKeyValue.Value => this[1];
-
-      public bool ExpandInTuple => false;
 
       public IObject[] Value => items;
 
