@@ -1,6 +1,7 @@
 ﻿using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Symbols;
 using Standard.Types.Monads;
+using Standard.Types.RegularExpressions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
@@ -18,9 +19,9 @@ namespace Kagami.Library.Parsers.Expressions
 
 			var result =
 				from parameters in ParseParameters(state, tokens)
-				from scanned in state.Scan("^ /(|s|) /('->' | '=>')", Color.Whitespace, Color.Structure)
+				from scanned in state.Scan("^ /(|s|) /'->'", Color.Whitespace, Color.Structure)
 				from typeConstraint in parseTypeConstraint(state)
-				from block in getLambdaBlock(scanned.Contains("->"), state, builder.Flags, typeConstraint)
+				from block in getLambdaBlock(!state.CurrentSource.IsMatch("^ (/r /n | /r | /n)"), state, builder.Flags, typeConstraint)
 				select new LambdaSymbol(parameters, block);
 			if (result.Out(out var lambdaSymbol, out var original))
 			{
