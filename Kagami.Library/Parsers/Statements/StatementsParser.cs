@@ -37,8 +37,9 @@ namespace Kagami.Library.Parsers.Statements
                yield return new DeferParser();
 					yield return new AssignFromBlockParser();
 					yield return new AssignFromLoopParser();
+					yield return new MatchAssignParser();
                yield return new AssignToNewFieldParser();
-               yield return new AssignToNewFieldParser2();
+               //yield return new AssignToNewFieldParser2();
                yield return new AssignToMatchParser();
                yield return new DefAssignParser();
                yield return new DataTypeParser();
