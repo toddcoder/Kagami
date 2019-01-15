@@ -138,12 +138,3 @@ namespace Kagami.Library.Parsers.Expressions
 		}
 	}
 }
-/*let x = 10?
-let y = 20?
-let result = do
-	a <- x
-	b <- y
-return a + b
-
-let result = x.bind(a -> y.bind(b -> a + b))
-*/

@@ -15,7 +15,7 @@ namespace Kagami.Library.Parsers.Statements
 
 			var result =
 				from comparisand in getValue(state, ExpressionFlags.Comparisand)
-				from scanned in state.Scan("^ /(|s|) /'<-'", Color.Whitespace, Color.Structure)
+				from scanned in state.Scan("^ /(|s|) /':='", Color.Whitespace, Color.Structure)
 				from source in getExpression(state, ExpressionFlags.Standard)
 				from block in getBlock(state)
 				select (comparisand, source, block);
@@ -23,10 +23,11 @@ namespace Kagami.Library.Parsers.Statements
 			{
 				var (comparisand, source, block) = tuple;
 				state.AddStatement(new For2(comparisand, source, block));
+
 				return Unit.Matched();
 			}
-
-			return original.Unmatched<Unit>();
+			else
+				return original.Unmatched<Unit>();
 		}
 	}
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Kagami.Library.Classes;
 using Standard.Types.Collections;
 using Standard.Types.Monads;
 using static Kagami.Library.Objects.ObjectFunctions;
@@ -59,11 +58,15 @@ namespace Kagami.Library.Objects
       {
 	      get
 	      {
-		      var iterator = GetIterator(false);
-		      var list = iterator.List().ToList();
-		      list = list.Take(list.Count - 1).ToList();
-
-		      return NewList(list);
+		      if (head.If(out var h))
+		      {
+			      if (tail.IsEmpty)
+				      return Empty;
+			      else
+				      return Cons(h, tail.Init);
+		      }
+		      else
+			      return Empty;
 	      }
       }
 
@@ -71,10 +74,15 @@ namespace Kagami.Library.Objects
       {
 	      get
 	      {
-		      var iterator = GetIterator(false);
-		      var list = iterator.List().ToArray();
-
-		      return when(list.Length > 0, () => list[list.Length - 1]);
+		      if (head.IsSome)
+		      {
+			      if (tail.IsEmpty)
+				      return head;
+			      else
+				      return tail.Last;
+		      }
+		      else
+			      return none<IObject>();
 	      }
       }
 
@@ -206,6 +214,13 @@ namespace Kagami.Library.Objects
          }
       }
 
-      public IObject this[int index] => getItem(this, 0, index);
+      public IObject this[int index]
+      {
+	      get
+	      {
+		      var item = (List)GetIterator(false).Skip(index);
+		      return someOf(item.head);
+	      }
+      }
    }
 }

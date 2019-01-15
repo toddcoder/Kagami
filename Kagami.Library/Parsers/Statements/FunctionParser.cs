@@ -54,7 +54,9 @@ namespace Kagami.Library.Parsers.Statements
 
 			if (GetAnyParameters(needsParameters, state).Out(out var parameters, out var original))
 			{
-				if (state.CurrentSource.StartsWith("("))
+				if (state.CurrentSource.IsMatch("^ /s* '|'"))
+					return getMatchFunction(state, functionName, parameters, overriding, className);
+				else if (state.CurrentSource.StartsWith("("))
 					return getCurriedFunction(state, functionName, parameters, overriding, className, trait).Map(f =>
 					{
 						if (isMacro)
@@ -141,5 +143,58 @@ namespace Kagami.Library.Parsers.Statements
 		{
 			return new LambdaSymbol(parameters, new Block(new Return(new Expression(previousLambdaSymbol), none<TypeConstraint>())));
 		}
+
+		protected static IMatched<Unit> getMatchFunction(ParseState state, string functionName, Parameters parameters, bool overriding, string className)
+		{
+			var list = new List<If>();
+
+			if (state.Advance().Out(out _, out var original))
+			{
+				state.CreateReturnType();
+				while (state.More)
+				{
+					var caseParser = new CaseParser(parameters[0].Name);
+					state.SkipEndOfLine();
+					if (caseParser.Scan(state).If(out _, out var mbException))
+						list.Add(caseParser.If);
+					else if (mbException.If(out var exception))
+					{
+						state.Regress();
+						return failedMatch<Unit>(exception);
+					}
+					else
+						break;
+				}
+
+				if (list.Count == 0)
+				{
+					state.Regress();
+					state.RemoveReturnType();
+					return notMatched<Unit>();
+				}
+				else
+				{
+					var stack = new Stack<If>();
+					foreach (var ifStatement in list)
+						stack.Push(ifStatement);
+
+					var previousIf = stack.Pop();
+					while (stack.Count > 0)
+					{
+						var current = stack.Pop();
+						current.ElseIf = previousIf.Some();
+						previousIf = current;
+					}
+
+					state.AddStatement(new MatchFunction(functionName, parameters, previousIf, overriding, className));
+					state.Regress();
+					state.RemoveReturnType();
+
+					return Unit.Matched();
+				}
+			}
+			else
+				return original;
+      }
 	}
 }
