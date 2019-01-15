@@ -164,6 +164,27 @@ namespace Kagami.Library.Runtime
 				return failure<Field>(fieldNotFound(name));
 		}
 
+		public IResult<Field> AssignToExisting(string name, IObject value, bool overriden = false)
+		{
+			if (Machine.Current.Find(name, false).Out(out var field, out var original))
+				if (field.Mutable)
+				{
+					field.Value = value;
+					return field.Success();
+				}
+				else if (field.Value is Unassigned || overriden)
+				{
+					field.Value = value;
+					return field.Success();
+				}
+				else
+					return failure<Field>(immutableField(name));
+			else if (original.IsFailedMatch)
+				return failure<Field>(original.Exception);
+			else
+				return failure<Field>(fieldNotFound(name));
+      }
+
 		public IResult<Field> Assign(Selector selector, bool overriden = false)
 		{
 			var result = Assign(selector, selector, overriden);
@@ -213,7 +234,7 @@ namespace Kagami.Library.Runtime
 					if (New(fieldName, value, mutable).IfNot(out var exception))
 						throw exception;
 				}
-				else if (Assign(key, value).IfNot(out var exception))
+				else if (AssignToExisting(key, value).IfNot(out var exception))
 					throw exception;
 		}
 
