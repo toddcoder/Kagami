@@ -35,5 +35,10 @@ namespace Kagami.Library.Parsers.Statements
 				return notMatched<Unit>();
 			}
 		}
+
+/*		static IMatched<Statement> getRestOfStatement(ParseState state)
+		{
+
+		}*/
 	}
 }
