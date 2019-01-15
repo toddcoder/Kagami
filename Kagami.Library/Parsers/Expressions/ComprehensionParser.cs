@@ -24,7 +24,7 @@ namespace Kagami.Library.Parsers.Expressions
 				if (getInnerComprehension(state).Out(out var tuple, out var original))
 				{
 					var (comparisand, source, ifExp) = tuple;
-					var image = $"for {comparisand} <- {source}";
+					var image = $"for {comparisand} := {source}";
 					comprehensions.Add((comparisand, source, ifExp, image));
 				}
 				else

@@ -651,7 +651,7 @@ namespace Kagami.Library.Parsers
 
 		public static IMatched<(Symbol, Expression, IMaybe<Expression>)> getInnerComprehension(ParseState state) =>
 			from comparisand in getValue(state, ExpressionFlags.Comparisand)
-			from scanned in state.Scan("^ /(|s|) /'<-'", Color.Whitespace, Color.Structure)
+			from scanned in state.Scan("^ /(|s|) /':='", Color.Whitespace, Color.Structure)
 			from source in getExpression(state, ExpressionFlags.OmitIf | ExpressionFlags.OmitComprehension)
 			from ifExp in getIf(state)
 			select (comparisand, source, ifExp);
