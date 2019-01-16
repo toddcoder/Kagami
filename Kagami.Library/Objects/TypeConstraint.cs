@@ -82,7 +82,7 @@ namespace Kagami.Library.Objects
 		public bool Matches(TypeConstraint typeConstraint)
 		{
 			var self = this;
-			return typeConstraint.comparisands.Select(bc => self.Matches(bc)).Any();
+			return typeConstraint.comparisands.Select(bc => self.Matches(bc)).Any(b => b);
 		}
 
 	   public bool IsTrue => true;
