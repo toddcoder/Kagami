@@ -99,7 +99,7 @@ namespace Kagami.Library.Objects
 						}
 						else
 							return false;*/
-						if (right.TypeConstraint.If(out var rTypeConstraint) && left.TypeConstraint.If(out var lTypeConstraint) && !lTypeConstraint.Matches(rTypeConstraint))
+						if (right.TypeConstraint.If(out var rTypeConstraint) && left.TypeConstraint.If(out var lTypeConstraint) && !rTypeConstraint.Matches(lTypeConstraint))
 							return false;
 					}
 
