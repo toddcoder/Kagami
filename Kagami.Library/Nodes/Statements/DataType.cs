@@ -21,33 +21,32 @@ namespace Kagami.Library.Nodes.Statements
 
       public override void Generate(OperationsBuilder builder)
       {
-         foreach (var item in comparisands)
+         foreach (var (key, value) in comparisands)
          {
-            var name = item.Key;
-            (var data, var ordinal) = item.Value;
+	         var (data, ordinal) = value;
 
             var skipLabel = newLabel("skip");
 
-            builder.FieldExists(name);
+            builder.FieldExists(key);
             builder.GoToIfTrue(skipLabel);
 
             if (data.Length == 0)
             {
-               builder.NewField(name, false, true);
-               builder.PushObject(new DataComparisand(className, name, data, ordinal));
-               builder.AssignField(name, true);
+               builder.NewField(key, false, true);
+               builder.PushObject(new DataComparisand(className, key, data, ordinal));
+               builder.AssignField(key, true);
             }
             else
             {
-               var dataTypeCode = new DataTypeCode(className, name, data, ordinal);
+               var dataTypeCode = new DataTypeCode(className, key, data, ordinal);
                var block = new Block(dataTypeCode);
                var invokable =
-                  new DataComparisandInvokable(name, new Parameters(data.Length), $"{name}({data.Select(d => d.Image).Listify()})");
+                  new DataComparisandInvokable(key, new Parameters(data.Length), $"{key}({data.Select(d => d.Image).Listify()})");
                if (builder.RegisterInvokable(invokable, block, true).If(out var _, out var exception))
                {
-                  builder.NewField(name, false, true);
+                  builder.NewField(key, false, true);
                   builder.PushObject(new Lambda(invokable));
-                  builder.AssignField(name, true);
+                  builder.AssignField(key, true);
                }
                else
                   throw exception;

@@ -26,7 +26,7 @@ namespace Kagami.Library.Nodes.Statements
 
          foreach (var comparisand in comparisands)
          {
-            var parameterName = i++.ToString().get();
+	         var parameterName = $"__${i++}";//i++.ToString().get();
             builder.GetField(parameterName);
             builder.PushObject(comparisand);
             builder.Match();
@@ -37,7 +37,7 @@ namespace Kagami.Library.Nodes.Statements
          builder.PushString(name);
          for (var j = 0; j < comparisands.Length; j++)
          {
-            var parameterName = j.ToString().get();
+	         var parameterName = $"__${j}";
             builder.GetField(parameterName);
          }
 

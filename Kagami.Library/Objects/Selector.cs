@@ -92,12 +92,14 @@ namespace Kagami.Library.Objects
 						var right = otherItems[i];
 /*						if (right.TypeConstraint.If(out var tc) && !left.TypeConstraint.Required("Type required").Matches(tc))
 							return false;*/
-						if (right.TypeConstraint.If(out var rTypeConstraint) && left.TypeConstraint.If(out var lTypeConstraint))
+/*						if (right.TypeConstraint.If(out var rTypeConstraint) && left.TypeConstraint.If(out var lTypeConstraint))
 						{
 							if (!lTypeConstraint.Matches(rTypeConstraint))
 								return false;
 						}
 						else
+							return false;*/
+						if (right.TypeConstraint.If(out var rTypeConstraint) && left.TypeConstraint.If(out var lTypeConstraint) && !lTypeConstraint.Matches(rTypeConstraint))
 							return false;
 					}
 
