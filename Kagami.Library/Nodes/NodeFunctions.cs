@@ -22,9 +22,9 @@ namespace Kagami.Library.Nodes
       public static IResult<Lambda> operatorLambda(Symbol operatorSymbol, OperationsBuilder builder)
       {
          var exBuilder = new ExpressionBuilder(ExpressionFlags.Standard);
-         exBuilder.Add(new FieldSymbol("0".get()));
+         exBuilder.Add(new FieldSymbol("__$0"));
          exBuilder.Add(operatorSymbol);
-         exBuilder.Add(new FieldSymbol("1".get()));
+         exBuilder.Add(new FieldSymbol("__$1"));
 
          return exBuilder.ToExpression().Map(expression =>
          {

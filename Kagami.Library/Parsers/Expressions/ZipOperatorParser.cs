@@ -8,7 +8,7 @@ namespace Kagami.Library.Parsers.Expressions
 	{
 		public ZipOperatorParser(ExpressionBuilder builder) : base(builder) { }
 
-		public override string Pattern => $"^ /(|s|) /'[' /({REGEX_OPERATORS}1%2) /']'";
+		public override string Pattern => $"^ /(|s|) /'[|' /({REGEX_OPERATORS}1%2) /'|]'";
 
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{

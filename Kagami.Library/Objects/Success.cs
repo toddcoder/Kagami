@@ -41,8 +41,8 @@ namespace Kagami.Library.Objects
 			{
 				case Success success:
 					return success;
-				case Error error:
-					return error;
+				case Failure failure:
+					return failure;
 				default:
 					return new Success(result);
 			}
