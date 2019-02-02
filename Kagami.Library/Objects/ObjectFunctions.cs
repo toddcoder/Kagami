@@ -198,6 +198,11 @@ namespace Kagami.Library.Objects
 
 		public static bool userObjectMatch(UserObject obj, IObject comparisand, Hash<string, IObject> bindings)
 		{
+			bool includeFieldName(string fieldName)
+			{
+				return !fieldName.StartsWith("__$") && fieldName != "self" && fieldName != "id" && !fieldName.StartsWith("_");
+			}
+
 			if (classOf(obj).RespondsTo("match(_)"))
 			{
 				var objectHash = bindings.ToHash(i => String.StringObject(i.Key), i => i.Value);
@@ -216,19 +221,32 @@ namespace Kagami.Library.Objects
 			else
 				return match(obj, comparisand, (uo1, uo2) =>
 				{
-					foreach (var parameter in obj.Parameters)
+					if (obj.Parameters.Length == 0)
 					{
-						var name = parameter.Name;
-						if (uo1.Fields.ContainsKey(name) && uo2.Fields.ContainsKey(name))
+						foreach (var (fieldName, field) in uo1.Fields.Where(f => includeFieldName(f.fieldName)))
 						{
-							var value1 = uo1.Fields[name];
-							var value2 = uo2.Fields[name];
+							var value1 = field.Value;
+							var value2 = uo2.Fields[fieldName];
 							if (!value1.Match(value2, bindings))
 								return false;
 						}
-						else
-							return false;
+
+						return true;
 					}
+					else
+						foreach (var parameter in obj.Parameters)
+						{
+							var name = parameter.Name;
+							if (uo1.Fields.ContainsKey(name) && uo2.Fields.ContainsKey(name))
+							{
+								var value1 = uo1.Fields[name];
+								var value2 = uo2.Fields[name];
+								if (!value1.Match(value2, bindings))
+									return false;
+							}
+							else
+								return false;
+						}
 
 					return true;
 				}, bindings);
@@ -376,7 +394,7 @@ namespace Kagami.Library.Objects
 
 				return true;
 			}
-      }
+		}
 
 		public static int compareObjects<T>(T x, IObject y, Func<T, T, int> comparer) where T : IObject
 		{
@@ -465,11 +483,11 @@ namespace Kagami.Library.Objects
 			var selectorItemType = SelectorItemType.Normal;
 			switch (source)
 			{
-            case "...":
-	            selectorItemType = SelectorItemType.Variadic;
+				case "...":
+					selectorItemType = SelectorItemType.Variadic;
 					break;
-            case "=":
-	            selectorItemType = SelectorItemType.Default;
+				case "=":
+					selectorItemType = SelectorItemType.Default;
 					break;
 			}
 

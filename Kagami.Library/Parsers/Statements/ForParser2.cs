@@ -14,7 +14,7 @@ namespace Kagami.Library.Parsers.Statements
 			state.Colorize(tokens, Color.Keyword, Color.Whitespace);
 
 			var result =
-				from comparisand in getValue(state, ExpressionFlags.Comparisand)
+				from comparisand in getExpression(state, ExpressionFlags.Comparisand | ExpressionFlags.OmitColon)
 				from scanned in state.Scan("^ /(|s|) /':='", Color.Whitespace, Color.Structure)
 				from source in getExpression(state, ExpressionFlags.Standard)
 				from block in getBlock(state)

@@ -24,7 +24,7 @@ namespace Kagami.Library.Parsers.Statements
 
 				return Unit.Matched();
 			}
-			else if (mbException.If(out var exception))
+			else if (mbException.If(out var exception) && exception.Message != "Invalid expression syntax")
 			{
 				state.RollBackTransaction();
 				return failedMatch<Unit>(exception);
