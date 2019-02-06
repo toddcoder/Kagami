@@ -11,7 +11,7 @@ using static Standard.Types.Monads.MonadFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct Tuple : IObject, IEquatable<Tuple>, ICollection
+   public struct Tuple : IObject, IEquatable<Tuple>, ICollection, IObjectCompare
    {
       public static IObject NewTuple(IObject x, IObject y)
       {
@@ -217,5 +217,35 @@ namespace Kagami.Library.Objects
       }
 
       public IIterator GetIndexedIterator() => new IndexedIterator(this);
+
+      public int Compare(IObject obj)
+      {
+	      if (obj is Tuple tuple)
+	      {
+		      var tupleItems = tuple.items;
+		      var length = Math.Min(items.Length, tupleItems.Length);
+		      for (var i = 0; i < length; i++)
+		      {
+			      var left = items[i];
+			      var right = tupleItems[i];
+			      if (left is IObjectCompare lCompare)
+			      {
+				      var compare = lCompare.Compare(right);
+				      if (compare != 0)
+					      return compare;
+			      }
+		      }
+
+		      return 0;
+	      }
+	      else
+		      throw incompatibleClasses(obj, "Tuple");
+      }
+
+      public IObject Object => this;
+
+      public Boolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
+
+      public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
    }
 }

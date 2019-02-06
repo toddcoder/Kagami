@@ -16,9 +16,9 @@ namespace Kagami.Library.Classes
          messages["error".get()] = (obj, msg) => function<Failure>(obj, s => s.Error);
 			messages["isSuccess".get()] = (obj, msg) => function<Success>(obj, s => (Boolean)s.IsSuccess);
 			messages["isFailure".get()] = (obj, msg) => function<Success>(obj, s => (Boolean)s.IsFailure);
-			messages["map"] = (obj, msg) => function<Success, Lambda>(obj, msg, (s, l) => s.Map(l));
-			messages["flatMap"] = (obj, msg) => function<Success, Lambda, Lambda>(obj, msg, (s, l1, l2) => s.FlatMap(l1, l2));
-			messages["defaultTo"] = (obj, msg) => function<Success, IObject>(obj, msg, (s, o) => o);
+			messages["map(_<Lambda>)"] = (obj, msg) => function<Success, Lambda>(obj, msg, (s, l) => s.Map(l));
+			messages["flatMap(_<Lambda>,_<Lambda>)"] = (obj, msg) => function<Success, Lambda, Lambda>(obj, msg, (s, l1, l2) => s.FlatMap(l1, l2));
+			messages["defaultTo(_)"] = (obj, msg) => function<Success, IObject>(obj, msg, (s, o) => o);
 		}
 
 		public override bool AssignCompatible(BaseClass otherClass) => otherClass is SuccessClass || otherClass is FailureClass;

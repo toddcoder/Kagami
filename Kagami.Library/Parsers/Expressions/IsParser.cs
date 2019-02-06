@@ -8,7 +8,7 @@ namespace Kagami.Library.Parsers.Expressions
    {
       public IsParser(ExpressionBuilder builder) : base(builder) { }
 
-      public override string Pattern => "^ /(|s+|) /'is' /(|s+| 'not') /b";
+      public override string Pattern => "^ /(|s+|) /'is' /(|s+| 'not')? /b";
 
       public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
       {

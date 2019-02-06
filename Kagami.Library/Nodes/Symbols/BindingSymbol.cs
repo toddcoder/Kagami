@@ -22,9 +22,9 @@ namespace Kagami.Library.Nodes.Symbols
 
          builder.NewValue("Binding", t =>
          {
-            var oname = ((String)t[0]).Value;
-            var ovalue = t[1];
-            return new Binding(oname, ovalue);
+            var s = ((String)t[0]).Value;
+            var o = t[1];
+            return new Binding(s, o);
          });
       }
 

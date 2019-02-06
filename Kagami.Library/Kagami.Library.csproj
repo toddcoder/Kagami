@@ -191,6 +191,7 @@
     <Compile Include="Nodes\Symbols\AnySymbol.cs" />
     <Compile Include="Nodes\Symbols\Arity.cs" />
     <Compile Include="Nodes\Symbols\ArraySymbol.cs" />
+    <Compile Include="Nodes\Symbols\AssertSymbol.cs" />
     <Compile Include="Nodes\Symbols\BAndSymbol.cs" />
     <Compile Include="Nodes\Symbols\BindingSymbol.cs" />
     <Compile Include="Nodes\Symbols\BindSymbol.cs" />
@@ -597,6 +598,7 @@
     <Compile Include="Parsers\Expressions\AnyLambdaParser.cs" />
     <Compile Include="Parsers\Expressions\AnyParser.cs" />
     <Compile Include="Parsers\Expressions\ArrayParser.cs" />
+    <Compile Include="Parsers\Expressions\AssertParser.cs" />
     <Compile Include="Parsers\Expressions\BinaryParser.cs" />
     <Compile Include="Parsers\Expressions\BindingParser.cs" />
     <Compile Include="Parsers\Expressions\BindParser.cs" />
