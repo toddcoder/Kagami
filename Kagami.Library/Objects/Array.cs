@@ -196,6 +196,8 @@ namespace Kagami.Library.Objects
          return this;
       }
 
+      public Boolean IsEmpty => list.Count == 0;
+
       public IObject Concatenate(Array array)
       {
          if (typeConstraint.If(out var thisConstraint))

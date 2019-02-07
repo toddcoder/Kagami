@@ -253,6 +253,7 @@ namespace Kagami.Library.Classes
 		      (obj, msg) => function<IObject, Int>(obj, msg, (o, i) => ((IMutableCollection)o).RemoveAt(i.Value)));
 	      registerMessage("insert(at:_<Int>,value:_)",
 		      (obj, msg) => function<IObject, Int, IObject>(obj, msg, (o, i, v) => ((IMutableCollection)o).InsertAt(i.Value, v)));
+	      registerMessage("isEmpty".get(), (obj, msg) => function<IObject>(obj, o => ((IMutableCollection)o).IsEmpty));
       }
 
       void loadIteratorMessages()

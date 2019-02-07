@@ -9,5 +9,7 @@
       IObject RemoveAt(int index);
 
       IObject InsertAt(int index, IObject obj);
+
+		Boolean IsEmpty { get; }
    }
 }

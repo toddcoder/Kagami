@@ -44,7 +44,7 @@ namespace Kagami.Library.Classes
       {
          base.RegisterClassMessages();
 
-         classMessages["repeat".Selector("value:", "times:<Int>")] = (bc, msg) =>
+         classMessages["repeat(value:_,times:_<Int>)"] = (bc, msg) =>
             classFunc<ArrayClass, IObject, Int>(bc, msg, (ac, v, t) => Array.Repeat(v, t.Value));
          classMessages["empty".get()] = (bc, msg) => classFunc<ArrayClass>(bc, ac => Array.Empty);
          classMessages["typed"] = (bc, msg) => getTypedArray(msg);

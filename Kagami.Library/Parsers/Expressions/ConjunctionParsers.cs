@@ -18,7 +18,7 @@ namespace Kagami.Library.Parsers.Expressions
             if (!builder.Flags[ExpressionFlags.OmitAnd])
                yield return new AndParser(builder);
             yield return new OrParser(builder);
-            yield return new MaybeParser(builder);
+            //yield return new MaybeParser(builder);
             yield return new InlineIfParser(builder);
             yield return new SliceParser(builder);
             yield return new IsParser(builder);

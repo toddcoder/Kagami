@@ -112,7 +112,7 @@ namespace Kagami.Library.Objects
 				{
 					case Dictionary otherDictionary when objectID == otherDictionary.objectID:
 						return;
-					case Del _:
+					case Nil _:
 						dictionary.Remove(key);
 						break;
 					default:
@@ -293,6 +293,8 @@ namespace Kagami.Library.Objects
 			else
 				return Nil.NilValue;
 		}
+
+		public Boolean IsEmpty => dictionary.Count == 0;
 
 		public IObject[] KeyArray => dictionary.KeyArray();
 
