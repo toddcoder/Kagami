@@ -745,6 +745,7 @@
     <Compile Include="Parsers\Statements\ForParser.cs" />
     <Compile Include="Parsers\Statements\ForParser2.cs" />
     <Compile Include="Parsers\Statements\FunctionParser.cs" />
+    <Compile Include="Parsers\Statements\GuardParser.cs" />
     <Compile Include="Parsers\Statements\IfParser.cs" />
     <Compile Include="Parsers\Statements\ImportPackageParser.cs" />
     <Compile Include="Parsers\Statements\IncludeTraitParser.cs" />

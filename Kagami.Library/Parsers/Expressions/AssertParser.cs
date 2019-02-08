@@ -9,7 +9,7 @@ namespace Kagami.Library.Parsers.Expressions
 	{
 		public AssertParser(ExpressionBuilder builder) : base(builder) { }
 
-		public override string Pattern => "^ /(|s|) /('assert' | 'some') /b";
+		public override string Pattern => "^ /(|s|) /('assert' | 'maybe') /b";
 
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{

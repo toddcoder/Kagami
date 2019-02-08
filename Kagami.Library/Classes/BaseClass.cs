@@ -259,7 +259,7 @@ namespace Kagami.Library.Classes
       void loadIteratorMessages()
       {
          alternateMessages.AddRange(array<string>("collection".get(), "isLazy".get(), "next()", "peek()", "reset()", "reverse()", "join(_<String>)",
-            "sort".Selector("_<Lambda>", "asc:_<Boolean>"), "sort".Selector("_<Lambda>"), "sort".Selector("_<Boolean>"), "sort()",
+            "sort(_<Lambda>,asc:_<Boolean>)", "sort(_<Lambda>)", "sort(_<Boolean>)", "sort()",
 	         "foldl".Selector("_", "_<Lambda>"),
             "foldl(_)", "foldr".Selector("_", "_<Lambda>"), "foldr(_)", "reducel".Selector("_", "_<Lambda>"), "reducel(_)",
             "reducer".Selector("_", "_<Lambda>"), "reducer(_)", "count(_)", "count(_<Lambda>)", "map(_<Lambda>)", "if(_<Lambda>)",
@@ -291,10 +291,10 @@ namespace Kagami.Library.Classes
          registerMessage("reset()", (obj, msg) => iteratorFunc(obj, i => i.Reset()));
          registerMessage("reverse()", (obj, msg) => iteratorFunc(obj, i => i.Reverse()));
          registerMessage("join(_<String>)", (obj, msg) => iteratorFunc<String>(obj, msg, (i, s) => i.Join(s.Value)));
-         registerMessage("sort".Selector("_<Lambda>", "asc:_<Boolean>"),
-            (obj, msg) => iteratorFunc<Lambda, Boolean>(obj, msg, (i, l, b) => i.Sort(l, b.Value)));
-         registerMessage("sort".Selector("_<Lambda>"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Sort(l, true)));
-         registerMessage("sort".Selector("_<Boolean>"), (obj, msg) => iteratorFunc<Boolean>(obj, msg, (i, b) => i.Sort(b.Value)));
+         registerMessage("sort(_<Lambda>,asc:_<Boolean>)",
+	         (obj, msg) => iteratorFunc<Lambda, Boolean>(obj, msg, (i, l, b) => i.Sort(l, b.Value)));
+         registerMessage("sort(_<Lambda>)", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Sort(l, true)));
+         registerMessage("sort(_<Boolean>)", (obj, msg) => iteratorFunc<Boolean>(obj, msg, (i, b) => i.Sort(b.Value)));
          registerMessage("sort()", (obj, msg) => iteratorFunc(obj, i => i.Sort(true)));
          registerMessage("foldl".Selector("_", "_<Lambda>"),
             (obj, msg) => iteratorFunc<IObject, Lambda>(obj, msg, (i, o, l) => i.FoldLeft(o, l)));

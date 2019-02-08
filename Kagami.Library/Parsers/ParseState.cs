@@ -82,6 +82,14 @@ namespace Kagami.Library.Parsers
 			tokenTransaction.Commit();
 		}
 
+		public IMatched<Unit> RollBackTransactionIf<T>(bool enabled, IMatched<T> previousMatch)
+		{
+			if (enabled && !previousMatch.IsMatched)
+				RollBackTransaction();
+
+			return previousMatch.Map(t => Unit.Value);
+      }
+
 		public void PushStatements()
 		{
 			statementStack.Push(statements);
