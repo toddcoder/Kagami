@@ -24,7 +24,7 @@ namespace Kagami.Library.Parsers.Statements
 			var arguments = new Expression[0];
 			Module.Global.ForwardReference(className);
 
-			var builder = new ClassBuilder(className, parameters, parentClassName, arguments, new Block(),
+			var builder = new ClassBuilder(className, parameters, parentClassName, arguments, false, new Block(),
 				new Hash<string, TraitClass>());
 			if (builder.Register().Out(out _, out var registerOriginal))
 			{
@@ -34,7 +34,7 @@ namespace Kagami.Library.Parsers.Statements
 				if (getBlock(state).Out(out var block, out var original))
 				{
 					var metaClassName = $"__$meta{className}";
-					var metaClassBuilder = new ClassBuilder(metaClassName, Parameters.Empty, "", new Expression[0], block,
+					var metaClassBuilder = new ClassBuilder(metaClassName, Parameters.Empty, "", new Expression[0], false, block,
 						new Hash<string, TraitClass>());
 					if (metaClassBuilder.Register().Out(out _, out registerOriginal))
 					{

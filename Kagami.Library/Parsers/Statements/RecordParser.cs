@@ -31,7 +31,7 @@ namespace Kagami.Library.Parsers.Statements
 
 				Module.Global.ForwardReference(className);
 
-				var builder = new ClassBuilder(className, parameters, parentClassName, arguments, new Block(),
+				var builder = new ClassBuilder(className, parameters, parentClassName, arguments, false, new Block(),
 					new Hash<string, TraitClass>());
 				if (builder.Register().Out(out _, out var registerOriginal))
 				{

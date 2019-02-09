@@ -8,8 +8,8 @@ namespace Kagami.Library.Nodes.Symbols
 {
 	public class InitializeSymbol : Symbol
 	{
-		string className;
-		(string name, Expression value)[] arguments;
+		protected string className;
+		protected (string name, Expression value)[] arguments;
 
 		public InitializeSymbol(string className, (string, Expression)[] arguments)
 		{

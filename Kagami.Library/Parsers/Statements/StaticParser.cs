@@ -25,7 +25,7 @@ namespace Kagami.Library.Parsers.Statements
 			{
 				var className = classBuilder.UserClass.Name;
 				var metaClassName = $"__$meta{className}";
-				var metaClassBuilder = new ClassBuilder(metaClassName, Parameters.Empty, "", new Expression[0], block,
+				var metaClassBuilder = new ClassBuilder(metaClassName, Parameters.Empty, "", new Expression[0], false, block,
 					new Hash<string, TraitClass>());
 				if (metaClassBuilder.Register().Out(out _, out var registerOriginal))
 				{

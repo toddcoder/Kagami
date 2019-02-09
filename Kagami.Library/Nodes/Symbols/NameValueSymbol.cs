@@ -21,9 +21,9 @@ namespace Kagami.Library.Nodes.Symbols
          builder.ToArguments(2);
          builder.NewValue("NameValue", t =>
          {
-            var oname = ((String)t[0]).Value;
-            var ovalue = t[1];
-            return new NameValue(oname, ovalue);
+            var s = ((String)t[0]).Value;
+            var o = t[1];
+            return new NameValue(s, o);
          });
       }
 
@@ -32,5 +32,7 @@ namespace Kagami.Library.Nodes.Symbols
       public override Arity Arity => Arity.Binary;
 
       public override string ToString() => $"{name}: {value}";
+
+      public (string, Expression) Tuple() => (name, value);
    }
 }

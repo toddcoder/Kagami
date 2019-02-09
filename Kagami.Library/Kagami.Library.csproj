@@ -238,6 +238,7 @@
     <Compile Include="Nodes\Symbols\ImageSymbol.cs" />
     <Compile Include="Nodes\Symbols\IndexSetterSymbol.cs" />
     <Compile Include="Nodes\Symbols\IndexSymbol.cs" />
+    <Compile Include="Nodes\Symbols\InitializeParentConstructorSymbol.cs" />
     <Compile Include="Nodes\Symbols\InitializeSymbol.cs" />
     <Compile Include="Nodes\Symbols\InlineIfSymbol.cs" />
     <Compile Include="Nodes\Symbols\IntDivideSymbol.cs" />

@@ -37,9 +37,10 @@ namespace Kagami.Library.Parsers.Statements
 			var parentClassParser = new ParentClassParser();
 
 			var parentClassName = "";
+			var initialize = false;
 			var arguments = new Expression[0];
 			if (parentClassParser.Scan(state).If(out _, out var mbException))
-				(parentClassName, _, arguments) = parentClassParser.Parent;
+				(parentClassName, initialize, arguments) = parentClassParser.Parent;
 			else if (mbException.If(out var exception))
 			{
 				state.Regress();
@@ -68,7 +69,7 @@ namespace Kagami.Library.Parsers.Statements
 			state.SkipEndOfLine();
 			if (getBlock(state).Out(out var block, out var original))
 			{
-				var builder = new ClassBuilder(className, parameters, parentClassName, arguments, block, traits);
+				var builder = new ClassBuilder(className, parameters, parentClassName, arguments, initialize, block, traits);
 				if (builder.Register().Out(out _, out var registerOriginal))
 				{
 					var cls = new Class(builder);
