@@ -44,10 +44,10 @@ namespace Kagami.Library.Parsers.Statements
 			if (needsParameters)
 			{
 				if (functionName.IsMatch("^ /w+ '=' $"))
-					functionName = "__$" + functionName.Skip(-1).set();
+					functionName = $"__${functionName.Skip(-1)}=";
 			}
 			else
-				functionName = "__$" + functionName;
+				functionName = $"__${functionName}";
 
 			state.CreateYieldFlag();
 			state.CreateReturnType();

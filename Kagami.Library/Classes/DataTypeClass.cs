@@ -96,6 +96,8 @@ namespace Kagami.Library.Classes
 				else
 					return Nil.NilValue;
 			}));
+
+			RegisterClassMessage("values".get(), (bc, msg) => classFunc<DataTypeClass>(bc, dtc => dtc.dataType.Values));
 		}
 
 		public override bool ClassRespondsTo(Selector selector) => classMessages.ContainsKey(selector);
