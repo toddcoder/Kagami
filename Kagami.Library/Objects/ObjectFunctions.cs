@@ -36,10 +36,16 @@ namespace Kagami.Library.Objects
 		public static bool match<T>(T source, IObject comparisand, Func<T, T, bool> equalifier, Hash<string, IObject> bindings)
 			where T : IObject
 		{
-			if (comparisand is Binding binding)
+			switch (comparisand)
 			{
-				comparisand = binding.Value;
-				bindings[binding.Name] = source;
+				case Binding binding:
+					comparisand = binding.Value;
+					bindings[binding.Name] = source;
+					break;
+				case NameValue nameValue:
+					comparisand = nameValue.Value;
+					bindings[$"-{nameValue.Name}"] = source;
+					break;
 			}
 
 			switch (comparisand)
@@ -56,7 +62,8 @@ namespace Kagami.Library.Objects
 				case Lambda lambda:
 					if (lambda.Invoke(source).IsTrue)
 					{
-						bindings[lambda.Invokable.Parameters[0].Name] = source;
+						var bindingName = $"-{lambda.Invokable.Parameters[0].Name}";
+						bindings[bindingName] = source;
 						return true;
 					}
 					else
@@ -89,10 +96,16 @@ namespace Kagami.Library.Objects
 			Hash<string, IObject> bindings)
 			where T : IObject
 		{
-			if (comparisand is Binding binding)
+			switch (comparisand)
 			{
-				comparisand = binding.Value;
-				bindings[binding.Name] = source;
+				case Binding binding:
+					comparisand = binding.Value;
+					bindings[binding.Name] = source;
+					break;
+				case NameValue nameValue:
+					comparisand = nameValue.Value;
+					bindings[$"-{nameValue.Name}"] = source;
+               break;
 			}
 
 			switch (comparisand)
@@ -109,9 +122,10 @@ namespace Kagami.Library.Objects
 				case Lambda lambda:
 					if (lambda.Invoke(source).IsTrue)
 					{
-						bindings[lambda.Invokable.Parameters[0].Name] = source;
+						var bindingName = $"-{lambda.Invokable.Parameters[0].Name}";
+						bindings[bindingName] = source;
 						return true;
-					}
+               }
 					else
 						return false;
 				case Pattern pattern:

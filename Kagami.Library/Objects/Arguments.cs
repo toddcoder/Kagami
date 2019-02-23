@@ -19,7 +19,7 @@ namespace Kagami.Library.Objects
          return new Arguments(newArguments);
       }
 
-      public static Arguments Empty = new Arguments(new IObject[] { });
+      public static Arguments Empty => new Arguments(new IObject[] { });
 
       IObject[] arguments;
       string[] labels;

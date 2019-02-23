@@ -3,6 +3,7 @@ using Kagami.Library.Objects;
 using Standard.Types.Exceptions;
 using Standard.Types.Monads;
 using static Kagami.Library.Classes.ClassFunctions;
+using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Classes
 {
@@ -22,6 +23,7 @@ namespace Kagami.Library.Classes
          sliceableMessages();
 
          messages["[](_)"] = (obj, msg) => function<Array, Int>(obj, msg, (a, i) => a[i.Value]);
+         messages["get(_)"] = (obj, msg) => function<Array, IObject>(obj, msg, (a, i) => someOf(a.Get(i)));
          messages["[]=(_<Int>,_)"] = (obj, msg) => function<Array>(obj, a => a[((Int)msg.Arguments[0]).Value] = msg.Arguments[1]);
          messages["~(_)"] = (obj, msg) => function<Array, Array>(obj, msg, (a1, a2) => a1.Concatenate(a2));
          registerMessage("push(_)", (obj, msg) => function<Array, IObject>(obj, msg, (a, v) => a.Append(v)));

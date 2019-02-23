@@ -5,7 +5,7 @@ namespace Kagami.Library.Objects
 {
 	public struct KUnit : IObject
 	{
-		public static IObject Value = new KUnit();
+		public static IObject Value => new KUnit();
 
 		public string ClassName => "Unit";
 

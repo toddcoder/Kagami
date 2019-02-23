@@ -10,16 +10,15 @@ namespace Kagami.Library.Objects
 {
    public class Slice : IObject, ICollection
    {
-      IObject original;
-      ISliceable sliceable;
+	   ISliceable sliceable;
       IObject[] indexes;
       ICollectionClass collectionClass;
 
       public Slice(ISliceable sliceable, IObject[] indexes)
       {
-         this.sliceable = sliceable;
+	      this.sliceable = sliceable;
          this.indexes = indexes;
-         original = (IObject)sliceable;
+         var original = (IObject)sliceable;
          collectionClass = (ICollectionClass)classOf(original);
       }
 

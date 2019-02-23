@@ -183,7 +183,7 @@ namespace Kagami.Library.Runtime
 				return failure<Field>(original.Exception);
 			else
 				return failure<Field>(fieldNotFound(name));
-      }
+		}
 
 		public IResult<Field> Assign(Selector selector, bool overriden = false)
 		{
@@ -276,8 +276,16 @@ namespace Kagami.Library.Runtime
 
 		public void CopyFrom(Fields sourceFields)
 		{
-			foreach (var item in sourceFields.fields)
-				fields[item.Key] = item.Value.Clone();
+			foreach (var (key, value) in sourceFields.fields)
+				fields[key] = value.Clone();
+			foreach (var (key, value) in sourceFields.buckets)
+				buckets[key] = value;
+		}
+
+		public void CopyFrom(Fields sourceFields, Func<string, Field, bool> filter)
+		{
+			foreach (var (key, value) in sourceFields.fields.Where(i => filter(i.Key, i.Value)))
+				fields[key] = value.Clone();
 			foreach (var (key, value) in sourceFields.buckets)
 				buckets[key] = value;
 		}
