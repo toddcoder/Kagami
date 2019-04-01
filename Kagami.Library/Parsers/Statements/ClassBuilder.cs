@@ -7,14 +7,14 @@ using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using Kagami.Library.Runtime;
-using Standard.Types.Collections;
-using Standard.Types.Enumerables;
-using Standard.Types.Monads;
-using Standard.Types.RegularExpressions;
-using Standard.Types.Strings;
+using Core.Collections;
+using Core.Enumerables;
+using Core.Monads;
+using Core.RegularExpressions;
+using Core.Strings;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.CommonFunctions;
-using static Standard.Types.Monads.MonadFunctions;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Statements
 {

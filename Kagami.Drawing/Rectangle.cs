@@ -1,5 +1,5 @@
 ﻿using Kagami.Library.Objects;
-using Standard.Types.Collections;
+using Core.Collections;
 using static Kagami.Drawing.DrawingFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 

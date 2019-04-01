@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Standard.Types.Collections;
-using Standard.Types.Enumerables;
-using Standard.Types.Exceptions;
-using Standard.Types.Monads;
+using Core.Collections;
+using Core.Enumerables;
+using Core.Exceptions;
+using Core.Monads;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.CollectionFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
-using static Standard.Types.Monads.MonadFunctions;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Objects
 {

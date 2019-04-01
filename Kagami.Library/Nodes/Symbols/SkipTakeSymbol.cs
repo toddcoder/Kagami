@@ -1,5 +1,5 @@
 ﻿using Kagami.Library.Operations;
-using Standard.Types.Monads;
+using Core.Monads;
 
 namespace Kagami.Library.Nodes.Symbols
 {
@@ -19,17 +19,17 @@ namespace Kagami.Library.Nodes.Symbols
 			if (skip.If(out var s))
 			{
 				s.Generate(builder);
-				builder.SendMessage("skip()", 1);
+				builder.SendMessage("skip(_<Int>)", 1);
 			}
 
 			if (take.If(out var t))
 			{
 				t.Generate(builder);
-				builder.SendMessage("take()", 1);
+				builder.SendMessage("take(_<Int>)", 1);
 			}
       }
 
-		public override Precedence Precedence => Precedence.Value;
+		public override Precedence Precedence => Precedence.SendMessage;
 
 		public override Arity Arity => Arity.Postfix;
 	}

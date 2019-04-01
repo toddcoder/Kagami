@@ -1,6 +1,6 @@
 ﻿using System;
 using Kagami.Library.Nodes.Symbols;
-using Standard.Types.Monads;
+using Core.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions

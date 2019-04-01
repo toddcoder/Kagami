@@ -1,9 +1,9 @@
 ﻿using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Operations;
-using Standard.Types.Monads;
-using Standard.Types.Strings;
+using Core.Monads;
+using Core.Strings;
 using static Kagami.Library.Nodes.NodeFunctions;
-using static Standard.Types.Monads.MonadFunctions;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Nodes.Statements
 {

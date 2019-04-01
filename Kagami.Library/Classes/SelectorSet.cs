@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Kagami.Library.Objects;
-using Standard.Types.Collections;
+using Core.Collections;
 
 namespace Kagami.Library.Classes
 {

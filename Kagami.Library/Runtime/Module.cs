@@ -1,9 +1,9 @@
 ﻿using Kagami.Library.Classes;
 using Kagami.Library.Packages;
-using Standard.Types.Collections;
-using Standard.Types.Monads;
+using Core.Collections;
+using Core.Monads;
 using static Kagami.Library.AllExceptions;
-using static Standard.Types.Monads.MonadFunctions;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Runtime
 {

@@ -1,6 +1,6 @@
 ﻿using Kagami.Library.Objects;
 using Kagami.Library.Operations;
-using Standard.Types.Strings;
+using Core.Strings;
 
 namespace Kagami.Library.Nodes.Symbols
 {

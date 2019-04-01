@@ -1,6 +1,6 @@
 ﻿using System.Linq;
-using Standard.Types.Collections;
-using Standard.Types.Enumerables;
+using Core.Collections;
+using Core.Enumerables;
 
 namespace Kagami.Library.Objects
 {

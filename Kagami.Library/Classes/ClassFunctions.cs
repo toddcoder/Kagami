@@ -1,7 +1,7 @@
 ﻿using System;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
-using Standard.Types.Collections;
+using Core.Collections;
 using Boolean = Kagami.Library.Objects.Boolean;
 
 namespace Kagami.Library.Classes

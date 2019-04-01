@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
-using Standard.Types.Collections;
-using Standard.Types.Monads;
-using Standard.Types.Objects;
-using Standard.Types.Strings;
+using Core.Collections;
+using Core.Monads;
+using Core.Objects;
+using Core.Strings;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Objects.TextFindingFunctions;
-using static Standard.Types.Monads.MonadFunctions;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Objects
 {

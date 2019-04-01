@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using Kagami.Library.Classes;
 using Kagami.Library.Runtime;
-using Standard.Types.Collections;
-using Standard.Types.Enumerables;
+using Core.Collections;
+using Core.Enumerables;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects

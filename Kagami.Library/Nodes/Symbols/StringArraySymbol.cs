@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
-using Standard.Types.RegularExpressions;
+using Core.RegularExpressions;
 
 namespace Kagami.Library.Nodes.Symbols
 {

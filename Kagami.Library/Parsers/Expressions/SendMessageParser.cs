@@ -1,7 +1,7 @@
 ﻿using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
-using Standard.Types.Monads;
-using Standard.Types.Strings;
+using Core.Monads;
+using Core.Strings;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
@@ -25,7 +25,7 @@ namespace Kagami.Library.Parsers.Expressions
 			}
 			else if (name.EndsWith("="))
 			{
-				name = name.Skip(-1).set();
+				name = name.Drop(-1).set();
 				parseArguments = true;
 			}
 

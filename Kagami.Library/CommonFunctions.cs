@@ -1,5 +1,5 @@
 ﻿using Kagami.Library.Objects;
-using Standard.Types.Strings;
+using Core.Strings;
 
 namespace Kagami.Library
 {
@@ -10,9 +10,9 @@ namespace Kagami.Library
 	   public static (BindingType, string name) fromBindingName(string name)
 	   {
 		   if (name.StartsWith("+"))
-			   return (BindingType.Mutable, name.Skip(1));
+			   return (BindingType.Mutable, name.Drop(1));
 			else if (name.StartsWith("-"))
-			   return (BindingType.Immutable, name.Skip(1));
+			   return (BindingType.Immutable, name.Drop(1));
 		   else
 			   return (BindingType.Existing, name);
 	   }

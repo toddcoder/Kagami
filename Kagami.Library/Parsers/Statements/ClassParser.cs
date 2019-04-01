@@ -3,10 +3,10 @@ using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Runtime;
-using Standard.Types.Collections;
-using Standard.Types.Monads;
+using Core.Collections;
+using Core.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
-using static Standard.Types.Monads.MonadFunctions;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Statements
 {

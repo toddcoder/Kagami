@@ -2,10 +2,10 @@
 using Kagami.Library.Parsers;
 using Kagami.Library.Parsers.Statements;
 using Kagami.Library.Runtime;
-using Standard.Types.Monads;
+using Core.Monads;
 using static Kagami.Library.Nodes.NodeFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
-using static Standard.Types.Monads.MonadFunctions;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library
 {

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
-using Standard.Types.Enumerables;
-using Standard.Types.Monads;
-using Standard.Types.Strings;
+using Core.Enumerables;
+using Core.Monads;
+using Core.Strings;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Operations.OperationFunctions;
-using static Standard.Types.Monads.AttemptFunctions;
-using static Standard.Types.Monads.MonadFunctions;
+using static Core.Monads.AttemptFunctions;
+using static Core.Monads.MonadFunctions;
 using Tuple = Kagami.Library.Objects.Tuple;
 
 namespace Kagami.Library.Runtime

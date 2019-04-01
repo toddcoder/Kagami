@@ -1,6 +1,6 @@
 ﻿using System.Text;
 using Kagami.Library.Objects;
-using Standard.Types.Collections;
+using Core.Collections;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Text

@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Standard.Types.Enumerables;
+using Core.Enumerables;
 
 namespace Kagami.Library.Invokables
 {

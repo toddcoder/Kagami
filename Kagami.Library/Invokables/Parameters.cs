@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Kagami.Library.Objects;
-using Standard.Types.Enumerables;
+using Core.Enumerables;
 
 namespace Kagami.Library.Invokables
 {

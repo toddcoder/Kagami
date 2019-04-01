@@ -4,9 +4,9 @@ using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
-using Standard.Types.Enumerables;
-using Standard.Types.Monads;
-using static Standard.Types.Monads.MonadFunctions;
+using Core.Enumerables;
+using Core.Monads;
+using static Core.Monads.MonadFunctions;
 using Return = Kagami.Library.Nodes.Statements.Return;
 
 namespace Kagami.Library.Nodes.Symbols

@@ -1,5 +1,5 @@
 ﻿using System.Numerics;
-using Standard.Types.Collections;
+using Core.Collections;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Operations.NumericFunctions;
 

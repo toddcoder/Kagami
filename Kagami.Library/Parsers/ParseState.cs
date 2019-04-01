@@ -6,14 +6,14 @@ using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
 using Kagami.Library.Parsers.Expressions;
-using Standard.Types.Arrays;
-using Standard.Types.Collections;
-using Standard.Types.Monads;
-using Standard.Types.RegularExpressions;
-using Standard.Types.Strings;
+using Core.Arrays;
+using Core.Collections;
+using Core.Monads;
+using Core.RegularExpressions;
+using Core.Strings;
 using static Kagami.Library.AllExceptions;
-using static Standard.Types.Monads.AttemptFunctions;
-using static Standard.Types.Monads.MonadFunctions;
+using static Core.Monads.AttemptFunctions;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers
 {
@@ -175,7 +175,7 @@ namespace Kagami.Library.Parsers
 
 		public string Source => source;
 
-		public string CurrentSource => source.Skip(index);
+		public string CurrentSource => source.Drop(index);
 
 		public string RealizePattern(string pattern)
 		{

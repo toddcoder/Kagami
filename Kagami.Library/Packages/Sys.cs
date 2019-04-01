@@ -4,13 +4,13 @@ using Kagami.Library.Classes;
 using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
-using Standard.Types.Collections;
-using Standard.Types.Enumerables;
-using Standard.Types.Monads;
-using Standard.Types.RegularExpressions;
-using Standard.Types.Strings;
+using Core.Collections;
+using Core.Enumerables;
+using Core.Monads;
+using Core.RegularExpressions;
+using Core.Strings;
 using static Kagami.Library.AllExceptions;
-using static Standard.Types.Monads.MonadFunctions;
+using static Core.Monads.MonadFunctions;
 using Boolean = Kagami.Library.Objects.Boolean;
 using String = Kagami.Library.Objects.String;
 using Tuple = Kagami.Library.Objects.Tuple;
@@ -229,7 +229,7 @@ namespace Kagami.Library.Packages
 							textOnly = true;
 							break;
 					}
-				pattern = pattern.Skip(-matcher.Length);
+				pattern = pattern.Drop(-matcher.Length);
 				return new Regex(pattern, ignoreCase, multiline, global, textOnly);
 			}
 			else

@@ -1,7 +1,7 @@
 ﻿using System;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Operations;
-using Standard.Types.Enumerables;
+using Core.Enumerables;
 
 namespace Kagami.Library.Nodes.Symbols
 {

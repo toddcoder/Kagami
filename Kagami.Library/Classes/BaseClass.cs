@@ -1,12 +1,12 @@
 ﻿using System;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
-using Standard.Types.Objects;
+using Core.Objects;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Classes.ClassFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Operations.NumericFunctions;
-using static Standard.Types.Arrays.ArrayFunctions;
+using static Core.Arrays.ArrayFunctions;
 using Boolean = Kagami.Library.Objects.Boolean;
 using String = Kagami.Library.Objects.String;
 using Byte = Kagami.Library.Objects.Byte;
@@ -263,8 +263,8 @@ namespace Kagami.Library.Classes
 	         "foldl".Selector("_", "_<Lambda>"),
             "foldl(_)", "foldr".Selector("_", "_<Lambda>"), "foldr(_)", "reducel".Selector("_", "_<Lambda>"), "reducel(_)",
             "reducer".Selector("_", "_<Lambda>"), "reducer(_)", "count(_)", "count(_<Lambda>)", "map(_<Lambda>)", "if(_<Lambda>)",
-            "ifNot(_<Lambda>)", "skip(_<Int>)", "skip".Selector("while:_<Lambda>"),
-            "skip".Selector("until:_<Lambda>"), "take(_<Int>)", "take".Selector("while:_<Lambda>"), "take".Selector("until:_<Lambda>"),
+            "ifNot(_<Lambda>)", "skip(_<Int>)", "-(_<Int>)", "skip".Selector("while:_<Lambda>"),
+            "skip".Selector("until:_<Lambda>"), "take(_<Int>)", "+(_<Int>)" ,"take".Selector("while:_<Lambda>"), "take".Selector("until:_<Lambda>"),
 	         "index(_<Lambda>)", "indexes(_<Lambda>)",
             "zip".Selector("_<Collection>", "_<Lambda>"), "zip(_)", "min".get(), "min(_<Lambda>)", "max".get(), "max(_<Lambda>)",
 	         "first()", "first".Selector("_<Lambda>"), "last()", "last".Selector("_<Lambda>"),
@@ -314,9 +314,11 @@ namespace Kagami.Library.Classes
          registerMessage("if(_<Lambda>)", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.If(l)));
          registerMessage("ifNot(_<Lambda>)", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.IfNot(l)));
          registerMessage("skip(_<Int>)", (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.Skip(j.Value)));
+         registerMessage("-(_<Int>)", (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.Skip(j.Value)));
          registerMessage("skip".Selector("while:_<Lambda>"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.SkipWhile(l)));
          registerMessage("skip".Selector("until:_<Lambda>"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.SkipUntil(l)));
          registerMessage("take(_<Int>)", (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.Take(j.Value)));
+         registerMessage("+(_<Int>)", (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.Take(j.Value)));
          registerMessage("take".Selector("while:_<Lambda>"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.TakeWhile(l)));
          registerMessage("take".Selector("until:_<Lambda>"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.TakeUntil(l)));
          registerMessage("index(_<Lambda>)", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Index(l)));

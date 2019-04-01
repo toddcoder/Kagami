@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Kagami.Library.Nodes.Symbols;
-using Standard.Types.Enumerables;
-using Standard.Types.Monads;
-using static Standard.Types.Monads.AttemptFunctions;
-using static Standard.Types.Monads.MonadFunctions;
+using Core.Enumerables;
+using Core.Monads;
+using static Core.Monads.AttemptFunctions;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
 {

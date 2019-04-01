@@ -1,5 +1,5 @@
-﻿using Standard.Types.Collections;
-using Standard.Types.Exceptions;
+﻿using Core.Collections;
+using Core.Exceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects

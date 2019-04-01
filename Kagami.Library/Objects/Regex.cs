@@ -1,10 +1,10 @@
 ﻿using System.Linq;
 using System.Text;
-using Standard.Types.Collections;
-using Standard.Types.Monads;
-using Standard.Types.Numbers;
-using Standard.Types.RegularExpressions;
-using Standard.Types.Strings;
+using Core.Collections;
+using Core.Monads;
+using Core.Numbers;
+using Core.RegularExpressions;
+using Core.Strings;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
@@ -205,9 +205,9 @@ namespace Kagami.Library.Objects
             if (matcher.IsMatch(input, pattern, ignoreCase, multiline))
             {
                var match = matcher.GetMatch(matcher.MatchCount - 1);
-               var left = input.Take(match.Index);
+               var left = input.Keep(match.Index);
                var delimiter = match.Text;
-               var right = input.Skip(match.Index + match.Length);
+               var right = input.Drop(match.Index + match.Length);
 
                return Tuple.Tuple3(left, delimiter, right);
             }
@@ -219,9 +219,9 @@ namespace Kagami.Library.Objects
             if (matcher.IsMatch(input, pattern, ignoreCase, multiline))
             {
                var match = matcher.GetMatch(0);
-               var left = input.Take(match.Index);
+               var left = input.Keep(match.Index);
                var delimiter = match.Text;
-               var right = input.Skip(match.Index + match.Length);
+               var right = input.Drop(match.Index + match.Length);
 
                return Tuple.Tuple3(left, delimiter, right);
             }

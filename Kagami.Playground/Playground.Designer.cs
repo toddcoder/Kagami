@@ -1,6 +1,4 @@
-﻿using Standard.WinForms.Controls;
-
-namespace Kagami.Playground
+﻿namespace Kagami.Playground
 {
    partial class Playground
    {
@@ -31,8 +29,8 @@ namespace Kagami.Playground
       private void InitializeComponent()
       {
          this.table = new System.Windows.Forms.TableLayoutPanel();
-         this.textEditor = new Standard.WinForms.Controls.ExRichTextBox();
-         this.textConsole = new Standard.WinForms.Controls.ExRichTextBox();
+         this.textEditor = new Core.WinForms.Controls.ExRichTextBox();
+         this.textConsole = new Core.WinForms.Controls.ExRichTextBox();
          this.labelStatus = new System.Windows.Forms.Label();
          this.table.SuspendLayout();
          this.SuspendLayout();
@@ -120,8 +118,8 @@ namespace Kagami.Playground
       #endregion
 
       private System.Windows.Forms.TableLayoutPanel table;
-      private ExRichTextBox textEditor;
-      private ExRichTextBox textConsole;
+      private Core.WinForms.Controls.ExRichTextBox textEditor;
+      private Core.WinForms.Controls.ExRichTextBox textConsole;
       private System.Windows.Forms.Label labelStatus;
    }
 }

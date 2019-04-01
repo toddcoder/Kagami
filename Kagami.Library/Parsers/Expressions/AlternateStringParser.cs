@@ -1,9 +1,9 @@
 ﻿using System.Text;
 using Kagami.Library.Nodes.Symbols;
-using Standard.Types.Monads;
-using Standard.Types.Strings;
+using Core.Monads;
+using Core.Strings;
 using static Kagami.Library.AllExceptions;
-using static Standard.Types.Monads.MonadFunctions;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
 {
@@ -44,7 +44,7 @@ namespace Kagami.Library.Parsers.Expressions
                      stringBuilder.Append('"');
                      escaped = false;
                   }
-                  else if (state.CurrentSource.Skip(1).StartsWith("\""))
+                  else if (state.CurrentSource.Drop(1).StartsWith("\""))
                      escaped = true;
                   else
                   {

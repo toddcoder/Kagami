@@ -1,9 +1,9 @@
 ﻿using Kagami.Library.Objects;
 using Kagami.Library.Operations;
-using Standard.Types.Enumerables;
-using Standard.Types.Monads;
-using Standard.Types.Strings;
-using static Standard.Types.Monads.MonadFunctions;
+using Core.Enumerables;
+using Core.Monads;
+using Core.Strings;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Nodes.Symbols
 {
@@ -39,7 +39,7 @@ namespace Kagami.Library.Nodes.Symbols
          if (operation.IsSome)
          {
             builder.Dup();
-            var getter = selector.NewName(selector.Name.Skip(-1));
+            var getter = selector.NewName(selector.Name.Drop(-1));
             builder.SendMessage(getter, 0);
          }
 
@@ -66,7 +66,7 @@ namespace Kagami.Library.Nodes.Symbols
 
       public override Precedence Precedence => precedence;
 
-      public override Arity Arity => Arity.Nullary;
+      public override Arity Arity => Arity.Postfix;
 
       public override string ToString() => $"{(precedence == Precedence.SendMessage ? "." : "@")}{selector.Image}({arguments.Listify()})";
    }

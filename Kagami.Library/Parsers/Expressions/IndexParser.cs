@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using Kagami.Library.Nodes.Symbols;
-using Standard.Types.Monads;
-using Standard.Types.Strings;
+using Core.Monads;
+using Core.Strings;
 using static Kagami.Library.Parsers.ParserFunctions;
-using static Standard.Types.Monads.MonadFunctions;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
 {
@@ -24,7 +24,7 @@ namespace Kagami.Library.Parsers.Expressions
 					.If(out var opSource, out var mbException))
 					if (getExpression(state, builder.Flags).Out(out var expression, out var original))
 					{
-						opSource = opSource.SkipWhile(" ").Take(1);
+						opSource = opSource.DropWhile(" ").Keep(1);
 						var operation = matchOperator(opSource)
 							.FlatMap(o => o.Some(), none<Operations.Operation>, _ => none<Operations.Operation>());
 						if (operation.IsNone && insert)

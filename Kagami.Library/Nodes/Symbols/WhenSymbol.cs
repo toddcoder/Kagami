@@ -1,5 +1,5 @@
 ﻿using Kagami.Library.Operations;
-using Standard.Types.Booleans;
+using Core.Booleans;
 
 namespace Kagami.Library.Nodes.Symbols
 {

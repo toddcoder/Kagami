@@ -1,6 +1,6 @@
-﻿using Standard.Types.Monads;
-using Standard.Types.RegularExpressions;
-using static Standard.Types.Monads.MonadFunctions;
+﻿using Core.Monads;
+using Core.RegularExpressions;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Statements
 {

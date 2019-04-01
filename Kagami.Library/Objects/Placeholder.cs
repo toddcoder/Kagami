@@ -1,6 +1,6 @@
 ﻿using System;
-using Standard.Types.Collections;
-using Standard.Types.Strings;
+using Core.Collections;
+using Core.Strings;
 
 namespace Kagami.Library.Objects
 {
@@ -21,9 +21,9 @@ namespace Kagami.Library.Objects
 	      get
 	      {
 		      if (name.StartsWith("+"))
-			      return $"var {name.Skip(1)}";
+			      return $"var {name.Drop(1)}";
 				else if (name.StartsWith("-"))
-			      return name.Skip(1);
+			      return name.Drop(1);
 		      else
 			      return $"existing {name}";
 	      }

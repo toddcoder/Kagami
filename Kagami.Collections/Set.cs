@@ -1,11 +1,11 @@
 ﻿using System.Linq;
 using Kagami.Library.Objects;
-using Standard.Types.Collections;
-using Standard.Types.Enumerables;
-using Standard.Types.Monads;
+using Core.Collections;
+using Core.Enumerables;
+using Core.Monads;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
-using static Standard.Types.Monads.MonadFunctions;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Collections
 {

@@ -2,9 +2,9 @@
 using System.Linq;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
-using Standard.Types.Collections;
-using Standard.Types.Monads;
-using Standard.Types.Strings;
+using Core.Collections;
+using Core.Monads;
+using Core.Strings;
 using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Classes
@@ -55,14 +55,14 @@ namespace Kagami.Library.Classes
 
 		public override bool DynamicRespondsTo(Selector selector)
 		{
-			var name = selector.Name.StartsWith("__$") ? selector.Name.Skip(3) : selector.Name;
+			var name = selector.Name.StartsWith("__$") ? selector.Name.Drop(3) : selector.Name;
 			return dataComparisands.ContainsKey(name);
 		}
 
 		public override IObject DynamicInvoke(IObject obj, Message message)
 		{
 			var dt = (DataType)obj;
-			var name = message.Selector.Name.StartsWith("__$") ? message.Selector.Name.Skip(3) : message.Selector.Name;
+			var name = message.Selector.Name.StartsWith("__$") ? message.Selector.Name.Drop(3) : message.Selector.Name;
 			return dt.GetDataComparisand(name, message.Arguments.Value);
 		}
 

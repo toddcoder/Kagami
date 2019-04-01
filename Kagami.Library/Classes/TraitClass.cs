@@ -1,8 +1,8 @@
 ﻿using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
-using Standard.Types.Collections;
-using Standard.Types.Monads;
-using static Standard.Types.Monads.MonadFunctions;
+using Core.Collections;
+using Core.Monads;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Classes
 {

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Kagami.Library.Classes;
 using Kagami.Library.Runtime;
-using Standard.Types.Collections;
-using Standard.Types.Enumerables;
-using Standard.Types.Exceptions;
+using Core.Collections;
+using Core.Enumerables;
+using Core.Exceptions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 

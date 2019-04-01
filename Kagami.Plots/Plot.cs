@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using Kagami.Library.Objects;
-using Standard.Types.Collections;
+using Core.Collections;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Plots

@@ -1,5 +1,5 @@
-﻿using Standard.Applications;
-using Standard.WinForms.Controls;
+﻿using Core.Applications;
+using Core.WinForms.Controls;
 
 namespace Kagami.Playground
 {

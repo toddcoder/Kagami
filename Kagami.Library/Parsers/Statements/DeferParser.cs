@@ -1,7 +1,7 @@
 ﻿using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Parsers.Expressions;
-using Standard.Types.Monads;
-using Standard.Types.RegularExpressions;
+using Core.Monads;
+using Core.RegularExpressions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Statements

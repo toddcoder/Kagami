@@ -3,8 +3,8 @@ using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using Kagami.Library.Runtime;
-using Standard.Types.Booleans;
-using Standard.Types.Strings;
+using Core.Booleans;
+using Core.Strings;
 using static Kagami.Library.AllExceptions;
 
 namespace Kagami.Library.Nodes.Statements

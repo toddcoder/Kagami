@@ -6,7 +6,7 @@ namespace Kagami.Library.Nodes.Symbols
 	{
 		public override void Generate(OperationsBuilder builder) => builder.SendMessage("takeRest()");
 
-		public override Precedence Precedence => Precedence.Value;
+		public override Precedence Precedence => Precedence.SendMessage;
 
 		public override Arity Arity => Arity.Postfix;
 	}

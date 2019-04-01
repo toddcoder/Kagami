@@ -1,7 +1,7 @@
 ﻿using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Operations;
-using Standard.Types.Enumerables;
-using Standard.Types.Monads;
+using Core.Enumerables;
+using Core.Monads;
 using static Kagami.Library.Nodes.NodeFunctions;
 
 namespace Kagami.Library.Nodes.Symbols

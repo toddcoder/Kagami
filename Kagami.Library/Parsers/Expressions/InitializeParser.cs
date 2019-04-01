@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Kagami.Library.Nodes.Symbols;
-using Standard.Types.Monads;
-using Standard.Types.Strings;
+using Core.Monads;
+using Core.Strings;
 using static Kagami.Library.Parsers.ParserFunctions;
-using static Standard.Types.Monads.MonadFunctions;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
 {
@@ -26,7 +26,7 @@ namespace Kagami.Library.Parsers.Expressions
 						Color.Structure)
 					from e in getExpression(state, builder.Flags | ExpressionFlags.OmitComma | ExpressionFlags.OmitColon)
 					from n in state.Scan("^ /(/s*) /[',}']", Color.Whitespace, Color.Structure)
-					select (field: f.Trim().Skip(-1), expression: e, next: n);
+					select (field: f.Trim().Drop(-1), expression: e, next: n);
 				if (result.If(out var tuple, out var mbException))
 				{
 					list.Add((tuple.field, tuple.expression));

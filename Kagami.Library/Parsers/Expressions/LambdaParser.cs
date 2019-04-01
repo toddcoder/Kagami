@@ -1,7 +1,7 @@
 ﻿using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Symbols;
-using Standard.Types.Monads;
-using Standard.Types.RegularExpressions;
+using Core.Monads;
+using Core.RegularExpressions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions

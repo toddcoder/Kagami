@@ -1,4 +1,4 @@
-﻿using Standard.Types.Monads;
+﻿using Core.Monads;
 
 namespace Kagami.Library.Parsers.Expressions
 {

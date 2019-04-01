@@ -4,11 +4,11 @@ using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
-using Standard.Types.Monads;
-using Standard.Types.RegularExpressions;
-using Standard.Types.Strings;
+using Core.Monads;
+using Core.RegularExpressions;
+using Core.Strings;
 using static Kagami.Library.Parsers.ParserFunctions;
-using static Standard.Types.Monads.MonadFunctions;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Statements
 {
@@ -44,7 +44,7 @@ namespace Kagami.Library.Parsers.Statements
 			if (needsParameters)
 			{
 				if (functionName.IsMatch("^ /w+ '=' $"))
-					functionName = $"__${functionName.Skip(-1)}=";
+					functionName = $"__${functionName.Drop(-1)}=";
 			}
 			else
 				functionName = $"__${functionName}";

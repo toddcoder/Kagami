@@ -1,5 +1,5 @@
 ﻿using System;
-using Standard.Types.Exceptions;
+using Core.Exceptions;
 
 namespace Kagami.Library.Objects
 {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Text;
 using Kagami.Library.Objects;
-using Standard.Types.Monads;
-using Standard.Types.Strings;
-using static Standard.Types.Monads.MonadFunctions;
+using Core.Monads;
+using Core.Strings;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Invokables
 {

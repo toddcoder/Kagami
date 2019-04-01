@@ -2,7 +2,7 @@
 using Kagami.Library.Classes;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
-using Standard.Types.Collections;
+using Core.Collections;
 
 namespace Kagami.Library.Packages
 {

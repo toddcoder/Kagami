@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Kagami.Library.Objects;
-using Standard.Types.Enumerables;
-using Standard.Types.RegularExpressions;
+using Core.Enumerables;
+using Core.RegularExpressions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library

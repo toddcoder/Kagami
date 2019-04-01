@@ -1,7 +1,7 @@
 ﻿using Kagami.Library.Nodes.Symbols;
-using Standard.Types.Monads;
-using Standard.Types.RegularExpressions;
-using Standard.Types.Strings;
+using Core.Monads;
+using Core.RegularExpressions;
+using Core.Strings;
 
 namespace Kagami.Library.Parsers.Expressions
 {
@@ -13,7 +13,7 @@ namespace Kagami.Library.Parsers.Expressions
 
       public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
       {
-         var input = tokens[2].Text.Skip(1);
+         var input = tokens[2].Text.Drop(1);
          if (!input.Contains("."))
          {
             if (input.IsMatch("^ ['efgnp']"))

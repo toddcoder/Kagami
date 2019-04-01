@@ -7,10 +7,10 @@ using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
 using Kagami.Library.Packages;
 using Kagami.Library.Parsers;
-using Standard.Types.Collections;
-using Standard.Types.Monads;
+using Core.Collections;
+using Core.Monads;
 using static Kagami.Library.Nodes.NodeFunctions;
-using static Standard.Types.Monads.MonadFunctions;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Operations
 {

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
-using Standard.Types.Monads;
+using Core.Monads;
 using static Kagami.Library.AllExceptions;
-using static Standard.Types.Monads.MonadFunctions;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Operations
 {

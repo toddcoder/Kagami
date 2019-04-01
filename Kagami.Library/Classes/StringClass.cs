@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Kagami.Library.Objects;
-using Standard.Types.Enumerables;
+using Core.Enumerables;
 using static Kagami.Library.Classes.ClassFunctions;
 using Boolean = Kagami.Library.Objects.Boolean;
 using String = Kagami.Library.Objects.String;
@@ -71,7 +71,8 @@ namespace Kagami.Library.Classes
 			messages["set"] = (obj, msg) => function<String>(obj, s => s.Set());
 			messages["swapCase"] = (obj, msg) => function<String>(obj, s => s.SwapCase());
 			messages["fields".get()] = (obj, msg) => function<String>(obj, s => s.Fields);
-			messages["words"] = (obj, msg) => function<String, Int>(obj, msg, (s, i) => s.Words(i.Value));
+			messages["words(at:_<Int>)"] = (obj, msg) => function<String, Int>(obj, msg, (s, i) => s.Words(i.Value));
+			messages["words()"] = (obj, msg) => function<String>(obj, s => s.Words());
 			messages["<<(_}"] = (obj, msg) => function<String, IObject>(obj, msg, (s, o) => s.Append(o));
 			messages["mutable()"] = (obj, msg) => function<String>(obj, s => s.Mutable());
 		}

@@ -1,7 +1,7 @@
 ﻿using Kagami.Library.Nodes.Symbols;
-using Standard.Types.Monads;
-using Standard.Types.Strings;
-using static Standard.Types.Monads.MonadFunctions;
+using Core.Monads;
+using Core.Strings;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
 {

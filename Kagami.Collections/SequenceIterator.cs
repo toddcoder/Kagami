@@ -1,6 +1,6 @@
 ﻿using Kagami.Library.Objects;
-using Standard.Types.Monads;
-using static Standard.Types.Monads.MonadFunctions;
+using Core.Monads;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Collections
 {

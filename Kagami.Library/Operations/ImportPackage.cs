@@ -3,11 +3,11 @@ using System.Reflection;
 using Kagami.Library.Objects;
 using Kagami.Library.Packages;
 using Kagami.Library.Runtime;
-using Standard.Types.Collections;
-using Standard.Types.Monads;
-using Standard.Types.Strings;
+using Core.Collections;
+using Core.Monads;
+using Core.Strings;
 using static Kagami.Library.AllExceptions;
-using static Standard.Types.Monads.MonadFunctions;
+using static Core.Monads.MonadFunctions;
 using Module = Kagami.Library.Runtime.Module;
 
 namespace Kagami.Library.Operations

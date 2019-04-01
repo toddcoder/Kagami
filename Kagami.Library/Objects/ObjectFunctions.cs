@@ -4,16 +4,16 @@ using System.Linq;
 using System.Text;
 using Kagami.Library.Classes;
 using Kagami.Library.Runtime;
-using Standard.Types.Collections;
-using Standard.Types.Enumerables;
-using Standard.Types.Exceptions;
-using Standard.Types.Monads;
-using Standard.Types.Objects;
-using Standard.Types.RegularExpressions;
-using Standard.Types.Strings;
+using Core.Collections;
+using Core.Enumerables;
+using Core.Exceptions;
+using Core.Monads;
+using Core.Objects;
+using Core.RegularExpressions;
+using Core.Strings;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Parsers.ParserFunctions;
-using static Standard.Types.Monads.MonadFunctions;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Objects
 {
@@ -440,7 +440,7 @@ namespace Kagami.Library.Objects
 			if (number.StartsWith("-"))
 			{
 				sign = "-";
-				number = number.Skip(1);
+				number = number.Drop(1);
 			}
 
 			return $"{sign}{number.PadLeft(count, '0')}";
@@ -455,7 +455,7 @@ namespace Kagami.Library.Objects
 			if (matcher.IsMatch(source, $"^ /(('__$')? {REGEX_FUNCTION_NAME}) '(' /@"))
 			{
 				var name = matcher.FirstGroup;
-				var rest = matcher.SecondGroup.TakeUntil(")");
+				var rest = matcher.SecondGroup.KeepUntil(")");
 				SelectorItem[] items;
 				if (rest.IsEmpty())
 					items = new SelectorItem[0];
@@ -521,12 +521,12 @@ namespace Kagami.Library.Objects
 		{
 			if (fmt.StartsWith("b"))
 			{
-				var size = fmt.Skip(1);
+				var size = fmt.Drop(1);
 				return format(obj, size, 2);
 			}
 			else if (fmt.StartsWith("o"))
 			{
-				var size = fmt.Skip(1);
+				var size = fmt.Drop(1);
 				return format(obj, size, 8);
 			}
 			else
@@ -564,7 +564,7 @@ namespace Kagami.Library.Objects
 				var padding = ' ';
 				if (size.StartsWith("."))
 				{
-					size = size.Skip(1);
+					size = size.Drop(1);
 					padding = '0';
 				}
 

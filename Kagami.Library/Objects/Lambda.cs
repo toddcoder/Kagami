@@ -1,7 +1,7 @@
 ﻿using System;
 using Kagami.Library.Invokables;
 using Kagami.Library.Runtime;
-using Standard.Types.Collections;
+using Core.Collections;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 

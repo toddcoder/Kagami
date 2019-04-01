@@ -11,12 +11,12 @@ using Kagami.Library.Operations;
 using Kagami.Library.Parsers.Expressions;
 using Kagami.Library.Parsers.Statements;
 using Kagami.Library.Runtime;
-using Standard.Types.Monads;
-using Standard.Types.Numbers;
-using Standard.Types.Strings;
+using Core.Monads;
+using Core.Numbers;
+using Core.Strings;
 using static System.Int32;
 using static Kagami.Library.AllExceptions;
-using static Standard.Types.Monads.MonadFunctions;
+using static Core.Monads.MonadFunctions;
 using Return = Kagami.Library.Nodes.Statements.Return;
 
 namespace Kagami.Library.Parsers
@@ -315,7 +315,7 @@ namespace Kagami.Library.Parsers
 		static IMatched<string> parseLabel(ParseState state)
 		{
 			return state.Scan($"^ (/(/s*) /({REGEX_FIELD}) /':')?", Color.Whitespace, Color.Label, Color.Structure)
-				.Map(s => s.TakeUntil(":").Trim());
+				.Map(s => s.KeepUntil(":").Trim());
 		}
 
 		static IMatched<bool> parseCapturing(ParseState state)
@@ -540,9 +540,9 @@ namespace Kagami.Library.Parsers
 
 		public static double convertFloat(string source, int baseValue, string possible)
 		{
-			var left = convert(source.TakeUntil("."), baseValue, possible);
+			var left = convert(source.KeepUntil("."), baseValue, possible);
 
-			var right = source.SkipUntil(".").Skip(1);
+			var right = source.DropUntil(".").Drop(1);
 			var accumulated = 0.0;
 			for (var i = 0; i < right.Length; i++)
 			{

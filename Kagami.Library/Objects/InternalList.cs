@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Standard.Types.Collections;
-using Standard.Types.Enumerables;
+using Core.Collections;
+using Core.Enumerables;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects

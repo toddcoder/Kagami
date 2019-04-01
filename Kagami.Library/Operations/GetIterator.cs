@@ -1,9 +1,9 @@
 ﻿using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
-using Standard.Types.Booleans;
-using Standard.Types.Monads;
+using Core.Booleans;
+using Core.Monads;
 using static Kagami.Library.Operations.OperationFunctions;
-using static Standard.Types.Monads.MonadFunctions;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Operations
 {

@@ -1,6 +1,6 @@
 ﻿using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Operations;
-using Standard.Types.Monads;
+using Core.Monads;
 using static Kagami.Library.Nodes.NodeFunctions;
 
 namespace Kagami.Library.Nodes.Statements

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
-using Standard.Types.Collections;
-using Standard.Types.RegularExpressions;
-using Standard.Types.Strings;
+using Core.Collections;
+using Core.RegularExpressions;
+using Core.Strings;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
@@ -158,11 +158,11 @@ namespace Kagami.Library.Objects
 
          if (index > -1)
          {
-            var text = input.Skip(index);
+            var text = input.Drop(index);
             var length = text.Length;
             var replacement = lambda.Invoke((String)text, (Int)index, (Int)length);
 
-            return input.Take(index) + replacement + input.Skip(index + 1);
+            return input.Keep(index) + replacement + input.Skip(index + 1);
          }
          else
             return input;
@@ -197,14 +197,14 @@ namespace Kagami.Library.Objects
          {
             var index = input.LastIndexOf(value);
             if (index > -1)
-               return Tuple.Tuple3(input.Take(index), value.ToString(), input.Skip(index + 1));
+               return Tuple.Tuple3(input.Keep(index), value.ToString(), input.Drop(index + 1));
             else
                return Tuple.Tuple3(input, "", "");
          }
          else
          {
             if (input.Find(value.ToString()).If(out var index))
-               return Tuple.Tuple3(input.Take(index), value.ToString(), input.Skip(index + 1));
+               return Tuple.Tuple3(input.Keep(index), value.ToString(), input.Drop(index + 1));
             else
                return Tuple.Tuple3(input, "", "");
          }

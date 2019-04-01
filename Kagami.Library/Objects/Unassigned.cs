@@ -1,4 +1,4 @@
-﻿using Standard.Types.Collections;
+﻿using Core.Collections;
 using static Kagami.Library.AllExceptions;
 
 namespace Kagami.Library.Objects

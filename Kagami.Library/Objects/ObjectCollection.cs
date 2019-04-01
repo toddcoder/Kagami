@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Kagami.Library.Classes;
-using Standard.Types.Collections;
-using Standard.Types.Monads;
+using Core.Collections;
+using Core.Monads;
 using static Kagami.Library.Objects.ObjectFunctions;
-using static Standard.Types.Monads.MonadFunctions;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Objects
 {

@@ -32,32 +32,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Standard.Applications, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Standard\Standard.Applications.dll</HintPath>
+    <Reference Include="Core">
+      <HintPath>..\..\Libraries\Core.dll</HintPath>
     </Reference>
-    <Reference Include="Standard.Computer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Standard\Standard.Computer.dll</HintPath>
+    <Reference Include="Core.WinForms">
+      <HintPath>..\..\Libraries\Core.WinForms.dll</HintPath>
     </Reference>
-    <Reference Include="Standard.ObjectGraphs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Standard\Standard.ObjectGraphs.dll</HintPath>
-    </Reference>
-    <Reference Include="Standard.Types, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Standard\Standard.Types.dll</HintPath>
-    </Reference>
-    <Reference Include="Standard.WinForms.Consoles, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Standard\Standard.WinForms.Consoles.dll</HintPath>
-    </Reference>
-    <Reference Include="Standard.WinForms.Controls">
-      <HintPath>..\..\..\Standard\Standard.WinForms.Controls.dll</HintPath>
-    </Reference>
-    <Reference Include="Standard.WinForms.Documents, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Standard\Standard.WinForms.Documents.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -81,6 +63,8 @@
     </Compile>
     <Compile Include="ExceptionData.cs" />
     <Compile Include="ExRichTextBoxExtensions.cs" />
+    <Compile Include="FileNameConverter.cs" />
+    <Compile Include="FolderNameConverter.cs" />
     <Compile Include="Playground.cs">
       <SubType>Form</SubType>
     </Compile>

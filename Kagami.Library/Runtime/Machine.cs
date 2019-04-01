@@ -5,14 +5,14 @@ using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using Kagami.Library.Packages;
-using Standard.Types.Collections;
-using Standard.Types.Enumerables;
-using Standard.Types.Exceptions;
-using Standard.Types.Monads;
-using Standard.Types.Strings;
+using Core.Collections;
+using Core.Enumerables;
+using Core.Exceptions;
+using Core.Monads;
+using Core.Strings;
 using static Kagami.Library.AllExceptions;
-using static Standard.Types.Monads.AttemptFunctions;
-using static Standard.Types.Monads.MonadFunctions;
+using static Core.Monads.AttemptFunctions;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Runtime
 {

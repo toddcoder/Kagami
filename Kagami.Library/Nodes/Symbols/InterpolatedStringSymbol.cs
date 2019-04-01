@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using Kagami.Library.Operations;
-using Standard.Types.Enumerables;
-using Standard.Types.Strings;
+using Core.Enumerables;
+using Core.Strings;
 
 namespace Kagami.Library.Nodes.Symbols
 {

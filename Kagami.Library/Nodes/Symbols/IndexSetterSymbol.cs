@@ -1,6 +1,6 @@
 ﻿using Kagami.Library.Operations;
-using Standard.Types.Enumerables;
-using Standard.Types.Monads;
+using Core.Enumerables;
+using Core.Monads;
 
 namespace Kagami.Library.Nodes.Symbols
 {

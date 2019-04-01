@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Kagami.Library.Objects;
-using Standard.Types.Exceptions;
-using Standard.Types.Monads;
+using Core.Exceptions;
+using Core.Monads;
 using static Kagami.Library.Classes.ClassFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 

@@ -2,10 +2,10 @@
 using System.Linq;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Operations;
-using Standard.Types.Collections;
-using Standard.Types.Enumerables;
-using Standard.Types.Numbers;
-using Standard.Types.Strings;
+using Core.Collections;
+using Core.Enumerables;
+using Core.Numbers;
+using Core.Strings;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects

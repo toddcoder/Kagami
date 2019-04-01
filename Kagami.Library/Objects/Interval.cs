@@ -1,7 +1,7 @@
 ﻿using System;
-using Standard.Types.Collections;
-using Standard.Types.Dates;
-using Standard.Types.Dates.DateIncrements;
+using Core.Collections;
+using Core.Dates;
+using Core.Dates.DateIncrements;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 

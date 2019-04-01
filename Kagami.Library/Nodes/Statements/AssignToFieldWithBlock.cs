@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
-using Standard.Types.Monads;
+using Core.Monads;
 
 namespace Kagami.Library.Nodes.Statements
 {

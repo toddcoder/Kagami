@@ -1,6 +1,6 @@
 ﻿using Kagami.Library.Nodes.Symbols;
-using Standard.Types.Monads;
-using Standard.Types.Strings;
+using Core.Monads;
+using Core.Strings;
 
 namespace Kagami.Library.Parsers.Expressions
 {
@@ -12,7 +12,7 @@ namespace Kagami.Library.Parsers.Expressions
 
       public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
       {
-         var source = tokens[2].Text.Skip(1);
+         var source = tokens[2].Text.Drop(1);
          state.Colorize(tokens, Color.Whitespace, Color.Identifier);
 
          Index = source.ToInt();

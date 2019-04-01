@@ -2,8 +2,8 @@
 using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
-using Standard.Types.Collections;
-using Standard.Types.Enumerables;
+using Core.Collections;
+using Core.Enumerables;
 using static Kagami.Library.Nodes.NodeFunctions;
 
 namespace Kagami.Library.Nodes.Statements

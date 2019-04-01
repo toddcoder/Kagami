@@ -3,9 +3,9 @@ using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
-using Standard.Types.Monads;
-using Standard.Types.Numbers;
-using static Standard.Types.Monads.MonadFunctions;
+using Core.Monads;
+using Core.Numbers;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
 {

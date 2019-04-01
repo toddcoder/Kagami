@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Standard.Types.Monads;
-using static Standard.Types.Monads.MonadFunctions;
+using Core.Monads;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Runtime
 {

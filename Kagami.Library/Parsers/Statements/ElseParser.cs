@@ -1,7 +1,7 @@
 ﻿using Kagami.Library.Nodes.Statements;
-using Standard.Types.Monads;
+using Core.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
-using static Standard.Types.Monads.MonadFunctions;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Statements
 {

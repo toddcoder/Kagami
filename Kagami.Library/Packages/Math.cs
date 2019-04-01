@@ -3,7 +3,7 @@ using Kagami.Library.Classes;
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using Kagami.Library.Runtime;
-using Standard.Types.Exceptions;
+using Core.Exceptions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Operations.NumericFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;

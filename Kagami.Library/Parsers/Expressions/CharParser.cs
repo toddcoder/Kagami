@@ -1,8 +1,8 @@
 ﻿using Kagami.Library.Nodes.Symbols;
-using Standard.Types.Monads;
-using Standard.Types.Strings;
+using Core.Monads;
+using Core.Strings;
 using static Kagami.Library.Parsers.ParserFunctions;
-using static Standard.Types.Monads.MonadFunctions;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
 {
@@ -15,7 +15,7 @@ namespace Kagami.Library.Parsers.Expressions
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
 			state.Colorize(tokens, Color.Whitespace, Color.Char);
-			var source = tokens[2].Text.Skip(1).Skip(-1);
+			var source = tokens[2].Text.Drop(1).Drop(-1);
 
 			switch (source.Length)
 			{
@@ -30,7 +30,7 @@ namespace Kagami.Library.Parsers.Expressions
 
 					break;
 				default:
-					if (fromHex(source.Skip(2)).Out(out ch, out var original))
+					if (fromHex(source.Drop(2)).Out(out ch, out var original))
 						builder.Add(new CharSymbol(ch));
 					else
 						return original.Map(c => Unit.Value);

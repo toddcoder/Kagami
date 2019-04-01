@@ -1,4 +1,4 @@
-﻿using Standard.Types.Collections;
+﻿using Core.Collections;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects

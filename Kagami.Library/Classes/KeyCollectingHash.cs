@@ -1,4 +1,4 @@
-﻿using Standard.Types.Collections;
+﻿using Core.Collections;
 
 namespace Kagami.Library.Classes
 {

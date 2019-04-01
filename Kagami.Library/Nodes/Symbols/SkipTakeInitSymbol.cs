@@ -1,5 +1,5 @@
 ﻿using Kagami.Library.Operations;
-using Standard.Types.Monads;
+using Core.Monads;
 
 namespace Kagami.Library.Nodes.Symbols
 {

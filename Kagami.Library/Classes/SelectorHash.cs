@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Kagami.Library.Objects;
-using Standard.Types.Collections;
+using Core.Collections;
 
 namespace Kagami.Library.Classes
 {

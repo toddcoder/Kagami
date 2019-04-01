@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using Kagami.Library.Objects;
-using Standard.Types.RegularExpressions;
+using Core.RegularExpressions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using Byte = Kagami.Library.Objects.Byte;

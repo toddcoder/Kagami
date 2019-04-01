@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using Kagami.Library.Classes;
 using Kagami.Library.Runtime;
-using Standard.Types.Collections;
-using Standard.Types.Dates.Now;
-using Standard.Types.Enumerables;
-using Standard.Types.Monads;
+using Core.Collections;
+using Core.Dates.Now;
+using Core.Enumerables;
+using Core.Monads;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.CollectionFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Operations.NumericFunctions;
-using static Standard.Types.Monads.MonadFunctions;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Objects
 {

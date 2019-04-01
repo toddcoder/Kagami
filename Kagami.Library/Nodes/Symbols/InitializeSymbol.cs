@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
-using Standard.Types.Enumerables;
+using Core.Enumerables;
 using static Kagami.Library.Nodes.NodeFunctions;
 
 namespace Kagami.Library.Nodes.Symbols

@@ -1,5 +1,5 @@
-﻿using Standard.Types.Monads;
-using Standard.Types.Strings;
+﻿using Core.Monads;
+using Core.Strings;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions

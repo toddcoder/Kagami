@@ -1,16 +1,16 @@
 ﻿using System.Linq;
 using Kagami.Library.Objects;
-using Standard.Types.Arrays;
-using Standard.Types.Collections;
-using Standard.Types.Enumerables;
-using Standard.Types.Monads;
-using Standard.Types.Numbers;
-using Standard.Types.Strings;
+using Core.Arrays;
+using Core.Collections;
+using Core.Enumerables;
+using Core.Monads;
+using Core.Numbers;
+using Core.Strings;
 using static Kagami.Awk.AwkFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Objects.String;
 using static Kagami.Library.Objects.TextFindingFunctions;
-using static Standard.Types.Monads.MonadFunctions;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Awk
 {

@@ -2,7 +2,7 @@
 using Kagami.Library.Classes;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
-using Standard.Types.Exceptions;
+using Core.Exceptions;
 
 namespace Kagami.Library
 {

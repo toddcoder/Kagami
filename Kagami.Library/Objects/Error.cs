@@ -1,5 +1,5 @@
-﻿using Standard.Types.Collections;
-using Standard.Types.Strings;
+﻿using Core.Collections;
+using Core.Strings;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects

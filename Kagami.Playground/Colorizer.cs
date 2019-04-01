@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Kagami.Library.Parsers;
-using Standard.Types.RegularExpressions;
+using Core.RegularExpressions;
 using Color = System.Drawing.Color;
 
 namespace Kagami.Playground

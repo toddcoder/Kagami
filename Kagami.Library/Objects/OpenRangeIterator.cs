@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Standard.Types.Monads;
+using Core.Monads;
 
 namespace Kagami.Library.Objects
 {

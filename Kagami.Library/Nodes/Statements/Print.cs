@@ -1,8 +1,8 @@
 ﻿using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Operations;
-using Standard.Types.Monads;
-using static Standard.Types.Monads.MonadFunctions;
-using static Standard.Types.Strings.StringStreamFunctions;
+using Core.Monads;
+using static Core.Monads.MonadFunctions;
+using static Core.Strings.StringStreamFunctions;
 
 namespace Kagami.Library.Nodes.Statements
 {

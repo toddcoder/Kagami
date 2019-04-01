@@ -2,7 +2,7 @@
 using Kagami.Library.Objects;
 using Kagami.Library.Packages;
 using Kagami.Library.Runtime;
-using Standard.Types.Monads;
+using Core.Monads;
 
 namespace Kagami.Library.Operations
 {

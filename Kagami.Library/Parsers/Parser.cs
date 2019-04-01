@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
-using Standard.Types.Monads;
-using Standard.Types.RegularExpressions;
-using Standard.Types.Strings;
-using static Standard.Types.Monads.MonadFunctions;
+using Core.Monads;
+using Core.RegularExpressions;
+using Core.Strings;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers
 {

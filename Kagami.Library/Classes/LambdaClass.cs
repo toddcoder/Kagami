@@ -1,6 +1,6 @@
 ﻿using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
-using Standard.Types.Objects;
+using Core.Objects;
 using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Classes

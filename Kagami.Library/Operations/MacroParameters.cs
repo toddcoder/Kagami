@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Symbols;
-using Standard.Types.Collections;
+using Core.Collections;
 
 namespace Kagami.Library.Operations
 {

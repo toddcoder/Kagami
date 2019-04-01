@@ -1,8 +1,8 @@
 ﻿using System;
+using Core.Applications;
 using Kagami.Library;
 using Kagami.Library.Runtime;
-using Standard.Applications;
-using Standard.Types.Monads;
+using Core.Monads;
 using static System.Console;
 
 namespace Kagami

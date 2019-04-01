@@ -1,6 +1,6 @@
 ﻿using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
-using Standard.Types.Monads;
+using Core.Monads;
 using static Kagami.Library.Operations.NumericFunctions;
 
 namespace Kagami.Library.Operations

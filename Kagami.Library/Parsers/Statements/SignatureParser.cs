@@ -1,10 +1,10 @@
 ﻿using Kagami.Library.Classes;
-using Standard.Types.Monads;
-using Standard.Types.RegularExpressions;
-using Standard.Types.Strings;
+using Core.Monads;
+using Core.RegularExpressions;
+using Core.Strings;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Kagami.Library.Parsers.Statements.FunctionParser;
-using static Standard.Types.Monads.MonadFunctions;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Statements
 {
@@ -25,7 +25,7 @@ namespace Kagami.Library.Parsers.Statements
 			if (needsParameters)
 			{
 				if (functionName.IsMatch("^ /w+ '=' $"))
-					functionName = "__$" + functionName.Skip(-1).set();
+					functionName = "__$" + functionName.Drop(-1).set();
 			}
 			else
 				functionName = "__$" + functionName;

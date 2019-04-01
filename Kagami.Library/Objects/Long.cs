@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using Kagami.Library.Operations;
-using Standard.Types.Collections;
+using Core.Collections;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Operations.NumericFunctions;
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
-using Standard.Types.Strings;
+using Core.Strings;
 
 namespace Kagami.Library.Objects
 {
@@ -52,11 +52,11 @@ namespace Kagami.Library.Objects
 
 			if (index > -1)
 			{
-				var text = input.Skip(index);
+				var text = input.Drop(index);
 				var length = text.Length;
 				var replacement = lambda.Invoke((String)text, (Int)index, (Int)length);
 
-				return input.Take(index) + replacement + input.Skip(index + value.Length);
+				return input.Keep(index) + replacement + input.Skip(index + value.Length);
 			}
 			else
 				return input;
@@ -94,14 +94,14 @@ namespace Kagami.Library.Objects
 			{
 				var index = input.LastIndexOf(value, StringComparison.Ordinal);
 				if (index > -1)
-					return Tuple.Tuple3(input.Take(index), value, input.Skip(index + value.Length));
+					return Tuple.Tuple3(input.Keep(index), value, input.Drop(index + value.Length));
 				else
 					return Tuple.Tuple3(input, "", "");
 			}
 			else
 			{
 				if (input.Find(value).If(out var index))
-					return Tuple.Tuple3(input.Take(index), value, input.Skip(index + value.Length));
+					return Tuple.Tuple3(input.Keep(index), value, input.Drop(index + value.Length));
 				else
 					return Tuple.Tuple3(input, "", "");
 			}

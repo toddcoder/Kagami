@@ -4,21 +4,23 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Core.Arrays;
 using Kagami.Library;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
-using Standard.Computer;
-using Standard.ObjectGraphs;
-using Standard.Types.Arrays;
-using Standard.Types.Collections;
-using Standard.Types.Dates;
-using Standard.Types.Monads;
-using Standard.Types.Numbers;
-using Standard.Types.RegularExpressions;
-using Standard.Types.Strings;
-using Standard.WinForms.Consoles;
-using Standard.WinForms.Documents;
-using static Standard.Types.Monads.MonadFunctions;
+using Core.Computers;
+using Core.Collections;
+using Core.Dates;
+using Core.Monads;
+using Core.Numbers;
+using Core.RegularExpressions;
+using Core.Strings;
+using Core.WinForms.Consoles;
+using Core.WinForms.Documents;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using static Core.Monads.AttemptFunctions;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Playground
 {
@@ -26,8 +28,7 @@ namespace Kagami.Playground
 	{
 		const string PLAYGROUND_FONT_NAME = "Consolas";
 		const float PLAYGROUND_FONT_SIZE = 14f;
-		const string PLAYGROUND_CONFIGURATION_FILE1 = @"E:\Configurations\Kagami\Kagami.configuration";
-		const string PLAYGROUND_CONFIGURATION_FILE2 = @"E:\Configurations\Kagami\Kagami.configuration";
+		const string PLAYGROUND_CONFIGURATION_FILE = @"E:\Configurations\Kagami\Kagami.json";
 		const string PLAYGROUND_PACKAGE_FOLDER = @"E:\Enterprise\Configurations\Kagami\Packages";
 		const string KAGAMI_EXCEPTION_PROMPT = "Kagami exception >>> ";
 
@@ -53,31 +54,48 @@ namespace Kagami.Playground
 
 		public Playground() => InitializeComponent();
 
+		static IResult<PlaygroundConfiguration> getConfiguration(FileName configurationFile) =>
+			from jsonText in configurationFile.TryTo.Text
+			from configuration in tryTo(() =>
+			{
+				var settings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
+				var serializer = JsonSerializer.Create(settings);
+				using (var stringReader = new StringReader(jsonText))
+				using (var jsonReader = new JsonTextReader(stringReader))
+					return serializer.Deserialize<PlaygroundConfiguration>(jsonReader);
+			})
+			select configuration;
+
+		static IResult<Unit> setConfiguration(PlaygroundConfiguration configuration, FileName configurationFile) =>
+			from jsonText in tryTo(() =>
+			{
+				var settings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
+				var serializer = JsonSerializer.Create(settings);
+				using (var stringWriter = new StringWriter())
+				using (var jsonWriter = new JsonTextWriter(stringWriter))
+				{
+					serializer.Serialize(jsonWriter, configuration);
+					return jsonWriter.ToString();
+				}
+			})
+			from unit in configurationFile.TryTo.SetText(jsonText)
+			select unit;
+
 		void Playground_Load(object sender, EventArgs e)
 		{
 			try
 			{
-				configurationFile = PLAYGROUND_CONFIGURATION_FILE1;
+				configurationFile = PLAYGROUND_CONFIGURATION_FILE;
 				if (configurationFile.Exists())
-					if (ObjectGraph.FromFile(configurationFile).Object<PlaygroundConfiguration>()
-						.If(out playgroundConfiguration, out var exception)) { }
+					if (getConfiguration(configurationFile).If(out playgroundConfiguration, out var exception)) { }
 					else
 						throw exception;
 				else
-				{
-					configurationFile = PLAYGROUND_CONFIGURATION_FILE2;
-					if (configurationFile.Exists())
-						if (ObjectGraph.FromFile(configurationFile).Object<PlaygroundConfiguration>()
-							.If(out playgroundConfiguration, out var exception)) { }
-						else
-							throw exception;
-					else
-						playgroundConfiguration = new PlaygroundConfiguration
-						{
-							DefaultFolder = FolderName.Current, FontName = PLAYGROUND_FONT_NAME, FontSize = PLAYGROUND_FONT_SIZE,
-							PackageFolder = PLAYGROUND_PACKAGE_FOLDER
-						};
-				}
+					playgroundConfiguration = new PlaygroundConfiguration
+					{
+						DefaultFolder = FolderName.Current, FontName = PLAYGROUND_FONT_NAME, FontSize = PLAYGROUND_FONT_SIZE,
+						PackageFolder = PLAYGROUND_PACKAGE_FOLDER
+					};
 			}
 			catch (Exception exception)
 			{
@@ -398,7 +416,7 @@ namespace Kagami.Playground
 			}
 		}
 
-		string textAtInsert(int take, int skip = 0) => textEditor.Text.Skip(textEditor.SelectionStart + skip).Take(take);
+		string textAtInsert(int take, int skip = 0) => textEditor.Text.Drop(textEditor.SelectionStart + skip).Keep(take);
 
 		void setTextAtInsert(int take, int skip = 0, string text = "")
 		{
@@ -592,7 +610,7 @@ namespace Kagami.Playground
 					break;
 				case Keys.F1:
 					if (getWord().If(out var begin) && findWord(begin).If(out var source))
-						insertText(source.Skip(begin.Length), 0);
+						insertText(source.Drop(begin.Length), 0);
 					e.Handled = true;
 					break;
 			}
@@ -600,7 +618,7 @@ namespace Kagami.Playground
 
 		IMaybe<string> getWord()
 		{
-			return textEditor.Text.Take(textEditor.SelectionStart).Matches("/(/w+) $").Map(m => m.FirstGroup);
+			return textEditor.Text.Keep(textEditor.SelectionStart).Matches("/(/w+) $").Map(m => m.FirstGroup);
 		}
 
 		IMaybe<string> findWord(string begin)

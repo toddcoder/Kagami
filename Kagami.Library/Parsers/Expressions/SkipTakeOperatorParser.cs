@@ -1,9 +1,9 @@
 ﻿using Kagami.Library.Nodes.Symbols;
-using Standard.Types.Monads;
-using Standard.Types.RegularExpressions;
-using Standard.Types.Strings;
+using Core.Monads;
+using Core.RegularExpressions;
+using Core.Strings;
 using static Kagami.Library.Parsers.ParserFunctions;
-using static Standard.Types.Monads.MonadFunctions;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
 {
@@ -15,7 +15,7 @@ namespace Kagami.Library.Parsers.Expressions
 
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
-			if (state.Source.Take(state.Index).IsMatch("/s+ $"))
+			if (state.Source.Keep(state.Index).IsMatch("/s+ $"))
 				return notMatched<Unit>();
 			else
 			{

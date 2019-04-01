@@ -3,7 +3,7 @@ using System.Linq;
 using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
-using Standard.Types.Enumerables;
+using Core.Enumerables;
 
 namespace Kagami.Library.Nodes.Symbols
 {

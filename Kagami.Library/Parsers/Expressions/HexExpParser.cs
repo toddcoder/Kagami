@@ -1,10 +1,10 @@
 ﻿using System;
 using Kagami.Library.Nodes.Symbols;
-using Standard.Types.Monads;
-using Standard.Types.Strings;
+using Core.Monads;
+using Core.Strings;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Parsers.ParserFunctions;
-using static Standard.Types.Monads.MonadFunctions;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
 {
@@ -20,8 +20,8 @@ namespace Kagami.Library.Parsers.Expressions
          var type = tokens[6].Text;
          state.Colorize(tokens, Color.Whitespace, Color.NumberPart, Color.Number, Color.NumberPart, Color.Number, Color.NumberPart);
 
-         var prefix = source.Contains("p") ? source.TakeUntil("p") : source;
-         var suffix = source.Contains("p") ? source.SkipUntil("p").Skip(1) : "";
+         var prefix = source.Contains("p") ? source.KeepUntil("p") : source;
+         var suffix = source.Contains("p") ? source.DropUntil("p").Drop(1) : "";
 
          var left = convertFloat(prefix, 16, "0123456789abcdef");
 

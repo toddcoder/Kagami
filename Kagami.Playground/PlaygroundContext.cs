@@ -2,8 +2,8 @@
 using System.Windows.Forms;
 using Kagami.Library;
 using Kagami.Library.Runtime;
-using Standard.Types.Collections;
-using Standard.Types.Monads;
+using Core.Collections;
+using Core.Monads;
 
 namespace Kagami.Playground
 {

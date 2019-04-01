@@ -1,5 +1,5 @@
-﻿using Standard.Types.Collections;
-using Standard.Types.RegularExpressions;
+﻿using Core.Collections;
+using Core.RegularExpressions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects

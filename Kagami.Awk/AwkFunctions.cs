@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Kagami.Library.Objects;
-using Standard.Types.RegularExpressions;
+using Core.RegularExpressions;
 
 namespace Kagami.Awk
 {

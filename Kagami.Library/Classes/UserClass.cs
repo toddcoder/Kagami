@@ -3,13 +3,13 @@ using System.Linq;
 using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
-using Standard.Types.Collections;
-using Standard.Types.Exceptions;
-using Standard.Types.Monads;
-using Standard.Types.Strings;
+using Core.Collections;
+using Core.Exceptions;
+using Core.Monads;
+using Core.Strings;
 using static Kagami.Library.Classes.ClassFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
-using static Standard.Types.Monads.MonadFunctions;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Classes
 {
