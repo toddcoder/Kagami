@@ -412,7 +412,7 @@ namespace Kagami.Playground
 				var selectedText = textEditor.SelectedText;
 				if (halfLength == -1)
 					halfLength = delimiter.Length / 2;
-				textEditor.SelectedText = delimiter.Take(halfLength) + selectedText + delimiter.Skip(halfLength);
+				textEditor.SelectedText = delimiter.Keep(halfLength) + selectedText + delimiter.Drop(halfLength);
 			}
 		}
 
@@ -432,11 +432,11 @@ namespace Kagami.Playground
 			try
 			{
 				var peeks = new Hash<int, string>();
-				foreach (var result in context.Peeks)
+				foreach (var (key, value) in context.Peeks)
 					try
 					{
-						var lineIndex = textEditor.GetLineFromCharIndex(result.Key);
-						peeks[lineIndex] = result.Value;
+						var lineIndex = textEditor.GetLineFromCharIndex(key);
+						peeks[lineIndex] = value;
 					}
 					catch { }
 
