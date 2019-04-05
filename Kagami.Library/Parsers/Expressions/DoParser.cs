@@ -36,7 +36,7 @@ namespace Kagami.Library.Parsers.Expressions
 			}
 		}
 
-		class ReturnItemParser : EndingInExpressionParser
+/*		class ReturnItemParser : EndingInExpressionParser
 		{
 			public ReturnItemParser(ExpressionBuilder builder) : base(builder) { }
 
@@ -55,7 +55,7 @@ namespace Kagami.Library.Parsers.Expressions
 				Expression = expression;
 				return Unit.Matched();
 			}
-		}
+		}*/
 
 		public DoParser(ExpressionBuilder builder) : base(builder) { }
 
@@ -66,7 +66,7 @@ namespace Kagami.Library.Parsers.Expressions
 			state.Colorize(tokens, Color.Whitespace, Color.Keyword);
 			var innerBuilder = new ExpressionBuilder(builder.Flags);
 			var boundItemParser = new BoundItemParser(innerBuilder);
-			var returnItemParser = new ReturnItemParser(innerBuilder);
+			//var returnItemParser = new ReturnItemParser(innerBuilder);
 			var stack = new Stack<(string, Expression)>();
 
 			if (state.Advance().Out(out _, out var original))
@@ -88,12 +88,16 @@ namespace Kagami.Library.Parsers.Expressions
 						break;
 				}
 
-				state.Regress();
+				//state.Regress();
 
-				var lambdaResult =
-					from tabs in state.Scan($"^ /({state.Indentation.FriendlyString()})", Color.Whitespace)
-					from unit in returnItemParser.Scan(state)
-					select returnItemParser.Expression;
+				var lambdaResult = getExpression(state, builder.Flags);
+					//from tabs in state.Scan($"^ /({state.Indentation.FriendlyString()})", Color.Whitespace)
+					/*from unit in returnItemParser.Scan(state)
+					select returnItemParser.Expression;*/
+					/*from expression in getExpression(state, builder.Flags)
+					select expression;*/
+
+				state.Regress();
 
 				if (lambdaResult.If(out var lambdaExpression, out var mbLambdaException))
 				{
