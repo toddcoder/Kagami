@@ -50,6 +50,8 @@ namespace Kagami.Library.Objects
 
       IObject Map(Lambda lambda);
 
+      IObject FlatMap(Lambda lambda);
+
       IObject If(Lambda predicate);
 
       IObject IfNot(Lambda predicate);

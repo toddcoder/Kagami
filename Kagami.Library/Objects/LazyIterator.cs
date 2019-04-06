@@ -15,6 +15,8 @@ namespace Kagami.Library.Objects
 
       public override IObject Map(Lambda lambda) => new StreamIterator(this, new MapAction(lambda));
 
+      public override IObject FlatMap(Lambda lambda) => new StreamIterator(this, new FlatMapAction(lambda));
+
       public override IObject If(Lambda predicate) => new StreamIterator(this, new IfAction(predicate));
 
       public override IObject Skip(int count) => new StreamIterator(this, new SkipAction(count));

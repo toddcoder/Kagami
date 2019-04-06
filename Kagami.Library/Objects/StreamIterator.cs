@@ -129,6 +129,8 @@ namespace Kagami.Library.Objects
 
       public IObject Map(Lambda lambda) => Copy(new MapAction(lambda));
 
+      public IObject FlatMap(Lambda lambda) => Copy(new FlatMapAction(lambda));
+
       public IObject If(Lambda predicate) => Copy(new IfAction(predicate));
 
       public IObject IfNot(Lambda predicate) => Copy(new IfNotAction(predicate));

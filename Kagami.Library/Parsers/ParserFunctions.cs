@@ -734,9 +734,6 @@ namespace Kagami.Library.Parsers
 					else
 						symbol = new RationalSymbol().Matched<Symbol>();
 					break;
-/*            case "//":
-               symbol = new IntDivideSymbol().Matched<Symbol>();
-               break;*/
 				case "<!":
 					symbol = new SendBinaryMessageSymbol("foldl", Precedence.ChainedOperator).Matched<Symbol>();
 					break;
@@ -782,15 +779,6 @@ namespace Kagami.Library.Parsers
 				case "<=":
 					symbol = new LessThanEqualSymbol().Matched<Symbol>();
 					break;
-/*				case "++":
-					symbol = new RangeSymbol(true).Matched<Symbol>();
-					break;
-				case "+-":
-					symbol = new RangeSymbol(false).Matched<Symbol>();
-					break;
-				case "--":
-					symbol = new RangeSymbol(true, true).Matched<Symbol>();
-					break;*/
 				case "::":
 					symbol = new ConsSymbol().Matched<Symbol>();
 					break;

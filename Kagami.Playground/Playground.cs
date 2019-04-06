@@ -484,7 +484,7 @@ namespace Kagami.Playground
 				{
 					while (annotationWidth > remainingWidth)
 					{
-						annotation = annotation.Skip(-2) + dots;
+						annotation = annotation.Drop(-2) + dots;
 						annotationWidth = getWidth(graphics, annotation, annotationFont);
 					}
 

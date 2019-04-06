@@ -238,6 +238,15 @@ namespace Kagami.Library.Objects
 
       public virtual IObject Map(Lambda lambda) => collectionClass.Revert(List().Select(value => lambda.Invoke(value)));
 
+      public virtual IObject FlatMap(Lambda lambda)
+      {
+	      var className = ((BaseClass)collectionClass).Name;
+	      var enumerable = List().Select(value => lambda.Invoke(value));
+	      var flattened = flatten(enumerable, className);
+
+	      return collectionClass.Revert(flattened);
+      }
+
       public virtual IObject If(Lambda predicate) => collectionClass.Revert(List().Where(value => predicate.Invoke(value).IsTrue));
 
       public virtual IObject IfNot(Lambda predicate) => collectionClass.Revert(List().Where(value => !predicate.Invoke(value).IsTrue));
@@ -803,6 +812,19 @@ namespace Kagami.Library.Objects
             }
             else
                yield return item;
+      }
+
+      static IEnumerable<IObject> flatten(IEnumerable<IObject> enumerable, string className)
+      {
+         foreach (var item in enumerable)
+		      if (item.ClassName == className)
+		      {
+			      var innerIterator = ((ICollection)item).GetIterator(false);
+			      foreach (var inner in flatten(innerIterator))
+				      yield return inner;
+		      }
+		      else
+			      yield return item;
       }
 
       public IObject Flatten() => collectionClass.Revert(flatten(this));

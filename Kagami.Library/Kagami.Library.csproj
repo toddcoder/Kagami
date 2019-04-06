@@ -355,6 +355,7 @@
     <Compile Include="Objects\Error.cs" />
     <Compile Include="Objects\Failed.cs" />
     <Compile Include="Objects\Failure.cs" />
+    <Compile Include="Objects\FlatMapAction.cs" />
     <Compile Include="Objects\Float.cs" />
     <Compile Include="Objects\IBoolean.cs" />
     <Compile Include="Objects\ICollection.cs" />
