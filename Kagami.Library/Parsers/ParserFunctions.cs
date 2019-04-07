@@ -834,7 +834,7 @@ namespace Kagami.Library.Parsers
 					symbol = new SendBinaryMessageSymbol("notMatches(_<String>)", Precedence.Boolean, true).Matched<Symbol>();
 					break;
 				case "!!":
-					symbol = new SendBinaryMessageSymbol("defaultTo", Precedence.Concatenate).Matched<Symbol>();
+					symbol = new SendBinaryMessageSymbol("flatMap(_<Lambda>)", Precedence.ChainedOperator).Matched<Symbol>();
 					break;
 				case "><":
 					symbol = new SendBinaryMessageSymbol("join", Precedence.Concatenate).Matched<Symbol>();
