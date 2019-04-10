@@ -19,6 +19,7 @@ using Core.WinForms.Consoles;
 using Core.WinForms.Documents;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using static Core.Arrays.ArrayFunctions;
 using static Core.Monads.AttemptFunctions;
 using static Core.Monads.MonadFunctions;
 
@@ -28,8 +29,9 @@ namespace Kagami.Playground
 	{
 		const string PLAYGROUND_FONT_NAME = "Consolas";
 		const float PLAYGROUND_FONT_SIZE = 14f;
-		const string PLAYGROUND_CONFIGURATION_FILE = @"E:\Configurations\Kagami\Kagami.json";
-		const string PLAYGROUND_PACKAGE_FOLDER = @"E:\Enterprise\Configurations\Kagami\Packages";
+		const string CONFIGURATION_FOLDER = @":\Configurations\Kagami\";
+		const string PLAYGROUND_CONFIGURATION_FILE = CONFIGURATION_FOLDER + "Kagami.json";
+		const string PLAYGROUND_PACKAGE_FOLDER = CONFIGURATION_FOLDER + "Packages";
 		const string KAGAMI_EXCEPTION_PROMPT = "Kagami exception >>> ";
 
 		Document document;
@@ -39,7 +41,7 @@ namespace Kagami.Playground
 		bool locked;
 		bool manual;
 		Stopwatch stopwatch;
-		FileName configurationFile;
+		//FileName configurationFile;
 		PlaygroundConfiguration playgroundConfiguration;
 		PlaygroundContext context;
 		Colorizer colorizer;
@@ -53,6 +55,18 @@ namespace Kagami.Playground
 		IMaybe<ExceptionData> exceptionData;
 
 		public Playground() => InitializeComponent();
+
+		static IResult<FileName> existingConfigurationFile()
+		{
+			foreach (var drive in array('C', 'E'))
+			{
+				FileName configurationFile = $"{drive}{PLAYGROUND_CONFIGURATION_FILE}";
+				if (configurationFile.Exists())
+					return configurationFile.Success();
+			}
+
+			return "Couldn't find configuration file".Failure<FileName>();
+		}
 
 		static IResult<PlaygroundConfiguration> getConfiguration(FileName configurationFile) =>
 			from jsonText in configurationFile.TryTo.Text
@@ -85,17 +99,21 @@ namespace Kagami.Playground
 		{
 			try
 			{
-				configurationFile = PLAYGROUND_CONFIGURATION_FILE;
-				if (configurationFile.Exists())
-					if (getConfiguration(configurationFile).If(out playgroundConfiguration, out var exception)) { }
-					else
-						throw exception;
+				var result =
+					from file in existingConfigurationFile()
+					from config in getConfiguration(file)
+					select config;
+				if (result.If(out playgroundConfiguration)) { }
 				else
+				{
 					playgroundConfiguration = new PlaygroundConfiguration
 					{
-						DefaultFolder = FolderName.Current, FontName = PLAYGROUND_FONT_NAME, FontSize = PLAYGROUND_FONT_SIZE,
-						PackageFolder = PLAYGROUND_PACKAGE_FOLDER
+						DefaultFolder = FolderName.Current,
+						FontName = PLAYGROUND_FONT_NAME,
+						FontSize = PLAYGROUND_FONT_SIZE,
+						PackageFolder = "C" + PLAYGROUND_PACKAGE_FOLDER
 					};
+				}
 			}
 			catch (Exception exception)
 			{

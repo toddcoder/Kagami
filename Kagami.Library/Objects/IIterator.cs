@@ -151,5 +151,7 @@ namespace Kagami.Library.Objects
       IObject Flatten();
 
       IObject Copy();
+
+      IObject Apply(ICollection collection);
    }
 }

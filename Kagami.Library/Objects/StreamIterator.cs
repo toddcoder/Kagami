@@ -276,6 +276,8 @@ namespace Kagami.Library.Objects
 
       public IObject Copy() => iterator.Copy();
 
+      public IObject Apply(ICollection collection) => iterator.Apply(collection);
+
       public BaseClass Equivalent() => new CollectionClass();
 
       public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
