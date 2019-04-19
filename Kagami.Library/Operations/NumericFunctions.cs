@@ -35,7 +35,7 @@ namespace Kagami.Library.Operations
                   if (cx is IMessageNumber mn)
                      return message(mn, cy);
                   else
-                     return sendMessage(x, messageName, y);
+                     return sendMessage(x, messageName + "(_)", y);
             }
          }
          else

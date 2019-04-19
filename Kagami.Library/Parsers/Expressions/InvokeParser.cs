@@ -53,7 +53,7 @@ namespace Kagami.Library.Parsers.Expressions
 					else if (state.Macro(functionName).If(out var function))
 						builder.Add(new MacroInvokeSymbol(function, arguments, possibleLambda));
 					else
-						builder.Add(new InvokeSymbol(functionName, arguments, possibleLambda));
+						builder.Add(new InvokeSymbol(functionName, arguments, possibleLambda, builder.Flags[ExpressionFlags.Comparisand]));
 
 					return Unit.Matched();
 				}

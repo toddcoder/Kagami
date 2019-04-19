@@ -16,11 +16,11 @@ namespace Kagami.Library.Objects
 
       public StreamIterator(IIterator iterator)
       {
-         this.iterator = iterator;
+	      this.iterator = iterator.Clone();
          actions = new List<IStreamAction>();
       }
 
-      public StreamIterator(IIterator iterator, IStreamAction action) : this(iterator) => actions.Add(action);
+     // public StreamIterator(IIterator iterator, IStreamAction action) : this(iterator) => actions.Add(action);
 
       public string ClassName => "StreamIterator";
 
@@ -89,6 +89,14 @@ namespace Kagami.Library.Objects
       }
 
       public IEnumerable<IObject> List() => list();
+
+      public IIterator Clone()
+      {
+	      var newIterator = new StreamIterator(iterator);
+	      newIterator.actions.AddRange(actions);
+
+	      return newIterator;
+        }
 
       public IObject Reverse() => iterator.Reverse();
 

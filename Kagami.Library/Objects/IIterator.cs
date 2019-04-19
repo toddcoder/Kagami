@@ -20,6 +20,8 @@ namespace Kagami.Library.Objects
 
       IEnumerable<IObject> List();
 
+      IIterator Clone();
+
       IObject Reverse();
 
       String Join(string connector);

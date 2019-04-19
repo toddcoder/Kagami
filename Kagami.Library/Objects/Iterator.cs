@@ -76,6 +76,8 @@ namespace Kagami.Library.Objects
 			} while (item.IsSome);
 		}
 
+		public IIterator Clone() => new Iterator(collection);
+
 		public IObject Reverse()
 		{
 			return collectionClass.Revert(List().Reverse());

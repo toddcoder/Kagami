@@ -78,7 +78,7 @@ namespace Kagami.Library.Parsers.Statements
 					if (standard)
 						userClass.InheritFrom(parentClass);
 					var symbol = initialize ? (Symbol)new InitializeParentConstructorSymbol(parentClassName, getInitializeArguments())
-						: new InvokeParentConstructorSymbol(parentClassName, parentArguments);
+						: new InvokeParentConstructorSymbol(parentClassName, parentArguments, false);
 					statements.Add(new ExpressionStatement(symbol, false));
 				}
 				else
