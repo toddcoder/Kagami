@@ -26,7 +26,7 @@ namespace Kagami.Library.Parsers.Expressions
 						first = false;
 						if (found.Contains("}"))
 						{
-							builder.Add(new SendMessageSymbol("fullResult".get(), Precedence.Value));
+							builder.Add(new SendMessageSymbol("fullResult".get(), Precedence.SendMessage));
 							return Unit.Matched();
 						}
 					}

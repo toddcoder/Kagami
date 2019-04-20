@@ -14,7 +14,7 @@ namespace Kagami.Library.Nodes.Symbols
 			builder.SendMessage("literal()", 1);
 		}
 
-		public override Precedence Precedence => Precedence.Value;
+		public override Precedence Precedence => Precedence.PostfixOperator;
 
 		public override Arity Arity => Arity.Postfix;
 	}
