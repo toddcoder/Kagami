@@ -8,12 +8,14 @@ namespace Kagami.Library.Objects
       IObject seed;
       IObject current;
       Lambda lambda;
+      OpenRange range;
 
       public OpenRangeIterator(OpenRange range) : base(range)
       {
          seed = range.Seed;
          current = seed;
          lambda = range.Lambda;
+         this.range = range;
       }
 
       public override bool IsLazy => true;
@@ -37,5 +39,7 @@ namespace Kagami.Library.Objects
             current = lambda.Invoke(current);
          }
       }
+
+      public override IIterator Clone() => new OpenRangeIterator(range);
    }
 }

@@ -20,8 +20,6 @@ namespace Kagami.Library.Objects
          actions = new List<IStreamAction>();
       }
 
-     // public StreamIterator(IIterator iterator, IStreamAction action) : this(iterator) => actions.Add(action);
-
       public string ClassName => "StreamIterator";
 
       public string AsString => actions.Listify(" ");
