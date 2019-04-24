@@ -143,7 +143,7 @@ namespace Kagami.Library.Objects
             index = input.IndexOf(value);
 
          if (index > -1)
-            return input.Take(index) + replacement + input.Skip(index + 1);
+            return input.Keep(index) + replacement + input.Drop(index + 1);
          else
             return input;
       }
@@ -162,7 +162,7 @@ namespace Kagami.Library.Objects
             var length = text.Length;
             var replacement = lambda.Invoke((String)text, (Int)index, (Int)length);
 
-            return input.Keep(index) + replacement + input.Skip(index + 1);
+            return input.Keep(index) + replacement + input.Drop(index + 1);
          }
          else
             return input;
@@ -178,13 +178,13 @@ namespace Kagami.Library.Objects
          while (index > -1)
          {
             var replacement = lambda.Invoke((Char)value, (Int)index, Int.One);
-            builder.Append(input.Skip(start));
+            builder.Append(input.Drop(start));
             builder.Append(replacement.AsString);
             start = index + 1;
             index = input.IndexOf(value);
          }
 
-         builder.Append(input.Skip(start));
+         builder.Append(input.Drop(start));
 
          return builder.ToString();
       }

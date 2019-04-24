@@ -148,9 +148,9 @@ namespace Kagami.Library.Objects
             if (matcher.IsMatch(input, pattern, ignoreCase, multiline))
             {
                var matchIndex = matcher.MatchCount - 1;
-               var match = matcher.GetMatch(matchIndex);
-               var replacement = lambda.Invoke((String)match.Text, (Int)match.Index, (Int)match.Length);
-               var result = match.Text.Substitute(pattern, replacement.AsString, ignoreCase, multiline);
+               var (text, index, length) = matcher.GetMatch(matchIndex);
+               var replacement = lambda.Invoke((String)text, (Int)index, (Int)length);
+               var result = text.Substitute(pattern, replacement.AsString, ignoreCase, multiline);
                matcher[matchIndex] = result;
 
                return matcher.ToString();
@@ -162,9 +162,9 @@ namespace Kagami.Library.Objects
          {
             if (matcher.IsMatch(input, pattern, ignoreCase, multiline))
             {
-               var match = matcher.GetMatch(0);
-               var replacement = lambda.Invoke((String)match.Text, (Int)match.Index, (Int)match.Length);
-               var result = match.Text.Substitute(pattern, replacement.AsString, ignoreCase, multiline);
+               var (text, index, length) = matcher.GetMatch(0);
+               var replacement = lambda.Invoke((String)text, (Int)index, (Int)length);
+               var result = text.Substitute(pattern, replacement.AsString, ignoreCase, multiline);
                matcher[0] = result;
 
                return matcher.ToString();
@@ -182,8 +182,8 @@ namespace Kagami.Library.Objects
          {
             for (var i = 0; i < matcher.MatchCount; i++)
             {
-               var match = matcher.GetMatch(i);
-               var replacement = lambda.Invoke((String)match.Text, (Int)match.Index, (Int)match.Length);
+               var (text, index, length) = matcher.GetMatch(i);
+               var replacement = lambda.Invoke((String)text, (Int)index, (Int)length);
                matcher[i] = replacement.AsString;
             }
 
@@ -204,10 +204,9 @@ namespace Kagami.Library.Objects
          {
             if (matcher.IsMatch(input, pattern, ignoreCase, multiline))
             {
-               var match = matcher.GetMatch(matcher.MatchCount - 1);
-               var left = input.Keep(match.Index);
-               var delimiter = match.Text;
-               var right = input.Drop(match.Index + match.Length);
+               var (delimiter, index, length) = matcher.GetMatch(matcher.MatchCount - 1);
+               var left = input.Keep(index);
+               var right = input.Drop(index + length);
 
                return Tuple.Tuple3(left, delimiter, right);
             }
@@ -218,10 +217,9 @@ namespace Kagami.Library.Objects
          {
             if (matcher.IsMatch(input, pattern, ignoreCase, multiline))
             {
-               var match = matcher.GetMatch(0);
-               var left = input.Keep(match.Index);
-               var delimiter = match.Text;
-               var right = input.Drop(match.Index + match.Length);
+               var (delimiter, index, length) = matcher.GetMatch(0);
+               var left = input.Keep(index);
+               var right = input.Drop(index + length);
 
                return Tuple.Tuple3(left, delimiter, right);
             }
@@ -239,8 +237,8 @@ namespace Kagami.Library.Objects
             var count = 0;
             for (var i = 0; i < matcher.MatchCount; i++)
             {
-               var match = matcher.GetMatch(i);
-               if (lambda.Invoke((String)match.Text, (Int)match.Index, (Int)match.Length).IsTrue)
+	            var (text, index, length) = matcher.GetMatch(i);
+	            if (lambda.Invoke((String)text, (Int)index, (Int)length).IsTrue)
                   count++;
             }
 
