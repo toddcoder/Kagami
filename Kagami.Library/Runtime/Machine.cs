@@ -13,6 +13,7 @@ using Core.Strings;
 using static Kagami.Library.AllExceptions;
 using static Core.Monads.AttemptFunctions;
 using static Core.Monads.MonadFunctions;
+using Failure = Kagami.Library.Objects.Failure;
 
 namespace Kagami.Library.Runtime
 {
@@ -79,7 +80,7 @@ namespace Kagami.Library.Runtime
 							context.PrintLine(table.Value.ToString());
 						if (GetErrorHandler().If(out var address))
 						{
-							stack.Peek().Push(new Objects.Failure(original.Exception.Message));
+							stack.Peek().Push(new Failure(original.Exception.Message));
 							operations.Goto(address);
 						}
 						else
@@ -211,7 +212,10 @@ namespace Kagami.Library.Runtime
 							else if (mbException.If(out var exception))
 							{
 								if (GetErrorHandler().If(out var address))
+								{
+									stack.Peek().Push(new Failure(exception.Message));
 									operations.Goto(address);
+								}
 								else
 									return failedMatch<IObject>(exception);
 							}
@@ -221,10 +225,18 @@ namespace Kagami.Library.Runtime
 							continue;
 					}
 
-					if (operation.Execute(this).Out(out var result, out var original) && running)
+					if (operation.Execute(this).If(out var result, out var mbResult) && running)
 						stack.Peek().Push(result);
-					else if (original.IsFailedMatch)
-						return failedMatch<IObject>(original.Exception);
+					else if (mbResult.If(out var exception))
+					{
+						if (GetErrorHandler().If(out var address))
+						{
+							stack.Peek().Push(new Failure(exception.Message));
+							operations.Goto(address);
+						}
+						else
+							return failedMatch<IObject>(exception);
+					}
 
 					if (operation.Increment && currentAddress == operations.Address)
 						operations.Advance(1);

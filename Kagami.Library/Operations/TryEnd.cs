@@ -30,6 +30,7 @@ namespace Kagami.Library.Operations
 						result = new Objects.Success(value);
 						break;
             }
+
 				return result.Matched();
 			}
 			else

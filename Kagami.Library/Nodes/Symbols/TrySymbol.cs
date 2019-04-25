@@ -12,17 +12,13 @@ namespace Kagami.Library.Nodes.Symbols
 		public override void Generate(OperationsBuilder builder)
 		{
 			var errorLabel = newLabel("error");
-			var endLabel = newLabel("end");
 
 			builder.TryBegin();
 			builder.SetErrorHandler(errorLabel);
 			expression.Generate(builder);
 			builder.TryEnd();
-			builder.GoTo(endLabel);
 
 			builder.Label(errorLabel);
-			builder.TryEnd();
-			builder.Label(endLabel);
 			builder.NoOp();
 		}
 
