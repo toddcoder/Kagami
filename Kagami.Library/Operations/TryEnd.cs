@@ -30,7 +30,6 @@ namespace Kagami.Library.Operations
 						result = new Objects.Success(value);
 						break;
             }
-				//machine.PopFramesUntil(f => f.FrameType == FrameType.Try);
 				return result.Matched();
 			}
 			else
