@@ -13,11 +13,11 @@ namespace Kagami.Library.Packages
          base.RegisterMessages();
          collectionMessages();
 
-         messages["next"] = (obj, msg) => function<XRandom>(obj, r => r.Next());
-         messages["next".Selector("float:<Boolean>")] =
+         messages["next()"] = (obj, msg) => function<XRandom>(obj, r => r.Next());
+         messages["next(float:<Boolean>)"] =
             (obj, msg) => function<XRandom, Boolean>(obj, msg, (r, b) => b.Value ? (IObject)r.NextFloat() : r.Next());
-         messages["next".Selector("max:<Int>")] = (obj, msg) => function<XRandom, Int>(obj, msg, (r, i) => r.Next(i.Value));
-         messages["next".Selector("min:<Int>", "max:<Int>")] =
+         messages["next(max:<Int>)"] = (obj, msg) => function<XRandom, Int>(obj, msg, (r, i) => r.Next(i.Value));
+         messages["next(min:<Int>,max:<Int>)"] =
             (obj, msg) => function<XRandom, Int, Int>(obj, msg, (r, i1, i2) => r.Next(i1.Value, i2.Value));
       }
    }

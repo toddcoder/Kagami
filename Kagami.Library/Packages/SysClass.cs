@@ -25,8 +25,8 @@ namespace Kagami.Library.Packages
 			registerPackageFunction("Tuple", (obj, msg) => function<Sys>(obj, sys => sys.Tuple(msg.Arguments[0])));
 			registerPackageFunction("Group(_,_,_)", (obj, msg) => function<Sys>(obj, sys => sys.RegexGroup(msg.Arguments)));
 			registerPackageFunction("Match(_,_,_,_)", (obj, msg) => function<Sys>(obj, sys => sys.RegexMatch(msg.Arguments)));
-			registerPackageFunction("Random", (obj, msg) => function<Sys>(obj, sys => sys.Random()));
-			registerPackageFunction("Random".Selector("seed:<Int>"),
+			registerPackageFunction("Random()", (obj, msg) => function<Sys>(obj, sys => sys.Random()));
+			registerPackageFunction("Random(seed:<Int>)",
 				(obj, msg) => function<Sys, Int>(obj, msg, (sys, i) => sys.Random(i.Value)));
 			registerPackageFunction("Complex(_,_)", (obj, msg) => function<Sys, IObject, IObject>(obj, msg, (s, o1, o2) => s.Complex(o1, o2)));
 			registerPackageFunction("sel", (obj, msg) => function<Sys, String>(obj, msg, (sys, s) => sys.Selector(s.Value)));
