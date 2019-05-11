@@ -5,11 +5,11 @@ using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
 {
-	public class MapExpressionParser : SymbolParser
+	public class ImplicitMessageParser : SymbolParser
 	{
-		public override string Pattern => "^ /(|s|) /['!&*;'] -(> /s+)";
+		public override string Pattern => "^ /(|s|) /['!&*;:'] -(> /s+)";
 
-		public MapExpressionParser(ExpressionBuilder builder) : base(builder) { }
+		public ImplicitMessageParser(ExpressionBuilder builder) : base(builder) { }
 
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
@@ -36,6 +36,9 @@ namespace Kagami.Library.Parsers.Expressions
 						break;
 					case ";":
 						state.FoldExpression = tuple;
+						break;
+					case ":":
+						state.BindExpression = tuple;
 						break;
 				}
 

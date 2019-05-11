@@ -301,5 +301,7 @@ namespace Kagami.Library.Parsers
 		public IMaybe<(string, Symbol)> RightZipExpression { get; set; } = none<(string, Symbol)>();
 
 		public IMaybe<(string, Symbol)> FoldExpression { get; set; } = none<(string, Symbol)>();
+
+		public IMaybe<(string, Symbol)> BindExpression { get; set; } = none<(string, Symbol)>();
 	}
 }

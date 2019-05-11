@@ -132,6 +132,22 @@ namespace Kagami.Library.Parsers.Expressions
 						else
 							return failedMatch<Unit>(expException);
 					}
+					else if (state.BindExpression.If(out var bindTuple))
+					{
+						var (fieldName, symbol) = bindTuple;
+						if (!keep(fieldName))
+						{
+							Expression = expression;
+							return Unit.Matched();
+						}
+						else if (getMessageWithLambda(fieldName, symbol, "bind", expression).If(out var newExpression, out expException))
+						{
+							Expression = newExpression;
+							state.BindExpression = none<(string, Symbol)>();
+						}
+						else
+							return failedMatch<Unit>(expException);
+					}
 					else if (whateverCount > 0)
 					{
 						var lambda = new LambdaSymbol(whateverCount,

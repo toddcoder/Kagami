@@ -649,7 +649,7 @@
     <Compile Include="Parsers\Expressions\IteratorParser.cs" />
     <Compile Include="Parsers\Expressions\LazyParser.cs" />
     <Compile Include="Parsers\Expressions\ListParser.cs" />
-    <Compile Include="Parsers\Expressions\MapExpressionParser.cs" />
+    <Compile Include="Parsers\Expressions\ImplicitMessageParser.cs" />
     <Compile Include="Parsers\Expressions\MatchLambdaParser.cs" />
     <Compile Include="Parsers\Expressions\MaybeParser.cs" />
     <Compile Include="Parsers\Expressions\MessageParser.cs" />
