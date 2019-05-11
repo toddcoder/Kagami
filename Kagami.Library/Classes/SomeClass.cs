@@ -15,12 +15,12 @@ namespace Kagami.Library.Classes
 
          messages["value".get()] = (obj, msg) => function<Some>(obj, s => s.Value);
          messages["isSome".get()] = (obj, msg) => function<Some>(obj, s => (Boolean)s.IsSome);
-         messages["isNil".get()] = (obj, msg) => function<Some>(obj, s => (Boolean)s.IsNil);
+         messages["isNone".get()] = (obj, msg) => function<Some>(obj, s => (Boolean)s.IsNone);
          messages["map(_<Lambda>)"] = (obj, msg) => function<Some, Lambda>(obj, msg, (s, l) => s.Map(l));
          messages["flatMap(_<Lambda>,_<Lambda>)"] = (obj, msg) => function<Some, Lambda, Lambda>(obj, msg, (s, l1, l2) => s.FlatMap(l1, l2));
          messages["defaultTo(_)"] = (obj, msg) => function<Some, IObject>(obj, msg, (s, o) => s.Value);
       }
 
-      public override bool AssignCompatible(BaseClass otherClass) => otherClass is SomeClass || otherClass is NilClass;
+      public override bool AssignCompatible(BaseClass otherClass) => otherClass is SomeClass || otherClass is NoneClass;
    }
 }

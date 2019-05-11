@@ -78,7 +78,7 @@ namespace Kagami.Library.Classes
 					return new Some(dataType.GetDataComparisand(name, msg.Arguments.Value.Skip(1).ToArray()));
 				}
 				else
-					return Nil.NilValue;
+					return None.NoneValue;
 			}));
 		}
 
@@ -94,7 +94,7 @@ namespace Kagami.Library.Classes
 					return new Some(dataType.GetDataComparisand(name, msg.Arguments.Value.Skip(1).ToArray()));
 				}
 				else
-					return Nil.NilValue;
+					return None.NoneValue;
 			}));
 
 			RegisterClassMessage("values".get(), (bc, msg) => classFunc<DataTypeClass>(bc, dtc => dtc.dataType.Values));

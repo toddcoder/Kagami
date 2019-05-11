@@ -31,7 +31,7 @@ namespace Kagami.Library.Nodes.Symbols
 				builder.Failure();
 			}
 			else
-				builder.PushNil();
+				builder.PushNone();
 
 			builder.GoTo(endLabel);
 

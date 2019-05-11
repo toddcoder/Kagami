@@ -21,7 +21,7 @@ namespace Kagami.Library.Objects
 				index = input.IndexOf(value, startIndex, StringComparison.Ordinal);
 
 			if (index == -1)
-				return Nil.NilValue;
+				return None.NoneValue;
 			else
 				return Some.Object((Int)index);
       }

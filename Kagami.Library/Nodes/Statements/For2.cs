@@ -38,7 +38,7 @@ namespace Kagami.Library.Nodes.Statements
          comparisand.Generate(builder);
          builder.GetField(iteratorName);
          builder.SendMessage("next()", 0);
-         builder.GoToIfNil(endLabel);
+         builder.GoToIfNone(endLabel);
          builder.Swap();
          builder.Match();
          builder.GoToIfTrue(backToTopLabel);

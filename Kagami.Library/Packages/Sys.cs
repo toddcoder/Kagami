@@ -62,7 +62,7 @@ namespace Kagami.Library.Packages
 			return value;
 		}
 
-		public IObject Readln() => Machine.Current.Context.ReadLine().FlatMap(s => new Some(String.StringObject(s)), () => Nil.NilValue);
+		public IObject Readln() => Machine.Current.Context.ReadLine().FlatMap(s => new Some(String.StringObject(s)), () => None.NoneValue);
 
 		public IObject Peek(IObject obj)
 		{

@@ -126,7 +126,7 @@ namespace Kagami.Library.Objects
          if (index > -1)
             return Some.Object((Int)index);
          else
-            return Nil.NilValue;
+            return None.NoneValue;
       }
 
       public Tuple FindAll(string input)

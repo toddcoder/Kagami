@@ -57,7 +57,7 @@ namespace Kagami.Library.Invokables
 			if (Machine.Current.Invoke(this).If(out var result, out var mbException))
 				switch (result)
 				{
-					case Nil _:
+					case None _:
 						return none<IObject>();
 					case YieldReturn yr:
 						Address = yr.Address + 1;

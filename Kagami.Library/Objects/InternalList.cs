@@ -12,7 +12,7 @@ namespace Kagami.Library.Objects
 
       public InternalList(IObject x, IObject y)
       {
-         if (y is Nil)
+         if (y is None)
             list = new List<IObject> { x };
          else
             list = new List<IObject> { x, y };

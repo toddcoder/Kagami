@@ -24,7 +24,7 @@ namespace Kagami.Library.Operations
       public void Assign(Parameters parameters, Expression[] arguments)
       {
          var length = Math.Min(arguments.Length, parameters.Length);
-         var lastValue = new Expression(new NilSymbol());
+         var lastValue = new Expression(new NoneSymbol());
          //var lastName = "";
          var variadic = false;
 

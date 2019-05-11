@@ -6,10 +6,10 @@
 
       bool IsSome { get; }
 
-      bool IsNil { get; }
+      bool IsNone { get; }
 
       IObject Map(Lambda lambda);
 
-      IObject FlatMap(Lambda ifSome, Lambda ifNil);
+      IObject FlatMap(Lambda ifSome, Lambda ifNone);
    }
 }

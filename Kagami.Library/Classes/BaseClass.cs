@@ -294,8 +294,8 @@ namespace Kagami.Library.Classes
 		{
 			registerMessage("collection".get(), (obj, msg) => iteratorFunc(obj, i => (IObject)i.Collection));
 			registerMessage("isLazy".get(), (obj, msg) => iteratorFunc(obj, i => (Boolean)i.IsLazy));
-			registerMessage("next()", (obj, msg) => iteratorFunc(obj, i => i.Next().FlatMap(s => new Some(s), () => Nil.NilValue)));
-			registerMessage("peek()", (obj, msg) => iteratorFunc(obj, i => i.Peek().FlatMap(s => new Some(s), () => Nil.NilValue)));
+			registerMessage("next()", (obj, msg) => iteratorFunc(obj, i => i.Next().FlatMap(s => new Some(s), () => None.NoneValue)));
+			registerMessage("peek()", (obj, msg) => iteratorFunc(obj, i => i.Peek().FlatMap(s => new Some(s), () => None.NoneValue)));
 			registerMessage("reset()", (obj, msg) => iteratorFunc(obj, i => i.Reset()));
 			registerMessage("reverse()", (obj, msg) => iteratorFunc(obj, i => i.Reverse()));
 			registerMessage("join(_<String>)", (obj, msg) => iteratorFunc<String>(obj, msg, (i, s) => i.Join(s.Value)));

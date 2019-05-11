@@ -6,7 +6,7 @@
 
 		public override bool AssignCompatible(BaseClass otherClass)
 		{
-			return base.AssignCompatible(otherClass) || otherClass.Name == "Some" || otherClass.Name == "Nil" ||
+			return base.AssignCompatible(otherClass) || otherClass.Name == "Some" || otherClass.Name == "None" ||
 				otherClass.Name == "Success" || otherClass.Name == "Failure";
 		}
 

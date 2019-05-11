@@ -31,7 +31,7 @@ namespace Kagami.Library.Objects
 
 		public bool IsSome => true;
 
-		public bool IsNil => false;
+		public bool IsNone => false;
 
 		public IObject Map(Lambda lambda)
 		{
@@ -40,14 +40,14 @@ namespace Kagami.Library.Objects
 			{
 				case Some some:
 					return some;
-				case Nil _:
-					return Nil.NilValue;
+				case None _:
+					return None.NoneValue;
 				default:
 					return new Some(result);
 			}
 		}
 
-		public IObject FlatMap(Lambda ifSome, Lambda ifNil) => ifSome.Invoke(value);
+		public IObject FlatMap(Lambda ifSome, Lambda ifNone) => ifSome.Invoke(value);
 
 		public bool IsTrue => true;
 

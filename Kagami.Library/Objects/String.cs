@@ -259,7 +259,7 @@ namespace Kagami.Library.Objects
 			if (int.TryParse(value, out var result))
 				return new Some((Int)result);
 			else
-				return Nil.NilValue;
+				return None.NoneValue;
 		}
 
 		public IObject Float()
@@ -267,7 +267,7 @@ namespace Kagami.Library.Objects
 			if (double.TryParse(value, out var result))
 				return new Some((Float)result);
 			else
-				return Nil.NilValue;
+				return None.NoneValue;
 		}
 
 		public IObject Byte()
@@ -275,7 +275,7 @@ namespace Kagami.Library.Objects
 			if (byte.TryParse(value, out var result))
 				return new Some((Byte)result);
 			else
-				return Nil.NilValue;
+				return None.NoneValue;
 		}
 
 		public IObject Long()
@@ -283,7 +283,7 @@ namespace Kagami.Library.Objects
 			if (BigInteger.TryParse(value, out var result))
 				return new Some((Long)result);
 			else
-				return Nil.NilValue;
+				return None.NoneValue;
 		}
 
 		public Tuple SplitRegex(Regex regex) => regex.Split(value);
@@ -344,7 +344,7 @@ namespace Kagami.Library.Objects
 				return Some.Object(new Tuple(list.Select(StringObject).ToArray()));
 			}
 			else
-				return Nil.NilValue;
+				return None.NoneValue;
 		}
 
 		public Tuple Words() => new Tuple(value.Split("/s+").Select(StringObject).ToArray());

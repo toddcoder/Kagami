@@ -14,9 +14,9 @@ namespace Kagami.Library.Operations
          var frames = machine.PopFrames();
          IMatched<IObject> returnValue;
          if (topFrame.IsEmpty)
-            returnValue = Nil.NilValue.Matched();
+            returnValue = None.NoneValue.Matched();
          else if (topFrame.Pop().If(out var popped, out var exception))
-            if (popped is Nil)
+            if (popped is None)
                returnValue = popped.Matched();
             else
             {

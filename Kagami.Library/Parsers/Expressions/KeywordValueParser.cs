@@ -6,7 +6,7 @@ namespace Kagami.Library.Parsers.Expressions
 {
    public class KeywordValueParser : SymbolParser
    {
-      public override string Pattern => "^ /(|s|) /('nil' | 'true' | 'false' | 'del' | 'unit') /b";
+      public override string Pattern => "^ /(|s|) /('none' | 'true' | 'false' | 'del' | 'unit') /b";
 
       public KeywordValueParser(ExpressionBuilder builder) : base(builder) { }
 
@@ -17,8 +17,8 @@ namespace Kagami.Library.Parsers.Expressions
 
          switch (word)
          {
-            case "nil":
-               builder.Add(new NilSymbol());
+            case "none":
+               builder.Add(new NoneSymbol());
                break;
             case "true":
                builder.Add(new BooleanSymbol(true));

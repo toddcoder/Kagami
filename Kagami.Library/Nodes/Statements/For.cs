@@ -35,7 +35,7 @@ namespace Kagami.Library.Nodes.Statements
          builder.NewField(fieldName, true, true);
          builder.GetField(iteratorName);
          builder.SendMessage("next()", 0);
-         builder.GoToIfNil(endLabel);
+         builder.GoToIfNone(endLabel);
 
          builder.AssignField(fieldName, false);
          builder.GetField(fieldName);

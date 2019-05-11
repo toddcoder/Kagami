@@ -370,7 +370,7 @@ namespace Kagami.Library.Objects
 
 		public static IEnumerable<IObject> list(ICollection collection) => collection.GetIterator(false).List();
 
-		public static IObject someOf(IMaybe<IObject> maybe) => maybe.FlatMap(Some.Object, () => Nil.NilValue);
+		public static IObject someOf(IMaybe<IObject> maybe) => maybe.FlatMap(Some.Object, () => None.NoneValue);
 
 		public static bool compareEnumerables(IEnumerable<IObject> left, IEnumerable<IObject> right)
 		{

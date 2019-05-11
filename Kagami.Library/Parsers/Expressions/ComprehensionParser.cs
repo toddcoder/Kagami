@@ -75,7 +75,7 @@ namespace Kagami.Library.Parsers.Expressions
 
 				var statements = new List<Statement>
 				{
-					forStatement, new Return(new Expression(new NilSymbol()), state.GetReturnType())
+					forStatement, new Return(new Expression(new NoneSymbol()), state.GetReturnType())
 				};
 
 				state.RemoveReturnType();

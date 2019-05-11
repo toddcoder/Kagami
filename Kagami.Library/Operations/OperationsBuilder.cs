@@ -157,7 +157,7 @@ namespace Kagami.Library.Operations
 
 		public string GoToIfSome(string label) => add(new GoToIfSome(), label);
 
-		public string GoToIfNil(string label) => add(new GoToIfNil(), label);
+		public string GoToIfNone(string label) => add(new GoToIfNone(), label);
 
 		public string GoToIfSuccess(string label) => add(new GoToIfSuccess(), label);
 
@@ -323,7 +323,7 @@ namespace Kagami.Library.Operations
 
 		public void Success() => add(new Success());
 
-		public void PushNil() => add(new PushNil());
+		public void PushNone() => add(new PushNone());
 
 		public void Failure() => add(new Failure());
 

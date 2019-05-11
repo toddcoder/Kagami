@@ -15,7 +15,7 @@ namespace Kagami.Library.Nodes.Symbols
 			var endLabel = newLabel("end");
 
 			builder.GoToIfTrue(isTrueLabel);
-			builder.PushNil();
+			builder.PushNone();
 			builder.GoTo(endLabel);
 
 			builder.Label(isTrueLabel);

@@ -79,7 +79,7 @@ namespace Kagami.Library.Nodes.Statements
 
 			if (Yielding)
 			{
-				builder.PushNil();
+				builder.PushNone();
 				builder.Return(true);
 			}
 			else if (typeConstraint.If(out var tc))

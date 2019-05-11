@@ -112,7 +112,7 @@ namespace Kagami.Library.Objects
 				{
 					case Dictionary otherDictionary when objectID == otherDictionary.objectID:
 						return;
-					case Nil _:
+					case None _:
 						dictionary.Remove(key);
 						break;
 					default:
@@ -146,7 +146,7 @@ namespace Kagami.Library.Objects
             return dValue;
 			}
 			else
-				return Nil.NilValue;
+				return None.NoneValue;
 		}
 
 		public string ClassName => "Dictionary";
@@ -197,7 +197,7 @@ namespace Kagami.Library.Objects
 				return new Some(value);
 			}
 			else
-				return Nil.NilValue;
+				return None.NoneValue;
 		}
 
 		public IObject Keys => new Array(dictionary.KeyArray());
@@ -242,7 +242,7 @@ namespace Kagami.Library.Objects
 			else
 			{
 				dictionary[key] = value;
-				return Nil.NilValue;
+				return None.NoneValue;
 			}
 		}
 
@@ -272,7 +272,7 @@ namespace Kagami.Library.Objects
 			else
 			{
 				dictionary.Remove(obj);
-				return Nil.NilValue;
+				return None.NoneValue;
 			}
 		}
 
@@ -282,7 +282,7 @@ namespace Kagami.Library.Objects
 			if (index.Between(0).Until(keyArray.Length))
 				return Remove(keyArray[index]);
 			else
-				return Nil.NilValue;
+				return None.NoneValue;
 		}
 
 		public IObject InsertAt(int index, IObject obj)
@@ -291,7 +291,7 @@ namespace Kagami.Library.Objects
 			if (index.Between(0).Until(keyArray.Length))
 				return Update(keyArray[index], obj);
 			else
-				return Nil.NilValue;
+				return None.NoneValue;
 		}
 
 		public Boolean IsEmpty => dictionary.Count == 0;

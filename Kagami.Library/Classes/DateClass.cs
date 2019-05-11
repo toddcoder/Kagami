@@ -46,7 +46,7 @@ namespace Kagami.Library.Classes
          if (DateTime.TryParse(source, out var dateTime))
             return Some.Object((Date)dateTime);
          else
-            return Nil.NilValue;
+            return None.NoneValue;
       }
    }
 }

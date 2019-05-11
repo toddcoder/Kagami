@@ -306,7 +306,7 @@ namespace Kagami.Library.Objects
 				i++;
 			}
 
-			return Nil.NilValue;
+			return Objects.None.NoneValue;
 		}
 
 		public IObject Indexes(Lambda predicate)
@@ -444,7 +444,7 @@ namespace Kagami.Library.Objects
 			return result;
 		}
 
-		public IObject First() => List().FirstOrNone().FlatMap(value => new Some(value), () => Nil.NilValue);
+		public IObject First() => List().FirstOrNone().FlatMap(value => new Some(value), () => Objects.None.NoneValue);
 
 		public IObject First(Lambda predicate)
 		{
@@ -452,10 +452,10 @@ namespace Kagami.Library.Objects
 				if (predicate.Invoke(value).IsTrue)
 					return new Some(value);
 
-			return Nil.NilValue;
+			return Objects.None.NoneValue;
 		}
 
-		public IObject Last() => List().Reverse().FirstOrNone().FlatMap(value => new Some(value), () => Nil.NilValue);
+		public IObject Last() => List().Reverse().FirstOrNone().FlatMap(value => new Some(value), () => Objects.None.NoneValue);
 
 		public IObject Last(Lambda predicate)
 		{
@@ -463,7 +463,7 @@ namespace Kagami.Library.Objects
 				if (predicate.Invoke(value).IsTrue)
 					return new Some(value);
 
-			return Nil.NilValue;
+			return Objects.None.NoneValue;
 		}
 
 		public IObject Split(Lambda predicate)

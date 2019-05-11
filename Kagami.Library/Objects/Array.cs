@@ -224,7 +224,7 @@ namespace Kagami.Library.Objects
          if (list.Count > 0)
             return Some.Object(RemoveAt(list.Count - 1));
          else
-            return Nil.NilValue;
+            return None.NoneValue;
       }
 
       public IObject Unshift(IObject value) => InsertAt(0, value);
@@ -234,7 +234,7 @@ namespace Kagami.Library.Objects
          if (list.Count > 0)
             return Some.Object(RemoveAt(0));
          else
-            return Nil.NilValue;
+            return None.NoneValue;
       }
 
       public IObject Find(IObject item, int startIndex, bool reverse)
@@ -242,7 +242,7 @@ namespace Kagami.Library.Objects
          var index = reverse ? list.LastIndexOf(item, startIndex) : list.IndexOf(item, startIndex);
 
          if (index == -1)
-            return Nil.NilValue;
+            return None.NoneValue;
          else
             return Some.Object((Int)index);
       }

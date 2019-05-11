@@ -3,28 +3,28 @@ using static Kagami.Library.Nodes.NodeFunctions;
 
 namespace Kagami.Library.Nodes.Symbols
 {
-   public class IfSomeNilSymbol : Symbol
+   public class IfSomeNoneSymbol : Symbol
    {
       Expression result;
 
-      public IfSomeNilSymbol(Expression result)
+      public IfSomeNoneSymbol(Expression result)
       {
          this.result = result;
       }
 
       public override void Generate(OperationsBuilder builder)
       {
-         var nilLabel = newLabel("nil");
+         var noneLabel = newLabel("none");
          var endLabel = newLabel("end");
 
-         builder.GoToIfFalse(nilLabel);
+         builder.GoToIfFalse(noneLabel);
 
          result.Generate(builder);
          builder.Some();
          builder.GoTo(endLabel);
 
-         builder.Label(nilLabel);
-         builder.PushNil();
+         builder.Label(noneLabel);
+         builder.PushNone();
 
          builder.Label(endLabel);
          builder.Peek(Index);

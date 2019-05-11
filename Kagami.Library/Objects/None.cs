@@ -4,19 +4,19 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct Nil : IObject, IOptional, IBoolean, IEquatable<Nil>, IMonad
+   public struct None : IObject, IOptional, IBoolean, IEquatable<None>, IMonad
    {
-      public static IObject NilValue => new Nil();
+      public static IObject NoneValue => new None();
 
-      public string ClassName => "Nil";
+      public string ClassName => "None";
 
-      public string AsString => "nil";
+      public string AsString => "none";
 
-      public string Image => "nil";
+      public string Image => "none";
 
       public int Hash => AsString.GetHashCode();
 
-      public bool IsEqualTo(IObject obj) => obj is Nil;
+      public bool IsEqualTo(IObject obj) => obj is None;
 
       public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
@@ -24,15 +24,15 @@ namespace Kagami.Library.Objects
 
       public bool IsSome => false;
 
-      public bool IsNil => true;
+      public bool IsNone => true;
 
       public IObject Map(Lambda lambda) => this;
 
-      public IObject FlatMap(Lambda ifSome, Lambda ifNil) => ifNil.Invoke();
+      public IObject FlatMap(Lambda ifSome, Lambda ifNone) => ifNone.Invoke();
 
       public bool IsTrue => false;
 
-      public bool Equals(Nil other) => true;
+      public bool Equals(None other) => true;
 
 	   public IObject Bind(Lambda map) => this;
 

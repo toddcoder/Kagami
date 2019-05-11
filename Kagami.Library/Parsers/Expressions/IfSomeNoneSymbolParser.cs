@@ -5,9 +5,9 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
 {
-	public class IfSomeNilSymbolParser : SymbolParser
+	public class IfSomeNoneSymbolParser : SymbolParser
 	{
-		public IfSomeNilSymbolParser(ExpressionBuilder builder) : base(builder) { }
+		public IfSomeNoneSymbolParser(ExpressionBuilder builder) : base(builder) { }
 
 		public override string Pattern => "^ /(|s|) /'||'";
 
@@ -20,7 +20,7 @@ namespace Kagami.Library.Parsers.Expressions
 			if (getExpression(state, builder.Flags).If(out var expression, out var mbException))
 			{
 				state.CommitTransaction();
-				builder.Add(new IfSomeNilSymbol(expression));
+				builder.Add(new IfSomeNoneSymbol(expression));
 
 				return Unit.Matched();
 			}

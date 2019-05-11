@@ -76,7 +76,7 @@ namespace Kagami.Library.Objects
          else if (isMatch(input))
             return Some.Object(new RegexMatch(matcher.GetMatch(0)));
          else
-            return Nil.NilValue;
+            return None.NoneValue;
       }
 
 	   public Boolean NotMatches(string input) => !isMatch(input);
@@ -91,7 +91,7 @@ namespace Kagami.Library.Objects
          else if (isMatch(input))
             return Some.Object(String.StringObject(matcher.GetMatch(0).Text));
          else
-            return Nil.NilValue;
+            return None.NoneValue;
       }
 
       public String Replace(string input, string replacement)
@@ -110,9 +110,9 @@ namespace Kagami.Library.Objects
             if (startIndex.Between(0).Until(matches.Length))
                return Some.Object(Int.IntObject(matches[startIndex].Index));
             else
-               return Nil.NilValue;
+               return None.NoneValue;
          else
-            return Nil.NilValue;
+            return None.NoneValue;
       }
 
       public Tuple FindAll(string input)

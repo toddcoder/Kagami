@@ -36,8 +36,8 @@ namespace Kagami.Library.Objects
 
 		public bool IsEqualTo(IObject obj)
 		{
-			return obj is SkipTake st && source.IsEqualTo(st.source) && result.FlatMap(o => o, () => Nil.NilValue)
-				.IsEqualTo(st.result.FlatMap(o => o, () => Nil.NilValue));
+			return obj is SkipTake st && source.IsEqualTo(st.source) && result.FlatMap(o => o, () => None.NoneValue)
+				.IsEqualTo(st.result.FlatMap(o => o, () => None.NoneValue));
 		}
 
 		public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);

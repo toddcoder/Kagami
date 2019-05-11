@@ -41,7 +41,7 @@ namespace Kagami.Library.Runtime
 			classes["Lambda"] = new LambdaClass();
 			classes["Void"] = new VoidClass();
 			classes["Some"] = new SomeClass();
-			classes["Nil"] = new NilClass();
+			classes["None"] = new NoneClass();
 			classes["Array"] = new ArrayClass();
 			classes["Iterator"] = new IteratorClass();
 			classes["LazyIterator"] = new LazyIteratorClass();
