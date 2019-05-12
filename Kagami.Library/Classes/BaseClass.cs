@@ -254,6 +254,8 @@ namespace Kagami.Library.Classes
 			registerMessage("-(_)", (obj, msg) => function<IObject, IObject>(obj, msg, (o, v) => ((IMutableCollection)o).Remove(v)));
 			registerMessage("remove(at:_<Int>)",
 				(obj, msg) => function<IObject, Int>(obj, msg, (o, i) => ((IMutableCollection)o).RemoveAt(i.Value)));
+			registerMessage("remove(all:_)",
+				(obj, msg) => function<IObject, IObject>(obj, msg, (o, v) => ((IMutableCollection)o).RemoveAll(v)));
 			registerMessage("insert(at:_<Int>,value:_)",
 				(obj, msg) => function<IObject, Int, IObject>(obj, msg, (o, i, v) => ((IMutableCollection)o).InsertAt(i.Value, v)));
 			registerMessage("isEmpty".get(), (obj, msg) => function<IObject>(obj, o => ((IMutableCollection)o).IsEmpty));
@@ -266,7 +268,7 @@ namespace Kagami.Library.Classes
 				"sort(_<Lambda>,asc:_<Boolean>)", "sort(_<Lambda>)", "sort(_<Boolean>)", "sort()",
 				"foldl".Selector("_", "_<Lambda>"),
 				"foldl(_)", "foldr".Selector("_", "_<Lambda>"), "foldr(_)", "reducel".Selector("_", "_<Lambda>"), "reducel(_)",
-				"reducer".Selector("_", "_<Lambda>"), "reducer(_)", "count(_)", "count(_<Lambda>)", "map(_<Lambda>)", "flatMap(_<Lambda>)", "bind(_<Lambda>)",
+				"reducer".Selector("_", "_<Lambda>"), "reducer(_)", "count(of:_)", "count(_<Lambda>)", "map(_<Lambda>)", "flatMap(_<Lambda>)", "bind(_<Lambda>)",
 				"if(_<Lambda>)",
 				"ifNot(_<Lambda>)", "skip(_<Int>)", "-(_<Int>)", "skip".Selector("while:_<Lambda>"),
 				"skip".Selector("until:_<Lambda>"), "take(_<Int>)", "+(_<Int>)", "take".Selector("while:_<Lambda>"),

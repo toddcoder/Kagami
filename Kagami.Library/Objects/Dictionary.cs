@@ -285,6 +285,8 @@ namespace Kagami.Library.Objects
 				return None.NoneValue;
 		}
 
+		public IObject RemoveAll(IObject obj) => Remove(obj);
+
 		public IObject InsertAt(int index, IObject obj)
 		{
 			var keyArray = dictionary.KeyArray();

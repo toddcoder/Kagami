@@ -187,6 +187,12 @@ namespace Kagami.Library.Objects
          return obj;
       }
 
+      public IObject RemoveAll(IObject obj)
+      {
+	      list.RemoveAll(o => o.IsEqualTo(obj));
+	      return this;
+      }
+
       public IObject InsertAt(int index, IObject obj)
       {
          throwIfSelf(obj);

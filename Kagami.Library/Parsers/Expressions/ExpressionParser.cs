@@ -140,7 +140,7 @@ namespace Kagami.Library.Parsers.Expressions
 							Expression = expression;
 							return Unit.Matched();
 						}
-						else if (getMessageWithLambda(fieldName, symbol, "bind", expression).If(out var newExpression, out expException))
+						else if (getMessageWithLambda(fieldName, symbol, "bind(_<Lambda>)", expression).If(out var newExpression, out expException))
 						{
 							Expression = newExpression;
 							state.BindExpression = none<(string, Symbol)>();

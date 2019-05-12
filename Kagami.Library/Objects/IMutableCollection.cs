@@ -8,6 +8,8 @@
 
       IObject RemoveAt(int index);
 
+      IObject RemoveAll(IObject obj);
+
       IObject InsertAt(int index, IObject obj);
 
 		Boolean IsEmpty { get; }
