@@ -151,7 +151,7 @@ namespace Kagami.Library.Objects
 		public String Replace(string old, string @new)
 		{
 			if (value.Find(old).If(out var index))
-				return value.Take(index) + @new + value.Skip(index + old.Length);
+				return value.Keep(index) + @new + value.Drop(index + old.Length);
 			else
 				return new String(value);
 		}

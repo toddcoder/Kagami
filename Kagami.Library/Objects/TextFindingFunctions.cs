@@ -37,7 +37,7 @@ namespace Kagami.Library.Objects
 				index = input.IndexOf(value, StringComparison.Ordinal);
 
 			if (index > -1)
-				return input.Take(index) + replacement + input.Skip(index + value.Length);
+				return input.Keep(index) + replacement + input.Drop(index + value.Length);
 			else
 				return input;
       }
@@ -56,7 +56,7 @@ namespace Kagami.Library.Objects
 				var length = text.Length;
 				var replacement = lambda.Invoke((String)text, (Int)index, (Int)length);
 
-				return input.Keep(index) + replacement + input.Skip(index + value.Length);
+				return input.Keep(index) + replacement + input.Drop(index + value.Length);
 			}
 			else
 				return input;
@@ -72,13 +72,13 @@ namespace Kagami.Library.Objects
 			while (index > -1)
 			{
 				var replacement = lambda.Invoke((String)value, (Int)index, (Int)value.Length);
-				builder.Append(input.Skip(start));
+				builder.Append(input.Drop(start));
 				builder.Append(replacement.AsString);
 				start = index + value.Length;
 				index = input.IndexOf(value);
 			}
 
-			builder.Append(input.Skip(start));
+			builder.Append(input.Drop(start));
 
 			return builder.ToString();
       }

@@ -50,7 +50,11 @@ namespace Kagami.Library.Invokables
 
 		public FrameGroup Frames { get; set; } = new FrameGroup();
 
-		public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new Iterator(this);
+		public IIterator GetIterator(bool lazy)
+		{
+			var clone = new YieldingInvokable(selector, Parameters, Image) { Address = Address, Arguments = Arguments, Index = Index };
+			return lazy ? new LazyIterator(clone) : new Iterator(clone);
+		}
 
 		public IMaybe<IObject> Next(int index)
 		{
