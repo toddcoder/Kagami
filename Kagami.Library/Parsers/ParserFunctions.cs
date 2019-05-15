@@ -567,6 +567,7 @@ namespace Kagami.Library.Parsers
 					}
 					else
 						return failedMatch<Unit>(unableToConvert(source, "Int"));
+
 				case "L":
 					if (BigInteger.TryParse(source, out var bigInteger))
 					{
@@ -575,6 +576,7 @@ namespace Kagami.Library.Parsers
 					}
 					else
 						return failedMatch<Unit>(unableToConvert(source, "Long"));
+
 				case "i":
 					if (TryParse(source, out integer))
 					{
@@ -583,6 +585,7 @@ namespace Kagami.Library.Parsers
 					}
 					else
 						return failedMatch<Unit>(unableToConvert(source, "Complex"));
+
 				case "f":
 					if (double.TryParse(source, out var real))
 					{
@@ -591,6 +594,7 @@ namespace Kagami.Library.Parsers
 					}
 					else
 						return failedMatch<Unit>(unableToConvert(source, "Float"));
+
 				default:
 					return failedMatch<Unit>(unableToConvert(source, "Int"));
 			}
@@ -611,6 +615,7 @@ namespace Kagami.Library.Parsers
 						builder.Add(new IntSymbol((int)number));
 						return Unit.Matched();
 					}
+
 				case "L":
 					builder.Add(new LongSymbol(number));
 					return Unit.Matched();
@@ -841,6 +846,9 @@ namespace Kagami.Library.Parsers
 					break;
 				case ":-":
 					symbol = new BindSymbol().Matched<Symbol>();
+					break;
+				case ";":
+					symbol = new IndexSymbol().Matched<Symbol>();
 					break;
 			}
 

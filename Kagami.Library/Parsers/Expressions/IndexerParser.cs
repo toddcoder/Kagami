@@ -7,9 +7,9 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
 {
-	public class IndexParser : SymbolParser
+	public class IndexerParser : SymbolParser
 	{
-		public IndexParser(ExpressionBuilder builder) : base(builder) { }
+		public IndexerParser(ExpressionBuilder builder) : base(builder) { }
 
 		public override string Pattern => "^ /'[' /'+'?";
 
@@ -44,7 +44,7 @@ namespace Kagami.Library.Parsers.Expressions
 				else if (mbException.If(out var exception))
 					return failedMatch<Unit>(exception);
 				else
-					builder.Add(new IndexSymbol(e));
+					builder.Add(new IndexerSymbol(e));
 
 				return Unit.Matched();
 			});

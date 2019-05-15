@@ -75,10 +75,10 @@ namespace Kagami.Library.Operations
 		public void Merge(OperationsBuilder otherBuilder)
 		{
 			operations.AddRange(otherBuilder.operations);
-			foreach (var item in otherBuilder.addresses)
-				addresses[item.Key] = item.Value;
-			foreach (var item in labels)
-				labels[item.Key] = item.Value;
+			foreach (var (key, value) in otherBuilder.addresses)
+				addresses[key] = value;
+			foreach (var (key, value) in labels)
+				labels[key] = value;
 		}
 
 		public void Label(string label) => labels[label] = operations.Count;
@@ -274,17 +274,19 @@ namespace Kagami.Library.Operations
 
 		public void NewSkipTake() => add(new NewSkipTake());
 
-		//public void OneTuple() => add(new OneTuple());
+		public void NewIndex() => add(new NewIndex());
 
-		//public void ToTuple() => add(new ToTuple());
+        //public void OneTuple() => add(new OneTuple());
 
-		/*public void ToTuple(int count)
+        //public void ToTuple() => add(new ToTuple());
+
+        /*public void ToTuple(int count)
 		{
 		   PushInt(count);
 		   ToTuple();
 		}*/
 
-		public void PushFrame() => add(new PushFrame());
+        public void PushFrame() => add(new PushFrame());
 
 		public void PushFrameWithValue() => add(new PushFrameWithValue());
 
@@ -420,16 +422,16 @@ namespace Kagami.Library.Operations
 					operations.Add(new Return(false));
 			}
 
-			foreach (var item in addresses)
+			foreach (var (key, value) in addresses)
 			{
-				var address = labels[item.Value];
-				if (operations[item.Key] is AddressedOperation op)
+				var address = labels[value];
+				if (operations[key] is AddressedOperation op)
 					if (address > -1)
 						op.Address = address;
 					else
-						return $"Label {item.Value} couldn't be found".Failure<Operations>();
+						return $"Label {value} couldn't be found".Failure<Operations>();
 				else
-					return $"Addressed operation required; {operations[item.Key]} found".Failure<Operations>();
+					return $"Addressed operation required; {operations[key]} found".Failure<Operations>();
 			}
 
 			return new Operations(operations.ToArray()).Success();

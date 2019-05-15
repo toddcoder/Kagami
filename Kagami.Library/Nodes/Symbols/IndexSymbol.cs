@@ -1,20 +1,18 @@
 ﻿using Kagami.Library.Operations;
-using Core.Enumerables;
 
 namespace Kagami.Library.Nodes.Symbols
 {
-   public class IndexSymbol : Symbol
-   {
-      Expression[] arguments;
+	public class IndexSymbol : Symbol
+	{
+		public override void Generate(OperationsBuilder builder)
+		{
+			builder.NewIndex();
+		}
 
-      public IndexSymbol(Expression[] arguments) => this.arguments = arguments;
+		public override Precedence Precedence => Precedence.Or;
 
-      public override Precedence Precedence => Precedence.SendMessage;
+		public override Arity Arity => Arity.Binary;
 
-      public override Arity Arity => Arity.Postfix;
-
-      public override void Generate(OperationsBuilder builder) => builder.SendMessage("[]()", arguments);
-
-      public override string ToString() => $"[{arguments.Listify()}]";
-   }
+		public override string ToString() => ";";
+	}
 }

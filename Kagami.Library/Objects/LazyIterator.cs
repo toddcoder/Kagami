@@ -6,7 +6,7 @@
 
       public override string ClassName => "LazyIterator";
 
-      public override string Image => "LazyIterator";//$"^{collection.GetIterator(false).List().Select(i => i.Image).Listify()}";
+      public override string Image => "LazyIterator";
 
       public override bool IsLazy => true;
 

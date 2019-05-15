@@ -76,6 +76,7 @@
     <Compile Include="Classes\ForwardedClass.cs" />
     <Compile Include="Classes\ICollectionClass.cs" />
     <Compile Include="Classes\IEquivalentClass.cs" />
+    <Compile Include="Classes\IndexClass.cs" />
     <Compile Include="Classes\InfinityClass.cs" />
     <Compile Include="Classes\IntClass.cs" />
     <Compile Include="Classes\InternalListClass.cs" />
@@ -238,6 +239,7 @@
     <Compile Include="Nodes\Symbols\IfSomeNoneSymbol.cs" />
     <Compile Include="Nodes\Symbols\ImageSymbol.cs" />
     <Compile Include="Nodes\Symbols\IndexSetterSymbol.cs" />
+    <Compile Include="Nodes\Symbols\IndexerSymbol.cs" />
     <Compile Include="Nodes\Symbols\IndexSymbol.cs" />
     <Compile Include="Nodes\Symbols\InitializeParentConstructorSymbol.cs" />
     <Compile Include="Nodes\Symbols\InitializeSymbol.cs" />
@@ -371,6 +373,7 @@
     <Compile Include="Objects\IMessageNumber.cs" />
     <Compile Include="Objects\IMonad.cs" />
     <Compile Include="Objects\IMutableCollection.cs" />
+    <Compile Include="Objects\Index.cs" />
     <Compile Include="Objects\IndexedIterator.cs" />
     <Compile Include="Objects\Infinity.cs" />
     <Compile Include="Objects\Int.cs" />
@@ -499,6 +502,7 @@
     <Compile Include="Operations\MultipleOperandOperation.cs" />
     <Compile Include="Operations\NewDataComparisand.cs" />
     <Compile Include="Operations\NewDataType.cs" />
+    <Compile Include="Operations\NewIndex.cs" />
     <Compile Include="Operations\NewKeyValue.cs" />
     <Compile Include="Operations\NewLambda.cs" />
     <Compile Include="Operations\NewList.cs" />
@@ -634,7 +638,7 @@
     <Compile Include="Parsers\Expressions\IfAsAndParser.cs" />
     <Compile Include="Parsers\Expressions\ImageParser.cs" />
     <Compile Include="Parsers\Expressions\IndexOptionalParser.cs" />
-    <Compile Include="Parsers\Expressions\IndexParser.cs" />
+    <Compile Include="Parsers\Expressions\IndexerParser.cs" />
     <Compile Include="Parsers\Expressions\InfixParser.cs" />
     <Compile Include="Parsers\Expressions\InitializeParser.cs" />
     <Compile Include="Parsers\Expressions\InlineIfParser.cs" />
