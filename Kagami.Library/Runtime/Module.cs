@@ -95,6 +95,7 @@ namespace Kagami.Library.Runtime
 			classes["Unit"] = new UnitClass();
 			classes["YieldReturn"] = new YieldReturnClass();
 			classes["Index"] = new IndexClass();
+			classes["Cycle"] = new CycleClass();
 		}
 
 		public IMaybe<BaseClass> Class(string name, bool forwardsIncluded = false)

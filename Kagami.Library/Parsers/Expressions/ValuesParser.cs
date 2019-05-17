@@ -21,6 +21,7 @@ namespace Kagami.Library.Parsers.Expressions
             yield return new TypeConstraintParser(builder);
             yield return new SubexpressionParser2(builder);
             yield return new ArrayParser(builder);
+            yield return new CycleParser(builder);
             yield return new ListParser(builder);
             yield return new AnyParser(builder);
             yield return new FloatParser(builder);

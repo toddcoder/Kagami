@@ -754,10 +754,10 @@ namespace Kagami.Library.Parsers
 				case "%%":
 					symbol = new SendBinaryMessageSymbol("all", Precedence.ChainedOperator).Matched<Symbol>();
 					break;
-				case "-%":
+				case "-+":
 					symbol = new SendBinaryMessageSymbol("skip", Precedence.ChainedOperator).Matched<Symbol>();
 					break;
-				case "+%":
+				case "+-":
 					symbol = new SendBinaryMessageSymbol("take", Precedence.ChainedOperator).Matched<Symbol>();
 					break;
 				case "++":

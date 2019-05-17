@@ -64,6 +64,7 @@
     <Compile Include="Classes\CollectionProxyClass.cs" />
     <Compile Include="Classes\ComplexClass.cs" />
     <Compile Include="Classes\ConstructorClass.cs" />
+    <Compile Include="Classes\CycleClass.cs" />
     <Compile Include="Classes\DataComparisandClass.cs" />
     <Compile Include="Classes\DataTypeClass.cs" />
     <Compile Include="Classes\DateClass.cs" />
@@ -217,6 +218,7 @@
     <Compile Include="Nodes\Symbols\ComprehensionSymbol.cs" />
     <Compile Include="Nodes\Symbols\ConcatenationSymbol.cs" />
     <Compile Include="Nodes\Symbols\ConsSymbol.cs" />
+    <Compile Include="Nodes\Symbols\CycleSymbol.cs" />
     <Compile Include="Nodes\Symbols\DateSymbol.cs" />
     <Compile Include="Nodes\Symbols\DelSymbol.cs" />
     <Compile Include="Nodes\Symbols\DoesSymbol.cs" />
@@ -347,6 +349,7 @@
     <Compile Include="Objects\Comparer.cs" />
     <Compile Include="Objects\Complex.cs" />
     <Compile Include="Objects\Constructor.cs" />
+    <Compile Include="Objects\Cycle.cs" />
     <Compile Include="Objects\DataComparisand.cs" />
     <Compile Include="Objects\DataType.cs" />
     <Compile Include="Objects\Date.cs" />
@@ -502,6 +505,7 @@
     <Compile Include="Operations\ArgumentLabel.cs" />
     <Compile Include="Operations\MacroParameters.cs" />
     <Compile Include="Operations\MultipleOperandOperation.cs" />
+    <Compile Include="Operations\NewCycle.cs" />
     <Compile Include="Operations\NewDataComparisand.cs" />
     <Compile Include="Operations\NewDataType.cs" />
     <Compile Include="Operations\NewIndex.cs" />
@@ -621,6 +625,7 @@
     <Compile Include="Parsers\Expressions\ComprehensionParser.cs" />
     <Compile Include="Parsers\Expressions\ConjunctionParsers.cs" />
     <Compile Include="Parsers\Expressions\ConstantsParser.cs" />
+    <Compile Include="Parsers\Expressions\CycleParser.cs" />
     <Compile Include="Parsers\Expressions\DateParser.cs" />
     <Compile Include="Parsers\Expressions\DollarFieldParser.cs" />
     <Compile Include="Parsers\Expressions\DoParser.cs" />
