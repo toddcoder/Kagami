@@ -222,7 +222,7 @@ namespace Kagami.Library.Runtime
 				fields.Remove(fieldName);
 		}
 
-		public override string ToString() => fields.Select(i => $"{i.Key} = {i.Value.Value.Image}").Listify();
+		public override string ToString() => fields.Select(i => $"{i.Key} = {i.Value.Value.Image}").Join();
 
 		public void SetBindings(Hash<string, IObject> bindings)
 		{

@@ -22,7 +22,7 @@ namespace Kagami.Library.Objects
 
 		public string ClassName => className;
 
-		public string AsString => comparisands.KeyArray().Listify(" | ");
+		public string AsString => comparisands.KeyArray().Join(" | ");
 
 		public string Image => AsString;
 

@@ -19,9 +19,9 @@ namespace Kagami.Library.Objects
 
 		public string ClassName => "Cycle";
 
-		public string AsString => $".({items.Select(i => i.AsString).Listify()})";
+		public string AsString => $".({items.Select(i => i.AsString).Join()})";
 
-		public string Image => $".({items.Select(i => i.Image).Listify()})";
+		public string Image => $".({items.Select(i => i.Image).Join()})";
 
 		public int Hash => items.GetHashCode();
 

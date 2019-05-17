@@ -21,7 +21,7 @@ namespace Kagami.Library
          else
          {
             var selectorItems = selectorItemSources.Select(parseSelectorItem).ToArray();
-            var image = $"{baseName}({selectorItemSources.Listify(",")})";
+            var image = $"{baseName}({selectorItemSources.Join(",")})";
 
             return new Selector(baseName, selectorItems, image);
          }

@@ -24,9 +24,9 @@ namespace Kagami.Library.Objects
 
       public string ClassName => "InternalList";
 
-      public string AsString => list.Select(i => i.AsString).Listify(" ");
+      public string AsString => list.Select(i => i.AsString).Join(" ");
 
-      public string Image => list.Select(i => i.Image).Listify();
+      public string Image => list.Select(i => i.Image).Join();
 
       public int Hash => list.GetHashCode();
 

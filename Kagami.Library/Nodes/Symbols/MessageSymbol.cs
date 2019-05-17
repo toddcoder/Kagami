@@ -44,7 +44,7 @@ namespace Kagami.Library.Nodes.Symbols
 
 		public override string ToString()
 		{
-			return $"?{selector}({arguments.Select(a => a.ToString()).Listify()})" + lambda.FlatMap(l => $" {l}", () => "");
+			return $"?{selector}({arguments.Select(a => a.ToString()).Join()})" + lambda.FlatMap(l => $" {l}", () => "");
 		}
 	}
 }

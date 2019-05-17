@@ -58,7 +58,7 @@ namespace Kagami.Library.Invokables
 				yield return parameter;
 		}
 
-		public override string ToString() => parameters.Listify();
+		public override string ToString() => parameters.Join();
 
 /*      public string FullFunctionName(string name)
       {

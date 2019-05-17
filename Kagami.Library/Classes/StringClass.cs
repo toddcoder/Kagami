@@ -89,7 +89,7 @@ namespace Kagami.Library.Classes
 			classMessages["punctuation".get()] = (cls, msg) => (String)"!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
 		}
 
-		public IObject Revert(IEnumerable<IObject> list) => String.StringObject(list.Select(i => i.AsString).Listify(""));
+		public IObject Revert(IEnumerable<IObject> list) => String.StringObject(list.Select(i => i.AsString).Join(""));
 
 		public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection", "TextFinding");
 

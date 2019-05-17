@@ -221,7 +221,7 @@ namespace Kagami.Library.Parsers.Statements
 
 		public override string ToString()
 		{
-			return $"class {className}({parameters}){parentClassName.Extend(" of ", $"({parentArguments.Listify()})")}";
+			return $"class {className}({parameters}){parentClassName.Extend(" of ", $"({parentArguments.Join()})")}";
 		}
 	}
 }

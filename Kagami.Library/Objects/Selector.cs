@@ -51,7 +51,7 @@ namespace Kagami.Library.Objects
 		public Selector LabelsOnly()
 		{
 			var items = selectorItems.Select(si => si.LabelOnly()).ToArray();
-			return new Selector(name, items, $"{name}({items.Select(i => i.ToString()).Listify(",")})");
+			return new Selector(name, items, $"{name}({items.Select(i => i.ToString()).Join(",")})");
 		}
 
 		public Selector NewName(string newName) => new Selector(newName, selectorItems, selectorImage(newName, selectorItems));

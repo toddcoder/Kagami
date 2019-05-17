@@ -37,7 +37,7 @@ namespace Kagami.Library.Objects
             if (comparisands.Length == 0)
                return name;
             else
-               return $"{name}({comparisands.Select(c => c.Image).Listify()})";
+               return $"{name}({comparisands.Select(c => c.Image).Join()})";
          }
       }
 

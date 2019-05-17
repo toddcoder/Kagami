@@ -44,6 +44,6 @@ namespace Kagami.Library.Nodes.Symbols
 
       public override Arity Arity => Arity.Nullary;
 
-      public override string ToString() => items.Select(i => $"{i.comparisand} = {i.lambda}").Listify("|");
+      public override string ToString() => items.Select(i => $"{i.comparisand} = {i.lambda}").Join("|");
    }
 }

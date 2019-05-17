@@ -39,6 +39,6 @@ namespace Kagami.Library.Nodes.Symbols
 
 		public override Arity Arity => Arity.Nullary;
 
-		public override string ToString() => $"{className}{{{arguments.Select(t => $"{t.name}: {t.value}").Listify()}}}";
+		public override string ToString() => $"{className}{{{arguments.Select(t => $"{t.name}: {t.value}").Join()}}}";
 	}
 }

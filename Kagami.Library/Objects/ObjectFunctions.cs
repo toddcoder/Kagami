@@ -185,7 +185,7 @@ namespace Kagami.Library.Objects
 				return sendMessage(obj, "string".get()).AsString;
 			else
 				return
-					$"object{obj.ObjectID} {obj.ClassName}({obj.Parameters.Select(p => $"{p.Name} = {obj.Fields[p.Name].Image}").Listify()})";
+					$"object{obj.ObjectID} {obj.ClassName}({obj.Parameters.Select(p => $"{p.Name} = {obj.Fields[p.Name].Image}").Join()})";
 		}
 
 		public static string userObjectImage(UserObject obj)
@@ -194,7 +194,7 @@ namespace Kagami.Library.Objects
 				return sendMessage(obj, "image".get()).AsString;
 			else
 				return
-					$"object{obj.ObjectID} {obj.ClassName}({obj.Parameters.Select(p => $"{p.Name} = {obj.Fields[p.Name].Image}").Listify()})";
+					$"object{obj.ObjectID} {obj.ClassName}({obj.Parameters.Select(p => $"{p.Name} = {obj.Fields[p.Name].Image}").Join()})";
 		}
 
 		public static bool isEqualTo(UserObject obj, IObject other)
@@ -508,7 +508,7 @@ namespace Kagami.Library.Objects
 			return new SelectorItem(label, typeConstraint, selectorItemType);
 		}
 
-		public static string selectorImage(string name, SelectorItem[] selectorItems) => $"{name}({selectorItems.Listify(",")})";
+		public static string selectorImage(string name, SelectorItem[] selectorItems) => $"{name}({selectorItems.Join(",")})";
 
 		public static Selector selector(string name, string[] labels, IObject[] objects)
 		{

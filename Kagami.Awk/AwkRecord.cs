@@ -49,9 +49,9 @@ namespace Kagami.Awk
 
 		public string ClassName => "AwkRecord";
 
-		public string AsString => fields.Skip(1).Listify(fieldSeparator).Elliptical(80, ' ');
+		public string AsString => fields.Skip(1).Join(fieldSeparator).Elliptical(80, ' ');
 
-		public string Image => $"AwkRecord({fields.Listify()}, {fieldSeparator})";
+		public string Image => $"AwkRecord({fields.Join()}, {fieldSeparator})";
 
 		public int Hash
 		{

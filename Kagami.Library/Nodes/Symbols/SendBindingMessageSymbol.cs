@@ -41,6 +41,6 @@ namespace Kagami.Library.Nodes.Symbols
 
 		public override Precedence Precedence => Precedence.SendMessage;
 
-		public override string ToString() => $"?.{selector.Image}({arguments.Listify()})";
+		public override string ToString() => $"?.{selector.Image}({arguments.Join()})";
 	}
 }

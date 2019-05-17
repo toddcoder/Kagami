@@ -15,6 +15,6 @@ namespace Kagami.Library.Nodes.Symbols
 
       public override void Generate(OperationsBuilder builder) => builder.SendMessage("[]()", arguments);
 
-      public override string ToString() => $"[{arguments.Listify()}]";
+      public override string ToString() => $"[{arguments.Join()}]";
    }
 }

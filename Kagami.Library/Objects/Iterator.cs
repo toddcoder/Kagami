@@ -83,7 +83,7 @@ namespace Kagami.Library.Objects
 			return collectionClass.Revert(List().Reverse());
 		}
 
-		public String Join(string connector) => List().Select(i => i.AsString).Listify(connector);
+		public String Join(string connector) => List().Select(i => i.AsString).Join(connector);
 
 		public IObject Sort(Lambda lambda, bool ascending)
 		{

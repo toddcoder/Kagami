@@ -23,9 +23,9 @@ namespace Kagami.Collections
 
       public string ClassName => "Set";
 
-      public string AsString => set.Select(i => i.AsString).Listify(" ");
+      public string AsString => set.Select(i => i.AsString).Join(" ");
 
-      public string Image => $"Set({set.Select(i => i.Image).Listify()})";
+      public string Image => $"Set({set.Select(i => i.Image).Join()})";
 
       public int Hash => set.GetHashCode();
 

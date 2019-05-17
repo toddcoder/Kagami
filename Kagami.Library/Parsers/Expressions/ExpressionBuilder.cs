@@ -68,7 +68,7 @@ namespace Kagami.Library.Parsers.Expressions
 
       public IEnumerable<Symbol> Ordered => ordered;
 
-      public override string ToString() => ordered.Listify(" ");
+      public override string ToString() => ordered.Join(" ");
 
       public int Length => ordered.Count;
 
