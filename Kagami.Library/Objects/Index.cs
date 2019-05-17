@@ -43,5 +43,9 @@ namespace Kagami.Library.Objects
 				return iterator.Take(takeCount);
 			}
 		}
+
+		public Int SkipCount => skipCount;
+
+		public Int TakeCount => takeCount;
 	}
 }

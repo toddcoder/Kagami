@@ -9,11 +9,11 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class SendMessageSymbol : Symbol
    {
-      Selector selector;
-      Precedence precedence;
-      IMaybe<LambdaSymbol> lambda;
-      IMaybe<Operation> operation;
-      Expression[] arguments;
+      protected Selector selector;
+      protected Precedence precedence;
+      protected IMaybe<LambdaSymbol> lambda;
+      protected IMaybe<Operation> operation;
+      protected Expression[] arguments;
 
       public SendMessageSymbol(Selector selector, Precedence precedence, IMaybe<LambdaSymbol> lambda, IMaybe<Operation> operation,
          params Expression[] arguments)

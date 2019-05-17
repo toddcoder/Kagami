@@ -53,5 +53,7 @@ namespace Kagami.Library.Objects
 		public IObject Bind(Lambda map) => Map(map);
 
 		public IObject Unit(IObject obj) => new Success(obj);
+
+		public Boolean CanBind => true;
 	}
 }

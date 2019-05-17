@@ -37,5 +37,7 @@ namespace Kagami.Library.Objects
 	   public IObject Bind(Lambda map) => this;
 
 	   public IObject Unit(IObject obj) => this;
+
+	   public Boolean CanBind => false;
    }
 }

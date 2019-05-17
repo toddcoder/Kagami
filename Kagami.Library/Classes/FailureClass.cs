@@ -13,13 +13,14 @@ namespace Kagami.Library.Classes
 
 			monadMessage();
 
-         messages["error".get()] = (obj, msg) => function<Failure>(obj, s => s.Error);
-			messages["isSuccess".get()] = (obj, msg) => function<Failure>(obj, s => (Boolean)s.IsSuccess);
-			messages["isFailure".get()] = (obj, msg) => function<Failure>(obj, s => (Boolean)s.IsFailure);
-			messages["map(_<Lambda>)"] = (obj, msg) => function<Failure, Lambda>(obj, msg, (s, l) => s.Map(l));
-			messages["flatMap(_<Lambda>,_<Lambda>)"] = (obj, msg) => function<Failure, Lambda, Lambda>(obj, msg, (s, l1, l2) => s.FlatMap(l1, l2));
-			messages["defaultTo(_)"] = (obj, msg) => function<Failure, IObject>(obj, msg, (s, o) => o);
-		}
+         messages["error".get()] = (obj, msg) => function<Failure>(obj, f => f.Error);
+			messages["isSuccess".get()] = (obj, msg) => function<Failure>(obj, f => (Boolean)f.IsSuccess);
+			messages["isFailure".get()] = (obj, msg) => function<Failure>(obj, f => (Boolean)f.IsFailure);
+			messages["map(_<Lambda>)"] = (obj, msg) => function<Failure, Lambda>(obj, msg, (f, l) => f.Map(l));
+			messages["flatMap(_<Lambda>,_<Lambda>)"] = (obj, msg) => function<Failure, Lambda, Lambda>(obj, msg, (f, l1, l2) => f.FlatMap(l1, l2));
+			messages["defaultTo(_)"] = (obj, msg) => function<Failure, IObject>(obj, msg, (f, o) => o);
+			messages["canBind".get()] = (obj, msg) => function<Failure>(obj, f => f.CanBind);
+        }
 
 		public override bool AssignCompatible(BaseClass otherClass) => otherClass is SuccessClass || otherClass is FailureClass;
    }

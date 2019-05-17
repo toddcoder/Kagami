@@ -850,6 +850,9 @@ namespace Kagami.Library.Parsers
 				case ";":
 					symbol = new IndexSymbol().Matched<Symbol>();
 					break;
+				case "^^":
+					symbol = new SendBinaryMessageSymbol("defaultTo(_)", Precedence.SendMessage).Matched<Symbol>();
+					break;
 			}
 
 			return symbol;

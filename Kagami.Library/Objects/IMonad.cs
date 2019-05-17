@@ -5,5 +5,7 @@
 		IObject Bind(Lambda map);
 
 		IObject Unit(IObject obj);
+
+		Boolean CanBind { get; }
 	}
 }

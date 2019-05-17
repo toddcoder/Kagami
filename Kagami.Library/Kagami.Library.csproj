@@ -298,6 +298,7 @@
     <Compile Include="Nodes\Symbols\RemainderSymbol.cs" />
     <Compile Include="Nodes\Symbols\ResultSymbol.cs" />
     <Compile Include="Nodes\Symbols\SendBinaryMessageSymbol.cs" />
+    <Compile Include="Nodes\Symbols\SendBindingMessageSymbol.cs" />
     <Compile Include="Nodes\Symbols\SendOperatorMessage.cs" />
     <Compile Include="Nodes\Symbols\SendMessageSymbol.cs" />
     <Compile Include="Nodes\Symbols\SendPrefixMessage.cs" />
@@ -666,6 +667,7 @@
     <Compile Include="Parsers\Expressions\RefParser.cs" />
     <Compile Include="Parsers\Expressions\ResultParser.cs" />
     <Compile Include="Parsers\Expressions\SelectorParser.cs" />
+    <Compile Include="Parsers\Expressions\SendBindingMessageParser.cs" />
     <Compile Include="Parsers\Expressions\SeqParser.cs" />
     <Compile Include="Parsers\Expressions\SetPropertyParser.cs" />
     <Compile Include="Parsers\Expressions\SkipTakeItemParser.cs" />

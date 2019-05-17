@@ -21,7 +21,10 @@ namespace Kagami.Library.Parsers.Expressions
 	         yield return new WhereParser(builder);
 
             if (!builder.Flags[ExpressionFlags.OmitSendMessageAssign])
-               yield return new SendMessageAssignParser(builder);
+            {
+	            yield return new SendMessageAssignParser(builder);
+	            yield return new SendBindingMessageParser(builder);
+            }
 
             yield return new FoldOperatorParser(builder);
             yield return new SendMessageParser(builder);

@@ -19,7 +19,8 @@ namespace Kagami.Library.Classes
          messages["map(_<Lambda>)"] = (obj, msg) => function<Some, Lambda>(obj, msg, (s, l) => s.Map(l));
          messages["flatMap(_<Lambda>,_<Lambda>)"] = (obj, msg) => function<Some, Lambda, Lambda>(obj, msg, (s, l1, l2) => s.FlatMap(l1, l2));
          messages["defaultTo(_)"] = (obj, msg) => function<Some, IObject>(obj, msg, (s, o) => s.Value);
-      }
+         messages["canBind".get()] = (obj, msg) => function<Some>(obj, s => s.CanBind);
+        }
 
       public override bool AssignCompatible(BaseClass otherClass) => otherClass is SomeClass || otherClass is NoneClass;
    }
