@@ -28,9 +28,12 @@ namespace Kagami.Library.Nodes.Symbols
 			builder.Dup();
 			builder.SendMessage("canBind".get(), 0);
 			builder.GoToIfFalse(endLabel);
+			builder.Dup();
 			builder.SendMessage("value".get(), 0);
 
 			base.Generate(builder);
+
+			builder.SendMessage("unit(_)", 1);
 
 			builder.Label(endLabel);
 			builder.NoOp();

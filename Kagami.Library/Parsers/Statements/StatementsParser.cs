@@ -31,18 +31,17 @@ namespace Kagami.Library.Parsers.Statements
 					yield return new ForParser2();
 					yield return new RepeatParser();
 
-					//yield return new MatchFunctionParser();
 					yield return new MatchParser();
 					yield return new YieldParser();
 					yield return new ReturnParser();
 					yield return new ReturnNothingParser();
+					yield return new StopParser();
 					yield return new DeferParser();
 					yield return new AssignFromBlockParser();
 					yield return new AssignFromLoopParser();
 					yield return new MatchAssignParser();
 					yield return new AssignToNewFieldParser();
 
-					//yield return new AssignToNewFieldParser2();
 					yield return new AssignToMatchParser();
 					yield return new DefAssignParser();
 					yield return new DataTypeParser();
@@ -58,10 +57,6 @@ namespace Kagami.Library.Parsers.Statements
 
 				if (!singleLine)
 					yield return new FunctionParser();
-
-/*            yield return new PrintParser { SingleLine = singleLine };
-            yield return new PrintLnParser { SingleLine = singleLine };
-            yield return new PutParser { SingleLine = singleLine };*/
 
 				if (!singleLine)
 				{

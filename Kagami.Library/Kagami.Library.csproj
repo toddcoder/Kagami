@@ -186,6 +186,7 @@
     <Compile Include="Nodes\Statements\ReturnNothing.cs" />
     <Compile Include="Nodes\Statements\Skip.cs" />
     <Compile Include="Nodes\Statements\Statement.cs" />
+    <Compile Include="Nodes\Statements\Stop.cs" />
     <Compile Include="Nodes\Statements\While.cs" />
     <Compile Include="Nodes\Statements\Yield.cs" />
     <Compile Include="Nodes\Symbols\AddSymbol.cs" />
@@ -780,6 +781,7 @@
     <Compile Include="Parsers\Statements\StatementParser.cs" />
     <Compile Include="Parsers\Statements\StatementsParser.cs" />
     <Compile Include="Parsers\Statements\StaticParser.cs" />
+    <Compile Include="Parsers\Statements\StopParser.cs" />
     <Compile Include="Parsers\Statements\TraitImplementsParser.cs" />
     <Compile Include="Parsers\Statements\TraitItemsParser.cs" />
     <Compile Include="Parsers\Statements\TraitNameParser.cs" />
