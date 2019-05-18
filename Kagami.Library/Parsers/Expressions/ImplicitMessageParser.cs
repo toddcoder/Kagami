@@ -1,6 +1,5 @@
 ﻿using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
-using static Kagami.Library.Nodes.NodeFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
@@ -18,7 +17,7 @@ namespace Kagami.Library.Parsers.Expressions
 
 			if (getValue(state, builder.Flags).Out(out var symbol, out var original))
 			{
-				var fieldName = newLabel("item");
+				var fieldName = "__$0";
 				var tuple = (fieldName, symbol).Some();
 				switch (source)
 				{
@@ -32,7 +31,11 @@ namespace Kagami.Library.Parsers.Expressions
 						if (state.LeftZipExpression.IsNone)
 							state.LeftZipExpression = tuple;
 						else
+						{
+							fieldName = "__$1";
+							tuple = (fieldName, symbol).Some();
 							state.RightZipExpression = tuple;
+						}
 						break;
 					case ";":
 						state.FoldExpression = tuple;

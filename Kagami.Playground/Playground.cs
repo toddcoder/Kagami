@@ -469,7 +469,7 @@ namespace Kagami.Playground
 					}
 
 					textEditor.DrawTabLines(e.Graphics);
-					textEditor.DrawLineNumbers(e.Graphics, Color.Black, Color.LightGreen);
+					textEditor.DrawLineNumbers(e.Graphics, Color.Black, Color.White);
 					if (textEditor.SelectionLength == 0)
 						textEditor.DrawCurrentLineBar(e.Graphics, Color.Black, Color.White, alpha: 0);
 
