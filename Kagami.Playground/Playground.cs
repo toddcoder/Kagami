@@ -177,9 +177,9 @@ namespace Kagami.Playground
 				menus.StandardContextEdit(document);
 
 				textEditor.SetLeftMargin(70);
-				textEditor.ReassignHandle();
 				textEditor.Paint += (s, evt) => paint(evt);
 				textEditor.AnnotationFont = new Font(textEditor.Font, FontStyle.Bold);
+				textEditor.ReassignHandle();
 
 				locked = false;
 				manual = false;

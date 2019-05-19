@@ -22,7 +22,8 @@ namespace Kagami.Library.Packages
 			registerPackageFunction("fst(_)", (obj, msg) => function<Sys, Tuple>(obj, msg, (sys, t) => sys.First(t)));
 			registerPackageFunction("snd(_)", (obj, msg) => function<Sys, Tuple>(obj, msg, (sys, t) => sys.Second(t)));
 			registerPackageFunction("id".get(), (obj, msg) => function<Sys>(obj, sys => sys.ID));
-			registerPackageFunction("Tuple", (obj, msg) => function<Sys>(obj, sys => sys.Tuple(msg.Arguments[0])));
+			registerPackageFunction("Tuple(_)", (obj, msg) => function<Sys>(obj, sys => sys.Tuple(msg.Arguments[0])));
+			registerPackageFunction("Tuple(_,_)", (obj, msg) => function<Sys>(obj, sys => sys.Tuple(msg.Arguments[0], msg.Arguments[1])));
 			registerPackageFunction("Group(_,_,_)", (obj, msg) => function<Sys>(obj, sys => sys.RegexGroup(msg.Arguments)));
 			registerPackageFunction("Match(_,_,_,_)", (obj, msg) => function<Sys>(obj, sys => sys.RegexMatch(msg.Arguments)));
 			registerPackageFunction("Random()", (obj, msg) => function<Sys>(obj, sys => sys.Random()));

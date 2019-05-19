@@ -6,7 +6,7 @@ namespace Kagami.Library.Parsers.Expressions
 {
 	public class ImplicitMessageParser : SymbolParser
 	{
-		public override string Pattern => "^ /(|s|) /['!&*<>:'] -(> [/s')'])";
+		public override string Pattern => "^ /(|s|) /['!&*<>:'] -(> [/s')='])";
 
 		public ImplicitMessageParser(ExpressionBuilder builder) : base(builder) { }
 

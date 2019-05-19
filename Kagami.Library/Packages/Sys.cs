@@ -146,6 +146,8 @@ namespace Kagami.Library.Packages
 
 		public IObject Tuple(IObject value) => new Tuple(value);
 
+		public IObject Tuple(IObject value1, IObject value2) => new Tuple(value1, value2);
+
 		public RegexGroup RegexGroup(Arguments arguments)
 		{
 			var passed = new Hash<string, IObject>
