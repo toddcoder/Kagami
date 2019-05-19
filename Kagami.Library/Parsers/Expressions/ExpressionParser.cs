@@ -1,10 +1,10 @@
-﻿using System.Linq;
+﻿using Core.Monads;
+using Core.Numbers;
 using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
-using Core.Monads;
-using Core.Numbers;
+using System.Linq;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
@@ -96,18 +96,34 @@ namespace Kagami.Library.Parsers.Expressions
 						else
 							return failedMatch<Unit>(expException);
 					}
-					else if (state.FoldExpression.If(out var foldExpression))
+					else if (state.LeftFoldExpression.If(out var symbol))
 					{
-						var (fieldName, symbol) = foldExpression;
-						if (!keep(fieldName))
+						if (!keep("__$0") || !keep("__$1"))
 						{
 							Expression = expression;
 							return Unit.Matched();
 						}
-						else if (getMessageWithLambda(fieldName, symbol, "foldl", expression).If(out var newExpression, out expException))
+						else if (getMessage2WithLambda("__$1", "__$0", symbol, "foldl(_)", expression)
+							.If(out var newExpression, out expException))
 						{
 							Expression = newExpression;
-							state.FoldExpression = none<(string, Symbol)>();
+							state.LeftFoldExpression = none<Symbol>();
+						}
+						else
+							return failedMatch<Unit>(expException);
+					}
+					else if (state.RightFoldExpression.If(out symbol))
+					{
+						if (!keep("__$0") || !keep("__$1"))
+						{
+							Expression = expression;
+							return Unit.Matched();
+						}
+						else if (getMessage2WithLambda("__$0", "__$1", symbol, "foldr(_)", expression)
+							.If(out var newExpression, out expException))
+						{
+							Expression = newExpression;
+							state.RightFoldExpression = none<Symbol>();
 						}
 						else
 							return failedMatch<Unit>(expException);
@@ -134,13 +150,14 @@ namespace Kagami.Library.Parsers.Expressions
 					}
 					else if (state.BindExpression.If(out var bindTuple))
 					{
-						var (fieldName, symbol) = bindTuple;
+						var (fieldName, bindSymbol) = bindTuple;
 						if (!keep(fieldName))
 						{
 							Expression = expression;
 							return Unit.Matched();
 						}
-						else if (getMessageWithLambda(fieldName, symbol, "bind(_<Lambda>)", expression).If(out var newExpression, out expException))
+						else if (getMessageWithLambda(fieldName, bindSymbol, "bind(_<Lambda>)", expression)
+							.If(out var newExpression, out expException))
 						{
 							Expression = newExpression;
 							state.BindExpression = none<(string, Symbol)>();
@@ -181,6 +198,22 @@ namespace Kagami.Library.Parsers.Expressions
 		{
 			var parameter = Parameter.New(false, fieldName);
 			var parameters = new Parameters(parameter);
+			var lambdaSymbol = new LambdaSymbol(parameters, new Block(new Return(expression, none<TypeConstraint>())));
+			var sendMessage = new SendMessageSymbol(selector, Precedence.SendMessage, lambdaSymbol.Some());
+
+			var builder = new ExpressionBuilder(ExpressionFlags.Standard);
+			builder.Add(symbol);
+			builder.Add(sendMessage);
+
+			return builder.ToExpression();
+		}
+
+		static IResult<Expression> getMessage2WithLambda(string leftName, string rightName, Symbol symbol, Selector selector,
+			Expression expression)
+		{
+			var leftParameter = Parameter.New(false, leftName);
+			var rightParameter = Parameter.New(false, rightName);
+			var parameters = new Parameters(leftParameter, rightParameter);
 			var lambdaSymbol = new LambdaSymbol(parameters, new Block(new Return(expression, none<TypeConstraint>())));
 			var sendMessage = new SendMessageSymbol(selector, Precedence.SendMessage, lambdaSymbol.Some());
 

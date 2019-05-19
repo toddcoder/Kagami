@@ -6,7 +6,7 @@ namespace Kagami.Library.Parsers.Expressions
 {
 	public class ImplicitMessageParser : SymbolParser
 	{
-		public override string Pattern => "^ /(|s|) /['!&*;:'] -(> [/s')'])";
+		public override string Pattern => "^ /(|s|) /['!&*<>:'] -(> [/s')'])";
 
 		public ImplicitMessageParser(ExpressionBuilder builder) : base(builder) { }
 
@@ -36,9 +36,13 @@ namespace Kagami.Library.Parsers.Expressions
 							tuple = (fieldName, symbol).Some();
 							state.RightZipExpression = tuple;
 						}
+
 						break;
-					case ";":
-						state.FoldExpression = tuple;
+					case "<":
+						state.LeftFoldExpression = symbol.Some();
+						break;
+					case ">":
+						state.RightFoldExpression = symbol.Some();
 						break;
 					case ":":
 						state.BindExpression = tuple;
