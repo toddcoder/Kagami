@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Operations;
 using Core.Collections;
 using Core.Enumerables;
+using Core.Monads;
 using Core.Numbers;
 using Core.Strings;
 using static Kagami.Library.Objects.ObjectFunctions;
@@ -90,16 +92,8 @@ namespace Kagami.Library.Objects
 					{
 						var left = selectorItems[i];
 						var right = otherItems[i];
-/*						if (right.TypeConstraint.If(out var tc) && !left.TypeConstraint.Required("Type required").Matches(tc))
-							return false;*/
-/*						if (right.TypeConstraint.If(out var rTypeConstraint) && left.TypeConstraint.If(out var lTypeConstraint))
-						{
-							if (!lTypeConstraint.Matches(rTypeConstraint))
-								return false;
-						}
-						else
-							return false;*/
-						if (right.TypeConstraint.If(out var rTypeConstraint) && left.TypeConstraint.If(out var lTypeConstraint) && !rTypeConstraint.Matches(lTypeConstraint))
+						if (right.TypeConstraint.If(out var rTypeConstraint) && left.TypeConstraint.If(out var lTypeConstraint) &&
+							!rTypeConstraint.Matches(lTypeConstraint))
 							return false;
 					}
 
@@ -110,6 +104,14 @@ namespace Kagami.Library.Objects
 			}
 			else
 				return false;
+		}
+
+		public IMaybe<Selector> Optional()
+		{
+			if (selectorItems.Length > 0)
+				return new Selector(name, selectorItems.Skip(-1).ToArray(), "").Some();
+			else
+				return MonadFunctions.none<Selector>();
 		}
 
 		public override string ToString() => image;
@@ -143,6 +145,36 @@ namespace Kagami.Library.Objects
 			}
 
 			expression.Generate(builder);
+		}
+
+		public IEnumerable<Selector> AllSelectors()
+		{
+			yield return this;
+
+			var continuing = true;
+			var length = selectorItems.Length;
+			var take = length - 1;
+
+			for (var i = length - 1; i > -1 && continuing; i--)
+			{
+				var items = selectorItems.Take(take--).ToArray();
+				var newImage = selectorImage(name, items);
+				switch (selectorItems[i].SelectorItemType)
+				{
+					case SelectorItemType.Variadic:
+						continuing = false;
+						yield return new Selector(name, items, newImage);
+
+						break;
+					case SelectorItemType.Default:
+						yield return new Selector(name, items, newImage);
+
+						break;
+					default:
+						continuing = false;
+						break;
+				}
+			}
 		}
 	}
 }

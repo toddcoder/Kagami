@@ -18,10 +18,21 @@ namespace Kagami.Library.Operations
 
 		public override IMatched<IObject> Execute(Machine machine, IObject value)
 		{
-			if (machine.Assign(selector, value, overriding).If(out _, out var exception))
-				return notMatched<IObject>();
-			else
-				return failedMatch<IObject>(exception);
+			var createNewField = false;
+			foreach (var subSelector in selector.AllSelectors())
+			{
+				if (createNewField)
+					if (machine.CurrentFrame.Fields.New(subSelector, overriding).If(out _, out var mbException)) { }
+					else
+						return failedMatch<IObject>(mbException);
+
+				if (machine.Assign(subSelector, value, overriding).If(out _, out var exception))
+					createNewField = true;
+				else
+					return failedMatch<IObject>(exception);
+			}
+
+			return notMatched<IObject>();
 		}
 
 		public override string ToString() => $"assign.selector({selector.Image}, {overriding})";
