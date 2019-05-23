@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Core.Enumerables;
 using static Kagami.Library.AllExceptions;
 
 namespace Kagami.Library.Objects
@@ -56,5 +57,9 @@ namespace Kagami.Library.Objects
             throw incompatibleClasses(right, typeof(T).Name);
       }
 
+      public static String makeString(ICollection collection, string connector)
+      {
+	      return collection.GetIterator(false).List().Select(i => i.AsString).Join(connector);
+      }
    }
 }

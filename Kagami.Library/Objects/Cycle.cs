@@ -47,6 +47,8 @@ namespace Kagami.Library.Objects
 
 		public IObject Times(int count) => new Cycle(items.Repeat(count));
 
+		public String MakeString(string connector) => makeString(this, connector);
+
 		public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
 		public Tuple Items => new Tuple(items);

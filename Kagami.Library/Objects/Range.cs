@@ -4,6 +4,7 @@ using Core.Collections;
 using Core.Monads;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.Objects.CollectionFunctions;
 
 namespace Kagami.Library.Objects
 {
@@ -123,6 +124,8 @@ namespace Kagami.Library.Objects
 		public Boolean NotIn(IObject comparisand) => !In(comparisand).IsTrue;
 
 		public IObject Times(int count) => this;
+
+		public String MakeString(string connector) => makeString(this, connector);
 
 		public IIterator GetIndexedIterator() => new IndexedIterator(this);
 

@@ -6,6 +6,7 @@ using Core.Monads;
 using Core.Numbers;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.Objects.CollectionFunctions;
 
 namespace Kagami.Library.Objects
 {
@@ -143,7 +144,7 @@ namespace Kagami.Library.Objects
 			{
 				if (Caching.IsTrue)
 					dictionary[key] = dValue;
-            return dValue;
+				return dValue;
 			}
 			else
 				return None.NoneValue;
@@ -209,6 +210,8 @@ namespace Kagami.Library.Objects
 		public Boolean NotIn(IObject key) => !dictionary.ContainsKey(key);
 
 		public IObject Times(int count) => this;
+
+		public String MakeString(string connector) => makeString(this, connector);
 
 		public IIterator GetIndexedIterator() => new IndexedIterator(this);
 

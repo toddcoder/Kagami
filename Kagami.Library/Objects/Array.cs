@@ -12,262 +12,264 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public class Array : IObject, IObjectCompare, IComparable<Array>, IEquatable<Array>, IMutableCollection, ISliceable
-   {
-      public static IObject CreateObject(IEnumerable<IObject> items)
-      {
-         if (items.All(i => i is IKeyValue))
-            return new Dictionary(items);
-         else
-            return new Array(items);
-      }
+	public class Array : IObject, IObjectCompare, IComparable<Array>, IEquatable<Array>, IMutableCollection, ISliceable
+	{
+		public static IObject CreateObject(IEnumerable<IObject> items)
+		{
+			if (items.All(i => i is IKeyValue))
+				return new Dictionary(items);
+			else
+				return new Array(items);
+		}
 
-      public static IObject Empty => new Array(new IObject[0]);
+		public static IObject Empty => new Array(new IObject[0]);
 
-      public static Array Repeat(IObject value, int times)
-      {
-         var init = Enumerable.Repeat(value, times).ToList();
-         return new Array(init);
-      }
+		public static Array Repeat(IObject value, int times)
+		{
+			var init = Enumerable.Repeat(value, times).ToList();
+			return new Array(init);
+		}
 
-      List<IObject> list;
-      int arrayID;
-      IMaybe<TypeConstraint> typeConstraint;
+		List<IObject> list;
+		int arrayID;
+		IMaybe<TypeConstraint> typeConstraint;
 
-      public Array(IEnumerable<IObject> objects)
-      {
-         list = objects.ToList();
-         arrayID = uniqueObjectID();
-         typeConstraint = none<TypeConstraint>();
-      }
+		public Array(IEnumerable<IObject> objects)
+		{
+			list = objects.ToList();
+			arrayID = uniqueObjectID();
+			typeConstraint = none<TypeConstraint>();
+		}
 
-      public Array(IObject value)
-      {
-         list = new List<IObject> { value };
-         arrayID = uniqueObjectID();
-         typeConstraint = none<TypeConstraint>();
-      }
+		public Array(IObject value)
+		{
+			list = new List<IObject> { value };
+			arrayID = uniqueObjectID();
+			typeConstraint = none<TypeConstraint>();
+		}
 
-      public string ClassName => "Array";
+		public string ClassName => "Array";
 
-      public string AsString => list.Select(i => i.AsString).Join(" ");
+		public string AsString => list.Select(i => i.AsString).Join(" ");
 
-      public string Image => $"{{{list.Select(i => i.Image).Join()}}}";
+		public string Image => $"{{{list.Select(i => i.Image).Join()}}}";
 
-      public int Hash => list.GetHashCode();
+		public int Hash => list.GetHashCode();
 
-      public bool IsEqualTo(IObject obj) => isEqualTo(this, obj);
+		public bool IsEqualTo(IObject obj) => isEqualTo(this, obj);
 
-      public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, (a1, a2) =>
-      {
-         if (a1.Length.Value != a2.Length.Value)
-            return false;
-         else
-            return a1.list.Zip(a2.list, (i1, i2) => i1.Match(i2, bindings)).All(b => b);
-      }, bindings);
+		public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, (a1, a2) =>
+		{
+			if (a1.Length.Value != a2.Length.Value)
+				return false;
+			else
+				return a1.list.Zip(a2.list, (i1, i2) => i1.Match(i2, bindings)).All(b => b);
+		}, bindings);
 
-      public bool IsTrue => list.Count > 0;
+		public bool IsTrue => list.Count > 0;
 
-      public int Compare(IObject obj) => compareCollections(this, obj);
+		public int Compare(IObject obj) => compareCollections(this, obj);
 
-      public IObject Object => this;
+		public IObject Object => this;
 
-      public Boolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
+		public Boolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
 
-      public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
+		public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
 
-      public int CompareTo(Array other) => compareCollections(this, other);
+		public int CompareTo(Array other) => compareCollections(this, other);
 
-      public bool Equals(Array other) => isEqualTo(this, other);
+		public bool Equals(Array other) => isEqualTo(this, other);
 
-      public IMaybe<TypeConstraint> TypeConstraint
-      {
-         get => typeConstraint;
-         set => typeConstraint = value;
-      }
+		public IMaybe<TypeConstraint> TypeConstraint
+		{
+			get => typeConstraint;
+			set => typeConstraint = value;
+		}
 
-      void assertType(IObject value)
-      {
-         if (typeConstraint.If(out var tc) && !tc.Matches(classOf(value)))
-            throw incompatibleClasses(value, tc.AsString);
-      }
+		void assertType(IObject value)
+		{
+			if (typeConstraint.If(out var tc) && !tc.Matches(classOf(value)))
+				throw incompatibleClasses(value, tc.AsString);
+		}
 
-      public IObject this[int index]
-      {
-         get => list[wrapIndex(index, list.Count)];
-         set
-         {
-            throwIfSelf(value);
+		public IObject this[int index]
+		{
+			get => list[wrapIndex(index, list.Count)];
+			set
+			{
+				throwIfSelf(value);
 
-            index = wrapIndex(index, list.Count);
-            if (value is Del)
-               list.RemoveAt(index);
-            else
-            {
-               assertType(value);
-               list[index] = value;
-            }
-         }
-      }
+				index = wrapIndex(index, list.Count);
+				if (value is Del)
+					list.RemoveAt(index);
+				else
+				{
+					assertType(value);
+					list[index] = value;
+				}
+			}
+		}
 
-      void throwIfSelf(IObject value)
-      {
-         if (value is Array array && array.arrayID == arrayID)
-            throw "Can't assign an array item to itself".Throws();
-      }
+		void throwIfSelf(IObject value)
+		{
+			if (value is Array array && array.arrayID == arrayID)
+				throw "Can't assign an array item to itself".Throws();
+		}
 
-      public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new Iterator(this);
+		public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new Iterator(this);
 
-      public IMaybe<IObject> Next(int index) => when(index < list.Count, () => this[index]);
+		public IMaybe<IObject> Next(int index) => when(index < list.Count, () => this[index]);
 
-      public IMaybe<IObject> Peek(int index) => Next(index);
+		public IMaybe<IObject> Peek(int index) => Next(index);
 
-      public Int Length => list.Count;
+		public Int Length => list.Count;
 
-      public IEnumerable<IObject> List => list;
+		public IEnumerable<IObject> List => list;
 
-      public Slice Slice(ICollection collection) => new Slice(this, collection.GetIterator(false).List().ToArray());
+		public Slice Slice(ICollection collection) => new Slice(this, collection.GetIterator(false).List().ToArray());
 
-      public IMaybe<IObject> Get(IObject index) => Next(((Int)index).Value);
+		public IMaybe<IObject> Get(IObject index) => Next(((Int)index).Value);
 
-      public IObject Set(IObject index, IObject value)
-      {
-         var intIndex = wrapIndex(((Int)index).Value, list.Count);
-         assertType(value);
-         list[intIndex] = value;
+		public IObject Set(IObject index, IObject value)
+		{
+			var intIndex = wrapIndex(((Int)index).Value, list.Count);
+			assertType(value);
+			list[intIndex] = value;
 
-         return this;
-      }
+			return this;
+		}
 
-      public bool ExpandForArray => false;
+		public bool ExpandForArray => false;
 
-      int ISliceable.Length => list.Count;
+		int ISliceable.Length => list.Count;
 
-      public Boolean In(IObject item) => list.Contains(item);
+		public Boolean In(IObject item) => list.Contains(item);
 
-      public Boolean NotIn(IObject item) => !list.Contains(item);
+		public Boolean NotIn(IObject item) => !list.Contains(item);
 
-      public IObject Times(int count)
-      {
-         var result = new List<IObject>();
-         for (var i = 0; i < count; i++)
-            result.AddRange(list);
+		public IObject Times(int count)
+		{
+			var result = new List<IObject>();
+			for (var i = 0; i < count; i++)
+				result.AddRange(list);
 
-         return new Array(result);
-      }
+			return new Array(result);
+		}
 
-      public IIterator GetIndexedIterator() => new IndexedIterator(this);
+		public String MakeString(string connector) => makeString(this, connector);
 
-      public void Add(IObject obj)
-      {
-         assertType(obj);
-         list.Add(obj);
-      }
+		public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
-      public IObject Append(IObject obj)
-      {
-         throwIfSelf(obj);
-         assertType(obj);
-         list.Add(obj);
+		public void Add(IObject obj)
+		{
+			assertType(obj);
+			list.Add(obj);
+		}
 
-         return this;
-      }
+		public IObject Append(IObject obj)
+		{
+			throwIfSelf(obj);
+			assertType(obj);
+			list.Add(obj);
 
-      public IObject Remove(IObject obj)
-      {
-         list.Remove(obj);
-         return this;
-      }
+			return this;
+		}
 
-      public IObject RemoveAt(int index)
-      {
-         var obj = this[index];
-         list.RemoveAt(index);
+		public IObject Remove(IObject obj)
+		{
+			list.Remove(obj);
+			return this;
+		}
 
-         return obj;
-      }
+		public IObject RemoveAt(int index)
+		{
+			var obj = this[index];
+			list.RemoveAt(index);
 
-      public IObject RemoveAll(IObject obj)
-      {
-	      list.RemoveAll(o => o.IsEqualTo(obj));
-	      return this;
-      }
+			return obj;
+		}
 
-      public IObject InsertAt(int index, IObject obj)
-      {
-         throwIfSelf(obj);
-         assertType(obj);
-         list.Insert(index, obj);
+		public IObject RemoveAll(IObject obj)
+		{
+			list.RemoveAll(o => o.IsEqualTo(obj));
+			return this;
+		}
 
-         return this;
-      }
+		public IObject InsertAt(int index, IObject obj)
+		{
+			throwIfSelf(obj);
+			assertType(obj);
+			list.Insert(index, obj);
 
-      public Boolean IsEmpty => list.Count == 0;
+			return this;
+		}
 
-      public IObject Concatenate(Array array)
-      {
-         if (typeConstraint.If(out var thisConstraint))
-         {
-            if (array.typeConstraint.If(out var otherConstraint))
-            {
-               if (!thisConstraint.IsEqualTo(otherConstraint))
-                  throw "Incompatible type constraints".Throws();
-            }
-            else
-               throw "Expected type constraint in RHS array".Throws();
-         }
-         else if (array.typeConstraint.IsSome)
-            throw "RHS array has a type constraint".Throws();
+		public Boolean IsEmpty => list.Count == 0;
 
-         var newList = new List<IObject>(list);
-         newList.AddRange(array.list);
+		public IObject Concatenate(Array array)
+		{
+			if (typeConstraint.If(out var thisConstraint))
+			{
+				if (array.typeConstraint.If(out var otherConstraint))
+				{
+					if (!thisConstraint.IsEqualTo(otherConstraint))
+						throw "Incompatible type constraints".Throws();
+				}
+				else
+					throw "Expected type constraint in RHS array".Throws();
+			}
+			else if (array.typeConstraint.IsSome)
+				throw "RHS array has a type constraint".Throws();
 
-         return new Array(newList);
-      }
+			var newList = new List<IObject>(list);
+			newList.AddRange(array.list);
 
-      public IObject Pop()
-      {
-         if (list.Count > 0)
-            return Some.Object(RemoveAt(list.Count - 1));
-         else
-            return None.NoneValue;
-      }
+			return new Array(newList);
+		}
 
-      public IObject Unshift(IObject value) => InsertAt(0, value);
+		public IObject Pop()
+		{
+			if (list.Count > 0)
+				return Some.Object(RemoveAt(list.Count - 1));
+			else
+				return None.NoneValue;
+		}
 
-      public IObject Shift()
-      {
-         if (list.Count > 0)
-            return Some.Object(RemoveAt(0));
-         else
-            return None.NoneValue;
-      }
+		public IObject Unshift(IObject value) => InsertAt(0, value);
 
-      public IObject Find(IObject item, int startIndex, bool reverse)
-      {
-         var index = reverse ? list.LastIndexOf(item, startIndex) : list.IndexOf(item, startIndex);
+		public IObject Shift()
+		{
+			if (list.Count > 0)
+				return Some.Object(RemoveAt(0));
+			else
+				return None.NoneValue;
+		}
 
-         if (index == -1)
-            return None.NoneValue;
-         else
-            return Some.Object((Int)index);
-      }
+		public IObject Find(IObject item, int startIndex, bool reverse)
+		{
+			var index = reverse ? list.LastIndexOf(item, startIndex) : list.IndexOf(item, startIndex);
 
-      public IObject FindAll(IObject item)
-      {
-         var result = new List<IObject>();
-         var index = 0;
-         while (index > -1)
-         {
-            index = list.IndexOf(item, index);
-            if (index > -1)
-            {
-               result.Add((Int)index);
-               index++;
-            }
-         }
+			if (index == -1)
+				return None.NoneValue;
+			else
+				return Some.Object((Int)index);
+		}
 
-         return new Tuple(result.ToArray());
-      }
-   }
+		public IObject FindAll(IObject item)
+		{
+			var result = new List<IObject>();
+			var index = 0;
+			while (index > -1)
+			{
+				index = list.IndexOf(item, index);
+				if (index > -1)
+				{
+					result.Add((Int)index);
+					index++;
+				}
+			}
+
+			return new Tuple(result.ToArray());
+		}
+	}
 }

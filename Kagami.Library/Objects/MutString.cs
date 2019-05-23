@@ -8,6 +8,7 @@ using Core.Strings;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Objects.TextFindingFunctions;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.Objects.CollectionFunctions;
 
 namespace Kagami.Library.Objects
 {
@@ -48,7 +49,7 @@ namespace Kagami.Library.Objects
 		{
 			var self = this;
 			return when(index < mutable.Length, () => Char.CharObject(self.mutable[index]));
-      }
+		}
 
 		public IMaybe<IObject> Peek(int index) => Next(index);
 
@@ -60,7 +61,7 @@ namespace Kagami.Library.Objects
 		{
 			var intIndex = wrapIndex(((Int)index).Value, mutable.Length);
 			return Next(intIndex);
-      }
+		}
 
 		public Char this[int index]
 		{
@@ -97,6 +98,8 @@ namespace Kagami.Library.Objects
 
 		public IObject Times(int count) => new MutString(AsString.Repeat(count));
 
+		public String MakeString(string connector) => makeString(this, connector);
+
 		public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
 		public int CompareTo(object obj) => AsString.CompareTo(obj.ToString());
@@ -124,7 +127,7 @@ namespace Kagami.Library.Objects
 			{
 				mutable = new StringBuilder(AsString.Pred());
 				return this;
-         }
+			}
 		}
 
 		public Range Range() => new Range(this, (MutString)"z".Repeat(mutable.Length), true);

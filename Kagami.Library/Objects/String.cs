@@ -13,6 +13,7 @@ using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Objects.TextFindingFunctions;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.Objects.CollectionFunctions;
 
 namespace Kagami.Library.Objects
 {
@@ -127,6 +128,8 @@ namespace Kagami.Library.Objects
 		}
 
 		public IObject Times(int count) => (String)value.Repeat(count);
+
+		public String MakeString(string connector) => makeString(this, connector);
 
 		public IIterator GetIndexedIterator() => new IndexedIterator(this);
 

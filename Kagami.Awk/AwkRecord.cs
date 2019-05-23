@@ -11,6 +11,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Objects.String;
 using static Kagami.Library.Objects.TextFindingFunctions;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.Objects.CollectionFunctions;
 
 namespace Kagami.Awk
 {
@@ -96,6 +97,8 @@ namespace Kagami.Awk
 		public Boolean NotIn(IObject item) => !In(item).Value;
 
 		public IObject Times(int count) => this;
+
+		public String MakeString(string connector) => makeString(this, connector);
 
 		public IIterator GetIndexedIterator() => new IndexedIterator(this);
 

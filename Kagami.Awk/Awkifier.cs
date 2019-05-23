@@ -10,6 +10,7 @@ using Core.Strings;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Awk.AwkFunctions;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.Objects.CollectionFunctions;
 
 namespace Kagami.Awk
 {
@@ -128,7 +129,7 @@ namespace Kagami.Awk
 			{
 				records = regexSplit(source, recordPattern);
 				recordsCreated = true;
-         }
+			}
 		}
 
 		void split(int index)
@@ -173,12 +174,14 @@ namespace Kagami.Awk
 			var subject = item.AsString;
 			splitIfRecordNotCreated();
 
-         return records.Contains(subject);
+			return records.Contains(subject);
 		}
 
 		public Boolean NotIn(IObject item) => !In(item).Value;
 
 		public IObject Times(int count) => this;
+
+		public String MakeString(string connector) => makeString(this, connector);
 
 		public IIterator GetIndexedIterator() => new IndexedIterator(this);
 

@@ -20,6 +20,8 @@ namespace Kagami.Library.Objects
 
       IObject Times(int count);
 
+      String MakeString(string connector);
+
       IIterator GetIndexedIterator();
    }
 }

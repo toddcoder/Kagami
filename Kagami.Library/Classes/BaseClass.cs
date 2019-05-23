@@ -240,6 +240,8 @@ namespace Kagami.Library.Classes
 			registerMessage("in(_)", (obj, msg) => collectionFunc<IObject>(obj, msg, (c, i) => c.In(i)));
 			registerMessage("notIn(_)", (obj, msg) => collectionFunc<IObject>(obj, msg, (c, i) => c.NotIn(i)));
 			registerMessage("*(_<Int>)", (obj, msg) => collectionFunc<Int>(obj, msg, (c, i) => c.Times(i.Value)));
+			registerMessage("*(_<String>)",
+				(obj, msg) => collectionFunc<String>(obj, msg, (c, connector) => c.MakeString(connector.Value)));
 			registerMessage("indexed()", (obj, msg) => collectionFunc(obj, c => (IObject)c.GetIndexedIterator()));
 
 			loadIteratorMessages();

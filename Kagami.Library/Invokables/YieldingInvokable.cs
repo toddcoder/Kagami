@@ -6,6 +6,7 @@ using Core.Exceptions;
 using Core.Monads;
 using static Kagami.Library.AllExceptions;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.Objects.CollectionFunctions;
 
 namespace Kagami.Library.Invokables
 {
@@ -108,6 +109,8 @@ namespace Kagami.Library.Invokables
 		public Boolean NotIn(IObject item) => !cached.Contains(item);
 
 		public IObject Times(int count) => this;
+
+		public String MakeString(string connector) => makeString(this, connector);
 
 		public IIterator GetIndexedIterator() => new IndexedIterator(this);
 	}
