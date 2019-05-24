@@ -15,6 +15,7 @@ namespace Kagami.Library.Classes
          messages["index".get()] = (obj, msg) => function<RegexMatch>(obj, m => m.Index);
          messages["length".get()] = (obj, msg) => function<RegexMatch>(obj, m => m.Length);
          messages["groups".get()] = (obj, msg) => function<RegexMatch>(obj, m => m.Groups);
+         messages["[](_)"] = (obj, msg) => function<RegexMatch, Int>(obj, msg, (m, i) => m[i.Value]);
       }
    }
 }

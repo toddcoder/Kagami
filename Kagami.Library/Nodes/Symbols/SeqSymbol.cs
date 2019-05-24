@@ -1,6 +1,5 @@
 ﻿using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
-using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using static Kagami.Library.Nodes.NodeFunctions;
 
@@ -19,8 +18,9 @@ namespace Kagami.Library.Nodes.Symbols
          var invokable = new YieldingInvokable(newLabel("seq"), Parameters.Empty, image);
          if (builder.RegisterInvokable(invokable, block, false).If(out _, out var exception))
          {
-            var lambda = new Lambda(invokable);
-            builder.PushObject(lambda);
+	         builder.PushObject(invokable);
+            builder.PushBoolean(false);
+            builder.SendMessage("getIterator(_)", 1);
          }
          else
             throw exception;

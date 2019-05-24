@@ -1,12 +1,12 @@
-﻿using Kagami.Library.Nodes.Symbols;
-using Core.Monads;
+﻿using Core.Monads;
+using Kagami.Library.Nodes.Symbols;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
 {
 	public class ImplicitMessageParser : SymbolParser
 	{
-		public override string Pattern => "^ /(|s|) /['!&*<>:'] -(> [/s')='])";
+		public override string Pattern => "^ /(|s|) /(['!&*<>:'] ':'?) -(> [/s')='])";
 
 		public ImplicitMessageParser(ExpressionBuilder builder) : base(builder) { }
 
@@ -39,19 +39,24 @@ namespace Kagami.Library.Parsers.Expressions
 
 						break;
 					case "<":
-						state.LeftFoldExpression = symbol.Some();
+						state.LeftFoldExpression = (false, symbol).Some();
 						break;
 					case ">":
-						state.RightFoldExpression = symbol.Some();
+						state.RightFoldExpression = (false, symbol).Some();
 						break;
-					case ":":
-						state.BindExpression = tuple;
+					case "<:":
+						state.LeftFoldExpression = (true, symbol).Some();
+						break;
+					case ">:":
+						state.RightFoldExpression = (true, symbol).Some();
 						break;
 				}
 
 				builder.Add(new FieldSymbol(fieldName));
+
 				return Unit.Matched();
 			}
+
 			else
 				return original.Unmatched<Unit>();
 		}

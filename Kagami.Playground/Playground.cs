@@ -472,6 +472,7 @@ namespace Kagami.Playground
 					textEditor.DrawLineNumbers(e.Graphics, Color.Black, Color.White);
 					if (textEditor.SelectionLength == 0)
 						textEditor.DrawCurrentLineBar(e.Graphics, Color.Black, Color.White, alpha: 0);
+					textEditor.DrawModificationGlyphs(e.Graphics);
 
 					if (exceptionData.If(out var data))
 					{

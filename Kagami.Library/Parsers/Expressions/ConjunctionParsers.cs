@@ -22,7 +22,7 @@ namespace Kagami.Library.Parsers.Expressions
             yield return new InlineIfParser(builder);
             yield return new SliceParser(builder);
             yield return new IsParser(builder);
-            yield return new SeqParser(builder);
+            //yield return new SeqParser(builder);
          }
       }
    }

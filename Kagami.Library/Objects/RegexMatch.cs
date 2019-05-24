@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Core.Collections;
+using Core.Numbers;
 using Core.RegularExpressions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
@@ -85,5 +86,16 @@ namespace Kagami.Library.Objects
       public Hash<string, IObject> Passed => passed;
 
       public Hash<string, IObject> Internals => internals;
+
+      public String this[int index]
+      {
+	      get
+	      {
+		      if (index.Between(0).Until(groups.Length))
+			      return groups[index].Text;
+		      else
+			      return "";
+	      }
+      }
    }
 }

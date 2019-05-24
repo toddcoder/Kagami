@@ -96,34 +96,38 @@ namespace Kagami.Library.Parsers.Expressions
 						else
 							return failedMatch<Unit>(expException);
 					}
-					else if (state.LeftFoldExpression.If(out var symbol))
+					else if (state.LeftFoldExpression.If(out var leftExpression))
 					{
+						var (leftReduce, leftSymbol) = leftExpression;
+						var leftMessage = leftReduce ? "reducel()" : "foldl()";
 						if (!keep("__$0") || !keep("__$1"))
 						{
 							Expression = expression;
 							return Unit.Matched();
 						}
-						else if (getMessage2WithLambda("__$1", "__$0", symbol, "foldl(_)", expression)
+						else if (getMessage2WithLambda("__$1", "__$0", leftSymbol, leftMessage, expression)
 							.If(out var newExpression, out expException))
 						{
 							Expression = newExpression;
-							state.LeftFoldExpression = none<Symbol>();
+							state.LeftFoldExpression = none<(bool, Symbol)>();
 						}
 						else
 							return failedMatch<Unit>(expException);
 					}
-					else if (state.RightFoldExpression.If(out symbol))
+					else if (state.RightFoldExpression.If(out var rightExpression))
 					{
+						var (rightReduce, rightSymbol) = rightExpression;
+						var rightMessage = rightReduce ? "reducer()" : "foldr()";
 						if (!keep("__$0") || !keep("__$1"))
 						{
 							Expression = expression;
 							return Unit.Matched();
 						}
-						else if (getMessage2WithLambda("__$0", "__$1", symbol, "foldr(_)", expression)
+						else if (getMessage2WithLambda("__$0", "__$1", rightSymbol, rightMessage, expression)
 							.If(out var newExpression, out expException))
 						{
 							Expression = newExpression;
-							state.RightFoldExpression = none<Symbol>();
+							state.RightFoldExpression = none<(bool, Symbol)>();
 						}
 						else
 							return failedMatch<Unit>(expException);
