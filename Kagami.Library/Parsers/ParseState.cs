@@ -34,6 +34,7 @@ namespace Kagami.Library.Parsers
 		Stack<IMaybe<TypeConstraint>> returnTypesStack;
 		Hash<string, Expression> defExpressions;
 		Hash<string, Function> macros;
+		Stack<IMaybe<IPrefixCode>> prefixCodes;
 
 		public ParseState(string source)
 		{
@@ -52,6 +53,7 @@ namespace Kagami.Library.Parsers
 			returnTypesStack = new Stack<IMaybe<TypeConstraint>>();
 			defExpressions = new Hash<string, Expression>();
 			macros = new Hash<string, Function>();
+			prefixCodes = new Stack<IMaybe<IPrefixCode>>();
 		}
 
 		public IMaybe<int> ExceptionIndex
@@ -290,8 +292,6 @@ namespace Kagami.Library.Parsers
 
 		public bool BlockFollows() => CurrentSource.IsMatch($"^ ':' (/r /n | /r | /n) '{indentation}' [' /t']+", multiline: true);
 
-		public IMaybe<IPrefixCode> LastOperator { get; set; } = none<IPrefixCode>();
-
 		public IMaybe<(string, Expression)> ForExpression { get; set; } = none<(string, Expression)>();
 
 		public IMaybe<(string, Symbol)> MapExpression { get; set; } = none<(string, Symbol)>();
@@ -307,5 +307,19 @@ namespace Kagami.Library.Parsers
 		public IMaybe<(bool, Symbol)> RightFoldExpression { get; set; } = none<(bool, Symbol)>();
 
 		public IMaybe<(string, Symbol)> BindExpression { get; set; } = none<(string, Symbol)>();
+
+		public void BeginPrefixCode() => prefixCodes.Push(none<IPrefixCode>());
+
+		public IMaybe<IPrefixCode> PrefixCode
+		{
+			get => prefixCodes.Peek();
+			set
+			{
+				_ = prefixCodes.Pop();
+				prefixCodes.Push(value);
+			}
+		}
+
+		public void EndPrefixCode() => prefixCodes.Pop();
 	}
 }

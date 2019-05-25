@@ -7,7 +7,11 @@ namespace Kagami.Library.Operations
 {
    public class Break : Operation
    {
-      public override IMatched<IObject> Execute(Machine machine) => notMatched<IObject>();
+      public override IMatched<IObject> Execute(Machine machine)
+      {
+			machine.Clear();
+	      return notMatched<IObject>();
+      }
 
       public override string ToString() => "break";
    }

@@ -19,6 +19,7 @@ namespace Kagami.Library.Parsers.Expressions
 		protected PostfixParser postfixParser;
 		protected ConjunctionParsers conjunctionParsers;
 		protected int whateverCount;
+		protected IMaybe<IPrefixCode> prefixCode;
 
 		public ExpressionParser(Bits32<ExpressionFlags> flags) : base(false) => this.flags = flags;
 
@@ -32,161 +33,171 @@ namespace Kagami.Library.Parsers.Expressions
 			builder = new ExpressionBuilder(flags);
 			prefixParser = new PrefixParser(builder);
 			valuesParser = new ValuesParser(builder);
+			prefixCode = none<IPrefixCode>();
 			infixParser = new InfixParser(builder);
 			postfixParser = new PostfixParser(builder);
 			conjunctionParsers = new ConjunctionParsers(builder);
 			whateverCount = 0;
 
-			if (getTerm(state).If(out _, out var mbException))
-			{
-				while (state.More)
-				{
-					if (!flags[ExpressionFlags.OmitConjunction])
-					{
-						var conjunction = conjunctionParsers.Scan(state);
-						if (conjunction.IsMatched)
-							break;
-						else if (conjunction.IsFailedMatch)
-							return conjunction;
-					}
+			state.BeginPrefixCode();
 
-					if (infixParser.Scan(state).If(out _, out mbException))
-						if (getTerm(state).If(out _, out mbException)) { }
+			try
+			{
+				if (getTerm(state).If(out _, out var mbException))
+				{
+					while (state.More)
+					{
+						if (!flags[ExpressionFlags.OmitConjunction])
+						{
+							var conjunction = conjunctionParsers.Scan(state);
+							if (conjunction.IsMatched)
+								break;
+							else if (conjunction.IsFailedMatch)
+								return conjunction;
+						}
+
+						if (infixParser.Scan(state).If(out _, out mbException))
+							if (getTerm(state).If(out _, out mbException)) { }
+							else if (mbException.If(out var exception))
+								return failedMatch<Unit>(exception);
+							else
+								break;
 						else if (mbException.If(out var exception))
 							return failedMatch<Unit>(exception);
 						else
 							break;
-					else if (mbException.If(out var exception))
-						return failedMatch<Unit>(exception);
-					else
-						break;
-				}
+					}
 
-				if (builder.ToExpression().If(out var expression, out var expException))
-				{
-					if (state.MapExpression.If(out var mapExpression))
+					if (builder.ToExpression().If(out var expression, out var expException))
 					{
-						var (fieldName, symbol) = mapExpression;
-						if (!keep(fieldName))
+						if (state.MapExpression.If(out var mapExpression))
 						{
-							Expression = expression;
-							return Unit.Matched();
+							var (fieldName, symbol) = mapExpression;
+							if (!keep(fieldName))
+							{
+								Expression = expression;
+								return Unit.Matched();
+							}
+							else if (getMessageWithLambda(fieldName, symbol, "map", expression).If(out var newExpression, out expException))
+							{
+								Expression = newExpression;
+								state.MapExpression = none<(string, Symbol)>();
+							}
+							else
+								return failedMatch<Unit>(expException);
 						}
-						else if (getMessageWithLambda(fieldName, symbol, "map", expression).If(out var newExpression, out expException))
+						else if (state.IfExpression.If(out var ifExpression))
 						{
-							Expression = newExpression;
-							state.MapExpression = none<(string, Symbol)>();
+							var (fieldName, symbol) = ifExpression;
+							if (!keep(fieldName))
+							{
+								Expression = expression;
+								return Unit.Matched();
+							}
+							else if (getMessageWithLambda(fieldName, symbol, "if", expression).If(out var newExpression, out expException))
+							{
+								Expression = newExpression;
+								state.IfExpression = none<(string, Symbol)>();
+							}
+							else
+								return failedMatch<Unit>(expException);
+						}
+						else if (state.LeftFoldExpression.If(out var leftExpression))
+						{
+							var (leftReduce, leftSymbol) = leftExpression;
+							var leftMessage = leftReduce ? "reducel()" : "foldl()";
+							if (!keep("__$0") || !keep("__$1"))
+							{
+								Expression = expression;
+								return Unit.Matched();
+							}
+							else if (getMessage2WithLambda("__$1", "__$0", leftSymbol, leftMessage, expression)
+								.If(out var newExpression, out expException))
+							{
+								Expression = newExpression;
+								state.LeftFoldExpression = none<(bool, Symbol)>();
+							}
+							else
+								return failedMatch<Unit>(expException);
+						}
+						else if (state.RightFoldExpression.If(out var rightExpression))
+						{
+							var (rightReduce, rightSymbol) = rightExpression;
+							var rightMessage = rightReduce ? "reducer()" : "foldr()";
+							if (!keep("__$0") || !keep("__$1"))
+							{
+								Expression = expression;
+								return Unit.Matched();
+							}
+							else if (getMessage2WithLambda("__$0", "__$1", rightSymbol, rightMessage, expression)
+								.If(out var newExpression, out expException))
+							{
+								Expression = newExpression;
+								state.RightFoldExpression = none<(bool, Symbol)>();
+							}
+							else
+								return failedMatch<Unit>(expException);
+						}
+						else if (state.LeftZipExpression.If(out var leftTuple) && state.RightZipExpression.If(out var rightTuple))
+						{
+							var (leftFieldName, leftSymbol) = leftTuple;
+							var (rightFieldName, rightSymbol) = rightTuple;
+							if (!keep(leftFieldName) || !keep(rightFieldName))
+							{
+								Expression = expression;
+								return Unit.Matched();
+							}
+							else if (getDualMessageWithLambda(leftFieldName, rightFieldName, leftSymbol, rightSymbol,
+								"zip".Selector("<Collection>", "<Lambda>"),
+								expression).If(out var newExpression, out expException))
+							{
+								Expression = newExpression;
+								state.LeftZipExpression = none<(string, Symbol)>();
+								state.RightZipExpression = none<(string, Symbol)>();
+							}
+							else
+								return failedMatch<Unit>(expException);
+						}
+						else if (state.BindExpression.If(out var bindTuple))
+						{
+							var (fieldName, bindSymbol) = bindTuple;
+							if (!keep(fieldName))
+							{
+								Expression = expression;
+								return Unit.Matched();
+							}
+							else if (getMessageWithLambda(fieldName, bindSymbol, "bind(_<Lambda>)", expression)
+								.If(out var newExpression, out expException))
+							{
+								Expression = newExpression;
+								state.BindExpression = none<(string, Symbol)>();
+							}
+							else
+								return failedMatch<Unit>(expException);
+						}
+						else if (whateverCount > 0)
+						{
+							var lambda = new LambdaSymbol(whateverCount,
+								new Block(new ExpressionStatement(expression, true)) { Index = expression.Index });
+							Expression = new Expression(lambda);
 						}
 						else
-							return failedMatch<Unit>(expException);
-					}
-					else if (state.IfExpression.If(out var ifExpression))
-					{
-						var (fieldName, symbol) = ifExpression;
-						if (!keep(fieldName))
-						{
 							Expression = expression;
-							return Unit.Matched();
-						}
-						else if (getMessageWithLambda(fieldName, symbol, "if", expression).If(out var newExpression, out expException))
-						{
-							Expression = newExpression;
-							state.IfExpression = none<(string, Symbol)>();
-						}
-						else
-							return failedMatch<Unit>(expException);
-					}
-					else if (state.LeftFoldExpression.If(out var leftExpression))
-					{
-						var (leftReduce, leftSymbol) = leftExpression;
-						var leftMessage = leftReduce ? "reducel()" : "foldl()";
-						if (!keep("__$0") || !keep("__$1"))
-						{
-							Expression = expression;
-							return Unit.Matched();
-						}
-						else if (getMessage2WithLambda("__$1", "__$0", leftSymbol, leftMessage, expression)
-							.If(out var newExpression, out expException))
-						{
-							Expression = newExpression;
-							state.LeftFoldExpression = none<(bool, Symbol)>();
-						}
-						else
-							return failedMatch<Unit>(expException);
-					}
-					else if (state.RightFoldExpression.If(out var rightExpression))
-					{
-						var (rightReduce, rightSymbol) = rightExpression;
-						var rightMessage = rightReduce ? "reducer()" : "foldr()";
-						if (!keep("__$0") || !keep("__$1"))
-						{
-							Expression = expression;
-							return Unit.Matched();
-						}
-						else if (getMessage2WithLambda("__$0", "__$1", rightSymbol, rightMessage, expression)
-							.If(out var newExpression, out expException))
-						{
-							Expression = newExpression;
-							state.RightFoldExpression = none<(bool, Symbol)>();
-						}
-						else
-							return failedMatch<Unit>(expException);
-					}
-					else if (state.LeftZipExpression.If(out var leftTuple) && state.RightZipExpression.If(out var rightTuple))
-					{
-						var (leftFieldName, leftSymbol) = leftTuple;
-						var (rightFieldName, rightSymbol) = rightTuple;
-						if (!keep(leftFieldName) || !keep(rightFieldName))
-						{
-							Expression = expression;
-							return Unit.Matched();
-						}
-						else if (getDualMessageWithLambda(leftFieldName, rightFieldName, leftSymbol, rightSymbol,
-							"zip".Selector("<Collection>", "<Lambda>"),
-							expression).If(out var newExpression, out expException))
-						{
-							Expression = newExpression;
-							state.LeftZipExpression = none<(string, Symbol)>();
-							state.RightZipExpression = none<(string, Symbol)>();
-						}
-						else
-							return failedMatch<Unit>(expException);
-					}
-					else if (state.BindExpression.If(out var bindTuple))
-					{
-						var (fieldName, bindSymbol) = bindTuple;
-						if (!keep(fieldName))
-						{
-							Expression = expression;
-							return Unit.Matched();
-						}
-						else if (getMessageWithLambda(fieldName, bindSymbol, "bind(_<Lambda>)", expression)
-							.If(out var newExpression, out expException))
-						{
-							Expression = newExpression;
-							state.BindExpression = none<(string, Symbol)>();
-						}
-						else
-							return failedMatch<Unit>(expException);
-					}
-					else if (whateverCount > 0)
-					{
-						var lambda = new LambdaSymbol(whateverCount,
-							new Block(new ExpressionStatement(expression, true)) { Index = expression.Index });
-						Expression = new Expression(lambda);
+
+						return Unit.Matched();
 					}
 					else
-						Expression = expression;
-
-					return Unit.Matched();
+						return failedMatch<Unit>(expException);
 				}
+				else if (mbException.If(out var exception))
+					return failedMatch<Unit>(exception);
 				else
-					return failedMatch<Unit>(expException);
+					return "Invalid expression syntax".FailedMatch<Unit>();
 			}
-			else if (mbException.If(out var exception))
-				return failedMatch<Unit>(exception);
-			else
-				return "Invalid expression syntax".FailedMatch<Unit>();
+			finally
+			{
+				state.EndPrefixCode();
+			}
 		}
 
 		bool keep(string fieldName)

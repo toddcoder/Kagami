@@ -56,10 +56,7 @@ namespace Kagami.Library.Parsers
 		public static IMatched<Expression> getExpression(ParseState state, Bits32<ExpressionFlags> flags)
 		{
 			var expressionParser = new ExpressionParser(flags);
-			var expression = expressionParser.Scan(state).Map(u => expressionParser.Expression);
-			state.LastOperator = none<IPrefixCode>();
-
-			return expression;
+			return expressionParser.Scan(state).Map(u => expressionParser.Expression);
 		}
 
 		public static IMatched<Expression> getExpression(ParseState state, string pattern, Bits32<ExpressionFlags> flags,
@@ -478,33 +475,41 @@ namespace Kagami.Library.Parsers
 				return Unit.Matched();
 			}
 
+			state.BeginPrefixCode();
 			state.Scan("^ /(|s|) /'('", Color.Whitespace, Color.Structure);
 
-			while (state.More)
+			try
 			{
-				if (state.CurrentSource.StartsWith(")"))
-					break;
-
-				if (getTerm().Failed(out var exception))
-					return failedMatch<LambdaSymbol>(exception);
-
-				if (infixParser.Scan(state).If(out _, out var mbException))
+				while (state.More)
 				{
-					if (getTerm().Failed(out exception))
-						return failedMatch<LambdaSymbol>(exception);
-				}
-				else if (mbException.If(out exception))
-					return failedMatch<LambdaSymbol>(exception);
-				else
-					break;
-			}
+					if (state.CurrentSource.StartsWith(")"))
+						break;
 
-			var parameterCount = unknownFieldCount.MaxOf(maxFieldCount) + (addOne ? 1 : 0);
-			if (state.Scan("^ /')'", Color.Structure).Out(out _, out var scanOriginal))
-				return builder.ToExpression().FlatMap(expression => new LambdaSymbol(parameterCount, expression).Matched(),
-					failedMatch<LambdaSymbol>);
-			else
-				return scanOriginal.Unmatched<LambdaSymbol>();
+					if (getTerm().Failed(out var exception))
+						return failedMatch<LambdaSymbol>(exception);
+
+					if (infixParser.Scan(state).If(out _, out var mbException))
+					{
+						if (getTerm().Failed(out exception))
+							return failedMatch<LambdaSymbol>(exception);
+					}
+					else if (mbException.If(out exception))
+						return failedMatch<LambdaSymbol>(exception);
+					else
+						break;
+				}
+
+				var parameterCount = unknownFieldCount.MaxOf(maxFieldCount) + (addOne ? 1 : 0);
+				if (state.Scan("^ /')'", Color.Structure).Out(out _, out var scanOriginal))
+					return builder.ToExpression().FlatMap(expression => new LambdaSymbol(parameterCount, expression).Matched(),
+						failedMatch<LambdaSymbol>);
+				else
+					return scanOriginal.Unmatched<LambdaSymbol>();
+			}
+			finally
+			{
+				state.EndPrefixCode();
+			}
 		}
 
 		public static IMatched<IConstant> getConstant(ParseState state)
@@ -783,32 +788,32 @@ namespace Kagami.Library.Parsers
 					symbol = new GreaterThanEqualSymbol().Matched<Symbol>();
 					break;
 				case "<":
-					if (state.LastOperator.If(out var prefixCode))
+					if (state.PrefixCode.If(out var prefixCode))
 					{
 						prefixCode.Prefix();
 						symbol = new SpecialLessThanSymbol().Matched<Symbol>();
-						state.LastOperator = none<IPrefixCode>();
+						state.PrefixCode = none<IPrefixCode>();
 					}
 					else
 					{
 						var lessThanSymbol = new LessThanSymbol();
 						symbol = lessThanSymbol.Matched<Symbol>();
-						state.LastOperator = lessThanSymbol.Some<IPrefixCode>();
+						state.PrefixCode = lessThanSymbol.Some<IPrefixCode>();
 					}
 
 					break;
 				case "<=":
-					if (state.LastOperator.If(out prefixCode))
+					if (state.PrefixCode.If(out prefixCode))
 					{
 						prefixCode.Prefix();
 						symbol = new SpecialLessThanEqualSymbol().Matched<Symbol>();
-						state.LastOperator = none<IPrefixCode>();
+						state.PrefixCode = none<IPrefixCode>();
 					}
 					else
 					{
 						var lessThanEqualSymbol = new LessThanEqualSymbol();
 						symbol = lessThanEqualSymbol.Matched<Symbol>();
-						state.LastOperator = lessThanEqualSymbol.Some<IPrefixCode>();
+						state.PrefixCode = lessThanEqualSymbol.Some<IPrefixCode>();
 					}
 
 					break;

@@ -1,10 +1,11 @@
 ﻿using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
 {
 	public class ReductionParser : SymbolParser
-   {
+	{
 		public override string Pattern => "^ /(|s+|) /'['";
 
 		public ReductionParser(ExpressionBuilder builder) : base(builder) { }
@@ -38,7 +39,7 @@ namespace Kagami.Library.Parsers.Expressions
 				else
 				{
 					state.RollBackTransaction();
-					return MonadFunctions.failedMatch<Unit>(exception);
+					return failedMatch<Unit>(exception);
 				}
 			}
 			else
@@ -47,5 +48,5 @@ namespace Kagami.Library.Parsers.Expressions
 				return original.Unmatched<Unit>();
 			}
 		}
-   }
+	}
 }
