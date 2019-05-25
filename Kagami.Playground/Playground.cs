@@ -135,9 +135,32 @@ namespace Kagami.Playground
 				textEditor.SetTabs(32, 64, 96, 128);
 				document = new Document(this, textEditor, ".kagami", "Kagami", playgroundConfiguration.FontName,
 					playgroundConfiguration.FontSize);
-				document.StandardMenus();
-
+				//document.StandardMenus();
 				var menus = document.Menus;
+				menus.Menu("&File");
+				menus.Menu("File","&New", (s, evt) =>
+				{
+					textEditor.ClearModificationGlyphs();
+					document.New();
+				});
+				menus.Menu("File","&Open", (s, evt) =>
+				{
+					textEditor.ClearModificationGlyphs();
+					document.Open();
+				}, "^O");
+				menus.Menu("File", "&Save", (s, evt) =>
+				{
+					textEditor.SetToSavedGlyphs();
+					document.Save();
+				}, "^S");
+				menus.Menu("File","Save As", (s, evt) =>
+				{
+					textEditor.SetToSavedGlyphs();
+					document.SaveAs();
+				});
+				menus.Menu("File", "Exit", (s, evt) => Close(), "%F4");
+
+				document.StandardEditMenu();
 
 				menus.Menu("Edit", "Duplicate", (s, evt) => duplicate(), "^D");
 				menus.Menu("Edit", "Indent", (s, evt) => indent(), "^I");
