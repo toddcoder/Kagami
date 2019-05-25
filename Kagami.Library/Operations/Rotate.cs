@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Monads;

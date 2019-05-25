@@ -290,6 +290,8 @@ namespace Kagami.Library.Parsers
 
 		public bool BlockFollows() => CurrentSource.IsMatch($"^ ':' (/r /n | /r | /n) '{indentation}' [' /t']+", multiline: true);
 
+		public IMaybe<IPrefixCode> LastOperator { get; set; } = none<IPrefixCode>();
+
 		public IMaybe<(string, Expression)> ForExpression { get; set; } = none<(string, Expression)>();
 
 		public IMaybe<(string, Symbol)> MapExpression { get; set; } = none<(string, Symbol)>();

@@ -250,6 +250,10 @@ namespace Kagami.Library.Operations
 
 		public void Swap() => add(new Swap());
 
+		public void SwapAt(int index) => add(new SwapAt(index));
+
+		public void Pick(int index) => add(new Pick(index));
+
 		public void Rotate(int count) => add(new Rotate(count));
 
 		public void Roll(int count) => add(new Roll(count));

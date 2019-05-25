@@ -56,7 +56,10 @@ namespace Kagami.Library.Parsers
 		public static IMatched<Expression> getExpression(ParseState state, Bits32<ExpressionFlags> flags)
 		{
 			var expressionParser = new ExpressionParser(flags);
-			return expressionParser.Scan(state).Map(u => expressionParser.Expression);
+			var expression = expressionParser.Scan(state).Map(u => expressionParser.Expression);
+			state.LastOperator = none<IPrefixCode>();
+
+			return expression;
 		}
 
 		public static IMatched<Expression> getExpression(ParseState state, string pattern, Bits32<ExpressionFlags> flags,
@@ -722,6 +725,7 @@ namespace Kagami.Library.Parsers
 		public static IMatched<Symbol> getOperator(ParseState state, string source, Bits32<ExpressionFlags> flags, bool whitespace)
 		{
 			var symbol = notMatched<Symbol>();
+
 			switch (source)
 			{
 				case "+":
@@ -779,10 +783,34 @@ namespace Kagami.Library.Parsers
 					symbol = new GreaterThanEqualSymbol().Matched<Symbol>();
 					break;
 				case "<":
-					symbol = new LessThanSymbol().Matched<Symbol>();
+					if (state.LastOperator.If(out var prefixCode))
+					{
+						prefixCode.Prefix();
+						symbol = new SpecialLessThanSymbol().Matched<Symbol>();
+						state.LastOperator = none<IPrefixCode>();
+					}
+					else
+					{
+						var lessThanSymbol = new LessThanSymbol();
+						symbol = lessThanSymbol.Matched<Symbol>();
+						state.LastOperator = lessThanSymbol.Some<IPrefixCode>();
+					}
+
 					break;
 				case "<=":
-					symbol = new LessThanEqualSymbol().Matched<Symbol>();
+					if (state.LastOperator.If(out prefixCode))
+					{
+						prefixCode.Prefix();
+						symbol = new SpecialLessThanEqualSymbol().Matched<Symbol>();
+						state.LastOperator = none<IPrefixCode>();
+					}
+					else
+					{
+						var lessThanEqualSymbol = new LessThanEqualSymbol();
+						symbol = lessThanEqualSymbol.Matched<Symbol>();
+						state.LastOperator = lessThanEqualSymbol.Some<IPrefixCode>();
+					}
+
 					break;
 				case "::":
 					symbol = new ConsSymbol().Matched<Symbol>();
@@ -847,9 +875,9 @@ namespace Kagami.Library.Parsers
 				case ":-":
 					symbol = new BindSymbol().Matched<Symbol>();
 					break;
-				case ";":
+/*				case ";":
 					symbol = new IndexSymbol().Matched<Symbol>();
-					break;
+					break;*/
 				case "^^":
 					symbol = new SendBinaryMessageSymbol("defaultTo(_)", Precedence.SendMessage).Matched<Symbol>();
 					break;

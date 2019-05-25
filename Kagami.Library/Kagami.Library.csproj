@@ -239,6 +239,7 @@
     <Compile Include="Nodes\Symbols\GetSliceSymbol.cs" />
     <Compile Include="Nodes\Symbols\GreaterThanEqualSymbol.cs" />
     <Compile Include="Nodes\Symbols\GreaterThanSymbol.cs" />
+    <Compile Include="Nodes\Symbols\IPrefixCode.cs" />
     <Compile Include="Nodes\Symbols\IConstant.cs" />
     <Compile Include="Nodes\Symbols\IfSomeNoneSymbol.cs" />
     <Compile Include="Nodes\Symbols\ImageSymbol.cs" />
@@ -317,6 +318,8 @@
     <Compile Include="Nodes\Symbols\SkipTakeLiteralSymbol.cs" />
     <Compile Include="Nodes\Symbols\SkipTakeOperatorSymbol.cs" />
     <Compile Include="Nodes\Symbols\SomeSymbol.cs" />
+    <Compile Include="Nodes\Symbols\SpecialLessThanEqualSymbol.cs" />
+    <Compile Include="Nodes\Symbols\SpecialLessThanSymbol.cs" />
     <Compile Include="Nodes\Symbols\StringArraySymbol.cs" />
     <Compile Include="Nodes\Symbols\StringListSymbol.cs" />
     <Compile Include="Nodes\Symbols\StringSymbol.cs" />
@@ -521,6 +524,7 @@
     <Compile Include="Operations\NewSkipTake.cs" />
     <Compile Include="Operations\NewValue.cs" />
     <Compile Include="Operations\OpenPackage.cs" />
+    <Compile Include="Operations\Pick.cs" />
     <Compile Include="Operations\Pipeline.cs" />
     <Compile Include="Operations\PopExitFrame.cs" />
     <Compile Include="Operations\PopFrameWithValue.cs" />
@@ -586,6 +590,7 @@
     <Compile Include="Operations\Success.cs" />
     <Compile Include="Operations\Super.cs" />
     <Compile Include="Operations\Swap.cs" />
+    <Compile Include="Operations\SwapAt.cs" />
     <Compile Include="Operations\Throw.cs" />
     <Compile Include="Operations\ToArguments.cs" />
     <Compile Include="Operations\ToTuple.cs" />

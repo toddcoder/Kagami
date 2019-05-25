@@ -119,7 +119,7 @@ namespace Kagami.Library.Parsers.Expressions
 				if (matched)
 				{
 					skip = value.Some();
-					if (state.Scan("^ /(|s|) /':'", Color.Whitespace, Color.Structure).IsMatched)
+					if (state.Scan("^ /(|s|) /';'", Color.Whitespace, Color.Structure).IsMatched)
 					{
 						if (state.Scan("^ /(|s|) /'*'", Color.Whitespace, Color.Structure).IsMatched)
 						{

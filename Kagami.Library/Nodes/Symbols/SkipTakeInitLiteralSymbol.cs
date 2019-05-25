@@ -21,5 +21,7 @@ namespace Kagami.Library.Nodes.Symbols
 		public override Precedence Precedence => Precedence.PostfixOperator;
 
 		public override Arity Arity => Arity.Postfix;
+
+		public override string ToString() => $"skipTake({literal})";
 	}
 }

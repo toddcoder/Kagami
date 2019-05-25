@@ -188,5 +188,39 @@ namespace Kagami.Library.Runtime
 		public void CopyFromFields(Fields sourceFields) => fields.CopyFrom(sourceFields);
 
 		public IMaybe<int> ErrorHandler { get; set; } = none<int>();
+
+		public IMaybe<Unit> Swap(int index)
+		{
+			var index2 = index + 1;
+			if (index2 < stack.Count)
+			{
+				var array = stack.ToArray();
+				var temp = array[index];
+				array[index] = array[index2];
+				array[index2] = temp;
+				stack = new Stack<IObject>(array);
+
+				return Unit.Some();
+			}
+			else
+				return none<Unit>();
+		}
+
+		public IMaybe<IObject> Pick(int index)
+		{
+			if (index < stack.Count)
+			{
+				var array = stack.ToArray();
+				var item = array[index];
+				var list = array.ToList();
+				list.RemoveAt(index);
+				list.Reverse();
+				stack = new Stack<IObject>(list);
+
+				return item.Some();
+			}
+			else
+				return none<IObject>();
+		}
 	}
 }
