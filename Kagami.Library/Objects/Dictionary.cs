@@ -319,5 +319,14 @@ namespace Kagami.Library.Objects
 
 			return this;
 		}
+
+		public Dictionary Invert()
+		{
+			var newDictionary = new Hash<IObject, IObject>();
+			foreach (var (key, value) in dictionary)
+				newDictionary[value] = key;
+
+			return new Dictionary(newDictionary);
+		}
 	}
 }

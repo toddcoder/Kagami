@@ -1,6 +1,7 @@
 ﻿using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Operations;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Nodes.NodeFunctions;
 
 namespace Kagami.Library.Nodes.Symbols
@@ -15,15 +16,12 @@ namespace Kagami.Library.Nodes.Symbols
       public override void Generate(OperationsBuilder builder)
       {
          image = $"seq {block}";
-         var invokable = new YieldingInvokable(newLabel("seq"), Parameters.Empty, image);
-         if (builder.RegisterInvokable(invokable, block, false).If(out _, out var exception))
-         {
-	         builder.PushObject(invokable);
-            builder.PushBoolean(false);
-            builder.SendMessage("getIterator(_)", 1);
-         }
-         else
-            throw exception;
+         var functionName = newLabel("seq");
+         var function = new Function(functionName, Parameters.Empty, block, true, false, "");
+         function.Generate(builder);
+
+         var invokeSymbol = new InvokeSymbol(functionName, new Expression[0], none<LambdaSymbol>(), false);
+         invokeSymbol.Generate(builder);
       }
 
       public override Precedence Precedence => Precedence.Value;

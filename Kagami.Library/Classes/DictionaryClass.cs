@@ -48,6 +48,7 @@ namespace Kagami.Library.Classes
 			messages["merge(_)"] = (obj, msg) => function<Dictionary, Dictionary>(obj, msg, (d1, d2) => d1.Merge(d2));
 			messages["remove(at:_)"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, k) => d.Remove(k));
 			messages["forEach(_<Lambda>)"] = (obj, msg) => function<Dictionary, Lambda>(obj, msg, (d, l) => d.ForEach(l));
+			messages["invert()"] = (obj, msg) => function<Dictionary>(obj, d => d.Invert());
 		}
 
 		public override void RegisterClassMessages()

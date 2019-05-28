@@ -352,6 +352,7 @@
     <Compile Include="Objects\CollectionFunctions.cs" />
     <Compile Include="Objects\Comparer.cs" />
     <Compile Include="Objects\Complex.cs" />
+    <Compile Include="Objects\CompositeLambda.cs" />
     <Compile Include="Objects\Constructor.cs" />
     <Compile Include="Objects\Cycle.cs" />
     <Compile Include="Objects\DataComparisand.cs" />

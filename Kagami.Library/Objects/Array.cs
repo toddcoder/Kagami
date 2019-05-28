@@ -36,7 +36,12 @@ namespace Kagami.Library.Objects
 
 		public Array(IEnumerable<IObject> objects)
 		{
-			list = objects.ToList();
+			list = new List<IObject>();
+			foreach (var obj in objects)
+				if (obj is Range range)
+					list.AddRange(range.GetIterator(false).List());
+				else
+					list.Add(obj);
 			arrayID = uniqueObjectID();
 			typeConstraint = none<TypeConstraint>();
 		}
