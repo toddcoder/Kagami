@@ -249,6 +249,18 @@ namespace Kagami.Library.Objects
 			return collectionClass.Revert(flattened);
 		}
 
+		public IObject MapIf(Lambda lambda, Lambda predicate)
+		{
+			var list = new List<IObject>();
+			foreach (var item in List())
+				if (predicate.Invoke(item).IsTrue)
+					list.Add(lambda.Invoke(item));
+				else
+					list.Add(item);
+
+			return collectionClass.Revert(list);
+		}
+
 		public virtual IObject If(Lambda predicate) => collectionClass.Revert(List().Where(value => predicate.Invoke(value).IsTrue));
 
 		public virtual IObject IfNot(Lambda predicate) => collectionClass.Revert(List().Where(value => !predicate.Invoke(value).IsTrue));

@@ -52,8 +52,8 @@ namespace Kagami.Library.Classes
 
 		public void InheritFrom(UserClass parentClass)
 		{
-			foreach (var item in parentClass.messages)
-				messages[item.Key] = item.Value;
+			foreach (var (key, value) in parentClass.messages)
+				messages[key] = value;
 			foreach (var selector in parentClass.signatures)
 				signatures.Add(selector);
 		}

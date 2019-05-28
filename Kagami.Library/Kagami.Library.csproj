@@ -411,6 +411,7 @@
     <Compile Include="Objects\ListIterator.cs" />
     <Compile Include="Objects\Long.cs" />
     <Compile Include="Objects\MapAction.cs" />
+    <Compile Include="Objects\MapIfAction.cs" />
     <Compile Include="Objects\Message.cs" />
     <Compile Include="Objects\MutString.cs" />
     <Compile Include="Objects\NameValue.cs" />
@@ -683,7 +684,6 @@
     <Compile Include="Parsers\Expressions\SeqParser.cs" />
     <Compile Include="Parsers\Expressions\SetPropertyParser.cs" />
     <Compile Include="Parsers\Expressions\SkipTakeItemParser.cs" />
-    <Compile Include="Parsers\Expressions\SkipTakeOperatorParser.cs" />
     <Compile Include="Parsers\Expressions\IfSomeNoneSymbolParser.cs" />
     <Compile Include="Parsers\Expressions\NotParser.cs" />
     <Compile Include="Parsers\Expressions\OctalParser.cs" />
@@ -700,7 +700,7 @@
     <Compile Include="Parsers\Expressions\RegexParsingType.cs" />
     <Compile Include="Parsers\Expressions\SendMessageAssignParser.cs" />
     <Compile Include="Parsers\Expressions\SeparatedKeywordOperatorsParser.cs" />
-    <Compile Include="Parsers\Expressions\SkipTakeOperatorParser2.cs" />
+    <Compile Include="Parsers\Expressions\SkipTakeOperatorParser.cs" />
     <Compile Include="Parsers\Expressions\SliceParser.cs" />
     <Compile Include="Parsers\Expressions\StringArrayParser.cs" />
     <Compile Include="Parsers\Expressions\SubexpressionParser2.cs" />

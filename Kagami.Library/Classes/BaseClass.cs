@@ -286,7 +286,7 @@ namespace Kagami.Library.Classes
 				"span".Selector("_<Int>"),
 				"shuffle()", "array()", "list()", "tuple()", "dictionary".Selector("key:_<Lambda>", "value:_<Lambda>"), "dictionary()",
 				"each(_<Lambda>)", "rotate(_<Int>)", "permutation(_<Int>)", "combination(_<Int>)", "flatten()",
-				"copy()", "revert()", "*(_)", "format(_)"));
+				"copy()", "revert()", "*(_)", "format(_)", "mapIf(_<Lambda>,_<Lambda>)"));
 
 			dynamicInvoke = (obj, msg) =>
 			{
@@ -350,7 +350,7 @@ namespace Kagami.Library.Classes
 			registerMessage("last()", (obj, msg) => iteratorFunc(obj, i => i.Last()));
 			registerMessage("last".Selector("_<Lambda>"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Last(l)));
 			registerMessage("split(_<Lambda>)", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Split(l)));
-			registerMessage("split".Selector("_<Int>"), (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.Split(j.Value)));
+			registerMessage("split(_<Int>)", (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.Split(j.Value)));
 			registerMessage("random()", (obj, msg) => iteratorFunc(obj, i => i.Random()));
 			registerMessage("group".Selector("by:_<Lambda>"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.GroupBy(l)));
 			registerMessage("one(_<Lambda>)", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.One(l)));
@@ -383,6 +383,8 @@ namespace Kagami.Library.Classes
 			registerMessage("collect()", (obj, msg) => iteratorFunc(obj, i => i.Collect()));
 			registerMessage("*(_)", (obj, msg) => iteratorFunc<IObject>(obj, msg, (i1, i2) => i1.Apply((ICollection)i2)));
 			registerMessage("format(_)", (obj, msg) => iteratorFunc<Index>(obj, msg, (i, index) => index.IndexOf(i.Collection)));
+			registerMessage("mapIf(_<Lambda>,_<Lambda>)",
+				(obj, msg) => iteratorFunc<Lambda, Lambda>(obj, msg, (i, l1, l2) => i.MapIf(l1, l2)));
 		}
 
 		public virtual bool MatchCompatible(BaseClass otherClass)

@@ -92,6 +92,18 @@ namespace Kagami.Library.Objects
 			return match(source, comparisand, (x, y) => x.IsEqualTo(y), bindings);
 		}
 
+/*		static bool matchOnUserObject(UserObject userObject, IObject comparisand, Hash<string, IObject> bindings)
+		{
+			var userClass = (UserClass)classOf(userObject);
+			var parameters = userObject.Parameters.Select(p => "_").Join(",");
+			var extractMessage = $"extract({parameters})";
+
+			if (userClass.RespondsTo(extractMessage))
+			{
+					 var result = sendMessage(userObject,extractMessage)
+			}
+		}*/
+
 		public static bool matchSingle<T>(T source, IObject comparisand, Func<T, IObject, bool> equalifier,
 			Hash<string, IObject> bindings)
 			where T : IObject
@@ -217,11 +229,11 @@ namespace Kagami.Library.Objects
 				return !fieldName.StartsWith("__$") && fieldName != "self" && fieldName != "id" && !fieldName.StartsWith("_");
 			}
 
-			if (classOf(obj).RespondsTo("match(_)"))
+			if (classOf(obj).RespondsTo("match(_,_)"))
 			{
 				var objectHash = bindings.ToHash(i => String.StringObject(i.Key), i => i.Value);
 				var dictionary = new Dictionary(objectHash);
-				if (sendMessage(obj, "match", dictionary).IsTrue)
+				if (sendMessage(obj, "match(_,_)", comparisand, dictionary).IsTrue)
 				{
 					var resultHash = dictionary.InternalHash;
 					foreach (var (key, value) in resultHash)

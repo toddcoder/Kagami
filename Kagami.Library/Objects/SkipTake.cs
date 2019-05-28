@@ -47,7 +47,7 @@ namespace Kagami.Library.Objects
 		public SkipTake Literal(IObject literal)
 		{
 			if (result.If(out var r))
-				result = sendMessage(r, "~()", literal).Some();
+				result = sendMessage(r, "~(_)", literal).Some();
 			else
 				result = literal.Some();
 
@@ -56,13 +56,13 @@ namespace Kagami.Library.Objects
 
 		public SkipTake Skip(int count)
 		{
-			source = sendMessage(source, "skip()", new Int(count));
+			source = sendMessage(source, "skip(_)", new Int(count));
 			return this;
 		}
 
 		public SkipTake Take(int count)
 		{
-			var taken = sendMessage(source, "take()", new Int(count));
+			var taken = sendMessage(source, "take(_)", new Int(count));
 			Literal(taken);
 			Skip(count);
 

@@ -156,7 +156,7 @@ namespace Kagami.Library.Objects
 		public bool IsEqualTo(IObject obj)
 		{
 			return obj is Tuple t && items.Length == t.items.Length &&
-				Enumerable.Zip(items, t.items, (t1, t2) => (x: t1, y: t2)).All(tu => tu.x.IsEqualTo(tu.y));
+				items.Zip(t.items, (t1, t2) => (x: t1, y: t2)).All(tu => tu.x.IsEqualTo(tu.y));
 		}
 
 		public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, (t1, t2) =>
@@ -164,7 +164,7 @@ namespace Kagami.Library.Objects
 			if (t1.Length.Value != t2.Length.Value)
 				return false;
 			else
-				return Enumerable.Zip(t1.items, t2.items, (i1, i2) => i1.Match(i2, bindings)).All(b => b);
+				return t1.items.Zip(t2.items, (i1, i2) => i1.Match(i2, bindings)).All(b => b);
 		}, bindings);
 
 		public bool IsTrue => items.Length > 0;
