@@ -40,6 +40,7 @@ namespace Kagami.Library.Parsers.Expressions
             yield return new CharParser(builder);
             yield return new ForExpressionParser(builder);
             yield return new ImplicitMessageParser(builder);
+            yield return new ImplicitZipParser(builder);
 	         yield return new MessageParser(builder);
 
             if (!builder.Flags[ExpressionFlags.Subset])

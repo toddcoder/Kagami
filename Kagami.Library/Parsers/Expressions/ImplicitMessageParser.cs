@@ -1,4 +1,5 @@
-﻿using Core.Monads;
+﻿using System.Linq;
+using Core.Monads;
 using Kagami.Library.Nodes.Symbols;
 using static Kagami.Library.Parsers.ParserFunctions;
 
@@ -6,60 +7,40 @@ namespace Kagami.Library.Parsers.Expressions
 {
 	public class ImplicitMessageParser : SymbolParser
 	{
-		public override string Pattern => "^ /(|s|) /(['!&*<>:'] '|'?) -(> [/s')='])";
+		static string parameters(int count)
+		{
+			return "(" + Core.Enumerables.EnumerableExtensions.Join(Enumerable.Range(0, count).Select(i => "_"), ",") + ")";
+		}
 
 		public ImplicitMessageParser(ExpressionBuilder builder) : base(builder) { }
 
+		public override string Pattern => "^ /(|s|) /('sort' | 'foldl' | 'foldr' | 'reducel' | 'reducer' | " +
+			"'count' | 'map' | 'flatMap' | 'bind' | 'if' | 'ifNot' | 'index' | 'min' | 'max' | 'first' | " +
+			"'last' | 'split' | 'one' | 'none' | 'any' | 'all' | 'span') /'|'";
+
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
-			var source = tokens[2].Text;
-			state.Colorize(tokens, Color.Whitespace, Color.Operator);
+			var message = tokens[2].Text;
+			state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Operator);
 
 			if (getValue(state, builder.Flags).Out(out var symbol, out var original))
 			{
-				var fieldName = "__$0";
-				var tuple = (fieldName, symbol).Some();
-				switch (source)
+				var parameterCount = 1;
+				switch (message)
 				{
-					case "!":
-						state.MapExpression = tuple;
-						break;
-					case "&":
-						state.IfExpression = tuple;
-						break;
-					case "*":
-						if (state.LeftZipExpression.IsNone)
-							state.LeftZipExpression = tuple;
-						else
-						{
-							fieldName = "__$1";
-							tuple = (fieldName, symbol).Some();
-							state.RightZipExpression = tuple;
-						}
-
-						break;
-					case "<":
-						state.LeftFoldExpression = (false, symbol).Some();
-						break;
-					case ">":
-						state.RightFoldExpression = (false, symbol).Some();
-						break;
-					case "<|":
-						state.LeftFoldExpression = (true, symbol).Some();
-						break;
-					case ">|":
-						state.RightFoldExpression = (true, symbol).Some();
-						break;
-					case ":":
-						state.BindExpression = tuple;
+					case "foldl":
+					case "foldr":
+					case "reducel":
+					case "reducer":
+						parameterCount = 2;
 						break;
 				}
 
-				builder.Add(new FieldSymbol(fieldName));
+				state.ImplicitState = new ImplicitState(symbol, message + parameters(parameterCount), parameterCount).Some();
+				builder.Add(new FieldSymbol("__$0"));
 
 				return Unit.Matched();
 			}
-
 			else
 				return original.Unmatched<Unit>();
 		}

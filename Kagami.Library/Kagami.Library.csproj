@@ -652,6 +652,7 @@
     <Compile Include="Parsers\Expressions\HexExpParser.cs" />
     <Compile Include="Parsers\Expressions\IfAsAndParser.cs" />
     <Compile Include="Parsers\Expressions\ImageParser.cs" />
+    <Compile Include="Parsers\Expressions\ImplicitMessageParser.cs" />
     <Compile Include="Parsers\Expressions\IndexOptionalParser.cs" />
     <Compile Include="Parsers\Expressions\IndexerParser.cs" />
     <Compile Include="Parsers\Expressions\InfixParser.cs" />
@@ -668,7 +669,7 @@
     <Compile Include="Parsers\Expressions\IteratorParser.cs" />
     <Compile Include="Parsers\Expressions\LazyParser.cs" />
     <Compile Include="Parsers\Expressions\ListParser.cs" />
-    <Compile Include="Parsers\Expressions\ImplicitMessageParser.cs" />
+    <Compile Include="Parsers\Expressions\ImplicitZipParser.cs" />
     <Compile Include="Parsers\Expressions\MatchLambdaParser.cs" />
     <Compile Include="Parsers\Expressions\MaybeParser.cs" />
     <Compile Include="Parsers\Expressions\MessageParser.cs" />
@@ -733,6 +734,7 @@
     <Compile Include="Parsers\Expressions\ValuesParser.cs" />
     <Compile Include="Parsers\Expressions\ZipLambdaParser.cs" />
     <Compile Include="Parsers\Expressions\ZipOperatorParser.cs" />
+    <Compile Include="Parsers\ImplicitState.cs" />
     <Compile Include="Parsers\MultiParser.cs" />
     <Compile Include="Parsers\Parser.cs" />
     <Compile Include="Parsers\ParserFunctions.cs" />

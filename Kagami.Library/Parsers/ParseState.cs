@@ -292,21 +292,27 @@ namespace Kagami.Library.Parsers
 
 		public bool BlockFollows() => CurrentSource.IsMatch($"^ ':' (/r /n | /r | /n) '{indentation}' [' /t']+", multiline: true);
 
+		public IMaybe<ImplicitState> ImplicitState { get; set; } = none<ImplicitState>();
+
 		public IMaybe<(string, Expression)> ForExpression { get; set; } = none<(string, Expression)>();
 
+/*
 		public IMaybe<(string, Symbol)> MapExpression { get; set; } = none<(string, Symbol)>();
 
 		public IMaybe<(string, Symbol)> IfExpression { get; set; } = none<(string, Symbol)>();
+*/
 
 		public IMaybe<(string, Symbol)> LeftZipExpression { get; set; } = none<(string, Symbol)>();
 
 		public IMaybe<(string, Symbol)> RightZipExpression { get; set; } = none<(string, Symbol)>();
 
+/*
 		public IMaybe<(bool, Symbol)> LeftFoldExpression { get; set; } = none<(bool, Symbol)>();
 
 		public IMaybe<(bool, Symbol)> RightFoldExpression { get; set; } = none<(bool, Symbol)>();
 
 		public IMaybe<(string, Symbol)> BindExpression { get; set; } = none<(string, Symbol)>();
+*/
 
 		public void BeginPrefixCode() => prefixCodes.Push(none<IPrefixCode>());
 

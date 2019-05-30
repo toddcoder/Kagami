@@ -70,70 +70,13 @@ namespace Kagami.Library.Parsers.Expressions
 
 					if (builder.ToExpression().If(out var expression, out var expException))
 					{
-						if (state.MapExpression.If(out var mapExpression))
+						if (state.ImplicitState.If(out var implicitState))
 						{
-							var (fieldName, symbol) = mapExpression;
-							if (!keep(fieldName))
-							{
-								Expression = expression;
-								return Unit.Matched();
-							}
-							else if (getMessageWithLambda(fieldName, symbol, "map", expression).If(out var newExpression, out expException))
-							{
-								Expression = newExpression;
-								state.MapExpression = none<(string, Symbol)>();
-							}
-							else
-								return failedMatch<Unit>(expException);
-						}
-						else if (state.IfExpression.If(out var ifExpression))
-						{
-							var (fieldName, symbol) = ifExpression;
-							if (!keep(fieldName))
-							{
-								Expression = expression;
-								return Unit.Matched();
-							}
-							else if (getMessageWithLambda(fieldName, symbol, "if", expression).If(out var newExpression, out expException))
-							{
-								Expression = newExpression;
-								state.IfExpression = none<(string, Symbol)>();
-							}
-							else
-								return failedMatch<Unit>(expException);
-						}
-						else if (state.LeftFoldExpression.If(out var leftExpression))
-						{
-							var (leftReduce, leftSymbol) = leftExpression;
-							var leftMessage = leftReduce ? "reducel()" : "foldl()";
-							if (!keep("__$0") || !keep("__$1"))
-							{
-								Expression = expression;
-								return Unit.Matched();
-							}
-							else if (getMessage2WithLambda("__$1", "__$0", leftSymbol, leftMessage, expression)
+							if (getMessageWithLambda(implicitState.Symbol, implicitState.Message, implicitState.ParameterCount, expression)
 								.If(out var newExpression, out expException))
 							{
 								Expression = newExpression;
-								state.LeftFoldExpression = none<(bool, Symbol)>();
-							}
-							else
-								return failedMatch<Unit>(expException);
-						}
-						else if (state.RightFoldExpression.If(out var rightExpression))
-						{
-							var (rightReduce, rightSymbol) = rightExpression;
-							var rightMessage = rightReduce ? "reducer()" : "foldr()";
-							if (!keep("__$0") || !keep("__$1"))
-							{
-								Expression = expression;
-								return Unit.Matched();
-							}
-							else if (getMessage2WithLambda("__$0", "__$1", rightSymbol, rightMessage, expression)
-								.If(out var newExpression, out expException))
-							{
-								Expression = newExpression;
-								state.RightFoldExpression = none<(bool, Symbol)>();
+								state.ImplicitState = none<ImplicitState>();
 							}
 							else
 								return failedMatch<Unit>(expException);
@@ -154,23 +97,6 @@ namespace Kagami.Library.Parsers.Expressions
 								Expression = newExpression;
 								state.LeftZipExpression = none<(string, Symbol)>();
 								state.RightZipExpression = none<(string, Symbol)>();
-							}
-							else
-								return failedMatch<Unit>(expException);
-						}
-						else if (state.BindExpression.If(out var bindTuple))
-						{
-							var (fieldName, bindSymbol) = bindTuple;
-							if (!keep(fieldName))
-							{
-								Expression = expression;
-								return Unit.Matched();
-							}
-							else if (getMessageWithLambda(fieldName, bindSymbol, "bind(_<Lambda>)", expression)
-								.If(out var newExpression, out expException))
-							{
-								Expression = newExpression;
-								state.BindExpression = none<(string, Symbol)>();
 							}
 							else
 								return failedMatch<Unit>(expException);
@@ -209,10 +135,9 @@ namespace Kagami.Library.Parsers.Expressions
 				return !(exp[0] is FieldSymbol fieldSymbol) || fieldSymbol.FieldName != fieldName;
 		}
 
-		static IResult<Expression> getMessageWithLambda(string fieldName, Symbol symbol, Selector selector, Expression expression)
+		static IResult<Expression> getMessageWithLambda(Symbol symbol, Selector selector, int parameterCount, Expression expression)
 		{
-			var parameter = Parameter.New(false, fieldName);
-			var parameters = new Parameters(parameter);
+			var parameters = new Parameters(Enumerable.Range(0, parameterCount).Select(i => $"__${i}").ToArray());
 			var lambdaSymbol = new LambdaSymbol(parameters, new Block(new Return(expression, none<TypeConstraint>())));
 			var sendMessage = new SendMessageSymbol(selector, Precedence.SendMessage, lambdaSymbol.Some());
 
