@@ -88,7 +88,7 @@ namespace Kagami.Library.Nodes.Statements
 
 		public IEnumerator<Statement> GetEnumerator() => statements.GetEnumerator();
 
-		public override string ToString() => statements.Join("\r\n");
+		public override string ToString() => statements.Stringify("\r\n");
 
 		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 

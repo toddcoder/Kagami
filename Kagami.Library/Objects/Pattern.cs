@@ -12,9 +12,9 @@ namespace Kagami.Library.Objects
 
       public string ClassName => "Pattern";
 
-      public string AsString => cases.Select(c => $"{c.comparisand.AsString} = {c.lambda.AsString}").Join(" ");
+      public string AsString => cases.Select(c => $"{c.comparisand.AsString} = {c.lambda.AsString}").Stringify(" ");
 
-      public string Image => $"(|{cases.Select(c => $"{c.comparisand.Image} = {c.lambda.Image}").Join("|")})";
+      public string Image => $"(|{cases.Select(c => $"{c.comparisand.Image} = {c.lambda.Image}").Stringify("|")})";
 
       public int Hash => cases.GetHashCode();
 

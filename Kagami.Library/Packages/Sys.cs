@@ -38,7 +38,7 @@ namespace Kagami.Library.Packages
 
 		public String Println(Arguments arguments)
 		{
-			var value = arguments.Select(a => a.AsString).Join(" ");
+			var value = arguments.Select(a => a.AsString).Stringify(" ");
 			Machine.Current.Context.PrintLine(value);
 
 			return value;
@@ -46,7 +46,7 @@ namespace Kagami.Library.Packages
 
 		public String Print(Arguments arguments)
 		{
-			var value = arguments.Select(a => a.AsString).Join(" ");
+			var value = arguments.Select(a => a.AsString).Stringify(" ");
 			Machine.Current.Context.Print(value);
 
 			return value;
@@ -54,7 +54,7 @@ namespace Kagami.Library.Packages
 
 		public String Put(Arguments arguments)
 		{
-			var value = arguments.Select(a => a.AsString).Join(" ");
+			var value = arguments.Select(a => a.AsString).Stringify(" ");
 
 			foreach (var argument in arguments)
 				Machine.Current.Context.Put(argument.AsString);

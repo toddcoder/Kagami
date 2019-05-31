@@ -18,9 +18,9 @@ namespace Kagami.Library.Objects
 
 		public string ClassName => "ByteArray";
 
-		public string AsString => bytes.Join(" ");
+		public string AsString => bytes.Stringify(" ");
 
-		public string Image => $"b\"{bytes.Select(b => (char)b).Join("")}\"";
+		public string Image => $"b\"{bytes.Select(b => (char)b).Stringify("")}\"";
 
 		public int Hash => bytes.GetHashCode();
 

@@ -27,7 +27,7 @@ namespace Kagami.Library.Nodes.Symbols
 
       public override Arity Arity => Arity.Nullary;
 
-      public override string ToString() => symbols.Join(" ");
+      public override string ToString() => symbols.Stringify(" ");
 
       public void Replace(Predicate<Symbol> predicate, Func<Symbol, Symbol> replacement)
       {

@@ -95,7 +95,7 @@ namespace Kagami.Library.Objects
 /*		static bool matchOnUserObject(UserObject userObject, IObject comparisand, Hash<string, IObject> bindings)
 		{
 			var userClass = (UserClass)classOf(userObject);
-			var parameters = userObject.Parameters.Select(p => "_").Join(",");
+			var parameters = userObject.Parameters.Select(p => "_").Stringify(",");
 			var extractMessage = $"extract({parameters})";
 
 			if (userClass.RespondsTo(extractMessage))
@@ -197,7 +197,7 @@ namespace Kagami.Library.Objects
 				return sendMessage(obj, "string".get()).AsString;
 			else
 				return
-					$"object{obj.ObjectID} {obj.ClassName}({obj.Parameters.Select(p => $"{p.Name} = {obj.Fields[p.Name].Image}").Join()})";
+					$"object{obj.ObjectID} {obj.ClassName}({obj.Parameters.Select(p => $"{p.Name} = {obj.Fields[p.Name].Image}").Stringify()})";
 		}
 
 		public static string userObjectImage(UserObject obj)
@@ -206,7 +206,7 @@ namespace Kagami.Library.Objects
 				return sendMessage(obj, "image".get()).AsString;
 			else
 				return
-					$"object{obj.ObjectID} {obj.ClassName}({obj.Parameters.Select(p => $"{p.Name} = {obj.Fields[p.Name].Image}").Join()})";
+					$"object{obj.ObjectID} {obj.ClassName}({obj.Parameters.Select(p => $"{p.Name} = {obj.Fields[p.Name].Image}").Stringify()})";
 		}
 
 		public static bool isEqualTo(UserObject obj, IObject other)
@@ -520,7 +520,7 @@ namespace Kagami.Library.Objects
 			return new SelectorItem(label, typeConstraint, selectorItemType);
 		}
 
-		public static string selectorImage(string name, SelectorItem[] selectorItems) => $"{name}({selectorItems.Join(",")})";
+		public static string selectorImage(string name, SelectorItem[] selectorItems) => $"{name}({selectorItems.Stringify(",")})";
 
 		public static Selector selector(string name, string[] labels, IObject[] objects)
 		{

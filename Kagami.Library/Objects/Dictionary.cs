@@ -152,10 +152,10 @@ namespace Kagami.Library.Objects
 
 		public string ClassName => "Dictionary";
 
-		public string AsString => $"{{{dictionary.Select(i => $"{i.Key.AsString} => {i.Value.AsString}").Join(" ")}}}";
+		public string AsString => $"{{{dictionary.Select(i => $"{i.Key.AsString} => {i.Value.AsString}").Stringify(" ")}}}";
 
 		public string Image =>
-			dictionary.Count == 0 ? "{:}" : $"{{{dictionary.Select(i => $"{i.Key.Image} => {i.Value.Image}").Join()}}}";
+			dictionary.Count == 0 ? "{:}" : $"{{{dictionary.Select(i => $"{i.Key.Image} => {i.Value.Image}").Stringify()}}}";
 
 		public int Hash => dictionary.GetHashCode();
 

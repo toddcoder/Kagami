@@ -19,7 +19,7 @@ namespace Kagami.Library.Invokables
 
       public Parameters Parameters { get; }
 
-      public string Image => $"{ClassName}({Parameters.Select(p => p.Name).Join()})";
+      public string Image => $"{ClassName}({Parameters.Select(p => p.Name).Stringify()})";
 
       public bool Constructing => true;
    }

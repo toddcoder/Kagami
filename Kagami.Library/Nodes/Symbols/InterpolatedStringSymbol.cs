@@ -45,7 +45,7 @@ namespace Kagami.Library.Nodes.Symbols
 
       public override string ToString()
       {
-         return (StringStream)"$\"" / prefix / expressions.Zip(suffixes, (e, s) => $"({e}){s}").Join("");
+         return (StringStream)"$\"" / prefix / expressions.Zip(suffixes, (e, s) => $"({e}){s}").Stringify("");
       }
    }
 }

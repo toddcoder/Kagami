@@ -138,7 +138,7 @@ namespace Kagami.Library.Objects
 			get
 			{
 				var self = this;
-				return items.Select((o, i) => self.getItemString(i)).Join(" ");
+				return items.Select((o, i) => self.getItemString(i)).Stringify(" ");
 			}
 		}
 
@@ -147,7 +147,7 @@ namespace Kagami.Library.Objects
 			get
 			{
 				var self = this;
-				return $"({items.Select((o, i) => self.getItemImage(i)).Join()})";
+				return $"({items.Select((o, i) => self.getItemImage(i)).Stringify()})";
 			}
 		}
 

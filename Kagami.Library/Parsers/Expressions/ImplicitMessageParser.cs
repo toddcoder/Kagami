@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Core.Enumerables;
 using Core.Monads;
 using Kagami.Library.Nodes.Symbols;
 using static Kagami.Library.Parsers.ParserFunctions;
@@ -9,7 +10,7 @@ namespace Kagami.Library.Parsers.Expressions
 	{
 		static string parameters(int count)
 		{
-			return "(" + Core.Enumerables.EnumerableExtensions.Join(Enumerable.Range(0, count).Select(i => "_"), ",") + ")";
+			return $"({Enumerable.Range(0, count).Select(i => "_").Stringify(",")})";
 		}
 
 		public ImplicitMessageParser(ExpressionBuilder builder) : base(builder) { }
@@ -26,18 +27,25 @@ namespace Kagami.Library.Parsers.Expressions
 			if (getValue(state, builder.Flags).Out(out var symbol, out var original))
 			{
 				var parameterCount = 1;
+				var fieldName = "__$0";
 				switch (message)
 				{
 					case "foldl":
-					case "foldr":
+						fieldName = "__$1";
+						parameterCount = 2;
+						break;
 					case "reducel":
+						fieldName = "__$1";
+						parameterCount = 2;
+						break;
+					case "foldr":
 					case "reducer":
 						parameterCount = 2;
 						break;
 				}
 
 				state.ImplicitState = new ImplicitState(symbol, message + parameters(parameterCount), parameterCount).Some();
-				builder.Add(new FieldSymbol("__$0"));
+				builder.Add(new FieldSymbol(fieldName));
 
 				return Unit.Matched();
 			}

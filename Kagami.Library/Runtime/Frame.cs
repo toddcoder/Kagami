@@ -182,7 +182,7 @@ namespace Kagami.Library.Runtime
 
 		public override string ToString()
 		{
-			return (StringStream)"(" / stack.Select(v => v.Image).Join() / ")[" / fields.FieldNames.Join() / "]";
+			return (StringStream)"(" / stack.Select(v => v.Image).Stringify() / ")[" / fields.FieldNames.Stringify() / "]";
 		}
 
 		public void CopyFromFields(Fields sourceFields) => fields.CopyFrom(sourceFields);

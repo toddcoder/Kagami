@@ -94,7 +94,7 @@ namespace Kagami.Awk
 			get
 			{
 				split(0);
-				return records.Join(recordSeparator).Elliptical(80, '\n');
+				return records.Stringify(recordSeparator).Elliptical(80, '\n');
 			}
 		}
 

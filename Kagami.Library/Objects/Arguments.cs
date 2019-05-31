@@ -32,9 +32,9 @@ namespace Kagami.Library.Objects
 
       public string ClassName => "Arguments";
 
-      public string AsString => arguments.Select(i => i.AsString).Join();
+      public string AsString => arguments.Select(i => i.AsString).Stringify();
 
-      public string Image => arguments.Select(i => i.Image).Join();
+      public string Image => arguments.Select(i => i.Image).Stringify();
 
       public int Hash => arguments.GetHashCode();
 

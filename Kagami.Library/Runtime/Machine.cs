@@ -338,7 +338,7 @@ namespace Kagami.Library.Runtime
 
 		public void Clear() => CurrentFrame.Clear();
 
-		public string StackImage => stack.Select(f => f.ToString()).Join();
+		public string StackImage => stack.Select(f => f.ToString()).Stringify();
 
 		public IObject X { get; set; } = Unassigned.Value;
 

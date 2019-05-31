@@ -41,7 +41,7 @@ namespace Kagami.Library.Nodes.Statements
                var dataTypeCode = new DataTypeCode(className, key, data, ordinal);
                var block = new Block(dataTypeCode);
                var invokable =
-                  new DataComparisandInvokable(key, new Parameters(data.Length), $"{key}({data.Select(d => d.Image).Join()})");
+                  new DataComparisandInvokable(key, new Parameters(data.Length), $"{key}({data.Select(d => d.Image).Stringify()})");
                if (builder.RegisterInvokable(invokable, block, true).If(out var _, out var exception))
                {
                   builder.NewField(key, false, true);

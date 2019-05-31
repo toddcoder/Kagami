@@ -35,6 +35,6 @@ namespace Kagami.Library.Parsers.Expressions
 
       public void Clear() => stack.Clear();
 
-      public override string ToString() => stack.Join(" ");
+      public override string ToString() => stack.Stringify(" ");
    }
 }

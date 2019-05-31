@@ -68,6 +68,6 @@ namespace Kagami.Library.Nodes.Symbols
 
       public override Arity Arity => Arity.Postfix;
 
-      public override string ToString() => $"{(precedence == Precedence.SendMessage ? "." : "@")}{selector.Image}({arguments.Join()})";
+      public override string ToString() => $"{(precedence == Precedence.SendMessage ? "." : "@")}{selector.Image}({arguments.Stringify()})";
    }
 }
