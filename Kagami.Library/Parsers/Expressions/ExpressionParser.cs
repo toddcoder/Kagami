@@ -40,6 +40,7 @@ namespace Kagami.Library.Parsers.Expressions
 			whateverCount = 0;
 
 			state.BeginPrefixCode();
+			state.BeginImplicitState();
 
 			try
 			{
@@ -72,7 +73,8 @@ namespace Kagami.Library.Parsers.Expressions
 					{
 						if (state.ImplicitState.If(out var implicitState))
 						{
-							if (getMessageWithLambda(implicitState.Symbol, implicitState.Message, implicitState.ParameterCount, expression)
+							if (getMessageWithLambda(implicitState.Symbol, implicitState.Message, implicitState.ParameterCount,
+									expression)
 								.If(out var newExpression, out expException))
 							{
 								Expression = newExpression;
@@ -123,6 +125,7 @@ namespace Kagami.Library.Parsers.Expressions
 			finally
 			{
 				state.EndPrefixCode();
+				state.EndImplicitState();
 			}
 		}
 

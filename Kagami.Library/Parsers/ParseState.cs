@@ -35,6 +35,7 @@ namespace Kagami.Library.Parsers
 		Hash<string, Expression> defExpressions;
 		Hash<string, Function> macros;
 		Stack<IMaybe<IPrefixCode>> prefixCodes;
+		Stack<IMaybe<ImplicitState>> implicitStates;
 
 		public ParseState(string source)
 		{
@@ -54,6 +55,7 @@ namespace Kagami.Library.Parsers
 			defExpressions = new Hash<string, Expression>();
 			macros = new Hash<string, Function>();
 			prefixCodes = new Stack<IMaybe<IPrefixCode>>();
+			implicitStates = new Stack<IMaybe<ImplicitState>>();
 		}
 
 		public IMaybe<int> ExceptionIndex
@@ -292,7 +294,7 @@ namespace Kagami.Library.Parsers
 
 		public bool BlockFollows() => CurrentSource.IsMatch($"^ ':' (/r /n | /r | /n) '{indentation}' [' /t']+", multiline: true);
 
-		public IMaybe<ImplicitState> ImplicitState { get; set; } = none<ImplicitState>();
+		//public IMaybe<ImplicitState> ImplicitState { get; set; } = none<ImplicitState>();
 
 		public IMaybe<(string, Expression)> ForExpression { get; set; } = none<(string, Expression)>();
 
@@ -327,5 +329,19 @@ namespace Kagami.Library.Parsers
 		}
 
 		public void EndPrefixCode() => prefixCodes.Pop();
+
+		public void BeginImplicitState() => implicitStates.Push(none<ImplicitState>());
+
+		public IMaybe<ImplicitState> ImplicitState
+		{
+			get => implicitStates.Peek();
+			set
+			{
+				_ = implicitStates.Pop();
+				implicitStates.Push(value);
+			}
+		}
+
+		public void EndImplicitState() => implicitStates.Pop();
 	}
 }

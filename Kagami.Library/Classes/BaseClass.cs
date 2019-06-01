@@ -279,7 +279,7 @@ namespace Kagami.Library.Classes
 				"index(_<Lambda>)", "indexes(_<Lambda>)",
 				"zip".Selector("_<Collection>", "_<Lambda>"), "zip(_)", "min".get(), "min(_<Lambda>)", "max".get(), "max(_<Lambda>)",
 				"first()", "first".Selector("_<Lambda>"), "last()", "last".Selector("_<Lambda>"),
-				"split(_<Lambda>)", "split".Selector("_<Int>"), "random()", "group".Selector("by:_<Lambda>"), "one(_<Lambda>)",
+				"split(_<Lambda>)", "split".Selector("_<Int>"), "random()", "groupBy(_<Lambda>)", "one(_<Lambda>)",
 				"none(_<Lambda>)",
 				"any(_<Lambda>)", "all(_<Lambda>)", "sum()", "average()",
 				"product()", "cross(_)", "by(_<Int>)", "/(_<Int>)", "window(_<Int>)", "distinct()", "span".Selector("_<Lambda>"),
@@ -352,7 +352,7 @@ namespace Kagami.Library.Classes
 			registerMessage("split(_<Lambda>)", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Split(l)));
 			registerMessage("split(_<Int>)", (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.Split(j.Value)));
 			registerMessage("random()", (obj, msg) => iteratorFunc(obj, i => i.Random()));
-			registerMessage("group".Selector("by:_<Lambda>"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.GroupBy(l)));
+			registerMessage("groupBy(_<Lambda>)", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.GroupBy(l)));
 			registerMessage("one(_<Lambda>)", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.One(l)));
 			registerMessage("none(_<Lambda>)", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.None(l)));
 			registerMessage("any(_<Lambda>)", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Any(l)));

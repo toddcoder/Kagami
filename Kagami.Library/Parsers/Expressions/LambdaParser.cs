@@ -22,7 +22,7 @@ namespace Kagami.Library.Parsers.Expressions
 				from scanned in state.Scan("^ /(|s|) /'->'", Color.Whitespace, Color.Structure)
 				from typeConstraint in parseTypeConstraint(state)
 				from block in getLambdaBlock(!state.CurrentSource.IsMatch("^ (/r /n | /r | /n)"), state,
-					builder.Flags & ~ExpressionFlags.Comparisand, typeConstraint)
+					builder.Flags & ~ExpressionFlags.Comparisand | ExpressionFlags.InLambda, typeConstraint)
 				select new LambdaSymbol(parameters, block);
 			if (result.Out(out var lambdaSymbol, out var original))
 			{

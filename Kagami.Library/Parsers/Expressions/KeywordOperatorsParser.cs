@@ -52,7 +52,7 @@ namespace Kagami.Library.Parsers.Expressions
 							builder.Add(new SendBinaryMessageSymbol("foldr", Precedence.ChainedOperator));
 							break;
 						case "downto":
-							builder.Add(new RangeSymbol(true, true));
+							builder.Add(new RangeSymbol(true));
 							break;
 						case "skip":
 							builder.Add(new SendBinaryMessageSymbol("skip", Precedence.ChainedOperator));

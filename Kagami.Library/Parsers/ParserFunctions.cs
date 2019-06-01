@@ -236,7 +236,7 @@ namespace Kagami.Library.Parsers
 			var scanning = true;
 
 			while (state.More && scanning)
-				if (getExpression(state, flags | ExpressionFlags.OmitComma).If(out var expression, out var mbException))
+				if (getExpression(state, flags | ExpressionFlags.OmitComma | ExpressionFlags.InArgument).If(out var expression, out var mbException))
 				{
 					arguments.Add(expression);
 					if (state.Scan("^ /(/s*) /[',)]}']", Color.Whitespace, Color.Structure).Out(out var next, out var original))
@@ -476,6 +476,7 @@ namespace Kagami.Library.Parsers
 			}
 
 			state.BeginPrefixCode();
+			state.BeginImplicitState();
 			state.Scan("^ /(|s|) /'('", Color.Whitespace, Color.Structure);
 
 			try
@@ -509,6 +510,7 @@ namespace Kagami.Library.Parsers
 			finally
 			{
 				state.EndPrefixCode();
+				state.EndImplicitState();
 			}
 		}
 
