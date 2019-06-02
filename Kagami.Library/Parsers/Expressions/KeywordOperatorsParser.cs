@@ -93,7 +93,7 @@ namespace Kagami.Library.Parsers.Expressions
 							builder.Add(new RemainderSymbol());
 							break;
 						case "divs":
-							builder.Add(new RemainderZero());
+							builder.Add(new RemainderZeroSymbol());
 							break;
 						case "does":
 							builder.Add(new SendBinaryMessageSymbol("respondsTo", Precedence.Boolean));

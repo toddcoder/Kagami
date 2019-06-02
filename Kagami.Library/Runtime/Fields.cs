@@ -212,8 +212,8 @@ namespace Kagami.Library.Runtime
 
 		public IEnumerator<(string fieldName, Field field)> GetEnumerator()
 		{
-			foreach (var item in fields)
-				yield return (item.Key, item.Value);
+			foreach (var (key, value) in fields)
+				yield return (key, value);
 		}
 
 		public void Remove(string fieldName)

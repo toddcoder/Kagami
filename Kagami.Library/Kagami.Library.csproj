@@ -299,7 +299,7 @@
     <Compile Include="Nodes\Symbols\RangeSymbol.cs" />
     <Compile Include="Nodes\Symbols\RationalSymbol.cs" />
     <Compile Include="Nodes\Symbols\RegexSymbol.cs" />
-    <Compile Include="Nodes\Symbols\RemainderZero.cs" />
+    <Compile Include="Nodes\Symbols\RemainderZeroSymbol.cs" />
     <Compile Include="Nodes\Symbols\RemainderSymbol.cs" />
     <Compile Include="Nodes\Symbols\ResultSymbol.cs" />
     <Compile Include="Nodes\Symbols\SendBinaryMessageSymbol.cs" />

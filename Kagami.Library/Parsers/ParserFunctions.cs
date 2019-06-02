@@ -236,7 +236,8 @@ namespace Kagami.Library.Parsers
 			var scanning = true;
 
 			while (state.More && scanning)
-				if (getExpression(state, flags | ExpressionFlags.OmitComma | ExpressionFlags.InArgument).If(out var expression, out var mbException))
+				if (getExpression(state, flags | ExpressionFlags.OmitComma | ExpressionFlags.InArgument)
+					.If(out var expression, out var mbException))
 				{
 					arguments.Add(expression);
 					if (state.Scan("^ /(/s*) /[',)]}']", Color.Whitespace, Color.Structure).Out(out var next, out var original))
@@ -330,7 +331,8 @@ namespace Kagami.Library.Parsers
 
 		public static IMatched<IMaybe<TypeConstraint>> parseTypeConstraint(ParseState state)
 		{
-			if (state.Scan($"^ /(|s|) /({REGEX_CLASS}) /b", Color.Whitespace, Color.Class).If(out var className, out var mbException))
+			if (state.Scan($"^ /(|s|) /({REGEX_CLASS}) -(> '(') /b", Color.Whitespace, Color.Class)
+				.If(out var className, out var mbException))
 			{
 				className = className.TrimStart();
 				if (Module.Global.Class(className).If(out var baseClass))
@@ -750,6 +752,9 @@ namespace Kagami.Library.Parsers
 					else
 						symbol = new RationalSymbol().Matched<Symbol>();
 					break;
+				case "//":
+					symbol = new IntDivideSymbol().Matched<Symbol>();
+					break;
 				case "<!":
 					symbol = new SendBinaryMessageSymbol("foldl", Precedence.ChainedOperator).Matched<Symbol>();
 					break;
@@ -760,10 +765,10 @@ namespace Kagami.Library.Parsers
 					symbol = new SendBinaryMessageSymbol("foldr", Precedence.ChainedOperator).Matched<Symbol>();
 					break;
 				case "%":
-					symbol = new SendBinaryMessageSymbol("any", Precedence.ChainedOperator).Matched<Symbol>();
+					symbol = new RemainderSymbol().Matched<Symbol>();
 					break;
 				case "%%":
-					symbol = new SendBinaryMessageSymbol("all", Precedence.ChainedOperator).Matched<Symbol>();
+					symbol = new RemainderZeroSymbol().Matched<Symbol>();
 					break;
 				case "-+":
 					symbol = new SendBinaryMessageSymbol("skip", Precedence.ChainedOperator).Matched<Symbol>();
