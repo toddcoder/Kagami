@@ -17,7 +17,7 @@ namespace Kagami.Library.Parsers.Expressions
 
 		public override string Pattern => "^ /(|s|) /('sort' | 'foldl' | 'foldr' | 'reducel' | 'reducer' | " +
 			"'count' | 'map' | 'flatMap' | 'bind' | 'if' | 'ifNot' | 'index' | 'min' | 'max' | 'first' | " +
-			"'last' | 'split' | 'one' | 'none' | 'any' | 'all' | 'span' | 'groupBy' | 'each') /'>'";
+			"'last' | 'split' | 'one' | 'none' | 'any' | 'all' | 'span' | 'groupBy' | 'each' | 'while' | 'until') /'>'";
 
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
@@ -41,6 +41,12 @@ namespace Kagami.Library.Parsers.Expressions
 					case "foldr":
 					case "reducer":
 						parameterCount = 2;
+						break;
+					case "while":
+						message = "takeWhile";
+						break;
+					case "until":
+						message = "takeUntil";
 						break;
 				}
 

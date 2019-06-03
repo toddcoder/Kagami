@@ -273,9 +273,9 @@ namespace Kagami.Library.Classes
 				"reducer".Selector("_", "_<Lambda>"), "reducer(_)", "count(of:_)", "count(_<Lambda>)", "map(_<Lambda>)",
 				"flatMap(_<Lambda>)", "bind(_<Lambda>)",
 				"if(_<Lambda>)",
-				"ifNot(_<Lambda>)", "skip(_<Int>)", "-(_<Int>)", "skip".Selector("while:_<Lambda>"),
-				"skip".Selector("until:_<Lambda>"), "take(_<Int>)", "+(_<Int>)", "take".Selector("while:_<Lambda>"),
-				"take".Selector("until:_<Lambda>"),
+				"ifNot(_<Lambda>)", "skip(_<Int>)", "-(_<Int>)", "skipWhile(_<Lambda>)",
+				"skipUntil(_<Lambda>)", "take(_<Int>)", "+(_<Int>)", "takeWhile(_<Lambda>)",
+				"takeUntil(_<Lambda>)",
 				"index(_<Lambda>)", "indexes(_<Lambda>)",
 				"zip".Selector("_<Collection>", "_<Lambda>"), "zip(_)", "min".get(), "min(_<Lambda>)", "max".get(), "max(_<Lambda>)",
 				"first()", "first".Selector("_<Lambda>"), "last()", "last".Selector("_<Lambda>"),
@@ -330,12 +330,12 @@ namespace Kagami.Library.Classes
 			registerMessage("ifNot(_<Lambda>)", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.IfNot(l)));
 			registerMessage("skip(_<Int>)", (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.Skip(j.Value)));
 			registerMessage("-(_<Int>)", (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.Skip(j.Value)));
-			registerMessage("skip".Selector("while:_<Lambda>"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.SkipWhile(l)));
-			registerMessage("skip".Selector("until:_<Lambda>"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.SkipUntil(l)));
+			registerMessage("skipWhile(_<Lambda>)", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.SkipWhile(l)));
+			registerMessage("skipUntil(_<Lambda>)", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.SkipUntil(l)));
 			registerMessage("take(_<Int>)", (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.Take(j.Value)));
 			registerMessage("+(_<Int>)", (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.Take(j.Value)));
-			registerMessage("take".Selector("while:_<Lambda>"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.TakeWhile(l)));
-			registerMessage("take".Selector("until:_<Lambda>"), (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.TakeUntil(l)));
+			registerMessage("takeWhile(_<Lambda>)", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.TakeWhile(l)));
+			registerMessage("takeUntil(_<Lambda>)", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.TakeUntil(l)));
 			registerMessage("index(_<Lambda>)", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Index(l)));
 			registerMessage("indexes(_<Lambda>)", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Indexes(l)));
 			registerMessage("zip".Selector("_<Collection>", "_<Lambda>"),

@@ -24,7 +24,7 @@ namespace Kagami.Library.Parsers.Expressions
                {
                   case "while":
                   case "until":
-                     builder.Add(new SendBinaryMessageSymbol($"{word1}{word2.ToTitleCase()}", Precedence.ChainedOperator));
+                     builder.Add(new SendBinaryMessageSymbol($"{word1}{word2.ToTitleCase()}(_<Lambda>)", Precedence.ChainedOperator));
                      break;
                   default:
                      return notMatched<Unit>();
@@ -36,7 +36,7 @@ namespace Kagami.Library.Parsers.Expressions
                {
                   case "while":
                   case "until":
-                     builder.Add(new SendBinaryMessageSymbol($"{word1}{word2.ToTitleCase()}", Precedence.ChainedOperator));
+                     builder.Add(new SendBinaryMessageSymbol($"{word1}{word2.ToTitleCase()}(_<Lambda>)", Precedence.ChainedOperator));
                      break;
                   default:
                      return notMatched<Unit>();

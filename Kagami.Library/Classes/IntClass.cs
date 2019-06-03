@@ -22,7 +22,7 @@ namespace Kagami.Library.Classes
          messages["isEven".get()] = (obj, msg) => function<Int>(obj, i => i.IsEven);
          messages["isOdd".get()] = (obj, msg) => function<Int>(obj, i => i.IsOdd);
          messages["isPrime".get()] = (obj, msg) => function<Int>(obj, i => i.IsPrime);
-         messages["factorial"] = (obj, msg) => function<Int>(obj, i => i.Factorial());
+         messages["factorial()"] = (obj, msg) => function<Int>(obj, i => i.Factorial());
          messages["millisecond".get()] = (obj, msg) => function<Int>(obj, i => i.Millisecond);
          messages["milliseconds".get()] = (obj, msg) => function<Int>(obj, i => i.Millisecond);
          messages["second".get()] = (obj, msg) => function<Int>(obj, i => i.Second);

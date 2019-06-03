@@ -1,5 +1,6 @@
 ﻿using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
+using Core.Strings;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
@@ -77,8 +78,7 @@ namespace Kagami.Library.Parsers.Expressions
 							break;
 						case "while":
 						case "until":
-							builder.Add(new SendBinaryMessageSymbol("take".Selector($"{keyword}:<Lambda>"), Precedence.ChainedOperator, false,
-								keyword));
+							builder.Add(new SendBinaryMessageSymbol($"take{keyword.ToTitleCase()}(_<Lambda>)", Precedence.ChainedOperator));
 							break;
 						case "min":
 							builder.Add(new MinSymbol());
@@ -98,8 +98,8 @@ namespace Kagami.Library.Parsers.Expressions
 						case "does":
 							builder.Add(new SendBinaryMessageSymbol("respondsTo", Precedence.Boolean));
 							break;
-                  case "x":
-	                  builder.Add(new SendBinaryMessageSymbol("cross(_)", Precedence.Concatenate));
+						case "x":
+							builder.Add(new SendBinaryMessageSymbol("cross(_)", Precedence.Concatenate));
 							break;
 						default:
 							return $"Keyword internal error for {keyword}".FailedMatch<Unit>();
