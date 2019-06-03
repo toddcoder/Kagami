@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using Core.Arrays;
 using Kagami.Library;
@@ -138,12 +139,12 @@ namespace Kagami.Playground
 				//document.StandardMenus();
 				var menus = document.Menus;
 				menus.Menu("&File");
-				menus.Menu("File","&New", (s, evt) =>
+				menus.Menu("File", "&New", (s, evt) =>
 				{
 					textEditor.ClearModificationGlyphs();
 					document.New();
 				});
-				menus.Menu("File","&Open", (s, evt) =>
+				menus.Menu("File", "&Open", (s, evt) =>
 				{
 					textEditor.ClearModificationGlyphs();
 					document.Open();
@@ -153,7 +154,7 @@ namespace Kagami.Playground
 					textEditor.SetToSavedGlyphs();
 					document.Save();
 				}, "^S");
-				menus.Menu("File","Save As", (s, evt) =>
+				menus.Menu("File", "Save As", (s, evt) =>
 				{
 					textEditor.SetToSavedGlyphs();
 					document.SaveAs();
@@ -226,7 +227,7 @@ namespace Kagami.Playground
 
 		void update(bool execute, bool fromMenu)
 		{
-			if (!locked && textEditor.TextLength != 0)
+			if (!locked && textEditor.TextLength != 0 && delay())
 			{
 				locked = true;
 				if (manual)
@@ -696,5 +697,14 @@ namespace Kagami.Playground
 		}
 
 		void textEditor_SelectionChanged(object sender, EventArgs e) => textEditor.Invalidate();
+
+		bool delay()
+		{
+			var text = textEditor.Text;
+			Thread.Sleep(100);
+			var text2 = textEditor.Text;
+
+			return text == text2;
+		}
 	}
 }
