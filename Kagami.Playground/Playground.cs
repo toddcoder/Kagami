@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Windows.Forms;
 using Core.Arrays;
 using Kagami.Library;
@@ -227,7 +226,7 @@ namespace Kagami.Playground
 
 		void update(bool execute, bool fromMenu)
 		{
-			if (!locked && textEditor.TextLength != 0 && delay())
+			if (!locked && textEditor.TextLength != 0)
 			{
 				locked = true;
 				if (manual)
@@ -698,13 +697,13 @@ namespace Kagami.Playground
 
 		void textEditor_SelectionChanged(object sender, EventArgs e) => textEditor.Invalidate();
 
-		bool delay()
+/*		bool delay()
 		{
 			var text = textEditor.Text;
 			Thread.Sleep(100);
 			var text2 = textEditor.Text;
 
 			return text == text2;
-		}
+		}*/
 	}
 }

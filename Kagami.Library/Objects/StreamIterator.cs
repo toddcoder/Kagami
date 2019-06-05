@@ -229,6 +229,8 @@ namespace Kagami.Library.Objects
 
 		public IObject Cross(ICollection collection) => iterator.Cross(collection);
 
+		public IObject Cross(ICollection collection, Lambda lambda) => iterator.Cross(collection, lambda);
+
 		public IObject By(int count) => iterator.By(count);
 
 		public IObject Window(int count) => iterator.Window(count);

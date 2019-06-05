@@ -17,11 +17,12 @@ namespace Kagami.Library.Parsers.Expressions
 
 		public override string Pattern => "^ /(|s|) /('sort' | 'foldl' | 'foldr' | 'reducel' | 'reducer' | " +
 			"'count' | 'map' | 'flatMap' | 'bind' | 'if' | 'ifNot' | 'index' | 'min' | 'max' | 'first' | " +
-			"'last' | 'split' | 'one' | 'none' | 'any' | 'all' | 'span' | 'groupBy' | 'each' | 'while' | 'until') /'>'";
+			"'last' | 'split' | 'one' | 'none' | 'any' | 'all' | 'span' | 'groupBy' | 'each' | 'while' | 'until' | 'z' | 'x') /('>'+)";
 
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
 			var message = tokens[2].Text;
+			var count = tokens[3].Text.Length;
 			state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Operator);
 
 			if (getValue(state, builder.Flags).Out(out var symbol, out var original))
@@ -48,9 +49,27 @@ namespace Kagami.Library.Parsers.Expressions
 					case "until":
 						message = "takeUntil";
 						break;
+					case "z":
+					case "x":
+						if (state.ImplicitState.IsNone)
+						{
+							var newMessage = message == "z" ? "zip(_,_)" : "cross(_,_)";
+							state.ImplicitState = new ImplicitState(symbol, newMessage, 2, "__$0") { Levels = count }.Some();
+							builder.Add(new FieldSymbol("__$0"));
+							return Unit.Matched();
+						}
+						else if (state.ImplicitState.If(out var implicitState))
+						{
+							implicitState.Two = symbol.Some();
+							builder.Add(new FieldSymbol("__$1"));
+							return Unit.Matched();
+						}
+
+						break;
 				}
 
-				state.ImplicitState = new ImplicitState(symbol, message + parameters(parameterCount), parameterCount, fieldName).Some();
+				state.ImplicitState = new ImplicitState(symbol, message + parameters(parameterCount), parameterCount, fieldName)
+					{ Levels = count }.Some();
 				builder.Add(new FieldSymbol(fieldName));
 
 				return Unit.Matched();

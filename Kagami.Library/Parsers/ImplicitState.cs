@@ -1,4 +1,6 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using Core.Monads;
+using Kagami.Library.Nodes.Symbols;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers
 {
@@ -20,8 +22,12 @@ namespace Kagami.Library.Parsers
 
 		public string FieldName { get; }
 
+		public int Levels { get; set; }
+
 		public string Left => FieldName;
 
 		public string Right => FieldName == "__$0" ? "__$1" : "__$0";
+
+		public IMaybe<Symbol> Two { get; set; } = none<Symbol>();
 	}
 }

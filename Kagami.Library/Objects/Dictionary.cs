@@ -328,5 +328,18 @@ namespace Kagami.Library.Objects
 
 			return new Dictionary(newDictionary);
 		}
+
+		public Dictionary Concatenate(ICollection collection)
+		{
+			var newDictionary = new Hash<IObject, IObject>();
+			foreach (var (key, value) in dictionary)
+				newDictionary[key] = value;
+			var iterator = collection.GetIterator(false);
+			foreach (var item in iterator.List())
+				if (item is IKeyValue keyValue)
+					newDictionary[keyValue.Key] = keyValue.Value;
+
+			return new Dictionary(newDictionary);
+		}
 	}
 }

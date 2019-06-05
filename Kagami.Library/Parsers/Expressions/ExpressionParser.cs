@@ -71,10 +71,20 @@ namespace Kagami.Library.Parsers.Expressions
 
 					if (builder.ToExpression().If(out var expression, out var expException))
 					{
-						if (state.ImplicitState.If(out var implicitState))
+						if (state.ImplicitState.If(out var implicitState) && implicitState.Two.IsNone)
 						{
-							if (getMessageWithLambda(implicitState.Symbol, implicitState.Message, implicitState.ParameterCount,
-									expression)
+/*							if (implicitState.Levels > 1)
+							{
+								Expression = expression;
+								implicitState.Levels--;
+								return Unit.Matched();
+							}*/
+/*							if (!keep("__$0"))
+							{
+								Expression = expression;
+								return Unit.Matched();
+							}*/
+							if (getMessageWithLambda(implicitState.Symbol, implicitState.Message, implicitState.ParameterCount, expression)
 								.If(out var newExpression, out expException))
 							{
 								Expression = newExpression;
@@ -83,25 +93,14 @@ namespace Kagami.Library.Parsers.Expressions
 							else
 								return failedMatch<Unit>(expException);
 						}
-						else if (state.LeftZipExpression.If(out var leftTuple) && state.RightZipExpression.If(out var rightTuple))
+						else if (state.ImplicitState.If(out implicitState) && implicitState.Two.If(out var symbol))
 						{
-							var (leftFieldName, leftSymbol) = leftTuple;
-							var (rightFieldName, rightSymbol) = rightTuple;
-							if (!keep(leftFieldName) || !keep(rightFieldName))
-							{
-								Expression = expression;
-								return Unit.Matched();
-							}
-							else if (getDualMessageWithLambda(leftFieldName, rightFieldName, leftSymbol, rightSymbol,
-								"zip".Selector("<Collection>", "<Lambda>"),
-								expression).If(out var newExpression, out expException))
+							if (getDualMessageWithLambda("__$0", "__$1", implicitState.Symbol, symbol, implicitState.Message, expression)
+								.If(out var newExpression, out expException))
 							{
 								Expression = newExpression;
-								state.LeftZipExpression = none<(string, Symbol)>();
-								state.RightZipExpression = none<(string, Symbol)>();
+								state.ImplicitState = none<ImplicitState>();
 							}
-							else
-								return failedMatch<Unit>(expException);
 						}
 						else if (whateverCount > 0)
 						{

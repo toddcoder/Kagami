@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Core.Arrays;
 using Core.Collections;
 using Core.Enumerables;
 using Core.Monads;
@@ -45,7 +44,7 @@ namespace Kagami.Library.Objects
 
 		public Boolean NotIn(IObject item) => !items.Contains(item);
 
-		public IObject Times(int count) => new Cycle(items.Repeat(count));
+		public IObject Times(int count) => GetIterator(false).Take(count);
 
 		public String MakeString(string connector) => makeString(this, connector);
 

@@ -11,7 +11,7 @@ namespace Kagami.Library.Classes
    {
       public override string Name => "Array";
 
-      public IObject Revert(IEnumerable<IObject> list) => new Array(list);
+      public IObject Revert(IEnumerable<IObject> list) => Array.CreateObject(list);
 
       public override void RegisterMessages()
       {

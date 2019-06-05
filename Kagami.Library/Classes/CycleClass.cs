@@ -1,9 +1,11 @@
-﻿using Kagami.Library.Objects;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Kagami.Library.Objects;
 using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Classes
 {
-	public class CycleClass : BaseClass
+	public class CycleClass : BaseClass, ICollectionClass
 	{
 		public override string Name => "Cycle";
 
@@ -15,5 +17,9 @@ namespace Kagami.Library.Classes
 
 			messages["items".get()] = (obj, msg) => function<Cycle>(obj, c => c.Items);
 		}
+
+		public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
+
+		public IObject Revert(IEnumerable<IObject> list) => new Tuple(list.ToArray());
 	}
 }

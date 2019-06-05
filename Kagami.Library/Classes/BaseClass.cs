@@ -282,7 +282,7 @@ namespace Kagami.Library.Classes
 				"split(_<Lambda>)", "split".Selector("_<Int>"), "random()", "groupBy(_<Lambda>)", "one(_<Lambda>)",
 				"none(_<Lambda>)",
 				"any(_<Lambda>)", "all(_<Lambda>)", "sum()", "average()",
-				"product()", "cross(_)", "by(_<Int>)", "/(_<Int>)", "window(_<Int>)", "distinct()", "span".Selector("_<Lambda>"),
+				"product()", "cross(_)", "cross(_,_)", "by(_<Int>)", "/(_<Int>)", "window(_<Int>)", "distinct()", "span".Selector("_<Lambda>"),
 				"span".Selector("_<Int>"),
 				"shuffle()", "array()", "list()", "tuple()", "dictionary".Selector("key:_<Lambda>", "value:_<Lambda>"), "dictionary()",
 				"each(_<Lambda>)", "rotate(_<Int>)", "permutation(_<Int>)", "combination(_<Int>)", "flatten()",
@@ -361,6 +361,7 @@ namespace Kagami.Library.Classes
 			registerMessage("average()", (obj, msg) => iteratorFunc(obj, i => (IObject)i.Average()));
 			registerMessage("product()", (obj, msg) => iteratorFunc(obj, i => (IObject)i.Product()));
 			registerMessage("cross(_)", (obj, msg) => iteratorFunc<IObject>(obj, msg, (i, c) => i.Cross((ICollection)c)));
+			registerMessage("cross(_,_)", (obj, msg) => iteratorFunc<IObject, Lambda>(obj, msg, (i, c, l) => i.Cross((ICollection)c, l)));
 			registerMessage("by(_<Int>)", (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.By(j.Value)));
 			registerMessage("/(_<Int>)", (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.By(j.Value)));
 			registerMessage("window(_<Int>)", (obj, msg) => iteratorFunc<Int>(obj, msg, (i, j) => i.Window(j.Value)));

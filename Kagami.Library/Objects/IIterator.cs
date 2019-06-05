@@ -118,6 +118,8 @@ namespace Kagami.Library.Objects
 
       IObject Cross(ICollection collection);
 
+      IObject Cross(ICollection collection, Lambda lambda);
+
       IObject By(int count);
 
       IObject Window(int count);

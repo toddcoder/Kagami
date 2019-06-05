@@ -49,6 +49,7 @@ namespace Kagami.Library.Classes
 			messages["remove(at:_)"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, k) => d.Remove(k));
 			messages["forEach(_<Lambda>)"] = (obj, msg) => function<Dictionary, Lambda>(obj, msg, (d, l) => d.ForEach(l));
 			messages["invert()"] = (obj, msg) => function<Dictionary>(obj, d => d.Invert());
+			messages["~(_)"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, o) => d.Concatenate((ICollection)o));
 		}
 
 		public override void RegisterClassMessages()

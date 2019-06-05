@@ -592,9 +592,24 @@ namespace Kagami.Library.Objects
 			return collectionClass.Revert(result.Select(l => collectionClass.Revert(l)));
 		}
 
+		public IObject Cross(ICollection collection, Lambda lambda)
+		{
+			var result = new List<IObject>();
+			foreach (var left in List())
+			foreach (var right in collection.GetIterator(false).List())
+			{
+				var value = lambda.Invoke(left, right);
+				result.Add(value);
+			}
+
+			return collectionClass.Revert(result);
+		}
+
 		public IObject By(int count)
 		{
-			if (count > 1)
+			if (count <= 0)
+				return Flatten();
+			else if (count > 1)
 			{
 				var outer = new List<IObject>();
 				var inner = new List<IObject>();
@@ -841,7 +856,7 @@ namespace Kagami.Library.Objects
 					yield return item;
 		}
 
-		public IObject Flatten() => collectionClass.Revert(flatten(this));
+		public IObject Flatten() => collectionClass.Revert(flatten(this).ToList());
 
 		public IObject Copy() => collectionClass.Revert(List());
 
