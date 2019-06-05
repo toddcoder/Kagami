@@ -890,7 +890,7 @@ namespace Kagami.Library.Parsers
 /*				case ";":
 					symbol = new IndexSymbol().Matched<Symbol>();
 					break;*/
-				case "^^":
+				case "##":
 					symbol = new SendBinaryMessageSymbol("defaultTo(_)", Precedence.SendMessage).Matched<Symbol>();
 					break;
 			}

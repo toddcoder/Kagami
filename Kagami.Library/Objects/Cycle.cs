@@ -30,9 +30,15 @@ namespace Kagami.Library.Objects
 
 		public bool IsTrue => items.Length > 0;
 
-		public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new Iterator(this);
+		public IIterator GetIterator(bool lazy) => lazy ? (IIterator)new LazyIterator(this) : new CycleIterator(this);
 
-		public IMaybe<IObject> Next(int index) => items[index % items.Length].Some();
+		public IMaybe<IObject> Next(int index)
+		{
+			var value = items[index % items.Length];
+			if (value is Lambda lambda)
+				value = lambda.Invoke();
+			return value.Some();
+		}
 
 		public IMaybe<IObject> Peek(int index) => Next(index);
 
@@ -51,5 +57,7 @@ namespace Kagami.Library.Objects
 		public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
 		public Tuple Items => new Tuple(items);
+
+		public IObject this[int index] => items[index];
 	}
 }
