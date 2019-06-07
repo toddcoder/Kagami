@@ -26,6 +26,8 @@ namespace Kagami.Library.Objects
 
 		public static IObject Empty => new Dictionary(new IObject[0]);
 
+		public static IObject New(IEnumerable<IObject> objects) => new Dictionary(objects);
+
 		int objectID;
 		Hash<IObject, IObject> dictionary;
 		IObject[] keys;
@@ -152,10 +154,10 @@ namespace Kagami.Library.Objects
 
 		public string ClassName => "Dictionary";
 
-		public string AsString => $"{{{dictionary.Select(i => $"{i.Key.AsString} => {i.Value.AsString}").Stringify(" ")}}}";
+		public string AsString => $"[{dictionary.Select(i => $"{i.Key.AsString} => {i.Value.AsString}").Stringify(" ")}]";
 
 		public string Image =>
-			dictionary.Count == 0 ? "{:}" : $"{{{dictionary.Select(i => $"{i.Key.Image} => {i.Value.Image}").Stringify()}}}";
+			dictionary.Count == 0 ? "[]" : $"[{dictionary.Select(i => $"{i.Key.Image} => {i.Value.Image}").Stringify()}]";
 
 		public int Hash => dictionary.GetHashCode();
 

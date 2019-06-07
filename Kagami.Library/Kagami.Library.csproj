@@ -222,6 +222,7 @@
     <Compile Include="Nodes\Symbols\CycleSymbol.cs" />
     <Compile Include="Nodes\Symbols\DateSymbol.cs" />
     <Compile Include="Nodes\Symbols\DelSymbol.cs" />
+    <Compile Include="Nodes\Symbols\DictionarySymbol.cs" />
     <Compile Include="Nodes\Symbols\DoesSymbol.cs" />
     <Compile Include="Nodes\Symbols\DoSymbol.cs" />
     <Compile Include="Nodes\Symbols\EmptyArraySymbol.cs" />
@@ -515,6 +516,7 @@
     <Compile Include="Operations\NewCycle.cs" />
     <Compile Include="Operations\NewDataComparisand.cs" />
     <Compile Include="Operations\NewDataType.cs" />
+    <Compile Include="Operations\NewDictionary.cs" />
     <Compile Include="Operations\NewIndex.cs" />
     <Compile Include="Operations\NewKeyValue.cs" />
     <Compile Include="Operations\NewLambda.cs" />
@@ -636,6 +638,7 @@
     <Compile Include="Parsers\Expressions\ConstantsParser.cs" />
     <Compile Include="Parsers\Expressions\CycleParser.cs" />
     <Compile Include="Parsers\Expressions\DateParser.cs" />
+    <Compile Include="Parsers\Expressions\DictionaryParser.cs" />
     <Compile Include="Parsers\Expressions\DollarFieldParser.cs" />
     <Compile Include="Parsers\Expressions\DoParser.cs" />
     <Compile Include="Parsers\Expressions\EmptyValueParser.cs" />

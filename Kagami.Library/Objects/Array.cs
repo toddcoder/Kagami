@@ -14,13 +14,7 @@ namespace Kagami.Library.Objects
 {
 	public class Array : IObject, IObjectCompare, IComparable<Array>, IEquatable<Array>, IMutableCollection, ISliceable
 	{
-		public static IObject CreateObject(IEnumerable<IObject> items)
-		{
-			if (items.All(i => i is IKeyValue))
-				return new Dictionary(items);
-			else
-				return new Array(items);
-		}
+		public static IObject CreateObject(IEnumerable<IObject> items) => new Array(items);
 
 		public static IObject Empty => new Array(new IObject[0]);
 

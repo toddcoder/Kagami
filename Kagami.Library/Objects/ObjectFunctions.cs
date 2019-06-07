@@ -363,7 +363,7 @@ namespace Kagami.Library.Objects
 
 				while (next.If(out n))
 				{
-					builder.Append(", ");
+					builder.Append(" :: ");
 					builder.Append(func(n));
 					if (++count == breakOn && breakEarly)
 					{

@@ -73,17 +73,6 @@ namespace Kagami.Library.Parsers.Expressions
 					{
 						if (state.ImplicitState.If(out var implicitState) && implicitState.Two.IsNone)
 						{
-/*							if (implicitState.Levels > 1)
-							{
-								Expression = expression;
-								implicitState.Levels--;
-								return Unit.Matched();
-							}*/
-/*							if (!keep("__$0"))
-							{
-								Expression = expression;
-								return Unit.Matched();
-							}*/
 							if (getMessageWithLambda(implicitState.Symbol, implicitState.Message, implicitState.ParameterCount, expression)
 								.If(out var newExpression, out expException))
 							{

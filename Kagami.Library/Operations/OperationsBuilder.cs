@@ -310,6 +310,8 @@ namespace Kagami.Library.Operations
 
 		public void NewArray() => add(new NewArray());
 
+		public void NewDictionary() => add(new NewDictionary());
+
 		public void NewCycle() => add(new NewCycle());
 
 		public void GetIterator(bool lazy) => add(new GetIterator(lazy));

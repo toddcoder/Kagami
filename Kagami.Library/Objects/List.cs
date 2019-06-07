@@ -117,7 +117,7 @@ namespace Kagami.Library.Objects
 				if (IsString)
 					return show(this, "$\"", o => o.AsString, "\"");
 				else
-					return show(this, "[", o => o.Image, "]");
+					return show(this, "", o => o.Image, "");
 			}
 		}
 
