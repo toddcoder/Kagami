@@ -15,14 +15,11 @@ namespace Kagami.Library.Parsers.Expressions
 
 		public ImplicitMessageParser(ExpressionBuilder builder) : base(builder) { }
 
-		public override string Pattern => "^ /(|s|) /('sort' | 'foldl' | 'foldr' | 'reducel' | 'reducer' | " +
-			"'count' | 'map' | 'flatMap' | 'bind' | 'if' | 'ifNot' | 'index' | 'min' | 'max' | 'first' | " +
-			"'last' | 'split' | 'one' | 'none' | 'any' | 'all' | 'span' | 'groupBy' | 'each' | 'while' | 'until' | 'z' | 'x') /('>'+)";
+		public override string Pattern => $"^ /(|s|) /({REGEX_ITERATOR_FUNCTIONS}) /'>'";
 
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
 			var message = tokens[2].Text;
-			var count = tokens[3].Text.Length;
 			state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Operator);
 
 			if (getValue(state, builder.Flags).Out(out var symbol, out var original))
@@ -54,7 +51,7 @@ namespace Kagami.Library.Parsers.Expressions
 						if (state.ImplicitState.IsNone)
 						{
 							var newMessage = message == "z" ? "zip(_,_)" : "cross(_,_)";
-							state.ImplicitState = new ImplicitState(symbol, newMessage, 2, "__$0") { Levels = count }.Some();
+							state.ImplicitState = new ImplicitState(symbol, newMessage, 2, "__$0").Some();
 							builder.Add(new FieldSymbol("__$0"));
 							return Unit.Matched();
 						}
@@ -68,8 +65,7 @@ namespace Kagami.Library.Parsers.Expressions
 						break;
 				}
 
-				state.ImplicitState = new ImplicitState(symbol, message + parameters(parameterCount), parameterCount, fieldName)
-					{ Levels = count }.Some();
+				state.ImplicitState = new ImplicitState(symbol, message + parameters(parameterCount), parameterCount, fieldName).Some();
 				builder.Add(new FieldSymbol(fieldName));
 
 				return Unit.Matched();

@@ -13,7 +13,7 @@ namespace Kagami.Library.Parsers.Statements
 		string fieldName;
 		bool assignment;
 
-		public override string Pattern => $"^ (/('var' | 'let') /(|s|) /({REGEX_FIELD}) /(|s|) /'=' /(|s|))? /'if' -(> '>') /b";
+		public override string Pattern => $"^ (/('var' | 'let') /(|s|) /({REGEX_FIELD}) /(|s|) /'=' /(|s|))? /'if' -(> ['>(']) /b";
 
 		public override IMatched<Unit> Prefix(ParseState state, Token[] tokens)
 		{

@@ -240,6 +240,7 @@
     <Compile Include="Nodes\Symbols\GetSliceSymbol.cs" />
     <Compile Include="Nodes\Symbols\GreaterThanEqualSymbol.cs" />
     <Compile Include="Nodes\Symbols\GreaterThanSymbol.cs" />
+    <Compile Include="Nodes\Symbols\ImplicitExpressionSymbol.cs" />
     <Compile Include="Nodes\Symbols\IPrefixCode.cs" />
     <Compile Include="Nodes\Symbols\IConstant.cs" />
     <Compile Include="Nodes\Symbols\IfSomeNoneSymbol.cs" />
@@ -318,6 +319,7 @@
     <Compile Include="Nodes\Symbols\SkipTakeItem.cs" />
     <Compile Include="Nodes\Symbols\SkipTakeLiteralSymbol.cs" />
     <Compile Include="Nodes\Symbols\SkipTakeOperatorSymbol.cs" />
+    <Compile Include="Nodes\Symbols\SliceSymbol.cs" />
     <Compile Include="Nodes\Symbols\SomeSymbol.cs" />
     <Compile Include="Nodes\Symbols\SpecialLessThanEqualSymbol.cs" />
     <Compile Include="Nodes\Symbols\SpecialLessThanSymbol.cs" />
@@ -656,7 +658,9 @@
     <Compile Include="Parsers\Expressions\HexExpParser.cs" />
     <Compile Include="Parsers\Expressions\IfAsAndParser.cs" />
     <Compile Include="Parsers\Expressions\ImageParser.cs" />
+    <Compile Include="Parsers\Expressions\ImplicitExpressionParser.cs" />
     <Compile Include="Parsers\Expressions\ImplicitMessageParser.cs" />
+    <Compile Include="Parsers\Expressions\ImplicitSymbolParser.cs" />
     <Compile Include="Parsers\Expressions\IndexOptionalParser.cs" />
     <Compile Include="Parsers\Expressions\IndexerParser.cs" />
     <Compile Include="Parsers\Expressions\InfixParser.cs" />
@@ -738,6 +742,7 @@
     <Compile Include="Parsers\Expressions\ValuesParser.cs" />
     <Compile Include="Parsers\Expressions\ZipLambdaParser.cs" />
     <Compile Include="Parsers\Expressions\ZipOperatorParser.cs" />
+    <Compile Include="Parsers\ImplicitExpressionState.cs" />
     <Compile Include="Parsers\ImplicitState.cs" />
     <Compile Include="Parsers\MultiParser.cs" />
     <Compile Include="Parsers\Parser.cs" />

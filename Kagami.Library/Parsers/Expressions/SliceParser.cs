@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using System.Collections.Generic;
+using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
@@ -7,31 +8,96 @@ namespace Kagami.Library.Parsers.Expressions
 {
 	public class SliceParser : SymbolParser
 	{
+		public class SkipTake
+		{
+			public IMaybe<Expression> Skip { get; set; } = none<Expression>();
+
+			public IMaybe<Expression> Take { get; set; } = none<Expression>();
+
+			public bool Terminal { get; set; }
+
+			public override string ToString()
+			{
+				return $"{Skip.FlatMap(e => e.ToString(), () => "")};{Take.FlatMap(e => e.ToString(), () => "")}";
+			}
+		}
+
 		public SliceParser(ExpressionBuilder builder) : base(builder) { }
 
-		public override string Pattern => "^ /(|s|) /'$' -(> ['cdefgnprxs' dquote])";
+		public override string Pattern => "^ /'{'";
 
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
-			state.Colorize(tokens, Color.Whitespace, Color.Operator);
+			state.Colorize(tokens, Color.Structure);
 
-			if (getExpression(state, builder.Flags).Out(out var expression, out var original))
+			var skipTakes = new List<SkipTake>();
+
+			while (state.More)
 			{
-				builder.Add(new GetSliceSymbol(expression));
-
-				var result =
-					from scanned in state.Scan("^ /(|s|) /'=' -(> '=')", Color.Whitespace, Color.Structure)
-					from expression1 in getExpression(state, builder.Flags)
-					select expression1;
-				if (result.If(out var value, out var mbException))
-					builder.Add(new SetSliceSymbol(value));
+				var skipTakeMatch = getSkipTake(state, builder.Flags | ExpressionFlags.OmitComma);
+				if (skipTakeMatch.If(out var skipTake, out var mbException))
+				{
+					skipTakes.Add(skipTake);
+					if (skipTake.Terminal)
+						break;
+				}
 				else if (mbException.If(out var exception))
 					return failedMatch<Unit>(exception);
 			}
-			else
-				return original.Unmatched<Unit>();
+
+			builder.Add(new SliceSymbol(skipTakes.ToArray()));
 
 			return Unit.Matched();
+		}
+
+		IMatched<SkipTake> getSkipTake(ParseState state, ExpressionFlags flags)
+		{
+			var skipTake = new SkipTake();
+
+			var noSkipMatch = state.Scan("^ /(|s|) /';'", Color.Whitespace, Color.Structure);
+			if (noSkipMatch.If(out _, out var mbException)) { }
+			else if (mbException.If(out var exception))
+				return failedMatch<SkipTake>(exception);
+			else
+			{
+				var skipMatch = getExpression(state, flags);
+				if (skipMatch.If(out var skipExpression, out mbException))
+					skipTake.Skip = skipExpression.Some();
+				else if (mbException.If(out exception))
+					return failedMatch<SkipTake>(exception);
+
+				var semiOrEndMatch = state.Scan("^ /(|s|) /[';,}']", Color.Whitespace, Color.Structure);
+				if (semiOrEndMatch.If(out var semiOrEnd, out mbException))
+					switch (semiOrEnd)
+					{
+						case "}":
+							skipTake.Terminal = true;
+							return skipTake.Matched();
+						case ",":
+							return skipTake.Matched();
+					}
+				else if (mbException.If(out exception))
+					return failedMatch<SkipTake>(exception);
+			}
+
+			var takeMatch = getExpression(state, flags);
+			if (takeMatch.If(out var takeExpression, out mbException))
+				skipTake.Take = takeExpression.Some();
+			else if (mbException.If(out var exception))
+				return failedMatch<SkipTake>(exception);
+
+			var endMatch = state.Scan("^ /(|s|) /['}']", Color.Whitespace, Color.Structure);
+			if (endMatch.If(out var end, out mbException))
+				switch (end)
+				{
+					case "}":
+						skipTake.Terminal = true;
+						return skipTake.Matched();
+				}
+			else if (mbException.If(out var exception))
+				return failedMatch<SkipTake>(exception);
+
+			return skipTake.Matched();
 		}
 	}
 }
