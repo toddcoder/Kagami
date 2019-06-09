@@ -54,7 +54,7 @@ namespace Kagami.Library.Parsers.Expressions
 		{
 			var skipTake = new SkipTake();
 
-			var noSkipMatch = state.Scan("^ /(|s|) /';'", Color.Whitespace, Color.Structure);
+			var noSkipMatch = state.Scan("^ /(|s|) /','", Color.Whitespace, Color.Structure);
 			if (noSkipMatch.If(out _, out var mbException)) { }
 			else if (mbException.If(out var exception))
 				return failedMatch<SkipTake>(exception);
@@ -73,7 +73,7 @@ namespace Kagami.Library.Parsers.Expressions
 						case "}":
 							skipTake.Terminal = true;
 							return skipTake.Matched();
-						case ",":
+						case ";":
 							return skipTake.Matched();
 					}
 				else if (mbException.If(out exception))
@@ -86,7 +86,7 @@ namespace Kagami.Library.Parsers.Expressions
 			else if (mbException.If(out var exception))
 				return failedMatch<SkipTake>(exception);
 
-			var endMatch = state.Scan("^ /(|s|) /['}']", Color.Whitespace, Color.Structure);
+			var endMatch = state.Scan("^ /(|s|) /['};']", Color.Whitespace, Color.Structure);
 			if (endMatch.If(out var end, out mbException))
 				switch (end)
 				{

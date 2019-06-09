@@ -254,6 +254,8 @@ namespace Kagami.Library.Operations
 
 		public void Pick(int index) => add(new Pick(index));
 
+		public void Copy(int index) => add(new Copy(index));
+
 		public void Rotate(int count) => add(new Rotate(count));
 
 		public void Roll(int count) => add(new Roll(count));

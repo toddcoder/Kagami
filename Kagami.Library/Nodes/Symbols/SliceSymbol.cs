@@ -12,15 +12,22 @@ namespace Kagami.Library.Nodes.Symbols
 
 		public override void Generate(OperationsBuilder builder)
 		{
-			builder.Dup();
+			var firstSkipTake = false;
 			foreach (var skipTake in skipTakes)
 			{
-				builder.Dup();
+				if (firstSkipTake)
+					builder.Copy(1);
+				else
+					builder.Dup();
 				generate(builder, skipTake);
+				if (firstSkipTake)
+					builder.SendMessage("~(_)", 1);
+
+				firstSkipTake = true;
 			}
 		}
 
-		void generate(OperationsBuilder builder, SliceParser.SkipTake skipTake)
+		static void generate(OperationsBuilder builder, SliceParser.SkipTake skipTake)
 		{
 			if (skipTake.Skip.If(out var skipExpression))
 			{

@@ -222,5 +222,20 @@ namespace Kagami.Library.Runtime
 			else
 				return none<IObject>();
 		}
+
+		public IMaybe<IObject> Copy(int index)
+		{
+			if (index < stack.Count)
+			{
+				var list = stack.ToList();
+				var item = list[index];
+				list.Reverse();
+				stack = new Stack<IObject>(list);
+
+				return item.Some();
+			}
+			else
+				return none<IObject>();
+		}
 	}
 }
