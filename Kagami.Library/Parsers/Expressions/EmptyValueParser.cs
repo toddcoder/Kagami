@@ -17,10 +17,10 @@ namespace Kagami.Library.Parsers.Expressions
 
          switch (source)
          {
-            case "{}":
+            case "[]":
                builder.Add(new EmptyArraySymbol());
                break;
-            case "[]":
+            case "{}":
                builder.Add(new EmptyDictionarySymbol());
                break;
             case "()":

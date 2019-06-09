@@ -20,7 +20,7 @@ namespace Kagami.Library.Parsers.Expressions
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
 			var message = tokens[2].Text;
-			state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Operator);
+			state.Colorize(tokens, Color.Whitespace, Color.Collection, Color.Collection);
 
 			if (getValue(state, builder.Flags).Out(out var symbol, out var original))
 			{
@@ -47,7 +47,9 @@ namespace Kagami.Library.Parsers.Expressions
 						message = "takeUntil";
 						break;
 					case "z":
+					case "zip":
 					case "x":
+					case "cross":
 						if (state.ImplicitState.IsNone)
 						{
 							var newMessage = message == "z" ? "zip(_,_)" : "cross(_,_)";
