@@ -51,7 +51,7 @@ namespace Kagami.Library.Objects
 
 		public string AsString => list.Select(i => i.AsString).Stringify(" ");
 
-		public string Image => $"{{{list.Select(i => i.Image).Stringify()}}}";
+		public string Image => $"[{list.Select(i => i.Image).Stringify()}]";
 
 		public int Hash => list.GetHashCode();
 
