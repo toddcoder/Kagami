@@ -1,5 +1,4 @@
-﻿using System;
-using Kagami.Library.Nodes.Statements;
+﻿using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Parsers.Expressions;
 using Core.Monads;
@@ -52,7 +51,7 @@ namespace Kagami.Library.Parsers.Statements
 				case CaseType.Lambda:
 					return getBlock(state);
 				default:
-					throw new ArgumentOutOfRangeException(nameof(caseType), caseType, null);
+					return $"Didn't understand case type {caseType}".FailedMatch<Block>();
 			}
 		}
 

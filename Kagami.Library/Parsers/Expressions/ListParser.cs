@@ -8,14 +8,14 @@ namespace Kagami.Library.Parsers.Expressions
 	{
 		public ListParser(ExpressionBuilder builder) : base(builder) { }
 
-		public override string Pattern => "^ /(/s*) /'.[' /(/s*)";
+		public override string Pattern => $"^ /(/s*) /'{REGEX_LIST_LEFT}' /(/s*)";
 
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
 			state.Colorize(tokens, Color.Whitespace, Color.Collection, Color.Whitespace);
 
-			if (getExpression(state, "^ /(/s*) /']'", builder.Flags & ~ExpressionFlags.OmitComma, Color.Whitespace, Color.Collection)
-				.Out(out var expression, out var original))
+			if (getExpression(state, $"^ /(/s*) /'{REGEX_LIST_RIGHT}'", builder.Flags & ~ExpressionFlags.OmitComma, Color.Whitespace,
+					Color.Collection).Out(out var expression, out var original))
 			{
 				builder.Add(new ListSymbol(expression));
 				return Unit.Matched();
