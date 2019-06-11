@@ -12,6 +12,8 @@ namespace Kagami.Library.Nodes.Symbols
 
 		public override void Generate(OperationsBuilder builder)
 		{
+			builder.PushFrameWithValue();
+
 			var firstSkipTake = false;
 			foreach (var skipTake in skipTakes)
 			{
@@ -25,6 +27,8 @@ namespace Kagami.Library.Nodes.Symbols
 
 				firstSkipTake = true;
 			}
+
+			builder.PopFrameWithValue();
 		}
 
 		static void generate(OperationsBuilder builder, SliceParser.SkipTake skipTake)
@@ -42,7 +46,7 @@ namespace Kagami.Library.Nodes.Symbols
 			}
 		}
 
-		public override Precedence Precedence => Precedence.PostfixOperator;
+		public override Precedence Precedence => Precedence.SendMessage;
 
 		public override Arity Arity => Arity.Postfix;
 
