@@ -7,6 +7,7 @@ using Core.Numbers;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.CollectionFunctions;
+using static Kagami.Library.Operations.OperationFunctions;
 
 namespace Kagami.Library.Objects
 {
@@ -302,6 +303,18 @@ namespace Kagami.Library.Objects
 		}
 
 		public Boolean IsEmpty => dictionary.Count == 0;
+
+		public IObject Assign(IObject indexes, IObject values)
+		{
+			if (getIterator(indexes, false).If(out var indexesIterator) && getIterator(values, false).If(out var valuesIterator))
+				while (indexesIterator.Next().If(out var index))
+					if (valuesIterator.Next().If(out var value))
+						dictionary[index] = value;
+					else
+						break;
+
+			return this;
+		}
 
 		public IObject[] KeyArray => dictionary.KeyArray();
 

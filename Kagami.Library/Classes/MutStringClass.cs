@@ -17,6 +17,7 @@ namespace Kagami.Library.Classes
 			compareMessages();
 			rangeMessages();
 			textFindingMessages();
+			mutableCollectionMessages();
 
 			registerMessage("<<", (obj, msg) => function<MutString, IObject>(obj, msg, (m, o) => m.Append(o)));
 			registerMessage("[](_<Int>)", (obj, msg) => function<MutString, Int>(obj, msg, (m, i) => m[i.Value]));

@@ -3,17 +3,19 @@ using System.Linq;
 using System.Text;
 using Core.Collections;
 using Core.Monads;
+using Core.Numbers;
 using Core.Objects;
 using Core.Strings;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Objects.TextFindingFunctions;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.CollectionFunctions;
+using static Kagami.Library.Operations.OperationFunctions;
 
 namespace Kagami.Library.Objects
 {
-	public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>, IFormattable, ICollection, IComparable, ISliceable,
-		IRangeItem, ITextFinding
+	public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>, IFormattable, IComparable, ISliceable,
+		IRangeItem, ITextFinding, IMutableCollection
 	{
 		public static implicit operator MutString(string source) => new MutString(source);
 
@@ -158,6 +160,53 @@ namespace Kagami.Library.Objects
 			return this;
 		}
 
+		public IObject Remove(IObject obj)
+		{
+			if (mutable.ToString().Find(obj.AsString).If(out var index))
+				mutable.Remove(index, obj.AsString.Length);
+			return this;
+		}
+
+		public IObject RemoveAt(int index)
+		{
+			if (index.Between(0).Until(mutable.Length))
+				mutable.Remove(index, 1);
+			return this;
+		}
+
+		public IObject RemoveAll(IObject obj)
+		{
+			var asString = obj.AsString;
+			var length = asString.Length;
+			foreach (var index in mutable.ToString().FindAll(asString).Reverse())
+				mutable.Remove(index, length);
+
+			return this;
+		}
+
+		public IObject InsertAt(int index, IObject obj)
+		{
+			mutable.Insert(index, obj.AsString);
+			return this;
+		}
+
+		public Boolean IsEmpty => mutable.Length == 0;
+
+		public IObject Assign(IObject indexes, IObject values)
+		{
+			if (getIterator(indexes, false).If(out var indexesIterator) && getIterator(values, false).If(out var valuesIterator))
+				while (indexesIterator.Next().If(out var index))
+					if (valuesIterator.Next().If(out var value))
+					{
+						if (index is Int i && i.Value.Between(0).Until(mutable.Length) && value is Char ch)
+							mutable[i.Value] = ch.Value;
+					}
+					else
+						break;
+
+			return this;
+		}
+
 		public MutString Fill(char ch, int count)
 		{
 			mutable.Clear();
@@ -165,5 +214,7 @@ namespace Kagami.Library.Objects
 
 			return this;
 		}
+
+		IObject IMutableCollection.Append(IObject obj) => Append(obj);
 	}
 }

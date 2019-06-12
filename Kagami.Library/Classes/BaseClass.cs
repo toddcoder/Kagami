@@ -261,6 +261,8 @@ namespace Kagami.Library.Classes
 			registerMessage("insert(at:_<Int>,value:_)",
 				(obj, msg) => function<IObject, Int, IObject>(obj, msg, (o, i, v) => ((IMutableCollection)o).InsertAt(i.Value, v)));
 			registerMessage("isEmpty".get(), (obj, msg) => function<IObject>(obj, o => ((IMutableCollection)o).IsEmpty));
+			registerMessage("assign(_,_)",
+				(obj, msg) => function<IObject, IObject, IObject>(obj, msg, (o, i, v) => ((IMutableCollection)o).Assign(i, v)));
 		}
 
 		void loadIteratorMessages()
@@ -282,7 +284,8 @@ namespace Kagami.Library.Classes
 				"split(_<Lambda>)", "split".Selector("_<Int>"), "random()", "groupBy(_<Lambda>)", "one(_<Lambda>)",
 				"none(_<Lambda>)",
 				"any(_<Lambda>)", "all(_<Lambda>)", "sum()", "average()",
-				"product()", "cross(_)", "cross(_,_)", "by(_<Int>)", "/(_<Int>)", "window(_<Int>)", "distinct()", "span".Selector("_<Lambda>"),
+				"product()", "cross(_)", "cross(_,_)", "by(_<Int>)", "/(_<Int>)", "window(_<Int>)", "distinct()",
+				"span".Selector("_<Lambda>"),
 				"span".Selector("_<Int>"),
 				"shuffle()", "array()", "list()", "tuple()", "dictionary".Selector("key:_<Lambda>", "value:_<Lambda>"), "dictionary()",
 				"each(_<Lambda>)", "rotate(_<Int>)", "permutation(_<Int>)", "combination(_<Int>)", "flatten()",

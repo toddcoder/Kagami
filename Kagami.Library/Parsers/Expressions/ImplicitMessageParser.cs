@@ -29,6 +29,7 @@ namespace Kagami.Library.Parsers.Expressions
 				switch (message)
 				{
 					case "foldl":
+					case "acc":
 						fieldName = "__$1";
 						parameterCount = 2;
 						break;
@@ -38,6 +39,7 @@ namespace Kagami.Library.Parsers.Expressions
 						break;
 					case "foldr":
 					case "reducer":
+					case "accr":
 						parameterCount = 2;
 						break;
 					case "while":

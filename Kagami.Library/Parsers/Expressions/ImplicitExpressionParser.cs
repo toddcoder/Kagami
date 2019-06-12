@@ -24,6 +24,7 @@ namespace Kagami.Library.Parsers.Expressions
 			switch (message)
 			{
 				case "foldl":
+				case "acc":
 					message += "(_,_)";
 					fieldName = "__$1";
 					parameterCount = 2;
@@ -35,6 +36,7 @@ namespace Kagami.Library.Parsers.Expressions
 					break;
 				case "foldr":
 				case "reducer":
+				case "accr":
 					message += "(_,_)";
 					parameterCount = 2;
 					break;

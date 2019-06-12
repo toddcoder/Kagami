@@ -34,12 +34,11 @@ namespace Kagami.Library.Parsers
 		public const string REGEX_OPERATORS = "['-+*//\\%<=>!.~|?#@&^,;.:']";
 		public const string REGEX_ITERATOR_FUNCTIONS = "'sort' | 'foldl' | 'foldr' | 'reducel' | 'reducer' | " +
 			"'count' | 'map' | 'flatMap' | 'bind' | 'if' | 'ifNot' | 'index' | 'min' | 'max' | 'first' | " +
-			"'last' | 'split' | 'one' | 'none' | 'any' | 'all' | 'span' | 'groupBy' | 'each' | 'while' | 'until' | 'z' | 'zip' | 'x' | 'cross'";
+			"'last' | 'split' | 'one' | 'none' | 'any' | 'all' | 'span' | 'groupBy' | 'each' | 'while' | 'until' | 'z' | 'zip' | 'x' | 'cross' | 'acc' | 'accr'";
 		public const string REGEX_LIST_LEFT = "⌈";
-		public const string REGEX_LIST_RIGHT = "⌉";//⎩⎭
+		public const string REGEX_LIST_RIGHT = "⌉"; //⎩⎭
 
-
-        public static IMatched<char> fromHex(string text)
+		public static IMatched<char> fromHex(string text)
 		{
 			return $"0x{text}".FromHex().Result($"Didn't understand {text}").FlatMap(i => ((char)i).Matched(), failedMatch<char>);
 		}

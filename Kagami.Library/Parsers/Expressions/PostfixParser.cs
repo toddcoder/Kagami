@@ -18,6 +18,7 @@ namespace Kagami.Library.Parsers.Expressions
             yield return new IndexerParser(builder);
             yield return new ReductionParser(builder);
             //yield return new SkipTakeOperatorParser(builder);
+            yield return new SliceAssignParser(builder);
             yield return new SliceParser(builder);
 	         yield return new WhereParser(builder);
 

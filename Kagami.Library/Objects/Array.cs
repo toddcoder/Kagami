@@ -5,10 +5,12 @@ using Core.Collections;
 using Core.Enumerables;
 using Core.Exceptions;
 using Core.Monads;
+using Core.Numbers;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.CollectionFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.Operations.OperationFunctions;
 
 namespace Kagami.Library.Objects
 {
@@ -204,6 +206,21 @@ namespace Kagami.Library.Objects
 		}
 
 		public Boolean IsEmpty => list.Count == 0;
+
+		public IObject Assign(IObject indexes, IObject values)
+		{
+			if (getIterator(indexes, false).If(out var indexesIterator) && getIterator(values, false).If(out var valuesIterator))
+				while (indexesIterator.Next().If(out var index))
+					if (valuesIterator.Next().If(out var value))
+					{
+						if (index is Int i && i.Value.Between(0).Until(list.Count))
+							list[i.Value] = value;
+					}
+					else
+						break;
+
+			return this;
+		}
 
 		public IObject Concatenate(Array array)
 		{

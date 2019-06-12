@@ -319,6 +319,7 @@
     <Compile Include="Nodes\Symbols\SkipTakeItem.cs" />
     <Compile Include="Nodes\Symbols\SkipTakeLiteralSymbol.cs" />
     <Compile Include="Nodes\Symbols\SkipTakeOperatorSymbol.cs" />
+    <Compile Include="Nodes\Symbols\SliceAssignSymbol.cs" />
     <Compile Include="Nodes\Symbols\SliceSymbol.cs" />
     <Compile Include="Nodes\Symbols\SomeSymbol.cs" />
     <Compile Include="Nodes\Symbols\SpecialLessThanEqualSymbol.cs" />
@@ -712,6 +713,7 @@
     <Compile Include="Parsers\Expressions\SendMessageAssignParser.cs" />
     <Compile Include="Parsers\Expressions\SeparatedKeywordOperatorsParser.cs" />
     <Compile Include="Parsers\Expressions\SkipTakeOperatorParser.cs" />
+    <Compile Include="Parsers\Expressions\SliceAssignParser.cs" />
     <Compile Include="Parsers\Expressions\SliceParser.cs" />
     <Compile Include="Parsers\Expressions\StringArrayParser.cs" />
     <Compile Include="Parsers\Expressions\SubexpressionParser2.cs" />
