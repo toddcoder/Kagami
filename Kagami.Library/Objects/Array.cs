@@ -36,6 +36,8 @@ namespace Kagami.Library.Objects
 		List<IObject> list;
 		int arrayID;
 		IMaybe<TypeConstraint> typeConstraint;
+		IMaybe<Lambda> defaultLambda;
+		IMaybe<IObject> defaultValue;
 
 		public Array(IEnumerable<IObject> objects)
 		{
@@ -47,6 +49,8 @@ namespace Kagami.Library.Objects
 					list.Add(obj);
 			arrayID = uniqueObjectID();
 			typeConstraint = none<TypeConstraint>();
+			defaultLambda = none<Lambda>();
+			defaultValue = none<IObject>();
 		}
 
 		public Array(IObject value)
@@ -54,6 +58,8 @@ namespace Kagami.Library.Objects
 			list = new List<IObject> { value };
 			arrayID = uniqueObjectID();
 			typeConstraint = none<TypeConstraint>();
+			defaultLambda = none<Lambda>();
+			defaultValue = none<IObject>();
 		}
 
 		public string ClassName => "Array";
@@ -94,6 +100,18 @@ namespace Kagami.Library.Objects
 			set => typeConstraint = value;
 		}
 
+		public IMaybe<Lambda> DefaultLambda
+		{
+			get => defaultLambda;
+			set => defaultLambda = value;
+		}
+
+		public IMaybe<IObject> DefaultValue
+		{
+			get => defaultValue;
+			set => defaultValue = value;
+		}
+
 		void assertType(IObject value)
 		{
 			if (typeConstraint.If(out var tc) && !tc.Matches(classOf(value)))
@@ -102,18 +120,29 @@ namespace Kagami.Library.Objects
 
 		public IObject this[int index]
 		{
-			get => list[wrapIndex(index, list.Count)];
+			get
+			{
+				var wrappedIndex = wrapIndex(index, list.Count);
+				if (wrappedIndex.Between(0).Until(list.Count))
+					return list[wrappedIndex];
+				else if (defaultLambda.If(out var lambda))
+					return lambda.Invoke(Int.IntObject(index));
+				else if (defaultValue.If(out var value))
+					return value;
+				else
+					throw badIndex(wrappedIndex);
+			}
 			set
 			{
 				throwIfSelf(value);
 
-				index = wrapIndex(index, list.Count);
-				if (value is Del)
-					list.RemoveAt(index);
+				var wrappedIndex = wrapIndex(index, list.Count);
+				if (value is Unit)
+					list.RemoveAt(wrappedIndex);
 				else
 				{
 					assertType(value);
-					list[index] = value;
+					list[wrappedIndex] = value;
 				}
 			}
 		}

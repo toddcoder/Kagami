@@ -1,7 +1,9 @@
 ﻿using System.Linq;
 using Kagami.Library.Objects;
 using Core.Enumerables;
+using Core.Monads;
 using Core.RegularExpressions;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library
@@ -30,6 +32,16 @@ namespace Kagami.Library
 	   public static Selector Selector(this string baseName, int count)
 	   {
 		   return baseName.Selector(Enumerable.Range(0, count).Select(i => "_").ToArray());
+	   }
+
+	   public static IObject AsOptional<T>(this IMaybe<T> maybe) where T : IObject
+	   {
+		   return maybe.FlatMap(o => Some.Object(o), () => None.NoneValue);
+	   }
+
+	   public static IMaybe<T> AsMaybe<T>(this IOptional optional) where T : IObject
+	   {
+		   return optional is Some some ? (IMaybe<T>)some.Value.Some() : none<T>();
 	   }
    }
 }
