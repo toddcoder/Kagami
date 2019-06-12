@@ -28,8 +28,10 @@ namespace Kagami.Library.Parsers.Expressions
 				var fieldName = "__$0";
 				switch (message)
 				{
-					case "foldl":
 					case "acc":
+						message = "foldl";
+						goto case "foldl";
+					case "foldl":
 						fieldName = "__$1";
 						parameterCount = 2;
 						break;
@@ -37,9 +39,11 @@ namespace Kagami.Library.Parsers.Expressions
 						fieldName = "__$1";
 						parameterCount = 2;
 						break;
+					case "accr":
+						message = "foldr";
+						goto case "foldr";
 					case "foldr":
 					case "reducer":
-					case "accr":
 						parameterCount = 2;
 						break;
 					case "while":
@@ -54,7 +58,7 @@ namespace Kagami.Library.Parsers.Expressions
 					case "cross":
 						if (state.ImplicitState.IsNone)
 						{
-							var newMessage = message == "z" ? "zip(_,_)" : "cross(_,_)";
+							var newMessage = message == "z" || message=="zip" ? "zip(_,_)" : "cross(_,_)";
 							state.ImplicitState = new ImplicitState(symbol, newMessage, 2, "__$0").Some();
 							builder.Add(new FieldSymbol("__$0"));
 							return Unit.Matched();
