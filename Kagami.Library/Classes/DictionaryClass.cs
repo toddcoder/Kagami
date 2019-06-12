@@ -1,10 +1,11 @@
-﻿using Kagami.Library.Objects;
+﻿using System.Collections.Generic;
+using Kagami.Library.Objects;
 using Core.Monads;
 using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Classes
 {
-	public class DictionaryClass : BaseClass
+	public class DictionaryClass : BaseClass, ICollectionClass
 	{
 		public override string Name => "Dictionary";
 
@@ -62,5 +63,9 @@ namespace Kagami.Library.Classes
 				(cls, msg) => classFunc<DictionaryClass, IObject>(cls, msg, (dc, d) => Dictionary.New(d, false));
 			classMessages["empty".get()] = (cls, msg) => classFunc<DictionaryClass>(cls, dc => Dictionary.Empty);
 		}
+
+		public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
+
+		public IObject Revert(IEnumerable<IObject> list) => new Dictionary(list);
 	}
 }

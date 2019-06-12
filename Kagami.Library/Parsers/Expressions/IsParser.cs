@@ -8,17 +8,23 @@ namespace Kagami.Library.Parsers.Expressions
    {
       public IsParser(ExpressionBuilder builder) : base(builder) { }
 
-      public override string Pattern => "^ /(|s+|) /'is' /(|s+| 'not')? /b";
+      public override string Pattern => "^ /(|s+|) /'??'";
 
       public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
       {
-	      var not = tokens[3].Text.Length > 0;
-	      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Keyword);
-         return getExpression(state, ExpressionFlags.Comparisand).Map(e =>
-         {
-            builder.Add(new IsSymbol(e, not));
-            return Unit.Value;
-         });
+	      state.Colorize(tokens, Color.Whitespace, Color.Operator);
+	      var result =
+		      from comparisand in getExpression(state, ExpressionFlags.Comparisand)
+		      from scanned in state.Scan("^ /(/s*) /':'", Color.Whitespace, Color.Operator)
+		      from expression in getExpression(state, builder.Flags)
+		      select (comparisand, expression);
+	      if (result.Out(out var tuple, out var original))
+	      {
+		      builder.Add(new IsSymbol(tuple.comparisand, tuple.expression));
+		      return Unit.Matched();
+	      }
+	      else
+		      return original.Unmatched<Unit>();
       }
    }
 }

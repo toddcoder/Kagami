@@ -1,25 +1,28 @@
 ﻿using Kagami.Library.Operations;
-using Core.Booleans;
 
 namespace Kagami.Library.Nodes.Symbols
 {
    public class IsSymbol : Symbol
    {
       Expression comparisand;
-      bool not;
+      Expression expression;
 
-      public IsSymbol(Expression comparisand, bool not)
+      public IsSymbol(Expression comparisand, Expression expression)
       {
 	      this.comparisand = comparisand;
-	      this.not = not;
+	      this.expression = expression;
       }
 
       public override void Generate(OperationsBuilder builder)
       {
+			builder.PushFrameWithValue();
+
          comparisand.Generate(builder);
          builder.Match();
-			if (not)
-				builder.Not();
+
+			expression.Generate(builder);
+
+			builder.PopFrameWithValue();
       }
 
       public override Precedence Precedence => Precedence.Boolean;
@@ -27,6 +30,6 @@ namespace Kagami.Library.Nodes.Symbols
 
       public override Arity Arity => Arity.Binary;
 
-      public override string ToString() => $"is {not.Extend("not ")}{comparisand}";
+      public override string ToString() => $"?? {comparisand} : {expression}";
    }
 }

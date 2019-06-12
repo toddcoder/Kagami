@@ -18,6 +18,7 @@ namespace Kagami.Library.Packages
 			registerPackageFunction("put(_)", (obj, msg) => function<Sys>(obj, sys => sys.Put(msg.Arguments)));
 			registerPackageFunction("readln()", (obj, msg) => function<Sys>(obj, sys => sys.Readln()));
 			registerPackageFunction("peek(_)", (obj, msg) => function<Sys>(obj, sys => sys.Peek(msg.Arguments[0])));
+			registerPackageFunction("peek(_,_)", (obj, msg) => function<Sys>(obj, sys => sys.Peek(msg.Arguments[0], msg.Arguments[1])));
 			registerPackageFunction("ticks()", (obj, msg) => function<Sys>(obj, sys => sys.Ticks()));
 			registerPackageFunction("fst(_)", (obj, msg) => function<Sys, Tuple>(obj, msg, (sys, t) => sys.First(t)));
 			registerPackageFunction("snd(_)", (obj, msg) => function<Sys, Tuple>(obj, msg, (sys, t) => sys.Second(t)));
@@ -30,8 +31,8 @@ namespace Kagami.Library.Packages
 			registerPackageFunction("Random(seed:<Int>)",
 				(obj, msg) => function<Sys, Int>(obj, msg, (sys, i) => sys.Random(i.Value)));
 			registerPackageFunction("Complex(_,_)", (obj, msg) => function<Sys, IObject, IObject>(obj, msg, (s, o1, o2) => s.Complex(o1, o2)));
-			registerPackageFunction("sel", (obj, msg) => function<Sys, String>(obj, msg, (sys, s) => sys.Selector(s.Value)));
-			registerPackageFunction("fields", (obj, msg) => function<Sys>(obj, sys => sys.XFields()));
+			registerPackageFunction("sel(_)", (obj, msg) => function<Sys, String>(obj, msg, (sys, s) => sys.Selector(s.Value)));
+			registerPackageFunction("fields()", (obj, msg) => function<Sys>(obj, sys => sys.XFields()));
 			registerPackageFunction("Date(_<Float>)", (obj, msg) => function<Sys, Float>(obj, msg, (sys, f) => sys.Date(f.Value)));
 			registerPackageFunction("Regex(_<String>)", (obj, msg) => function<Sys, String>(obj, msg, (sys, s) => sys.Regex(s.Value)));
 		}

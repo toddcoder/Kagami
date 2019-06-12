@@ -8,7 +8,7 @@
       PrefixOperator = 2,
       //Invoke = 3,
       //SendMessage = 3,
-      KeyValue = 4,
+      //KeyValue = 4,
       PostfixOperator = 5,
       Raise = 6,
       MultiplyDivide = 7,
@@ -25,6 +25,7 @@
       Concatenate = 18,
       //Range = 19,
       ChainedOperator = 20,
-      Comma = 21
+		KeyValue = 21,
+      Comma = 22
    }
 }

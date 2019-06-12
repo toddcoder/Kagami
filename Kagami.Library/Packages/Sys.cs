@@ -70,6 +70,12 @@ namespace Kagami.Library.Packages
 			return obj;
 		}
 
+		public IObject Peek(IObject prefix, IObject obj)
+		{
+			Machine.Current.Context.PrintLine($"{prefix.AsString}: {obj.Image}");
+			return obj;
+		}
+
 		public IResult<IObject> Match(IObject x, IObject y)
 		{
 			if (y is Pattern pattern)
