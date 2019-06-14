@@ -33,9 +33,9 @@ namespace Kagami.Library.Objects
 
 		public virtual string ClassName => "Iterator";
 
-		public string AsString => "iterator";
+		public virtual string AsString => "!Iterator";
 
-		public virtual string Image => "!iterator";
+		public virtual string Image => "!Iterator";
 
 		public int Hash => ((IObject)collection).Hash;
 

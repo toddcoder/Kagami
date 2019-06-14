@@ -6,7 +6,9 @@
 
       public override string ClassName => "LazyIterator";
 
-      public override string Image => "LazyIterator";
+      public override string AsString => "!!Iterator";
+
+      public override string Image => "!!Iterator";
 
       public override bool IsLazy => true;
 

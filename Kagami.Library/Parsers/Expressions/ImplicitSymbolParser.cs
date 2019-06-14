@@ -8,7 +8,7 @@ namespace Kagami.Library.Parsers.Expressions
 	{
 		public ImplicitSymbolParser(ExpressionBuilder builder) : base(builder) { }
 
-		public override string Pattern => "^ /(|s|) /'*' -(> /s)";
+		public override string Pattern => "^ /(|s|) /'^' -(> /s)";
 
 		public override IMatched<Unit> Prefix(ParseState state, Token[] tokens)
 		{
