@@ -351,8 +351,8 @@ namespace Kagami.Library.Objects
 				newDictionary[key] = value;
 			var iterator = collection.GetIterator(false);
 			foreach (var item in iterator.List())
-				if (item is IKeyValue keyValue)
-					newDictionary[keyValue.Key] = keyValue.Value;
+				if (item is Tuple tuple && tuple.Length.Value == 2)
+					newDictionary[tuple[0]] = tuple[1];
 
 			return new Dictionary(newDictionary);
 		}

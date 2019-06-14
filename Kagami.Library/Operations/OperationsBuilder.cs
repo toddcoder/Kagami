@@ -276,6 +276,8 @@ namespace Kagami.Library.Operations
 
 		public void NewList() => add(new NewList());
 
+		public void NewSet() => add(new NewSet());
+
 		public void NewLambda(IInvokable invokable) => add(new NewLambda(invokable));
 
 		public void NewSkipTake() => add(new NewSkipTake());

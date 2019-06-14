@@ -36,7 +36,7 @@ namespace Kagami.Library.Parsers
 			"'count' | 'map' | 'flatMap' | 'bind' | 'if' | 'ifNot' | 'index' | 'min' | 'max' | 'first' | " +
 			"'last' | 'split' | 'one' | 'none' | 'any' | 'all' | 'span' | 'groupBy' | 'each' | 'while' | 'until' | 'z' | 'zip' | 'x' | 'cross' | 'acc' | 'accr'";
 		public const string REGEX_LIST_LEFT = "⌈";
-		public const string REGEX_LIST_RIGHT = "⌉"; //⎩⎭
+		public const string REGEX_LIST_RIGHT = "⌉";
 
 		public static IMatched<char> fromHex(string text)
 		{

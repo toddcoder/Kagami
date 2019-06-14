@@ -192,6 +192,7 @@ namespace Kagami.Playground
 				menus.Menu("Insert", "peek()", (s, evt) => surround("peek(", ")"), "^K");
 				menus.Menu("Insert", "Triple quotes", (s, evt) => insertText("\"\"\"\n\"\"\"", -3), "^Q");
 				menus.Menu("Insert", "List", (s, evt) => insertText("⌈⌉", -1), "^L");
+				menus.Menu("Insert", "Set", (s, evt) => insertText("⎩⎭", -1), "^E");
 
 				menus.Menu("&Debug");
 				menus.Menu("Debug", "Step Into", (s, evt) => stepInto(), "F11");

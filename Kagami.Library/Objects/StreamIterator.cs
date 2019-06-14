@@ -269,6 +269,8 @@ namespace Kagami.Library.Objects
 
 		public IObject ToDictionary() => Array.CreateObject(List());
 
+		public IObject ToSet() => new Set(List().ToArray());
+
 		public IObject Each(Lambda action)
 		{
 			foreach (var item in List())

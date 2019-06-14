@@ -8,7 +8,7 @@ namespace Kagami.Library.Parsers.Expressions
 	{
 		public EmptyValueParser(ExpressionBuilder builder) : base(builder) { }
 
-		public override string Pattern => "^ /(|s|) /('{}' | '{:}' | '()' | '[]' | '⌈⌉')";
+		public override string Pattern => "^ /(|s|) /('{}' | '{:}' | '()' | '[]' | '⌈⌉' | '⎩⎭')";
 
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
@@ -28,6 +28,9 @@ namespace Kagami.Library.Parsers.Expressions
 					break;
 				case "⌈⌉":
 					builder.Add(new EmptyListSymbol());
+					break;
+				case "⎩⎭":
+					builder.Add(new EmptySetSymbol());
 					break;
 				default:
 					return notMatched<Unit>();

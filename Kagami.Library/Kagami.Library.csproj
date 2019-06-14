@@ -115,6 +115,7 @@
     <Compile Include="Classes\SelectorClass.cs" />
     <Compile Include="Classes\SelectorHash.cs" />
     <Compile Include="Classes\SelectorSet.cs" />
+    <Compile Include="Classes\SetClass.cs" />
     <Compile Include="Classes\Signature.cs" />
     <Compile Include="Classes\SkipTakeClass.cs" />
     <Compile Include="Classes\SliceClass.cs" />
@@ -228,6 +229,7 @@
     <Compile Include="Nodes\Symbols\EmptyArraySymbol.cs" />
     <Compile Include="Nodes\Symbols\EmptyDictionarySymbol.cs" />
     <Compile Include="Nodes\Symbols\EmptyListSymbol.cs" />
+    <Compile Include="Nodes\Symbols\EmptySetSymbol.cs" />
     <Compile Include="Nodes\Symbols\EmptyTupleSymbol.cs" />
     <Compile Include="Nodes\Symbols\EqualSymbol.cs" />
     <Compile Include="Nodes\Symbols\Expression.cs" />
@@ -311,6 +313,7 @@
     <Compile Include="Nodes\Symbols\SendPrefixMessage.cs" />
     <Compile Include="Nodes\Symbols\SeqSymbol.cs" />
     <Compile Include="Nodes\Symbols\SetSliceSymbol.cs" />
+    <Compile Include="Nodes\Symbols\SetSymbol.cs" />
     <Compile Include="Nodes\Symbols\SkipTakeRestSymbol.cs" />
     <Compile Include="Nodes\Symbols\SkipTakeRestInitSymbol.cs" />
     <Compile Include="Nodes\Symbols\SkipTakeSymbol.cs" />
@@ -443,6 +446,7 @@
     <Compile Include="Objects\SelectorItem.cs" />
     <Compile Include="Objects\SelectorItemType.cs" />
     <Compile Include="Objects\Sequence.cs" />
+    <Compile Include="Objects\Set.cs" />
     <Compile Include="Objects\SkipAction.cs" />
     <Compile Include="Objects\Skipped.cs" />
     <Compile Include="Objects\SkipTake.cs" />
@@ -530,6 +534,7 @@
     <Compile Include="Operations\NewOpenRange.cs" />
     <Compile Include="Operations\NewRational.cs" />
     <Compile Include="Operations\NewSelector.cs" />
+    <Compile Include="Operations\NewSet.cs" />
     <Compile Include="Operations\NewSkipTake.cs" />
     <Compile Include="Operations\NewValue.cs" />
     <Compile Include="Operations\OpenPackage.cs" />
@@ -694,6 +699,7 @@
     <Compile Include="Parsers\Expressions\SelectorParser.cs" />
     <Compile Include="Parsers\Expressions\SendBindingMessageParser.cs" />
     <Compile Include="Parsers\Expressions\SeqParser.cs" />
+    <Compile Include="Parsers\Expressions\SetParser.cs" />
     <Compile Include="Parsers\Expressions\SetPropertyParser.cs" />
     <Compile Include="Parsers\Expressions\SkipTakeItemParser.cs" />
     <Compile Include="Parsers\Expressions\IfSomeNoneSymbolParser.cs" />

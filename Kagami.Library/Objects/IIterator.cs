@@ -146,6 +146,8 @@ namespace Kagami.Library.Objects
 
       IObject ToDictionary();
 
+      IObject ToSet();
+
       IObject Each(Lambda action);
 
       IObject Rotate(int count);

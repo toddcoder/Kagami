@@ -289,7 +289,7 @@ namespace Kagami.Library.Classes
 				"span".Selector("_<Int>"),
 				"shuffle()", "array()", "list()", "tuple()", "dictionary".Selector("key:_<Lambda>", "value:_<Lambda>"), "dictionary()",
 				"each(_<Lambda>)", "rotate(_<Int>)", "permutation(_<Int>)", "combination(_<Int>)", "flatten()",
-				"copy()", "revert()", "*(_)", "format(_)", "mapIf(_<Lambda>,_<Lambda>)"));
+				"copy()", "revert()", "*(_)", "format(_)", "mapIf(_<Lambda>,_<Lambda>)", "set()"));
 
 			dynamicInvoke = (obj, msg) =>
 			{
@@ -389,7 +389,8 @@ namespace Kagami.Library.Classes
 			registerMessage("format(_)", (obj, msg) => iteratorFunc<Index>(obj, msg, (i, index) => index.IndexOf(i.Collection)));
 			registerMessage("mapIf(_<Lambda>,_<Lambda>)",
 				(obj, msg) => iteratorFunc<Lambda, Lambda>(obj, msg, (i, l1, l2) => i.MapIf(l1, l2)));
-		}
+			registerMessage("set()", (obj, msg) => iteratorFunc(obj, i => i.ToSet()));
+        }
 
 		public virtual bool MatchCompatible(BaseClass otherClass)
 		{
