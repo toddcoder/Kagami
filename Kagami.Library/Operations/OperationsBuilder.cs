@@ -274,6 +274,8 @@ namespace Kagami.Library.Operations
 
 		public void NewTuple() => add(new NewTuple());
 
+		public void NewMonoTuple() => add(new NewMonoTuple());
+
 		public void NewList() => add(new NewList());
 
 		public void NewSet() => add(new NewSet());

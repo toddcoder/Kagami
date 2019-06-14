@@ -9,17 +9,18 @@ namespace Kagami.Library.Parsers.Expressions
 	{
 		public SubexpressionParser2(ExpressionBuilder builder) : base(builder) { }
 
-		public override string Pattern => "^ /(|s|) /'('";
+		public override string Pattern => "^ /(|s|) /'(' /','?";
 
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
 			state.BeginTransaction();
-			state.Colorize(tokens, Color.Whitespace, Color.Structure);
+			var monoTuple = tokens[3].Text == ",";
+			state.Colorize(tokens, Color.Whitespace, Color.Structure, Color.Structure);
 
 			if (getExpression(state, "^ /')'", builder.Flags & ~ExpressionFlags.OmitComma, Color.Structure)
 				.If(out var expression, out var mbException))
 			{
-				builder.Add(new SubexpressionSymbol(expression));
+				builder.Add(new SubexpressionSymbol(expression, monoTuple));
 				state.CommitTransaction();
 
 				return Unit.Matched();

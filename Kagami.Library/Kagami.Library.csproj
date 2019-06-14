@@ -530,6 +530,7 @@
     <Compile Include="Operations\NewLambda.cs" />
     <Compile Include="Operations\NewList.cs" />
     <Compile Include="Operations\NewMessage.cs" />
+    <Compile Include="Operations\NewMonoTuple.cs" />
     <Compile Include="Operations\NewObject.cs" />
     <Compile Include="Operations\NewOpenRange.cs" />
     <Compile Include="Operations\NewRational.cs" />
