@@ -15,6 +15,7 @@
       Format,
       Date,
       Collection,
+		CollectionPart,
       Symbol,
       Boolean,
       Keyword,

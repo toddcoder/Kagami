@@ -32,8 +32,8 @@ namespace Kagami.Library.Classes
 			messages["title()"] = (obj, msg) => function<String>(obj, s => s.Title());
 			messages["upper1()"] = (obj, msg) => function<String>(obj, s => s.Upper1());
 			messages["lower1()"] = (obj, msg) => function<String>(obj, s => s.Lower1());
-			messages["leftIs(_)"] = (obj, msg) => function<String, String>(obj, msg, (s1, s2) => s1.IsPrefix(s2.Value));
-			messages["rightIs(_)"] = (obj, msg) => function<String, String>(obj, msg, (s1, s2) => s1.IsSuffix(s2.Value));
+			messages["startsWith(_)"] = (obj, msg) => function<String, String>(obj, msg, (s1, s2) => s1.IsPrefix(s2.Value));
+			messages["endsWith(_)"] = (obj, msg) => function<String, String>(obj, msg, (s1, s2) => s1.IsSuffix(s2.Value));
 			messages["in(_)"] = (obj, msg) => function<String, IObject>(obj, msg, (s1, s2) => s1.In(s2));
 			messages["notIn(_)"] = (obj, msg) => function<String, IObject>(obj, msg, (s1, s2) => s1.NotIn(s2));
 			messages["lstrip()"] = (obj, msg) => function<String>(obj, s => s.LStrip());

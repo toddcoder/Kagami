@@ -1,30 +1,47 @@
 ﻿using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
 {
-   public class IsParser : SymbolParser
-   {
-      public IsParser(ExpressionBuilder builder) : base(builder) { }
+	public class IsParser : SymbolParser
+	{
+		static IMatched<IMaybe<Expression>> optionalExpression(ParseState state, ExpressionFlags flags)
+		{
+			var result =
+				from colon in state.Scan("^ /(/s*) /':'", Color.Whitespace, Color.Structure)
+				from expression in getExpression(state, flags)
+				select expression;
+			if (result.Out(out var expressionValue, out var original))
+				return expressionValue.Some().Matched();
+			else if (original.IsNotMatched)
+				return none<Expression>().Matched();
+			else
+				return original.ExceptionAs<IMaybe<Expression>>();
+		}
 
-      public override string Pattern => "^ /(|s+|) /'??'";
+		public IsParser(ExpressionBuilder builder) : base(builder) { }
 
-      public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
-      {
-	      state.Colorize(tokens, Color.Whitespace, Color.Operator);
-	      var result =
-		      from comparisand in getExpression(state, ExpressionFlags.Comparisand)
-		      from scanned in state.Scan("^ /(/s*) /':'", Color.Whitespace, Color.Operator)
-		      from expression in getExpression(state, builder.Flags)
-		      select (comparisand, expression);
-	      if (result.Out(out var tuple, out var original))
-	      {
-		      builder.Add(new IsSymbol(tuple.comparisand, tuple.expression));
-		      return Unit.Matched();
-	      }
-	      else
-		      return original.Unmatched<Unit>();
-      }
-   }
+		public override string Pattern => "^ /(|s+|) /'??'";
+
+		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+		{
+			state.Colorize(tokens, Color.Whitespace, Color.Structure);
+			var flags = builder.Flags | ExpressionFlags.OmitColon;
+			var result =
+				from comparisand in getExpression(state, ExpressionFlags.Comparisand)
+				from scanned in state.Scan("^ /(/s*) /':'", Color.Whitespace, Color.Structure)
+				from expression in getExpression(state, flags)
+				from elseExpression in optionalExpression(state, flags)
+				select (comparisand, expression, elseExpression);
+			if (result.Out(out var tuple, out var original))
+			{
+				builder.Add(new IsSymbol(tuple.comparisand, tuple.expression, tuple.elseExpression));
+				return Unit.Matched();
+			}
+			else
+				return original.Unmatched<Unit>();
+		}
+	}
 }

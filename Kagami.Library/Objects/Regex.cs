@@ -11,6 +11,8 @@ namespace Kagami.Library.Objects
 {
 	public struct Regex : IObject, ITextFinding
 	{
+		static IObject getMatchOrText(RegexMatch match, bool textOnly) => textOnly ? (IObject)match.Text : match;
+
 		string pattern;
 		bool ignoreCase;
 		bool multiline;
@@ -68,20 +70,22 @@ namespace Kagami.Library.Objects
 
 		public IObject Matches(string input)
 		{
+			var self = this;
+
 			if (global)
 				if (isMatch(input))
-					return new Tuple(matcher.Select(m => (IObject)new RegexMatch(m)).ToArray());
+					return new Tuple(matcher.Select(m => new RegexMatch(m)).Select(m => getMatchOrText(m, self.textOnly)).ToArray());
 				else
 					return Tuple.Empty;
 			else if (isMatch(input))
-				return Some.Object(new RegexMatch(matcher.GetMatch(0)));
+				return Some.Object(getMatchOrText(new RegexMatch(matcher.GetMatch(0)), self.textOnly));
 			else
 				return None.NoneValue;
 		}
 
 		public Boolean NotMatches(string input) => !isMatch(input);
 
-		public IObject MatchString(string input)
+/*		public IObject MatchString(string input)
 		{
 			if (global)
 				if (isMatch(input))
@@ -92,7 +96,7 @@ namespace Kagami.Library.Objects
 				return Some.Object(String.StringObject(matcher.GetMatch(0).Text));
 			else
 				return None.NoneValue;
-		}
+		}*/
 
 		public String Replace(string input, string replacement)
 		{
