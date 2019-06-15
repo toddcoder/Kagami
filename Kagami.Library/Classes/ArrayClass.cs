@@ -4,6 +4,7 @@ using Core.Exceptions;
 using Core.Monads;
 using static Kagami.Library.Classes.ClassFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
+using static Kagami.Library.Operations.OperationFunctions;
 using Array = Kagami.Library.Objects.Array;
 using Boolean = Kagami.Library.Objects.Boolean;
 using Void = Kagami.Library.Objects.Void;
@@ -25,9 +26,9 @@ namespace Kagami.Library.Classes
 			mutableCollectionMessages();
 			sliceableMessages();
 
-			messages["[](_)"] = (obj, msg) => function<Array, Int>(obj, msg, (a, i) => a[i.Value]);
+			messages["[](_)"] = (obj, msg) => function<Array, IObject>(obj, msg, getIndexed);
 			messages["get(_)"] = (obj, msg) => function<Array, IObject>(obj, msg, (a, i) => someOf(a.Get(i)));
-			messages["[]=(_<Int>,_)"] = (obj, msg) => function<Array>(obj, a => a[((Int)msg.Arguments[0]).Value] = msg.Arguments[1]);
+			messages["[]=(_,_)"] = (obj, msg) => function<Array, IObject, IObject>(obj, msg, setIndexed);
 			messages["~(_)"] = (obj, msg) => function<Array, Array>(obj, msg, (a1, a2) => a1.Concatenate(a2));
 			registerMessage("push(_)", (obj, msg) => function<Array, IObject>(obj, msg, (a, v) => a.Append(v)));
 			registerMessage("pop()", (obj, msg) => function<Array>(obj, a => a.Pop()));
@@ -60,8 +61,33 @@ namespace Kagami.Library.Classes
 
 				return Void.Value;
 			});
+		}
 
-        }
+		public IObject getIndexed(Array array, IObject index)
+		{
+			if (index is Int i)
+				return array[i.Value];
+			else if (getIterator(index, false).If(out var iterator, out var exception))
+				return array[iterator];
+			else
+				throw exception;
+		}
+
+		public IObject setIndexed(Array array, IObject index, IObject value)
+		{
+			if (index is Int i)
+			{
+				array[i.Value] = value;
+				return array;
+			}
+			else if (getIterator(index, false).If(out var iterator, out var exception))
+			{
+				array[iterator] = value;
+				return array;
+			}
+			else
+				throw exception;
+		}
 
 		public override void RegisterClassMessages()
 		{

@@ -147,6 +147,51 @@ namespace Kagami.Library.Objects
 			}
 		}
 
+		IEnumerable<int> indexList(IIterator iterator)
+		{
+			return iterator.List().Cast<Int>().Where(i => i.Value.Between(0).Until(list.Count)).Select(i => i.Value);
+		}
+
+		public IObject this[IIterator iterator]
+		{
+			get
+			{
+				var result = new List<IObject>();
+				foreach (var index in indexList(iterator))
+					result.Add(list[index]);
+				return new Array(result);
+			}
+			set
+			{
+				switch (value)
+				{
+					case Array array when array.arrayID == arrayID:
+						return;
+					case ICollection collection:
+					{
+						var valueIterator = collection.GetIterator(false);
+						foreach (var index in indexList(iterator))
+						{
+							var anyItem = valueIterator.Next();
+							if (anyItem.If(out var item))
+								list[index] = item;
+							else
+								break;
+						}
+
+						break;
+					}
+
+					default:
+					{
+						foreach (var index in indexList(iterator))
+							list[index] = value;
+						break;
+					}
+				}
+			}
+		}
+
 		void throwIfSelf(IObject value)
 		{
 			if (value is Array array && array.arrayID == arrayID)
