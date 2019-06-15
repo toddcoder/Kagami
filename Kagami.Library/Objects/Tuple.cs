@@ -12,7 +12,7 @@ using static Kagami.Library.Objects.CollectionFunctions;
 
 namespace Kagami.Library.Objects
 {
-	public struct Tuple : IObject, IEquatable<Tuple>, ICollection, IObjectCompare
+	public struct Tuple : IObject, IEquatable<Tuple>, ICollection, IObjectCompare, IComparable<Tuple>, IComparable
 	{
 		public static IObject NewTuple(IObject x, IObject y)
 		{
@@ -175,6 +175,14 @@ namespace Kagami.Library.Objects
 
 		public override int GetHashCode() => Hash;
 
+		public int CompareTo(object obj)
+		{
+			if (obj is Tuple tuple)
+				return CompareTo(tuple);
+			else
+				return Compare((IObject)obj);
+		}
+
 		//public string FullFunctionName(string name) => name.Function(names.KeyArray());
 
 		public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new Iterator(this);
@@ -250,5 +258,7 @@ namespace Kagami.Library.Objects
 		public Boolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
 
 		public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
+
+		public int CompareTo(Tuple other) => Compare(other);
 	}
 }

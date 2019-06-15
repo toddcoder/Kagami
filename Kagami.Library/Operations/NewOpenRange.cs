@@ -2,7 +2,6 @@
 using Kagami.Library.Runtime;
 using Core.Monads;
 using static Kagami.Library.AllExceptions;
-using static Kagami.Library.Objects.ObjectFunctions;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Operations
@@ -18,9 +17,9 @@ namespace Kagami.Library.Operations
                {
                   case Lambda lambda1:
                      return new OpenRange(x, lambda1).Matched<IObject>();
-                  case INumeric _:
+/*                  case INumeric _:
                      var internalLambda = new InternalLambda(o => sendMessage(o[0], "+", y));
-                     return new OpenRange(x, internalLambda).Matched<IObject>();
+                     return new OpenRange(x, internalLambda).Matched<IObject>();*/
                   default:
                      return new Sequence(i.Value, y).Matched<IObject>();
                }

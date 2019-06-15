@@ -41,8 +41,15 @@ namespace Kagami.Library.Objects
 			dictionary = new Hash<IObject, IObject>();
 
 			foreach (var item in items)
-				if (item is IKeyValue kv)
-					dictionary[kv.Key] = kv.Value;
+				switch (item)
+				{
+					case IKeyValue kv:
+						dictionary[kv.Key] = kv.Value;
+						break;
+					case Tuple tuple:
+						dictionary[tuple[0]] = tuple[1];
+						break;
+				}
 
 			keys = new IObject[0];
 			parameterCount = 0;
@@ -204,7 +211,7 @@ namespace Kagami.Library.Objects
 				return None.NoneValue;
 		}
 
-		public IObject Keys => new Array(dictionary.KeyArray());
+		public IObject Keys => new Set(dictionary.KeyArray());
 
 		public IObject Values => new Array(dictionary.ValueArray());
 
