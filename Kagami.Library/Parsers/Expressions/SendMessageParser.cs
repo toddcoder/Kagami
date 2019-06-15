@@ -33,7 +33,7 @@ namespace Kagami.Library.Parsers.Expressions
 				parseArguments = true;
 			}
 
-			state.Colorize(tokens, Color.Whitespace, Color.Message, Color.Message, Color.Structure);
+			state.Colorize(tokens, Color.Whitespace, Color.Message, Color.Message, Color.OpenParenthesis);
 
 			if (!parseArguments)
 			{

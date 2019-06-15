@@ -16,7 +16,7 @@ namespace Kagami.Library.Parsers.Statements
 		public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
 		{
 			var className = tokens[3].Text;
-			state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Class, Color.Structure);
+			state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Class, Color.OpenParenthesis);
 
 			if (getParameters(state).Out(out var parameters, out var parametersOriginal))
 			{

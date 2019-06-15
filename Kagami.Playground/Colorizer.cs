@@ -14,11 +14,16 @@ namespace Kagami.Playground
 		const int WM_SETREDRAW = 11;
 
 		RichTextBox textBox;
+		int parenthesesCount;
 
 		[DllImport("user32.dll")]
 		public static extern int SendMessage(IntPtr hWnd, int msg, bool wParam, int lParam);
 
-		public Colorizer(RichTextBox textBox) => this.textBox = textBox;
+		public Colorizer(RichTextBox textBox)
+		{
+			this.textBox = textBox;
+			parenthesesCount = 0;
+		}
 
 		public void Colorize(IEnumerable<Token> tokens)
 		{
@@ -32,7 +37,7 @@ namespace Kagami.Playground
 				foreach (var token in tokens)
 				{
 					textBox.Select(token.Index, token.Length);
-					textBox.SelectionColor = getForeColor(token.Color);
+					textBox.SelectionColor = getForeColor(token.Color, ref parenthesesCount);
 					textBox.SelectionBackColor = getBackColor();
 					textBox.SelectionFont = !isItalic(token.Color) ? !isBold(token.Color) ? font : boldFont : italicFont;
 				}
@@ -64,6 +69,8 @@ namespace Kagami.Playground
 				case Library.Parsers.Color.CollectionPart:
 				case Library.Parsers.Color.Keyword:
 				case Library.Parsers.Color.Char:
+				case Library.Parsers.Color.OpenParenthesis:
+				case Library.Parsers.Color.CloseParenthesis:
 					return true;
 				default:
 					return false;
@@ -84,7 +91,41 @@ namespace Kagami.Playground
 
 		static Color getBackColor() => Color.White;
 
-		static Color getForeColor(Library.Parsers.Color color)
+		static Color getParenthesisColor(Library.Parsers.Color color, ref int parenthesesCount)
+		{
+			switch (color)
+			{
+				case Library.Parsers.Color.OpenParenthesis:
+					return getParenthesisColor(++parenthesesCount);
+				case Library.Parsers.Color.CloseParenthesis:
+					return getParenthesisColor(parenthesesCount--);
+				default:
+					return Color.Black;
+			}
+		}
+
+		static Color getParenthesisColor(int parenthesesCount)
+		{
+			switch (parenthesesCount)
+			{
+				case 1:
+					return Color.Red;
+				case 2:
+					return Color.Green;
+				case 3:
+					return Color.Blue;
+				case 4:
+					return Color.DarkCyan;
+				case 5:
+					return Color.YellowGreen;
+				case 6:
+					return Color.Gray;
+				default:
+					return Color.Black;
+			}
+		}
+
+		static Color getForeColor(Library.Parsers.Color color, ref int parenthesesCount)
 		{
 			switch (color)
 			{
@@ -128,6 +169,9 @@ namespace Kagami.Playground
 					return Color.DimGray;
 				case Library.Parsers.Color.Type:
 					return Color.DarkCyan;
+				case Library.Parsers.Color.OpenParenthesis:
+				case Library.Parsers.Color.CloseParenthesis:
+					return getParenthesisColor(color, ref parenthesesCount);
 				default:
 					return Color.Black;
 			}

@@ -12,7 +12,7 @@ namespace Kagami.Library.Parsers.Expressions
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
 			state.BeginTransaction();
-			state.Colorize(tokens, Color.Whitespace, Color.Structure);
+			state.Colorize(tokens, Color.Whitespace, Color.OpenParenthesis);
 			if (getPartialLambda(state).Out(out var lambda, out var original))
 			{
 				builder.Add(lambda);

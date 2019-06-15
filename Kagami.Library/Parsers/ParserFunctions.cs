@@ -193,9 +193,9 @@ namespace Kagami.Library.Parsers
 
 		public static IMatched<Parameters> getParameters(ParseState state)
 		{
-			if (state.Scan("^ /[')]']", Color.Structure).If(out _, out var mbException))
+			if (state.Scan("^ /[')]']", Color.CloseParenthesis).If(out _, out var anyException))
 				return new Parameters().Matched();
-			else if (mbException.If(out var exception))
+			else if (anyException.If(out var exception))
 				return failedMatch<Parameters>(exception);
 
 			var parameters = new List<Parameter>();
@@ -215,7 +215,7 @@ namespace Kagami.Library.Parsers
 				else
 					return originalParameter.UnmatchedOnly<Parameters>();
 
-				if (state.Scan("^ /(/s*) /[',)']", Color.Whitespace, Color.Structure).Out(out var next, out var nextOriginal))
+				if (state.Scan("^ /(/s*) /[',)']", Color.Whitespace, Color.CloseParenthesis).Out(out var next, out var nextOriginal))
 				{
 					if (next.EndsWith(")"))
 						return new Parameters(parameters.ToArray()).Matched();
@@ -232,9 +232,9 @@ namespace Kagami.Library.Parsers
 
 		public static IMatched<Expression[]> getArguments(ParseState state, Bits32<ExpressionFlags> flags)
 		{
-			if (state.Scan("^ /[')]}']", Color.Structure).If(out _, out var mbScanException))
+			if (state.Scan("^ /[')]}']", Color.CloseParenthesis).If(out _, out var anyScanException))
 				return new Expression[0].Matched();
-			else if (mbScanException.If(out var scanException))
+			else if (anyScanException.If(out var scanException))
 				return failedMatch<Expression[]>(scanException);
 
 			var arguments = new List<Expression>();
@@ -242,10 +242,10 @@ namespace Kagami.Library.Parsers
 
 			while (state.More && scanning)
 				if (getExpression(state, flags | ExpressionFlags.OmitComma | ExpressionFlags.InArgument)
-					.If(out var expression, out var mbException))
+					.If(out var expression, out var anyException))
 				{
 					arguments.Add(expression);
-					if (state.Scan("^ /(/s*) /[',)]}']", Color.Whitespace, Color.Structure).Out(out var next, out var original))
+					if (state.Scan("^ /(/s*) /[',)]}']", Color.Whitespace, Color.CloseParenthesis).Out(out var next, out var original))
 					{
 						if (next.EndsWith(")") || next.EndsWith("]") || next.EndsWith("}"))
 							return arguments.ToArray().Matched();
@@ -253,7 +253,7 @@ namespace Kagami.Library.Parsers
 					else
 						return original.UnmatchedOnly<Expression[]>();
 				}
-				else if (mbException.If(out var exception))
+				else if (anyException.If(out var exception))
 					return failedMatch<Expression[]>(exception);
 				else
 					scanning = false;
@@ -473,8 +473,8 @@ namespace Kagami.Library.Parsers
 					return original;
 
 				while (state.More)
-					if (postfixOperatorsParser.Scan(state).If(out _, out var mbException)) { }
-					else if (mbException.If(out var exception))
+					if (postfixOperatorsParser.Scan(state).If(out _, out var anyException)) { }
+					else if (anyException.If(out var exception))
 						return failedMatch<Unit>(exception);
 					else
 						break;
@@ -484,7 +484,7 @@ namespace Kagami.Library.Parsers
 
 			state.BeginPrefixCode();
 			state.BeginImplicitState();
-			state.Scan("^ /(|s|) /'('", Color.Whitespace, Color.Structure);
+			state.Scan("^ /(|s|) /'('", Color.Whitespace, Color.OpenParenthesis);
 
 			try
 			{
@@ -496,19 +496,19 @@ namespace Kagami.Library.Parsers
 					if (getTerm().Failed(out var exception))
 						return failedMatch<LambdaSymbol>(exception);
 
-					if (infixParser.Scan(state).If(out _, out var mbException))
+					if (infixParser.Scan(state).If(out _, out var anyException))
 					{
 						if (getTerm().Failed(out exception))
 							return failedMatch<LambdaSymbol>(exception);
 					}
-					else if (mbException.If(out exception))
+					else if (anyException.If(out exception))
 						return failedMatch<LambdaSymbol>(exception);
 					else
 						break;
 				}
 
 				var parameterCount = unknownFieldCount.MaxOf(maxFieldCount) + (addOne ? 1 : 0);
-				if (state.Scan("^ /')'", Color.Structure).Out(out _, out var scanOriginal))
+				if (state.Scan("^ /')'", Color.CloseParenthesis).Out(out _, out var scanOriginal))
 					return builder.ToExpression().FlatMap(expression => new LambdaSymbol(parameterCount, expression).Matched(),
 						failedMatch<LambdaSymbol>);
 				else

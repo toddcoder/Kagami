@@ -11,7 +11,7 @@ namespace Kagami.Library.Parsers.Statements
 
       public override IMatched<Unit> ParseClassItem(ParseState state, Token[] tokens, ClassBuilder builder)
       {
-         state.Colorize(tokens, Color.Keyword, Color.Structure);
+         state.Colorize(tokens, Color.Keyword, Color.OpenParenthesis);
 			state.CreateReturnType();
 	      return
 		      from parameters in getParameters(state)

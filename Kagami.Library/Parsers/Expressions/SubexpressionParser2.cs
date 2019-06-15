@@ -15,9 +15,9 @@ namespace Kagami.Library.Parsers.Expressions
 		{
 			state.BeginTransaction();
 			var monoTuple = tokens[3].Text == ",";
-			state.Colorize(tokens, Color.Whitespace, Color.Structure, Color.Structure);
+			state.Colorize(tokens, Color.Whitespace, Color.OpenParenthesis, Color.Structure);
 
-			if (getExpression(state, "^ /')'", builder.Flags & ~ExpressionFlags.OmitComma, Color.Structure)
+			if (getExpression(state, "^ /')'", builder.Flags & ~ExpressionFlags.OmitComma, Color.CloseParenthesis)
 				.If(out var expression, out var mbException))
 			{
 				builder.Add(new SubexpressionSymbol(expression, monoTuple));

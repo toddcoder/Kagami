@@ -38,7 +38,7 @@ namespace Kagami.Library.Parsers.Statements
 				return $"Operator {functionName} already registered".FailedMatch<Unit>();
 
 			state.Colorize(tokens, Color.Keyword, Color.Keyword, Color.Whitespace, Color.Class, Color.Structure, Color.Invokable,
-				Color.Structure);
+				Color.OpenParenthesis);
 
 			var needsParameters = type == "(";
 			if (needsParameters)
@@ -101,7 +101,7 @@ namespace Kagami.Library.Parsers.Statements
 			while (state.More)
 			{
 				var result =
-					from prefix in state.Scan("^ /'('", Color.Structure)
+					from prefix in state.Scan("^ /'('", Color.OpenParenthesis)
 					from p in getParameters(state)
 					select p;
 				if (result.If(out var parameters, out var mbException))

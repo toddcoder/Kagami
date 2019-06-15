@@ -12,7 +12,7 @@ namespace Kagami.Library.Parsers.Expressions
 
       public override IMatched<Parameters> ParseParameters(ParseState state, Token[] tokens)
       {
-         state.Colorize(tokens, Color.Whitespace, Color.Structure);
+         state.Colorize(tokens, Color.Whitespace, Color.OpenParenthesis);
          return getParameters(state);
       }
    }

@@ -23,6 +23,8 @@
       Char,
       Class,
       Label,
-      Type
+      Type,
+		OpenParenthesis,
+		CloseParenthesis
    }
 }

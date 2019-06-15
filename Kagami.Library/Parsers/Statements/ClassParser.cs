@@ -18,7 +18,7 @@ namespace Kagami.Library.Parsers.Statements
 		{
 			var className = tokens[3].Text;
 			var hasParameters = tokens[4].Text == "(";
-			state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Class, Color.Structure);
+			state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Class, Color.OpenParenthesis);
 
 			Parameters parameters;
 

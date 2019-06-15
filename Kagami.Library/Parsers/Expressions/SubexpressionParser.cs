@@ -51,12 +51,12 @@ namespace Kagami.Library.Parsers.Expressions
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
 			state.BeginTransaction();
-			state.Colorize(tokens, Color.Whitespace, Color.Structure);
+			state.Colorize(tokens, Color.Whitespace, Color.OpenParenthesis);
 
 			if (getExpression(state, builder.Flags).If(out var expression, out var anyException))
 			{
 				var monoTuple = false;
-				if (state.Scan("^ /(|s|) (/',' /(|s|))? /')'", Color.Whitespace, Color.Structure, Color.Whitespace, Color.Structure)
+				if (state.Scan("^ /(|s|) (/',' /(|s|))? /')'", Color.Whitespace, Color.Structure, Color.Whitespace, Color.CloseParenthesis)
 					.If(out var scanned, out anyException))
 				{
 					if (scanned.Contains(","))

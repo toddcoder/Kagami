@@ -19,7 +19,7 @@ namespace Kagami.Library.Parsers.Expressions
 				return notMatched<Unit>();
 			else
 			{
-				state.Colorize(tokens, Color.Whitespace, Color.Invokable, Color.Structure);
+				state.Colorize(tokens, Color.Whitespace, Color.Invokable, Color.OpenParenthesis);
 
 				if (getArgumentsPlusLambda(state, builder.Flags).Out(out var tuple, out var original))
 				{

@@ -15,7 +15,7 @@ namespace Kagami
 
       static void Main(string[] args)
       {
-         var program = new Program { Test = true };
+         var program = new Program();
          program.Run(args);
       }
 
