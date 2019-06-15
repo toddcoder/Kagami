@@ -32,7 +32,7 @@ namespace Kagami.Library.Parsers.Statements
 					while (state.More)
 					{
 						var parser = new DataComparisandParser(className, values, ordinal);
-						if (parser.Scan(state).If(out _, out var mbException))
+						if (parser.Scan(state).If(out _, out var anyException))
 							if (dataTypeClass.RegisterDataComparisand(parser.Name, (IObject)parser.Ordinal).If(out _, out var regException))
 							{
 								dataComparisandNames.Add(parser.Name);
@@ -40,7 +40,7 @@ namespace Kagami.Library.Parsers.Statements
 							}
 							else
 								return failedMatch<Unit>(regException);
-						else if (mbException.If(out exception))
+						else if (anyException.If(out exception))
 							return failedMatch<Unit>(exception);
 						else
 							break;

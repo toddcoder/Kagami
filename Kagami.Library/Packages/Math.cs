@@ -112,9 +112,9 @@ namespace Kagami.Library.Packages
                return mn.Abs();
             case INumeric n:
 		         if (n.IsNegative)
-			         if (Negate.Evaluate(n).If(out var value, out var mbException))
+			         if (Negate.Evaluate(n).If(out var value, out var anyException))
 				         return value;
-			         else if (mbException.If(out var exception))
+			         else if (anyException.If(out var exception))
 				         throw exception;
 			         else
 				         throw notNumeric(obj);

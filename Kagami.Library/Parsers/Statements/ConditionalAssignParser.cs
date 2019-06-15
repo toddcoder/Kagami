@@ -29,9 +29,9 @@ namespace Kagami.Library.Parsers.Statements
 				var (comparisand, expression, and, block) = tuple;
 				var elseBlock = none<Block>();
 				var elseParser = new ElseParser();
-				if (elseParser.Scan(state).If(out _, out var mbException))
+				if (elseParser.Scan(state).If(out _, out var anyException))
 					elseBlock = elseParser.Block;
-				else if (mbException.If(out var exception))
+				else if (anyException.If(out var exception))
 				{
 					state.RollBackTransaction();
 					return failedMatch<Unit>(exception);

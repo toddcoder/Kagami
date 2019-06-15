@@ -12,7 +12,7 @@ namespace Kagami.Library.Operations
 	{
 		public override IMatched<IObject> Execute(Machine machine)
 		{
-			if (machine.Find("self", true).If(out var selfField, out var mbException))
+			if (machine.Find("self", true).If(out var selfField, out var anyException))
 			{
 				var self = (UserObject)selfField.Value;
 				var selfClass = (UserClass)classOf(self);
@@ -25,7 +25,7 @@ namespace Kagami.Library.Operations
 					return superObject.Matched<IObject>();
 				}
 			}
-			else if (mbException.If(out var exception))
+			else if (anyException.If(out var exception))
 				return failedMatch<IObject>(exception);
 			else
 				return "self not defined".FailedMatch<IObject>();

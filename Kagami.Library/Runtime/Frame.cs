@@ -131,8 +131,8 @@ namespace Kagami.Library.Runtime
 						IObject value;
 						if (defaultValue.If(out var invokable))
 						{
-							if (Machine.Current.Invoke(invokable, Arguments.Empty, 0).If(out value, out var mbException)) { }
-							else if (mbException.If(out var exception))
+							if (Machine.Current.Invoke(invokable, Arguments.Empty, 0).If(out value, out var anyException)) { }
+							else if (anyException.If(out var exception))
 								throw exception;
 						}
 						else

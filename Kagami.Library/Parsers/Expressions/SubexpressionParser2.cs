@@ -18,14 +18,14 @@ namespace Kagami.Library.Parsers.Expressions
 			state.Colorize(tokens, Color.Whitespace, Color.OpenParenthesis, Color.Structure);
 
 			if (getExpression(state, "^ /')'", builder.Flags & ~ExpressionFlags.OmitComma, Color.CloseParenthesis)
-				.If(out var expression, out var mbException))
+				.If(out var expression, out var anyException))
 			{
 				builder.Add(new SubexpressionSymbol(expression, monoTuple));
 				state.CommitTransaction();
 
 				return Unit.Matched();
 			}
-			else if (mbException.IsSome)
+			else if (anyException.IsSome)
 			{
 				state.RollBackTransaction();
 				state.BeginTransaction();

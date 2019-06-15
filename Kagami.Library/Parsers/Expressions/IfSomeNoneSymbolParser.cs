@@ -17,14 +17,14 @@ namespace Kagami.Library.Parsers.Expressions
 
 			state.Colorize(tokens, Color.Whitespace, Color.Structure);
 
-			if (getExpression(state, builder.Flags).If(out var expression, out var mbException))
+			if (getExpression(state, builder.Flags).If(out var expression, out var anyException))
 			{
 				state.CommitTransaction();
 				builder.Add(new IfSomeNoneSymbol(expression));
 
 				return Unit.Matched();
 			}
-			else if (mbException.If(out var exception))
+			else if (anyException.If(out var exception))
 				return failedMatch<Unit>(exception);
 			else
 			{

@@ -39,9 +39,9 @@ namespace Kagami.Library.Parsers.Statements
 			var parentClassName = "";
 			var initialize = false;
 			var arguments = new Expression[0];
-			if (parentClassParser.Scan(state).If(out _, out var mbException))
+			if (parentClassParser.Scan(state).If(out _, out var anyException))
 				(parentClassName, initialize, arguments) = parentClassParser.Parent;
-			else if (mbException.If(out var exception))
+			else if (anyException.If(out var exception))
 			{
 				state.Regress();
 				return failedMatch<Unit>(exception);
@@ -51,8 +51,8 @@ namespace Kagami.Library.Parsers.Statements
 			while (state.More)
 			{
 				var traitImplementsParser = new TraitImplementsParser(traits);
-				if (traitImplementsParser.Scan(state).If(out _, out mbException)) { }
-				else if (mbException.If(out var exception))
+				if (traitImplementsParser.Scan(state).If(out _, out anyException)) { }
+				else if (anyException.If(out var exception))
 				{
 					state.Regress();
 					return failedMatch<Unit>(exception);
@@ -80,8 +80,8 @@ namespace Kagami.Library.Parsers.Statements
 
 					var classItemsParser = new ClassItemsParser(builder);
 					while (state.More)
-						if (classItemsParser.Scan(state).If(out _, out mbException)) { }
-						else if (mbException.If(out exception))
+						if (classItemsParser.Scan(state).If(out _, out anyException)) { }
+						else if (anyException.If(out exception))
 							return failedMatch<Unit>(exception);
 						else
 							break;

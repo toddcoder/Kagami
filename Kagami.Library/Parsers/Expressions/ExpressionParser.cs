@@ -44,7 +44,7 @@ namespace Kagami.Library.Parsers.Expressions
 
 			try
 			{
-				if (getTerm(state).If(out _, out var mbException))
+				if (getTerm(state).If(out _, out var anyException))
 				{
 					while (state.More)
 					{
@@ -57,13 +57,13 @@ namespace Kagami.Library.Parsers.Expressions
 								return conjunction;
 						}
 
-						if (infixParser.Scan(state).If(out _, out mbException))
-							if (getTerm(state).If(out _, out mbException)) { }
-							else if (mbException.If(out var exception))
+						if (infixParser.Scan(state).If(out _, out anyException))
+							if (getTerm(state).If(out _, out anyException)) { }
+							else if (anyException.If(out var exception))
 								return failedMatch<Unit>(exception);
 							else
 								break;
-						else if (mbException.If(out var exception))
+						else if (anyException.If(out var exception))
 							return failedMatch<Unit>(exception);
 						else
 							break;
@@ -105,7 +105,7 @@ namespace Kagami.Library.Parsers.Expressions
 					else
 						return failedMatch<Unit>(expException);
 				}
-				else if (mbException.If(out var exception))
+				else if (anyException.If(out var exception))
 					return failedMatch<Unit>(exception);
 				else
 					return "Invalid expression syntax".FailedMatch<Unit>();

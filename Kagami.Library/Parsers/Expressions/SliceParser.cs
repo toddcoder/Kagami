@@ -35,13 +35,13 @@ namespace Kagami.Library.Parsers.Expressions
 			while (state.More)
 			{
 				var skipTakeMatch = getSkipTake(state, builder.Flags | ExpressionFlags.OmitComma);
-				if (skipTakeMatch.If(out var skipTake, out var mbException))
+				if (skipTakeMatch.If(out var skipTake, out var anyException))
 				{
 					skipTakes.Add(skipTake);
 					if (skipTake.Terminal)
 						break;
 				}
-				else if (mbException.If(out var exception))
+				else if (anyException.If(out var exception))
 					return failedMatch<Unit>(exception);
 			}
 
@@ -55,19 +55,19 @@ namespace Kagami.Library.Parsers.Expressions
 			var skipTake = new SkipTake();
 
 			var noSkipMatch = state.Scan("^ /(|s|) /','", Color.Whitespace, Color.Structure);
-			if (noSkipMatch.If(out _, out var mbException)) { }
-			else if (mbException.If(out var exception))
+			if (noSkipMatch.If(out _, out var anyException)) { }
+			else if (anyException.If(out var exception))
 				return failedMatch<SkipTake>(exception);
 			else
 			{
 				var skipMatch = getExpression(state, flags);
-				if (skipMatch.If(out var skipExpression, out mbException))
+				if (skipMatch.If(out var skipExpression, out anyException))
 					skipTake.Skip = skipExpression.Some();
-				else if (mbException.If(out exception))
+				else if (anyException.If(out exception))
 					return failedMatch<SkipTake>(exception);
 
 				var semiOrEndMatch = state.Scan("^ /(|s|) /[';,}']", Color.Whitespace, Color.Structure);
-				if (semiOrEndMatch.If(out var semiOrEnd, out mbException))
+				if (semiOrEndMatch.If(out var semiOrEnd, out anyException))
 					switch (semiOrEnd)
 					{
 						case "}":
@@ -76,25 +76,25 @@ namespace Kagami.Library.Parsers.Expressions
 						case ";":
 							return skipTake.Matched();
 					}
-				else if (mbException.If(out exception))
+				else if (anyException.If(out exception))
 					return failedMatch<SkipTake>(exception);
 			}
 
 			var takeMatch = getExpression(state, flags);
-			if (takeMatch.If(out var takeExpression, out mbException))
+			if (takeMatch.If(out var takeExpression, out anyException))
 				skipTake.Take = takeExpression.Some();
-			else if (mbException.If(out var exception))
+			else if (anyException.If(out var exception))
 				return failedMatch<SkipTake>(exception);
 
 			var endMatch = state.Scan("^ /(|s|) /['};']", Color.Whitespace, Color.Structure);
-			if (endMatch.If(out var end, out mbException))
+			if (endMatch.If(out var end, out anyException))
 				switch (end)
 				{
 					case "}":
 						skipTake.Terminal = true;
 						return skipTake.Matched();
 				}
-			else if (mbException.If(out var exception))
+			else if (anyException.If(out var exception))
 				return failedMatch<SkipTake>(exception);
 
 			return skipTake.Matched();

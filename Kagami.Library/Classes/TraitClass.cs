@@ -47,9 +47,9 @@ namespace Kagami.Library.Classes
 
       public IResult<Unit> RegisterImplementor(UserClass userClass)
       {
-         if (userClass.MatchImplemented(signatures).If(out var signature, out var mbException))
+         if (userClass.MatchImplemented(signatures).If(out var signature, out var anyException))
             return $"Signature {signature.Image} not implemented".Failure<Unit>();
-         else if (mbException.If(out var exception))
+         else if (anyException.If(out var exception))
 		      return failure<Unit>(exception);
 	      else
 	      {

@@ -28,23 +28,23 @@ namespace Kagami.Library.Parsers
 
       public virtual IMatched<Unit> Scan(ParseState state)
       {
-	      IMaybe<Exception> mbException;
+	      IMaybe<Exception> anyException;
 
          if (Pattern.IsEmpty())
          {
             var index = state.Index;
             var parsed = Parse(state, new Token[0]);
-	         if (parsed.If(out _, out mbException))
+	         if (parsed.If(out _, out anyException))
 	         {
 		         if (UpdateIndexOnParseOnly)
 			         state.UpdateStatement(index, 1);
             }
-				else if (mbException.IsSome)
+				else if (anyException.IsSome)
 		         state.SetExceptionIndex();
             return parsed;
          }
 
-	      if (new Matcher().MatchOne(state.CurrentSource, state.RealizePattern(Pattern), IgnoreCase, Multiline).If(out var match, out mbException))
+	      if (new Matcher().MatchOne(state.CurrentSource, state.RealizePattern(Pattern), IgnoreCase, Multiline).If(out var match, out anyException))
 	      {
 		      var index = state.Index;
 		      var parsed = Parse(state, GetTokens(state, match));
@@ -54,7 +54,7 @@ namespace Kagami.Library.Parsers
 			      state.SetExceptionIndex();
 		      return parsed;
          }
-			else if (mbException.If(out var exception))
+			else if (anyException.If(out var exception))
 	      {
 		      state.SetExceptionIndex();
 		      return failedMatch<Unit>(exception);

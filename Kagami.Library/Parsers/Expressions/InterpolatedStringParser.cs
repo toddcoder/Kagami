@@ -45,9 +45,9 @@ namespace Kagami.Library.Parsers.Expressions
 						}
 
 						if (hex)
-							if (fromHex(hexText.ToString()).If(out var matchedChar, out var mbException))
+							if (fromHex(hexText.ToString()).If(out var matchedChar, out var anyException))
 								text.Append(matchedChar);
-							else if (mbException.If(out var exception))
+							else if (anyException.If(out var exception))
 								return failedMatch<Unit>(exception);
 							else
 								return failedMatch<Unit>(badHex(hexText.ToString()));
@@ -77,7 +77,7 @@ namespace Kagami.Library.Parsers.Expressions
 
 						state.Move(1);
 						state.AddToken(index, length, Color.String);
-						state.AddToken(index + length, 1, Color.Structure);
+						state.AddToken(index + length, 1, Color.OpenParenthesis);
 
 						if (firstString.IsNone)
 							firstString = text.ToString().Some();
@@ -85,14 +85,14 @@ namespace Kagami.Library.Parsers.Expressions
 							suffixes.Add(text.ToString());
 						text.Clear();
 
-						if (getExpression(state, "^ /')'", builder.Flags, Color.Structure).If(out var expression, out var mbException))
+						if (getExpression(state, "^ /')'", builder.Flags, Color.CloseParenthesis).If(out var expression, out var anyException))
 						{
 							expressions.Add(expression);
 							index = state.Index;
 							length = 0;
 							continue;
 						}
-						else if (mbException.If(out var exception))
+						else if (anyException.If(out var exception))
 							return failedMatch<Unit>(exception);
 						else
 							return failedMatch<Unit>(expectedExpression());
@@ -156,12 +156,12 @@ namespace Kagami.Library.Parsers.Expressions
 							else
 							{
 								escaped = false;
-								if (fromHex(hexText.ToString()).If(out var charMatched, out var mbException))
+								if (fromHex(hexText.ToString()).If(out var charMatched, out var anyException))
 								{
 									hexText.Append(charMatched);
 									hexText.Append(ch);
 								}
-								else if (mbException.If(out var exception))
+								else if (anyException.If(out var exception))
 									return failedMatch<Unit>(exception);
 								else
 									return failedMatch<Unit>(badHex(hexText.ToString()));

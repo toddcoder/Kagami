@@ -22,8 +22,8 @@ namespace Kagami.Library.Parsers.Statements
 				if (state.Advance().Out(out _, out var original))
 				{
 					while (state.More)
-						if (traitItemsParser.Scan(state).If(out _, out var mbException)) { }
-						else if (mbException.If(out exception))
+						if (traitItemsParser.Scan(state).If(out _, out var anyException)) { }
+						else if (anyException.If(out exception))
 							return failedMatch<Unit>(exception);
 						else
 							break;

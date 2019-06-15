@@ -20,12 +20,12 @@ namespace Kagami.Library.Parsers.Statements
 			while (state.More)
 			{
 				var parser = new TraitNameParser(traits);
-				if (parser.Scan(state).If(out _, out var mbException))
+				if (parser.Scan(state).If(out _, out var anyException))
 				{
 					if (!parser.More)
 						break;
 				}
-				else if (mbException.If(out var exception))
+				else if (anyException.If(out var exception))
 					return failedMatch<Unit>(exception);
 				else
 					break;

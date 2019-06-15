@@ -18,9 +18,9 @@ namespace Kagami.Library.Operations
 			{
 				var returnAddress = frame.Address;
 				if (returnTopOfStack)
-					if (rtn.If(out var v, out var mbException))
+					if (rtn.If(out var v, out var anyException))
 						rtn = copyFields(v, frames).Matched();
-					else if (mbException.If(out var exception))
+					else if (anyException.If(out var exception))
 						return failedMatch<IObject>(exception);
 					else
 						return failedMatch<IObject>(emptyStack());

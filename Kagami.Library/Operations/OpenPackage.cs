@@ -17,7 +17,7 @@ namespace Kagami.Library.Operations
 		public override IMatched<IObject> Execute(Machine machine)
 		{
 			var fieldName = packageName.ToLower1();
-			if (machine.Find(fieldName, true).If(out var field, out var mbException))
+			if (machine.Find(fieldName, true).If(out var field, out var anyException))
 				switch (field.Value)
 				{
 					case Package package when Module.Global.Class(package.ClassName).If(out var baseClass):
@@ -35,7 +35,7 @@ namespace Kagami.Library.Operations
 					default:
 						return failedMatch<IObject>(unableToConvert(field.Value.Image, "Package"));
 				}
-			else if (mbException.If(out var exception))
+			else if (anyException.If(out var exception))
 				return failedMatch<IObject>(exception);
 			else
 				return failedMatch<IObject>(fieldNotFound(fieldName));

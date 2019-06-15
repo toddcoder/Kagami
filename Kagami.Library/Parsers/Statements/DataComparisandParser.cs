@@ -76,7 +76,7 @@ namespace Kagami.Library.Parsers.Statements
 
 		static IMatched<IRangeItem> getOrdinal(ParseState state, IRangeItem ordinal)
 		{
-			if (state.Scan("^ /(|s|) /'='", Color.Whitespace, Color.Structure).If(out _, out var mbException))
+			if (state.Scan("^ /(|s|) /'='", Color.Whitespace, Color.Structure).If(out _, out var anyException))
 				if (getValue(state, ExpressionFlags.Standard).Out(out var value, out var original))
 					if (value is IConstant constant && constant.Object is IRangeItem ri)
 						return ri.Matched();
@@ -84,7 +84,7 @@ namespace Kagami.Library.Parsers.Statements
 						return $"Range item required, found {value}".FailedMatch<IRangeItem>();
 				else
 					return original.Unmatched<IRangeItem>();
-			else if (mbException.If(out var exception))
+			else if (anyException.If(out var exception))
 				return failedMatch<IRangeItem>(exception);
 			else
 				return ordinal.Matched();

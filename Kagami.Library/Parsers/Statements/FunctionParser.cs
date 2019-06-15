@@ -104,9 +104,9 @@ namespace Kagami.Library.Parsers.Statements
 					from prefix in state.Scan("^ /'('", Color.OpenParenthesis)
 					from p in getParameters(state)
 					select p;
-				if (result.If(out var parameters, out var mbException))
+				if (result.If(out var parameters, out var anyException))
 					parametersStack.Push(parameters);
-				else if (mbException.If(out var exception))
+				else if (anyException.If(out var exception))
 				{
 					state.RemoveYieldFlag();
 					state.RemoveReturnType();
@@ -155,9 +155,9 @@ namespace Kagami.Library.Parsers.Statements
 				{
 					var caseParser = new CaseParser(parameters[0].Name);
 					state.SkipEndOfLine();
-					if (caseParser.Scan(state).If(out _, out var mbException))
+					if (caseParser.Scan(state).If(out _, out var anyException))
 						list.Add(caseParser.If);
-					else if (mbException.If(out var exception))
+					else if (anyException.If(out var exception))
 					{
 						state.Regress();
 						return failedMatch<Unit>(exception);

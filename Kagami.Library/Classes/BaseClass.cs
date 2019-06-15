@@ -418,9 +418,9 @@ namespace Kagami.Library.Classes
 				fields.Assign("self", obj);
 			}
 
-			if (Machine.Current.Invoke(lambda.Invokable, arguments, fields).If(out var value, out var mbException))
+			if (Machine.Current.Invoke(lambda.Invokable, arguments, fields).If(out var value, out var anyException))
 				return value;
-			else if (mbException.If(out var exception))
+			else if (anyException.If(out var exception))
 				throw exception;
 			else
 				return Void.Value;

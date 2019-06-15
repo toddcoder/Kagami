@@ -207,9 +207,9 @@ namespace Kagami.Library.Runtime
 						case Yield _:
 							return Yield.YieldAction(this);
 						case Invoke invoke:
-							if (Invoke(invoke.FieldName).If(out var returnValue, out var mbException))
+							if (Invoke(invoke.FieldName).If(out var returnValue, out var anyException))
 								stack.Peek().Push(returnValue);
-							else if (mbException.If(out var exception))
+							else if (anyException.If(out var exception))
 							{
 								if (GetErrorHandler().If(out var address))
 								{
@@ -350,9 +350,9 @@ namespace Kagami.Library.Runtime
 		{
 			var depth = 0;
 			foreach (var frame in stack)
-				if (frame.Fields.Find(fieldName, getting).If(out var field, out var mbException))
+				if (frame.Fields.Find(fieldName, getting).If(out var field, out var anyException))
 					return field.Matched();
-				else if (mbException.If(out var exception))
+				else if (anyException.If(out var exception))
 					return failedMatch<Field>(exception);
 				else
 				{
@@ -396,9 +396,9 @@ namespace Kagami.Library.Runtime
 			foreach (var booleans in iterator)
 			{
 				var newSelector = selector.Equivalent(booleans);
-				if (findExact(newSelector).If(out var matched, out var mbException))
+				if (findExact(newSelector).If(out var matched, out var anyException))
 					return matched.Matched();
-				else if (mbException.If(out var exception))
+				else if (anyException.If(out var exception))
 					return failedMatch<Field>(exception);
 			}
 
@@ -411,7 +411,7 @@ namespace Kagami.Library.Runtime
 
 		public IResult<Field> Assign(string fieldName, IObject value, bool getting, bool overriden = false)
 		{
-			if (Find(fieldName, getting).If(out var field, out var mbException))
+			if (Find(fieldName, getting).If(out var field, out var anyException))
 				if (field.Mutable)
 				{
 					if (field.Value is Reference r)
@@ -430,7 +430,7 @@ namespace Kagami.Library.Runtime
 				}
 				else
 					return failure<Field>(immutableField(fieldName));
-			else if (mbException.If(out var exception))
+			else if (anyException.If(out var exception))
 				return failure<Field>(exception);
 			else
 				return failure<Field>(fieldNotFound(fieldName));

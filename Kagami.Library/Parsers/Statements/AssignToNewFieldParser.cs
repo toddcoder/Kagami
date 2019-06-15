@@ -23,18 +23,18 @@ namespace Kagami.Library.Parsers.Statements
 			fieldName = tokens[3].Text;
 			state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Identifier);
 
-			if (parseTypeConstraint(state).If(out typeConstraint, out var mbException)) { }
-			else if (mbException.If(out var exception))
+			if (parseTypeConstraint(state).If(out typeConstraint, out var anyException)) { }
+			else if (anyException.If(out var exception))
 				return failedMatch<Unit>(exception);
 			else
 				typeConstraint = none<TypeConstraint>();
 
-			if (state.Scan("^ /(|s|) /'='", Color.Whitespace, Color.Structure).If(out _, out mbException))
+			if (state.Scan("^ /(|s|) /'='", Color.Whitespace, Color.Structure).If(out _, out anyException))
 			{
 				state.CommitTransaction();
 				return Unit.Matched();
 			}
-			else if (mbException.If(out var exception))
+			else if (anyException.If(out var exception))
 				return failedMatch<Unit>(exception);
 			else
 			{

@@ -34,8 +34,8 @@ namespace Kagami.Library.Parsers.Expressions
 							var outerBuilder = new ExpressionBuilder(ExpressionFlags.Standard);
 							var setPropertyParser = new SetPropertyParser(builder, tempObjectField, outerBuilder);
 							while (state.More)
-								if (setPropertyParser.Scan(state).If(out _, out var mbException)) { }
-								else if (mbException.If(out var exception))
+								if (setPropertyParser.Scan(state).If(out _, out var anyException)) { }
+								else if (anyException.If(out var exception))
 									return failedMatch<Unit>(exception);
 								else
 									break;

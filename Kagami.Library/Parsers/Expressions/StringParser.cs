@@ -44,9 +44,9 @@ namespace Kagami.Library.Parsers.Expressions
 						}
 
 						if (hex)
-							if (fromHex(hexText.ToString()).If(out var matchedChar, out var mbException))
+							if (fromHex(hexText.ToString()).If(out var matchedChar, out var anyException))
 								text.Append(matchedChar);
-							else if (mbException.If(out var exception))
+							else if (anyException.If(out var exception))
 								return failedMatch<Unit>(exception);
 							else
 								return failedMatch<Unit>(badHex(hexText.ToString()));

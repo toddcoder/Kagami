@@ -15,12 +15,12 @@ namespace Kagami.Library.Parsers.Statements
 			state.BeginTransaction();
 			if (IgnoreIndentation || SingleLine || state.Scan($"^ /({state.Indentation.FriendlyString()})", Color.Whitespace).IsMatched)
 			{
-				if (base.Scan(state).If(out _, out var mbException))
+				if (base.Scan(state).If(out _, out var anyException))
 				{
 					state.CommitTransaction();
 					return Unit.Matched();
 				}
-				else if (mbException.If(out var exception))
+				else if (anyException.If(out var exception))
 				{
 					ExceptionIndex = state.Index.Some();
 					state.RollBackTransaction();

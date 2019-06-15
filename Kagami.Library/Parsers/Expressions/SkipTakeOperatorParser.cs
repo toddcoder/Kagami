@@ -21,7 +21,7 @@ namespace Kagami.Library.Parsers.Expressions
 			{
 				var ((matched, _), (failed, exception)) = getItem(state, builder, first);
 				if (matched)
-					if (state.Scan("^ /(|s|) /[',}']", Color.Whitespace, Color.Structure).If(out var found, out var mbException))
+					if (state.Scan("^ /(|s|) /[',}']", Color.Whitespace, Color.Structure).If(out var found, out var anyException))
 					{
 						first = false;
 						if (found.Contains("}"))
@@ -30,7 +30,7 @@ namespace Kagami.Library.Parsers.Expressions
 							return Unit.Matched();
 						}
 					}
-					else if (mbException.If(out exception))
+					else if (anyException.If(out exception))
 						return failedMatch<Unit>(exception);
 					else
 						return "Expected , or }".FailedMatch<Unit>();
@@ -60,7 +60,7 @@ namespace Kagami.Library.Parsers.Expressions
 		{
 			var ((matched, _), (failed, exception)) = state.Scan("^ /(|s|) /'='", Color.Whitespace, Color.Structure);
 			if (matched)
-				if (getExpression(state, ExpressionFlags.OmitComma).If(out var expression, out var mbException))
+				if (getExpression(state, ExpressionFlags.OmitComma).If(out var expression, out var anyException))
 				{
 					if (first)
 						builder.Add(new SkipTakeInitLiteralSymbol(expression));
@@ -68,7 +68,7 @@ namespace Kagami.Library.Parsers.Expressions
 						builder.Add(new SkipTakeLiteralSymbol(expression));
 					return true.Success();
 				}
-				else if (mbException.If(out exception))
+				else if (anyException.If(out exception))
 					return failure<bool>(exception);
 				else
 					return "Expected expression".Failure<bool>();

@@ -35,8 +35,8 @@ namespace Kagami.Library
 			resetUniqueID();
 
 			while (state.More)
-				if (statementsParser.Scan(state).If(out _, out var mbException)) { }
-				else if (mbException.If(out var innerException))
+				if (statementsParser.Scan(state).If(out _, out var anyException)) { }
+				else if (anyException.If(out var innerException))
 				{
 					ExceptionIndex = state.ExceptionIndex;
 					return failure<Machine>(innerException);

@@ -55,12 +55,12 @@ namespace Kagami.Library.Parsers.Expressions
 						from tabs in state.Scan($"^ /({state.Indentation.FriendlyString()})", Color.Whitespace)
 						from unit in boundItemParser.Scan(state)
 						select boundItemParser.NameExpression;
-					if (result.If(out var nameExpression, out var mbException))
+					if (result.If(out var nameExpression, out var anyException))
 					{
 						stack.Push(nameExpression);
 						state.SkipEndOfLine();
 					}
-					else if (mbException.If(out var exception))
+					else if (anyException.If(out var exception))
 						return failedMatch<Unit>(exception);
 					else
 						break;

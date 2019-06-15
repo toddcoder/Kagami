@@ -27,7 +27,7 @@ namespace Kagami.Library.Parsers.Expressions
 					from e in getExpression(state, builder.Flags | ExpressionFlags.OmitComma | ExpressionFlags.OmitColon)
 					from n in state.Scan("^ /(/s*) /[',}']", Color.Whitespace, Color.Structure)
 					select (field: f.Trim().Drop(-1), expression: e, next: n);
-				if (result.If(out var tuple, out var mbException))
+				if (result.If(out var tuple, out var anyException))
 				{
 					list.Add((tuple.field, tuple.expression));
 					if (tuple.next.Trim() == "}")
@@ -36,7 +36,7 @@ namespace Kagami.Library.Parsers.Expressions
 						return Unit.Matched();
 					}
 				}
-				else if (mbException.If(out var exception))
+				else if (anyException.If(out var exception))
 					return failedMatch<Unit>(exception);
 				else
 					return notMatched<Unit>();

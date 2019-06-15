@@ -39,7 +39,7 @@ namespace Kagami.Playground
 				{
 					textBox.Select(token.Index, token.Length);
 					textBox.SelectionColor = getForeColor(token.Color, ref parenthesesCount);
-					textBox.SelectionBackColor = getBackColor();
+					textBox.SelectionBackColor = getBackColor(token.Color);
 					textBox.SelectionFont = !isItalic(token.Color) ? !isBold(token.Color) ? font : boldFont : italicFont;
 				}
 
@@ -70,8 +70,8 @@ namespace Kagami.Playground
 				case Library.Parsers.Color.CollectionPart:
 				case Library.Parsers.Color.Keyword:
 				case Library.Parsers.Color.Char:
-				case Library.Parsers.Color.OpenParenthesis:
-				case Library.Parsers.Color.CloseParenthesis:
+				/*case Library.Parsers.Color.OpenParenthesis:
+				case Library.Parsers.Color.CloseParenthesis:*/
 					return true;
 				default:
 					return false;
@@ -90,7 +90,17 @@ namespace Kagami.Playground
 			}
 		}
 
-		static Color getBackColor() => Color.White;
+		static Color getBackColor(Library.Parsers.Color color)
+		{
+			switch (color)
+			{
+				case Library.Parsers.Color.OpenParenthesis:
+				case Library.Parsers.Color.CloseParenthesis:
+					return SystemColors.Info;
+				default:
+					return Color.White;
+			}
+		}
 
 		static Color getParenthesisColor(Library.Parsers.Color color, ref int parenthesesCount)
 		{
@@ -110,11 +120,11 @@ namespace Kagami.Playground
 			switch (parenthesesCount)
 			{
 				case 1:
-					return Color.LightCoral;
+					return Color.Red;
 				case 2:
-					return Color.LightGreen;
+					return Color.Green;
 				case 3:
-					return Color.LightBlue;
+					return Color.Blue;
 				case 4:
 					return Color.DarkCyan;
 				case 5:
@@ -155,7 +165,7 @@ namespace Kagami.Playground
 					return Color.DarkOliveGreen;
 				case Library.Parsers.Color.Collection:
 				case Library.Parsers.Color.CollectionPart:
-					return Color.DarkSeaGreen;
+					return Color.Purple;
 				case Library.Parsers.Color.Symbol:
 					return Color.CornflowerBlue;
 				case Library.Parsers.Color.Boolean:

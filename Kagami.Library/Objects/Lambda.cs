@@ -52,9 +52,9 @@ namespace Kagami.Library.Objects
 
       public virtual IObject Invoke(params IObject[] arguments)
       {
-	      if (Machine.Current.Invoke(invokable, new Arguments(arguments), fields, 0).If(out var value, out var mbException))
+	      if (Machine.Current.Invoke(invokable, new Arguments(arguments), fields, 0).If(out var value, out var anyException))
 		      return value;
-	      else if (mbException.If(out var exception))
+	      else if (anyException.If(out var exception))
 		      throw exception;
 	      else
 		      throw fieldNotFound(invokable.Image);

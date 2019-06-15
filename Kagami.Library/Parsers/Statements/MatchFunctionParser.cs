@@ -31,9 +31,9 @@ namespace Kagami.Library.Parsers.Statements
 				{
 					var caseParser = new CaseParser(parameterName);
 					state.SkipEndOfLine();
-					if (caseParser.Scan(state).If(out _, out var mbException))
+					if (caseParser.Scan(state).If(out _, out var anyException))
 						list.Add(caseParser.If);
-					else if (mbException.If(out var exception))
+					else if (anyException.If(out var exception))
 					{
 						state.Regress();
 						return failedMatch<Unit>(exception);

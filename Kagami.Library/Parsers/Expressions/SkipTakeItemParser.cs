@@ -22,9 +22,9 @@ namespace Kagami.Library.Parsers.Expressions
 			Take = take.ToInt();
 
 			if (state.Scan("^ /(|s|) /'='", Color.Whitespace, Color.Operator).IsMatched)
-				if (getExpression(state, ExpressionFlags.OmitComma).If(out var expression, out var mbException))
+				if (getExpression(state, ExpressionFlags.OmitComma).If(out var expression, out var anyException))
 					Prefix = expression.Some();
-				else if (mbException.If(out var exception))
+				else if (anyException.If(out var exception))
 					return failedMatch<Unit>(exception);
 				else
 					Prefix = none<Expression>();
@@ -33,9 +33,9 @@ namespace Kagami.Library.Parsers.Expressions
 
 			if (state.Scan("^ /(|s|) /'~'", Color.Whitespace, Color.Operator).IsMatched)
 				if (getExpression(state, ExpressionFlags.OmitComma | ExpressionFlags.OmitConcatenate)
-					.If(out var expression, out var mbException))
+					.If(out var expression, out var anyException))
 					Suffix = expression.Some();
-				else if (mbException.If(out var exception))
+				else if (anyException.If(out var exception))
 					return failedMatch<Unit>(exception);
 				else
 					Suffix = none<Expression>();

@@ -22,12 +22,12 @@ namespace Kagami.Library.Objects
       {
 	      if (value.If(out var v))
 		      return v;
-	      else if (Machine.Current.Invoke(invokable, Arguments.Empty, 0).If(out var result, out var mbException))
+	      else if (Machine.Current.Invoke(invokable, Arguments.Empty, 0).If(out var result, out var anyException))
 	      {
 		      value = result.Some();
 		      return result;
 	      }
-	      else if (mbException.If(out var exception))
+	      else if (anyException.If(out var exception))
 		      throw exception;
 	      else
 		      throw "Value could not be resolved".Throws();

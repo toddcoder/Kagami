@@ -125,15 +125,15 @@ namespace Kagami.Library.Parsers
 				statements.Add(statement);
 		}
 
-		public void AddToken(int index, int length, Color color)
+		public void AddToken(int index, int length, Color color, string text = "")
 		{
-			var token = new Token(index, length, " ".Repeat(length));
+			var token = new Token(index, length, text);
 			setTokenColor(token, color);
 
 			tokens.Add(token);
 		}
 
-		public void AddToken(Color color, int length = 1) => AddToken(index, length, color);
+		public void AddToken(Color color, int length = 1, string text = "") => AddToken(index, length, color, text);
 
 		public string Indentation => indentation;
 
@@ -209,19 +209,24 @@ namespace Kagami.Library.Parsers
 
 		void setTokenColor(Token token, Color color)
 		{
-			switch (token.Text)
+			switch (token.Text.Trim())
 			{
 				case "(":
+				case "[":
 					if (token.Length == 0)
 						token.Color = Color.Structure;
 					else
 						token.Color = color;
 					break;
 				case ")":
+				case "]":
 					if (token.Length == 0)
 						token.Color = Color.Structure;
 					else
 						token.Color = color;
+					break;
+				case ",":
+					token.Color = Color.Structure;
 					break;
 				default:
 					token.Color = color;
@@ -237,7 +242,7 @@ namespace Kagami.Library.Parsers
 				for (var i = 0; i < Math.Min(groupArray.Length, colors.Length); i++)
 				{
 					var length = groupArray[i].Length;
-					AddToken(colors[i], length);
+					AddToken(colors[i], length, groupArray[i].Text);
 					Move(length);
 				}
 
@@ -279,12 +284,12 @@ namespace Kagami.Library.Parsers
 		{
 			var builder = new ExpressionBuilder(ExpressionFlags.OmitIf);
 			var parser = new IfAsAndParser(builder);
-			if (parser.Scan(this).If(out _, out var mbException))
+			if (parser.Scan(this).If(out _, out var anyException))
 				if (builder.ToExpression().If(out var expression, out var exception))
 					return expression.Some().Matched();
 				else
 					return failedMatch<IMaybe<Expression>>(exception);
-			else if (mbException.If(out var exception))
+			else if (anyException.If(out var exception))
 				return failedMatch<IMaybe<Expression>>(exception);
 			else
 				return none<Expression>().Matched();

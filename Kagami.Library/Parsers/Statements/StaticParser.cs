@@ -31,8 +31,8 @@ namespace Kagami.Library.Parsers.Statements
 				{
 					var classItemsParser = new ClassItemsParser(metaClassBuilder);
 					while (state.More)
-						if (classItemsParser.Scan(state).If(out _, out var mbException)) { }
-						else if (mbException.If(out var exception))
+						if (classItemsParser.Scan(state).If(out _, out var anyException)) { }
+						else if (anyException.If(out var exception))
 							return failedMatch<Unit>(exception);
 						else
 							break;

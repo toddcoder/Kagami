@@ -16,12 +16,12 @@ namespace Kagami.Library.Parsers.Expressions
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
 			var insert = tokens[2].Text == "+";
-			state.Colorize(tokens, Color.Structure, Color.Structure);
+			state.Colorize(tokens, Color.OpenParenthesis, Color.Structure);
 
 			return getArguments(state, builder.Flags).Map(e =>
 			{
 				if (state.Scan($"^ /(|s|) /({REGEX_ASSIGN_OPS})? /'=' -(> '=')", Color.Whitespace, Color.Operator, Color.Structure)
-					.If(out var opSource, out var mbException))
+					.If(out var opSource, out var anyException))
 					if (getExpression(state, builder.Flags).Out(out var expression, out var original))
 					{
 						opSource = opSource.DropWhile(" ").Keep(1);
@@ -41,7 +41,7 @@ namespace Kagami.Library.Parsers.Expressions
 					}
 					else
 						return original.Unmatched<Unit>();
-				else if (mbException.If(out var exception))
+				else if (anyException.If(out var exception))
 					return failedMatch<Unit>(exception);
 				else
 					builder.Add(new IndexerSymbol(e));

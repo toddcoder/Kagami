@@ -33,8 +33,8 @@ namespace Kagami.Library.Parsers.Expressions
 				while (state.More)
 				{
 					var parser = new InnerComprehensionParser(builder, comprehensions);
-					if (parser.Scan(state).If(out _, out var mbException)) { }
-					else if (mbException.If(out exception))
+					if (parser.Scan(state).If(out _, out var anyException)) { }
+					else if (anyException.If(out exception))
 						return failedMatch<Unit>(exception);
 					else
 						break;
