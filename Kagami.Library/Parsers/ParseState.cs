@@ -127,7 +127,10 @@ namespace Kagami.Library.Parsers
 
 		public void AddToken(int index, int length, Color color)
 		{
-			tokens.Add(new Token(index, length, " ".Repeat(length)) { Color = color });
+			var token = new Token(index, length, " ".Repeat(length));
+			setTokenColor(token, color);
+
+			tokens.Add(token);
 		}
 
 		public void AddToken(Color color, int length = 1) => AddToken(index, length, color);
@@ -137,12 +140,12 @@ namespace Kagami.Library.Parsers
 		public IMatched<Unit> Advance()
 		{
 			SkipEndOfLine();
-			if (Scan($"{Indentation.FriendlyString()} /(/s+)").If(out var newIndentation, out var mbException))
+			if (Scan($"{Indentation.FriendlyString()} /(/s+)").If(out var newIndentation, out var anyException))
 			{
 				PushIndentation(newIndentation);
 				return Unit.Matched();
 			}
-			else if (mbException.If(out var exception))
+			else if (anyException.If(out var exception))
 			{
 				exceptionIndex = index.Some();
 				return failedMatch<Unit>(exception);
@@ -204,6 +207,28 @@ namespace Kagami.Library.Parsers
 
 		public Token[] Tokens => tokens.ToArray();
 
+		void setTokenColor(Token token, Color color)
+		{
+			switch (token.Text)
+			{
+				case "(":
+					if (token.Length == 0)
+						token.Color = Color.Structure;
+					else
+						token.Color = color;
+					break;
+				case ")":
+					if (token.Length == 0)
+						token.Color = Color.Structure;
+					else
+						token.Color = color;
+					break;
+				default:
+					token.Color = color;
+					break;
+			}
+		}
+
 		public IMatched<string> Scan(string pattern, params Color[] colors)
 		{
 			return CurrentSource.MatchOne(RealizePattern(pattern)).Map(m =>
@@ -225,7 +250,8 @@ namespace Kagami.Library.Parsers
 		public void Colorize(Token[] tokens, params Color[] colors)
 		{
 			for (var i = 0; i < colors.Length; i++)
-				tokens[i + 1].Color = colors[i];
+				setTokenColor(tokens[i + 1], colors[i]);
+
 			foreach (var token in tokens.Skip(1))
 				this.tokens.Add(token);
 			Move(tokens);

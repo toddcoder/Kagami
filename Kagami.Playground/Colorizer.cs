@@ -27,6 +27,7 @@ namespace Kagami.Playground
 
 		public void Colorize(IEnumerable<Token> tokens)
 		{
+			parenthesesCount = 0;
 			var font = textBox.Font;
 			using (var boldFont = new Font(textBox.Font, FontStyle.Bold))
 			using (var italicFont = new Font(textBox.Font, FontStyle.Italic))
@@ -109,11 +110,11 @@ namespace Kagami.Playground
 			switch (parenthesesCount)
 			{
 				case 1:
-					return Color.Red;
+					return Color.LightCoral;
 				case 2:
-					return Color.Green;
+					return Color.LightGreen;
 				case 3:
-					return Color.Blue;
+					return Color.LightBlue;
 				case 4:
 					return Color.DarkCyan;
 				case 5:
