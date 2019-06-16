@@ -169,7 +169,7 @@ namespace Kagami.Library.Objects
 				{
 					case Array array when array.arrayID == arrayID:
 						return;
-					case ICollection collection when collection.ExpandForArray:
+					case ICollection collection when !(value is String):
 					{
 						var valueIterator = collection.GetIterator(false);
 						foreach (var index in indexList(internalList))

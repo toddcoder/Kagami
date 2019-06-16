@@ -162,7 +162,7 @@ namespace Kagami.Library.Objects
 							dictionary.Remove(key);
 					}
 						break;
-					case ICollection collection when collection.ExpandForArray:
+					case ICollection _ when !(value is String):
 					case IIterator _:
 					{
 						if (getIterator(value, false).If(out var iterator, out var exception))
