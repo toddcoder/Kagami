@@ -133,6 +133,54 @@ namespace Kagami.Library.Objects
 			}
 		}
 
+		public IObject this[InternalList internalList]
+		{
+			get
+			{
+				var list = new List<IObject>();
+				foreach (var key in internalList.List)
+					if (dictionary.ContainsKey(key))
+						list.Add(dictionary[key]);
+				return new Array(list);
+			}
+			set
+			{
+				switch (value)
+				{
+					case Dictionary otherDictionary when objectID == otherDictionary.objectID:
+						return;
+					case None _:
+					{
+						foreach (var key in internalList.List)
+							dictionary.Remove(key);
+					}
+						break;
+					case ICollection _:
+					case IIterator _:
+					{
+						if (getIterator(value, false).If(out var iterator, out var exception))
+							foreach (var key in internalList.List)
+							{
+								var anyItem = iterator.Next();
+								if (anyItem.If(out var item))
+									this[key] = item;
+								else
+									break;
+							}
+						else
+							throw exception;
+					}
+						break;
+					default:
+					{
+						foreach (var key in internalList.List)
+							this[key] = value;
+					}
+						break;
+				}
+			}
+		}
+
 		public IObject Get(IObject key)
 		{
 			if (dictionary.ContainsKey(key))

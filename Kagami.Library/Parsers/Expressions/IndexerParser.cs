@@ -43,8 +43,10 @@ namespace Kagami.Library.Parsers.Expressions
 						return original.Unmatched<Unit>();
 				else if (anyException.If(out var exception))
 					return failedMatch<Unit>(exception);
-				else
+				else if (e.Length > 0)
 					builder.Add(new IndexerSymbol(e));
+				else
+					return notMatched<Unit>();
 
 				return Unit.Matched();
 			});

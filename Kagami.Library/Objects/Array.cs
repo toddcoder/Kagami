@@ -147,19 +147,19 @@ namespace Kagami.Library.Objects
 			}
 		}
 
-		IEnumerable<int> indexList(IIterator iterator)
+		IEnumerable<int> indexList(InternalList internalList)
 		{
-			return iterator.List().Cast<Int>()
+			return internalList.List.Cast<Int>()
 				.Select(i => wrapIndex(i.Value, list.Count))
 				.Where(i => i.Between(0).Until(list.Count));
 		}
 
-		public IObject this[IIterator iterator]
+		public IObject this[InternalList internalList]
 		{
 			get
 			{
 				var result = new List<IObject>();
-				foreach (var index in indexList(iterator))
+				foreach (var index in indexList(internalList))
 					result.Add(list[index]);
 				return new Array(result);
 			}
@@ -172,7 +172,7 @@ namespace Kagami.Library.Objects
 					case ICollection collection:
 					{
 						var valueIterator = collection.GetIterator(false);
-						foreach (var index in indexList(iterator))
+						foreach (var index in indexList(internalList))
 						{
 							var anyItem = valueIterator.Next();
 							if (anyItem.If(out var item))
@@ -186,7 +186,7 @@ namespace Kagami.Library.Objects
 
 					default:
 					{
-						foreach (var index in indexList(iterator))
+						foreach (var index in indexList(internalList))
 							list[index] = value;
 						break;
 					}

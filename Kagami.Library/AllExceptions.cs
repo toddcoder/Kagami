@@ -26,6 +26,10 @@ namespace Kagami.Library
 
       public static Exception badIndex(int index) => messageBadIndex(index).Throws();
 
+      public static string messageInvalidIndex(IObject index) => $"Index or key {index} is invalid";
+
+      public static Exception invalidIndex(IObject index) => messageInvalidIndex(index).Throws();
+
       public static string messageAddressOutOfRange() => "Address out of range";
 
       public static Exception addressOutOfRange() => messageAddressOutOfRange().Throws();

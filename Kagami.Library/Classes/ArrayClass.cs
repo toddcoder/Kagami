@@ -2,9 +2,9 @@
 using Kagami.Library.Objects;
 using Core.Exceptions;
 using Core.Monads;
+using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Classes.ClassFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
-using static Kagami.Library.Operations.OperationFunctions;
 using Array = Kagami.Library.Objects.Array;
 using Boolean = Kagami.Library.Objects.Boolean;
 using Void = Kagami.Library.Objects.Void;
@@ -65,28 +65,30 @@ namespace Kagami.Library.Classes
 
 		public IObject getIndexed(Array array, IObject index)
 		{
-			if (index is Int i)
-				return array[i.Value];
-			else if (getIterator(index, false).If(out var iterator, out var exception))
-				return array[iterator];
-			else
-				throw exception;
+			switch (index)
+			{
+				case Int i:
+					return array[i.Value];
+				case InternalList internalList:
+					return array[internalList];
+				default:
+					throw invalidIndex(index);
+			}
 		}
 
 		public IObject setIndexed(Array array, IObject index, IObject value)
 		{
-			if (index is Int i)
+			switch (index)
 			{
-				array[i.Value] = value;
-				return array;
+				case Int i:
+					array[i.Value] = value;
+					return array;
+				case InternalList internalList:
+					array[internalList] = value;
+					return array;
+				default:
+					throw invalidIndex(index);
 			}
-			else if (getIterator(index, false).If(out var iterator, out var exception))
-			{
-				array[iterator] = value;
-				return array;
-			}
-			else
-				throw exception;
 		}
 
 		public override void RegisterClassMessages()
