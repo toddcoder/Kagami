@@ -17,7 +17,7 @@ namespace Kagami.Library.Parsers.Expressions
 		public override IMatched<Unit> Prefix(ParseState state, Token[] tokens)
 		{
 			message = tokens[2].Text;
-			state.Colorize(tokens, Color.Whitespace, Color.CollectionPart, Color.CollectionPart);
+			state.Colorize(tokens, Color.Whitespace, Color.CollectionPart, Color.OpenParenthesis);
 
 			parameterCount = 1;
 			fieldName = "__$0";
@@ -72,7 +72,7 @@ namespace Kagami.Library.Parsers.Expressions
 
 		public override IMatched<Unit> Suffix(ParseState state, Expression expression)
 		{
-			state.Scan("^ /(|s|) /')'", Color.Whitespace, Color.CollectionPart);
+			state.Scan("^ /(|s|) /')'", Color.Whitespace, Color.CloseParenthesis);
 
 			var implicitExpressionState = state.ImplicitExpressionState;
 			state.EndImplicitExpressionState();

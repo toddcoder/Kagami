@@ -28,7 +28,7 @@ namespace Kagami.Library.Parsers.Expressions
 
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
-			state.Colorize(tokens, Color.Structure);
+			state.Colorize(tokens, Color.OpenParenthesis);
 
 			var skipTakes = new List<SkipTake>();
 
@@ -66,7 +66,7 @@ namespace Kagami.Library.Parsers.Expressions
 				else if (anyException.If(out exception))
 					return failedMatch<SkipTake>(exception);
 
-				var semiOrEndMatch = state.Scan("^ /(|s|) /[';,}']", Color.Whitespace, Color.Structure);
+				var semiOrEndMatch = state.Scan("^ /(|s|) /[';,}']", Color.Whitespace, Color.CloseParenthesis);
 				if (semiOrEndMatch.If(out var semiOrEnd, out anyException))
 					switch (semiOrEnd)
 					{
@@ -86,7 +86,7 @@ namespace Kagami.Library.Parsers.Expressions
 			else if (anyException.If(out var exception))
 				return failedMatch<SkipTake>(exception);
 
-			var endMatch = state.Scan("^ /(|s|) /['};']", Color.Whitespace, Color.Structure);
+			var endMatch = state.Scan("^ /(|s|) /['};']", Color.Whitespace, Color.CloseParenthesis);
 			if (endMatch.If(out var end, out anyException))
 				switch (end)
 				{

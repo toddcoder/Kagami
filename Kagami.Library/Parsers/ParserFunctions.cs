@@ -262,10 +262,12 @@ namespace Kagami.Library.Parsers
 		}
 
 		public static IMatched<(Expression[], IMaybe<LambdaSymbol>)> getArgumentsPlusLambda(ParseState state,
-			Bits32<ExpressionFlags> flags) =>
-			from arguments in getArguments(state, flags)
-			from lambda in getPossibleLambda(state, flags)
-			select (arguments, lambda);
+			Bits32<ExpressionFlags> flags)
+		{
+			return from arguments in getArguments(state, flags)
+				from lambda in getPossibleLambda(state, flags)
+				select (arguments, lambda);
+		}
 
 		public static IMatched<IObject> getComparisand(ParseState state)
 		{

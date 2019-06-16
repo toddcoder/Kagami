@@ -149,7 +149,9 @@ namespace Kagami.Library.Objects
 
 		IEnumerable<int> indexList(IIterator iterator)
 		{
-			return iterator.List().Cast<Int>().Where(i => i.Value.Between(0).Until(list.Count)).Select(i => i.Value);
+			return iterator.List().Cast<Int>()
+				.Select(i => wrapIndex(i.Value, list.Count))
+				.Where(i => i.Between(0).Until(list.Count));
 		}
 
 		public IObject this[IIterator iterator]

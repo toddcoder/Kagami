@@ -37,17 +37,19 @@ namespace Kagami.Library.Parsers.Statements
 			if (isOperator && !Module.Global.RegisterOperator(functionName))
 				return $"Operator {functionName} already registered".FailedMatch<Unit>();
 
-			state.Colorize(tokens, Color.Keyword, Color.Keyword, Color.Whitespace, Color.Class, Color.Structure, Color.Invokable,
-				Color.OpenParenthesis);
-
 			var needsParameters = type == "(";
 			if (needsParameters)
 			{
+				state.Colorize(tokens, Color.Keyword, Color.Keyword, Color.Whitespace, Color.Class, Color.Structure, Color.Invokable,
+					Color.OpenParenthesis);
 				if (functionName.IsMatch("^ /w+ '=' $"))
 					functionName = $"__${functionName.Drop(-1)}=";
 			}
 			else
+			{
+				state.Colorize(tokens, Color.Keyword, Color.Keyword, Color.Whitespace, Color.Class, Color.Structure, Color.Invokable);
 				functionName = $"__${functionName}";
+			}
 
 			state.CreateYieldFlag();
 			state.CreateReturnType();
@@ -144,7 +146,8 @@ namespace Kagami.Library.Parsers.Statements
 			return new LambdaSymbol(parameters, new Block(new Return(new Expression(previousLambdaSymbol), none<TypeConstraint>())));
 		}
 
-		protected static IMatched<Unit> getMatchFunction(ParseState state, string functionName, Parameters parameters, bool overriding, string className)
+		protected static IMatched<Unit> getMatchFunction(ParseState state, string functionName, Parameters parameters, bool overriding,
+			string className)
 		{
 			var list = new List<If>();
 
@@ -195,6 +198,6 @@ namespace Kagami.Library.Parsers.Statements
 			}
 			else
 				return original;
-      }
+		}
 	}
 }

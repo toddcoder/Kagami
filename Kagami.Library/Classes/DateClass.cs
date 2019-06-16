@@ -39,6 +39,8 @@ namespace Kagami.Library.Classes
          classMessages["max".get()] = (bc, msg) => new Date(DateTime.MaxValue);
          classMessages["utcNow".get()] = (bc, msg) => new Date(DateTime.UtcNow);
          classMessages["parse"] = (bc, msg) => parse(msg.Arguments[0].AsString);
+         classMessages["months".get()] = (bc, msg) => Date.Months;
+         classMessages["daysOfTheWeek".get()] = (bc, msg) => Date.DaysOfTheWeek;
       }
 
       static IObject parse(string source)

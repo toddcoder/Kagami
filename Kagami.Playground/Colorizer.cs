@@ -30,7 +30,7 @@ namespace Kagami.Playground
 			parenthesesCount = 0;
 			var font = textBox.Font;
 			using (var boldFont = new Font(textBox.Font, FontStyle.Bold))
-			using (var italicFont = new Font(textBox.Font, FontStyle.Italic))
+			//using (var italicFont = new Font(textBox.Font, FontStyle.Italic))
 			{
 				textBox.SelectAll();
 				textBox.SelectionColor = Color.Black;
@@ -40,7 +40,8 @@ namespace Kagami.Playground
 					textBox.Select(token.Index, token.Length);
 					textBox.SelectionColor = getForeColor(token.Color, ref parenthesesCount);
 					textBox.SelectionBackColor = getBackColor(token.Color);
-					textBox.SelectionFont = !isItalic(token.Color) ? !isBold(token.Color) ? font : boldFont : italicFont;
+					textBox.SelectionFont = isBold(token.Color) ? boldFont : font;
+					//!isItalic(token.Color) ? !isBold(token.Color) ? font : boldFont : italicFont;
 				}
 
 				markText("/s+ (/r /n | /r | /n)", Color.PaleVioletRed);
@@ -78,7 +79,7 @@ namespace Kagami.Playground
 			}
 		}
 
-		static bool isItalic(Library.Parsers.Color color)
+/*		static bool isItalic(Library.Parsers.Color color)
 		{
 			switch (color)
 			{
@@ -88,7 +89,7 @@ namespace Kagami.Playground
 				default:
 					return false;
 			}
-		}
+		}*/
 
 		static Color getBackColor(Library.Parsers.Color color)
 		{
@@ -122,9 +123,9 @@ namespace Kagami.Playground
 				case 1:
 					return Color.Red;
 				case 2:
-					return Color.Green;
-				case 3:
 					return Color.Blue;
+				case 3:
+					return Color.Green;
 				case 4:
 					return Color.DarkCyan;
 				case 5:
