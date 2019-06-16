@@ -6,6 +6,7 @@ using Core.Monads;
 using Core.Numbers;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.CollectionFunctions;
 using static Kagami.Library.Operations.OperationFunctions;
 
@@ -84,7 +85,13 @@ namespace Kagami.Library.Objects
 		IObject getValue(IObject key)
 		{
 			if (dictionary.ContainsKey(key))
-				return dictionary[key];
+			{
+				var value = dictionary[key];
+				if (DefaultValue.IsSome || defaultLambda.IsSome)
+					return value;
+				else
+					return Some.Object(value);
+			}
 			else if (DefaultValue.If(out var dv))
 			{
 				if (Caching.IsTrue)
@@ -111,7 +118,7 @@ namespace Kagami.Library.Objects
 				return value;
 			}
 			else
-				return Unassigned.Value;
+				throw keyNotFound(key);
 		}
 
 		public IObject this[IObject key]
@@ -140,7 +147,7 @@ namespace Kagami.Library.Objects
 				var list = new List<IObject>();
 				foreach (var key in internalList.List)
 					if (dictionary.ContainsKey(key))
-						list.Add(dictionary[key]);
+						list.Add(this[key]);
 				return new Array(list);
 			}
 			set

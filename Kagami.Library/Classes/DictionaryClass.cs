@@ -16,8 +16,8 @@ namespace Kagami.Library.Classes
 			collectionMessages();
 			mutableCollectionMessages();
 
-			messages["[]=(_,_)"] = (obj, msg) => function<Dictionary>(obj, d => d[msg.Arguments[0]] = msg.Arguments[1]);
-			messages["[](_)"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, k) => d.Get(k));
+			messages["[](_)"] = (obj, msg) => function<Dictionary>(obj, d => getKeyed(d, msg.Arguments[0]));
+			messages["[]=(_,_)"] = (obj, msg) => function<Dictionary>(obj, d => setKeyed(d, msg.Arguments[0], msg.Arguments[1]));
 			messages["default".get()] = (obj, msg) => function<Dictionary>(obj, d =>
 			{
 				if (d.DefaultValue.If(out var dv))
@@ -51,6 +51,30 @@ namespace Kagami.Library.Classes
 			messages["forEach(_<Lambda>)"] = (obj, msg) => function<Dictionary, Lambda>(obj, msg, (d, l) => d.ForEach(l));
 			messages["invert()"] = (obj, msg) => function<Dictionary>(obj, d => d.Invert());
 			messages["~(_)"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, o) => d.Concatenate((ICollection)o));
+		}
+
+		static IObject getKeyed(Dictionary dictionary, IObject key)
+		{
+			switch (key)
+			{
+				case InternalList internalList:
+					return dictionary[internalList];
+				default:
+					return dictionary[key];
+			}
+		}
+
+		static IObject setKeyed(Dictionary dictionary, IObject key, IObject value)
+		{
+			switch (key)
+			{
+				case InternalList internalList:
+					dictionary[internalList] = value;
+					return dictionary;
+				default:
+					dictionary[key] = value;
+					return dictionary;
+			}
 		}
 
 		public override void RegisterClassMessages()
