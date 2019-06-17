@@ -59,6 +59,10 @@ namespace Kagami.Library.Classes
 			{
 				case InternalList internalList:
 					return dictionary[internalList];
+				case ICollection collection:
+					return dictionary[new InternalList(collection.GetIterator(false).List())];
+				case IIterator iterator:
+					return dictionary[new InternalList(iterator.List())];
 				default:
 					return dictionary[key];
 			}
@@ -70,6 +74,12 @@ namespace Kagami.Library.Classes
 			{
 				case InternalList internalList:
 					dictionary[internalList] = value;
+					return dictionary;
+				case ICollection collection:
+					dictionary[new InternalList(collection.GetIterator(false).List())] = value;
+					return dictionary;
+				case IIterator iterator:
+					dictionary[new InternalList(iterator.List())] = value;
 					return dictionary;
 				default:
 					dictionary[key] = value;

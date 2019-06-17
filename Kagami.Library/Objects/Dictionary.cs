@@ -6,7 +6,6 @@ using Core.Monads;
 using Core.Numbers;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Core.Monads.MonadFunctions;
-using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.CollectionFunctions;
 using static Kagami.Library.Operations.OperationFunctions;
 
@@ -118,7 +117,7 @@ namespace Kagami.Library.Objects
 				return value;
 			}
 			else
-				throw keyNotFound(key);
+				return None.NoneValue;
 		}
 
 		public IObject this[IObject key]

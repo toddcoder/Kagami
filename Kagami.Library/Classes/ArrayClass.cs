@@ -63,20 +63,47 @@ namespace Kagami.Library.Classes
 			});
 		}
 
-		public IObject getIndexed(Array array, IObject index)
+		static InternalList conditionList(InternalList internalList)
+		{
+			var list = new List<IObject>();
+			foreach (var obj in internalList.List)
+				switch (obj)
+				{
+					case ICollection collection:
+						foreach (var obj2 in collection.GetIterator(false).List())
+							list.Add(obj2);
+
+						break;
+					case IIterator iterator:
+						foreach (var innerObject in iterator.List())
+							list.Add(innerObject);
+						break;
+					default:
+						list.Add(obj);
+						break;
+				}
+
+			return new InternalList(list);
+		}
+
+		static IObject getIndexed(Array array, IObject index)
 		{
 			switch (index)
 			{
 				case Int i:
 					return array[i.Value];
 				case InternalList internalList:
-					return array[internalList];
+					return array[conditionList(internalList)];
+				case ICollection collection:
+					return array[new InternalList(collection.GetIterator(false).List())];
+				case IIterator iterator:
+					return array[new InternalList(iterator.List())];
 				default:
 					throw invalidIndex(index);
 			}
 		}
 
-		public IObject setIndexed(Array array, IObject index, IObject value)
+		static IObject setIndexed(Array array, IObject index, IObject value)
 		{
 			switch (index)
 			{
@@ -84,7 +111,13 @@ namespace Kagami.Library.Classes
 					array[i.Value] = value;
 					return array;
 				case InternalList internalList:
-					array[internalList] = value;
+					array[conditionList(internalList)] = value;
+					return array;
+				case ICollection collection:
+					array[new InternalList(collection.GetIterator(false).List())] = value;
+					return array;
+				case IIterator iterator:
+					array[new InternalList(iterator.List())] = value;
 					return array;
 				default:
 					throw invalidIndex(index);
