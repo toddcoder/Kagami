@@ -236,8 +236,35 @@ namespace Kagami.Library.Objects
 
 		public Boolean IsTitle => value == value.ToTitleCase();
 
+		static string expand(string value)
+		{
+			var matcher = new Matcher();
+			if (matcher.IsMatch(value, "/(.) /'-' /(.)"))
+			{
+				for (var i = 0; i < matcher.MatchCount; i++)
+				{
+					var left = matcher[i, 1][0];
+					var right = matcher[i, 3][0];
+					var builder = new StringBuilder();
+					if (left < right)
+						for (var j = left + 1; j < right; j++)
+							builder.Append((char)j);
+					else
+						for (var j = right - 1; j > left; j--)
+							builder.Append((char)j);
+					matcher[i, 2] = builder.ToString();
+				}
+
+				return matcher.ToString();
+			}
+			else
+				return value;
+		}
+
 		public String Translate(string from, string to)
 		{
+			from = expand(from);
+			to = expand(to);
 			var length = Math.Min(from.Length, to.Length);
 			var table = new AutoHash<char, char>(k => k);
 
