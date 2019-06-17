@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Numerics;
 using Core.Collections;
-using Core.Objects;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Operations.NumericFunctions;
 
@@ -114,6 +113,6 @@ namespace Kagami.Library.Objects
 
       public int CompareTo(object obj) => CompareTo((Byte)obj);
 
-      public String Format(string format) => value.FormatAs(format);
+      public String Format(string format) => value.FormatUsing<byte>(format, b => b.ToString(format));
    }
 }

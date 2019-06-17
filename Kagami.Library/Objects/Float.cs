@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Numerics;
 using Core.Collections;
-using Core.Objects;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Operations.NumericFunctions;
 
@@ -66,11 +65,11 @@ namespace Kagami.Library.Objects
       public (BigInteger, BigInteger) AsRational()
       {
          var x = value;
-         var maxden = int.MaxValue;
+         var maxValue = int.MaxValue;
          var m = new[] { new[] { 1L, 0L }, new[] { 0L, 1L } };
 
          long ai;
-         while (m[1][0] * (ai = (long)x) + m[1][1] <= maxden)
+         while (m[1][0] * (ai = (long)x) + m[1][1] <= maxValue)
          {
             var t = m[0][0] * ai + m[0][1];
             m[0][1] = m[0][0];
@@ -146,6 +145,6 @@ namespace Kagami.Library.Objects
 
       public int CompareTo(object obj) => CompareTo((Float)obj);
 
-      public String Format(string format) => value.FormatAs(format);
+      public String Format(string format) => value.FormatUsing<double>(format, d => d.ToString(format));
    }
 }

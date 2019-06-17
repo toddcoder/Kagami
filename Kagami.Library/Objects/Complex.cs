@@ -3,7 +3,6 @@ using System.Numerics;
 using Kagami.Library.Operations;
 using Core.Booleans;
 using Core.Collections;
-using Core.Objects;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Operations.NumericFunctions;
@@ -137,7 +136,8 @@ namespace Kagami.Library.Objects
 
       public String Format(string format)
       {
-         return $"{value.Real.FormatAs(format)}{(value.Imaginary >= 0.0).Extend("+")}{value.Imaginary.FormatAs(format)}";
+	      return $"{value.Real.FormatUsing<double>(format, d => d.ToString(format))}" +
+		      $"{(value.Imaginary >= 0.0).Extend("+")}{value.Imaginary.FormatUsing<double>(format, d => d.ToString(format))}";
       }
 
       public IObject Negate() => (Complex)CComplex.Negate(value);

@@ -8,7 +8,6 @@ using Core.Collections;
 using Core.Enumerables;
 using Core.Exceptions;
 using Core.Monads;
-using Core.Objects;
 using Core.RegularExpressions;
 using Core.Strings;
 using static Kagami.Library.AllExceptions;
@@ -529,20 +528,20 @@ namespace Kagami.Library.Objects
 			return new Selector(name, selectItems, selectorImage(name, selectItems));
 		}
 
-		public static string formatNumber(object obj, string fmt)
+		public static string formatNumber(int intValue, string format)
 		{
-			if (fmt.StartsWith("b"))
+			if (format.StartsWith("b"))
 			{
-				var size = fmt.Drop(1);
-				return format(obj, size, 2);
+				var size = format.Drop(1);
+				return ObjectFunctions.format(intValue, size, 2);
 			}
-			else if (fmt.StartsWith("o"))
+			else if (format.StartsWith("o"))
 			{
-				var size = fmt.Drop(1);
-				return format(obj, size, 8);
+				var size = format.Drop(1);
+				return ObjectFunctions.format(intValue, size, 8);
 			}
 			else
-				return obj.FormatAs(fmt);
+				return intValue.FormatUsing<int>(format, i => i.ToString(format));
 		}
 
 		public static string format(int value, int toBase, int size, char padding)
