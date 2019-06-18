@@ -214,6 +214,8 @@ namespace Kagami.Library.Objects
 				return None.NoneValue;
 		}
 
+		public IObject GetRaw(IObject key) => dictionary[key];
+
 		public string ClassName => "Dictionary";
 
 		public string AsString => $"{{{dictionary.Select(i => $"{i.Key.AsString} => {i.Value.AsString}").Stringify(" ")}}}";

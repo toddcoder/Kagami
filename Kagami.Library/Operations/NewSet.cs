@@ -13,7 +13,7 @@ namespace Kagami.Library.Operations
 			{
 				case InternalList list:
 					return new Set(list.List.ToArray()).Matched<IObject>();
-				case ICollection collection when collection.ExpandForArray:
+				case ICollection collection when !(value is String):
 					return new Set(collection.GetIterator(false).List().ToArray()).Matched<IObject>();
 				case IIterator iterator:
 					return new Set(iterator.List().ToArray()).Matched<IObject>();

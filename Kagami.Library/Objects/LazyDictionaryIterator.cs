@@ -19,13 +19,13 @@ namespace Kagami.Library.Objects
       public override IMaybe<IObject> Next() => when(index < keys.Length, () =>
       {
          var key = keys[index++];
-         return Tuple.NewTuple(key, dictionary[key]).Some();
+         return Tuple.NewTuple(key, dictionary.GetRaw(key)).Some();
       });
 
       public override IMaybe<IObject> Peek() => when(index < keys.Length, () =>
       {
          var key = keys[index];
-         return Tuple.NewTuple(key, dictionary[key]).Some();
+         return Tuple.NewTuple(key, dictionary.GetRaw(key)).Some();
       });
 
       public override IEnumerable<IObject> List()

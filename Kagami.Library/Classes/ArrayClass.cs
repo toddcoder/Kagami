@@ -94,7 +94,7 @@ namespace Kagami.Library.Classes
 					return array[i.Value];
 				case InternalList internalList:
 					return array[conditionList(internalList)];
-				case ICollection collection:
+				case ICollection collection when !(index is String):
 					return array[new InternalList(collection.GetIterator(false).List())];
 				case IIterator iterator:
 					return array[new InternalList(iterator.List())];
@@ -113,7 +113,7 @@ namespace Kagami.Library.Classes
 				case InternalList internalList:
 					array[conditionList(internalList)] = value;
 					return array;
-				case ICollection collection:
+				case ICollection collection when !(index is String):
 					array[new InternalList(collection.GetIterator(false).List())] = value;
 					return array;
 				case IIterator iterator:
