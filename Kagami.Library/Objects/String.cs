@@ -265,7 +265,16 @@ namespace Kagami.Library.Objects
 		{
 			from = expand(from);
 			to = expand(to);
-			var length = Math.Min(from.Length, to.Length);
+			var fromLength = from.Length;
+			var toLength = to.Length;
+			if (toLength < fromLength)
+			{
+				var count = fromLength - toLength;
+				var remainder = to[toLength - 1].Repeat(count);
+				to += remainder;
+				toLength = to.Length;
+			}
+			var length = Math.Min(fromLength, toLength);
 			var table = new AutoHash<char, char>(k => k);
 
 			for (var i = 0; i < length; i++)
