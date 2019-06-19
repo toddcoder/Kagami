@@ -267,6 +267,7 @@ namespace Kagami.Library.Objects
 
 		public IObject RemoveAt(int index)
 		{
+			index = wrapIndex(index, list.Count);
 			var obj = this[index];
 			list.RemoveAt(index);
 

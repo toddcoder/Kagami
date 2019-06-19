@@ -34,7 +34,7 @@ namespace Kagami.Library.Parsers
 		public const string REGEX_OPERATORS = "['-+*//\\%<=>!.~|?#@&^,;.:']";
 		public const string REGEX_ITERATOR_FUNCTIONS = "'sort' | 'foldl' | 'foldr' | 'reducel' | 'reducer' | " +
 			"'count' | 'map' | 'flatMap' | 'bind' | 'if' | 'ifNot' | 'index' | 'min' | 'max' | 'first' | " +
-			"'last' | 'split' | 'one' | 'none' | 'any' | 'all' | 'span' | 'groupBy' | 'each' | 'while' | 'until' | 'z' | 'zip' | 'x' | 'cross' | 'acc' | 'accr'";
+			"'last' | 'split' | 'one' | 'none' | 'any' | 'all' | 'span' | 'groupBy' | 'each' | 'while' | 'until' | 'z' | 'zip' | 'x' | 'cross' | 'acc' | 'accr' | 'seq'";
 		public const string REGEX_LIST_LEFT = "⌈";
 		public const string REGEX_LIST_RIGHT = "⌉";
 

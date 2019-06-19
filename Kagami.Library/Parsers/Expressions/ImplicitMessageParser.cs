@@ -58,7 +58,7 @@ namespace Kagami.Library.Parsers.Expressions
 					case "cross":
 						if (state.ImplicitState.IsNone)
 						{
-							var newMessage = message == "z" || message=="zip" ? "zip(_,_)" : "cross(_,_)";
+							var newMessage = message == "z" || message == "zip" ? "zip(_,_)" : "cross(_,_)";
 							state.ImplicitState = new ImplicitState(symbol, newMessage, 2, "__$0").Some();
 							builder.Add(new FieldSymbol("__$0"));
 							return Unit.Matched();
@@ -70,6 +70,9 @@ namespace Kagami.Library.Parsers.Expressions
 							return Unit.Matched();
 						}
 
+						break;
+					case "seq":
+						message = "seq(_)";
 						break;
 				}
 

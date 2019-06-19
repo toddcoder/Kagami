@@ -57,6 +57,9 @@ namespace Kagami.Library.Parsers.Expressions
 					parameterCount = 2;
 					message = message == "z" || message == "zip" ? "zip(_,_,_)" : "cross(_,_,_)";
 					break;
+				case "seq":
+					message = "seq(_)";
+					break;
 				default:
 					message += "(_,_)";
 					break;

@@ -3,6 +3,7 @@ using System.Linq;
 using Core.Collections;
 using Core.Enumerables;
 using Core.Monads;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.CollectionFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
@@ -13,14 +14,24 @@ namespace Kagami.Library.Objects
 		public static IObject CreateObject(IEnumerable<IObject> items) => new Cycle(items.ToArray());
 
 		IObject[] items;
+		IMaybe<(IObject, Lambda)> seedLambda;
 
-		public Cycle(params IObject[] items) => this.items = items;
+		public Cycle(params IObject[] items)
+		{
+			this.items = items;
+			if (this.items.Length == 2 && this.items[1] is Lambda lambda)
+				seedLambda = (this.items[0], lambda).Some();
+			else
+				seedLambda = none<(IObject, Lambda)>();
+		}
+
+		public IMaybe<(IObject, Lambda)> SeedLambda => seedLambda;
 
 		public string ClassName => "Cycle";
 
-		public string AsString => $".({items.Select(i => i.AsString).Stringify()})";
+		public string AsString => $"?({items.Select(i => i.AsString).Stringify()})";
 
-		public string Image => $".({items.Select(i => i.Image).Stringify()})";
+		public string Image => $"?({items.Select(i => i.Image).Stringify()})";
 
 		public int Hash => items.GetHashCode();
 

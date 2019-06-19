@@ -76,6 +76,7 @@ namespace Kagami.Library.Classes
 			registerMessage("send(_,_)",
 				(obj, msg) => function<IObject, String>(obj, msg, (o, n) => sendMessage(o, n.Value, msg.Arguments.Pass(1))));
 			registerMessage("respondsTo(_)", (obj, msg) => (Boolean)classOf(obj).RespondsTo(msg.Arguments[0].AsString));
+			registerMessage("seq(_)", (obj, msg) => new OpenRange(obj, (Lambda)msg.Arguments[0]));
 		}
 
 		public virtual void RegisterClassMessages()

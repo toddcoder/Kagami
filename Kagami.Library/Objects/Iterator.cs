@@ -80,10 +80,12 @@ namespace Kagami.Library.Objects
 
 		public IObject Reverse()
 		{
-			return collectionClass.Revert(List().Reverse());
+			var list = List().ToList();
+			list.Reverse();
+			return collectionClass.Revert(list);
 		}
 
-		public String Join(string connector) => List().Select(i => i.AsString).Stringify(connector);
+		public String Join(string connector) => List().ToList().Select(i => i.AsString).Stringify(connector);
 
 		public IObject Sort(Lambda lambda, bool ascending)
 		{
@@ -92,9 +94,9 @@ namespace Kagami.Library.Objects
 				case 1:
 					List<IObject> result;
 					if (ascending)
-						result = List().OrderBy(i => lambda.Invoke(i)).ToList();
+						result = List().ToList().OrderBy(i => lambda.Invoke(i)).ToList();
 					else
-						result = List().OrderByDescending(i => lambda.Invoke(i)).ToList();
+						result = List().ToList().OrderByDescending(i => lambda.Invoke(i)).ToList();
 
 					return collectionClass.Revert(result);
 				case 2:
@@ -118,14 +120,14 @@ namespace Kagami.Library.Objects
 
 		public IObject FoldLeft(IObject initialValue, Lambda lambda)
 		{
-			return List().Aggregate(initialValue, (current, value) => lambda.Invoke(current, value));
+			return List().ToList().Aggregate(initialValue, (current, value) => lambda.Invoke(current, value));
 		}
 
 		public IObject FoldLeft(Lambda lambda)
 		{
 			var firstObtained = false;
 			var current = Unassigned.Value;
-			foreach (var value in List())
+			foreach (var value in List().ToList())
 				if (firstObtained)
 					current = lambda.Invoke(current, value);
 				else
@@ -139,14 +141,16 @@ namespace Kagami.Library.Objects
 
 		public IObject FoldRight(IObject initialValue, Lambda lambda)
 		{
-			return List().Aggregate(initialValue, (current, value) => lambda.Invoke(value, current));
+			return List().ToList().Aggregate(initialValue, (current, value) => lambda.Invoke(value, current));
 		}
 
 		public IObject FoldRight(Lambda lambda)
 		{
 			var firstObtained = false;
 			var current = Unassigned.Value;
-			foreach (var value in List().Reverse())
+			var list = List().ToList();
+			list.Reverse();
+			foreach (var value in list)
 				if (firstObtained)
 					current = lambda.Invoke(value, current);
 				else
@@ -162,7 +166,7 @@ namespace Kagami.Library.Objects
 		{
 			var current = initialValue;
 			var result = new List<IObject> { current };
-			foreach (var value in List())
+			foreach (var value in List().ToList())
 			{
 				current = lambda.Invoke(current, value);
 				result.Add(current);
@@ -176,7 +180,7 @@ namespace Kagami.Library.Objects
 			var firstObtained = false;
 			var current = Unassigned.Value;
 			var result = new List<IObject>();
-			foreach (var value in List())
+			foreach (var value in List().ToList())
 				if (firstObtained)
 				{
 					current = lambda.Invoke(current, value);
@@ -196,7 +200,9 @@ namespace Kagami.Library.Objects
 		{
 			var current = initialValue;
 			var result = new List<IObject> { current };
-			foreach (var value in List().Reverse())
+			var list = List().ToList();
+			list.Reverse();
+			foreach (var value in list)
 			{
 				current = lambda.Invoke(value, current);
 				result.Add(current);
@@ -210,7 +216,7 @@ namespace Kagami.Library.Objects
 			var firstObtained = false;
 			var current = Unassigned.Value;
 			var result = new List<IObject>();
-			foreach (var value in List())
+			foreach (var value in List().ToList())
 				if (firstObtained)
 				{
 					current = lambda.Invoke(value, current);
@@ -231,19 +237,19 @@ namespace Kagami.Library.Objects
 		public Int Count(Lambda predicate)
 		{
 			var count = 0;
-			foreach (var value in List())
+			foreach (var value in List().ToList())
 				if (predicate.Invoke(value).IsTrue)
 					count++;
 
 			return count;
 		}
 
-		public virtual IObject Map(Lambda lambda) => collectionClass.Revert(List().Select(value => lambda.Invoke(value)));
+		public virtual IObject Map(Lambda lambda) => collectionClass.Revert(List().ToList().Select(value => lambda.Invoke(value)));
 
 		public virtual IObject FlatMap(Lambda lambda)
 		{
 			var className = ((BaseClass)collectionClass).Name;
-			var enumerable = List().Select(value => lambda.Invoke(value));
+			var enumerable = List().ToList().Select(value => lambda.Invoke(value));
 			var flattened = flatten(enumerable, className);
 
 			return collectionClass.Revert(flattened);
@@ -252,7 +258,7 @@ namespace Kagami.Library.Objects
 		public IObject MapIf(Lambda lambda, Lambda predicate)
 		{
 			var list = new List<IObject>();
-			foreach (var item in List())
+			foreach (var item in List().ToList())
 				if (predicate.Invoke(item).IsTrue)
 					list.Add(lambda.Invoke(item));
 				else
@@ -261,14 +267,14 @@ namespace Kagami.Library.Objects
 			return collectionClass.Revert(list);
 		}
 
-		public virtual IObject If(Lambda predicate) => collectionClass.Revert(List().Where(value => predicate.Invoke(value).IsTrue));
+		public virtual IObject If(Lambda predicate) => collectionClass.Revert(List().ToList().Where(value => predicate.Invoke(value).IsTrue));
 
-		public virtual IObject IfNot(Lambda predicate) => collectionClass.Revert(List().Where(value => !predicate.Invoke(value).IsTrue));
+		public virtual IObject IfNot(Lambda predicate) => collectionClass.Revert(List().ToList().Where(value => !predicate.Invoke(value).IsTrue));
 
 		public virtual IObject Skip(int count)
 		{
 			if (count > -1)
-				return collectionClass.Revert(List().Skip(count));
+				return collectionClass.Revert(List().ToList().Skip(count));
 			else
 			{
 				var list = List().ToList();
@@ -278,18 +284,18 @@ namespace Kagami.Library.Objects
 
 		public virtual IObject SkipWhile(Lambda predicate)
 		{
-			return collectionClass.Revert(List().SkipWhile(value => predicate.Invoke(value).IsTrue));
+			return collectionClass.Revert(List().ToList().SkipWhile(value => predicate.Invoke(value).IsTrue));
 		}
 
 		public virtual IObject SkipUntil(Lambda predicate)
 		{
-			return collectionClass.Revert(List().SkipWhile(value => !predicate.Invoke(value).IsTrue));
+			return collectionClass.Revert(List().ToList().SkipWhile(value => !predicate.Invoke(value).IsTrue));
 		}
 
 		public virtual IObject Take(int count)
 		{
 			if (count > -1)
-				return collectionClass.Revert(List().Take(count));
+				return collectionClass.Revert(List().ToList().Take(count));
 			else
 			{
 				var list = List().ToList();
@@ -299,18 +305,18 @@ namespace Kagami.Library.Objects
 
 		public virtual IObject TakeWhile(Lambda predicate)
 		{
-			return collectionClass.Revert(List().TakeWhile(value => predicate.Invoke(value).IsTrue));
+			return collectionClass.Revert(List().ToList().TakeWhile(value => predicate.Invoke(value).IsTrue));
 		}
 
 		public virtual IObject TakeUntil(Lambda predicate)
 		{
-			return collectionClass.Revert(List().TakeWhile(value => !predicate.Invoke(value).IsTrue));
+			return collectionClass.Revert(List().ToList().TakeWhile(value => !predicate.Invoke(value).IsTrue));
 		}
 
 		public IObject Index(Lambda predicate)
 		{
 			var i = 0;
-			foreach (var value in List())
+			foreach (var value in List().ToList())
 			{
 				if (predicate.Invoke(value).IsTrue)
 					return new Some((Int)i);
@@ -325,7 +331,7 @@ namespace Kagami.Library.Objects
 		{
 			var i = 0;
 			var result = new List<IObject>();
-			foreach (var value in List())
+			foreach (var value in List().ToList())
 			{
 				if (predicate.Invoke(value).IsTrue)
 					result.Add((Int)i);
@@ -338,20 +344,20 @@ namespace Kagami.Library.Objects
 
 		public IObject Zip(ICollection collection)
 		{
-			var rightList = collection.GetIterator(false).List();
-			return collectionClass.Revert(List().Zip(rightList, (x, y) => collectionClass.Revert(new List<IObject> { x, y })));
+			var rightList = collection.GetIterator(false).List().ToList();
+			return collectionClass.Revert(List().ToList().Zip(rightList, (x, y) => collectionClass.Revert(new List<IObject> { x, y })));
 		}
 
 		public IObject Zip(ICollection collection, Lambda lambda)
 		{
-			var rightList = collection.GetIterator(false).List();
-			return collectionClass.Revert(List().Zip(rightList, (x, y) => lambda.Invoke(x, y)));
+			var rightList = collection.GetIterator(false).List().ToList();
+			return collectionClass.Revert(List().ToList().Zip(rightList, (x, y) => lambda.Invoke(x, y)));
 		}
 
 		public IObject Min()
 		{
 			var result = Unassigned.Value;
-			foreach (var value in List())
+			foreach (var value in List().ToList())
 				if (result is Unassigned)
 					switch (value)
 					{
@@ -372,7 +378,7 @@ namespace Kagami.Library.Objects
 			var result = Unassigned.Value;
 			if (lambda.Invokable.Parameters.Length == 2)
 			{
-				foreach (var value in List())
+				foreach (var value in List().ToList())
 					if (result is Unassigned)
 						result = value;
 					else if (((Int)lambda.Invoke(value, result)).Value < 0)
@@ -405,7 +411,7 @@ namespace Kagami.Library.Objects
 		public IObject Max()
 		{
 			var result = Unassigned.Value;
-			foreach (var value in List())
+			foreach (var value in List().ToList())
 				if (result is Unassigned)
 					switch (value)
 					{
@@ -426,7 +432,7 @@ namespace Kagami.Library.Objects
 			var result = Unassigned.Value;
 			if (lambda.Invokable.Parameters.Length == 2)
 			{
-				foreach (var value in List())
+				foreach (var value in List().ToList())
 					if (result is Unassigned)
 						result = value;
 					else if (((Int)lambda.Invoke(value, result)).Value < 0)
@@ -456,22 +462,29 @@ namespace Kagami.Library.Objects
 			return result;
 		}
 
-		public IObject First() => List().FirstOrNone().FlatMap(value => new Some(value), () => Objects.None.NoneValue);
+		public IObject First() => List().ToList().FirstOrNone().FlatMap(value => new Some(value), () => Objects.None.NoneValue);
 
 		public IObject First(Lambda predicate)
 		{
-			foreach (var value in List())
+			foreach (var value in List().ToList())
 				if (predicate.Invoke(value).IsTrue)
 					return new Some(value);
 
 			return Objects.None.NoneValue;
 		}
 
-		public IObject Last() => List().Reverse().FirstOrNone().FlatMap(value => new Some(value), () => Objects.None.NoneValue);
+		public IObject Last()
+		{
+			var list = List().ToList();
+			list.Reverse();
+			return list.FirstOrNone().FlatMap(value => new Some(value), () => Objects.None.NoneValue);
+		}
 
 		public IObject Last(Lambda predicate)
 		{
-			foreach (var value in List().Reverse())
+			var list = List().ToList();
+			list.Reverse();
+			foreach (var value in list)
 				if (predicate.Invoke(value).IsTrue)
 					return new Some(value);
 
@@ -482,7 +495,7 @@ namespace Kagami.Library.Objects
 		{
 			var ifTrue = new List<IObject>();
 			var ifFalse = new List<IObject>();
-			foreach (var value in List())
+			foreach (var value in List().ToList())
 				if (predicate.Invoke(value).IsTrue)
 					ifTrue.Add(value);
 				else
@@ -496,7 +509,7 @@ namespace Kagami.Library.Objects
 			var ifTrue = new List<IObject>();
 			var ifFalse = new List<IObject>();
 			var i = 0;
-			foreach (var value in List())
+			foreach (var value in List().ToList())
 				if (i++ < count)
 					ifTrue.Add(value);
 				else
@@ -508,7 +521,7 @@ namespace Kagami.Library.Objects
 		public virtual IObject GroupBy(Lambda lambda)
 		{
 			var hash = new AutoHash<IObject, List<IObject>>(o => new List<IObject>()) { AutoAddDefault = true };
-			foreach (var item in List())
+			foreach (var item in List().ToList())
 			{
 				var key = lambda.Invoke(item);
 				hash[key].Add(item);
@@ -525,7 +538,7 @@ namespace Kagami.Library.Objects
 		public Boolean One(Lambda predicate)
 		{
 			var one = false;
-			foreach (var value in List())
+			foreach (var value in List().ToList())
 				if (predicate.Invoke(value).IsTrue)
 				{
 					if (one)
@@ -539,21 +552,21 @@ namespace Kagami.Library.Objects
 
 		public Boolean None(Lambda predicate)
 		{
-			foreach (var value in List())
+			foreach (var value in List().ToList())
 				if (predicate.Invoke(value).IsTrue)
 					return false;
 
 			return true;
 		}
 
-		public Boolean Any(Lambda predicate) => List().Any(value => predicate.Invoke(value).IsTrue);
+		public Boolean Any(Lambda predicate) => List().ToList().Any(value => predicate.Invoke(value).IsTrue);
 
-		public Boolean All(Lambda predicate) => List().All(value => predicate.Invoke(value).IsTrue);
+		public Boolean All(Lambda predicate) => List().ToList().All(value => predicate.Invoke(value).IsTrue);
 
 		public INumeric Sum()
 		{
 			var sum = (INumeric)Int.Zero;
-			foreach (var value in List())
+			foreach (var value in List().ToList())
 				if (value is INumeric numeric)
 					sum = (INumeric)apply(sum, numeric, (x, y) => x + y, (x, y) => x + y, (x, y) => x + y, (x, y) => x.Add(y), "+");
 
@@ -571,7 +584,7 @@ namespace Kagami.Library.Objects
 		public INumeric Product()
 		{
 			var product = (INumeric)Int.One;
-			foreach (var value in List())
+			foreach (var value in List().ToList())
 				if (value is INumeric numeric)
 					product = (INumeric)apply(product, numeric, (x, y) => x * y, (x, y) => x * y, (x, y) => x * y, (x, y) => x.Multiply(y),
 						"*");
@@ -582,8 +595,8 @@ namespace Kagami.Library.Objects
 		public IObject Cross(ICollection collection)
 		{
 			var result = new List<List<IObject>>();
-			foreach (var left in List())
-			foreach (var right in collection.GetIterator(false).List())
+			foreach (var left in List().ToList())
+			foreach (var right in collection.GetIterator(false).List().ToList())
 			{
 				var inner = new List<IObject> { left, right };
 				result.Add(inner);
@@ -595,8 +608,8 @@ namespace Kagami.Library.Objects
 		public IObject Cross(ICollection collection, Lambda lambda)
 		{
 			var result = new List<IObject>();
-			foreach (var left in List())
-			foreach (var right in collection.GetIterator(false).List())
+			foreach (var left in List().ToList())
+			foreach (var right in collection.GetIterator(false).List().ToList())
 			{
 				var value = lambda.Invoke(left, right);
 				result.Add(value);
@@ -613,7 +626,7 @@ namespace Kagami.Library.Objects
 			{
 				var outer = new List<IObject>();
 				var inner = new List<IObject>();
-				foreach (var value in List())
+				foreach (var value in List().ToList())
 				{
 					inner.Add(value);
 					if (inner.Count == count)
@@ -628,7 +641,7 @@ namespace Kagami.Library.Objects
 				return collectionClass.Revert(outer);
 			}
 			else
-				return collectionClass.Revert(List());
+				return collectionClass.Revert(List().ToList());
 		}
 
 		public IObject Window(int count)
@@ -661,10 +674,10 @@ namespace Kagami.Library.Objects
 					return collectionClass.Revert(list);
 			}
 			else
-				return collectionClass.Revert(List());
+				return collectionClass.Revert(List().ToList());
 		}
 
-		public virtual IObject Distinct() => collectionClass.Revert(List().Distinct());
+		public virtual IObject Distinct() => collectionClass.Revert(List().ToList().Distinct());
 
 		public IObject Span(Lambda predicate)
 		{
@@ -672,7 +685,7 @@ namespace Kagami.Library.Objects
 			var isTrue = new List<IObject>();
 			var isFalse = new List<IObject>();
 
-			foreach (var value in List())
+			foreach (var value in List().ToList())
 				if (whileTrue && predicate.Invoke(value).IsTrue)
 					isTrue.Add(value);
 				else if (whileTrue)
@@ -691,7 +704,7 @@ namespace Kagami.Library.Objects
 			var isTrue = new List<IObject>();
 			var isFalse = new List<IObject>();
 
-			foreach (var value in List())
+			foreach (var value in List().ToList())
 				if (isTrue.Count < count)
 					isTrue.Add(value);
 				else
@@ -715,11 +728,11 @@ namespace Kagami.Library.Objects
 			return array[i];
 		}
 
-		public IObject Collect() => collectionClass.Revert(List());
+		public IObject Collect() => collectionClass.Revert(List().ToList());
 
-		public Array ToArray() => new Array(List());
+		public Array ToArray() => new Array(List().ToList());
 
-		public List ToList() => Objects.List.NewList(List());
+		public List ToList() => Objects.List.NewList(List().ToList());
 
 		public Tuple ToTuple() => new Tuple(List().ToArray());
 
@@ -727,7 +740,7 @@ namespace Kagami.Library.Objects
 		{
 			var hash = new Hash<IObject, IObject>();
 
-			foreach (var item in List())
+			foreach (var item in List().ToList())
 			{
 				var key = keyLambda.Invoke(item);
 				var value = valueLambda.Invoke(item);
@@ -737,13 +750,13 @@ namespace Kagami.Library.Objects
 			return new Dictionary(hash);
 		}
 
-		public IObject ToDictionary() => Array.CreateObject(List());
+		public IObject ToDictionary() => Array.CreateObject(List().ToList());
 
 		public IObject ToSet() => new Set(List().ToArray());
 
 		public IObject Each(Lambda action)
 		{
-			foreach (var item in List())
+			foreach (var item in List().ToList())
 				action.Invoke(item);
 			return this;
 		}
@@ -860,11 +873,11 @@ namespace Kagami.Library.Objects
 
 		public IObject Flatten() => collectionClass.Revert(flatten(this).ToList());
 
-		public IObject Copy() => collectionClass.Revert(List());
+		public IObject Copy() => collectionClass.Revert(List().ToList());
 
 		public IObject Apply(ICollection collection)
 		{
-			var lambdas = List().Select(l => (Lambda)l).ToList();
+			var lambdas = List().ToList().Select(l => (Lambda)l).ToList();
 			var list = collection.GetIterator(false).List().ToList();
 
 			var result = applyAgainst(lambdas, list).ToList();

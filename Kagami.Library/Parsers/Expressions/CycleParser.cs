@@ -8,7 +8,7 @@ namespace Kagami.Library.Parsers.Expressions
 	{
 		public CycleParser(ExpressionBuilder builder) : base(builder) { }
 
-		public override string Pattern => "^ /(/s*) /'.(' /(/s*)";
+		public override string Pattern => "^ /(/s*) /'?(' /(/s*)";
 
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
