@@ -188,7 +188,13 @@ namespace Kagami.Library.Objects
 
 		public Boolean NotIn(IObject item) => list(this).All(i => !i.IsEqualTo(item));
 
-		public IObject Times(int count) => this;
+		public IObject Times(int count)
+		{
+			var accum = Empty;
+			for (var i = 0; i < count; i++)
+				accum = (List)accum.Concatenate(this);
+			return accum;
+		}
 
 		public String MakeString(string connector) => makeString(this, connector);
 
