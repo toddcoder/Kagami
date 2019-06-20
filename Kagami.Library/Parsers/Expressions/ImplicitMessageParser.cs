@@ -20,7 +20,7 @@ namespace Kagami.Library.Parsers.Expressions
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
 			var message = tokens[2].Text;
-			state.Colorize(tokens, Color.Whitespace, Color.CollectionPart, Color.CollectionPart);
+			state.Colorize(tokens, Color.Whitespace, Color.Message, Color.Structure);
 
 			if (getValue(state, builder.Flags).Out(out var symbol, out var original))
 			{

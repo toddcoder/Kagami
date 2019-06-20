@@ -655,6 +655,7 @@
     <Compile Include="Parsers\Expressions\EmptyValueParser.cs" />
     <Compile Include="Parsers\Expressions\EndingInExpressionParser.cs" />
     <Compile Include="Parsers\Expressions\EndingInValueParser.cs" />
+    <Compile Include="Parsers\Expressions\EndOfCurrentExpressionParser.cs" />
     <Compile Include="Parsers\Expressions\ExpressionBuilder.cs" />
     <Compile Include="Parsers\Expressions\ExpressionFlags.cs" />
     <Compile Include="Parsers\Expressions\ExpressionInMiddleParser.cs" />

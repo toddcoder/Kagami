@@ -280,7 +280,7 @@ namespace Kagami.Library.Classes
 				"skipUntil(_<Lambda>)", "take(_<Int>)", "+(_<Int>)", "takeWhile(_<Lambda>)",
 				"takeUntil(_<Lambda>)",
 				"index(_<Lambda>)", "indexes(_<Lambda>)",
-				"zip".Selector("_<Collection>", "_<Lambda>"), "zip(_)", "min".get(), "min(_<Lambda>)", "max".get(), "max(_<Lambda>)",
+				"zip(_<Collection>,_<Lambda>)", "zip(_)", "min".get(), "min(_<Lambda>)", "max".get(), "max(_<Lambda>)",
 				"first()", "first".Selector("_<Lambda>"), "last()", "last".Selector("_<Lambda>"),
 				"split(_<Lambda>)", "split".Selector("_<Int>"), "random()", "groupBy(_<Lambda>)", "one(_<Lambda>)",
 				"none(_<Lambda>)",
@@ -342,7 +342,7 @@ namespace Kagami.Library.Classes
 			registerMessage("takeUntil(_<Lambda>)", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.TakeUntil(l)));
 			registerMessage("index(_<Lambda>)", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Index(l)));
 			registerMessage("indexes(_<Lambda>)", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Indexes(l)));
-			registerMessage("zip".Selector("_<Collection>", "_<Lambda>"),
+			registerMessage("zip(_<Collection>,_<Lambda>)",
 				(obj, msg) => iteratorFunc<IObject, Lambda>(obj, msg, (i, c, l) => i.Zip((ICollection)c, l)));
 			registerMessage("zip(_)", (obj, msg) => iteratorFunc<IObject>(obj, msg, (i, c) => i.Zip((ICollection)c)));
 			registerMessage("min".get(), (obj, msg) => iteratorFunc(obj, i => i.Min()));
@@ -391,7 +391,7 @@ namespace Kagami.Library.Classes
 			registerMessage("mapIf(_<Lambda>,_<Lambda>)",
 				(obj, msg) => iteratorFunc<Lambda, Lambda>(obj, msg, (i, l1, l2) => i.MapIf(l1, l2)));
 			registerMessage("set()", (obj, msg) => iteratorFunc(obj, i => i.ToSet()));
-        }
+		}
 
 		public virtual bool MatchCompatible(BaseClass otherClass)
 		{
