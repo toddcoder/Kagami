@@ -69,7 +69,7 @@ namespace Kagami.Library.Parsers.Expressions
 					message = "seq(_)";
 					break;
 				default:
-					message += "(_,_)";
+					message += "(_)";
 					break;
 			}
 

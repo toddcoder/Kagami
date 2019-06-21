@@ -8,7 +8,7 @@ namespace Kagami.Library.Parsers.Expressions
 	{
 		public OperatorsParser(ExpressionBuilder builder) : base(builder) { }
 
-		public override string Pattern => $"^ /(|s|) /({REGEX_OPERATORS}1%2) -(>{REGEX_OPERATORS})";
+		public override string Pattern => $"^ /(|s|) /({REGEX_OPERATORS}1%2) -(>{REGEX_OPERATORS}) /(/s*)";
 
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
@@ -16,7 +16,7 @@ namespace Kagami.Library.Parsers.Expressions
 
 			var whitespace = tokens[1].Text.IsNotEmpty();
 			var source = tokens[2].Text;
-			state.Colorize(tokens, Color.Whitespace, Color.Operator);
+			state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Whitespace);
 
 			if (getOperator(state, source, builder.Flags, whitespace).Out(out var symbol, out var original))
 			{
