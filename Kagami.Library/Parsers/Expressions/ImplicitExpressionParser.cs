@@ -45,10 +45,18 @@ namespace Kagami.Library.Parsers.Expressions
 					parameterCount = 2;
 					break;
 				case "while":
-					message = "takeWhile(_,_)";
+				case "takeWhile":
+					message = "takeWhile(_)";
 					break;
 				case "until":
-					message = "takeUntil(_,_)";
+				case "takeUntil":
+					message = "takeUntil(_)";
+					break;
+				case "skipWhile":
+					message = "skipWhile(_)";
+					break;
+				case "skipUntil":
+					message = "skipUntil(_)";
 					break;
 				case "zip":
 				case "z":

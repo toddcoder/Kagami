@@ -34,7 +34,8 @@ namespace Kagami.Library.Parsers
 		public const string REGEX_OPERATORS = "['-+*//\\%<=>!.~|?#@&^,;.:']";
 		public const string REGEX_ITERATOR_FUNCTIONS = "'sort' | 'foldl' | 'foldr' | 'reducel' | 'reducer' | " +
 			"'count' | 'map' | 'flatMap' | 'bind' | 'if' | 'ifNot' | 'index' | 'min' | 'max' | 'first' | " +
-			"'last' | 'split' | 'one' | 'none' | 'any' | 'all' | 'span' | 'groupBy' | 'each' | 'while' | 'until' | 'z' | 'zip' | 'x' | 'cross' | 'acc' | 'accr' | 'seq'";
+			"'last' | 'split' | 'one' | 'none' | 'any' | 'all' | 'span' | 'groupBy' | 'each' | 'while' | 'until' | 'z' | 'zip' | 'x' | 'cross' | 'acc' | 'accr' |" +
+			" 'seq' | 'takeWhile' | 'takeUntil' | 'skipWhile' | 'skipUntil'";
 		public const string REGEX_LIST_LEFT = "⌈";
 		public const string REGEX_LIST_RIGHT = "⌉";
 
@@ -777,15 +778,6 @@ namespace Kagami.Library.Parsers
 				case "%%":
 					symbol = new RemainderZeroSymbol().Matched<Symbol>();
 					break;
-				case "-+":
-					symbol = new SendBinaryMessageSymbol("skip", Precedence.ChainedOperator).Matched<Symbol>();
-					break;
-				case "+-":
-					symbol = new SendBinaryMessageSymbol("take", Precedence.ChainedOperator).Matched<Symbol>();
-					break;
-				case "++":
-					symbol = new SendBinaryMessageSymbol("zip", Precedence.ChainedOperator).Matched<Symbol>();
-					break;
 				case "^":
 					symbol = new RaiseSymbol().Matched<Symbol>();
 					break;
@@ -870,12 +862,6 @@ namespace Kagami.Library.Parsers
 				case "<>":
 					symbol = new CompareSymbol().Matched<Symbol>();
 					break;
-				case "&":
-					symbol = new FilterSymbol().Matched<Symbol>();
-					break;
-				case "!":
-					symbol = new MapOperatorBinarySymbol().Matched<Symbol>();
-					break;
 				case "|=":
 					symbol = new MatchSymbol().Matched<Symbol>();
 					break;
@@ -885,18 +871,9 @@ namespace Kagami.Library.Parsers
 				case "!~":
 					symbol = new SendBinaryMessageSymbol("notMatches(_<String>)", Precedence.Boolean, true).Matched<Symbol>();
 					break;
-				case "!!":
-					symbol = new SendBinaryMessageSymbol("flatMap(_<Lambda>)", Precedence.ChainedOperator).Matched<Symbol>();
-					break;
-				case "><":
-					symbol = new SendBinaryMessageSymbol("join", Precedence.Concatenate).Matched<Symbol>();
-					break;
 				case ":-":
 					symbol = new BindSymbol().Matched<Symbol>();
 					break;
-/*				case ";":
-					symbol = new IndexSymbol().Matched<Symbol>();
-					break;*/
 				case "##":
 					symbol = new SendBinaryMessageSymbol("defaultTo(_)", Precedence.SendMessage).Matched<Symbol>();
 					break;

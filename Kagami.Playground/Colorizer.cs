@@ -11,8 +11,6 @@ namespace Kagami.Playground
 {
 	public class Colorizer
 	{
-		const int WM_SETREDRAW = 11;
-
 		RichTextBox textBox;
 		int parenthesesCount;
 
@@ -121,7 +119,7 @@ namespace Kagami.Playground
 			switch (parenthesesCount)
 			{
 				case 1:
-					return Color.Red;
+					return Color.Black;
 				case 2:
 					return Color.Blue;
 				case 3:
@@ -133,7 +131,7 @@ namespace Kagami.Playground
 				case 6:
 					return Color.Gray;
 				default:
-					return Color.Black;
+					return Color.Red;
 			}
 		}
 
