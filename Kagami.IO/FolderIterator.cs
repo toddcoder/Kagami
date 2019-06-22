@@ -43,7 +43,9 @@ namespace Kagami.IO
             return currentFolder.Some<IObject>();
          }
          else
-            return none<IObject>();
+         {
+	         return none<IObject>();
+         }
       }
    }
 }

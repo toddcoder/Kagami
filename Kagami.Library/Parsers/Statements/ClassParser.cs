@@ -23,13 +23,21 @@ namespace Kagami.Library.Parsers.Statements
 			Parameters parameters;
 
 			if (hasParameters)
+			{
 				if (getParameters(state).Out(out parameters, out var parametersOriginal)) { }
 				else if (parametersOriginal.IsNotMatched)
+				{
 					parameters = new Parameters(0);
+				}
 				else
+				{
 					return parametersOriginal.ExceptionAs<Unit>();
+				}
+			}
 			else
+			{
 				parameters = Parameters.Empty;
+			}
 
 			state.SkipEndOfLine();
 
@@ -40,7 +48,9 @@ namespace Kagami.Library.Parsers.Statements
 			var initialize = false;
 			var arguments = new Expression[0];
 			if (parentClassParser.Scan(state).If(out _, out var anyException))
+			{
 				(parentClassName, initialize, arguments) = parentClassParser.Parent;
+			}
 			else if (anyException.If(out var exception))
 			{
 				state.Regress();
@@ -58,7 +68,9 @@ namespace Kagami.Library.Parsers.Statements
 					return failedMatch<Unit>(exception);
 				}
 				else
+				{
 					break;
+				}
 			}
 
 			state.SkipEndOfLine();
@@ -74,32 +86,50 @@ namespace Kagami.Library.Parsers.Statements
 				{
 					var cls = new Class(builder);
 					if (testImplementation(builder.UserClass, traits).IfNot(out var exception))
+					{
 						return failedMatch<Unit>(exception);
+					}
 					else
+					{
 						state.AddStatement(cls);
+					}
 
 					var classItemsParser = new ClassItemsParser(builder);
 					while (state.More)
+					{
 						if (classItemsParser.Scan(state).If(out _, out anyException)) { }
 						else if (anyException.If(out exception))
+						{
 							return failedMatch<Unit>(exception);
+						}
 						else
+						{
 							break;
+						}
+					}
 
 					return Unit.Matched();
 				}
 				else
+				{
 					return registerOriginal.Unmatched<Unit>();
+				}
 			}
 			else
+			{
 				return original.Unmatched<Unit>();
+			}
 		}
 
 		static IResult<Unit> testImplementation(UserClass userClass, Hash<string, TraitClass> traits)
 		{
 			foreach (var item in traits)
+			{
 				if (item.Value.RegisterImplementor(userClass).IfNot(out var exception))
+				{
 					return failure<Unit>(exception);
+				}
+			}
 
 			return Unit.Success();
 		}

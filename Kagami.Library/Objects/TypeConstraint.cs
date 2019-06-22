@@ -30,10 +30,16 @@ namespace Kagami.Library.Objects
          {
             var comparisand = comparisands[i];
             if (comparisand is ForwardedClass forwardedClass)
-               if (Module.Global.Class(forwardedClass.Name).If(out var actualClass))
-                  comparisands[i] = actualClass;
-               else
-                  throw $"Expected {forwardedClass.Name} to exist".Throws();
+            {
+	            if (Module.Global.Class(forwardedClass.Name).If(out var actualClass))
+	            {
+		            comparisands[i] = actualClass;
+	            }
+	            else
+	            {
+		            throw $"Expected {forwardedClass.Name} to exist".Throws();
+	            }
+            }
          }
       }
 
@@ -49,7 +55,9 @@ namespace Kagami.Library.Objects
          {
             var hash = 17;
             foreach (var comparisand in comparisands)
-               hash += 37 * comparisand.GetHashCode();
+            {
+	            hash += 37 * comparisand.GetHashCode();
+            }
 
             return hash;
          }
@@ -63,16 +71,24 @@ namespace Kagami.Library.Objects
             if (comparisands.Length == otherComparisands.Length)
             {
                foreach (var comparisand in comparisands)
-                  if (otherComparisands.All(c => c.Name != comparisand.Name))
-                     return false;
+               {
+	               if (otherComparisands.All(c => c.Name != comparisand.Name))
+	               {
+		               return false;
+	               }
+               }
 
                return true;
             }
             else
-               return false;
+            {
+	            return false;
+            }
          }
          else
-            return false;
+         {
+	         return false;
+         }
       }
 
       public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
@@ -100,8 +116,12 @@ namespace Kagami.Library.Objects
       {
          var result = this;
          foreach (var comparisand in comparisands)
-            if (comparisand is IEquivalentClass equivalent)
-               result = result.Merge(equivalent.TypeConstraint());
+         {
+	         if (comparisand is IEquivalentClass equivalent)
+	         {
+		         result = result.Merge(equivalent.TypeConstraint());
+	         }
+         }
 
          return result;
       }
@@ -109,7 +129,9 @@ namespace Kagami.Library.Objects
       public IEnumerator<TypeConstraint> GetEnumerator()
       {
          foreach (var comparisand in comparisands)
-            yield return SingleType(comparisand);
+         {
+	         yield return SingleType(comparisand);
+         }
       }
 
       IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -118,17 +140,25 @@ namespace Kagami.Library.Objects
 	   {
 		   var baseClass = comparisands[0];
 		   if (typeConstraint.comparisands.Contains(baseClass))
+		   {
 			   return true;
+		   }
 		   else if (baseClass is IEquivalentClass equivalentClass)
 		   {
 			   foreach (var comparisand in equivalentClass.TypeConstraint().comparisands)
+			   {
 				   if (typeConstraint.comparisands.Contains(comparisand))
+				   {
 					   return true;
+				   }
+			   }
 
 			   return false;
 		   }
 		   else
+		   {
 			   return false;
+		   }
 	   }
    }
 }

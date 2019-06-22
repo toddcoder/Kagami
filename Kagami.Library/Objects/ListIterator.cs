@@ -18,7 +18,9 @@ namespace Kagami.Library.Objects
             return head.Some();
          }
          else
-            return none<IObject>();
+         {
+	         return none<IObject>();
+         }
       }
 
       public override IMaybe<IObject> Peek() => list.Head;

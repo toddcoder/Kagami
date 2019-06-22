@@ -25,21 +25,31 @@ namespace Kagami.Library.Parsers.Statements
 			if (needsParameters)
 			{
 				if (functionName.IsMatch("^ /w+ '=' $"))
+				{
 					functionName = "__$" + functionName.Drop(-1).set();
+				}
 			}
 			else
+			{
 				functionName = "__$" + functionName;
+			}
 
 			if (GetAnyParameters(needsParameters, state).Out(out var parameters, out var original))
 			{
 				var selector = parameters.Selector(functionName);
 				if (traitClass.RegisterSignature(selector).If(out _, out var exception))
+				{
 					return Unit.Matched();
+				}
 				else
+				{
 					return failedMatch<Unit>(exception);
+				}
 			}
 			else
+			{
 				return original.Unmatched<Unit>();
+			}
 		}
 	}
 }

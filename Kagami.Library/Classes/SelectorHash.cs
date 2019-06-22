@@ -15,17 +15,23 @@ namespace Kagami.Library.Classes
 		   get
          {
             if (base.ContainsKey(selector.Image))
-               return base[selector.Image];
+            {
+	            return base[selector.Image];
+            }
             else
             {
 	            var labelsOnlyImage = selector.LabelsOnly().Image;
 	            if (buckets.ContainsKey(labelsOnlyImage))
+	            {
 		            foreach (var bucket in buckets[labelsOnlyImage])
 		            {
 			            Selector matchSelector = bucket;
 			            if (selector.IsEquivalentTo(matchSelector))
+			            {
 				            return base[matchSelector.Image];
+			            }
 		            }
+	            }
 
 	            return base[labelsOnlyImage];
             }
@@ -40,19 +46,25 @@ namespace Kagami.Library.Classes
 	   public bool ContainsKey(Selector selector)
       {
          if (base.ContainsKey(selector.Image))
-            return true;
+         {
+	         return true;
+         }
          else
          {
 	         var labelsOnlyImage = selector.LabelsOnly().Image;
 	         if (buckets.ContainsKey(labelsOnlyImage))
+	         {
 		         foreach (var bucket in buckets[labelsOnlyImage])
 		         {
 			         Selector matchSelector = bucket;
 			         if (selector.IsEquivalentTo(matchSelector))
+			         {
 				         return true;
+			         }
 		         }
+	         }
 
-            return base.ContainsKey(labelsOnlyImage);
+	         return base.ContainsKey(labelsOnlyImage);
          }
       }
 

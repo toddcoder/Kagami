@@ -28,7 +28,9 @@ namespace Kagami.Library.Parsers.Expressions
 				return Unit.Matched();
 			}
 			else
+			{
 				return original.Unmatched<Unit>();
+			}
 		}
 	}
 }

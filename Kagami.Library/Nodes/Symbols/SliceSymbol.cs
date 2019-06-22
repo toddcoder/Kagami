@@ -18,12 +18,19 @@ namespace Kagami.Library.Nodes.Symbols
 			foreach (var skipTake in skipTakes)
 			{
 				if (firstSkipTake)
+				{
 					builder.Copy(1);
+				}
 				else
+				{
 					builder.Dup();
+				}
+
 				generate(builder, skipTake);
 				if (firstSkipTake)
+				{
 					builder.SendMessage("~(_)", 1);
+				}
 
 				firstSkipTake = true;
 			}

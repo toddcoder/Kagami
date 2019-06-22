@@ -28,7 +28,9 @@ namespace Kagami.Plots
 		void paint(object sender, PaintEventArgs e)
 		{
 			foreach (var action in actions)
+			{
 				action(e.Graphics);
+			}
 		}
 
 		public string ClassName => "Plot";
@@ -58,7 +60,9 @@ namespace Kagami.Plots
 			actions.Add(g =>
 			{
 				using (var pen = getPen())
+				{
 					g.DrawLine(pen, x1, y1, x2, y2);
+				}
 			});
 
 			return this;

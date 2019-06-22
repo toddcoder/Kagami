@@ -20,9 +20,13 @@ namespace Kagami.Library.Nodes.Symbols
             expression1.Generate(builder);
             var invokable = new LambdaInvokable(Parameters.Empty, expression2.ToString());
             if (builder.RegisterInvokable(invokable, expression2, true).If(out _, out var exception))
-               builder.PushObject(new Lambda(invokable));
+            {
+	            builder.PushObject(new Lambda(invokable));
+            }
             else
-               throw exception;
+            {
+	            throw exception;
+            }
          }
 
          builder.ToArguments(items.Length * 2);

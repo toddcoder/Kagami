@@ -16,15 +16,27 @@ namespace Kagami.Library.Operations
          try
          {
             if (machine.Pop().If(out var y, out var exception) && machine.Pop().If(out var x, out exception))
-               if (x is INumeric nx)
-                  if (y is INumeric ny)
-                     return Execute(machine, nx, ny);
-                  else
-                     return failedMatch<IObject>(notNumeric(y.Image));
-               else
-                  return failedMatch<IObject>(notNumeric(x.Image));
+            {
+	            if (x is INumeric nx)
+	            {
+		            if (y is INumeric ny)
+		            {
+			            return Execute(machine, nx, ny);
+		            }
+		            else
+		            {
+			            return failedMatch<IObject>(notNumeric(y.Image));
+		            }
+	            }
+	            else
+	            {
+		            return failedMatch<IObject>(notNumeric(x.Image));
+	            }
+            }
             else
-               return failedMatch<IObject>(exception);
+            {
+	            return failedMatch<IObject>(exception);
+            }
          }
          catch (Exception exception)
          {

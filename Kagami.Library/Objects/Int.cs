@@ -135,14 +135,18 @@ namespace Kagami.Library.Objects
          get
          {
             if ((value & 1) == 0)
-               return value == 2;
+            {
+	            return value == 2;
+            }
             else
             {
                var num = 3;
                while (num * num <= value)
                {
                   if (value % num == 0)
-                     return false;
+                  {
+	                  return false;
+                  }
 
                   num += 2;
                }
@@ -155,12 +159,17 @@ namespace Kagami.Library.Objects
       public Int Factorial()
       {
          if (value <= 1)
-            return 1;
+         {
+	         return 1;
+         }
          else
          {
             var num = 1;
             for (var index = 2; index <= value; index++)
-               num *= index;
+            {
+	            num *= index;
+            }
+
             return num;
          }
       }

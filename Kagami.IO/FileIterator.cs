@@ -20,7 +20,9 @@ namespace Kagami.IO
             return none<IObject>();
          }
          else
-            return String.StringObject(line).Some();
+         {
+	         return String.StringObject(line).Some();
+         }
       }
 
       public override IMaybe<IObject> Peek() => Next();

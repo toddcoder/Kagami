@@ -25,7 +25,10 @@ namespace Kagami.Library.Nodes.Statements
 		public override void Generate(OperationsBuilder builder)
 		{
 			if (isNew)
+			{
 				builder.NewField(fieldName, mutable, true, typeConstraint);
+			}
+
 			builder.PushFrame();
 			block.Generate(builder);
 			builder.PopFrameWithValue();
@@ -38,14 +41,22 @@ namespace Kagami.Library.Nodes.Statements
 			using (var writer = new StringWriter())
 			{
 				if (!isNew)
+				{
 					if (mutable)
+					{
 						writer.Write("var ");
+					}
 					else
+					{
 						writer.Write("let ");
+					}
+				}
 
 				writer.Write($"{fieldName} ");
 				if (typeConstraint.If(out var tc))
+				{
 					writer.Write($"{tc.AsString} ");
+				}
 
 				writer.Write("=");
 				writer.WriteLine(block);

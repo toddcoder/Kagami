@@ -13,9 +13,13 @@ namespace Kagami.Library.Operations
       public override IMatched<IObject> Execute(Machine machine, IObject value)
       {
          if (value is InternalList list)
-            return Execute(machine, list);
+         {
+	         return Execute(machine, list);
+         }
          else
-            return failedMatch<IObject>(incompatibleClasses(value, "InternalList"));
+         {
+	         return failedMatch<IObject>(incompatibleClasses(value, "InternalList"));
+         }
       }
    }
 }

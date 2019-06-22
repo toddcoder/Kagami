@@ -21,12 +21,20 @@ namespace Kagami.Library.Parsers.Statements
          state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Class);
 
          if (Module.Global.Trait(sourceTraitName).If(out var sourceTraitClass))
-            if (targetTraitClass.CopyFrom(sourceTraitClass).If(out _, out var exception))
-               return Unit.Matched();
-            else
-               return failedMatch<Unit>(exception);
+         {
+	         if (targetTraitClass.CopyFrom(sourceTraitClass).If(out _, out var exception))
+	         {
+		         return Unit.Matched();
+	         }
+	         else
+	         {
+		         return failedMatch<Unit>(exception);
+	         }
+         }
          else
-            return failedMatch<Unit>(traitNotFound(sourceTraitName));
+         {
+	         return failedMatch<Unit>(traitNotFound(sourceTraitName));
+         }
       }
    }
 }

@@ -49,15 +49,21 @@ namespace Kagami.Library.Classes
       public override IObject DynamicInvoke(IObject obj, Message message)
       {
          if (base.DynamicRespondsTo(message.Selector))
-            return base.DynamicInvoke(obj, message);
+         {
+	         return base.DynamicInvoke(obj, message);
+         }
          else
          {
             var tuple = (Tuple)obj;
             var name = message.Selector.Name.unget();
             if (tuple.ContainsName(name))
-               return tuple[name];
+            {
+	            return tuple[name];
+            }
             else
-               throw messageNotFound(this, name);
+            {
+	            throw messageNotFound(this, name);
+            }
          }
       }
 

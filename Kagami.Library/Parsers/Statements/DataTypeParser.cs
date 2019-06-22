@@ -33,23 +33,33 @@ namespace Kagami.Library.Parsers.Statements
 					{
 						var parser = new DataComparisandParser(className, values, ordinal);
 						if (parser.Scan(state).If(out _, out var anyException))
+						{
 							if (dataTypeClass.RegisterDataComparisand(parser.Name, (IObject)parser.Ordinal).If(out _, out var regException))
 							{
 								dataComparisandNames.Add(parser.Name);
 								ordinal = parser.Ordinal.Successor;
 							}
 							else
+							{
 								return failedMatch<Unit>(regException);
+							}
+						}
 						else if (anyException.If(out exception))
+						{
 							return failedMatch<Unit>(exception);
+						}
 						else
+						{
 							break;
+						}
 					}
 
 					state.Regress();
 				}
 				else
+				{
 					return original;
+				}
 
 				state.AddStatement(new DataType(className, values.ToHash(i => i.Key, i =>
 				{
@@ -60,7 +70,9 @@ namespace Kagami.Library.Parsers.Statements
 				return Unit.Matched();
 			}
 			else
+			{
 				return failedMatch<Unit>(exception);
+			}
 		}
 	}
 }

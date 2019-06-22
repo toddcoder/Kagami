@@ -53,11 +53,17 @@ namespace Kagami.Library.Objects
       public virtual IObject Invoke(params IObject[] arguments)
       {
 	      if (Machine.Current.Invoke(invokable, new Arguments(arguments), fields, 0).If(out var value, out var anyException))
+	      {
 		      return value;
+	      }
 	      else if (anyException.If(out var exception))
+	      {
 		      throw exception;
+	      }
 	      else
+	      {
 		      throw fieldNotFound(invokable.Image);
+	      }
       }
 
       public bool ProvidesFields => providesFields;
@@ -81,10 +87,15 @@ namespace Kagami.Library.Objects
             if (Machine.Current.Find(fieldName, true).If(out var field))
             {
                if (!fields.ContainsKey(fieldName))
-                  fields.New(fieldName, parameter.Mutable);
+               {
+	               fields.New(fieldName, parameter.Mutable);
+               }
+
                var value = field.Value;
                if (parameter.TypeConstraint.If(out var typeConstraint) && !typeConstraint.Matches(classOf(value)))
-                  throw incompatibleClasses(value, typeConstraint.AsString);
+               {
+	               throw incompatibleClasses(value, typeConstraint.AsString);
+               }
 
                fields.Assign(fieldName, value, true).Force();
                providesFields = true;

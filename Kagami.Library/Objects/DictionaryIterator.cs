@@ -36,9 +36,14 @@ namespace Kagami.Library.Objects
          {
             item = Next();
             if (item.If(out var obj))
-               yield return obj;
+            {
+	            yield return obj;
+            }
+
             if (index % 1000 == 0 && Machine.Current.Context.Cancelled())
-               yield break;
+            {
+	            yield break;
+            }
          } while (item.IsSome);
       }
    }

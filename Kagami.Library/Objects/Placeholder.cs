@@ -21,11 +21,17 @@ namespace Kagami.Library.Objects
 	      get
 	      {
 		      if (name.StartsWith("+"))
+		      {
 			      return $"var {name.Drop(1)}";
-				else if (name.StartsWith("-"))
+		      }
+		      else if (name.StartsWith("-"))
+		      {
 			      return name.Drop(1);
+		      }
 		      else
+		      {
 			      return $"existing {name}";
+		      }
 	      }
       }
 

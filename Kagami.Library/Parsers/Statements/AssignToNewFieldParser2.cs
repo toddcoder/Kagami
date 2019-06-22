@@ -21,9 +21,13 @@ namespace Kagami.Library.Parsers.Statements
 				from scanned in state.Scan("^ /(|s|) /'=' -(> '=')", Color.Whitespace, Color.Structure)
 				select comparisand;
 			if (result.Out(out comparisand, out var original))
+			{
 				return Unit.Matched();
+			}
 			else
+			{
 				return original.Unmatched<Unit>();
+			}
 		}
 
 		public override IMatched<Unit> Suffix(ParseState state, Expression expression)

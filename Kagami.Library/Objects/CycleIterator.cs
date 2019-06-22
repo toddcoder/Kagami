@@ -27,7 +27,9 @@ namespace Kagami.Library.Objects
 					lastItem = item.Some();
 				}
 				else
+				{
 					lastItem = seed.Some();
+				}
 			}
 			else
 			{
@@ -36,13 +38,20 @@ namespace Kagami.Library.Objects
 				{
 					var parameterCount = lambda.Invokable.Parameters.Length;
 					if (parameterCount > 0 && lastItem.If(out var value))
+					{
 						item = lambda.Invoke(value);
+					}
 					else
+					{
 						item = lambda.Invoke();
+					}
+
 					lastItem = item.Some();
 				}
 				else
+				{
 					lastItem = item.Some();
+				}
 			}
 
 			return lastItem;

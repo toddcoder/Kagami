@@ -78,11 +78,15 @@ namespace Kagami.Library.Objects
             m[1][1] = m[1][0];
             m[1][0] = t;
             if (x == ai)
-               break;
+            {
+	            break;
+            }
 
             x = 1 / (x - ai);
             if (x > 0x7FFFFFFF)
-               break;
+            {
+	            break;
+            }
          }
 
          return (m[0][0], m[1][0]);

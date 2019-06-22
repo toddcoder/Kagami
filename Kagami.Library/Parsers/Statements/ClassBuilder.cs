@@ -49,9 +49,13 @@ namespace Kagami.Library.Parsers.Statements
 		{
 			userClass = new UserClass(className, parentClassName);
 			if (Module.Global.RegisterClass(userClass).IfNot(out var exception))
+			{
 				return failedMatch<Unit>(exception);
+			}
 			else
+			{
 				return Constructor(parameters, constructorBlock, true);
+			}
 		}
 
 		public UserClass UserClass => userClass;
@@ -72,19 +76,27 @@ namespace Kagami.Library.Parsers.Statements
 			var statements = new List<Statement>();
 
 			if (parentClassName.IsNotEmpty())
+			{
 				if (Module.Global.Class(parentClassName).If(out var baseClass))
 				{
 					var parentClass = (UserClass)baseClass;
 					if (standard)
+					{
 						userClass.InheritFrom(parentClass);
+					}
+
 					var symbol = initialize ? (Symbol)new InitializeParentConstructorSymbol(parentClassName, getInitializeArguments())
 						: new InvokeParentConstructorSymbol(parentClassName, parentArguments, false);
 					statements.Add(new ExpressionStatement(symbol, false));
 				}
 				else
+				{
 					throw classNotFound(parentClassName);
+				}
+			}
 
 			foreach (var statement in originalBlock)
+			{
 				switch (statement)
 				{
 					case AssignToNewField assignToNewField:
@@ -94,7 +106,9 @@ namespace Kagami.Library.Parsers.Statements
 						statements.Add(function);
 						var (functionName, _, block, _, invokable, _) = function;
 						if (!isPrivate(fieldName) && !userClass.RegisterMethod(functionName, new Lambda(invokable), true))
+						{
 							throw needsOverride(functionName);
+						}
 
 						functions.Add((invokable, block, true));
 
@@ -104,7 +118,9 @@ namespace Kagami.Library.Parsers.Statements
 							statements.Add(function);
 							(functionName, _, block, _, invokable, _) = function;
 							if (!isPrivate(fieldName) && !userClass.RegisterMethod(functionName, new Lambda(invokable), true))
+							{
 								throw needsOverride(functionName);
+							}
 
 							functions.Add((invokable, block, true));
 						}
@@ -123,7 +139,9 @@ namespace Kagami.Library.Parsers.Statements
 							statements.Add(function);
 							var (functionName, _, block, _, invokable, _) = function;
 							if (!isPrivate(fieldName) && !userClass.RegisterMethod(functionName, new Lambda(invokable), true))
+							{
 								throw needsOverride(functionName);
+							}
 
 							functions.Add((invokable, block, true));
 
@@ -133,7 +151,9 @@ namespace Kagami.Library.Parsers.Statements
 								statements.Add(function);
 								(functionName, _, block, _, invokable, _) = function;
 								if (!isPrivate(fieldName) && !userClass.RegisterMethod(functionName, new Lambda(invokable), true))
+								{
 									throw needsOverride(functionName);
+								}
 
 								functions.Add((invokable, block, true));
 							}
@@ -146,10 +166,16 @@ namespace Kagami.Library.Parsers.Statements
 					{
 						var (selector, _, block, _, invokable, overriding) = function;
 						if (!isPrivate(selector))
+						{
 							if (userClass.RegisterMethod(selector, new Lambda(invokable), overriding))
+							{
 								functions.Add((invokable, block, overriding));
+							}
 							else
+							{
 								throw needsOverride(selector);
+							}
+						}
 
 						statements.Add(statement);
 					}
@@ -158,10 +184,16 @@ namespace Kagami.Library.Parsers.Statements
 					{
 						var (functionName, _, block, _, invokable, overriding) = matchFunction;
 						if (!isPrivate(functionName))
+						{
 							if (userClass.RegisterMethod(functionName, new Lambda(invokable), overriding))
+							{
 								functions.Add((invokable, block, overriding));
+							}
 							else
+							{
 								throw needsOverride(functionName);
+							}
+						}
 
 						statements.Add(statement);
 					}
@@ -170,11 +202,16 @@ namespace Kagami.Library.Parsers.Statements
 						statements.Add(statement);
 						break;
 				}
+			}
 
 			foreach (var (_, traitClass) in traits)
 			foreach (var (funcName, invokable) in traitClass.Invokables)
+			{
 				if (userClass.RegisterMethod(funcName, new Lambda(invokable), true))
+				{
 					functions.Add((invokable, new Block(), true));
+				}
+			}
 
 			statements.Add(new ReturnNewObject(className, parameters));
 
@@ -188,7 +225,9 @@ namespace Kagami.Library.Parsers.Statements
 			var invokable = new ConstructorInvokable(className, parameters);
 			var fullFunctionName = parameters.Selector(className);
 			if (constructorInvokables.ContainsKey(fullFunctionName))
+			{
 				return $"Constructor {fullFunctionName} already exists".FailedMatch<Unit>();
+			}
 			else
 			{
 				constructorInvokables[fullFunctionName] = (invokable, modifyBlock(block, standard));
@@ -203,7 +242,9 @@ namespace Kagami.Library.Parsers.Statements
 				Selector selector = item.Key;
 				var (invokable, block) = item.Value;
 				if (builder.RegisterInvokable(invokable, block, true).IfNot(out var exception))
+				{
 					throw exception;
+				}
 
 				builder.NewSelector(selector, false, true);
 				builder.PushObject(new Constructor(invokable));
@@ -215,7 +256,9 @@ namespace Kagami.Library.Parsers.Statements
 			{
 				var (invokable, block, overriding) = function;
 				if (builder.RegisterInvokable(invokable, block, overriding).IfNot(out var exception))
+				{
 					throw exception;
+				}
 			}
 		}
 

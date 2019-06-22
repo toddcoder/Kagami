@@ -19,9 +19,13 @@ namespace Kagami.Drawing
       public static int compare(IObject x, IObject y)
       {
          if (x is IObjectCompare xc)
-            return xc.Compare(y);
+         {
+	         return xc.Compare(y);
+         }
          else
-            throw unableToConvert(x.Image, "ObjectCompare");
+         {
+	         throw unableToConvert(x.Image, "ObjectCompare");
+         }
       }
    }
 }

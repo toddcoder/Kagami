@@ -20,7 +20,9 @@ namespace Kagami.Library.Classes
          {
             collecting = value;
             if (collecting)
-               collectedKeys.Clear();
+            {
+	            collectedKeys.Clear();
+            }
          }
       }
 
@@ -31,7 +33,9 @@ namespace Kagami.Library.Classes
          {
             base[key] = value;
             if (collecting)
-               collectedKeys.Add(key);
+            {
+	            collectedKeys.Add(key);
+            }
          }
       }
 

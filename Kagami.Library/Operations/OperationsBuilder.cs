@@ -42,7 +42,9 @@ namespace Kagami.Library.Operations
 		public IResult<int> RegisterInvokable(IInvokable invokable, Block block, bool overriding)
 		{
 			if (invokables.ContainsKey(invokable.Index) && !overriding)
+			{
 				return $"Invokable {invokable.Image} already registered".Failure<int>();
+			}
 			else
 			{
 				var index = invokables.Count;
@@ -76,9 +78,14 @@ namespace Kagami.Library.Operations
 		{
 			operations.AddRange(otherBuilder.operations);
 			foreach (var (key, value) in otherBuilder.addresses)
+			{
 				addresses[key] = value;
+			}
+
 			foreach (var (key, value) in labels)
+			{
 				labels[key] = value;
+			}
 		}
 
 		public void Label(string label) => labels[label] = operations.Count;
@@ -87,7 +94,9 @@ namespace Kagami.Library.Operations
 		{
 			var label = newLabel(name);
 			if (labelStack.If(type, out var stack))
+			{
 				stack.Push(label);
+			}
 			else
 			{
 				stack = new Stack<string>();
@@ -176,7 +185,10 @@ namespace Kagami.Library.Operations
 		public void Invoke(string functionName, params Expression[] arguments)
 		{
 			foreach (var argument in arguments)
+			{
 				argument.Generate(this);
+			}
+
 			Invoke(functionName, arguments.Length);
 		}
 
@@ -214,7 +226,10 @@ namespace Kagami.Library.Operations
 		public void SendMessage(Selector selector, params Expression[] arguments)
 		{
 			foreach (var argument in arguments)
+			{
 				argument.Generate(this);
+			}
+
 			SendMessage(selector, arguments.Length);
 		}
 
@@ -423,7 +438,9 @@ namespace Kagami.Library.Operations
 				block.Generate(this);
 				var lastOperation = operations[operations.Count - 1];
 				if (!(lastOperation is Return) /* && !(lastOperation is NoOp)*/)
+				{
 					operations.Add(new Return(false));
+				}
 			}
 
 			foreach (var symbol in state.PostGenerationSymbols)
@@ -433,19 +450,29 @@ namespace Kagami.Library.Operations
 				symbol.Generate(this);
 				var lastOperation = operations[operations.Count - 1];
 				if (!(lastOperation is Return) /* && !(lastOperation is NoOp)*/)
+				{
 					operations.Add(new Return(false));
+				}
 			}
 
 			foreach (var (key, value) in addresses)
 			{
 				var address = labels[value];
 				if (operations[key] is AddressedOperation op)
+				{
 					if (address > -1)
+					{
 						op.Address = address;
+					}
 					else
+					{
 						return $"Label {value} couldn't be found".Failure<Operations>();
+					}
+				}
 				else
+				{
 					return $"Addressed operation required; {operations[key]} found".Failure<Operations>();
+				}
 			}
 
 			return new Operations(operations.ToArray()).Success();
@@ -468,19 +495,29 @@ namespace Kagami.Library.Operations
 		public void Field(Symbol symbol)
 		{
 			foreach (var macroParameter in macroParameters)
+			{
 				if (macroParameter.Replace(symbol, this))
+				{
 					return;
+				}
+			}
 
 			if (symbol is FieldSymbol fieldSymbol)
+			{
 				GetField(fieldSymbol.FieldName);
+			}
 		}
 
 		public void ReturnNothing()
 		{
 			if (returnLabels.Count == 0)
+			{
 				Return(false);
+			}
 			else
+			{
 				GoTo(returnLabels.Peek());
+			}
 		}
 
 		public void Return(Expression expression, Statement statement)
@@ -489,9 +526,13 @@ namespace Kagami.Library.Operations
 			Peek(statement.Index);
 
 			if (returnLabels.Count == 0)
+			{
 				Return(true);
+			}
 			else
+			{
 				GoTo(returnLabels.Peek());
+			}
 		}
 
 		public void Return(Expression expression, Statement statement, IMaybe<TypeConstraint> typeConstraint)
@@ -502,12 +543,18 @@ namespace Kagami.Library.Operations
 			if (returnLabels.Count == 0)
 			{
 				if (typeConstraint.If(out var tc))
+				{
 					ReturnType(true, tc);
+				}
 				else
+				{
 					Return(true);
+				}
 			}
 			else
+			{
 				GoTo(returnLabels.Peek());
+			}
 		}
 	}
 }

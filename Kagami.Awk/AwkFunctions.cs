@@ -23,7 +23,9 @@ namespace Kagami.Awk
 			list.AddRange(fields);
 
 			for (var i = list.Count; i < index; i++)
+			{
 				list.Add("");
+			}
 
 			list.Add(item);
 

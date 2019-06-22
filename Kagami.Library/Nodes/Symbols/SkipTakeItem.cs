@@ -36,7 +36,9 @@ namespace Kagami.Library.Nodes.Symbols
          }
 
          if (prefix.IsSome)
-            builder.SendMessage("~()", 1);
+         {
+	         builder.SendMessage("~()", 1);
+         }
 
          if (suffix.If(out var s))
          {

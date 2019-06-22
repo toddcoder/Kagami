@@ -66,9 +66,14 @@ namespace Kagami.Library.Runtime
 			returnValue = none<IObject>();
 			this.address = address;
 			if (invokable is IProvidesFields pf && pf.ProvidesFields)
+			{
 				fields = pf.Fields;
+			}
 			else
+			{
 				fields = new Fields();
+			}
+
 			arguments = Arguments.Empty;
 			frameType = FrameType.Function;
 			parametersSet = false;
@@ -102,10 +107,14 @@ namespace Kagami.Library.Runtime
 					var parameter = parameters[i];
 					lastValue = arguments[i];
 					if (!fields.ContainsKey(parameter.Name))
+					{
 						fields.New(parameter.Name, parameter.Mutable).Force();
+					}
 
 					if (parameter.TypeConstraint.If(out var typeConstraint) && !typeConstraint.Matches(classOf(lastValue)))
+					{
 						throw incompatibleClasses(lastValue, typeConstraint.AsString);
+					}
 
 					fields.Assign(parameter.Name, lastValue, true).Force();
 					lastName = parameter.Name;
@@ -117,37 +126,54 @@ namespace Kagami.Library.Runtime
 					var iterator = getIterator(lastValue, false);
 					var tupleList = iterator.FlatMap(i => i.List().ToList(), e => new List<IObject> { lastValue });
 					for (var i = length; i < arguments.Length; i++)
+					{
 						tupleList.Add(arguments[i]);
+					}
+
 					var tuple = new Tuple(tupleList.ToArray());
 					fields.Assign(lastName, tuple, true).Force();
 				}
 				else if (length < parameters.Length)
+				{
 					for (var i = length; i < parameters.Length; i++)
 					{
 						var parameter = parameters[i];
 						var defaultValue = parameter.DefaultValue;
 						if (!fields.ContainsKey(parameter.Name))
+						{
 							fields.New(parameter.Name, parameter.Mutable).Force();
+						}
+
 						IObject value;
 						if (defaultValue.If(out var invokable))
 						{
 							if (Machine.Current.Invoke(invokable, Arguments.Empty, 0).If(out value, out var anyException)) { }
 							else if (anyException.If(out var exception))
+							{
 								throw exception;
+							}
 						}
 						else
+						{
 							value = Unassigned.Value;
+						}
 
 						if (parameter.TypeConstraint.If(out var typeConstraint) && !typeConstraint.Matches(classOf(value)))
+						{
 							throw incompatibleClasses(value, typeConstraint.AsString);
+						}
 
 						fields.Assign(parameter.Name, value, true).Force();
 					}
+				}
 				else if (length < arguments.Length)
 				{
 					var tupleList = new List<IObject> { lastValue };
 					for (var i = length; i < arguments.Length; i++)
+					{
 						tupleList.Add(arguments[i]);
+					}
+
 					var tuple = new Tuple(tupleList.ToArray());
 					fields.Assign(lastName, tuple, true).Force();
 				}
@@ -203,7 +229,9 @@ namespace Kagami.Library.Runtime
 				return Unit.Some();
 			}
 			else
+			{
 				return none<Unit>();
+			}
 		}
 
 		public IMaybe<IObject> Pick(int index)
@@ -220,7 +248,9 @@ namespace Kagami.Library.Runtime
 				return item.Some();
 			}
 			else
+			{
 				return none<IObject>();
+			}
 		}
 
 		public IMaybe<IObject> Copy(int index)
@@ -235,7 +265,9 @@ namespace Kagami.Library.Runtime
 				return item.Some();
 			}
 			else
+			{
 				return none<IObject>();
+			}
 		}
 	}
 }

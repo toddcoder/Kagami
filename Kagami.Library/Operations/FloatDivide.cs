@@ -17,7 +17,9 @@ namespace Kagami.Library.Operations
             return Float.FloatObject(dx / dy).Matched();
          }
          else
-            return sendMessage(x, "/", y).Matched();
+         {
+	         return sendMessage(x, "/", y).Matched();
+         }
       }
 
       public override string ToString() => "float.divide";

@@ -20,7 +20,10 @@ namespace Kagami.Library.Operations
             var currentAddress = machine.Address;
             var message = $"{value.Image} | {value.ClassName}";
             if (currentAddress != machine.Address)
-               machine.GoTo(currentAddress);
+            {
+	            machine.GoTo(currentAddress);
+            }
+
             machine.Context.Peek(message, index);
          }
 

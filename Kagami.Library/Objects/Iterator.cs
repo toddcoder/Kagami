@@ -25,9 +25,14 @@ namespace Kagami.Library.Objects
 		{
 			this.collection = collection;
 			if (Module.Global.Class(((IObject)this.collection).ClassName).If(out var baseClass))
+			{
 				collectionClass = baseClass is ICollectionClass cc ? cc : new ArrayClass();
+			}
 			else
+			{
 				baseClass = new ArrayClass();
+			}
+
 			index = 0;
 		}
 
@@ -69,10 +74,14 @@ namespace Kagami.Library.Objects
 			{
 				item = Next();
 				if (item.If(out var obj))
+				{
 					yield return obj;
+				}
 
 				if (index % 1000 == 0 && Machine.Current.Context.Cancelled())
+				{
 					yield break;
+				}
 			} while (item.IsSome);
 		}
 
@@ -94,9 +103,13 @@ namespace Kagami.Library.Objects
 				case 1:
 					List<IObject> result;
 					if (ascending)
+					{
 						result = List().ToList().OrderBy(i => lambda.Invoke(i)).ToList();
+					}
 					else
+					{
 						result = List().ToList().OrderByDescending(i => lambda.Invoke(i)).ToList();
+					}
 
 					return collectionClass.Revert(result);
 				case 2:
@@ -128,13 +141,17 @@ namespace Kagami.Library.Objects
 			var firstObtained = false;
 			var current = Unassigned.Value;
 			foreach (var value in List().ToList())
+			{
 				if (firstObtained)
+				{
 					current = lambda.Invoke(current, value);
+				}
 				else
 				{
 					current = value;
 					firstObtained = true;
 				}
+			}
 
 			return current;
 		}
@@ -151,13 +168,17 @@ namespace Kagami.Library.Objects
 			var list = List().ToList();
 			list.Reverse();
 			foreach (var value in list)
+			{
 				if (firstObtained)
+				{
 					current = lambda.Invoke(value, current);
+				}
 				else
 				{
 					current = value;
 					firstObtained = true;
 				}
+			}
 
 			return current;
 		}
@@ -181,6 +202,7 @@ namespace Kagami.Library.Objects
 			var current = Unassigned.Value;
 			var result = new List<IObject>();
 			foreach (var value in List().ToList())
+			{
 				if (firstObtained)
 				{
 					current = lambda.Invoke(current, value);
@@ -192,6 +214,7 @@ namespace Kagami.Library.Objects
 					result.Add(current);
 					firstObtained = true;
 				}
+			}
 
 			return collectionClass.Revert(result);
 		}
@@ -217,6 +240,7 @@ namespace Kagami.Library.Objects
 			var current = Unassigned.Value;
 			var result = new List<IObject>();
 			foreach (var value in List().ToList())
+			{
 				if (firstObtained)
 				{
 					current = lambda.Invoke(value, current);
@@ -228,6 +252,7 @@ namespace Kagami.Library.Objects
 					result.Add(current);
 					firstObtained = true;
 				}
+			}
 
 			return collectionClass.Revert(result);
 		}
@@ -238,8 +263,12 @@ namespace Kagami.Library.Objects
 		{
 			var count = 0;
 			foreach (var value in List().ToList())
+			{
 				if (predicate.Invoke(value).IsTrue)
+				{
 					count++;
+				}
+			}
 
 			return count;
 		}
@@ -259,10 +288,16 @@ namespace Kagami.Library.Objects
 		{
 			var list = new List<IObject>();
 			foreach (var item in List().ToList())
+			{
 				if (predicate.Invoke(item).IsTrue)
+				{
 					list.Add(lambda.Invoke(item));
+				}
 				else
+				{
 					list.Add(item);
+				}
+			}
 
 			return collectionClass.Revert(list);
 		}
@@ -274,7 +309,9 @@ namespace Kagami.Library.Objects
 		public virtual IObject Skip(int count)
 		{
 			if (count > -1)
+			{
 				return collectionClass.Revert(List().ToList().Skip(count));
+			}
 			else
 			{
 				var list = List().ToList();
@@ -295,7 +332,9 @@ namespace Kagami.Library.Objects
 		public virtual IObject Take(int count)
 		{
 			if (count > -1)
+			{
 				return collectionClass.Revert(List().ToList().Take(count));
+			}
 			else
 			{
 				var list = List().ToList();
@@ -319,7 +358,9 @@ namespace Kagami.Library.Objects
 			foreach (var value in List().ToList())
 			{
 				if (predicate.Invoke(value).IsTrue)
+				{
 					return new Some((Int)i);
+				}
 
 				i++;
 			}
@@ -334,7 +375,9 @@ namespace Kagami.Library.Objects
 			foreach (var value in List().ToList())
 			{
 				if (predicate.Invoke(value).IsTrue)
+				{
 					result.Add((Int)i);
+				}
 
 				i++;
 			}
@@ -358,7 +401,9 @@ namespace Kagami.Library.Objects
 		{
 			var result = Unassigned.Value;
 			foreach (var value in List().ToList())
+			{
 				if (result is Unassigned)
+				{
 					switch (value)
 					{
 						case IObjectCompare _:
@@ -367,8 +412,12 @@ namespace Kagami.Library.Objects
 						default:
 							return Unassigned.Value;
 					}
+				}
 				else if (value is IObjectCompare oc && oc.Compare(result) < 0)
+				{
 					result = value;
+				}
+			}
 
 			return result;
 		}
@@ -379,10 +428,16 @@ namespace Kagami.Library.Objects
 			if (lambda.Invokable.Parameters.Length == 2)
 			{
 				foreach (var value in List().ToList())
+				{
 					if (result is Unassigned)
+					{
 						result = value;
+					}
 					else if (((Int)lambda.Invoke(value, result)).Value < 0)
+					{
 						result = value;
+					}
+				}
 			}
 			else
 			{
@@ -401,7 +456,9 @@ namespace Kagami.Library.Objects
 						}
 					}
 					else
+					{
 						throw incompatibleClasses(valueResult, "Object compare");
+					}
 				}
 			}
 
@@ -412,7 +469,9 @@ namespace Kagami.Library.Objects
 		{
 			var result = Unassigned.Value;
 			foreach (var value in List().ToList())
+			{
 				if (result is Unassigned)
+				{
 					switch (value)
 					{
 						case IObjectCompare _:
@@ -421,8 +480,12 @@ namespace Kagami.Library.Objects
 						default:
 							return Unassigned.Value;
 					}
+				}
 				else if (value is IObjectCompare oc && oc.Compare(result) > 0)
+				{
 					result = value;
+				}
+			}
 
 			return result;
 		}
@@ -433,10 +496,16 @@ namespace Kagami.Library.Objects
 			if (lambda.Invokable.Parameters.Length == 2)
 			{
 				foreach (var value in List().ToList())
+				{
 					if (result is Unassigned)
+					{
 						result = value;
+					}
 					else if (((Int)lambda.Invoke(value, result)).Value < 0)
+					{
 						result = value;
+					}
+				}
 			}
 			else
 			{
@@ -455,7 +524,9 @@ namespace Kagami.Library.Objects
 						}
 					}
 					else
+					{
 						throw incompatibleClasses(valueResult, "Object compare");
+					}
 				}
 			}
 
@@ -467,8 +538,12 @@ namespace Kagami.Library.Objects
 		public IObject First(Lambda predicate)
 		{
 			foreach (var value in List().ToList())
+			{
 				if (predicate.Invoke(value).IsTrue)
+				{
 					return new Some(value);
+				}
+			}
 
 			return Objects.None.NoneValue;
 		}
@@ -485,8 +560,12 @@ namespace Kagami.Library.Objects
 			var list = List().ToList();
 			list.Reverse();
 			foreach (var value in list)
+			{
 				if (predicate.Invoke(value).IsTrue)
+				{
 					return new Some(value);
+				}
+			}
 
 			return Objects.None.NoneValue;
 		}
@@ -496,10 +575,16 @@ namespace Kagami.Library.Objects
 			var ifTrue = new List<IObject>();
 			var ifFalse = new List<IObject>();
 			foreach (var value in List().ToList())
+			{
 				if (predicate.Invoke(value).IsTrue)
+				{
 					ifTrue.Add(value);
+				}
 				else
+				{
 					ifFalse.Add(value);
+				}
+			}
 
 			return collectionClass.Revert(new List<IObject> { collectionClass.Revert(ifTrue), collectionClass.Revert(ifFalse) });
 		}
@@ -510,10 +595,16 @@ namespace Kagami.Library.Objects
 			var ifFalse = new List<IObject>();
 			var i = 0;
 			foreach (var value in List().ToList())
+			{
 				if (i++ < count)
+				{
 					ifTrue.Add(value);
+				}
 				else
+				{
 					ifFalse.Add(value);
+				}
+			}
 
 			return collectionClass.Revert(new List<IObject> { collectionClass.Revert(ifTrue), collectionClass.Revert(ifFalse) });
 		}
@@ -530,7 +621,9 @@ namespace Kagami.Library.Objects
 			var result = new Hash<IObject, IObject>();
 
 			foreach (var key in hash.KeyArray())
+			{
 				result[key] = collectionClass.Revert(hash[key]);
+			}
 
 			return new Dictionary(result);
 		}
@@ -539,13 +632,19 @@ namespace Kagami.Library.Objects
 		{
 			var one = false;
 			foreach (var value in List().ToList())
+			{
 				if (predicate.Invoke(value).IsTrue)
 				{
 					if (one)
+					{
 						return new Boolean(false);
+					}
 					else
+					{
 						one = true;
+					}
 				}
+			}
 
 			return new Boolean(true);
 		}
@@ -553,8 +652,12 @@ namespace Kagami.Library.Objects
 		public Boolean None(Lambda predicate)
 		{
 			foreach (var value in List().ToList())
+			{
 				if (predicate.Invoke(value).IsTrue)
+				{
 					return false;
+				}
+			}
 
 			return true;
 		}
@@ -567,8 +670,12 @@ namespace Kagami.Library.Objects
 		{
 			var sum = (INumeric)Int.Zero;
 			foreach (var value in List().ToList())
+			{
 				if (value is INumeric numeric)
+				{
 					sum = (INumeric)apply(sum, numeric, (x, y) => x + y, (x, y) => x + y, (x, y) => x + y, (x, y) => x.Add(y), "+");
+				}
+			}
 
 			return sum;
 		}
@@ -585,9 +692,13 @@ namespace Kagami.Library.Objects
 		{
 			var product = (INumeric)Int.One;
 			foreach (var value in List().ToList())
+			{
 				if (value is INumeric numeric)
+				{
 					product = (INumeric)apply(product, numeric, (x, y) => x * y, (x, y) => x * y, (x, y) => x * y, (x, y) => x.Multiply(y),
 						"*");
+				}
+			}
 
 			return product;
 		}
@@ -621,7 +732,9 @@ namespace Kagami.Library.Objects
 		public IObject By(int count)
 		{
 			if (count <= 0)
+			{
 				return Flatten();
+			}
 			else if (count > 1)
 			{
 				var outer = new List<IObject>();
@@ -637,11 +750,16 @@ namespace Kagami.Library.Objects
 				}
 
 				if (inner.Count > 0)
+				{
 					outer.Add(collectionClass.Revert(inner));
+				}
+
 				return collectionClass.Revert(outer);
 			}
 			else
+			{
 				return collectionClass.Revert(List().ToList());
+			}
 		}
 
 		public IObject Window(int count)
@@ -661,7 +779,9 @@ namespace Kagami.Library.Objects
 						{
 							innerList.Add(list[j]);
 							if (j == lastIndex)
+							{
 								escape = true;
+							}
 						}
 
 						var result = collectionClass.Revert(innerList);
@@ -671,10 +791,14 @@ namespace Kagami.Library.Objects
 					return collectionClass.Revert(outerList);
 				}
 				else
+				{
 					return collectionClass.Revert(list);
+				}
 			}
 			else
+			{
 				return collectionClass.Revert(List().ToList());
+			}
 		}
 
 		public virtual IObject Distinct() => collectionClass.Revert(List().ToList().Distinct());
@@ -686,15 +810,21 @@ namespace Kagami.Library.Objects
 			var isFalse = new List<IObject>();
 
 			foreach (var value in List().ToList())
+			{
 				if (whileTrue && predicate.Invoke(value).IsTrue)
+				{
 					isTrue.Add(value);
+				}
 				else if (whileTrue)
 				{
 					whileTrue = false;
 					isFalse.Add(value);
 				}
 				else
+				{
 					isFalse.Add(value);
+				}
+			}
 
 			return collectionClass.Revert(new List<IObject> { collectionClass.Revert(isTrue), collectionClass.Revert(isFalse) });
 		}
@@ -705,10 +835,16 @@ namespace Kagami.Library.Objects
 			var isFalse = new List<IObject>();
 
 			foreach (var value in List().ToList())
+			{
 				if (isTrue.Count < count)
+				{
 					isTrue.Add(value);
+				}
 				else
+				{
 					isFalse.Add(value);
+				}
+			}
 
 			return collectionClass.Revert(new List<IObject> { collectionClass.Revert(isTrue), collectionClass.Revert(isFalse) });
 		}
@@ -757,7 +893,10 @@ namespace Kagami.Library.Objects
 		public IObject Each(Lambda action)
 		{
 			foreach (var item in List().ToList())
+			{
 				action.Invoke(item);
+			}
+
 			return this;
 		}
 
@@ -768,7 +907,10 @@ namespace Kagami.Library.Objects
 			for (var i = 0; i < count; i++)
 			{
 				if (item.If(out var obj))
+				{
 					postfix.Add(obj);
+				}
+
 				item = Next();
 			}
 
@@ -795,15 +937,21 @@ namespace Kagami.Library.Objects
 		IEnumerable<List<IObject>> permutate(List<IObject> list, int count)
 		{
 			if (count == 1)
+			{
 				yield return list;
+			}
 			else
+			{
 				for (var i = 0; i < count; i++)
+				{
 					foreach (var perm in permutate(list, count - 1))
 					{
 						yield return perm;
 
 						rotateRight(list, count);
 					}
+				}
+			}
 		}
 
 		public IObject Permutation(int count)
@@ -824,15 +972,21 @@ namespace Kagami.Library.Objects
 		static IEnumerable<List<IObject>> combinations(List<IObject> list, int start, int count, int choose)
 		{
 			if (choose == 0)
+			{
 				yield return list;
+			}
 			else
+			{
 				for (var i = 0; i < count; i++)
 				{
 					foreach (var combo in combinations(list, start + 1, count - 1 - i, choose - 1))
+					{
 						yield return combo;
+					}
 
 					rotateLeft(list, start, count);
 				}
+			}
 		}
 
 		public IObject Combination(int count)
@@ -848,27 +1002,39 @@ namespace Kagami.Library.Objects
 			var className = ((IObject)iterator.Collection).ClassName;
 
 			while (iterator.Next().If(out var item))
+			{
 				if (item.ClassName == className)
 				{
 					var innerIterator = ((ICollection)item).GetIterator(false);
 					foreach (var inner in flatten(innerIterator))
+					{
 						yield return inner;
+					}
 				}
 				else
+				{
 					yield return item;
+				}
+			}
 		}
 
 		static IEnumerable<IObject> flatten(IEnumerable<IObject> enumerable, string className)
 		{
 			foreach (var item in enumerable)
+			{
 				if (item.ClassName == className)
 				{
 					var innerIterator = ((ICollection)item).GetIterator(false);
 					foreach (var inner in flatten(innerIterator))
+					{
 						yield return inner;
+					}
 				}
 				else
+				{
 					yield return item;
+				}
+			}
 		}
 
 		public IObject Flatten() => collectionClass.Revert(flatten(this).ToList());
@@ -888,7 +1054,9 @@ namespace Kagami.Library.Objects
 		{
 			foreach (var lambda in lambdas)
 			foreach (var item in enumerable)
+			{
 				yield return lambda.Invoke(item);
+			}
 		}
 
 		IObject shuffle(IObject[] array, int count)
@@ -899,7 +1067,10 @@ namespace Kagami.Library.Objects
 			{
 				var key = random.Next(array.Length);
 				while (result.ContainsKey(key))
+				{
 					key = random.Next(array.Length);
+				}
+
 				result[key] = array[key];
 			}
 

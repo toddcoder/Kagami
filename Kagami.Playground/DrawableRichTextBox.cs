@@ -33,13 +33,17 @@ namespace Kagami.Playground
                onPerformPaint();
             }
             else
-               base.WndProc(ref m);
+            {
+	            base.WndProc(ref m);
+            }
          }
 
          protected void onPerformPaint()
          {
             if (!canRender)
-               return;
+            {
+	            return;
+            }
 
             bufferGraphics.Clear(Color.Transparent);
             baseControl.OnPaint(new PaintEventArgs(bufferGraphics, bufferClip));
@@ -53,7 +57,9 @@ namespace Kagami.Playground
                TearDown();
                canRender = baseControl.Width > 0 && baseControl.Height > 0;
                if (!canRender)
-                  return;
+               {
+	               return;
+               }
 
                canvas = new Bitmap(baseControl.Width, baseControl.Height);
                bufferGraphics = Graphics.FromImage(canvas);

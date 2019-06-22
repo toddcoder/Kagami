@@ -59,7 +59,9 @@ namespace Kagami.Library.Objects
             hash = 37 * hash + length.GetHashCode();
 
             foreach (var group in groups)
-               hash = 37 * hash + group.Hash;
+            {
+	            hash = 37 * hash + group.Hash;
+            }
 
             return hash;
          }
@@ -92,9 +94,13 @@ namespace Kagami.Library.Objects
 	      get
 	      {
 		      if (index.Between(0).Until(groups.Length))
+		      {
 			      return groups[index].Text;
+		      }
 		      else
+		      {
 			      return "";
+		      }
 	      }
       }
    }

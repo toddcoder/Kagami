@@ -28,21 +28,29 @@ namespace Kagami.Library.Parsers.Expressions
 					comprehensions.Add((comparisand, source, ifExp, image));
 				}
 				else
+				{
 					return original.Unmatched<Unit>();
+				}
 
 				while (state.More)
 				{
 					var parser = new InnerComprehensionParser(builder, comprehensions);
 					if (parser.Scan(state).If(out _, out var anyException)) { }
 					else if (anyException.If(out exception))
+					{
 						return failedMatch<Unit>(exception);
+					}
 					else
+					{
 						break;
+					}
 				}
 
 				var stack = new Stack<(Symbol, Expression, IMaybe<Expression>, string)>();
 				foreach (var item in comprehensions)
+				{
 					stack.Push(item);
+				}
 
 				For2 forStatement;
 				var images = new StringBuilder();
@@ -53,11 +61,16 @@ namespace Kagami.Library.Parsers.Expressions
 					var yieldStatement = new Yield(expression);
 					var block = new Block(yieldStatement);
 					if (ifExp.If(out var boolean))
+					{
 						block = new Block(new If(boolean, block));
+					}
+
 					forStatement = new For2(symbol, source, block);
 				}
 				else
+				{
 					return notMatched<Unit>();
+				}
 
 				while (stack.Count > 0)
 				{
@@ -65,7 +78,10 @@ namespace Kagami.Library.Parsers.Expressions
 					images.Append(image);
 					var block = new Block(forStatement);
 					if (ifExp.If(out var boolean))
+					{
 						block = new Block(new If(boolean, block));
+					}
+
 					forStatement = new For2(symbol, source, block);
 				}
 
@@ -85,7 +101,9 @@ namespace Kagami.Library.Parsers.Expressions
 				return Unit.Matched();
 			}
 			else
+			{
 				return failedMatch<Unit>(exception);
+			}
 		}
 	}
 }

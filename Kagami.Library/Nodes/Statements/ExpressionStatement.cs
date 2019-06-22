@@ -39,9 +39,13 @@ namespace Kagami.Library.Nodes.Statements
 			if (returnExpression)
 			{
 				if (typeConstraint.If(out var tc))
+				{
 					builder.ReturnType(true, tc);
+				}
 				else
+				{
 					builder.Return(true);
+				}
 			}
 		}
 

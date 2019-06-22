@@ -23,10 +23,16 @@ namespace Kagami.Library.Operations
          var stack = new Stack<IObject>();
 
          for (var i = 0; i < count; i++)
-            if (machine.Pop().If(out var obj, out var exception))
-               stack.Push(obj);
-            else
-               return failedMatch<IObject>(exception);
+         {
+	         if (machine.Pop().If(out var obj, out var exception))
+	         {
+		         stack.Push(obj);
+	         }
+	         else
+	         {
+		         return failedMatch<IObject>(exception);
+	         }
+         }
 
          var index = 0;
          while (stack.Count > 0)
@@ -34,7 +40,9 @@ namespace Kagami.Library.Operations
             var value = stack.Pop();
             if (Execute(machine, index++, value).If(out _, out var exception)) { }
             else
-               return failedMatch<IObject>(exception);
+            {
+	            return failedMatch<IObject>(exception);
+            }
          }
 
          return Final(machine);
@@ -48,7 +56,9 @@ namespace Kagami.Library.Operations
             return Unit.Success();
          }
          else
-            return failure<Unit>(incompatibleClasses(value, typeof(T).Name));
+         {
+	         return failure<Unit>(incompatibleClasses(value, typeof(T).Name));
+         }
       }
    }
 }

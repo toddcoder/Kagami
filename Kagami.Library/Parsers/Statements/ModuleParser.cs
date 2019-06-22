@@ -44,13 +44,19 @@ namespace Kagami.Library.Parsers.Statements
 						return Unit.Matched();
 					}
 					else
+					{
 						return registerOriginal.Unmatched<Unit>();
+					}
 				}
 				else
+				{
 					return original.Unmatched<Unit>();
+				}
 			}
 			else
+			{
 				return registerOriginal.Unmatched<Unit>();
+			}
 		}
 	}
 }

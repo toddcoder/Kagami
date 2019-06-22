@@ -37,9 +37,13 @@ namespace Kagami.Library.Parsers.Expressions
 					}
 				}
 				else if (anyException.If(out var exception))
+				{
 					return failedMatch<Unit>(exception);
+				}
 				else
+				{
 					return notMatched<Unit>();
+				}
 			}
 
 			return "Open initializer".FailedMatch<Unit>();

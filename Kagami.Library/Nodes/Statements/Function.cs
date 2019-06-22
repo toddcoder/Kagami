@@ -73,9 +73,13 @@ namespace Kagami.Library.Nodes.Statements
       public IInvokable GetInvokable()
       {
          if (yielding)
-            return new YieldingInvokable(selector, parameters, ToString());
+         {
+	         return new YieldingInvokable(selector, parameters, ToString());
+         }
          else
-            return new FunctionInvokable(selector, parameters, ToString());
+         {
+	         return new FunctionInvokable(selector, parameters, ToString());
+         }
       }
 
       public override void Generate(OperationsBuilder builder)
@@ -87,32 +91,47 @@ namespace Kagami.Library.Nodes.Statements
             string fullFunctionName = selector;
             fullFunctionName = className.IsNotEmpty() ? $"{className}.{fullFunctionName}" : fullFunctionName;
             if (!overriding)
-               builder.NewSelector(selector, false, true);
+            {
+	            builder.NewSelector(selector, false, true);
+            }
+
             builder.PushObject(lambda);
             builder.Peek(Index);
             builder.AssignSelector(selector, overriding);
          }
          else
-            throw exception;
+         {
+	         throw exception;
+         }
 
          if (className.IsNotEmpty())
-            if (Trait)
-            {
-               if (Module.Global.Trait(className).If(out var trait))
-               {
-                  if (trait.RegisterInvokable(selector, invokable).IfNot(out _, out exception))
-                     throw exception;
-               }
-               else
-                  throw traitNotFound(className);
-            }
-            else
-            {
-               if (Module.Global.Class(className).If(out var cls))
-                  cls.RegisterMessage(selector, (obj, msg) => BaseClass.Invoke(obj, msg.Arguments, lambda));
-               else
-                  throw classNotFound(className);
-            }
+         {
+	         if (Trait)
+	         {
+		         if (Module.Global.Trait(className).If(out var trait))
+		         {
+			         if (trait.RegisterInvokable(selector, invokable).IfNot(out _, out exception))
+			         {
+				         throw exception;
+			         }
+		         }
+		         else
+		         {
+			         throw traitNotFound(className);
+		         }
+	         }
+	         else
+	         {
+		         if (Module.Global.Class(className).If(out var cls))
+		         {
+			         cls.RegisterMessage(selector, (obj, msg) => BaseClass.Invoke(obj, msg.Arguments, lambda));
+		         }
+		         else
+		         {
+			         throw classNotFound(className);
+		         }
+	         }
+         }
       }
 
       public override string ToString()

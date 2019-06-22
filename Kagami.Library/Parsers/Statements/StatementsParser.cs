@@ -56,7 +56,9 @@ namespace Kagami.Library.Parsers.Statements
 				yield return new AssignToFieldParser { SingleLine = singleLine };
 
 				if (!singleLine)
+				{
 					yield return new FunctionParser();
+				}
 
 				if (!singleLine)
 				{

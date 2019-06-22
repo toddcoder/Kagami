@@ -24,16 +24,24 @@ namespace Kagami.Library.Parsers.Expressions
 					break;
 				case 2 when source.StartsWith("\\"):
 					if (fromBackslash(source[1]).If(out var ch, out var exception))
+					{
 						builder.Add(new CharSymbol(ch));
+					}
 					else
+					{
 						return failedMatch<Unit>(exception);
+					}
 
 					break;
 				default:
 					if (fromHex(source.Drop(2)).Out(out ch, out var original))
+					{
 						builder.Add(new CharSymbol(ch));
+					}
 					else
+					{
 						return original.Map(c => Unit.Value);
+					}
 
 					break;
 			}

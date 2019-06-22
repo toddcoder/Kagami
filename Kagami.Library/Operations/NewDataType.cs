@@ -19,27 +19,39 @@ namespace Kagami.Library.Operations
          {
             var hash = new Hash<string, (IObject[], IObject)>();
             foreach (var item in dictionary.InternalHash)
-               if (item.Key is String name)
-                  if (item.Value is Tuple tuple)
-                  {
-                     var dataComparisandName = name.Value;
-                     if (tuple[0] is Tuple comparisands)
-                     {
-                        var ordinal = tuple[1];
-                        hash[dataComparisandName] = (comparisands.Value, ordinal);
-                     }
-                     else
-                        return failedMatch<IObject>(incompatibleClasses(tuple[0], "Tuple"));
-                  }
-                  else
-                     return failedMatch<IObject>(incompatibleClasses(item.Value, "Tuple"));
-               else
-                  return failedMatch<IObject>(incompatibleClasses(item.Key, "String"));
+            {
+	            if (item.Key is String name)
+	            {
+		            if (item.Value is Tuple tuple)
+		            {
+			            var dataComparisandName = name.Value;
+			            if (tuple[0] is Tuple comparisands)
+			            {
+				            var ordinal = tuple[1];
+				            hash[dataComparisandName] = (comparisands.Value, ordinal);
+			            }
+			            else
+			            {
+				            return failedMatch<IObject>(incompatibleClasses(tuple[0], "Tuple"));
+			            }
+		            }
+		            else
+		            {
+			            return failedMatch<IObject>(incompatibleClasses(item.Value, "Tuple"));
+		            }
+	            }
+	            else
+	            {
+		            return failedMatch<IObject>(incompatibleClasses(item.Key, "String"));
+	            }
+            }
 
             return new DataType(className, hash).Matched<IObject>();
          }
          else
-            return failedMatch<IObject>(incompatibleClasses(value, "Dictionary"));
+         {
+	         return failedMatch<IObject>(incompatibleClasses(value, "Dictionary"));
+         }
       }
 
       public override string ToString() => "new.data.type";

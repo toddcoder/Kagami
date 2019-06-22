@@ -45,10 +45,14 @@ namespace Kagami.Library.Nodes.Symbols
 
 	      var index = 0;
          foreach (var argument in arguments)
+         {
 	         selector.Generate(index++, argument, builder);
+         }
 
-	      if (operation.If(out var op))
-            builder.AddRaw(op);
+         if (operation.If(out var op))
+         {
+	         builder.AddRaw(op);
+         }
 
          int count;
          if (lambda.If(out var l))
@@ -57,7 +61,9 @@ namespace Kagami.Library.Nodes.Symbols
             count = arguments.Length + 1;
          }
          else
-            count = arguments.Length;
+         {
+	         count = arguments.Length;
+         }
 
          builder.Peek(Index);
          builder.SendMessage(selector, count);

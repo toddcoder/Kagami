@@ -18,7 +18,9 @@ namespace Kagami.Library.Objects
          if (status.IsAccepted && taking)
          {
             if (predicate.Invoke(status.Object).IsTrue)
-               return status;
+            {
+	            return status;
+            }
 
             taking = false;
          }
@@ -29,10 +31,16 @@ namespace Kagami.Library.Objects
       public IEnumerable<IObject> Execute(IIterator iterator)
       {
          foreach (var value in iterator.List())
-            if (predicate.Invoke(value).IsTrue)
-               yield return value;
-            else
-               yield break;
+         {
+	         if (predicate.Invoke(value).IsTrue)
+	         {
+		         yield return value;
+	         }
+	         else
+	         {
+		         yield break;
+	         }
+         }
       }
 
       public override string ToString() => $"take while {predicate.Image}";

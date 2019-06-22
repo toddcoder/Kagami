@@ -75,27 +75,39 @@ namespace Kagami.Library.Parsers.Statements
 				builder.Add(comparisand);
 				builder.Add(new MatchSymbol());
 				if (and.If(out var a))
+				{
 					builder.Add(a);
+				}
 
 				if (builder.ToExpression().If(out var expression, out var exception))
 				{
 					var caseParser = new CaseParser(assignmentField, mutable, assignment, fieldName, false, caseType);
 					var ifStatement = none<If>();
 					if (caseParser.Scan(state).If(out _, out var mbCaseException))
+					{
 						ifStatement = caseParser.If.Some();
+					}
 					else if (mbCaseException.If(out var caseException))
+					{
 						return failedMatch<Unit>(caseException);
+					}
 
 					If = new If(expression, block, ifStatement, none<Block>(), assignmentField, mutable, assignment, top);
 					return Unit.Matched();
 				}
 				else
+				{
 					return failedMatch<Unit>(exception);
+				}
 			}
 			else if (original.IsNotMatched)
+			{
 				return failedMatch<Unit>(expectedValue());
+			}
 			else
+			{
 				return original.Unmatched<Unit>();
+			}
 		}
 
 		public If If { get; set; }

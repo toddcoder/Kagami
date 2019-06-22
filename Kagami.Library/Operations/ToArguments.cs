@@ -13,10 +13,16 @@ namespace Kagami.Library.Operations
          var count = x.AsInt32();
          var stack = new Stack<IObject>();
          for (var i = 0; i < count; i++)
-            if (machine.Pop().If(out var obj, out var exception))
-               stack.Push(obj);
-            else
-               return failedMatch<IObject>(exception);
+         {
+	         if (machine.Pop().If(out var obj, out var exception))
+	         {
+		         stack.Push(obj);
+	         }
+	         else
+	         {
+		         return failedMatch<IObject>(exception);
+	         }
+         }
 
          var array = stack.ToArray();
          var arguments = new Arguments(array);

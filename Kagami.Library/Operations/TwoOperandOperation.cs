@@ -15,9 +15,13 @@ namespace Kagami.Library.Operations
          try
          {
             if (machine.Pop().If(out var y, out var exception) && machine.Pop().If(out var x, out exception))
-               return Execute(machine, x, y);
+            {
+	            return Execute(machine, x, y);
+            }
             else
-               return failedMatch<IObject>(exception);
+            {
+	            return failedMatch<IObject>(exception);
+            }
          }
          catch (Exception exception)
          {

@@ -45,15 +45,21 @@ namespace Kagami.Library.Parsers.Expressions
                      escaped = false;
                   }
                   else if (state.CurrentSource.Drop(1).StartsWith("\""))
-                     escaped = true;
+                  {
+	                  escaped = true;
+                  }
                   else
                   {
                      state.Move(1);
                      state.AddToken(start, length + 1, Color.String);
                      if (type == AlternateStringType.List)
-                        builder.Add(new StringListSymbol(stringBuilder.ToString()));
+                     {
+	                     builder.Add(new StringListSymbol(stringBuilder.ToString()));
+                     }
                      else
-                        builder.Add(new StringSymbol(stringBuilder.ToString()));
+                     {
+	                     builder.Add(new StringSymbol(stringBuilder.ToString()));
+                     }
 
                      return Unit.Matched();
                   }

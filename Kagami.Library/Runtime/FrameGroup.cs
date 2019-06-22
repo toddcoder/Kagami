@@ -32,7 +32,9 @@ namespace Kagami.Library.Runtime
       public void Push(Machine machine)
       {
          foreach (var frame in frames)
-            machine.PushFrame(frame);
+         {
+	         machine.PushFrame(frame);
+         }
       }
 
       public IMaybe<Frame> FunctionFrame => when(functionFrameIndex > -1, () => frames[functionFrameIndex]);
@@ -54,7 +56,9 @@ namespace Kagami.Library.Runtime
       public IEnumerator<Frame> GetEnumerator()
       {
          foreach (var frame in frames)
-            yield return frame;
+         {
+	         yield return frame;
+         }
       }
 
       IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -66,7 +70,9 @@ namespace Kagami.Library.Runtime
             var fields = new Fields();
 
             for (var i = functionFrameIndex; i >= 0; i--)
-               fields.CopyFrom(frames[i].Fields);
+            {
+	            fields.CopyFrom(frames[i].Fields);
+            }
 
             return fields;
          }

@@ -43,7 +43,9 @@ namespace Kagami.Library.Parsers.Statements
 				}
 			}
 			else
+			{
 				return original1.Unmatched<Unit>();
+			}
 		}
 	}
 }

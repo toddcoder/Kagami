@@ -13,9 +13,13 @@ namespace Kagami.Library.Operations
       public override IMatched<IObject> Execute(Machine machine, IObject value)
       {
          if (value is INumeric nx)
-            return Execute(machine, nx);
+         {
+	         return Execute(machine, nx);
+         }
          else
-            return failedMatch<IObject>(incompatibleClasses(value, "Numeric"));
+         {
+	         return failedMatch<IObject>(incompatibleClasses(value, "Numeric"));
+         }
       }
    }
 }

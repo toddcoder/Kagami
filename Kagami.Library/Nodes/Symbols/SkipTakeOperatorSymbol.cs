@@ -33,7 +33,9 @@ namespace Kagami.Library.Nodes.Symbols
       public override void Generate(OperationsBuilder builder)
       {
          foreach (var skipTakeItem in arguments)
-            skipTakeItem.Generate(builder);
+         {
+	         skipTakeItem.Generate(builder);
+         }
       }
 
       public override Precedence Precedence => Precedence.PostfixOperator;

@@ -17,9 +17,13 @@ namespace Kagami.Library.Parsers.Expressions
          if (!input.Contains("."))
          {
             if (input.IsMatch("^ ['efgnp']"))
-               input += ".6";
+            {
+	            input += ".6";
+            }
             else if (input == "c")
-               input += ".2";
+            {
+	            input += ".2";
+            }
          }
 
          state.Colorize(tokens, Color.Whitespace, Color.Format);

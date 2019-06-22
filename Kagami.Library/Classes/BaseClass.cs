@@ -54,13 +54,17 @@ namespace Kagami.Library.Classes
 		protected void registerMessage(Selector selector, Func<IObject, Message, IObject> function)
 		{
 			if (!messages.ContainsKey(selector))
+			{
 				messages[selector] = function;
+			}
 		}
 
 		protected void registerClassMessage(Selector selector, Func<BaseClass, Message, IObject> function)
 		{
 			if (!classMessages.ContainsKey(selector))
+			{
 				classMessages[selector] = function;
+			}
 		}
 
 		public virtual void RegisterMessages()
@@ -127,21 +131,33 @@ namespace Kagami.Library.Classes
 			var selector = message.Selector;
 
 			if (RespondsTo(selector))
+			{
 				if (messages.ContainsKey(selector))
+				{
 					return messages[selector](obj, message);
+				}
 				else
+				{
 					return DynamicInvoke(obj, message);
+				}
+			}
 			else
+			{
 				throw messageNotFound(classOf(obj), selector);
+			}
 		}
 
 		protected IObject invokeDirectly(IObject obj, Message message)
 		{
 			var result = messages[message.Selector];
 			if (result == null)
+			{
 				throw messageNotFound(classOf(obj), message.Selector);
+			}
 			else
+			{
 				return result(obj, message);
+			}
 		}
 
 		IObject invokeClassMessage(Message message)
@@ -149,12 +165,20 @@ namespace Kagami.Library.Classes
 			var selector = message.Selector;
 
 			if (ClassRespondsTo(selector))
+			{
 				if (classMessages.ContainsKey(selector))
+				{
 					return classMessages[selector](this, message);
+				}
 				else
+				{
 					return ClassDynamicInvoke(message);
+				}
+			}
 			else
+			{
 				throw messageNotFound(this, selector);
+			}
 		}
 
 		public IObject SendMessage(IObject obj, Message message)
@@ -412,7 +436,9 @@ namespace Kagami.Library.Classes
 		{
 			Fields fields;
 			if (obj is UserObject uo)
+			{
 				fields = uo.Fields;
+			}
 			else
 			{
 				fields = new Fields();
@@ -421,11 +447,17 @@ namespace Kagami.Library.Classes
 			}
 
 			if (Machine.Current.Invoke(lambda.Invokable, arguments, fields).If(out var value, out var anyException))
+			{
 				return value;
+			}
 			else if (anyException.If(out var exception))
+			{
 				throw exception;
+			}
 			else
+			{
 				return Void.Value;
+			}
 		}
 
 		public static IObject Invoke(UserClass userClass, Arguments arguments, Lambda lambda)
@@ -483,12 +515,17 @@ namespace Kagami.Library.Classes
 								var length = sliceable.Length;
 								var start = range.StartObj;
 								if (start is Int i && i.Value < 0)
+								{
 									start = (Int)wrapIndex(i.Value, length);
+								}
+
 								var newRange = new Range((IRangeItem)start, (Int)(length - 1), range.Inclusive, range.Increment);
 								return sliceable.Slice(newRange);
 							}
 							else
+							{
 								return sliceable.Slice(range);
+							}
 
 						case ICollection collection:
 							return sliceable.Slice(collection);

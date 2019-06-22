@@ -35,7 +35,9 @@ namespace Kagami.Library.Parsers.Statements
 			var type = tokens[7].Text;
 
 			if (isOperator && !Module.Global.RegisterOperator(functionName))
+			{
 				return $"Operator {functionName} already registered".FailedMatch<Unit>();
+			}
 
 			var needsParameters = type == "(";
 			if (needsParameters)
@@ -43,7 +45,9 @@ namespace Kagami.Library.Parsers.Statements
 				state.Colorize(tokens, Color.Keyword, Color.Keyword, Color.Whitespace, Color.Class, Color.Structure, Color.Invokable,
 					Color.OpenParenthesis);
 				if (functionName.IsMatch("^ /w+ '=' $"))
+				{
 					functionName = $"__${functionName.Drop(-1)}=";
+				}
 			}
 			else
 			{
@@ -57,33 +61,49 @@ namespace Kagami.Library.Parsers.Statements
 			if (GetAnyParameters(needsParameters, state).Out(out var parameters, out var original))
 			{
 				if (state.CurrentSource.IsMatch("^ /s* '|'"))
+				{
 					return getMatchFunction(state, functionName, parameters, overriding, className);
+				}
 				else if (state.CurrentSource.StartsWith("("))
+				{
 					return getCurriedFunction(state, functionName, parameters, overriding, className, trait).Map(f =>
 					{
 						if (isMacro)
+						{
 							state.RegisterMacro(f);
+						}
 						else
+						{
 							state.AddStatement(f);
+						}
 
 						return Unit.Matched();
 					});
+				}
 				else
+				{
 					return getAnyBlock(state).Map(block =>
 					{
 						var yielding = state.RemoveYieldFlag();
 						state.RemoveReturnType();
 						var function = new Function(functionName, parameters, block, yielding, overriding, className) { Trait = trait };
 						if (isMacro)
+						{
 							state.RegisterMacro(function);
+						}
 						else
+						{
 							state.AddStatement(function);
+						}
 
 						return Unit.Matched();
 					});
+				}
 			}
 			else
+			{
 				return original.Unmatched<Unit>();
+			}
 		}
 
 		public string TraitName { get; set; } = "";
@@ -91,9 +111,13 @@ namespace Kagami.Library.Parsers.Statements
 		public static IMatched<Parameters> GetAnyParameters(bool needsParameters, ParseState state)
 		{
 			if (needsParameters)
+			{
 				return getParameters(state);
+			}
 			else
+			{
 				return Parameters.Empty.Matched();
+			}
 		}
 
 		protected static IMatched<Function> getCurriedFunction(ParseState state, string functionName, Parameters firstParameters,
@@ -107,7 +131,9 @@ namespace Kagami.Library.Parsers.Statements
 					from p in getParameters(state)
 					select p;
 				if (result.If(out var parameters, out var anyException))
+				{
 					parametersStack.Push(parameters);
+				}
 				else if (anyException.If(out var exception))
 				{
 					state.RemoveYieldFlag();
@@ -116,7 +142,9 @@ namespace Kagami.Library.Parsers.Statements
 					return failedMatch<Function>(exception);
 				}
 				else
+				{
 					break;
+				}
 			}
 
 			if (getAnyBlock(state).Out(out var block, out var original))
@@ -131,14 +159,20 @@ namespace Kagami.Library.Parsers.Statements
 				}
 
 				if (lambdaSymbol.If(out var ls))
+				{
 					return new Function(functionName, firstParameters, new Block(new Return(new Expression(ls), none<TypeConstraint>())),
 						yielding, overriding,
 						className) { Trait = trait }.Matched();
+				}
 				else
+				{
 					return notMatched<Function>();
+				}
 			}
 			else
+			{
 				return original.Unmatched<Function>();
+			}
 		}
 
 		protected static LambdaSymbol getLambda(Parameters parameters, LambdaSymbol previousLambdaSymbol)
@@ -159,14 +193,18 @@ namespace Kagami.Library.Parsers.Statements
 					var caseParser = new CaseParser(parameters[0].Name);
 					state.SkipEndOfLine();
 					if (caseParser.Scan(state).If(out _, out var anyException))
+					{
 						list.Add(caseParser.If);
+					}
 					else if (anyException.If(out var exception))
 					{
 						state.Regress();
 						return failedMatch<Unit>(exception);
 					}
 					else
+					{
 						break;
+					}
 				}
 
 				if (list.Count == 0)
@@ -179,7 +217,9 @@ namespace Kagami.Library.Parsers.Statements
 				{
 					var stack = new Stack<If>();
 					foreach (var ifStatement in list)
+					{
 						stack.Push(ifStatement);
+					}
 
 					var previousIf = stack.Pop();
 					while (stack.Count > 0)
@@ -197,7 +237,9 @@ namespace Kagami.Library.Parsers.Statements
 				}
 			}
 			else
+			{
 				return original;
+			}
 		}
 	}
 }

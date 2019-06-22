@@ -46,7 +46,9 @@ namespace Kagami.Library.Operations
       {
          var table = new TableMaker(("Loc", Justification.Right), ("Operation", Justification.Left));
          for (var i = 0; i < length; i++)
-            table.Add(i, operations[i]);
+         {
+	         table.Add(i, operations[i]);
+         }
 
          return table.ToString();
       }

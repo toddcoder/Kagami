@@ -13,18 +13,28 @@ namespace Kagami.Library.Objects
 			if (reverse)
 			{
 				if (startIndex == 0)
+				{
 					index = input.LastIndexOf(value, StringComparison.Ordinal);
+				}
 				else
+				{
 					index = input.LastIndexOf(value, startIndex, StringComparison.Ordinal);
+				}
 			}
 			else
+			{
 				index = input.IndexOf(value, startIndex, StringComparison.Ordinal);
+			}
 
 			if (index == -1)
+			{
 				return None.NoneValue;
+			}
 			else
+			{
 				return Some.Object((Int)index);
-      }
+			}
+		}
 
 		public static Tuple findAll(string value, string input) => new Tuple(input.FindAll(value).Select(Int.IntObject).ToArray());
 
@@ -32,23 +42,35 @@ namespace Kagami.Library.Objects
 		{
 			int index;
 			if (reverse)
+			{
 				index = input.LastIndexOf(value, StringComparison.Ordinal);
+			}
 			else
+			{
 				index = input.IndexOf(value, StringComparison.Ordinal);
+			}
 
 			if (index > -1)
+			{
 				return input.Keep(index) + replacement + input.Drop(index + value.Length);
+			}
 			else
+			{
 				return input;
-      }
+			}
+		}
 
 		public static String replace(string value, string input, Lambda lambda, bool reverse)
 		{
 			int index;
 			if (reverse)
+			{
 				index = input.LastIndexOf(value, StringComparison.Ordinal);
+			}
 			else
+			{
 				index = input.IndexOf(value, StringComparison.Ordinal);
+			}
 
 			if (index > -1)
 			{
@@ -59,8 +81,10 @@ namespace Kagami.Library.Objects
 				return input.Keep(index) + replacement + input.Drop(index + value.Length);
 			}
 			else
+			{
 				return input;
-      }
+			}
+		}
 
 		public static String replaceAll(string value, string input, string replacement) => input.Replace(value, replacement);
 
@@ -94,16 +118,24 @@ namespace Kagami.Library.Objects
 			{
 				var index = input.LastIndexOf(value, StringComparison.Ordinal);
 				if (index > -1)
+				{
 					return Tuple.Tuple3(input.Keep(index), value, input.Drop(index + value.Length));
+				}
 				else
+				{
 					return Tuple.Tuple3(input, "", "");
+				}
 			}
 			else
 			{
 				if (input.Find(value).If(out var index))
+				{
 					return Tuple.Tuple3(input.Keep(index), value, input.Drop(index + value.Length));
+				}
 				else
+				{
 					return Tuple.Tuple3(input, "", "");
+				}
 			}
       }
 

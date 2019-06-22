@@ -94,11 +94,18 @@ namespace Kagami.Library.Packages
                return mn.Sign();
             case INumeric n:
                if (n.IsNegative)
-                  return Int.IntObject(-1);
+               {
+	               return Int.IntObject(-1);
+               }
                else if (n.IsZero)
-                  return Int.IntObject(0);
+               {
+	               return Int.IntObject(0);
+               }
                else
-                  return Int.IntObject(1);
+               {
+	               return Int.IntObject(1);
+               }
+
             default:
                throw notNumeric(obj);
          }
@@ -112,15 +119,26 @@ namespace Kagami.Library.Packages
                return mn.Abs();
             case INumeric n:
 		         if (n.IsNegative)
+		         {
 			         if (Negate.Evaluate(n).If(out var value, out var anyException))
+			         {
 				         return value;
+			         }
 			         else if (anyException.If(out var exception))
+			         {
 				         throw exception;
+			         }
 			         else
+			         {
 				         throw notNumeric(obj);
+			         }
+		         }
 		         else
+		         {
 			         return obj;
-	         default:
+		         }
+
+            default:
                throw notNumeric(obj);
          }
       }
@@ -174,12 +192,20 @@ namespace Kagami.Library.Packages
                return func(n);
             case String s:
                if (Module.Global.Class(className).If(out var baseClass))
-                  if (baseClass is IParse parse)
-                     return (T)parse.Parse(s.Value);
-                  else
-                     throw $"Cannot convert to {className}".Throws();
+               {
+	               if (baseClass is IParse parse)
+	               {
+		               return (T)parse.Parse(s.Value);
+	               }
+	               else
+	               {
+		               throw $"Cannot convert to {className}".Throws();
+	               }
+               }
                else
-                  throw incompatibleClasses(obj, className);
+               {
+	               throw incompatibleClasses(obj, className);
+               }
 
             default:
                throw incompatibleClasses(obj, className);
@@ -234,15 +260,21 @@ namespace Kagami.Library.Packages
          var bits = BitConverter.DoubleToInt64Bits(number);
          var realMantissa = 1.0d;
          if (double.IsNaN(number) || number + number == number || double.IsInfinity(number))
-            return getFrexpResult(number, 0);
+         {
+	         return getFrexpResult(number, 0);
+         }
 
          var negative = bits < 0;
          var exponent = (int)(bits >> 52 & 0x7ffL);
          var mantissa = bits & 0xfffffffffffffL;
          if (exponent == 0)
-            exponent++;
+         {
+	         exponent++;
+         }
          else
-            mantissa |= 1L << 52;
+         {
+	         mantissa |= 1L << 52;
+         }
 
          exponent -= 1075;
          realMantissa = mantissa;
@@ -255,7 +287,9 @@ namespace Kagami.Library.Packages
          }
 
          if (negative)
-            realMantissa *= -1;
+         {
+	         realMantissa *= -1;
+         }
 
          return getFrexpResult(realMantissa, exponent);
       }

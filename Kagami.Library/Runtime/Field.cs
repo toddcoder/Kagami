@@ -19,20 +19,33 @@ namespace Kagami.Library.Runtime
 				if (TypeConstraint.If(out var typeConstraint))
 				{
 					if (typeConstraint.Matches(valueClass))
+					{
 						if (this.value is Reference reference)
+						{
 							reference.Field.Value = value;
+						}
 						else
+						{
 							this.value = value;
+						}
+					}
 					else
+					{
 						throw incompatibleClasses(value, typeConstraint.AsString);
+					}
 				}
 				else
 				{
 					if (this.value is Reference reference)
+					{
 						reference.Field.Value = value;
+					}
 					else
+					{
 						this.value = value;
-               TypeConstraint = Objects.TypeConstraint.SingleType(valueClass).Some();
+					}
+
+					TypeConstraint = Objects.TypeConstraint.SingleType(valueClass).Some();
 				}
 			}
 		}

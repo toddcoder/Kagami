@@ -12,9 +12,13 @@ namespace Kagami.Library.Operations
       public override IMatched<IObject> Execute(Machine machine)
       {
          if (machine.Pop().If(out var value, out var exception))
-            return Execute(machine, value);
+         {
+	         return Execute(machine, value);
+         }
          else
-            return failedMatch<IObject>(exception);
+         {
+	         return failedMatch<IObject>(exception);
+         }
       }
    }
 }

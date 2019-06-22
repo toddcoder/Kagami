@@ -14,9 +14,13 @@ namespace Kagami.Library.Objects
 			try
 			{
 				if (status.IsAccepted)
+				{
 					return Accepted.New(lambda.Invoke(status.Object));
+				}
 				else
+				{
 					return status;
+				}
 			}
 			catch (Exception exception)
 			{
@@ -29,7 +33,9 @@ namespace Kagami.Library.Objects
 			var flattened = (ICollection)iterator.Flatten();
 			var newIterator = flattened.GetIterator(false);
 			foreach (var item in newIterator.List())
+			{
 				yield return item;
+			}
 		}
 	}
 }

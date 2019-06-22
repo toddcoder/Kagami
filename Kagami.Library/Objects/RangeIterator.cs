@@ -26,15 +26,21 @@ namespace Kagami.Library.Objects
             return result.Object.Some();
          }
          else
-            return none<IObject>();
+         {
+	         return none<IObject>();
+         }
       }
 
       public override IMaybe<IObject> Peek()
       {
          if (range.Compare(current, stop))
-            return current.Object.Some();
+         {
+	         return current.Object.Some();
+         }
          else
-            return none<IObject>();
+         {
+	         return none<IObject>();
+         }
       }
 
       public override IEnumerable<IObject> List()

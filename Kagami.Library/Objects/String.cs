@@ -90,7 +90,9 @@ namespace Kagami.Library.Objects
 			get
 			{
 				foreach (var c in value)
+				{
 					yield return (Char)c;
+				}
 			}
 		}
 
@@ -154,9 +156,13 @@ namespace Kagami.Library.Objects
 		public String Replace(string old, string @new)
 		{
 			if (value.Find(old).If(out var index))
+			{
 				return value.Keep(index) + @new + value.Drop(index + old.Length);
+			}
 			else
+			{
 				return new String(value);
+			}
 		}
 
 		public Tuple FindAll(ITextFinding textFinding) => textFinding.FindAll(value);
@@ -247,18 +253,29 @@ namespace Kagami.Library.Objects
 					var right = matcher[i, 3][0];
 					var builder = new StringBuilder();
 					if (left < right)
+					{
 						for (var j = left + 1; j < right; j++)
+						{
 							builder.Append((char)j);
+						}
+					}
 					else
+					{
 						for (var j = right - 1; j > left; j--)
+						{
 							builder.Append((char)j);
+						}
+					}
+
 					matcher[i, 2] = builder.ToString();
 				}
 
 				return matcher.ToString();
 			}
 			else
+			{
 				return value;
+			}
 		}
 
 		public String Translate(string from, string to)
@@ -278,11 +295,15 @@ namespace Kagami.Library.Objects
 			var table = new AutoHash<char, char>(k => k);
 
 			for (var i = 0; i < length; i++)
+			{
 				table[from[i]] = to[i];
+			}
 
 			var result = new StringBuilder();
 			foreach (var ch in value)
+			{
 				result.Append(table[ch]);
+			}
 
 			return result.ToString();
 		}
@@ -296,33 +317,49 @@ namespace Kagami.Library.Objects
 		public IObject Int()
 		{
 			if (int.TryParse(value, out var result))
+			{
 				return new Some((Int)result);
+			}
 			else
+			{
 				return None.NoneValue;
+			}
 		}
 
 		public IObject Float()
 		{
 			if (double.TryParse(value, out var result))
+			{
 				return new Some((Float)result);
+			}
 			else
+			{
 				return None.NoneValue;
+			}
 		}
 
 		public IObject Byte()
 		{
 			if (byte.TryParse(value, out var result))
+			{
 				return new Some((Byte)result);
+			}
 			else
+			{
 				return None.NoneValue;
+			}
 		}
 
 		public IObject Long()
 		{
 			if (BigInteger.TryParse(value, out var result))
+			{
 				return new Some((Long)result);
+			}
 			else
+			{
 				return None.NoneValue;
+			}
 		}
 
 		public Tuple SplitRegex(Regex regex) => regex.Split(value);
@@ -348,13 +385,23 @@ namespace Kagami.Library.Objects
 		{
 			var builder = new StringBuilder();
 			foreach (var ch in value)
+			{
 				if (char.IsLetter(ch))
+				{
 					if (char.IsLower(ch))
+					{
 						builder.Append(char.ToUpper(ch));
+					}
 					else
+					{
 						builder.Append(char.ToLower(ch));
+					}
+				}
 				else
+				{
 					builder.Append(ch);
+				}
+			}
 
 			return builder.ToString();
 		}
@@ -383,7 +430,9 @@ namespace Kagami.Library.Objects
 				return Some.Object(new Tuple(list.Select(StringObject).ToArray()));
 			}
 			else
+			{
 				return None.NoneValue;
+			}
 		}
 
 		public Tuple Words() => new Tuple(value.Split("/s+").Select(StringObject).ToArray());

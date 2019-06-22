@@ -69,9 +69,14 @@ namespace Kagami.Library.Parsers.Expressions
                               break;
                            default:
                               if (char.IsNumber(ch))
-                                 color = Color.Number;
+                              {
+	                              color = Color.Number;
+                              }
                               else if (char.IsLetter(ch))
-                                 color = Color.Identifier;
+                              {
+	                              color = Color.Identifier;
+                              }
+
                               break;
                         }
 

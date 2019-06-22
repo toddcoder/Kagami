@@ -15,7 +15,9 @@ namespace Kagami.Library.Objects
             return Tuple.NewTuple(newIndex, value).Some();
          }
          else
-            return result;
+         {
+	         return result;
+         }
       }
    }
 }

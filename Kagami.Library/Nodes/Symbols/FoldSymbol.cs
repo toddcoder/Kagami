@@ -22,7 +22,9 @@ namespace Kagami.Library.Nodes.Symbols
             builder.SendMessage(left ? "foldl()" : "foldr()", 1);
          }
          else
-            throw exception;
+         {
+	         throw exception;
+         }
       }
 
       public override Precedence Precedence => Precedence.SendMessage;

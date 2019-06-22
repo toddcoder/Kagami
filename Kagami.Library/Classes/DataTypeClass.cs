@@ -26,7 +26,9 @@ namespace Kagami.Library.Classes
 		public IResult<Unit> RegisterDataComparisand(string name, IObject ordinal)
 		{
 			if (dataComparisands.ContainsKey(name))
+			{
 				return $"Data comparisand {name} already exists".Failure<Unit>();
+			}
 			else
 			{
 				dataComparisands[name] = ordinal;
@@ -49,7 +51,9 @@ namespace Kagami.Library.Classes
 			{
 				var key = $"{name}.{item.Key}";
 				if (Module.Global.Class(key).If(out var cls))
+				{
 					cls.RegisterMessage(key, func);
+				}
 			}
 		}
 
@@ -78,7 +82,9 @@ namespace Kagami.Library.Classes
 					return new Some(dataType.GetDataComparisand(name, msg.Arguments.Value.Skip(1).ToArray()));
 				}
 				else
+				{
 					return None.NoneValue;
+				}
 			}));
 		}
 
@@ -94,7 +100,9 @@ namespace Kagami.Library.Classes
 					return new Some(dataType.GetDataComparisand(name, msg.Arguments.Value.Skip(1).ToArray()));
 				}
 				else
+				{
 					return None.NoneValue;
+				}
 			}));
 
 			RegisterClassMessage("values".get(), (bc, msg) => classFunc<DataTypeClass>(bc, dtc => dtc.dataType.Values));

@@ -21,14 +21,19 @@ namespace Kagami.Library.Parsers.Statements
 		{
 			var flags = ExpressionFlags.Standard;
 			if (returnExpression)
+			{
 				flags |= ExpressionFlags.OmitSendMessageAssign;
+			}
+
 			if (getExpression(state, flags).Out(out var expression, out var original))
 			{
 				state.AddStatement(new ExpressionStatement(expression, returnExpression, typeConstraint));
 				return Unit.Matched();
 			}
 			else
+			{
 				return original.Unmatched<Unit>();
+			}
 		}
 
 		public override bool UpdateIndexOnParseOnly => true;

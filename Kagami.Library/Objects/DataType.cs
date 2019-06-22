@@ -41,9 +41,13 @@ namespace Kagami.Library.Objects
 			{
 				var (data, ordinal) = c;
 				if (checkParameters(data, arguments))
+				{
 					return new DataComparisand(self.className, name, data, ordinal);
+				}
 				else
+				{
 					return Unmatched.Value;
+				}
 			}, () => Unmatched.Value);
 		}
 
@@ -53,7 +57,9 @@ namespace Kagami.Library.Objects
 		{
 			var length = comparisands.Length;
 			if (arguments.Length != length)
+			{
 				return false;
+			}
 			else
 			{
 				var bindings = new Hash<string, IObject>();
@@ -62,7 +68,9 @@ namespace Kagami.Library.Objects
 					var value = arguments[i];
 					var comparisand = comparisands[i];
 					if (!value.Match(comparisand, bindings))
+					{
 						return false;
+					}
 				}
 
 				Machine.Current.CurrentFrame.Fields.SetBindings(bindings);

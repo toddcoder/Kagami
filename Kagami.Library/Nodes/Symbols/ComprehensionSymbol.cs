@@ -21,9 +21,13 @@ namespace Kagami.Library.Nodes.Symbols
          var functionName = $"__$comprehension{id()}";
          var yieldingInvokable = new YieldingInvokable(functionName, Parameters.Empty, image);
          if (builder.RegisterInvokable(yieldingInvokable, block, true).If(out _, out var exception))
-            builder.PushObject(yieldingInvokable);
+         {
+	         builder.PushObject(yieldingInvokable);
+         }
          else
-            throw exception;
+         {
+	         throw exception;
+         }
       }
 
       public override Precedence Precedence => Precedence.Value;

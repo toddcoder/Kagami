@@ -41,24 +41,32 @@ namespace Kagami.Library.Operations
          {
             var list = new List<Expression> { lastValue };
             for (var i = length; i < arguments.Length; i++)
-               list.Add(arguments[i]);
+            {
+	            list.Add(arguments[i]);
+            }
 
 /*            tupleName = lastName;
             tuple = list;*/
          }
          else if (length < parameters.Length)
-            for (var i = length; i < parameters.Length; i++)
-            {
-               var parameter = parameters[i];
-               var defaultValue = parameter.DefaultValue;
-               if (defaultValue.If(out var invokable))
-                  defaults[parameter.Name] = invokable;
-            }
+         {
+	         for (var i = length; i < parameters.Length; i++)
+	         {
+		         var parameter = parameters[i];
+		         var defaultValue = parameter.DefaultValue;
+		         if (defaultValue.If(out var invokable))
+		         {
+			         defaults[parameter.Name] = invokable;
+		         }
+	         }
+         }
          else if (length < arguments.Length)
          {
             var list = new List<Expression> { lastValue };
             for (var i = length; i < arguments.Length; i++)
-               list.Add(arguments[i]);
+            {
+	            list.Add(arguments[i]);
+            }
 
 /*            tupleName = lastName;
             tuple = list;*/
@@ -84,7 +92,9 @@ namespace Kagami.Library.Operations
             return true;
          }
          else
-            return false;
+         {
+	         return false;
+         }
       }
    }
 }

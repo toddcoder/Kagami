@@ -47,7 +47,9 @@ namespace Kagami.Library.Operations
          var assembly = assemblyCache[assemblyName];
          var type = assembly.GetType($"Kagami.{ns}.{packageClassName}");
          if (type is null)
-            return failedMatch<IObject>(classNotFound(ns));
+         {
+	         return failedMatch<IObject>(classNotFound(ns));
+         }
          else
          {
             var package = (Package)Activator.CreateInstance(type, null);

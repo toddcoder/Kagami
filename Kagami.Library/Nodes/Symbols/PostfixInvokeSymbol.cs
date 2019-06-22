@@ -12,7 +12,10 @@ namespace Kagami.Library.Nodes.Symbols
       public override void Generate(OperationsBuilder builder)
       {
          foreach (var argument in arguments)
-            argument.Generate(builder);
+         {
+	         argument.Generate(builder);
+         }
+
          builder.ToArguments(arguments.Length);
          builder.PostfixInvoke();
       }

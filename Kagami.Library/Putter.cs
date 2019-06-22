@@ -9,7 +9,9 @@
       public string Put(string value)
       {
          if (putting)
-            return $" {value}";
+         {
+	         return $" {value}";
+         }
 
          putting = true;
          return value;

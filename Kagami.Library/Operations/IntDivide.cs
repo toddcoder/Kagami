@@ -19,7 +19,9 @@ namespace Kagami.Library.Operations
 				return Int.IntObject(dx / dy).Matched();
 			}
 			else
+			{
 				return sendMessage(x, "//", y).Matched();
+			}
 		}
 	}
 }

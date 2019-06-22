@@ -185,12 +185,17 @@ namespace Kagami.Library.Objects
 		public Long Factorial()
 		{
 			if (value <= 1)
+			{
 				return BigInteger.One;
+			}
 			else
 			{
 				var num = BigInteger.One;
 				for (var index = 2; index <= value; index++)
+				{
 					num *= index;
+				}
+
 				return num;
 			}
 		}

@@ -14,10 +14,14 @@ namespace Kagami.Library.Operations
 		{
 			var invokable = invokableObject.Invokable;
 			if (invokable is YieldingInvokable yi)
+			{
 				InvokeYieldingInvokable(machine, yi, arguments);
+			}
 			else
+			{
 				InvokeInvokable(machine, invokable, arguments,
 					invokableObject is IProvidesFields pf && pf.ProvidesFields ? pf.Fields : new Fields());
+			}
 		}
 
 		static void InvokeYieldingInvokable(Machine machine, YieldingInvokable invokable, Arguments arguments)
@@ -30,7 +34,9 @@ namespace Kagami.Library.Operations
 		public static void InvokeInvokable(Machine machine, IInvokable invokable, Arguments arguments, Fields fields)
 		{
 			if (invokable.Constructing)
+			{
 				InvokeConstructor(machine, invokable, arguments, fields);
+			}
 			else
 			{
 				var returnAddress = machine.Address + 1;
@@ -72,6 +78,7 @@ namespace Kagami.Library.Operations
 				}
 
 				if (isFound && field != null)
+				{
 					switch (field.Value)
 					{
 						case IInvokableObject io:
@@ -88,13 +95,20 @@ namespace Kagami.Library.Operations
 						default:
 							return failedMatch<IObject>(incompatibleClasses(field.Value, "Invokable object"));
 					}
+				}
 				else if (isFailure)
+				{
 					return failedMatch<IObject>(exception);
+				}
 				else
+				{
 					return failedMatch<IObject>(fieldNotFound(image));
+				}
 			}
 			else
+			{
 				return failedMatch<IObject>(incompatibleClasses(value, "Arguments"));
+			}
 		}
 
 		public override bool Increment => increment;

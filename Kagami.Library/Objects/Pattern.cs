@@ -24,13 +24,19 @@ namespace Kagami.Library.Objects
          {
             var otherCases = pattern.cases;
             if (cases.Length == otherCases.Length)
-               return cases.Zip(otherCases, (c1, c2) => c1.comparisand.IsEqualTo(c2.comparisand) && c1.lambda.IsEqualTo(c2.lambda))
-                  .All(b => b);
+            {
+	            return cases.Zip(otherCases, (c1, c2) => c1.comparisand.IsEqualTo(c2.comparisand) && c1.lambda.IsEqualTo(c2.lambda))
+		            .All(b => b);
+            }
             else
-               return false;
+            {
+	            return false;
+            }
          }
          else
-            return false;
+         {
+	         return false;
+         }
       }
 
       public bool Match(IObject comparisand, Hash<string, IObject> bindings) => false;

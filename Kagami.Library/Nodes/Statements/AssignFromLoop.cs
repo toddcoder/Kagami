@@ -36,7 +36,9 @@ namespace Kagami.Library.Nodes.Statements
 			var endLabel = newLabel("end");
 
 			if (isNew)
+			{
 				builder.NewField(fieldName, mutable, true, typeConstraint);
+			}
 
 			builder.Label(beginLabel);
 

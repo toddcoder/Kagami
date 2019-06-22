@@ -51,11 +51,17 @@ namespace Kagami.Library.Objects
          get
          {
             if (index >= arguments.Length)
-               throw "Argument missing".Throws();
+            {
+	            throw "Argument missing".Throws();
+            }
             else if (index < 0)
-               throw "Malformed argument request".Throws();
+            {
+	            throw "Malformed argument request".Throws();
+            }
             else
-               return arguments[index];
+            {
+	            return arguments[index];
+            }
          }
       }
 
@@ -66,7 +72,9 @@ namespace Kagami.Library.Objects
       public IEnumerator<IObject> GetEnumerator()
       {
          foreach (var argument in arguments)
-            yield return argument;
+         {
+	         yield return argument;
+         }
       }
 
       IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();

@@ -32,14 +32,18 @@ namespace Kagami.Library.Parsers.Statements
 					var caseParser = new CaseParser(parameterName);
 					state.SkipEndOfLine();
 					if (caseParser.Scan(state).If(out _, out var anyException))
+					{
 						list.Add(caseParser.If);
+					}
 					else if (anyException.If(out var exception))
 					{
 						state.Regress();
 						return failedMatch<Unit>(exception);
 					}
 					else
+					{
 						break;
+					}
 				}
 
 				if (list.Count == 0)
@@ -52,7 +56,9 @@ namespace Kagami.Library.Parsers.Statements
 				{
 					var stack = new Stack<If>();
 					foreach (var ifStatement in list)
+					{
 						stack.Push(ifStatement);
+					}
 
 					var previousIf = stack.Pop();
 					while (stack.Count > 0)
@@ -70,7 +76,9 @@ namespace Kagami.Library.Parsers.Statements
 				}
 			}
 			else
+			{
 				return original;
+			}
 		}
 	}
 }

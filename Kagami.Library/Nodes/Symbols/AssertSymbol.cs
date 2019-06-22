@@ -31,16 +31,22 @@ namespace Kagami.Library.Nodes.Symbols
 				builder.Failure();
 			}
 			else
+			{
 				builder.PushNone();
+			}
 
 			builder.GoTo(endLabel);
 
 			builder.Label(trueLabel);
 			value.Generate(builder);
 			if (error.IsSome)
+			{
 				builder.Success();
+			}
 			else
+			{
 				builder.Some();
+			}
 
 			builder.Label(endLabel);
 			builder.NoOp();

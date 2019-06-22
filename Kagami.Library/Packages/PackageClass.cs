@@ -30,12 +30,18 @@ namespace Kagami.Library.Packages
          {
 	         Selector selector = functionName;
 	         if (!functionName.StartsWith("_") && !fields.ContainsKey(selector))
+	         {
 		         fields.New(selector, new PackageFunction(package, functionName, func));
+	         }
          }
 
          foreach (var (fieldName, field) in package.Fields)
+         {
 	         if (!fieldName.StartsWith("_") && !fields.ContainsKey(fieldName))
+	         {
 		         fields.New(fieldName, field);
+	         }
+         }
       }
    }
 }

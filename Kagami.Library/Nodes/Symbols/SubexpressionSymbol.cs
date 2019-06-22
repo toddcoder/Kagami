@@ -25,7 +25,10 @@ namespace Kagami.Library.Nodes.Symbols
          builder.GoToIfTrue(tupleLabel);
 
 			if (monoTuple)
+			{
 				builder.NewMonoTuple();
+			}
+
 			builder.GoTo(endLabel);
 
 			builder.Label(tupleLabel);

@@ -13,7 +13,10 @@ namespace Kagami.Library.Operations
       public override IMatched<IObject> Execute(Machine machine)
       {
          if (obj is Lambda lambda)
-            lambda.Capture();
+         {
+	         lambda.Capture();
+         }
+
          return obj.Matched();
       }
 

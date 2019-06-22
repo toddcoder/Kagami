@@ -11,9 +11,13 @@ namespace Kagami.Library.Operations
       public override IMatched<IObject> Execute(Machine machine)
       {
          if (machine.GoTo(address))
-            return notMatched<IObject>();
+         {
+	         return notMatched<IObject>();
+         }
          else
-            return failedMatch<IObject>(badAddress(address));
+         {
+	         return failedMatch<IObject>(badAddress(address));
+         }
       }
 
       public override string ToString() => $"goto({address})";

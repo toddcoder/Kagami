@@ -17,7 +17,9 @@ namespace Kagami.Library.Parsers.Expressions
 		{
 			var precedence = tokens[2].Text == "." ? Precedence.SendMessage : Precedence.ChainedOperator;
 			if (precedence == Precedence.ChainedOperator && builder.Flags[ExpressionFlags.InLambda])
+			{
 				return notMatched<Unit>();
+			}
 
 			var name = tokens[3].Text;
 			var parameterDelimiter = tokens[4].Text;
@@ -34,9 +36,13 @@ namespace Kagami.Library.Parsers.Expressions
 			}
 
 			if (parseArguments)
+			{
 				state.Colorize(tokens, Color.Whitespace, Color.Message, Color.Message, Color.OpenParenthesis);
+			}
 			else
+			{
 				state.Colorize(tokens, Color.Whitespace, Color.Message, Color.Message);
+			}
 
 			if (!parseArguments)
 			{
@@ -53,7 +59,9 @@ namespace Kagami.Library.Parsers.Expressions
 				return Unit.Matched();
 			}
 			else
+			{
 				return original.Unmatched<Unit>();
+			}
 		}
 	}
 }

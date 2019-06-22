@@ -33,13 +33,19 @@ namespace Kagami.Library.Operations
                   return byteFunc(bx, by);
                default:
                   if (cx is IMessageNumber mn)
-                     return message(mn, cy);
+                  {
+	                  return message(mn, cy);
+                  }
                   else
-                     return sendMessage(x, messageName + "(_)", y);
+                  {
+	                  return sendMessage(x, messageName + "(_)", y);
+                  }
             }
          }
          else
-            return sendMessage(x, messageName, y);
+         {
+	         return sendMessage(x, messageName, y);
+         }
       }
 
       public static IObject apply(INumeric x, INumeric y, Func<int, int, Int> int32Func, Func<double, double, Float> doubleFunc,
@@ -62,9 +68,13 @@ namespace Kagami.Library.Operations
                return byteFunc(bx, by);
             default:
                if (cx is IMessageNumber mn)
-                  return message(mn, cy);
+               {
+	               return message(mn, cy);
+               }
                else
-                  return sendMessage((IObject)x, messageName, (IObject)y);
+               {
+	               return sendMessage((IObject)x, messageName, (IObject)y);
+               }
          }
       }
 
@@ -72,22 +82,30 @@ namespace Kagami.Library.Operations
          Func<IMessageNumber, IObject> message, string messageName)
       {
          if (x is INumeric n)
-            switch (x.ClassName)
-            {
-               case "Int":
-                  return int32Func(n.AsInt32());
-               case "Float":
-                  return doubleFunc(n.AsDouble());
-               case "Byte":
-                  return byteFunc(n.AsByte());
-               default:
-                  if (x is IMessageNumber mn)
-                     return message(mn);
-                  else
-                     return sendMessage(x, messageName);
-            }
+         {
+	         switch (x.ClassName)
+	         {
+		         case "Int":
+			         return int32Func(n.AsInt32());
+		         case "Float":
+			         return doubleFunc(n.AsDouble());
+		         case "Byte":
+			         return byteFunc(n.AsByte());
+		         default:
+			         if (x is IMessageNumber mn)
+			         {
+				         return message(mn);
+			         }
+			         else
+			         {
+				         return sendMessage(x, messageName);
+			         }
+	         }
+         }
          else
-            return sendMessage(x, messageName);
+         {
+	         return sendMessage(x, messageName);
+         }
       }
 
       public static IObject apply<T>(IObject x, Func<int, T> int32Func, Func<double, T> doubleFunc, Func<byte, T> byteFunc,
@@ -95,22 +113,30 @@ namespace Kagami.Library.Operations
          where T : IObject
       {
          if (x is INumeric n)
-            switch (x.ClassName)
-            {
-               case "Int":
-                  return int32Func(n.AsInt32());
-               case "Float":
-                  return doubleFunc(n.AsDouble());
-               case "Byte":
-                  return byteFunc(n.AsByte());
-               default:
-                  if (x is IMessageNumber mn)
-                     return message(mn);
-                  else
-                     return sendMessage(x, messageName);
-            }
+         {
+	         switch (x.ClassName)
+	         {
+		         case "Int":
+			         return int32Func(n.AsInt32());
+		         case "Float":
+			         return doubleFunc(n.AsDouble());
+		         case "Byte":
+			         return byteFunc(n.AsByte());
+		         default:
+			         if (x is IMessageNumber mn)
+			         {
+				         return message(mn);
+			         }
+			         else
+			         {
+				         return sendMessage(x, messageName);
+			         }
+	         }
+         }
          else
-            return sendMessage(x, messageName);
+         {
+	         return sendMessage(x, messageName);
+         }
       }
 
       public static IObject function(IObject x, Message message, Func<INumeric, INumeric, IObject> func, string messageName)
@@ -119,20 +145,30 @@ namespace Kagami.Library.Operations
          {
             var y = message.Arguments[0];
             if (y is INumeric ny)
-               return func(nx, ny);
+            {
+	            return func(nx, ny);
+            }
             else
-               throw notNumeric(y);
+            {
+	            throw notNumeric(y);
+            }
          }
          else
-            return sendMessage(x, messageName, message.Arguments);
+         {
+	         return sendMessage(x, messageName, message.Arguments);
+         }
       }
 
       public static IObject function(IObject x, Func<INumeric, IObject> func)
       {
          if (x is INumeric nx)
-            return func(nx);
+         {
+	         return func(nx);
+         }
          else
-            throw notNumeric(x);
+         {
+	         throw notNumeric(x);
+         }
       }
 
       public static IObject function(IObject x, Func<double, Float> func, Func<IMessageNumber, IObject> messageFunc)
@@ -152,9 +188,13 @@ namespace Kagami.Library.Operations
          Func<IMessageNumber, IObject> messageFunc, string message)
       {
          if (x is INumeric)
-            return apply(x, int32Func, doubleFunc, byteFunc, messageFunc, message);
+         {
+	         return apply(x, int32Func, doubleFunc, byteFunc, messageFunc, message);
+         }
          else
-            return sendMessage(x, message);
+         {
+	         return sendMessage(x, message);
+         }
       }
 
       public static IObject function<T>(IObject x, Func<int, T> int32Func, Func<double, T> doubleFunc, Func<byte, T> byteFunc,
@@ -162,9 +202,13 @@ namespace Kagami.Library.Operations
          where T : IObject
       {
          if (x is INumeric)
-            return apply(x, int32Func, doubleFunc, byteFunc, messageFunc, message);
+         {
+	         return apply(x, int32Func, doubleFunc, byteFunc, messageFunc, message);
+         }
          else
-            return sendMessage(x, message);
+         {
+	         return sendMessage(x, message);
+         }
       }
 
       public static IObject function(IObject x, Message message, Func<int, int, Int> int32Func,
@@ -195,45 +239,55 @@ namespace Kagami.Library.Operations
          {
             var y = message.Arguments[0];
             if (y is INumeric ny)
-               return (Int)(nx.AsInt32() / ny.AsInt32());
+            {
+	            return (Int)(nx.AsInt32() / ny.AsInt32());
+            }
             else
-               throw notNumeric(y);
+            {
+	            throw notNumeric(y);
+            }
          }
          else
-            throw notNumeric(x);
+         {
+	         throw notNumeric(x);
+         }
       }
 
       public static int compatibleCompare(IObject x, IObject y)
       {
          if (y is Infinity inf)
-            return inf.IsPositive ? -1 : 1;
+         {
+	         return inf.IsPositive ? -1 : 1;
+         }
          else
-            switch (x)
-            {
-               case INumeric nx when y is INumeric ny:
-                  var (left, right) = nx.Compatible(ny);
-                  switch (left)
-                  {
-                     case Int i:
-                        return i.CompareTo((Int)right);
-                     case Float f:
-                        return f.CompareTo((Float)right);
-                     case Byte b:
-                        return b.CompareTo((Byte)right);
-                     case Long l:
-                        return l.CompareTo((Long)right);
-                     case Rational r:
-                        return r.CompareTo((Rational)right);
-                     case Complex c:
-                        return c.CompareTo((Complex)right);
-                     default:
-                        throw incompatibleClasses(x is INumeric ? y : x, "Numeric");
-                  }
-               case UserObject uo:
-                  return ((Int)sendMessage(uo, "<=>", y)).Value;
-               default:
-                  throw incompatibleClasses(x is INumeric ? y : x, "Numeric");
-            }
+         {
+	         switch (x)
+	         {
+		         case INumeric nx when y is INumeric ny:
+			         var (left, right) = nx.Compatible(ny);
+			         switch (left)
+			         {
+				         case Int i:
+					         return i.CompareTo((Int)right);
+				         case Float f:
+					         return f.CompareTo((Float)right);
+				         case Byte b:
+					         return b.CompareTo((Byte)right);
+				         case Long l:
+					         return l.CompareTo((Long)right);
+				         case Rational r:
+					         return r.CompareTo((Rational)right);
+				         case Complex c:
+					         return c.CompareTo((Complex)right);
+				         default:
+					         throw incompatibleClasses(x is INumeric ? y : x, "Numeric");
+			         }
+		         case UserObject uo:
+			         return ((Int)sendMessage(uo, "<=>", y)).Value;
+		         default:
+			         throw incompatibleClasses(x is INumeric ? y : x, "Numeric");
+	         }
+         }
       }
 
       public static INumeric toNumeric(IObject obj) => obj is INumeric numeric ? numeric : throw incompatibleClasses(obj, "Numeric");
@@ -241,18 +295,28 @@ namespace Kagami.Library.Operations
       public static string floatImage(double value)
       {
          if (double.IsNaN(value))
-            return "nan";
+         {
+	         return "nan";
+         }
          else if (double.IsPositiveInfinity(value))
-            return "inf";
+         {
+	         return "inf";
+         }
          else if (double.IsNegativeInfinity(value))
-            return "-inf";
+         {
+	         return "-inf";
+         }
          else
          {
             var str = value.ToString("g");
             if (str.IsMatch("['.Ee']"))
-               return str;
+            {
+	            return str;
+            }
             else
-               return $"{value}.0";
+            {
+	            return $"{value}.0";
+            }
          }
       }
 
@@ -267,13 +331,17 @@ namespace Kagami.Library.Operations
 	   public static IObject raise(INumeric x, INumeric y)
 	   {
 		   if (x.IsFloat || y.IsFloat)
+		   {
 			   return Float.FloatObject(Math.Pow(x.AsDouble(), y.AsDouble()));
-			else if (x.IsInt && y.IsInt)
+		   }
+		   else if (x.IsInt && y.IsInt)
 		   {
 			   var accum = 1;
 			   var amount = x.AsInt32();
 			   for (var i = 0; i < y.AsInt32(); i++)
+			   {
 				   accum *= amount;
+			   }
 
 			   return Int.IntObject(accum);
 		   }
@@ -282,7 +350,9 @@ namespace Kagami.Library.Operations
 			   var accum = BigInteger.One;
 			   var amount = x.AsBigInteger();
 			   for (var i = 0; i < y.AsBigInteger(); i++)
+			   {
 				   accum *= amount;
+			   }
 
 			   return Long.LongObject(accum);
 		   }

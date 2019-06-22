@@ -58,7 +58,9 @@ namespace Kagami.Library.Nodes.Statements
       public override void Generate(OperationsBuilder builder)
       {
          if (assignment && top)
-            builder.NewField(fieldName, mutable, true);
+         {
+	         builder.NewField(fieldName, mutable, true);
+         }
 
          var nextLabel = newLabel("next");
          builder.PushLabel(LabelType.If, "end");
@@ -71,7 +73,10 @@ namespace Kagami.Library.Nodes.Statements
          builder.PushFrame();
          block.Generate(builder);
          if (assignment)
-            builder.AssignField(fieldName, false);
+         {
+	         builder.AssignField(fieldName, false);
+         }
+
          builder.PopFrame();
          builder.PopFrame();
          builder.GoTo(LabelType.If);
@@ -79,13 +84,18 @@ namespace Kagami.Library.Nodes.Statements
          builder.Label(nextLabel);
          builder.PopFrame();
          if (elseIf.If(out var ei))
-            ei.Generate(builder);
+         {
+	         ei.Generate(builder);
+         }
          else if (elseBlock.If(out var eBlock))
          {
             builder.PushFrame();
             eBlock.Generate(builder);
             if (assignment)
-               builder.AssignField(fieldName, false);
+            {
+	            builder.AssignField(fieldName, false);
+            }
+
             builder.PopFrame();
          }
 

@@ -45,9 +45,13 @@ namespace Kagami.Library.Parsers.Expressions
                break;
             case "if":
                if (word2 == "not")
-                  builder.Add(new SendBinaryMessageSymbol("ifNot", Precedence.ChainedOperator));
+               {
+	               builder.Add(new SendBinaryMessageSymbol("ifNot", Precedence.ChainedOperator));
+               }
                else
-                  return notMatched<Unit>();
+               {
+	               return notMatched<Unit>();
+               }
 
                break;
          }

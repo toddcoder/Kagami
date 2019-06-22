@@ -13,12 +13,18 @@ namespace Kagami.Library.Objects
             var l1 = left.GetIterator(false).List().ToArray();
             var l2 = other.GetIterator(false).List().ToArray();
             if (l1.Length == l2.Length)
-               return l1.Zip(l2, (a, b) => a.IsEqualTo(b)).All(b => b);
+            {
+	            return l1.Zip(l2, (a, b) => a.IsEqualTo(b)).All(b => b);
+            }
             else
-               return false;
+            {
+	            return false;
+            }
          }
          else
-            return false;
+         {
+	         return false;
+         }
       }
 
       public static int compareCollections<T>(T left, IObject right) where T : ICollection, IObjectCompare
@@ -38,7 +44,9 @@ namespace Kagami.Library.Objects
                {
                   var compare = oc.Compare(item2);
                   if (compare != 0)
-                     return compare;
+                  {
+	                  return compare;
+                  }
                }
                else
                {
@@ -47,14 +55,22 @@ namespace Kagami.Library.Objects
             }
 
             if (length1 == length2)
-               return 0;
+            {
+	            return 0;
+            }
             else if (length1 < length2)
-               return -1;
+            {
+	            return -1;
+            }
             else
-               return 1;
+            {
+	            return 1;
+            }
          }
          else
-            throw incompatibleClasses(right, typeof(T).Name);
+         {
+	         throw incompatibleClasses(right, typeof(T).Name);
+         }
       }
 
       public static String makeString(ICollection collection, string connector)

@@ -45,12 +45,20 @@ namespace Kagami.Library.Parsers.Expressions
 						}
 
 						if (hex)
+						{
 							if (fromHex(hexText.ToString()).If(out var matchedChar, out var anyException))
+							{
 								text.Append(matchedChar);
+							}
 							else if (anyException.If(out var exception))
+							{
 								return failedMatch<Unit>(exception);
+							}
 							else
+							{
 								return failedMatch<Unit>(badHex(hexText.ToString()));
+							}
+						}
 
 						state.Move(1);
 						state.AddToken(index, length + 1, Color.String);
@@ -80,9 +88,14 @@ namespace Kagami.Library.Parsers.Expressions
 						state.AddToken(index + length, 1, Color.OpenParenthesis);
 
 						if (firstString.IsNone)
+						{
 							firstString = text.ToString().Some();
+						}
 						else
+						{
 							suffixes.Add(text.ToString());
+						}
+
 						text.Clear();
 
 						if (getExpression(state, "^ /')'", builder.Flags, Color.CloseParenthesis).If(out var expression, out var anyException))
@@ -93,9 +106,13 @@ namespace Kagami.Library.Parsers.Expressions
 							continue;
 						}
 						else if (anyException.If(out var exception))
+						{
 							return failedMatch<Unit>(exception);
+						}
 						else
+						{
 							return failedMatch<Unit>(expectedExpression());
+						}
 					}
 					case '\\':
 						if (escaped)
@@ -151,8 +168,11 @@ namespace Kagami.Library.Parsers.Expressions
 					default:
 					{
 						if (escaped)
+						{
 							if (ch.Between('0').And('9') || ch.Between('a').And('f') && hexText.Length < 6)
+							{
 								hexText.Append(ch);
+							}
 							else
 							{
 								escaped = false;
@@ -162,12 +182,19 @@ namespace Kagami.Library.Parsers.Expressions
 									hexText.Append(ch);
 								}
 								else if (anyException.If(out var exception))
+								{
 									return failedMatch<Unit>(exception);
+								}
 								else
+								{
 									return failedMatch<Unit>(badHex(hexText.ToString()));
+								}
 							}
+						}
 						else
+						{
 							text.Append(ch);
+						}
 
 						escaped = false;
 					}

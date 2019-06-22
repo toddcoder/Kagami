@@ -14,11 +14,17 @@ namespace Kagami.Library.Parsers.Expressions
 				from expression in getExpression(state, flags)
 				select expression;
 			if (result.Out(out var expressionValue, out var original))
+			{
 				return expressionValue.Some().Matched();
+			}
 			else if (original.IsNotMatched)
+			{
 				return none<Expression>().Matched();
+			}
 			else
+			{
 				return original.ExceptionAs<IMaybe<Expression>>();
+			}
 		}
 
 		public IsParser(ExpressionBuilder builder) : base(builder) { }
@@ -41,7 +47,9 @@ namespace Kagami.Library.Parsers.Expressions
 				return Unit.Matched();
 			}
 			else
+			{
 				return original.Unmatched<Unit>();
+			}
 		}
 	}
 }

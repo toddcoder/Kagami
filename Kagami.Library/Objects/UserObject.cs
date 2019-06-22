@@ -27,7 +27,10 @@ namespace Kagami.Library.Objects
 		void setField(string fieldName, IObject value)
 		{
 			if (fields.ContainsKey(fieldName))
+			{
 				fields.Remove(fieldName);
+			}
+
 			fields.New(fieldName, value);
 		}
 

@@ -24,12 +24,17 @@ namespace Kagami.Library.Parsers.Statements
          if (Module.Global.Trait(traitName).If(out var trait))
          {
             if (!traits.ContainsKey(traitName))
-               traits[traitName] = trait;
+            {
+	            traits[traitName] = trait;
+            }
+
             More = more;
             return Unit.Matched();
          }
          else
-            return failedMatch<Unit>(traitNotFound(traitName));
+         {
+	         return failedMatch<Unit>(traitNotFound(traitName));
+         }
       }
 
       public bool More { get; set; }

@@ -29,7 +29,9 @@ namespace Kagami.Library.Runtime
 		public IMatched<Field> Find(string name, bool getting, int depth = 0)
 		{
 			if (depth > MAX_DEPTH)
+			{
 				return failedMatch<Field>(exceededMaxDepth());
+			}
 			else if (fields.ContainsKey(name))
 			{
 				var field = fields[name];
@@ -44,27 +46,37 @@ namespace Kagami.Library.Runtime
 				}
 			}
 			else
+			{
 				return notMatched<Field>();
+			}
 		}
 
 		public IMatched<Field> Find(Selector selector, int depth = 0)
 		{
 			if (depth > MAX_DEPTH)
+			{
 				return failedMatch<Field>(exceededMaxDepth());
+			}
 			else
 			{
 				if (fields.ContainsKey(selector.Image))
+				{
 					return fields[selector.Image].Matched();
+				}
 				else
 				{
 					var labelsOnlyImage = selector.LabelsOnly().Image;
 					if (buckets.ContainsKey(labelsOnlyImage))
+					{
 						foreach (var bucket in buckets[labelsOnlyImage])
 						{
 							Selector matchSelector = bucket;
 							if (selector.IsEquivalentTo(matchSelector))
+							{
 								return fields[matchSelector.Image].Matched();
+							}
 						}
+					}
 
 					return fields[labelsOnlyImage].Matched();
 				}
@@ -76,11 +88,15 @@ namespace Kagami.Library.Runtime
 		public IResult<Unit> FindByPattern(string pattern, List<Field> list, int depth = 0)
 		{
 			if (depth > MAX_DEPTH)
+			{
 				return failure<Unit>(exceededMaxDepth());
+			}
 			else
 			{
 				foreach (var key in fields.KeyArray().Where(k => k.IsMatch(pattern)))
+				{
 					list.Add(fields[key]);
+				}
 
 				return Unit.Success();
 			}
@@ -107,7 +123,9 @@ namespace Kagami.Library.Runtime
 		public IResult<Field> New(Selector selector, bool mutable = false, bool visible = true)
 		{
 			if (fields.ContainsKey(selector))
+			{
 				return failure<Field>(fieldAlreadyExists(selector));
+			}
 			else
 			{
 				var field = new Field { Value = Unassigned.Value, Mutable = mutable, Visible = visible };
@@ -121,7 +139,9 @@ namespace Kagami.Library.Runtime
 		public IResult<Field> New(Selector selector, IObject value, bool mutable = false, bool visible = true)
 		{
 			if (fields.ContainsKey(selector))
+			{
 				return failure<Field>(fieldAlreadyExists(selector));
+			}
 			else
 			{
 				var field = new Field { Value = value, Mutable = mutable, Visible = visible };
@@ -135,7 +155,9 @@ namespace Kagami.Library.Runtime
 		public IResult<Field> New(string name, Field field)
 		{
 			if (fields.ContainsKey(name))
+			{
 				return failure<Field>(fieldAlreadyExists(name));
+			}
 			else
 			{
 				fields[name] = field;
@@ -146,6 +168,7 @@ namespace Kagami.Library.Runtime
 		public IResult<Field> Assign(string name, IObject value, bool overriden = false)
 		{
 			if (Find(name, false).Out(out var field, out var original))
+			{
 				if (field.Mutable)
 				{
 					field.Value = value;
@@ -157,16 +180,24 @@ namespace Kagami.Library.Runtime
 					return field.Success();
 				}
 				else
+				{
 					return failure<Field>(immutableField(name));
+				}
+			}
 			else if (original.IsFailedMatch)
+			{
 				return failure<Field>(original.Exception);
+			}
 			else
+			{
 				return failure<Field>(fieldNotFound(name));
+			}
 		}
 
 		public IResult<Field> AssignToExisting(string name, IObject value, bool overriden = false)
 		{
 			if (Machine.Current.Find(name, false).Out(out var field, out var original))
+			{
 				if (field.Mutable)
 				{
 					field.Value = value;
@@ -178,18 +209,27 @@ namespace Kagami.Library.Runtime
 					return field.Success();
 				}
 				else
+				{
 					return failure<Field>(immutableField(name));
+				}
+			}
 			else if (original.IsFailedMatch)
+			{
 				return failure<Field>(original.Exception);
+			}
 			else
+			{
 				return failure<Field>(fieldNotFound(name));
+			}
 		}
 
 		public IResult<Field> Assign(Selector selector, bool overriden = false)
 		{
 			var result = Assign(selector, selector, overriden);
 			if (result.If(out _))
+			{
 				buckets[selector.LabelsOnly().Image].Add(selector);
+			}
 
 			return result;
 		}
@@ -207,19 +247,25 @@ namespace Kagami.Library.Runtime
 				return Unit.Success();
 			}
 			else
+			{
 				return failure<Unit>(fieldNotFound(fieldName));
+			}
 		}
 
 		public IEnumerator<(string fieldName, Field field)> GetEnumerator()
 		{
 			foreach (var (key, value) in fields)
+			{
 				yield return (key, value);
+			}
 		}
 
 		public void Remove(string fieldName)
 		{
 			if (fields.ContainsKey(fieldName))
+			{
 				fields.Remove(fieldName);
+			}
 		}
 
 		public override string ToString() => fields.Select(i => $"{i.Key} = {i.Value.Value.Image}").Stringify();
@@ -227,15 +273,21 @@ namespace Kagami.Library.Runtime
 		public void SetBindings(Hash<string, IObject> bindings)
 		{
 			foreach (var (key, value) in bindings)
+			{
 				if (key.IsMatch("^ ['+-']"))
 				{
 					var mutable = key.StartsWith("+");
 					var fieldName = key.Drop(1);
 					if (New(fieldName, value, mutable).IfNot(out var exception))
+					{
 						throw exception;
+					}
 				}
 				else if (AssignToExisting(key, value).IfNot(out var exception))
+				{
 					throw exception;
+				}
+			}
 		}
 
 		public bool Equals(Fields other)
@@ -257,16 +309,24 @@ namespace Kagami.Library.Runtime
 			get
 			{
 				if (fields.ContainsKey(name))
+				{
 					return fields[name].Value;
+				}
 				else
+				{
 					throw fieldNotFound(name);
+				}
 			}
 			set
 			{
 				if (fields.ContainsKey(name))
+				{
 					fields[name].Value = value;
+				}
 				else
+				{
 					throw fieldNotFound(name);
+				}
 			}
 		}
 
@@ -277,17 +337,27 @@ namespace Kagami.Library.Runtime
 		public void CopyFrom(Fields sourceFields)
 		{
 			foreach (var (key, value) in sourceFields.fields)
+			{
 				fields[key] = value.Clone();
+			}
+
 			foreach (var (key, value) in sourceFields.buckets)
+			{
 				buckets[key] = value;
+			}
 		}
 
 		public void CopyFrom(Fields sourceFields, Func<string, Field, bool> filter)
 		{
 			foreach (var (key, value) in sourceFields.fields.Where(i => filter(i.Key, i.Value)))
+			{
 				fields[key] = value.Clone();
+			}
+
 			foreach (var (key, value) in sourceFields.buckets)
+			{
 				buckets[key] = value;
+			}
 		}
 
 		public void SetBucket(Selector selector) => buckets[selector.LabelsOnly()].Add(selector);

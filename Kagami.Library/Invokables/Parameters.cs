@@ -55,7 +55,9 @@ namespace Kagami.Library.Invokables
 		public IEnumerator<Parameter> GetEnumerator()
 		{
 			foreach (var parameter in parameters)
+			{
 				yield return parameter;
+			}
 		}
 
 		public override string ToString() => parameters.Stringify();

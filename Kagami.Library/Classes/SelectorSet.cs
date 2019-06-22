@@ -20,7 +20,9 @@ namespace Kagami.Library.Classes
 	   public void AddRange(IEnumerable<Selector> selectors)
 	   {
 		   foreach (var selector in selectors)
+		   {
 			   Add(selector);
+		   }
 	   }
 
 	   public new void AddRange(IEnumerable<string> sources) => AddRange(sources.Select(s => (Selector)s));
@@ -28,19 +30,25 @@ namespace Kagami.Library.Classes
 	   public bool Contains(Selector selector)
       {
 	      if (base.Contains(selector.Image))
+	      {
 		      return true;
+	      }
 	      else
 	      {
 		      var labelsOnlyImage = selector.LabelsOnly().Image;
 				if (buckets.ContainsKey(labelsOnlyImage))
+				{
 					foreach (var bucket in buckets[labelsOnlyImage])
 					{
 						Selector matchSelector = bucket;
 						if (selector.IsEquivalentTo(matchSelector))
+						{
 							return true;
+						}
 					}
+				}
 
-		      return base.Contains(labelsOnlyImage);
+				return base.Contains(labelsOnlyImage);
 	      }
       }
    }

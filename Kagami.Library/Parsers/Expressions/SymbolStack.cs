@@ -24,11 +24,15 @@ namespace Kagami.Library.Parsers.Expressions
       public bool IsPending(Symbol next)
       {
          if (IsEmpty)
-            return false;
+         {
+	         return false;
+         }
 
          var symbol = stack.Peek();
          if (!symbol.LeftToRight)
-            return symbol.Precedence < next.Precedence;
+         {
+	         return symbol.Precedence < next.Precedence;
+         }
 
          return symbol.Precedence <= next.Precedence;
       }

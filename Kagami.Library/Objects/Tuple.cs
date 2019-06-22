@@ -17,9 +17,13 @@ namespace Kagami.Library.Objects
 		public static IObject NewTuple(IObject x, IObject y)
 		{
 			if (x is Tuple t)
+			{
 				return new Tuple(t, y);
+			}
 			else
+			{
 				return new Tuple(x, y);
+			}
 		}
 
 		public static IObject NewTupleNamed(string nameX, IObject x, string nameY, IObject y)
@@ -41,9 +45,14 @@ namespace Kagami.Library.Objects
 		public Tuple(IObject[] items) : this()
 		{
 			if (items.Length == 1 && items[0] is InternalList il && il.ExpandInTuple)
+			{
 				this.items = il.List.ToArray();
+			}
 			else
+			{
 				this.items = items;
+			}
+
 			names = new Hash<string, int>();
 			indexes = new Hash<int, string>();
 
@@ -64,12 +73,14 @@ namespace Kagami.Library.Objects
 		void denameify()
 		{
 			for (var i = 0; i < items.Length; i++)
+			{
 				if (items[i] is IKeyValue keyValue && keyValue.ExpandInTuple)
 				{
 					names[keyValue.Key.AsString] = i;
 					indexes[i] = keyValue.Key.AsString;
 					items[i] = keyValue.Value;
 				}
+			}
 		}
 
 		public Tuple(Tuple tuple, IObject item) : this()
@@ -96,9 +107,13 @@ namespace Kagami.Library.Objects
 			get
 			{
 				if (names.ContainsKey(name))
+				{
 					return items[names[name]];
+				}
 				else
+				{
 					throw keyNotFound((String)name);
+				}
 			}
 		}
 
@@ -162,9 +177,13 @@ namespace Kagami.Library.Objects
 		public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, (t1, t2) =>
 		{
 			if (t1.Length.Value != t2.Length.Value)
+			{
 				return false;
+			}
 			else
+			{
 				return t1.items.Zip(t2.items, (i1, i2) => i1.Match(i2, bindings)).All(b => b);
+			}
 		}, bindings);
 
 		public bool IsTrue => items.Length > 0;
@@ -178,9 +197,13 @@ namespace Kagami.Library.Objects
 		public int CompareTo(object obj)
 		{
 			if (obj is Tuple tuple)
+			{
 				return CompareTo(tuple);
+			}
 			else
+			{
 				return Compare((IObject)obj);
+			}
 		}
 
 		//public string FullFunctionName(string name) => name.Function(names.KeyArray());
@@ -206,7 +229,9 @@ namespace Kagami.Library.Objects
 			get
 			{
 				foreach (var item in items)
+				{
 					yield return item;
+				}
 			}
 		}
 
@@ -220,7 +245,9 @@ namespace Kagami.Library.Objects
 		{
 			var result = new List<IObject>();
 			for (var i = 0; i < count; i++)
+			{
 				result.AddRange(items);
+			}
 
 			return new Tuple(result.ToArray());
 		}
@@ -243,14 +270,18 @@ namespace Kagami.Library.Objects
 					{
 						var compare = lCompare.Compare(right);
 						if (compare != 0)
+						{
 							return compare;
+						}
 					}
 				}
 
 				return 0;
 			}
 			else
+			{
 				throw incompatibleClasses(obj, "Tuple");
+			}
 		}
 
 		public IObject Object => this;

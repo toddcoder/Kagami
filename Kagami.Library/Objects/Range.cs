@@ -33,13 +33,20 @@ namespace Kagami.Library.Objects
 				{
 					var current = i;
 					for (var j = 0; j < increment; j++)
+					{
 						current = current.Successor;
+					}
+
 					return current;
 				};
 				if (inclusive)
+				{
 					compare = (i, o) => i.Compare(o) <= 0;
+				}
 				else
+				{
 					compare = (i, o) => i.Compare(o) < 0;
+				}
 			}
 			else
 			{
@@ -47,13 +54,20 @@ namespace Kagami.Library.Objects
 				{
 					var current = i;
 					for (var j = 0; j < -increment; j++)
+					{
 						current = current.Predecessor;
+					}
+
 					return current;
 				};
 				if (inclusive)
+				{
 					compare = (i, o) => i.Compare(o) >= 0;
+				}
 				else
+				{
 					compare = (i, o) => i.Compare(o) > 0;
+				}
 			}
 		}
 
@@ -97,9 +111,13 @@ namespace Kagami.Library.Objects
 		public IMaybe<IObject> Next(int index)
 		{
 			if (index == 0)
+			{
 				return GetIterator(false).ToArray().Some<IObject>();
+			}
 			else
+			{
 				return none<IObject>();
+			}
 		}
 
 		public IMaybe<IObject> Peek(int index) => none<IObject>();
@@ -111,14 +129,24 @@ namespace Kagami.Library.Objects
 		public Boolean In(IObject comparisand)
 		{
 			if (comparisand is IObjectCompare oc && startObj is IObjectCompare left)
+			{
 				if (left.Compare(comparisand) > 0)
+				{
 					return false;
+				}
 				else if (inclusive)
+				{
 					return oc.Compare(stopObj) <= 0;
+				}
 				else
+				{
 					return oc.Compare(stopObj) < 0;
+				}
+			}
 			else
+			{
 				return false;
+			}
 		}
 
 		public Boolean NotIn(IObject comparisand) => !In(comparisand).IsTrue;

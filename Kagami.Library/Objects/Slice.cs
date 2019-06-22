@@ -52,10 +52,16 @@ namespace Kagami.Library.Objects
 			get
 			{
 				foreach (var index in indexes)
+				{
 					if (sliceable.Get(index).If(out var value))
+					{
 						yield return value;
+					}
 					else
+					{
 						yield break;
+					}
+				}
 			}
 		}
 
@@ -89,8 +95,12 @@ namespace Kagami.Library.Objects
 				}
 			}
 			else
+			{
 				foreach (var index in indexes)
+				{
 					sliceable.Set(index, value);
+				}
+			}
 
 			return this;
 		}

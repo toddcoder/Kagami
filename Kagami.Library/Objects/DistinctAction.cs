@@ -14,9 +14,13 @@ namespace Kagami.Library.Objects
          if (status.IsAccepted)
          {
             if (existing.Contains(status.Object))
-               return new Skipped();
+            {
+	            return new Skipped();
+            }
             else
-               existing.Add(status.Object);
+            {
+	            existing.Add(status.Object);
+            }
          }
 
          return status;
@@ -26,11 +30,13 @@ namespace Kagami.Library.Objects
       {
          existing.Clear();
          foreach (var value in iterator.List())
-            if (!existing.Contains(value))
-            {
-               existing.Add(value);
-               yield return value;
-            }
+         {
+	         if (!existing.Contains(value))
+	         {
+		         existing.Add(value);
+		         yield return value;
+	         }
+         }
       }
 
       public override string ToString() => "distinct";

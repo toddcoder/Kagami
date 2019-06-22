@@ -15,7 +15,9 @@ namespace Kagami.Library.Nodes.Symbols
 	   public static void GetIndex(OperationsBuilder builder, Expression[] arguments)
 	   {
 		   if (arguments.Length == 1)
+		   {
 			   arguments[0].Generate(builder);
+		   }
 		   else
 		   {
 			   arguments[0].Generate(builder);

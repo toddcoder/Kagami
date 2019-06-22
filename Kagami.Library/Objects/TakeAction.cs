@@ -18,12 +18,18 @@ namespace Kagami.Library.Objects
          if (status.IsAccepted)
          {
             if (++index < count)
-               return status;
+            {
+	            return status;
+            }
             else
-               return new Ended();
+            {
+	            return new Ended();
+            }
          }
          else
-            return status;
+         {
+	         return status;
+         }
       }
 
       public IEnumerable<IObject> Execute(IIterator iterator)
@@ -32,7 +38,9 @@ namespace Kagami.Library.Objects
          foreach (var value in iterator.List())
          {
             if (++i < count)
-               yield return value;
+            {
+	            yield return value;
+            }
 
             yield break;
          }

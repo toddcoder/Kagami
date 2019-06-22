@@ -44,12 +44,20 @@ namespace Kagami.Library.Parsers.Expressions
 						}
 
 						if (hex)
+						{
 							if (fromHex(hexText.ToString()).If(out var matchedChar, out var anyException))
+							{
 								text.Append(matchedChar);
+							}
 							else if (anyException.If(out var exception))
+							{
 								return failedMatch<Unit>(exception);
+							}
 							else
+							{
 								return failedMatch<Unit>(badHex(hexText.ToString()));
+							}
+						}
 
 						state.Move(1);
 						state.AddToken(index, length + 1, Color.String);
@@ -137,21 +145,33 @@ namespace Kagami.Library.Parsers.Expressions
 						break;
 					default:
 						if (hex)
+						{
 							if (ch.Between('0').And('9') || ch.Between('a').And('f') && hexText.Length < 6)
+							{
 								hexText.Append(ch);
+							}
 							else
 							{
 								hex = false;
 								if (fromHex(hexText.ToString()).Out(out var matchedChar, out var original))
+								{
 									text.Append(matchedChar);
+								}
 								else if (original.IsFailedMatch)
+								{
 									return original.ExceptionAs<Unit>();
+								}
 
 								if (ch == 96)
+								{
 									text.Append(ch);
+								}
 							}
+						}
 						else
+						{
 							text.Append(ch);
+						}
 
 						escaped = false;
 						break;

@@ -19,7 +19,9 @@ namespace Kagami.Library.Parsers.Expressions
 				var fieldName = "__$0";
 				var tuple = (fieldName, symbol).Some();
 				if (state.LeftZipExpression.IsNone)
+				{
 					state.LeftZipExpression = tuple;
+				}
 				else
 				{
 					fieldName = "__$1";
@@ -33,7 +35,9 @@ namespace Kagami.Library.Parsers.Expressions
 			}
 
 			else
+			{
 				return original.Unmatched<Unit>();
+			}
 		}
 	}
 }

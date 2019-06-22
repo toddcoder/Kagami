@@ -35,19 +35,30 @@ namespace Kagami.Library.Nodes.Statements
          if (builder.RegisterInvokable(invokable, block, overriding).If(out _, out var exception))
          {
             if (!overriding)
-               builder.NewSelector(selector, false, true);
+            {
+	            builder.NewSelector(selector, false, true);
+            }
+
             builder.PushObject(lambda);
             builder.Peek(Index);
             builder.AssignField(selector, overriding);
          }
          else
-            throw exception;
+         {
+	         throw exception;
+         }
 
          if (className.IsNotEmpty())
-            if (Module.Global.Class(className).If(out var cls))
-               cls.RegisterMessage(selector, (obj, msg) => BaseClass.Invoke(obj, msg.Arguments, lambda));
-            else
-               throw classNotFound(className);
+         {
+	         if (Module.Global.Class(className).If(out var cls))
+	         {
+		         cls.RegisterMessage(selector, (obj, msg) => BaseClass.Invoke(obj, msg.Arguments, lambda));
+	         }
+	         else
+	         {
+		         throw classNotFound(className);
+	         }
+         }
       }
 
       public override string ToString() => $"{overriding.Extend("override ")}match {selector.Image}() ...";

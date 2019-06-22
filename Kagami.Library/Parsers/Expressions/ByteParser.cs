@@ -22,7 +22,9 @@ namespace Kagami.Library.Parsers.Expressions
             return Unit.Matched();
          }
          else
-            return failedMatch<Unit>(unableToConvert(source, "Byte"));
+         {
+	         return failedMatch<Unit>(unableToConvert(source, "Byte"));
+         }
       }
    }
 }

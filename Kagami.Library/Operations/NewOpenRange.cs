@@ -27,9 +27,13 @@ namespace Kagami.Library.Operations
                return new Sequence(seq, y).Matched<IObject>();
             default:
                if (y is Lambda lambda2)
-                  return new OpenRange(x, lambda2).Matched<IObject>();
+               {
+	               return new OpenRange(x, lambda2).Matched<IObject>();
+               }
                else
-                  return failedMatch<IObject>(incompatibleClasses(y, "Lambda"));
+               {
+	               return failedMatch<IObject>(incompatibleClasses(y, "Lambda"));
+               }
          }
       }
 

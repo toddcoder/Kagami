@@ -25,21 +25,30 @@ namespace Kagami.Library.Operations
          increment = false;
 
          if (machine.Pop().If(out var value, out var exception))
-            switch (value)
-            {
-               case IOptional o when predicate(o):
-                  if (machine.GoTo(address))
-                     return returnIfTrue(value);
-                  else
-                     return failedMatch<IObject>(badAddress(address));
-               case IOptional _:
-                  increment = true;
-                  return returnIfFalse(value);
-               default:
-                  return failedMatch<IObject>(incompatibleClasses(value, "Optional"));
-            }
+         {
+	         switch (value)
+	         {
+		         case IOptional o when predicate(o):
+			         if (machine.GoTo(address))
+			         {
+				         return returnIfTrue(value);
+			         }
+			         else
+			         {
+				         return failedMatch<IObject>(badAddress(address));
+			         }
+
+		         case IOptional _:
+			         increment = true;
+			         return returnIfFalse(value);
+		         default:
+			         return failedMatch<IObject>(incompatibleClasses(value, "Optional"));
+	         }
+         }
          else
-            return failedMatch<IObject>(exception);
+         {
+	         return failedMatch<IObject>(exception);
+         }
       }
 
       public override string ToString() => "goto.if.some";

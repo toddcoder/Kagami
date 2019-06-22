@@ -61,9 +61,13 @@ namespace Kagami.Library.Parsers.Expressions
 						state.SkipEndOfLine();
 					}
 					else if (anyException.If(out var exception))
+					{
 						return failedMatch<Unit>(exception);
+					}
 					else
+					{
 						break;
+					}
 				}
 
 				var lambdaResult = getExpression(state, builder.Flags);
@@ -79,15 +83,23 @@ namespace Kagami.Library.Parsers.Expressions
 						return Unit.Matched();
 					}
 					else
+					{
 						return failedMatch<Unit>(exception);
+					}
 				}
 				else if (mbLambdaException.If(out var exception))
+				{
 					return failedMatch<Unit>(exception);
+				}
 				else
+				{
 					return "Missing 'gather' expression".FailedMatch<Unit>();
+				}
 			}
 			else
+			{
 				return original;
+			}
 		}
 
 		static IResult<Symbol> getSymbol(Expression targetExpression, string parameterName, Expression lambdaExpression,
@@ -101,7 +113,9 @@ namespace Kagami.Library.Parsers.Expressions
 			if (builder.ToExpression().If(out var expression, out var exception))
 			{
 				if (stack.Count == 0)
+				{
 					return new SubexpressionSymbol(expression).Success<Symbol>();
+				}
 				else
 				{
 					var (nextName, nextExpression) = stack.Pop();
@@ -109,7 +123,9 @@ namespace Kagami.Library.Parsers.Expressions
 				}
 			}
 			else
+			{
 				return failure<Symbol>(exception);
+			}
 		}
 	}
 }

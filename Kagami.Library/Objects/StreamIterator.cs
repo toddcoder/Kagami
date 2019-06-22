@@ -47,13 +47,16 @@ namespace Kagami.Library.Objects
 			{
 				item = Next();
 				if (item.If(out var obj))
+				{
 					yield return obj;
+				}
 			} while (item.IsSome);
 		}
 
 		public IMaybe<IObject> Next()
 		{
 			while (!Machine.Current.Context.Cancelled())
+			{
 				if (iterator.Next().If(out var value))
 				{
 					var status = Accepted.New(value);
@@ -62,18 +65,29 @@ namespace Kagami.Library.Objects
 					{
 						status = action.Next(status);
 						if (status.IsSkipped)
+						{
 							break;
+						}
 						else if (status.IsEnded)
+						{
 							return none<IObject>();
+						}
 					}
 
 					if (status.IsAccepted)
+					{
 						return status.Object.Some();
+					}
 					else if (status.IsEnded)
+					{
 						return none<IObject>();
+					}
 				}
 				else
+				{
 					return none<IObject>();
+				}
+			}
 
 			return none<IObject>();
 		}
@@ -146,14 +160,20 @@ namespace Kagami.Library.Objects
 		static IStreamAction getSkipAction(ICollection collection, int count)
 		{
 			if (count > -1)
+			{
 				return new SkipAction(count);
+			}
 			else
 			{
 				var length = collection.Length.Value;
 				if (length == -1)
+				{
 					return new SkipAction(-count);
+				}
 				else
+				{
 					return new TakeAction(length + count);
+				}
 			}
 		}
 
@@ -166,14 +186,20 @@ namespace Kagami.Library.Objects
 		static IStreamAction getTakeAction(ICollection collection, int count)
 		{
 			if (count > -1)
+			{
 				return new TakeAction(count);
+			}
 			else
 			{
 				var length = collection.Length.Value;
 				if (length == -1)
+				{
 					return new TakeAction(-count);
+				}
 				else
+				{
 					return new SkipAction(length + count);
+				}
 			}
 		}
 
@@ -274,7 +300,10 @@ namespace Kagami.Library.Objects
 		public IObject Each(Lambda action)
 		{
 			foreach (var item in List())
+			{
 				action.Invoke(item);
+			}
+
 			return this;
 		}
 

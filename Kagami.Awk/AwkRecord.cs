@@ -33,18 +33,28 @@ namespace Kagami.Awk
 			get
 			{
 				if (index.Between(0).Until(fields.Length))
+				{
 					return fields[index];
+				}
 				else
+				{
 					return "";
+				}
 			}
 			set
 			{
 				if (index == 0)
+				{
 					fields = awkSplit(value.Value, fieldPattern);
+				}
 				else if (index.Between(1).Until(fields.Length))
+				{
 					fields[index] = value.Value;
+				}
 				else
+				{
 					fields = awkInsert(fields, index, value.Value);
+				}
 			}
 		}
 
@@ -81,9 +91,13 @@ namespace Kagami.Awk
 		public IMaybe<IObject> Next(int index)
 		{
 			if (index < fields.Length)
+			{
 				return StringObject(fields[index]).Some();
+			}
 			else
+			{
 				return none<IObject>();
+			}
 		}
 
 		public IMaybe<IObject> Peek(int index) => Next(index);

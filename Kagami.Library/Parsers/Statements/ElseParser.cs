@@ -18,7 +18,9 @@ namespace Kagami.Library.Parsers.Statements
 				return Unit.Matched();
 			}
 			else
+			{
 				return original.Unmatched<Unit>();
+			}
 		}
 
 		public IMaybe<Block> Block { get; set; } = none<Block>();

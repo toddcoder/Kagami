@@ -16,7 +16,9 @@ namespace Kagami.Library.Parsers.Expressions
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
 			if (builder.Flags[ExpressionFlags.OmitRange])
+			{
 				return notMatched<Unit>();
+			}
 			else
 			{
 				var keyword = tokens[2].Text;
@@ -108,7 +110,9 @@ namespace Kagami.Library.Parsers.Expressions
 					return Unit.Matched();
 				}
 				else
+				{
 					return notMatched<Unit>();
+				}
 			}
 		}
 	}

@@ -18,7 +18,9 @@ namespace Kagami.Library.Nodes.Symbols
 	   {
 		   builder.PushString(value);
 			if (isFailure)
+			{
 				builder.Failure();
+			}
 	   }
 
 	   public override Precedence Precedence => Precedence.Value;

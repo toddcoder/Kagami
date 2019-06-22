@@ -22,6 +22,7 @@ namespace Kagami.Library.Parsers.Expressions
 			{
 				if (state.Scan($"^ /(|s|) /({REGEX_ASSIGN_OPS})? /'=' -(> '=')", Color.Whitespace, Color.Operator, Color.Structure)
 					.If(out var opSource, out var anyException))
+				{
 					if (getExpression(state, builder.Flags).Out(out var expression, out var original))
 					{
 						opSource = opSource.DropWhile(" ").Keep(1);
@@ -35,18 +36,29 @@ namespace Kagami.Library.Parsers.Expressions
 								none<Operations.Operation>(), list.ToArray()));
 						}
 						else
+						{
 							builder.Add(new IndexSetterSymbol(e, expression, operation));
+						}
 
 						return Unit.Matched();
 					}
 					else
+					{
 						return original.Unmatched<Unit>();
+					}
+				}
 				else if (anyException.If(out var exception))
+				{
 					return failedMatch<Unit>(exception);
+				}
 				else if (e.Length > 0)
+				{
 					builder.Add(new IndexerSymbol(e));
+				}
 				else
+				{
 					return notMatched<Unit>();
+				}
 
 				return Unit.Matched();
 			});

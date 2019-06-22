@@ -102,11 +102,17 @@ namespace Kagami.Library.Runtime
 		public IMaybe<BaseClass> Class(string name, bool forwardsIncluded = false)
 		{
 			if (classes.ContainsKey(name))
+			{
 				return classes[name].Some();
+			}
 			else if (forwardsIncluded)
+			{
 				return new ForwardedClass(name).Some<BaseClass>();
+			}
 			else
+			{
 				return none<BaseClass>();
+			}
 		}
 
 		public IMaybe<TraitClass> Trait(string name) => traits.Map(name);
@@ -114,7 +120,9 @@ namespace Kagami.Library.Runtime
 		public IResult<Unit> RegisterClass(BaseClass cls)
 		{
 			if (classes.ContainsKey(cls.Name))
+			{
 				return failure<Unit>(classAlreadyExists(cls.Name));
+			}
 			else
 			{
 				classes[cls.Name] = cls;
@@ -125,7 +133,9 @@ namespace Kagami.Library.Runtime
 		public IResult<Unit> RegisterTrait(TraitClass trait)
 		{
 			if (traits.ContainsKey(trait.Name))
+			{
 				return failure<Unit>(traitAlreadyExists(trait.Name));
+			}
 			else
 			{
 				traits[trait.Name] = trait;
@@ -144,7 +154,9 @@ namespace Kagami.Library.Runtime
 		public bool RegisterOperator(string name)
 		{
 			if (operators.Contains(name))
+			{
 				return false;
+			}
 			else
 			{
 				operators.Add(name);
@@ -162,7 +174,9 @@ namespace Kagami.Library.Runtime
 				return Unit.Success();
 			}
 			else
+			{
 				return failure<Unit>(classNotFound(className));
+			}
 		}
 	}
 }

@@ -13,9 +13,13 @@ namespace Kagami.Library.Objects
       {
          var result = sendMessage(userObject, "<>", obj);
          if (result is Int i)
-            return i.Value;
+         {
+	         return i.Value;
+         }
          else
-            throw incompatibleClasses(result, "Int");
+         {
+	         throw incompatibleClasses(result, "Int");
+         }
       }
 
       public IObject Object => userObject;

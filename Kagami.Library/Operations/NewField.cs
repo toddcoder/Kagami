@@ -23,9 +23,13 @@ namespace Kagami.Library.Operations
       public override IMatched<IObject> Execute(Machine machine)
       {
          if (machine.CurrentFrame.Fields.New(name, typeConstraint, mutable, visible).If(out _, out var exception))
-            return notMatched<IObject>();
+         {
+	         return notMatched<IObject>();
+         }
          else
-            return failedMatch<IObject>(exception);
+         {
+	         return failedMatch<IObject>(exception);
+         }
       }
 
       public override string ToString() => $"new.field({name}, {mutable.ToString().ToLower()}, {visible.ToString().ToLower()})";

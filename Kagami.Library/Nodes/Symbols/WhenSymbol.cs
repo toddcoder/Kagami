@@ -22,7 +22,9 @@ namespace Kagami.Library.Nodes.Symbols
       {
          expression.Generate(builder);
          if (reverse)
-            builder.Not();
+         {
+	         builder.Not();
+         }
       }
 
       public override Precedence Precedence => Precedence.Value;

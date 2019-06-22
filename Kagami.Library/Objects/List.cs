@@ -18,16 +18,22 @@ namespace Kagami.Library.Objects
 		public static List Cons(IObject head, IObject tail)
 		{
 			if (tail is List list)
+			{
 				return new List(head.Some(), list);
+			}
 			else
+			{
 				return new List(head, tail);
+			}
 		}
 
 		public static List NewList(IEnumerable<IObject> list)
 		{
 			var current = Empty;
 			foreach (var value in list.Reverse())
+			{
 				current = Cons(value, current);
+			}
 
 			return current;
 		}
@@ -62,12 +68,18 @@ namespace Kagami.Library.Objects
 				if (head.If(out var h))
 				{
 					if (tail.IsEmpty)
+					{
 						return Empty;
+					}
 					else
+					{
 						return Cons(h, tail.Init);
+					}
 				}
 				else
+				{
 					return Empty;
+				}
 			}
 		}
 
@@ -78,12 +90,18 @@ namespace Kagami.Library.Objects
 				if (head.IsSome)
 				{
 					if (tail.IsEmpty)
+					{
 						return head;
+					}
 					else
+					{
 						return tail.Last;
+					}
 				}
 				else
+				{
 					return none<IObject>();
+				}
 			}
 		}
 
@@ -94,9 +112,13 @@ namespace Kagami.Library.Objects
 		string getText(string divider, Func<IObject, string> mapping, bool first = true)
 		{
 			if (head.If(out var h))
+			{
 				return (first ? "" : divider) + $"{mapping(h)}{tail.getText(divider, mapping, false)}";
+			}
 			else
+			{
 				return "";
+			}
 		}
 
 		public string AsString
@@ -104,9 +126,13 @@ namespace Kagami.Library.Objects
 			get
 			{
 				if (IsString)
+				{
 					return getText("", v => v.AsString);
+				}
 				else
+				{
 					return getText(" ", v => v.AsString);
+				}
 			}
 		}
 
@@ -115,9 +141,13 @@ namespace Kagami.Library.Objects
 			get
 			{
 				if (IsString)
+				{
 					return show(this, "$\"", o => o.AsString, "\"");
+				}
 				else
+				{
 					return show(this, "⌈", o => o.Image, "⌉");
+				}
 			}
 		}
 
@@ -148,12 +178,15 @@ namespace Kagami.Library.Objects
 			return match(this, comparisand, (l1, l2) =>
 			{
 				if (l1.head.IsNone && l2.head.IsNone)
+				{
 					return true;
+				}
 				else
 				{
 					var lHead = l1.head.FlatMap(v => v, () => Empty);
 					var rHead = l2.head.FlatMap(v => v, () => Empty);
 					if (getPlaceholder(rHead).If(out var placeholder))
+					{
 						if (l2.tail.IsEmpty)
 						{
 							bindings[placeholder] = l1;
@@ -164,10 +197,15 @@ namespace Kagami.Library.Objects
 							bindings[placeholder] = lHead;
 							return l1.Tail.Match(l2.Tail, bindings);
 						}
+					}
 					else if (rHead is Any || lHead.Match(rHead, bindings))
+					{
 						return l2.Tail.IsEmpty || l1.Tail.Match(l2.Tail, bindings);
+					}
 					else
+					{
 						return false;
+					}
 				}
 			}, bindings);
 		}
@@ -192,7 +230,10 @@ namespace Kagami.Library.Objects
 		{
 			var accum = Empty;
 			for (var i = 0; i < count; i++)
+			{
 				accum = (List)accum.Concatenate(this);
+			}
+
 			return accum;
 		}
 
@@ -211,15 +252,23 @@ namespace Kagami.Library.Objects
 		static IObject getItem(List list, int currentIndex, int expectedIndex)
 		{
 			if (list.IsEmpty)
+			{
 				return Unassigned.Value;
+			}
 			else
 			{
 				if (currentIndex < expectedIndex)
+				{
 					return getItem(list.Tail, currentIndex + 1, expectedIndex);
+				}
 				else if (list.Head.If(out var head))
+				{
 					return head;
+				}
 				else
+				{
 					return Unassigned.Value;
+				}
 			}
 		}
 

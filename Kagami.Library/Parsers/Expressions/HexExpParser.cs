@@ -28,9 +28,13 @@ namespace Kagami.Library.Parsers.Expressions
          if (suffix.IsEmpty())
          {
             if (type == "i")
-               builder.Add(new ComplexSymbol(left));
+            {
+	            builder.Add(new ComplexSymbol(left));
+            }
             else
-               builder.Add(new FloatSymbol(left));
+            {
+	            builder.Add(new FloatSymbol(left));
+            }
 
             return Unit.Matched();
          }
@@ -39,14 +43,20 @@ namespace Kagami.Library.Parsers.Expressions
             var raised = Math.Pow(2, right);
             var result = left * raised;
             if (type == "i")
-               builder.Add(new ComplexSymbol(result));
+            {
+	            builder.Add(new ComplexSymbol(result));
+            }
             else
-               builder.Add(new FloatSymbol(result));
+            {
+	            builder.Add(new FloatSymbol(result));
+            }
 
             return Unit.Matched();
          }
          else
-            return failedMatch<Unit>(unableToConvert(suffix, "Long"));
+         {
+	         return failedMatch<Unit>(unableToConvert(suffix, "Long"));
+         }
       }
    }
 }

@@ -38,7 +38,9 @@ namespace Kagami.Library.Objects
             return result.Some();
          }
          else
-            return none<IObject>();
+         {
+	         return none<IObject>();
+         }
       }
    }
 }

@@ -9,9 +9,13 @@ namespace Kagami.Library.Operations
       public override IMatched<IObject> Execute(Machine machine, IObject value)
       {
          if (value is Tuple)
-            return value.Matched();
+         {
+	         return value.Matched();
+         }
          else
-            return new Tuple(value).Matched<IObject>();
+         {
+	         return new Tuple(value).Matched<IObject>();
+         }
       }
 
       public override string ToString() => "one.tuple";

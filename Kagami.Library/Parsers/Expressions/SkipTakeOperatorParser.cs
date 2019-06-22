@@ -21,6 +21,7 @@ namespace Kagami.Library.Parsers.Expressions
 			{
 				var ((matched, _), (failed, exception)) = getItem(state, builder, first);
 				if (matched)
+				{
 					if (state.Scan("^ /(|s|) /[',}']", Color.Whitespace, Color.Structure).If(out var found, out var anyException))
 					{
 						first = false;
@@ -31,13 +32,22 @@ namespace Kagami.Library.Parsers.Expressions
 						}
 					}
 					else if (anyException.If(out exception))
+					{
 						return failedMatch<Unit>(exception);
+					}
 					else
+					{
 						return "Expected , or }".FailedMatch<Unit>();
+					}
+				}
 				else if (failed)
+				{
 					return failedMatch<Unit>(exception);
+				}
 				else
+				{
 					return notMatched<Unit>();
+				}
 			}
 
 			return "Open braces".FailedMatch<Unit>();
@@ -51,45 +61,70 @@ namespace Kagami.Library.Parsers.Expressions
 				select literal || skipTake;
 
 			if (result.If(out var found, out var exception))
+			{
 				return found ? Unit.Matched() : "Expected expression".FailedMatch<Unit>();
+			}
 			else
+			{
 				return failedMatch<Unit>(exception);
+			}
 		}
 
 		static IResult<bool> getLiteral(ParseState state, ExpressionBuilder builder, bool first)
 		{
 			var ((matched, _), (failed, exception)) = state.Scan("^ /(|s|) /'='", Color.Whitespace, Color.Structure);
 			if (matched)
+			{
 				if (getExpression(state, ExpressionFlags.OmitComma).If(out var expression, out var anyException))
 				{
 					if (first)
+					{
 						builder.Add(new SkipTakeInitLiteralSymbol(expression));
+					}
 					else
+					{
 						builder.Add(new SkipTakeLiteralSymbol(expression));
+					}
+
 					return true.Success();
 				}
 				else if (anyException.If(out exception))
+				{
 					return failure<bool>(exception);
+				}
 				else
+				{
 					return "Expected expression".Failure<bool>();
+				}
+			}
 			else if (failed)
+			{
 				return failure<bool>(exception);
+			}
 			else
+			{
 				return failed.Success();
+			}
 		}
 
 		static IResult<bool> getSkipTake(bool literalFound, ParseState state, ExpressionBuilder builder, bool first)
 		{
 			if (literalFound)
+			{
 				return false.Success();
+			}
 			else if (state.Scan("^ /(|s|) /';'", Color.Whitespace, Color.Structure).IsMatched)
 			{
 				if (state.Scan("^ /(|s|) /'*'", Color.Whitespace, Color.Structure).IsMatched)
 				{
 					if (first)
+					{
 						builder.Add(new SkipTakeRestInitSymbol());
+					}
 					else
+					{
 						builder.Add(new SkipTakeRestSymbol());
+					}
 
 					return true.Success();
 				}
@@ -100,16 +135,24 @@ namespace Kagami.Library.Parsers.Expressions
 					var skip = none<Expression>();
 					var take = value.Some();
 					if (first)
+					{
 						builder.Add(new SkipTakeInitSymbol(skip, take));
+					}
 					else
+					{
 						builder.Add(new SkipTakeSymbol(skip, take));
+					}
 
 					return true.Success();
 				}
 				else if (failed)
+				{
 					return failure<bool>(exception);
+				}
 				else
+				{
 					return "Expected expression".Failure<bool>();
+				}
 			}
 			else
 			{
@@ -124,33 +167,51 @@ namespace Kagami.Library.Parsers.Expressions
 						if (state.Scan("^ /(|s|) /'*'", Color.Whitespace, Color.Structure).IsMatched)
 						{
 							if (first)
+							{
 								builder.Add(new SkipTakeRestInitSymbol());
+							}
 							else
+							{
 								builder.Add(new SkipTakeRestSymbol());
+							}
 
 							return true.Success();
 						}
 
 						((matched, value), (failed, exception)) = getExpression(state, ExpressionFlags.OmitComma);
 						if (matched)
+						{
 							take = value.Some();
+						}
 						else if (failed)
+						{
 							return failure<bool>(exception);
+						}
 						else
+						{
 							return "Expected take expression".Failure<bool>();
+						}
 					}
 
 					if (first)
+					{
 						builder.Add(new SkipTakeInitSymbol(skip, take));
+					}
 					else
+					{
 						builder.Add(new SkipTakeSymbol(skip, take));
+					}
 
 					return true.Success();
 				}
 				else if (failed)
+				{
 					return failure<bool>(exception);
+				}
 				else
+				{
 					return "Expected expression".Failure<bool>();
+				}
 			}
 		}
 	}

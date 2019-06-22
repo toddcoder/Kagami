@@ -38,10 +38,14 @@ namespace Kagami.Library.Parsers.Expressions
 						return Unit.Matched();
 					}
 					else
+					{
 						return original2.Unmatched<Unit>();
+					}
 				}
 				else
+				{
 					return original.Unmatched<Unit>();
+				}
 			}
 			else if (result.Out(out var tuple, out var original))
 			{
@@ -51,7 +55,9 @@ namespace Kagami.Library.Parsers.Expressions
 				return Unit.Matched();
 			}
 			else
+			{
 				return original.Unmatched<Unit>();
+			}
 		}
 	}
 }

@@ -21,16 +21,22 @@ namespace Kagami.Library.Objects
       IObject getValue()
       {
 	      if (value.If(out var v))
+	      {
 		      return v;
+	      }
 	      else if (Machine.Current.Invoke(invokable, Arguments.Empty, 0).If(out var result, out var anyException))
 	      {
 		      value = result.Some();
 		      return result;
 	      }
 	      else if (anyException.If(out var exception))
+	      {
 		      throw exception;
+	      }
 	      else
+	      {
 		      throw "Value could not be resolved".Throws();
+	      }
       }
 
       public IObject Value => getValue();
@@ -53,7 +59,9 @@ namespace Kagami.Library.Objects
             return true;
          }
          else
-            return getValue().Match(comparisand, bindings);
+         {
+	         return getValue().Match(comparisand, bindings);
+         }
       }
 
       public bool IsTrue => getValue().IsTrue;

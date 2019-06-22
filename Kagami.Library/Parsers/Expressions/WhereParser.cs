@@ -33,12 +33,18 @@ namespace Kagami.Library.Parsers.Expressions
 						}
 					}
 					else
+					{
 						return "Open where".FailedMatch<Unit>();
+					}
 				}
 				else if (failed)
+				{
 					return failedMatch<Unit>(exception);
+				}
 				else
+				{
 					return notMatched<Unit>();
+				}
 			}
 
 			return Unit.Matched();

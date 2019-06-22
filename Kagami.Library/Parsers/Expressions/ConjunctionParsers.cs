@@ -16,9 +16,14 @@ namespace Kagami.Library.Parsers.Expressions
 				yield return new IfSomeNoneSymbolParser(builder);
 
 				if (!builder.Flags[ExpressionFlags.OmitComprehension])
+				{
 					yield return new ComprehensionParser(builder);
+				}
+
 				if (!builder.Flags[ExpressionFlags.OmitAnd])
+				{
 					yield return new AndParser(builder);
+				}
 
 				yield return new OrParser(builder);
 				yield return new IsParser(builder);

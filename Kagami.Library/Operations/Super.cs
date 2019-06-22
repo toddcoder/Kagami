@@ -18,7 +18,9 @@ namespace Kagami.Library.Operations
 				var selfClass = (UserClass)classOf(self);
 				var parentClassName = selfClass.ParentClassName;
 				if (parentClassName.IsEmpty())
+				{
 					return $"Class {selfClass.Name} has no parent class".FailedMatch<IObject>();
+				}
 				else
 				{
 					var superObject = new UserObject(parentClassName, self.Fields, self.Parameters);
@@ -26,9 +28,13 @@ namespace Kagami.Library.Operations
 				}
 			}
 			else if (anyException.If(out var exception))
+			{
 				return failedMatch<IObject>(exception);
+			}
 			else
+			{
 				return "self not defined".FailedMatch<IObject>();
+			}
 		}
 
 		public override string ToString() => "super";

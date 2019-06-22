@@ -57,7 +57,9 @@ namespace Kagami.Library.Packages
 			var value = arguments.Select(a => a.AsString).Stringify(" ");
 
 			foreach (var argument in arguments)
+			{
 				Machine.Current.Context.Put(argument.AsString);
+			}
 
 			return value;
 		}
@@ -79,7 +81,9 @@ namespace Kagami.Library.Packages
 		public IResult<IObject> Match(IObject x, IObject y)
 		{
 			if (y is Pattern pattern)
+			{
 				return MatchToPattern(pattern, x);
+			}
 			else
 			{
 				var bindings = new Hash<string, IObject>();
@@ -89,7 +93,9 @@ namespace Kagami.Library.Packages
 					return Boolean.True.Success();
 				}
 				else
+				{
 					return Boolean.False.Success();
+				}
 			}
 		}
 
@@ -130,9 +136,13 @@ namespace Kagami.Library.Packages
 			{
 				var userObject = new UserObject(className, new Fields(), Parameters.Empty);
 				if (Machine.Current.CurrentFrame.Fields.New(fieldName, userObject).IfNot(out var exception))
+				{
 					return failure<IObject>(exception);
+				}
 				else
+				{
 					return userObject.Success<IObject>();
+				}
 			}
 			catch (Exception exception)
 			{
@@ -194,10 +204,14 @@ namespace Kagami.Library.Packages
 					return new Complex(doubleR, doubleI);
 				}
 				else
+				{
 					throw notNumeric(imaginary);
+				}
 			}
 			else
+			{
 				throw notNumeric(real);
+			}
 		}
 
 		public Selector Selector(string source) => source;
@@ -218,6 +232,7 @@ namespace Kagami.Library.Packages
 				var global = false;
 				var textOnly = true;
 				foreach (var option in matcher.FirstGroup)
+				{
 					switch (option)
 					{
 						case 'I':
@@ -237,11 +252,15 @@ namespace Kagami.Library.Packages
 							textOnly = true;
 							break;
 					}
+				}
+
 				pattern = pattern.Drop(-matcher.Length);
 				return new Regex(pattern, ignoreCase, multiline, global, textOnly);
 			}
 			else
+			{
 				return new Regex(pattern, false, false, false, false);
+			}
 		}
 	}
 }

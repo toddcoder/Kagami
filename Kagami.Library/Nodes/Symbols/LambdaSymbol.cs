@@ -36,7 +36,9 @@ namespace Kagami.Library.Nodes.Symbols
             builder.Peek(Index);
          }
          else
-            throw exception;
+         {
+	         throw exception;
+         }
       }
 
       public override Precedence Precedence => Precedence.Value;

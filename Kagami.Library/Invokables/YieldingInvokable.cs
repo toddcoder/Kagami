@@ -60,6 +60,7 @@ namespace Kagami.Library.Invokables
 		public IMaybe<IObject> Next(int index)
 		{
 			if (Machine.Current.Invoke(this).If(out var result, out var anyException))
+			{
 				switch (result)
 				{
 					case None _:
@@ -71,10 +72,15 @@ namespace Kagami.Library.Invokables
 					default:
 						throw incompatibleClasses(result, "YieldReturn");
 				}
+			}
 			else if (anyException.If(out var exception))
+			{
 				throw exception;
+			}
 			else
+			{
 				return none<IObject>();
+			}
 		}
 
 		public IMaybe<IObject> Peek(int index) => throw "Peek not supported".Throws();
@@ -97,7 +103,9 @@ namespace Kagami.Library.Invokables
 						yield return value;
 					}
 					else
+					{
 						yield break;
+					}
 				}
 			}
 		}

@@ -19,7 +19,9 @@ namespace Kagami.Library
 	   public static Selector Selector(this string baseName, params string[] selectorItemSources)
       {
          if (selectorItemSources.Length == 0)
-            return new Selector(baseName);
+         {
+	         return new Selector(baseName);
+         }
          else
          {
             var selectorItems = selectorItemSources.Select(parseSelectorItem).ToArray();

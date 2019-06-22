@@ -29,7 +29,9 @@ namespace Kagami.Library.Parsers.Statements
             state.AddStatement(for2);
          }
          else
-            state.AddStatement(new Yield(expression));
+         {
+	         state.AddStatement(new Yield(expression));
+         }
 
          state.SetYieldFlag();
          return Unit.Matched();

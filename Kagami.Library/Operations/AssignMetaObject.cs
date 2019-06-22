@@ -34,20 +34,31 @@ namespace Kagami.Library.Operations
 				         return notMatched<IObject>();
                   }
 						else if (anyException.If(out var exception))
+			         {
 				         return failedMatch<IObject>(exception);
+			         }
 			         else
+			         {
 				         return $"Couldn't construct metaobject {metaClassName}".FailedMatch<IObject>();
+			         }
 		         }
 
             }
             else if (anyException.If(out var exception))
+	         {
 		         return failedMatch<IObject>(exception);
+	         }
 	         else
+	         {
 		         return $"Couldn't find metaclass {metaClassName}".FailedMatch<IObject>();
-            return notMatched<IObject>();
+	         }
+
+	         return notMatched<IObject>();
          }
          else
-            return failedMatch<IObject>(classNotFound(className));
+         {
+	         return failedMatch<IObject>(classNotFound(className));
+         }
       }
 
       public override string ToString() => "assign.meta.object";

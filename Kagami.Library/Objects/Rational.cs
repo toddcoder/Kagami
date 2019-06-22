@@ -20,9 +20,13 @@ namespace Kagami.Library.Objects
       static BigInteger gcd(BigInteger a, BigInteger b)
       {
          if (b != BigInteger.Zero)
-            return gcd(b, a % b);
+         {
+	         return gcd(b, a % b);
+         }
          else
-            return a;
+         {
+	         return a;
+         }
       }
 
       BigInteger numerator;

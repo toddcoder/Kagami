@@ -33,6 +33,7 @@ namespace Kagami.Library.Nodes.Symbols
 				var argumentsList = new List<Expression>();
 				var parametersList = new List<Parameter>();
 				foreach (var argument in arguments)
+				{
 					if (argument.Symbols[0] is AnySymbol)
 					{
 						var parameterName = $"__${parametersList.Count}";
@@ -40,7 +41,10 @@ namespace Kagami.Library.Nodes.Symbols
 						argumentsList.Add(new Expression(new FieldSymbol(parameterName)));
 					}
 					else
+					{
 						argumentsList.Add(argument);
+					}
+				}
 
 				var newInvokeSymbol = new InvokeSymbol(functionName, argumentsList.ToArray(), lambda, false);
 				var parameters = new Parameters(parametersList.ToArray());
@@ -52,7 +56,10 @@ namespace Kagami.Library.Nodes.Symbols
 			else
 			{
 				foreach (var argument in arguments)
+				{
 					argument.Generate(builder);
+				}
+
 				int count;
 				if (lambda.If(out var l))
 				{
@@ -60,7 +67,9 @@ namespace Kagami.Library.Nodes.Symbols
 					count = arguments.Length + 1;
 				}
 				else
+				{
 					count = arguments.Length;
+				}
 
 				builder.Invoke(functionName, count);
 			}

@@ -27,9 +27,13 @@ namespace Kagami.Library.Classes
 			this.parentClassName = parentClassName;
 
 			if (this.parentClassName.IsNotEmpty())
+			{
 				parentClass = Module.Global.Class(parentClassName).Map(bc => (UserClass)bc);
+			}
 			else
+			{
 				parentClass = none<UserClass>();
+			}
 
 			signatures = new Set<Selector>();
 
@@ -53,15 +57,22 @@ namespace Kagami.Library.Classes
 		public void InheritFrom(UserClass parentClass)
 		{
 			foreach (var (key, value) in parentClass.messages)
+			{
 				messages[key] = value;
+			}
+
 			foreach (var selector in parentClass.signatures)
+			{
 				signatures.Add(selector);
+			}
 		}
 
 		public virtual bool RegisterMethod(Selector selector, Lambda lambda, bool overriding)
 		{
 			if (messages.ContainsExact(selector) && !overriding)
+			{
 				return false;
+			}
 			else
 			{
 				var clone = lambda.Clone();
@@ -78,7 +89,9 @@ namespace Kagami.Library.Classes
 			{
 				var (fieldName, field) = item;
 				if (fieldName.StartsWith("__$") || field.Value is IInvokableObject)
+				{
 					continue;
+				}
 
 				var getter = fieldName.get();
 				messages[getter] = (obj, msg) => ((UserObject)obj).Fields[fieldName];
@@ -118,8 +131,12 @@ namespace Kagami.Library.Classes
 		public IMatched<Selector> MatchImplemented(IEnumerable<Selector> traitSignatures)
 		{
 			foreach (var signature in traitSignatures)
+			{
 				if (!signatures.Contains(signature))
+				{
 					return signature.Matched();
+				}
+			}
 
 			return notMatched<Selector>();
 		}
@@ -134,17 +151,25 @@ namespace Kagami.Library.Classes
 		public override IObject ClassDynamicInvoke(Message message)
 		{
 			if (metaObject.If(out var uo))
+			{
 				return sendMessage(uo, message);
+			}
 			else
+			{
 				throw "No metaobject".Throws();
+			}
 		}
 
 		public override bool RespondsTo(Selector selector)
 		{
 			if (base.RespondsTo(selector))
+			{
 				return true;
+			}
 			else
+			{
 				return messages.ContainsKey("missing(_<String>,_<Tuple>)");
+			}
 		}
 
 		public override IObject DynamicInvoke(IObject obj, Message message)
@@ -159,21 +184,33 @@ namespace Kagami.Library.Classes
 		public override bool AssignCompatible(BaseClass otherClass)
 		{
 			if (Name == otherClass.Name)
+			{
 				return true;
+			}
 			else if (parentClass.If(out var pc))
+			{
 				return pc.AssignCompatible(otherClass);
+			}
 			else
+			{
 				return false;
+			}
 		}
 
 		public override bool MatchCompatible(BaseClass otherClass)
 		{
 			if (Name == otherClass.Name)
+			{
 				return true;
+			}
 			else if (parentClass.If(out var pc))
+			{
 				return pc.MatchCompatible(otherClass);
+			}
 			else
+			{
 				return false;
+			}
 		}
 	}
 }

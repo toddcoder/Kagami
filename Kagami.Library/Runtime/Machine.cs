@@ -54,7 +54,9 @@ namespace Kagami.Library.Runtime
 		void trace(int address, Func<string> message)
 		{
 			if (Tracing)
+			{
 				table.Value.Add(address.ToString("D5"), message().Truncate(80), StackImage.Truncate(80));
+			}
 		}
 
 		public GlobalFrame GlobalFrame => globalFrame;
@@ -68,33 +70,48 @@ namespace Kagami.Library.Runtime
 			running = true;
 
 			while (!context.Cancelled() && operations.More && running)
+			{
 				if (operations.Current.If(out var operation))
 				{
 					trace(operations.Address, () => operation.ToString());
 					var currentAddress = operations.Address;
 					if (operation.Execute(this).Out(out var result, out var original) && running && result.ClassName != "Void")
+					{
 						stack.Peek().Push(result);
+					}
 					else if (original.IsFailedMatch)
 					{
 						if (Tracing)
+						{
 							context.PrintLine(table.Value.ToString());
+						}
+
 						if (GetErrorHandler().If(out var address))
 						{
 							stack.Peek().Push(new Failure(original.Exception.Message));
 							operations.Goto(address);
 						}
 						else
+						{
 							return failure<Unit>(original.Exception);
+						}
 					}
 
 					if (operation.Increment && currentAddress == operations.Address)
+					{
 						operations.Advance(1);
+					}
 				}
 				else
+				{
 					return failure<Unit>(addressOutOfRange());
+				}
+			}
 
 			if (Tracing)
+			{
 				context.PrintLine(table.Value.ToString());
+			}
 
 			return Unit.Success();
 		}
@@ -105,16 +122,22 @@ namespace Kagami.Library.Runtime
 			var frame = new Frame(returnAddress, fields);
 
 			if (invokable is YieldingInvokable yfi)
+			{
 				yfi.Arguments = arguments;
+			}
 
 			PushFrame(frame);
 			frame = new Frame(arguments);
 			PushFrame(frame);
 			frame.SetFields(invokable.Parameters);
 			if (GoTo(invokable.Address))
+			{
 				return invoke();
+			}
 			else
+			{
 				return failedMatch<IObject>(badAddress(invokable.Address));
+			}
 		}
 
 		public IMatched<IObject> Invoke(IInvokable invokable, Arguments arguments, int increment = 1)
@@ -123,14 +146,20 @@ namespace Kagami.Library.Runtime
 			var frame = new Frame(returnAddress, arguments);
 
 			if (invokable is YieldingInvokable yfi)
+			{
 				yfi.Arguments = arguments;
+			}
 
 			PushFrame(frame);
 			frame.SetFields(invokable.Parameters);
 			if (GoTo(invokable.Address))
+			{
 				return invoke();
+			}
 			else
+			{
 				return failedMatch<IObject>(badAddress(invokable.Address));
+			}
 		}
 
 		public IMatched<IObject> Invoke(YieldingInvokable invokable)
@@ -156,6 +185,7 @@ namespace Kagami.Library.Runtime
 		public IMatched<IObject> Invoke(string fieldName)
 		{
 			if (Pop().If(out var value, out var popException))
+			{
 				if (value is Arguments arguments)
 				{
 					var image = fieldName;
@@ -183,19 +213,29 @@ namespace Kagami.Library.Runtime
 						}
 					}
 					else if (!isFailure)
+					{
 						return failedMatch<IObject>(fieldNotFound(image));
+					}
 					else
+					{
 						return failedMatch<IObject>(exception);
+					}
 				}
 				else
+				{
 					return failedMatch<IObject>(incompatibleClasses(value, "Arguments"));
+				}
+			}
 			else
+			{
 				return failedMatch<IObject>(popException);
+			}
 		}
 
 		IMatched<IObject> invoke()
 		{
 			while (!context.Cancelled() && operations.More && running)
+			{
 				if (operations.Current.If(out var operation))
 				{
 					trace(operations.Address, () => operation.ToString());
@@ -208,7 +248,9 @@ namespace Kagami.Library.Runtime
 							return Yield.YieldAction(this);
 						case Invoke invoke:
 							if (Invoke(invoke.FieldName).If(out var returnValue, out var anyException))
+							{
 								stack.Peek().Push(returnValue);
+							}
 							else if (anyException.If(out var exception))
 							{
 								if (GetErrorHandler().If(out var address))
@@ -217,16 +259,23 @@ namespace Kagami.Library.Runtime
 									operations.Goto(address);
 								}
 								else
+								{
 									return failedMatch<IObject>(exception);
+								}
 							}
 
 							if (currentAddress == operations.Address)
+							{
 								operations.Advance(1);
+							}
+
 							continue;
 					}
 
 					if (operation.Execute(this).If(out var result, out var mbResult) && running)
+					{
 						stack.Peek().Push(result);
+					}
 					else if (mbResult.If(out var exception))
 					{
 						if (GetErrorHandler().If(out var address))
@@ -235,14 +284,21 @@ namespace Kagami.Library.Runtime
 							operations.Goto(address);
 						}
 						else
+						{
 							return failedMatch<IObject>(exception);
+						}
 					}
 
 					if (operation.Increment && currentAddress == operations.Address)
+					{
 						operations.Advance(1);
+					}
 				}
 				else
+				{
 					return "Address out of range".FailedMatch<IObject>();
+				}
+			}
 
 			return "No return".FailedMatch<IObject>();
 		}
@@ -275,13 +331,17 @@ namespace Kagami.Library.Runtime
 		{
 			stack.Push(frame);
 			if (stack.Count > MAX_DEPTH)
+			{
 				throw "Max stack depth".Throws();
+			}
 		}
 
 		public void PushFrames(FrameGroup frames)
 		{
 			foreach (var frame in frames.Reverse())
+			{
 				PushFrame(frame);
+			}
 		}
 
 		public IResult<Frame> PopFrame() => tryTo(() => stack.Pop());
@@ -295,7 +355,9 @@ namespace Kagami.Library.Runtime
 			{
 				frames.Add(frame);
 				if (predicate(frame))
+				{
 					break;
+				}
 			}
 
 			return new FrameGroup(frames.ToArray());
@@ -304,8 +366,12 @@ namespace Kagami.Library.Runtime
 		public IMaybe<Frame> FunctionFrame()
 		{
 			foreach (var frame in stack)
+			{
 				if (frame.FrameType == FrameType.Function)
+				{
 					return frame.Some();
+				}
+			}
 
 			return none<Frame>();
 		}
@@ -318,7 +384,9 @@ namespace Kagami.Library.Runtime
 				var frame = stack.Pop();
 				frames.Add(frame);
 				if (predicate(frame))
+				{
 					break;
+				}
 			}
 
 			return new FrameGroup(frames.ToArray());
@@ -330,7 +398,9 @@ namespace Kagami.Library.Runtime
 			{
 				var frame = stack.Pop();
 				if (frame.FrameType == FrameType.Try)
+				{
 					return frame.ErrorHandler.FlatMap(i => i.Success(), () => "No error handler set".Failure<int>());
+				}
 			}
 
 			return failure<int>(emptyStack());
@@ -350,15 +420,23 @@ namespace Kagami.Library.Runtime
 		{
 			var depth = 0;
 			foreach (var frame in stack)
+			{
 				if (frame.Fields.Find(fieldName, getting).If(out var field, out var anyException))
+				{
 					return field.Matched();
+				}
 				else if (anyException.If(out var exception))
+				{
 					return failedMatch<Field>(exception);
+				}
 				else
 				{
 					if (depth++ > MAX_DEPTH)
+					{
 						return failedMatch<Field>(exceededMaxDepth());
+					}
 				}
+			}
 
 			return notMatched<Field>();
 		}
@@ -366,8 +444,12 @@ namespace Kagami.Library.Runtime
 		public IResult<Unit> FindByPattern(string pattern, List<Field> list)
 		{
 			foreach (var frame in stack)
+			{
 				if (frame.Fields.FindByPattern(pattern, list).IfNot(out var exception))
+				{
 					return failure<Unit>(exception);
+				}
+			}
 
 			return Unit.Success();
 		}
@@ -376,13 +458,18 @@ namespace Kagami.Library.Runtime
 		{
 			var labelsOnly = selector.LabelsOnly();
 			foreach (var frame in stack)
+			{
 				if (frame.Fields.ContainsSelector(labelsOnly))
 				{
 					var match = frame.Fields.Find(selector);
 					if (match.If(out var field) && field != null)
+					{
 						field.Fields = frame.Fields;
+					}
+
 					return match;
 				}
+			}
 
 			return notMatched<Field>();
 		}
@@ -397,9 +484,13 @@ namespace Kagami.Library.Runtime
 			{
 				var newSelector = selector.Equivalent(booleans);
 				if (findExact(newSelector).If(out var matched, out var anyException))
+				{
 					return matched.Matched();
+				}
 				else if (anyException.If(out var exception))
+				{
 					return failedMatch<Field>(exception);
+				}
 			}
 
 			return notMatched<Field>();
@@ -412,28 +503,46 @@ namespace Kagami.Library.Runtime
 		public IResult<Field> Assign(string fieldName, IObject value, bool getting, bool overriden = false)
 		{
 			if (Find(fieldName, getting).If(out var field, out var anyException))
+			{
 				if (field.Mutable)
 				{
 					if (field.Value is Reference r)
+					{
 						r.Field.Value = value;
+					}
 					else
+					{
 						field.Value = value;
+					}
+
 					return field.Success();
 				}
 				else if (field.Value is Unassigned || overriden)
 				{
 					if (field.Value is Reference r)
+					{
 						r.Field.Value = value;
+					}
 					else
+					{
 						field.Value = value;
+					}
+
 					return field.Success();
 				}
 				else
+				{
 					return failure<Field>(immutableField(fieldName));
+				}
+			}
 			else if (anyException.If(out var exception))
+			{
 				return failure<Field>(exception);
+			}
 			else
+			{
 				return failure<Field>(fieldNotFound(fieldName));
+			}
 		}
 
 		public IResult<Field> Assign(Selector selector, IObject value, bool overriden = false)
@@ -443,6 +552,7 @@ namespace Kagami.Library.Runtime
 			{
 				var fields = field.Fields;
 				if (field.Mutable)
+				{
 					switch (field.Value)
 					{
 						case Unassigned _:
@@ -454,6 +564,7 @@ namespace Kagami.Library.Runtime
 						default:
 							return failure<Field>(incompatibleClasses(selector, field.Value.ClassName));
 					}
+				}
 				else if (field.Value is Unassigned || overriden)
 				{
 					field.Value = value;
@@ -461,12 +572,18 @@ namespace Kagami.Library.Runtime
 					return field.Success();
 				}
 				else
+				{
 					return failure<Field>(immutableField(selector));
+				}
 			}
 			else if (isFailure)
+			{
 				return failure<Field>(exception);
+			}
 			else
+			{
 				return failure<Field>(fieldNotFound(selector));
+			}
 		}
 
 		public void BeginDebugging()
@@ -480,9 +597,12 @@ namespace Kagami.Library.Runtime
 		public IResult<DebugState> Step(bool into, Hash<string, IObject> watch)
 		{
 			if (debugState == DebugState.Starting)
+			{
 				BeginDebugging();
+			}
 
 			while (!context.Cancelled() && operations.More && debugState == DebugState.Active)
+			{
 				if (operations.Current.If(out var operation))
 				{
 					var currentAddress = operations.Address;
@@ -492,18 +612,27 @@ namespace Kagami.Library.Runtime
 							return debugState.Success();
 						default:
 							if (operation.Execute(this).Out(out var result, out var original) && running && result.ClassName != "Void")
+							{
 								stack.Peek().Push(result);
+							}
 							else if (original.IsFailedMatch)
+							{
 								return failure<DebugState>(original.Exception);
+							}
 
 							break;
 					}
 
 					if (operation.Increment && currentAddress == operations.Address)
+					{
 						operations.Advance(1);
+					}
 				}
 				else
+				{
 					return failure<DebugState>(addressOutOfRange());
+				}
+			}
 
 			return debugState.Success();
 		}
@@ -519,7 +648,9 @@ namespace Kagami.Library.Runtime
 				return Unit.Success();
 			}
 			else
+			{
 				return "Try frame not found".Failure<Unit>();
+			}
 		}
 	}
 }

@@ -17,9 +17,14 @@ namespace Kagami.Library.Operations
                return notMatched<IObject>();
             case Arguments arguments when Module.Global.Class(x.ClassName).If(out var cls):
                if (cls.RespondsTo("invoke"))
-                  return cls.SendMessage(x, "invoke", arguments).Matched();
+               {
+	               return cls.SendMessage(x, "invoke", arguments).Matched();
+               }
                else
-                  return failedMatch<IObject>(messageNotFound(cls, "invoke"));
+               {
+	               return failedMatch<IObject>(messageNotFound(cls, "invoke"));
+               }
+
             case Arguments _:
                return failedMatch<IObject>(classNotFound(x.ClassName));
             default:

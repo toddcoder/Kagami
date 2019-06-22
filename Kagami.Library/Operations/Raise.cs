@@ -10,9 +10,13 @@ namespace Kagami.Library.Operations
       public override IMatched<IObject> Execute(Machine machine, IObject x, IObject y)
       {
          if (x is INumeric n1 && y is INumeric n2)
+         {
 	         return n1.Raise(n2).Matched();
+         }
          else
-            return sendMessage(x, "^", y).Matched();
+         {
+	         return sendMessage(x, "^", y).Matched();
+         }
       }
 
       public override string ToString() => "raise";

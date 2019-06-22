@@ -18,22 +18,38 @@ namespace Kagami.Library.Operations
 			{
 				var returnAddress = frame.Address;
 				if (returnTopOfStack)
+				{
 					if (rtn.If(out var v, out var anyException))
+					{
 						rtn = copyFields(v, frames).Matched();
+					}
 					else if (anyException.If(out var exception))
+					{
 						return failedMatch<IObject>(exception);
+					}
 					else
+					{
 						return failedMatch<IObject>(emptyStack());
+					}
+				}
 				else
+				{
 					rtn = notMatched<IObject>();
+				}
 
 				if (machine.GoTo(returnAddress))
+				{
 					return rtn;
+				}
 				else
+				{
 					return failedMatch<IObject>(badAddress(returnAddress));
+				}
 			}
 			else
+			{
 				return failedMatch<IObject>(invalidStack());
+			}
 		}
 
 		protected bool returnTopOfStack;

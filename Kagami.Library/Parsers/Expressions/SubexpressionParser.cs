@@ -60,7 +60,9 @@ namespace Kagami.Library.Parsers.Expressions
 					.If(out var scanned, out anyException))
 				{
 					if (scanned.Contains(","))
+					{
 						monoTuple = true;
+					}
 
 					builder.Add(new SubexpressionSymbol(expression, monoTuple));
 				}
@@ -82,7 +84,9 @@ namespace Kagami.Library.Parsers.Expressions
 					}
 				}
 				else
+				{
 					return notMatched<Unit>();
+				}
 			}
 			else if (anyException.If(out var exception))
 			{
@@ -90,7 +94,9 @@ namespace Kagami.Library.Parsers.Expressions
 				return failedMatch<Unit>(exception);
 			}
 			else
+			{
 				return notMatched<Unit>();
+			}
 
 			return Unit.Matched();
 		}

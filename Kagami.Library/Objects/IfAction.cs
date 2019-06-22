@@ -16,12 +16,18 @@ namespace Kagami.Library.Objects
             if (status.IsAccepted)
             {
                if (predicate.Invoke(status.Object).IsTrue)
-                  return status;
+               {
+	               return status;
+               }
                else
-                  return new Skipped();
+               {
+	               return new Skipped();
+               }
             }
             else
-               return status;
+            {
+	            return status;
+            }
          }
          catch (Exception exception)
          {
@@ -32,8 +38,12 @@ namespace Kagami.Library.Objects
       public IEnumerable<IObject> Execute(IIterator iterator)
       {
          foreach (var value in iterator.List())
-            if (predicate.Invoke(value).IsTrue)
-               yield return value;
+         {
+	         if (predicate.Invoke(value).IsTrue)
+	         {
+		         yield return value;
+	         }
+         }
       }
 
       public override string ToString() => $"if {predicate.Image}";

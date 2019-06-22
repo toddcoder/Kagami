@@ -22,12 +22,18 @@ namespace Kagami.Library.Operations
 			{
 				var valueClass = classOf(value);
 				if (typeConstraint.Matches(valueClass))
+				{
 					return base.Execute(machine);
+				}
 				else
+				{
 					return $"You must return a type {typeConstraint.AsString}, not a {valueClass.Name}".FailedMatch<IObject>();
+				}
 			}
 			else
+			{
 				return failedMatch<IObject>(emptyStack());
+			}
 
 /*			if (base.Execute(machine).If(out var value, out var original))
 			{

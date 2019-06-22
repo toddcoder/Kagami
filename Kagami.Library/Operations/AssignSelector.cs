@@ -22,14 +22,22 @@ namespace Kagami.Library.Operations
 			foreach (var subSelector in selector.AllSelectors())
 			{
 				if (createNewField)
+				{
 					if (machine.CurrentFrame.Fields.New(subSelector, overriding).If(out _, out var anyException)) { }
 					else
+					{
 						return failedMatch<IObject>(anyException);
+					}
+				}
 
 				if (machine.Assign(subSelector, value, overriding).If(out _, out var exception))
+				{
 					createNewField = true;
+				}
 				else
+				{
 					return failedMatch<IObject>(exception);
+				}
 			}
 
 			return notMatched<IObject>();

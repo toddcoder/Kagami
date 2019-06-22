@@ -59,9 +59,13 @@ namespace Kagami.Library.Objects
 		public int Compare(IObject obj)
 		{
 			if (obj is Date d)
+			{
 				return value.CompareTo(d.value);
+			}
 			else
+			{
 				throw incompatibleClasses(obj, "Date");
+			}
 		}
 
 		public IObject Object => this;
@@ -69,9 +73,13 @@ namespace Kagami.Library.Objects
 		public Boolean Between(IObject min, IObject max, bool inclusive)
 		{
 			if (min is Date minDate && max is Date maxDate)
+			{
 				return Compare(minDate) >= 0 && inclusive ? Compare(maxDate) <= 0 : Compare(maxDate) < 0;
+			}
 			else
+			{
 				return false;
+			}
 		}
 
 		public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);

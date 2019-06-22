@@ -17,7 +17,9 @@ namespace Kagami.Library.Parsers.Statements
 				return Unit.Matched();
 			}
 			else
+			{
 				return original.UnmatchedOnly<Unit>();
+			}
 		}
 	}
 }

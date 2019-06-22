@@ -13,12 +13,20 @@ namespace Kagami.Library.Operations
       public override IMatched<IObject> Execute(Machine machine)
       {
          if (machine.Pop().If(out var value, out var exception))
-            if (value is Boolean b)
-               return Execute(machine, b.Value).Map(Boolean.BooleanObject);
-            else
-               return failedMatch<IObject>(incompatibleClasses(value, "Boolean"));
+         {
+	         if (value is Boolean b)
+	         {
+		         return Execute(machine, b.Value).Map(Boolean.BooleanObject);
+	         }
+	         else
+	         {
+		         return failedMatch<IObject>(incompatibleClasses(value, "Boolean"));
+	         }
+         }
          else
-            return failedMatch<IObject>(exception);
+         {
+	         return failedMatch<IObject>(exception);
+         }
       }
    }
 }

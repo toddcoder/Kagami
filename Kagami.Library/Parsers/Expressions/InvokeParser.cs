@@ -16,7 +16,9 @@ namespace Kagami.Library.Parsers.Expressions
 		{
 			var functionName = tokens[2].Text;
 			if (functionName == @"\/")
+			{
 				return notMatched<Unit>();
+			}
 			else
 			{
 				state.Colorize(tokens, Color.Whitespace, Color.Invokable, Color.OpenParenthesis);
@@ -34,31 +36,49 @@ namespace Kagami.Library.Parsers.Expressions
 							var outerBuilder = new ExpressionBuilder(ExpressionFlags.Standard);
 							var setPropertyParser = new SetPropertyParser(builder, tempObjectField, outerBuilder);
 							while (state.More)
+							{
 								if (setPropertyParser.Scan(state).If(out _, out var anyException)) { }
 								else if (anyException.If(out var exception))
+								{
 									return failedMatch<Unit>(exception);
+								}
 								else
+								{
 									break;
+								}
+							}
 
 							state.Regress();
 
 							if (outerBuilder.ToExpression().If(out var outerExpression, out var outerException))
+							{
 								builder.Add(new NewObjectSymbol(tempObjectField, functionName, outerExpression));
+							}
 							else
+							{
 								return failedMatch<Unit>(outerException);
+							}
 						}
 						else
+						{
 							return unitMatched;
+						}
 					}
 					else if (state.Macro(functionName).If(out var function))
+					{
 						builder.Add(new MacroInvokeSymbol(function, arguments, possibleLambda));
+					}
 					else
+					{
 						builder.Add(new InvokeSymbol(functionName, arguments, possibleLambda, builder.Flags[ExpressionFlags.Comparisand]));
+					}
 
 					return Unit.Matched();
 				}
 				else
+				{
 					return original.Unmatched<Unit>();
+				}
 			}
 		}
 	}

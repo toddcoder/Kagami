@@ -43,15 +43,30 @@ namespace Kagami.Library.Objects
 				matcher.IsMatch("", pattern);
 				builder.Append(matcher.Pattern);
 				if (ignoreCase || multiline || global)
+				{
 					builder.Append(";");
+				}
+
 				if (ignoreCase)
+				{
 					builder.Append("i");
+				}
+
 				if (multiline)
+				{
 					builder.Append("m");
+				}
+
 				if (global)
+				{
 					builder.Append("g");
+				}
+
 				if (textOnly)
+				{
 					builder.Append("t");
+				}
+
 				builder.Append("/");
 
 				return builder.ToString();
@@ -73,14 +88,24 @@ namespace Kagami.Library.Objects
 			var self = this;
 
 			if (global)
+			{
 				if (isMatch(input))
+				{
 					return new Tuple(matcher.Select(m => new RegexMatch(m)).Select(m => getMatchOrText(m, self.textOnly)).ToArray());
+				}
 				else
+				{
 					return Tuple.Empty;
+				}
+			}
 			else if (isMatch(input))
+			{
 				return Some.Object(getMatchOrText(new RegexMatch(matcher.GetMatch(0)), self.textOnly));
+			}
 			else
+			{
 				return None.NoneValue;
+			}
 		}
 
 		public Boolean NotMatches(string input) => !isMatch(input);
@@ -101,9 +126,13 @@ namespace Kagami.Library.Objects
 		public String Replace(string input, string replacement)
 		{
 			if (global)
+			{
 				return input.Substitute(pattern, replacement, ignoreCase, multiline);
+			}
 			else
+			{
 				return input.Substitute(pattern, replacement, 1, ignoreCase, multiline);
+			}
 		}
 
 		public Boolean IsMatch(string input) => matcher.IsMatch(input, pattern, ignoreCase, multiline);
@@ -111,12 +140,20 @@ namespace Kagami.Library.Objects
 		public IObject Find(string input, int startIndex, bool reverse)
 		{
 			if (input.MatchAll(pattern, ignoreCase, multiline).If(out var matches))
+			{
 				if (startIndex.Between(0).Until(matches.Length))
+				{
 					return Some.Object(Int.IntObject(matches[startIndex].Index));
+				}
 				else
+				{
 					return None.NoneValue;
+				}
+			}
 			else
+			{
 				return None.NoneValue;
+			}
 		}
 
 		public Tuple FindAll(string input)
@@ -139,18 +176,26 @@ namespace Kagami.Library.Objects
 					return matcher.ToString();
 				}
 				else
+				{
 					return input;
+				}
 			}
 			else
+			{
 				return input.Substitute(pattern, replacement, 1, ignoreCase, multiline);
+			}
 		}
 
 		public String Replace(string input, Lambda lambda, bool reverse)
 		{
 			if (lambda.Invokable.Parameters.Length == 1)
+			{
 				return replace1(input, lambda, reverse);
+			}
 			else
+			{
 				return replace3(input, lambda, reverse);
+			}
 		}
 
 		String replace3(string input, Lambda lambda, bool reverse)
@@ -168,7 +213,9 @@ namespace Kagami.Library.Objects
 					return matcher.ToString();
 				}
 				else
+				{
 					return input;
+				}
 			}
 			else
 			{
@@ -182,7 +229,9 @@ namespace Kagami.Library.Objects
 					return matcher.ToString();
 				}
 				else
+				{
 					return input;
+				}
 			}
 		}
 
@@ -201,7 +250,9 @@ namespace Kagami.Library.Objects
 					return matcher.ToString();
 				}
 				else
+				{
 					return input;
+				}
 			}
 			else
 			{
@@ -215,7 +266,9 @@ namespace Kagami.Library.Objects
 					return matcher.ToString();
 				}
 				else
+				{
 					return input;
+				}
 			}
 		}
 
@@ -224,9 +277,13 @@ namespace Kagami.Library.Objects
 		public String ReplaceAll(string input, Lambda lambda)
 		{
 			if (lambda.Invokable.Parameters.Length == 1)
+			{
 				return replaceAll1(input, lambda);
+			}
 			else
+			{
 				return replaceAll3(input, lambda);
+			}
 		}
 
 		String replaceAll3(string input, Lambda lambda)
@@ -243,7 +300,9 @@ namespace Kagami.Library.Objects
 				return matcher.ToString();
 			}
 			else
+			{
 				return input;
+			}
 		}
 
 		String replaceAll1(string input, Lambda lambda)
@@ -260,7 +319,9 @@ namespace Kagami.Library.Objects
 				return matcher.ToString();
 			}
 			else
+			{
 				return input;
+			}
 		}
 
 		public Tuple Split(string input)
@@ -281,7 +342,9 @@ namespace Kagami.Library.Objects
 					return Tuple.Tuple3(left, delimiter, right);
 				}
 				else
+				{
 					return Tuple.Tuple3(input, "", "");
+				}
 			}
 			else
 			{
@@ -294,7 +357,9 @@ namespace Kagami.Library.Objects
 					return Tuple.Tuple3(left, delimiter, right);
 				}
 				else
+				{
 					return Tuple.Tuple3(input, "", "");
+				}
 			}
 		}
 
@@ -303,9 +368,13 @@ namespace Kagami.Library.Objects
 		public Int Count(string input, Lambda lambda)
 		{
 			if (lambda.Invokable.Parameters.Length == 1)
+			{
 				return count1(input, lambda);
+			}
 			else
+			{
 				return count3(input, lambda);
+			}
 		}
 
 		Int count3(string input, Lambda lambda)
@@ -317,13 +386,17 @@ namespace Kagami.Library.Objects
 				{
 					var (text, index, length) = matcher.GetMatch(i);
 					if (lambda.Invoke((String)text, (Int)index, (Int)length).IsTrue)
+					{
 						count++;
+					}
 				}
 
 				return count;
 			}
 			else
+			{
 				return 0;
+			}
 		}
 
 		Int count1(string input, Lambda lambda)
@@ -335,13 +408,17 @@ namespace Kagami.Library.Objects
 				{
 					var (text, _, _) = matcher.GetMatch(i);
 					if (lambda.Invoke((String)text).IsTrue)
+					{
 						count++;
+					}
 				}
 
 				return count;
 			}
 			else
+			{
 				return 0;
+			}
 		}
 
 		public Regex Concatenate(IObject obj)

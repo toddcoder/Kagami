@@ -21,27 +21,41 @@ namespace Kagami.Library.Parsers.Expressions
 
 			var list = new List<BaseClass>();
 			while (state.More)
+			{
 				if (state.Scan($"^ /(/s*) /({REGEX_CLASS})", Color.Whitespace, Color.Class).If(out var name, out var anyException))
 				{
 					name = name.TrimStart();
 					if (Module.Global.Class(name).If(out var baseClass))
+					{
 						list.Add(baseClass);
+					}
 					else if (Module.Global.Forwarded(name))
+					{
 						list.Add(new ForwardedClass(name));
+					}
 					else
+					{
 						return failedMatch<Unit>(classNotFound(name));
+					}
 				}
 				else if (anyException.If(out var exception))
+				{
 					return failedMatch<Unit>(exception);
+				}
 				else if (state.Scan("^ /'>'", Color.Class).If(out _, out anyException))
 				{
 					builder.Add(new TypeConstraintSymbol(list));
 					return Unit.Matched();
 				}
 				else if (anyException.If(out exception))
+				{
 					return failedMatch<Unit>(exception);
+				}
 				else
+				{
 					return "Open type constraint".FailedMatch<Unit>();
+				}
+			}
 
 			return Unit.Matched();
 		}

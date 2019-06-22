@@ -10,7 +10,10 @@ namespace Kagami.Playground
 			textBox.StopUpdating();
 			var (start, length) = textBox.Selection;
 			if (textBox.Focused)
+			{
 				textBox.Parent.Focus();
+			}
+
 			User32.SendMessage(textBox.Handle, User32.Messages.HideSelection, true, 0);
 
 			return (start, length);
@@ -25,7 +28,9 @@ namespace Kagami.Playground
 			textBox.Refresh();
 
 			if (!textBox.Focused)
+			{
 				textBox.Focus();
+			}
 		}
 	}
 }

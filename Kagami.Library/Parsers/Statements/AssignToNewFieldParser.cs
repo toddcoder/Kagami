@@ -25,9 +25,13 @@ namespace Kagami.Library.Parsers.Statements
 
 			if (parseTypeConstraint(state).If(out typeConstraint, out var anyException)) { }
 			else if (anyException.If(out var exception))
+			{
 				return failedMatch<Unit>(exception);
+			}
 			else
+			{
 				typeConstraint = none<TypeConstraint>();
+			}
 
 			if (state.Scan("^ /(|s|) /'='", Color.Whitespace, Color.Structure).If(out _, out anyException))
 			{
@@ -35,7 +39,9 @@ namespace Kagami.Library.Parsers.Statements
 				return Unit.Matched();
 			}
 			else if (anyException.If(out var exception))
+			{
 				return failedMatch<Unit>(exception);
+			}
 			else
 			{
 				state.RollBackTransaction();

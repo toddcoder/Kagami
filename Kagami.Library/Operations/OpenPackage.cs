@@ -18,6 +18,7 @@ namespace Kagami.Library.Operations
 		{
 			var fieldName = packageName.ToLower1();
 			if (machine.Find(fieldName, true).If(out var field, out var anyException))
+			{
 				switch (field.Value)
 				{
 					case Package package when Module.Global.Class(package.ClassName).If(out var baseClass):
@@ -29,16 +30,24 @@ namespace Kagami.Library.Operations
 							return notMatched<IObject>();
 						}
 						else
+						{
 							return failedMatch<IObject>(unableToConvert(baseClass.Name, "Package class"));
+						}
+
 					case Package package:
 						return failedMatch<IObject>(classNotFound(package.ClassName));
 					default:
 						return failedMatch<IObject>(unableToConvert(field.Value.Image, "Package"));
 				}
+			}
 			else if (anyException.If(out var exception))
+			{
 				return failedMatch<IObject>(exception);
+			}
 			else
+			{
 				return failedMatch<IObject>(fieldNotFound(fieldName));
+			}
 		}
 
 		public override string ToString() => $"open.package({packageName})";

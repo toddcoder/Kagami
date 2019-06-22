@@ -21,12 +21,16 @@ namespace Kagami.Library.Nodes.Statements
       public override void Generate(OperationsBuilder builder)
       {
          if (operation.If(out var op))
-            builder.GetField(fieldName);
+         {
+	         builder.GetField(fieldName);
+         }
 
          expression.Generate(builder);
 
          if (operation.If(out op))
-            builder.AddRaw(op);
+         {
+	         builder.AddRaw(op);
+         }
 
          builder.Peek(Index);
          builder.AssignField(fieldName, false);

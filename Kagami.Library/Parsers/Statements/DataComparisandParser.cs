@@ -64,30 +64,52 @@ namespace Kagami.Library.Parsers.Statements
 						.FlatMap(u => Unit.Matched(), failedMatch<Unit>)
 					select comparisandList;
 				if (result.Out(out var comparisands, out var original))
+				{
 					return comparisands.Matched();
+				}
 				else
+				{
 					return original.Unmatched<IObject[]>();
+				}
 			}
 			else if (Module.Global.RegisterClass(new DataComparisandClass(className, name)).If(out _, out var exception))
+			{
 				return new IObject[0].Matched();
+			}
 			else
+			{
 				return failedMatch<IObject[]>(exception);
+			}
 		}
 
 		static IMatched<IRangeItem> getOrdinal(ParseState state, IRangeItem ordinal)
 		{
 			if (state.Scan("^ /(|s|) /'='", Color.Whitespace, Color.Structure).If(out _, out var anyException))
+			{
 				if (getValue(state, ExpressionFlags.Standard).Out(out var value, out var original))
+				{
 					if (value is IConstant constant && constant.Object is IRangeItem ri)
+					{
 						return ri.Matched();
+					}
 					else
+					{
 						return $"Range item required, found {value}".FailedMatch<IRangeItem>();
+					}
+				}
 				else
+				{
 					return original.Unmatched<IRangeItem>();
+				}
+			}
 			else if (anyException.If(out var exception))
+			{
 				return failedMatch<IRangeItem>(exception);
+			}
 			else
+			{
 				return ordinal.Matched();
+			}
 		}
 
 		public string Name { get; set; }

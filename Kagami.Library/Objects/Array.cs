@@ -20,9 +20,13 @@ namespace Kagami.Library.Objects
 		{
 			var list = items.ToList();
 			if (list.All(i => i is IKeyValue))
+			{
 				return new Dictionary(list);
+			}
 			else
+			{
 				return new Array(items);
+			}
 		}
 
 		public static IObject Empty => new Array(new IObject[0]);
@@ -43,10 +47,17 @@ namespace Kagami.Library.Objects
 		{
 			list = new List<IObject>();
 			foreach (var obj in objects)
+			{
 				if (obj is Range range)
+				{
 					list.AddRange(range.GetIterator(false).List());
+				}
 				else
+				{
 					list.Add(obj);
+				}
+			}
+
 			arrayID = uniqueObjectID();
 			typeConstraint = none<TypeConstraint>();
 			defaultLambda = none<Lambda>();
@@ -75,9 +86,13 @@ namespace Kagami.Library.Objects
 		public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, (a1, a2) =>
 		{
 			if (a1.Length.Value != a2.Length.Value)
+			{
 				return false;
+			}
 			else
+			{
 				return a1.list.Zip(a2.list, (i1, i2) => i1.Match(i2, bindings)).All(b => b);
+			}
 		}, bindings);
 
 		public bool IsTrue => list.Count > 0;
@@ -115,7 +130,9 @@ namespace Kagami.Library.Objects
 		void assertType(IObject value)
 		{
 			if (typeConstraint.If(out var tc) && !tc.Matches(classOf(value)))
+			{
 				throw incompatibleClasses(value, tc.AsString);
+			}
 		}
 
 		public IObject this[int index]
@@ -124,13 +141,21 @@ namespace Kagami.Library.Objects
 			{
 				var wrappedIndex = wrapIndex(index, list.Count);
 				if (wrappedIndex.Between(0).Until(list.Count))
+				{
 					return list[wrappedIndex];
+				}
 				else if (defaultLambda.If(out var lambda))
+				{
 					return lambda.Invoke(Int.IntObject(index));
+				}
 				else if (defaultValue.If(out var value))
+				{
 					return value;
+				}
 				else
+				{
 					throw badIndex(wrappedIndex);
+				}
 			}
 			set
 			{
@@ -138,7 +163,9 @@ namespace Kagami.Library.Objects
 
 				var wrappedIndex = wrapIndex(index, list.Count);
 				if (value is Unit)
+				{
 					list.RemoveAt(wrappedIndex);
+				}
 				else
 				{
 					assertType(value);
@@ -160,7 +187,10 @@ namespace Kagami.Library.Objects
 			{
 				var result = new List<IObject>();
 				foreach (var index in indexList(internalList))
+				{
 					result.Add(list[index]);
+				}
+
 				return new Array(result);
 			}
 			set
@@ -176,9 +206,13 @@ namespace Kagami.Library.Objects
 						{
 							var anyItem = valueIterator.Next();
 							if (anyItem.If(out var item))
+							{
 								list[index] = item;
+							}
 							else
+							{
 								break;
+							}
 						}
 
 						break;
@@ -187,7 +221,10 @@ namespace Kagami.Library.Objects
 					default:
 					{
 						foreach (var index in indexList(internalList))
+						{
 							list[index] = value;
+						}
+
 						break;
 					}
 				}
@@ -197,7 +234,9 @@ namespace Kagami.Library.Objects
 		void throwIfSelf(IObject value)
 		{
 			if (value is Array array && array.arrayID == arrayID)
+			{
 				throw "Can't assign an array item to itself".Throws();
+			}
 		}
 
 		public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new Iterator(this);
@@ -235,7 +274,9 @@ namespace Kagami.Library.Objects
 		{
 			var result = new List<IObject>();
 			for (var i = 0; i < count; i++)
+			{
 				result.AddRange(list);
+			}
 
 			return new Array(result);
 		}
@@ -294,14 +335,22 @@ namespace Kagami.Library.Objects
 		public IObject Assign(IObject indexes, IObject values)
 		{
 			if (getIterator(indexes, false).If(out var indexesIterator) && getIterator(values, false).If(out var valuesIterator))
+			{
 				while (indexesIterator.Next().If(out var index))
+				{
 					if (valuesIterator.Next().If(out var value))
 					{
 						if (index is Int i && i.Value.Between(0).Until(list.Count))
+						{
 							list[i.Value] = value;
+						}
 					}
 					else
+					{
 						break;
+					}
+				}
+			}
 
 			return this;
 		}
@@ -313,13 +362,19 @@ namespace Kagami.Library.Objects
 				if (array.typeConstraint.If(out var otherConstraint))
 				{
 					if (!thisConstraint.IsEqualTo(otherConstraint))
+					{
 						throw "Incompatible type constraints".Throws();
+					}
 				}
 				else
+				{
 					throw "Expected type constraint in RHS array".Throws();
+				}
 			}
 			else if (array.typeConstraint.IsSome)
+			{
 				throw "RHS array has a type constraint".Throws();
+			}
 
 			var newList = new List<IObject>(list);
 			newList.AddRange(array.list);
@@ -330,9 +385,13 @@ namespace Kagami.Library.Objects
 		public IObject Pop()
 		{
 			if (list.Count > 0)
+			{
 				return Some.Object(RemoveAt(list.Count - 1));
+			}
 			else
+			{
 				return None.NoneValue;
+			}
 		}
 
 		public IObject Unshift(IObject value) => InsertAt(0, value);
@@ -340,9 +399,13 @@ namespace Kagami.Library.Objects
 		public IObject Shift()
 		{
 			if (list.Count > 0)
+			{
 				return Some.Object(RemoveAt(0));
+			}
 			else
+			{
 				return None.NoneValue;
+			}
 		}
 
 		public IObject Find(IObject item, int startIndex, bool reverse)
@@ -350,9 +413,13 @@ namespace Kagami.Library.Objects
 			var index = reverse ? list.LastIndexOf(item, startIndex) : list.IndexOf(item, startIndex);
 
 			if (index == -1)
+			{
 				return None.NoneValue;
+			}
 			else
+			{
 				return Some.Object((Int)index);
+			}
 		}
 
 		public IObject FindAll(IObject item)

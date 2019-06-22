@@ -25,9 +25,13 @@ namespace Kagami.Library.Objects
 		{
 			var result = sendMessage(obj, "next", (Int)index);
 			if (result is Some some)
+			{
 				return some.Value.Some();
+			}
 			else
+			{
 				return none<IObject>();
+			}
 		}
 
 		public IMaybe<IObject> Peek(int index)
@@ -36,12 +40,18 @@ namespace Kagami.Library.Objects
 			{
 				var result = sendMessage(obj, "next", (Int)index);
 				if (result is Some some)
+				{
 					return some.Value.Some();
+				}
 				else
+				{
 					return none<IObject>();
+				}
 			}
 			else
+			{
 				return none<IObject>();
+			}
 		}
 
 		public Int Length
@@ -49,9 +59,13 @@ namespace Kagami.Library.Objects
 			get
 			{
 				if (cls.RespondsTo("length".get()))
+				{
 					return (Int)sendMessage(obj, "length".get());
+				}
 				else
+				{
 					return -1;
+				}
 			}
 		}
 
@@ -61,10 +75,16 @@ namespace Kagami.Library.Objects
 			{
 				var i = 0;
 				while (true)
+				{
 					if (Next(i++).If(out var value))
+					{
 						yield return value;
+					}
 					else
+					{
 						yield break;
+					}
+				}
 			}
 		}
 
@@ -73,25 +93,37 @@ namespace Kagami.Library.Objects
 		public Boolean In(IObject item)
 		{
 			if (cls.RespondsTo("in"))
+			{
 				return (Boolean)sendMessage(obj, "in", item);
+			}
 			else
+			{
 				return false;
+			}
 		}
 
 		public Boolean NotIn(IObject item)
 		{
 			if (cls.RespondsTo("notIn"))
+			{
 				return (Boolean)sendMessage(obj, "notIn", item);
+			}
 			else
+			{
 				return false;
+			}
 		}
 
 		public IObject Times(int count)
 		{
 			if (cls.RespondsTo("*"))
+			{
 				return (Boolean)sendMessage(obj, "*", (Int)count);
+			}
 			else
+			{
 				return obj;
+			}
 		}
 
 		public String MakeString(string connector) => makeString(this, connector);

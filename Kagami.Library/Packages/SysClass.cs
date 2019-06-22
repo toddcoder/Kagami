@@ -12,7 +12,9 @@ namespace Kagami.Library.Packages
 			base.RegisterMessages();
 
 			for (var i = 0; i < 10; i++)
+			{
 				registerPackageFunction("println".Selector(i), (obj, msg) => function<Sys>(obj, sys => sys.Println(msg.Arguments)));
+			}
 
 			registerPackageFunction("print(_)", (obj, msg) => function<Sys>(obj, sys => sys.Print(msg.Arguments)));
 			registerPackageFunction("put(_)", (obj, msg) => function<Sys>(obj, sys => sys.Put(msg.Arguments)));

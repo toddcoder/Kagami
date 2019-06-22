@@ -36,10 +36,16 @@ namespace Kagami.Library.Parsers.Expressions
          lastSymbol = symbol.Some();
 
          while (stack.IsPending(symbol))
-            if (stack.Pop().If(out var poppedSymbol, out var exception))
-               symbols.Add(poppedSymbol);
-            else
-               return failure<Unit>(exception);
+         {
+	         if (stack.Pop().If(out var poppedSymbol, out var exception))
+	         {
+		         symbols.Add(poppedSymbol);
+	         }
+	         else
+	         {
+		         return failure<Unit>(exception);
+	         }
+         }
 
          if (symbol.Precedence != Precedence.Value)
          {
@@ -56,10 +62,16 @@ namespace Kagami.Library.Parsers.Expressions
       public IResult<Unit> EndOfExpression()
       {
          while (!stack.IsEmpty)
-            if (stack.Pop().If(out var symbol, out var exception))
-               symbols.Add(symbol);
-            else
-               return failure<Unit>(exception);
+         {
+	         if (stack.Pop().If(out var symbol, out var exception))
+	         {
+		         symbols.Add(symbol);
+	         }
+	         else
+	         {
+		         return failure<Unit>(exception);
+	         }
+         }
 
          return Unit.Success();
       }

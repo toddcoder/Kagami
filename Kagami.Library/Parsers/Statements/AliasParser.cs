@@ -17,9 +17,13 @@ namespace Kagami.Library.Parsers.Statements
          state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Class, Color.Whitespace, Color.Structure, Color.Whitespace, Color.Class);
 
          if (Module.Global.Alias(aliasName, className).IfNot(out var exception))
-            return failedMatch<Unit>(exception);
+         {
+	         return failedMatch<Unit>(exception);
+         }
          else
-            return Unit.Matched();
+         {
+	         return Unit.Matched();
+         }
       }
    }
 }

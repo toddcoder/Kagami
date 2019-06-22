@@ -22,25 +22,45 @@ namespace Kagami.Library.Parsers.Expressions
 			Take = take.ToInt();
 
 			if (state.Scan("^ /(|s|) /'='", Color.Whitespace, Color.Operator).IsMatched)
+			{
 				if (getExpression(state, ExpressionFlags.OmitComma).If(out var expression, out var anyException))
+				{
 					Prefix = expression.Some();
+				}
 				else if (anyException.If(out var exception))
+				{
 					return failedMatch<Unit>(exception);
+				}
 				else
+				{
 					Prefix = none<Expression>();
+				}
+			}
 			else
+			{
 				Prefix = none<Expression>();
+			}
 
 			if (state.Scan("^ /(|s|) /'~'", Color.Whitespace, Color.Operator).IsMatched)
+			{
 				if (getExpression(state, ExpressionFlags.OmitComma | ExpressionFlags.OmitConcatenate)
 					.If(out var expression, out var anyException))
+				{
 					Suffix = expression.Some();
+				}
 				else if (anyException.If(out var exception))
+				{
 					return failedMatch<Unit>(exception);
+				}
 				else
+				{
 					Suffix = none<Expression>();
+				}
+			}
 			else
+			{
 				Suffix = none<Expression>();
+			}
 
 			return Unit.Matched();
 		}

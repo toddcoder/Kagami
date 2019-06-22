@@ -91,7 +91,9 @@ namespace Kagami.Library.Parsers
 		public IMatched<Unit> RollBackTransactionIf<T>(bool enabled, IMatched<T> previousMatch)
 		{
 			if (enabled && !previousMatch.IsMatched)
+			{
 				RollBackTransaction();
+			}
 
 			return previousMatch.Map(t => Unit.Value);
 		}
@@ -122,7 +124,9 @@ namespace Kagami.Library.Parsers
 				ForExpression = none<(string, Expression)>();
 			}
 			else
+			{
 				statements.Add(statement);
+			}
 		}
 
 		public void AddToken(int index, int length, Color color, string text = "")
@@ -202,7 +206,9 @@ namespace Kagami.Library.Parsers
 		public void Move(Token[] tokens)
 		{
 			if (tokens.Length != 0)
+			{
 				Move(tokens[0].Length);
+			}
 		}
 
 		public Token[] Tokens => tokens.ToArray();
@@ -214,16 +220,26 @@ namespace Kagami.Library.Parsers
 				case "(":
 				case "[":
 					if (token.Length == 0)
+					{
 						token.Color = Color.Structure;
+					}
 					else
+					{
 						token.Color = color;
+					}
+
 					break;
 				case ")":
 				case "]":
 					if (token.Length == 0)
+					{
 						token.Color = Color.Structure;
+					}
 					else
+					{
 						token.Color = color;
+					}
+
 					break;
 				case ",":
 					token.Color = Color.Structure;
@@ -255,10 +271,15 @@ namespace Kagami.Library.Parsers
 		public void Colorize(Token[] tokens, params Color[] colors)
 		{
 			for (var i = 0; i < colors.Length; i++)
+			{
 				setTokenColor(tokens[i + 1], colors[i]);
+			}
 
 			foreach (var token in tokens.Skip(1))
+			{
 				this.tokens.Add(token);
+			}
+
 			Move(tokens);
 		}
 
@@ -285,14 +306,24 @@ namespace Kagami.Library.Parsers
 			var builder = new ExpressionBuilder(ExpressionFlags.OmitIf);
 			var parser = new IfAsAndParser(builder);
 			if (parser.Scan(this).If(out _, out var anyException))
+			{
 				if (builder.ToExpression().If(out var expression, out var exception))
+				{
 					return expression.Some().Matched();
+				}
 				else
+				{
 					return failedMatch<IMaybe<Expression>>(exception);
+				}
+			}
 			else if (anyException.If(out var exception))
+			{
 				return failedMatch<IMaybe<Expression>>(exception);
+			}
 			else
+			{
 				return none<Expression>().Matched();
+			}
 		}
 
 		public void CreateYieldFlag() => yieldingStack.Push(false);

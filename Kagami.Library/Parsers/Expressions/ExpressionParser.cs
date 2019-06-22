@@ -28,7 +28,9 @@ namespace Kagami.Library.Parsers.Expressions
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens)
 		{
 			if (!state.More)
+			{
 				return notMatched<Unit>();
+			}
 
 			builder = new ExpressionBuilder(flags);
 			prefixParser = new PrefixParser(builder);
@@ -52,21 +54,35 @@ namespace Kagami.Library.Parsers.Expressions
 						{
 							var conjunction = conjunctionParsers.Scan(state);
 							if (conjunction.IsMatched)
+							{
 								break;
+							}
 							else if (conjunction.IsFailedMatch)
+							{
 								return conjunction;
+							}
 						}
 
 						if (infixParser.Scan(state).If(out _, out anyException))
+						{
 							if (getTerm(state).If(out _, out anyException)) { }
 							else if (anyException.If(out var exception))
+							{
 								return failedMatch<Unit>(exception);
+							}
 							else
+							{
 								break;
+							}
+						}
 						else if (anyException.If(out var exception))
+						{
 							return failedMatch<Unit>(exception);
+						}
 						else
+						{
 							break;
+						}
 					}
 
 					if (builder.ToExpression().If(out var expression, out var expException))
@@ -80,7 +96,9 @@ namespace Kagami.Library.Parsers.Expressions
 								state.ImplicitState = none<ImplicitState>();
 							}
 							else
+							{
 								return failedMatch<Unit>(expException);
+							}
 						}
 						else if (state.ImplicitState.If(out implicitState) && implicitState.Two.If(out var symbol))
 						{
@@ -98,17 +116,25 @@ namespace Kagami.Library.Parsers.Expressions
 							Expression = new Expression(lambda);
 						}
 						else
+						{
 							Expression = expression;
+						}
 
 						return Unit.Matched();
 					}
 					else
+					{
 						return failedMatch<Unit>(expException);
+					}
 				}
 				else if (anyException.If(out var exception))
+				{
 					return failedMatch<Unit>(exception);
+				}
 				else
+				{
 					return "Invalid expression syntax".FailedMatch<Unit>();
+				}
 			}
 			finally
 			{
@@ -121,9 +147,13 @@ namespace Kagami.Library.Parsers.Expressions
 		{
 			var exp = builder.Ordered.ToArray();
 			if (exp.Length != 1)
+			{
 				return true;
+			}
 			else
+			{
 				return !(exp[0] is FieldSymbol fieldSymbol) || fieldSymbol.FieldName != fieldName;
+			}
 		}
 
 		static IResult<Expression> getMessageWithLambda(Symbol symbol, Selector selector, int parameterCount, Expression expression)
@@ -176,20 +206,28 @@ namespace Kagami.Library.Parsers.Expressions
 		{
 			var matched = parser.Scan(state);
 			if (matched.IsFailedMatch)
+			{
 				return matched;
+			}
 			else
 			{
 				while (matched.IsMatched)
 				{
 					matched = parser.Scan(state);
 					if (matched.IsFailedMatch)
+					{
 						return matched;
+					}
 				}
 
 				if (matched.IsFailedMatch)
+				{
 					return matched;
+				}
 				else
+				{
 					return notMatched<Unit>();
+				}
 			}
 		}
 
@@ -198,13 +236,20 @@ namespace Kagami.Library.Parsers.Expressions
 			if (valuesParser.Scan(state).Out(out _, out var original))
 			{
 				if (builder.LastSymbol.If(out var lastSymbol) && lastSymbol is WhateverSymbol whatever)
+				{
 					whatever.Count = whateverCount++;
+				}
+
 				return Unit.Matched();
 			}
 			else if (original.IsFailedMatch)
+			{
 				return valuesParser.Scan(state);
+			}
 			else
+			{
 				return "Invalid expression syntax".FailedMatch<Unit>();
+			}
 		}
 
 		protected IMatched<Unit> getTerm(ParseState state)
@@ -212,9 +257,13 @@ namespace Kagami.Library.Parsers.Expressions
 			if ((getOutfixOperator(state, prefixParser).Out(out _, out var original) || original.IsNotMatched) &&
 				getValue(state).Out(out _, out original) &&
 				(getOutfixOperator(state, postfixParser).Out(out _, out original) || original.IsNotMatched))
+			{
 				return Unit.Matched();
+			}
 			else
+			{
 				return original;
+			}
 		}
 	}
 }

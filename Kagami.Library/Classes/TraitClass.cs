@@ -26,7 +26,9 @@ namespace Kagami.Library.Classes
       public IResult<Unit> RegisterSignature(Selector signature)
       {
          if (signatures.Contains(signature))
-            return $"Signature {signature.Image} already exists in trait {traitName}".Failure<Unit>();
+         {
+	         return $"Signature {signature.Image} already exists in trait {traitName}".Failure<Unit>();
+         }
          else
          {
 	         signatures.Add(signature);
@@ -37,7 +39,9 @@ namespace Kagami.Library.Classes
       public IResult<Unit> RegisterInvokable(string functionName, IInvokable invokable)
       {
          if (invokables.ContainsKey(functionName))
-            return $"Function {functionName} already exists in trait {traitName}".Failure<Unit>();
+         {
+	         return $"Function {functionName} already exists in trait {traitName}".Failure<Unit>();
+         }
          else
          {
             invokables[functionName] = invokable;
@@ -48,10 +52,14 @@ namespace Kagami.Library.Classes
       public IResult<Unit> RegisterImplementor(UserClass userClass)
       {
          if (userClass.MatchImplemented(signatures).If(out var signature, out var anyException))
-            return $"Signature {signature.Image} not implemented".Failure<Unit>();
+         {
+	         return $"Signature {signature.Image} not implemented".Failure<Unit>();
+         }
          else if (anyException.If(out var exception))
-		      return failure<Unit>(exception);
-	      else
+         {
+	         return failure<Unit>(exception);
+         }
+         else
 	      {
 		      implementors[userClass.Name] = userClass;
 		      return registerFunctions(userClass);
@@ -64,10 +72,15 @@ namespace Kagami.Library.Classes
          {
             var functionName = item.Key;
             if (userClass.ClassRespondsTo(functionName))
-               functionName = $"{traitName}_{functionName}";
+            {
+	            functionName = $"{traitName}_{functionName}";
+            }
+
             if (userClass.RegisterMethod(functionName, new Lambda(item.Value), false)) { }
             else
-               return $"function {functionName} already implemented".Failure<Unit>();
+            {
+	            return $"function {functionName} already implemented".Failure<Unit>();
+            }
          }
 
          return Unit.Success();
@@ -76,17 +89,27 @@ namespace Kagami.Library.Classes
       public IResult<Unit> CopyFrom(TraitClass sourceTraitClass)
       {
          foreach (var signature in sourceTraitClass.signatures)
-            if (RegisterSignature(signature).IfNot(out var exception))
-               return failure<Unit>(exception);
+         {
+	         if (RegisterSignature(signature).IfNot(out var exception))
+	         {
+		         return failure<Unit>(exception);
+	         }
+         }
 
          foreach (var (functionName, invokable) in sourceTraitClass.invokables)
-            if (RegisterInvokable(functionName, invokable).If(out _, out var exception))
-            {
-               if (signatures.Contains(functionName))
-                  signatures.Remove(functionName);
-            }
-            else
-               return failure<Unit>(exception);
+         {
+	         if (RegisterInvokable(functionName, invokable).If(out _, out var exception))
+	         {
+		         if (signatures.Contains(functionName))
+		         {
+			         signatures.Remove(functionName);
+		         }
+	         }
+	         else
+	         {
+		         return failure<Unit>(exception);
+	         }
+         }
 
          return Unit.Success();
       }

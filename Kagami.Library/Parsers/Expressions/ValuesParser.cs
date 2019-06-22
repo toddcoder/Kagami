@@ -50,7 +50,9 @@ namespace Kagami.Library.Parsers.Expressions
             if (!builder.Flags[ExpressionFlags.Subset])
             {
                if (!builder.Flags[ExpressionFlags.OmitColon])
-                  yield return new NameValueParser(builder);
+               {
+	               yield return new NameValueParser(builder);
+               }
 
                yield return new BindingParser(builder);
 	            yield return new InitializeParser(builder);

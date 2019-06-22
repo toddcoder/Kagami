@@ -11,9 +11,13 @@ namespace Kagami.Library.Operations
       public override IMatched<IObject> Execute(Machine machine, IObject value)
       {
          if (value is Tuple tuple)
-            return Execute(machine, tuple);
+         {
+	         return Execute(machine, tuple);
+         }
          else
-            return failedMatch<IObject>(incompatibleClasses(value, "Tuple"));
+         {
+	         return failedMatch<IObject>(incompatibleClasses(value, "Tuple"));
+         }
       }
 
       public abstract IMatched<IObject> Execute(Machine machine, Tuple tuple);

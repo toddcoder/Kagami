@@ -34,7 +34,9 @@ namespace Kagami.Library.Operations
 				return result.Matched();
 			}
 			else
+			{
 				return failedMatch<IObject>(exception);
+			}
 		}
 
 		public override string ToString() => "try.end";

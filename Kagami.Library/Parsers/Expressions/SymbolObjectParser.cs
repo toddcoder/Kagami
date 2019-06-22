@@ -16,9 +16,14 @@ namespace Kagami.Library.Parsers.Expressions
 			state.Colorize(tokens, Color.Whitespace, Color.Symbol, Color.Symbol);
 
 			if (builder.Flags[ExpressionFlags.Comparisand])
+			{
 				builder.Add(new FieldSymbol(name));
+			}
 			else
+			{
 				builder.Add(new SymbolSymbol(name));
+			}
+
 			return Unit.Matched();
 		}
 	}

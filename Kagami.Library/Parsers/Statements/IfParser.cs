@@ -31,16 +31,24 @@ namespace Kagami.Library.Parsers.Statements
 			var elseIf = none<If>();
 			var elseIfParser = new ElseIfParser(fieldName, mutable, assignment);
 			if (elseIfParser.Scan(state).If(out _, out var mbElseIfException))
+			{
 				elseIf = elseIfParser.If;
+			}
 			else if (mbElseIfException.If(out var elseIfException))
+			{
 				return failedMatch<Unit>(elseIfException);
+			}
 
 			var elseBlock = none<Block>();
 			var elseParser = new ElseParser();
 			if (elseParser.Scan(state).If(out _, out var mbElseException))
+			{
 				elseBlock = elseParser.Block;
+			}
 			else if (mbElseException.If(out var elseException))
+			{
 				return failedMatch<Unit>(elseException);
+			}
 
 			state.AddStatement(new If(expression, block, elseIf, elseBlock, fieldName, mutable, assignment, true));
 			return Unit.Matched();

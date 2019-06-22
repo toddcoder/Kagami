@@ -80,15 +80,25 @@ namespace Kagami.Library.Parsers
 			{
 				var result = constantsParser.Scan(state);
 				if (result.IsMatched)
+				{
 					if (state.Scan("^ /(|s|) /','", Color.Whitespace, Color.Operator).IsMatched) { }
 					else if (result.Failed(out var exception))
+					{
 						return failedMatch<InternalList>(exception);
+					}
 					else
+					{
 						break;
+					}
+				}
 				else if (result.Failed(out var exception))
+				{
 					return failedMatch<InternalList>(exception);
+				}
 				else
+				{
 					break;
+				}
 			}
 
 			if (builder.ToExpression().If(out var expression, out var expException))
@@ -96,15 +106,23 @@ namespace Kagami.Library.Parsers
 				var symbols = expression.Symbols;
 				var list = new List<IObject>();
 				foreach (var symbol in symbols)
+				{
 					if (symbol is IConstant c)
+					{
 						list.Add(c.Object);
+					}
 					else
+					{
 						return $"Expected constant, found {symbol}".FailedMatch<InternalList>();
+					}
+				}
 
 				return new InternalList(list).Matched();
 			}
 			else
+			{
 				return failedMatch<InternalList>(expException);
+			}
 		}
 
 		public static IMatched<Operation> matchOperator(string source)
@@ -137,13 +155,17 @@ namespace Kagami.Library.Parsers
 				var statementsParser = new StatementsParser();
 				state.PushStatements();
 				while (state.More)
+				{
 					if (statementsParser.Scan(state).If(out _, out var mbStatementException)) { }
 					else if (mbStatementException.If(out var statementException))
+					{
 						return failedMatch<Block>(statementException);
+					}
 					else
 					{
 						break;
 					}
+				}
 
 				return state.PopStatements().FlatMap(statements =>
 				{
@@ -152,9 +174,13 @@ namespace Kagami.Library.Parsers
 				}, failedMatch<Block>);
 			}
 			else if (anyException.If(out var exception))
+			{
 				return failedMatch<Block>(exception);
+			}
 			else
+			{
 				return failedMatch<Block>(badIndentation());
+			}
 		}
 
 		public static IMatched<Block> getBlock(ParseState state) => getBlock(state, none<TypeConstraint>());
@@ -167,12 +193,18 @@ namespace Kagami.Library.Parsers
 			if (statementsParser.Scan(state).If(out _, out var anyException))
 			{
 				if (state.PopStatements().If(out var statements, out var exception))
+				{
 					return new Block(statements, typeConstraint).Matched();
+				}
 				else
+				{
 					return failedMatch<Block>(exception);
+				}
 			}
 			else if (anyException.If(out var exception))
+			{
 				return failedMatch<Block>(exception);
+			}
 			else
 			{
 				state.PopStatements();
@@ -195,9 +227,13 @@ namespace Kagami.Library.Parsers
 		public static IMatched<Parameters> getParameters(ParseState state)
 		{
 			if (state.Scan("^ /[')]']", Color.CloseParenthesis).If(out _, out var anyException))
+			{
 				return new Parameters().Matched();
+			}
 			else if (anyException.If(out var exception))
+			{
 				return failedMatch<Parameters>(exception);
+			}
 
 			var parameters = new List<Parameter>();
 			var defaultRequired = false;
@@ -208,24 +244,37 @@ namespace Kagami.Library.Parsers
 				if (getParameter(state, defaultRequired).Out(out var parameter, out var originalParameter))
 				{
 					if (parameter.DefaultValue.IsSome)
+					{
 						defaultRequired = true;
+					}
+
 					parameters.Add(parameter);
 					if (parameter.Variadic)
+					{
 						continuing = false;
+					}
 				}
 				else
+				{
 					return originalParameter.UnmatchedOnly<Parameters>();
+				}
 
 				if (state.Scan("^ /(/s*) /[',)']", Color.Whitespace, Color.CloseParenthesis).Out(out var next, out var nextOriginal))
 				{
 					if (next.EndsWith(")"))
+					{
 						return new Parameters(parameters.ToArray()).Matched();
+					}
 				}
 				else
+				{
 					return nextOriginal.UnmatchedOnly<Parameters>();
+				}
 
 				if (!continuing)
+				{
 					return "There can be no parameters after a variadic parameter".FailedMatch<Parameters>();
+				}
 			}
 
 			return failedMatch<Parameters>(openParameters());
@@ -234,14 +283,19 @@ namespace Kagami.Library.Parsers
 		public static IMatched<Expression[]> getArguments(ParseState state, Bits32<ExpressionFlags> flags)
 		{
 			if (state.Scan("^ /[')]}']", Color.CloseParenthesis).If(out _, out var anyScanException))
+			{
 				return new Expression[0].Matched();
+			}
 			else if (anyScanException.If(out var scanException))
+			{
 				return failedMatch<Expression[]>(scanException);
+			}
 
 			var arguments = new List<Expression>();
 			var scanning = true;
 
 			while (state.More && scanning)
+			{
 				if (getExpression(state, flags | ExpressionFlags.OmitComma | ExpressionFlags.InArgument)
 					.If(out var expression, out var anyException))
 				{
@@ -249,15 +303,24 @@ namespace Kagami.Library.Parsers
 					if (state.Scan("^ /(/s*) /[',)]}']", Color.Whitespace, Color.CloseParenthesis).Out(out var next, out var original))
 					{
 						if (next.EndsWith(")") || next.EndsWith("]") || next.EndsWith("}"))
+						{
 							return arguments.ToArray().Matched();
+						}
 					}
 					else
+					{
 						return original.UnmatchedOnly<Expression[]>();
+					}
 				}
 				else if (anyException.If(out var exception))
+				{
 					return failedMatch<Expression[]>(exception);
+				}
 				else
+				{
 					scanning = false;
+				}
+			}
 
 			return failedMatch<Expression[]>(openArguments());
 		}
@@ -273,40 +336,62 @@ namespace Kagami.Library.Parsers
 		public static IMatched<IObject> getComparisand(ParseState state)
 		{
 			if (getExpression(state, ExpressionFlags.Comparisand | ExpressionFlags.OmitComma).Out(out var expression, out var original))
+			{
 				if (expression.Symbols[0] is IConstant constant)
+				{
 					return constant.Object.Matched();
+				}
 				else
+				{
 					return failedMatch<IObject>(constantRequired(expression));
+				}
+			}
 			else
+			{
 				return original.Unmatched<IObject>();
+			}
 		}
 
 		public static IMatched<IObject[]> getComparisandList(ParseState state)
 		{
 			if (state.Scan("^ /[')]']", Color.Structure).If(out _, out var mbScanException))
+			{
 				return new IObject[0].Matched();
+			}
 			else if (mbScanException.If(out var scanException))
+			{
 				return failedMatch<IObject[]>(scanException);
+			}
 
 			var arguments = new List<IObject>();
 			var scanning = true;
 
 			while (state.More && scanning)
+			{
 				if (getComparisand(state).If(out var comparisand, out var anyException))
 				{
 					arguments.Add(comparisand);
 					if (state.Scan("^ /(/s*) /[',)]']", Color.Whitespace, Color.Structure).Out(out var next, out var nextOriginal))
 					{
 						if (next.EndsWith(")") || next.EndsWith("]"))
+						{
 							return arguments.ToArray().Matched();
+						}
 					}
 					else
+					{
 						return nextOriginal.UnmatchedOnly<IObject[]>();
+					}
 				}
 				else if (anyException.If(out var exception))
+				{
 					return failedMatch<IObject[]>(exception);
+				}
 				else
+				{
 					scanning = false;
+				}
+			}
 
 			return failedMatch<IObject[]>(openArguments());
 		}
@@ -344,14 +429,22 @@ namespace Kagami.Library.Parsers
 			{
 				className = className.TrimStart();
 				if (Module.Global.Class(className).If(out var baseClass))
+				{
 					return new TypeConstraint(new[] { baseClass }).Some().Matched();
+				}
 				else if (Module.Global.Forwarded(className))
+				{
 					return new TypeConstraint(new[] { new ForwardedClass(className) }).Some().Matched();
+				}
 				else
+				{
 					return failedMatch<IMaybe<TypeConstraint>>(classNotFound(className));
+				}
 			}
 			else if (anyException.If(out var exception))
+			{
 				return failedMatch<IMaybe<TypeConstraint>>(exception);
+			}
 			else
 			{
 				var builder = new ExpressionBuilder(ExpressionFlags.Standard);
@@ -362,38 +455,56 @@ namespace Kagami.Library.Parsers
 					return typeConstraint.Some().Matched();
 				}
 				else if (anyException.If(out exception))
+				{
 					return failedMatch<IMaybe<TypeConstraint>>(exception);
+				}
 				else
+				{
 					return none<TypeConstraint>().Matched();
+				}
 			}
 		}
 
 		static IMatched<bool> parseVaraidic(ParseState state)
 		{
 			if (state.Scan("^ /(|s|) /'...'", Color.Whitespace, Color.Structure).If(out _, out var anyException))
+			{
 				return true.Matched();
+			}
 			else if (anyException.If(out var exception))
+			{
 				return failedMatch<bool>(exception);
+			}
 			else
+			{
 				return false.Matched();
+			}
 		}
 
 		static IMatched<IMaybe<IInvokable>> parseDefaultValue(ParseState state, bool defaultRequired)
 		{
 			var result = state.Scan("^ /(/s* '=') -(> '=')", Color.Structure);
 			if (result.If(out _, out var anyException))
+			{
 				return getExpression(state, ExpressionFlags.OmitComma).Map(e =>
 				{
 					var symbol = new InvokableExpressionSymbol(e);
 					state.AddSymbol(symbol);
 					return symbol.Invokable.Some().Matched();
 				});
+			}
 			else if (anyException.If(out var exception))
+			{
 				return failedMatch<IMaybe<IInvokable>>(exception);
+			}
 			else if (defaultRequired)
+			{
 				return "default required".FailedMatch<IMaybe<IInvokable>>();
+			}
 			else
+			{
 				return none<IInvokable>().Matched();
+			}
 		}
 
 		static IMatched<Parameter> getParameter(ParseState state, bool defaultRequired) =>
@@ -414,14 +525,22 @@ namespace Kagami.Library.Parsers
 			{
 				state.SetReturnType(match);
 				if (state.Scan("^ /(|s|) /'=' /(|s|)", Color.Whitespace, Color.Structure, Color.Whitespace).IsMatched)
+				{
 					return getSingleLine(state, match);
+				}
 				else
+				{
 					return getBlock(state, match);
+				}
 			}
 			else if (isFailed)
+			{
 				return failedMatch<Block>(exception);
+			}
 			else
+			{
 				return notMatched<Block>();
+			}
 		}
 
 		public static IResult<If> getIf(string parameterName, Symbol comparisand, IMaybe<Expression> and, Block block)
@@ -430,7 +549,9 @@ namespace Kagami.Library.Parsers
 			builder.Add(new FieldSymbol(parameterName));
 			builder.Add(new SendMessageSymbol("match", Precedence.SendMessage, new Expression(comparisand)));
 			if (and.If(out var andExpression))
+			{
 				builder.Add(andExpression);
+			}
 
 			return builder.ToExpression().Map(expression => new If(expression, block));
 		}
@@ -438,7 +559,9 @@ namespace Kagami.Library.Parsers
 		public static IMatched<LambdaSymbol> getPartialLambda(ParseState state)
 		{
 			if (!state.More)
+			{
 				return notMatched<LambdaSymbol>();
+			}
 
 			var unknownFieldCount = 0;
 			var maxFieldCount = 0;
@@ -452,9 +575,13 @@ namespace Kagami.Library.Parsers
 			IMatched<Unit> getValue()
 			{
 				if (valuesParser.Scan(state).Out(out _, out var original))
+				{
 					return Unit.Matched();
+				}
 				else if (original.IsFailedMatch)
+				{
 					return original;
+				}
 
 				if (unknownFieldParser.Scan(state).Out(out _, out original))
 				{
@@ -463,7 +590,9 @@ namespace Kagami.Library.Parsers
 					return Unit.Matched();
 				}
 				else if (original.IsFailedMatch)
+				{
 					return original;
+				}
 
 				builder.Add(new FieldSymbol($"__${unknownFieldCount++}"));
 				return Unit.Matched();
@@ -473,14 +602,22 @@ namespace Kagami.Library.Parsers
 			{
 				if (getValue().Out(out _, out var original)) { }
 				else if (original.IsFailedMatch)
+				{
 					return original;
+				}
 
 				while (state.More)
+				{
 					if (postfixOperatorsParser.Scan(state).If(out _, out var anyException)) { }
 					else if (anyException.If(out var exception))
+					{
 						return failedMatch<Unit>(exception);
+					}
 					else
+					{
 						break;
+					}
+				}
 
 				return Unit.Matched();
 			}
@@ -494,28 +631,42 @@ namespace Kagami.Library.Parsers
 				while (state.More)
 				{
 					if (state.CurrentSource.StartsWith(")"))
+					{
 						break;
+					}
 
 					if (getTerm().Failed(out var exception))
+					{
 						return failedMatch<LambdaSymbol>(exception);
+					}
 
 					if (infixParser.Scan(state).If(out _, out var anyException))
 					{
 						if (getTerm().Failed(out exception))
+						{
 							return failedMatch<LambdaSymbol>(exception);
+						}
 					}
 					else if (anyException.If(out exception))
+					{
 						return failedMatch<LambdaSymbol>(exception);
+					}
 					else
+					{
 						break;
+					}
 				}
 
 				var parameterCount = unknownFieldCount.MaxOf(maxFieldCount) + (addOne ? 1 : 0);
 				if (state.Scan("^ /')'", Color.CloseParenthesis).Out(out _, out var scanOriginal))
+				{
 					return builder.ToExpression().FlatMap(expression => new LambdaSymbol(parameterCount, expression).Matched(),
 						failedMatch<LambdaSymbol>);
+				}
 				else
+				{
 					return scanOriginal.Unmatched<LambdaSymbol>();
+				}
 			}
 			finally
 			{
@@ -529,18 +680,28 @@ namespace Kagami.Library.Parsers
 			var builder = new ExpressionBuilder(ExpressionFlags.Standard);
 			var parser = new ConstantsParser(builder);
 			if (parser.Scan(state).Out(out _, out var original))
+			{
 				if (builder.ToExpression().If(out var expression, out var exception))
 				{
 					var symbol = expression.Symbols[0];
 					if (symbol is IConstant c)
+					{
 						return c.Matched();
+					}
 					else
+					{
 						return $"Expected constant, found {symbol}".FailedMatch<IConstant>();
+					}
 				}
 				else
+				{
 					return failedMatch<IConstant>(exception);
+				}
+			}
 			else
+			{
 				return original.Unmatched<IConstant>();
+			}
 		}
 
 		public static BigInteger convert(string source, int baseValue, string possible)
@@ -586,7 +747,9 @@ namespace Kagami.Library.Parsers
 						return Unit.Matched();
 					}
 					else
+					{
 						return failedMatch<Unit>(unableToConvert(source, "Int"));
+					}
 
 				case "L":
 					if (BigInteger.TryParse(source, out var bigInteger))
@@ -595,7 +758,9 @@ namespace Kagami.Library.Parsers
 						return Unit.Matched();
 					}
 					else
+					{
 						return failedMatch<Unit>(unableToConvert(source, "Long"));
+					}
 
 				case "i":
 					if (TryParse(source, out integer))
@@ -604,7 +769,9 @@ namespace Kagami.Library.Parsers
 						return Unit.Matched();
 					}
 					else
+					{
 						return failedMatch<Unit>(unableToConvert(source, "Complex"));
+					}
 
 				case "f":
 					if (double.TryParse(source, out var real))
@@ -613,7 +780,9 @@ namespace Kagami.Library.Parsers
 						return Unit.Matched();
 					}
 					else
+					{
 						return failedMatch<Unit>(unableToConvert(source, "Float"));
+					}
 
 				default:
 					return failedMatch<Unit>(unableToConvert(source, "Int"));
@@ -656,22 +825,34 @@ namespace Kagami.Library.Parsers
 			return new AnyLambdaParser(builder).Scan(state).Map(u =>
 			{
 				if (builder.ToExpression().If(out var expression, out var exception))
+				{
 					return ((LambdaSymbol)expression.Symbols[0]).Matched();
+				}
 				else
+				{
 					return failedMatch<LambdaSymbol>(exception);
+				}
 			});
 		}
 
 		public static IMatched<IMaybe<LambdaSymbol>> getPossibleLambda(ParseState state, Bits32<ExpressionFlags> flags)
 		{
 			if (state.CurrentSource.StartsWith("("))
+			{
 				return none<LambdaSymbol>().Matched();
+			}
 			else if (getAnyLambda(state, flags).If(out var lambdaSymbol, out var anyException))
+			{
 				return lambdaSymbol.Some().Matched();
+			}
 			else if (anyException.If(out var exception))
+			{
 				return failedMatch<IMaybe<LambdaSymbol>>(exception);
+			}
 			else
+			{
 				return none<LambdaSymbol>().Matched();
+			}
 		}
 
 		public static IMatched<(Symbol, Expression, IMaybe<Expression>)> getInnerComprehension(ParseState state) =>
@@ -684,15 +865,25 @@ namespace Kagami.Library.Parsers
 		public static IMatched<IMaybe<Expression>> getIf(ParseState state)
 		{
 			if (state.Scan("^ /(|s+|) /'if' /b", Color.Whitespace, Color.Keyword).If(out _, out var anyException))
+			{
 				if (getExpression(state, ExpressionFlags.OmitIf | ExpressionFlags.OmitComprehension)
 					.Out(out var expression, out var original))
+				{
 					return expression.Some().Matched();
+				}
 				else
+				{
 					return original.Unmatched<IMaybe<Expression>>();
+				}
+			}
 			else if (anyException.If(out var exception))
+			{
 				return failedMatch<IMaybe<Expression>>(exception);
+			}
 			else
+			{
 				return none<Expression>().Matched();
+			}
 		}
 
 		public static IMatched<IMaybe<Expression>> getAnd(ParseState state)
@@ -700,21 +891,33 @@ namespace Kagami.Library.Parsers
 			var builder = new ExpressionBuilder(ExpressionFlags.OmitIf);
 			var parser = new IfAsAndParser(builder);
 			if (parser.Scan(state).If(out _, out var anyException))
+			{
 				if (builder.ToExpression().If(out var expression, out var exception))
+				{
 					return expression.Some().Matched();
+				}
 				else
+				{
 					return failedMatch<IMaybe<Expression>>(exception);
+				}
+			}
 			else if (anyException.If(out var exception))
+			{
 				return failedMatch<IMaybe<Expression>>(exception);
+			}
 			else
+			{
 				return none<Expression>().Matched();
+			}
 		}
 
 		public static void addMatchElse(If ifStatement)
 		{
 			var current = ifStatement;
 			while (current.ElseIf.If(out var nextIf))
+			{
 				current = nextIf;
+			}
 
 			current.Else = new Block(new Return(new Expression(new ObjectSymbol(Unmatched.Value)), none<TypeConstraint>())).Some();
 		}
@@ -724,19 +927,29 @@ namespace Kagami.Library.Parsers
 			var builder = new ExpressionBuilder(ExpressionFlags.Standard);
 			var andParser = new IfAsAndParser(builder);
 			if (andParser.Scan(state).If(out _, out var anyException))
+			{
 				return builder.ToExpression().FlatMap(e => ((AndSymbol)e.Symbols[0]).Some().Matched(), failedMatch<IMaybe<AndSymbol>>);
+			}
 			else if (anyException.If(out var exception))
+			{
 				return failedMatch<IMaybe<AndSymbol>>(exception);
+			}
 			else
+			{
 				return none<AndSymbol>().Matched();
+			}
 		}
 
 		public static IMatched<Block> getCaseStatementBlock(ParseState state)
 		{
 			if (state.Scan("^ /(|s|) /'=' -(> '=')", Color.Whitespace, Color.Structure).IsMatched)
+			{
 				return getSingleLine(state, false);
+			}
 			else
+			{
 				return getBlock(state);
+			}
 		}
 
 		public static IMatched<Symbol> getOperator(ParseState state, string source, Bits32<ExpressionFlags> flags, bool whitespace)
@@ -756,9 +969,14 @@ namespace Kagami.Library.Parsers
 					break;
 				case "/":
 					if (whitespace)
+					{
 						symbol = new FloatDivideSymbol().Matched<Symbol>();
+					}
 					else
+					{
 						symbol = new RationalSymbol().Matched<Symbol>();
+					}
+
 					break;
 				case "//":
 					symbol = new IntDivideSymbol().Matched<Symbol>();
@@ -831,7 +1049,9 @@ namespace Kagami.Library.Parsers
 					break;
 				case ",":
 					if (flags[ExpressionFlags.OmitComma])
+					{
 						return notMatched<Symbol>();
+					}
 					else
 					{
 						state.Scan("^ /(/s*)", Color.Whitespace);
@@ -841,9 +1061,13 @@ namespace Kagami.Library.Parsers
 					break;
 				case "~":
 					if (flags[ExpressionFlags.OmitConcatenate])
+					{
 						return notMatched<Symbol>();
+					}
 					else
+					{
 						symbol = new ConcatenationSymbol().Matched<Symbol>();
+					}
 
 					break;
 				case "<<":
@@ -893,29 +1117,49 @@ namespace Kagami.Library.Parsers
 			Exception exception = null;
 
 			while (state.More)
+			{
 				if (prefixParser.Scan(state).If(out _, out anyException)) { }
 				else if (anyException.If(out exception))
+				{
 					return failedMatch<Expression>(exception);
+				}
 				else
+				{
 					break;
+				}
+			}
 
 			if (valuesParser.Scan(state).If(out _, out anyException)) { }
 			else if (anyException.If(out exception))
+			{
 				return failedMatch<Expression>(exception);
+			}
 			else
+			{
 				return failedMatch<Expression>(invalidSyntax());
+			}
 
 			while (state.More)
+			{
 				if (postfixParser.Scan(state).If(out _, out anyException)) { }
 				else if (anyException.If(out exception))
+				{
 					return failedMatch<Expression>(exception);
+				}
 				else
+				{
 					break;
+				}
+			}
 
 			if (builder.ToExpression().If(out var expression, out exception))
+			{
 				return expression.Matched();
+			}
 			else
+			{
 				return failedMatch<Expression>(exception);
+			}
 		}
 
 		public static IMatched<Block> getLambdaBlock(bool isExpression, ParseState state, Bits32<ExpressionFlags> flags,
@@ -924,13 +1168,19 @@ namespace Kagami.Library.Parsers
 			if (isExpression)
 			{
 				if (getExpression(state, flags).Out(out var expression, out var exOriginal))
+				{
 					return new Block(new ExpressionStatement(expression, true, typeConstraint), typeConstraint) { Index = state.Index }
 						.Matched();
+				}
 				else
+				{
 					return exOriginal.Unmatched<Block>();
+				}
 			}
 			else
+			{
 				return getBlock(state, typeConstraint);
+			}
 		}
 
 		public static IMatched<(int, int, IMaybe<Expression>, IMaybe<Expression>)> getSkipTakeItem(ParseState state)
@@ -947,20 +1197,30 @@ namespace Kagami.Library.Parsers
 				var (skip, take, prefix, suffix) = tuple;
 				list.Add(new SkipTakeItem(skip, take, prefix, suffix));
 				if (state.Scan("^ /'}'", Color.Structure).IsMatched)
+				{
 					break;
+				}
 
 				if (state.Scan("^ /(|s|) /',' /(|s|)", Color.Whitespace, Color.Structure, Color.Whitespace)
 					.If(out _, out var anyException)) { }
 				else if (anyException.If(out var exception))
+				{
 					return failedMatch<SkipTakeItem[]>(exception);
+				}
 				else
+				{
 					return "Expected ,".FailedMatch<SkipTakeItem[]>();
+				}
 			}
 
 			if (list.Count == 0)
+			{
 				return notMatched<SkipTakeItem[]>();
+			}
 			else
+			{
 				return list.ToArray().Matched();
+			}
 		}
 	}
 }

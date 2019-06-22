@@ -21,16 +21,25 @@ namespace Kagami.Library.Classes
 			messages["default".get()] = (obj, msg) => function<Dictionary>(obj, d =>
 			{
 				if (d.DefaultValue.If(out var dv))
+				{
 					return dv;
+				}
 				else if (d.DefaultLambda.If(out var dl))
+				{
 					return dl;
+				}
 				else
+				{
 					return Unassigned.Value;
+				}
 			});
 			messages["default".set()] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, v) =>
 			{
 				if (v is Lambda lambda)
+				{
 					d.DefaultLambda = lambda.Some();
+				}
+
 				d.DefaultValue = v.Some();
 
 				return Void.Value;

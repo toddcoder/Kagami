@@ -31,11 +31,17 @@ namespace Kagami.Library.Parsers.Statements
 				{
 					var classItemsParser = new ClassItemsParser(metaClassBuilder);
 					while (state.More)
+					{
 						if (classItemsParser.Scan(state).If(out _, out var anyException)) { }
 						else if (anyException.If(out var exception))
+						{
 							return failedMatch<Unit>(exception);
+						}
 						else
+						{
 							break;
+						}
+					}
 
 					var metaClass = new MetaClass(className, metaClassBuilder);
 					state.AddStatement(metaClass);
@@ -43,10 +49,14 @@ namespace Kagami.Library.Parsers.Statements
 					return Unit.Matched();
 				}
 				else
+				{
 					return registerOriginal.Unmatched<Unit>();
+				}
 			}
 			else
+			{
 				return original.Unmatched<Unit>();
+			}
 		}
 	}
 }

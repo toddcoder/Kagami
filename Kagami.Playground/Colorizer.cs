@@ -49,12 +49,14 @@ namespace Kagami.Playground
 		void markText(string pattern, Color backColor)
 		{
 			if (textBox.Text.Matches(pattern).If(out var matcher))
+			{
 				for (var matchIndex = 0; matchIndex < matcher.MatchCount; ++matchIndex)
 				{
 					var (_, index, length) = matcher.GetMatch(matchIndex);
 					textBox.Select(index, length);
 					textBox.SelectionBackColor = backColor;
 				}
+			}
 		}
 
 		static bool isBold(Library.Parsers.Color color)

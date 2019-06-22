@@ -21,7 +21,10 @@ namespace Kagami.Library.Runtime
          for (var i = 0; i < limit; i++)
          {
             for (var j = 0; j < digits.Length; j++)
-               digits[j] = isBitSet(i, j);
+            {
+	            digits[j] = isBitSet(i, j);
+            }
+
             yield return digits;
          }
       }

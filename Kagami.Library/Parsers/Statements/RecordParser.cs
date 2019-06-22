@@ -25,9 +25,13 @@ namespace Kagami.Library.Parsers.Statements
 				var parentClassName = "";
 				var arguments = new Expression[0];
 				if (parentClassParser.Scan(state).If(out _, out var anyException))
+				{
 					(parentClassName, _, arguments) = parentClassParser.Parent;
+				}
 				else if (anyException.If(out var exception))
+				{
 					return failedMatch<Unit>(exception);
+				}
 
 				Module.Global.ForwardReference(className);
 
@@ -41,12 +45,18 @@ namespace Kagami.Library.Parsers.Statements
 					return Unit.Matched();
 				}
 				else
+				{
 					return registerOriginal;
+				}
 			}
 			else if (parametersOriginal.IsNotMatched)
+			{
 				return "parameters required".FailedMatch<Unit>();
+			}
 			else
+			{
 				return parametersOriginal.ExceptionAs<Unit>();
+			}
 		}
 	}
 }

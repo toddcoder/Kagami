@@ -23,12 +23,18 @@ namespace Kagami.Library.Parsers.Statements
 				if (parser.Scan(state).If(out _, out var anyException))
 				{
 					if (!parser.More)
+					{
 						break;
+					}
 				}
 				else if (anyException.If(out var exception))
+				{
 					return failedMatch<Unit>(exception);
+				}
 				else
+				{
 					break;
+				}
 			}
 
 			return Unit.Matched();

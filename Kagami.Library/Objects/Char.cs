@@ -119,14 +119,22 @@ namespace Kagami.Library.Objects
       {
          int index;
          if (reverse)
-            index = input.LastIndexOf(value, startIndex);
+         {
+	         index = input.LastIndexOf(value, startIndex);
+         }
          else
-            index = input.IndexOf(value, startIndex);
+         {
+	         index = input.IndexOf(value, startIndex);
+         }
 
          if (index > -1)
-            return Some.Object((Int)index);
+         {
+	         return Some.Object((Int)index);
+         }
          else
-            return None.NoneValue;
+         {
+	         return None.NoneValue;
+         }
       }
 
       public Tuple FindAll(string input)
@@ -138,23 +146,35 @@ namespace Kagami.Library.Objects
       {
          int index;
          if (reverse)
-            index = input.LastIndexOf(value);
+         {
+	         index = input.LastIndexOf(value);
+         }
          else
-            index = input.IndexOf(value);
+         {
+	         index = input.IndexOf(value);
+         }
 
          if (index > -1)
-            return input.Keep(index) + replacement + input.Drop(index + 1);
+         {
+	         return input.Keep(index) + replacement + input.Drop(index + 1);
+         }
          else
-            return input;
+         {
+	         return input;
+         }
       }
 
       public String Replace(string input, Lambda lambda, bool reverse)
       {
          int index;
          if (reverse)
-            index = input.LastIndexOf(value);
+         {
+	         index = input.LastIndexOf(value);
+         }
          else
-            index = input.IndexOf(value);
+         {
+	         index = input.IndexOf(value);
+         }
 
          if (index > -1)
          {
@@ -165,7 +185,9 @@ namespace Kagami.Library.Objects
             return input.Keep(index) + replacement + input.Drop(index + 1);
          }
          else
-            return input;
+         {
+	         return input;
+         }
       }
 
       public String ReplaceAll(string input, string replacement) => input.Replace(value.ToString(), replacement);
@@ -197,16 +219,24 @@ namespace Kagami.Library.Objects
          {
             var index = input.LastIndexOf(value);
             if (index > -1)
-               return Tuple.Tuple3(input.Keep(index), value.ToString(), input.Drop(index + 1));
+            {
+	            return Tuple.Tuple3(input.Keep(index), value.ToString(), input.Drop(index + 1));
+            }
             else
-               return Tuple.Tuple3(input, "", "");
+            {
+	            return Tuple.Tuple3(input, "", "");
+            }
          }
          else
          {
             if (input.Find(value.ToString()).If(out var index))
-               return Tuple.Tuple3(input.Keep(index), value.ToString(), input.Drop(index + 1));
+            {
+	            return Tuple.Tuple3(input.Keep(index), value.ToString(), input.Drop(index + 1));
+            }
             else
-               return Tuple.Tuple3(input, "", "");
+            {
+	            return Tuple.Tuple3(input, "", "");
+            }
          }
       }
 

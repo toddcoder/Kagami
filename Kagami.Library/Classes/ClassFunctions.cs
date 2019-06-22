@@ -74,7 +74,9 @@ namespace Kagami.Library.Classes
             return Boolean.True;
          }
          else
-            return Boolean.False;
+         {
+	         return Boolean.False;
+         }
       }
 
       public static IObject msgNumberFunction(IObject x, Func<IMessageNumber, IObject> func) => func((IMessageNumber)x);

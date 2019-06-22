@@ -47,16 +47,25 @@ namespace Kagami.Library.Classes
 			messages["default".get()] = (obj, msg) => function<Array>(obj, array =>
 			{
 				if (array.DefaultValue.If(out var dv))
+				{
 					return dv;
+				}
 				else if (array.DefaultLambda.If(out var dl))
+				{
 					return dl;
+				}
 				else
+				{
 					return Unassigned.Value;
+				}
 			});
 			messages["default".set()] = (obj, msg) => function<Array, IObject>(obj, msg, (array, v) =>
 			{
 				if (v is Lambda lambda)
+				{
 					array.DefaultLambda = lambda.Some();
+				}
+
 				array.DefaultValue = v.Some();
 
 				return Void.Value;
@@ -67,21 +76,28 @@ namespace Kagami.Library.Classes
 		{
 			var list = new List<IObject>();
 			foreach (var obj in internalList.List)
+			{
 				switch (obj)
 				{
 					case ICollection collection:
 						foreach (var obj2 in collection.GetIterator(false).List())
+						{
 							list.Add(obj2);
+						}
 
 						break;
 					case IIterator iterator:
 						foreach (var innerObject in iterator.List())
+						{
 							list.Add(innerObject);
+						}
+
 						break;
 					default:
 						list.Add(obj);
 						break;
 				}
+			}
 
 			return new InternalList(list);
 		}
@@ -137,9 +153,13 @@ namespace Kagami.Library.Classes
 		static Array getTypedArray(Message message)
 		{
 			if (message.Arguments[0] is TypeConstraint typeConstraint)
+			{
 				return new Array(new IObject[0]) { TypeConstraint = typeConstraint.Some() };
+			}
 			else
+			{
 				throw "Type constraint for array required".Throws();
+			}
 		}
 
 		public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");

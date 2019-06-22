@@ -17,7 +17,9 @@ namespace Kagami.Library.Operations
 				return notMatched<IObject>();
 			}
 			else
+			{
 				return failedMatch<IObject>(classNotFound("UserObject"));
+			}
 		}
 
 		public override string ToString() => "fields.from.object";

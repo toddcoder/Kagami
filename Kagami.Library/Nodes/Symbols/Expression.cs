@@ -20,7 +20,9 @@ namespace Kagami.Library.Nodes.Symbols
       public override void Generate(OperationsBuilder builder)
       {
          foreach (var symbol in symbols)
-            symbol.Generate(builder);
+         {
+	         symbol.Generate(builder);
+         }
       }
 
       public override Precedence Precedence => Precedence.Value;
@@ -32,8 +34,12 @@ namespace Kagami.Library.Nodes.Symbols
       public void Replace(Predicate<Symbol> predicate, Func<Symbol, Symbol> replacement)
       {
          for (var i = 0; i < symbols.Length; i++)
-            if (predicate(symbols[i]))
-               symbols[i] = replacement(symbols[i]);
+         {
+	         if (predicate(symbols[i]))
+	         {
+		         symbols[i] = replacement(symbols[i]);
+	         }
+         }
       }
    }
 }

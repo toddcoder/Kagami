@@ -19,12 +19,18 @@ namespace Kagami.Library.Parsers.Statements
 			{
 				if (getBlock(state).Out(out block, out var original)) { }
 				else
+				{
 					return original.UnmatchedOnly<Unit>();
+				}
 			}
 			else if (getExpression(state, ExpressionFlags.Standard).Out(out var expression, out var exOriginal))
+			{
 				block = new Block(new ExpressionStatement(expression, true));
+			}
 			else
+			{
 				return exOriginal.UnmatchedOnly<Unit>();
+			}
 
 			block.AddReturnIf();
 			state.AddStatement(new Defer(block));

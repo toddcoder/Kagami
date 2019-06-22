@@ -24,10 +24,14 @@ namespace Kagami.Library.Parsers.Expressions
 					return Unit.Matched();
 				}
 				else
+				{
 					return "Yield required".FailedMatch<Unit>();
+				}
 			}
 			else
+			{
 				return original.UnmatchedOnly<Unit>();
+			}
 		}
 	}
 }

@@ -94,24 +94,34 @@ namespace Kagami.Library.Objects
 						var right = otherItems[i];
 						if (right.TypeConstraint.If(out var rTypeConstraint) && left.TypeConstraint.If(out var lTypeConstraint) &&
 							!rTypeConstraint.Matches(lTypeConstraint))
+						{
 							return false;
+						}
 					}
 
 					return true;
 				}
 				else
+				{
 					return false;
+				}
 			}
 			else
+			{
 				return false;
+			}
 		}
 
 		public IMaybe<Selector> Optional()
 		{
 			if (selectorItems.Length > 0)
+			{
 				return new Selector(name, selectorItems.Skip(-1).ToArray(), "").Some();
+			}
 			else
+			{
 				return MonadFunctions.none<Selector>();
+			}
 		}
 
 		public override string ToString() => image;
@@ -122,12 +132,18 @@ namespace Kagami.Library.Objects
 			{
 				var label = selectorItems[index].Label;
 				if (label.IsNotEmpty())
+				{
 					return new NameValue(label, obj);
+				}
 				else
+				{
 					return obj;
+				}
 			}
 			else
+			{
 				return obj;
+			}
 		}
 
 		public void Generate(int index, Expression expression, OperationsBuilder builder)

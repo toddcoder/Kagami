@@ -46,9 +46,13 @@ namespace Kagami.Library.Classes
       static IObject parse(string source)
       {
          if (DateTime.TryParse(source, out var dateTime))
-            return Some.Object((Date)dateTime);
+         {
+	         return Some.Object((Date)dateTime);
+         }
          else
-            return None.NoneValue;
+         {
+	         return None.NoneValue;
+         }
       }
    }
 }

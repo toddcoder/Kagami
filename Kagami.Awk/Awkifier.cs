@@ -81,9 +81,13 @@ namespace Kagami.Awk
 			get
 			{
 				if (index.Between(0).Until(getLength()))
+				{
 					return fields[index];
+				}
 				else
+				{
 					return "";
+				}
 			}
 		}
 
@@ -150,11 +154,16 @@ namespace Kagami.Awk
 				var array = fields.Select(String.StringObject).ToArray();
 				var currentFields = Machine.Fields;
 				for (var i = 0; i < array.Length; i++)
+				{
 					currentFields.New($"__${i}", array[i]);
+				}
+
 				return new Tuple(array).Some<IObject>();
 			}
 			else
+			{
 				return none<IObject>();
+			}
 		}
 
 		public IMaybe<IObject> Peek(int index) => Next(index);

@@ -18,9 +18,13 @@ namespace Kagami.Library.Objects
          if (status.IsAccepted && skipping)
          {
             if (!predicate.Invoke(status.Object).IsTrue)
-               return new Skipped();
+            {
+	            return new Skipped();
+            }
             else
-               skipping = false;
+            {
+	            skipping = false;
+            }
          }
 
          return status;
@@ -33,7 +37,9 @@ namespace Kagami.Library.Objects
          foreach (var value in iterator.List())
          {
             if (skipping && !predicate.Invoke(value).IsTrue)
-               continue;
+            {
+	            continue;
+            }
 
             skipping = false;
             yield return value;

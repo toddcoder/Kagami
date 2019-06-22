@@ -25,7 +25,9 @@ namespace Kagami.Library.Parsers.Expressions
 				return Unit.Matched();
 			}
 			else if (anyException.If(out var exception))
+			{
 				return failedMatch<Unit>(exception);
+			}
 			else
 			{
 				state.RollBackTransaction();

@@ -18,7 +18,9 @@ namespace Kagami.Library.Operations
             return notMatched<IObject>();
          }
          else
-            return failedMatch<IObject>(incompatibleClasses(value, "Arguments"));
+         {
+	         return failedMatch<IObject>(incompatibleClasses(value, "Arguments"));
+         }
       }
 
 

@@ -49,7 +49,9 @@ namespace Kagami.Library.Nodes.Statements
                   builder.AssignField(key, true);
                }
                else
-                  throw exception;
+               {
+	               throw exception;
+               }
             }
 
             builder.Label(skipLabel);

@@ -29,9 +29,13 @@ namespace Kagami.Library.Parsers.Expressions
       {
          var result = Prefix(state, tokens).Map(u => getExpression(state, pattern, flags, colors)).Map(e => Suffix(state, e));
          if (result.IsFailedMatch)
-            return OnFailure(state, result.Exception);
+         {
+	         return OnFailure(state, result.Exception);
+         }
          else
-            return result;
+         {
+	         return result;
+         }
       }
 
       public virtual IMatched<Unit> OnFailure(ParseState state, Exception exception) => failedMatch<Unit>(exception);

@@ -14,7 +14,9 @@ namespace Kagami.Library.Parsers
          {
             var matched = parser.Scan(state);
             if (!matched.IsNotMatched)
-               return matched;
+            {
+	            return matched;
+            }
          }
 
          return notMatched<Unit>();

@@ -17,9 +17,13 @@ namespace Kagami.Library.Nodes.Statements
 			var expressionBuilder = new ExpressionBuilder(ExpressionFlags.Standard);
 			expressionBuilder.Add(new FieldSymbol(fieldName));
 			if (expressionBuilder.ToExpression().If(out var expression, out var exception))
+			{
 				return new Block(new Return(expression, none<TypeConstraint>()));
+			}
 			else
+			{
 				throw exception;
+			}
 		}
 
 		public static Block Setter(string fieldName, string parameterName)
@@ -32,7 +36,9 @@ namespace Kagami.Library.Nodes.Statements
 				return new Block(assignToField);
 			}
 			else
+			{
 				throw exception;
+			}
 		}
 
 		List<Statement> statements;
@@ -75,7 +81,9 @@ namespace Kagami.Library.Nodes.Statements
 		public override void Generate(OperationsBuilder builder)
 		{
 			foreach (var statement in statements)
+			{
 				statement.Generate(builder);
+			}
 
 			if (Yielding)
 			{
@@ -83,7 +91,9 @@ namespace Kagami.Library.Nodes.Statements
 				builder.Return(true);
 			}
 			else if (typeConstraint.If(out var tc))
+			{
 				builder.ReturnType(true, tc);
+			}
 		}
 
 		public IEnumerator<Statement> GetEnumerator() => statements.GetEnumerator();
@@ -97,7 +107,9 @@ namespace Kagami.Library.Nodes.Statements
 		public void AddReturnIf()
 		{
 			if (!(statements[statements.Count - 1] is ReturnNothing))
+			{
 				statements.Add(new ReturnNothing());
+			}
 		}
 
 		public void AddReturnIf(Symbol symbol)
@@ -113,9 +125,13 @@ namespace Kagami.Library.Nodes.Statements
 		{
 			if (statements.Count > 0 && statements[0] is ExpressionStatement expressionStatement &&
 				expressionStatement.ReturnExpression == returns)
+			{
 				return expressionStatement.Expression.Some();
+			}
 			else
+			{
 				return none<Expression>();
+			}
 		}
 	}
 }

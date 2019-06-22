@@ -30,7 +30,9 @@ namespace Kagami.Library.Parsers.Statements
 				var elseBlock = none<Block>();
 				var elseParser = new ElseParser();
 				if (elseParser.Scan(state).If(out _, out var anyException))
+				{
 					elseBlock = elseParser.Block;
+				}
 				else if (anyException.If(out var exception))
 				{
 					state.RollBackTransaction();

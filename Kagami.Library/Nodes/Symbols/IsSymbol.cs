@@ -35,7 +35,9 @@ namespace Kagami.Library.Nodes.Symbols
 			builder.Label(elseLabel);
 
 			if (elseExpression.If(out var elseExpressionValue))
+			{
 				elseExpressionValue.Generate(builder);
+			}
 
 			builder.Label(endLabel);
 

@@ -163,14 +163,20 @@ namespace Kagami.Library.Objects
 		public IObject Remove(IObject obj)
 		{
 			if (mutable.ToString().Find(obj.AsString).If(out var index))
+			{
 				mutable.Remove(index, obj.AsString.Length);
+			}
+
 			return this;
 		}
 
 		public IObject RemoveAt(int index)
 		{
 			if (index.Between(0).Until(mutable.Length))
+			{
 				mutable.Remove(index, 1);
+			}
+
 			return this;
 		}
 
@@ -179,7 +185,9 @@ namespace Kagami.Library.Objects
 			var asString = obj.AsString;
 			var length = asString.Length;
 			foreach (var index in mutable.ToString().FindAll(asString).Reverse())
+			{
 				mutable.Remove(index, length);
+			}
 
 			return this;
 		}
@@ -195,14 +203,22 @@ namespace Kagami.Library.Objects
 		public IObject Assign(IObject indexes, IObject values)
 		{
 			if (getIterator(indexes, false).If(out var indexesIterator) && getIterator(values, false).If(out var valuesIterator))
+			{
 				while (indexesIterator.Next().If(out var index))
+				{
 					if (valuesIterator.Next().If(out var value))
 					{
 						if (index is Int i && i.Value.Between(0).Until(mutable.Length) && value is Char ch)
+						{
 							mutable[i.Value] = ch.Value;
+						}
 					}
 					else
+					{
 						break;
+					}
+				}
+			}
 
 			return this;
 		}

@@ -16,13 +16,21 @@ namespace Kagami.Library.Operations
       {
          var stack = new Stack<IObject>();
          for (var i = 0; i < count; i++)
-            if (machine.Pop().If(out var value, out var exception))
-               stack.Push(value);
-            else
-               return failedMatch<IObject>(exception);
+         {
+	         if (machine.Pop().If(out var value, out var exception))
+	         {
+		         stack.Push(value);
+	         }
+	         else
+	         {
+		         return failedMatch<IObject>(exception);
+	         }
+         }
 
          while (stack.Count > 0)
-            machine.Push(stack.Pop());
+         {
+	         machine.Push(stack.Pop());
+         }
 
          return notMatched<IObject>();
       }

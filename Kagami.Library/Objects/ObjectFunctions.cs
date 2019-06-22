@@ -66,7 +66,10 @@ namespace Kagami.Library.Objects
 						return true;
 					}
 					else
+					{
 						return false;
+					}
+
 				case InternalList internalList:
 					return internalList.In(source);
 				case Regex regex:
@@ -79,9 +82,13 @@ namespace Kagami.Library.Objects
 					return typeConstraint.Matches(classOf(source));
 				default:
 					if (classOf(source).MatchCompatible(classOf(comparisand)))
+					{
 						return equalifier(source, (T)comparisand);
+					}
 					else
+					{
 						return false;
+					}
 			}
 		}
 
@@ -138,7 +145,10 @@ namespace Kagami.Library.Objects
 						return true;
                }
 					else
+					{
 						return false;
+					}
+
 				case Pattern pattern:
 					return pattern.Match(source, bindings);
 				case IProcessPlaceholders _:
@@ -166,18 +176,26 @@ namespace Kagami.Library.Objects
 		{
 			var cls = classOf(obj);
 			if (cls.RespondsTo(message.Selector))
+			{
 				return cls.SendMessage(obj, message);
+			}
 			else
+			{
 				return defaultFunc();
+			}
 		}
 
 		public static IObject sendMessage(IObject obj, Selector selector, Func<IObject> defaultFunc, Arguments arguments)
 		{
 			var cls = classOf(obj);
 			if (cls.RespondsTo(selector))
+			{
 				return cls.SendMessage(obj, selector, arguments);
+			}
 			else
+			{
 				return defaultFunc();
+			}
 		}
 
 		public static IObject sendMessage(IObject obj, Selector selector, Func<IObject> defaultFunc, params IObject[] arguments)
@@ -193,32 +211,44 @@ namespace Kagami.Library.Objects
 		public static string userObjectString(UserObject obj)
 		{
 			if (classOf(obj).RespondsTo("string".get()))
+			{
 				return sendMessage(obj, "string".get()).AsString;
+			}
 			else
+			{
 				return
 					$"object{obj.ObjectID} {obj.ClassName}({obj.Parameters.Select(p => $"{p.Name} = {obj.Fields[p.Name].Image}").Stringify()})";
+			}
 		}
 
 		public static string userObjectImage(UserObject obj)
 		{
 			if (classOf(obj).RespondsTo("image".get()))
+			{
 				return sendMessage(obj, "image".get()).AsString;
+			}
 			else
+			{
 				return
 					$"object{obj.ObjectID} {obj.ClassName}({obj.Parameters.Select(p => $"{p.Name} = {obj.Fields[p.Name].Image}").Stringify()})";
+			}
 		}
 
 		public static bool isEqualTo(UserObject obj, IObject other)
 		{
 			if (classOf(obj).RespondsTo("isEqualTo(_)"))
+			{
 				return sendMessage(obj, "isEqualTo(_)", other).IsTrue;
+			}
 			else if (other is UserObject otherUserObject && obj.ClassName == otherUserObject.ClassName)
 			{
 				var fields = otherUserObject.Fields;
 				return obj.Fields.All(f => fields.ContainsKey(f.fieldName) && f.field.Value.IsEqualTo(fields[f.fieldName]));
 			}
 			else
+			{
 				return false;
+			}
 		}
 
 		public static bool userObjectMatch(UserObject obj, IObject comparisand, Hash<string, IObject> bindings)
@@ -236,14 +266,19 @@ namespace Kagami.Library.Objects
 				{
 					var resultHash = dictionary.InternalHash;
 					foreach (var (key, value) in resultHash)
+					{
 						bindings[key.AsString] = value;
+					}
 
 					return true;
 				}
 				else
+				{
 					return false;
+				}
 			}
 			else
+			{
 				return match(obj, comparisand, (uo1, uo2) =>
 				{
 					if (obj.Parameters.Length == 0)
@@ -253,12 +288,15 @@ namespace Kagami.Library.Objects
 							var value1 = field.Value;
 							var value2 = uo2.Fields[fieldName];
 							if (!value1.Match(value2, bindings))
+							{
 								return false;
+							}
 						}
 
 						return true;
 					}
 					else
+					{
 						foreach (var parameter in obj.Parameters)
 						{
 							var name = parameter.Name;
@@ -267,14 +305,20 @@ namespace Kagami.Library.Objects
 								var value1 = uo1.Fields[name];
 								var value2 = uo2.Fields[name];
 								if (!value1.Match(value2, bindings))
+								{
 									return false;
+								}
 							}
 							else
+							{
 								return false;
+							}
 						}
+					}
 
 					return true;
 				}, bindings);
+			}
 		}
 
 		public static bool processPlaceholdersMatch(IObject obj, IObject comparisand, Hash<string, IObject> bindings)
@@ -282,19 +326,27 @@ namespace Kagami.Library.Objects
 			if (obj is IProcessPlaceholders ppInternals && comparisand is IProcessPlaceholders ppPassed)
 			{
 				foreach (var (key, value) in ppInternals.Internals)
+				{
 					if (ppPassed.Passed.ContainsKey(key))
 					{
 						var passedValue = ppPassed.Passed[key];
 						if (!value.Match(passedValue, bindings))
+						{
 							return false;
+						}
 					}
 					else
+					{
 						return false;
+					}
+				}
 
 				return true;
 			}
 			else
+			{
 				return false;
+			}
 		}
 
 		public static string stringOf(IObject obj)
@@ -302,9 +354,13 @@ namespace Kagami.Library.Objects
 			var message = "string".get();
 			var cls = classOf(obj);
 			if (cls.RespondsTo(message))
+			{
 				return ((String)sendMessage(obj, message)).Value;
+			}
 			else
+			{
 				return obj.AsString;
+			}
 		}
 
 		public static IObject[] setObjects(IObject[] target, IEnumerable<IObject> source, Func<int, IObject> defaultValue)
@@ -322,14 +378,21 @@ namespace Kagami.Library.Objects
 			}
 
 			if (length < target.Length)
+			{
 				for (var i = length; i < target.Length; i++)
+				{
 					target[i] = defaultValue(i);
+				}
+			}
 
 			else if (length < s.Length)
 			{
 				var list = new List<IObject> { lastValue };
 				for (var i = length; i < s.Length; i++)
+				{
 					list.Add(s[i]);
+				}
+
 				target[lastIndex] = new Tuple(list.ToArray());
 			}
 
@@ -346,7 +409,9 @@ namespace Kagami.Library.Objects
 
 			var rangeSize = collection.Length.Value;
 			if (rangeSize == -1)
+			{
 				builder.Append(func(obj));
+			}
 			else
 			{
 				var breakEarly = rangeSize >= breakOn;
@@ -391,12 +456,18 @@ namespace Kagami.Library.Objects
 			var lLength = lArray.Length;
 			var rLength = rArray.Length;
 			if (lLength != rLength)
+			{
 				return false;
+			}
 			else
 			{
 				for (var i = 0; i < lLength; i++)
+				{
 					if (!lArray[i].IsEqualTo(rArray[i]))
+					{
 						return false;
+					}
+				}
 
 				return true;
 			}
@@ -410,12 +481,18 @@ namespace Kagami.Library.Objects
 			var lLength = lArray.Length;
 			var rLength = rArray.Length;
 			if (lLength != rLength)
+			{
 				return false;
+			}
 			else
 			{
 				for (var i = 0; i < lLength; i++)
+				{
 					if (!lArray[i].Equals(rArray[i]))
+					{
 						return false;
+					}
+				}
 
 				return true;
 			}
@@ -424,25 +501,37 @@ namespace Kagami.Library.Objects
 		public static int compareObjects<T>(T x, IObject y, Func<T, T, int> comparer) where T : IObject
 		{
 			if (y is T ty)
+			{
 				return comparer(x, ty);
+			}
 			else
+			{
 				throw incompatibleClasses(y, typeof(T).Name);
+			}
 		}
 
 		public static bool between(IObjectCompare obj, IObject min, IObject max, bool inclusive)
 		{
 			if (inclusive)
+			{
 				return obj.Compare(min) >= 0 && obj.Compare(max) <= 0;
+			}
 			else
+			{
 				return obj.Compare(min) >= 0 && obj.Compare(max) < 0;
+			}
 		}
 
 		public static bool after(IObjectCompare obj, IObject min, IObject max, bool inclusive)
 		{
 			if (inclusive)
+			{
 				return obj.Compare(min) > 0 && obj.Compare(max) <= 0;
+			}
 			else
+			{
 				return obj.Compare(min) > 0 && obj.Compare(max) < 0;
+			}
 		}
 
 		public static string zfill(string number, int count)
@@ -460,7 +549,9 @@ namespace Kagami.Library.Objects
 		public static Selector parseSelector(string source)
 		{
 			if (!source.EndsWith(")"))
+			{
 				source = $"{source}(_)";
+			}
 
 			var matcher = new Matcher();
 			if (matcher.IsMatch(source, $"^ /(('__$')? {REGEX_FUNCTION_NAME}) '(' /@"))
@@ -469,7 +560,9 @@ namespace Kagami.Library.Objects
 				var rest = matcher.SecondGroup.KeepUntil(")");
 				SelectorItem[] items;
 				if (rest.IsEmpty())
+				{
 					items = new SelectorItem[0];
+				}
 				else
 				{
 					var sourceItems = rest.Split("/s* ',' /s*");
@@ -479,7 +572,9 @@ namespace Kagami.Library.Objects
 				return new Selector(name, items, source);
 			}
 			else
+			{
 				throw $"Can't convert {source} into a Selector".Throws();
+			}
 		}
 
 		public static SelectorItem parseSelectorItem(string source)
@@ -495,7 +590,9 @@ namespace Kagami.Library.Objects
 			}
 
 			if (matcher.IsMatch(source, $"^ /({REGEX_FIELD}) /b /@"))
+			{
 				source = matcher.SecondGroup;
+			}
 
 			if (matcher.IsMatch(source, "^ '<' /(-['>']+) '>' /@"))
 			{
@@ -541,7 +638,9 @@ namespace Kagami.Library.Objects
 				return ObjectFunctions.format(intValue, size, 8);
 			}
 			else
+			{
 				return intValue.FormatUsing<int>(format, i => i.ToString(format));
+			}
 		}
 
 		public static string format(int value, int toBase, int size, char padding)

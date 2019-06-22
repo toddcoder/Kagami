@@ -76,7 +76,9 @@ namespace Kagami.Library.Parsers.Expressions
 			state.BeginImplicitExpressionState();
 			state.ImplicitExpressionState.FieldName1 = fieldName;
 			if (parameterCount == 2)
+			{
 				state.ImplicitExpressionState.FieldName2 = fieldName == "__$0" ? "__$1" : "__$0";
+			}
 
 			return Unit.Matched();
 		}
@@ -96,7 +98,9 @@ namespace Kagami.Library.Parsers.Expressions
 				return Unit.Matched();
 			}
 			else
+			{
 				return "Collection or iterable not expressed".FailedMatch<Unit>();
+			}
 		}
 	}
 }

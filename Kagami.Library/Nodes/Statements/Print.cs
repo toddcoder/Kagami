@@ -26,15 +26,24 @@ namespace Kagami.Library.Nodes.Statements
       public override void Generate(OperationsBuilder builder)
       {
          if (expression.If(out var e))
-            e.Generate(builder);
+         {
+	         e.Generate(builder);
+         }
          else
-            builder.PushString("");
+         {
+	         builder.PushString("");
+         }
+
          builder.Peek(Index);
 
          if (newLine)
-            builder.PrintLine();
+         {
+	         builder.PrintLine();
+         }
          else
-            builder.Print();
+         {
+	         builder.Print();
+         }
       }
 
       public override string ToString()

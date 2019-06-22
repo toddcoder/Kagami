@@ -20,9 +20,13 @@ namespace Kagami.Library.Objects
 		{
 			this.items = items;
 			if (this.items.Length == 2 && this.items[1] is Lambda lambda)
+			{
 				seedLambda = (this.items[0], lambda).Some();
+			}
 			else
+			{
 				seedLambda = none<(IObject, Lambda)>();
+			}
 		}
 
 		public IMaybe<(IObject, Lambda)> SeedLambda => seedLambda;
@@ -47,7 +51,10 @@ namespace Kagami.Library.Objects
 		{
 			var value = items[index % items.Length];
 			if (value is Lambda lambda)
+			{
 				value = lambda.Invoke();
+			}
+
 			return value.Some();
 		}
 

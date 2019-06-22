@@ -37,11 +37,16 @@ namespace Kagami.Library.Parsers
 	         if (parsed.If(out _, out anyException))
 	         {
 		         if (UpdateIndexOnParseOnly)
+		         {
 			         state.UpdateStatement(index, 1);
-            }
+		         }
+	         }
 				else if (anyException.IsSome)
+	         {
 		         state.SetExceptionIndex();
-            return parsed;
+	         }
+
+	         return parsed;
          }
 
 	      if (new Matcher().MatchOne(state.CurrentSource, state.RealizePattern(Pattern), IgnoreCase, Multiline).If(out var match, out anyException))
@@ -49,9 +54,15 @@ namespace Kagami.Library.Parsers
 		      var index = state.Index;
 		      var parsed = Parse(state, GetTokens(state, match));
 		      if (parsed.IsMatched && updateLastStatement)
+		      {
 			      state.UpdateStatement(index, match.Length);
+		      }
+
 		      if (parsed.IsFailedMatch)
+		      {
 			      state.SetExceptionIndex();
+		      }
+
 		      return parsed;
          }
 			else if (anyException.If(out var exception))
@@ -60,7 +71,9 @@ namespace Kagami.Library.Parsers
 		      return failedMatch<Unit>(exception);
 	      }
 	      else
+	      {
 		      return notMatched<Unit>();
+	      }
       }
 
       public virtual bool UpdateIndexOnParseOnly => false;

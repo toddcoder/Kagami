@@ -35,9 +35,13 @@ namespace Kagami.Library.Objects
          get
          {
             if (comparisands.Length == 0)
-               return name;
+            {
+	            return name;
+            }
             else
-               return $"{name}({comparisands.Select(c => c.Image).Stringify()})";
+            {
+	            return $"{name}({comparisands.Select(c => c.Image).Stringify()})";
+            }
          }
       }
 
@@ -51,7 +55,9 @@ namespace Kagami.Library.Objects
             return Enumerable.Range(0, comparisands.Length).Select(i => self.comparisands[i].IsEqualTo(others[i])).All(b => b);
          }
          else
-            return false;
+         {
+	         return false;
+         }
       }
 
       public bool IsEqualTo(IObject obj)

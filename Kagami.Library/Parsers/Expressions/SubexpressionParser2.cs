@@ -43,7 +43,9 @@ namespace Kagami.Library.Parsers.Expressions
 				}
 			}
 			else
+			{
 				return notMatched<Unit>();
+			}
 		}
 	}
 }

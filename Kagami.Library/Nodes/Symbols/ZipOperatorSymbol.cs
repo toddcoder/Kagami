@@ -17,7 +17,9 @@ namespace Kagami.Library.Nodes.Symbols
             builder.SendMessage("zip".Selector("<Collection>", "<Lambda>"), 2);
          }
          else
-            throw exception;
+         {
+	         throw exception;
+         }
       }
 
       public override Precedence Precedence => Precedence.ChainedOperator;

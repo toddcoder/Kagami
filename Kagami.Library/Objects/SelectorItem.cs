@@ -27,20 +27,31 @@ namespace Kagami.Library.Objects
 		public IEnumerator<SelectorItem> GetEnumerator()
 		{
 			if (TypeConstraint.If(out var typeConstraint))
+			{
 				foreach (var tc in typeConstraint)
+				{
 					yield return new SelectorItem(Label, tc.Some(), SelectorItemType);
+				}
+			}
 			else
+			{
 				yield return this;
+			}
 		}
 
 		public override string ToString()
 		{
 			var builder = new StringBuilder();
 			if (Label.IsNotEmpty())
+			{
 				builder.Append($"{Label}:");
+			}
+
 			builder.Append("_");
 			if (TypeConstraint.If(out var tc))
+			{
 				builder.Append(tc.Image);
+			}
 
 			return builder.ToString();
 		}

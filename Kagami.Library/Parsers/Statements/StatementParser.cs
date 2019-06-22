@@ -44,11 +44,16 @@ namespace Kagami.Library.Parsers.Statements
 			if (ParseStatement(state, tokens).Out(out _, out var original))
 			{
 				if (MatchEndOfLine)
+				{
 					state.SkipEndOfLine();
+				}
+
 				return Unit.Matched();
 			}
 			else
+			{
 				return original;
+			}
 		}
 
 		public virtual bool MatchEndOfLine => true;

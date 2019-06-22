@@ -22,9 +22,15 @@ namespace Kagami.Library.Nodes.Symbols
 		public override void Generate(OperationsBuilder builder)
 		{
 			if (swap)
+			{
 				builder.Swap();
+			}
+
 			if (label.IsNotEmpty())
+			{
 				builder.ArgumentLabel(label);
+			}
+
 			builder.SendMessage(selector, 1);
 		}
 

@@ -36,7 +36,9 @@ namespace Kagami.Library.Objects
 			var stage1 = (ICollection)iterator.Skip(skipCount);
 
 			if (takeCount == 0)
+			{
 				return (IObject)stage1;
+			}
 			else
 			{
 				iterator = stage1.GetIterator(false);

@@ -20,13 +20,20 @@ namespace Kagami.Library.Parsers.Expressions
          if (double.TryParse(source, out var result))
          {
             if (type == "i")
-               builder.Add(new ComplexSymbol(result));
+            {
+	            builder.Add(new ComplexSymbol(result));
+            }
             else
-               builder.Add(new FloatSymbol(result));
+            {
+	            builder.Add(new FloatSymbol(result));
+            }
+
             return Unit.Matched();
          }
          else
-            return failedMatch<Unit>(unableToConvert(source, "Float"));
+         {
+	         return failedMatch<Unit>(unableToConvert(source, "Float"));
+         }
       }
    }
 }

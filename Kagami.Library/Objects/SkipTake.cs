@@ -47,9 +47,13 @@ namespace Kagami.Library.Objects
 		public SkipTake Literal(IObject literal)
 		{
 			if (result.If(out var r))
+			{
 				result = sendMessage(r, "~(_)", literal).Some();
+			}
 			else
+			{
 				result = literal.Some();
+			}
 
 			return this;
 		}

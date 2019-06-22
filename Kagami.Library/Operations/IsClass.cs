@@ -11,9 +11,13 @@ namespace Kagami.Library.Operations
       static IMatched<IObject> getValue(bool pop, Machine machine, string className)
       {
          if (pop)
-            return machine.Pop().FlatMap(value => value.Matched(), failedMatch<IObject>);
+         {
+	         return machine.Pop().FlatMap(value => value.Matched(), failedMatch<IObject>);
+         }
          else
-            return machine.Peek().FlatMap(value => value.Matched(), () => $"Couldn't peek value to determine class {className}".FailedMatch<IObject>());
+         {
+	         return machine.Peek().FlatMap(value => value.Matched(), () => $"Couldn't peek value to determine class {className}".FailedMatch<IObject>());
+         }
       }
 
       string className;

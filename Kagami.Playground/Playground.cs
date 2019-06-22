@@ -62,7 +62,9 @@ namespace Kagami.Playground
 			{
 				FileName configurationFile = $"{drive}{PLAYGROUND_CONFIGURATION_FILE}";
 				if (configurationFile.Exists())
+				{
 					return configurationFile.Success();
+				}
 			}
 
 			return "Couldn't find configuration file".Failure<FileName>();
@@ -76,7 +78,9 @@ namespace Kagami.Playground
 				var serializer = JsonSerializer.Create(settings);
 				using (var stringReader = new StringReader(jsonText))
 				using (var jsonReader = new JsonTextReader(stringReader))
+				{
 					return serializer.Deserialize<PlaygroundConfiguration>(jsonReader);
+				}
 			})
 			select configuration;
 
@@ -216,7 +220,9 @@ namespace Kagami.Playground
 				cancelled = false;
 				watch = new Hash<string, IObject>();
 				if (playgroundConfiguration.LastFile != null)
+				{
 					document.Open(playgroundConfiguration.LastFile);
+				}
 			}
 			catch (Exception exception)
 			{
@@ -237,7 +243,9 @@ namespace Kagami.Playground
 					Application.DoEvents();
 				}
 				else if (fromMenu)
+				{
 					document.Save();
+				}
 
 				try
 				{
@@ -254,18 +262,22 @@ namespace Kagami.Playground
 					{
 						machine.PackageFolder = packageFolder.FullPath;
 						if (execute)
+						{
 							if (machine.Execute().IfNot(out exception))
 							{
 								textWriter.WriteLine(KAGAMI_EXCEPTION_PROMPT + exception.Message);
 								exceptionIndex = compiler.ExceptionIndex;
 								if (exceptionIndex.IsNone)
+								{
 									exceptionIndex = textEditor.SelectionStart.Some();
+								}
 							}
 							else
 							{
 								cancelled = context.Cancelled();
 								context.Reset();
 							}
+						}
 
 						stopwatch.Stop();
 						var state = textEditor.StopAutoScrollingAlways();
@@ -282,11 +294,15 @@ namespace Kagami.Playground
 						{
 							var remainingLineLength = getRemainingLineIndex(index);
 							if (remainingLineLength > -1)
+							{
 								showException(index, remainingLineLength);
+							}
 						}
 
 						if (dumpOperations && compiler.Operations.If(out var operations))
+						{
 							textWriter.WriteLine(operations);
+						}
 
 						document.Clean();
 
@@ -297,12 +313,17 @@ namespace Kagami.Playground
 						textWriter.WriteLine(KAGAMI_EXCEPTION_PROMPT + exception.Message);
 						exceptionIndex = compiler.ExceptionIndex;
 						if (exceptionIndex.IsNone)
+						{
 							exceptionIndex = textEditor.SelectionStart.Some();
+						}
+
 						if (exceptionIndex.If(out var index))
 						{
 							var remainingLineLength = getRemainingLineIndex(index);
 							if (remainingLineLength > -1)
+							{
 								showException(index, remainingLineLength);
+							}
 						}
 					}
 				}
@@ -324,15 +345,19 @@ namespace Kagami.Playground
 		int getRemainingLineIndex(int index)
 		{
 			for (var i = index; i < textEditor.TextLength; i++)
+			{
 				switch (textEditor.Text[i])
 				{
 					case '\n':
 					case '\r':
 						if (index != i)
+						{
 							return i - index;
+						}
 
 						break;
 				}
+			}
 
 			return textEditor.TextLength - index;
 		}
@@ -350,13 +375,20 @@ namespace Kagami.Playground
 			{
 				var number = textEditor.CurrentLineIndex();
 				if (textEditor.AtEnd() && textEditor.Text.IsMatch("/n $"))
+				{
 					number--;
+				}
+
 				var lines = textEditor.Lines;
 				if (number.Between(0).Until(lines.Length))
+				{
 					text = lines[number].Copy();
+				}
 			}
 			else
+			{
 				text = textEditor.SelectedText;
+			}
 
 			textEditor.AppendAtEnd(text, "/n");
 		}
@@ -421,7 +453,9 @@ namespace Kagami.Playground
 			var lineFromCharIndex2 = textEditor.GetLineFromCharIndex(textEditor.SelectionStart + textEditor.SelectionLength);
 			var lines = textEditor.Lines;
 			if (lineFromCharIndex1.Between(0).Until(lines.Length) && lineFromCharIndex2.Between(0).Until(lines.Length))
+			{
 				return (lines.RangeOf(lineFromCharIndex1, lineFromCharIndex2), lineFromCharIndex1).Some();
+			}
 
 			return none<(string[], int)>();
 		}
@@ -435,7 +469,9 @@ namespace Kagami.Playground
 			textEditor.SelectedText = text;
 			textEditor.SelectionStart += selectionOffset;
 			if (length <= -1)
+			{
 				return;
+			}
 
 			textEditor.SelectionLength = length;
 		}
@@ -449,12 +485,17 @@ namespace Kagami.Playground
 		void insertDelimiterText(string delimiter, int selectionOffset, int length, int halfLength = -1)
 		{
 			if (textEditor.SelectionLength == 0)
+			{
 				insertText(delimiter, selectionOffset, length);
+			}
 			else
 			{
 				var selectedText = textEditor.SelectedText;
 				if (halfLength == -1)
+				{
 					halfLength = delimiter.Length / 2;
+				}
+
 				textEditor.SelectedText = delimiter.Keep(halfLength) + selectedText + delimiter.Drop(halfLength);
 			}
 		}
@@ -476,12 +517,14 @@ namespace Kagami.Playground
 			{
 				var peeks = new Hash<int, string>();
 				foreach (var (key, value) in context.Peeks)
+				{
 					try
 					{
 						var lineIndex = textEditor.GetLineFromCharIndex(key);
 						peeks[lineIndex] = value;
 					}
 					catch { }
+				}
 
 				foreach (var (lineNumber, line, _) in textEditor.VisibleLines)
 				{
@@ -496,7 +539,10 @@ namespace Kagami.Playground
 					textEditor.DrawTabLines(e.Graphics);
 					textEditor.DrawLineNumbers(e.Graphics, Color.Black, Color.White);
 					if (textEditor.SelectionLength == 0)
+					{
 						textEditor.DrawCurrentLineBar(e.Graphics, Color.Black, Color.White, alpha: 0);
+					}
+
 					textEditor.DrawModificationGlyphs(e.Graphics);
 
 					if (exceptionData.If(out var data))
@@ -518,12 +564,16 @@ namespace Kagami.Playground
 			var remainingWidth = width - lineWidth - diff;
 			var dots = "…";
 			if (remainingWidth <= diff)
+			{
 				return dots;
+			}
 			else
 			{
 				var annotationWidth = getWidth(graphics, annotation, annotationFont);
 				if (annotationWidth <= remainingWidth)
+				{
 					return annotation;
+				}
 				else
 				{
 					while (annotationWidth > remainingWidth)
@@ -569,21 +619,27 @@ namespace Kagami.Playground
 					break;
 				case ')':
 					if (textAtInsert(1) != ")")
+					{
 						break;
+					}
 
 					moveSelectionRelative();
 					e.Handled = true;
 					break;
 				case ',':
 					if (textAtInsert(1) != ",")
+					{
 						break;
+					}
 
 					moveSelectionRelative();
 					e.Handled = true;
 					break;
 				case ';':
 					if (textAtInsert(1) != ";")
+					{
 						break;
+					}
 
 					moveSelectionRelative();
 					e.Handled = true;
@@ -594,7 +650,9 @@ namespace Kagami.Playground
 					break;
 				case ']':
 					if (textAtInsert(1) != "]")
+					{
 						break;
+					}
 
 					moveSelectionRelative();
 					e.Handled = true;
@@ -605,7 +663,9 @@ namespace Kagami.Playground
 					break;
 				case '}':
 					if (textAtInsert(1) != "}")
+					{
 						break;
+					}
 
 					moveSelectionRelative();
 					e.Handled = true;
@@ -647,14 +707,19 @@ namespace Kagami.Playground
 					}
 
 					if (textAtInsert(1) != "}" || textAtInsert(1, -1) != "{")
+					{
 						break;
+					}
 
 					e.Handled = true;
 					setTextAtInsert(1);
 					break;
 				case Keys.F1:
 					if (getWord().If(out var begin) && findWord(begin).If(out var source))
+					{
 						insertText(source.Drop(begin.Length), 0);
+					}
+
 					e.Handled = true;
 					break;
 			}

@@ -35,6 +35,7 @@ namespace Kagami.Library
 			resetUniqueID();
 
 			while (state.More)
+			{
 				if (statementsParser.Scan(state).If(out _, out var anyException)) { }
 				else if (anyException.If(out var innerException))
 				{
@@ -46,6 +47,7 @@ namespace Kagami.Library
 					ExceptionIndex = state.CurrentSource.Length.Some();
 					return $"Didn't understand {state.CurrentSource}".Failure<Machine>();
 				}
+			}
 
 			Tokens = state.Tokens;
 
@@ -66,7 +68,9 @@ namespace Kagami.Library
 				return machine.Success();
 			}
 			else
+			{
 				return failure<Machine>(exception);
+			}
 		}
 
 		public IMaybe<int> ExceptionIndex { get; set; } = none<int>();
