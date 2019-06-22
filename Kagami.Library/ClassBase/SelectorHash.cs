@@ -1,14 +1,19 @@
 ﻿using System.Collections.Generic;
-using Kagami.Library.Objects;
 using Core.Collections;
+using Kagami.Library.Objects;
 
-namespace Kagami.Library.Classes
+namespace Kagami.Library.ClassBase
 {
 	public class SelectorHash<TValue> : Hash<string, TValue>
 	{
-		AutoHash<string, List<string>> buckets;
+		protected AutoHash<string, List<string>> buckets;
 
-		public SelectorHash() => buckets = new AutoHash<string, List<string>>(key => new List<string>(), true);
+		public SelectorHash() => buckets = new AutoHash<string, List<string>>(key => new List<string>(), true)
+
+		protected bool isEquivalentTo(Selector selector, Selector matchSelector)
+		{
+
+		}
 
 		public TValue this[Selector selector]
 		{
@@ -69,5 +74,5 @@ namespace Kagami.Library.Classes
 		}
 
 		public bool ContainsExact(Selector selector) => base.ContainsKey(selector.Image);
-	}
+    }
 }
