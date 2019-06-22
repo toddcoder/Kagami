@@ -174,19 +174,12 @@ namespace Kagami.Library.Objects
 			}
 		}
 
-		IEnumerable<int> indexList(InternalList internalList)
-		{
-			return internalList.List.Cast<Int>()
-				.Select(i => wrapIndex(i.Value, list.Count))
-				.Where(i => i.Between(0).Until(list.Count));
-		}
-
 		public IObject this[InternalList internalList]
 		{
 			get
 			{
 				var result = new List<IObject>();
-				foreach (var index in indexList(internalList))
+				foreach (var index in indexList(internalList, list.Count))
 				{
 					result.Add(list[index]);
 				}
@@ -202,7 +195,7 @@ namespace Kagami.Library.Objects
 					case ICollection collection when !(value is String):
 					{
 						var valueIterator = collection.GetIterator(false);
-						foreach (var index in indexList(internalList))
+						foreach (var index in indexList(internalList, list.Count))
 						{
 							var anyItem = valueIterator.Next();
 							if (anyItem.If(out var item))
@@ -220,7 +213,7 @@ namespace Kagami.Library.Objects
 
 					default:
 					{
-						foreach (var index in indexList(internalList))
+						foreach (var index in indexList(internalList, list.Count))
 						{
 							list[index] = value;
 						}

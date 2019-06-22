@@ -25,7 +25,7 @@ namespace Kagami.Library.Classes
 			textFindingMessages();
 
 			messages["~(_)"] = (obj, msg) => function<String, IObject>(obj, msg, (s1, s2) => s1.Concatenate(s2.AsString));
-			messages["[](_)"] = (obj, msg) => function<String, Int>(obj, msg, (s, i) => s[i.Value]);
+			messages["[](_)"] = (obj, msg) => function<String, IObject>(obj, msg, getIndexed);
 			messages["length".get()] = (obj, msg) => function<String>(obj, s => s.Length);
 			messages["upper()"] = (obj, msg) => function<String>(obj, s => s.Upper());
 			messages["lower()"] = (obj, msg) => function<String>(obj, s => s.Lower());
@@ -77,7 +77,12 @@ namespace Kagami.Library.Classes
 			messages["mutable()"] = (obj, msg) => function<String>(obj, s => s.Mutable());
 		}
 
-		public override void RegisterClassMessages()
+		static IObject getIndexed(String s, IObject i)
+		{
+			return CollectionFunctions.getIndexed(s, i, (str, index) => str[index], (str, list) => str[list]);
+		}
+
+        public override void RegisterClassMessages()
 		{
 			base.RegisterClassMessages();
 

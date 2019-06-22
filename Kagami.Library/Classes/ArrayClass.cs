@@ -2,7 +2,6 @@
 using Kagami.Library.Objects;
 using Core.Exceptions;
 using Core.Monads;
-using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Classes.ClassFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using Array = Kagami.Library.Objects.Array;
@@ -72,7 +71,19 @@ namespace Kagami.Library.Classes
 			});
 		}
 
-		static InternalList conditionList(InternalList internalList)
+		static IObject getIndexed(Array a, IObject i)
+		{
+			return CollectionFunctions.getIndexed(a, i, (array, index) => array[index], (array, list) => array[list]);
+		}
+
+		static IObject setIndexed(Array a, IObject i, IObject v)
+		{
+			CollectionFunctions.setIndexed(a, i, v, (array, index, value) => array[index] = value,
+				(array, list, value) => array[list] = value);
+			return a;
+		}
+
+/*		static InternalList conditionList(InternalList internalList)
 		{
 			var list = new List<IObject>();
 			foreach (var obj in internalList.List)
@@ -138,7 +149,7 @@ namespace Kagami.Library.Classes
 				default:
 					throw invalidIndex(index);
 			}
-		}
+		}*/
 
 		public override void RegisterClassMessages()
 		{

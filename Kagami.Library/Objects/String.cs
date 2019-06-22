@@ -115,6 +115,21 @@ namespace Kagami.Library.Objects
 			}
 		}
 
+		public String this[InternalList internalList]
+		{
+
+			get
+			{
+				var builder = new StringBuilder();
+				foreach (var index in indexList(internalList, value.Length))
+				{
+					builder.Append(value[index]);
+				}
+
+				return builder.ToString();
+			}
+		}
+
 		public bool ExpandForArray => false;
 
 		int ISliceable.Length => value.Length;
