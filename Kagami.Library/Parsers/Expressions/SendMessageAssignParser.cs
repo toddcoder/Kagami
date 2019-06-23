@@ -13,7 +13,7 @@ namespace Kagami.Library.Parsers.Expressions
 
 		public SendMessageAssignParser(ExpressionBuilder builder) : base(builder) { }
 
-		public override string Pattern => $"^ /(|s|) /['.@'] /({REGEX_FUNCTION_NAME}) /(|s|) /({REGEX_ASSIGN_OPS})? /'=' -(> '=')";
+		public override string Pattern => $"^ /(|s|) /['.@'] /({REGEX_FUNCTION_NAME}) /(|s|) /({REGEX_ASSIGN_OPS})? /'=' -(> ['=>'])";
 
 		public override IMatched<Unit> Prefix(ParseState state, Token[] tokens)
 		{

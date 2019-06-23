@@ -11,7 +11,7 @@ namespace Kagami.Library.Parsers.Statements
 		string fieldName;
 		string operationSource;
 
-		public override string Pattern => $"^ /({REGEX_FIELD}) /(/s*) /({REGEX_ASSIGN_OPS})? /'=' -(> '=')";
+		public override string Pattern => $"^ /({REGEX_FIELD}) /(/s*) /({REGEX_ASSIGN_OPS})? /'=' -(> ['=>'])";
 
 		public override IMatched<Unit> Prefix(ParseState state, Token[] tokens)
 		{
