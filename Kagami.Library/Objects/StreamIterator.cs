@@ -34,9 +34,9 @@ namespace Kagami.Library.Objects
 
 		public bool IsTrue { get; } = true;
 
-		public ICollection Collection => iterator.Collection;
+		public ICollection Collection => terminate().Collection;
 
-		public ICollectionClass CollectionClass => iterator.CollectionClass;
+		public ICollectionClass CollectionClass => terminate().CollectionClass;
 
 		public bool IsLazy => true;
 
@@ -96,7 +96,7 @@ namespace Kagami.Library.Objects
 
 		public IObject Reset()
 		{
-			iterator.Reset();
+			terminate().Reset();
 			return this;
 		}
 
@@ -110,33 +110,41 @@ namespace Kagami.Library.Objects
 			return newIterator;
 		}
 
-		public IObject Reverse() => iterator.Reverse();
+		public IIterator terminate()
+		{
+			var list = List().ToList();
+			var array = new Array(list);
 
-		public String Join(string connector) => iterator.Join(connector);
+			return array.GetIterator(false);
+		}
 
-		public IObject Sort(Lambda lambda, bool ascending) => iterator.Sort(lambda, ascending);
+		public IObject Reverse() => terminate().Reverse();
 
-		public IObject Sort(bool ascending) => iterator.Sort(ascending);
+		public String Join(string connector) => terminate().Join(connector);
 
-		public IObject FoldLeft(IObject initialValue, Lambda lambda) => iterator.FoldLeft(initialValue, lambda);
+		public IObject Sort(Lambda lambda, bool ascending) => terminate().Sort(lambda, ascending);
 
-		public IObject FoldLeft(Lambda lambda) => iterator.FoldLeft(lambda);
+		public IObject Sort(bool ascending) => terminate().Sort(ascending);
 
-		public IObject FoldRight(IObject initialValue, Lambda lambda) => iterator.FoldRight(initialValue, lambda);
+		public IObject FoldLeft(IObject initialValue, Lambda lambda) => terminate().FoldLeft(initialValue, lambda);
 
-		public IObject FoldRight(Lambda lambda) => iterator.FoldRight(lambda);
+		public IObject FoldLeft(Lambda lambda) => terminate().FoldLeft(lambda);
 
-		public IObject ReduceLeft(IObject initialValue, Lambda lambda) => iterator.ReduceLeft(initialValue, lambda);
+		public IObject FoldRight(IObject initialValue, Lambda lambda) => terminate().FoldRight(initialValue, lambda);
 
-		public IObject ReduceLeft(Lambda lambda) => iterator.ReduceLeft(lambda);
+		public IObject FoldRight(Lambda lambda) => terminate().FoldRight(lambda);
 
-		public IObject ReduceRight(IObject initialValue, Lambda lambda) => iterator.ReduceRight(initialValue, lambda);
+		public IObject ReduceLeft(IObject initialValue, Lambda lambda) => terminate().ReduceLeft(initialValue, lambda);
 
-		public IObject ReduceRight(Lambda lambda) => iterator.ReduceRight(lambda);
+		public IObject ReduceLeft(Lambda lambda) => terminate().ReduceLeft(lambda);
 
-		public Int Count(IObject item) => iterator.Count(item);
+		public IObject ReduceRight(IObject initialValue, Lambda lambda) => terminate().ReduceRight(initialValue, lambda);
 
-		public Int Count(Lambda predicate) => iterator.Count(predicate);
+		public IObject ReduceRight(Lambda lambda) => terminate().ReduceRight(lambda);
+
+		public Int Count(IObject item) => terminate().Count(item);
+
+		public Int Count(Lambda predicate) => terminate().Count(predicate);
 
 		public IObject Copy(IStreamAction action)
 		{
@@ -209,69 +217,69 @@ namespace Kagami.Library.Objects
 
 		public IObject TakeUntil(Lambda predicate) => Copy(new TakeUntilAction(predicate));
 
-		public IObject Index(Lambda predicate) => iterator.Index(predicate);
+		public IObject Index(Lambda predicate) => terminate().Index(predicate);
 
-		public IObject Indexes(Lambda predicate) => iterator.Indexes(predicate);
+		public IObject Indexes(Lambda predicate) => terminate().Indexes(predicate);
 
-		public IObject Zip(ICollection collection) => iterator.Zip(collection);
+		public IObject Zip(ICollection collection) => terminate().Zip(collection);
 
-		public IObject Zip(ICollection collection, Lambda lambda) => iterator.Zip(collection, lambda);
+		public IObject Zip(ICollection collection, Lambda lambda) => terminate().Zip(collection, lambda);
 
-		public IObject Min() => iterator.Min();
+		public IObject Min() => terminate().Min();
 
-		public IObject Min(Lambda lambda) => iterator.Min(lambda);
+		public IObject Min(Lambda lambda) => terminate().Min(lambda);
 
-		public IObject Max() => iterator.Max();
+		public IObject Max() => terminate().Max();
 
-		public IObject Max(Lambda lambda) => iterator.Max(lambda);
+		public IObject Max(Lambda lambda) => terminate().Max(lambda);
 
-		public IObject First() => iterator.First();
+		public IObject First() => terminate().First();
 
-		public IObject First(Lambda predicate) => iterator.First(predicate);
+		public IObject First(Lambda predicate) => terminate().First(predicate);
 
-		public IObject Last() => iterator.Last();
+		public IObject Last() => terminate().Last();
 
-		public IObject Last(Lambda predicate) => iterator.Last(predicate);
+		public IObject Last(Lambda predicate) => terminate().Last(predicate);
 
-		public IObject Split(Lambda predicate) => iterator.Split(predicate);
+		public IObject Split(Lambda predicate) => terminate().Split(predicate);
 
-		public IObject Split(int count) => iterator.Split(count);
+		public IObject Split(int count) => terminate().Split(count);
 
-		public IObject GroupBy(Lambda lambda) => iterator.GroupBy(lambda);
+		public IObject GroupBy(Lambda lambda) => terminate().GroupBy(lambda);
 
-		public Boolean One(Lambda predicate) => iterator.One(predicate);
+		public Boolean One(Lambda predicate) => terminate().One(predicate);
 
-		public Boolean None(Lambda predicate) => iterator.None(predicate);
+		public Boolean None(Lambda predicate) => terminate().None(predicate);
 
-		public Boolean Any(Lambda predicate) => iterator.Any(predicate);
+		public Boolean Any(Lambda predicate) => terminate().Any(predicate);
 
-		public Boolean All(Lambda predicate) => iterator.All(predicate);
+		public Boolean All(Lambda predicate) => terminate().All(predicate);
 
-		public INumeric Sum() => iterator.Sum();
+		public INumeric Sum() => terminate().Sum();
 
-		public INumeric Average() => iterator.Average();
+		public INumeric Average() => terminate().Average();
 
-		public INumeric Product() => iterator.Product();
+		public INumeric Product() => terminate().Product();
 
-		public IObject Cross(ICollection collection) => iterator.Cross(collection);
+		public IObject Cross(ICollection collection) => terminate().Cross(collection);
 
-		public IObject Cross(ICollection collection, Lambda lambda) => iterator.Cross(collection, lambda);
+		public IObject Cross(ICollection collection, Lambda lambda) => terminate().Cross(collection, lambda);
 
-		public IObject By(int count) => iterator.By(count);
+		public IObject By(int count) => terminate().By(count);
 
-		public IObject Window(int count) => iterator.Window(count);
+		public IObject Window(int count) => terminate().Window(count);
 
 		public IObject Distinct() => Copy(new DistinctAction());
 
-		public IObject Span(Lambda predicate) => iterator.Span(predicate);
+		public IObject Span(Lambda predicate) => terminate().Span(predicate);
 
-		public IObject Span(int count) => iterator.Span(count);
+		public IObject Span(int count) => terminate().Span(count);
 
-		public IObject Shuffle() => iterator.Shuffle();
+		public IObject Shuffle() => terminate().Shuffle();
 
-		public IObject Random() => iterator.Random();
+		public IObject Random() => terminate().Random();
 
-		public IObject Collect() => iterator.Collect();
+		public IObject Collect() => terminate().Collect();
 
 		public Array ToArray() => new Array(List());
 
@@ -307,17 +315,17 @@ namespace Kagami.Library.Objects
 			return this;
 		}
 
-		public IObject Rotate(int count) => iterator.Rotate(count);
+		public IObject Rotate(int count) => terminate().Rotate(count);
 
-		public IObject Permutation(int count) => iterator.Permutation(count);
+		public IObject Permutation(int count) => terminate().Permutation(count);
 
-		public IObject Combination(int count) => iterator.Combination(count);
+		public IObject Combination(int count) => terminate().Combination(count);
 
-		public IObject Flatten() => iterator.Flatten();
+		public IObject Flatten() => terminate().Flatten();
 
-		public IObject Copy() => iterator.Copy();
+		public IObject Copy() => terminate().Copy();
 
-		public IObject Apply(ICollection collection) => iterator.Apply(collection);
+		public IObject Apply(ICollection collection) => terminate().Apply(collection);
 
 		public BaseClass Equivalent() => new CollectionClass();
 
