@@ -430,6 +430,7 @@
     <Compile Include="Objects\ObjectExtensions.cs" />
     <Compile Include="Objects\ObjectFunctions.cs" />
     <Compile Include="Objects\OpenRange.cs" />
+    <Compile Include="Objects\OpenRangeCollection.cs" />
     <Compile Include="Objects\OpenRangeIterator.cs" />
     <Compile Include="Objects\Pattern.cs" />
     <Compile Include="Objects\Placeholder.cs" />

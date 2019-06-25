@@ -34,9 +34,9 @@ namespace Kagami.Library.Objects
 
 		public bool IsTrue { get; } = true;
 
-		public ICollection Collection => terminate().Collection;
+		public ICollection Collection => iterator.Collection;
 
-		public ICollectionClass CollectionClass => terminate().CollectionClass;
+		public ICollectionClass CollectionClass => iterator.CollectionClass;
 
 		public bool IsLazy => true;
 

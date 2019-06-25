@@ -35,7 +35,7 @@ namespace Kagami.Library.Objects
 
 		public bool IsTrue => seed.IsTrue;
 
-		public IIterator GetIterator(bool lazy) => new StreamIterator(new OpenRangeIterator(this));
+		public IIterator GetIterator(bool lazy) => new OpenRangeCollection(this).GetIterator(lazy);
 
 		public IMaybe<IObject> Next(int index) => none<IObject>();
 
