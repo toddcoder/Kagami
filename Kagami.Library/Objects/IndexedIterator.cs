@@ -12,7 +12,9 @@ namespace Kagami.Library.Objects
          if (result.If(out var value))
          {
             var newIndex = Int.IntObject(index - 1);
-            return Tuple.NewTuple(newIndex, value).Some();
+            var x = new NameValue("index", newIndex);
+            var y = new NameValue("value", value);
+            return Tuple.NewTuple(x, y).Some();
          }
          else
          {
