@@ -362,6 +362,7 @@
     <Compile Include="Objects\CompositeLambda.cs" />
     <Compile Include="Objects\Constructor.cs" />
     <Compile Include="Objects\Cycle.cs" />
+    <Compile Include="Objects\CycleCollection.cs" />
     <Compile Include="Objects\CycleIterator.cs" />
     <Compile Include="Objects\DataComparisand.cs" />
     <Compile Include="Objects\DataType.cs" />

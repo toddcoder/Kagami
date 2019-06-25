@@ -45,7 +45,7 @@ namespace Kagami.Library.Objects
 
 		public bool IsTrue => items.Length > 0;
 
-		public IIterator GetIterator(bool lazy) => lazy ? (IIterator)new LazyIterator(this) : new CycleIterator(this);
+		public IIterator GetIterator(bool lazy) => new CycleCollection(this).GetIterator(lazy);
 
 		public IMaybe<IObject> Next(int index)
 		{
