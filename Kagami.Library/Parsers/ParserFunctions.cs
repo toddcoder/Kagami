@@ -1113,15 +1113,12 @@ namespace Kagami.Library.Parsers
 			var valuesParser = new ValuesParser(builder);
 			var postfixParser = new PostfixParser(builder);
 
-			var anyException = none<Exception>();
-			Exception exception = null;
-
 			while (state.More)
 			{
-				if (prefixParser.Scan(state).If(out _, out anyException)) { }
-				else if (anyException.If(out exception))
+				if (prefixParser.Scan(state).If(out _, out var anyPrefixException)) { }
+				else if (anyPrefixException.If(out var prefixException))
 				{
-					return failedMatch<Expression>(exception);
+					return failedMatch<Expression>(prefixException);
 				}
 				else
 				{
@@ -1129,10 +1126,10 @@ namespace Kagami.Library.Parsers
 				}
 			}
 
-			if (valuesParser.Scan(state).If(out _, out anyException)) { }
-			else if (anyException.If(out exception))
+			if (valuesParser.Scan(state).If(out _, out var anyValueException)) { }
+			else if (anyValueException.If(out var valueException))
 			{
-				return failedMatch<Expression>(exception);
+				return failedMatch<Expression>(valueException);
 			}
 			else
 			{
@@ -1141,10 +1138,10 @@ namespace Kagami.Library.Parsers
 
 			while (state.More)
 			{
-				if (postfixParser.Scan(state).If(out _, out anyException)) { }
-				else if (anyException.If(out exception))
+				if (postfixParser.Scan(state).If(out _, out var anyPostException)) { }
+				else if (anyPostException.If(out var postException))
 				{
-					return failedMatch<Expression>(exception);
+					return failedMatch<Expression>(postException);
 				}
 				else
 				{
@@ -1152,7 +1149,7 @@ namespace Kagami.Library.Parsers
 				}
 			}
 
-			if (builder.ToExpression().If(out var expression, out exception))
+			if (builder.ToExpression().If(out var expression, out var exception))
 			{
 				return expression.Matched();
 			}

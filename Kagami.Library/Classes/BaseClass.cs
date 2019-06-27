@@ -553,7 +553,7 @@ namespace Kagami.Library.Classes
 		{
 			IObject apply(IObject obj, Message msg, Func<String, ITextFinding, IObject> func)
 			{
-				var input = (String)obj;
+				String input = obj.AsString;
 				var textFinding = (ITextFinding)msg.Arguments[0];
 
 				return func(input, textFinding);
@@ -562,7 +562,7 @@ namespace Kagami.Library.Classes
 			IObject apply1<T>(IObject obj, Message msg, Func<String, ITextFinding, T, IObject> func)
 				where T : IObject
 			{
-				var input = (String)obj;
+				String input = obj.AsString;
 				var textFinding = (ITextFinding)msg.Arguments[0];
 				var arg1 = (T)msg.Arguments[1];
 
@@ -573,7 +573,7 @@ namespace Kagami.Library.Classes
 				where T1 : IObject
 				where T2 : IObject
 			{
-				var input = (String)obj;
+				String input = obj.AsString;
 				var textFinding = (ITextFinding)msg.Arguments[0];
 				var arg1 = (T1)msg.Arguments[1];
 				var arg2 = (T2)msg.Arguments[2];

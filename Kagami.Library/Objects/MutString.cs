@@ -21,6 +21,10 @@ namespace Kagami.Library.Objects
 
 		public static implicit operator MutString(String source) => new MutString(source.AsString);
 
+		public static implicit operator string(MutString source) => source.AsString;
+
+		public static implicit operator String(MutString source) => source.AsString;
+
 		StringBuilder mutable;
 
 		public MutString(string mutable) => this.mutable = new StringBuilder(mutable);
@@ -138,13 +142,37 @@ namespace Kagami.Library.Objects
 
 		public Tuple FindAll(string input) => findAll(AsString, input);
 
-		public String Replace(string input, string replacement, bool reverse) => replace(AsString, input, replacement, reverse);
+		public String Replace(string input, string replacement, bool reverse)
+		{
+			var result = replace(AsString, input, replacement, reverse);
+			mutable.Clear();
+			mutable.Append(result.Value);
+			return result;
+		}
 
-		public String Replace(string input, Lambda lambda, bool reverse) => replace(AsString, input, lambda, reverse);
+		public String Replace(string input, Lambda lambda, bool reverse)
+		{
+			var result = replace(AsString, input, lambda, reverse);
+			mutable.Clear();
+			mutable.Append(result.Value);
+			return result;
+		}
 
-		public String ReplaceAll(string input, string replacement) => replaceAll(AsString, input, replacement);
+		public String ReplaceAll(string input, string replacement)
+		{
+			var result = replaceAll(AsString, input, replacement);
+			mutable.Clear();
+			mutable.Append(result.Value);
+			return result;
+		}
 
-		public String ReplaceAll(string input, Lambda lambda) => replaceAll(AsString, input, lambda);
+		public String ReplaceAll(string input, Lambda lambda)
+		{
+			var result = replaceAll(AsString, input, lambda);
+			mutable.Clear();
+			mutable.Append(result.Value);
+			return result;
+		}
 
 		public Tuple Split(string input) => split(AsString, input);
 

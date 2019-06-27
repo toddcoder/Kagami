@@ -1,9 +1,12 @@
-﻿using Kagami.Library.Objects;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Core.Enumerables;
+using Kagami.Library.Objects;
 using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Classes
 {
-	public class MutStringClass : BaseClass
+	public class MutStringClass : BaseClass, ICollectionClass
 	{
 		public override string Name => "MutString";
 
@@ -27,5 +30,9 @@ namespace Kagami.Library.Classes
 			registerMessage("fill(count:_<Int>,char:_<Char>)",
 				(obj, msg) => function<MutString, Int, Char>(obj, msg, (m, i, c) => m.Fill(c.Value, i.Value)));
       }
-	}
+
+		public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection", "TextFinding");
+
+		public IObject Revert(IEnumerable<IObject> list) => (MutString)list.Select(i => i.AsString).Stringify("");
+    }
 }

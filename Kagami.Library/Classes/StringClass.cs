@@ -98,7 +98,9 @@ namespace Kagami.Library.Classes
 
 		public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection", "TextFinding");
 
-		public override bool AssignCompatible(BaseClass otherClass) =>
-			base.AssignCompatible(otherClass) || otherClass.Name == "MutString";
+		public override bool AssignCompatible(BaseClass otherClass)
+		{
+			return base.AssignCompatible(otherClass) || otherClass.Name == "MutString";
+		}
 	}
 }
