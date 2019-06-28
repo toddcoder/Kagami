@@ -94,8 +94,9 @@ namespace Kagami.Library.Operations
 							return mi.Invoke(arguments.Value).Matched();
 						case Pattern pattern:
 							increment = true;
-							pattern.RegisterArguments(arguments);
-							return pattern.Matched<IObject>();
+							var copy = pattern.Copy();
+							copy.RegisterArguments(arguments);
+							return copy.Matched<IObject>();
 						default:
 							return failedMatch<IObject>(incompatibleClasses(field.Value, "Invokable object"));
 					}

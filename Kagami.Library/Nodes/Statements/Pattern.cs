@@ -23,11 +23,13 @@ namespace Kagami.Library.Nodes.Statements
 
 		public override void Generate(OperationsBuilder builder)
 		{
-			var invokable = new FunctionInvokable(name, parameters, name);
+			var skip1Parameters = new Parameters(parameters.GetParameters().Skip(1).ToArray());
+			var comparisandParameters = new Parameters(parameters.GetParameters().Take(1).ToArray());
+			var invokable = new FunctionInvokable(name, comparisandParameters, name);
 			if (builder.RegisterInvokable(invokable, block, true).If(out _, out var exception))
 			{
 				var lambda = new Lambda(invokable);
-				var pattern = new Objects.Pattern(name, lambda);
+				var pattern = new Objects.Pattern(name, lambda, skip1Parameters);
 				builder.NewField(name, false, true);
 				builder.PushObject(pattern);
 				builder.Peek(Index);

@@ -15,10 +15,10 @@ namespace Kagami.Library.Runtime
 {
 	public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field field)>
 	{
-		const int MAX_DEPTH = 1024;
+		protected const int MAX_DEPTH = 1024;
 
-		Hash<string, Field> fields;
-		AutoHash<string, List<string>> buckets;
+		protected Hash<string, Field> fields;
+		protected AutoHash<string, List<string>> buckets;
 
 		public Fields()
 		{

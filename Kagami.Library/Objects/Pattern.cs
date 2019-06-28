@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Core.Collections;
 using Core.Enumerables;
+using Kagami.Library.Invokables;
 using Kagami.Library.Runtime;
 
 namespace Kagami.Library.Objects
@@ -9,17 +11,22 @@ namespace Kagami.Library.Objects
 	{
 		string name;
 		Lambda lambda;
-		Hash<string, string> placeholders;
+		Fields fields;
+		List<string> bindingNames;
+		Parameters parameters;
 
-		public Pattern(string name, Lambda lambda) : this()
+		public Pattern(string name, Lambda lambda, Parameters parameters) : this()
 		{
 			this.name = name;
 			this.lambda = lambda;
-			placeholders = new Hash<string, string>();
-			foreach (var parameter in lambda.Invokable.Parameters.Skip(1))
+			this.parameters = parameters;
+
+			fields = new Fields();
+			foreach (var parameter in parameters)
 			{
-				placeholders[parameter.Name] = "";
+				fields.New(parameter.Name, true);
 			}
+			bindingNames = new List<string>();
 		}
 
 		public string ClassName => "Pattern";
@@ -44,43 +51,63 @@ namespace Kagami.Library.Objects
 
 		public bool Match(IObject comparisand, Hash<string, IObject> bindings)
 		{
-			if (lambda.Invoke(comparisand).IsTrue)
-			{
-/*				foreach (var (fieldName, field) in fields)
-				{
-					if (placeholders.ContainsKey(fieldName))
-					{
-						bindings[placeholders[fieldName]] = field.Value;
-					}
-				}*/
+			lambda.CopyFields(fields);
+			var result = lambda.Invoke(comparisand);
 
-				return true;
-			}
-			else
+			switch (bindingNames.Count)
 			{
-				return false;
+				case 0:
+					return result.IsTrue;
+				case 1:
+					if (result is Some some && bindingNames.Count == 1)
+					{
+						bindings[bindingNames[0]] = some.Value;
+						return true;
+					}
+					else
+					{
+						return false;
+					}
+
+				default:
+					if (result is Some tupleSome && tupleSome.Value is Tuple tuple && tuple.Length.Value == bindingNames.Count)
+					{
+						for (var i = 0; i < bindingNames.Count; i++)
+						{
+							var bindingName = bindingNames[i];
+							bindings[bindingName] = tuple[i];
+						}
+						return true;
+					}
+					else
+					{
+						return false;
+					}
 			}
 		}
 
 		public void RegisterArguments(Arguments arguments)
 		{
-			var pairs = lambda.Invokable.Parameters.Skip(1).Zip(arguments.Value, (p, a) => (p.Name, a));
-			foreach (var (parameterName, argument)in pairs)
+			var fieldValues = arguments.Take(fields.Length).ToArray();
+			var parameterNames = parameters.Select(p => p.Name).ToArray();
+			var index = 0;
+			foreach (var parameterName in parameterNames)
 			{
-				registerArgument(parameterName, argument);
+				fields.Assign(parameterName, fieldValues[index++]);
 			}
-		}
 
-		void registerArgument(string parameterName, IObject argument)
-		{
-			switch (argument)
+			var argumentValues = arguments.Skip(fields.Length).ToArray();
+			foreach (var argumentValue in argumentValues)
 			{
-				case Placeholder placeholder:
-					placeholders[parameterName] = placeholder.Name;
-					break;
+				if (argumentValue is Placeholder placeholder)
+				{
+					bindingNames.Add(placeholder.Name);
+				}
 			}
 		}
 
 		public bool IsTrue => true;
+
+		public Pattern Copy() => new Pattern(name, lambda, parameters);
 	}
 }
