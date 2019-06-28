@@ -64,7 +64,8 @@ namespace Kagami.Library.Packages
 			return value;
 		}
 
-		public IObject Readln() => Machine.Current.Context.ReadLine().FlatMap(s => new Some(String.StringObject(s)), () => None.NoneValue);
+		public IObject Readln() =>
+			Machine.Current.Context.ReadLine().FlatMap(s => new Some(String.StringObject(s)), () => None.NoneValue);
 
 		public IObject Peek(IObject obj)
 		{
@@ -80,26 +81,27 @@ namespace Kagami.Library.Packages
 
 		public IResult<IObject> Match(IObject x, IObject y)
 		{
-			if (y is Pattern pattern)
+/*			if (y is Pattern pattern)
 			{
 				return MatchToPattern(pattern, x);
 			}
 			else
+			{*/
+			var bindings = new Hash<string, IObject>();
+			if (x.Match(y, bindings))
 			{
-				var bindings = new Hash<string, IObject>();
-				if (x.Match(y, bindings))
-				{
-					Machine.Current.CurrentFrame.Fields.SetBindings(bindings);
-					return Boolean.True.Success();
-				}
-				else
-				{
-					return Boolean.False.Success();
-				}
+				Machine.Current.CurrentFrame.Fields.SetBindings(bindings);
+				return Boolean.True.Success();
 			}
+			else
+			{
+				return Boolean.False.Success();
+			}
+
+			//}
 		}
 
-		public IResult<IObject> MatchToPattern(Pattern pattern, IObject source)
+/*		public IResult<IObject> MatchToPattern(Pattern pattern, IObject source)
 		{
 			try
 			{
@@ -126,7 +128,7 @@ namespace Kagami.Library.Packages
 			{
 				return failure<IObject>(exception);
 			}
-		}
+		}*/
 
 		public Long Ticks() => new Long(DateTime.Now.Ticks);
 

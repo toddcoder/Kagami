@@ -32,6 +32,11 @@ namespace Kagami.Library.Parsers.Expressions
             builder.Add(new ClassSymbol(className));
             return Unit.Matched();
          }
+			else if (state.ContainsPattern(className))
+         {
+	         builder.Add(new FieldSymbol(className));
+	         return Unit.Matched();
+         }
          else
          {
 	         return notMatched<Unit>();

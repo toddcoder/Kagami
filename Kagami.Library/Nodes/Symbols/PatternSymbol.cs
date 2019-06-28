@@ -40,7 +40,7 @@ namespace Kagami.Library.Nodes.Symbols
                list.Add((comparisand, lambda));
             }
 
-            return new Pattern(list.ToArray());
+            return new Pattern();
          });
       }
 

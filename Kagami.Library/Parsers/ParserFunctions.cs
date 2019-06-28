@@ -520,20 +520,19 @@ namespace Kagami.Library.Parsers
 
 		public static IMatched<Block> getAnyBlock(ParseState state)
 		{
-			var ((isFound, match), (isFailed, exception)) = parseTypeConstraint(state);
-			if (isFound)
+			if (parseTypeConstraint(state).If(out var anyTypeConstraint, out var anyException))
 			{
-				state.SetReturnType(match);
+				state.SetReturnType(anyTypeConstraint);
 				if (state.Scan("^ /(|s|) /'=' /(|s|)", Color.Whitespace, Color.Structure, Color.Whitespace).IsMatched)
 				{
-					return getSingleLine(state, match);
+					return getSingleLine(state, anyTypeConstraint);
 				}
 				else
 				{
-					return getBlock(state, match);
+					return getBlock(state, anyTypeConstraint);
 				}
 			}
-			else if (isFailed)
+			else if (anyException.If(out var exception))
 			{
 				return failedMatch<Block>(exception);
 			}

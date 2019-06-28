@@ -1,48 +1,86 @@
 ﻿using System.Linq;
 using Core.Collections;
 using Core.Enumerables;
+using Kagami.Library.Runtime;
 
 namespace Kagami.Library.Objects
 {
-   public struct Pattern : IObject
-   {
-      (IObject comparisand, Lambda lambda)[] cases;
+	public struct Pattern : IObject
+	{
+		string name;
+		Lambda lambda;
+		Hash<string, string> placeholders;
 
-      public Pattern((IObject, Lambda)[] cases) : this() => this.cases = cases;
+		public Pattern(string name, Lambda lambda) : this()
+		{
+			this.name = name;
+			this.lambda = lambda;
+			placeholders = new Hash<string, string>();
+			foreach (var parameter in lambda.Invokable.Parameters.Skip(1))
+			{
+				placeholders[parameter.Name] = "";
+			}
+		}
 
-      public string ClassName => "Pattern";
+		public string ClassName => "Pattern";
 
-      public string AsString => cases.Select(c => $"{c.comparisand.AsString} = {c.lambda.AsString}").Stringify(" ");
+		public string AsString => name;
 
-      public string Image => $"(|{cases.Select(c => $"{c.comparisand.Image} = {c.lambda.Image}").Stringify("|")})";
+		public string Image => $"pattern {name}({lambda.Invokable.Parameters.Select(p => p.Name).Stringify()})";
 
-      public int Hash => cases.GetHashCode();
+		public int Hash => Image.GetHashCode();
 
-      public bool IsEqualTo(IObject obj)
-      {
-         if (obj is Pattern pattern)
-         {
-            var otherCases = pattern.cases;
-            if (cases.Length == otherCases.Length)
-            {
-	            return cases.Zip(otherCases, (c1, c2) => c1.comparisand.IsEqualTo(c2.comparisand) && c1.lambda.IsEqualTo(c2.lambda))
-		            .All(b => b);
-            }
-            else
-            {
-	            return false;
-            }
-         }
-         else
-         {
-	         return false;
-         }
-      }
+		public bool IsEqualTo(IObject obj)
+		{
+			if (obj is Pattern pattern)
+			{
+				return name == pattern.name && lambda.IsEqualTo(pattern.lambda);
+			}
+			else
+			{
+				return false;
+			}
+		}
 
-      public bool Match(IObject comparisand, Hash<string, IObject> bindings) => false;
+		public bool Match(IObject comparisand, Hash<string, IObject> bindings)
+		{
+			if (lambda.Invoke(comparisand).IsTrue)
+			{
+/*				foreach (var (fieldName, field) in fields)
+				{
+					if (placeholders.ContainsKey(fieldName))
+					{
+						bindings[placeholders[fieldName]] = field.Value;
+					}
+				}*/
 
-      public bool IsTrue => true;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
 
-      public (IObject comparisand, Lambda lambda)[] Cases => cases;
-   }
+		public void RegisterArguments(Arguments arguments)
+		{
+			var pairs = lambda.Invokable.Parameters.Skip(1).Zip(arguments.Value, (p, a) => (p.Name, a));
+			foreach (var (parameterName, argument)in pairs)
+			{
+				registerArgument(parameterName, argument);
+			}
+		}
+
+		void registerArgument(string parameterName, IObject argument)
+		{
+			switch (argument)
+			{
+				case Placeholder placeholder:
+					placeholders[parameterName] = placeholder.Name;
+					break;
+			}
+		}
+
+		public bool IsTrue => true;
+	}
 }

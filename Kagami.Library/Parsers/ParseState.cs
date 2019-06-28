@@ -37,6 +37,7 @@ namespace Kagami.Library.Parsers
 		Stack<IMaybe<IPrefixCode>> prefixCodes;
 		Stack<IMaybe<ImplicitState>> implicitStates;
 		Stack<ImplicitExpressionState> implicitExpressionStates;
+		Set<string> patterns;
 
 		public ParseState(string source)
 		{
@@ -58,6 +59,7 @@ namespace Kagami.Library.Parsers
 			prefixCodes = new Stack<IMaybe<IPrefixCode>>();
 			implicitStates = new Stack<IMaybe<ImplicitState>>();
 			implicitExpressionStates = new Stack<ImplicitExpressionState>();
+			patterns = new Set<string>();
 		}
 
 		public IMaybe<int> ExceptionIndex
@@ -413,5 +415,9 @@ namespace Kagami.Library.Parsers
 		public ImplicitExpressionState ImplicitExpressionState => implicitExpressionStates.Peek();
 
 		public void EndImplicitExpressionState() => implicitExpressionStates.Pop();
+
+		public void RegisterPattern(string patternName) => patterns.Add(patternName);
+
+		public bool ContainsPattern(string patternName) => patternName.Contains(patternName);
 	}
 }

@@ -92,6 +92,10 @@ namespace Kagami.Library.Operations
 						case IMayInvoke mi:
 							increment = true;
 							return mi.Invoke(arguments.Value).Matched();
+						case Pattern pattern:
+							increment = true;
+							pattern.RegisterArguments(arguments);
+							return pattern.Matched<IObject>();
 						default:
 							return failedMatch<IObject>(incompatibleClasses(field.Value, "Invokable object"));
 					}

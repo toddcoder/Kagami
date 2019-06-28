@@ -181,6 +181,7 @@
     <Compile Include="Nodes\Statements\NoOp.cs" />
     <Compile Include="Nodes\Statements\OpenPackage.cs" />
     <Compile Include="Nodes\Statements\Pass.cs" />
+    <Compile Include="Nodes\Statements\Pattern.cs" />
     <Compile Include="Nodes\Statements\Print.cs" />
     <Compile Include="Nodes\Statements\Put.cs" />
     <Compile Include="Nodes\Statements\Repeat.cs" />
@@ -805,6 +806,7 @@
     <Compile Include="Parsers\Statements\OpenPackageParser.cs" />
     <Compile Include="Parsers\Statements\ParentClassParser.cs" />
     <Compile Include="Parsers\Statements\PassParser.cs" />
+    <Compile Include="Parsers\Statements\PatternParser.cs" />
     <Compile Include="Parsers\Statements\PrintLnParser.cs" />
     <Compile Include="Parsers\Statements\PrintParser.cs" />
     <Compile Include="Parsers\Statements\PutParser.cs" />

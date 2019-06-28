@@ -132,7 +132,8 @@ namespace Kagami.Library.Runtime
 			frame.SetFields(invokable.Parameters);
 			if (GoTo(invokable.Address))
 			{
-				return invoke();
+				var result = invoke();
+				return result;
 			}
 			else
 			{
