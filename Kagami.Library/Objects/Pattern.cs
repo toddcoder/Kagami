@@ -2,12 +2,14 @@
 using System.Linq;
 using Core.Collections;
 using Core.Enumerables;
+using Core.Monads;
 using Kagami.Library.Invokables;
 using Kagami.Library.Runtime;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Objects
 {
-	public struct Pattern : IObject
+	public class Pattern : IObject
 	{
 		string name;
 		Lambda lambda;
@@ -15,7 +17,7 @@ namespace Kagami.Library.Objects
 		List<string> bindingNames;
 		Parameters parameters;
 
-		public Pattern(string name, Lambda lambda, Parameters parameters) : this()
+		public Pattern(string name, Lambda lambda, Parameters parameters)
 		{
 			this.name = name;
 			this.lambda = lambda;
@@ -109,5 +111,9 @@ namespace Kagami.Library.Objects
 		public bool IsTrue => true;
 
 		public Pattern Copy() => new Pattern(name, lambda, parameters);
+
+		public IMaybe<Pattern> And { get; set; } = none<Pattern>();
+
+		public IMaybe<Pattern> Or { get; set; } = none<Pattern>();
 	}
 }

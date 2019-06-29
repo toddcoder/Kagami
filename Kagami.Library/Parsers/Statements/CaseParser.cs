@@ -68,26 +68,26 @@ namespace Kagami.Library.Parsers.Statements
 
 			if (result.Out(out var tuple, out var original))
 			{
-				var (comparisand, and, block) = tuple;
+				var (comparisand, anyAnd, block) = tuple;
 
 				var builder = new ExpressionBuilder(ExpressionFlags.Standard);
 				builder.Add(new FieldSymbol(fieldName));
 				builder.Add(comparisand);
 				builder.Add(new MatchSymbol());
-				if (and.If(out var a))
+				if (anyAnd.If(out var and))
 				{
-					builder.Add(a);
+					builder.Add(and);
 				}
 
 				if (builder.ToExpression().If(out var expression, out var exception))
 				{
 					var caseParser = new CaseParser(assignmentField, mutable, assignment, fieldName, false, caseType);
 					var ifStatement = none<If>();
-					if (caseParser.Scan(state).If(out _, out var mbCaseException))
+					if (caseParser.Scan(state).If(out _, out var anyCaseException))
 					{
 						ifStatement = caseParser.If.Some();
 					}
-					else if (mbCaseException.If(out var caseException))
+					else if (anyCaseException.If(out var caseException))
 					{
 						return failedMatch<Unit>(caseException);
 					}

@@ -275,7 +275,6 @@
     <Compile Include="Nodes\Symbols\MonadBindSymbol.cs" />
     <Compile Include="Nodes\Symbols\MutStringSymbol.cs" />
     <Compile Include="Nodes\Symbols\NewObjectSymbol.cs" />
-    <Compile Include="Nodes\Symbols\PatternSymbol.cs" />
     <Compile Include="Nodes\Symbols\MatchMapSymbol.cs" />
     <Compile Include="Nodes\Symbols\MatchSymbol.cs" />
     <Compile Include="Nodes\Symbols\MaxSymbol.cs" />
@@ -695,7 +694,6 @@
     <Compile Include="Parsers\Expressions\MaybeParser.cs" />
     <Compile Include="Parsers\Expressions\MessageParser.cs" />
     <Compile Include="Parsers\Expressions\MonadBindParser.cs" />
-    <Compile Include="Parsers\Expressions\PatternParser.cs" />
     <Compile Include="Parsers\Expressions\PlaceholderParser.cs" />
     <Compile Include="Parsers\Expressions\RangeOperatorParser.cs" />
     <Compile Include="Parsers\Expressions\RangePrefixParser.cs" />
