@@ -58,6 +58,8 @@ namespace Kagami.Library.Objects
 			{
 				case Boolean boolean when arguments.Length == 0:
 					return boolean.Value;
+				case Boolean boolean when arguments.Length == 1:
+					return match(boolean, arguments[0], bindings);
 				case Some some when arguments.Length == 1:
 					return match(some.Value, arguments[0], bindings);
 				default:
@@ -65,6 +67,7 @@ namespace Kagami.Library.Objects
 					{
 						return tuple.Value.Zip(arguments, (l, r) => match(l, r, bindings)).All(b => b);
 					}
+
 					break;
 			}
 

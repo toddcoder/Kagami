@@ -209,6 +209,10 @@ namespace Kagami.Library.Runtime
 								return Invoke(invokable, arguments);
 							case PackageFunction pf:
 								return pf.Invoke(arguments).Matched();
+							case Pattern pattern:
+								var copy = pattern.Copy();
+								copy.RegisterArguments(arguments);
+								return copy.Matched<IObject>();
 							default:
 								return failedMatch<IObject>(incompatibleClasses(value, "Invokable"));
 						}
