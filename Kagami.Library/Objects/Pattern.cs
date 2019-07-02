@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Core.Collections;
 using Core.Enumerables;
-using Core.Monads;
 using Kagami.Library.Invokables;
 using Kagami.Library.Runtime;
-using static Core.Monads.MonadFunctions;
+using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
 {
@@ -14,8 +12,8 @@ namespace Kagami.Library.Objects
 		string name;
 		Lambda lambda;
 		Fields fields;
-		List<string> bindingNames;
 		Parameters parameters;
+		IObject[] arguments;
 
 		public Pattern(string name, Lambda lambda, Parameters parameters)
 		{
@@ -28,7 +26,8 @@ namespace Kagami.Library.Objects
 			{
 				fields.New(parameter.Name, true);
 			}
-			bindingNames = new List<string>();
+
+			arguments = new IObject[0];
 		}
 
 		public string ClassName => "Pattern";
@@ -55,37 +54,21 @@ namespace Kagami.Library.Objects
 		{
 			lambda.CopyFields(fields);
 			var result = lambda.Invoke(comparisand);
-
-			switch (bindingNames.Count)
+			switch (result)
 			{
-				case 0:
-					return result.IsTrue;
-				case 1:
-					if (result is Some some && bindingNames.Count == 1)
-					{
-						bindings[bindingNames[0]] = some.Value;
-						return true;
-					}
-					else
-					{
-						return false;
-					}
-
+				case Boolean boolean when arguments.Length == 0:
+					return boolean.Value;
+				case Some some when arguments.Length == 1:
+					return match(some.Value, arguments[0], bindings);
 				default:
-					if (result is Some tupleSome && tupleSome.Value is Tuple tuple && tuple.Length.Value == bindingNames.Count)
+					if (result is Some tupleSome && tupleSome.Value is Tuple tuple && tuple.Length.Value == arguments.Length)
 					{
-						for (var i = 0; i < bindingNames.Count; i++)
-						{
-							var bindingName = bindingNames[i];
-							bindings[bindingName] = tuple[i];
-						}
-						return true;
+						return tuple.Value.Zip(arguments, (l, r) => match(l, r, bindings)).All(b => b);
 					}
-					else
-					{
-						return false;
-					}
+					break;
 			}
+
+			return false;
 		}
 
 		public void RegisterArguments(Arguments arguments)
@@ -98,22 +81,11 @@ namespace Kagami.Library.Objects
 				fields.Assign(parameterName, fieldValues[index++]);
 			}
 
-			var argumentValues = arguments.Skip(fields.Length).ToArray();
-			foreach (var argumentValue in argumentValues)
-			{
-				if (argumentValue is Placeholder placeholder)
-				{
-					bindingNames.Add(placeholder.Name);
-				}
-			}
+			this.arguments = arguments.Skip(fields.Length).ToArray();
 		}
 
 		public bool IsTrue => true;
 
 		public Pattern Copy() => new Pattern(name, lambda, parameters);
-
-		public IMaybe<Pattern> And { get; set; } = none<Pattern>();
-
-		public IMaybe<Pattern> Or { get; set; } = none<Pattern>();
 	}
 }

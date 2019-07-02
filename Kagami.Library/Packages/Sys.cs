@@ -81,12 +81,6 @@ namespace Kagami.Library.Packages
 
 		public IResult<IObject> Match(IObject x, IObject y)
 		{
-/*			if (y is Pattern pattern)
-			{
-				return MatchToPattern(pattern, x);
-			}
-			else
-			{*/
 			var bindings = new Hash<string, IObject>();
 			if (x.Match(y, bindings))
 			{
@@ -97,38 +91,7 @@ namespace Kagami.Library.Packages
 			{
 				return Boolean.False.Success();
 			}
-
-			//}
 		}
-
-/*		public IResult<IObject> MatchToPattern(Pattern pattern, IObject source)
-		{
-			try
-			{
-				var cases = pattern.Cases;
-				foreach (var (comparisand, lambda) in cases)
-				{
-					var bindings = new Hash<string, IObject>();
-					var frame = new Frame();
-					Machine.Current.PushFrame(frame);
-					if (source.Match(comparisand, bindings))
-					{
-						frame.Fields.SetBindings(bindings);
-						var result = lambda.Invoke();
-						frame.Pop();
-						return result.Success();
-					}
-
-					frame.Pop();
-				}
-
-				return "No match".Failure<IObject>();
-			}
-			catch (Exception exception)
-			{
-				return failure<IObject>(exception);
-			}
-		}*/
 
 		public Long Ticks() => new Long(DateTime.Now.Ticks);
 

@@ -62,14 +62,6 @@ namespace Kagami.Library.Invokables
 
 		public override string ToString() => parameters.Stringify();
 
-/*      public string FullFunctionName(string name)
-      {
-         if (parameters.Any(p => p.Label.IsNotEmpty()))
-            return name.Selector(parameters.Select(p=>p.NameForFunction)) name.Function(parameters.Select(p => p.NameForFunction).ToArray());
-         else
-            return name;
-      }*/
-
 		public Selector Selector(string name) => name.Selector(parameters.Select(p => p.NameForFunction).ToArray());
 	}
 }

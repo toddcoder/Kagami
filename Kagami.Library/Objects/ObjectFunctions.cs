@@ -98,21 +98,8 @@ namespace Kagami.Library.Objects
 			return match(source, comparisand, (x, y) => x.IsEqualTo(y), bindings);
 		}
 
-/*		static bool matchOnUserObject(UserObject userObject, IObject comparisand, Hash<string, IObject> bindings)
-		{
-			var userClass = (UserClass)classOf(userObject);
-			var parameters = userObject.Parameters.Select(p => "_").Stringify(",");
-			var extractMessage = $"extract({parameters})";
-
-			if (userClass.RespondsTo(extractMessage))
-			{
-					 var result = sendMessage(userObject,extractMessage)
-			}
-		}*/
-
 		public static bool matchSingle<T>(T source, IObject comparisand, Func<T, IObject, bool> equalifier,
-			Hash<string, IObject> bindings)
-			where T : IObject
+			Hash<string, IObject> bindings) where T : IObject
 		{
 			switch (comparisand)
 			{
@@ -123,7 +110,7 @@ namespace Kagami.Library.Objects
 				case NameValue nameValue:
 					comparisand = nameValue.Value;
 					bindings[$"-{nameValue.Name}"] = source;
-               break;
+					break;
 			}
 
 			switch (comparisand)
@@ -143,7 +130,7 @@ namespace Kagami.Library.Objects
 						var bindingName = $"-{lambda.Invokable.Parameters[0].Name}";
 						bindings[bindingName] = source;
 						return true;
-               }
+					}
 					else
 					{
 						return false;
