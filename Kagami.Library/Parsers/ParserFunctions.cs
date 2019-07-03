@@ -71,6 +71,39 @@ namespace Kagami.Library.Parsers
 			return getExpression(state, flags).Map(e => state.Scan(pattern, colors).Map(s => e));
 		}
 
+		public static IMatched<Expression> getCompoundComparisands(ParseState state, string fieldName)
+		{
+			var flags = ExpressionFlags.Comparisand | ExpressionFlags.OmitAnd | ExpressionFlags.OmitIf;
+			var builder = new ExpressionBuilder(flags);
+
+			if (getExpression(state, flags).Out(out var comparisand, out var original))
+			{
+				builder.Add(new FieldSymbol(fieldName));
+				builder.Add(comparisand);
+				builder.Add(new MatchSymbol());
+				if (state.Scan("^ /(|s|) /'&'", Color.Whitespace, Color.OpenParenthesis).If(out _, out var anyException))
+				{
+					return getCompoundComparisands(state, fieldName).Map(nextExpression =>
+					{
+						builder.Add(new AndSymbol(nextExpression));
+						return builder.ToExpression().Match();
+					});
+				}
+				else if (anyException.If(out var exception))
+				{
+					return failedMatch<Expression>(exception);
+				}
+				else
+				{
+					return builder.ToExpression().Match();
+				}
+			}
+			else
+			{
+				return original.Unmatched<Expression>();
+			}
+		}
+
 		public static IMatched<InternalList> getInternalList(ParseState state)
 		{
 			var builder = new ExpressionBuilder(ExpressionFlags.Standard);

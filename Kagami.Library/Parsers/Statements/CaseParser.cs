@@ -1,5 +1,4 @@
 ﻿using Kagami.Library.Nodes.Statements;
-using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Parsers.Expressions;
 using Core.Monads;
 using static Kagami.Library.AllExceptions;
@@ -60,7 +59,7 @@ namespace Kagami.Library.Parsers.Statements
 			state.Colorize(tokens, Color.Structure, Color.Whitespace);
 
 			var result =
-				from comparisand in getExpression(state, ExpressionFlags.Comparisand | ExpressionFlags.OmitIf)
+				from comparisand in getCompoundComparisands(state, fieldName)
 				from and in andExpression(state)
 				from end in state.SkipEndOfLine().Or(() => "".Matched())
 				from block in getCaseBlock(caseType, state)
@@ -71,9 +70,7 @@ namespace Kagami.Library.Parsers.Statements
 				var (comparisand, anyAnd, block) = tuple;
 
 				var builder = new ExpressionBuilder(ExpressionFlags.Standard);
-				builder.Add(new FieldSymbol(fieldName));
 				builder.Add(comparisand);
-				builder.Add(new MatchSymbol());
 				if (anyAnd.If(out var and))
 				{
 					builder.Add(and);
