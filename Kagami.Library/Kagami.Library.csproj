@@ -459,6 +459,7 @@
     <Compile Include="Objects\Some.cs" />
     <Compile Include="Objects\StreamIterator.cs" />
     <Compile Include="Objects\String.cs" />
+    <Compile Include="Objects\SubPattern.cs" />
     <Compile Include="Objects\Success.cs" />
     <Compile Include="Objects\SymbolObject.cs" />
     <Compile Include="Objects\TakeAction.cs" />

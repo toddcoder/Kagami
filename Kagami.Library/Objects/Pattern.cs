@@ -9,11 +9,11 @@ namespace Kagami.Library.Objects
 {
 	public class Pattern : IObject
 	{
-		string name;
-		Lambda lambda;
-		Fields fields;
-		Parameters parameters;
-		IObject[] arguments;
+		protected string name;
+		protected Lambda lambda;
+		protected Fields fields;
+		protected Parameters parameters;
+		protected IObject[] arguments;
 
 		public Pattern(string name, Lambda lambda, Parameters parameters)
 		{
@@ -50,10 +50,8 @@ namespace Kagami.Library.Objects
 			}
 		}
 
-		public bool Match(IObject comparisand, Hash<string, IObject> bindings)
+		protected bool returnValues(IObject result, Hash<string, IObject> bindings)
 		{
-			lambda.CopyFields(fields);
-			var result = lambda.Invoke(comparisand);
 			switch (result)
 			{
 				case Boolean boolean when arguments.Length == 0:
@@ -72,6 +70,14 @@ namespace Kagami.Library.Objects
 			}
 
 			return false;
+		}
+
+		public virtual bool Match(IObject comparisand, Hash<string, IObject> bindings)
+		{
+			lambda.CopyFields(fields);
+			var result = lambda.Invoke(comparisand);
+
+			return returnValues(result, bindings);
 		}
 
 		public void RegisterArguments(Arguments arguments)

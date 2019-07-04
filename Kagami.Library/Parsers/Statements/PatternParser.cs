@@ -6,6 +6,11 @@ namespace Kagami.Library.Parsers.Statements
 {
 	public class PatternParser : StatementParser
 	{
+/*		static IMatched<Unit> getDataTypes(ParseState state)
+		{
+
+		}*/
+
 		public override string Pattern => $"^ /'pattern' /(|s+|) /({REGEX_CLASS}) /'('";
 
 		public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)

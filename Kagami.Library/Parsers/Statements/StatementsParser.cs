@@ -31,7 +31,6 @@ namespace Kagami.Library.Parsers.Statements
 					yield return new WhileParser();
 					yield return new ForParser2();
 					yield return new RepeatParser();
-
 					yield return new MatchParser();
 					yield return new YieldParser();
 					yield return new ReturnParser();
@@ -42,7 +41,6 @@ namespace Kagami.Library.Parsers.Statements
 					yield return new AssignFromLoopParser();
 					yield return new MatchAssignParser();
 					yield return new AssignToNewFieldParser();
-
 					yield return new AssignToMatchParser();
 					yield return new DefAssignParser();
 					yield return new DataTypeParser();
