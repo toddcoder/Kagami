@@ -74,13 +74,13 @@ namespace Kagami.Library.Objects
 		public IMaybe<IObject> Next(int index)
 		{
 			var self = this;
-			return when(index < value.Length, () => Char.CharObject(self.value[index]));
+			return maybe(index < value.Length, () => Char.CharObject(self.value[index]));
 		}
 
 		public IMaybe<IObject> Peek(int index)
 		{
 			var self = this;
-			return when(index < value.Length, () => Char.CharObject(self.value[index]));
+			return maybe(index < value.Length, () => Char.CharObject(self.value[index]));
 		}
 
 		public Int Length => value.Length;

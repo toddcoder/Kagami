@@ -16,13 +16,13 @@ namespace Kagami.Library.Objects
          keys = dictionary.KeyArray;
       }
 
-      public override IMaybe<IObject> Next() => when(index < keys.Length, () =>
+      public override IMaybe<IObject> Next() => maybe(index < keys.Length, () =>
       {
          var key = keys[index++];
          return Tuple.NewTupleNamed("key", key, "value", dictionary.GetRaw(key)).Some();
       });
 
-      public override IMaybe<IObject> Peek() => when(index < keys.Length, () =>
+      public override IMaybe<IObject> Peek() => maybe(index < keys.Length, () =>
       {
          var key = keys[index];
          return Tuple.NewTupleNamed("key", key, "value", dictionary.GetRaw(key)).Some();

@@ -136,7 +136,6 @@ namespace Kagami.Playground
 			try
 			{
 				exceptionData = none<ExceptionData>();
-				textEditor.SetTabs(32, 64, 96, 128);
 				document = new Document(this, textEditor, ".kagami", "Kagami", playgroundConfiguration.FontName,
 					playgroundConfiguration.FontSize);
 				//document.StandardMenus();
@@ -205,6 +204,7 @@ namespace Kagami.Playground
 				menus.CreateMainMenu(this);
 				menus.StandardContextEdit(document);
 
+				textEditor.SetTabs(32, 64, 96, 128);
 				textEditor.SetLeftMargin(70);
 				textEditor.ReassignHandle();
 				textEditor.Paint += (s, evt) => paint(evt);

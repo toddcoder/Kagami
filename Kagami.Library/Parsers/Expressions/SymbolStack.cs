@@ -17,7 +17,7 @@ namespace Kagami.Library.Parsers.Expressions
 
       public IResult<Symbol> Pop() => tryTo(() => stack.Pop());
 
-      public IMaybe<Symbol> Peek() => when(!IsEmpty, () => stack.Peek());
+      public IMaybe<Symbol> Peek() => maybe(!IsEmpty, () => stack.Peek());
 
       public bool IsEmpty => stack.Count == 0;
 

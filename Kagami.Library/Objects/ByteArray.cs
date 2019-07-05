@@ -37,7 +37,7 @@ namespace Kagami.Library.Objects
 		public IMaybe<IObject> Next(int index)
 		{
 			var self = this;
-			return when(index < bytes.Length, () => Byte.ByteObject(self.bytes[index]));
+			return maybe(index < bytes.Length, () => Byte.ByteObject(self.bytes[index]));
 		}
 
 		public IMaybe<IObject> Peek(int index) => Next(index);

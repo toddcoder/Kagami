@@ -40,7 +40,7 @@ namespace Kagami.Library.Objects
 
 		public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new Iterator(this);
 
-		public IMaybe<IObject> Next(int index) => when(index < set.Count, () => set[index]);
+		public IMaybe<IObject> Next(int index) => maybe(index < set.Count, () => set[index]);
 
 		public IMaybe<IObject> Peek(int index) => Next(index);
 

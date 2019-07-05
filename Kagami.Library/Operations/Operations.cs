@@ -40,7 +40,7 @@ namespace Kagami.Library.Operations
 
       public Operation this[int index] => operations[index];
 
-      public IMaybe<Operation> Current => when(address.Between(0).Until(length), () => operations[address]);
+      public IMaybe<Operation> Current => maybe(address.Between(0).Until(length), () => operations[address]);
 
       public override string ToString()
       {
