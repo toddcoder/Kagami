@@ -53,8 +53,13 @@ namespace Kagami.Playground
 		Hash<string, IObject> watch;
 		FolderName packageFolder;
 		IMaybe<ExceptionData> exceptionData;
+		int firstEditorLine;
 
-		public Playground() => InitializeComponent();
+		public Playground()
+		{
+			InitializeComponent();
+			firstEditorLine = 0;
+		}
 
 		static IResult<FileName> existingConfigurationFile()
 		{
@@ -762,7 +767,14 @@ namespace Kagami.Playground
 			}
 		}
 
-		void textEditor_SelectionChanged(object sender, EventArgs e) => textEditor.Invalidate();
+		void textEditor_SelectionChanged(object sender, EventArgs e)
+		{
+			if (textEditor.FirstVisibleLine != firstEditorLine)
+			{
+				firstEditorLine = textEditor.FirstVisibleLine;
+				textEditor.Invalidate();
+			}
+		}
 
 /*		bool delay()
 		{
