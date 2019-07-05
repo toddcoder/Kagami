@@ -54,7 +54,7 @@ namespace Kagami.Library.Objects
 		public IMaybe<IObject> Next(int index)
 		{
 			var self = this;
-			return when(index < mutable.Length, () => Char.CharObject(self.mutable[index]));
+			return maybe(index < mutable.Length, () => Char.CharObject(self.mutable[index]));
 		}
 
 		public IMaybe<IObject> Peek(int index) => Next(index);

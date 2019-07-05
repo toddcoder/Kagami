@@ -37,7 +37,7 @@ namespace Kagami.Library.Runtime
          }
       }
 
-      public IMaybe<Frame> FunctionFrame => when(functionFrameIndex > -1, () => frames[functionFrameIndex]);
+      public IMaybe<Frame> FunctionFrame => maybe(functionFrameIndex > -1, () => frames[functionFrameIndex]);
 
       public int FunctionFrameIndex
       {
@@ -51,7 +51,7 @@ namespace Kagami.Library.Runtime
 
       public IMaybe<Frame> SkipFrame => frames.FirstOrNone(f => f.FrameType == FrameType.Skip);
 
-      public IMaybe<Frame> TopFrame => when(frames.Length > 0, () => frames[0]);
+      public IMaybe<Frame> TopFrame => maybe(frames.Length > 0, () => frames[0]);
 
       public IEnumerator<Frame> GetEnumerator()
       {

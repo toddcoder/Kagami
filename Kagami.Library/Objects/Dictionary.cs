@@ -293,9 +293,9 @@ namespace Kagami.Library.Objects
 
 		public IIterator GetIterator(bool lazy) => lazy ? (IIterator)new LazyDictionaryIterator(this) : new DictionaryIterator(this);
 
-		public IMaybe<IObject> Next(int index) => when(keys.Length < index, () => dictionary[keys[index]]);
+		public IMaybe<IObject> Next(int index) => maybe(keys.Length < index, () => dictionary[keys[index]]);
 
-		public IMaybe<IObject> Peek(int index) => when(keys.Length < index, () => dictionary[keys[index]]);
+		public IMaybe<IObject> Peek(int index) => maybe(keys.Length < index, () => dictionary[keys[index]]);
 
 		public Int Length => dictionary.Count;
 

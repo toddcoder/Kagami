@@ -131,7 +131,7 @@ namespace Kagami.Library.Objects
 			get
 			{
 				var self = this;
-				return when(items.Length > 0, () => self.items.Take(self.items.Length - 1).ToArray());
+				return maybe(items.Length > 0, () => self.items.Take(self.items.Length - 1).ToArray());
 			}
 		}
 
@@ -140,7 +140,7 @@ namespace Kagami.Library.Objects
 			get
 			{
 				var self = this;
-				return when(items.Length > 0, () => self.items[self.items.Length - 1]);
+				return maybe(items.Length > 0, () => self.items[self.items.Length - 1]);
 			}
 		}
 
@@ -213,13 +213,13 @@ namespace Kagami.Library.Objects
 		public IMaybe<IObject> Next(int index)
 		{
 			var self = this;
-			return when(index < items.Length, () => self.items[index]);
+			return maybe(index < items.Length, () => self.items[index]);
 		}
 
 		public IMaybe<IObject> Peek(int index)
 		{
 			var self = this;
-			return when(index < items.Length, () => self.items[index]);
+			return maybe(index < items.Length, () => self.items[index]);
 		}
 
 		public Int Length => items.Length;

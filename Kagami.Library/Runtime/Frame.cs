@@ -186,7 +186,7 @@ namespace Kagami.Library.Runtime
 
 		public bool IsEmpty => stack.Count == 0;
 
-		public IMaybe<IObject> Peek() => when(stack.Count > 0, () => stack.Peek());
+		public IMaybe<IObject> Peek() => maybe(stack.Count > 0, () => stack.Peek());
 
 		public IResult<IObject> Pop() => tryTo(() => stack.Pop());
 

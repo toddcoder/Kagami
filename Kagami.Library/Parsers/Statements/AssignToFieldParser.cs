@@ -26,7 +26,7 @@ namespace Kagami.Library.Parsers.Statements
 		{
 			if (matchOperator(operationSource).Out(out var operation, out var original) || original.IsNotMatched)
 			{
-				var assignmentOperation = when(original.IsMatched, () => operation);
+				var assignmentOperation = maybe(original.IsMatched, () => operation);
 				state.AddStatement(new AssignToField(fieldName, assignmentOperation, expression));
 
 				return Unit.Matched();

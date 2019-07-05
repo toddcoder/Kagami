@@ -30,7 +30,7 @@ namespace Kagami.Library.Parsers.Expressions
 		{
 			if (matchOperator(operationSource).Out(out var operation, out var original) || original.IsNotMatched)
 			{
-				var assignmentOperation = when(original.IsMatched, () => operation);
+				var assignmentOperation = maybe(original.IsMatched, () => operation);
 				builder.Add(new SendMessageSymbol(messageName.set(), precedence, assignmentOperation, expression));
 				return Unit.Matched();
 			}
