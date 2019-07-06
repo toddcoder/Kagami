@@ -14,7 +14,7 @@ namespace Kagami.Library.Parsers.Expressions
 		public override IMatched<Unit> Prefix(ParseState state, Token[] tokens)
 		{
 			message = tokens[2].Text;
-			state.Colorize(tokens, Color.Whitespace, Color.OpenParenthesis, Color.Whitespace);
+			state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Whitespace);
 
 			return Unit.Matched();
 		}
