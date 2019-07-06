@@ -127,8 +127,8 @@ namespace Kagami.Library.Objects
 			{
 				case Int i:
 					return intGetter(obj, i.Value);
-				case Container internalList:
-					return listGetter(obj, conditionContainer(internalList));
+				case Container container:
+					return listGetter(obj, conditionContainer(container));
 				case ICollection collection when !(index is String):
 					return listGetter(obj, new Container(collection.GetIterator(false).List()));
 				case IIterator iterator:
@@ -146,8 +146,8 @@ namespace Kagami.Library.Objects
 				case Int i:
 					intSetter(obj, i.Value, value);
 					return obj;
-				case Container internalList:
-					listSetter(obj, conditionContainer(internalList), value);
+				case Container container:
+					listSetter(obj, conditionContainer(container), value);
 					return obj;
 				case ICollection collection when !(index is String):
 					listSetter(obj, new Container(collection.GetIterator(false).List()), value);

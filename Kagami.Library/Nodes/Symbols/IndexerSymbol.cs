@@ -22,12 +22,12 @@ namespace Kagami.Library.Nodes.Symbols
 		   {
 			   arguments[0].Generate(builder);
 			   arguments[1].Generate(builder);
-			   builder.NewInternalList();
+			   builder.NewContainer();
 
 			   foreach (var argument in arguments.Skip(2))
 			   {
 				   argument.Generate(builder);
-				   builder.NewInternalList();
+				   builder.NewContainer();
 			   }
 		   }
 	   }

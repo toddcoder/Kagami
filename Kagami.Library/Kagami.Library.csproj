@@ -728,7 +728,7 @@
     <Compile Include="Parsers\Expressions\SliceAssignParser.cs" />
     <Compile Include="Parsers\Expressions\SliceParser.cs" />
     <Compile Include="Parsers\Expressions\StringArrayParser.cs" />
-    <Compile Include="Parsers\Expressions\SubexpressionParser2.cs" />
+    <Compile Include="Parsers\Expressions\SubexpressionParser.cs" />
     <Compile Include="Parsers\Expressions\SuperParser.cs" />
     <Compile Include="Parsers\Expressions\SymbolObjectParser.cs" />
     <Compile Include="Parsers\Expressions\ThrowParser.cs" />
@@ -748,7 +748,6 @@
     <Compile Include="Parsers\Expressions\OrParser.cs" />
     <Compile Include="Parsers\Expressions\PostfixParser.cs" />
     <Compile Include="Parsers\Expressions\SendMessageParser.cs" />
-    <Compile Include="Parsers\Expressions\SubexpressionParser.cs" />
     <Compile Include="Parsers\Expressions\PrefixParser.cs" />
     <Compile Include="Parsers\Expressions\StringParser.cs" />
     <Compile Include="Parsers\Expressions\SymbolStack.cs" />

@@ -21,7 +21,7 @@ namespace Kagami.Library.Nodes.Symbols
 
          expression.Generate(builder);
 
-         builder.IsClass("InternalList", false);
+         builder.IsClass("Container", false);
          builder.GoToIfTrue(tupleLabel);
 
 			if (monoTuple)

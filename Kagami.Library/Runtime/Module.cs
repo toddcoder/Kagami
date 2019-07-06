@@ -50,7 +50,7 @@ namespace Kagami.Library.Runtime
 			classes["Placeholder"] = new PlaceholderClass();
 			classes["Range"] = new RangeClass();
 			classes["Dictionary"] = new DictionaryClass();
-			classes["Collection"] = new ContainerClass();
+			classes["Container"] = new ContainerClass();
 			classes["Unmatched"] = new UnmatchedClass();
 			classes["Complex"] = new ComplexClass();
 			classes["Rational"] = new RationalClass();
