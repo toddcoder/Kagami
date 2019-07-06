@@ -86,6 +86,7 @@ namespace Kagami.Library.Parsers.Expressions
 	         yield return new ThrowParser(builder);
 	         yield return new AssertParser(builder);
 	         yield return new SeqParser(builder);
+	         yield return new ConversionParser(builder);
             yield return new FieldParser(builder);
          }
       }

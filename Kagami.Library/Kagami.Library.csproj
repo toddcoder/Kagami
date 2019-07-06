@@ -221,6 +221,7 @@
     <Compile Include="Nodes\Symbols\ComprehensionSymbol.cs" />
     <Compile Include="Nodes\Symbols\ConcatenationSymbol.cs" />
     <Compile Include="Nodes\Symbols\ConsSymbol.cs" />
+    <Compile Include="Nodes\Symbols\ConversionSymbol.cs" />
     <Compile Include="Nodes\Symbols\CycleSymbol.cs" />
     <Compile Include="Nodes\Symbols\DateSymbol.cs" />
     <Compile Include="Nodes\Symbols\DelSymbol.cs" />
@@ -649,6 +650,7 @@
     <Compile Include="Parsers\Expressions\ComprehensionParser.cs" />
     <Compile Include="Parsers\Expressions\ConjunctionParsers.cs" />
     <Compile Include="Parsers\Expressions\ConstantsParser.cs" />
+    <Compile Include="Parsers\Expressions\ConversionParser.cs" />
     <Compile Include="Parsers\Expressions\CycleParser.cs" />
     <Compile Include="Parsers\Expressions\DateParser.cs" />
     <Compile Include="Parsers\Expressions\DictionaryParser.cs" />
