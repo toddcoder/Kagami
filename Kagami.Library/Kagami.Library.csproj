@@ -191,6 +191,7 @@
     <Compile Include="Nodes\Statements\Skip.cs" />
     <Compile Include="Nodes\Statements\Statement.cs" />
     <Compile Include="Nodes\Statements\Stop.cs" />
+    <Compile Include="Nodes\Statements\SubPattern.cs" />
     <Compile Include="Nodes\Statements\While.cs" />
     <Compile Include="Nodes\Statements\Yield.cs" />
     <Compile Include="Nodes\Symbols\AddSymbol.cs" />

@@ -20,9 +20,13 @@ namespace Kagami.Library.Objects
 			return obj is SubPattern subPattern && name == subPattern.name && parentPattern.IsEqualTo(subPattern.parentPattern);
 		}
 
-		//public override Pattern Copy() => new SubPattern(name, parameters, parentPattern.Copy());
+		public override Pattern Copy() => new SubPattern(name, parameters, parentPattern.Copy());
 
-		public override void RegisterArguments(Arguments arguments) => parentPattern.RegisterArguments(arguments);
+		public override void RegisterArguments(Arguments arguments)
+		{
+			parentPattern.RegisterArguments(arguments);
+			base.RegisterArguments(arguments);
+		}
 
 		public override bool Match(IObject comparisand, Hash<string, IObject> bindings)
 		{
@@ -30,14 +34,12 @@ namespace Kagami.Library.Objects
 			{
 				if (IsEqualTo(parentPattern.Value))
 				{
-					return returnValues()
+					return returnValues(parentPattern.Value, bindings);
 				}
 			}
-			else
-			{
-				Value = Boolean.False;
-				return false;
-			}
+
+			Value = Boolean.False;
+			return false;
 		}
 	}
 }
