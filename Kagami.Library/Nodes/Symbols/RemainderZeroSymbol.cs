@@ -2,19 +2,27 @@
 
 namespace Kagami.Library.Nodes.Symbols
 {
-   public class RemainderZeroSymbol : Symbol
-   {
-      public override void Generate(OperationsBuilder builder)
-      {
-         builder.Remainder();
-         builder.PushInt(0);
-         builder.Equal();
-      }
+	public class RemainderZeroSymbol : Symbol
+	{
+		bool not;
 
-      public override Precedence Precedence => Precedence.Boolean;
+		public RemainderZeroSymbol(bool not) => this.not = not;
 
-      public override Arity Arity => Arity.Binary;
+		public override void Generate(OperationsBuilder builder)
+		{
+			builder.Remainder();
+			builder.PushInt(0);
+			builder.Equal();
+			if (not)
+			{
+				builder.Not();
+			}
+		}
 
-      public override string ToString() => "%%";
-   }
+		public override Precedence Precedence => Precedence.Boolean;
+
+		public override Arity Arity => Arity.Binary;
+
+		public override string ToString() => not ? "!%" : "%%";
+	}
 }

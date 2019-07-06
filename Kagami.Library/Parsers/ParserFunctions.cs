@@ -1013,20 +1013,14 @@ namespace Kagami.Library.Parsers
 				case "//":
 					symbol = new IntDivideSymbol().Matched<Symbol>();
 					break;
-				case "<!":
-					symbol = new SendBinaryMessageSymbol("foldl", Precedence.ChainedOperator).Matched<Symbol>();
-					break;
-				case "<%":
-					symbol = new SendBinaryMessageSymbol("sort".Selector("<Lambda>"), Precedence.ChainedOperator).Matched<Symbol>();
-					break;
-				case "!>":
-					symbol = new SendBinaryMessageSymbol("foldr", Precedence.ChainedOperator).Matched<Symbol>();
-					break;
 				case "%":
 					symbol = new RemainderSymbol().Matched<Symbol>();
 					break;
 				case "%%":
-					symbol = new RemainderZeroSymbol().Matched<Symbol>();
+					symbol = new RemainderZeroSymbol(false).Matched<Symbol>();
+					break;
+				case "!%":
+					symbol = new RemainderZeroSymbol(true).Matched<Symbol>();
 					break;
 				case "^":
 					symbol = new RaiseSymbol().Matched<Symbol>();

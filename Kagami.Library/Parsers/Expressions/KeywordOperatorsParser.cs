@@ -11,7 +11,7 @@ namespace Kagami.Library.Parsers.Expressions
 
 		public override string Pattern => "^ /(|s|) /('to' | 'til' | 'by' | 'if' | 'map' | 'join' | 'sort' |" +
 			"'foldl' | 'foldr' | 'all' | 'any' | 'none' | 'one' | 'zip' | 'downto' | 'skip' | 'take' | 'band' | 'bor' |" +
-			" 'bxor' | 'bsl' | 'bsr' | 'while' | 'until' | 'min' | 'max' | 'div' | 'mod' | 'divs' | 'does' | 'x') /b";
+			" 'bxor' | 'bsl' | 'bsr' | 'while' | 'until' | 'min' | 'max' | 'does' | 'x') /b";
 
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
@@ -87,15 +87,6 @@ namespace Kagami.Library.Parsers.Expressions
 							break;
 						case "max":
 							builder.Add(new MaxSymbol());
-							break;
-						case "div":
-							builder.Add(new IntDivideSymbol());
-							break;
-						case "mod":
-							builder.Add(new RemainderSymbol());
-							break;
-						case "divs":
-							builder.Add(new RemainderZeroSymbol());
 							break;
 						case "does":
 							builder.Add(new SendBinaryMessageSymbol("respondsTo", Precedence.Boolean));
