@@ -115,13 +115,13 @@ namespace Kagami.Library.Objects
 			}
 		}
 
-		public String this[InternalList internalList]
+		public String this[Container container]
 		{
 
 			get
 			{
 				var builder = new StringBuilder();
-				foreach (var index in indexList(internalList, value.Length))
+				foreach (var index in indexList(container, value.Length))
 				{
 					builder.Append(value[index]);
 				}

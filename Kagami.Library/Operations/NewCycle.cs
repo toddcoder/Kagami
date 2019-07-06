@@ -11,7 +11,7 @@ namespace Kagami.Library.Operations
 		{
 			switch (value)
 			{
-				case InternalList list:
+				case Container list:
 					return Cycle.CreateObject(list.List.ToArray()).Matched();
 				case ICollection collection when collection.ExpandForArray:
 					return Cycle.CreateObject(collection.GetIterator(false).List().ToArray()).Matched();

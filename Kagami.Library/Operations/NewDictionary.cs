@@ -11,7 +11,7 @@ namespace Kagami.Library.Operations
 		{
 			switch (value)
 			{
-				case InternalList list:
+				case Container list:
 					return Dictionary.New(list.List.ToArray()).Matched();
 				case IKeyValue _:
 					return Dictionary.New(new[] { value }).Matched();

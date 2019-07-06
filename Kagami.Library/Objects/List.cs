@@ -38,7 +38,7 @@ namespace Kagami.Library.Objects
 			return current;
 		}
 
-		public static List NewList(InternalList list) => NewList(list.List);
+		public static List NewList(Container list) => NewList(list.List);
 
 		IMaybe<IObject> head;
 		List tail;

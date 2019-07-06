@@ -174,12 +174,12 @@ namespace Kagami.Library.Objects
 			}
 		}
 
-		public IObject this[InternalList internalList]
+		public IObject this[Container container]
 		{
 			get
 			{
 				var result = new List<IObject>();
-				foreach (var index in indexList(internalList, list.Count))
+				foreach (var index in indexList(container, list.Count))
 				{
 					result.Add(list[index]);
 				}
@@ -195,7 +195,7 @@ namespace Kagami.Library.Objects
 					case ICollection collection when !(value is String):
 					{
 						var valueIterator = collection.GetIterator(false);
-						foreach (var index in indexList(internalList, list.Count))
+						foreach (var index in indexList(container, list.Count))
 						{
 							var anyItem = valueIterator.Next();
 							if (anyItem.If(out var item))
@@ -213,7 +213,7 @@ namespace Kagami.Library.Objects
 
 					default:
 					{
-						foreach (var index in indexList(internalList, list.Count))
+						foreach (var index in indexList(container, list.Count))
 						{
 							list[index] = value;
 						}

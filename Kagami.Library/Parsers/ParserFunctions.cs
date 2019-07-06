@@ -104,7 +104,7 @@ namespace Kagami.Library.Parsers
 			}
 		}
 
-		public static IMatched<InternalList> getInternalList(ParseState state)
+		public static IMatched<Container> getInternalList(ParseState state)
 		{
 			var builder = new ExpressionBuilder(ExpressionFlags.Standard);
 			var constantsParser = new ConstantsParser(builder);
@@ -117,7 +117,7 @@ namespace Kagami.Library.Parsers
 					if (state.Scan("^ /(|s|) /','", Color.Whitespace, Color.Operator).IsMatched) { }
 					else if (result.Failed(out var exception))
 					{
-						return failedMatch<InternalList>(exception);
+						return failedMatch<Container>(exception);
 					}
 					else
 					{
@@ -126,7 +126,7 @@ namespace Kagami.Library.Parsers
 				}
 				else if (result.Failed(out var exception))
 				{
-					return failedMatch<InternalList>(exception);
+					return failedMatch<Container>(exception);
 				}
 				else
 				{
@@ -146,15 +146,15 @@ namespace Kagami.Library.Parsers
 					}
 					else
 					{
-						return $"Expected constant, found {symbol}".FailedMatch<InternalList>();
+						return $"Expected constant, found {symbol}".FailedMatch<Container>();
 					}
 				}
 
-				return new InternalList(list).Matched();
+				return new Container(list).Matched();
 			}
 			else
 			{
-				return failedMatch<InternalList>(expException);
+				return failedMatch<Container>(expException);
 			}
 		}
 

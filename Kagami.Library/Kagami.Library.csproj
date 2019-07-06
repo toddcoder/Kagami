@@ -81,7 +81,7 @@
     <Compile Include="Classes\IndexClass.cs" />
     <Compile Include="Classes\InfinityClass.cs" />
     <Compile Include="Classes\IntClass.cs" />
-    <Compile Include="Classes\InternalListClass.cs" />
+    <Compile Include="Classes\ContainerClass.cs" />
     <Compile Include="Classes\IntervalClass.cs" />
     <Compile Include="Classes\IParse.cs" />
     <Compile Include="Classes\IteratorClass.cs" />
@@ -399,7 +399,7 @@
     <Compile Include="Objects\Infinity.cs" />
     <Compile Include="Objects\Int.cs" />
     <Compile Include="Objects\InternalLambda.cs" />
-    <Compile Include="Objects\InternalList.cs" />
+    <Compile Include="Objects\Container.cs" />
     <Compile Include="Objects\Interval.cs" />
     <Compile Include="Objects\INumeric.cs" />
     <Compile Include="Objects\IObject.cs" />
@@ -557,7 +557,7 @@
     <Compile Include="Operations\Negate.cs" />
     <Compile Include="Operations\NewArray.cs" />
     <Compile Include="Operations\NewField.cs" />
-    <Compile Include="Operations\NewInternalList.cs" />
+    <Compile Include="Operations\NewContainer.cs" />
     <Compile Include="Operations\NewNameValue.cs" />
     <Compile Include="Operations\NewRange.cs" />
     <Compile Include="Operations\NewTuple.cs" />

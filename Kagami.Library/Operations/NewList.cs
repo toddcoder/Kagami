@@ -11,7 +11,7 @@ namespace Kagami.Library.Operations
       {
          switch (value)
          {
-            case InternalList list:
+            case Container list:
                return List.NewList(list).Matched<IObject>();
             case ICollection collection when collection.ExpandForArray:
                return List.NewList(list(collection)).Matched<IObject>();

@@ -285,7 +285,7 @@ namespace Kagami.Library.Operations
 
 		public void NewNameValue() => add(new NewNameValue());
 
-		public void NewInternalList() => add(new NewInternalList());
+		public void NewInternalList() => add(new NewContainer());
 
 		public void NewTuple() => add(new NewTuple());
 

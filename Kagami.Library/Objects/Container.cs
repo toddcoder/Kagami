@@ -6,17 +6,17 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
 {
-	public class InternalList : IObject
+	public class Container : IObject
 	{
 		List<IObject> list;
 
-		public InternalList(IObject x, IObject y) => list = new List<IObject> { x, y };
+		public Container(IObject x, IObject y) => list = new List<IObject> { x, y };
 
-		public InternalList(IEnumerable<IObject> objects) => list = new List<IObject>(objects);
+		public Container(IEnumerable<IObject> objects) => list = new List<IObject>(objects);
 
 		public List<IObject> List => list;
 
-		public string ClassName => "InternalList";
+		public string ClassName => "Container";
 
 		public string AsString => list.Select(i => i.AsString).Stringify(" ");
 
@@ -24,11 +24,14 @@ namespace Kagami.Library.Objects
 
 		public int Hash => list.GetHashCode();
 
-		public bool IsEqualTo(IObject obj) => obj is InternalList il && list.Count == il.list.Count && list.All(i => list.Contains(i));
+		public bool IsEqualTo(IObject obj)
+		{
+			return obj is Container container && list.Count == container.list.Count && list.All(i => list.Contains(i));
+		}
 
 		public bool Match(IObject comparisand, Hash<string, IObject> bindings)
 		{
-			return matchSingle(this, comparisand, (il, o) => il.In(o), bindings);
+			return matchSingle(this, comparisand, (container, o) => container.In(o), bindings);
 		}
 
 		public bool IsTrue => list.Count > 0;

@@ -82,18 +82,18 @@ namespace Kagami.Library.Objects
 			return collection.GetIterator(false).List().Select(i => i.AsString).Stringify(connector);
 		}
 
-		public static IEnumerable<int> indexList(InternalList internalList, int length)
+		public static IEnumerable<int> indexList(Container container, int length)
 		{
-			return internalList.List
+			return container.List
 				.Cast<Int>()
 				.Select(i => wrapIndex(i.Value, length))
 				.Where(i => i.Between(0).Until(length));
 		}
 
-		static InternalList conditionList(InternalList internalList)
+		static Container conditionContainer(Container container)
 		{
 			var list = new List<IObject>();
-			foreach (var obj in internalList.List)
+			foreach (var obj in container.List)
 			{
 				switch (obj)
 				{
@@ -117,43 +117,43 @@ namespace Kagami.Library.Objects
 				}
 			}
 
-			return new InternalList(list);
+			return new Container(list);
 		}
 
 		public static IObject getIndexed<T>(T obj, IObject index, Func<T, int, IObject> intGetter,
-			Func<T, InternalList, IObject> listGetter) where T : IObject
+			Func<T, Container, IObject> listGetter) where T : IObject
 		{
 			switch (index)
 			{
 				case Int i:
 					return intGetter(obj, i.Value);
-				case InternalList internalList:
-					return listGetter(obj, conditionList(internalList));
+				case Container internalList:
+					return listGetter(obj, conditionContainer(internalList));
 				case ICollection collection when !(index is String):
-					return listGetter(obj, new InternalList(collection.GetIterator(false).List()));
+					return listGetter(obj, new Container(collection.GetIterator(false).List()));
 				case IIterator iterator:
-					return listGetter(obj, new InternalList(iterator.List()));
+					return listGetter(obj, new Container(iterator.List()));
 				default:
 					throw invalidIndex(index);
 			}
 		}
 
 		public static IObject setIndexed<T>(T obj, IObject index, IObject value, Action<T, int, IObject> intSetter,
-			Action<T, InternalList, IObject> listSetter) where T : IObject
+			Action<T, Container, IObject> listSetter) where T : IObject
 		{
 			switch (index)
 			{
 				case Int i:
 					intSetter(obj, i.Value, value);
 					return obj;
-				case InternalList internalList:
-					listSetter(obj, conditionList(internalList), value);
+				case Container internalList:
+					listSetter(obj, conditionContainer(internalList), value);
 					return obj;
 				case ICollection collection when !(index is String):
-					listSetter(obj, new InternalList(collection.GetIterator(false).List()), value);
+					listSetter(obj, new Container(collection.GetIterator(false).List()), value);
 					return obj;
 				case IIterator iterator:
-					listSetter(obj, new InternalList(iterator.List()), value);
+					listSetter(obj, new Container(iterator.List()), value);
 					return obj;
 				default:
 					throw invalidIndex(index);

@@ -70,7 +70,7 @@ namespace Kagami.Library.Objects
 						return false;
 					}
 
-				case InternalList internalList:
+				case Container internalList:
 					return internalList.In(source);
 				case Regex regex:
 					return regex.IsMatch(source.AsString).IsTrue;

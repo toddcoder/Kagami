@@ -11,7 +11,7 @@ namespace Kagami.Library.Operations
 		{
 			switch (value)
 			{
-				case InternalList list:
+				case Container list:
 					return new Set(list.List.ToArray()).Matched<IObject>();
 				case ICollection collection when !(value is String):
 					return new Set(collection.GetIterator(false).List().ToArray()).Matched<IObject>();

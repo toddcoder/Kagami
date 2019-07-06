@@ -158,12 +158,12 @@ namespace Kagami.Library.Objects
 			}
 		}
 
-		public IObject this[InternalList internalList]
+		public IObject this[Container container]
 		{
 			get
 			{
 				var list = new List<IObject>();
-				foreach (var key in internalList.List)
+				foreach (var key in container.List)
 				{
 					if (dictionary.ContainsKey(key))
 					{
@@ -181,7 +181,7 @@ namespace Kagami.Library.Objects
 						return;
 					case None _:
 					{
-						foreach (var key in internalList.List)
+						foreach (var key in container.List)
 						{
 							dictionary.Remove(key);
 						}
@@ -192,7 +192,7 @@ namespace Kagami.Library.Objects
 					{
 						if (getIterator(value, false).If(out var iterator, out var exception))
 						{
-							foreach (var key in internalList.List)
+							foreach (var key in container.List)
 							{
 								var anyItem = iterator.Next();
 								if (anyItem.If(out var item))
@@ -213,7 +213,7 @@ namespace Kagami.Library.Objects
 						break;
 					default:
 					{
-						foreach (var key in internalList.List)
+						foreach (var key in container.List)
 						{
 							this[key] = value;
 						}

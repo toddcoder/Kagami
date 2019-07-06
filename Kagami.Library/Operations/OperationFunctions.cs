@@ -20,7 +20,7 @@ namespace Kagami.Library.Operations
 				case UserObject uo:
 					var objectCollection = new ObjectCollection(uo);
 					return objectCollection.GetIterator(lazy).Success();
-				case InternalList internalList:
+				case Container internalList:
 					var array = new Array(internalList.List);
 					return array.GetIterator(lazy).Success();
 				default:

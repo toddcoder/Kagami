@@ -5,16 +5,16 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class InternalListSymbol : Symbol
    {
-      InternalList internalList;
+      Container container;
 
-      public InternalListSymbol(InternalList internalList) => this.internalList = internalList;
+      public InternalListSymbol(Container container) => this.container = container;
 
-      public override void Generate(OperationsBuilder builder) => builder.PushObject(internalList);
+      public override void Generate(OperationsBuilder builder) => builder.PushObject(container);
 
       public override Precedence Precedence => Precedence.Value;
 
       public override Arity Arity => Arity.Nullary;
 
-      public override string ToString() => internalList.Image;
+      public override string ToString() => container.Image;
    }
 }

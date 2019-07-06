@@ -44,7 +44,7 @@ namespace Kagami.Library.Objects
 
 		public Tuple(IObject[] items) : this()
 		{
-			if (items.Length == 1 && items[0] is InternalList il && il.ExpandInTuple)
+			if (items.Length == 1 && items[0] is Container il && il.ExpandInTuple)
 			{
 				this.items = il.List.ToArray();
 			}
