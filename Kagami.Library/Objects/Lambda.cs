@@ -74,7 +74,8 @@ namespace Kagami.Library.Objects
 
       public IObject Join(Lambda otherLambda)
       {
-         return new CompositeLambda(invokable, otherLambda.Invokable);
+
+	      return new CompositeLambda(invokable, otherLambda.Invokable);
       }
 
       public void Capture()
