@@ -117,7 +117,6 @@ namespace Kagami.Library.Objects
 
 		public String this[Container container]
 		{
-
 			get
 			{
 				var builder = new StringBuilder();
@@ -136,13 +135,29 @@ namespace Kagami.Library.Objects
 
 		public Boolean In(IObject item)
 		{
-			return item is String other && value.Contains(other.value) || item is Char c && value.IndexOf(c.Value) > 0;
+			switch (item)
+			{
+				case String other:
+					return value.Contains(other.value);
+				case Char c:
+					return value.IndexOf(c.Value) >= 0;
+				default:
+					return false;
+			}
 		}
 
 		public Boolean NotIn(IObject item)
 		{
-			return item is String other && !value.Contains(other.value) || item is Char c && value.IndexOf(c.Value) == -1;
-		}
+			switch (item)
+			{
+				case String other:
+					return !value.Contains(other.value);
+				case Char c:
+					return value.IndexOf(c.Value) == -1;
+				default:
+					return false;
+			}
+        }
 
 		public IObject Times(int count) => (String)value.Repeat(count);
 
@@ -306,6 +321,7 @@ namespace Kagami.Library.Objects
 				to += remainder;
 				toLength = to.Length;
 			}
+
 			var length = Math.Min(fromLength, toLength);
 			var table = new AutoHash<char, char>(k => k);
 
