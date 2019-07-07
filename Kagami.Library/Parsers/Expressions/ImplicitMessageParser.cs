@@ -28,7 +28,7 @@ namespace Kagami.Library.Parsers.Expressions
 				var fieldName = "__$0";
 				switch (message)
 				{
-					case "acc":
+					case "fold":
 						message = "foldl";
 						goto case "foldl";
 					case "foldl":

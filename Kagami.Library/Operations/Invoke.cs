@@ -58,6 +58,31 @@ namespace Kagami.Library.Operations
 			machine.GoTo(invokable.Address);
 		}
 
+		public static IMatched<IObject> InvokeObject(Machine machine, IObject value, Arguments arguments, ref bool increment)
+		{
+			switch (value)
+			{
+				case IInvokableObject io:
+					InvokeInvokableObject(machine, io, arguments);
+					increment = io.Invokable is YieldingInvokable;
+
+					return notMatched<IObject>();
+				case PackageFunction pf:
+					increment = true;
+					return pf.Invoke(arguments).Matched();
+				case IMayInvoke mi:
+					increment = true;
+					return mi.Invoke(arguments.Value).Matched();
+				case Pattern pattern:
+					increment = true;
+					var copy = pattern.Copy();
+					copy.RegisterArguments(arguments);
+					return copy.Matched<IObject>();
+				default:
+					return failedMatch<IObject>(incompatibleClasses(value, "Invokable object"));
+			}
+		}
+
 		string fieldName;
 		bool increment;
 
@@ -79,27 +104,7 @@ namespace Kagami.Library.Operations
 
 				if (isFound && field != null)
 				{
-					switch (field.Value)
-					{
-						case IInvokableObject io:
-							InvokeInvokableObject(machine, io, arguments);
-							increment = io.Invokable is YieldingInvokable;
-
-							return notMatched<IObject>();
-						case PackageFunction pf:
-							increment = true;
-							return pf.Invoke(arguments).Matched();
-						case IMayInvoke mi:
-							increment = true;
-							return mi.Invoke(arguments.Value).Matched();
-						case Pattern pattern:
-							increment = true;
-							var copy = pattern.Copy();
-							copy.RegisterArguments(arguments);
-							return copy.Matched<IObject>();
-						default:
-							return failedMatch<IObject>(incompatibleClasses(field.Value, "Invokable object"));
-					}
+					return InvokeObject(machine, field.Value, arguments, ref increment);
 				}
 				else if (isFailure)
 				{

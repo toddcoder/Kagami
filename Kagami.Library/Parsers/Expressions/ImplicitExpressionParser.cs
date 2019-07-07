@@ -23,7 +23,7 @@ namespace Kagami.Library.Parsers.Expressions
 			fieldName = "__$0";
 			switch (message)
 			{
-				case "acc":
+				case "fold":
 					message = "foldl";
 					goto case "foldl";
 				case "foldl":
