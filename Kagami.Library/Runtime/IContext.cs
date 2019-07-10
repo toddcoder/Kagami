@@ -10,7 +10,7 @@ namespace Kagami.Library.Runtime
 
       void Put(string value);
 
-      IMaybe<string> ReadLine();
+      IResult<string> ReadLine();
 
       bool Cancelled();
 

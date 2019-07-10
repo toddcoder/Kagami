@@ -155,7 +155,12 @@ namespace Kagami.Library.Objects
 
 		public String MakeString(string connector) => makeString(this, connector);
 
-		public IIterator GetIndexedIterator() => new IndexedIterator(this);
+		public IIterator GetIndexedIterator()
+		{
+			var iterator = GetIterator(false);
+			var array = new Array(iterator.List());
+			return new IndexedIterator(array);
+		}
 
 		public IObject Add(int increment) => new Range(this, increment);
 

@@ -19,7 +19,7 @@ namespace Kagami.Library.Objects
 		public static IObject CreateObject(IEnumerable<IObject> items)
 		{
 			var list = items.ToList();
-			if (list.All(i => i is IKeyValue))
+			if (list.All(i => i is IKeyValue) && list.Count > 0)
 			{
 				return new Dictionary(list);
 			}

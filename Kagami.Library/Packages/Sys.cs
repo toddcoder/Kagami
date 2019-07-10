@@ -64,8 +64,12 @@ namespace Kagami.Library.Packages
 			return value;
 		}
 
-		public IObject Readln() =>
-			Machine.Current.Context.ReadLine().FlatMap(s => new Some(String.StringObject(s)), () => None.NoneValue);
+		public IObject Readln()
+		{
+			return Machine.Current.Context.ReadLine()
+				.FlatMap(s => Success.Object(String.StringObject(s)),
+					e => Failure.Object(e.Message));
+		}
 
 		public IObject Peek(IObject obj)
 		{
