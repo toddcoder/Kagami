@@ -9,7 +9,7 @@ namespace Kagami.Library.Parsers.Expressions
 
 		public ConversionParser(ExpressionBuilder builder) : base(builder) { }
 
-		public override string Pattern => "/(|s|) /('int' | 'float' | 'byte' | 'long' | 'complex' | 'rational') /(|s+|)";
+		public override string Pattern => "^ /(|s|) /('int' | 'float' | 'byte' | 'long' | 'complex' | 'rational') /(|s+|)";
 
 		public override IMatched<Unit> Prefix(ParseState state, Token[] tokens)
 		{
