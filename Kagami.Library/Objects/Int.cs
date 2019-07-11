@@ -195,5 +195,15 @@ namespace Kagami.Library.Objects
       public Char Char() => new Char((char)value);
 
       public Byte Byte() => new Byte((byte)value);
+
+      public IObject Times(Lambda lambda)
+      {
+	      for (var i = 0; i < value; i++)
+	      {
+		      lambda.Invoke();
+	      }
+
+	      return Void.Value;
+      }
    }
 }
