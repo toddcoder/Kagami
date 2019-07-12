@@ -7,7 +7,7 @@ namespace Kagami.Library.Parsers.Statements
 {
 	public class WhileParser : StatementParser
 	{
-		public override string Pattern => "^ /'while' -(> ['>^']) /b";
+		public override string Pattern => "^ /'while' -(> ['.|']) /b";
 
 		public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
 		{

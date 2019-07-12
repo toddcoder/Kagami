@@ -28,7 +28,7 @@ namespace Kagami.Playground
 			parenthesesCount = 0;
 			var font = textBox.Font;
 			using (var boldFont = new Font(textBox.Font, FontStyle.Bold))
-			//using (var italicFont = new Font(textBox.Font, FontStyle.Italic))
+				//using (var italicFont = new Font(textBox.Font, FontStyle.Italic))
 			{
 				textBox.SelectAll();
 				textBox.SelectionColor = Color.Black;
@@ -71,8 +71,8 @@ namespace Kagami.Playground
 				case Library.Parsers.Color.CollectionPart:
 				case Library.Parsers.Color.Keyword:
 				case Library.Parsers.Color.Char:
-				/*case Library.Parsers.Color.OpenParenthesis:
-				case Library.Parsers.Color.CloseParenthesis:*/
+					/*case Library.Parsers.Color.OpenParenthesis:
+					case Library.Parsers.Color.CloseParenthesis:*/
 					return true;
 				default:
 					return false;

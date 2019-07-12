@@ -88,7 +88,7 @@ namespace Kagami.Library.Nodes.Statements
 			lambda = new Lambda(invokable);
 			if (builder.RegisterInvokable(invokable, block, overriding).If(out _, out var exception))
 			{
-				if (parameters[parameters.Length - 1].Variadic)
+				if (parameters.Length > 0 && parameters[parameters.Length - 1].Variadic)
 				{
 					var lambdaName = selector.Name;
 					lambdaName = className.IsNotEmpty() ? $"{className}.{lambdaName}" : lambdaName;

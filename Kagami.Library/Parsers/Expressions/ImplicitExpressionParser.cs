@@ -12,7 +12,7 @@ namespace Kagami.Library.Parsers.Expressions
 
 		public ImplicitExpressionParser(ExpressionBuilder builder) : base(builder) { }
 
-		public override string Pattern => $"^ /(|s|) /({REGEX_ITERATOR_FUNCTIONS}) /'>'";
+		public override string Pattern => $"^ /(|s|) /({REGEX_ITERATOR_FUNCTIONS}) /'|'";
 
 		public override IMatched<Unit> Prefix(ParseState state, Token[] tokens)
 		{
@@ -23,6 +23,9 @@ namespace Kagami.Library.Parsers.Expressions
 			fieldName = "__$0";
 			switch (message)
 			{
+				case "for":
+					message = "each(_)";
+					break;
 				case "fold":
 					message = "foldl";
 					goto case "foldl";

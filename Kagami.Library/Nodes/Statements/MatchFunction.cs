@@ -21,7 +21,8 @@ namespace Kagami.Library.Nodes.Statements
       {
          selector = parameters.Selector(functionName);
          this.parameters = parameters;
-         block = new Block(ifStatement);
+         block = new Block(ifStatement) { new ReturnNothing() };
+			block.AddReturnIf();
          this.overriding = overriding;
          this.className = className;
       }

@@ -194,6 +194,7 @@ namespace Kagami.Library.Parsers.Statements
 					state.SkipEndOfLine();
 					if (caseParser.Scan(state).If(out _, out var anyException))
 					{
+						caseParser.If.AddReturnIf();
 						list.Add(caseParser.If);
 					}
 					else if (anyException.If(out var exception))

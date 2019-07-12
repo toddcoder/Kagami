@@ -43,6 +43,20 @@ namespace Kagami.Library.Nodes.Statements
          top = false;
       }
 
+      public void AddReturnIf()
+      {
+			block.AddReturnIf();
+			if (elseBlock.If(out var b))
+			{
+				b.AddReturnIf();
+			}
+
+			if (elseIf.If(out var ei))
+			{
+				ei.AddReturnIf();
+			}
+      }
+
       public IMaybe<If> ElseIf
       {
          get => elseIf;
