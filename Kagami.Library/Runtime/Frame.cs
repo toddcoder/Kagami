@@ -8,7 +8,6 @@ using Core.Monads;
 using Core.Strings;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
-using static Kagami.Library.Operations.OperationFunctions;
 using static Core.Monads.AttemptFunctions;
 using static Core.Monads.MonadFunctions;
 using Tuple = Kagami.Library.Objects.Tuple;
@@ -100,7 +99,25 @@ namespace Kagami.Library.Runtime
 				var length = Math.Min(arguments.Length, parameters.Length);
 				var lastValue = Unassigned.Value;
 				var lastName = "";
-				var variadic = false;
+				var variadic = parameters.Length > 0 && parameters[0].Variadic;
+
+				if (variadic)
+				{
+					var parameter = parameters[0];
+					var tuple = new Tuple(arguments.ToArray());
+					if (!fields.ContainsKey(parameter.Name))
+					{
+						fields.New(parameter.Name, parameter.Mutable).Force();
+					}
+
+					if (parameter.TypeConstraint.If(out var typeConstraint) && !typeConstraint.Matches(classOf(lastValue)))
+					{
+						throw incompatibleClasses(lastValue, typeConstraint.AsString);
+					}
+
+					fields.Assign(parameter.Name, tuple, true).Force();
+					return;
+				}
 
 				for (var i = 0; i < length && !variadic; i++)
 				{
@@ -123,8 +140,7 @@ namespace Kagami.Library.Runtime
 
 				if (variadic)
 				{
-					var iterator = getIterator(lastValue, false);
-					var tupleList = iterator.FlatMap(i => i.List().ToList(), e => new List<IObject> { lastValue });
+					var tupleList = new List<IObject> { lastValue };
 					for (var i = length; i < arguments.Length; i++)
 					{
 						tupleList.Add(arguments[i]);

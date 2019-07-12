@@ -9,26 +9,26 @@ namespace Kagami.Library.Objects
 {
    public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields, IPristineCopy, IProvidesFields
    {
-      protected IInvokable invokable;
+      protected IInvokable invokable1;
       protected Fields fields;
       protected bool providesFields;
 
-      public Lambda(IInvokable invokable)
+      public Lambda(IInvokable invokable1)
       {
-         this.invokable = invokable;
+         this.invokable1 = invokable1;
          fields = new Fields();
          providesFields = false;
       }
 
       public string ClassName => "Lambda";
 
-      public virtual string AsString => invokable.ToString();
+      public virtual string AsString => invokable1.ToString();
 
-      public virtual string Image => invokable.Image;
+      public virtual string Image => invokable1.Image;
 
-      public virtual int Hash => invokable.GetHashCode();
+      public virtual int Hash => invokable1.GetHashCode();
 
-      public virtual bool IsEqualTo(IObject obj) => obj is Lambda l && invokable.Index == l.invokable.Index;
+      public virtual bool IsEqualTo(IObject obj) => obj is Lambda l && invokable1.Index == l.invokable1.Index;
 
       public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
@@ -40,7 +40,7 @@ namespace Kagami.Library.Objects
 
       public override int GetHashCode() => Hash;
 
-      public virtual IObject Copy() => new Lambda(invokable);
+      public virtual IObject Copy() => new Lambda(invokable1);
 
       public void CopyFields(Fields fields)
       {
@@ -48,11 +48,11 @@ namespace Kagami.Library.Objects
          providesFields = true;
       }
 
-      public IInvokable Invokable => invokable;
+      public IInvokable Invokable => invokable1;
 
       public virtual IObject Invoke(params IObject[] arguments)
       {
-	      if (Machine.Current.Invoke(invokable, new Arguments(arguments), fields, 0).If(out var value, out var anyException))
+	      if (Machine.Current.Invoke(invokable1, new Arguments(arguments), fields, 0).If(out var value, out var anyException))
 	      {
 		      return value;
 	      }
@@ -62,7 +62,7 @@ namespace Kagami.Library.Objects
 	      }
 	      else
 	      {
-		      throw fieldNotFound(invokable.Image);
+		      throw fieldNotFound(invokable1.Image);
 	      }
       }
 
@@ -70,17 +70,17 @@ namespace Kagami.Library.Objects
 
       public Fields Fields => fields;
 
-      public Lambda Clone() => new Lambda(invokable);
+      public Lambda Clone() => new Lambda(invokable1);
 
       public IObject Join(Lambda otherLambda)
       {
 
-	      return new CompositeLambda(invokable, otherLambda.Invokable);
+	      return new CompositeLambda(invokable1, otherLambda.Invokable);
       }
 
       public void Capture()
       {
-         var parameters = invokable.Parameters;
+         var parameters = invokable1.Parameters;
          foreach (var parameter in parameters.GetCapturingParameters())
          {
             var fieldName = parameter.Name;
@@ -103,6 +103,6 @@ namespace Kagami.Library.Objects
          }
       }
 
-      public Int ParameterCount => invokable.Parameters.Length;
+      public Int ParameterCount => invokable1.Parameters.Length;
    }
 }
