@@ -23,6 +23,7 @@ namespace Kagami.Library.Classes
          messages["+"] = (obj, msg) => function<Range, Int>(obj, msg, (r, i) => r.Add(i.Value));
          messages["-"] = (obj, msg) => function<Range, Int>(obj, msg, (r, i) => r.Subtract(i.Value));
          messages["inverse()"] = (obj, msg) => function<Range>(obj, r => r.Reverse());
+         //messages["*"] = (obj, msg) => function<Range, Int>(obj, msg, (r, i) => r.Times(i.Value));
       }
 
       public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");

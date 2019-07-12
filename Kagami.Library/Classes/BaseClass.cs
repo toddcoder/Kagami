@@ -314,7 +314,7 @@ namespace Kagami.Library.Classes
 				"span".Selector("_<Int>"),
 				"shuffle()", "array()", "list()", "tuple()", "dictionary".Selector("key:_<Lambda>", "value:_<Lambda>"), "dictionary()",
 				"each(_<Lambda>)", "rotate(_<Int>)", "permutation(_<Int>)", "combination(_<Int>)", "flatten()",
-				"copy()", "revert()", "*(_)", "format(_)", "mapIf(_<Lambda>,_<Lambda>)", "set()"));
+				"copy()", "revert()", "*(_)", "format(_)", "replace(_<Lambda>,_<Lambda>)", "set()"));
 
 			dynamicInvoke = (obj, msg) =>
 			{
@@ -413,8 +413,8 @@ namespace Kagami.Library.Classes
 			registerMessage("collect()", (obj, msg) => iteratorFunc(obj, i => i.Collect()));
 			registerMessage("*(_)", (obj, msg) => iteratorFunc<IObject>(obj, msg, (i1, i2) => i1.Apply((ICollection)i2)));
 			registerMessage("format(_)", (obj, msg) => iteratorFunc<Index>(obj, msg, (i, index) => index.IndexOf(i.Collection)));
-			registerMessage("mapIf(_<Lambda>,_<Lambda>)",
-				(obj, msg) => iteratorFunc<Lambda, Lambda>(obj, msg, (i, l1, l2) => i.MapIf(l1, l2)));
+			registerMessage("replace(_<Lambda>,_<Lambda>)",
+				(obj, msg) => iteratorFunc<Lambda, Lambda>(obj, msg, (i, l1, l2) => i.Replace(l1, l2)));
 			registerMessage("set()", (obj, msg) => iteratorFunc(obj, i => i.ToSet()));
 		}
 

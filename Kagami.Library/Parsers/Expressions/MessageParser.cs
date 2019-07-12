@@ -28,15 +28,15 @@ namespace Kagami.Library.Parsers.Expressions
 				parseArguments = true;
 			}
 
-			state.Colorize(tokens, Color.Whitespace, Color.Message, Color.Message, Color.Structure);
-
 			if (!parseArguments)
 			{
+				state.Colorize(tokens, Color.Whitespace, Color.Message, Color.Message);
 				builder.Add(new MessageSymbol(selector, new Expression[0], none<LambdaSymbol>()));
 				return Unit.Matched();
 			}
 			else if (getArgumentsPlusLambda(state, builder.Flags).Out(out var tuple, out var original))
 			{
+				state.Colorize(tokens, Color.Whitespace, Color.Message, Color.Message, Color.OpenParenthesis);
 				var (arguments, lambda) = tuple;
 				builder.Add(new MessageSymbol(selector, arguments, lambda));
 

@@ -43,9 +43,9 @@ namespace Kagami.Library.Packages
 			registerPackageFunction("complex", (obj, msg) => function<Math, IObject>(obj, msg, (m, n) => m.XComplex(n)));
 			registerPackageFunction("rational", (obj, msg) => function<Math, IObject>(obj, msg, (m, n) => m.XRational(n)));
 			registerPackageFunction("hypot(_,_)", (obj, msg) => function<Math, IObject, IObject>(obj, msg, (m, x, y) => m.Hypot(x, y)));
-			registerPackageFunction("string(toLong:_<String>,base:_<Int>)",
+			registerPackageFunction("convert(toLong:_<String>,base:_<Int>)",
 				(obj, msg) => function<Math, String, Int>(obj, msg, (m, s, i) => m.StringToLong(s.Value, i.Value)));
-			registerPackageFunction("string(toFloat:_<String>,base:_<Int>)",
+			registerPackageFunction("convert(toFloat:_<String>,base:_<Int>)",
 				(obj, msg) => function<Math, String, Int>(obj, msg, (m, s, i) => m.StringToFloat(s.Value, i.Value)));
 			registerPackageFunction("frexp", (obj, msg) => function<Math, Float>(obj, msg, (m, f) => m.Frexp(f.Value)));
 			registerPackageFunction("pi".get(), (obj, msg) => function<Math>(obj, m => m.Pi));

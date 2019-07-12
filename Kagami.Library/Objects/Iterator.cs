@@ -284,7 +284,7 @@ namespace Kagami.Library.Objects
 			return collectionClass.Revert(flattened);
 		}
 
-		public IObject MapIf(Lambda lambda, Lambda predicate)
+		public IObject Replace(Lambda predicate, Lambda lambda)
 		{
 			var list = new List<IObject>();
 			foreach (var item in List().ToList())

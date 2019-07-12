@@ -159,7 +159,7 @@ namespace Kagami.Library.Objects
 
 		public IObject FlatMap(Lambda lambda) => Copy(new FlatMapAction(lambda));
 
-		public IObject MapIf(Lambda lambda, Lambda predicate) => Copy(new MapIfAction(lambda, predicate));
+		public IObject Replace(Lambda predicate, Lambda lambda) => Copy(new MapIfAction(lambda, predicate));
 
 		public IObject If(Lambda predicate) => Copy(new IfAction(predicate));
 

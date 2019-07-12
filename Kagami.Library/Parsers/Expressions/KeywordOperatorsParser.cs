@@ -11,7 +11,7 @@ namespace Kagami.Library.Parsers.Expressions
 
 		public override string Pattern => "^ /(|s|) /('to' | 'til' | 'by' | 'if' | 'map' | 'join' | 'sort' |" +
 			"'foldl' | 'foldr' | 'all' | 'any' | 'none' | 'one' | 'zip' | 'downto' | 'skip' | 'take' | 'band' | 'bor' |" +
-			" 'bxor' | 'bsl' | 'bsr' | 'while' | 'until' | 'min' | 'max' | 'does' | 'x') /b";
+			" 'bxor' | 'bsl' | 'bsr' | 'while' | 'until' | 'min' | 'max' | 'does' | 'x') /(/s+)";
 
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
@@ -24,7 +24,7 @@ namespace Kagami.Library.Parsers.Expressions
 				var keyword = tokens[2].Text;
 				if (keyword != "if" || !builder.Flags[ExpressionFlags.OmitIf])
 				{
-					state.Colorize(tokens, Color.Whitespace, Color.Operator);
+					state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Whitespace);
 
 					switch (keyword)
 					{

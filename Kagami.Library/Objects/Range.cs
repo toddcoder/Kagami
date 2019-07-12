@@ -91,9 +91,19 @@ namespace Kagami.Library.Objects
 
 		public string ClassName => "Range";
 
-		public string AsString => $"{startObj.AsString} ... {stopObj.AsString} {(increment >= 0 ? "+" : "-")} {Math.Abs(increment)}";
+		static string str(IObject obj, bool asString) => asString ? obj.AsString : obj.Image;
 
-		public string Image => $"{startObj.Image} ... {stopObj.Image} {(increment >= 0 ? "+" : "-")} {Math.Abs(increment)}";
+		string startImage(bool asString) => str(startObj, asString);
+
+		string stopImage(bool asString) => str(stopObj, asString);
+
+		string inclusiveImage() => inclusive ? "" : "<";
+
+		string incrementImage() => $"{(increment >= 0 ? "+" : "-")} {Math.Abs(increment)}";
+
+		public string AsString => $"{startImage(true)} ..{inclusiveImage()} {stopImage(true)} {incrementImage()}";
+
+		public string Image => $"{startImage(false)} ..{inclusiveImage()} {stopImage(false)} {incrementImage()}";
 
 		public int Hash => (startObj.Hash + stopObj.Hash + increment.GetHashCode()).GetHashCode();
 
@@ -151,7 +161,17 @@ namespace Kagami.Library.Objects
 
 		public Boolean NotIn(IObject comparisand) => !In(comparisand).IsTrue;
 
-		public IObject Times(int count) => this;
+		public IObject Times(int count)
+		{
+			if (start is Int iStart && stop is Int iStop)
+			{
+				return new Range((Int)(iStart.Value * count), (Int)(iStop.Value * count), inclusive, increment * count);
+			}
+			else
+			{
+				return new Range(start, stop, inclusive, increment * 4);
+			}
+		}
 
 		public String MakeString(string connector) => makeString(this, connector);
 
