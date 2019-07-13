@@ -1121,6 +1121,9 @@ namespace Kagami.Library.Parsers
 				case "!~":
 					symbol = new SendBinaryMessageSymbol("notMatches(_<String>)", Precedence.Boolean, true).Matched<Symbol>();
 					break;
+				case "=~":
+					symbol = new SendBinaryMessageSymbol("isMatch(_<String>)", Precedence.Boolean, true).Matched<Symbol>();
+					break;
 				case ":-":
 					symbol = new BindSymbol().Matched<Symbol>();
 					break;
