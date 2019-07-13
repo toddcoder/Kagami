@@ -45,10 +45,10 @@ namespace Kagami.Library.Nodes.Statements
 
       public void AddReturnIf()
       {
-			block.AddReturnIf();
+			block.AddReturnIf(new UnitSymbol());
 			if (elseBlock.If(out var b))
 			{
-				b.AddReturnIf();
+				b.AddReturnIf(new UnitSymbol());
 			}
 
 			if (elseIf.If(out var ei))
