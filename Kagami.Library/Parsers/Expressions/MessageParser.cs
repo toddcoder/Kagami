@@ -30,21 +30,31 @@ namespace Kagami.Library.Parsers.Expressions
 
 			if (!parseArguments)
 			{
-				state.Colorize(tokens, Color.Whitespace, Color.Message, Color.Message);
-				builder.Add(new MessageSymbol(selector, new Expression[0], none<LambdaSymbol>()));
-				return Unit.Matched();
+				state.Colorize(tokens, Color.Whitespace, Color.Structure, Color.Message);
 			}
-			else if (getArgumentsPlusLambda(state, builder.Flags).Out(out var tuple, out var original))
+			else
 			{
-				state.Colorize(tokens, Color.Whitespace, Color.Message, Color.Message, Color.OpenParenthesis);
-				var (arguments, lambda) = tuple;
-				builder.Add(new MessageSymbol(selector, arguments, lambda));
+				state.Colorize(tokens, Color.Whitespace, Color.Structure, Color.Message, Color.OpenParenthesis);
+			}
 
+			if (!parseArguments)
+			{
+				builder.Add(new MessageSymbol(selector, new Expression[0], none<LambdaSymbol>()));
 				return Unit.Matched();
 			}
 			else
 			{
-				return original.Unmatched<Unit>();
+				if (getArgumentsPlusLambda(state, builder.Flags).Out(out var tuple, out var original))
+				{
+					var (arguments, lambda) = tuple;
+					builder.Add(new MessageSymbol(selector, arguments, lambda));
+
+					return Unit.Matched();
+				}
+				else
+				{
+					return original.Unmatched<Unit>();
+				}
 			}
 		}
 	}

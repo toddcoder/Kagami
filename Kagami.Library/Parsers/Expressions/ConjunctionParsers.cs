@@ -13,7 +13,7 @@ namespace Kagami.Library.Parsers.Expressions
 			get
 			{
 				yield return new EndOfCurrentExpressionParser(builder);
-				yield return new IfSomeNoneSymbolParser(builder);
+				//yield return new IfSomeNoneSymbolParser(builder);
 
 				if (!builder.Flags[ExpressionFlags.OmitComprehension])
 				{

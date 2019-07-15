@@ -124,6 +124,8 @@ namespace Kagami.Library.Objects
 
       IObject Window(int count);
 
+      IObject Shape(int rows, int columns);
+
       IObject Distinct();
 
       IObject Span(Lambda predicate);
@@ -161,5 +163,7 @@ namespace Kagami.Library.Objects
       IObject Copy();
 
       IObject Apply(ICollection collection);
+
+      IObject Column(int column);
    }
 }

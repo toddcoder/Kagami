@@ -801,6 +801,33 @@ namespace Kagami.Library.Objects
 			}
 		}
 
+		public IObject Shape(int rows, int columns)
+		{
+			var continuing = true;
+			var outerList = new List<IObject>();
+			for (var row = 0; row < rows && continuing; row++)
+			{
+				var innerList = new List<IObject>();
+				for (var column = 0; column < columns; column++)
+				{
+					if (Next().If(out var item))
+					{
+						innerList.Add(item);
+					}
+					else
+					{
+						continuing = false;
+						break;
+					}
+				}
+
+				var innerCollection = collectionClass.Revert(innerList);
+				outerList.Add(innerCollection);
+			}
+
+			return collectionClass.Revert(outerList);
+		}
+
 		public virtual IObject Distinct() => collectionClass.Revert(List().ToList().Distinct());
 
 		public IObject Span(Lambda predicate)
@@ -1047,6 +1074,33 @@ namespace Kagami.Library.Objects
 			var list = collection.GetIterator(false).List().ToList();
 
 			var result = applyAgainst(lambdas, list).ToList();
+			return collectionClass.Revert(result);
+		}
+
+		public IObject Column(int column)
+		{
+			var result = new List<IObject>();
+			var columnIndex = Int.IntObject(column);
+			while (true)
+			{
+				if (Next().If(out var item))
+				{
+					if (classOf(item).RespondsTo("[](_)"))
+					{
+						var value = sendMessage(item, "[](_)", columnIndex);
+						result.Add(value);
+					}
+					else
+					{
+						break;
+					}
+				}
+				else
+				{
+					break;
+				}
+			}
+
 			return collectionClass.Revert(result);
 		}
 

@@ -10,7 +10,7 @@ namespace Kagami.Library.Parsers.Expressions
 		static IMatched<IMaybe<Expression>> optionalExpression(ParseState state, ExpressionFlags flags)
 		{
 			var result =
-				from colon in state.Scan("^ /(/s*) /':'", Color.Whitespace, Color.Structure)
+				from colon in state.Scan("^ /(/s*) /'else' /b", Color.Whitespace, Color.Keyword)
 				from expression in getExpression(state, flags)
 				select expression;
 			if (result.Out(out var expressionValue, out var original))
@@ -29,15 +29,15 @@ namespace Kagami.Library.Parsers.Expressions
 
 		public IsParser(ExpressionBuilder builder) : base(builder) { }
 
-		public override string Pattern => "^ /(|s+|) /'??'";
+		public override string Pattern => "^ /(|s+|) /'on' /b";
 
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
-			state.Colorize(tokens, Color.Whitespace, Color.Structure);
-			var flags = builder.Flags | ExpressionFlags.OmitColon;
+			state.Colorize(tokens, Color.Whitespace, Color.Keyword);
+			var flags = builder.Flags;
 			var result =
 				from comparisand in getExpression(state, ExpressionFlags.Comparisand)
-				from scanned in state.Scan("^ /(/s*) /':'", Color.Whitespace, Color.Structure)
+				from scanned in state.Scan("^ /(/s*) /'then' /b", Color.Whitespace, Color.Keyword)
 				from expression in getExpression(state, flags)
 				from elseExpression in optionalExpression(state, flags)
 				select (comparisand, expression, elseExpression);

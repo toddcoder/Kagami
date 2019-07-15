@@ -269,6 +269,8 @@ namespace Kagami.Library.Objects
 
 		public IObject Window(int count) => terminate().Window(count);
 
+		public IObject Shape(int rows, int columns) => terminate().Shape(rows, columns);
+
 		public IObject Distinct() => Copy(new DistinctAction());
 
 		public IObject Span(Lambda predicate) => terminate().Span(predicate);
@@ -326,6 +328,8 @@ namespace Kagami.Library.Objects
 		public IObject Copy() => terminate().Copy();
 
 		public IObject Apply(ICollection collection) => terminate().Apply(collection);
+
+		public IObject Column(int column) => terminate().Column(column);
 
 		public BaseClass Equivalent() => new CollectionClass();
 

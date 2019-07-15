@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Objects;
+﻿using System.Linq;
+using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Monads;
 using static Kagami.Library.AllExceptions;
@@ -14,7 +15,16 @@ namespace Kagami.Library.Operations
 			switch (y)
 			{
 				case Lambda lambda:
-					return lambda.Invoke(x).Matched();
+					if (x is ICollection collection)
+					{
+						var array = collection.GetIterator(false).List().ToArray();
+						return lambda.Invoke(array).Matched();
+					}
+					else
+					{
+						return lambda.Invoke(x).Matched();
+					}
+
 				case IMayInvoke mi:
 					return mi.Invoke(x).Matched();
 				case Message message:

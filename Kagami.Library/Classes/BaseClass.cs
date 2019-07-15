@@ -314,7 +314,7 @@ namespace Kagami.Library.Classes
 				"span".Selector("_<Int>"),
 				"shuffle()", "array()", "list()", "tuple()", "dictionary".Selector("key:_<Lambda>", "value:_<Lambda>"), "dictionary()",
 				"each(_<Lambda>)", "rotate(_<Int>)", "permutation(_<Int>)", "combination(_<Int>)", "flatten()",
-				"copy()", "revert()", "*(_)", "format(_)", "replace(_<Lambda>,_<Lambda>)", "set()"));
+				"copy()", "revert()", "*(_)", "format(_)", "replace(_<Lambda>,_<Lambda>)", "set()", "shape(_<Int>,_<Int>)", "column(_<Int>)"));
 
 			dynamicInvoke = (obj, msg) =>
 			{
@@ -416,6 +416,9 @@ namespace Kagami.Library.Classes
 			registerMessage("replace(_<Lambda>,_<Lambda>)",
 				(obj, msg) => iteratorFunc<Lambda, Lambda>(obj, msg, (i, l1, l2) => i.Replace(l1, l2)));
 			registerMessage("set()", (obj, msg) => iteratorFunc(obj, i => i.ToSet()));
+			registerMessage("shape(_<Int>,_<Int>)",
+				(obj, msg) => iteratorFunc<Int, Int>(obj, msg, (i, j, k) => i.Shape(j.Value, k.Value)));
+			registerMessage("column(_<Int>)", (obj, msg) => iteratorFunc<Int>(obj, msg, (i, c) => i.Column(c.Value)));
 		}
 
 		public virtual bool MatchCompatible(BaseClass otherClass)
