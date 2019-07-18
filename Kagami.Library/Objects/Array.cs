@@ -431,5 +431,31 @@ namespace Kagami.Library.Objects
 
 			return new Tuple(result.ToArray());
 		}
+
+		public Array Transpose()
+		{
+			if (list.All(i => i is Array) && list.Count > 0)
+			{
+				var listOfLists = list.Select(i => ((Array)i).list.ToArray()).ToArray();
+				var minLength = listOfLists.Min(a => a.Length);
+				var outerList = new List<IObject>();
+				for (var i = 0; i < minLength; i++)
+				{
+					var innerList = new List<IObject>();
+					for (var j = 0; j < listOfLists.Length; j++)
+					{
+						innerList.Add(listOfLists[j][i]);
+					}
+
+					outerList.Add(new Array(innerList));
+				}
+
+				return new Array(outerList);
+			}
+			else
+			{
+				return this;
+			}
+		}
 	}
 }

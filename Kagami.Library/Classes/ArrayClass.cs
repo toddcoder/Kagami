@@ -69,6 +69,7 @@ namespace Kagami.Library.Classes
 
 				return Void.Value;
 			});
+			messages["transpose()"] = (obj, msg) => function<Array>(obj, a => a.Transpose());
 		}
 
 		static IObject getIndexed(Array a, IObject i)
