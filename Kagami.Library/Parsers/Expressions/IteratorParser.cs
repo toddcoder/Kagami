@@ -7,7 +7,7 @@ namespace Kagami.Library.Parsers.Expressions
 	{
 		public IteratorParser(ExpressionBuilder builder) : base(builder) { }
 
-		public override string Pattern => "^ /(|s|) /('!'1%2 | '?') -(> /s)";
+		public override string Pattern => "^ /(|s|) /('!'1%2 | '?') -(> [/s '^>'])";
 
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{

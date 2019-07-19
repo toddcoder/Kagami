@@ -20,13 +20,28 @@ namespace Kagami.Library.Parsers.Expressions
 			state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Keyword);
 
 			parameterCount = 1;
-			fieldName = "__$0";
+			fieldName = "__$0"; //!?*%$
+			switch (message)
+			{
+				case "!":
+					message = "map";
+					break;
+				case "?":
+					message = "if";
+					break;
+				case ":":
+					message = "bind";
+					break;
+			}
+
 			switch (message)
 			{
 				case "for":
+				case "@":
 					message = "each(_)";
 					break;
 				case "fold":
+				case "$":
 					message = "foldl";
 					goto case "foldl";
 				case "foldl":
@@ -65,10 +80,12 @@ namespace Kagami.Library.Parsers.Expressions
 				case "z":
 				case "cross":
 				case "x":
+				case "*":
 					parameterCount = 2;
-					message = message == "z" || message == "zip" ? "zip(_,_,_)" : "cross(_,_,_)";
+					message = message == "z" || message == "zip" || message == "*" ? "zip(_,_,_)" : "cross(_,_,_)";
 					break;
 				case "seq":
+				case ".":
 					message = "seq(_)";
 					break;
 				default:

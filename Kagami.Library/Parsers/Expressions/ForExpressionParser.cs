@@ -9,7 +9,7 @@ namespace Kagami.Library.Parsers.Expressions
 		public ForExpressionParser(ExpressionBuilder builder, ExpressionFlags flags = ExpressionFlags.Standard) :
 			base(builder, flags) { }
 
-		public override string Pattern => "^ /(|s|) /'%'";
+		public override string Pattern => "^ /(|s|) /'%' -(> '>')";
 
 		public override IMatched<Unit> Prefix(ParseState state, Token[] tokens)
 		{
