@@ -10,16 +10,16 @@ namespace Kagami.Library.Nodes.Symbols
 	{
 		public SendBindingMessageSymbol(Selector selector, IMaybe<LambdaSymbol> lambda, IMaybe<Operation> operation,
 			params Expression[] arguments) :
-			base(selector, Precedence.SendMessage, lambda, operation, arguments) { }
+			base(selector, lambda, operation, arguments) { }
 
 		public SendBindingMessageSymbol(Selector selector, params Expression[] arguments) :
-			base(selector, Precedence.SendMessage, arguments) { }
+			base(selector, arguments) { }
 
 		public SendBindingMessageSymbol(Selector selector, IMaybe<Operation> operation, params Expression[] arguments) :
-			base(selector, Precedence.SendMessage, operation, arguments) { }
+			base(selector, operation, arguments) { }
 
 		public SendBindingMessageSymbol(Selector selector, IMaybe<LambdaSymbol> lambda, params Expression[] arguments) :
-			base(selector, Precedence.SendMessage, lambda, arguments) { }
+			base(selector, lambda, arguments) { }
 
 		public override void Generate(OperationsBuilder builder)
 		{

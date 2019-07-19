@@ -11,7 +11,7 @@ namespace Kagami.Library.Parsers.Expressions
 	{
 		public SendMessageParser(ExpressionBuilder builder) : base(builder) { }
 
-		public override string Pattern => $"^ /(/s*) /['.@'] /({REGEX_FUNCTION_NAME}) /'('?";
+		public override string Pattern => $"^ /(/s*) /'.' /({REGEX_FUNCTION_NAME}) /'('?";
 
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
@@ -47,14 +47,14 @@ namespace Kagami.Library.Parsers.Expressions
 			if (!parseArguments)
 			{
 				Selector selector = name;
-				builder.Add(new SendMessageSymbol(selector, precedence));
+				builder.Add(new SendMessageSymbol(selector));
 				return Unit.Matched();
 			}
 			else if (getArgumentsPlusLambda(state, builder.Flags).Out(out var tuple, out var original))
 			{
 				var (arguments, lambda) = tuple;
 				var selector = name.Selector(arguments.Length);
-				builder.Add(new SendMessageSymbol(selector, precedence, lambda, arguments));
+				builder.Add(new SendMessageSymbol(selector, lambda, arguments));
 
 				return Unit.Matched();
 			}

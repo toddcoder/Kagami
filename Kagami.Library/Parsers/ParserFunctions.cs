@@ -579,7 +579,7 @@ namespace Kagami.Library.Parsers
 		{
 			var builder = new ExpressionBuilder(ExpressionFlags.Standard);
 			builder.Add(new FieldSymbol(parameterName));
-			builder.Add(new SendMessageSymbol("match", Precedence.SendMessage, new Expression(comparisand)));
+			builder.Add(new SendMessageSymbol("match", new Expression(comparisand)));
 			if (and.If(out var andExpression))
 			{
 				builder.Add(andExpression);

@@ -31,7 +31,7 @@ namespace Kagami.Library.Parsers.Expressions
       public override IMatched<Unit> Suffix(ParseState state, Expression expression)
       {
          outerBuilder.Add(new FieldSymbol(tempObjectField));
-         outerBuilder.Add(new SendMessageSymbol(propertyName.set(), Precedence.SendMessage, none<LambdaSymbol>(), expression));
+         outerBuilder.Add(new SendMessageSymbol(propertyName.set(), none<LambdaSymbol>(), expression));
 
          return Unit.Matched();
       }

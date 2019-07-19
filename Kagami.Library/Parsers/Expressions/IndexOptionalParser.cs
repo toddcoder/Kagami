@@ -16,7 +16,7 @@ namespace Kagami.Library.Parsers.Expressions
 
          return getArguments(state, builder.Flags).Map(e =>
          {
-            builder.Add(new SendMessageSymbol("[?]", Precedence.PostfixOperator, e));
+            builder.Add(new SendMessageSymbol("[?]", e));
             return Unit.Value;
          });
       }

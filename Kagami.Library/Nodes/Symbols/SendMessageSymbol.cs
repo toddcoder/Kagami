@@ -10,29 +10,27 @@ namespace Kagami.Library.Nodes.Symbols
    public class SendMessageSymbol : Symbol
    {
       protected Selector selector;
-      protected Precedence precedence;
       protected IMaybe<LambdaSymbol> lambda;
       protected IMaybe<Operation> operation;
       protected Expression[] arguments;
 
-      public SendMessageSymbol(Selector selector, Precedence precedence, IMaybe<LambdaSymbol> lambda, IMaybe<Operation> operation,
+      public SendMessageSymbol(Selector selector, IMaybe<LambdaSymbol> lambda, IMaybe<Operation> operation,
          params Expression[] arguments)
       {
          this.selector = selector;
-         this.precedence = precedence;
          this.lambda = lambda;
          this.operation = operation;
          this.arguments = arguments;
       }
 
-      public SendMessageSymbol(Selector selector, Precedence precedence, params Expression[] arguments) :
-         this(selector, precedence, none<LambdaSymbol>(), none<Operation>(), arguments) { }
+      public SendMessageSymbol(Selector selector, params Expression[] arguments) :
+         this(selector, none<LambdaSymbol>(), none<Operation>(), arguments) { }
 
-      public SendMessageSymbol(Selector selector, Precedence precedence, IMaybe<Operation> operation, params Expression[] arguments) :
-         this(selector, precedence, none<LambdaSymbol>(), operation, arguments) { }
+      public SendMessageSymbol(Selector selector, IMaybe<Operation> operation, params Expression[] arguments) :
+         this(selector, none<LambdaSymbol>(), operation, arguments) { }
 
-      public SendMessageSymbol(Selector selector, Precedence precedence, IMaybe<LambdaSymbol> lambda, params Expression[] arguments) :
-         this(selector, precedence, lambda, none<Operation>(), arguments) { }
+      public SendMessageSymbol(Selector selector, IMaybe<LambdaSymbol> lambda, params Expression[] arguments) :
+         this(selector, lambda, none<Operation>(), arguments) { }
 
       public override void Generate(OperationsBuilder builder)
       {
@@ -70,10 +68,10 @@ namespace Kagami.Library.Nodes.Symbols
          builder.NoOp();
       }
 
-      public override Precedence Precedence => precedence;
+      public override Precedence Precedence => Precedence.SendMessage;
 
       public override Arity Arity => Arity.Postfix;
 
-      public override string ToString() => $"{(precedence == Precedence.SendMessage ? "." : "@")}{selector.Image}({arguments.Stringify()})";
+      public override string ToString() => $".{selector.Image}({arguments.Stringify()})";
    }
 }

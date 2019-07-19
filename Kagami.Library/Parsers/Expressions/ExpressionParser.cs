@@ -161,7 +161,7 @@ namespace Kagami.Library.Parsers.Expressions
 		{
 			var parameters = new Parameters(Enumerable.Range(0, parameterCount).Select(i => $"__${i}").ToArray());
 			var lambdaSymbol = new LambdaSymbol(parameters, new Block(new Return(expression, none<TypeConstraint>())));
-			var sendMessage = new SendMessageSymbol(selector, Precedence.SendMessage, lambdaSymbol.Some());
+			var sendMessage = new SendMessageSymbol(selector, lambdaSymbol.Some());
 
 			var builder = new ExpressionBuilder(ExpressionFlags.Standard);
 			builder.Add(symbol);
@@ -177,7 +177,7 @@ namespace Kagami.Library.Parsers.Expressions
 			var rightParameter = Parameter.New(false, rightName);
 			var parameters = new Parameters(leftParameter, rightParameter);
 			var lambdaSymbol = new LambdaSymbol(parameters, new Block(new Return(expression, none<TypeConstraint>())));
-			var sendMessage = new SendMessageSymbol(selector, Precedence.SendMessage, lambdaSymbol.Some());
+			var sendMessage = new SendMessageSymbol(selector, lambdaSymbol.Some());
 
 			var builder = new ExpressionBuilder(ExpressionFlags.Standard);
 			builder.Add(symbol);
@@ -193,7 +193,7 @@ namespace Kagami.Library.Parsers.Expressions
 			var rightParameter = Parameter.New(false, rightName);
 			var parameters = new Parameters(leftParameter, rightParameter);
 			var lambdaSymbol = new LambdaSymbol(parameters, new Block(new Return(expression, none<TypeConstraint>())));
-			var sendMessage = new SendMessageSymbol(selector, Precedence.SendMessage, lambdaSymbol.Some(),
+			var sendMessage = new SendMessageSymbol(selector, lambdaSymbol.Some(),
 				new Expression(rightSymbol));
 
 			var builder = new ExpressionBuilder(ExpressionFlags.Standard);

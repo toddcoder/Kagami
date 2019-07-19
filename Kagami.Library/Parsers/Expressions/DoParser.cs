@@ -109,7 +109,7 @@ namespace Kagami.Library.Parsers.Expressions
 			var lambda = new LambdaSymbol(new Parameters(parameterName), block);
 			var builder = new ExpressionBuilder(ExpressionFlags.Standard);
 			builder.Add(targetExpression);
-			builder.Add(new SendMessageSymbol("bind(_<Lambda>)", Precedence.ChainedOperator, lambda.Some()));
+			builder.Add(new SendMessageSymbol("bind(_<Lambda>)", lambda.Some()));
 			if (builder.ToExpression().If(out var expression, out var exception))
 			{
 				if (stack.Count == 0)
