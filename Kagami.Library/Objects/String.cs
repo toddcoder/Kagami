@@ -67,7 +67,23 @@ namespace Kagami.Library.Objects
 
 		public int CompareTo(object obj) => CompareTo((String)obj);
 
-		public String Format(string format) => value.FormatAs(format);
+		public String Format(string format)
+		{
+			if (format.StartsWith("s."))
+			{
+				var amount = format.Drop(2);
+				if (amount.StartsWith("-"))
+				{
+					amount = amount.Drop(1);
+				}
+
+				return value.Center(amount.ToInt());
+			}
+			else
+			{
+				return value.FormatAs(format);
+			}
+		}
 
 		public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new Iterator(this);
 
@@ -157,7 +173,7 @@ namespace Kagami.Library.Objects
 				default:
 					return false;
 			}
-        }
+		}
 
 		public IObject Times(int count) => (String)value.Repeat(count);
 
