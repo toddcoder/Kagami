@@ -626,7 +626,7 @@ namespace Kagami.Library.Objects
 			}
 			else
 			{
-				return intValue.FormatUsing<int>(format, i => i.ToString(format));
+				return intValue.FormatUsing<int>(format, i => i.ToString(format).Replace("@", "e"));
 			}
 		}
 
