@@ -44,11 +44,25 @@ namespace Kagami.Library.Objects
 		{
 			objectID = uniqueObjectID();
 			dictionary = new Hash<IObject, IObject>();
+			defaultLambda = none<Lambda>();
 
 			foreach (var item in items)
 			{
 				switch (item)
 				{
+					case IKeyValue kv when kv.Key.IsEqualTo(Any.Value):
+
+						switch (kv.Value)
+						{
+							case Lambda lambda:
+								defaultLambda = lambda.Some();
+								break;
+							default:
+								DefaultValue = kv.Value.Some();
+								break;
+						}
+
+						break;
 					case IKeyValue kv:
 						dictionary[kv.Key] = kv.Value;
 						break;
@@ -60,7 +74,6 @@ namespace Kagami.Library.Objects
 
 			keys = new IObject[0];
 			parameterCount = 0;
-			defaultLambda = none<Lambda>();
 		}
 
 		public Dictionary() : this(new IObject[0]) { }
