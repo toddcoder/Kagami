@@ -1100,7 +1100,7 @@ namespace Kagami.Library.Parsers
 				case ">>":
 					symbol = new SendBinaryMessageSymbol(source, Precedence.Shift).Matched<Symbol>();
 					break;
-				case "=>":
+				case "=>" when !flags[ExpressionFlags.OmitNameValue]:
 					symbol = new KeyValueSymbol().Matched<Symbol>();
 					break;
 				case "|>":

@@ -18,6 +18,7 @@ namespace Kagami.Library.Parsers.Expressions
       OmitSendMessageAssign = 512,
       OmitConcatenate = 1024,
 		InLambda = 2048,
-		InArgument = 4096
+		InArgument = 4096,
+		OmitNameValue = 2 * 4096
    }
 }

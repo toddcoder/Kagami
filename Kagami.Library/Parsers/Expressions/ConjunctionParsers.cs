@@ -14,6 +14,7 @@ namespace Kagami.Library.Parsers.Expressions
 			{
 				yield return new EndOfCurrentExpressionParser(builder);
 				//yield return new IfSomeNoneSymbolParser(builder);
+				yield return new MatchExpressionParser(builder);
 
 				if (!builder.Flags[ExpressionFlags.OmitComprehension])
 				{

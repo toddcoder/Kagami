@@ -271,6 +271,8 @@
     <Compile Include="Nodes\Symbols\MacroInvokeSymbol.cs" />
     <Compile Include="Nodes\Symbols\MapOperatorBinarySymbol.cs" />
     <Compile Include="Nodes\Symbols\MapOperatorSymbol.cs" />
+    <Compile Include="Nodes\Symbols\MatchExpressionSymbol.cs" />
+    <Compile Include="Nodes\Symbols\MatchItemSymbol.cs" />
     <Compile Include="Nodes\Symbols\MaybeSymbol.cs" />
     <Compile Include="Nodes\Symbols\MessageSymbol.cs" />
     <Compile Include="Nodes\Symbols\MonadBindSymbol.cs" />
@@ -692,6 +694,7 @@
     <Compile Include="Parsers\Expressions\LazyParser.cs" />
     <Compile Include="Parsers\Expressions\ListParser.cs" />
     <Compile Include="Parsers\Expressions\ImplicitZipParser.cs" />
+    <Compile Include="Parsers\Expressions\MatchExpressionParser.cs" />
     <Compile Include="Parsers\Expressions\MatchLambdaParser.cs" />
     <Compile Include="Parsers\Expressions\MaybeParser.cs" />
     <Compile Include="Parsers\Expressions\MessageParser.cs" />
