@@ -10,7 +10,7 @@ namespace Kagami.Library.Parsers.Expressions
 	{
 		static IMatched<(Expression, Expression)> getMatchItem(ParseState state)
 		{
-			if (state.Scan("^ /'}'", Color.Structure).IsMatched)
+			if (state.Scan("^ /(/s*) /'}'", Color.Whitespace, Color.Structure).IsMatched)
 			{
 				return notMatched<(Expression, Expression)>();
 			}
@@ -18,12 +18,12 @@ namespace Kagami.Library.Parsers.Expressions
 			{
 				var matchItem =
 					from key in getExpression(state, ExpressionFlags.Comparisand | ExpressionFlags.OmitNameValue)
-					from _ in state.Scan("^ /(|s|) /'=>'", Color.Whitespace, Color.Operator)
+					from _ in state.Scan("^ /(/s*) /'=>' /(/s*)", Color.Whitespace, Color.Operator, Color.Whitespace)
 					from expression in getExpression(state, ExpressionFlags.OmitComma)
 					select (key, expression);
 				if (matchItem.IsMatched)
 				{
-					state.Scan("^ /(|s|) /','", Color.Whitespace, Color.Structure);
+					state.Scan("^ /(/s*) /',' /(/s*)", Color.Whitespace, Color.Structure, Color.Whitespace);
 				}
 
 				return matchItem;
@@ -32,11 +32,11 @@ namespace Kagami.Library.Parsers.Expressions
 
 		public MatchExpressionParser(ExpressionBuilder builder) : base(builder) { }
 
-		public override string Pattern => "^ /(|s|) /'match' /(/s*) /'{'";
+		public override string Pattern => "^ /(|s|) /'match' /(/s*) /'{' /(/s*)";
 
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
-			state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Structure);
+			state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Structure, Color.Whitespace);
 
 			var matchItems = new List<(Expression, Expression)>();
 
