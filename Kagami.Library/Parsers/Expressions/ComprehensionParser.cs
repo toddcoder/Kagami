@@ -12,7 +12,7 @@ namespace Kagami.Library.Parsers.Expressions
 	{
 		public ComprehensionParser(ExpressionBuilder builder) : base(builder) { }
 
-		public override string Pattern => "^ /(|s|) /'for' /b";
+		public override string Pattern => "^ /(|s|) /'for' -(> ['>^']) /b";
 
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{

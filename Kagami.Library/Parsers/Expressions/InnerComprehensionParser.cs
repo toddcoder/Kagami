@@ -15,7 +15,7 @@ namespace Kagami.Library.Parsers.Expressions
 			this.comprehensions = comprehensions;
 		}
 
-		public override string Pattern => "^ /(|s|) /'for' /b";
+		public override string Pattern => "^ /(|s|) /'for' -(> ['^>']) /b";
 
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
