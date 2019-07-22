@@ -9,7 +9,7 @@ namespace Kagami.Library.Parsers.Expressions
 	{
 		public IfSomeNoneSymbolParser(ExpressionBuilder builder) : base(builder) { }
 
-		public override string Pattern => "^ /(|s|) /'||'";
+		public override string Pattern => "^ /(|s|) /'??'";
 
 		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{

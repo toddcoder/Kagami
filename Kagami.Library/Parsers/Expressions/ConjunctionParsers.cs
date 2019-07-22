@@ -27,7 +27,7 @@ namespace Kagami.Library.Parsers.Expressions
 				}
 
 				yield return new OrParser(builder);
-				yield return new IsParser(builder);
+				//yield return new IsParser(builder);
 				yield return new InlineIfParser(builder);
 			}
 		}
