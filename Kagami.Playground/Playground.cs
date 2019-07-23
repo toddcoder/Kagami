@@ -594,13 +594,17 @@ namespace Kagami.Playground
 
 		void textEditor_TextChanged(object sender, EventArgs e)
 		{
-			exceptionData = none<ExceptionData>();
-
-			if (document != null)
+			try
 			{
-				update(!manual, false);
-				document.Dirty();
+				exceptionData = none<ExceptionData>();
+
+				if (document != null)
+				{
+					update(!manual, false);
+					document.Dirty();
+				}
 			}
+			catch { }
 		}
 
 		void textEditor_KeyPress(object sender, KeyPressEventArgs e)
