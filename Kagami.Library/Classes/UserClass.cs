@@ -20,6 +20,7 @@ namespace Kagami.Library.Classes
 		protected IMaybe<UserClass> parentClass;
 		protected Set<Selector> signatures;
 		protected IMaybe<UserObject> metaObject;
+		protected Hash<Selector, UserClass> mixins;
 
 		public UserClass(string className, string parentClassName)
 		{
@@ -38,6 +39,17 @@ namespace Kagami.Library.Classes
 			signatures = new Set<Selector>();
 
 			metaObject = none<UserObject>();
+
+			mixins = new Hash<Selector, UserClass>();
+		}
+
+		public void Include(Mixin mixin)
+		{
+			var mixinClass = (UserClass)classOf(mixin);
+			foreach (var (selector, _) in mixinClass.messages)
+			{
+				mixins[selector] = mixinClass;
+			}
 		}
 
 		public override string Name => className;
@@ -166,6 +178,10 @@ namespace Kagami.Library.Classes
 			{
 				return true;
 			}
+			else if (mixins.If(selector, out var mixinClass))
+			{
+				return mixinClass.RespondsTo(selector);
+			}
 			else
 			{
 				return messages.ContainsKey("missing(_<String>,_<Tuple>)");
@@ -174,11 +190,18 @@ namespace Kagami.Library.Classes
 
 		public override IObject DynamicInvoke(IObject obj, Message message)
 		{
-			var originalMessage = String.StringObject(message.Selector.Name);
-			var args = message.Arguments.ToArray();
-			var tuple = new Tuple(args);
+			if (mixins.If(message.Selector, out var mixinClass))
+			{
+				return mixinClass.SendMessage(obj, message);
+			}
+			else
+			{
+				var originalMessage = String.StringObject(message.Selector.Name);
+				var args = message.Arguments.ToArray();
+				var tuple = new Tuple(args);
 
-			return sendMessage(obj, "missing(_<String>,_<Tuple>)", originalMessage, tuple);
+				return sendMessage(obj, "missing(_<String>,_<Tuple>)", originalMessage, tuple);
+			}
 		}
 
 		public override bool AssignCompatible(BaseClass otherClass)

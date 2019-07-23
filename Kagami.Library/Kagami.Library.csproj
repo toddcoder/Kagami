@@ -427,6 +427,7 @@
     <Compile Include="Objects\MapAction.cs" />
     <Compile Include="Objects\MapIfAction.cs" />
     <Compile Include="Objects\Message.cs" />
+    <Compile Include="Objects\Mixin.cs" />
     <Compile Include="Objects\MutString.cs" />
     <Compile Include="Objects\NameValue.cs" />
     <Compile Include="Objects\None.cs" />
@@ -799,12 +800,14 @@
     <Compile Include="Parsers\Statements\GuardParser.cs" />
     <Compile Include="Parsers\Statements\IfParser.cs" />
     <Compile Include="Parsers\Statements\ImportPackageParser.cs" />
+    <Compile Include="Parsers\Statements\IncludeParser.cs" />
     <Compile Include="Parsers\Statements\IncludeTraitParser.cs" />
     <Compile Include="Parsers\Statements\LoopParser.cs" />
     <Compile Include="Parsers\Statements\MatchAssignParser.cs" />
     <Compile Include="Parsers\Statements\MatchFunctionParser.cs" />
     <Compile Include="Parsers\Statements\MatchParser.cs" />
     <Compile Include="Parsers\Statements\ConditionalAssignParser.cs" />
+    <Compile Include="Parsers\Statements\MixinParser.cs" />
     <Compile Include="Parsers\Statements\ModuleParser.cs" />
     <Compile Include="Parsers\Statements\OpenPackageParser.cs" />
     <Compile Include="Parsers\Statements\ParentClassParser.cs" />
