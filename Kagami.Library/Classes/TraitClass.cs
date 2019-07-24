@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Invokables;
+﻿using System;
+using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using Core.Collections;
 using Core.Monads;
@@ -6,6 +7,7 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Classes
 {
+	[Obsolete("Use mixins")]
    public class TraitClass : BaseClass
    {
       string traitName;

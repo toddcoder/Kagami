@@ -46,17 +46,17 @@ namespace Kagami.Library
 
       public static Exception classNotFound(string name) => messageClassNotFound(name).Throws();
 
-      public static string messageTraitNotFound(string name) => $"Trait {name} not found";
+      public static string messageMixinNotFound(string name) => $"Mixin {name} not found";
 
-      public static Exception traitNotFound(string name) => messageTraitNotFound(name).Throws();
+      public static Exception mixinNotFound(string name) => messageMixinNotFound(name).Throws();
 
       public static string messageClassAlreadyExists(string name) => $"Class {name} already exists";
 
       public static Exception classAlreadyExists(string name) => messageClassAlreadyExists(name).Throws();
 
-      public static string messageTraitAlreadyExists(string name) => $"Trait {name} already exists";
+      public static string messageMixinAlreadyExists(string name) => $"Mixin {name} already exists";
 
-      public static Exception traitAlreadyExists(string name) => messageTraitAlreadyExists(name).Throws();
+      public static Exception mixinAlreadyExists(string name) => messageMixinAlreadyExists(name).Throws();
 
       public static string messageFieldUnassigned(string name) => $"Field {name} unassigned";
 

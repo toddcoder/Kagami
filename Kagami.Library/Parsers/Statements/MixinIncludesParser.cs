@@ -1,17 +1,17 @@
-﻿using Kagami.Library.Classes;
-using Core.Collections;
+﻿using System.Collections.Generic;
 using Core.Monads;
+using Kagami.Library.Objects;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Statements
 {
-	public class TraitImplementsParser : StatementParser
+	public class MixinIncludesParser : StatementParser
 	{
-		Hash<string, TraitClass> traits;
+		List<Mixin> mixins;
 
-		public TraitImplementsParser(Hash<string, TraitClass> traits) => this.traits = traits;
+		public MixinIncludesParser(List<Mixin> mixins) => this.mixins = mixins;
 
-		public override string Pattern => "^ /'implements' /b";
+		public override string Pattern => "^ /'includes' /b";
 
 		public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
 		{
@@ -19,7 +19,7 @@ namespace Kagami.Library.Parsers.Statements
 
 			while (state.More)
 			{
-				var parser = new TraitNameParser(traits);
+				var parser = new MixinNameParser(mixins);
 				if (parser.Scan(state).If(out _, out var anyException))
 				{
 					if (!parser.More)

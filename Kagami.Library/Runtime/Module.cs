@@ -2,6 +2,7 @@
 using Kagami.Library.Packages;
 using Core.Collections;
 using Core.Monads;
+using Kagami.Library.Objects;
 using static Kagami.Library.AllExceptions;
 using static Core.Monads.MonadFunctions;
 
@@ -12,7 +13,7 @@ namespace Kagami.Library.Runtime
 		public static Module Global { get; set; }
 
 		Hash<string, BaseClass> classes;
-		Hash<string, TraitClass> traits;
+		Hash<string, Mixin> mixins;
 		Set<string> forwardReferences;
 		Hash<string, string> dataReferences;
 		Set<string> operators;
@@ -20,7 +21,7 @@ namespace Kagami.Library.Runtime
 		public Module()
 		{
 			classes = new Hash<string, BaseClass>();
-			traits = new Hash<string, TraitClass>();
+			mixins = new Hash<string, Mixin>();
 			forwardReferences = new Set<string>();
 			dataReferences = new Hash<string, string>();
 			operators = new Set<string>();
@@ -115,7 +116,7 @@ namespace Kagami.Library.Runtime
 			}
 		}
 
-		public IMaybe<TraitClass> Trait(string name) => traits.Map(name);
+		public IMaybe<Mixin> Mixin(string name) => mixins.Map(name);
 
 		public IResult<Unit> RegisterClass(BaseClass cls)
 		{
@@ -130,15 +131,15 @@ namespace Kagami.Library.Runtime
 			}
 		}
 
-		public IResult<Unit> RegisterTrait(TraitClass trait)
+		public IResult<Unit> RegisterMixin(Mixin mixin)
 		{
-			if (traits.ContainsKey(trait.Name))
+			if (mixins.ContainsKey(mixin.ClassName))
 			{
-				return failure<Unit>(traitAlreadyExists(trait.Name));
+				return failure<Unit>(mixinAlreadyExists(mixin.ClassName));
 			}
 			else
 			{
-				traits[trait.Name] = trait;
+				mixins[mixin.ClassName] = mixin;
 				return Unit.Success();
 			}
 		}

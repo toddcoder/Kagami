@@ -29,10 +29,10 @@ namespace Kagami.Library.Parsers.Statements
 		Hash<string, (ConstructorInvokable, Block)> constructorInvokables;
 		List<(IInvokable, Block, bool)> functions;
 		UserClass userClass;
-		Hash<string, TraitClass> traits;
+		IEnumerable<Mixin> mixins;
 
 		public ClassBuilder(string className, Parameters parameters, string parentClassName, Expression[] parentArguments,
-			bool initialize, Block constructorBlock, Hash<string, TraitClass> traits)
+			bool initialize, Block constructorBlock, IEnumerable<Mixin> mixins)
 		{
 			this.className = className;
 			this.parameters = parameters;
@@ -42,7 +42,7 @@ namespace Kagami.Library.Parsers.Statements
 			this.constructorBlock = constructorBlock;
 			constructorInvokables = new Hash<string, (ConstructorInvokable, Block)>();
 			functions = new List<(IInvokable, Block, bool)>();
-			this.traits = traits;
+			this.mixins = mixins;
 		}
 
 		public IMatched<Unit> Register()
@@ -204,13 +204,9 @@ namespace Kagami.Library.Parsers.Statements
 				}
 			}
 
-			foreach (var (_, traitClass) in traits)
-			foreach (var (funcName, invokable) in traitClass.Invokables)
+			foreach (var mixin in mixins)
 			{
-				if (userClass.RegisterMethod(funcName, new Lambda(invokable), true))
-				{
-					functions.Add((invokable, new Block(), true));
-				}
+				userClass.Include(mixin);
 			}
 
 			statements.Add(new ReturnNewObject(className, parameters));

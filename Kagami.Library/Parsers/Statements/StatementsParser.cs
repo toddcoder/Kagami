@@ -22,7 +22,6 @@ namespace Kagami.Library.Parsers.Statements
 					yield return new ClassParser();
 					yield return new MixinParser();
 					yield return new ModuleParser();
-					yield return new TraitParser();
 					yield return new RecordParser();
 					yield return new PatternParser();
 					yield return new ConditionalAssignParser();
