@@ -1,11 +1,12 @@
-﻿using Kagami.Library.Classes;
+﻿using System.Collections.Generic;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Runtime;
-using Core.Collections;
 using Core.Monads;
+using Kagami.Library.Objects;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
+using Class = Kagami.Library.Nodes.Statements.Class;
 
 namespace Kagami.Library.Parsers.Statements
 {
@@ -35,8 +36,7 @@ namespace Kagami.Library.Parsers.Statements
 
 				Module.Global.ForwardReference(className);
 
-				var builder = new ClassBuilder(className, parameters, parentClassName, arguments, false, new Block(),
-					new Hash<string, TraitClass>());
+				var builder = new ClassBuilder(className, parameters, parentClassName, arguments, false, new Block(), new List<Mixin>());
 				if (builder.Register().Out(out _, out var registerOriginal))
 				{
 					var cls = new Class(builder);

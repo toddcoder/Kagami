@@ -1,9 +1,9 @@
-﻿using Kagami.Library.Classes;
+﻿using System.Collections.Generic;
 using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
-using Core.Collections;
 using Core.Monads;
+using Kagami.Library.Objects;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
 
@@ -26,7 +26,7 @@ namespace Kagami.Library.Parsers.Statements
 				var className = classBuilder.UserClass.Name;
 				var metaClassName = $"__$meta{className}";
 				var metaClassBuilder = new ClassBuilder(metaClassName, Parameters.Empty, "", new Expression[0], false, block,
-					new Hash<string, TraitClass>());
+					new List<Mixin>());
 				if (metaClassBuilder.Register().Out(out _, out var registerOriginal))
 				{
 					var classItemsParser = new ClassItemsParser(metaClassBuilder);

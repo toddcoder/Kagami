@@ -86,7 +86,7 @@ namespace Kagami.Library.Parsers.Statements
 					{
 						var yielding = state.RemoveYieldFlag();
 						state.RemoveReturnType();
-						var function = new Function(functionName, parameters, block, yielding, overriding, className) { Trait = trait };
+						var function = new Function(functionName, parameters, block, yielding, overriding, className);
 						if (isMacro)
 						{
 							state.RegisterMacro(function);
@@ -161,8 +161,7 @@ namespace Kagami.Library.Parsers.Statements
 				if (lambdaSymbol.If(out var ls))
 				{
 					return new Function(functionName, firstParameters, new Block(new Return(new Expression(ls), none<TypeConstraint>())),
-						yielding, overriding,
-						className) { Trait = trait }.Matched();
+						yielding, overriding, className).Matched();
 				}
 				else
 				{

@@ -68,8 +68,6 @@ namespace Kagami.Library.Nodes.Statements
 
 		public bool Overriding => overriding;
 
-		public bool Trait { get; set; }
-
 		public IInvokable GetInvokable()
 		{
 			if (yielding)
@@ -122,30 +120,13 @@ namespace Kagami.Library.Nodes.Statements
 
 			if (className.IsNotEmpty())
 			{
-				if (Trait)
+				if (Module.Global.Class(className).If(out var cls))
 				{
-					if (Module.Global.Trait(className).If(out var trait))
-					{
-						if (trait.RegisterInvokable(selector, invokable).IfNot(out _, out exception))
-						{
-							throw exception;
-						}
-					}
-					else
-					{
-						throw traitNotFound(className);
-					}
+					cls.RegisterMessage(selector, (obj, msg) => BaseClass.Invoke(obj, msg.Arguments, lambda));
 				}
 				else
 				{
-					if (Module.Global.Class(className).If(out var cls))
-					{
-						cls.RegisterMessage(selector, (obj, msg) => BaseClass.Invoke(obj, msg.Arguments, lambda));
-					}
-					else
-					{
-						throw classNotFound(className);
-					}
+					throw classNotFound(className);
 				}
 			}
 		}

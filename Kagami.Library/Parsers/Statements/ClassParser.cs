@@ -1,12 +1,12 @@
-﻿using Kagami.Library.Classes;
+﻿using System.Collections.Generic;
 using Kagami.Library.Invokables;
-using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Runtime;
-using Core.Collections;
 using Core.Monads;
+using Kagami.Library.Objects;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
+using Class = Kagami.Library.Nodes.Statements.Class;
 
 namespace Kagami.Library.Parsers.Statements
 {
@@ -57,11 +57,11 @@ namespace Kagami.Library.Parsers.Statements
 				return failedMatch<Unit>(exception);
 			}
 
-			var traits = new Hash<string, TraitClass>();
+			var mixins = new List<Mixin>();
 			while (state.More)
 			{
-				var traitImplementsParser = new TraitImplementsParser(traits);
-				if (traitImplementsParser.Scan(state).If(out _, out anyException)) { }
+				var mixinIncludesParser = new MixinIncludesParser(mixins);
+				if (mixinIncludesParser.Scan(state).If(out _, out anyException)) { }
 				else if (anyException.If(out var exception))
 				{
 					state.Regress();
@@ -81,24 +81,17 @@ namespace Kagami.Library.Parsers.Statements
 			state.SkipEndOfLine();
 			if (getBlock(state).Out(out var block, out var original))
 			{
-				var builder = new ClassBuilder(className, parameters, parentClassName, arguments, initialize, block, traits);
+				var builder = new ClassBuilder(className, parameters, parentClassName, arguments, initialize, block, mixins);
 				if (builder.Register().Out(out _, out var registerOriginal))
 				{
 					var cls = new Class(builder);
-					if (testImplementation(builder.UserClass, traits).IfNot(out var exception))
-					{
-						return failedMatch<Unit>(exception);
-					}
-					else
-					{
-						state.AddStatement(cls);
-					}
+					state.AddStatement(cls);
 
 					var classItemsParser = new ClassItemsParser(builder);
 					while (state.More)
 					{
 						if (classItemsParser.Scan(state).If(out _, out anyException)) { }
-						else if (anyException.If(out exception))
+						else if (anyException.If(out var exception))
 						{
 							return failedMatch<Unit>(exception);
 						}
@@ -119,19 +112,6 @@ namespace Kagami.Library.Parsers.Statements
 			{
 				return original.Unmatched<Unit>();
 			}
-		}
-
-		static IResult<Unit> testImplementation(UserClass userClass, Hash<string, TraitClass> traits)
-		{
-			foreach (var item in traits)
-			{
-				if (item.Value.RegisterImplementor(userClass).IfNot(out var exception))
-				{
-					return failure<Unit>(exception);
-				}
-			}
-
-			return Unit.Success();
 		}
 	}
 }
