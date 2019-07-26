@@ -20,7 +20,8 @@ namespace Kagami.Library.Classes
 		protected IMaybe<UserClass> parentClass;
 		protected Set<Selector> signatures;
 		protected IMaybe<UserObject> metaObject;
-		protected Hash<Selector, UserClass> mixins;
+		//protected Hash<Selector, UserClass> mixins;
+		protected SelectorHash<UserClass> mixins;
 
 		public UserClass(string className, string parentClassName)
 		{
@@ -40,7 +41,7 @@ namespace Kagami.Library.Classes
 
 			metaObject = none<UserObject>();
 
-			mixins = new Hash<Selector, UserClass>();
+			mixins = new SelectorHash<UserClass>();
 		}
 
 		public void Include(Mixin mixin)
@@ -178,9 +179,9 @@ namespace Kagami.Library.Classes
 			{
 				return true;
 			}
-			else if (mixins.If(selector, out var mixinClass))
+			else if (mixins.ContainsKey(selector))
 			{
-				return mixinClass.RespondsTo(selector);
+				return true;
 			}
 			else
 			{
@@ -190,9 +191,9 @@ namespace Kagami.Library.Classes
 
 		public override IObject DynamicInvoke(IObject obj, Message message)
 		{
-			if (mixins.If(message.Selector, out var mixinClass))
+			if (mixins.ContainsKey(message.Selector))
 			{
-				return mixinClass.SendMessage(obj, message);
+				return mixins[message.Selector].SendMessage(obj, message);
 			}
 			else
 			{

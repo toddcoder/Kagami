@@ -9,7 +9,10 @@ namespace Kagami.Library.Parsers.Statements
 	{
 		List<Mixin> mixins;
 
-		public MixinIncludesParser(List<Mixin> mixins) => this.mixins = mixins;
+		public MixinIncludesParser(List<Mixin> mixins)
+		{
+			this.mixins = mixins;
+		}
 
 		public override string Pattern => "^ /'includes' /b";
 
@@ -20,13 +23,7 @@ namespace Kagami.Library.Parsers.Statements
 			while (state.More)
 			{
 				var parser = new MixinNameParser(mixins);
-				if (parser.Scan(state).If(out _, out var anyException))
-				{
-					if (!parser.More)
-					{
-						break;
-					}
-				}
+				if (parser.Scan(state).If(out _, out var anyException)) { }
 				else if (anyException.If(out var exception))
 				{
 					return failedMatch<Unit>(exception);

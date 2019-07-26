@@ -233,10 +233,10 @@ namespace Kagami.Library.Parsers.Statements
 
 		public void Generate(OperationsBuilder builder, int index)
 		{
-			foreach (var item in constructorInvokables)
+			foreach (var (key, value) in constructorInvokables)
 			{
-				Selector selector = item.Key;
-				var (invokable, block) = item.Value;
+				Selector selector = key;
+				var (invokable, block) = value;
 				if (builder.RegisterInvokable(invokable, block, true).IfNot(out var exception))
 				{
 					throw exception;
