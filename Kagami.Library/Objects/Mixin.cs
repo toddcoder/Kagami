@@ -7,8 +7,8 @@ namespace Kagami.Library.Objects
 {
 	public class Mixin : IObject, IEquatable<Mixin>
 	{
-		string name;
-		Equatable<Mixin> equatable;
+		protected string name;
+		protected Equatable<Mixin> equatable;
 
 		public Mixin(string name)
 		{

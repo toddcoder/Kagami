@@ -20,7 +20,6 @@ namespace Kagami.Library.Classes
 		protected IMaybe<UserClass> parentClass;
 		protected Set<Selector> signatures;
 		protected IMaybe<UserObject> metaObject;
-		//protected Hash<Selector, UserClass> mixins;
 		protected SelectorHash<UserClass> mixins;
 
 		public UserClass(string className, string parentClassName)
@@ -52,6 +51,8 @@ namespace Kagami.Library.Classes
 				mixins[selector] = mixinClass;
 			}
 		}
+
+		public bool Includes(string mixinClassName) => mixins.Values.Select(uc => uc.Name).Any(n => n == mixinClassName);
 
 		public override string Name => className;
 

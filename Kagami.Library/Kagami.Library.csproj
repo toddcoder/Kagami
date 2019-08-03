@@ -148,6 +148,7 @@
     <Compile Include="Invokables\Parameter.cs" />
     <Compile Include="Invokables\Parameters.cs" />
     <Compile Include="Invokables\YieldingInvokable.cs" />
+    <Compile Include="Mixins\Collecting.cs" />
     <Compile Include="Nodes\IOperationsGenerator.cs" />
     <Compile Include="Nodes\LabelType.cs" />
     <Compile Include="Nodes\Node.cs" />
@@ -854,5 +855,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
