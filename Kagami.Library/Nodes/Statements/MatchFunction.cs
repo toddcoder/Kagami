@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Classes;
+﻿using System.Linq;
+using Kagami.Library.Classes;
 using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
@@ -12,22 +13,20 @@ namespace Kagami.Library.Nodes.Statements
    public class MatchFunction : Statement
    {
       Selector selector;
-      Parameters parameters;
+      IObject[] comparisands;
       Block block;
       bool overriding;
       string className;
 
-      public MatchFunction(string functionName, Parameters parameters, If ifStatement, bool overriding, string className)
+      public MatchFunction(string functionName, IObject[] comparisands, Block block, bool overriding, string className)
       {
-         selector = parameters.Selector(functionName);
-         this.parameters = parameters;
-         block = new Block(ifStatement) { new ReturnNothing() };
-			block.AddReturnIf();
+	      selector = new Selector(functionName, new SelectorItem[0], functionName);
+	      this.comparisands = comparisands;
          this.overriding = overriding;
          this.className = className;
       }
 
-      public IInvokable getInvokable() => new FunctionInvokable(selector, parameters, ToString());
+      public IInvokable getInvokable() => new FunctionInvokable(selector, new Parameters(comparisands.Length), ToString());
 
       public override void Generate(OperationsBuilder builder)
       {

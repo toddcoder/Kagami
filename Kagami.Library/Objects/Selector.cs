@@ -58,6 +58,8 @@ namespace Kagami.Library.Objects
 
 		public Selector NewName(string newName) => new Selector(newName, selectorItems, selectorImage(newName, selectorItems));
 
+		public bool Matching { get; set; }
+
 		public string ClassName => "Selector";
 
 		public string AsString => image;

@@ -387,11 +387,11 @@ namespace Kagami.Library.Parsers
 
 		public static IMatched<IObject[]> getComparisandList(ParseState state)
 		{
-			if (state.Scan("^ /[')]']", Color.Structure).If(out _, out var mbScanException))
+			if (state.Scan("^ /[')]']", Color.CloseParenthesis).If(out _, out var anyScanException))
 			{
 				return new IObject[0].Matched();
 			}
-			else if (mbScanException.If(out var scanException))
+			else if (anyScanException.If(out var scanException))
 			{
 				return failedMatch<IObject[]>(scanException);
 			}
@@ -404,7 +404,7 @@ namespace Kagami.Library.Parsers
 				if (getComparisand(state).If(out var comparisand, out var anyException))
 				{
 					arguments.Add(comparisand);
-					if (state.Scan("^ /(/s*) /[',)]']", Color.Whitespace, Color.Structure).Out(out var next, out var nextOriginal))
+					if (state.Scan("^ /(/s*) /[',)]']", Color.Whitespace, Color.CloseParenthesis).Out(out var next, out var nextOriginal))
 					{
 						if (next.EndsWith(")") || next.EndsWith("]"))
 						{
