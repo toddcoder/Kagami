@@ -531,6 +531,11 @@ namespace Kagami.Playground
 					catch { }
 				}
 
+				if (textEditor.TextLength == 0)
+				{
+					return;
+				}
+
 				foreach (var (lineNumber, line, _) in textEditor.VisibleLines)
 				{
 					if (peeks.ContainsKey(lineNumber))

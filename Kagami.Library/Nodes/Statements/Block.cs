@@ -114,7 +114,7 @@ namespace Kagami.Library.Nodes.Statements
 
 		public void AddReturnIf(Symbol symbol)
 		{
-			if (!(statements[statements.Count - 1] is Return))
+			if (statements.Count > 0 && !(statements[statements.Count - 1] is Return))
 			{
 				var expression = new Expression(symbol);
 				statements.Add(new Return(expression, none<TypeConstraint>()));
