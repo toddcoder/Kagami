@@ -206,8 +206,6 @@ namespace Kagami.Library.Objects
 			}
 		}
 
-		//public string FullFunctionName(string name) => name.Function(names.KeyArray());
-
 		public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new Iterator(this);
 
 		public IMaybe<IObject> Next(int index)
@@ -291,5 +289,36 @@ namespace Kagami.Library.Objects
 		public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
 
 		public int CompareTo(Tuple other) => Compare(other);
+
+		public IObject Head
+		{
+			get
+			{
+				if (items.Length == 0)
+				{
+					return None.NoneValue;
+				}
+				else
+				{
+					var head = items[0];
+					return new Some(head);
+				}
+			}
+		}
+
+		public IObject Tail
+		{
+			get
+			{
+				if (items.Length == 0)
+				{
+					return Empty;
+				}
+				else
+				{
+					return new Tuple(items.Skip(1).ToArray());
+				}
+			}
+		}
 	}
 }

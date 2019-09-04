@@ -29,6 +29,8 @@ namespace Kagami.Library.Classes
          messages["nineth".get()] = (obj, msg) => function<Tuple>(obj, t => t[8]);
          messages["tenth".get()] = (obj, msg) => function<Tuple>(obj, t => t[9]);
          messages["[]"] = (obj, msg) => function<Tuple, IObject>(obj, msg, indexed);
+         messages["head".get()] = (obj, msg) => function<Tuple>(obj, t => t.Head);
+         messages["tail".get()] = (obj, msg) => function<Tuple>(obj, t => t.Tail);
       }
 
       static IObject indexed(Tuple tuple, IObject index)
