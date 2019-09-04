@@ -1,5 +1,6 @@
 ﻿using Core.Monads;
 using Kagami.Library.Objects;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Mixins
 {
@@ -7,24 +8,24 @@ namespace Kagami.Library.Mixins
 	{
 		public CollectionMixin(string name) : base(name) { }
 
-		public IIterator GetIterator(bool lazy) => TODO_IMPLEMENT_ME;
+		public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new Iterator(this);
 
-		public IMaybe<IObject> Next(int index) => TODO_IMPLEMENT_ME;
+		public IMaybe<IObject> Next(int index) => none<IObject>();
 
-		public IMaybe<IObject> Peek(int index) => TODO_IMPLEMENT_ME;
+		public IMaybe<IObject> Peek(int index) => none<IObject>();
 
-		public Int Length { get; }
+		public Int Length => 0;
 
-		public bool ExpandForArray { get; }
+		public bool ExpandForArray => false;
 
-		public Boolean In(IObject item) => TODO_IMPLEMENT_ME;
+		public Boolean In(IObject item) => false;
 
-		public Boolean NotIn(IObject item) => TODO_IMPLEMENT_ME;
+		public Boolean NotIn(IObject item) => false;
 
-		public IObject Times(int count) => TODO_IMPLEMENT_ME;
+		public IObject Times(int count) => this;
 
-		public String MakeString(string connector) => TODO_IMPLEMENT_ME;
+		public String MakeString(string connector) => "";
 
-		public IIterator GetIndexedIterator() => TODO_IMPLEMENT_ME;
+		public IIterator GetIndexedIterator() => new IndexedIterator(this);
 	}
 }
