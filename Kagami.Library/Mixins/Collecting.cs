@@ -4,9 +4,9 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Mixins
 {
-	public class CollectionMixin : Mixin, ICollection
+	public class Collecting : Mixin, ICollection
 	{
-		public CollectionMixin(string name) : base(name) { }
+		public Collecting() : base("Collecting") { }
 
 		public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new Iterator(this);
 

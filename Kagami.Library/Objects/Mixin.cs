@@ -1,6 +1,8 @@
 ﻿using System;
 using Core.Collections;
+using Core.Monads;
 using Core.Objects;
+using Kagami.Library.Runtime;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
@@ -35,5 +37,7 @@ namespace Kagami.Library.Objects
 		public override bool Equals(object obj) => equatable.Equals(obj);
 
 		public override int GetHashCode() => equatable.GetHashCode();
+
+		public IResult<Unit> Load() => Module.Global.RegisterMixin(this);
 	}
 }
