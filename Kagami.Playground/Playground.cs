@@ -11,6 +11,7 @@ using Kagami.Library.Runtime;
 using Core.Computers;
 using Core.Collections;
 using Core.Dates;
+using Core.Enumerables;
 using Core.Monads;
 using Core.Numbers;
 using Core.RegularExpressions;
