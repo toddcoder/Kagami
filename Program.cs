@@ -1,32 +1,53 @@
 ﻿using System;
+using System.Diagnostics;
 using Core.Applications;
+using Core.Computers;
+using Core.Dates;
 using Kagami.Library;
 using Kagami.Library.Runtime;
 using Core.Monads;
 using static System.Console;
 using static Core.Monads.AttemptFunctions;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami
 {
-	internal class Program : CommandLine, IContext
+	internal class Program : CommandLineInterface, IContext
 	{
 		Putter putter;
 
 		public Program() => putter = new Putter();
 
-		static void Main(string[] args)
+		static void Main()
 		{
-			var program = new Program();
-			program.Run(args);
+			using (var program = new Program())
+			{
+				program.Run("--", " ");
+			}
 		}
 
-		public override void Execute(Arguments arguments)
+		[EntryPoint(EntryPointType.This)]
+		public void EntryPoint()
 		{
-			if (arguments[0].FileName.If(out var sourceFile))
+			if (Exec)
+			{
+				exec();
+			}
+		}
+
+		void exec()
+		{
+			if (File.If(out var sourceFile))
 			{
 				if (sourceFile.TryTo.Text.If(out var source, out var exception))
 				{
-					var configuration = new CompilerConfiguration { ShowOperations = false, Tracing = false };
+					var stopwatch = new Stopwatch();
+					if (Stopwatch)
+					{
+						stopwatch.Start();
+					}
+
+					var configuration = new CompilerConfiguration { ShowOperations = ShowOps, Tracing = Trace };
 					var compiler = new Compiler(source, configuration, this);
 					var result =
 						from machine in compiler.Generate().OnSuccess(m =>
@@ -42,6 +63,12 @@ namespace Kagami
 					{
 						WriteLine($"Exception: {result.Exception}");
 					}
+
+					if (Stopwatch)
+					{
+						stopwatch.Stop();
+						WriteLine(stopwatch.Elapsed.ToLongString(true));
+					}
 				}
 				else
 				{
@@ -49,6 +76,16 @@ namespace Kagami
 				}
 			}
 		}
+
+		public bool Exec { get; set; }
+
+		public IMaybe<FileName> File { get; set; } = none<FileName>();
+
+		public bool Stopwatch { get; set; }
+
+		public bool ShowOps { get; set; }
+
+		public bool Trace { get; set; }
 
 		public void Print(string value)
 		{
