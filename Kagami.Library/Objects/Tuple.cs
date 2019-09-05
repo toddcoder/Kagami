@@ -291,9 +291,6 @@ namespace Kagami.Library.Objects
 		public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
 
 		public int CompareTo(Tuple other) => Compare(other);
-<<<<<<< Updated upstream
-=======
-
 		public IObject Head
 		{
 			get
@@ -326,6 +323,5 @@ namespace Kagami.Library.Objects
 		}
 
 		public IObject HeadTail => new Tuple(Head, Tail);
->>>>>>> Stashed changes
 	}
 }
