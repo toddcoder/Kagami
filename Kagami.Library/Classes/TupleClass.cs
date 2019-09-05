@@ -17,7 +17,6 @@ namespace Kagami.Library.Classes
 
          collectionMessages();
          messages["tuple"] = (obj, msg) => function<Tuple>(obj, t => t);
-
          messages["first".get()] = (obj, msg) => function<Tuple>(obj, t => t[0]);
          messages["second".get()] = (obj, msg) => function<Tuple>(obj, t => t[1]);
          messages["third".get()] = (obj, msg) => function<Tuple>(obj, t => t[2]);
@@ -29,6 +28,12 @@ namespace Kagami.Library.Classes
          messages["nineth".get()] = (obj, msg) => function<Tuple>(obj, t => t[8]);
          messages["tenth".get()] = (obj, msg) => function<Tuple>(obj, t => t[9]);
          messages["[]"] = (obj, msg) => function<Tuple, IObject>(obj, msg, indexed);
+<<<<<<< Updated upstream
+=======
+         messages["head".get()] = (obj, msg) => function<Tuple>(obj, t => t.Head);
+         messages["tail".get()] = (obj, msg) => function<Tuple>(obj, t => t.Tail);
+         messages["headTail".get()] = (obj, msg) => function<Tuple>(obj, t => t.HeadTail);
+>>>>>>> Stashed changes
       }
 
       static IObject indexed(Tuple tuple, IObject index)

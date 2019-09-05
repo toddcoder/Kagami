@@ -291,5 +291,41 @@ namespace Kagami.Library.Objects
 		public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
 
 		public int CompareTo(Tuple other) => Compare(other);
+<<<<<<< Updated upstream
+=======
+
+		public IObject Head
+		{
+			get
+			{
+				if (items.Length == 0)
+				{
+					return None.NoneValue;
+				}
+				else
+				{
+					var head = items[0];
+					return new Some(head);
+				}
+			}
+		}
+
+		public IObject Tail
+		{
+			get
+			{
+				if (items.Length == 0)
+				{
+					return Empty;
+				}
+				else
+				{
+					return new Tuple(items.Skip(1).ToArray());
+				}
+			}
+		}
+
+		public IObject HeadTail => new Tuple(Head, Tail);
+>>>>>>> Stashed changes
 	}
 }
