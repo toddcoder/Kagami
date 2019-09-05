@@ -15,7 +15,6 @@ namespace Kagami.Library.Classes
 
          numericMessages();
          numericConversionMessages();
-         formatMessage<Int>();
          rangeMessages();
          compareMessages();
 

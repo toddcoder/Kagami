@@ -11,7 +11,6 @@ namespace Kagami.Library.Classes
       {
          base.RegisterMessages();
 
-         formatMessage<Byte>();
          compareMessages();
       }
 

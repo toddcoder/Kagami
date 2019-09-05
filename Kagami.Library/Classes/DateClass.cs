@@ -14,7 +14,6 @@ namespace Kagami.Library.Classes
 
          compareMessages();
          rangeMessages();
-         formatMessage<Date>();
 
          messages["year".get()] = (obj, msg) => function<Date>(obj, d => d.Year);
          messages["month".get()] = (obj, msg) => function<Date>(obj, d => d.Month);

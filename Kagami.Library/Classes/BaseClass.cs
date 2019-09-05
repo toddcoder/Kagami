@@ -81,6 +81,23 @@ namespace Kagami.Library.Classes
 				(obj, msg) => function<IObject, String>(obj, msg, (o, n) => sendMessage(o, n.Value, msg.Arguments.Pass(1))));
 			registerMessage("respondsTo(_)", (obj, msg) => (Boolean)classOf(obj).RespondsTo(msg.Arguments[0].AsString));
 			registerMessage("seq(_)", (obj, msg) => new OpenRange(obj, (Lambda)msg.Arguments[0]));
+			registerMessage("format(_)", (obj, msg) => format(obj, msg.Arguments[0].AsString));
+		}
+
+		static String format(IObject obj, string formattingString)
+		{
+			if (formattingString == "i")
+			{
+				return obj.Image;
+			}
+			else if (obj is IFormattable formattable)
+			{
+				return formattable.Format(formattingString);
+			}
+			else
+			{
+				return obj.AsString;
+			}
 		}
 
 		public virtual void RegisterClassMessages()
@@ -251,12 +268,6 @@ namespace Kagami.Library.Classes
 				(obj, msg) => function(obj, i => (byte)i, d => (byte)d, b => b, m => (Byte)((INumeric)m).ToByte(), "b".get()));
 		}
 
-		protected void formatMessage<T>() where T : IObject, IFormattable
-		{
-			registerMessage("format",
-				(obj, msg) => function<T, String>(obj, msg, (v, s) => v is IFormattable f ? f.Format(s.Value) : String.Empty));
-		}
-
 		protected void collectionMessages()
 		{
 			registerMessage("getIterator(_<Boolean>)",
@@ -314,7 +325,8 @@ namespace Kagami.Library.Classes
 				"span".Selector("_<Int>"),
 				"shuffle()", "array()", "list()", "tuple()", "dictionary".Selector("key:_<Lambda>", "value:_<Lambda>"), "dictionary()",
 				"each(_<Lambda>)", "rotate(_<Int>)", "permutation(_<Int>)", "combination(_<Int>)", "flatten()",
-				"copy()", "revert()", "*(_)", "format(_)", "replace(_<Lambda>,_<Lambda>)", "set()", "shape(_<Int>,_<Int>)", "column(_<Int>)"));
+				"copy()", "revert()", "*(_)", "format(_)", "replace(_<Lambda>,_<Lambda>)", "set()", "shape(_<Int>,_<Int>)",
+				"column(_<Int>)"));
 
 			dynamicInvoke = (obj, msg) =>
 			{

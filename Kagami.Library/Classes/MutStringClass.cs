@@ -15,7 +15,6 @@ namespace Kagami.Library.Classes
 			base.RegisterMessages();
 
 			collectionMessages();
-			formatMessage<MutString>();
 			sliceableMessages();
 			compareMessages();
 			rangeMessages();

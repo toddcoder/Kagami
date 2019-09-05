@@ -15,7 +15,6 @@ namespace Kagami.Library.Classes
 
          numericMessages();
          numericConversionMessages();
-         formatMessage<Float>();
          compareMessages();
 
          messages["round"] = (obj, msg) => function(obj, msg, (a, b) => Math.Round(a, (int)b), (a, b) => a.Round(b), "round");
