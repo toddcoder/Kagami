@@ -184,9 +184,9 @@ namespace Kagami.Library.Runtime
 					return failure<Field>(immutableField(name));
 				}
 			}
-			else if (original.IsFailedMatch)
+			else if (original.IfNot(out var anyException) && anyException.If(out var exception))
 			{
-				return failure<Field>(original.Exception);
+				return failure<Field>(exception);
 			}
 			else
 			{
@@ -213,9 +213,9 @@ namespace Kagami.Library.Runtime
 					return failure<Field>(immutableField(name));
 				}
 			}
-			else if (original.IsFailedMatch)
+			else if (original.IfNot(out var anyException) && anyException.If(out var exception))
 			{
-				return failure<Field>(original.Exception);
+				return failure<Field>(exception);
 			}
 			else
 			{

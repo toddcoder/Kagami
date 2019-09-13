@@ -28,9 +28,9 @@ namespace Kagami.Library.Parsers.Expressions
       public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
       {
          var result = Prefix(state, tokens).Map(u => getExpression(state, pattern, flags, colors)).Map(e => Suffix(state, e));
-         if (result.IsFailedMatch)
+         if (!result.If(out _, out var anyException) && anyException.If(out var exception))
          {
-	         return OnFailure(state, result.Exception);
+	         return OnFailure(state, exception);
          }
          else
          {

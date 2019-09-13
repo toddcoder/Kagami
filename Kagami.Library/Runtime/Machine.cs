@@ -79,7 +79,7 @@ namespace Kagami.Library.Runtime
 					{
 						stack.Peek().Push(result);
 					}
-					else if (original.IsFailedMatch)
+					else if (original.IfNot(out var anyException) && anyException.If(out var exception))
 					{
 						if (Tracing)
 						{
@@ -88,12 +88,12 @@ namespace Kagami.Library.Runtime
 
 						if (GetErrorHandler().If(out var address))
 						{
-							stack.Peek().Push(new Failure(original.Exception.Message));
+							stack.Peek().Push(new Failure(exception.Message));
 							operations.Goto(address);
 						}
 						else
 						{
-							return failure<Unit>(original.Exception);
+							return failure<Unit>(exception);
 						}
 					}
 
@@ -620,9 +620,9 @@ namespace Kagami.Library.Runtime
 							{
 								stack.Peek().Push(result);
 							}
-							else if (original.IsFailedMatch)
+							else if (original.IfNot(out var anyException) && anyException.If(out var exception))
 							{
-								return failure<DebugState>(original.Exception);
+								return failure<DebugState>(exception);
 							}
 
 							break;

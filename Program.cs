@@ -59,9 +59,9 @@ namespace Kagami
 						})
 						from executed in machine.Execute()
 						select executed;
-					if (result.IsFailed)
+					if (result.IfNot(out var failureException))
 					{
-						WriteLine($"Exception: {result.Exception}");
+						WriteLine($"Exception: {failureException}");
 					}
 
 					if (Stopwatch)
