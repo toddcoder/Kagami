@@ -18,7 +18,7 @@ namespace Kagami.Library.Parsers.Expressions
 
 			var result =
 				from condition in getExpression(state, builder.Flags | ExpressionFlags.OmitColon)
-				from colon1 in state.Scan("^ /(|s|) /'then' /b", Color.Whitespace, Color.Keyword)
+				from colon1 in state.Scan("^ /(|s|) /':'", Color.Whitespace, Color.Structure)
 				from value in getExpression(state, builder.Flags | ExpressionFlags.OmitColon)
 				select (condition, value);
 
@@ -29,7 +29,7 @@ namespace Kagami.Library.Parsers.Expressions
 					var (condition, value) = tuple;
 
 					var result2 =
-						from colon2 in state.Scan("^ /(|s|) /'else' /b", Color.Whitespace, Color.Keyword)
+						from colon2 in state.Scan("^ /(|s|) /':'", Color.Whitespace, Color.Structure)
 						from error in getExpression(state, builder.Flags | ExpressionFlags.OmitColon)
 						select error;
 					if (result2.Out(out var expression, out var original2))
