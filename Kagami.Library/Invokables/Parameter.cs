@@ -67,7 +67,7 @@ namespace Kagami.Library.Invokables
             hashCode = hashCode * 397 ^ (name?.GetHashCode() ?? 0);
             hashCode = hashCode * 397 ^ (label?.GetHashCode() ?? 0);
             hashCode = hashCode * 397 ^ (defaultValue?.GetHashCode() ?? 0);
-            hashCode = hashCode * 397 ^ typeConstraint.FlatMap(tc => tc.Hash, () => 0);
+            hashCode = hashCode * 397 ^ typeConstraint.Map(tc => tc.Hash).DefaultTo(() => 0);
             hashCode = hashCode * 397 ^ reference.GetHashCode();
             hashCode = hashCode * 397 ^ capturing.GetHashCode();
             return hashCode;
@@ -106,7 +106,7 @@ namespace Kagami.Library.Invokables
       public override string ToString()
       {
          return (StringStream)"" / (reference, "ref ") / (mutable, "var ") / label.Extend(after: ": ") / name
-            / typeConstraint.FlatMap(t => t.Image, () => "") / defaultValue.FlatMap(i => $" = {i.Image}", () => "");
+            / typeConstraint.Map(t => t.Image).DefaultTo(() => "") / defaultValue.Map(i => $" = {i.Image}").DefaultTo(() => "");
       }
    }
 }

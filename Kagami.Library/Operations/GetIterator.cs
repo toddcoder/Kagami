@@ -15,7 +15,7 @@ namespace Kagami.Library.Operations
 
       public override IMatched<IObject> Execute(Machine machine, IObject value)
       {
-         return getIterator(value, lazy).Map(i => (IObject)i).FlatMap(o => o.Matched(), failedMatch<IObject>);
+         return getIterator(value, lazy).Map(i => (IObject)i).Map(o => o.Matched()).Recover(failedMatch<IObject>);
       }
 
       public override string ToString() => $"get.iterator{lazy.Extend("(lazy)")}";

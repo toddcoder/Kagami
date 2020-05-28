@@ -38,7 +38,7 @@ namespace Kagami.Library.Nodes.Statements
 
       public override string ToString()
       {
-         return stream() / fieldName / " " / operation.FlatMap(o => o.ToString(), () => "") / "= " / expression;
+         return stream() / fieldName / " " / operation.Map(o => o.ToString()).DefaultTo(() => "") / "= " / expression;
       }
    }
 }

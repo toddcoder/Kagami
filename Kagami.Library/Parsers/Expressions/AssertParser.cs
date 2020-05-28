@@ -24,7 +24,7 @@ namespace Kagami.Library.Parsers.Expressions
 
 			if (isSuccess)
 			{
-				if (result.Out(out var tuple, out var original))
+				if (result.ValueOrOriginal(out var tuple, out var original))
 				{
 					var (condition, value) = tuple;
 
@@ -32,7 +32,7 @@ namespace Kagami.Library.Parsers.Expressions
 						from colon2 in state.Scan("^ /(|s|) /':'", Color.Whitespace, Color.Structure)
 						from error in getExpression(state, builder.Flags | ExpressionFlags.OmitColon)
 						select error;
-					if (result2.Out(out var expression, out var original2))
+					if (result2.ValueOrOriginal(out var expression, out var original2))
 					{
 						builder.Add(new AssertSymbol(condition, value, expression.Some()));
 						return Unit.Matched();
@@ -47,7 +47,7 @@ namespace Kagami.Library.Parsers.Expressions
 					return original.Unmatched<Unit>();
 				}
 			}
-			else if (result.Out(out var tuple, out var original))
+			else if (result.ValueOrOriginal(out var tuple, out var original))
 			{
 				var (condition, value) = tuple;
 				builder.Add(new AssertSymbol(condition, value, none<Expression>()));

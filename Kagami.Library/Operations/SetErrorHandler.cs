@@ -5,14 +5,14 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Operations
 {
-	public class SetErrorHandler : AddressedOperation
-	{
-		public override IMatched<IObject> Execute(Machine machine)
-		{
-			increment = true;
-			return machine.SetErrorHandler(address).FlatMap(u => notMatched<IObject>(), failedMatch<IObject>);
-		}
+   public class SetErrorHandler : AddressedOperation
+   {
+      public override IMatched<IObject> Execute(Machine machine)
+      {
+         increment = true;
+         return machine.SetErrorHandler(address).Map(u => notMatched<IObject>()).Recover(failedMatch<IObject>);
+      }
 
-		public override string ToString() => "set.error.handler";
-	}
+      public override string ToString() => "set.error.handler";
+   }
 }

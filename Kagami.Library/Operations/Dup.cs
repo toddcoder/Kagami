@@ -10,7 +10,7 @@ namespace Kagami.Library.Operations
    {
       public override IMatched<IObject> Execute(Machine machine)
       {
-         return machine.Peek().FlatMap(v => v.Matched(), () => failedMatch<IObject>(requiresNOperands(1)));
+         return machine.Peek().Map(v => v.Matched()).DefaultTo(() => failedMatch<IObject>(requiresNOperands(1)));
       }
 
       public override string ToString() => "dup";

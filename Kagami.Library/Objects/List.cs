@@ -151,7 +151,7 @@ namespace Kagami.Library.Objects
 			}
 		}
 
-		public int Hash => (head.FlatMap(h => h.Hash, () => 0) + tail.Hash).GetHashCode();
+      public int Hash => (head.Map(h => h.Hash).DefaultTo(() => 0) + tail.Hash).GetHashCode();
 
 		public bool IsEqualTo(IObject obj)
 		{
@@ -183,8 +183,8 @@ namespace Kagami.Library.Objects
 				}
 				else
 				{
-					var lHead = l1.head.FlatMap(v => v, () => Empty);
-					var rHead = l2.head.FlatMap(v => v, () => Empty);
+					var lHead = l1.head.Map(v => v).DefaultTo(() => Empty);
+					var rHead = l2.head.Map(v => v).DefaultTo(() => Empty);
 					if (getPlaceholder(rHead).If(out var placeholder))
 					{
 						if (l2.tail.IsEmpty)

@@ -4,40 +4,40 @@ using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
 {
-	public class ImplicitZipParser : SymbolParser
-	{
-		public override string Pattern => "^ /(|s|) /'*' -(> [/s')='])";
+   public class ImplicitZipParser : SymbolParser
+   {
+      public override string Pattern => "^ /(|s|) /'*' -(> [/s')='])";
 
-		public ImplicitZipParser(ExpressionBuilder builder) : base(builder) { }
+      public ImplicitZipParser(ExpressionBuilder builder) : base(builder) { }
 
-		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
-		{
-			state.Colorize(tokens, Color.Whitespace, Color.Operator);
+      public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+      {
+         state.Colorize(tokens, Color.Whitespace, Color.Operator);
 
-			if (getValue(state, builder.Flags).Out(out var symbol, out var original))
-			{
-				var fieldName = "__$0";
-				var tuple = (fieldName, symbol).Some();
-				if (state.LeftZipExpression.IsNone)
-				{
-					state.LeftZipExpression = tuple;
-				}
-				else
-				{
-					fieldName = "__$1";
-					tuple = (fieldName, symbol).Some();
-					state.RightZipExpression = tuple;
-				}
+         if (getValue(state, builder.Flags).ValueOrCast<Unit>(out var symbol, out var asUnit))
+         {
+            var fieldName = "__$0";
+            var tuple = (fieldName, symbol).Some();
+            if (state.LeftZipExpression.IsNone)
+            {
+               state.LeftZipExpression = tuple;
+            }
+            else
+            {
+               fieldName = "__$1";
+               tuple = (fieldName, symbol).Some();
+               state.RightZipExpression = tuple;
+            }
 
-				builder.Add(new FieldSymbol(fieldName));
+            builder.Add(new FieldSymbol(fieldName));
 
-				return Unit.Matched();
-			}
+            return Unit.Matched();
+         }
 
-			else
-			{
-				return original.Unmatched<Unit>();
-			}
-		}
-	}
+         else
+         {
+            return asUnit;
+         }
+      }
+   }
 }

@@ -95,8 +95,8 @@ namespace Kagami.Library.Objects
 			set
 			{
 				defaultLambda = value;
-				parameterCount = defaultLambda.FlatMap(l => l.Invokable.Parameters.Length, () => 0);
-			}
+            parameterCount = defaultLambda.Map(l => l.Invokable.Parameters.Length).DefaultTo(() => 0);
+         }
 		}
 
 		public Boolean Caching { get; set; } = false;

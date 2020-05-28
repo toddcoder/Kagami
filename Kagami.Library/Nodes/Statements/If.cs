@@ -119,8 +119,8 @@ namespace Kagami.Library.Nodes.Statements
 
       public override string ToString()
       {
-         return (StringStream)"if " / expression / block % elseIf.FlatMap(i => $"else {i}", () => "") %
-            elseBlock.FlatMap(b => b.ToString(), () => "");
+         return (StringStream)"if " / expression / block % elseIf.Map(i => $"else {i}").DefaultTo(() => "") %
+            elseBlock.Map(b => b.ToString()).DefaultTo(() => "");
       }
    }
 }

@@ -12,9 +12,9 @@ namespace Kagami.Library.Operations
 		public Copy(int index) => this.index = index;
 
 		public override IMatched<IObject> Execute(Machine machine)
-		{
-			return machine.CurrentFrame.Copy(index).FlatMap(i => i.Matched(), notMatched<IObject>);
-		}
+      {
+         return machine.CurrentFrame.Copy(index).Map(i => i.Matched()).DefaultTo(notMatched<IObject>);
+      }
 
 		public override string ToString() => $"copy({index})";
 	}

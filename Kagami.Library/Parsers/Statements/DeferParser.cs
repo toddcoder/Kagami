@@ -6,36 +6,36 @@ using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Statements
 {
-	public class DeferParser : StatementParser
-	{
-		public override string Pattern => "^ /'defer' /b";
+   public class DeferParser : StatementParser
+   {
+      public override string Pattern => "^ /'defer' /b";
 
-		public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
-		{
-			state.Colorize(tokens, Color.Keyword);
+      public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
+      {
+         state.Colorize(tokens, Color.Keyword);
 
-			Block block;
-			if (state.CurrentSource.IsMatch(REGEX_EOL))
-			{
-				if (getBlock(state).Out(out block, out var original)) { }
-				else
-				{
-					return original.UnmatchedOnly<Unit>();
-				}
-			}
-			else if (getExpression(state, ExpressionFlags.Standard).Out(out var expression, out var exOriginal))
-			{
-				block = new Block(new ExpressionStatement(expression, true));
-			}
-			else
-			{
-				return exOriginal.UnmatchedOnly<Unit>();
-			}
+         Block block;
+         if (state.CurrentSource.IsMatch(REGEX_EOL))
+         {
+            if (getBlock(state).ValueOrCast<Unit>(out block, out var asUnit)) { }
+            else
+            {
+               return asUnit;
+            }
+         }
+         else if (getExpression(state, ExpressionFlags.Standard).ValueOrCast<Unit>(out var expression, out var asUnit))
+         {
+            block = new Block(new ExpressionStatement(expression, true));
+         }
+         else
+         {
+            return asUnit;
+         }
 
-			block.AddReturnIf();
-			state.AddStatement(new Defer(block));
+         block.AddReturnIf();
+         state.AddStatement(new Defer(block));
 
-			return Unit.Matched();
-		}
-	}
+         return Unit.Matched();
+      }
+   }
 }

@@ -9,7 +9,7 @@ namespace Kagami.Library.Operations
    {
       public override IMatched<IObject> Execute(Machine machine)
       {
-         return machine.PopFrame().FlatMap(f => notMatched<IObject>(), failedMatch<IObject>);
+         return machine.PopFrame().Map(f => notMatched<IObject>()).Recover(failedMatch<IObject>);
       }
 
       public override string ToString() => "pop.frame";

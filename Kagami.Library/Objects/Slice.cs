@@ -67,12 +67,12 @@ namespace Kagami.Library.Objects
 
 		public bool ExpandForArray => sliceable.ExpandForArray;
 
-		public Boolean In(IObject item) => indexes.Select(i => sliceable.Get(i).FlatMap(o => o.IsEqualTo(item), () => false)).Any();
+		public Boolean In(IObject item) => indexes.Select(i => sliceable.Get(i).Map(o => o.IsEqualTo(item)).DefaultTo(() => false)).Any();
 
 		public Boolean NotIn(IObject item)
-		{
-			return indexes.Select(i => sliceable.Get(i).FlatMap(o => !o.IsEqualTo(item), () => false)).All(b => b);
-		}
+      {
+         return indexes.Select(i => sliceable.Get(i).Map(o => !o.IsEqualTo(item)).DefaultTo(() => false)).All(b => b);
+      }
 
 		public IObject Times(int count) => ((ICollection)Reverted()).Times(count);
 

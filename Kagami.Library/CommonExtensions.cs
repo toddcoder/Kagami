@@ -38,7 +38,7 @@ namespace Kagami.Library
 
 	   public static IObject AsOptional<T>(this IMaybe<T> maybe) where T : IObject
 	   {
-		   return maybe.FlatMap(o => Some.Object(o), () => None.NoneValue);
+		   return maybe.Map(o => Some.Object(o)).DefaultTo(() => None.NoneValue);
 	   }
 
 	   public static IMaybe<T> AsMaybe<T>(this IOptional optional) where T : IObject

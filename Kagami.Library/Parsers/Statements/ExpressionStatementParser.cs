@@ -6,36 +6,36 @@ using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Statements
 {
-	public class ExpressionStatementParser : StatementParser
-	{
-		bool returnExpression;
-		IMaybe<TypeConstraint> typeConstraint;
+   public class ExpressionStatementParser : StatementParser
+   {
+      bool returnExpression;
+      IMaybe<TypeConstraint> typeConstraint;
 
-		public ExpressionStatementParser(bool returnExpression, IMaybe<TypeConstraint> typeConstraint)
-		{
-			this.returnExpression = returnExpression;
-			this.typeConstraint = typeConstraint;
-		}
+      public ExpressionStatementParser(bool returnExpression, IMaybe<TypeConstraint> typeConstraint)
+      {
+         this.returnExpression = returnExpression;
+         this.typeConstraint = typeConstraint;
+      }
 
-		public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
-		{
-			var flags = ExpressionFlags.Standard;
-			if (returnExpression)
-			{
-				flags |= ExpressionFlags.OmitSendMessageAssign;
-			}
+      public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
+      {
+         var flags = ExpressionFlags.Standard;
+         if (returnExpression)
+         {
+            flags |= ExpressionFlags.OmitSendMessageAssign;
+         }
 
-			if (getExpression(state, flags).Out(out var expression, out var original))
-			{
-				state.AddStatement(new ExpressionStatement(expression, returnExpression, typeConstraint));
-				return Unit.Matched();
-			}
-			else
-			{
-				return original.Unmatched<Unit>();
-			}
-		}
+         if (getExpression(state, flags).ValueOrCast<Unit>(out var expression, out var asUnit))
+         {
+            state.AddStatement(new ExpressionStatement(expression, returnExpression, typeConstraint));
+            return Unit.Matched();
+         }
+         else
+         {
+            return asUnit;
+         }
+      }
 
-		public override bool UpdateIndexOnParseOnly => true;
-	}
+      public override bool UpdateIndexOnParseOnly => true;
+   }
 }

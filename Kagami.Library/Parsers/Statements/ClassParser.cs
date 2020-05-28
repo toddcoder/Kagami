@@ -10,108 +10,108 @@ using Class = Kagami.Library.Nodes.Statements.Class;
 
 namespace Kagami.Library.Parsers.Statements
 {
-	public class ClassParser : StatementParser
-	{
-		public override string Pattern => $"^ /'class' /(|s+|) /({REGEX_CLASS}) /'('?";
+   public class ClassParser : StatementParser
+   {
+      public override string Pattern => $"^ /'class' /(|s+|) /({REGEX_CLASS}) /'('?";
 
-		public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
-		{
-			var className = tokens[3].Text;
-			var hasParameters = tokens[4].Text == "(";
-			state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Class, Color.OpenParenthesis);
+      public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
+      {
+         var className = tokens[3].Text;
+         var hasParameters = tokens[4].Text == "(";
+         state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Class, Color.OpenParenthesis);
 
-			Parameters parameters;
+         Parameters parameters;
 
-			if (hasParameters)
-			{
-				if (getParameters(state).Out(out parameters, out var parametersOriginal)) { }
-				else if (parametersOriginal.IsNotMatched)
-				{
-					parameters = new Parameters(0);
-				}
-				else
-				{
-					return parametersOriginal.ExceptionAs<Unit>();
-				}
-			}
-			else
-			{
-				parameters = Parameters.Empty;
-			}
+         if (hasParameters)
+         {
+            if (getParameters(state).ValueOrCast<Unit>(out parameters, out var asUnit)) { }
+            else if (asUnit.IsNotMatched)
+            {
+               parameters = new Parameters(0);
+            }
+            else
+            {
+               return asUnit;
+            }
+         }
+         else
+         {
+            parameters = Parameters.Empty;
+         }
 
-			state.SkipEndOfLine();
+         state.SkipEndOfLine();
 
-			state.Advance();
-			var parentClassParser = new ParentClassParser();
+         state.Advance();
+         var parentClassParser = new ParentClassParser();
 
-			var parentClassName = "";
-			var initialize = false;
-			var arguments = new Expression[0];
-			if (parentClassParser.Scan(state).If(out _, out var anyException))
-			{
-				(parentClassName, initialize, arguments) = parentClassParser.Parent;
-			}
-			else if (anyException.If(out var exception))
-			{
-				state.Regress();
-				return failedMatch<Unit>(exception);
-			}
+         var parentClassName = "";
+         var initialize = false;
+         var arguments = new Expression[0];
+         if (parentClassParser.Scan(state).If(out _, out var anyException))
+         {
+            (parentClassName, initialize, arguments) = parentClassParser.Parent;
+         }
+         else if (anyException.If(out var exception))
+         {
+            state.Regress();
+            return failedMatch<Unit>(exception);
+         }
 
-			var mixins = new List<Mixin>();
-			while (state.More)
-			{
-				var mixinIncludesParser = new MixinIncludesParser(mixins);
-				if (mixinIncludesParser.Scan(state).If(out _, out anyException)) { }
-				else if (anyException.If(out var exception))
-				{
-					state.Regress();
-					return failedMatch<Unit>(exception);
-				}
-				else
-				{
-					break;
-				}
-			}
+         var mixins = new List<Mixin>();
+         while (state.More)
+         {
+            var mixinIncludesParser = new MixinIncludesParser(mixins);
+            if (mixinIncludesParser.Scan(state).If(out _, out anyException)) { }
+            else if (anyException.If(out var exception))
+            {
+               state.Regress();
+               return failedMatch<Unit>(exception);
+            }
+            else
+            {
+               break;
+            }
+         }
 
-			state.SkipEndOfLine();
-			state.Regress();
+         state.SkipEndOfLine();
+         state.Regress();
 
-			Module.Global.ForwardReference(className);
+         Module.Global.ForwardReference(className);
 
-			state.SkipEndOfLine();
-			if (getBlock(state).Out(out var block, out var original))
-			{
-				var builder = new ClassBuilder(className, parameters, parentClassName, arguments, initialize, block, mixins);
-				if (builder.Register().Out(out _, out var registerOriginal))
-				{
-					var cls = new Class(builder);
-					state.AddStatement(cls);
+         state.SkipEndOfLine();
+         if (getBlock(state).ValueOrCast<Unit>(out var block, out var asUnit2))
+         {
+            var builder = new ClassBuilder(className, parameters, parentClassName, arguments, initialize, block, mixins);
+            if (builder.Register().ValueOrOriginal(out _, out asUnit2))
+            {
+               var cls = new Class(builder);
+               state.AddStatement(cls);
 
-					var classItemsParser = new ClassItemsParser(builder);
-					while (state.More)
-					{
-						if (classItemsParser.Scan(state).If(out _, out anyException)) { }
-						else if (anyException.If(out var exception))
-						{
-							return failedMatch<Unit>(exception);
-						}
-						else
-						{
-							break;
-						}
-					}
+               var classItemsParser = new ClassItemsParser(builder);
+               while (state.More)
+               {
+                  if (classItemsParser.Scan(state).If(out _, out anyException)) { }
+                  else if (anyException.If(out var exception))
+                  {
+                     return failedMatch<Unit>(exception);
+                  }
+                  else
+                  {
+                     break;
+                  }
+               }
 
-					return Unit.Matched();
-				}
-				else
-				{
-					return registerOriginal.Unmatched<Unit>();
-				}
-			}
-			else
-			{
-				return original.Unmatched<Unit>();
-			}
-		}
-	}
+               return Unit.Matched();
+            }
+            else
+            {
+               return asUnit2;
+            }
+         }
+         else
+         {
+            return asUnit2;
+         }
+      }
+   }
 }

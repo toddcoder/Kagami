@@ -12,9 +12,9 @@ namespace Kagami.Library.Operations
 		public Pick(int index) => this.index = index;
 
 		public override IMatched<IObject> Execute(Machine machine)
-		{
-			return machine.CurrentFrame.Pick(index).FlatMap(i => i.Matched(), notMatched<IObject>);
-		}
+      {
+         return machine.CurrentFrame.Pick(index).Map(i => i.Matched()).DefaultTo(notMatched<IObject>);
+      }
 
 		public override string ToString() => $"pick({index})";
 	}

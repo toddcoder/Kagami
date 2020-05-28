@@ -533,7 +533,7 @@ namespace Kagami.Library.Objects
 			return result;
 		}
 
-		public IObject First() => List().ToList().FirstOrNone().FlatMap(value => new Some(value), () => Objects.None.NoneValue);
+		public IObject First() => List().ToList().FirstOrNone().Map(Some.Object).DefaultTo(() => Objects.None.NoneValue);
 
 		public IObject First(Lambda predicate)
 		{
@@ -552,8 +552,8 @@ namespace Kagami.Library.Objects
 		{
 			var list = List().ToList();
 			list.Reverse();
-			return list.FirstOrNone().FlatMap(value => new Some(value), () => Objects.None.NoneValue);
-		}
+         return list.FirstOrNone().Map(Some.Object).DefaultTo(() => Objects.None.NoneValue);
+      }
 
 		public IObject Last(Lambda predicate)
 		{

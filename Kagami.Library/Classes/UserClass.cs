@@ -158,9 +158,9 @@ namespace Kagami.Library.Classes
 		public override void RegisterClassMessages() { }
 
 		public override bool ClassRespondsTo(Selector selector)
-		{
-			return metaObject.FlatMap(uo => classOf(uo).RespondsTo(selector), () => false);
-		}
+      {
+         return metaObject.Map(uo => classOf(uo).RespondsTo(selector)).DefaultTo(() => false);
+      }
 
 		public override IObject ClassDynamicInvoke(Message message)
 		{

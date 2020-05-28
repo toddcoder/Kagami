@@ -16,14 +16,14 @@ namespace Kagami.Library.Parsers.Expressions
          var source = tokens[3].Text;
          state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Operator);
 
-         if (getOperator(state, source, builder.Flags, true).Out(out var symbol, out var original))
+         if (getOperator(state, source, builder.Flags, true).ValueOrCast<Unit>(out var symbol, out var asUnit))
          {
             builder.Add(new FoldSymbol(prefix == "<:", symbol));
             return Unit.Matched();
          }
          else
          {
-	         return original.UnmatchedOnly<Unit>();
+            return asUnit;
          }
       }
    }

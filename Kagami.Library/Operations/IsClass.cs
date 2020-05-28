@@ -12,11 +12,12 @@ namespace Kagami.Library.Operations
       {
          if (pop)
          {
-	         return machine.Pop().FlatMap(value => value.Matched(), failedMatch<IObject>);
+            return machine.Pop().Map(value => value.Matched()).Recover(failedMatch<IObject>);
          }
          else
          {
-	         return machine.Peek().FlatMap(value => value.Matched(), () => $"Couldn't peek value to determine class {className}".FailedMatch<IObject>());
+            return machine.Peek().Map(value => value.Matched())
+               .DefaultTo(() => $"Couldn't peek value to determine class {className}".FailedMatch<IObject>());
          }
       }
 
