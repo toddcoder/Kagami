@@ -37,11 +37,11 @@
     <Reference Include="Core">
       <HintPath>..\..\Libraries\Core.dll</HintPath>
     </Reference>
+    <Reference Include="Core.ObjectGraphs">
+      <HintPath>..\..\Libraries\Core.ObjectGraphs.dll</HintPath>
+    </Reference>
     <Reference Include="Core.WinForms">
       <HintPath>..\..\Libraries\Core.WinForms.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -62,8 +62,6 @@
     </Compile>
     <Compile Include="ExceptionData.cs" />
     <Compile Include="ExRichTextBoxExtensions.cs" />
-    <Compile Include="FileNameConverter.cs" />
-    <Compile Include="FolderNameConverter.cs" />
     <Compile Include="Playground.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -87,7 +85,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

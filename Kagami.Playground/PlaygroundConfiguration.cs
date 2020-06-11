@@ -1,21 +1,17 @@
 ﻿using Core.Computers;
-using Newtonsoft.Json;
 
 namespace Kagami.Playground
 {
    public class PlaygroundConfiguration
    {
-		[JsonConverter(typeof(FileNameConverter))]
-      public FileName LastFile { get; set; }
+      public FileName LastFile { get; set; } = @"tutorial.kagami";
 
-      [JsonConverter(typeof(FolderNameConverter))]
-      public FolderName DefaultFolder { get; set; }
+      public FolderName DefaultFolder { get; set; } = @"C:\";
 
-      public string FontName { get; set; }
+      public string FontName { get; set; } = "Consolas";
 
-      public float FontSize { get; set; }
+      public float FontSize { get; set; } = 12;
 
-      [JsonConverter(typeof(FolderNameConverter))]
-      public FolderName PackageFolder { get; set; }
+      public FolderName PackageFolder { get; set; } = @"C:\";
    }
 }

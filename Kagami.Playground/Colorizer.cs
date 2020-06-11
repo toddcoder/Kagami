@@ -9,184 +9,117 @@ using Color = System.Drawing.Color;
 
 namespace Kagami.Playground
 {
-	public class Colorizer
-	{
-		RichTextBox textBox;
-		int parenthesesCount;
+   public class Colorizer
+   {
+      RichTextBox textBox;
+      int parenthesesCount;
 
-		[DllImport("user32.dll")]
-		public static extern int SendMessage(IntPtr hWnd, int msg, bool wParam, int lParam);
+      [DllImport("user32.dll")]
+      public static extern int SendMessage(IntPtr hWnd, int msg, bool wParam, int lParam);
 
-		public Colorizer(RichTextBox textBox)
-		{
-			this.textBox = textBox;
-			parenthesesCount = 0;
-		}
+      public Colorizer(RichTextBox textBox)
+      {
+         this.textBox = textBox;
+         parenthesesCount = 0;
+      }
 
-		public void Colorize(IEnumerable<Token> tokens)
-		{
-			parenthesesCount = 0;
-			var font = textBox.Font;
-			using (var boldFont = new Font(textBox.Font, FontStyle.Bold))
-				//using (var italicFont = new Font(textBox.Font, FontStyle.Italic))
-			{
-				textBox.SelectAll();
-				textBox.SelectionColor = Color.Black;
-				textBox.SelectionBackColor = Color.White;
-				foreach (var token in tokens)
-				{
-					textBox.Select(token.Index, token.Length);
-					textBox.SelectionColor = getForeColor(token.Color, ref parenthesesCount);
-					textBox.SelectionBackColor = getBackColor(token.Color);
-					textBox.SelectionFont = isBold(token.Color) ? boldFont : font;
-					//!isItalic(token.Color) ? !isBold(token.Color) ? font : boldFont : italicFont;
-				}
+      public void Colorize(IEnumerable<Token> tokens)
+      {
+         parenthesesCount = 0;
+         var font = textBox.Font;
+         using var boldFont = new Font(textBox.Font, FontStyle.Bold);
+         textBox.SelectAll();
+         textBox.SelectionColor = Color.Black;
+         textBox.SelectionBackColor = Color.White;
+         foreach (var token in tokens)
+         {
+            textBox.Select(token.Index, token.Length);
+            textBox.SelectionColor = getForeColor(token.Color, ref parenthesesCount);
+            textBox.SelectionBackColor = getBackColor(token.Color);
+            textBox.SelectionFont = isBold(token.Color) ? boldFont : font;
+         }
 
-				markText("/s+ (/r /n | /r | /n)", Color.PaleVioletRed);
-			}
-		}
+         markText("/s+ (/r /n | /r | /n)", Color.PaleVioletRed);
+      }
 
-		void markText(string pattern, Color backColor)
-		{
-			if (textBox.Text.Matches(pattern).If(out var matcher))
-			{
-				for (var matchIndex = 0; matchIndex < matcher.MatchCount; ++matchIndex)
-				{
-					var (_, index, length) = matcher.GetMatch(matchIndex);
-					textBox.Select(index, length);
-					textBox.SelectionBackColor = backColor;
-				}
-			}
-		}
+      void markText(string pattern, Color backColor)
+      {
+         if (textBox.Text.Matches(pattern).If(out var matcher))
+         {
+            for (var matchIndex = 0; matchIndex < matcher.MatchCount; ++matchIndex)
+            {
+               var (_, index, length) = matcher.GetMatch(matchIndex);
+               textBox.Select(index, length);
+               textBox.SelectionBackColor = backColor;
+            }
+         }
+      }
 
-		static bool isBold(Library.Parsers.Color color)
-		{
-			switch (color)
-			{
-				case Library.Parsers.Color.StringPart:
-				case Library.Parsers.Color.NumberPart:
-				case Library.Parsers.Color.Operator:
-				case Library.Parsers.Color.Message:
-				case Library.Parsers.Color.Collection:
-				case Library.Parsers.Color.CollectionPart:
-				case Library.Parsers.Color.Keyword:
-				case Library.Parsers.Color.Char:
-					/*case Library.Parsers.Color.OpenParenthesis:
-					case Library.Parsers.Color.CloseParenthesis:*/
-					return true;
-				default:
-					return false;
-			}
-		}
+      static bool isBold(Library.Parsers.Color color) => color switch
+      {
+         Library.Parsers.Color.StringPart => true,
+         Library.Parsers.Color.NumberPart => true,
+         Library.Parsers.Color.Operator => true,
+         Library.Parsers.Color.Message => true,
+         Library.Parsers.Color.Collection => true,
+         Library.Parsers.Color.CollectionPart => true,
+         Library.Parsers.Color.Keyword => true,
+         Library.Parsers.Color.Char => true,
+         _ => false
+      };
 
-/*		static bool isItalic(Library.Parsers.Color color)
-		{
-			switch (color)
-			{
-				case Library.Parsers.Color.Identifier:
-				case Library.Parsers.Color.Label:
-					return true;
-				default:
-					return false;
-			}
-		}*/
+      static Color getBackColor(Library.Parsers.Color color) => color switch
+      {
+         Library.Parsers.Color.OpenParenthesis => SystemColors.Info,
+         Library.Parsers.Color.CloseParenthesis => SystemColors.Info,
+         _ => Color.White
+      };
 
-		static Color getBackColor(Library.Parsers.Color color)
-		{
-			switch (color)
-			{
-				case Library.Parsers.Color.OpenParenthesis:
-				case Library.Parsers.Color.CloseParenthesis:
-					return SystemColors.Info;
-				default:
-					return Color.White;
-			}
-		}
+      static Color getParenthesisColor(Library.Parsers.Color color, ref int parenthesesCount) => color switch
+      {
+         Library.Parsers.Color.OpenParenthesis => getParenthesisColor(++parenthesesCount),
+         Library.Parsers.Color.CloseParenthesis => getParenthesisColor(parenthesesCount--),
+         _ => Color.Black
+      };
 
-		static Color getParenthesisColor(Library.Parsers.Color color, ref int parenthesesCount)
-		{
-			switch (color)
-			{
-				case Library.Parsers.Color.OpenParenthesis:
-					return getParenthesisColor(++parenthesesCount);
-				case Library.Parsers.Color.CloseParenthesis:
-					return getParenthesisColor(parenthesesCount--);
-				default:
-					return Color.Black;
-			}
-		}
+      static Color getParenthesisColor(int parenthesesCount) => parenthesesCount switch
+      {
+         1 => Color.Black,
+         2 => Color.Blue,
+         3 => Color.Green,
+         4 => Color.DarkCyan,
+         5 => Color.YellowGreen,
+         6 => Color.Gray,
+         _ => Color.Red
+      };
 
-		static Color getParenthesisColor(int parenthesesCount)
-		{
-			switch (parenthesesCount)
-			{
-				case 1:
-					return Color.Black;
-				case 2:
-					return Color.Blue;
-				case 3:
-					return Color.Green;
-				case 4:
-					return Color.DarkCyan;
-				case 5:
-					return Color.YellowGreen;
-				case 6:
-					return Color.Gray;
-				default:
-					return Color.Red;
-			}
-		}
-
-		static Color getForeColor(Library.Parsers.Color color, ref int parenthesesCount)
-		{
-			switch (color)
-			{
-				case Library.Parsers.Color.String:
-				case Library.Parsers.Color.StringPart:
-				case Library.Parsers.Color.Char:
-					return Color.FromArgb(38, 205, 0);
-				case Library.Parsers.Color.Number:
-				case Library.Parsers.Color.NumberPart:
-					return Color.Green;
-				case Library.Parsers.Color.Operator:
-					return Color.BlueViolet;
-				case Library.Parsers.Color.Identifier:
-					return Color.Blue;
-				case Library.Parsers.Color.Structure:
-					return Color.Black;
-				case Library.Parsers.Color.Whitespace:
-					return Color.Black;
-				case Library.Parsers.Color.Comment:
-					return Color.FromArgb(128, 128, 128);
-				case Library.Parsers.Color.Message:
-					return Color.Teal;
-				case Library.Parsers.Color.Format:
-					return Color.Violet;
-				case Library.Parsers.Color.Date:
-					return Color.DarkOliveGreen;
-				case Library.Parsers.Color.Collection:
-				case Library.Parsers.Color.CollectionPart:
-					return Color.Purple;
-				case Library.Parsers.Color.Symbol:
-					return Color.CornflowerBlue;
-				case Library.Parsers.Color.Boolean:
-					return Color.Coral;
-				case Library.Parsers.Color.Keyword:
-					return Color.Red;
-				case Library.Parsers.Color.Invokable:
-					return Color.DarkMagenta;
-				case Library.Parsers.Color.Class:
-					return Color.DarkGreen;
-				case Library.Parsers.Color.Label:
-					return Color.DimGray;
-				case Library.Parsers.Color.Type:
-					return Color.DarkCyan;
-				case Library.Parsers.Color.OpenParenthesis:
-				case Library.Parsers.Color.CloseParenthesis:
-					return getParenthesisColor(color, ref parenthesesCount);
-				default:
-					return Color.Black;
-			}
-		}
-	}
+      static Color getForeColor(Library.Parsers.Color color, ref int parenthesesCount) => color switch
+      {
+         Library.Parsers.Color.String => Color.FromArgb(38, 205, 0),
+         Library.Parsers.Color.StringPart => Color.FromArgb(38, 205, 0),
+         Library.Parsers.Color.Char => Color.FromArgb(38, 205, 0),
+         Library.Parsers.Color.Number => Color.Green,
+         Library.Parsers.Color.NumberPart => Color.Green,
+         Library.Parsers.Color.Operator => Color.BlueViolet,
+         Library.Parsers.Color.Identifier => Color.Blue,
+         Library.Parsers.Color.Structure => Color.Black,
+         Library.Parsers.Color.Whitespace => Color.Black,
+         Library.Parsers.Color.Comment => Color.FromArgb(128, 128, 128),
+         Library.Parsers.Color.Message => Color.Teal,
+         Library.Parsers.Color.Format => Color.Violet,
+         Library.Parsers.Color.Date => Color.DarkOliveGreen,
+         Library.Parsers.Color.Collection => Color.Purple,
+         Library.Parsers.Color.CollectionPart => Color.Purple,
+         Library.Parsers.Color.Symbol => Color.CornflowerBlue,
+         Library.Parsers.Color.Boolean => Color.Coral,
+         Library.Parsers.Color.Keyword => Color.Red,
+         Library.Parsers.Color.Invokable => Color.DarkMagenta,
+         Library.Parsers.Color.Class => Color.DarkGreen,
+         Library.Parsers.Color.Label => Color.DimGray,
+         Library.Parsers.Color.Type => Color.DarkCyan,
+         Library.Parsers.Color.OpenParenthesis => getParenthesisColor(color, ref parenthesesCount),
+         Library.Parsers.Color.CloseParenthesis => getParenthesisColor(color, ref parenthesesCount),
+         _ => Color.Black
+      };
+   }
 }

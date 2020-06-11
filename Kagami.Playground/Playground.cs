@@ -14,14 +14,12 @@ using Core.Dates;
 using Core.Enumerables;
 using Core.Monads;
 using Core.Numbers;
+using Core.ObjectGraphs;
 using Core.RegularExpressions;
 using Core.Strings;
 using Core.WinForms.Consoles;
 using Core.WinForms.Documents;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using static Core.Arrays.ArrayFunctions;
-using static Core.Monads.AttemptFunctions;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Playground
@@ -31,7 +29,7 @@ namespace Kagami.Playground
       const string PLAYGROUND_FONT_NAME = "Consolas";
       const float PLAYGROUND_FONT_SIZE = 14f;
       const string CONFIGURATION_FOLDER = @":\Configurations\Kagami\";
-      const string PLAYGROUND_CONFIGURATION_FILE = CONFIGURATION_FOLDER + "Kagami.json";
+      const string PLAYGROUND_CONFIGURATION_FILE = CONFIGURATION_FOLDER + "Kagami.configuration";
       const string PLAYGROUND_PACKAGE_FOLDER = CONFIGURATION_FOLDER + "Packages";
       const string KAGAMI_EXCEPTION_PROMPT = "Kagami exception >>> ";
 
@@ -42,11 +40,9 @@ namespace Kagami.Playground
       bool locked;
       bool manual;
       Stopwatch stopwatch;
-      //FileName configurationFile;
       PlaygroundConfiguration playgroundConfiguration;
       PlaygroundContext context;
       Colorizer colorizer;
-      //bool debugging;
       bool dumpOperations;
       bool tracing;
       IMaybe<int> exceptionIndex;
@@ -77,32 +73,13 @@ namespace Kagami.Playground
       }
 
       static IResult<PlaygroundConfiguration> getConfiguration(FileName configurationFile) =>
-         from jsonText in configurationFile.TryTo.Text
-         from configuration in tryTo(() =>
-         {
-            var settings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
-            var serializer = JsonSerializer.Create(settings);
-            using (var stringReader = new StringReader(jsonText))
-            using (var jsonReader = new JsonTextReader(stringReader))
-            {
-               return serializer.Deserialize<PlaygroundConfiguration>(jsonReader);
-            }
-         })
+         from objectGraph in ObjectGraph.Try.FromFile(configurationFile)
+         from configuration in objectGraph.Object<PlaygroundConfiguration>()
          select configuration;
 
       static IResult<Unit> setConfiguration(PlaygroundConfiguration configuration, FileName configurationFile) =>
-         from jsonText in tryTo(() =>
-         {
-            var settings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
-            var serializer = JsonSerializer.Create(settings);
-            using (var stringWriter = new StringWriter())
-            using (var jsonWriter = new JsonTextWriter(stringWriter))
-            {
-               serializer.Serialize(jsonWriter, configuration);
-               return jsonWriter.ToString();
-            }
-         })
-         from unit in configurationFile.TryTo.SetText(jsonText)
+         from serialized in ObjectGraph.Try.Serialize(configuration)
+         from unit in configurationFile.TryTo.SetText(serialized.ToString())
          select unit;
 
       void Playground_Load(object sender, EventArgs e)
@@ -144,7 +121,6 @@ namespace Kagami.Playground
             exceptionData = none<ExceptionData>();
             document = new Document(this, textEditor, ".kagami", "Kagami", playgroundConfiguration.FontName,
                playgroundConfiguration.FontSize);
-            //document.StandardMenus();
             var menus = document.Menus;
             menus.Menu("&File");
             menus.Menu("File", "&New", (s, evt) =>
@@ -218,7 +194,6 @@ namespace Kagami.Playground
 
             locked = false;
             manual = false;
-            //debugging = false;
             dumpOperations = false;
             tracing = false;
             stopwatch = new Stopwatch();
