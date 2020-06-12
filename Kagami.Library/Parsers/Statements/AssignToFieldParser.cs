@@ -1,6 +1,8 @@
 ﻿using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
+using Kagami.Library.Operations;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Statements
@@ -23,17 +25,19 @@ namespace Kagami.Library.Parsers.Statements
 
       public override IMatched<Unit> Suffix(ParseState state, Expression expression)
       {
-         if (matchOperator(operationSource).ValueOrCast<Unit>(out var operation, out var asUnit))
-         {
-            var assignmentOperation = operation.Some();
-            state.AddStatement(new AssignToField(fieldName, assignmentOperation, expression));
+         var assignmentOperation = none<Operation>();
 
-            return Unit.Matched();
-         }
-         else
+         if (matchOperator(operationSource).If(out var operation, out var anyException))
          {
-            return asUnit;
+            assignmentOperation = operation.Some();
          }
+         else if (anyException.If(out var exception))
+         {
+            return failedMatch<Unit>(exception);
+         }
+
+         state.AddStatement(new AssignToField(fieldName, assignmentOperation, expression));
+         return Unit.Matched();
       }
    }
 }
