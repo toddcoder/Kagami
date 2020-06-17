@@ -12,12 +12,12 @@ namespace Kagami.Library.Parsers.Expressions
       {
          get
          {
+            yield return new ToEndParser(builder);
             yield return new PostfixOperatorsParser(builder);
             yield return new PostfixInvokeParser(builder);
             yield return new IndexOptionalParser(builder);
             yield return new IndexerParser(builder);
             yield return new ReductionParser(builder);
-            //yield return new SkipTakeOperatorParser(builder);
             yield return new SliceAssignParser(builder);
             yield return new SliceParser(builder);
 	         yield return new WhereParser(builder);

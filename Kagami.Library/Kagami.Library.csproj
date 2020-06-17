@@ -734,6 +734,7 @@
     <Compile Include="Parsers\Expressions\SuperParser.cs" />
     <Compile Include="Parsers\Expressions\SymbolObjectParser.cs" />
     <Compile Include="Parsers\Expressions\ThrowParser.cs" />
+    <Compile Include="Parsers\Expressions\ToEndParser.cs" />
     <Compile Include="Parsers\Expressions\TryBlockParser.cs" />
     <Compile Include="Parsers\Expressions\TryParser.cs" />
     <Compile Include="Parsers\Expressions\TwoKeywordOperatorsParser.cs" />
@@ -792,7 +793,6 @@
     <Compile Include="Parsers\Statements\ExpressionBlockParser.cs" />
     <Compile Include="Parsers\Statements\ExpressionStatementParser.cs" />
     <Compile Include="Parsers\Statements\ForParser.cs" />
-    <Compile Include="Parsers\Statements\ForParser2.cs" />
     <Compile Include="Parsers\Statements\FunctionParser.cs" />
     <Compile Include="Parsers\Statements\GuardParser.cs" />
     <Compile Include="Parsers\Statements\IfParser.cs" />

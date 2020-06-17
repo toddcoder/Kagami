@@ -29,7 +29,7 @@ namespace Kagami.Library.Parsers.Statements
 					yield return new IfParser();
 					yield return new GuardParser();
 					yield return new WhileParser();
-					yield return new ForParser2();
+					yield return new ForParser();
 					yield return new RepeatParser();
 
 					yield return new MatchParser();
