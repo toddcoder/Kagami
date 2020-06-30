@@ -726,7 +726,6 @@
     <Compile Include="Parsers\Expressions\RegexParsingType.cs" />
     <Compile Include="Parsers\Expressions\SendMessageAssignParser.cs" />
     <Compile Include="Parsers\Expressions\SeparatedKeywordOperatorsParser.cs" />
-    <Compile Include="Parsers\Expressions\SkipTakeOperatorParser.cs" />
     <Compile Include="Parsers\Expressions\SliceAssignParser.cs" />
     <Compile Include="Parsers\Expressions\SliceParser.cs" />
     <Compile Include="Parsers\Expressions\StringArrayParser.cs" />
