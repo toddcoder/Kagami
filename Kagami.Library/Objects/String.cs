@@ -494,6 +494,13 @@ namespace Kagami.Library.Objects
 
       public MutString Mutable() => new MutString(value);
 
-      public IObject this[SkipTake skipTake] => skipTakeThis(this, skipTake);
+      public IObject this[SkipTake skipTake]
+      {
+         get
+         {
+            var (skip, take) = skipTake;
+            return StringObject(value.Drop(skip).Keep(take));
+         }
+      }
    }
 }
