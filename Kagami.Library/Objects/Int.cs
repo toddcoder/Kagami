@@ -104,9 +104,9 @@ namespace Kagami.Library.Objects
 
       public String ZFill(int count) => zfill(AsString, count);
 
-	   public IObject Raise(INumeric power) => raise(this, power);
+      public IObject Raise(INumeric power) => raise(this, power);
 
-	   public int Compare(IObject obj) => compatibleCompare(this, obj);
+      public int Compare(IObject obj) => compatibleCompare(this, obj);
 
       public IObject Object => this;
 
@@ -126,7 +126,7 @@ namespace Kagami.Library.Objects
 
       public String Format(string format) => formatNumber(value, format);
 
-	   public Boolean IsEven => value % 2 == 0;
+      public Boolean IsEven => value % 2 == 0;
 
       public Boolean IsOdd => value % 2 != 0;
 
@@ -136,7 +136,7 @@ namespace Kagami.Library.Objects
          {
             if ((value & 1) == 0)
             {
-	            return value == 2;
+               return value == 2;
             }
             else
             {
@@ -145,7 +145,7 @@ namespace Kagami.Library.Objects
                {
                   if (value % num == 0)
                   {
-	                  return false;
+                     return false;
                   }
 
                   num += 2;
@@ -160,14 +160,14 @@ namespace Kagami.Library.Objects
       {
          if (value <= 1)
          {
-	         return 1;
+            return 1;
          }
          else
          {
             var num = 1;
             for (var index = 2; index <= value; index++)
             {
-	            num *= index;
+               num *= index;
             }
 
             return num;
@@ -190,7 +190,7 @@ namespace Kagami.Library.Objects
 
       public Interval Day => value.Day();
 
-	   public Interval Week => (7 * value).Day();
+      public Interval Week => (7 * value).Day();
 
       public Char Char() => new Char((char)value);
 
@@ -198,12 +198,12 @@ namespace Kagami.Library.Objects
 
       public IObject Times(Lambda lambda)
       {
-	      for (var i = 0; i < value; i++)
-	      {
-		      lambda.Invoke();
-	      }
+         for (var i = 0; i < value; i++)
+         {
+            lambda.Invoke();
+         }
 
-	      return Void.Value;
+         return Void.Value;
       }
    }
 }

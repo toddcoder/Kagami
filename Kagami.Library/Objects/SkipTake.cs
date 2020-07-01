@@ -7,7 +7,6 @@ namespace Kagami.Library.Objects
 {
    public struct SkipTake : IObject, IEquatable<SkipTake>
    {
-
       int skip;
       int take;
       Equatable<SkipTake> equatable;
