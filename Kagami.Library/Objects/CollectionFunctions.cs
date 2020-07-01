@@ -159,5 +159,13 @@ namespace Kagami.Library.Objects
 					throw invalidIndex(index);
 			}
 		}
+
+      public static IObject skipTakeThis(ICollection collection, SkipTake skipTake)
+      {
+         var (skip, take) = skipTake;
+         var iterator = collection.GetIterator(true);
+         iterator = (IIterator)iterator.Skip(skip);
+         return iterator.Take(take);
+		}
 	}
 }

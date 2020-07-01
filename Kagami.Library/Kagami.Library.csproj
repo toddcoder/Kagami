@@ -314,6 +314,7 @@
     <Compile Include="Nodes\Symbols\SeqSymbol.cs" />
     <Compile Include="Nodes\Symbols\SetSliceSymbol.cs" />
     <Compile Include="Nodes\Symbols\SetSymbol.cs" />
+    <Compile Include="Nodes\Symbols\SkipTakeOperatorPopSymbol.cs" />
     <Compile Include="Nodes\Symbols\SkipTakeRestSymbol.cs" />
     <Compile Include="Nodes\Symbols\SkipTakeRestInitSymbol.cs" />
     <Compile Include="Nodes\Symbols\SkipTakeSymbol.cs" />
@@ -454,6 +455,7 @@
     <Compile Include="Objects\SkipAction.cs" />
     <Compile Include="Objects\Skipped.cs" />
     <Compile Include="Objects\SkipTake.cs" />
+    <Compile Include="Objects\ISkipTakeable.cs" />
     <Compile Include="Objects\SkipUntilAction.cs" />
     <Compile Include="Objects\SkipWhileAction.cs" />
     <Compile Include="Objects\Slice.cs" />
@@ -603,6 +605,7 @@
     <Compile Include="Operations\SetErrorHandler.cs" />
     <Compile Include="Operations\SetFields.cs" />
     <Compile Include="Operations\SetX.cs" />
+    <Compile Include="Operations\SkipTake.cs" />
     <Compile Include="Operations\Some.cs" />
     <Compile Include="Operations\Stop.cs" />
     <Compile Include="Operations\Subtract.cs" />
@@ -744,7 +747,6 @@
     <Compile Include="Parsers\Expressions\WhereItemParser.cs" />
     <Compile Include="Parsers\Expressions\WhereParser.cs" />
     <Compile Include="Parsers\Expressions\ZeroParameterLambdaParser.cs" />
-    <Compile Include="Parsers\Expressions\NameValueParser.cs" />
     <Compile Include="Parsers\Expressions\NegateParser.cs" />
     <Compile Include="Parsers\Expressions\OperatorsParser.cs" />
     <Compile Include="Parsers\Expressions\OrParser.cs" />

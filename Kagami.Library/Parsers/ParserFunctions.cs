@@ -1071,6 +1071,9 @@ namespace Kagami.Library.Parsers
                }
 
                break;
+            case ":":
+               symbol = new SkipTakeOperatorPopSymbol().Matched<Symbol>();
+               break;
             case "::":
                symbol = new ConsSymbol().Matched<Symbol>();
                break;

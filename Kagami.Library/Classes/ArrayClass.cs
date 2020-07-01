@@ -24,6 +24,7 @@ namespace Kagami.Library.Classes
 			messages["array()"] = (obj, msg) => function<Array>(obj, a => a);
 			mutableCollectionMessages();
 			sliceableMessages();
+			skipTakeableMessages();
 
 			messages["[](_)"] = (obj, msg) => function<Array, IObject>(obj, msg, getIndexed);
 			messages["get(_)"] = (obj, msg) => function<Array, IObject>(obj, msg, (a, i) => someOf(a.Get(i)));

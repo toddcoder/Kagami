@@ -279,6 +279,7 @@ namespace Kagami.Library.Classes
 			registerMessage("*(_<String>)",
 				(obj, msg) => collectionFunc<String>(obj, msg, (c, connector) => c.MakeString(connector.Value)));
 			registerMessage("indexed()", (obj, msg) => collectionFunc(obj, c => (IObject)c.GetIndexedIterator()));
+         registerMessage("[](_<SkipTake>)", (obj, msg) => ((ISkipTakeable)obj)[(SkipTake)msg.Arguments[0]]);
 
 			loadIteratorMessages();
 		}
@@ -629,5 +630,5 @@ namespace Kagami.Library.Classes
 			registerMessage("bind(_<Lambda>)", (obj, msg) => ((IMonad)obj).Bind((Lambda)msg.Arguments[0]));
 			registerMessage("unit(_)", (obj, msg) => ((IMonad)obj).Unit(msg.Arguments[0]));
 		}
-	}
+   }
 }

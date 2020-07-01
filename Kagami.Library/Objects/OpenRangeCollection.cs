@@ -1,5 +1,6 @@
 ﻿using Core.Collections;
 using Core.Monads;
+using static Kagami.Library.Objects.CollectionFunctions;
 
 namespace Kagami.Library.Objects
 {
@@ -55,5 +56,7 @@ namespace Kagami.Library.Objects
 		public bool Match(IObject comparisand, Hash<string, IObject> bindings) => openRange.Match(comparisand, bindings);
 
 		public bool IsTrue => openRange.IsTrue;
-	}
+
+      public IObject this[SkipTake skipTake] => skipTakeThis(this, skipTake);
+   }
 }

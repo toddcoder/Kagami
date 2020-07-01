@@ -158,5 +158,7 @@ namespace Kagami.Awk
 		public Int Count(string input, Lambda lambda) => count(fields[0], input, lambda);
 
 		public Int Count(ITextFinding textFinding, Lambda lambda) => textFinding.Count(fields[0], lambda);
-	}
+
+      public IObject this[SkipTake skipTake] => skipTakeThis(this, skipTake);
+   }
 }

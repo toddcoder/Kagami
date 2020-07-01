@@ -2,7 +2,7 @@
 
 namespace Kagami.Library.Objects
 {
-   public interface ICollection
+   public interface ICollection : ISkipTakeable
    {
       IIterator GetIterator(bool lazy);
 
