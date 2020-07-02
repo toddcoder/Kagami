@@ -195,17 +195,23 @@ namespace Kagami.Library.Objects
                case ICollection collection when !(value is String):
                {
                   var valueIterator = collection.GetIterator(false);
+                  var toDelete = new List<int>();
                   foreach (var index in indexList(container, list.Count))
                   {
-                     var anyItem = valueIterator.Next();
-                     if (anyItem.If(out var item))
+                     if (valueIterator.Next().If(out var item))
                      {
                         list[index] = item;
                      }
                      else
                      {
-                        break;
+                        toDelete.Add(index);
                      }
+                  }
+
+                  toDelete.Reverse();
+                  foreach (var index in toDelete)
+                  {
+                     list.RemoveAt(index);
                   }
 
                   break;
