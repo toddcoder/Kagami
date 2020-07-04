@@ -12,6 +12,7 @@ using Core.Computers;
 using Core.Collections;
 using Core.Dates;
 using Core.Enumerables;
+using Core.Exceptions;
 using Core.Monads;
 using Core.Numbers;
 using Core.ObjectGraphs;
@@ -40,6 +41,7 @@ namespace Kagami.Playground
       bool locked;
       bool manual;
       Stopwatch stopwatch;
+      FileName configurationFile;
       PlaygroundConfiguration playgroundConfiguration;
       PlaygroundContext context;
       Colorizer colorizer;
@@ -89,8 +91,8 @@ namespace Kagami.Playground
             var result =
                from file in existingConfigurationFile()
                from config in getConfiguration(file)
-               select config;
-            if (result.If(out playgroundConfiguration)) { }
+               select (file, config);
+            if (result.If(out configurationFile, out playgroundConfiguration)) { }
             else
             {
                playgroundConfiguration = new PlaygroundConfiguration
@@ -727,20 +729,23 @@ namespace Kagami.Playground
 
       void Playground_FormClosing(object sender, FormClosingEventArgs e)
       {
-/*         if (document.FileName.If(out var fileName) && ((FileName)fileName).Exists())
-            try
+         if (document.FileName.If(out var fileName))
+         {
+            FileName file = fileName;
+            if (file.Exists())
             {
-               //configurationFile = PLAYGROUND_CONFIGURATION_FILE1;
-               playgroundConfiguration.LastFile = fileName;
-               playgroundConfiguration.DefaultFolder = FolderName.Current;
-               playgroundConfiguration.FontName = textEditor.Font.Name;
-               playgroundConfiguration.FontSize = textEditor.Font.Size;
-               configurationFile.Text = ObjectGraph.Serialize(playgroundConfiguration).ToString();
+               try
+               {
+                  playgroundConfiguration.LastFile = file;
+                  playgroundConfiguration.DefaultFolder = FolderName.Current;
+                  configurationFile.Text = ObjectGraph.Serialize(playgroundConfiguration).ToString();
+               }
+               catch (Exception exception)
+               {
+                  MessageBox.Show(exception.DeepMessage());
+               }
             }
-            catch (Exception exception)
-            {
-               MessageBox.Show(exception.Message);
-            }*/
+         }
       }
 
       void Playground_KeyUp(object sender, KeyEventArgs e)
