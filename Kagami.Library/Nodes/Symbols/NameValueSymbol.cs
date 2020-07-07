@@ -34,5 +34,11 @@ namespace Kagami.Library.Nodes.Symbols
       public override string ToString() => $"{name}: {value}";
 
       public (string, Expression) Tuple() => (name, value);
+
+      public void Deconstruct(out string name, out Expression value)
+      {
+         name = this.name;
+         value = this.value;
+      }
    }
 }

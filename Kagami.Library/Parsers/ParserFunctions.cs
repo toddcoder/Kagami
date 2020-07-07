@@ -363,7 +363,7 @@ namespace Kagami.Library.Parsers
          Bits32<ExpressionFlags> flags)
       {
          return
-            from arguments in getArguments(state, flags)
+            from arguments in getArguments(state, flags | ExpressionFlags.OmitColon)
             from lambda in getPossibleLambda(state, flags)
             select (arguments, lambda);
       }

@@ -3,6 +3,7 @@ using Kagami.Library.Objects;
 using Core.Enumerables;
 using Core.Monads;
 using Core.RegularExpressions;
+using Kagami.Library.Nodes.Symbols;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
@@ -31,7 +32,20 @@ namespace Kagami.Library
          }
       }
 
-	   public static Selector Selector(this string baseName, int count)
+      static string miniSelectorItem(Expression expression)
+      {
+         if (expression.Symbols[0] is NameValueSymbol nameValueSymbol)
+         {
+            var (name, _) = nameValueSymbol;
+            return $"{name}:_";
+         }
+         else
+         {
+            return "_";
+         }
+      }
+
+      public static Selector Selector(this string baseName, int count)
 	   {
 		   return baseName.Selector(Enumerable.Range(0, count).Select(i => "_").ToArray());
 	   }
