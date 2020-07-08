@@ -3,7 +3,6 @@ using Kagami.Library.Objects;
 using Core.Enumerables;
 using Core.Monads;
 using Core.RegularExpressions;
-using Kagami.Library.Nodes.Symbols;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
@@ -29,19 +28,6 @@ namespace Kagami.Library
             var image = $"{baseName}({selectorItemSources.Stringify(",")})";
 
             return new Selector(baseName, selectorItems, image);
-         }
-      }
-
-      static string miniSelectorItem(Expression expression)
-      {
-         if (expression.Symbols[0] is NameValueSymbol nameValueSymbol)
-         {
-            var (name, _) = nameValueSymbol;
-            return $"{name}:_";
-         }
-         else
-         {
-            return "_";
          }
       }
 

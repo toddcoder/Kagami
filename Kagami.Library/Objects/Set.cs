@@ -70,6 +70,19 @@ namespace Kagami.Library.Objects
          return this;
       }
 
+      public IObject RemoveObject(IObject item)
+      {
+         if (set.Contains(item))
+         {
+            set.Remove(item);
+            return Some.Object(item);
+         }
+         else
+         {
+            return None.NoneValue;
+         }
+      }
+
       public Set Union(Set other) => new Set(set.Union(other.set));
 
       public Set Difference(Set other) => new Set(set.Except(other.set).ToArray());

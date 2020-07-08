@@ -17,6 +17,7 @@ namespace Kagami.Library.Classes
 
 			messages["<<"] = (obj, msg) => function<Set, IObject>(obj, msg, (s, i) => s.Append(i));
 			messages[">>"] = (obj, msg) => function<Set, IObject>(obj, msg, (s, i) => s.Remove(i));
+         messages["remove(_)"] = (obj, msg) => function<Set, IObject>(obj, msg, (s, i) => s.RemoveObject(i));
 			messages["+"] = (obj, msg) => function<Set, Set>(obj, msg, (s1, s2) => s1.Union(s2));
 			messages["-"] = (obj, msg) => function<Set, Set>(obj, msg, (s1, s2) => s1.Difference(s2));
 			messages["*"] = (obj, msg) => function<Set, Set>(obj, msg, (s1, s2) => s1.Intersection(s2));
