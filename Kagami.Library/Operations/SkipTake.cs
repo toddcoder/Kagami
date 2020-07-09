@@ -12,13 +12,14 @@ namespace Kagami.Library.Operations
       {
          if (x is Int xInt)
          {
-            if (y is Int yInt)
+            switch (y)
             {
-               return new Objects.SkipTake(xInt.Value, yInt.Value).Matched<IObject>();
-            }
-            else
-            {
-               return failedMatch<IObject>(incompatibleClasses(y, "Int"));
+               case Int yInt:
+                  return new Objects.SkipTake(xInt.Value, yInt.Value).Matched<IObject>();
+               case None _:
+                  return new Objects.SkipTake(xInt.Value, 0) { NoTake = true }.Matched<IObject>();
+               default:
+                  return failedMatch<IObject>(incompatibleClasses(y, "Int"));
             }
          }
          else

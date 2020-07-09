@@ -314,6 +314,7 @@
     <Compile Include="Nodes\Symbols\SeqSymbol.cs" />
     <Compile Include="Nodes\Symbols\SetSliceSymbol.cs" />
     <Compile Include="Nodes\Symbols\SetSymbol.cs" />
+    <Compile Include="Nodes\Symbols\SkipOperatorSymbol.cs" />
     <Compile Include="Nodes\Symbols\SkipTakeOperatorPopSymbol.cs" />
     <Compile Include="Nodes\Symbols\SkipTakeRestSymbol.cs" />
     <Compile Include="Nodes\Symbols\SkipTakeRestInitSymbol.cs" />
@@ -337,6 +338,7 @@
     <Compile Include="Nodes\Symbols\SuperSymbol.cs" />
     <Compile Include="Nodes\Symbols\Symbol.cs" />
     <Compile Include="Nodes\Symbols\SymbolSymbol.cs" />
+    <Compile Include="Nodes\Symbols\TakeOperatorSymbol.cs" />
     <Compile Include="Nodes\Symbols\ThrowSymbol.cs" />
     <Compile Include="Nodes\Symbols\TrySymbol.cs" />
     <Compile Include="Nodes\Symbols\TypeConstraintSymbol.cs" />
@@ -713,6 +715,7 @@
     <Compile Include="Parsers\Expressions\SeqParser.cs" />
     <Compile Include="Parsers\Expressions\SetParser.cs" />
     <Compile Include="Parsers\Expressions\SetPropertyParser.cs" />
+    <Compile Include="Parsers\Expressions\SkipOperatorParser.cs" />
     <Compile Include="Parsers\Expressions\SkipTakeItemParser.cs" />
     <Compile Include="Parsers\Expressions\IfSomeNoneSymbolParser.cs" />
     <Compile Include="Parsers\Expressions\NotParser.cs" />
@@ -736,6 +739,7 @@
     <Compile Include="Parsers\Expressions\SubexpressionParser.cs" />
     <Compile Include="Parsers\Expressions\SuperParser.cs" />
     <Compile Include="Parsers\Expressions\SymbolObjectParser.cs" />
+    <Compile Include="Parsers\Expressions\TakeOperatorParser.cs" />
     <Compile Include="Parsers\Expressions\ThrowParser.cs" />
     <Compile Include="Parsers\Expressions\ToEndParser.cs" />
     <Compile Include="Parsers\Expressions\TryBlockParser.cs" />

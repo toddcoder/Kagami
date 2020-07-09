@@ -31,7 +31,7 @@ namespace Kagami.Library.Parsers.Statements
          var name = tokens[1].Text;
          Name = name;
          var hasArguments = tokens[2].Text == "(";
-         state.Colorize(tokens, Color.Class, Color.Structure);
+         state.Colorize(tokens, Color.Class, Color.OpenParenthesis);
 
          var result =
             from possibleComparisands in getPossibleComparisands(hasArguments, className, name, state)

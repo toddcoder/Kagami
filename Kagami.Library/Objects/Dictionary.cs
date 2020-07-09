@@ -281,8 +281,20 @@ namespace Kagami.Library.Objects
 
       public string AsString => $"{{{dictionary.Select(i => $"{i.Key.AsString} => {i.Value.AsString}").Stringify(" ")}}}";
 
-      public string Image =>
-         dictionary.Count == 0 ? "{}" : $"{{{dictionary.Select(i => $"{i.Key.Image} => {i.Value.Image}").Stringify()}}}";
+      public string Image
+      {
+         get
+         {
+            if (dictionary.Count == 0)
+            {
+               return "{}";
+            }
+            else
+            {
+               return $"{{{dictionary.Select(i => $"{i.Key.Image} => {i.Value.Image}").Stringify()}}}";
+            }
+         }
+      }
 
       public int Hash => dictionary.GetHashCode();
 

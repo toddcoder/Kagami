@@ -146,5 +146,26 @@ namespace Kagami.Library.Objects
       }
 
       public IObject this[SkipTake skipTake] => skipTakeThis(this, skipTake);
+
+      public Boolean IsDisjointWith(Set otherSet)
+      {
+         foreach (var obj in set)
+         {
+            if (otherSet.In(obj).IsTrue)
+            {
+               return false;
+            }
+         }
+
+         foreach (var obj in otherSet.set)
+         {
+            if (In(obj).IsTrue)
+            {
+               return false;
+            }
+         }
+
+         return true;
+      }
    }
 }

@@ -21,6 +21,7 @@ namespace Kagami.Library.Parsers.Expressions
             yield return new SliceAssignParser(builder);
             yield return new SliceParser(builder);
 	         yield return new WhereParser(builder);
+            yield return new SkipOperatorParser(builder);
 
             if (!builder.Flags[ExpressionFlags.OmitSendMessageAssign])
             {

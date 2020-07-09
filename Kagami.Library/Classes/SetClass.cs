@@ -27,7 +27,8 @@ namespace Kagami.Library.Classes
 			messages["extend"] = (obj, msg) => function<Set, IObject>(obj, msg, (s, o) => s.Extend(o));
 			messages["clear"] = (obj, msg) => function<Set>(obj, s => s.Clear());
 			messages["classify"] = (obj, msg) => function<Set, Lambda>(obj, msg, (s, l) => s.Classify(l));
-		}
+         messages["isDisjoint(with:_)"] = (obj, msg) => function<Set, Set>(obj, msg, (s1, s2) => s1.IsDisjointWith(s2));
+      }
 
 		public IObject Revert(IEnumerable<IObject> list) => new Set(list.ToArray());
 

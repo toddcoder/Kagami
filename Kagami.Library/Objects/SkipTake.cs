@@ -48,5 +48,7 @@ namespace Kagami.Library.Objects
          skip = this.skip;
          take = this.take;
       }
+
+      public bool NoTake { get; set; }
    }
 }
