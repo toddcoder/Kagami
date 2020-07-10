@@ -110,19 +110,6 @@ namespace Kagami.Library.Objects
 
 		public Boolean NotMatches(string input) => !isMatch(input);
 
-/*		public IObject MatchString(string input)
-		{
-			if (global)
-				if (isMatch(input))
-					return new Tuple(matcher.Select(m => String.StringObject(m.Text)).ToArray());
-				else
-					return Tuple.Empty;
-			else if (isMatch(input))
-				return Some.Object(String.StringObject(matcher.GetMatch(0).Text));
-			else
-				return None.NoneValue;
-		}*/
-
 		public String Replace(string input, string replacement)
 		{
 			if (global)

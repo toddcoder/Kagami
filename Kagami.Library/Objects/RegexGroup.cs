@@ -1,16 +1,19 @@
-﻿using Core.Collections;
+﻿using System;
+using Core.Collections;
+using Core.Objects;
 using Core.RegularExpressions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct RegexGroup : IObject, IProcessPlaceholders
+   public struct RegexGroup : IObject, IProcessPlaceholders, IEquatable<RegexGroup>
    {
       string text;
       int index;
       int length;
       Hash<string, IObject> passed;
       Hash<string, IObject> internals;
+      Equatable<RegexGroup> equatable;
 
       public RegexGroup(Matcher.Group group) : this()
       {
@@ -25,9 +28,11 @@ namespace Kagami.Library.Objects
             ["index"] = (Int)index,
             ["length"] = (Int)length
          };
+
+         equatable = new Equatable<RegexGroup>(this, "text", "index", "length");
       }
 
-      public RegexGroup(Hash<string, IObject> passed)
+      public RegexGroup(Hash<string, IObject> passed) : this()
       {
          text = "";
          index = 0;
@@ -35,6 +40,8 @@ namespace Kagami.Library.Objects
 
          this.passed = passed;
          internals = new Hash<string, IObject>();
+
+         equatable = new Equatable<RegexGroup>(this, "text", "index", "length");
       }
 
       public string ClassName => "Group";
@@ -43,18 +50,7 @@ namespace Kagami.Library.Objects
 
       public string Image => $"Group({((String)text).Image}, {index}, {length})";
 
-      public int Hash
-      {
-         get
-         {
-            var hash = 17;
-            hash = 37 * hash + text.GetHashCode();
-            hash = 37 * hash + index.GetHashCode();
-            hash = 37 * hash + length.GetHashCode();
-
-            return hash;
-         }
-      }
+      public int Hash => GetHashCode();
 
       public bool IsEqualTo(IObject obj) => obj is RegexGroup g && g.text == text && g.index == index && g.length == length;
 
@@ -71,5 +67,11 @@ namespace Kagami.Library.Objects
       public Hash<string, IObject> Passed => passed;
 
       public Hash<string, IObject> Internals => internals;
+
+      public bool Equals(RegexGroup other) => equatable.Equals(other);
+
+      public override bool Equals(object obj) => equatable.Equals(obj);
+
+      public override int GetHashCode() => equatable.GetHashCode();
    }
 }

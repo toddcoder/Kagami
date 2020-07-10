@@ -1,12 +1,14 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Core.Collections;
 using Core.Numbers;
+using Core.Objects;
 using Core.RegularExpressions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct RegexMatch : IObject, IProcessPlaceholders
+   public struct RegexMatch : IObject, IProcessPlaceholders, IEquatable<RegexMatch>
    {
       string text;
       int index;
@@ -14,6 +16,7 @@ namespace Kagami.Library.Objects
       RegexGroup[] groups;
       Hash<string, IObject> passed;
       Hash<string, IObject> internals;
+      Equatable<RegexMatch> equatable;
 
       public RegexMatch(Matcher.Match match) : this()
       {
@@ -30,6 +33,8 @@ namespace Kagami.Library.Objects
             ["length"] = (Int)length,
             ["groups"] = new Tuple(groups.Select(g => (IObject)g).ToArray())
          };
+
+         equatable = new Equatable<RegexMatch>(this, "text", "index", "length", "groups");
       }
 
       public RegexMatch(Hash<string, IObject> passed) : this()
@@ -41,6 +46,8 @@ namespace Kagami.Library.Objects
 
          this.passed = passed;
          internals = new Hash<string, IObject>();
+
+         equatable = new Equatable<RegexMatch>(this, "text", "index", "length", "groups");
       }
 
       public string ClassName => "Match";
@@ -49,23 +56,7 @@ namespace Kagami.Library.Objects
 
       public string Image => $"Match({((String)text).Image}, {index}, {length})";
 
-      public int Hash
-      {
-         get
-         {
-            var hash = 17;
-            hash = 37 * hash + text.GetHashCode();
-            hash = 37 * hash + index.GetHashCode();
-            hash = 37 * hash + length.GetHashCode();
-
-            foreach (var group in groups)
-            {
-	            hash = 37 * hash + group.Hash;
-            }
-
-            return hash;
-         }
-      }
+      public int Hash => GetHashCode();
 
       public bool IsEqualTo(IObject obj)
       {
@@ -91,17 +82,23 @@ namespace Kagami.Library.Objects
 
       public String this[int index]
       {
-	      get
-	      {
-		      if (index.Between(0).Until(groups.Length))
-		      {
-			      return groups[index].Text;
-		      }
-		      else
-		      {
-			      return "";
-		      }
-	      }
+         get
+         {
+            if (index.Between(0).Until(groups.Length))
+            {
+               return groups[index].Text;
+            }
+            else
+            {
+               return "";
+            }
+         }
       }
+
+      public bool Equals(RegexMatch other) => equatable.Equals(other);
+
+      public override bool Equals(object obj) => obj is RegexMatch other && Equals(other);
+
+      public override int GetHashCode() => equatable.GetHashCode();
    }
 }

@@ -44,6 +44,7 @@ namespace Kagami.Library.Parsers.Statements
             Ordinal = newOrdinal;
             state.CommitTransaction();
             Module.Global.RegisterDataComparisand(className, name);
+
             return Unit.Matched();
          }
          else
