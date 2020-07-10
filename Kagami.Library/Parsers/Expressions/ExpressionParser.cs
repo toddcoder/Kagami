@@ -87,7 +87,7 @@ namespace Kagami.Library.Parsers.Expressions
 
                if (builder.ToExpression().If(out var expression, out var expException))
                {
-                  state.Scan("^ /(|s|) /';'", Color.Whitespace, Color.Structure);
+                  //state.Scan("^ /(|s|) /';'", Color.Whitespace, Color.Structure);
                   if (state.ImplicitState.If(out var implicitState) && implicitState.Two.IsNone)
                   {
                      if (getMessageWithLambda(implicitState.Symbol, implicitState.Message, implicitState.ParameterCount, expression)

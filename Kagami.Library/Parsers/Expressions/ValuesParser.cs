@@ -54,10 +54,10 @@ namespace Kagami.Library.Parsers.Expressions
                yield return new InvokeParser(builder);
             }
 
-            if (builder.Flags[ExpressionFlags.OmitColon])
-            {
+            /*if (builder.Flags[ExpressionFlags.OmitColon])
+            {*/
                yield return new NameValueParser(builder);
-            }
+            //}
 
             yield return new FormatParser(builder);
 
