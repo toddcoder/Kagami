@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
 using Core.Collections;
+using Core.Monads;
 using Core.Numbers;
 using Core.Objects;
 using Core.RegularExpressions;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
@@ -14,16 +16,18 @@ namespace Kagami.Library.Objects
       int index;
       int length;
       RegexGroup[] groups;
+      Func<string, IMaybe<int>> nameToIndex;
       Hash<string, IObject> passed;
       Hash<string, IObject> internals;
       Equatable<RegexMatch> equatable;
 
-      public RegexMatch(Matcher.Match match) : this()
+      public RegexMatch(Matcher.Match match, Func<string, IMaybe<int>> nameToIndex) : this()
       {
          text = match.Text;
          index = match.Index;
          length = match.Length;
          groups = match.Groups.Select(g => new RegexGroup(g)).ToArray();
+         this.nameToIndex = nameToIndex;
 
          passed = new Hash<string, IObject>();
          internals = new Hash<string, IObject>
@@ -43,6 +47,7 @@ namespace Kagami.Library.Objects
          index = 0;
          length = 0;
          groups = new RegexGroup[0];
+         nameToIndex = name => none<int>();
 
          this.passed = passed;
          internals = new Hash<string, IObject>();
@@ -87,6 +92,21 @@ namespace Kagami.Library.Objects
             if (index.Between(0).Until(groups.Length))
             {
                return groups[index].Text;
+            }
+            else
+            {
+               return "";
+            }
+         }
+      }
+
+      public String this[string name]
+      {
+         get
+         {
+            if (nameToIndex(name).If(out var i))
+            {
+               return this[i];
             }
             else
             {
