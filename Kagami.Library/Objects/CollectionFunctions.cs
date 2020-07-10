@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Core.Enumerables;
 using Core.Numbers;
+using static Core.Arrays.ArrayFunctions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
@@ -18,7 +19,7 @@ namespace Kagami.Library.Objects
             var l2 = other.GetIterator(false).List().ToArray();
             if (l1.Length == l2.Length)
             {
-               return l1.Zip(l2, (a, b) => a.IsEqualTo(b)).All(b => b);
+               return Enumerable.Zip(l1, l2, (a, b) => a.IsEqualTo(b)).All(b => b);
             }
             else
             {
@@ -171,6 +172,17 @@ namespace Kagami.Library.Objects
          }
 
          return ((IIterator)skipped).Take(take);
+      }
+
+      public static IObject[] spread(IObject value)
+      {
+         switch (value)
+         {
+            case Tuple tuple:
+               return tuple.Value;
+            default:
+               return array(value);
+         }
       }
    }
 }

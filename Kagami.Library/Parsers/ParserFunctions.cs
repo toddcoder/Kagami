@@ -990,6 +990,7 @@ namespace Kagami.Library.Parsers
 
       public static IMatched<Symbol> getOperator(ParseState state, string source, Bits32<ExpressionFlags> flags, bool whitespace)
       {
+         var omitColon = flags[ExpressionFlags.OmitColon];
          var symbol = notMatched<Symbol>();
 
          switch (source)
@@ -1071,7 +1072,7 @@ namespace Kagami.Library.Parsers
                }
 
                break;
-            case ":":
+            case ":" when !omitColon:
                symbol = new SkipTakeOperatorPopSymbol().Matched<Symbol>();
                break;
             case "::":

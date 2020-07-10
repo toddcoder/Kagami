@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using static Kagami.Library.Objects.CollectionFunctions;
 
 namespace Kagami.Library.Objects
 {
@@ -15,7 +16,8 @@ namespace Kagami.Library.Objects
          {
             if (status.IsAccepted)
             {
-	            return Accepted.New(lambda.Invoke(status.Object));
+               var value = spread(status.Object);
+	            return Accepted.New(lambda.Invoke(value));
             }
             else
             {
@@ -32,7 +34,8 @@ namespace Kagami.Library.Objects
       {
          foreach (var value in iterator.List())
          {
-	         yield return lambda.Invoke(value);
+            var wasSpread = spread(value);
+	         yield return lambda.Invoke(wasSpread);
          }
       }
 

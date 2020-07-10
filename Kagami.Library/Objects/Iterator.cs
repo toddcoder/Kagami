@@ -273,9 +273,13 @@ namespace Kagami.Library.Objects
 			return count;
 		}
 
-		public virtual IObject Map(Lambda lambda) => collectionClass.Revert(List().ToList().Select(value => lambda.Invoke(value)));
+      public virtual IObject Map(Lambda lambda)
+      {
+         var objects = List().ToList();
+         return collectionClass.Revert(objects.Select(value => lambda.Invoke(spread(value))));
+      }
 
-		public virtual IObject FlatMap(Lambda lambda)
+      public virtual IObject FlatMap(Lambda lambda)
 		{
 			var className = ((BaseClass)collectionClass).Name;
 			var enumerable = List().ToList().Select(value => lambda.Invoke(value));
