@@ -4,7 +4,7 @@ using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
 {
-	public class NameValueParser : EndingInExpressionParser
+   public class NameValueParser : EndingInExpressionParser
    {
       protected string name;
 

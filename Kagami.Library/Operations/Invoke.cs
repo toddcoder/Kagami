@@ -5,6 +5,7 @@ using Kagami.Library.Runtime;
 using Core.Monads;
 using static Kagami.Library.AllExceptions;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Operations
 {
@@ -78,6 +79,9 @@ namespace Kagami.Library.Operations
 					var copy = pattern.Copy();
 					copy.RegisterArguments(arguments);
 					return copy.Matched<IObject>();
+				case UserObject userObject:
+               increment = true;
+               return sendMessage(userObject, "invoke(_...)", arguments).Matched();
 				default:
 					return failedMatch<IObject>(incompatibleClasses(value, "Invokable object"));
 			}
