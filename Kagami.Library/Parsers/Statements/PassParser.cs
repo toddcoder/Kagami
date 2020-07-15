@@ -5,7 +5,7 @@ namespace Kagami.Library.Parsers.Statements
 {
    public class PassParser : StatementParser
    {
-      public override string Pattern => "^ /'pass' /b";
+      public override string Pattern => "^ /('pass' | 'endseq') /b";
 
       public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
       {

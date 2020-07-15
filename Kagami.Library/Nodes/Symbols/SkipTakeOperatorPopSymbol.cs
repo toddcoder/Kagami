@@ -6,7 +6,7 @@ namespace Kagami.Library.Nodes.Symbols
    {
       public override void Generate(OperationsBuilder builder) => builder.SkipTake();
 
-      public override Precedence Precedence => Precedence.MultiplyDivide;
+      public override Precedence Precedence => Precedence.SendMessage;
 
       public override Arity Arity => Arity.Binary;
 

@@ -107,8 +107,11 @@ namespace Kagami.Library.Objects
 
       public bool IsRational => false;
 
-      public String ZFill(int count) =>
-         $"{zfill(value.Real.ToString(), count)}{(value.Imaginary >= 0.0).Extend("+")}{zfill(value.Imaginary.ToString(), count)}";
+      public String ZFill(int count)
+      {
+         return $"{zfill(value.Real.ToString(), count)}{(value.Imaginary >= 0.0).Extend("+")}" +
+            $"{zfill(value.Imaginary.ToString(), count)}";
+      }
 
       public string AsString => $"{value.Real}{(value.Imaginary >= 0.0).Extend("+")}{value.Imaginary}i";
 
@@ -136,8 +139,8 @@ namespace Kagami.Library.Objects
 
       public String Format(string format)
       {
-	      return $"{value.Real.FormatUsing<double>(format, d => d.ToString(format))}" +
-		      $"{(value.Imaginary >= 0.0).Extend("+")}{value.Imaginary.FormatUsing<double>(format, d => d.ToString(format))}";
+         return $"{value.Real.FormatUsing<double>(format, d => d.ToString(format))}" +
+            $"{(value.Imaginary >= 0.0).Extend("+")}{value.Imaginary.FormatUsing<double>(format, d => d.ToString(format))}i";
       }
 
       public IObject Negate() => (Complex)CComplex.Negate(value);

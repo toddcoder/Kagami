@@ -462,6 +462,7 @@
     <Compile Include="Objects\SkipWhileAction.cs" />
     <Compile Include="Objects\Slice.cs" />
     <Compile Include="Objects\Some.cs" />
+    <Compile Include="Objects\StepAction.cs" />
     <Compile Include="Objects\StreamIterator.cs" />
     <Compile Include="Objects\String.cs" />
     <Compile Include="Objects\Success.cs" />
