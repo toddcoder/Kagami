@@ -80,7 +80,7 @@ namespace Kagami.Library.Parsers.Expressions
 
       public IEnumerable<Symbol> Ordered => ordered;
 
-      public override string ToString() => ordered.Stringify(" ");
+      public override string ToString() => ordered.ToString(" ");
 
       public int Length => ordered.Count;
 
