@@ -268,7 +268,7 @@ namespace Kagami.Library.Runtime
          }
       }
 
-      public override string ToString() => fields.Select(i => $"{i.Key} = {i.Value.Value.Image}").Stringify();
+      public override string ToString() => fields.Select(i => $"{i.Key} = {i.Value.Value.Image}").ToString(", ");
 
       public void SetBindings(Hash<string, IObject> bindings)
       {

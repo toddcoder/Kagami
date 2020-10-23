@@ -60,7 +60,7 @@ namespace Kagami.Library.Invokables
 			}
 		}
 
-		public override string ToString() => parameters.Stringify();
+		public override string ToString() => parameters.ToString(", ");
 
 		public Selector Selector(string name) => name.Selector(parameters.Select(p => p.NameForFunction).ToArray());
 	}

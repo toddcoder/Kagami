@@ -38,7 +38,7 @@ namespace Kagami.Library.Packages
 
       public String Println(Arguments arguments)
       {
-         var value = arguments.Select(a => a.AsString).Stringify(" ");
+         var value = arguments.Select(a => a.AsString).ToString(" ");
          Machine.Current.Context.PrintLine(value);
 
          return value;
@@ -46,7 +46,7 @@ namespace Kagami.Library.Packages
 
       public String Print(Arguments arguments)
       {
-         var value = arguments.Select(a => a.AsString).Stringify(" ");
+         var value = arguments.Select(a => a.AsString).ToString(" ");
          Machine.Current.Context.Print(value);
 
          return value;
@@ -54,7 +54,7 @@ namespace Kagami.Library.Packages
 
       public String Put(Arguments arguments)
       {
-         var value = arguments.Select(a => a.AsString).Stringify(" ");
+         var value = arguments.Select(a => a.AsString).ToString(" ");
 
          foreach (var argument in arguments)
          {
@@ -194,7 +194,7 @@ namespace Kagami.Library.Packages
 
       public Regex Regex(string pattern)
       {
-         if (pattern.Matches("';' /(['IiMmGgTt']+) $").If(out var matcher))
+         if (pattern.Matcher("';' /(['IiMmGgTt']+) $").If(out var matcher))
          {
             var ignoreCase = false;
             var multiline = false;

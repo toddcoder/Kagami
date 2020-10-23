@@ -22,7 +22,7 @@ namespace Kagami.Library.Objects
 
       public string ClassName => "StreamIterator";
 
-      public string AsString => actions.Stringify(" ");
+      public string AsString => actions.ToString(" ");
 
       public string Image => AsString;
 

@@ -10,7 +10,7 @@ namespace Kagami.Library.Parsers.Expressions
    {
       static string parameters(int count)
       {
-         return $"({Enumerable.Range(0, count).Select(i => "_").Stringify(",")})";
+         return $"({Enumerable.Range(0, count).Select(i => "_").ToString(",")})";
       }
 
       public ImplicitMessageParser(ExpressionBuilder builder) : base(builder) { }

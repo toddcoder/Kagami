@@ -72,6 +72,6 @@ namespace Kagami.Library.Nodes.Symbols
 
       public override Arity Arity => Arity.Postfix;
 
-      public override string ToString() => $".{selector.Image}({arguments.Stringify()})";
+      public override string ToString() => $".{selector.Image}({arguments.ToString(", ")})";
    }
 }

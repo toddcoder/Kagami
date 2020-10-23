@@ -18,7 +18,7 @@ namespace Kagami.Library.Nodes.Statements
 			this.name = name;
 			this.parameters = parameters;
 			this.block = block;
-			image = $"{name}({parameters.Select(p => "_").Stringify(",")})";
+			image = $"{name}({parameters.Select(p => "_").ToString(",")})";
         }
 
 		public override void Generate(OperationsBuilder builder)

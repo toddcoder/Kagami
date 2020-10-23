@@ -94,7 +94,7 @@ namespace Kagami.Library.Objects
          return collectionClass.Revert(list);
       }
 
-      public String Join(string connector) => List().ToList().Select(i => i.AsString).Stringify(connector);
+      public String Join(string connector) => List().ToList().Select(i => i.AsString).ToString(connector);
 
       public IObject Sort(Lambda lambda, bool ascending)
       {

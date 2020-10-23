@@ -44,7 +44,7 @@ namespace Kagami.Playground
 
       void markText(string pattern, Color backColor)
       {
-         if (textBox.Text.Matches(pattern).If(out var matcher))
+         if (textBox.Text.Matcher(pattern).If(out var matcher))
          {
             for (var matchIndex = 0; matchIndex < matcher.MatchCount; ++matchIndex)
             {

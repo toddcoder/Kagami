@@ -608,7 +608,7 @@ namespace Kagami.Library.Parsers
          var postfixOperatorsParser = new PostfixOperatorsParser(builder);
          var infixParser = new InfixParser(builder);
 
-         IMatched<Unit> getValue()
+         IMatched<Unit> getLocalValue()
          {
             if (valuesParser.Scan(state).ValueOrOriginal(out _, out var original))
             {
@@ -634,9 +634,9 @@ namespace Kagami.Library.Parsers
             return Unit.Matched();
          }
 
-         IMatched<Unit> getTerm()
+         IMatched<Unit> getLocalTerm()
          {
-            if (getValue().ValueOrOriginal(out _, out var original)) { }
+            if (getLocalValue().ValueOrOriginal(out _, out var original)) { }
             else if (original.IsFailedMatch)
             {
                return original;
@@ -671,14 +671,14 @@ namespace Kagami.Library.Parsers
                   break;
                }
 
-               if (getTerm().Failed(out var exception))
+               if (getLocalTerm().Failed(out var exception))
                {
                   return failedMatch<LambdaSymbol>(exception);
                }
 
                if (infixParser.Scan(state).If(out _, out var anyException))
                {
-                  if (getTerm().Failed(out exception))
+                  if (getLocalTerm().Failed(out exception))
                   {
                      return failedMatch<LambdaSymbol>(exception);
                   }

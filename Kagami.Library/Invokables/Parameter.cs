@@ -81,22 +81,22 @@ namespace Kagami.Library.Invokables
             var builder = new StringBuilder();
             if (label.IsNotEmpty())
             {
-	            builder.Append($"{label}:");
+               builder.Append($"{label}:");
             }
 
             builder.Append("_");
             if (typeConstraint.If(out var tc))
             {
-	            builder.Append(tc.Image);
+               builder.Append(tc.Image);
             }
 
             if (Variadic)
             {
-	            builder.Append("...");
+               builder.Append("...");
             }
             else if (defaultValue.IsSome)
             {
-	            builder.Append("=");
+               builder.Append("=");
             }
 
             return builder.ToString();
@@ -105,7 +105,7 @@ namespace Kagami.Library.Invokables
 
       public override string ToString()
       {
-         return (StringStream)"" / (reference, "ref ") / (mutable, "var ") / label.Extend(after: ": ") / name
+         return (StringStream)"" / (reference, "ref ") / (mutable, "var ") / label.Map(l => $": {l}") / name
             / typeConstraint.Map(t => t.Image).DefaultTo(() => "") / defaultValue.Map(i => $" = {i.Image}").DefaultTo(() => "");
       }
    }

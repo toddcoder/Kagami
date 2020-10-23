@@ -279,7 +279,7 @@ namespace Kagami.Library.Objects
 
       public string ClassName => "Dictionary";
 
-      public string AsString => $"{{{dictionary.Select(i => $"{i.Key.AsString} => {i.Value.AsString}").Stringify(" ")}}}";
+      public string AsString => $"{{{dictionary.Select(i => $"{i.Key.AsString} => {i.Value.AsString}").ToString(" ")}}}";
 
       public string Image
       {
@@ -291,7 +291,7 @@ namespace Kagami.Library.Objects
             }
             else
             {
-               return $"{{{dictionary.Select(i => $"{i.Key.Image} => {i.Value.Image}").Stringify()}}}";
+               return $"{{{dictionary.Select(i => $"{i.Key.Image} => {i.Value.Image}").ToString(", ")}}}";
             }
          }
       }

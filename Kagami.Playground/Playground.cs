@@ -719,7 +719,7 @@ namespace Kagami.Playground
 
       IMaybe<string> getWord()
       {
-         return textEditor.Text.Keep(textEditor.SelectionStart).Matches("/(/w+) $").Map(m => m.FirstGroup);
+         return textEditor.Text.Keep(textEditor.SelectionStart).Matcher("/(/w+) $").Map(m => m.FirstGroup);
       }
 
       IMaybe<string> findWord(string begin)

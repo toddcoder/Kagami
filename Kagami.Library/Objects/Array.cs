@@ -25,7 +25,7 @@ namespace Kagami.Library.Objects
          }
          else
          {
-            return new Array(items);
+            return new Array(list);
          }
       }
 
@@ -75,9 +75,9 @@ namespace Kagami.Library.Objects
 
       public string ClassName => "Array";
 
-      public string AsString => list.Select(i => i.AsString).Stringify(" ");
+      public string AsString => list.Select(i => i.AsString).ToString(" ");
 
-      public string Image => $"[{list.Select(i => i.Image).Stringify()}]";
+      public string Image => $"[{list.Select(i => i.Image).ToString(", ")}]";
 
       public int Hash => list.GetHashCode();
 

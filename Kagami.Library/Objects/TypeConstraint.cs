@@ -45,9 +45,9 @@ namespace Kagami.Library.Objects
 
       public string ClassName => "TypeConstraint";
 
-      public string AsString => comparisands.Select(c => c?.Name ?? "?").Stringify(" or ");
+      public string AsString => comparisands.Select(c => c?.Name ?? "?").ToString(" or ");
 
-      public string Image => $"<{comparisands.Select(c => c?.Name ?? "?").Stringify(" ")}>";
+      public string Image => $"<{comparisands.Select(c => c?.Name ?? "?").ToString(" ")}>";
 
       public int Hash
       {

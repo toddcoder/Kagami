@@ -33,9 +33,9 @@ namespace Kagami.Library.Objects
 
       public string ClassName => "Cycle";
 
-      public string AsString => $"?({items.Select(i => i.AsString).Stringify()})";
+      public string AsString => $"?({items.Select(i => i.AsString).ToString(", ")})";
 
-      public string Image => $"?({items.Select(i => i.Image).Stringify()})";
+      public string Image => $"?({items.Select(i => i.Image).ToString(", ")})";
 
       public int Hash => items.GetHashCode();
 

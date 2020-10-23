@@ -34,7 +34,7 @@ namespace Kagami.Library.Objects
 
 		public string AsString => name;
 
-		public string Image => $"pattern {name}({lambda.Invokable.Parameters.Select(p => p.Name).Stringify()})";
+		public string Image => $"pattern {name}({lambda.Invokable.Parameters.Select(p => p.Name).ToString(", ")})";
 
 		public int Hash => Image.GetHashCode();
 

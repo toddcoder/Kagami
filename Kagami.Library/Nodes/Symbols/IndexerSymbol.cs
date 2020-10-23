@@ -42,6 +42,6 @@ namespace Kagami.Library.Nodes.Symbols
 
       public override void Generate(OperationsBuilder builder) => Get(builder, arguments);
 
-      public override string ToString() => $"[{arguments.Stringify()}]";
+      public override string ToString() => $"[{arguments.ToString(", ")}]";
    }
 }

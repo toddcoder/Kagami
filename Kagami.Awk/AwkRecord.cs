@@ -15,149 +15,149 @@ using static Kagami.Library.Objects.CollectionFunctions;
 
 namespace Kagami.Awk
 {
-	public class AwkRecord : IObject, ICollection, ITextFinding
-	{
-		string[] fields;
-		Regex fieldPattern;
-		string fieldSeparator;
+   public class AwkRecord : IObject, ICollection, ITextFinding
+   {
+      string[] fields;
+      Regex fieldPattern;
+      string fieldSeparator;
 
-		public AwkRecord(string[] fields, Regex fieldPattern, string fieldSeparator)
-		{
-			this.fields = fields;
-			this.fieldPattern = fieldPattern;
-			this.fieldSeparator = fieldSeparator;
-		}
+      public AwkRecord(string[] fields, Regex fieldPattern, string fieldSeparator)
+      {
+         this.fields = fields;
+         this.fieldPattern = fieldPattern;
+         this.fieldSeparator = fieldSeparator;
+      }
 
-		public String this[int index]
-		{
-			get
-			{
-				if (index.Between(0).Until(fields.Length))
-				{
-					return fields[index];
-				}
-				else
-				{
-					return "";
-				}
-			}
-			set
-			{
-				if (index == 0)
-				{
-					fields = awkSplit(value.Value, fieldPattern);
-				}
-				else if (index.Between(1).Until(fields.Length))
-				{
-					fields[index] = value.Value;
-				}
-				else
-				{
-					fields = awkInsert(fields, index, value.Value);
-				}
-			}
-		}
+      public String this[int index]
+      {
+         get
+         {
+            if (index.Between(0).Until(fields.Length))
+            {
+               return fields[index];
+            }
+            else
+            {
+               return "";
+            }
+         }
+         set
+         {
+            if (index == 0)
+            {
+               fields = awkSplit(value.Value, fieldPattern);
+            }
+            else if (index.Between(1).Until(fields.Length))
+            {
+               fields[index] = value.Value;
+            }
+            else
+            {
+               fields = awkInsert(fields, index, value.Value);
+            }
+         }
+      }
 
-		public string ClassName => "AwkRecord";
+      public string ClassName => "AwkRecord";
 
-		public string AsString => fields.Skip(1).Stringify(fieldSeparator).Elliptical(80, ' ');
+      public string AsString => fields.Skip(1).ToString(fieldSeparator).Elliptical(80, ' ');
 
-		public string Image => $"AwkRecord({fields.Stringify()}, {fieldSeparator})";
+      public string Image => $"AwkRecord({fields.ToString(", ")}, {fieldSeparator})";
 
-		public int Hash
-		{
-			get
-			{
-				var hash = 17;
-				hash += 37 * fields.GetHashCode();
-				hash += 37 * fieldSeparator.GetHashCode();
+      public int Hash
+      {
+         get
+         {
+            var hash = 17;
+            hash += 37 * fields.GetHashCode();
+            hash += 37 * fieldSeparator.GetHashCode();
 
-				return hash;
-			}
-		}
+            return hash;
+         }
+      }
 
-		public bool IsEqualTo(IObject obj)
-		{
-			return obj is AwkRecord awkRecord && compareEnumerables(fields, awkRecord.fields) &&
-				fieldSeparator == awkRecord.fieldSeparator;
-		}
+      public bool IsEqualTo(IObject obj)
+      {
+         return obj is AwkRecord awkRecord && compareEnumerables(fields, awkRecord.fields) &&
+            fieldSeparator == awkRecord.fieldSeparator;
+      }
 
-		public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
+      public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
-		public bool IsTrue => fields.Length > 0;
+      public bool IsTrue => fields.Length > 0;
 
-		public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new Iterator(this);
+      public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new Iterator(this);
 
-		public IMaybe<IObject> Next(int index)
-		{
-			if (index < fields.Length)
-			{
-				return StringObject(fields[index]).Some();
-			}
-			else
-			{
-				return none<IObject>();
-			}
-		}
+      public IMaybe<IObject> Next(int index)
+      {
+         if (index < fields.Length)
+         {
+            return StringObject(fields[index]).Some();
+         }
+         else
+         {
+            return none<IObject>();
+         }
+      }
 
-		public IMaybe<IObject> Peek(int index) => Next(index);
+      public IMaybe<IObject> Peek(int index) => Next(index);
 
-		public Int Length => fields.Length;
+      public Int Length => fields.Length;
 
-		public bool ExpandForArray => false;
+      public bool ExpandForArray => false;
 
-		public Boolean In(IObject item) => fields.ContainsValue(item.AsString);
+      public Boolean In(IObject item) => fields.ContainsValue(item.AsString);
 
-		public Boolean NotIn(IObject item) => !In(item).Value;
+      public Boolean NotIn(IObject item) => !In(item).Value;
 
-		public IObject Times(int count) => this;
+      public IObject Times(int count) => this;
 
-		public String MakeString(string connector) => makeString(this, connector);
+      public String MakeString(string connector) => makeString(this, connector);
 
-		public IIterator GetIndexedIterator() => new IndexedIterator(this);
+      public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
-		public IObject Find(string input, int startIndex, bool reverse) => find(fields[0], input, startIndex, reverse);
+      public IObject Find(string input, int startIndex, bool reverse) => find(fields[0], input, startIndex, reverse);
 
-		public IObject Find(ITextFinding textFinding, int startIndex, bool reverse) => textFinding.Find(fields[0], startIndex, reverse);
+      public IObject Find(ITextFinding textFinding, int startIndex, bool reverse) => textFinding.Find(fields[0], startIndex, reverse);
 
-		public Tuple FindAll(string input) => findAll(fields[0], input);
+      public Tuple FindAll(string input) => findAll(fields[0], input);
 
-		public Tuple FindAll(ITextFinding textFinding, string input) => textFinding.FindAll(input);
+      public Tuple FindAll(ITextFinding textFinding, string input) => textFinding.FindAll(input);
 
-		public String Replace(string input, string replacement, bool reverse) => replace(fields[0], input, replacement, reverse);
+      public String Replace(string input, string replacement, bool reverse) => replace(fields[0], input, replacement, reverse);
 
-		public String Replace(ITextFinding textFinding, string replacement, bool reverse)
-		{
-			return textFinding.Replace(fields[0], replacement, reverse);
-		}
+      public String Replace(ITextFinding textFinding, string replacement, bool reverse)
+      {
+         return textFinding.Replace(fields[0], replacement, reverse);
+      }
 
-		public String Replace(string input, Lambda lambda, bool reverse) => replace(fields[0], input, lambda, reverse);
+      public String Replace(string input, Lambda lambda, bool reverse) => replace(fields[0], input, lambda, reverse);
 
-		public String Replace(ITextFinding textFinding, Lambda lambda, bool reverse) => textFinding.Replace(fields[0], lambda, reverse);
+      public String Replace(ITextFinding textFinding, Lambda lambda, bool reverse) => textFinding.Replace(fields[0], lambda, reverse);
 
-		public String ReplaceAll(string input, string replacement) => replaceAll(fields[0], input, replacement);
+      public String ReplaceAll(string input, string replacement) => replaceAll(fields[0], input, replacement);
 
-		public String ReplaceAll(ITextFinding textFinding, string replacement) => textFinding.ReplaceAll(fields[0], replacement);
+      public String ReplaceAll(ITextFinding textFinding, string replacement) => textFinding.ReplaceAll(fields[0], replacement);
 
-		public String ReplaceAll(string input, Lambda lambda) => replaceAll(fields[0], input, lambda);
+      public String ReplaceAll(string input, Lambda lambda) => replaceAll(fields[0], input, lambda);
 
-		public String ReplaceAll(ITextFinding textFinding, Lambda lambda) => textFinding.ReplaceAll(fields[0], lambda);
+      public String ReplaceAll(ITextFinding textFinding, Lambda lambda) => textFinding.ReplaceAll(fields[0], lambda);
 
-		public Tuple Split(string input) => split(fields[0], input);
+      public Tuple Split(string input) => split(fields[0], input);
 
-		public Tuple Split(ITextFinding textFinding) => textFinding.Split(fields[0]);
+      public Tuple Split(ITextFinding textFinding) => textFinding.Split(fields[0]);
 
-		public Tuple Partition(string input, bool reverse) => partition(fields[0], input, reverse);
+      public Tuple Partition(string input, bool reverse) => partition(fields[0], input, reverse);
 
-		public Tuple Partition(ITextFinding textFinding, bool reverse) => textFinding.Partition(fields[0], reverse);
+      public Tuple Partition(ITextFinding textFinding, bool reverse) => textFinding.Partition(fields[0], reverse);
 
-		public Int Count(string input) => count(fields[0], input);
+      public Int Count(string input) => count(fields[0], input);
 
-		public Int Count(ITextFinding textFinding) => textFinding.Count(fields[0]);
+      public Int Count(ITextFinding textFinding) => textFinding.Count(fields[0]);
 
-		public Int Count(string input, Lambda lambda) => count(fields[0], input, lambda);
+      public Int Count(string input, Lambda lambda) => count(fields[0], input, lambda);
 
-		public Int Count(ITextFinding textFinding, Lambda lambda) => textFinding.Count(fields[0], lambda);
+      public Int Count(ITextFinding textFinding, Lambda lambda) => textFinding.Count(fields[0], lambda);
 
       public IObject this[SkipTake skipTake] => skipTakeThis(this, skipTake);
    }

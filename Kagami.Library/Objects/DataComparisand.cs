@@ -40,7 +40,7 @@ namespace Kagami.Library.Objects
             }
             else
             {
-	            return $"{name}({comparisands.Select(c => c.Image).Stringify()})";
+	            return $"{name}({comparisands.Select(c => c.Image).ToString(", ")})";
             }
          }
       }

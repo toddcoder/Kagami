@@ -80,7 +80,7 @@ namespace Kagami.Library.Objects
 
       public static String makeString(ICollection collection, string connector)
       {
-         return collection.GetIterator(false).List().Select(i => i.AsString).Stringify(connector);
+         return collection.GetIterator(false).List().Select(i => i.AsString).ToString(connector);
       }
 
       public static IEnumerable<int> indexList(Container container, int length)

@@ -24,6 +24,6 @@ namespace Kagami.Library.Nodes.Symbols
 
       public override Arity Arity => Arity.Postfix;
 
-      public override string ToString() => $"{{{arguments.Stringify()}}}";
+      public override string ToString() => $"{{{arguments.ToString(", ")}}}";
    }
 }
