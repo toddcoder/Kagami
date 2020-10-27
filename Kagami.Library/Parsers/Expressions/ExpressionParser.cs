@@ -232,7 +232,7 @@ namespace Kagami.Library.Parsers.Expressions
          }
       }
 
-      protected IMatched<Unit> getValue(ParseState state)
+      protected virtual IMatched<Unit> getValue(ParseState state)
       {
          if (valuesParser.Scan(state).ValueOrOriginal(out _, out var original))
          {
@@ -253,7 +253,7 @@ namespace Kagami.Library.Parsers.Expressions
          }
       }
 
-      protected IMatched<Unit> getTerm(ParseState state)
+      protected virtual IMatched<Unit> getTerm(ParseState state)
       {
          if ((getOutfixOperator(state, prefixParser).ValueOrOriginal(out _, out var original) || original.IsNotMatched) &&
             getValue(state).ValueOrOriginal(out _, out original) &&

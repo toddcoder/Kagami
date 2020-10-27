@@ -59,7 +59,7 @@ namespace Kagami.Library.Parsers.Statements
          state.Colorize(tokens, Color.Structure, Color.Whitespace);
 
          var result =
-            from comparisand in getCompoundComparisands(state, fieldName)
+            from comparisand in getComparisandExpression(state, ExpressionFlags.Standard, fieldName)
             from and in andExpression(state)
             from end in state.SkipEndOfLine().Or(() => "".Matched())
             from block in getCaseBlock(caseType, state)

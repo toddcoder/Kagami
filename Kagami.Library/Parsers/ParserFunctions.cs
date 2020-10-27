@@ -65,6 +65,12 @@ namespace Kagami.Library.Parsers
          return expressionParser.Scan(state).Map(u => expressionParser.Expression);
       }
 
+      public static IMatched<Expression> getComparisandExpression(ParseState state, Bits32<ExpressionFlags> flags, string fieldName)
+      {
+         var expressionParser = new ComparisandExpressionParser(flags, fieldName);
+         return expressionParser.Scan(state).Map(_ => expressionParser.Expression);
+      }
+
       public static IMatched<Expression> getExpression(ParseState state, string pattern, Bits32<ExpressionFlags> flags,
          params Color[] colors)
       {
