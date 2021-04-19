@@ -32,16 +32,17 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Core">
-      <HintPath>..\..\Libraries\Core.dll</HintPath>
+      <HintPath>..\References\Core.dll</HintPath>
     </Reference>
     <Reference Include="Core.ObjectGraphs">
-      <HintPath>..\..\Libraries\Core.ObjectGraphs.dll</HintPath>
+      <HintPath>..\References\Core.ObjectGraphs.dll</HintPath>
     </Reference>
     <Reference Include="Core.WinForms">
-      <HintPath>..\..\Libraries\Core.WinForms.dll</HintPath>
+      <HintPath>..\References\Core.WinForms.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
