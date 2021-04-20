@@ -8,16 +8,16 @@ using static Kagami.Library.Objects.CollectionFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct Range : IObject, ICollection
+   public readonly struct Range : IObject, ICollection
    {
-      IRangeItem start;
-      IObject startObj;
-      IObjectCompare stop;
-      IObject stopObj;
-      bool inclusive;
-      int increment;
-      Func<IRangeItem, IRangeItem> next;
-      Func<IRangeItem, IObject, bool> compare;
+      private readonly IRangeItem start;
+      private readonly IObject startObj;
+      private readonly IObjectCompare stop;
+      private readonly IObject stopObj;
+      private readonly bool inclusive;
+      private readonly int increment;
+      private readonly Func<IRangeItem, IRangeItem> next;
+      private readonly Func<IRangeItem, IObject, bool> compare;
 
       public Range(IRangeItem start, IObjectCompare stop, bool inclusive, int increment = 1) : this()
       {
@@ -71,7 +71,9 @@ namespace Kagami.Library.Objects
          }
       }
 
-      public Range(Range range, Int increment) : this(range.start, range.stop, range.inclusive, increment.Value) { }
+      public Range(Range range, Int increment) : this(range.start, range.stop, range.inclusive, increment.Value)
+      {
+      }
 
       public IRangeItem Start => start;
 
@@ -91,15 +93,15 @@ namespace Kagami.Library.Objects
 
       public string ClassName => "Range";
 
-      static string str(IObject obj, bool asString) => asString ? obj.AsString : obj.Image;
+      private static string str(IObject obj, bool asString) => asString ? obj.AsString : obj.Image;
 
-      string startImage(bool asString) => str(startObj, asString);
+      private string startImage(bool asString) => str(startObj, asString);
 
-      string stopImage(bool asString) => str(stopObj, asString);
+      private string stopImage(bool asString) => str(stopObj, asString);
 
-      string inclusiveImage() => inclusive ? "" : "<";
+      private string inclusiveImage() => inclusive ? "" : "<";
 
-      string incrementImage() => $"{(increment >= 0 ? "+" : "-")} {Math.Abs(increment)}";
+      private string incrementImage() => $"{(increment >= 0 ? "+" : "-")} {Math.Abs(increment)}";
 
       public string AsString => $"{startImage(true)} ..{inclusiveImage()} {stopImage(true)} {incrementImage()}";
 
@@ -116,18 +118,12 @@ namespace Kagami.Library.Objects
 
       public bool IsTrue => list(this).Any();
 
-      public IIterator GetIterator(bool lazy) => lazy ? (IIterator)new LazyIterator(new Array(list(this))) : new RangeIterator(this);
+      public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(new Array(list(this))) : new RangeIterator(this);
 
       public IMaybe<IObject> Next(int index)
       {
-         if (index == 0)
-         {
-            return GetIterator(false).ToArray().Some<IObject>();
-         }
-         else
-         {
-            return none<IObject>();
-         }
+         var self = this;
+         return maybe(index == 0, () => (IObject)self.GetIterator(false).ToArray());
       }
 
       public IMaybe<IObject> Peek(int index) => none<IObject>();
@@ -186,8 +182,8 @@ namespace Kagami.Library.Objects
 
       public IObject Subtract(int increment) => new Range(this, -increment);
 
-      public Range Reverse() => new Range((IRangeItem)stop, start, true, -increment);
+      public Range Reverse() => new((IRangeItem)stop, start, true, -increment);
 
-      public IObject this[SkipTake skipTake] => skipTakeThis(this, skipTake);
+      public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
    }
 }

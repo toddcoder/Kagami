@@ -52,11 +52,11 @@ namespace Kagami.Library.Objects
 
       public virtual IObject Invoke(params IObject[] arguments)
       {
-	      if (Machine.Current.Invoke(invokable1, new Arguments(arguments), fields, 0).If(out var value, out var anyException))
+	      if (Machine.Current.Invoke(invokable1, new Arguments(arguments), fields, 0).If(out var value, out var _exception))
 	      {
 		      return value;
 	      }
-	      else if (anyException.If(out var exception))
+	      else if (_exception.If(out var exception))
 	      {
 		      throw exception;
 	      }
@@ -70,13 +70,9 @@ namespace Kagami.Library.Objects
 
       public Fields Fields => fields;
 
-      public Lambda Clone() => new Lambda(invokable1);
+      public Lambda Clone() => new(invokable1);
 
-      public IObject Join(Lambda otherLambda)
-      {
-
-	      return new CompositeLambda(invokable1, otherLambda.Invokable);
-      }
+      public IObject Join(Lambda otherLambda) => new CompositeLambda(invokable1, otherLambda.Invokable);
 
       public void Capture()
       {

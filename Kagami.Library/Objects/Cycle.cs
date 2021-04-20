@@ -77,5 +77,7 @@ namespace Kagami.Library.Objects
       public Tuple Items => new(items);
 
       public IObject this[int index] => items[index];
+
+      public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
    }
 }

@@ -11,9 +11,9 @@ namespace Kagami.Library.Objects
 {
    public class Slice : IObject, ICollection
    {
-      ISliceable sliceable;
-      IObject[] indexes;
-      ICollectionClass collectionClass;
+      protected ISliceable sliceable;
+      protected IObject[] indexes;
+      protected ICollectionClass collectionClass;
 
       public Slice(ISliceable sliceable, IObject[] indexes)
       {
@@ -87,7 +87,7 @@ namespace Kagami.Library.Objects
          {
             var target = List.ToArray();
             var source = collection.GetIterator(false).List();
-            target = setObjects(target, source, i => Unassigned.Value);
+            target = setObjects(target, source, _ => Unassigned.Value);
 
             for (var i = 0; i < target.Length; i++)
             {
@@ -106,6 +106,6 @@ namespace Kagami.Library.Objects
          return this;
       }
 
-      public IObject this[SkipTake skipTake] => skipTakeThis(this, skipTake);
+      public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
    }
 }

@@ -695,7 +695,7 @@ namespace Kagami.Playground
                {
                   playgroundConfiguration.LastFile = file;
                   playgroundConfiguration.DefaultFolder = FolderName.Current;
-                  configurationFile.Text = ObjectGraph.Serialize(playgroundConfiguration).ToString();
+                  //configurationFile.Text = ObjectGraph.Serialize(playgroundConfiguration).ToString();
                }
                catch (Exception exception)
                {

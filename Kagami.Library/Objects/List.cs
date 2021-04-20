@@ -11,9 +11,9 @@ namespace Kagami.Library.Objects
 {
    public class List : IObject, ICollection
    {
-      public static List Empty => new List(none<IObject>(), null);
+      public static List Empty => new(none<IObject>(), null);
 
-      public static List Single(IObject value) => new List(value.Some(), Empty);
+      public static List Single(IObject value) => new(value.Some(), Empty);
 
       public static List Cons(IObject head, IObject tail)
       {
@@ -40,24 +40,24 @@ namespace Kagami.Library.Objects
 
       public static List NewList(Container list) => NewList(list.List);
 
-      IMaybe<IObject> head;
-      List tail;
+      protected IMaybe<IObject> _head;
+      protected List tail;
 
       public List(IMaybe<IObject> head, List tail)
       {
-         this.head = head;
+         _head = head;
          this.tail = tail;
       }
 
       public List(IObject head, IObject tail)
       {
-         this.head = head.Some();
+         _head = head.Some();
          this.tail = Single(tail);
       }
 
       public bool IsString { get; set; }
 
-      public IMaybe<IObject> Head => head;
+      public IMaybe<IObject> Head => _head;
 
       public List Tail => tail ?? Empty;
 
@@ -65,16 +65,9 @@ namespace Kagami.Library.Objects
       {
          get
          {
-            if (head.If(out var h))
+            if (_head.If(out var head))
             {
-               if (tail.IsEmpty)
-               {
-                  return Empty;
-               }
-               else
-               {
-                  return Cons(h, tail.Init);
-               }
+               return tail.IsEmpty ? Empty : Cons(head, tail.Init);
             }
             else
             {
@@ -87,16 +80,9 @@ namespace Kagami.Library.Objects
       {
          get
          {
-            if (head.IsSome)
+            if (_head.IsSome)
             {
-               if (tail.IsEmpty)
-               {
-                  return head;
-               }
-               else
-               {
-                  return tail.Last;
-               }
+               return tail.IsEmpty ? _head : tail.Last;
             }
             else
             {
@@ -105,15 +91,15 @@ namespace Kagami.Library.Objects
          }
       }
 
-      public bool IsEmpty => head.IsNone;
+      public bool IsEmpty => _head.IsNone;
 
       public string ClassName => "List";
 
-      string getText(string divider, Func<IObject, string> mapping, bool first = true)
+      protected string getText(string divider, Func<IObject, string> mapping, bool first = true)
       {
-         if (head.If(out var h))
+         if (_head.If(out var head))
          {
-            return (first ? "" : divider) + $"{mapping(h)}{tail.getText(divider, mapping, false)}";
+            return (first ? "" : divider) + $"{mapping(head)}{tail.getText(divider, mapping, false)}";
          }
          else
          {
@@ -121,54 +107,21 @@ namespace Kagami.Library.Objects
          }
       }
 
-      public string AsString
+      public string AsString => IsString ? getText("", v => v.AsString) : getText(" ", v => v.AsString);
+
+      public string Image => IsString ? show(this, "$\"", o => o.AsString, "\"") : show(this, "⌈", o => o.Image, "⌉");
+
+      public int Hash => (_head.Map(h => h.Hash).DefaultTo(() => 0) + tail.Hash).GetHashCode();
+
+      public bool IsEqualTo(IObject obj) => obj switch
       {
-         get
-         {
-            if (IsString)
-            {
-               return getText("", v => v.AsString);
-            }
-            else
-            {
-               return getText(" ", v => v.AsString);
-            }
-         }
-      }
+         List list when _head.If(out var h1) && list._head.If(out var h2) => h1.IsEqualTo(h2) && tail.IsEqualTo(list.tail),
+         List list when _head.IsNone && list._head.IsNone => true,
+         List _ => false,
+         _ => false
+      };
 
-      public string Image
-      {
-         get
-         {
-            if (IsString)
-            {
-               return show(this, "$\"", o => o.AsString, "\"");
-            }
-            else
-            {
-               return show(this, "⌈", o => o.Image, "⌉");
-            }
-         }
-      }
-
-      public int Hash => (head.Map(h => h.Hash).DefaultTo(() => 0) + tail.Hash).GetHashCode();
-
-      public bool IsEqualTo(IObject obj)
-      {
-         switch (obj)
-         {
-            case List list when head.If(out var h1) && list.head.If(out var h2):
-               return h1.IsEqualTo(h2) && tail.IsEqualTo(list.tail);
-            case List list when head.IsNone && list.head.IsNone:
-               return true;
-            case List _:
-               return false;
-            default:
-               return false;
-         }
-      }
-
-      static IMaybe<string> getPlaceholder(IObject obj)
+      protected static IMaybe<string> getPlaceholder(IObject obj)
       {
          return obj is Placeholder placeholder ? placeholder.AsString.Some() : none<string>();
       }
@@ -177,14 +130,14 @@ namespace Kagami.Library.Objects
       {
          return match(this, comparisand, (l1, l2) =>
          {
-            if (l1.head.IsNone && l2.head.IsNone)
+            if (l1._head.IsNone && l2._head.IsNone)
             {
                return true;
             }
             else
             {
-               var lHead = l1.head.Map(v => v).DefaultTo(() => Empty);
-               var rHead = l2.head.Map(v => v).DefaultTo(() => Empty);
+               var lHead = l1._head.Map(v => v).DefaultTo(() => Empty);
+               var rHead = l2._head.Map(v => v).DefaultTo(() => Empty);
                if (getPlaceholder(rHead).If(out var placeholder))
                {
                   if (l2.tail.IsEmpty)
@@ -210,9 +163,9 @@ namespace Kagami.Library.Objects
          }, bindings);
       }
 
-      public bool IsTrue => head.IsSome;
+      public bool IsTrue => _head.IsSome;
 
-      public IIterator GetIterator(bool lazy) => lazy ? (IIterator)new LazyIterator(this) : new ListIterator(this);
+      public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new ListIterator(this);
 
       public IMaybe<IObject> Next(int index) => none<IObject>();
 
@@ -249,7 +202,7 @@ namespace Kagami.Library.Objects
          return NewList(left);
       }
 
-      static IObject getItem(List list, int currentIndex, int expectedIndex)
+      protected static IObject getItem(List list, int currentIndex, int expectedIndex)
       {
          if (list.IsEmpty)
          {
@@ -277,10 +230,10 @@ namespace Kagami.Library.Objects
          get
          {
             var item = (List)GetIterator(false).Skip(index);
-            return someOf(item.head);
+            return someOf(item._head);
          }
       }
 
-      public IObject this[SkipTake skipTake] => skipTakeThis(this, skipTake);
+      public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
    }
 }

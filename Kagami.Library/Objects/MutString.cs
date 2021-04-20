@@ -17,15 +17,15 @@ namespace Kagami.Library.Objects
    public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>, IFormattable, IComparable, ISliceable,
       IRangeItem, ITextFinding, IMutableCollection
    {
-      public static implicit operator MutString(string source) => new MutString(source);
+      public static implicit operator MutString(string source) => new(source);
 
-      public static implicit operator MutString(String source) => new MutString(source.AsString);
+      public static implicit operator MutString(String source) => new(source.AsString);
 
       public static implicit operator string(MutString source) => source.AsString;
 
       public static implicit operator String(MutString source) => source.AsString;
 
-      StringBuilder mutable;
+      protected StringBuilder mutable;
 
       public MutString(string mutable) => this.mutable = new StringBuilder(mutable);
 
@@ -61,7 +61,7 @@ namespace Kagami.Library.Objects
 
       Int ICollection.Length => Length;
 
-      public Slice Slice(ICollection collection) => new Slice(this, collection.GetIterator(false).List().ToArray());
+      public Slice Slice(ICollection collection) => new(this, collection.GetIterator(false).List().ToArray());
 
       public IMaybe<IObject> Get(IObject index)
       {
@@ -136,7 +136,7 @@ namespace Kagami.Library.Objects
          }
       }
 
-      public Range Range() => new Range(this, (MutString)"z".Repeat(mutable.Length), true);
+      public Range Range() => new(this, (MutString)"z".Repeat(mutable.Length), true);
 
       public IObject Find(string input, int startIndex, bool reverse) => find(AsString, input, startIndex, reverse);
 
@@ -261,6 +261,6 @@ namespace Kagami.Library.Objects
 
       IObject IMutableCollection.Append(IObject obj) => Append(obj);
 
-      public IObject this[SkipTake skipTake] => skipTakeThis(this, skipTake);
+      public IObject this[SkipTake skipTake] => Objects.CollectionFunctions.skipTake(this, skipTake);
    }
 }

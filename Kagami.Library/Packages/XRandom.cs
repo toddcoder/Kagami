@@ -12,7 +12,7 @@ namespace Kagami.Library.Packages
 {
    public class XRandom : IObject, ICollection
    {
-      Random random;
+      protected Random random;
 
       public XRandom(int seed) => random = new Random(seed);
 
@@ -38,7 +38,7 @@ namespace Kagami.Library.Packages
 
       public IObject Times(int count)
       {
-         return new Objects.Tuple(Enumerable.Range(0, count).Select(i => Int.IntObject(random.Next())).ToArray());
+         return new Objects.Tuple(Enumerable.Range(0, count).Select(_ => Int.IntObject(random.Next())).ToArray());
       }
 
       public String MakeString(string connector) => makeString(this, connector);
@@ -63,6 +63,6 @@ namespace Kagami.Library.Packages
 
       public bool IsTrue => random.Next() != 0;
 
-      public IObject this[SkipTake skipTake] => skipTakeThis(this, skipTake);
+      public IObject this[SkipTake skipTake] => Objects.CollectionFunctions.skipTake(this, skipTake);
    }
 }

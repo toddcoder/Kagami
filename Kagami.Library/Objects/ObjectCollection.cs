@@ -10,8 +10,8 @@ namespace Kagami.Library.Objects
 {
    public class ObjectCollection : IObject, ICollection
    {
-      UserObject obj;
-      BaseClass cls;
+      protected UserObject obj;
+      protected BaseClass cls;
 
       public ObjectCollection(UserObject obj)
       {
@@ -54,20 +54,7 @@ namespace Kagami.Library.Objects
          }
       }
 
-      public Int Length
-      {
-         get
-         {
-            if (cls.RespondsTo("length".get()))
-            {
-               return (Int)sendMessage(obj, "length".get());
-            }
-            else
-            {
-               return -1;
-            }
-         }
-      }
+      public Int Length => cls.RespondsTo("length".get()) ? (Int)sendMessage(obj, "length".get()) : -1;
 
       public IEnumerable<IObject> List
       {
@@ -90,41 +77,11 @@ namespace Kagami.Library.Objects
 
       public bool ExpandForArray => true;
 
-      public Boolean In(IObject item)
-      {
-         if (cls.RespondsTo("in"))
-         {
-            return (Boolean)sendMessage(obj, "in", item);
-         }
-         else
-         {
-            return false;
-         }
-      }
+      public Boolean In(IObject item) => cls.RespondsTo("in") ? (Boolean)sendMessage(obj, "in", item) : false;
 
-      public Boolean NotIn(IObject item)
-      {
-         if (cls.RespondsTo("notIn"))
-         {
-            return (Boolean)sendMessage(obj, "notIn", item);
-         }
-         else
-         {
-            return false;
-         }
-      }
+      public Boolean NotIn(IObject item) => cls.RespondsTo("notIn") ? (Boolean)sendMessage(obj, "notIn", item) : false;
 
-      public IObject Times(int count)
-      {
-         if (cls.RespondsTo("*"))
-         {
-            return (Boolean)sendMessage(obj, "*", (Int)count);
-         }
-         else
-         {
-            return obj;
-         }
-      }
+      public IObject Times(int count) => cls.RespondsTo("*") ? (Boolean)sendMessage(obj, "*", (Int)count) : obj;
 
       public String MakeString(string connector) => makeString(this, connector);
 
@@ -147,6 +104,6 @@ namespace Kagami.Library.Objects
 
       public bool IsTrue => obj.IsTrue;
 
-      public IObject this[SkipTake skipTake] => skipTakeThis(this, skipTake);
+      public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
    }
 }

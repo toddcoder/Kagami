@@ -163,5 +163,7 @@ namespace Kagami.Library.Objects
 
          return new Set(classified.ValueArray().Select(s => (IObject)s).ToArray());
       }
+
+      public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
    }
 }

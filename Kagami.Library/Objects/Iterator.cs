@@ -29,7 +29,7 @@ namespace Kagami.Library.Objects
          }
          else
          {
-            baseClass = new ArrayClass();
+            collectionClass = new ArrayClass();
          }
 
          index = 0;

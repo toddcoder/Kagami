@@ -12,7 +12,7 @@ namespace Kagami.IO
 {
    public class Folder : IObject, ICollection
    {
-      FolderName folderName;
+      protected FolderName folderName;
 
       public Folder(string folderName) => this.folderName = folderName;
 
@@ -46,15 +46,12 @@ namespace Kagami.IO
 
       public Boolean In(IObject item)
       {
-         switch (item)
+         return item switch
          {
-            case File f:
-               return folderName.Files.Contains(new FileName(f.AsString));
-            case Folder folder:
-               return folderName.Folders.Contains(new FolderName(folder.AsString));
-            default:
-               return false;
-         }
+            File f => folderName.Files.Contains(new FileName(f.AsString)),
+            Folder folder => folderName.Folders.Contains(new FolderName(folder.AsString)),
+            _ => false
+         };
       }
 
       public Boolean NotIn(IObject item)
@@ -78,6 +75,6 @@ namespace Kagami.IO
 
       public IObject Flatten() => this;
 
-      public IObject this[SkipTake skipTake] => skipTakeThis(this, skipTake);
+      public IObject this[SkipTake skipTake] => Library.Objects.CollectionFunctions.skipTake(this, skipTake);
    }
 }

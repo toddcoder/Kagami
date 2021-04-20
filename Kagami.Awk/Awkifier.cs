@@ -11,6 +11,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Awk.AwkFunctions;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.CollectionFunctions;
+using CollectionFunctions = Kagami.Library.Objects.CollectionFunctions;
 
 namespace Kagami.Awk
 {
@@ -203,5 +204,7 @@ namespace Kagami.Awk
             return result;
          }));
       }
+
+      public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
    }
 }

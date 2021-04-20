@@ -6,7 +6,7 @@ namespace Kagami.Library.Objects
 {
    public class MapAction : IStreamAction
    {
-      Lambda lambda;
+      protected Lambda lambda;
 
       public MapAction(Lambda lambda) => this.lambda = lambda;
 

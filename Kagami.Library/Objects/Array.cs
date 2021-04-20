@@ -423,5 +423,7 @@ namespace Kagami.Library.Objects
             return this;
          }
       }
+
+      public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
    }
 }

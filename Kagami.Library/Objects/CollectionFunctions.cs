@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Core.Enumerables;
 using Core.Numbers;
-using static Core.Arrays.ArrayFunctions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
@@ -124,26 +123,42 @@ namespace Kagami.Library.Objects
          _ => throw invalidIndex(index)
       };
 
-      public static IObject setIndexed<T>(T obj, IObject index, IObject value, Action<T, int, IObject> intSetter,
+      public static void setIndexed<T>(T obj, IObject index, IObject value, Action<T, int, IObject> intSetter,
          Action<T, Container, IObject> listSetter) where T : IObject
       {
          switch (index)
          {
             case Int i:
                intSetter(obj, i.Value, value);
-               return obj;
+               return;
             case Container container:
                listSetter(obj, conditionContainer(container), value);
-               return obj;
+               return;
             case ICollection collection and not String:
                listSetter(obj, new Container(collection.GetIterator(false).List()), value);
-               return obj;
+               return;
             case IIterator iterator:
                listSetter(obj, new Container(iterator.List()), value);
-               return obj;
+               return;
             default:
                throw invalidIndex(index);
          }
       }
+
+      public static IObject skipTake(ICollection collection, SkipTake skipTake)
+      {
+         var skipIterator = collection.GetIterator(true);
+         var (skip, take) = skipTake;
+         var takeIterator = (IIterator)skipIterator.Skip(skip);
+
+         return takeIterator.Take(take);
+      }
+
+      public static IObject[] spread(IObject obj) => obj switch
+      {
+         ICollection collection => collection.GetIterator(false).List().ToArray(),
+         IIterator iterator => iterator.List().ToArray(),
+         _ => new[] { obj }
+      };
    }
 }

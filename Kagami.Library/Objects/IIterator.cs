@@ -165,7 +165,5 @@ namespace Kagami.Library.Objects
       IObject Apply(ICollection collection);
 
       IObject Column(int column);
-
-      IObject Step(int step);
    }
 }

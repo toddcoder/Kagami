@@ -12,8 +12,8 @@ namespace Kagami.Library.Invokables
 {
    public class YieldingInvokable : IInvokable, ICollection, IObject
    {
-      Selector selector;
-      List<IObject> cached;
+      protected Selector selector;
+      protected List<IObject> cached;
 
       public YieldingInvokable(Selector selector, Parameters parameters, string image)
       {
@@ -49,7 +49,7 @@ namespace Kagami.Library.Invokables
 
       public Arguments Arguments { get; set; } = Arguments.Empty;
 
-      public FrameGroup Frames { get; set; } = new FrameGroup();
+      public FrameGroup Frames { get; set; } = new();
 
       public IIterator GetIterator(bool lazy)
       {
@@ -63,7 +63,7 @@ namespace Kagami.Library.Invokables
          {
             switch (result)
             {
-               case None _:
+               case None:
                   return none<IObject>();
                case YieldReturn yr:
                   Address = yr.Address + 1;
@@ -122,6 +122,6 @@ namespace Kagami.Library.Invokables
 
       public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
-      public IObject this[SkipTake skipTake] => skipTakeThis(this, skipTake);
+      public IObject this[SkipTake skipTake] => Objects.CollectionFunctions.skipTake(this, skipTake);
    }
 }

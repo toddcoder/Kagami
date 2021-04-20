@@ -1,21 +1,20 @@
 ﻿using Core.Collections;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
-using static Kagami.Library.Objects.CollectionFunctions;
 
 namespace Kagami.Library.Objects
 {
    public class CycleCollection : IObject, ICollection
    {
-      Cycle cycle;
-      IMaybe<IObject> lastItem;
-      IMaybe<(IObject, Lambda)> anySeedLambda;
+      protected Cycle cycle;
+      protected IMaybe<IObject> _lastItem;
+      protected IMaybe<(IObject, Lambda)> _seedLambda;
 
       public CycleCollection(Cycle cycle)
       {
          this.cycle = cycle;
-         lastItem = none<IObject>();
-         anySeedLambda = cycle.SeedLambda;
+         _lastItem = none<IObject>();
+         _seedLambda = cycle.SeedLambda;
       }
 
       public string ClassName => cycle.ClassName;
@@ -36,17 +35,17 @@ namespace Kagami.Library.Objects
 
       public IMaybe<IObject> Next(int index)
       {
-         if (anySeedLambda.If(out var seedLambda))
+         if (_seedLambda.If(out var seedLambda))
          {
             var (seed, lambda) = seedLambda;
-            if (lastItem.If(out var item))
+            if (_lastItem.If(out var lastItem))
             {
-               item = lambda.Invoke(item);
-               lastItem = item.Some();
+               lastItem = lambda.Invoke(lastItem);
+               _lastItem = lastItem.Some();
             }
             else
             {
-               lastItem = seed.Some();
+               _lastItem = seed.Some();
             }
          }
          else
@@ -55,27 +54,27 @@ namespace Kagami.Library.Objects
             if (item is Lambda lambda)
             {
                var parameterCount = lambda.Invokable.Parameters.Length;
-               if (parameterCount > 0 && lastItem.If(out var value))
+               if (parameterCount > 0 && _lastItem.If(out var lastItem))
                {
-                  item = lambda.Invoke(value);
+                  item = lambda.Invoke(lastItem);
                }
                else
                {
                   item = lambda.Invoke();
                }
 
-               lastItem = item.Some();
+               _lastItem = item.Some();
             }
             else
             {
-               lastItem = item.Some();
+               _lastItem = item.Some();
             }
          }
 
-         return lastItem;
+         return _lastItem;
       }
 
-      public IMaybe<IObject> Peek(int index) => lastItem;
+      public IMaybe<IObject> Peek(int index) => _lastItem;
 
       public Int Length => cycle.Length;
 
@@ -91,6 +90,6 @@ namespace Kagami.Library.Objects
 
       public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
-      public IObject this[SkipTake skipTake] => skipTakeThis(this, skipTake);
+      public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
    }
 }

@@ -6,10 +6,10 @@ using static Kagami.Library.Objects.CollectionFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct OpenRange : IObject, ICollection
+   public readonly struct OpenRange : IObject, ICollection
    {
-      IObject seed;
-      Lambda lambda;
+      private readonly IObject seed;
+      private readonly Lambda lambda;
 
       public OpenRange(IObject seed, Lambda lambda) : this()
       {
@@ -55,6 +55,6 @@ namespace Kagami.Library.Objects
 
       public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
-      public IObject this[SkipTake skipTake] => skipTakeThis(this, skipTake);
+      public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
    }
 }

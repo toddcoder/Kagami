@@ -1,14 +1,13 @@
 ﻿using Core.Collections;
 using Core.Monads;
-using static Kagami.Library.Objects.CollectionFunctions;
 
 namespace Kagami.Library.Objects
 {
 	public class OpenRangeCollection : ICollection, IObject
 	{
-		IObject current;
-		Lambda lambda;
-		OpenRange openRange;
+		protected IObject current;
+		protected Lambda lambda;
+		protected OpenRange openRange;
 
 		public OpenRangeCollection(OpenRange openRange)
 		{
@@ -57,6 +56,6 @@ namespace Kagami.Library.Objects
 
 		public bool IsTrue => openRange.IsTrue;
 
-      public IObject this[SkipTake skipTake] => skipTakeThis(this, skipTake);
+      public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
    }
 }
