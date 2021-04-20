@@ -10,8 +10,8 @@ namespace Kagami.Library.Nodes.Statements
 {
    public class DataType : Statement
    {
-      string className;
-      Hash<string, (IObject[], IObject)> comparisands;
+      protected string className;
+      protected Hash<string, (IObject[], IObject)> comparisands;
 
       public DataType(string className, Hash<string, (IObject[], IObject)> comparisands)
       {
@@ -41,7 +41,7 @@ namespace Kagami.Library.Nodes.Statements
                var dataTypeCode = new DataTypeCode(className, key, data, ordinal);
                var block = new Block(dataTypeCode);
                var invokable =
-                  new DataComparisandInvokable(key, new Parameters(data.Length), $"{key}({data.Select(d => d.Image).Stringify()})");
+                  new DataComparisandInvokable(key, new Parameters(data.Length), $"{key}({data.Select(d => d.Image).ToString(", ")})");
                if (builder.RegisterInvokable(invokable, block, true).If(out var _, out var exception))
                {
                   builder.NewField(key, false, true);

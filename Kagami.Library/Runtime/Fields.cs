@@ -23,7 +23,7 @@ namespace Kagami.Library.Runtime
       public Fields()
       {
          fields = new Hash<string, Field>();
-         buckets = new AutoHash<string, List<string>>(key => new List<string>(), true);
+         buckets = new AutoHash<string, List<string>>(_ => new List<string>(), true);
       }
 
       public IMatched<Field> Find(string name, bool getting, int depth = 0)
@@ -35,15 +35,12 @@ namespace Kagami.Library.Runtime
          else if (fields.ContainsKey(name))
          {
             var field = fields[name];
-            switch (field.Value)
+            return field.Value switch
             {
-               case Unassigned _ when getting:
-                  return failedMatch<Field>(fieldUnassigned(name));
-               case Reference r:
-                  return r.Field.Matched();
-               default:
-                  return field.Matched();
-            }
+               Unassigned when getting => failedMatch<Field>(fieldUnassigned(name)),
+               Reference r => r.Field.Matched(),
+               _ => field.Matched()
+            };
          }
          else
          {
@@ -68,13 +65,9 @@ namespace Kagami.Library.Runtime
                var labelsOnlyImage = selector.LabelsOnly().Image;
                if (buckets.ContainsKey(labelsOnlyImage))
                {
-                  foreach (var bucket in buckets[labelsOnlyImage])
+                  foreach (var matchSelector in buckets[labelsOnlyImage].Where(matchSelector => selector.IsEquivalentTo((Selector)matchSelector)))
                   {
-                     Selector matchSelector = bucket;
-                     if (selector.IsEquivalentTo(matchSelector))
-                     {
-                        return fields[matchSelector.Image].Matched();
-                     }
+                     return fields[((Selector)matchSelector).Image].Matched();
                   }
                }
 
@@ -136,19 +129,13 @@ namespace Kagami.Library.Runtime
          }
       }
 
-      public IResult<Field> New(Selector selector, IObject value, bool mutable = false, bool visible = true)
+      public void New(Selector selector, IObject value, bool mutable = false, bool visible = true)
       {
-         if (fields.ContainsKey(selector))
-         {
-            return failure<Field>(fieldAlreadyExists(selector));
-         }
-         else
+         if (!fields.ContainsKey(selector))
          {
             var field = new Field { Value = value, Mutable = mutable, Visible = visible };
             fields[selector] = field;
             buckets[selector.LabelsOnly()].Add(selector);
-
-            return field.Success();
          }
       }
 
@@ -194,7 +181,7 @@ namespace Kagami.Library.Runtime
          }
       }
 
-      public IResult<Field> AssignToExisting(string name, IObject value, bool overriden = false)
+      public static IResult<Field> AssignToExisting(string name, IObject value, bool overriden = false)
       {
          if (Machine.Current.Find(name, false).ValueOrOriginal(out var field, out var original))
          {
@@ -268,7 +255,7 @@ namespace Kagami.Library.Runtime
          }
       }
 
-      public override string ToString() => fields.Select(i => $"{i.Key} = {i.Value.Value.Image}").Stringify();
+      public override string ToString() => fields.Select(i => $"{i.Key} = {i.Value.Value.Image}").ToString(", ");
 
       public void SetBindings(Hash<string, IObject> bindings)
       {

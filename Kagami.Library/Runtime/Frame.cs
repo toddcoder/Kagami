@@ -16,7 +16,7 @@ namespace Kagami.Library.Runtime
 {
 	public class Frame
 	{
-		public static Frame TryFrame() => new Frame() { FrameType = FrameType.Try };
+		public static Frame TryFrame() => new() { FrameType = FrameType.Try };
 
 		protected Stack<IObject> stack;
 		protected IMaybe<IObject> returnValue;
@@ -64,7 +64,7 @@ namespace Kagami.Library.Runtime
 			stack = new Stack<IObject>();
 			returnValue = none<IObject>();
 			this.address = address;
-			if (invokable is IProvidesFields pf && pf.ProvidesFields)
+			if (invokable is IProvidesFields { ProvidesFields: true } pf)
 			{
 				fields = pf.Fields;
 			}
@@ -224,7 +224,7 @@ namespace Kagami.Library.Runtime
 
 		public override string ToString()
 		{
-			return (StringStream)"(" / stack.Select(v => v.Image).Stringify() / ")[" / fields.FieldNames.Stringify() / "]";
+			return (StringStream)"(" / stack.Select(v => v.Image).ToString(", ") / ")[" / fields.FieldNames.ToString(", ") / "]";
 		}
 
 		public void CopyFromFields(Fields sourceFields) => fields.CopyFrom(sourceFields);

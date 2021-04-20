@@ -5,7 +5,6 @@ using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using Kagami.Library.Packages;
-using Core.Collections;
 using Core.Enumerables;
 using Core.Exceptions;
 using Core.Monads;
@@ -19,19 +18,19 @@ namespace Kagami.Library.Runtime
 {
    public class Machine
    {
-      const int MAX_DEPTH = 128;
+      protected const int MAX_DEPTH = 128;
 
       public static Machine Current { get; set; }
 
       public static Fields Fields => Current.CurrentFrame.Fields;
 
-      IContext context;
-      Stack<Frame> stack;
-      Operations.Operations operations;
-      bool running;
-      Lazy<TableMaker> table;
-      DebugState debugState;
-      GlobalFrame globalFrame;
+      protected IContext context;
+      protected Stack<Frame> stack;
+      protected Operations.Operations operations;
+      protected bool running;
+      protected Lazy<TableMaker> table;
+      protected DebugState debugState;
+      protected GlobalFrame globalFrame;
 
       public Machine(IContext context)
       {
@@ -51,7 +50,7 @@ namespace Kagami.Library.Runtime
 
       public void Load(Operations.Operations operations) => this.operations = operations;
 
-      void trace(int address, Func<string> message)
+      protected void trace(int address, Func<string> message)
       {
          if (Tracing)
          {
@@ -153,14 +152,8 @@ namespace Kagami.Library.Runtime
 
          PushFrame(frame);
          frame.SetFields(invokable.Parameters);
-         if (GoTo(invokable.Address))
-         {
-            return invoke();
-         }
-         else
-         {
-            return failedMatch<IObject>(badAddress(invokable.Address));
-         }
+
+         return GoTo(invokable.Address) ? invoke() : failedMatch<IObject>(badAddress(invokable.Address));
       }
 
       public IMatched<IObject> Invoke(YieldingInvokable invokable)
@@ -237,7 +230,7 @@ namespace Kagami.Library.Runtime
          }
       }
 
-      IMatched<IObject> invoke()
+      protected IMatched<IObject> invoke()
       {
          while (!context.Cancelled() && operations.More && running)
          {
@@ -249,7 +242,7 @@ namespace Kagami.Library.Runtime
                {
                   case Return rtn:
                      return Return.ReturnAction(this, rtn.ReturnTopOfStack);
-                  case Yield _:
+                  case Yield:
                      return Yield.YieldAction(this);
                   case Invoke invoke:
                      if (Invoke(invoke.FieldName).If(out var returnValue, out var anyException))
@@ -370,12 +363,9 @@ namespace Kagami.Library.Runtime
 
       public IMaybe<Frame> FunctionFrame()
       {
-         foreach (var frame in stack)
+         foreach (var frame in stack.Where(frame => frame.FrameType == FrameType.Function))
          {
-            if (frame.FrameType == FrameType.Function)
-            {
-               return frame.Some();
-            }
+            return frame.Some();
          }
 
          return none<Frame>();
@@ -413,7 +403,7 @@ namespace Kagami.Library.Runtime
 
       public void Clear() => CurrentFrame.Clear();
 
-      public string StackImage => stack.Select(f => f.ToString()).Stringify();
+      public string StackImage => stack.Select(f => f.ToString()).ToString(", ");
 
       public IObject X { get; set; } = Unassigned.Value;
 
@@ -426,11 +416,11 @@ namespace Kagami.Library.Runtime
          var depth = 0;
          foreach (var frame in stack)
          {
-            if (frame.Fields.Find(fieldName, getting).If(out var field, out var anyException))
+            if (frame.Fields.Find(fieldName, getting).If(out var field, out var _exception))
             {
                return field.Matched();
             }
-            else if (anyException.If(out var exception))
+            else if (_exception.If(out var exception))
             {
                return failedMatch<Field>(exception);
             }
@@ -479,9 +469,9 @@ namespace Kagami.Library.Runtime
          return notMatched<Field>();
       }
 
-      IMatched<Field> findExact(Selector selector) => Find(selector.Image, true);
+      protected IMatched<Field> findExact(Selector selector) => Find(selector.Image, true);
 
-      IMatched<Field> findEquivalent(Selector selector)
+      protected IMatched<Field> findEquivalent(Selector selector)
       {
          var count = selector.SelectorItems.Length;
          var iterator = new BitIterator(count);
@@ -501,9 +491,9 @@ namespace Kagami.Library.Runtime
          return notMatched<Field>();
       }
 
-      IMatched<Field> findTypeless(Selector selector) => Find(selector.LabelsOnly().Image, true);
+      protected IMatched<Field> findTypeless(Selector selector) => Find(selector.LabelsOnly().Image, true);
 
-      IMatched<Field> findField(Selector selector) => Find(selector.Name, true);
+      protected IMatched<Field> findField(Selector selector) => Find(selector.Name, true);
 
       public IResult<Field> Assign(string fieldName, IObject value, bool getting, bool overriden = false)
       {
@@ -560,7 +550,7 @@ namespace Kagami.Library.Runtime
             {
                switch (field.Value)
                {
-                  case Unassigned _:
+                  case Unassigned:
                      field.Value = value;
                      fields.SetBucket(selector);
                      return field.Success();
@@ -599,7 +589,7 @@ namespace Kagami.Library.Runtime
          operations.Goto(0);
       }
 
-      public IResult<DebugState> Step(bool into, Hash<string, IObject> watch)
+      public void Step()
       {
          if (debugState == DebugState.Starting)
          {
@@ -613,17 +603,17 @@ namespace Kagami.Library.Runtime
                var currentAddress = operations.Address;
                switch (operation)
                {
-                  case Break _:
-                     return debugState.Success();
+                  case Break:
+                     return;
                   default:
                      if (operation.Execute(this).ValueOrOriginal(out var result, out var original) && running &&
                         result.ClassName != "Void")
                      {
                         stack.Peek().Push(result);
                      }
-                     else if (original.IfNot(out var anyException) && anyException.If(out var exception))
+                     else if (original.IfNot(out var _exception) && _exception.If(out _))
                      {
-                        return failure<DebugState>(exception);
+                        return;
                      }
 
                      break;
@@ -636,11 +626,9 @@ namespace Kagami.Library.Runtime
             }
             else
             {
-               return failure<DebugState>(addressOutOfRange());
+               return;
             }
          }
-
-         return debugState.Success();
       }
 
       public string PackageFolder { get; set; } = "";

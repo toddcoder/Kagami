@@ -321,7 +321,6 @@
     <Compile Include="Nodes\Symbols\SkipTakeInitLiteralSymbol.cs" />
     <Compile Include="Nodes\Symbols\SkipTakeItem.cs" />
     <Compile Include="Nodes\Symbols\SkipTakeLiteralSymbol.cs" />
-    <Compile Include="Nodes\Symbols\SkipTakeOperatorSymbol.cs" />
     <Compile Include="Nodes\Symbols\SliceAssignSymbol.cs" />
     <Compile Include="Nodes\Symbols\SliceSymbol.cs" />
     <Compile Include="Nodes\Symbols\SomeSymbol.cs" />

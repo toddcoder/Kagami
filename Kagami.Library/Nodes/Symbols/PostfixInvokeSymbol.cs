@@ -5,7 +5,7 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class PostfixInvokeSymbol : Symbol
    {
-      Expression[] arguments;
+      protected Expression[] arguments;
 
       public PostfixInvokeSymbol(Expression[] arguments) => this.arguments = arguments;
 
@@ -13,7 +13,7 @@ namespace Kagami.Library.Nodes.Symbols
       {
          foreach (var argument in arguments)
          {
-	         argument.Generate(builder);
+            argument.Generate(builder);
          }
 
          builder.ToArguments(arguments.Length);
@@ -24,6 +24,6 @@ namespace Kagami.Library.Nodes.Symbols
 
       public override Arity Arity => Arity.Postfix;
 
-      public override string ToString() => $"({arguments.Stringify()})";
+      public override string ToString() => $"({arguments.ToString(", ")})";
    }
 }

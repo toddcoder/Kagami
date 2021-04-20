@@ -15,16 +15,14 @@ namespace Kagami
 {
    internal class Program : CommandLineInterface, IContext
    {
-      Putter putter;
+      protected Putter putter;
 
       public Program() => putter = new Putter();
 
-      static void Main()
+      public static void Main()
       {
-         using (var program = new Program())
-         {
-            program.Run();
-         }
+         using var program = new Program();
+         program.Run();
       }
 
       [EntryPoint(EntryPointType.This)]
@@ -36,7 +34,7 @@ namespace Kagami
          }
       }
 
-      void exec()
+      protected void exec()
       {
          if (File.If(out var sourceFile))
          {
@@ -110,6 +108,8 @@ namespace Kagami
 
       public bool Cancelled() => KeyAvailable && ReadKey().Key == ConsoleKey.Escape;
 
-      public void Peek(string message, int index) { }
+      public void Peek(string message, int index)
+      {
+      }
    }
 }

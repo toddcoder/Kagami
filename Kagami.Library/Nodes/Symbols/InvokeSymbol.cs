@@ -79,6 +79,6 @@ namespace Kagami.Library.Nodes.Symbols
 
 		public override Arity Arity => Arity.Nullary;
 
-		public override string ToString() => $"{functionName}({arguments.Stringify()})";
+		public override string ToString() => $"{functionName}({arguments.ToString(", ")})";
 	}
 }
