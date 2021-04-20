@@ -16,11 +16,11 @@ namespace Kagami.Library
 
       public static string set(this string name) => $"__${name}=(_)";
 
-	   public static Selector Selector(this string baseName, params string[] selectorItemSources)
+      public static Selector Selector(this string baseName, params string[] selectorItemSources)
       {
          if (selectorItemSources.Length == 0)
          {
-	         return new Selector(baseName);
+            return new Selector(baseName);
          }
          else
          {
@@ -32,18 +32,18 @@ namespace Kagami.Library
       }
 
       public static Selector Selector(this string baseName, int count)
-	   {
-		   return baseName.Selector(Enumerable.Range(0, count).Select(i => "_").ToArray());
-	   }
+      {
+         return baseName.Selector(Enumerable.Range(0, count).Select(i => "_").ToArray());
+      }
 
-	   public static IObject AsOptional<T>(this IMaybe<T> maybe) where T : IObject
-	   {
-		   return maybe.Map(o => Some.Object(o)).DefaultTo(() => None.NoneValue);
-	   }
+      public static IObject AsOptional<T>(this IMaybe<T> maybe) where T : IObject
+      {
+         return maybe.Map(o => Some.Object(o)).DefaultTo(() => None.NoneValue);
+      }
 
-	   public static IMaybe<T> AsMaybe<T>(this IOptional optional) where T : IObject
-	   {
-		   return optional is Some some ? (IMaybe<T>)some.Value.Some() : none<T>();
-	   }
+      public static IMaybe<T> AsMaybe<T>(this IOptional optional) where T : IObject
+      {
+         return optional is Some some ? (IMaybe<T>)some.Value.Some() : none<T>();
+      }
    }
 }

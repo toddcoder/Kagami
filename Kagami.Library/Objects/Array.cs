@@ -37,11 +37,11 @@ namespace Kagami.Library.Objects
          return new Array(init);
       }
 
-      List<IObject> list;
-      int arrayID;
-      IMaybe<TypeConstraint> typeConstraint;
-      IMaybe<Lambda> defaultLambda;
-      IMaybe<IObject> defaultValue;
+      protected List<IObject> list;
+      protected int arrayID;
+      protected IMaybe<TypeConstraint> _typeConstraint;
+      protected IMaybe<Lambda> _defaultLambda;
+      protected IMaybe<IObject> _defaultValue;
 
       public Array(IEnumerable<IObject> objects)
       {
@@ -59,18 +59,18 @@ namespace Kagami.Library.Objects
          }
 
          arrayID = uniqueObjectID();
-         typeConstraint = none<TypeConstraint>();
-         defaultLambda = none<Lambda>();
-         defaultValue = none<IObject>();
+         _typeConstraint = none<TypeConstraint>();
+         _defaultLambda = none<Lambda>();
+         _defaultValue = none<IObject>();
       }
 
       public Array(IObject value)
       {
          list = new List<IObject> { value };
          arrayID = uniqueObjectID();
-         typeConstraint = none<TypeConstraint>();
-         defaultLambda = none<Lambda>();
-         defaultValue = none<IObject>();
+         _typeConstraint = none<TypeConstraint>();
+         _defaultLambda = none<Lambda>();
+         _defaultValue = none<IObject>();
       }
 
       public string ClassName => "Array";
@@ -83,17 +83,11 @@ namespace Kagami.Library.Objects
 
       public bool IsEqualTo(IObject obj) => isEqualTo(this, obj);
 
-      public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, (a1, a2) =>
-      {
-         if (a1.Length.Value != a2.Length.Value)
+      public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand,
+         (a1, a2) =>
          {
-            return false;
-         }
-         else
-         {
-            return a1.list.Zip(a2.list, (i1, i2) => i1.Match(i2, bindings)).All(b => b);
-         }
-      }, bindings);
+            return a1.Length.Value == a2.Length.Value && a1.list.Zip(a2.list, (i1, i2) => i1.Match(i2, bindings)).All(b => b);
+         }, bindings);
 
       public bool IsTrue => list.Count > 0;
 
@@ -111,25 +105,25 @@ namespace Kagami.Library.Objects
 
       public IMaybe<TypeConstraint> TypeConstraint
       {
-         get => typeConstraint;
-         set => typeConstraint = value;
+         get => _typeConstraint;
+         set => _typeConstraint = value;
       }
 
       public IMaybe<Lambda> DefaultLambda
       {
-         get => defaultLambda;
-         set => defaultLambda = value;
+         get => _defaultLambda;
+         set => _defaultLambda = value;
       }
 
       public IMaybe<IObject> DefaultValue
       {
-         get => defaultValue;
-         set => defaultValue = value;
+         get => _defaultValue;
+         set => _defaultValue = value;
       }
 
-      void assertType(IObject value)
+      protected void assertType(IObject value)
       {
-         if (typeConstraint.If(out var tc) && !tc.Matches(classOf(value)))
+         if (_typeConstraint.If(out var tc) && !tc.Matches(classOf(value)))
          {
             throw incompatibleClasses(value, tc.AsString);
          }
@@ -144,11 +138,11 @@ namespace Kagami.Library.Objects
             {
                return list[wrappedIndex];
             }
-            else if (defaultLambda.If(out var lambda))
+            else if (_defaultLambda.If(out var lambda))
             {
                return lambda.Invoke(Int.IntObject(index));
             }
-            else if (defaultValue.If(out var value))
+            else if (_defaultValue.If(out var value))
             {
                return value;
             }
@@ -192,26 +186,20 @@ namespace Kagami.Library.Objects
             {
                case Array array when array.arrayID == arrayID:
                   return;
-               case ICollection collection when !(value is String):
+               case ICollection collection and not String:
                {
                   var valueIterator = collection.GetIterator(false);
-                  var toDelete = new List<int>();
                   foreach (var index in indexList(container, list.Count))
                   {
-                     if (valueIterator.Next().If(out var item))
+                     var anyItem = valueIterator.Next();
+                     if (anyItem.If(out var item))
                      {
                         list[index] = item;
                      }
                      else
                      {
-                        toDelete.Add(index);
+                        break;
                      }
-                  }
-
-                  toDelete.Reverse();
-                  foreach (var index in toDelete)
-                  {
-                     list.RemoveAt(index);
                   }
 
                   break;
@@ -230,7 +218,7 @@ namespace Kagami.Library.Objects
          }
       }
 
-      void throwIfSelf(IObject value)
+      protected void throwIfSelf(IObject value)
       {
          if (value is Array array && array.arrayID == arrayID)
          {
@@ -248,7 +236,7 @@ namespace Kagami.Library.Objects
 
       public IEnumerable<IObject> List => list;
 
-      public Slice Slice(ICollection collection) => new Slice(this, collection.GetIterator(false).List().ToArray());
+      public Slice Slice(ICollection collection) => new(this, collection.GetIterator(false).List().ToArray());
 
       public IMaybe<IObject> Get(IObject index) => Next(((Int)index).Value);
 
@@ -356,9 +344,9 @@ namespace Kagami.Library.Objects
 
       public IObject Concatenate(Array array)
       {
-         if (typeConstraint.If(out var thisConstraint))
+         if (_typeConstraint.If(out var thisConstraint))
          {
-            if (array.typeConstraint.If(out var otherConstraint))
+            if (array._typeConstraint.If(out var otherConstraint))
             {
                if (!thisConstraint.IsEqualTo(otherConstraint))
                {
@@ -370,7 +358,7 @@ namespace Kagami.Library.Objects
                throw "Expected type constraint in RHS array".Throws();
             }
          }
-         else if (array.typeConstraint.IsSome)
+         else if (array._typeConstraint.IsSome)
          {
             throw "RHS array has a type constraint".Throws();
          }
@@ -381,44 +369,16 @@ namespace Kagami.Library.Objects
          return new Array(newList);
       }
 
-      public IObject Pop()
-      {
-         if (list.Count > 0)
-         {
-            return Some.Object(RemoveAt(list.Count - 1));
-         }
-         else
-         {
-            return None.NoneValue;
-         }
-      }
+      public IObject Pop() => list.Count > 0 ? Some.Object(RemoveAt(list.Count - 1)) : None.NoneValue;
 
       public IObject Unshift(IObject value) => InsertAt(0, value);
 
-      public IObject Shift()
-      {
-         if (list.Count > 0)
-         {
-            return Some.Object(RemoveAt(0));
-         }
-         else
-         {
-            return None.NoneValue;
-         }
-      }
+      public IObject Shift() => list.Count > 0 ? Some.Object(RemoveAt(0)) : None.NoneValue;
 
       public IObject Find(IObject item, int startIndex, bool reverse)
       {
          var index = reverse ? list.LastIndexOf(item, startIndex) : list.IndexOf(item, startIndex);
-
-         if (index == -1)
-         {
-            return None.NoneValue;
-         }
-         else
-         {
-            return Some.Object((Int)index);
-         }
+         return index == -1 ? None.NoneValue : Some.Object((Int)index);
       }
 
       public IObject FindAll(IObject item)
@@ -448,9 +408,9 @@ namespace Kagami.Library.Objects
             for (var i = 0; i < minLength; i++)
             {
                var innerList = new List<IObject>();
-               foreach (var t in listOfLists)
+               foreach (var listOf in listOfLists)
                {
-                  innerList.Add(t[i]);
+                  innerList.Add(listOf[i]);
                }
 
                outerList.Add(new Array(innerList));
@@ -463,7 +423,5 @@ namespace Kagami.Library.Objects
             return this;
          }
       }
-
-      public IObject this[SkipTake skipTake] => skipTakeThis(this, skipTake);
    }
 }

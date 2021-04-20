@@ -17,14 +17,7 @@ namespace Kagami.Library.Objects
          {
             var l1 = left.GetIterator(false).List().ToArray();
             var l2 = other.GetIterator(false).List().ToArray();
-            if (l1.Length == l2.Length)
-            {
-               return Enumerable.Zip(l1, l2, (a, b) => a.IsEqualTo(b)).All(b => b);
-            }
-            else
-            {
-               return false;
-            }
+            return l1.Length == l2.Length && l1.Zip(l2, (a, b) => a.IsEqualTo(b)).All(b => b);
          }
          else
          {
@@ -91,7 +84,7 @@ namespace Kagami.Library.Objects
             .Where(i => i.Between(0).Until(length));
       }
 
-      static Container conditionContainer(Container container)
+      private static Container conditionContainer(Container container)
       {
          var list = new List<IObject>();
          foreach (var obj in container.List)
@@ -122,22 +115,14 @@ namespace Kagami.Library.Objects
       }
 
       public static IObject getIndexed<T>(T obj, IObject index, Func<T, int, IObject> intGetter,
-         Func<T, Container, IObject> listGetter) where T : IObject
+         Func<T, Container, IObject> listGetter) where T : IObject => index switch
       {
-         switch (index)
-         {
-            case Int i:
-               return intGetter(obj, i.Value);
-            case Container container:
-               return listGetter(obj, conditionContainer(container));
-            case ICollection collection when !(index is String):
-               return listGetter(obj, new Container(collection.GetIterator(false).List()));
-            case IIterator iterator:
-               return listGetter(obj, new Container(iterator.List()));
-            default:
-               throw invalidIndex(index);
-         }
-      }
+         Int i => intGetter(obj, i.Value),
+         Container container => listGetter(obj, conditionContainer(container)),
+         ICollection collection and not String => listGetter(obj, new Container(collection.GetIterator(false).List())),
+         IIterator iterator => listGetter(obj, new Container(iterator.List())),
+         _ => throw invalidIndex(index)
+      };
 
       public static IObject setIndexed<T>(T obj, IObject index, IObject value, Action<T, int, IObject> intSetter,
          Action<T, Container, IObject> listSetter) where T : IObject
@@ -150,7 +135,7 @@ namespace Kagami.Library.Objects
             case Container container:
                listSetter(obj, conditionContainer(container), value);
                return obj;
-            case ICollection collection when !(index is String):
+            case ICollection collection and not String:
                listSetter(obj, new Container(collection.GetIterator(false).List()), value);
                return obj;
             case IIterator iterator:
@@ -158,30 +143,6 @@ namespace Kagami.Library.Objects
                return obj;
             default:
                throw invalidIndex(index);
-         }
-      }
-
-      public static IObject skipTakeThis(ICollection collection, SkipTake skipTake)
-      {
-         var (skip, take) = skipTake;
-         var iterator = collection.GetIterator(true);
-         var skipped = iterator.Skip(skip);
-         if (skipTake.NoTake)
-         {
-            return skipped;
-         }
-
-         return ((IIterator)skipped).Take(take);
-      }
-
-      public static IObject[] spread(IObject value)
-      {
-         switch (value)
-         {
-            case Tuple tuple:
-               return tuple.Value;
-            default:
-               return array(value);
          }
       }
    }

@@ -34,17 +34,19 @@ namespace Kagami.Library.Objects
 
       public static IObject New(IEnumerable<IObject> objects) => new Dictionary(objects);
 
-      int objectID;
-      Hash<IObject, IObject> dictionary;
-      IObject[] keys;
-      IMaybe<Lambda> defaultLambda;
-      int parameterCount;
+      protected int objectID;
+      protected Hash<IObject, IObject> dictionary;
+      protected IObject[] keys;
+      protected IMaybe<Lambda> _defaultLambda;
+      protected int parameterCount;
 
       public Dictionary(IEnumerable<IObject> items)
       {
          objectID = uniqueObjectID();
          dictionary = new Hash<IObject, IObject>();
-         defaultLambda = none<Lambda>();
+         _defaultLambda = none<Lambda>();
+         DefaultValue = none<IObject>();
+         Caching = false;
 
          foreach (var item in items)
          {
@@ -55,7 +57,7 @@ namespace Kagami.Library.Objects
                   switch (kv.Value)
                   {
                      case Lambda lambda:
-                        defaultLambda = lambda.Some();
+                        _defaultLambda = lambda.Some();
                         break;
                      default:
                         DefaultValue = kv.Value.Some();
@@ -76,7 +78,9 @@ namespace Kagami.Library.Objects
          parameterCount = 0;
       }
 
-      public Dictionary() : this(new IObject[0]) { }
+      public Dictionary() : this(new IObject[0])
+      {
+      }
 
       public Dictionary(Hash<IObject, IObject> hash)
       {
@@ -84,29 +88,31 @@ namespace Kagami.Library.Objects
          dictionary = hash;
          keys = new IObject[0];
          parameterCount = 0;
-         defaultLambda = none<Lambda>();
+         _defaultLambda = none<Lambda>();
+         DefaultValue = none<IObject>();
+         Caching = false;
       }
 
-      public IMaybe<IObject> DefaultValue { get; set; } = none<IObject>();
+      public IMaybe<IObject> DefaultValue { get; set; }
 
       public IMaybe<Lambda> DefaultLambda
       {
-         get => defaultLambda;
+         get => _defaultLambda;
          set
          {
-            defaultLambda = value;
-            parameterCount = defaultLambda.Map(l => l.Invokable.Parameters.Length).DefaultTo(() => 0);
+            _defaultLambda = value;
+            parameterCount = _defaultLambda.Map(l => l.Invokable.Parameters.Length).DefaultTo(() => 0);
          }
       }
 
-      public Boolean Caching { get; set; } = false;
+      public Boolean Caching { get; set; }
 
-      IObject getValue(IObject key)
+      protected IObject getValue(IObject key)
       {
          if (dictionary.ContainsKey(key))
          {
             var value = dictionary[key];
-            if (DefaultValue.IsSome || defaultLambda.IsSome)
+            if (DefaultValue.IsSome || _defaultLambda.IsSome)
             {
                return value;
             }
@@ -124,7 +130,7 @@ namespace Kagami.Library.Objects
 
             return dv;
          }
-         else if (defaultLambda.If(out var lambda))
+         else if (_defaultLambda.If(out var lambda))
          {
             IObject value;
             switch (parameterCount)
@@ -161,7 +167,7 @@ namespace Kagami.Library.Objects
             {
                case Dictionary otherDictionary when objectID == otherDictionary.objectID:
                   return;
-               case None _:
+               case None:
                   dictionary.Remove(key);
                   break;
                default:
@@ -175,15 +181,7 @@ namespace Kagami.Library.Objects
       {
          get
          {
-            var list = new List<IObject>();
-            foreach (var key in container.List)
-            {
-               if (dictionary.ContainsKey(key))
-               {
-                  list.Add(this[key]);
-               }
-            }
-
+            var list = container.List.Where(key => dictionary.ContainsKey(key)).Select(key => this[key]).ToList();
             return new Array(list);
          }
          set
@@ -192,7 +190,7 @@ namespace Kagami.Library.Objects
             {
                case Dictionary otherDictionary when objectID == otherDictionary.objectID:
                   return;
-               case None _:
+               case None:
                {
                   foreach (var key in container.List)
                   {
@@ -200,8 +198,8 @@ namespace Kagami.Library.Objects
                   }
                }
                   break;
-               case ICollection _ when !(value is String):
-               case IIterator _:
+               case ICollection and not String:
+               case IIterator:
                {
                   if (getIterator(value, false).If(out var iterator, out var exception))
                   {
@@ -250,7 +248,7 @@ namespace Kagami.Library.Objects
                return new Some(value);
             }
          }
-         else if (defaultLambda.If(out var lambda))
+         else if (_defaultLambda.If(out var lambda))
          {
             var result = lambda.Invoke(key);
             if (Caching.IsTrue)
@@ -283,17 +281,7 @@ namespace Kagami.Library.Objects
 
       public string Image
       {
-         get
-         {
-            if (dictionary.Count == 0)
-            {
-               return "{}";
-            }
-            else
-            {
-               return $"{{{dictionary.Select(i => $"{i.Key.Image} => {i.Value.Image}").ToString(", ")}}}";
-            }
-         }
+         get => dictionary.Count == 0 ? "{}" : $"{{{dictionary.Select(i => $"{i.Key.Image} => {i.Value.Image}").ToString(", ")}}}";
       }
 
       public int Hash => dictionary.GetHashCode();
@@ -316,7 +304,7 @@ namespace Kagami.Library.Objects
 
       public bool IsTrue => dictionary.Count > 0;
 
-      public IIterator GetIterator(bool lazy) => lazy ? (IIterator)new LazyDictionaryIterator(this) : new DictionaryIterator(this);
+      public IIterator GetIterator(bool lazy) => lazy ? new LazyDictionaryIterator(this) : new DictionaryIterator(this);
 
       public IMaybe<IObject> Next(int index) => maybe(keys.Length < index, () => dictionary[keys[index]]);
 
@@ -425,14 +413,7 @@ namespace Kagami.Library.Objects
       public IObject RemoveAt(int index)
       {
          var keyArray = dictionary.KeyArray();
-         if (index.Between(0).Until(keyArray.Length))
-         {
-            return Remove(keyArray[index]);
-         }
-         else
-         {
-            return None.NoneValue;
-         }
+         return index.Between(0).Until(keyArray.Length) ? Remove(keyArray[index]) : None.NoneValue;
       }
 
       public IObject RemoveAll(IObject obj) => Remove(obj);
@@ -440,14 +421,7 @@ namespace Kagami.Library.Objects
       public IObject InsertAt(int index, IObject obj)
       {
          var keyArray = dictionary.KeyArray();
-         if (index.Between(0).Until(keyArray.Length))
-         {
-            return Update(keyArray[index], obj);
-         }
-         else
-         {
-            return None.NoneValue;
-         }
+         return index.Between(0).Until(keyArray.Length) ? Update(keyArray[index], obj) : None.NoneValue;
       }
 
       public Boolean IsEmpty => dictionary.Count == 0;
@@ -517,7 +491,7 @@ namespace Kagami.Library.Objects
          var iterator = collection.GetIterator(false);
          foreach (var item in iterator.List())
          {
-            if (item is Tuple tuple && tuple.Length.Value == 2)
+            if (item is Tuple { Length: { Value: 2 } } tuple)
             {
                newDictionary[tuple[0]] = tuple[1];
             }
@@ -525,7 +499,5 @@ namespace Kagami.Library.Objects
 
          return new Dictionary(newDictionary);
       }
-
-      public IObject this[SkipTake skipTake] => skipTakeThis(this, skipTake);
    }
 }

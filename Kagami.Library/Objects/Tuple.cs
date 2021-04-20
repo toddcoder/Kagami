@@ -31,20 +31,20 @@ namespace Kagami.Library.Objects
          return new Tuple(array((IObject)new KeyValue(nameX, x), new KeyValue(nameY, y)));
       }
 
-      public static Tuple Empty => new Tuple(new IObject[0]);
+      public static Tuple Empty => new(new IObject[0]);
 
       public static Tuple Tuple3(string left, string middle, string right)
       {
-         return new Tuple(new[] { String.StringObject(left), String.StringObject(middle), String.StringObject(right) });
+         return new(new[] { String.StringObject(left), String.StringObject(middle), String.StringObject(right) });
       }
 
-      IObject[] items;
-      Hash<string, int> names;
-      Hash<int, string> indexes;
+      private IObject[] items;
+      private Hash<string, int> names;
+      private Hash<int, string> indexes;
 
       public Tuple(IObject[] items) : this()
       {
-         if (items.Length == 1 && items[0] is Container il && il.ExpandInTuple)
+         if (items.Length == 1 && items[0] is Container { ExpandInTuple: true } il)
          {
             this.items = il.List.ToArray();
          }
@@ -68,13 +68,15 @@ namespace Kagami.Library.Objects
          denameify();
       }
 
-      public Tuple(IObject value) : this(array(value)) { }
+      public Tuple(IObject value) : this(array(value))
+      {
+      }
 
-      void denameify()
+      private void denameify()
       {
          for (var i = 0; i < items.Length; i++)
          {
-            if (items[i] is IKeyValue keyValue && keyValue.ExpandInTuple)
+            if (items[i] is IKeyValue { ExpandInTuple: true } keyValue)
             {
                names[keyValue.Key.AsString] = i;
                indexes[i] = keyValue.Key.AsString;
@@ -117,16 +119,16 @@ namespace Kagami.Library.Objects
          }
       }
 
-      string getItemString(int index, string text)
+      private string getItemString(int index, string text)
       {
          return indexes.FlatMap(index, n => $"{n}: {text}", () => text);
       }
 
-      string getItemString(int index) => getItemString(index, items[index].AsString);
+      private string getItemString(int index) => getItemString(index, items[index].AsString);
 
-      string getItemImage(int index) => getItemString(index, items[index].Image);
+      private string getItemImage(int index) => getItemString(index, items[index].Image);
 
-      IMaybe<IObject[]> AllButLast
+      public IMaybe<IObject[]> AllButLast
       {
          get
          {
@@ -153,7 +155,7 @@ namespace Kagami.Library.Objects
          get
          {
             var self = this;
-            return items.Select((o, i) => self.getItemString(i)).ToString(" ");
+            return items.Select((_, i) => self.getItemString(i)).ToString(" ");
          }
       }
 
@@ -162,7 +164,7 @@ namespace Kagami.Library.Objects
          get
          {
             var self = this;
-            return $"({items.Select((o, i) => self.getItemImage(i)).ToString(", ")})";
+            return $"({items.Select((_, i) => self.getItemImage(i)).ToString(", ")})";
          }
       }
 
@@ -174,17 +176,9 @@ namespace Kagami.Library.Objects
             items.Zip(t.items, (t1, t2) => (x: t1, y: t2)).All(tu => tu.x.IsEqualTo(tu.y));
       }
 
-      public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, (t1, t2) =>
-      {
-         if (t1.Length.Value != t2.Length.Value)
-         {
-            return false;
-         }
-         else
-         {
-            return t1.items.Zip(t2.items, (i1, i2) => i1.Match(i2, bindings)).All(b => b);
-         }
-      }, bindings);
+      public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand,
+         (t1, t2) => { return t1.Length.Value == t2.Length.Value && t1.items.Zip(t2.items, (i1, i2) => i1.Match(i2, bindings)).All(b => b); },
+         bindings);
 
       public bool IsTrue => items.Length > 0;
 
@@ -205,8 +199,6 @@ namespace Kagami.Library.Objects
             return Compare((IObject)obj);
          }
       }
-
-      //public string FullFunctionName(string name) => name.Function(names.KeyArray());
 
       public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new Iterator(this);
 
@@ -308,23 +300,8 @@ namespace Kagami.Library.Objects
          }
       }
 
-      public IObject Tail
-      {
-         get
-         {
-            if (items.Length == 0)
-            {
-               return Empty;
-            }
-            else
-            {
-               return new Tuple(items.Skip(1).ToArray());
-            }
-         }
-      }
+      public IObject Tail => items.Length == 0 ? Empty : new Tuple(items.Skip(1).ToArray());
 
       public IObject HeadTail => new Tuple(Head, Tail);
-
-      public IObject this[SkipTake skipTake] => skipTakeThis(this, skipTake);
    }
 }

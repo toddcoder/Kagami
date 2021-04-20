@@ -9,7 +9,7 @@ namespace Kagami.Library.Parsers.Expressions
 {
    public class SymbolStack
    {
-      Stack<Symbol> stack;
+      protected Stack<Symbol> stack;
 
       public SymbolStack() => stack = new Stack<Symbol>();
 
@@ -25,13 +25,13 @@ namespace Kagami.Library.Parsers.Expressions
       {
          if (IsEmpty)
          {
-	         return false;
+            return false;
          }
 
          var symbol = stack.Peek();
          if (!symbol.LeftToRight)
          {
-	         return symbol.Precedence < next.Precedence;
+            return symbol.Precedence < next.Precedence;
          }
 
          return symbol.Precedence <= next.Precedence;

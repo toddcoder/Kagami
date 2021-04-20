@@ -97,7 +97,7 @@ namespace Kagami.Library.Packages
          }
       }
 
-      public Long Ticks() => new Long(DateTime.Now.Ticks);
+      public Long Ticks() => new(DateTime.Now.Ticks);
 
       public IResult<IObject> NewParameterlessObject(string className, string fieldName)
       {
@@ -158,9 +158,9 @@ namespace Kagami.Library.Packages
          return new RegexMatch(passed);
       }
 
-      public XRandom Random() => new XRandom();
+      public XRandom Random() => new();
 
-      public XRandom Random(int seed) => new XRandom(seed);
+      public XRandom Random(int seed) => new(seed);
 
       public Complex Complex(IObject real, IObject imaginary)
       {
@@ -187,7 +187,7 @@ namespace Kagami.Library.Packages
 
       public Dictionary XFields()
       {
-         return new Dictionary(Machine.Current.CurrentFrame.Fields.ToHash(t => String.StringObject(t.fieldName), t => t.field.Value));
+         return new(Machine.Current.CurrentFrame.Fields.ToHash(t => String.StringObject(t.fieldName), t => t.field.Value));
       }
 
       public Date Date(double floating) => DateTime.FromOADate(floating);

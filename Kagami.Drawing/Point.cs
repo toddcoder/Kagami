@@ -6,10 +6,10 @@ using static Kagami.Library.Operations.NumericFunctions;
 
 namespace Kagami.Drawing
 {
-   public struct Point : IObject
+   public readonly struct Point : IObject
    {
-      IObject x;
-      IObject y;
+      private readonly IObject x;
+      private readonly IObject y;
 
       public Point(IObject x, IObject y) : this()
       {

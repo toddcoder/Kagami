@@ -10,8 +10,8 @@ namespace Kagami.Library.Nodes.Statements
 {
    public class DataType : Statement
    {
-      string className;
-      Hash<string, (IObject[], IObject)> comparisands;
+      protected string className;
+      protected Hash<string, (IObject[], IObject)> comparisands;
 
       public DataType(string className, Hash<string, (IObject[], IObject)> comparisands)
       {

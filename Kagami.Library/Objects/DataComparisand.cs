@@ -5,12 +5,12 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct DataComparisand : IObject
+   public readonly struct DataComparisand : IObject
    {
-      string className;
-      string name;
-      IObject[] comparisands;
-      IObject ordinal;
+      private readonly string className;
+      private readonly string name;
+      private readonly IObject[] comparisands;
+      private readonly IObject ordinal;
 
       public DataComparisand(string className, string name, IObject[] comparisands, IObject ordinal) : this()
       {
@@ -22,7 +22,7 @@ namespace Kagami.Library.Objects
 
       public String Name => name;
 
-      public Tuple Comparisands => new Tuple(comparisands);
+      public Tuple Comparisands => new(comparisands);
 
       public IObject Ordinal => ordinal;
 
@@ -30,24 +30,11 @@ namespace Kagami.Library.Objects
 
       public string AsString => name;
 
-      public string Image
-      {
-         get
-         {
-            if (comparisands.Length == 0)
-            {
-	            return name;
-            }
-            else
-            {
-	            return $"{name}({comparisands.Select(c => c.Image).ToString(", ")})";
-            }
-         }
-      }
+      public string Image => comparisands.Length == 0 ? name : $"{name}({comparisands.Select(c => c.Image).ToString(", ")})";
 
       public int Hash => comparisands.GetHashCode();
 
-      bool comparisandsEqual(IObject[] others)
+      private bool comparisandsEqual(IObject[] others)
       {
          if (comparisands.Length == others.Length)
          {
@@ -56,7 +43,7 @@ namespace Kagami.Library.Objects
          }
          else
          {
-	         return false;
+            return false;
          }
       }
 
@@ -65,7 +52,7 @@ namespace Kagami.Library.Objects
          return obj is DataComparisand dc && className == dc.className && ordinal.IsEqualTo(dc.ordinal) && comparisandsEqual(dc.comparisands);
       }
 
-      bool comparisandsMatch(IObject[] others, Hash<string, IObject> bindings)
+      private bool comparisandsMatch(IObject[] others, Hash<string, IObject> bindings)
       {
          var self = this;
          return Enumerable.Range(0, comparisands.Length).Select(i => self.comparisands[i].Match(others[i], bindings)).All(b => b);

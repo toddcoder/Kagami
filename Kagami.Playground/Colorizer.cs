@@ -11,8 +11,8 @@ namespace Kagami.Playground
 {
    public class Colorizer
    {
-      RichTextBox textBox;
-      int parenthesesCount;
+      protected RichTextBox textBox;
+      protected int parenthesesCount;
 
       [DllImport("user32.dll")]
       public static extern int SendMessage(IntPtr hWnd, int msg, bool wParam, int lParam);
@@ -42,7 +42,7 @@ namespace Kagami.Playground
          markText("/s+ (/r /n | /r | /n)", Color.PaleVioletRed);
       }
 
-      void markText(string pattern, Color backColor)
+      protected void markText(string pattern, Color backColor)
       {
          if (textBox.Text.Matcher(pattern).If(out var matcher))
          {
@@ -55,7 +55,7 @@ namespace Kagami.Playground
          }
       }
 
-      static bool isBold(Library.Parsers.Color color) => color switch
+      protected static bool isBold(Library.Parsers.Color color) => color switch
       {
          Library.Parsers.Color.StringPart => true,
          Library.Parsers.Color.NumberPart => true,
@@ -68,21 +68,21 @@ namespace Kagami.Playground
          _ => false
       };
 
-      static Color getBackColor(Library.Parsers.Color color) => color switch
+      protected static Color getBackColor(Library.Parsers.Color color) => color switch
       {
          Library.Parsers.Color.OpenParenthesis => SystemColors.Info,
          Library.Parsers.Color.CloseParenthesis => SystemColors.Info,
          _ => Color.White
       };
 
-      static Color getParenthesisColor(Library.Parsers.Color color, ref int parenthesesCount) => color switch
+      protected static Color getParenthesisColor(Library.Parsers.Color color, ref int parenthesesCount) => color switch
       {
          Library.Parsers.Color.OpenParenthesis => getParenthesisColor(++parenthesesCount),
          Library.Parsers.Color.CloseParenthesis => getParenthesisColor(parenthesesCount--),
          _ => Color.Black
       };
 
-      static Color getParenthesisColor(int parenthesesCount) => parenthesesCount switch
+      protected static Color getParenthesisColor(int parenthesesCount) => parenthesesCount switch
       {
          1 => Color.Black,
          2 => Color.Blue,
@@ -93,7 +93,7 @@ namespace Kagami.Playground
          _ => Color.Red
       };
 
-      static Color getForeColor(Library.Parsers.Color color, ref int parenthesesCount) => color switch
+      protected static Color getForeColor(Library.Parsers.Color color, ref int parenthesesCount) => color switch
       {
          Library.Parsers.Color.String => Color.FromArgb(38, 205, 0),
          Library.Parsers.Color.StringPart => Color.FromArgb(38, 205, 0),

@@ -76,7 +76,7 @@ namespace Kagami.Library.Classes
          messages["mutable()"] = (obj, msg) => function<String>(obj, s => s.Mutable());
       }
 
-      static IObject getIndexed(String s, IObject i)
+      protected static IObject getIndexed(String s, IObject i)
       {
          return CollectionFunctions.getIndexed(s, i, (str, index) => str[index], (str, list) => str[list]);
       }

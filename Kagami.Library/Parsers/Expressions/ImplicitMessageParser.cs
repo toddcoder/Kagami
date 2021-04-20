@@ -8,12 +8,14 @@ namespace Kagami.Library.Parsers.Expressions
 {
    public class ImplicitMessageParser : SymbolParser
    {
-      static string parameters(int count)
+      protected static string parameters(int count)
       {
-         return $"({Enumerable.Range(0, count).Select(i => "_").ToString(",")})";
+         return $"({Enumerable.Range(0, count).Select(_ => "_").ToString(",")})";
       }
 
-      public ImplicitMessageParser(ExpressionBuilder builder) : base(builder) { }
+      public ImplicitMessageParser(ExpressionBuilder builder) : base(builder)
+      {
+      }
 
       public override string Pattern => $"^ /(|s|) /({REGEX_ITERATOR_FUNCTIONS}) /'^'";
 
@@ -26,18 +28,13 @@ namespace Kagami.Library.Parsers.Expressions
          {
             var parameterCount = 1;
             var fieldName = "__$0";
-            switch (message)
+            message = message switch
             {
-               case "!":
-                  message = "map";
-                  break;
-               case "?":
-                  message = "if";
-                  break;
-               case ":":
-                  message = "bind";
-                  break;
-            }
+               "!" => "map",
+               "?" => "if",
+               ":" => "bind",
+               _ => message
+            };
 
             switch (message)
             {

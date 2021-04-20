@@ -8,17 +8,17 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class InterpolatedStringSymbol : Symbol
    {
-      string prefix;
-      Expression[] expressions;
-      string[] suffixes;
-	   bool isFailure;
+      protected string prefix;
+      protected Expression[] expressions;
+      protected string[] suffixes;
+      protected bool isFailure;
 
       public InterpolatedStringSymbol(string prefix, Expression[] expressions, string[] suffixes, bool isFailure)
       {
          this.prefix = prefix;
          this.expressions = expressions;
          this.suffixes = suffixes;
-	      this.isFailure = isFailure;
+         this.isFailure = isFailure;
       }
 
       public override void Generate(OperationsBuilder builder)
@@ -35,10 +35,10 @@ namespace Kagami.Library.Nodes.Symbols
             builder.SendMessage("~(_)", 1);
          }
 
-			if (isFailure)
-			{
-				builder.Failure();
-			}
+         if (isFailure)
+         {
+            builder.Failure();
+         }
       }
 
       public override Precedence Precedence => Precedence.Value;

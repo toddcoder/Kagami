@@ -20,16 +20,16 @@ namespace Kagami.Library.Parsers.Statements
 {
    public class ClassBuilder
    {
-      string className;
-      Parameters parameters;
-      string parentClassName;
-      Expression[] parentArguments;
-      bool initialize;
-      Block constructorBlock;
-      Hash<string, (ConstructorInvokable, Block)> constructorInvokables;
-      List<(IInvokable, Block, bool)> functions;
-      UserClass userClass;
-      IEnumerable<Mixin> mixins;
+      protected string className;
+      protected Parameters parameters;
+      protected string parentClassName;
+      protected Expression[] parentArguments;
+      protected bool initialize;
+      protected Block constructorBlock;
+      protected Hash<string, (ConstructorInvokable, Block)> constructorInvokables;
+      protected List<(IInvokable, Block, bool)> functions;
+      protected UserClass userClass;
+      protected IEnumerable<Mixin> mixins;
 
       public ClassBuilder(string className, Parameters parameters, string parentClassName, Expression[] parentArguments,
          bool initialize, Block constructorBlock, IEnumerable<Mixin> mixins)
@@ -48,28 +48,22 @@ namespace Kagami.Library.Parsers.Statements
       public IMatched<Unit> Register()
       {
          userClass = new UserClass(className, parentClassName);
-         if (Module.Global.RegisterClass(userClass).IfNot(out var exception))
-         {
-            return failedMatch<Unit>(exception);
-         }
-         else
-         {
-            return Constructor(parameters, constructorBlock, true);
-         }
+         return Module.Global.RegisterClass(userClass).IfNot(out var exception) ? failedMatch<Unit>(exception)
+            : Constructor(parameters, constructorBlock, true);
       }
 
       public UserClass UserClass => userClass;
 
       public Statement[] Statements { get; set; } = new Statement[0];
 
-      static bool isPrivate(string identifier) => identifier.IsMatch("^ '_' -(> '_$')");
+      protected static bool isPrivate(string identifier) => identifier.IsMatch("^ '_' -(> '_$')");
 
-      (string, Expression)[] getInitializeArguments()
+      protected (string, Expression)[] getInitializeArguments()
       {
          return parentArguments.Select(e => e.Symbols[0]).Cast<NameValueSymbol>().Select(nv => nv.Tuple()).ToArray();
       }
 
-      Block modifyBlock(Block originalBlock, bool standard)
+      protected Block modifyBlock(Block originalBlock, bool standard)
       {
          userClass.RegisterParameters(parameters);
 
@@ -260,7 +254,7 @@ namespace Kagami.Library.Parsers.Statements
 
       public override string ToString()
       {
-         return $"class {className}({parameters}){parentClassName.Map(n => $"of {n}({parentArguments.ToString(", ")})")}";
+         return $"class {className}({parameters}){parentClassName.Map(s => $"{s} of ({parentArguments.ToString(", ")})")}";
       }
    }
 }

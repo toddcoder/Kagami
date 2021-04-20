@@ -9,11 +9,11 @@ namespace Kagami.Library.Parsers.Expressions
 {
    public class ExpressionBuilder
    {
-      SymbolStack stack;
-      List<Symbol> symbols;
-      List<Symbol> ordered;
-      Bits32<ExpressionFlags> flags;
-      IMaybe<Symbol> lastSymbol;
+      protected SymbolStack stack;
+      protected List<Symbol> symbols;
+      protected List<Symbol> ordered;
+      protected Bits32<ExpressionFlags> flags;
+      protected IMaybe<Symbol> _lastSymbol;
 
       public ExpressionBuilder(Bits32<ExpressionFlags> flags)
       {
@@ -21,7 +21,7 @@ namespace Kagami.Library.Parsers.Expressions
          symbols = new List<Symbol>();
          ordered = new List<Symbol>();
          this.flags = flags;
-         lastSymbol = none<Symbol>();
+         _lastSymbol = none<Symbol>();
       }
 
       public Bits32<ExpressionFlags> Flags
@@ -30,32 +30,30 @@ namespace Kagami.Library.Parsers.Expressions
          set => flags = value;
       }
 
-      public IResult<Unit> Add(Symbol symbol)
+      public void Add(Symbol symbol)
       {
          ordered.Add(symbol);
-         lastSymbol = symbol.Some();
+         _lastSymbol = symbol.Some();
 
          while (stack.IsPending(symbol))
          {
-	         if (stack.Pop().If(out var poppedSymbol, out var exception))
-	         {
-		         symbols.Add(poppedSymbol);
-	         }
-	         else
-	         {
-		         return failure<Unit>(exception);
-	         }
+            if (stack.Pop().If(out var poppedSymbol))
+            {
+               symbols.Add(poppedSymbol);
+            }
+            else
+            {
+               return;
+            }
          }
 
          if (symbol.Precedence != Precedence.Value)
          {
             stack.Push(symbol);
-            return Unit.Success();
          }
          else
          {
             symbols.Add(symbol);
-            return Unit.Success();
          }
       }
 
@@ -63,20 +61,20 @@ namespace Kagami.Library.Parsers.Expressions
       {
          while (!stack.IsEmpty)
          {
-	         if (stack.Pop().If(out var symbol, out var exception))
-	         {
-		         symbols.Add(symbol);
-	         }
-	         else
-	         {
-		         return failure<Unit>(exception);
-	         }
+            if (stack.Pop().If(out var symbol, out var exception))
+            {
+               symbols.Add(symbol);
+            }
+            else
+            {
+               return failure<Unit>(exception);
+            }
          }
 
          return Unit.Success();
       }
 
-      public IResult<Expression> ToExpression() => EndOfExpression().Map(u => new Expression(symbols.ToArray()));
+      public IResult<Expression> ToExpression() => EndOfExpression().Map(_ => new Expression(symbols.ToArray()));
 
       public IEnumerable<Symbol> Ordered => ordered;
 
@@ -91,6 +89,6 @@ namespace Kagami.Library.Parsers.Expressions
          ordered.Clear();
       }
 
-      public IMaybe<Symbol> LastSymbol => lastSymbol;
+      public IMaybe<Symbol> LastSymbol => _lastSymbol;
    }
 }

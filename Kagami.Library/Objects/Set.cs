@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Core.Collections;
 using Core.Enumerables;
 using Core.Monads;
@@ -12,17 +13,38 @@ namespace Kagami.Library.Objects
    {
       public static IObject Empty => new Set();
 
-      Set<IObject> set;
+      protected Set<IObject> set;
+      protected List<IObject> list;
 
-      public Set(IObject[] items) => set = new Set<IObject>(items);
+      public Set(IObject[] items)
+      {
+         set = new Set<IObject>(items);
+         list = new List<IObject>();
+      }
 
-      public Set(Set<IObject> set) => this.set = set;
+      public Set(Set<IObject> set)
+      {
+         this.set = set;
+         list = new List<IObject>();
+      }
 
-      public Set(Set otherSet) => set = otherSet.set;
+      public Set(Set otherSet)
+      {
+         set = otherSet.set;
+         list = new List<IObject>();
+      }
 
-      public Set(IObject obj) => set = new Set<IObject>(new[] { obj });
+      public Set(IObject obj)
+      {
+         set = new Set<IObject>(obj);
+         list = new List<IObject>();
+      }
 
-      public Set() => set = new Set<IObject>();
+      public Set()
+      {
+         set = new Set<IObject>();
+         list = new List<IObject>();
+      }
 
       public string ClassName => "Set";
 
@@ -38,9 +60,15 @@ namespace Kagami.Library.Objects
 
       public bool IsTrue => set.Count > 0;
 
-      public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new Iterator(this);
+      public IIterator GetIterator(bool lazy)
+      {
+         list = new List<IObject>();
+         list.AddRange(set);
 
-      public IMaybe<IObject> Next(int index) => maybe(index < set.Count, () => set[index]);
+         return lazy ? new LazyIterator(this) : new Iterator(this);
+      }
+
+      public IMaybe<IObject> Next(int index) => maybe(index < set.Count, () => list[index]);
 
       public IMaybe<IObject> Peek(int index) => Next(index);
 
@@ -70,35 +98,30 @@ namespace Kagami.Library.Objects
          return this;
       }
 
-      public IObject RemoveObject(IObject item)
+      public Set Union(Set other) => new(set.Union(other.set));
+
+      public Set Difference(Set other) => new(set.Except(other.set).ToArray());
+
+      public Set Intersection(Set other) => new(set.Intersection(other.set));
+
+      public IObject this[int index]
       {
-         if (set.Contains(item))
+         get
          {
-            set.Remove(item);
-            return Some.Object(item);
-         }
-         else
-         {
-            return None.NoneValue;
+            list = new List<IObject>();
+            list.AddRange(set);
+            return list[wrapIndex(index, set.Count)];
          }
       }
 
-      public Set Union(Set other) => new Set(set.Union(other.set));
-
-      public Set Difference(Set other) => new Set(set.Except(other.set).ToArray());
-
-      public Set Intersection(Set other) => new Set(set.Intersection(other.set));
-
-      public IObject this[int index] => set[wrapIndex(index, set.Count)];
-
-      public IObject Extend(IObject obj)
+      public IObject Extend()
       {
          var iterator = GetIterator(false);
-         var next = iterator.Next();
-         while (next.If(out var value))
+         var _next = iterator.Next();
+         while (_next.If(out var next))
          {
-            Append(value);
-            next = iterator.Next();
+            Append(next);
+            _next = iterator.Next();
          }
 
          return this;
@@ -112,17 +135,13 @@ namespace Kagami.Library.Objects
 
       public int Compare(IObject obj)
       {
-         switch (obj)
+         return obj switch
          {
-            case Set otherSet when set.IsStrictSubsetOf(otherSet.set):
-               return -1;
-            case Set otherSet when set.IsSubsetOf(otherSet.set):
-               return 0;
-            case Set _:
-               return 1;
-            default:
-               throw AllExceptions.unableToConvert(obj.Image, "Set");
-         }
+            Set otherSet when set.IsProperSubsetOf(otherSet.set) => -1,
+            Set otherSet when set.IsSubsetOf(otherSet.set) => 0,
+            Set _ => 1,
+            _ => throw AllExceptions.unableToConvert(obj.Image, "Set")
+         };
       }
 
       public IObject Object => this;
@@ -135,7 +154,7 @@ namespace Kagami.Library.Objects
 
       public Set Classify(Lambda lambda)
       {
-         var classified = new AutoHash<IObject, Set>(k => new Set(), true);
+         var classified = new AutoHash<IObject, Set>(_ => new Set(), true);
          foreach (var item in set)
          {
             var key = lambda.Invoke(item);
@@ -143,29 +162,6 @@ namespace Kagami.Library.Objects
          }
 
          return new Set(classified.ValueArray().Select(s => (IObject)s).ToArray());
-      }
-
-      public IObject this[SkipTake skipTake] => skipTakeThis(this, skipTake);
-
-      public Boolean IsDisjointWith(Set otherSet)
-      {
-         foreach (var obj in set)
-         {
-            if (otherSet.In(obj).IsTrue)
-            {
-               return false;
-            }
-         }
-
-         foreach (var obj in otherSet.set)
-         {
-            if (In(obj).IsTrue)
-            {
-               return false;
-            }
-         }
-
-         return true;
       }
    }
 }

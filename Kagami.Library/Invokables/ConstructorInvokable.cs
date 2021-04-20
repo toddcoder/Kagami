@@ -11,7 +11,7 @@ namespace Kagami.Library.Invokables
          Parameters = parameters;
       }
 
-      string ClassName { get; }
+      public string ClassName { get; }
 
       public int Index { get; set; }
 

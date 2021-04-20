@@ -13,23 +13,23 @@ namespace Kagami.Library.Objects
    {
       public static IObject CreateObject(IEnumerable<IObject> items) => new Cycle(items.ToArray());
 
-      IObject[] items;
-      IMaybe<(IObject, Lambda)> seedLambda;
+      protected IObject[] items;
+      protected IMaybe<(IObject, Lambda)> _seedLambda;
 
       public Cycle(params IObject[] items)
       {
          this.items = items;
          if (this.items.Length == 2 && this.items[1] is Lambda lambda)
          {
-            seedLambda = (this.items[0], lambda).Some();
+            _seedLambda = (this.items[0], lambda).Some();
          }
          else
          {
-            seedLambda = none<(IObject, Lambda)>();
+            _seedLambda = none<(IObject, Lambda)>();
          }
       }
 
-      public IMaybe<(IObject, Lambda)> SeedLambda => seedLambda;
+      public IMaybe<(IObject, Lambda)> SeedLambda => _seedLambda;
 
       public string ClassName => "Cycle";
 
@@ -74,10 +74,8 @@ namespace Kagami.Library.Objects
 
       public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
-      public Tuple Items => new Tuple(items);
+      public Tuple Items => new(items);
 
       public IObject this[int index] => items[index];
-
-      public IObject this[SkipTake skipTake] => skipTakeThis(this, skipTake);
    }
 }

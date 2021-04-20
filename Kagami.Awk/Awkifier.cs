@@ -16,14 +16,14 @@ namespace Kagami.Awk
 {
    public class Awkifier : IObject, ICollection
    {
-      string source;
-      Regex recordPattern;
-      Regex fieldPattern;
-      string[] records;
-      string[] fields;
-      string recordSeparator;
-      string fieldSeparator;
-      bool recordsCreated;
+      protected string source;
+      protected Regex recordPattern;
+      protected Regex fieldPattern;
+      protected string[] records;
+      protected string[] fields;
+      protected string recordSeparator;
+      protected string fieldSeparator;
+      protected bool recordsCreated;
 
       public Awkifier(string source, bool asFile)
       {
@@ -127,7 +127,7 @@ namespace Kagami.Awk
 
       public bool IsTrue => source.IsNotEmpty();
 
-      void splitIfRecordNotCreated()
+      protected void splitIfRecordNotCreated()
       {
          if (!recordsCreated)
          {
@@ -136,7 +136,7 @@ namespace Kagami.Awk
          }
       }
 
-      void split(int index)
+      protected void split(int index)
       {
          splitIfRecordNotCreated();
 
@@ -168,7 +168,7 @@ namespace Kagami.Awk
 
       public IMaybe<IObject> Peek(int index) => Next(index);
 
-      int getLength()
+      protected int getLength()
       {
          splitIfRecordNotCreated();
          return records.Length;
@@ -200,10 +200,8 @@ namespace Kagami.Awk
          {
             var input = ((String)args[0]).Value;
             var result = regex.IsMatch(input);
-            return (IObject)result;
+            return result;
          }));
       }
-
-      public IObject this[SkipTake skipTake] => skipTakeThis(this, skipTake);
    }
 }

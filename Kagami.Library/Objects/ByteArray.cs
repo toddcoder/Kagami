@@ -12,7 +12,7 @@ namespace Kagami.Library.Objects
 {
    public struct ByteArray : IObject, ICollection, IObjectCompare
    {
-      byte[] bytes;
+      private byte[] bytes;
 
       public ByteArray(byte[] bytes) : this() => this.bytes = bytes;
 
@@ -24,7 +24,7 @@ namespace Kagami.Library.Objects
 
       public int Hash => bytes.GetHashCode();
 
-      IEnumerable<IObject> list() => bytes.Select(Byte.ByteObject);
+      private IEnumerable<IObject> list() => bytes.Select(Byte.ByteObject);
 
       public bool IsEqualTo(IObject obj) => obj is ByteArray ba && compareEnumerables(list(), ba.list());
 
@@ -65,7 +65,5 @@ namespace Kagami.Library.Objects
       public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
 
       public Byte this[int index] => bytes[wrapIndex(index, bytes.Length)];
-
-      public IObject this[SkipTake skipTake] => skipTakeThis(this, skipTake);
    }
 }

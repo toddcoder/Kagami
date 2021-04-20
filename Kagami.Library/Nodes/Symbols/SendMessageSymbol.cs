@@ -23,14 +23,19 @@ namespace Kagami.Library.Nodes.Symbols
          this.arguments = arguments;
       }
 
-      public SendMessageSymbol(Selector selector, params Expression[] arguments) :
-         this(selector, none<LambdaSymbol>(), none<Operation>(), arguments) { }
+      public SendMessageSymbol(Selector selector, params Expression[] arguments) : this(selector, none<LambdaSymbol>(), none<Operation>(), arguments)
+      {
+      }
 
       public SendMessageSymbol(Selector selector, IMaybe<Operation> operation, params Expression[] arguments) :
-         this(selector, none<LambdaSymbol>(), operation, arguments) { }
+         this(selector, none<LambdaSymbol>(), operation, arguments)
+      {
+      }
 
       public SendMessageSymbol(Selector selector, IMaybe<LambdaSymbol> lambda, params Expression[] arguments) :
-         this(selector, lambda, none<Operation>(), arguments) { }
+         this(selector, lambda, none<Operation>(), arguments)
+      {
+      }
 
       public override void Generate(OperationsBuilder builder)
       {
@@ -41,15 +46,15 @@ namespace Kagami.Library.Nodes.Symbols
             builder.SendMessage(getter, 0);
          }
 
-	      var index = 0;
+         var index = 0;
          foreach (var argument in arguments)
          {
-	         selector.Generate(index++, argument, builder);
+            selector.Generate(index++, argument, builder);
          }
 
          if (operation.If(out var op))
          {
-	         builder.AddRaw(op);
+            builder.AddRaw(op);
          }
 
          int count;
@@ -60,7 +65,7 @@ namespace Kagami.Library.Nodes.Symbols
          }
          else
          {
-	         count = arguments.Length;
+            count = arguments.Length;
          }
 
          builder.Peek(Index);

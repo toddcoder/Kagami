@@ -27,32 +27,31 @@ namespace Kagami.Playground
 {
    public partial class Playground : Form
    {
-      const string PLAYGROUND_FONT_NAME = "Consolas";
-      const float PLAYGROUND_FONT_SIZE = 14f;
-      const string CONFIGURATION_FOLDER = @":\Configurations\Kagami\";
-      const string PLAYGROUND_CONFIGURATION_FILE = CONFIGURATION_FOLDER + "Kagami.configuration";
-      const string PLAYGROUND_PACKAGE_FOLDER = CONFIGURATION_FOLDER + "Packages";
-      const string KAGAMI_EXCEPTION_PROMPT = "Kagami exception >>> ";
+      protected const string PLAYGROUND_FONT_NAME = "Consolas";
+      protected const float PLAYGROUND_FONT_SIZE = 14f;
+      protected const string CONFIGURATION_FOLDER = @":\Configurations\Kagami\";
+      protected const string PLAYGROUND_CONFIGURATION_FILE = CONFIGURATION_FOLDER + "Kagami.configuration";
+      protected const string PLAYGROUND_PACKAGE_FOLDER = CONFIGURATION_FOLDER + "Packages";
+      protected const string KAGAMI_EXCEPTION_PROMPT = "Kagami exception >>> ";
 
-      Document document;
-      TextBoxConsole outputConsole;
-      TextWriter textWriter;
-      TextReader textReader;
-      bool locked;
-      bool manual;
-      Stopwatch stopwatch;
-      FileName configurationFile;
-      PlaygroundConfiguration playgroundConfiguration;
-      PlaygroundContext context;
-      Colorizer colorizer;
-      bool dumpOperations;
-      bool tracing;
-      IMaybe<int> exceptionIndex;
-      bool cancelled;
-      Hash<string, IObject> watch;
-      FolderName packageFolder;
-      IMaybe<ExceptionData> exceptionData;
-      int firstEditorLine;
+      protected Document document;
+      protected TextBoxConsole outputConsole;
+      protected TextWriter textWriter;
+      protected TextReader textReader;
+      protected bool locked;
+      protected bool manual;
+      protected Stopwatch stopwatch;
+      protected PlaygroundConfiguration playgroundConfiguration;
+      protected PlaygroundContext context;
+      protected Colorizer colorizer;
+      protected bool dumpOperations;
+      protected bool tracing;
+      protected IMaybe<int> _exceptionIndex;
+      protected bool cancelled;
+      protected Hash<string, IObject> watch;
+      protected FolderName packageFolder;
+      protected IMaybe<ExceptionData> _exceptionData;
+      protected int firstEditorLine;
 
       public Playground()
       {
@@ -60,7 +59,7 @@ namespace Kagami.Playground
          firstEditorLine = 0;
       }
 
-      static IResult<FileName> existingConfigurationFile()
+      protected static IResult<FileName> existingConfigurationFile()
       {
          foreach (var drive in array('C', 'E'))
          {
@@ -74,25 +73,27 @@ namespace Kagami.Playground
          return "Couldn't find configuration file".Failure<FileName>();
       }
 
-      static IResult<PlaygroundConfiguration> getConfiguration(FileName configurationFile) =>
+      protected static IResult<PlaygroundConfiguration> getConfiguration(FileName configurationFile) =>
          from objectGraph in ObjectGraph.Try.FromFile(configurationFile)
          from configuration in objectGraph.Object<PlaygroundConfiguration>()
          select configuration;
 
-      static IResult<Unit> setConfiguration(PlaygroundConfiguration configuration, FileName configurationFile) =>
+      protected static IResult<Unit> setConfiguration(PlaygroundConfiguration configuration, FileName configurationFile) =>
          from serialized in ObjectGraph.Try.Serialize(configuration)
          from unit in configurationFile.TryTo.SetText(serialized.ToString())
          select unit;
 
-      void Playground_Load(object sender, EventArgs e)
+      protected void Playground_Load(object sender, EventArgs e)
       {
          try
          {
             var result =
                from file in existingConfigurationFile()
                from config in getConfiguration(file)
-               select (file, config);
-            if (result.If(out configurationFile, out playgroundConfiguration)) { }
+               select config;
+            if (result.If(out playgroundConfiguration))
+            {
+            }
             else
             {
                playgroundConfiguration = new PlaygroundConfiguration
@@ -120,70 +121,69 @@ namespace Kagami.Playground
 
          try
          {
-            exceptionData = none<ExceptionData>();
-            document = new Document(this, textEditor, ".kagami", "Kagami", playgroundConfiguration.FontName,
-               playgroundConfiguration.FontSize);
+            _exceptionData = none<ExceptionData>();
+            document = new Document(this, textEditor, ".kagami", "Kagami", playgroundConfiguration.FontName, playgroundConfiguration.FontSize);
             var menus = document.Menus;
             menus.Menu("&File");
-            menus.Menu("File", "&New", (s, evt) =>
+            menus.Menu("File", "&New", (_, _) =>
             {
                textEditor.ClearModificationGlyphs();
                document.New();
             });
-            menus.Menu("File", "&Open", (s, evt) =>
+            menus.Menu("File", "&Open", (_, _) =>
             {
                textEditor.ClearModificationGlyphs();
                document.Open();
             }, "^O");
-            menus.Menu("File", "&Save", (s, evt) =>
+            menus.Menu("File", "&Save", (_, _) =>
             {
                textEditor.SetToSavedGlyphs();
                document.Save();
             }, "^S");
-            menus.Menu("File", "Save As", (s, evt) =>
+            menus.Menu("File", "Save As", (_, _) =>
             {
                textEditor.SetToSavedGlyphs();
                document.SaveAs();
             });
-            menus.Menu("File", "Exit", (s, evt) => Close(), "%F4");
+            menus.Menu("File", "Exit", (_, _) => Close(), "%F4");
 
             document.StandardEditMenu();
 
-            menus.Menu("Edit", "Duplicate", (s, evt) => duplicate(), "^D");
-            menus.Menu("Edit", "Indent", (s, evt) => indent(), "^I");
-            menus.Menu("Edit", "Unindent", (s, evt) => unindent(), "^%I");
+            menus.Menu("Edit", "Duplicate", (_, _) => duplicate(), "^D");
+            menus.Menu("Edit", "Indent", (_, _) => indent(), "^I");
+            menus.Menu("Edit", "Unindent", (_, _) => unindent(), "^%I");
             menus.Menu("&Build");
-            menus.Menu("Build", "Run", (s, evt) => run(), "F5");
-            menus.Menu("Build", "Manual", (s, evt) =>
+            menus.Menu("Build", "Run", (_, _) => run(), "F5");
+            menus.Menu("Build", "Manual", (s, _) =>
             {
                manual = !manual;
                ((ToolStripMenuItem)s).Checked = manual;
             }, "^F5");
-            menus.Menu("Build", "Dump operations", (s, evt) =>
+            menus.Menu("Build", "Dump operations", (s, _) =>
             {
                dumpOperations = !dumpOperations;
                ((ToolStripMenuItem)s).Checked = dumpOperations;
             });
-            menus.Menu("Build", "Trace", (s, evt) =>
+            menus.Menu("Build", "Trace", (s, _) =>
             {
                tracing = !tracing;
                ((ToolStripMenuItem)s).Checked = tracing;
             }, "^T");
             menus.Menu("&Insert");
-            menus.Menu("Insert", "open sys", (s, evt) => insertText("open sys\n\n", 0, 0), "^%S");
-            menus.Menu("Insert", "open math", (s, evt) => insertText("open math\n\n", 0, 0), "^%M");
-            menus.Menu("Insert", "println()", (s, evt) => insertText("println()", -1, 0), "^P");
-            menus.Menu("Insert", "println() interpolated", (s, evt) => insertText("println($\"\")", -2, 0), "^%P");
-            menus.Menu("Insert", "print()", (s, evt) => insertText("print()", -1, 0));
-            menus.Menu("Insert", "put()", (s, evt) => insertText("put()", -1, 0));
-            menus.Menu("Insert", "peek()", (s, evt) => surround("peek(", ")"), "^K");
-            menus.Menu("Insert", "Triple quotes", (s, evt) => insertText("\"\"\"\n\"\"\"", -3), "^Q");
-            menus.Menu("Insert", "List", (s, evt) => insertText("⌈⌉", -1), "^L");
-            menus.Menu("Insert", "Set", (s, evt) => insertText("⎩⎭", -1), "^E");
+            menus.Menu("Insert", "open sys", (_, _) => insertText("open sys\n\n", 0, 0), "^%S");
+            menus.Menu("Insert", "open math", (_, _) => insertText("open math\n\n", 0, 0), "^%M");
+            menus.Menu("Insert", "println()", (_, _) => insertText("println()", -1, 0), "^P");
+            menus.Menu("Insert", "println() interpolated", (_, _) => insertText("println($\"\")", -2, 0), "^%P");
+            menus.Menu("Insert", "print()", (_, _) => insertText("print()", -1, 0));
+            menus.Menu("Insert", "put()", (_, _) => insertText("put()", -1, 0));
+            menus.Menu("Insert", "peek()", (_, _) => surround("peek(", ")"), "^K");
+            menus.Menu("Insert", "Triple quotes", (_, _) => insertText("\"\"\"\n\"\"\"", -3), "^Q");
+            menus.Menu("Insert", "List", (_, _) => insertText("⌈⌉", -1), "^L");
+            menus.Menu("Insert", "Set", (_, _) => insertText("⎩⎭", -1), "^E");
 
             menus.Menu("&Debug");
-            menus.Menu("Debug", "Step Into", (s, evt) => stepInto(), "F11");
-            menus.Menu("Debug", "Step Over", (s, evt) => stepOver(), "F10");
+            menus.Menu("Debug", "Step Into", (_, _) => stepInto(), "F11");
+            menus.Menu("Debug", "Step Over", (_, _) => stepOver(), "F10");
 
             menus.CreateMainMenu(this);
             menus.StandardContextEdit(document);
@@ -191,7 +191,7 @@ namespace Kagami.Playground
             textEditor.SetTabs(32, 64, 96, 128);
             textEditor.SetLeftMargin(70);
             textEditor.ReassignHandle();
-            textEditor.Paint += (s, evt) => paint(evt);
+            textEditor.Paint += (_, evt) => paint(evt);
             textEditor.AnnotationFont = new Font(textEditor.Font, FontStyle.Bold);
 
             locked = false;
@@ -199,7 +199,7 @@ namespace Kagami.Playground
             dumpOperations = false;
             tracing = false;
             stopwatch = new Stopwatch();
-            exceptionIndex = none<int>();
+            _exceptionIndex = none<int>();
             cancelled = false;
             watch = new Hash<string, IObject>();
             if (playgroundConfiguration.LastFile != null)
@@ -213,9 +213,9 @@ namespace Kagami.Playground
          }
       }
 
-      void run() => update(true, true);
+      protected void run() => update(true, true);
 
-      void update(bool execute, bool fromMenu)
+      protected void update(bool execute, bool fromMenu)
       {
          if (!locked && textEditor.TextLength != 0)
          {
@@ -236,8 +236,8 @@ namespace Kagami.Playground
                context.ClearPeeks();
                stopwatch.Reset();
                stopwatch.Start();
-               exceptionIndex = none<int>();
-               exceptionData = none<ExceptionData>();
+               _exceptionIndex = none<int>();
+               _exceptionData = none<ExceptionData>();
 
                var kagamiConfiguration = new CompilerConfiguration { ShowOperations = dumpOperations, Tracing = tracing };
                var compiler = new Compiler(textEditor.Text, kagamiConfiguration, context);
@@ -249,10 +249,10 @@ namespace Kagami.Playground
                      if (machine.Execute().IfNot(out exception))
                      {
                         textWriter.WriteLine(KAGAMI_EXCEPTION_PROMPT + exception.Message);
-                        exceptionIndex = compiler.ExceptionIndex;
-                        if (exceptionIndex.IsNone)
+                        _exceptionIndex = compiler.ExceptionIndex;
+                        if (_exceptionIndex.IsNone)
                         {
-                           exceptionIndex = textEditor.SelectionStart.Some();
+                           _exceptionIndex = textEditor.SelectionStart.Some();
                         }
                      }
                      else
@@ -273,7 +273,7 @@ namespace Kagami.Playground
                      textEditor.ResumeAutoScrollingAlways(state);
                   }
 
-                  if (exceptionIndex.If(out var index))
+                  if (_exceptionIndex.If(out var index))
                   {
                      var remainingLineLength = getRemainingLineIndex(index);
                      if (remainingLineLength > -1)
@@ -294,13 +294,13 @@ namespace Kagami.Playground
                else
                {
                   textWriter.WriteLine(KAGAMI_EXCEPTION_PROMPT + exception.Message);
-                  exceptionIndex = compiler.ExceptionIndex;
-                  if (exceptionIndex.IsNone)
+                  _exceptionIndex = compiler.ExceptionIndex;
+                  if (_exceptionIndex.IsNone)
                   {
-                     exceptionIndex = textEditor.SelectionStart.Some();
+                     _exceptionIndex = textEditor.SelectionStart.Some();
                   }
 
-                  if (exceptionIndex.If(out var index))
+                  if (_exceptionIndex.If(out var index))
                   {
                      var remainingLineLength = getRemainingLineIndex(index);
                      if (remainingLineLength > -1)
@@ -321,11 +321,11 @@ namespace Kagami.Playground
          }
       }
 
-      void stepInto() => Machine.Current?.Step(true, watch);
+      protected static void stepInto() => Machine.Current?.Step();
 
-      void stepOver() => Machine.Current?.Step(false, watch);
+      protected static void stepOver() => Machine.Current?.Step();
 
-      int getRemainingLineIndex(int index)
+      protected int getRemainingLineIndex(int index)
       {
          for (var i = index; i < textEditor.TextLength; i++)
          {
@@ -345,13 +345,13 @@ namespace Kagami.Playground
          return textEditor.TextLength - index;
       }
 
-      void showException(int index, int length)
+      protected void showException(int index, int length)
       {
-         exceptionData = new ExceptionData(index, length).Some();
+         _exceptionData = new ExceptionData(index, length).Some();
          textEditor.Invalidate();
       }
 
-      void duplicate()
+      protected void duplicate()
       {
          var text = "";
          if (textEditor.SelectionLength == 0)
@@ -376,61 +376,15 @@ namespace Kagami.Playground
          textEditor.AppendAtEnd(text, "/n");
       }
 
-      void indent()
+      protected static void indent()
       {
-/*         try
-         {
-            var lines = textEditor.Lines;
-            var obj = (object)linesFromSelection();
-            var num1 = obj is Some<ValueTuple<string[], int>> ? 1 : 0;
-            var some = num1 != 0 ? (Some<ValueTuple<string[], int>>)obj : new Some<ValueTuple<string[], int>>();
-            if (num1 == 0)
-               return;
-
-            var valueTuple = some.Value;
-            var strArray = valueTuple.Item1;
-            var num2 = valueTuple.Item2;
-            ValueTuple<int, int> saved = saveSelection();
-            for (var index = 0; index < strArray.Length; ++index)
-               textEditor.Lines[index + num2] = $"\t{strArray[index]}";
-            textEditor.Lines = lines;
-            restoreSelection(saved);
-         }
-         catch (Exception ex)
-         {
-            textWriter.WriteLine(ex.Message);
-         }*/
       }
 
-      void unindent()
+      protected static void unindent()
       {
-/*         try
-         {
-            var lines = textEditor.Lines;
-            var obj = (object)linesFromSelection();
-            var num1 = obj is Some<ValueTuple<string[], int>> ? 1 : 0;
-            var some = num1 != 0 ? (Some<ValueTuple<string[], int>>)obj : new Some<ValueTuple<string[], int>>();
-            if (num1 == 0)
-               return;
-
-            var valueTuple = some.Value;
-            var strArray = valueTuple.Item1;
-            var num2 = valueTuple.Item2;
-            ValueTuple<int, int> saved = saveSelection();
-            for (var index = 0; index < strArray.Length; ++index)
-               if (strArray[index].Matches("^ /t /@").If(out var matcher))
-                  lines[index + num2] = matcher.FirstGroup;
-
-            textEditor.Lines = lines;
-            restoreSelection(saved);
-         }
-         catch (Exception ex)
-         {
-            textWriter.WriteLine(ex.Message);
-         }*/
       }
 
-      IMaybe<(string[] lines, int index)> linesFromSelection()
+      protected IMaybe<(string[] lines, int index)> linesFromSelection()
       {
          var lineFromCharIndex1 = textEditor.GetLineFromCharIndex(textEditor.SelectionStart);
          var lineFromCharIndex2 = textEditor.GetLineFromCharIndex(textEditor.SelectionStart + textEditor.SelectionLength);
@@ -443,29 +397,27 @@ namespace Kagami.Playground
          return none<(string[], int)>();
       }
 
-      (int start, int length) saveSelection() => (textEditor.SelectionStart, textEditor.SelectionLength);
+      protected (int start, int length) saveSelection() => (textEditor.SelectionStart, textEditor.SelectionLength);
 
-      void restoreSelection((int start, int length) saved) => textEditor.Select(saved.start, saved.length);
+      protected void restoreSelection((int start, int length) saved) => textEditor.Select(saved.start, saved.length);
 
-      void insertText(string text, int selectionOffset, int length = -1)
+      protected void insertText(string text, int selectionOffset, int length = -1)
       {
          textEditor.SelectedText = text;
          textEditor.SelectionStart += selectionOffset;
-         if (length <= -1)
+         if (length > -1)
          {
-            return;
+            textEditor.SelectionLength = length;
          }
-
-         textEditor.SelectionLength = length;
       }
 
-      void surround(string before, string after)
+      protected void surround(string before, string after)
       {
          var selectedText = textEditor.SelectedText;
          textEditor.SelectedText = $"{before}{selectedText}{after}";
       }
 
-      void insertDelimiterText(string delimiter, int selectionOffset, int length, int halfLength = -1)
+      protected void insertDelimiterText(string delimiter, int selectionOffset, int length, int halfLength = -1)
       {
          if (textEditor.SelectionLength == 0)
          {
@@ -483,18 +435,18 @@ namespace Kagami.Playground
          }
       }
 
-      string textAtInsert(int take, int skip = 0) => textEditor.Text.Drop(textEditor.SelectionStart + skip).Keep(take);
+      protected string textAtInsert(int take, int skip = 0) => textEditor.Text.Drop(textEditor.SelectionStart + skip).Keep(take);
 
-      void setTextAtInsert(int take, int skip = 0, string text = "")
+      protected void setTextAtInsert(int take, int skip = 0, string text = "")
       {
          textEditor.Select(textEditor.SelectionStart + skip, take);
          textEditor.SelectedText = text;
          textEditor.Select(textEditor.SelectionStart + skip, 0);
       }
 
-      void moveSelectionRelative(int amount = 1) => textEditor.SelectionStart += amount;
+      protected void moveSelectionRelative(int amount = 1) => textEditor.SelectionStart += amount;
 
-      void paint(PaintEventArgs e)
+      protected void paint(PaintEventArgs e)
       {
          try
          {
@@ -506,7 +458,9 @@ namespace Kagami.Playground
                   var lineIndex = textEditor.GetLineFromCharIndex(key);
                   peeks[lineIndex] = value;
                }
-               catch { }
+               catch
+               {
+               }
             }
 
             if (textEditor.TextLength == 0)
@@ -519,8 +473,7 @@ namespace Kagami.Playground
                if (peeks.ContainsKey(lineNumber))
                {
                   var str = peeks[lineNumber];
-                  str = sizedAnnotation(e.Graphics, line, str, textEditor.ClientSize.Width, textEditor.Font,
-                     textEditor.AnnotationFont);
+                  str = sizedAnnotation(e.Graphics, line, str, textEditor.ClientSize.Width, textEditor.Font, textEditor.AnnotationFont);
                   textEditor.AnnotateAt(e.Graphics, lineNumber, str, Color.Black, Color.LightGreen, Color.Black);
                }
 
@@ -533,19 +486,21 @@ namespace Kagami.Playground
 
                textEditor.DrawModificationGlyphs(e.Graphics);
 
-               if (exceptionData.If(out var data))
+               if (_exceptionData.If(out var exceptionData))
                {
-                  var rectangle = textEditor.RectangleFrom(e.Graphics, data.Index, data.Length, false);
+                  var rectangle = textEditor.RectangleFrom(e.Graphics, exceptionData.Index, exceptionData.Length, false);
                   textEditor.DrawWavyUnderline(e.Graphics, rectangle, Color.Red);
                }
             }
          }
-         catch { }
+         catch
+         {
+         }
       }
 
-      static int getWidth(Graphics graphics, string text, Font font) => (int)graphics.MeasureString(text, font).Width;
+      protected static int getWidth(Graphics graphics, string text, Font font) => (int)graphics.MeasureString(text, font).Width;
 
-      static string sizedAnnotation(Graphics graphics, string line, string annotation, int width, Font font, Font annotationFont)
+      protected static string sizedAnnotation(Graphics graphics, string line, string annotation, int width, Font font, Font annotationFont)
       {
          var diff = 80;
          var lineWidth = getWidth(graphics, line, font);
@@ -575,11 +530,11 @@ namespace Kagami.Playground
          }
       }
 
-      void textEditor_TextChanged(object sender, EventArgs e)
+      protected void textEditor_TextChanged(object sender, EventArgs e)
       {
          try
          {
-            exceptionData = none<ExceptionData>();
+            _exceptionData = none<ExceptionData>();
 
             if (document != null)
             {
@@ -587,10 +542,12 @@ namespace Kagami.Playground
                document.Dirty();
             }
          }
-         catch { }
+         catch
+         {
+         }
       }
 
-      void textEditor_KeyPress(object sender, KeyPressEventArgs e)
+      protected void textEditor_KeyPress(object sender, KeyPressEventArgs e)
       {
          switch (e.KeyChar)
          {
@@ -665,7 +622,7 @@ namespace Kagami.Playground
          }
       }
 
-      void textEditor_KeyUp(object sender, KeyEventArgs e)
+      protected void textEditor_KeyUp(object sender, KeyEventArgs e)
       {
          switch (e.KeyCode)
          {
@@ -717,17 +674,17 @@ namespace Kagami.Playground
          }
       }
 
-      IMaybe<string> getWord()
+      protected IMaybe<string> getWord()
       {
          return textEditor.Text.Keep(textEditor.SelectionStart).Matcher("/(/w+) $").Map(m => m.FirstGroup);
       }
 
-      IMaybe<string> findWord(string begin)
+      protected IMaybe<string> findWord(string begin)
       {
          return textEditor.Text.Split("-/w+").Distinct().Where(word => word.StartsWith(begin)).FirstOrNone();
       }
 
-      void Playground_FormClosing(object sender, FormClosingEventArgs e)
+      protected void Playground_FormClosing(object sender, FormClosingEventArgs e)
       {
          if (document.FileName.If(out var fileName))
          {
@@ -748,7 +705,7 @@ namespace Kagami.Playground
          }
       }
 
-      void Playground_KeyUp(object sender, KeyEventArgs e)
+      protected void Playground_KeyUp(object sender, KeyEventArgs e)
       {
          if (e.KeyCode == Keys.Escape)
          {
@@ -757,7 +714,7 @@ namespace Kagami.Playground
          }
       }
 
-      void textEditor_SelectionChanged(object sender, EventArgs e)
+      protected void textEditor_SelectionChanged(object sender, EventArgs e)
       {
          if (textEditor.FirstVisibleLine != firstEditorLine)
          {
@@ -765,14 +722,5 @@ namespace Kagami.Playground
             textEditor.Invalidate();
          }
       }
-
-/*		bool delay()
-      {
-         var text = textEditor.Text;
-         Thread.Sleep(100);
-         var text2 = textEditor.Text;
-
-         return text == text2;
-      }*/
    }
 }

@@ -30,11 +30,11 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>7.1</LangVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Core">
-      <HintPath>..\..\Libraries\Core.dll</HintPath>
+      <HintPath>..\References\Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -323,7 +323,6 @@
     <Compile Include="Nodes\Symbols\SkipTakeInitLiteralSymbol.cs" />
     <Compile Include="Nodes\Symbols\SkipTakeItem.cs" />
     <Compile Include="Nodes\Symbols\SkipTakeLiteralSymbol.cs" />
-    <Compile Include="Nodes\Symbols\SkipTakeOperatorSymbol.cs" />
     <Compile Include="Nodes\Symbols\SliceAssignSymbol.cs" />
     <Compile Include="Nodes\Symbols\SliceSymbol.cs" />
     <Compile Include="Nodes\Symbols\SomeSymbol.cs" />

@@ -6,41 +6,47 @@ using static Kagami.Library.Nodes.NodeFunctions;
 
 namespace Kagami.Library.Nodes.Symbols
 {
-	public class SendBindingMessageSymbol : SendMessageSymbol
-	{
-		public SendBindingMessageSymbol(Selector selector, IMaybe<LambdaSymbol> lambda, IMaybe<Operation> operation,
-			params Expression[] arguments) :
-			base(selector, lambda, operation, arguments) { }
+   public class SendBindingMessageSymbol : SendMessageSymbol
+   {
+      public SendBindingMessageSymbol(Selector selector, IMaybe<LambdaSymbol> lambda, IMaybe<Operation> operation,
+         params Expression[] arguments) : base(selector, lambda, operation, arguments)
+      {
+      }
 
-		public SendBindingMessageSymbol(Selector selector, params Expression[] arguments) :
-			base(selector, arguments) { }
+      public SendBindingMessageSymbol(Selector selector, params Expression[] arguments) : base(selector, arguments)
+      {
+      }
 
-		public SendBindingMessageSymbol(Selector selector, IMaybe<Operation> operation, params Expression[] arguments) :
-			base(selector, operation, arguments) { }
+      public SendBindingMessageSymbol(Selector selector, IMaybe<Operation> operation, params Expression[] arguments) :
+         base(selector, operation, arguments)
+      {
+      }
 
-		public SendBindingMessageSymbol(Selector selector, IMaybe<LambdaSymbol> lambda, params Expression[] arguments) :
-			base(selector, lambda, arguments) { }
+      public SendBindingMessageSymbol(Selector selector, IMaybe<LambdaSymbol> lambda, params Expression[] arguments) :
+         base(selector, lambda, arguments)
+      {
+      }
 
-		public override void Generate(OperationsBuilder builder)
-		{
-			var endLabel = newLabel("end");
+      public override void Generate(OperationsBuilder builder)
+      {
+         var endLabel = newLabel("end");
 
-			builder.Dup();
-			builder.SendMessage("canBind".get(), 0);
-			builder.GoToIfFalse(endLabel);
-			builder.Dup();
-			builder.SendMessage("value".get(), 0);
+         builder.Dup();
+         builder.SendMessage("canBind".get(), 0);
+         builder.GoToIfFalse(endLabel);
+         builder.Dup();
+         builder.SendMessage("value".get(), 0);
 
-			base.Generate(builder);
+         base.Generate(builder);
 
-			builder.SendMessage("unit(_)", 1);
+         builder.SendMessage("unit(_)", 1);
 
-			builder.Label(endLabel);
-			builder.NoOp();
-		}
+         builder.Label(endLabel);
+         builder.NoOp();
+      }
 
-		public override Precedence Precedence => Precedence.SendMessage;
+      public override Precedence Precedence => Precedence.SendMessage;
 
-		public override string ToString() => $"?.{selector.Image}({arguments.ToString(", ")})";
-	}
+      public override string ToString() => $"?.{selector.Image}({arguments.ToString(", ")})";
+   }
 }

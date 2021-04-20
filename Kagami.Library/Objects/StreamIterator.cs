@@ -11,8 +11,8 @@ namespace Kagami.Library.Objects
 {
    public class StreamIterator : IObject, IIterator
    {
-      IIterator iterator;
-      List<IStreamAction> actions;
+      protected IIterator iterator;
+      protected List<IStreamAction> actions;
 
       public StreamIterator(IIterator iterator)
       {
@@ -40,9 +40,9 @@ namespace Kagami.Library.Objects
 
       public bool IsLazy => true;
 
-      IEnumerable<IObject> list()
+      protected IEnumerable<IObject> list()
       {
-         var item = none<IObject>();
+         IMaybe<IObject> item;
          do
          {
             item = Next();
@@ -165,7 +165,7 @@ namespace Kagami.Library.Objects
 
       public IObject IfNot(Lambda predicate) => Copy(new IfNotAction(predicate));
 
-      static IStreamAction getSkipAction(ICollection collection, int count)
+      protected static IStreamAction getSkipAction(ICollection collection, int count)
       {
          if (count > -1)
          {
@@ -191,7 +191,7 @@ namespace Kagami.Library.Objects
 
       public IObject SkipUntil(Lambda predicate) => Copy(new SkipUntilAction(predicate));
 
-      static IStreamAction getTakeAction(ICollection collection, int count)
+      protected static IStreamAction getTakeAction(ICollection collection, int count)
       {
          if (count > -1)
          {
@@ -283,11 +283,11 @@ namespace Kagami.Library.Objects
 
       public IObject Collect() => terminate().Collect();
 
-      public Array ToArray() => new Array(List());
+      public Array ToArray() => new(List());
 
       public List ToList() => Objects.List.NewList(List());
 
-      public Tuple ToTuple() => new Tuple(List().ToArray());
+      public Tuple ToTuple() => new(List().ToArray());
 
       public Dictionary ToDictionary(Lambda keyLambda, Lambda valueLambda)
       {
@@ -330,8 +330,6 @@ namespace Kagami.Library.Objects
       public IObject Apply(ICollection collection) => terminate().Apply(collection);
 
       public IObject Column(int column) => terminate().Column(column);
-
-      public IObject Step(int step) => terminate().Step(step);
 
       public BaseClass Equivalent() => new CollectionClass();
 

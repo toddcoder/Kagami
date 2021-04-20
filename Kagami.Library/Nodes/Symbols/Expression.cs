@@ -7,9 +7,9 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class Expression : Symbol
    {
-      public static explicit operator Block(Expression expression) => new Block(new ExpressionStatement(expression, true));
+      public static explicit operator Block(Expression expression) => new(new ExpressionStatement(expression, true));
 
-      Symbol[] symbols;
+      protected Symbol[] symbols;
 
       public Expression(Symbol[] symbols) => this.symbols = symbols;
 
@@ -21,7 +21,7 @@ namespace Kagami.Library.Nodes.Symbols
       {
          foreach (var symbol in symbols)
          {
-	         symbol.Generate(builder);
+            symbol.Generate(builder);
          }
       }
 
@@ -35,10 +35,10 @@ namespace Kagami.Library.Nodes.Symbols
       {
          for (var i = 0; i < symbols.Length; i++)
          {
-	         if (predicate(symbols[i]))
-	         {
-		         symbols[i] = replacement(symbols[i]);
-	         }
+            if (predicate(symbols[i]))
+            {
+               symbols[i] = replacement(symbols[i]);
+            }
          }
       }
    }

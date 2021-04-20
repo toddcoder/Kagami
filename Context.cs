@@ -10,7 +10,7 @@ namespace Kagami
 {
    public class Context : IContext
    {
-      Putter putter;
+      protected Putter putter;
 
       public Context() => putter = new Putter();
 
@@ -36,6 +36,8 @@ namespace Kagami
 
       public bool Cancelled() => KeyAvailable && ReadKey().Key == ConsoleKey.Escape;
 
-      public void Peek(string message, int index) { }
+      public void Peek(string message, int index)
+      {
+      }
    }
 }

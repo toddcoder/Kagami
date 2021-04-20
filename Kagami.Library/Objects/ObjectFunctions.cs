@@ -18,9 +18,9 @@ namespace Kagami.Library.Objects
 {
    public static class ObjectFunctions
    {
-      const int BREAK_EARLY = 10;
+      private const int BREAK_EARLY = 10;
 
-      static int uniqueID;
+      private static int uniqueID;
 
       public static void resetUniqueID() => uniqueID = 0;
 
@@ -49,7 +49,7 @@ namespace Kagami.Library.Objects
 
          switch (comparisand)
          {
-            case Any _:
+            case Any:
                return true;
             case Class cls:
                return classOf(source).MatchCompatible(classOf(cls));
@@ -76,7 +76,7 @@ namespace Kagami.Library.Objects
                return regex.IsMatch(source.AsString).IsTrue;
             case Pattern pattern:
                return pattern.Match(source, bindings);
-            case IProcessPlaceholders _:
+            case IProcessPlaceholders:
                return processPlaceholdersMatch(source, comparisand, bindings);
             case TypeConstraint typeConstraint:
                return typeConstraint.Matches(classOf(source));
@@ -115,9 +115,9 @@ namespace Kagami.Library.Objects
 
          switch (comparisand)
          {
-            case Any _:
+            case Any:
                return true;
-            case Class _:
+            case Class:
                return true;
             case Placeholder ph:
                bindings[ph.Name] = source;
@@ -138,7 +138,7 @@ namespace Kagami.Library.Objects
 
             case Pattern pattern:
                return pattern.Match(source, bindings);
-            case IProcessPlaceholders _:
+            case IProcessPlaceholders:
                return processPlaceholdersMatch(source, comparisand, bindings);
             case TypeConstraint typeConstraint:
                return typeConstraint.Matches(classOf(source));
@@ -203,8 +203,8 @@ namespace Kagami.Library.Objects
          }
          else
          {
-            return
-               $"object{obj.ObjectID} {obj.ClassName}({obj.Parameters.Select(p => $"{p.Name} = {obj.Fields[p.Name].Image}").ToString(", ")})";
+            var parametersAndFields = obj.Parameters.Select(p => $"{p.Name} = {obj.Fields[p.Name].Image}").ToString(", ");
+            return $"object{obj.ObjectID} {obj.ClassName}({parametersAndFields})";
          }
       }
 
@@ -216,8 +216,8 @@ namespace Kagami.Library.Objects
          }
          else
          {
-            return
-               $"object{obj.ObjectID} {obj.ClassName}({obj.Parameters.Select(p => $"{p.Name} = {obj.Fields[p.Name].Image}").ToString(", ")})";
+            var parametersAndFields = obj.Parameters.Select(p => $"{p.Name} = {obj.Fields[p.Name].Image}").ToString(", ");
+            return $"object{obj.ObjectID} {obj.ClassName}({parametersAndFields})";
          }
       }
 
@@ -240,7 +240,7 @@ namespace Kagami.Library.Objects
 
       public static bool userObjectMatch(UserObject obj, IObject comparisand, Hash<string, IObject> bindings)
       {
-         bool includeFieldName(string fieldName)
+         static bool includeFieldName(string fieldName)
          {
             return !fieldName.StartsWith("__$") && fieldName != "self" && fieldName != "id" && !fieldName.StartsWith("_");
          }
@@ -340,14 +340,7 @@ namespace Kagami.Library.Objects
       {
          var message = "string".get();
          var cls = classOf(obj);
-         if (cls.RespondsTo(message))
-         {
-            return ((String)sendMessage(obj, message)).Value;
-         }
-         else
-         {
-            return obj.AsString;
-         }
+         return cls.RespondsTo(message) ? ((String)sendMessage(obj, message)).Value : obj.AsString;
       }
 
       public static IObject[] setObjects(IObject[] target, IEnumerable<IObject> source, Func<int, IObject> defaultValue)
@@ -388,8 +381,7 @@ namespace Kagami.Library.Objects
 
       public static int wrapIndex(int index, int length) => index > -1 ? index : length + index;
 
-      public static string show(ICollection collection, string begin, Func<IObject, string> func, string end,
-         int breakOn = BREAK_EARLY)
+      public static string show(ICollection collection, string begin, Func<IObject, string> func, string end, int breakOn = BREAK_EARLY)
       {
          var builder = new StringBuilder(begin);
          var obj = (IObject)collection;
@@ -404,25 +396,25 @@ namespace Kagami.Library.Objects
             var breakEarly = rangeSize >= breakOn;
             var count = 0;
             var iterator = collection.GetIterator(false);
-            var next = iterator.Next();
-            if (next.If(out var n))
+            var _next = iterator.Next();
+            if (_next.If(out var next))
             {
-               builder.Append(func(n));
-               next = iterator.Next();
+               builder.Append(func(next));
+               _next = iterator.Next();
                count++;
             }
 
-            while (next.If(out n))
+            while (_next.If(out next))
             {
                builder.Append(", ");
-               builder.Append(func(n));
+               builder.Append(func(next));
                if (++count == breakOn && breakEarly)
                {
                   builder.Append("...");
                   break;
                }
 
-               next = iterator.Next();
+               _next = iterator.Next();
             }
          }
 
@@ -589,16 +581,12 @@ namespace Kagami.Library.Objects
             source = matcher.SecondGroup.Trim();
          }
 
-         var selectorItemType = SelectorItemType.Normal;
-         switch (source)
+         var selectorItemType = source switch
          {
-            case "...":
-               selectorItemType = SelectorItemType.Variadic;
-               break;
-            case "=":
-               selectorItemType = SelectorItemType.Default;
-               break;
-         }
+            "..." => SelectorItemType.Variadic,
+            "=" => SelectorItemType.Default,
+            _ => SelectorItemType.Normal
+         };
 
          return new SelectorItem(label, typeConstraint, selectorItemType);
       }
@@ -607,8 +595,9 @@ namespace Kagami.Library.Objects
 
       public static Selector selector(string name, string[] labels, IObject[] objects)
       {
-         var enumerable = labels.Zip(objects, (l, o) => $"{l.Map(_ => ":")}_<{o.ClassName}>");
+         var enumerable = labels.Zip(objects, (l, o) => $"{l.Map(l1 => $"{l1}:")}_<{o.ClassName}>");
          var selectItems = enumerable.Select(parseSelectorItem).ToArray();
+
          return new Selector(name, selectItems, selectorImage(name, selectItems));
       }
 
@@ -646,15 +635,12 @@ namespace Kagami.Library.Objects
       {
          if (size.IsEmpty())
          {
-            switch (obj)
+            return obj switch
             {
-               case int i:
-                  return Convert.ToString(i, toBase);
-               case long l:
-                  return Convert.ToString(l, toBase);
-               default:
-                  return obj.ToString();
-            }
+               int i => Convert.ToString(i, toBase),
+               long l => Convert.ToString(l, toBase),
+               _ => obj.ToString()
+            };
          }
          else
          {
