@@ -12,7 +12,7 @@ using static Kagami.Library.Objects.CollectionFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct Tuple : IObject, IEquatable<Tuple>, ICollection, IObjectCompare, IComparable<Tuple>, IComparable
+   public readonly struct Tuple : IObject, IEquatable<Tuple>, ICollection, IObjectCompare, IComparable<Tuple>, IComparable
    {
       public static IObject NewTuple(IObject x, IObject y)
       {

@@ -19,7 +19,6 @@ namespace Kagami.Library.Parsers.Expressions
       protected PostfixParser postfixParser;
       protected ConjunctionParsers conjunctionParsers;
       protected int whateverCount;
-      protected IMaybe<IPrefixCode> prefixCode;
 
       public ExpressionParser(Bits32<ExpressionFlags> flags) : base(false) => this.flags = flags;
 
@@ -35,7 +34,6 @@ namespace Kagami.Library.Parsers.Expressions
          builder = new ExpressionBuilder(flags);
          prefixParser = new PrefixParser(builder);
          valuesParser = new ValuesParser(builder);
-         prefixCode = none<IPrefixCode>();
          infixParser = new InfixParser(builder);
          postfixParser = new PostfixParser(builder);
          conjunctionParsers = new ConjunctionParsers(builder);
@@ -65,7 +63,9 @@ namespace Kagami.Library.Parsers.Expressions
 
                   if (infixParser.Scan(state).If(out _, out anyException))
                   {
-                     if (getTerm(state).If(out _, out anyException)) { }
+                     if (getTerm(state).If(out _, out anyException))
+                     {
+                     }
                      else if (anyException.If(out var exception))
                      {
                         return failedMatch<Unit>(exception);
@@ -87,7 +87,6 @@ namespace Kagami.Library.Parsers.Expressions
 
                if (builder.ToExpression().If(out var expression, out var expException))
                {
-                  //state.Scan("^ /(|s|) /';'", Color.Whitespace, Color.Structure);
                   if (state.ImplicitState.If(out var implicitState) && implicitState.Two.IsNone)
                   {
                      if (getMessageWithLambda(implicitState.Symbol, implicitState.Message, implicitState.ParameterCount, expression)
@@ -104,7 +103,7 @@ namespace Kagami.Library.Parsers.Expressions
                   else if (state.ImplicitState.If(out implicitState) && implicitState.Two.If(out var symbol))
                   {
                      if (getDualMessageWithLambda("__$0", "__$1", implicitState.Symbol, symbol, implicitState.Message, expression)
-                        .If(out var newExpression, out expException))
+                        .If(out var newExpression, out _))
                      {
                         Expression = newExpression;
                         state.ImplicitState = none<ImplicitState>();
@@ -144,7 +143,7 @@ namespace Kagami.Library.Parsers.Expressions
          }
       }
 
-      bool keep(string fieldName)
+      protected bool keep(string fieldName)
       {
          var exp = builder.Ordered.ToArray();
          if (exp.Length != 1)
@@ -153,11 +152,11 @@ namespace Kagami.Library.Parsers.Expressions
          }
          else
          {
-            return !(exp[0] is FieldSymbol fieldSymbol) || fieldSymbol.FieldName != fieldName;
+            return exp[0] is not FieldSymbol fieldSymbol || fieldSymbol.FieldName != fieldName;
          }
       }
 
-      static IResult<Expression> getMessageWithLambda(Symbol symbol, Selector selector, int parameterCount, Expression expression)
+      protected static IResult<Expression> getMessageWithLambda(Symbol symbol, Selector selector, int parameterCount, Expression expression)
       {
          var parameters = new Parameters(Enumerable.Range(0, parameterCount).Select(i => $"__${i}").ToArray());
          var lambdaSymbol = new LambdaSymbol(parameters, new Block(new Return(expression, none<TypeConstraint>())));
@@ -170,7 +169,7 @@ namespace Kagami.Library.Parsers.Expressions
          return builder.ToExpression();
       }
 
-      static IResult<Expression> getMessage2WithLambda(string leftName, string rightName, Symbol symbol, Selector selector,
+      protected static IResult<Expression> getMessage2WithLambda(string leftName, string rightName, Symbol symbol, Selector selector,
          Expression expression)
       {
          var leftParameter = Parameter.New(false, leftName);
@@ -186,15 +185,14 @@ namespace Kagami.Library.Parsers.Expressions
          return builder.ToExpression();
       }
 
-      static IResult<Expression> getDualMessageWithLambda(string leftName, string rightName, Symbol leftSymbol, Symbol rightSymbol,
+      protected static IResult<Expression> getDualMessageWithLambda(string leftName, string rightName, Symbol leftSymbol, Symbol rightSymbol,
          Selector selector, Expression expression)
       {
          var leftParameter = Parameter.New(false, leftName);
          var rightParameter = Parameter.New(false, rightName);
          var parameters = new Parameters(leftParameter, rightParameter);
          var lambdaSymbol = new LambdaSymbol(parameters, new Block(new Return(expression, none<TypeConstraint>())));
-         var sendMessage = new SendMessageSymbol(selector, lambdaSymbol.Some(),
-            new Expression(rightSymbol));
+         var sendMessage = new SendMessageSymbol(selector, lambdaSymbol.Some(), new Expression(rightSymbol));
 
          var builder = new ExpressionBuilder(ExpressionFlags.Standard);
          builder.Add(leftSymbol);

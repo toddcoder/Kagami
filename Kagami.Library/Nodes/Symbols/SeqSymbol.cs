@@ -9,8 +9,8 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class SeqSymbol : Symbol
    {
-      Block block;
-      string image;
+      protected Block block;
+      protected string image;
 
       public SeqSymbol(Block block) => this.block = block;
 

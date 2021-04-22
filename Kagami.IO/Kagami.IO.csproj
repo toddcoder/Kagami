@@ -50,7 +50,6 @@
     <Compile Include="FileClass.cs" />
     <Compile Include="FileIterator.cs" />
     <Compile Include="Folder.cs" />
-    <Compile Include="FolderClass.cs" />
     <Compile Include="FolderIterator.cs" />
     <Compile Include="IO.cs" />
     <Compile Include="IOClass.cs" />

@@ -17,16 +17,16 @@ using static Kagami.Library.Objects.CollectionFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct String : IObject, IComparable<String>, IEquatable<String>, IFormattable, ICollection, IComparable, ISliceable,
+   public readonly struct String : IObject, IComparable<String>, IEquatable<String>, IFormattable, ICollection, IComparable, ISliceable,
       IRangeItem, ITextFinding
    {
-      public static implicit operator String(string value) => new String(value);
+      public static implicit operator String(string value) => new(value);
 
       public static IObject StringObject(string value) => new String(value);
 
       public static IObject Empty => StringObject("");
 
-      string value;
+      private readonly string value;
 
       public String(string value) : this() => this.value = value;
 
@@ -112,7 +112,7 @@ namespace Kagami.Library.Objects
          }
       }
 
-      public Slice Slice(ICollection collection) => new Slice(this, collection.GetIterator(false).List().ToArray());
+      public Slice Slice(ICollection collection) => new(this, collection.GetIterator(false).List().ToArray());
 
       public IMaybe<IObject> Get(IObject index)
       {
@@ -149,31 +149,19 @@ namespace Kagami.Library.Objects
 
       int ISliceable.Length => value.Length;
 
-      public Boolean In(IObject item)
+      public Boolean In(IObject item) => item switch
       {
-         switch (item)
-         {
-            case String other:
-               return value.Contains(other.value);
-            case Char c:
-               return value.IndexOf(c.Value) >= 0;
-            default:
-               return false;
-         }
-      }
+         String other => value.Contains(other.value),
+         Char c => value.IndexOf(c.Value) >= 0,
+         _ => false
+      };
 
-      public Boolean NotIn(IObject item)
+      public Boolean NotIn(IObject item) => item switch
       {
-         switch (item)
-         {
-            case String other:
-               return !value.Contains(other.value);
-            case Char c:
-               return value.IndexOf(c.Value) == -1;
-            default:
-               return false;
-         }
-      }
+         String other => !value.Contains(other.value),
+         Char c => value.IndexOf(c.Value) == -1,
+         _ => false
+      };
 
       public IObject Times(int count) => (String)value.Repeat(count);
 
@@ -288,7 +276,7 @@ namespace Kagami.Library.Objects
 
       public Boolean IsTitle => value == value.ToTitleCase();
 
-      static string expand(string value)
+      private static string expand(string value)
       {
          var matcher = new Matcher();
          if (matcher.IsMatch(value, "/(.) /'-' /(.)"))
@@ -361,60 +349,17 @@ namespace Kagami.Library.Objects
 
       public IObject Find(string input, int startIndex, bool reverse) => find(value, input, startIndex, reverse);
 
-      public IObject Int()
-      {
-         if (int.TryParse(value, out var result))
-         {
-            return new Some((Int)result);
-         }
-         else
-         {
-            return None.NoneValue;
-         }
-      }
+      public IObject Int() => int.TryParse(value, out var result) ? new Some((Int)result) : None.NoneValue;
 
-      public IObject Float()
-      {
-         if (double.TryParse(value, out var result))
-         {
-            return new Some((Float)result);
-         }
-         else
-         {
-            return None.NoneValue;
-         }
-      }
+      public IObject Float() => double.TryParse(value, out var result) ? new Some((Float)result) : None.NoneValue;
 
-      public IObject Byte()
-      {
-         if (byte.TryParse(value, out var result))
-         {
-            return new Some((Byte)result);
-         }
-         else
-         {
-            return None.NoneValue;
-         }
-      }
+      public IObject Byte() => byte.TryParse(value, out var result) ? new Some((Byte)result) : None.NoneValue;
 
-      public IObject Long()
-      {
-         if (BigInteger.TryParse(value, out var result))
-         {
-            return new Some((Long)result);
-         }
-         else
-         {
-            return None.NoneValue;
-         }
-      }
+      public IObject Long() => BigInteger.TryParse(value, out var result) ? new Some((Long)result) : None.NoneValue;
 
       public Tuple SplitRegex(Regex regex) => regex.Split(value);
 
-      public Tuple SplitOn(string on)
-      {
-         return new Tuple(value.Split(new[] { on }, StringSplitOptions.None).Select(StringObject).ToArray());
-      }
+      public Tuple SplitOn(string on) => new(value.Split(new[] { on }, StringSplitOptions.None).Select(StringObject).ToArray());
 
       public String Subtract(string substring) => value.Replace(substring, "");
 
@@ -422,7 +367,7 @@ namespace Kagami.Library.Objects
 
       public IRangeItem Predecessor => (String)value.Pred();
 
-      public Range Range() => new Range(this, (String)"z".Repeat(value.Length), true);
+      public Range Range() => new(this, (String)"z".Repeat(value.Length), true);
 
       public String Get() => value.get();
 
@@ -435,14 +380,7 @@ namespace Kagami.Library.Objects
          {
             if (char.IsLetter(ch))
             {
-               if (char.IsLower(ch))
-               {
-                  builder.Append(char.ToUpper(ch));
-               }
-               else
-               {
-                  builder.Append(char.ToLower(ch));
-               }
+               builder.Append(char.IsLower(ch) ? char.ToUpper(ch) : char.ToLower(ch));
             }
             else
             {
@@ -453,7 +391,7 @@ namespace Kagami.Library.Objects
          return builder.ToString();
       }
 
-      public Tuple Fields => new Tuple(value.Split("/s+").Select(StringObject).ToArray());
+      public Tuple Fields => new(value.Split("/s+").Select(StringObject).ToArray());
 
       public IObject Words(int count)
       {
@@ -482,7 +420,7 @@ namespace Kagami.Library.Objects
          }
       }
 
-      public Tuple Words() => new Tuple(value.Split("/s+").Select(StringObject).ToArray());
+      public Tuple Words() => new(value.Split("/s+").Select(StringObject).ToArray());
 
       public MutString Append(IObject obj)
       {
@@ -492,7 +430,7 @@ namespace Kagami.Library.Objects
          return mutString;
       }
 
-      public MutString Mutable() => new MutString(value);
+      public MutString Mutable() => new(value);
 
       public IObject this[SkipTake skipTake]
       {

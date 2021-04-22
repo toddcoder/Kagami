@@ -7,11 +7,11 @@ namespace Kagami.IO
 {
    public class FolderIterator : Iterator
    {
-      Folder folder;
-      List<File> files;
-      List<Folder> folders;
-      int fileIndex;
-      int folderIndex;
+      protected Folder folder;
+      protected List<File> files;
+      protected List<Folder> folders;
+      protected int fileIndex;
+      protected int folderIndex;
 
       public FolderIterator(Folder folder) : base(folder)
       {
@@ -32,7 +32,7 @@ namespace Kagami.IO
             folderIndex = 0;
          }
 
-         if (fileIndex<files.Count)
+         if (fileIndex < files.Count)
          {
             var file = files[fileIndex++];
             return file.Some<IObject>();
@@ -44,7 +44,7 @@ namespace Kagami.IO
          }
          else
          {
-	         return none<IObject>();
+            return none<IObject>();
          }
       }
    }

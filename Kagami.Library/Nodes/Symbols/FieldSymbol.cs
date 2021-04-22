@@ -4,7 +4,7 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class FieldSymbol : Symbol
    {
-      string fieldName;
+      protected string fieldName;
 
       public FieldSymbol(string fieldName) => this.fieldName = fieldName;
 

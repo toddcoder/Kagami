@@ -9,7 +9,7 @@ namespace Kagami.Library.Objects
 {
    public struct Rational : IObject, INumeric, IRangeItem, IComparable<Rational>, IFormattable, IMessageNumber, IComparable
    {
-      public static implicit operator Rational((BigInteger numerator, BigInteger denominator) values) => new Rational(values);
+      public static implicit operator Rational((BigInteger numerator, BigInteger denominator) values) => new(values);
 
       public static IObject RationalObject((BigInteger numerator, BigInteger denominator) values) => new Rational(values);
 
@@ -17,26 +17,16 @@ namespace Kagami.Library.Objects
 
       public static implicit operator Rational(double value) => (Rational)((Float)value).ToRational();
 
-      static BigInteger gcd(BigInteger a, BigInteger b)
-      {
-         if (b != BigInteger.Zero)
-         {
-	         return gcd(b, a % b);
-         }
-         else
-         {
-	         return a;
-         }
-      }
+      private static BigInteger gcd(BigInteger a, BigInteger b) => b != BigInteger.Zero ? gcd(b, a % b) : a;
 
-      BigInteger numerator;
-      BigInteger denominator;
+      private BigInteger numerator;
+      private BigInteger denominator;
 
       public Rational(BigInteger numerator, BigInteger denominator) : this() => setValues(numerator, denominator);
 
       public Rational((BigInteger numerator, BigInteger denominator) value) : this() => setValues(value.numerator, value.denominator);
 
-      void setValues(BigInteger numerator, BigInteger denominator)
+      private void setValues(BigInteger numerator, BigInteger denominator)
       {
          var result = gcd(BigInteger.Abs(numerator), BigInteger.Abs(denominator));
          this.numerator = numerator / result;
@@ -87,7 +77,7 @@ namespace Kagami.Library.Objects
 
       public INumeric ToComplex() => (Complex)AsComplex();
 
-      public System.Numerics.Complex AsComplex() => new System.Numerics.Complex(AsDouble(), 0);
+      public System.Numerics.Complex AsComplex() => new(AsDouble(), 0);
 
       public bool IsComplex => false;
 
@@ -123,13 +113,13 @@ namespace Kagami.Library.Objects
 
       public IRangeItem Predecessor => (IRangeItem)Subtract((Rational)(BigInteger.One, BigInteger.Zero));
 
-      public Range Range() => new Range((Rational)0.0, this, false);
+      public Range Range() => new((Rational)0.0, this, false);
 
       public int CompareTo(Rational other) => (numerator * other.denominator - other.numerator * denominator).Sign;
 
       public String Format(string format) => $"{numerator.ToString(format)}/{denominator.ToString(format)}";
 
-	   public IObject Negate() => (Rational)(-numerator, denominator);
+      public IObject Negate() => (Rational)(-numerator, denominator);
 
       public IObject Sign() => (Rational)(numerator.Sign, denominator.Sign);
 
@@ -137,6 +127,7 @@ namespace Kagami.Library.Objects
       {
          var rhs = other.AsRational();
          var (n, d) = rhs;
+
          return (Rational)(BigInteger.Pow(numerator, (int)n), BigInteger.Pow(denominator, (int)d));
       }
 
@@ -146,6 +137,7 @@ namespace Kagami.Library.Objects
       {
          var rhs = other.AsRational();
          var (n, d) = rhs;
+
          return (Rational)(numerator * d, denominator * n);
       }
 
@@ -155,6 +147,7 @@ namespace Kagami.Library.Objects
       {
          var rhs = other.AsRational();
          var (n, d) = rhs;
+
          return (Rational)(numerator * d + n * denominator, denominator * d);
       }
 
@@ -162,6 +155,7 @@ namespace Kagami.Library.Objects
       {
          var rhs = other.AsRational();
          var (n, d) = rhs;
+
          return (Rational)(numerator * d - n * denominator, denominator * d);
       }
 
@@ -169,6 +163,7 @@ namespace Kagami.Library.Objects
       {
          var rhs = other.AsRational();
          var (n, d) = rhs;
+
          return (Rational)(numerator * n, denominator * d);
       }
 

@@ -4,7 +4,7 @@ namespace Kagami.Library.Nodes.Statements
 {
    public class Defer : Statement
    {
-      Block block;
+      protected Block block;
 
       public Defer(Block block) => this.block = block;
 

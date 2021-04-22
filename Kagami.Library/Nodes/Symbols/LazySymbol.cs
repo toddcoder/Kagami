@@ -6,7 +6,7 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class LazySymbol : Symbol
    {
-      Expression expression;
+      protected Expression expression;
 
       public LazySymbol(Expression expression) => this.expression = expression;
 
@@ -15,11 +15,11 @@ namespace Kagami.Library.Nodes.Symbols
          var invokable = new ExpressionInvokable(expression.ToString());
          if (builder.RegisterInvokable(invokable, expression, false).If(out _, out var exception))
          {
-	         builder.PushObject(new Lazy(invokable));
+            builder.PushObject(new Lazy(invokable));
          }
          else
          {
-	         throw exception;
+            throw exception;
          }
       }
 

@@ -117,7 +117,7 @@ namespace Kagami.Library.Objects
       {
          List list when _head.If(out var h1) && list._head.If(out var h2) => h1.IsEqualTo(h2) && tail.IsEqualTo(list.tail),
          List list when _head.IsNone && list._head.IsNone => true,
-         List _ => false,
+         List => false,
          _ => false
       };
 

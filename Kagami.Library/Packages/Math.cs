@@ -40,18 +40,12 @@ namespace Kagami.Library.Packages
 
       public IObject Atan(IObject obj) => function(obj, d => System.Math.Atan(d), n => n.Atan());
 
-      public IObject Atan2(IObject x, IObject y)
+      public IObject Atan2(IObject x, IObject y) => x switch
       {
-         switch (x)
-         {
-            case INumeric nx when y is INumeric ny:
-               return Float.FloatObject(System.Math.Atan2(nx.AsDouble(), ny.AsDouble()));
-            case INumeric _:
-               throw unableToConvert(y.AsString, "Float");
-            default:
-               throw unableToConvert(x.AsString, "Float");
-         }
-      }
+         INumeric nx when y is INumeric ny => Float.FloatObject(System.Math.Atan2(nx.AsDouble(), ny.AsDouble())),
+         INumeric => throw unableToConvert(y.AsString, "Float"),
+         _ => throw unableToConvert(x.AsString, "Float")
+      };
 
       public IObject Sinh(IObject obj) => function(obj, d => System.Math.Sinh(d), n => n.Sin());
 
@@ -69,18 +63,12 @@ namespace Kagami.Library.Packages
 
       public IObject Log(IObject obj) => function(obj, d => System.Math.Log10(d), n => n.Log());
 
-      public IObject Log(IObject x, IObject y)
+      public IObject Log(IObject x, IObject y) => x switch
       {
-         switch (x)
-         {
-            case INumeric numeric when y is INumeric baseNumeric:
-               return Float.FloatObject(System.Math.Log(numeric.AsDouble(), baseNumeric.AsDouble()));
-            case INumeric _:
-               throw incompatibleClasses(y, "Float");
-            default:
-               throw incompatibleClasses(x, "Float");
-         }
-      }
+         INumeric numeric when y is INumeric baseNumeric => Float.FloatObject(System.Math.Log(numeric.AsDouble(), baseNumeric.AsDouble())),
+         INumeric => throw incompatibleClasses(y, "Float"),
+         _ => throw incompatibleClasses(x, "Float")
+      };
 
       public IObject Ln(IObject obj) => function(obj, d => System.Math.Log(d), n => n.Ln());
 
@@ -95,15 +83,15 @@ namespace Kagami.Library.Packages
             case INumeric n:
                if (n.IsNegative)
                {
-	               return Int.IntObject(-1);
+                  return Int.IntObject(-1);
                }
                else if (n.IsZero)
                {
-	               return Int.IntObject(0);
+                  return Int.IntObject(0);
                }
                else
                {
-	               return Int.IntObject(1);
+                  return Int.IntObject(1);
                }
 
             default:
@@ -118,72 +106,53 @@ namespace Kagami.Library.Packages
             case IMessageNumber mn:
                return mn.Abs();
             case INumeric n:
-		         if (n.IsNegative)
-		         {
-			         if (Negate.Evaluate(n).If(out var value, out var anyException))
-			         {
-				         return value;
-			         }
-			         else if (anyException.If(out var exception))
-			         {
-				         throw exception;
-			         }
-			         else
-			         {
-				         throw notNumeric(obj);
-			         }
-		         }
-		         else
-		         {
-			         return obj;
-		         }
+               if (n.IsNegative)
+               {
+                  if (Negate.Evaluate(n).If(out var value, out var anyException))
+                  {
+                     return value;
+                  }
+                  else if (anyException.If(out var exception))
+                  {
+                     throw exception;
+                  }
+                  else
+                  {
+                     throw notNumeric(obj);
+                  }
+               }
+               else
+               {
+                  return obj;
+               }
 
             default:
                throw notNumeric(obj);
          }
       }
 
-      public IObject Ceiling(IObject obj)
+      public IObject Ceiling(IObject obj) => obj switch
       {
-         switch (obj)
-         {
-            case IMessageNumber mn:
-               return mn.Ceiling();
-            case INumeric n:
-               return Float.FloatObject(System.Math.Ceiling(n.AsDouble()));
-            default:
-               throw notNumeric(obj);
-         }
-      }
+         IMessageNumber mn => mn.Ceiling(),
+         INumeric n => Float.FloatObject(System.Math.Ceiling(n.AsDouble())),
+         _ => throw notNumeric(obj)
+      };
 
-      public IObject Floor(IObject obj)
+      public IObject Floor(IObject obj) => obj switch
       {
-         switch (obj)
-         {
-            case IMessageNumber mn:
-               return mn.Ceiling();
-            case INumeric n:
-               return Float.FloatObject(System.Math.Floor(n.AsDouble()));
-            default:
-               throw notNumeric(obj);
-         }
-      }
+         IMessageNumber mn => mn.Ceiling(),
+         INumeric n => Float.FloatObject(System.Math.Floor(n.AsDouble())),
+         _ => throw notNumeric(obj)
+      };
 
-      public IObject Round(IObject obj, int size)
+      public IObject Round(IObject obj, int size) => obj switch
       {
-         switch (obj)
-         {
-            case IMessageNumber mn:
-               return mn.Round(new Int(size));
-            case INumeric n:
-               return Float.FloatObject(System.Math.Round(n.AsDouble(), size));
-            default:
-               throw notNumeric(obj);
-         }
-      }
+         IMessageNumber mn => mn.Round(new Int(size)),
+         INumeric n => Float.FloatObject(System.Math.Round(n.AsDouble(), size)),
+         _ => throw notNumeric(obj)
+      };
 
-      public T XConvert<T>(IObject obj, Func<INumeric, T> func)
-         where T : IObject
+      public T XConvert<T>(IObject obj, Func<INumeric, T> func) where T : IObject
       {
          var className = typeof(T).Name;
          switch (obj)
@@ -193,18 +162,18 @@ namespace Kagami.Library.Packages
             case String s:
                if (Module.Global.Class(className).If(out var baseClass))
                {
-	               if (baseClass is IParse parse)
-	               {
-		               return (T)parse.Parse(s.Value);
-	               }
-	               else
-	               {
-		               throw $"Cannot convert to {className}".Throws();
-	               }
+                  if (baseClass is IParse parse)
+                  {
+                     return (T)parse.Parse(s.Value);
+                  }
+                  else
+                  {
+                     throw $"Cannot convert to {className}".Throws();
+                  }
                }
                else
                {
-	               throw incompatibleClasses(obj, className);
+                  throw incompatibleClasses(obj, className);
                }
 
             default:
@@ -247,21 +216,20 @@ namespace Kagami.Library.Packages
 
       public Long StringToLong(string value, int baseNum)
       {
-         return new Long(convert(value.Replace("_", ""), baseNum, "0123456789abcdefghijklmnopqrstuvwxyz"));
+         return new(convert(value.Replace("_", ""), baseNum, "0123456789abcdefghijklmnopqrstuvwxyz"));
       }
 
       public Float StringToFloat(string value, int baseNum)
       {
-         return new Float(convertFloat(value.Replace("_", ""), baseNum, "0123456789abcdefghijklmnopqrstuvwxyz"));
+         return new(convertFloat(value.Replace("_", ""), baseNum, "0123456789abcdefghijklmnopqrstuvwxyz"));
       }
 
       public Tuple Frexp(double number)
       {
          var bits = BitConverter.DoubleToInt64Bits(number);
-         var realMantissa = 1.0d;
          if (double.IsNaN(number) || number + number == number || double.IsInfinity(number))
          {
-	         return getFrexpResult(number, 0);
+            return getFrexpResult(number, 0);
          }
 
          var negative = bits < 0;
@@ -269,15 +237,15 @@ namespace Kagami.Library.Packages
          var mantissa = bits & 0xfffffffffffffL;
          if (exponent == 0)
          {
-	         exponent++;
+            exponent++;
          }
          else
          {
-	         mantissa |= 1L << 52;
+            mantissa |= 1L << 52;
          }
 
          exponent -= 1075;
-         realMantissa = mantissa;
+         double realMantissa = mantissa;
 
          while (realMantissa > 1.0)
          {
@@ -288,13 +256,13 @@ namespace Kagami.Library.Packages
 
          if (negative)
          {
-	         realMantissa *= -1;
+            realMantissa *= -1;
          }
 
          return getFrexpResult(realMantissa, exponent);
       }
 
-      static Tuple getFrexpResult(double mantissa, int exponent)
+      protected static Tuple getFrexpResult(double mantissa, int exponent)
       {
          var m = Float.FloatObject(mantissa);
          var e = Int.IntObject(exponent);
@@ -306,8 +274,8 @@ namespace Kagami.Library.Packages
 
       public Float E => (Float)fields["e"];
 
-	   public Float Radians(double degrees) => System.Math.PI / 180 * degrees;
+      public Float Radians(double degrees) => System.Math.PI / 180 * degrees;
 
-	   public Float Degrees(double radians) => 180 / System.Math.PI * radians;
+      public Float Degrees(double radians) => 180 / System.Math.PI * radians;
    }
 }

@@ -5,7 +5,7 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class SendPrefixMessage : Symbol
    {
-      Selector selector;
+      protected Selector selector;
 
       public SendPrefixMessage(Selector selector) => this.selector = selector;
 

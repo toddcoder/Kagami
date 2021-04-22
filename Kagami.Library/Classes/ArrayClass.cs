@@ -21,7 +21,7 @@ namespace Kagami.Library.Classes
          base.RegisterMessages();
 
          collectionMessages();
-         messages["array()"] = (obj, msg) => function<Array>(obj, a => a);
+         messages["array()"] = (obj, _) => function<Array>(obj, a => a);
          mutableCollectionMessages();
          sliceableMessages();
 
@@ -30,9 +30,9 @@ namespace Kagami.Library.Classes
          messages["[]=(_,_)"] = (obj, msg) => function<Array, IObject, IObject>(obj, msg, setIndexed);
          messages["~(_)"] = (obj, msg) => function<Array, Array>(obj, msg, (a1, a2) => a1.Concatenate(a2));
          registerMessage("push(_)", (obj, msg) => function<Array, IObject>(obj, msg, (a, v) => a.Append(v)));
-         registerMessage("pop()", (obj, msg) => function<Array>(obj, a => a.Pop()));
+         registerMessage("pop()", (obj, _) => function<Array>(obj, a => a.Pop()));
          registerMessage("unshift(_)", (obj, msg) => function<Array, IObject>(obj, msg, (a, v) => a.Unshift(v)));
-         registerMessage("shift()", (obj, msg) => function<Array>(obj, a => a.Shift()));
+         registerMessage("shift()", (obj, _) => function<Array>(obj, a => a.Shift()));
          messages["find".Selector("<Array>", "startAt:<Int>", "reverse:<Boolean>")] = (obj, msg) =>
             function<Array, IObject, Int, Boolean>(obj, msg, (a, o, i, r) => a.Find(o, i.Value, r.Value));
          messages["find".Selector("<Array>", "startAt:<Int>")] = (obj, msg) =>
@@ -43,7 +43,7 @@ namespace Kagami.Library.Classes
             function<Array, IObject>(obj, msg, (a, o) => a.Find(o, 0, false));
          messages["find".Selector("all:<Array>")] = (obj, msg) =>
             function<Array, IObject>(obj, msg, (a, o) => a.FindAll(o));
-         messages["default".get()] = (obj, msg) => function<Array>(obj, array =>
+         messages["default".get()] = (obj, _) => function<Array>(obj, array =>
          {
             if (array.DefaultValue.If(out var dv))
             {
@@ -69,18 +69,17 @@ namespace Kagami.Library.Classes
 
             return Void.Value;
          });
-         messages["transpose()"] = (obj, msg) => function<Array>(obj, a => a.Transpose());
+         messages["transpose()"] = (obj, _) => function<Array>(obj, a => a.Transpose());
       }
 
-      static IObject getIndexed(Array a, IObject i)
+      protected static IObject getIndexed(Array a, IObject i)
       {
          return CollectionFunctions.getIndexed(a, i, (array, index) => array[index], (array, list) => array[list]);
       }
 
-      static IObject setIndexed(Array a, IObject i, IObject v)
+      protected static IObject setIndexed(Array a, IObject i, IObject v)
       {
-         CollectionFunctions.setIndexed(a, i, v, (array, index, value) => array[index] = value,
-            (array, list, value) => array[list] = value);
+         CollectionFunctions.setIndexed(a, i, v, (array, index, value) => array[index] = value, (array, list, value) => array[list] = value);
          return a;
       }
 
@@ -89,12 +88,12 @@ namespace Kagami.Library.Classes
          base.RegisterClassMessages();
 
          classMessages["repeat(value:_,times:_<Int>)"] = (bc, msg) =>
-            classFunc<ArrayClass, IObject, Int>(bc, msg, (ac, v, t) => Array.Repeat(v, t.Value));
-         classMessages["empty".get()] = (bc, msg) => classFunc<ArrayClass>(bc, ac => Array.Empty);
-         classMessages["typed"] = (bc, msg) => getTypedArray(msg);
+            classFunc<ArrayClass, IObject, Int>(bc, msg, (_, v, t) => Array.Repeat(v, t.Value));
+         classMessages["empty".get()] = (bc, _) => classFunc<ArrayClass>(bc, _ => Array.Empty);
+         classMessages["typed"] = (_, msg) => getTypedArray(msg);
       }
 
-      static Array getTypedArray(Message message)
+      protected static Array getTypedArray(Message message)
       {
          if (message.Arguments[0] is TypeConstraint typeConstraint)
          {

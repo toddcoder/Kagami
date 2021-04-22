@@ -4,7 +4,7 @@ namespace Kagami.Library.Nodes.Statements
 {
    public class ImportPackage : Statement
    {
-      string packageName;
+      protected string packageName;
 
       public ImportPackage(string packageName) => this.packageName = packageName;
 

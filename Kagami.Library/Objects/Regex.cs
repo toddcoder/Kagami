@@ -10,17 +10,17 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct Regex : IObject, ITextFinding
+   public readonly struct Regex : IObject, ITextFinding
    {
-      static IObject getMatchOrText(RegexMatch match, bool textOnly) => textOnly ? (IObject)match.Text : match;
+      private static IObject getMatchOrText(RegexMatch match, bool textOnly) => textOnly ? match.Text : match;
 
-      string pattern;
-      bool ignoreCase;
-      bool multiline;
-      bool global;
-      bool textOnly;
-      Matcher matcher;
-      Func<Matcher, Func<string, IMaybe<int>>> nameToIndex;
+      private readonly string pattern;
+      private readonly bool ignoreCase;
+      private readonly bool multiline;
+      private readonly bool global;
+      private readonly bool textOnly;
+      private readonly Matcher matcher;
+      private readonly Func<Matcher, Func<string, IMaybe<int>>> nameToIndex;
 
       public Regex(string pattern, bool ignoreCase, bool multiline, bool global, bool textOnly) : this()
       {
@@ -84,7 +84,7 @@ namespace Kagami.Library.Objects
 
       public bool IsTrue => pattern.Length > 0;
 
-      bool isMatch(string input) => matcher.IsMatch(input, pattern, ignoreCase, multiline);
+      private bool isMatch(string input) => matcher.IsMatch(input, pattern, ignoreCase, multiline);
 
       public IObject Matches(string input)
       {
@@ -189,7 +189,7 @@ namespace Kagami.Library.Objects
          }
       }
 
-      String replace3(string input, Lambda lambda, bool reverse)
+      private String replace3(string input, Lambda lambda, bool reverse)
       {
          if (reverse)
          {
@@ -226,7 +226,7 @@ namespace Kagami.Library.Objects
          }
       }
 
-      String replace1(string input, Lambda lambda, bool reverse)
+      private String replace1(string input, Lambda lambda, bool reverse)
       {
          if (reverse)
          {
@@ -277,7 +277,7 @@ namespace Kagami.Library.Objects
          }
       }
 
-      String replaceAll3(string input, Lambda lambda)
+      private String replaceAll3(string input, Lambda lambda)
       {
          if (matcher.IsMatch(input, pattern, ignoreCase, multiline))
          {
@@ -296,7 +296,7 @@ namespace Kagami.Library.Objects
          }
       }
 
-      String replaceAll1(string input, Lambda lambda)
+      private String replaceAll1(string input, Lambda lambda)
       {
          if (matcher.IsMatch(input, pattern, ignoreCase, multiline))
          {
@@ -315,10 +315,7 @@ namespace Kagami.Library.Objects
          }
       }
 
-      public Tuple Split(string input)
-      {
-         return new Tuple(input.Split(pattern, ignoreCase, multiline).Select(String.StringObject).ToArray());
-      }
+      public Tuple Split(string input) => new(input.Split(pattern, ignoreCase, multiline).Select(String.StringObject).ToArray());
 
       public Tuple Partition(string input, bool reverse)
       {
@@ -368,7 +365,7 @@ namespace Kagami.Library.Objects
          }
       }
 
-      Int count3(string input, Lambda lambda)
+      private Int count3(string input, Lambda lambda)
       {
          if (matcher.IsMatch(input, pattern, ignoreCase, multiline))
          {
@@ -390,7 +387,7 @@ namespace Kagami.Library.Objects
          }
       }
 
-      Int count1(string input, Lambda lambda)
+      private Int count1(string input, Lambda lambda)
       {
          if (matcher.IsMatch(input, pattern, ignoreCase, multiline))
          {
@@ -412,20 +409,14 @@ namespace Kagami.Library.Objects
          }
       }
 
-      public Regex Concatenate(IObject obj)
+      public Regex Concatenate(IObject obj) => obj switch
       {
-         switch (obj)
-         {
-            case Regex regex:
-               return new Regex(pattern + regex.pattern, ignoreCase, multiline, global, textOnly);
-            case String str:
-               return new Regex(pattern + str.Value, ignoreCase, multiline, global, textOnly);
-            default:
-               return new Regex(pattern + obj.AsString, ignoreCase, multiline, global, textOnly);
-         }
-      }
+         Regex regex => new Regex(pattern + regex.pattern, ignoreCase, multiline, global, textOnly),
+         String str => new Regex(pattern + str.Value, ignoreCase, multiline, global, textOnly),
+         _ => new Regex(pattern + obj.AsString, ignoreCase, multiline, global, textOnly)
+      };
 
-      public Regex Concatenate(string otherPattern) => new Regex(pattern + otherPattern, ignoreCase, multiline, global, textOnly);
+      public Regex Concatenate(string otherPattern) => new(pattern + otherPattern, ignoreCase, multiline, global, textOnly);
 
       public IMatched<Matcher.Match> MatchOne(string input) => input.MatchOne(pattern, ignoreCase, multiline);
 

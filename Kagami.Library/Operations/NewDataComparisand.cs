@@ -1,5 +1,4 @@
 ﻿using Kagami.Library.Objects;
-using Kagami.Library.Runtime;
 using Core.Monads;
 
 namespace Kagami.Library.Operations
@@ -13,7 +12,7 @@ namespace Kagami.Library.Operations
 
       public NewDataComparisand() : base(4) { }
 
-      public override IResult<Unit> Execute(Machine machine, int index, IObject value)
+      public override IResult<Unit> Execute(int index, IObject value)
       {
          switch (index)
          {
@@ -30,7 +29,7 @@ namespace Kagami.Library.Operations
          return Unit.Success();
       }
 
-      public override IMatched<IObject> Final(Machine machine)
+      public override IMatched<IObject> Final()
       {
          return new DataComparisand(className, name, comparisands, ordinal).Matched<IObject>();
       }

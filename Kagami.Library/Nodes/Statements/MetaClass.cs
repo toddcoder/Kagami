@@ -5,8 +5,8 @@ namespace Kagami.Library.Nodes.Statements
 {
    public class MetaClass : Statement
    {
-      string className;
-      ClassBuilder classBuilder;
+      protected string className;
+      protected ClassBuilder classBuilder;
 
       public MetaClass(string className, ClassBuilder classBuilder)
       {

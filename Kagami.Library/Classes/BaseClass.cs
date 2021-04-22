@@ -49,6 +49,7 @@ namespace Kagami.Library.Classes
 
       public virtual bool DynamicRespondsTo(Selector selector) => alternateMessages.Contains(selector);
 
+      // ReSharper disable once UnusedParameter.Global
       public virtual bool ClassDynamicRespondsTo(Selector selector) => false;
 
       protected void registerMessage(Selector selector, Func<IObject, Message, IObject> function)

@@ -1,6 +1,5 @@
 ﻿using System;
 using Kagami.Library.Objects;
-using Kagami.Library.Runtime;
 using Core.Monads;
 
 namespace Kagami.Library.Operations
@@ -18,6 +17,6 @@ namespace Kagami.Library.Operations
 
       public override string ToString() => $"new.value({className})";
 
-      public override IMatched<IObject> Execute(Machine machine, Arguments arguments) => initializer(arguments).Matched();
+      public override IMatched<IObject> Execute(Arguments arguments) => initializer(arguments).Matched();
    }
 }

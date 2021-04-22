@@ -5,24 +5,24 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class SkipTakeItem
    {
-      int skip;
-      int take;
-      IMaybe<Expression> prefix;
-      IMaybe<Expression> suffix;
+      protected int skip;
+      protected int take;
+      protected IMaybe<Expression> _prefix;
+      protected IMaybe<Expression> _suffix;
 
       public SkipTakeItem(int skip, int take, IMaybe<Expression> prefix, IMaybe<Expression> suffix)
       {
          this.skip = skip;
          this.take = take;
-         this.prefix = prefix;
-         this.suffix = suffix;
+         _prefix = prefix;
+         _suffix = suffix;
       }
 
       public void Generate(OperationsBuilder builder)
       {
-         if (prefix.If(out var p))
+         if (_prefix.If(out var prefix))
          {
-            p.Generate(builder);
+            prefix.Generate(builder);
             builder.Swap();
          }
 
@@ -35,14 +35,14 @@ namespace Kagami.Library.Nodes.Symbols
             builder.SendMessage("take()", 1);
          }
 
-         if (prefix.IsSome)
+         if (_prefix.IsSome)
          {
-	         builder.SendMessage("~()", 1);
+            builder.SendMessage("~()", 1);
          }
 
-         if (suffix.If(out var s))
+         if (_suffix.If(out var suffix))
          {
-            s.Generate(builder);
+            suffix.Generate(builder);
             builder.SendMessage("~()", 1);
          }
       }

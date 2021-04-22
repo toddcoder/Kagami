@@ -6,9 +6,9 @@ namespace Kagami.Library.Nodes.Statements
 {
    public class ConditionalWhile : Statement
    {
-      Symbol comparisand;
-      Expression expression;
-      Block block;
+      protected Symbol comparisand;
+      protected Expression expression;
+      protected Block block;
 
       public ConditionalWhile(Symbol comparisand, Expression expression, Block block)
       {

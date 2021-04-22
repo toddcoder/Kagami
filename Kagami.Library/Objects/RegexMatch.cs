@@ -10,16 +10,16 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct RegexMatch : IObject, IProcessPlaceholders, IEquatable<RegexMatch>
+   public readonly struct RegexMatch : IObject, IProcessPlaceholders, IEquatable<RegexMatch>
    {
-      string text;
-      int index;
-      int length;
-      RegexGroup[] groups;
-      Func<string, IMaybe<int>> nameToIndex;
-      Hash<string, IObject> passed;
-      Hash<string, IObject> internals;
-      Equatable<RegexMatch> equatable;
+      private readonly string text;
+      private readonly int index;
+      private readonly int length;
+      private readonly RegexGroup[] groups;
+      private readonly Func<string, IMaybe<int>> nameToIndex;
+      private readonly Hash<string, IObject> passed;
+      private readonly Hash<string, IObject> internals;
+      private readonly Equatable<RegexMatch> equatable;
 
       public RegexMatch(Matcher.Match match, Func<string, IMaybe<int>> nameToIndex) : this()
       {
@@ -47,7 +47,7 @@ namespace Kagami.Library.Objects
          index = 0;
          length = 0;
          groups = new RegexGroup[0];
-         nameToIndex = name => none<int>();
+         nameToIndex = _ => none<int>();
 
          this.passed = passed;
          internals = new Hash<string, IObject>();
@@ -79,41 +79,15 @@ namespace Kagami.Library.Objects
 
       public Int Length => length;
 
-      public Tuple Groups => new Tuple(groups.Select(g => (IObject)g).ToArray());
+      public Tuple Groups => new(groups.Select(g => (IObject)g).ToArray());
 
       public Hash<string, IObject> Passed => passed;
 
       public Hash<string, IObject> Internals => internals;
 
-      public String this[int index]
-      {
-         get
-         {
-            if (index.Between(0).Until(groups.Length))
-            {
-               return groups[index].Text;
-            }
-            else
-            {
-               return "";
-            }
-         }
-      }
+      public String this[int index] => index.Between(0).Until(groups.Length) ? groups[index].Text : "";
 
-      public String this[string name]
-      {
-         get
-         {
-            if (nameToIndex(name).If(out var i))
-            {
-               return this[i];
-            }
-            else
-            {
-               return "";
-            }
-         }
-      }
+      public String this[string name] => nameToIndex(name).If(out var i) ? this[i] : "";
 
       public bool Equals(RegexMatch other) => equatable.Equals(other);
 

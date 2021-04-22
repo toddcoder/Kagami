@@ -22,7 +22,7 @@ namespace Kagami.Library.Parsers.Statements
          if (result.ValueOrCast<Unit>(out var tuple, out var asUnit))
          {
             var (comparisand, source, block) = tuple;
-            state.AddStatement(new For2(comparisand, source, block));
+            state.AddStatement(new For(comparisand, source, block));
 
             return Unit.Matched();
          }

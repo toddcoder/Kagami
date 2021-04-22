@@ -53,7 +53,7 @@ namespace Kagami.Library.Objects
             case Some some when arguments.Length == 1:
                return match(some.Value, arguments[0], bindings);
             default:
-               if (result is Some tupleSome && tupleSome.Value is Tuple tuple && tuple.Length.Value == arguments.Length)
+               if (result is Some { Value: Tuple tuple } && tuple.Length.Value == arguments.Length)
                {
                   return tuple.Value.Zip(arguments, (l, r) => match(l, r, bindings)).All(b => b);
                }

@@ -25,7 +25,7 @@ namespace Kagami.Library.Parsers.Statements
          {
 	         var placeholderName = newLabel("yieldIndex");
             var block = new Block(new Yield(new Expression(new FieldSymbol(placeholderName))));
-            var for2 = new For2(new PlaceholderSymbol("-" + placeholderName), expression, block);
+            var for2 = new For(new PlaceholderSymbol("-" + placeholderName), expression, block);
             state.AddStatement(for2);
          }
          else

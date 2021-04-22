@@ -5,7 +5,7 @@ namespace Kagami.Library.Objects
 {
    public class IfAction : IStreamAction
    {
-      Lambda predicate;
+      protected Lambda predicate;
 
       public IfAction(Lambda predicate) => this.predicate = predicate;
 
@@ -15,14 +15,7 @@ namespace Kagami.Library.Objects
          {
             if (status.IsAccepted)
             {
-               if (predicate.Invoke(status.Object).IsTrue)
-               {
-	               return status;
-               }
-               else
-               {
-	               return new Skipped();
-               }
+               return predicate.Invoke(status.Object).IsTrue ? status : new Skipped();
             }
             else
             {

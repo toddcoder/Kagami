@@ -6,10 +6,10 @@ namespace Kagami.Library.Nodes.Statements
 {
    public class DataTypeCode : Statement
    {
-      string className;
-      string name;
-      IObject[] comparisands;
-      IObject ordinal;
+      protected string className;
+      protected string name;
+      protected IObject[] comparisands;
+      protected IObject ordinal;
 
       public DataTypeCode(string className, string name, IObject[] comparisands, IObject ordinal)
       {
@@ -26,7 +26,7 @@ namespace Kagami.Library.Nodes.Statements
 
          foreach (var comparisand in comparisands)
          {
-	         var parameterName = $"__${i++}";//i++.ToString().get();
+            var parameterName = $"__${i++}";
             builder.GetField(parameterName);
             builder.PushObject(comparisand);
             builder.Match();
@@ -37,7 +37,7 @@ namespace Kagami.Library.Nodes.Statements
          builder.PushString(name);
          for (var j = 0; j < comparisands.Length; j++)
          {
-	         var parameterName = $"__${j}";
+            var parameterName = $"__${j}";
             builder.GetField(parameterName);
          }
 

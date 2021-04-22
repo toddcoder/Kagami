@@ -11,8 +11,8 @@ namespace Kagami.Library.Classes
       {
          base.RegisterMessages();
 
-         registerMessage("skip".get(), (obj, msg) => function<SkipTake, Int>(obj, msg, (st, i) => (Int)st.Skip));
-         registerMessage("take".get(), (obj, msg) => function<SkipTake, Int>(obj, msg, (st, i) => (Int)st.Take));
+         registerMessage("skip".get(), (obj, msg) => function<SkipTake, Int>(obj, msg, (st, _) => (Int)st.Skip));
+         registerMessage("take".get(), (obj, msg) => function<SkipTake, Int>(obj, msg, (st, _) => (Int)st.Take));
       }
    }
 }

@@ -5,7 +5,7 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class PlaceholderSymbol : Symbol, IConstant
    {
-      string name;
+      protected string name;
 
       public PlaceholderSymbol(string name) => this.name = name;
 

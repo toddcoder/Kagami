@@ -23,7 +23,7 @@ namespace Kagami.Library.Nodes.Statements
       {
          foreach (var (key, value) in comparisands)
          {
-	         var (data, ordinal) = value;
+            var (data, ordinal) = value;
 
             var skipLabel = newLabel("skip");
 
@@ -42,7 +42,7 @@ namespace Kagami.Library.Nodes.Statements
                var block = new Block(dataTypeCode);
                var invokable =
                   new DataComparisandInvokable(key, new Parameters(data.Length), $"{key}({data.Select(d => d.Image).ToString(", ")})");
-               if (builder.RegisterInvokable(invokable, block, true).If(out var _, out var exception))
+               if (builder.RegisterInvokable(invokable, block, true).If(out _, out var exception))
                {
                   builder.NewField(key, false, true);
                   builder.PushObject(new Lambda(invokable));
@@ -50,7 +50,7 @@ namespace Kagami.Library.Nodes.Statements
                }
                else
                {
-	               throw exception;
+                  throw exception;
                }
             }
 

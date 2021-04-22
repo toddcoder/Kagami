@@ -4,7 +4,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
 {
-	public struct Failure : IObject, IResult, IMonad
+	public readonly struct Failure : IObject, IResult, IMonad
 	{
 		public static IObject Object(string message) => new Failure(message);
 

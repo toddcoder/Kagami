@@ -15,7 +15,7 @@ namespace Kagami.Library.Operations
             return y switch
             {
                Int yInt => new Objects.SkipTake(xInt.Value, yInt.Value).Matched<IObject>(),
-               None _ => new Objects.SkipTake(xInt.Value, 0) { NoTake = true }.Matched<IObject>(),
+               None => new Objects.SkipTake(xInt.Value, 0) { NoTake = true }.Matched<IObject>(),
                _ => failedMatch<IObject>(incompatibleClasses(y, "Int"))
             };
          }

@@ -5,8 +5,8 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class NameValueSymbol : Symbol
    {
-      string name;
-      Expression value;
+      protected string name;
+      protected Expression value;
 
       public NameValueSymbol(string name, Expression value)
       {

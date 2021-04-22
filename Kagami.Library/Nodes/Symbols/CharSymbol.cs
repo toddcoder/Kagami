@@ -5,7 +5,7 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class CharSymbol : Symbol, IConstant
    {
-      char value;
+      protected char value;
 
       public CharSymbol(char value) => this.value = value;
 

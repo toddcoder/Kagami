@@ -77,20 +77,7 @@ namespace Kagami.Awk
          }
       }
 
-      public String this[int index]
-      {
-         get
-         {
-            if (index.Between(0).Until(getLength()))
-            {
-               return fields[index];
-            }
-            else
-            {
-               return "";
-            }
-         }
-      }
+      public String this[int index] => index.Between(0).Until(getLength()) ? fields[index] : "";
 
       public string ClassName => "Awkifier";
 

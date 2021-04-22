@@ -6,9 +6,9 @@ namespace Kagami.Library.Objects
 {
    public class RangeIterator : Iterator
    {
-      Range range;
-      IRangeItem current;
-      IObject stop;
+      protected Range range;
+      protected IRangeItem current;
+      protected IObject stop;
 
       public RangeIterator(Range range) : base(range)
       {
@@ -27,21 +27,11 @@ namespace Kagami.Library.Objects
          }
          else
          {
-	         return none<IObject>();
+            return none<IObject>();
          }
       }
 
-      public override IMaybe<IObject> Peek()
-      {
-         if (range.Compare(current, stop))
-         {
-	         return current.Object.Some();
-         }
-         else
-         {
-	         return none<IObject>();
-         }
-      }
+      public override IMaybe<IObject> Peek() => maybe(range.Compare(current, stop), () => current.Object);
 
       public override IEnumerable<IObject> List()
       {

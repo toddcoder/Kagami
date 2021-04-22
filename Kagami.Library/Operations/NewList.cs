@@ -7,20 +7,13 @@ namespace Kagami.Library.Operations
 {
    public class NewList : OneOperandOperation
    {
-      public override IMatched<IObject> Execute(Machine machine, IObject value)
+      public override IMatched<IObject> Execute(Machine machine, IObject value) => value switch
       {
-         switch (value)
-         {
-            case Container list:
-               return List.NewList(list).Matched<IObject>();
-            case ICollection collection when collection.ExpandForArray:
-               return List.NewList(list(collection)).Matched<IObject>();
-            case IIterator iterator:
-               return List.NewList(iterator.List()).Matched<IObject>();
-            default:
-               return List.Single(value).Matched<IObject>();
-         }
-      }
+         Container list => List.NewList(list).Matched<IObject>(),
+         ICollection { ExpandForArray: true } collection => List.NewList(list(collection)).Matched<IObject>(),
+         IIterator iterator => List.NewList(iterator.List()).Matched<IObject>(),
+         _ => List.Single(value).Matched<IObject>()
+      };
 
       public override string ToString() => "new.list";
    }

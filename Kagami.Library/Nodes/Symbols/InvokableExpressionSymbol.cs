@@ -6,7 +6,7 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class InvokableExpressionSymbol : Symbol, IInvokableObject
    {
-      Expression expression;
+      protected Expression expression;
 
       public InvokableExpressionSymbol(Expression expression)
       {

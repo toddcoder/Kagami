@@ -6,8 +6,8 @@ namespace Kagami.Library.Nodes.Statements
 {
    public class While : Statement
    {
-      Expression expression;
-      Block block;
+      protected Expression expression;
+      protected Block block;
 
       public While(Expression expression, Block block)
       {

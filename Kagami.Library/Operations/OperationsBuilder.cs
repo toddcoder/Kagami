@@ -16,24 +16,24 @@ namespace Kagami.Library.Operations
 {
    public class OperationsBuilder
    {
-      List<Operation> operations;
-      Hash<string, int> labels;
-      Hash<int, string> addresses;
-      Hash<int, IInvokable> invokables;
-      Hash<int, Block> blocks;
-      Hash<LabelType, Stack<string>> labelStack;
-      Set<string> registeredBlocks;
-      Stack<MacroParameters> macroParameters;
-      Stack<string> returnLabels;
+      protected List<Operation> operations;
+      protected Hash<string, int> labels;
+      protected Hash<int, string> addresses;
+      protected Hash<int, IInvokable> invokables;
+      protected Hash<int, Block> blocks;
+      protected Hash<LabelType, Stack<string>> labelStack;
+      protected Set<string> registeredBlocks;
+      protected Stack<MacroParameters> macroParameters;
+      protected Stack<string> returnLabels;
 
       public OperationsBuilder()
       {
          operations = new List<Operation>();
-         labels = new AutoHash<string, int>(k => -1);
-         addresses = new AutoHash<int, string>(k => "");
+         labels = new AutoHash<string, int>(_ => -1);
+         addresses = new AutoHash<int, string>(_ => "");
          invokables = new Hash<int, IInvokable>();
          blocks = new Hash<int, Block>();
-         labelStack = new AutoHash<LabelType, Stack<string>>(type => new Stack<string>());
+         labelStack = new AutoHash<LabelType, Stack<string>>(_ => new Stack<string>());
          registeredBlocks = new Set<string>();
          macroParameters = new Stack<MacroParameters>();
          returnLabels = new Stack<string>();
@@ -62,16 +62,14 @@ namespace Kagami.Library.Operations
          return RegisterInvokable(invokable, new Block(new ExpressionStatement(expression, true)), overriding);
       }
 
-      void add(Operation operation) => operations.Add(operation);
+      protected void add(Operation operation) => operations.Add(operation);
 
       public void AddRaw(Operation operation) => operations.Add(operation);
 
-      string add(AddressedOperation operation, string label)
+      protected void add(AddressedOperation operation, string label)
       {
          addresses[operations.Count] = label;
          operations.Add(operation);
-
-         return label;
       }
 
       public void Merge(OperationsBuilder otherBuilder)
@@ -90,7 +88,7 @@ namespace Kagami.Library.Operations
 
       public void Label(string label) => labels[label] = operations.Count;
 
-      public string PushLabel(LabelType type, string name)
+      public void PushLabel(LabelType type, string name)
       {
          var label = newLabel(name);
          if (labelStack.If(type, out var stack))
@@ -103,13 +101,11 @@ namespace Kagami.Library.Operations
             stack.Push(label);
             labelStack[type] = stack;
          }
-
-         return label;
       }
 
       public string PeekLabel(LabelType type) => labelStack.FlatMap(type, stack => stack.Peek(), () => "");
 
-      public string PopLabel(LabelType type) => labelStack[type].Pop();
+      public void PopLabel(LabelType type) => labelStack[type].Pop();
 
       public void Label(LabelType type) => Label(PeekLabel(type));
 
@@ -156,21 +152,21 @@ namespace Kagami.Library.Operations
 
       public void Raise() => add(new Raise());
 
-      public string GoTo(string label) => add(new GoTo(), label);
+      public void GoTo(string label) => add(new GoTo(), label);
 
-      public string GoTo(LabelType type) => add(new GoTo(), PeekLabel(type));
+      public void GoTo(LabelType type) => add(new GoTo(), PeekLabel(type));
 
-      public string GoToIfTrue(string label) => add(new GoToIfTrue(), label);
+      public void GoToIfTrue(string label) => add(new GoToIfTrue(), label);
 
-      public string GoToIfFalse(string label) => add(new GoToIfFalse(), label);
+      public void GoToIfFalse(string label) => add(new GoToIfFalse(), label);
 
-      public string GoToIfSome(string label) => add(new GoToIfSome(), label);
+      public void GoToIfSome(string label) => add(new GoToIfSome(), label);
 
-      public string GoToIfNone(string label) => add(new GoToIfNone(), label);
+      public void GoToIfNone(string label) => add(new GoToIfNone(), label);
 
-      public string GoToIfSuccess(string label) => add(new GoToIfSuccess(), label);
+      public void GoToIfSuccess(string label) => add(new GoToIfSuccess(), label);
 
-      public string GoToIfFailure(string label) => add(new GoToIfFailure(), label);
+      public void GoToIfFailure(string label) => add(new GoToIfFailure(), label);
 
       public void Compare() => add(new Compare());
 
@@ -209,8 +205,10 @@ namespace Kagami.Library.Operations
 
       public void GetField(string name) => add(new GetField(name));
 
-      public void NewField(string name, bool mutable, bool visible, IMaybe<TypeConstraint> typeConstraint) =>
+      public void NewField(string name, bool mutable, bool visible, IMaybe<TypeConstraint> typeConstraint)
+      {
          add(new NewField(name, mutable, visible, typeConstraint));
+      }
 
       public void NewField(string name, bool mutable, bool visible)
       {

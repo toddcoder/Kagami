@@ -2,22 +2,22 @@
 
 namespace Kagami.Library.Nodes.Symbols
 {
-	public class SetSymbol : Symbol
-	{
-		Expression expression;
+   public class SetSymbol : Symbol
+   {
+      protected Expression expression;
 
-		public SetSymbol(Expression expression) => this.expression = expression;
+      public SetSymbol(Expression expression) => this.expression = expression;
 
-		public override void Generate(OperationsBuilder builder)
-		{
-			expression.Generate(builder);
-			builder.NewSet();
-		}
+      public override void Generate(OperationsBuilder builder)
+      {
+         expression.Generate(builder);
+         builder.NewSet();
+      }
 
-		public override Precedence Precedence => Precedence.Value;
+      public override Precedence Precedence => Precedence.Value;
 
-		public override Arity Arity => Arity.Nullary;
+      public override Arity Arity => Arity.Nullary;
 
-		public override string ToString() => $"⎩{expression}⎭";
-	}
+      public override string ToString() => $"⎩{expression}⎭";
+   }
 }

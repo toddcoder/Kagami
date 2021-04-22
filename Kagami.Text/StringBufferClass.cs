@@ -16,8 +16,8 @@ namespace Kagami.Text
          messages["[]"] = (obj, msg) => function<StringBuffer, Int>(obj, msg, (sb, i) => sb[i.Value]);
          messages["[]="] = (obj, msg) => function<StringBuffer, Int, Char>(obj, msg, (sb, i, c) => sb[i.Value] = c);
          messages["<<"] = (obj, msg) => function<StringBuffer, IObject>(obj, msg, (sb, o) => sb.Append(o));
-         messages["length".get()] = (obj, msg) => function<StringBuffer>(obj, sb => sb.Length);
-         messages["clear"] = (obj, msg) => function<StringBuffer>(obj, sb => sb.Clear());
+         messages["length".get()] = (obj, _) => function<StringBuffer>(obj, sb => sb.Length);
+         messages["clear"] = (obj, _) => function<StringBuffer>(obj, sb => sb.Clear());
       }
    }
 }

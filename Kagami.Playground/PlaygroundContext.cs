@@ -11,17 +11,17 @@ namespace Kagami.Playground
 {
    public class PlaygroundContext : IContext
    {
-      TextWriter writer;
-      TextReader reader;
-      Hash<int, string> peeks;
-      bool cancelled;
-      Putter putter;
+      protected TextWriter writer;
+      protected TextReader reader;
+      protected Hash<int, string> peeks;
+      protected bool cancelled;
+      protected Putter putter;
 
       public PlaygroundContext(TextWriter writer, TextReader reader)
       {
          this.writer = writer;
          this.reader = reader;
-         peeks = new AutoHash<int, string>(k => "");
+         peeks = new AutoHash<int, string>(_ => "");
          cancelled = false;
          putter = new Putter();
       }

@@ -33,7 +33,7 @@ namespace Kagami.Library
 
       public static Selector Selector(this string baseName, int count)
       {
-         return baseName.Selector(Enumerable.Range(0, count).Select(i => "_").ToArray());
+         return baseName.Selector(Enumerable.Range(0, count).Select(_ => "_").ToArray());
       }
 
       public static IObject AsOptional<T>(this IMaybe<T> maybe) where T : IObject

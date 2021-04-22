@@ -11,7 +11,7 @@ namespace Kagami.Library.Operations
    {
       public static IMatched<IObject> ReturnAction(Machine machine, bool returnTopOfStack)
       {
-         var rtn = Machine.Current.CurrentFrame.Pop().Map(o => o.Matched()).Recover(e => notMatched<IObject>());
+         var rtn = Machine.Current.CurrentFrame.Pop().Map(o => o.Matched()).Recover(_ => notMatched<IObject>());
 
          var frames = machine.PopFrames();
          if (frames.FunctionFrame.If(out var frame))
@@ -37,14 +37,7 @@ namespace Kagami.Library.Operations
                rtn = notMatched<IObject>();
             }
 
-            if (machine.GoTo(returnAddress))
-            {
-               return rtn;
-            }
-            else
-            {
-               return failedMatch<IObject>(badAddress(returnAddress));
-            }
+            return machine.GoTo(returnAddress) ? rtn : failedMatch<IObject>(badAddress(returnAddress));
          }
          else
          {

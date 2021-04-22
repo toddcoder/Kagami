@@ -5,7 +5,7 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class IntSymbol : Symbol, IConstant
    {
-      int value;
+      protected int value;
 
       public IntSymbol(int value) => this.value = value;
 

@@ -18,24 +18,24 @@ namespace Kagami.Library.Classes
          rangeMessages();
          compareMessages();
 
-         messages["isEven".get()] = (obj, msg) => function<Int>(obj, i => i.IsEven);
-         messages["isOdd".get()] = (obj, msg) => function<Int>(obj, i => i.IsOdd);
-         messages["isPrime".get()] = (obj, msg) => function<Int>(obj, i => i.IsPrime);
-         messages["factorial()"] = (obj, msg) => function<Int>(obj, i => i.Factorial());
-         messages["millisecond".get()] = (obj, msg) => function<Int>(obj, i => i.Millisecond);
-         messages["milliseconds".get()] = (obj, msg) => function<Int>(obj, i => i.Millisecond);
-         messages["second".get()] = (obj, msg) => function<Int>(obj, i => i.Second);
-         messages["seconds".get()] = (obj, msg) => function<Int>(obj, i => i.Second);
-         messages["minute".get()] = (obj, msg) => function<Int>(obj, i => i.Minute);
-         messages["minutes".get()] = (obj, msg) => function<Int>(obj, i => i.Minute);
-         messages["hour".get()] = (obj, msg) => function<Int>(obj, i => i.Hour);
-         messages["hours".get()] = (obj, msg) => function<Int>(obj, i => i.Hour);
-         messages["day".get()] = (obj, msg) => function<Int>(obj, i => i.Day);
-         messages["days".get()] = (obj, msg) => function<Int>(obj, i => i.Day);
-         messages["week".get()] = (obj, msg) => function<Int>(obj, i => i.Week);
-         messages["weeks".get()] = (obj, msg) => function<Int>(obj, i => i.Week);
-         messages["char()"] = (obj, msg) => function<Int>(obj, i => i.Char());
-         messages["byte()"] = (obj, msg) => function<Int>(obj, i => i.Byte());
+         messages["isEven".get()] = (obj, _) => function<Int>(obj, i => i.IsEven);
+         messages["isOdd".get()] = (obj, _) => function<Int>(obj, i => i.IsOdd);
+         messages["isPrime".get()] = (obj, _) => function<Int>(obj, i => i.IsPrime);
+         messages["factorial()"] = (obj, _) => function<Int>(obj, i => i.Factorial());
+         messages["millisecond".get()] = (obj, _) => function<Int>(obj, i => i.Millisecond);
+         messages["milliseconds".get()] = (obj, _) => function<Int>(obj, i => i.Millisecond);
+         messages["second".get()] = (obj, _) => function<Int>(obj, i => i.Second);
+         messages["seconds".get()] = (obj, _) => function<Int>(obj, i => i.Second);
+         messages["minute".get()] = (obj, _) => function<Int>(obj, i => i.Minute);
+         messages["minutes".get()] = (obj, _) => function<Int>(obj, i => i.Minute);
+         messages["hour".get()] = (obj, _) => function<Int>(obj, i => i.Hour);
+         messages["hours".get()] = (obj, _) => function<Int>(obj, i => i.Hour);
+         messages["day".get()] = (obj, _) => function<Int>(obj, i => i.Day);
+         messages["days".get()] = (obj, _) => function<Int>(obj, i => i.Day);
+         messages["week".get()] = (obj, _) => function<Int>(obj, i => i.Week);
+         messages["weeks".get()] = (obj, _) => function<Int>(obj, i => i.Week);
+         messages["char()"] = (obj, _) => function<Int>(obj, i => i.Char());
+         messages["byte()"] = (obj, _) => function<Int>(obj, i => i.Byte());
          messages["times(_)"] = (obj, msg) => function<Int, Lambda>(obj, msg, (i, l) => i.Times(l));
       }
 
@@ -43,23 +43,22 @@ namespace Kagami.Library.Classes
       {
          base.RegisterClassMessages();
 
-         classMessages["min".get()] = (cls, msg) => Int.IntObject(int.MinValue);
-         classMessages["max".get()] = (cls, msg) => Int.IntObject(int.MaxValue);
-         classMessages["parse"] = (cls, msg) => parse(msg.Arguments[0].AsString);
+         classMessages["min".get()] = (_, _) => Int.IntObject(int.MinValue);
+         classMessages["max".get()] = (_, _) => Int.IntObject(int.MaxValue);
+         classMessages["parse"] = (_, msg) => parse(msg.Arguments[0].AsString);
       }
 
       public static IObject parse(string value)
       {
-	      try
-	      {
-		      var number = int.Parse(value.Replace("_", ""));
-		      return Success.Object(Int.IntObject(number));
-
-	      }
-	      catch (Exception exception)
-	      {
-		      return Failure.Object(exception.Message);
-	      }
+         try
+         {
+            var number = int.Parse(value.Replace("_", ""));
+            return Success.Object(Int.IntObject(number));
+         }
+         catch (Exception exception)
+         {
+            return Failure.Object(exception.Message);
+         }
       }
 
       public IObject Parse(string source) => Int.IntObject(source.ToInt());

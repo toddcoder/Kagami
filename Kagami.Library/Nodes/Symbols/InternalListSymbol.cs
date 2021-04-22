@@ -5,7 +5,7 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class InternalListSymbol : Symbol
    {
-      Container container;
+      protected Container container;
 
       public InternalListSymbol(Container container) => this.container = container;
 

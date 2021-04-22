@@ -5,8 +5,8 @@ namespace Kagami.Library.Classes
 {
    public class DataComparisandClass : BaseClass
    {
-      string className;
-      string name;
+      protected string className;
+      protected string name;
 
       public DataComparisandClass(string className, string name)
       {
@@ -20,33 +20,26 @@ namespace Kagami.Library.Classes
       {
          base.RegisterMessages();
 
-         messages["name".get()] = (obj, msg) => function<DataComparisand>(obj, dc => dc.Name);
-         messages["comparisands".get()] = (obj, msg) => function<DataComparisand>(obj, dc => dc.Comparisands);
-         messages["ordinal".get()] = (obj, msg) => function<DataComparisand>(obj, dc => dc.Ordinal);
+         messages["name".get()] = (obj, _) => function<DataComparisand>(obj, dc => dc.Name);
+         messages["comparisands".get()] = (obj, _) => function<DataComparisand>(obj, dc => dc.Comparisands);
+         messages["ordinal".get()] = (obj, _) => function<DataComparisand>(obj, dc => dc.Ordinal);
       }
 
       public override bool MatchCompatible(BaseClass otherClass)
       {
          if (otherClass is DataTypeClass dataTypeClass)
          {
-	         return dataTypeClass.Name == className;
+            return dataTypeClass.Name == className;
          }
          else
          {
-	         return base.MatchCompatible(otherClass);
+            return base.MatchCompatible(otherClass);
          }
       }
 
       public override bool AssignCompatible(BaseClass otherClass)
       {
-         if (otherClass is DataComparisandClass dataComparisandClass)
-         {
-	         return className == dataComparisandClass.className;
-         }
-         else
-         {
-	         return false;
-         }
+         return otherClass is DataComparisandClass dataComparisandClass && className == dataComparisandClass.className;
       }
    }
 }
