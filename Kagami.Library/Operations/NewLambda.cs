@@ -7,7 +7,7 @@ namespace Kagami.Library.Operations
 {
    public class NewLambda : Operation
    {
-      IInvokable invokable;
+      protected IInvokable invokable;
 
       public NewLambda(IInvokable invokable) => this.invokable = invokable;
 

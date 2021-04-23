@@ -8,16 +8,12 @@ namespace Kagami.Library.Operations
 {
    public class MacroParameters
    {
-      Hash<string, Expression> values;
-/*      string tupleName;
-      List<Expression> tuple;*/
-      Hash<string, IInvokable> defaults;
+      protected Hash<string, Expression> values;
+      protected Hash<string, IInvokable> defaults;
 
       public MacroParameters()
       {
          values = new Hash<string, Expression>();
-/*         tupleName = "";
-         tuple = new List<Expression>();*/
          defaults = new Hash<string, IInvokable>();
       }
 
@@ -25,7 +21,6 @@ namespace Kagami.Library.Operations
       {
          var length = Math.Min(arguments.Length, parameters.Length);
          var lastValue = new Expression(new NoneSymbol());
-         //var lastName = "";
          var variadic = false;
 
          for (var i = 0; i < length && !variadic; i++)
@@ -33,7 +28,6 @@ namespace Kagami.Library.Operations
             var parameter = parameters[i];
             lastValue = arguments[i];
             values[parameter.Name] = lastValue;
-            //lastName = parameter.Name;
             variadic = parameter.Variadic;
          }
 
@@ -42,49 +36,38 @@ namespace Kagami.Library.Operations
             var list = new List<Expression> { lastValue };
             for (var i = length; i < arguments.Length; i++)
             {
-	            list.Add(arguments[i]);
+               list.Add(arguments[i]);
             }
-
-/*            tupleName = lastName;
-            tuple = list;*/
          }
          else if (length < parameters.Length)
          {
-	         for (var i = length; i < parameters.Length; i++)
-	         {
-		         var parameter = parameters[i];
-		         var defaultValue = parameter.DefaultValue;
-		         if (defaultValue.If(out var invokable))
-		         {
-			         defaults[parameter.Name] = invokable;
-		         }
-	         }
+            for (var i = length; i < parameters.Length; i++)
+            {
+               var parameter = parameters[i];
+               var defaultValue = parameter.DefaultValue;
+               if (defaultValue.If(out var invokable))
+               {
+                  defaults[parameter.Name] = invokable;
+               }
+            }
          }
          else if (length < arguments.Length)
          {
             var list = new List<Expression> { lastValue };
             for (var i = length; i < arguments.Length; i++)
             {
-	            list.Add(arguments[i]);
+               list.Add(arguments[i]);
             }
-
-/*            tupleName = lastName;
-            tuple = list;*/
          }
       }
 
-      public bool Replace(Symbol symbol, OperationsBuilder builder)
+      public bool Replace(Symbol symbol, OperationsBuilder builder) => symbol switch
       {
-         switch (symbol)
-         {
-            case FieldSymbol fieldSymbol:
-               return generate(fieldSymbol.FieldName, builder);
-            default:
-               return false;
-         }
-      }
+         FieldSymbol fieldSymbol => generate(fieldSymbol.FieldName, builder),
+         _ => false
+      };
 
-      bool generate(string name, OperationsBuilder builder)
+      protected bool generate(string name, OperationsBuilder builder)
       {
          if (values.ContainsKey(name))
          {
@@ -93,7 +76,7 @@ namespace Kagami.Library.Operations
          }
          else
          {
-	         return false;
+            return false;
          }
       }
    }

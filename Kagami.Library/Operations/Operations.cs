@@ -7,9 +7,9 @@ namespace Kagami.Library.Operations
 {
    public class Operations
    {
-      Operation[] operations;
-      int address;
-      int length;
+      protected Operation[] operations;
+      protected int address;
+      protected int length;
 
       public Operations(Operation[] operations)
       {
@@ -18,8 +18,9 @@ namespace Kagami.Library.Operations
          length = operations.Length;
       }
 
-      public Operations()
-         : this(new Operation[0]) { }
+      public Operations() : this(new Operation[0])
+      {
+      }
 
       public int Address => address;
 
@@ -47,7 +48,7 @@ namespace Kagami.Library.Operations
          var table = new TableMaker(("Loc", Justification.Right), ("Operation", Justification.Left));
          for (var i = 0; i < length; i++)
          {
-	         table.Add(i, operations[i]);
+            table.Add(i, operations[i]);
          }
 
          return table.ToString();

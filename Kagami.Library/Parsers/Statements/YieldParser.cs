@@ -8,7 +8,7 @@ namespace Kagami.Library.Parsers.Statements
 {
    public class YieldParser : EndingInExpressionParser
    {
-      bool all;
+      protected bool all;
 
       public override string Pattern => "^ /'yield' (/(|s+|) /'all')? /(|s+|)";
 
@@ -23,14 +23,14 @@ namespace Kagami.Library.Parsers.Statements
       {
          if (all)
          {
-	         var placeholderName = newLabel("yieldIndex");
+            var placeholderName = newLabel("yieldIndex");
             var block = new Block(new Yield(new Expression(new FieldSymbol(placeholderName))));
-            var for2 = new For(new PlaceholderSymbol("-" + placeholderName), expression, block);
-            state.AddStatement(for2);
+            var @for = new For(new PlaceholderSymbol("-" + placeholderName), expression, block);
+            state.AddStatement(@for);
          }
          else
          {
-	         state.AddStatement(new Yield(expression));
+            state.AddStatement(new Yield(expression));
          }
 
          state.SetYieldFlag();

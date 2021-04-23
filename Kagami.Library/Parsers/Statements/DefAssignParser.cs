@@ -6,7 +6,7 @@ namespace Kagami.Library.Parsers.Statements
 {
    public class DefAssignParser : EndingInExpressionParser
    {
-      string fieldName;
+      protected string fieldName;
 
       public override string Pattern => $"^ /'def' /(|s+|) /({REGEX_FIELD}) /(|s|) /'=' -(> '=')";
 

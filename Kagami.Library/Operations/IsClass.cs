@@ -8,7 +8,7 @@ namespace Kagami.Library.Operations
 {
    public class IsClass : Operation
    {
-      static IMatched<IObject> getValue(bool pop, Machine machine, string className)
+      protected static IMatched<IObject> getValue(bool pop, Machine machine, string className)
       {
          if (pop)
          {
@@ -21,8 +21,8 @@ namespace Kagami.Library.Operations
          }
       }
 
-      string className;
-      bool pop;
+      protected string className;
+      protected bool pop;
 
       public IsClass(string className, bool pop)
       {

@@ -4,17 +4,19 @@ namespace Kagami.Library.Objects
 {
    public class RuntimeInvokable : IInvokable
    {
-      Parameters parameters;
+      protected Parameters parameters;
 
       public RuntimeInvokable(int parameterCount, string image)
       {
          parameters = new Parameters(parameterCount);
          Image = image;
+         Index = -1;
+         Address = -1;
       }
 
-      public int Index { get; set; } = -1;
+      public int Index { get; set; }
 
-      public int Address { get; set; } = -1;
+      public int Address { get; set; }
 
       public Parameters Parameters => parameters;
 

@@ -9,34 +9,34 @@ namespace Kagami.Library.Objects
 {
    public class Lazy : IObject
    {
-      IInvokable invokable;
-      IMaybe<IObject> value;
+      protected IInvokable invokable;
+      protected IMaybe<IObject> _value;
 
       public Lazy(IInvokable invokable)
       {
          this.invokable = invokable;
-         value = none<IObject>();
+         _value = none<IObject>();
       }
 
-      IObject getValue()
+      protected IObject getValue()
       {
-	      if (value.If(out var v))
-	      {
-		      return v;
-	      }
-	      else if (Machine.Current.Invoke(invokable, Arguments.Empty, 0).If(out var result, out var anyException))
-	      {
-		      value = result.Some();
-		      return result;
-	      }
-	      else if (anyException.If(out var exception))
-	      {
-		      throw exception;
-	      }
-	      else
-	      {
-		      throw "Value could not be resolved".Throws();
-	      }
+         if (_value.If(out var value))
+         {
+            return value;
+         }
+         else if (Machine.Current.Invoke(invokable, Arguments.Empty, 0).If(out var result, out var _exception))
+         {
+            _value = result.Some();
+            return result;
+         }
+         else if (_exception.If(out var exception))
+         {
+            throw exception;
+         }
+         else
+         {
+            throw "Value could not be resolved".Throws();
+         }
       }
 
       public IObject Value => getValue();
@@ -53,14 +53,14 @@ namespace Kagami.Library.Objects
 
       public bool Match(IObject comparisand, Hash<string, IObject> bindings)
       {
-         if (comparisand is Placeholder ph)
+         if (comparisand is Placeholder placeholder)
          {
-            bindings[ph.Name] = this;
+            bindings[placeholder.Name] = this;
             return true;
          }
          else
          {
-	         return getValue().Match(comparisand, bindings);
+            return getValue().Match(comparisand, bindings);
          }
       }
 

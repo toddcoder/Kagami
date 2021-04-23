@@ -11,9 +11,9 @@ namespace Kagami.Library.Parsers.Expressions
 {
    public class DoParser : SymbolParser
    {
-      class BoundItemParser : EndingInExpressionParser
+      protected class BoundItemParser : EndingInExpressionParser
       {
-         string fieldName;
+         protected string fieldName;
 
          public BoundItemParser(ExpressionBuilder builder) : base(builder) => fieldName = "";
 
@@ -36,7 +36,9 @@ namespace Kagami.Library.Parsers.Expressions
          }
       }
 
-      public DoParser(ExpressionBuilder builder) : base(builder) { }
+      public DoParser(ExpressionBuilder builder) : base(builder)
+      {
+      }
 
       public override string Pattern => $"^ /(|s|) /'do' {REGEX_ANTICIPATE_END}";
 
@@ -102,7 +104,7 @@ namespace Kagami.Library.Parsers.Expressions
          }
       }
 
-      static IResult<Symbol> getSymbol(Expression targetExpression, string parameterName, Expression lambdaExpression,
+      protected static IResult<Symbol> getSymbol(Expression targetExpression, string parameterName, Expression lambdaExpression,
          Stack<(string, Expression)> stack)
       {
          var block = new Block(lambdaExpression);

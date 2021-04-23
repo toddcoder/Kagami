@@ -6,7 +6,7 @@ namespace Kagami.Library.Operations
 {
    public class PushObject : Operation
    {
-      IObject obj;
+      protected IObject obj;
 
       public PushObject(IObject obj) => this.obj = obj;
 
@@ -14,7 +14,7 @@ namespace Kagami.Library.Operations
       {
          if (obj is Lambda lambda)
          {
-	         lambda.Capture();
+            lambda.Capture();
          }
 
          return obj.Matched();

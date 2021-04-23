@@ -2,10 +2,10 @@
 
 namespace Kagami.Library.Objects
 {
-   public struct Binding : IObject
+   public readonly struct Binding : IObject
    {
-      string name;
-      IObject value;
+      private readonly string name;
+      private readonly IObject value;
 
       public Binding(string name, IObject value) : this()
       {

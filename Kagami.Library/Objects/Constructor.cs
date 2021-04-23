@@ -7,7 +7,7 @@ namespace Kagami.Library.Objects
 {
    public class Constructor : IObject, IEquatable<Constructor>, IInvokableObject
    {
-      IInvokable invokable;
+      protected IInvokable invokable;
 
       public Constructor(IInvokable invokable) => this.invokable = invokable;
 

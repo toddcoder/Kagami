@@ -5,13 +5,13 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class SubexpressionSymbol : Symbol
    {
-      Expression expression;
-      bool monoTuple;
+      protected Expression expression;
+      protected bool monoTuple;
 
       public SubexpressionSymbol(Expression expression, bool monoTuple = false)
       {
-	      this.expression = expression;
-	      this.monoTuple = monoTuple;
+         this.expression = expression;
+         this.monoTuple = monoTuple;
       }
 
       public override void Generate(OperationsBuilder builder)
@@ -24,18 +24,18 @@ namespace Kagami.Library.Nodes.Symbols
          builder.IsClass("Container", false);
          builder.GoToIfTrue(tupleLabel);
 
-			if (monoTuple)
-			{
-				builder.NewMonoTuple();
-			}
+         if (monoTuple)
+         {
+            builder.NewMonoTuple();
+         }
 
-			builder.GoTo(endLabel);
+         builder.GoTo(endLabel);
 
-			builder.Label(tupleLabel);
-			builder.NewTuple();
+         builder.Label(tupleLabel);
+         builder.NewTuple();
 
-			builder.Label(endLabel);
-			builder.NoOp();
+         builder.Label(endLabel);
+         builder.NoOp();
       }
 
       public Expression Expression => expression;

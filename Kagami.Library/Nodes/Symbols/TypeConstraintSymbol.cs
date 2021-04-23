@@ -8,7 +8,7 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class TypeConstraintSymbol : Symbol, IConstant
    {
-      TypeConstraint typeConstraint;
+      protected TypeConstraint typeConstraint;
 
       public TypeConstraintSymbol(IEnumerable<BaseClass> list) => typeConstraint = new TypeConstraint(list.ToArray());
 

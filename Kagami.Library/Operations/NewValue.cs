@@ -6,8 +6,8 @@ namespace Kagami.Library.Operations
 {
    public class NewValue : ArgumentsOperation
    {
-      string className;
-      Func<Arguments, IObject> initializer;
+      protected string className;
+      protected Func<Arguments, IObject> initializer;
 
       public NewValue(string className, Func<Arguments, IObject> initializer)
       {

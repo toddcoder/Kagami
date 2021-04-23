@@ -7,10 +7,12 @@ namespace Kagami.Library.Parsers.Expressions
 {
    public class SendMessageAssignParser : EndingInExpressionParser
    {
-      string messageName;
-      string operationSource;
+      protected string messageName;
+      protected string operationSource;
 
-      public SendMessageAssignParser(ExpressionBuilder builder) : base(builder) { }
+      public SendMessageAssignParser(ExpressionBuilder builder) : base(builder)
+      {
+      }
 
       public override string Pattern => $"^ /(|s|) /'.' /({REGEX_FUNCTION_NAME}) /(|s|) /({REGEX_ASSIGN_OPS})? /'=' -(> ['=>'])";
 
@@ -18,8 +20,7 @@ namespace Kagami.Library.Parsers.Expressions
       {
          messageName = tokens[3].Text;
          operationSource = tokens[5].Text;
-         state.Colorize(tokens, Color.Whitespace, Color.Structure, Color.Message, Color.Whitespace, Color.Operator,
-            Color.Structure);
+         state.Colorize(tokens, Color.Whitespace, Color.Structure, Color.Message, Color.Whitespace, Color.Operator, Color.Structure);
 
          return Unit.Matched();
       }

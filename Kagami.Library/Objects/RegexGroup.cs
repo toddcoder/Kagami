@@ -6,20 +6,21 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct RegexGroup : IObject, IProcessPlaceholders, IEquatable<RegexGroup>
+   public readonly struct RegexGroup : IObject, IProcessPlaceholders, IEquatable<RegexGroup>
    {
-      string text;
-      int index;
-      int length;
-      Hash<string, IObject> passed;
-      Hash<string, IObject> internals;
-      Equatable<RegexGroup> equatable;
+      private readonly string text;
+      private readonly int index;
+      private readonly int length;
+      private readonly Hash<string, IObject> passed;
+      private readonly Hash<string, IObject> internals;
+      private readonly Equatable<RegexGroup> equatable;
 
       public RegexGroup(Matcher.Group group) : this()
       {
-         text = group.Text;
-         index = group.Index;
-         length = group.Length;
+         var (groupText, groupIndex, groupLength) = group;
+         text = groupText;
+         index = groupIndex;
+         length = groupLength;
 
          passed = new Hash<string, IObject>();
          internals = new Hash<string, IObject>

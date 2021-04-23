@@ -9,8 +9,8 @@ namespace Kagami.Library.Parsers.Statements
 {
    public class AssignToFieldParser : EndingInExpressionParser
    {
-      string fieldName;
-      string operationSource;
+      protected string fieldName;
+      protected string operationSource;
 
       public override string Pattern => $"^ /({REGEX_FIELD}) /(/s*) /({REGEX_ASSIGN_OPS})? /'=' -(> ['=>'])";
 
@@ -27,11 +27,11 @@ namespace Kagami.Library.Parsers.Statements
       {
          var assignmentOperation = none<Operation>();
 
-         if (matchOperator(operationSource).If(out var operation, out var anyException))
+         if (matchOperator(operationSource).If(out var operation, out var _exception))
          {
             assignmentOperation = operation.Some();
          }
-         else if (anyException.If(out var exception))
+         else if (_exception.If(out var exception))
          {
             return failedMatch<Unit>(exception);
          }

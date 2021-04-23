@@ -2,7 +2,7 @@
 {
    public class Putter
    {
-      bool putting;
+      protected bool putting;
 
       public Putter() => putting = false;
 
@@ -10,7 +10,7 @@
       {
          if (putting)
          {
-	         return $" {value}";
+            return $" {value}";
          }
 
          putting = true;

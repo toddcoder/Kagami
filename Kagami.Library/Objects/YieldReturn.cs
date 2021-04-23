@@ -3,11 +3,11 @@ using Core.Collections;
 
 namespace Kagami.Library.Objects
 {
-   public struct YieldReturn : IObject
+   public readonly struct YieldReturn : IObject
    {
-      IObject returnValue;
-      int address;
-      FrameGroup frames;
+      private readonly IObject returnValue;
+      private readonly int address;
+      private readonly FrameGroup frames;
 
       public YieldReturn(IObject returnValue, int address, FrameGroup frames) : this()
       {

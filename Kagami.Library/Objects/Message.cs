@@ -4,10 +4,10 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct Message : IObject, IEquatable<Message>
+   public readonly struct Message : IObject, IEquatable<Message>
    {
-      Selector selector;
-      Arguments arguments;
+      private readonly Selector selector;
+      private readonly Arguments arguments;
 
       public Message(Selector selector, Arguments arguments) : this()
       {
@@ -20,12 +20,6 @@ namespace Kagami.Library.Objects
          this.arguments = new Arguments(arguments);
          this.selector = this.arguments.Selector(selector.Name);
       }
-
-/*      public Message(Selector selector) : this()
-      {
-         this.selector = selector;
-         arguments = Arguments.Empty;
-      }*/
 
       public Selector Selector => selector;
 
@@ -52,7 +46,7 @@ namespace Kagami.Library.Objects
 
       public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
-	   public bool IsTrue => true;
+      public bool IsTrue => true;
 
       public bool Equals(Message other) => selector.IsEqualTo(other.selector) && arguments.Equals(other.arguments);
 

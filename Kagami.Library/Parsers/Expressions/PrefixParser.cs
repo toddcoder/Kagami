@@ -4,7 +4,7 @@ namespace Kagami.Library.Parsers.Expressions
 {
    public class PrefixParser : MultiParser
    {
-      ExpressionBuilder builder;
+      protected ExpressionBuilder builder;
 
       public PrefixParser(ExpressionBuilder builder) => this.builder = builder;
 

@@ -13,8 +13,8 @@ namespace Kagami.Text
          module.RegisterClass(new StringBufferClass());
       }
 
-      public StringBuffer StringBuffer() => new StringBuffer();
+      public StringBuffer StringBuffer() => new();
 
-      public StringBuffer StringBuffer(string initialValue) => new StringBuffer(initialValue);
+      public StringBuffer StringBuffer(string initialValue) => new(initialValue);
    }
 }

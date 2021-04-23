@@ -8,13 +8,13 @@ namespace Kagami.Library.Parsers.Statements
 {
    public class ExpressionStatementParser : StatementParser
    {
-      bool returnExpression;
-      IMaybe<TypeConstraint> typeConstraint;
+      protected bool returnExpression;
+      protected IMaybe<TypeConstraint> _typeConstraint;
 
       public ExpressionStatementParser(bool returnExpression, IMaybe<TypeConstraint> typeConstraint)
       {
          this.returnExpression = returnExpression;
-         this.typeConstraint = typeConstraint;
+         _typeConstraint = typeConstraint;
       }
 
       public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
@@ -27,7 +27,7 @@ namespace Kagami.Library.Parsers.Statements
 
          if (getExpression(state, flags).ValueOrCast<Unit>(out var expression, out var asUnit))
          {
-            state.AddStatement(new ExpressionStatement(expression, returnExpression, typeConstraint));
+            state.AddStatement(new ExpressionStatement(expression, returnExpression, _typeConstraint));
             return Unit.Matched();
          }
          else

@@ -7,7 +7,7 @@ namespace Kagami.Library.Operations
 {
    public class Peek : Operation
    {
-      int index;
+      protected int index;
 
       public Peek(int index) => this.index = index;
 
@@ -21,7 +21,7 @@ namespace Kagami.Library.Operations
             var message = $"{value.Image} | {value.ClassName}";
             if (currentAddress != machine.Address)
             {
-	            machine.GoTo(currentAddress);
+               machine.GoTo(currentAddress);
             }
 
             machine.Context.Peek(message, index);

@@ -9,7 +9,7 @@ namespace Kagami.Library.Parsers
 {
    public abstract class Parser
    {
-      bool updateLastStatement;
+      protected bool updateLastStatement;
 
       protected Parser(bool updateLastStatement) => this.updateLastStatement = updateLastStatement;
 
@@ -28,52 +28,52 @@ namespace Kagami.Library.Parsers
 
       public virtual IMatched<Unit> Scan(ParseState state)
       {
-	      IMaybe<Exception> anyException;
+         IMaybe<Exception> _exception;
 
          if (Pattern.IsEmpty())
          {
             var index = state.Index;
             var parsed = Parse(state, new Token[0]);
-	         if (parsed.If(out _, out anyException))
-	         {
-		         if (UpdateIndexOnParseOnly)
-		         {
-			         state.UpdateStatement(index, 1);
-		         }
-	         }
-				else if (anyException.IsSome)
-	         {
-		         state.SetExceptionIndex();
-	         }
+            if (parsed.If(out _, out _exception))
+            {
+               if (UpdateIndexOnParseOnly)
+               {
+                  state.UpdateStatement(index, 1);
+               }
+            }
+            else if (_exception.IsSome)
+            {
+               state.SetExceptionIndex();
+            }
 
-	         return parsed;
+            return parsed;
          }
 
-	      if (new Matcher().MatchOne(state.CurrentSource, state.RealizePattern(Pattern), IgnoreCase, Multiline).If(out var match, out anyException))
-	      {
-		      var index = state.Index;
-		      var parsed = Parse(state, GetTokens(state, match));
-		      if (parsed.IsMatched && updateLastStatement)
-		      {
-			      state.UpdateStatement(index, match.Length);
-		      }
+         if (new Matcher().MatchOne(state.CurrentSource, state.RealizePattern(Pattern), IgnoreCase, Multiline).If(out var match, out _exception))
+         {
+            var index = state.Index;
+            var parsed = Parse(state, GetTokens(state, match));
+            if (parsed.IsMatched && updateLastStatement)
+            {
+               state.UpdateStatement(index, match.Length);
+            }
 
-		      if (parsed.IsFailedMatch)
-		      {
-			      state.SetExceptionIndex();
-		      }
+            if (parsed.IsFailedMatch)
+            {
+               state.SetExceptionIndex();
+            }
 
-		      return parsed;
+            return parsed;
          }
-			else if (anyException.If(out var exception))
-	      {
-		      state.SetExceptionIndex();
-		      return failedMatch<Unit>(exception);
-	      }
-	      else
-	      {
-		      return notMatched<Unit>();
-	      }
+         else if (_exception.If(out var exception))
+         {
+            state.SetExceptionIndex();
+            return failedMatch<Unit>(exception);
+         }
+         else
+         {
+            return notMatched<Unit>();
+         }
       }
 
       public virtual bool UpdateIndexOnParseOnly => false;

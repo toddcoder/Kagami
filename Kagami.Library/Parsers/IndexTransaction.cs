@@ -4,7 +4,7 @@ namespace Kagami.Library.Parsers
 {
    public class IndexTransaction
    {
-      Stack<int> stack;
+      protected Stack<int> stack;
 
       public IndexTransaction() => stack = new Stack<int>();
 

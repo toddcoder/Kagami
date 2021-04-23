@@ -8,7 +8,7 @@ namespace Kagami.Library.Operations
 {
    public class SetFields : Operation
    {
-      Parameters parameters;
+      protected Parameters parameters;
 
       public SetFields(Parameters parameters) => this.parameters = parameters;
 

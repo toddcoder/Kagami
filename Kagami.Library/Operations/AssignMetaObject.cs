@@ -9,8 +9,8 @@ namespace Kagami.Library.Operations
 {
    public class AssignMetaObject : Operation
    {
-      string className;
-      string metaClassName;
+      protected string className;
+      protected string metaClassName;
 
       public AssignMetaObject(string className, string metaClassName)
       {
@@ -22,42 +22,41 @@ namespace Kagami.Library.Operations
       {
          if (Module.Global.Class(className).If(out var targetClass))
          {
-	         var selector = metaClassName.Selector(0);
-	         if (Machine.Current.Find(selector).If(out var field, out var anyException))
-	         {
-		         if (field.Value is IInvokableObject io)
-		         {
-			         var invokable = io.Invokable;
-			         if (machine.Invoke(invokable, Arguments.Empty, 0).If(out var obj, out anyException))
-			         {
-				         ((UserClass)targetClass).MetaObject = ((UserObject)obj).Some();
-				         return notMatched<IObject>();
+            var selector = metaClassName.Selector(0);
+            if (Machine.Current.Find(selector).If(out var field, out var anyException))
+            {
+               if (field.Value is IInvokableObject io)
+               {
+                  var invokable = io.Invokable;
+                  if (machine.Invoke(invokable, Arguments.Empty, 0).If(out var obj, out anyException))
+                  {
+                     ((UserClass)targetClass).MetaObject = ((UserObject)obj).Some();
+                     return notMatched<IObject>();
                   }
-						else if (anyException.If(out var exception))
-			         {
-				         return failedMatch<IObject>(exception);
-			         }
-			         else
-			         {
-				         return $"Couldn't construct metaobject {metaClassName}".FailedMatch<IObject>();
-			         }
-		         }
-
+                  else if (anyException.If(out var exception))
+                  {
+                     return failedMatch<IObject>(exception);
+                  }
+                  else
+                  {
+                     return $"Couldn't construct metaobject {metaClassName}".FailedMatch<IObject>();
+                  }
+               }
             }
             else if (anyException.If(out var exception))
-	         {
-		         return failedMatch<IObject>(exception);
-	         }
-	         else
-	         {
-		         return $"Couldn't find metaclass {metaClassName}".FailedMatch<IObject>();
-	         }
+            {
+               return failedMatch<IObject>(exception);
+            }
+            else
+            {
+               return $"Couldn't find metaclass {metaClassName}".FailedMatch<IObject>();
+            }
 
-	         return notMatched<IObject>();
+            return notMatched<IObject>();
          }
          else
          {
-	         return failedMatch<IObject>(classNotFound(className));
+            return failedMatch<IObject>(classNotFound(className));
          }
       }
 

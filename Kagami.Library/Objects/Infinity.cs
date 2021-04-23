@@ -5,9 +5,9 @@ using static Kagami.Library.Operations.NumericFunctions;
 
 namespace Kagami.Library.Objects
 {
-	public struct Infinity : IObject, IObjectCompare, INumeric
+	public readonly struct Infinity : IObject, IObjectCompare, INumeric
 	{
-		bool positive;
+		private readonly bool positive;
 
 		public Infinity(bool positive) : this() => this.positive = positive;
 

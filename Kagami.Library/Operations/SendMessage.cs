@@ -10,7 +10,7 @@ namespace Kagami.Library.Operations
 {
    public class SendMessage : TwoOperandOperation
    {
-      Selector selector;
+      protected Selector selector;
 
       public SendMessage(Selector selector) => this.selector = selector;
 
@@ -20,15 +20,12 @@ namespace Kagami.Library.Operations
       {
          try
          {
-            switch (y)
+            return y switch
             {
-               case Arguments arguments when x is Class:
-                  return classOf(x).SendClassMessage(selector, arguments).Matched();
-               case Arguments arguments:
-                  return classOf(x).SendMessage(x, selector, arguments).Matched();
-               default:
-                  return failedMatch<IObject>(incompatibleClasses(y, "Arguments"));
-            }
+               Arguments arguments when x is Class => classOf(x).SendClassMessage(selector, arguments).Matched(),
+               Arguments arguments => classOf(x).SendMessage(x, selector, arguments).Matched(),
+               _ => failedMatch<IObject>(incompatibleClasses(y, "Arguments"))
+            };
          }
          catch (Exception exception)
          {

@@ -4,7 +4,7 @@ namespace Kagami.Library.Parsers.Expressions
 {
    public class ValuesParser : MultiParser
    {
-      ExpressionBuilder builder;
+      protected ExpressionBuilder builder;
 
       public ValuesParser(ExpressionBuilder builder) => this.builder = builder;
 
@@ -45,26 +45,22 @@ namespace Kagami.Library.Parsers.Expressions
             yield return new ImplicitMessageParser(builder);
             yield return new ImplicitSymbolParser(builder);
             yield return new ImplicitExpressionParser(builder);
-	         yield return new MessageParser(builder);
+            yield return new MessageParser(builder);
 
             if (!builder.Flags[ExpressionFlags.Subset])
             {
                yield return new BindingParser(builder);
-	            yield return new InitializeParser(builder);
+               yield return new InitializeParser(builder);
                yield return new InvokeParser(builder);
             }
 
-            /*if (builder.Flags[ExpressionFlags.OmitColon])
-            {*/
-               yield return new NameValueParser(builder);
-            //}
-
+            yield return new NameValueParser(builder);
             yield return new FormatParser(builder);
 
             if (builder.Flags[ExpressionFlags.Comparisand])
             {
-	            yield return new InternalListParser(builder);
-	            yield return new PlaceholderParser(builder);
+               yield return new InternalListParser(builder);
+               yield return new PlaceholderParser(builder);
             }
             else
             {
@@ -79,14 +75,14 @@ namespace Kagami.Library.Parsers.Expressions
             yield return new WhateverParser(builder);
             yield return new RegexParser(builder);
             yield return new RefParser(builder);
-	         yield return new DollarFieldParser(builder);
-	         yield return new DoParser(builder);
-	         yield return new TryBlockParser(builder);
-	         yield return new TryParser(builder);
-	         yield return new ThrowParser(builder);
-	         yield return new AssertParser(builder);
-	         yield return new SeqParser(builder);
-	         yield return new ConversionParser(builder);
+            yield return new DollarFieldParser(builder);
+            yield return new DoParser(builder);
+            yield return new TryBlockParser(builder);
+            yield return new TryParser(builder);
+            yield return new ThrowParser(builder);
+            yield return new AssertParser(builder);
+            yield return new SeqParser(builder);
+            yield return new ConversionParser(builder);
             yield return new FieldParser(builder);
          }
       }

@@ -4,7 +4,7 @@ namespace Kagami.Library.Parsers.Statements
 {
    public class ClassItemsParser : MultiParser
    {
-      ClassBuilder builder;
+      protected ClassBuilder builder;
 
       public ClassItemsParser(ClassBuilder builder) => this.builder = builder;
 

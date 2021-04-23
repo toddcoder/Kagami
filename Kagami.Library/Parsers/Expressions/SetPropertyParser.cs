@@ -7,9 +7,9 @@ namespace Kagami.Library.Parsers.Expressions
 {
    public class SetPropertyParser : EndingInExpressionParser
    {
-      string tempObjectField;
-      ExpressionBuilder outerBuilder;
-      string propertyName;
+      protected string tempObjectField;
+      protected ExpressionBuilder outerBuilder;
+      protected string propertyName;
 
       public SetPropertyParser(ExpressionBuilder builder, string tempObjectField, ExpressionBuilder outerBuilder) : base(builder)
       {

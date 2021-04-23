@@ -9,8 +9,8 @@ namespace Kagami.Library.Runtime
 {
    public class FrameGroup : IEnumerable<Frame>
    {
-      Frame[] frames;
-      int functionFrameIndex;
+      protected Frame[] frames;
+      protected int functionFrameIndex;
 
       public FrameGroup(Frame[] frames)
       {
@@ -34,7 +34,7 @@ namespace Kagami.Library.Runtime
       {
          foreach (var frame in frames)
          {
-	         machine.PushFrame(frame);
+            machine.PushFrame(frame);
          }
       }
 
@@ -58,7 +58,7 @@ namespace Kagami.Library.Runtime
       {
          foreach (var frame in frames)
          {
-	         yield return frame;
+            yield return frame;
          }
       }
 
@@ -72,7 +72,7 @@ namespace Kagami.Library.Runtime
 
             for (var i = functionFrameIndex; i >= 0; i--)
             {
-	            fields.CopyFrom(frames[i].Fields);
+               fields.CopyFrom(frames[i].Fields);
             }
 
             return fields;

@@ -6,7 +6,7 @@ namespace Kagami.Library.Objects
 {
    public class ListIterator : Iterator
    {
-      List list;
+      protected List list;
 
       public ListIterator(List list) : base(list) => this.list = list;
 
@@ -19,7 +19,7 @@ namespace Kagami.Library.Objects
          }
          else
          {
-	         return none<IObject>();
+            return none<IObject>();
          }
       }
 
@@ -28,9 +28,9 @@ namespace Kagami.Library.Objects
       public override IEnumerable<IObject> List()
       {
          var current = list;
-         while (current.Head.If(out var h))
+         while (current.Head.If(out var head))
          {
-            yield return h;
+            yield return head;
 
             current = current.Tail;
          }

@@ -6,7 +6,7 @@ namespace Kagami.Library.Operations
 {
    public class PushByte : Operation
    {
-      Byte value;
+      protected Byte value;
 
       public PushByte(byte value) => this.value = value;
 
