@@ -5,7 +5,7 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class ClassSymbol : Symbol, IConstant
    {
-      string className;
+      protected string className;
 
       public ClassSymbol(string className) => this.className = className;
 

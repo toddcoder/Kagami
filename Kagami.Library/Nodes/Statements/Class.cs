@@ -5,7 +5,7 @@ namespace Kagami.Library.Nodes.Statements
 {
    public class Class : Statement
    {
-      ClassBuilder classBuilder;
+      protected ClassBuilder classBuilder;
 
       public Class(ClassBuilder classBuilder) => this.classBuilder = classBuilder;
 

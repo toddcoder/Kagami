@@ -13,7 +13,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct Selector : IObject, IEquatable<Selector>
+   public readonly struct Selector : IObject, IEquatable<Selector>
    {
       public static implicit operator Selector(string source) => parseSelector(source);
 
@@ -58,8 +58,6 @@ namespace Kagami.Library.Objects
       }
 
       public Selector NewName(string newName) => new(newName, selectorItems, selectorImage(newName, selectorItems));
-
-      public bool Matching { get; set; }
 
       public string ClassName => "Selector";
 

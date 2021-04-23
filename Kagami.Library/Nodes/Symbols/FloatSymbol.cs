@@ -5,7 +5,7 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class FloatSymbol : Symbol, IConstant
    {
-      double value;
+      protected double value;
 
       public FloatSymbol(double value) => this.value = value;
 

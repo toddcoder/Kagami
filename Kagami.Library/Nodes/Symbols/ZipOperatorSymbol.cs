@@ -5,7 +5,7 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class ZipOperatorSymbol : Symbol
    {
-      Symbol operatorSymbol;
+      protected Symbol operatorSymbol;
 
       public ZipOperatorSymbol(Symbol operatorSymbol) => this.operatorSymbol = operatorSymbol;
 
@@ -18,7 +18,7 @@ namespace Kagami.Library.Nodes.Symbols
          }
          else
          {
-	         throw exception;
+            throw exception;
          }
       }
 

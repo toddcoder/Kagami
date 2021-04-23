@@ -4,21 +4,22 @@ namespace Kagami.Library.Objects
 {
    public class TakeUntilAction : IStreamAction
    {
-      Lambda predicate;
-      bool taking;
+      protected Lambda predicate;
+      protected bool taking;
 
       public TakeUntilAction(Lambda predicate)
       {
          this.predicate = predicate;
          taking = true;
       }
+
       public ILazyStatus Next(ILazyStatus status)
       {
          if (status.IsAccepted && taking)
          {
             if (!predicate.Invoke(status.Object).IsTrue)
             {
-	            return status;
+               return status;
             }
 
             taking = false;
@@ -31,14 +32,14 @@ namespace Kagami.Library.Objects
       {
          foreach (var value in iterator.List())
          {
-	         if (!predicate.Invoke(value).IsTrue)
-	         {
-		         yield return value;
-	         }
-	         else
-	         {
-		         yield break;
-	         }
+            if (!predicate.Invoke(value).IsTrue)
+            {
+               yield return value;
+            }
+            else
+            {
+               yield break;
+            }
          }
       }
 

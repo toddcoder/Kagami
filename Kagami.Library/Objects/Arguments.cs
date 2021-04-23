@@ -8,7 +8,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct Arguments : IObject, IEnumerable<IObject>
+   public readonly struct Arguments : IObject, IEnumerable<IObject>
    {
       public static Arguments Append(Arguments arguments, IObject item)
       {

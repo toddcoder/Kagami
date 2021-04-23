@@ -6,7 +6,7 @@ namespace Kagami.Library.Operations
 {
    public class PushChar : Operation
    {
-      Char value;
+      protected Char value;
 
       public PushChar(char value) => this.value = value;
 

@@ -13,10 +13,10 @@ namespace Kagami.Drawing
       {
          base.RegisterMessages();
 
-         messages["x".get()] = (obj, msg) => function<Point>(obj, p => p.X);
-         messages["y".get()] = (obj, msg) => function<Point>(obj, p => p.Y);
+         messages["x".get()] = (obj, _) => function<Point>(obj, p => p.X);
+         messages["y".get()] = (obj, _) => function<Point>(obj, p => p.Y);
          messages["offset"] = (obj, msg) => function<Point, IObject, IObject>(obj, msg, (p, x, y) => p.Offset(x, y));
-         messages["isEmpty".get()] = (obj, msg) => function<Point>(obj, p => p.IsEmpty);
+         messages["isEmpty".get()] = (obj, _) => function<Point>(obj, p => p.IsEmpty);
       }
    }
 }

@@ -4,9 +4,9 @@ using Core.Strings;
 
 namespace Kagami.Library.Objects
 {
-   public struct Placeholder : IObject, IEquatable<Placeholder>
+   public readonly struct Placeholder : IObject, IEquatable<Placeholder>
    {
-      string name;
+      private readonly string name;
 
       public Placeholder(string name) : this() => this.name = name;
 
@@ -18,24 +18,24 @@ namespace Kagami.Library.Objects
 
       public string Image
       {
-	      get
-	      {
-		      if (name.StartsWith("+"))
-		      {
-			      return $"var {name.Drop(1)}";
-		      }
-		      else if (name.StartsWith("-"))
-		      {
-			      return name.Drop(1);
-		      }
-		      else
-		      {
-			      return $"existing {name}";
-		      }
-	      }
+         get
+         {
+            if (name.StartsWith("+"))
+            {
+               return $"var {name.Drop(1)}";
+            }
+            else if (name.StartsWith("-"))
+            {
+               return name.Drop(1);
+            }
+            else
+            {
+               return $"existing {name}";
+            }
+         }
       }
 
-	   public int Hash => name.GetHashCode();
+      public int Hash => name.GetHashCode();
 
       public bool IsEqualTo(IObject obj) => obj is Placeholder ph && name == ph.name;
 

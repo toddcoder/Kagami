@@ -1,84 +1,50 @@
-﻿using Core.Collections;
-using Core.Monads;
+﻿using System;
+using Core.Collections;
 using static Kagami.Library.Objects.ObjectFunctions;
-using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public class SkipTake : IObject
+   public struct SkipTake : IObject, IEquatable<SkipTake>
    {
-      IObject source;
-      IMaybe<IObject> result;
+      private int skip;
+      private int take;
 
-      public SkipTake(IObject source)
+      public SkipTake(int skip, int take) : this()
       {
-         this.source = source;
-         result = none<IObject>();
+         this.skip = skip;
+         this.take = take;
       }
 
       public string ClassName => "SkipTake";
 
-      public string AsString => $"{source.AsString}{result.Map(o => o.AsString).DefaultTo(() => "")}";
+      public string AsString => $"{skip}:{take}";
 
-      public string Image => $"{source.Image}{result.Map(o => o.Image).DefaultTo(() => "")}";
+      public string Image => AsString;
 
-      public int Hash
-      {
-         get
-         {
-            var hash = 17;
-            hash = 37 * source.Hash;
-            hash = 37 * result.Map(o => o.Hash).DefaultTo(() => 0);
+      public int Hash => (skip.GetHashCode() + take.GetHashCode()).GetHashCode();
 
-            return hash;
-         }
-      }
-
-      public bool IsEqualTo(IObject obj)
-      {
-         return obj is SkipTake st && source.IsEqualTo(st.source) &&
-            result.DefaultTo(() => None.NoneValue).IsEqualTo(st.result.DefaultTo(() => None.NoneValue));
-      }
+      public bool IsEqualTo(IObject obj) => obj is SkipTake skipTake && Equals(skipTake);
 
       public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
-      public bool IsTrue => result.IsSome;
+      public bool IsTrue => skip != 0 && take != 0;
 
-      public SkipTake Literal(IObject literal)
+      public int Skip => skip;
+
+      public int Take => take;
+
+      public bool Equals(SkipTake other) => skip == other.Skip && take == other.Take;
+
+      public override bool Equals(object obj) => obj is SkipTake other && Equals(other);
+
+      public override int GetHashCode() => Hash;
+
+      public void Deconstruct(out int skip, out int take)
       {
-         if (result.If(out var r))
-         {
-            result = sendMessage(r, "~(_)", literal).Some();
-         }
-         else
-         {
-            result = literal.Some();
-         }
-
-         return this;
+         skip = this.skip;
+         take = this.take;
       }
 
-      public SkipTake Skip(int count)
-      {
-         source = sendMessage(source, "skip(_)", new Int(count));
-         return this;
-      }
-
-      public SkipTake Take(int count)
-      {
-         var taken = sendMessage(source, "take(_)", new Int(count));
-         Literal(taken);
-         Skip(count);
-
-         return this;
-      }
-
-      public SkipTake TakeRest()
-      {
-         var count = ((Int)sendMessage(source, "length".get())).Value;
-         return Take(count);
-      }
-
-      public IObject FullResult => result.DefaultTo(() => source);
+      public bool NoTake { get; set; }
    }
 }

@@ -3,16 +3,16 @@ using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Classes
 {
-	public class IndexClass : BaseClass
-	{
-		public override string Name => "Index";
+   public class IndexClass : BaseClass
+   {
+      public override string Name => "Index";
 
-		public override void RegisterMessages()
-		{
-			base.RegisterMessages();
+      public override void RegisterMessages()
+      {
+         base.RegisterMessages();
 
-			registerMessage("skipCount".get(), (obj, msg) => function<Index>(obj, i => i.SkipCount));
-			registerMessage("takeCount".get(), (obj, msg) => function<Index>(obj, i => i.TakeCount));
-		}
-	}
+         registerMessage("skipCount".get(), (obj, _) => function<Index>(obj, i => i.SkipCount));
+         registerMessage("takeCount".get(), (obj, _) => function<Index>(obj, i => i.TakeCount));
+      }
+   }
 }

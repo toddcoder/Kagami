@@ -4,8 +4,8 @@ namespace Kagami.Library.Objects
 {
    public class SkipWhileAction : IStreamAction
    {
-      Lambda predicate;
-      bool skipping;
+      protected Lambda predicate;
+      protected bool skipping;
 
       public SkipWhileAction(Lambda predicate)
       {
@@ -19,7 +19,7 @@ namespace Kagami.Library.Objects
          {
             if (predicate.Invoke(status.Object).IsTrue)
             {
-	            return new Skipped();
+               return new Skipped();
             }
 
             skipping = false;
@@ -36,7 +36,7 @@ namespace Kagami.Library.Objects
          {
             if (skipping && predicate.Invoke(value).IsTrue)
             {
-	            continue;
+               continue;
             }
 
             skipping = false;

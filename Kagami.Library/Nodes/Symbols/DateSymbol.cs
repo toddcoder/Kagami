@@ -6,7 +6,7 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class DateSymbol : Symbol
    {
-      Date date;
+      protected Date date;
 
       public DateSymbol(DateTime date)
       {

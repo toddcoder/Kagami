@@ -4,9 +4,9 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class NewObjectSymbol : Symbol
    {
-      string tempObjectField;
-      string className;
-      Expression expression;
+      protected string tempObjectField;
+      protected string className;
+      protected Expression expression;
 
       public NewObjectSymbol(string tempObjectField, string className, Expression expression)
       {

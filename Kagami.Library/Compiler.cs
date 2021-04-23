@@ -9,74 +9,80 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library
 {
-	public class Compiler
-	{
-		string source;
-		CompilerConfiguration configuration;
-		IContext context;
+   public class Compiler
+   {
+      protected string source;
+      protected CompilerConfiguration configuration;
+      protected IContext context;
 
-		public Compiler(string source, CompilerConfiguration configuration, IContext context)
-		{
-			this.source = source;
-			this.configuration = configuration;
-			this.context = context;
-		}
+      public Compiler(string source, CompilerConfiguration configuration, IContext context)
+      {
+         this.source = source;
+         this.configuration = configuration;
+         this.context = context;
 
-		public IResult<Machine> Generate()
-		{
-			Module.Global = new Module();
-			Module.Global.LoadBuiltinClasses();
+         ExceptionIndex = none<int>();
+         Tokens = new Token[0];
+         Operations = none<Operations.Operations>();
+      }
 
-			var state = new ParseState(source);
-			var statementsParser = new StatementsParser();
+      public IResult<Machine> Generate()
+      {
+         Module.Global = new Module();
+         Module.Global.LoadBuiltinClasses();
 
-			ResetUniqueID();
+         var state = new ParseState(source);
+         var statementsParser = new StatementsParser();
 
-			resetUniqueID();
+         ResetUniqueID();
 
-			while (state.More)
-			{
-				if (statementsParser.Scan(state).If(out _, out var anyException)) { }
-				else if (anyException.If(out var innerException))
-				{
-					ExceptionIndex = state.ExceptionIndex;
-					return failure<Machine>(innerException);
-				}
-				else
-				{
-					ExceptionIndex = state.CurrentSource.Length.Some();
-					return $"Didn't understand {state.CurrentSource}".Failure<Machine>();
-				}
-			}
+         resetUniqueID();
 
-			Tokens = state.Tokens;
+         while (state.More)
+         {
+            if (statementsParser.Scan(state).If(out _, out var anyException))
+            {
+            }
+            else if (anyException.If(out var innerException))
+            {
+               ExceptionIndex = state.ExceptionIndex;
+               return failure<Machine>(innerException);
+            }
+            else
+            {
+               ExceptionIndex = state.CurrentSource.Length.Some();
+               return $"Didn't understand {state.CurrentSource}".Failure<Machine>();
+            }
+         }
 
-			var statements = state.Statements();
-			var builder = new OperationsBuilder();
-			foreach (var statement in statements)
-			{
-				statement.Generate(builder);
-				statement.AddBreak(builder);
-			}
+         Tokens = state.Tokens;
 
-			if (builder.ToOperations(state).If(out var operations, out var exception))
-			{
-				var machine = new Machine(context) { Tracing = configuration.Tracing };
-				machine.Load(operations);
-				Machine.Current = machine;
-				Operations = operations.Some();
-				return machine.Success();
-			}
-			else
-			{
-				return failure<Machine>(exception);
-			}
-		}
+         var statements = state.Statements();
+         var builder = new OperationsBuilder();
+         foreach (var statement in statements)
+         {
+            statement.Generate(builder);
+            statement.AddBreak(builder);
+         }
 
-		public IMaybe<int> ExceptionIndex { get; set; } = none<int>();
+         if (builder.ToOperations(state).If(out var operations, out var exception))
+         {
+            var machine = new Machine(context) { Tracing = configuration.Tracing };
+            machine.Load(operations);
+            Machine.Current = machine;
+            Operations = operations.Some();
+            return machine.Success();
+         }
+         else
+         {
+            return failure<Machine>(exception);
+         }
+      }
 
-		public Token[] Tokens { get; set; } = new Token[0];
+      public IMaybe<int> ExceptionIndex { get; set; }
 
-		public IMaybe<Operations.Operations> Operations { get; set; } = none<Operations.Operations>();
-	}
+      public Token[] Tokens { get; set; }
+
+      public IMaybe<Operations.Operations> Operations { get; set; }
+   }
 }

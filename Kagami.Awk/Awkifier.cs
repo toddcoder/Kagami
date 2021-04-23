@@ -11,6 +11,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Awk.AwkFunctions;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.CollectionFunctions;
+using CollectionFunctions = Kagami.Library.Objects.CollectionFunctions;
 
 namespace Kagami.Awk
 {
@@ -76,20 +77,7 @@ namespace Kagami.Awk
          }
       }
 
-      public String this[int index]
-      {
-         get
-         {
-            if (index.Between(0).Until(getLength()))
-            {
-               return fields[index];
-            }
-            else
-            {
-               return "";
-            }
-         }
-      }
+      public String this[int index] => index.Between(0).Until(getLength()) ? fields[index] : "";
 
       public string ClassName => "Awkifier";
 
@@ -203,5 +191,7 @@ namespace Kagami.Awk
             return result;
          }));
       }
+
+      public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
    }
 }

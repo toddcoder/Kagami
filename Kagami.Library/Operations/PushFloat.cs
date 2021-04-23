@@ -6,7 +6,7 @@ namespace Kagami.Library.Operations
 {
    public class PushFloat : Operation
    {
-      Float value;
+      protected Float value;
 
       public PushFloat(double value) => this.value = value;
 

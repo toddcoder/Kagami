@@ -9,276 +9,231 @@ using static Kagami.Library.Objects.CollectionFunctions;
 
 namespace Kagami.Library.Objects
 {
-	public class List : IObject, ICollection
-	{
-		public static List Empty => new List(none<IObject>(), null);
+   public class List : IObject, ICollection
+   {
+      public static List Empty => new(none<IObject>(), null);
 
-		public static List Single(IObject value) => new List(value.Some(), Empty);
+      public static List Single(IObject value) => new(value.Some(), Empty);
 
-		public static List Cons(IObject head, IObject tail)
-		{
-			if (tail is List list)
-			{
-				return new List(head.Some(), list);
-			}
-			else
-			{
-				return new List(head, tail);
-			}
-		}
+      public static List Cons(IObject head, IObject tail)
+      {
+         if (tail is List list)
+         {
+            return new List(head.Some(), list);
+         }
+         else
+         {
+            return new List(head, tail);
+         }
+      }
 
-		public static List NewList(IEnumerable<IObject> list)
-		{
-			var current = Empty;
-			foreach (var value in list.Reverse())
-			{
-				current = Cons(value, current);
-			}
+      public static List NewList(IEnumerable<IObject> list)
+      {
+         var current = Empty;
+         foreach (var value in list.Reverse())
+         {
+            current = Cons(value, current);
+         }
 
-			return current;
-		}
+         return current;
+      }
 
-		public static List NewList(Container list) => NewList(list.List);
+      public static List NewList(Container list) => NewList(list.List);
 
-		IMaybe<IObject> head;
-		List tail;
+      protected IMaybe<IObject> _head;
+      protected List tail;
 
-		public List(IMaybe<IObject> head, List tail)
-		{
-			this.head = head;
-			this.tail = tail;
-		}
+      public List(IMaybe<IObject> head, List tail)
+      {
+         _head = head;
+         this.tail = tail;
+      }
 
-		public List(IObject head, IObject tail)
-		{
-			this.head = head.Some();
-			this.tail = Single(tail);
-		}
+      public List(IObject head, IObject tail)
+      {
+         _head = head.Some();
+         this.tail = Single(tail);
+      }
 
-		public bool IsString { get; set; }
+      public bool IsString { get; set; }
 
-		public IMaybe<IObject> Head => head;
+      public IMaybe<IObject> Head => _head;
 
-		public List Tail => tail ?? Empty;
+      public List Tail => tail ?? Empty;
 
-		public List Init
-		{
-			get
-			{
-				if (head.If(out var h))
-				{
-					if (tail.IsEmpty)
-					{
-						return Empty;
-					}
-					else
-					{
-						return Cons(h, tail.Init);
-					}
-				}
-				else
-				{
-					return Empty;
-				}
-			}
-		}
+      public List Init
+      {
+         get
+         {
+            if (_head.If(out var head))
+            {
+               return tail.IsEmpty ? Empty : Cons(head, tail.Init);
+            }
+            else
+            {
+               return Empty;
+            }
+         }
+      }
 
-		public IMaybe<IObject> Last
-		{
-			get
-			{
-				if (head.IsSome)
-				{
-					if (tail.IsEmpty)
-					{
-						return head;
-					}
-					else
-					{
-						return tail.Last;
-					}
-				}
-				else
-				{
-					return none<IObject>();
-				}
-			}
-		}
+      public IMaybe<IObject> Last
+      {
+         get
+         {
+            if (_head.IsSome)
+            {
+               return tail.IsEmpty ? _head : tail.Last;
+            }
+            else
+            {
+               return none<IObject>();
+            }
+         }
+      }
 
-		public bool IsEmpty => head.IsNone;
+      public bool IsEmpty => _head.IsNone;
 
-		public string ClassName => "List";
+      public string ClassName => "List";
 
-		string getText(string divider, Func<IObject, string> mapping, bool first = true)
-		{
-			if (head.If(out var h))
-			{
-				return (first ? "" : divider) + $"{mapping(h)}{tail.getText(divider, mapping, false)}";
-			}
-			else
-			{
-				return "";
-			}
-		}
+      protected string getText(string divider, Func<IObject, string> mapping, bool first = true)
+      {
+         if (_head.If(out var head))
+         {
+            return (first ? "" : divider) + $"{mapping(head)}{tail.getText(divider, mapping, false)}";
+         }
+         else
+         {
+            return "";
+         }
+      }
 
-		public string AsString
-		{
-			get
-			{
-				if (IsString)
-				{
-					return getText("", v => v.AsString);
-				}
-				else
-				{
-					return getText(" ", v => v.AsString);
-				}
-			}
-		}
+      public string AsString => IsString ? getText("", v => v.AsString) : getText(" ", v => v.AsString);
 
-		public string Image
-		{
-			get
-			{
-				if (IsString)
-				{
-					return show(this, "$\"", o => o.AsString, "\"");
-				}
-				else
-				{
-					return show(this, "⌈", o => o.Image, "⌉");
-				}
-			}
-		}
+      public string Image => IsString ? show(this, "$\"", o => o.AsString, "\"") : show(this, "⌈", o => o.Image, "⌉");
 
-      public int Hash => (head.Map(h => h.Hash).DefaultTo(() => 0) + tail.Hash).GetHashCode();
+      public int Hash => (_head.Map(h => h.Hash).DefaultTo(() => 0) + tail.Hash).GetHashCode();
 
-		public bool IsEqualTo(IObject obj)
-		{
-			switch (obj)
-			{
-				case List list when head.If(out var h1) && list.head.If(out var h2):
-					return h1.IsEqualTo(h2) && tail.IsEqualTo(list.tail);
-				case List list when head.IsNone && list.head.IsNone:
-					return true;
-				case List _:
-					return false;
-				default:
-					return false;
-			}
-		}
+      public bool IsEqualTo(IObject obj) => obj switch
+      {
+         List list when _head.If(out var h1) && list._head.If(out var h2) => h1.IsEqualTo(h2) && tail.IsEqualTo(list.tail),
+         List list when _head.IsNone && list._head.IsNone => true,
+         List => false,
+         _ => false
+      };
 
-		static IMaybe<string> getPlaceholder(IObject obj)
-		{
-			return obj is Placeholder placeholder ? placeholder.AsString.Some() : none<string>();
-		}
+      protected static IMaybe<string> getPlaceholder(IObject obj)
+      {
+         return obj is Placeholder placeholder ? placeholder.AsString.Some() : none<string>();
+      }
 
-		public bool Match(IObject comparisand, Hash<string, IObject> bindings)
-		{
-			return match(this, comparisand, (l1, l2) =>
-			{
-				if (l1.head.IsNone && l2.head.IsNone)
-				{
-					return true;
-				}
-				else
-				{
-					var lHead = l1.head.Map(v => v).DefaultTo(() => Empty);
-					var rHead = l2.head.Map(v => v).DefaultTo(() => Empty);
-					if (getPlaceholder(rHead).If(out var placeholder))
-					{
-						if (l2.tail.IsEmpty)
-						{
-							bindings[placeholder] = l1;
-							return true;
-						}
-						else
-						{
-							bindings[placeholder] = lHead;
-							return l1.Tail.Match(l2.Tail, bindings);
-						}
-					}
-					else if (rHead is Any || lHead.Match(rHead, bindings))
-					{
-						return l2.Tail.IsEmpty || l1.Tail.Match(l2.Tail, bindings);
-					}
-					else
-					{
-						return false;
-					}
-				}
-			}, bindings);
-		}
+      public bool Match(IObject comparisand, Hash<string, IObject> bindings)
+      {
+         return match(this, comparisand, (l1, l2) =>
+         {
+            if (l1._head.IsNone && l2._head.IsNone)
+            {
+               return true;
+            }
+            else
+            {
+               var lHead = l1._head.Map(v => v).DefaultTo(() => Empty);
+               var rHead = l2._head.Map(v => v).DefaultTo(() => Empty);
+               if (getPlaceholder(rHead).If(out var placeholder))
+               {
+                  if (l2.tail.IsEmpty)
+                  {
+                     bindings[placeholder] = l1;
+                     return true;
+                  }
+                  else
+                  {
+                     bindings[placeholder] = lHead;
+                     return l1.Tail.Match(l2.Tail, bindings);
+                  }
+               }
+               else if (rHead is Any || lHead.Match(rHead, bindings))
+               {
+                  return l2.Tail.IsEmpty || l1.Tail.Match(l2.Tail, bindings);
+               }
+               else
+               {
+                  return false;
+               }
+            }
+         }, bindings);
+      }
 
-		public bool IsTrue => head.IsSome;
+      public bool IsTrue => _head.IsSome;
 
-		public IIterator GetIterator(bool lazy) => lazy ? (IIterator)new LazyIterator(this) : new ListIterator(this);
+      public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new ListIterator(this);
 
-		public IMaybe<IObject> Next(int index) => none<IObject>();
+      public IMaybe<IObject> Next(int index) => none<IObject>();
 
-		public IMaybe<IObject> Peek(int index) => Next(index);
+      public IMaybe<IObject> Peek(int index) => Next(index);
 
-		public Int Length => list(this).Count();
+      public Int Length => list(this).Count();
 
-		public bool ExpandForArray => true;
+      public bool ExpandForArray => true;
 
-		public Boolean In(IObject item) => list(this).Any(i => i.IsEqualTo(item));
+      public Boolean In(IObject item) => list(this).Any(i => i.IsEqualTo(item));
 
-		public Boolean NotIn(IObject item) => list(this).All(i => !i.IsEqualTo(item));
+      public Boolean NotIn(IObject item) => list(this).All(i => !i.IsEqualTo(item));
 
-		public IObject Times(int count)
-		{
-			var accum = Empty;
-			for (var i = 0; i < count; i++)
-			{
-				accum = (List)accum.Concatenate(this);
-			}
+      public IObject Times(int count)
+      {
+         var accum = Empty;
+         for (var i = 0; i < count; i++)
+         {
+            accum = (List)accum.Concatenate(this);
+         }
 
-			return accum;
-		}
+         return accum;
+      }
 
-		public String MakeString(string connector) => makeString(this, connector);
+      public String MakeString(string connector) => makeString(this, connector);
 
-		public IIterator GetIndexedIterator() => new IndexedIterator(this);
+      public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
-		public IObject Concatenate(List other)
-		{
-			var left = GetIterator(false).List().ToList();
-			left.AddRange(other.GetIterator(false).List());
+      public IObject Concatenate(List other)
+      {
+         var left = GetIterator(false).List().ToList();
+         left.AddRange(other.GetIterator(false).List());
 
-			return NewList(left);
-		}
+         return NewList(left);
+      }
 
-		static IObject getItem(List list, int currentIndex, int expectedIndex)
-		{
-			if (list.IsEmpty)
-			{
-				return Unassigned.Value;
-			}
-			else
-			{
-				if (currentIndex < expectedIndex)
-				{
-					return getItem(list.Tail, currentIndex + 1, expectedIndex);
-				}
-				else if (list.Head.If(out var head))
-				{
-					return head;
-				}
-				else
-				{
-					return Unassigned.Value;
-				}
-			}
-		}
+      protected static IObject getItem(List list, int currentIndex, int expectedIndex)
+      {
+         if (list.IsEmpty)
+         {
+            return Unassigned.Value;
+         }
+         else
+         {
+            if (currentIndex < expectedIndex)
+            {
+               return getItem(list.Tail, currentIndex + 1, expectedIndex);
+            }
+            else if (list.Head.If(out var head))
+            {
+               return head;
+            }
+            else
+            {
+               return Unassigned.Value;
+            }
+         }
+      }
 
-		public IObject this[int index]
-		{
-			get
-			{
-				var item = (List)GetIterator(false).Skip(index);
-				return someOf(item.head);
-			}
-		}
-	}
+      public IObject this[int index]
+      {
+         get
+         {
+            var item = (List)GetIterator(false).Skip(index);
+            return someOf(item._head);
+         }
+      }
+
+      public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
+   }
 }

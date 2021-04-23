@@ -3,10 +3,10 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct KeyValue : IObject, IKeyValue
+   public readonly struct KeyValue : IObject, IKeyValue
    {
-      IObject key;
-      IObject value;
+      private readonly IObject key;
+      private readonly IObject value;
 
       public KeyValue(IObject key, IObject value) : this()
       {
@@ -14,7 +14,9 @@ namespace Kagami.Library.Objects
          this.value = value;
       }
 
-      public KeyValue(string key, IObject value) : this((String)key, value) { }
+      public KeyValue(string key, IObject value) : this((String)key, value)
+      {
+      }
 
       public string ClassName => "KeyValue";
 

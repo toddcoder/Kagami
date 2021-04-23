@@ -1,5 +1,6 @@
 ﻿using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
+using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Nodes.NodeFunctions;
@@ -8,8 +9,8 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class SeqSymbol : Symbol
    {
-      Block block;
-      string image;
+      protected Block block;
+      protected string image;
 
       public SeqSymbol(Block block) => this.block = block;
 
@@ -22,6 +23,8 @@ namespace Kagami.Library.Nodes.Symbols
 
          var invokeSymbol = new InvokeSymbol(functionName, new Expression[0], none<LambdaSymbol>(), false);
          invokeSymbol.Generate(builder);
+
+         builder.PushObject(Void.Value);
       }
 
       public override Precedence Precedence => Precedence.Value;

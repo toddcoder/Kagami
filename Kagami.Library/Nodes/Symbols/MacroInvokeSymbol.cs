@@ -1,7 +1,6 @@
 ﻿using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Operations;
 using Core.Enumerables;
-using Core.Monads;
 using static Kagami.Library.Nodes.NodeFunctions;
 
 namespace Kagami.Library.Nodes.Symbols
@@ -10,13 +9,11 @@ namespace Kagami.Library.Nodes.Symbols
    {
       protected Function function;
       protected Expression[] arguments;
-      protected IMaybe<LambdaSymbol> lambda;
 
-      public MacroInvokeSymbol(Function function, Expression[] arguments, IMaybe<LambdaSymbol> lambda)
+      public MacroInvokeSymbol(Function function, Expression[] arguments)
       {
          this.function = function;
          this.arguments = arguments;
-         this.lambda = lambda;
       }
 
       public override void Generate(OperationsBuilder builder)

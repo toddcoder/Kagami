@@ -7,17 +7,17 @@ namespace Kagami.Library.Nodes.Statements
 {
    public class ConditionalAssign : Statement
    {
-      Symbol comparisand;
-      Expression expression;
-      Block block;
-      IMaybe<Block> elseBlock;
+      protected Symbol comparisand;
+      protected Expression expression;
+      protected Block block;
+      protected IMaybe<Block> _elseBlock;
 
       public ConditionalAssign(Symbol comparisand, Expression expression, Block block, IMaybe<Block> elseBlock)
       {
          this.comparisand = comparisand;
          this.expression = expression;
          this.block = block;
-         this.elseBlock = elseBlock;
+         _elseBlock = elseBlock;
       }
 
       public override void Generate(OperationsBuilder builder)
@@ -29,7 +29,7 @@ namespace Kagami.Library.Nodes.Statements
          expression.Generate(builder);
          comparisand.Generate(builder);
          builder.Match();
-         builder.GoToIfFalse(elseBlock.IsSome ? elseLabel : endLabel);
+         builder.GoToIfFalse(_elseBlock.IsSome ? elseLabel : endLabel);
 
          builder.PushFrame();
          block.Generate(builder);
@@ -37,10 +37,10 @@ namespace Kagami.Library.Nodes.Statements
          builder.GoTo(endLabel);
 
          builder.Label(elseLabel);
-         if (elseBlock.If(out var b))
+         if (_elseBlock.If(out var elseBlock))
          {
             builder.PushFrame();
-            b.Generate(builder);
+            elseBlock.Generate(builder);
             builder.PopFrame();
          }
 

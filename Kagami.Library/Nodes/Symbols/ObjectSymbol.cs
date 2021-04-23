@@ -5,7 +5,7 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class ObjectSymbol : Symbol
    {
-      IObject obj;
+      protected IObject obj;
 
       public ObjectSymbol(IObject obj) => this.obj = obj;
 

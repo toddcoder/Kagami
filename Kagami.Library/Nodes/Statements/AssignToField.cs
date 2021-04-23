@@ -7,29 +7,29 @@ namespace Kagami.Library.Nodes.Statements
 {
    public class AssignToField : Statement
    {
-      string fieldName;
-      IMaybe<Operation> operation;
-      Expression expression;
+      protected string fieldName;
+      protected IMaybe<Operation> _operation;
+      protected Expression expression;
 
       public AssignToField(string fieldName, IMaybe<Operation> operation, Expression expression)
       {
          this.fieldName = fieldName;
-         this.operation = operation;
+         _operation = operation;
          this.expression = expression;
       }
 
       public override void Generate(OperationsBuilder builder)
       {
-         if (operation.If(out var op))
+         if (_operation.IsSome)
          {
-	         builder.GetField(fieldName);
+            builder.GetField(fieldName);
          }
 
          expression.Generate(builder);
 
-         if (operation.If(out op))
+         if (_operation.If(out var operation))
          {
-	         builder.AddRaw(op);
+            builder.AddRaw(operation);
          }
 
          builder.Peek(Index);
@@ -38,7 +38,7 @@ namespace Kagami.Library.Nodes.Statements
 
       public override string ToString()
       {
-         return stream() / fieldName / " " / operation.Map(o => o.ToString()).DefaultTo(() => "") / "= " / expression;
+         return stream() / fieldName / " " / _operation.Map(o => o.ToString()).DefaultTo(() => "") / "= " / expression;
       }
    }
 }

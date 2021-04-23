@@ -18,8 +18,8 @@ namespace Kagami.Library.Classes
       {
          base.RegisterClassMessages();
 
-         classMessages["min".get()] = (bc, msg) => (Byte)byte.MinValue;
-         classMessages["max".get()] = (bc, msg) => (Byte)byte.MaxValue;
+         classMessages["min".get()] = (_, _) => (Byte)byte.MinValue;
+         classMessages["max".get()] = (_, _) => (Byte)byte.MaxValue;
       }
 
       public IObject Parse(string source) => Byte.ByteObject(source.ToByte());

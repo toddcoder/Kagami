@@ -9,13 +9,13 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct Char : IObject, IComparable<Char>, IEquatable<Char>, IRangeItem, ITextFinding
+   public readonly struct Char : IObject, IComparable<Char>, IEquatable<Char>, IRangeItem, ITextFinding
    {
-      public static implicit operator Char(char value) => new Char(value);
+      public static implicit operator Char(char value) => new(value);
 
       public static IObject CharObject(char value) => new Char(value);
 
-      char value;
+      private readonly char value;
 
       public Char(char value) : this() => this.value = value;
 
@@ -33,7 +33,7 @@ namespace Kagami.Library.Objects
 
       public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
-	   public bool IsTrue => value > 0;
+      public bool IsTrue => value > 0;
 
       public int Compare(IObject obj) => CompareTo((Char)obj);
 
@@ -53,31 +53,19 @@ namespace Kagami.Library.Objects
 
       public String Repeat(int count) => value.Repeat(count);
 
-      public Char Add(IObject c)
+      public Char Add(IObject c) => c switch
       {
-         switch (c)
-         {
-            case Char ch:
-               return add(ch.value);
-            case Int count:
-               return add(count.Value);
-            default:
-               throw incompatibleClasses(c, "Char or Int");
-         }
-      }
+         Char ch => add(ch.value),
+         Int count => add(count.Value),
+         _ => throw incompatibleClasses(c, "Char or Int")
+      };
 
-      public Char Subtract(IObject c)
+      public Char Subtract(IObject c) => c switch
       {
-         switch (c)
-         {
-            case Char ch:
-               return subtract(ch.value);
-            case Int count:
-               return subtract(count.Value);
-            default:
-               throw incompatibleClasses(c, "Char or Int");
-         }
-      }
+         Char ch => subtract(ch.value),
+         Int count => subtract(count.Value),
+         _ => throw incompatibleClasses(c, "Char or Int")
+      };
 
       public Char add(int count) => (char)(value + count);
 
@@ -111,70 +99,35 @@ namespace Kagami.Library.Objects
 
       public IRangeItem Predecessor => (Char)(value - 1);
 
-      public Range Range() => new Range((Char)'a', this, false);
+      public Range Range() => new((Char)'a', this, false);
 
       public Int Ord => value;
 
       public IObject Find(string input, int startIndex, bool reverse)
       {
-         int index;
-         if (reverse)
-         {
-	         index = input.LastIndexOf(value, startIndex);
-         }
-         else
-         {
-	         index = input.IndexOf(value, startIndex);
-         }
-
-         if (index > -1)
-         {
-	         return Some.Object((Int)index);
-         }
-         else
-         {
-	         return None.NoneValue;
-         }
+         var index = reverse ? input.LastIndexOf(value, startIndex) : input.IndexOf(value, startIndex);
+         return index > -1 ? Some.Object((Int)index) : None.NoneValue;
       }
 
-      public Tuple FindAll(string input)
-      {
-         return new Tuple(input.FindAll(value.ToString()).Select(Int.IntObject).ToArray());
-      }
+      public Tuple FindAll(string input) => new(input.FindAll(value.ToString()).Select(Int.IntObject).ToArray());
 
       public String Replace(string input, string replacement, bool reverse)
       {
-         int index;
-         if (reverse)
-         {
-	         index = input.LastIndexOf(value);
-         }
-         else
-         {
-	         index = input.IndexOf(value);
-         }
+         var index = reverse ? input.LastIndexOf(value) : input.IndexOf(value);
 
          if (index > -1)
          {
-	         return input.Keep(index) + replacement + input.Drop(index + 1);
+            return input.Keep(index) + replacement + input.Drop(index + 1);
          }
          else
          {
-	         return input;
+            return input;
          }
       }
 
       public String Replace(string input, Lambda lambda, bool reverse)
       {
-         int index;
-         if (reverse)
-         {
-	         index = input.LastIndexOf(value);
-         }
-         else
-         {
-	         index = input.IndexOf(value);
-         }
+         var index = reverse ? input.LastIndexOf(value) : input.IndexOf(value);
 
          if (index > -1)
          {
@@ -186,7 +139,7 @@ namespace Kagami.Library.Objects
          }
          else
          {
-	         return input;
+            return input;
          }
       }
 
@@ -211,31 +164,24 @@ namespace Kagami.Library.Objects
          return builder.ToString();
       }
 
-      public Tuple Split(string input) => new Tuple(input.Split(value).Select(String.StringObject).ToArray());
+      public Tuple Split(string input) => new(input.Split(value).Select(String.StringObject).ToArray());
 
       public Tuple Partition(string input, bool reverse)
       {
          if (reverse)
          {
             var index = input.LastIndexOf(value);
-            if (index > -1)
-            {
-	            return Tuple.Tuple3(input.Keep(index), value.ToString(), input.Drop(index + 1));
-            }
-            else
-            {
-	            return Tuple.Tuple3(input, "", "");
-            }
+            return index > -1 ? Tuple.Tuple3(input.Keep(index), value.ToString(), input.Drop(index + 1)) : Tuple.Tuple3(input, "", "");
          }
          else
          {
             if (input.Find(value.ToString()).If(out var index))
             {
-	            return Tuple.Tuple3(input.Keep(index), value.ToString(), input.Drop(index + 1));
+               return Tuple.Tuple3(input.Keep(index), value.ToString(), input.Drop(index + 1));
             }
             else
             {
-	            return Tuple.Tuple3(input, "", "");
+               return Tuple.Tuple3(input, "", "");
             }
          }
       }
@@ -249,9 +195,9 @@ namespace Kagami.Library.Objects
       public Int Count(string input, Lambda lambda)
       {
          var self = this;
-         return input.Count(c => lambda.Invoke(self).IsTrue);
+         return input.Count(_ => lambda.Invoke(self).IsTrue);
       }
 
-      public Byte Byte() => new Byte((byte)value);
+      public Byte Byte() => new((byte)value);
    }
 }

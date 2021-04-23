@@ -6,10 +6,10 @@ namespace Kagami.Library.Objects
 {
    public class Sequence : Iterator
    {
-      int count;
-      IObject factor;
-      IObject offset;
-      int i;
+      protected int count;
+      protected IObject factor;
+      protected IObject offset;
+      protected int i;
 
       public Sequence(int count, IObject offset) : base((ICollection)Array.Empty)
       {
@@ -39,7 +39,7 @@ namespace Kagami.Library.Objects
          }
          else
          {
-	         return none<IObject>();
+            return none<IObject>();
          }
       }
    }

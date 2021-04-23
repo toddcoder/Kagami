@@ -14,9 +14,9 @@ namespace Kagami.Library.Operations
 
       protected MultipleOperandOperation(int count) => this.count = count;
 
-      public abstract IResult<Unit> Execute(Machine machine, int index, IObject value);
+      public abstract IResult<Unit> Execute(int index, IObject value);
 
-      public abstract IMatched<IObject> Final(Machine machine);
+      public abstract IMatched<IObject> Final();
 
       public override IMatched<IObject> Execute(Machine machine)
       {
@@ -24,28 +24,30 @@ namespace Kagami.Library.Operations
 
          for (var i = 0; i < count; i++)
          {
-	         if (machine.Pop().If(out var obj, out var exception))
-	         {
-		         stack.Push(obj);
-	         }
-	         else
-	         {
-		         return failedMatch<IObject>(exception);
-	         }
+            if (machine.Pop().If(out var obj, out var exception))
+            {
+               stack.Push(obj);
+            }
+            else
+            {
+               return failedMatch<IObject>(exception);
+            }
          }
 
          var index = 0;
          while (stack.Count > 0)
          {
             var value = stack.Pop();
-            if (Execute(machine, index++, value).If(out _, out var exception)) { }
+            if (Execute(index++, value).If(out _, out var exception))
+            {
+            }
             else
             {
-	            return failedMatch<IObject>(exception);
+               return failedMatch<IObject>(exception);
             }
          }
 
-         return Final(machine);
+         return Final();
       }
 
       protected static IResult<Unit> match<T>(IObject value, Action<T> action) where T : IObject
@@ -57,7 +59,7 @@ namespace Kagami.Library.Operations
          }
          else
          {
-	         return failure<Unit>(incompatibleClasses(value, typeof(T).Name));
+            return failure<Unit>(incompatibleClasses(value, typeof(T).Name));
          }
       }
    }

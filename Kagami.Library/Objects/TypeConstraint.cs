@@ -11,7 +11,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
+   public readonly struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
    {
       public static TypeConstraint FromList(params string[] classNames)
       {

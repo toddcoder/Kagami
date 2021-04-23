@@ -5,7 +5,7 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class BooleanSymbol : Symbol, IConstant
    {
-      bool value;
+      protected bool value;
 
       public BooleanSymbol(bool value) => this.value = value;
 

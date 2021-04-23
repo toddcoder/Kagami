@@ -7,8 +7,8 @@ namespace Kagami.Drawing
 {
    public class Rectangle : IObject
    {
-      Point origin;
-      Size size;
+      protected Point origin;
+      protected Size size;
 
       public Rectangle(IObject x, IObject y, IObject width, IObject height)
       {
@@ -57,18 +57,12 @@ namespace Kagami.Drawing
 
       public IObject Right => add(X, Width);
 
-      public Boolean In(IObject obj)
+      public Boolean In(IObject obj) => obj switch
       {
-         switch (obj)
-         {
-            case Point point:
-               return In(point);
-            case Rectangle rectangle:
-               return In(rectangle);
-            default:
-               return false;
-         }
-      }
+         Point point => In(point),
+         Rectangle rectangle => In(rectangle),
+         _ => false
+      };
 
       public Boolean NotIn(IObject obj) => !In(obj).IsTrue;
 

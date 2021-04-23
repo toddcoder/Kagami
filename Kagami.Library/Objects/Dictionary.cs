@@ -499,5 +499,7 @@ namespace Kagami.Library.Objects
 
          return new Dictionary(newDictionary);
       }
+
+      public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
    }
 }

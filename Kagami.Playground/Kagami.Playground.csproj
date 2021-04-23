@@ -38,9 +38,6 @@
     <Reference Include="Core">
       <HintPath>..\References\Core.dll</HintPath>
     </Reference>
-    <Reference Include="Core.ObjectGraphs">
-      <HintPath>..\References\Core.ObjectGraphs.dll</HintPath>
-    </Reference>
     <Reference Include="Core.WinForms">
       <HintPath>..\References\Core.WinForms.dll</HintPath>
     </Reference>
@@ -58,9 +55,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Colorizer.cs" />
-    <Compile Include="DrawableRichTextBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="ExceptionData.cs" />
     <Compile Include="ExRichTextBoxExtensions.cs" />
     <Compile Include="Playground.cs">

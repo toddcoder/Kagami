@@ -7,10 +7,10 @@ namespace Kagami.Library.Parsers.Expressions
 {
    public class InnerComprehensionParser : SymbolParser
    {
-      List<(Symbol, Expression, IMaybe<Expression>, string)> comprehensions;
+      protected List<(Symbol, Expression, IMaybe<Expression>, string)> comprehensions;
 
-      public InnerComprehensionParser(ExpressionBuilder builder, List<(Symbol, Expression, IMaybe<Expression>, string)> comprehensions)
-         : base(builder)
+      public InnerComprehensionParser(ExpressionBuilder builder, List<(Symbol, Expression, IMaybe<Expression>, string)> comprehensions) :
+         base(builder)
       {
          this.comprehensions = comprehensions;
       }

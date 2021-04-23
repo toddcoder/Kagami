@@ -5,8 +5,8 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class InlineIfSymbol : Symbol
    {
-      Expression ifTrue;
-      Expression ifFalse;
+      protected Expression ifTrue;
+      protected Expression ifFalse;
 
       public InlineIfSymbol(Expression ifTrue, Expression ifFalse)
       {

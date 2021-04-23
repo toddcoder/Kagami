@@ -4,7 +4,7 @@ namespace Kagami.Library.Nodes.Statements
 {
    public class OpenPackage : Statement
    {
-      string packageName;
+      protected string packageName;
 
       public OpenPackage(string packageName) => this.packageName = packageName;
 

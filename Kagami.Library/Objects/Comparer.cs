@@ -5,17 +5,17 @@ namespace Kagami.Library.Objects
 {
    public class Comparer : IComparer
    {
-      Func<object, object, int> function;
+      protected Func<object, object, int> function;
 
       public Comparer(bool ascending)
       {
          if (ascending)
          {
-	         function = (x, y) => ((IObjectCompare)x).Compare((IObject)y);
+            function = (x, y) => ((IObjectCompare)x).Compare((IObject)y);
          }
          else
          {
-	         function = (x, y) => ((IObjectCompare)y).Compare((IObject)x);
+            function = (x, y) => ((IObjectCompare)y).Compare((IObject)x);
          }
       }
 

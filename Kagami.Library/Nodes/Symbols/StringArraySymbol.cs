@@ -7,7 +7,7 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class StringArraySymbol : Symbol
    {
-      Array array;
+      protected Array array;
 
       public StringArraySymbol(string source) => array = new Array(source.Trim().Split("/s+").Select(String.StringObject));
 

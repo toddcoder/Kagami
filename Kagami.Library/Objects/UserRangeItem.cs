@@ -5,7 +5,7 @@ namespace Kagami.Library.Objects
 {
    public class UserRangeItem : IRangeItem
    {
-      UserObject userObject;
+      protected UserObject userObject;
 
       public UserRangeItem(UserObject userObject) => this.userObject = userObject;
 
@@ -14,11 +14,11 @@ namespace Kagami.Library.Objects
          var result = sendMessage(userObject, "<>", obj);
          if (result is Int i)
          {
-	         return i.Value;
+            return i.Value;
          }
          else
          {
-	         throw incompatibleClasses(result, "Int");
+            throw incompatibleClasses(result, "Int");
          }
       }
 
@@ -35,11 +35,11 @@ namespace Kagami.Library.Objects
             var result = sendMessage(userObject, "succ".get());
             if (result is UserObject uo)
             {
-	            return new UserRangeItem(uo);
+               return new UserRangeItem(uo);
             }
             else
             {
-	            throw incompatibleClasses(result, userObject.ClassName);
+               throw incompatibleClasses(result, userObject.ClassName);
             }
          }
       }
@@ -51,11 +51,11 @@ namespace Kagami.Library.Objects
             var result = sendMessage(userObject, "pred".get());
             if (result is UserObject uo)
             {
-	            return new UserRangeItem(uo);
+               return new UserRangeItem(uo);
             }
             else
             {
-	            throw incompatibleClasses(result, userObject.ClassName);
+               throw incompatibleClasses(result, userObject.ClassName);
             }
          }
       }
@@ -65,11 +65,11 @@ namespace Kagami.Library.Objects
          var result = sendMessage(userObject, "range");
          if (result is Range range)
          {
-	         return range;
+            return range;
          }
          else
          {
-	         throw incompatibleClasses(result, "Range");
+            throw incompatibleClasses(result, "Range");
          }
       }
    }

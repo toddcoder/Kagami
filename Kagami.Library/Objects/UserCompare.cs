@@ -5,7 +5,7 @@ namespace Kagami.Library.Objects
 {
    public class UserCompare : IObjectCompare
    {
-      UserObject userObject;
+      protected UserObject userObject;
 
       public UserCompare(UserObject userObject) => this.userObject = userObject;
 
@@ -14,11 +14,11 @@ namespace Kagami.Library.Objects
          var result = sendMessage(userObject, "<>", obj);
          if (result is Int i)
          {
-	         return i.Value;
+            return i.Value;
          }
          else
          {
-	         throw incompatibleClasses(result, "Int");
+            throw incompatibleClasses(result, "Int");
          }
       }
 

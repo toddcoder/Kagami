@@ -6,7 +6,7 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class StringListSymbol : Symbol
    {
-      List list;
+      protected List list;
 
       public StringListSymbol(string source)
       {

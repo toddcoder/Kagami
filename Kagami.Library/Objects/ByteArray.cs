@@ -10,9 +10,9 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct ByteArray : IObject, ICollection, IObjectCompare
+   public readonly struct ByteArray : IObject, ICollection, IObjectCompare
    {
-      private byte[] bytes;
+      private readonly byte[] bytes;
 
       public ByteArray(byte[] bytes) : this() => this.bytes = bytes;
 
@@ -65,5 +65,7 @@ namespace Kagami.Library.Objects
       public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
 
       public Byte this[int index] => bytes[wrapIndex(index, bytes.Length)];
+
+      public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
    }
 }

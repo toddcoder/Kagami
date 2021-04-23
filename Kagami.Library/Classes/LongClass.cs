@@ -15,7 +15,7 @@ namespace Kagami.Library.Classes
          numericMessages();
          numericConversionMessages();
 
-         messages["factorial()"] = (obj, msg) => function<Long>(obj, l => l.Factorial());
+         messages["factorial()"] = (obj, _) => function<Long>(obj, l => l.Factorial());
       }
 
       public IObject Parse(string source) => Long.LongObject(BigInteger.Parse(source));

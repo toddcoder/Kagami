@@ -8,17 +8,17 @@ namespace Kagami.Library.Operations
 {
    public abstract class InternalListOperation : OneOperandOperation
    {
-      public abstract IMatched<IObject> Execute(Machine machine, Container list);
+      public abstract IMatched<IObject> Execute(Container list);
 
       public override IMatched<IObject> Execute(Machine machine, IObject value)
       {
          if (value is Container list)
          {
-	         return Execute(machine, list);
+            return Execute(list);
          }
          else
          {
-	         return failedMatch<IObject>(incompatibleClasses(value, "InternalList"));
+            return failedMatch<IObject>(incompatibleClasses(value, "InternalList"));
          }
       }
    }

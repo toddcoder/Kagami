@@ -4,9 +4,9 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct SymbolObject : IObject, IObjectCompare, IEquatable<SymbolObject>
+   public readonly struct SymbolObject : IObject, IObjectCompare, IEquatable<SymbolObject>
    {
-      string name;
+      private readonly string name;
 
       public SymbolObject(string name) : this() => this.name = name;
 

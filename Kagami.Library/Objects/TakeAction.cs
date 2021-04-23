@@ -4,8 +4,8 @@ namespace Kagami.Library.Objects
 {
    public class TakeAction : IStreamAction
    {
-      int count;
-      int index;
+      protected int count;
+      protected int index;
 
       public TakeAction(int count)
       {
@@ -17,14 +17,7 @@ namespace Kagami.Library.Objects
       {
          if (status.IsAccepted)
          {
-            if (++index < count)
-            {
-	            return status;
-            }
-            else
-            {
-	            return new Ended();
-            }
+            return ++index < count ? status : new Ended();
          }
          else
          {

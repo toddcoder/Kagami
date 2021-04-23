@@ -11,46 +11,24 @@ namespace Kagami.Library.Objects
 		{
 			int index;
 			if (reverse)
-			{
-				if (startIndex == 0)
-				{
-					index = input.LastIndexOf(value, StringComparison.Ordinal);
-				}
-				else
-				{
-					index = input.LastIndexOf(value, startIndex, StringComparison.Ordinal);
-				}
-			}
+         {
+            index = startIndex == 0 ? input.LastIndexOf(value, StringComparison.Ordinal) : input.LastIndexOf(value, startIndex, StringComparison.Ordinal);
+         }
 			else
 			{
 				index = input.IndexOf(value, startIndex, StringComparison.Ordinal);
 			}
 
-			if (index == -1)
-			{
-				return None.NoneValue;
-			}
-			else
-			{
-				return Some.Object((Int)index);
-			}
+			return index == -1 ? None.NoneValue : Some.Object((Int)index);
 		}
 
-		public static Tuple findAll(string value, string input) => new Tuple(input.FindAll(value).Select(Int.IntObject).ToArray());
+		public static Tuple findAll(string value, string input) => new(input.FindAll(value).Select(Int.IntObject).ToArray());
 
 		public static String replace(string value, string input, string replacement, bool reverse)
-		{
-			int index;
-			if (reverse)
-			{
-				index = input.LastIndexOf(value, StringComparison.Ordinal);
-			}
-			else
-			{
-				index = input.IndexOf(value, StringComparison.Ordinal);
-			}
+      {
+         var index = reverse ? input.LastIndexOf(value, StringComparison.Ordinal) : input.IndexOf(value, StringComparison.Ordinal);
 
-			if (index > -1)
+         if (index > -1)
 			{
 				return input.Keep(index) + replacement + input.Drop(index + value.Length);
 			}
@@ -58,21 +36,13 @@ namespace Kagami.Library.Objects
 			{
 				return input;
 			}
-		}
+      }
 
 		public static String replace(string value, string input, Lambda lambda, bool reverse)
-		{
-			int index;
-			if (reverse)
-			{
-				index = input.LastIndexOf(value, StringComparison.Ordinal);
-			}
-			else
-			{
-				index = input.IndexOf(value, StringComparison.Ordinal);
-			}
+      {
+         var index = reverse ? input.LastIndexOf(value, StringComparison.Ordinal) : input.IndexOf(value, StringComparison.Ordinal);
 
-			if (index > -1)
+         if (index > -1)
 			{
 				var text = input.Drop(index);
 				var length = text.Length;
@@ -84,14 +54,14 @@ namespace Kagami.Library.Objects
 			{
 				return input;
 			}
-		}
+      }
 
 		public static String replaceAll(string value, string input, string replacement) => input.Replace(value, replacement);
 
 		public static String replaceAll(string value, string input, Lambda lambda)
 		{
 			var builder = new StringBuilder();
-			var index = input.IndexOf(value);
+			var index = input.IndexOf(value, StringComparison.Ordinal);
 			var start = 0;
 			while (index > -1)
 			{
@@ -99,7 +69,7 @@ namespace Kagami.Library.Objects
 				builder.Append(input.Drop(start));
 				builder.Append(replacement.AsString);
 				start = index + value.Length;
-				index = input.IndexOf(value);
+				index = input.IndexOf(value, StringComparison.Ordinal);
 			}
 
 			builder.Append(input.Drop(start));
@@ -109,7 +79,7 @@ namespace Kagami.Library.Objects
 
 		public static Tuple split(string value, string input)
 		{
-			return new Tuple(input.Split(new[] { value }, StringSplitOptions.None).Select(String.StringObject).ToArray());
+			return new(input.Split(new[] { value }, StringSplitOptions.None).Select(String.StringObject).ToArray());
       }
 
 		public static Tuple partition(string value, string input, bool reverse)

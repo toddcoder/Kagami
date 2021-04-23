@@ -5,7 +5,7 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class SymbolSymbol : Symbol
    {
-      string name;
+      protected string name;
 
       public SymbolSymbol(string name) => this.name = name;
 

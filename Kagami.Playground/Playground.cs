@@ -6,15 +6,15 @@ using System.Linq;
 using System.Windows.Forms;
 using Core.Arrays;
 using Kagami.Library;
-using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Computers;
 using Core.Collections;
+using Core.Configurations;
 using Core.Dates;
 using Core.Enumerables;
+using Core.Exceptions;
 using Core.Monads;
 using Core.Numbers;
-using Core.ObjectGraphs;
 using Core.RegularExpressions;
 using Core.Strings;
 using Core.WinForms.Consoles;
@@ -47,7 +47,6 @@ namespace Kagami.Playground
       protected bool tracing;
       protected IMaybe<int> _exceptionIndex;
       protected bool cancelled;
-      protected Hash<string, IObject> watch;
       protected FolderName packageFolder;
       protected IMaybe<ExceptionData> _exceptionData;
       protected int firstEditorLine;
@@ -73,12 +72,14 @@ namespace Kagami.Playground
       }
 
       protected static IResult<PlaygroundConfiguration> getConfiguration(FileName configurationFile) =>
-         from objectGraph in ObjectGraph.Try.FromFile(configurationFile)
-         from configuration in objectGraph.Object<PlaygroundConfiguration>()
-         select configuration;
+         from source in configurationFile.TryTo.Text
+         let parser = new Parser(source)
+         from configuration in parser.Parse()
+         from obj in configuration.Deserialize<PlaygroundConfiguration>()
+         select obj;
 
       protected static IResult<Unit> setConfiguration(PlaygroundConfiguration configuration, FileName configurationFile) =>
-         from serialized in ObjectGraph.Try.Serialize(configuration)
+         from serialized in Configuration.Serialize(configuration, "kagami")
          from unit in configurationFile.TryTo.SetText(serialized.ToString())
          select unit;
 
@@ -200,7 +201,6 @@ namespace Kagami.Playground
             stopwatch = new Stopwatch();
             _exceptionIndex = none<int>();
             cancelled = false;
-            watch = new Hash<string, IObject>();
             if (playgroundConfiguration.LastFile != null)
             {
                document.Open(playgroundConfiguration.LastFile);
@@ -685,20 +685,23 @@ namespace Kagami.Playground
 
       protected void Playground_FormClosing(object sender, FormClosingEventArgs e)
       {
-/*         if (document.FileName.If(out var fileName) && ((FileName)fileName).Exists())
-            try
+         if (document.FileName.If(out var fileName))
+         {
+            FileName file = fileName;
+            if (file.Exists())
             {
-               //configurationFile = PLAYGROUND_CONFIGURATION_FILE1;
-               playgroundConfiguration.LastFile = fileName;
-               playgroundConfiguration.DefaultFolder = FolderName.Current;
-               playgroundConfiguration.FontName = textEditor.Font.Name;
-               playgroundConfiguration.FontSize = textEditor.Font.Size;
-               configurationFile.Text = ObjectGraph.Serialize(playgroundConfiguration).ToString();
+               try
+               {
+                  playgroundConfiguration.LastFile = file;
+                  playgroundConfiguration.DefaultFolder = FolderName.Current;
+                  //configurationFile.Text = ObjectGraph.Serialize(playgroundConfiguration).ToString();
+               }
+               catch (Exception exception)
+               {
+                  MessageBox.Show(exception.DeepMessage());
+               }
             }
-            catch (Exception exception)
-            {
-               MessageBox.Show(exception.Message);
-            }*/
+         }
       }
 
       protected void Playground_KeyUp(object sender, KeyEventArgs e)

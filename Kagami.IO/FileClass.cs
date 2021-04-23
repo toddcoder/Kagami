@@ -14,8 +14,8 @@ namespace Kagami.IO
 
          collectionMessages();
 
-         messages["text".get()] = (obj, msg) => function<File>(obj, f => f.Text);
-         messages["lines".get()] = (obj, msg) => function<File>(obj, f => f.Lines);
+         messages["text".get()] = (obj, _) => function<File>(obj, f => f.Text);
+         messages["lines".get()] = (obj, _) => function<File>(obj, f => f.Lines);
       }
    }
 }

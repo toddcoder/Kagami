@@ -34,17 +34,17 @@ namespace Kagami.Library.Operations
                default:
                   if (cx is IMessageNumber mn)
                   {
-	                  return message(mn, cy);
+                     return message(mn, cy);
                   }
                   else
                   {
-	                  return sendMessage(x, messageName + "(_)", y);
+                     return sendMessage(x, messageName + "(_)", y);
                   }
             }
          }
          else
          {
-	         return sendMessage(x, messageName, y);
+            return sendMessage(x, messageName, y);
          }
       }
 
@@ -69,11 +69,11 @@ namespace Kagami.Library.Operations
             default:
                if (cx is IMessageNumber mn)
                {
-	               return message(mn, cy);
+                  return message(mn, cy);
                }
                else
                {
-	               return sendMessage((IObject)x, messageName, (IObject)y);
+                  return sendMessage((IObject)x, messageName, (IObject)y);
                }
          }
       }
@@ -83,28 +83,17 @@ namespace Kagami.Library.Operations
       {
          if (x is INumeric n)
          {
-	         switch (x.ClassName)
-	         {
-		         case "Int":
-			         return int32Func(n.AsInt32());
-		         case "Float":
-			         return doubleFunc(n.AsDouble());
-		         case "Byte":
-			         return byteFunc(n.AsByte());
-		         default:
-			         if (x is IMessageNumber mn)
-			         {
-				         return message(mn);
-			         }
-			         else
-			         {
-				         return sendMessage(x, messageName);
-			         }
-	         }
+            return x.ClassName switch
+            {
+               "Int" => int32Func(n.AsInt32()),
+               "Float" => doubleFunc(n.AsDouble()),
+               "Byte" => byteFunc(n.AsByte()),
+               _ => x is IMessageNumber mn ? message(mn) : sendMessage(x, messageName)
+            };
          }
          else
          {
-	         return sendMessage(x, messageName);
+            return sendMessage(x, messageName);
          }
       }
 
@@ -114,28 +103,17 @@ namespace Kagami.Library.Operations
       {
          if (x is INumeric n)
          {
-	         switch (x.ClassName)
-	         {
-		         case "Int":
-			         return int32Func(n.AsInt32());
-		         case "Float":
-			         return doubleFunc(n.AsDouble());
-		         case "Byte":
-			         return byteFunc(n.AsByte());
-		         default:
-			         if (x is IMessageNumber mn)
-			         {
-				         return message(mn);
-			         }
-			         else
-			         {
-				         return sendMessage(x, messageName);
-			         }
-	         }
+            return x.ClassName switch
+            {
+               "Int" => int32Func(n.AsInt32()),
+               "Float" => doubleFunc(n.AsDouble()),
+               "Byte" => byteFunc(n.AsByte()),
+               _ => x is IMessageNumber mn ? message(mn) : sendMessage(x, messageName)
+            };
          }
          else
          {
-	         return sendMessage(x, messageName);
+            return sendMessage(x, messageName);
          }
       }
 
@@ -146,16 +124,16 @@ namespace Kagami.Library.Operations
             var y = message.Arguments[0];
             if (y is INumeric ny)
             {
-	            return func(nx, ny);
+               return func(nx, ny);
             }
             else
             {
-	            throw notNumeric(y);
+               throw notNumeric(y);
             }
          }
          else
          {
-	         return sendMessage(x, messageName, message.Arguments);
+            return sendMessage(x, messageName, message.Arguments);
          }
       }
 
@@ -163,52 +141,32 @@ namespace Kagami.Library.Operations
       {
          if (x is INumeric nx)
          {
-	         return func(nx);
+            return func(nx);
          }
          else
          {
-	         throw notNumeric(x);
+            throw notNumeric(x);
          }
       }
 
-      public static IObject function(IObject x, Func<double, Float> func, Func<IMessageNumber, IObject> messageFunc)
+      public static IObject function(IObject x, Func<double, Float> func, Func<IMessageNumber, IObject> messageFunc) => x switch
       {
-         switch (x)
-         {
-            case IMessageNumber mn:
-               return messageFunc(mn);
-            case INumeric nx:
-               return func(nx.AsDouble());
-            default:
-               throw notNumeric(x);
-         }
-      }
+         IMessageNumber mn => messageFunc(mn),
+         INumeric nx => func(nx.AsDouble()),
+         _ => throw notNumeric(x)
+      };
 
       public static IObject function(IObject x, Func<int, Int> int32Func, Func<double, Float> doubleFunc, Func<byte, Byte> byteFunc,
          Func<IMessageNumber, IObject> messageFunc, string message)
       {
-         if (x is INumeric)
-         {
-	         return apply(x, int32Func, doubleFunc, byteFunc, messageFunc, message);
-         }
-         else
-         {
-	         return sendMessage(x, message);
-         }
+         return x is INumeric ? apply(x, int32Func, doubleFunc, byteFunc, messageFunc, message) : sendMessage(x, message);
       }
 
       public static IObject function<T>(IObject x, Func<int, T> int32Func, Func<double, T> doubleFunc, Func<byte, T> byteFunc,
          Func<IMessageNumber, T> messageFunc, string message)
          where T : IObject
       {
-         if (x is INumeric)
-         {
-	         return apply(x, int32Func, doubleFunc, byteFunc, messageFunc, message);
-         }
-         else
-         {
-	         return sendMessage(x, message);
-         }
+         return x is INumeric ? apply(x, int32Func, doubleFunc, byteFunc, messageFunc, message) : sendMessage(x, message);
       }
 
       public static IObject function(IObject x, Message message, Func<int, int, Int> int32Func,
@@ -226,7 +184,7 @@ namespace Kagami.Library.Operations
             case IMessageNumber mn:
                var y = (INumeric)message.Arguments[0];
                return messageFunc(mn, y);
-            case INumeric _:
+            case INumeric:
                return function(x, message, (a, b) => func(a.AsDouble(), b.AsDouble()), messageName);
             default:
                return sendMessage(x, messageName, message.Arguments);
@@ -240,16 +198,16 @@ namespace Kagami.Library.Operations
             var y = message.Arguments[0];
             if (y is INumeric ny)
             {
-	            return (Int)(nx.AsInt32() / ny.AsInt32());
+               return (Int)(nx.AsInt32() / ny.AsInt32());
             }
             else
             {
-	            throw notNumeric(y);
+               throw notNumeric(y);
             }
          }
          else
          {
-	         throw notNumeric(x);
+            throw notNumeric(x);
          }
       }
 
@@ -257,36 +215,29 @@ namespace Kagami.Library.Operations
       {
          if (y is Infinity inf)
          {
-	         return inf.IsPositive ? -1 : 1;
+            return inf.IsPositive ? -1 : 1;
          }
          else
          {
-	         switch (x)
-	         {
-		         case INumeric nx when y is INumeric ny:
-			         var (left, right) = nx.Compatible(ny);
-			         switch (left)
-			         {
-				         case Int i:
-					         return i.CompareTo((Int)right);
-				         case Float f:
-					         return f.CompareTo((Float)right);
-				         case Byte b:
-					         return b.CompareTo((Byte)right);
-				         case Long l:
-					         return l.CompareTo((Long)right);
-				         case Rational r:
-					         return r.CompareTo((Rational)right);
-				         case Complex c:
-					         return c.CompareTo((Complex)right);
-				         default:
-					         throw incompatibleClasses(x is INumeric ? y : x, "Numeric");
-			         }
-		         case UserObject uo:
-			         return ((Int)sendMessage(uo, "<=>", y)).Value;
-		         default:
-			         throw incompatibleClasses(x is INumeric ? y : x, "Numeric");
-	         }
+            switch (x)
+            {
+               case INumeric nx when y is INumeric ny:
+                  var (left, right) = nx.Compatible(ny);
+                  return left switch
+                  {
+                     Int i => i.CompareTo((Int)right),
+                     Float f => f.CompareTo((Float)right),
+                     Byte b => b.CompareTo((Byte)right),
+                     Long l => l.CompareTo((Long)right),
+                     Rational r => r.CompareTo((Rational)right),
+                     Complex c => c.CompareTo((Complex)right),
+                     _ => throw incompatibleClasses(x is INumeric ? y : x, "Numeric")
+                  };
+               case UserObject uo:
+                  return ((Int)sendMessage(uo, "<=>", y)).Value;
+               default:
+                  throw incompatibleClasses(x is INumeric ? y : x, "Numeric");
+            }
          }
       }
 
@@ -296,66 +247,59 @@ namespace Kagami.Library.Operations
       {
          if (double.IsNaN(value))
          {
-	         return "nan";
+            return "nan";
          }
          else if (double.IsPositiveInfinity(value))
          {
-	         return "inf";
+            return "inf";
          }
          else if (double.IsNegativeInfinity(value))
          {
-	         return "-inf";
+            return "-inf";
          }
          else
          {
             var str = value.ToString("g");
-            if (str.IsMatch("['.Ee']"))
-            {
-	            return str;
-            }
-            else
-            {
-	            return $"{value}.0";
-            }
+            return str.IsMatch("['.Ee']") ? str : $"{value}.0";
          }
       }
 
       public static double Asinh(double x) => Math.Log(x + Math.Sqrt(x * x + 1));
 
-      public static double Acosh(double x)=> Math.Log(x + Math.Sqrt(x * x - 1));
+      public static double Acosh(double x) => Math.Log(x + Math.Sqrt(x * x - 1));
 
       public static double Atanh(double x) => Math.Log((1 + x) / (1 - x)) / 2.0;
 
-      public static bool isZero(IObject obj) => obj is INumeric n && n.IsZero;
+      public static bool isZero(IObject obj) => obj is INumeric { IsZero: true };
 
-	   public static IObject raise(INumeric x, INumeric y)
-	   {
-		   if (x.IsFloat || y.IsFloat)
-		   {
-			   return Float.FloatObject(Math.Pow(x.AsDouble(), y.AsDouble()));
-		   }
-		   else if (x.IsInt && y.IsInt)
-		   {
-			   var accum = 1;
-			   var amount = x.AsInt32();
-			   for (var i = 0; i < y.AsInt32(); i++)
-			   {
-				   accum *= amount;
-			   }
+      public static IObject raise(INumeric x, INumeric y)
+      {
+         if (x.IsFloat || y.IsFloat)
+         {
+            return Float.FloatObject(Math.Pow(x.AsDouble(), y.AsDouble()));
+         }
+         else if (x.IsInt && y.IsInt)
+         {
+            var accum = 1;
+            var amount = x.AsInt32();
+            for (var i = 0; i < y.AsInt32(); i++)
+            {
+               accum *= amount;
+            }
 
-			   return Int.IntObject(accum);
-		   }
-		   else
-		   {
-			   var accum = BigInteger.One;
-			   var amount = x.AsBigInteger();
-			   for (var i = 0; i < y.AsBigInteger(); i++)
-			   {
-				   accum *= amount;
-			   }
+            return Int.IntObject(accum);
+         }
+         else
+         {
+            var accum = BigInteger.One;
+            var amount = x.AsBigInteger();
+            for (var i = 0; i < y.AsBigInteger(); i++)
+            {
+               accum *= amount;
+            }
 
-			   return Long.LongObject(accum);
-		   }
-	   }
+            return Long.LongObject(accum);
+         }
+      }
    }
 }

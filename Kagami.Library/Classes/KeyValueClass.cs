@@ -11,8 +11,8 @@ namespace Kagami.Library.Classes
       {
          base.RegisterMessages();
 
-         messages["key".get()] = (obj, msg) => function<KeyValue>(obj, kv => kv.Key);
-         messages["value".get()] = (obj, msg) => function<KeyValue>(obj, kv => kv.Value);
+         messages["key".get()] = (obj, _) => function<KeyValue>(obj, kv => kv.Key);
+         messages["value".get()] = (obj, _) => function<KeyValue>(obj, kv => kv.Value);
       }
    }
 }

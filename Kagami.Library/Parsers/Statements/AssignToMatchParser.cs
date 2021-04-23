@@ -8,7 +8,7 @@ namespace Kagami.Library.Parsers.Statements
 {
    public class AssignToMatchParser : EndingInExpressionParser
    {
-      Symbol comparisand;
+      protected Symbol comparisand;
 
       public override string Pattern => "^ /'set' /(/s+)";
 

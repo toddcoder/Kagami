@@ -139,7 +139,7 @@ namespace Kagami.Library.Objects
          {
             Set otherSet when set.IsProperSubsetOf(otherSet.set) => -1,
             Set otherSet when set.IsSubsetOf(otherSet.set) => 0,
-            Set _ => 1,
+            Set => 1,
             _ => throw AllExceptions.unableToConvert(obj.Image, "Set")
          };
       }
@@ -163,5 +163,7 @@ namespace Kagami.Library.Objects
 
          return new Set(classified.ValueArray().Select(s => (IObject)s).ToArray());
       }
+
+      public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
    }
 }

@@ -7,8 +7,8 @@ namespace Kagami.Library.Operations
 {
    public class NewObject : Operation
    {
-      string className;
-      Parameters parameters;
+      protected string className;
+      protected Parameters parameters;
 
       public NewObject(string className, Parameters parameters)
       {

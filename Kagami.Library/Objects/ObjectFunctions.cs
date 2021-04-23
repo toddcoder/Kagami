@@ -32,8 +32,7 @@ namespace Kagami.Library.Objects
          return Module.Global.Class(className).Required(messageClassNotFound(className));
       }
 
-      public static bool match<T>(T source, IObject comparisand, Func<T, T, bool> equalifier, Hash<string, IObject> bindings)
-         where T : IObject
+      public static bool match<T>(T source, IObject comparisand, Func<T, T, bool> equalifier, Hash<string, IObject> bindings) where T : IObject
       {
          switch (comparisand)
          {
@@ -81,14 +80,7 @@ namespace Kagami.Library.Objects
             case TypeConstraint typeConstraint:
                return typeConstraint.Matches(classOf(source));
             default:
-               if (classOf(source).MatchCompatible(classOf(comparisand)))
-               {
-                  return equalifier(source, (T)comparisand);
-               }
-               else
-               {
-                  return false;
-               }
+               return classOf(source).MatchCompatible(classOf(comparisand)) && equalifier(source, (T)comparisand);
          }
       }
 

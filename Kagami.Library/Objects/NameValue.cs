@@ -3,10 +3,10 @@ using Core.Collections;
 
 namespace Kagami.Library.Objects
 {
-   public struct NameValue : IObject, IEquatable<NameValue>, IKeyValue
+   public readonly struct NameValue : IObject, IEquatable<NameValue>, IKeyValue
    {
-      string name;
-      IObject value;
+      private readonly string name;
+      private readonly IObject value;
 
       public NameValue(string name, IObject value) : this()
       {
@@ -28,7 +28,7 @@ namespace Kagami.Library.Objects
 
       public bool Match(IObject comparisand, Hash<string, IObject> bindings) => value.Match(comparisand, bindings);
 
-	   public bool IsTrue => value.IsTrue;
+      public bool IsTrue => value.IsTrue;
 
       public bool Equals(NameValue other) => IsEqualTo(other);
 

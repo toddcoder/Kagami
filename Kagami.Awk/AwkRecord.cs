@@ -12,6 +12,7 @@ using static Kagami.Library.Objects.String;
 using static Kagami.Library.Objects.TextFindingFunctions;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.CollectionFunctions;
+using CollectionFunctions = Kagami.Library.Objects.CollectionFunctions;
 
 namespace Kagami.Awk
 {
@@ -138,5 +139,7 @@ namespace Kagami.Awk
       public Int Count(string input, Lambda lambda) => count(fields[0], input, lambda);
 
       public Int Count(ITextFinding textFinding, Lambda lambda) => textFinding.Count(fields[0], lambda);
+
+      public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
    }
 }

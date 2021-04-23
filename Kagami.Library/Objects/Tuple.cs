@@ -12,7 +12,7 @@ using static Kagami.Library.Objects.CollectionFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct Tuple : IObject, IEquatable<Tuple>, ICollection, IObjectCompare, IComparable<Tuple>, IComparable
+   public readonly struct Tuple : IObject, IEquatable<Tuple>, ICollection, IObjectCompare, IComparable<Tuple>, IComparable
    {
       public static IObject NewTuple(IObject x, IObject y)
       {
@@ -38,9 +38,9 @@ namespace Kagami.Library.Objects
          return new(new[] { String.StringObject(left), String.StringObject(middle), String.StringObject(right) });
       }
 
-      private IObject[] items;
-      private Hash<string, int> names;
-      private Hash<int, string> indexes;
+      private readonly IObject[] items;
+      private readonly Hash<string, int> names;
+      private readonly Hash<int, string> indexes;
 
       public Tuple(IObject[] items) : this()
       {
@@ -303,5 +303,7 @@ namespace Kagami.Library.Objects
       public IObject Tail => items.Length == 0 ? Empty : new Tuple(items.Skip(1).ToArray());
 
       public IObject HeadTail => new Tuple(Head, Tail);
+
+      public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
    }
 }

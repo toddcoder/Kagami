@@ -5,8 +5,8 @@ namespace Kagami.Library.Nodes.Statements
 {
    public class AssignToMatch : Statement
    {
-      Symbol comparisand;
-      Expression expression;
+      protected Symbol comparisand;
+      protected Expression expression;
 
       public AssignToMatch(Symbol comparisand, Expression expression)
       {

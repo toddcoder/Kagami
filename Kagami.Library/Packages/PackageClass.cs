@@ -8,7 +8,7 @@ namespace Kagami.Library.Packages
 {
    public abstract class PackageClass : BaseClass
    {
-      SelectorHash<Func<IObject, Message, IObject>> functions;
+      protected SelectorHash<Func<IObject, Message, IObject>> functions;
 
       public PackageClass()
       {
@@ -28,19 +28,19 @@ namespace Kagami.Library.Packages
 
          foreach (var (functionName, func) in functions)
          {
-	         Selector selector = functionName;
-	         if (!functionName.StartsWith("_") && !fields.ContainsKey(selector))
-	         {
-		         fields.New(selector, new PackageFunction(package, functionName, func));
-	         }
+            Selector selector = functionName;
+            if (!functionName.StartsWith("_") && !fields.ContainsKey(selector))
+            {
+               fields.New(selector, new PackageFunction(package, functionName, func));
+            }
          }
 
          foreach (var (fieldName, field) in package.Fields)
          {
-	         if (!fieldName.StartsWith("_") && !fields.ContainsKey(fieldName))
-	         {
-		         fields.New(fieldName, field);
-	         }
+            if (!fieldName.StartsWith("_") && !fields.ContainsKey(fieldName))
+            {
+               fields.New(fieldName, field);
+            }
          }
       }
    }

@@ -9,12 +9,12 @@ namespace Kagami.Library.Parsers.Statements
 {
    public class CaseParser : StatementParser
    {
-      string assignmentField;
-      string fieldName;
-      bool mutable;
-      bool assignment;
-      bool top;
-      CaseType caseType;
+      protected string assignmentField;
+      protected string fieldName;
+      protected bool mutable;
+      protected bool assignment;
+      protected bool top;
+      protected CaseType caseType;
 
       public CaseParser(string assignmentField, bool mutable, bool assignment, string fieldName, bool top, CaseType caseType)
       {
@@ -39,20 +39,13 @@ namespace Kagami.Library.Parsers.Statements
 
       public override string Pattern => "^ /'|' /(|s|)";
 
-      static IMatched<Block> getCaseBlock(CaseType caseType, ParseState state)
+      protected static IMatched<Block> getCaseBlock(CaseType caseType, ParseState state) => caseType switch
       {
-         switch (caseType)
-         {
-            case CaseType.Statement:
-               return getCaseStatementBlock(state);
-            case CaseType.Function:
-               return getAnyBlock(state);
-            case CaseType.Lambda:
-               return getBlock(state);
-            default:
-               return $"Didn't understand case type {caseType}".FailedMatch<Block>();
-         }
-      }
+         CaseType.Statement => getCaseStatementBlock(state),
+         CaseType.Function => getAnyBlock(state),
+         CaseType.Lambda => getBlock(state),
+         _ => $"Didn't understand case type {caseType}".FailedMatch<Block>()
+      };
 
       public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
       {
@@ -67,11 +60,11 @@ namespace Kagami.Library.Parsers.Statements
 
          if (result.ValueOrCast<Unit>(out var tuple, out var asUnit))
          {
-            var (comparisand, anyAnd, block) = tuple;
+            var (comparisand, _and, block) = tuple;
 
             var builder = new ExpressionBuilder(ExpressionFlags.Standard);
             builder.Add(comparisand);
-            if (anyAnd.If(out var and))
+            if (_and.If(out var and))
             {
                builder.Add(and);
             }
@@ -80,11 +73,11 @@ namespace Kagami.Library.Parsers.Statements
             {
                var caseParser = new CaseParser(assignmentField, mutable, assignment, fieldName, false, caseType);
                var ifStatement = none<If>();
-               if (caseParser.Scan(state).If(out _, out var anyCaseException))
+               if (caseParser.Scan(state).If(out _, out var _caseException))
                {
                   ifStatement = caseParser.If.Some();
                }
-               else if (anyCaseException.If(out var caseException))
+               else if (_caseException.If(out var caseException))
                {
                   return failedMatch<Unit>(caseException);
                }

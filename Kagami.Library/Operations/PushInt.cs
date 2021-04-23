@@ -6,7 +6,7 @@ namespace Kagami.Library.Operations
 {
    public class PushInt : Operation
    {
-      Int value;
+      protected Int value;
 
       public PushInt(int value) => this.value = value;
 

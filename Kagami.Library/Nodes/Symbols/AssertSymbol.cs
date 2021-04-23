@@ -6,15 +6,15 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class AssertSymbol : Symbol
    {
-      Expression condition;
-      Expression value;
-      IMaybe<Expression> error;
+      protected Expression condition;
+      protected Expression value;
+      protected IMaybe<Expression> _error;
 
       public AssertSymbol(Expression condition, Expression value, IMaybe<Expression> error)
       {
          this.condition = condition;
          this.value = value;
-         this.error = error;
+         _error = error;
       }
 
       public override void Generate(OperationsBuilder builder)
@@ -25,9 +25,9 @@ namespace Kagami.Library.Nodes.Symbols
          condition.Generate(builder);
          builder.GoToIfTrue(trueLabel);
 
-         if (error.If(out var e))
+         if (_error.If(out var error))
          {
-            e.Generate(builder);
+            error.Generate(builder);
             builder.Failure();
          }
          else
@@ -39,7 +39,7 @@ namespace Kagami.Library.Nodes.Symbols
 
          builder.Label(trueLabel);
          value.Generate(builder);
-         if (error.IsSome)
+         if (_error.IsSome)
          {
             builder.Success();
          }
@@ -58,8 +58,7 @@ namespace Kagami.Library.Nodes.Symbols
 
       public override string ToString()
       {
-         return
-            $"assert{error.Map(e => "!").DefaultTo(() => "?")} {condition} : {value}{error.Map(e => $" : {e}").DefaultTo(() => "")}";
+         return $"assert{_error.Map(_ => "!").DefaultTo(() => "?")} {condition} : {value}{_error.Map(e => $" : {e}").DefaultTo(() => "")}";
       }
    }
 }

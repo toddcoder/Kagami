@@ -5,8 +5,8 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class FoldSymbol : Symbol
    {
-      bool left;
-      Symbol operatorSymbol;
+      protected bool left;
+      protected Symbol operatorSymbol;
 
       public FoldSymbol(bool left, Symbol operatorSymbol)
       {
@@ -23,7 +23,7 @@ namespace Kagami.Library.Nodes.Symbols
          }
          else
          {
-	         throw exception;
+            throw exception;
          }
       }
 

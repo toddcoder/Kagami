@@ -6,8 +6,8 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class LambdaSymbol : Symbol
    {
-      Parameters parameters;
-      Block block;
+      protected Parameters parameters;
+      protected Block block;
 
       public LambdaSymbol(Parameters parameters, Block block)
       {
@@ -37,7 +37,7 @@ namespace Kagami.Library.Nodes.Symbols
          }
          else
          {
-	         throw exception;
+            throw exception;
          }
       }
 
