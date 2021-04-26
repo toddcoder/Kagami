@@ -8,7 +8,6 @@ using Kagami.Library;
 using Kagami.Library.Runtime;
 using Core.Monads;
 using static System.Console;
-using static Core.Assertions.AssertionFunctions;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami
@@ -103,7 +102,7 @@ namespace Kagami
       public IResult<string> ReadLine()
       {
          var line = Console.ReadLine();
-         return assert(() => line).Must().Not.BeNull().OrFailure("Input cancelled");
+         return line.Must().Not.BeNull().OrFailure("Input cancelled");
       }
 
       public bool Cancelled() => KeyAvailable && ReadKey().Key == ConsoleKey.Escape;
