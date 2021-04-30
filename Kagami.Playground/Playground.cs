@@ -73,8 +73,7 @@ namespace Kagami.Playground
 
       protected static IResult<PlaygroundConfiguration> getConfiguration(FileName configurationFile) =>
          from source in configurationFile.TryTo.Text
-         let parser = new Parser(source)
-         from configuration in parser.Parse()
+         from configuration in Configuration.FromString(source)
          from obj in configuration.Deserialize<PlaygroundConfiguration>()
          select obj;
 
