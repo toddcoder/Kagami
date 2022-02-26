@@ -12,9 +12,9 @@ namespace Kagami.Library.Objects
 
       bool IsLazy { get; }
 
-      IMaybe<IObject> Next();
+      Maybe<IObject> Next();
 
-      IMaybe<IObject> Peek();
+      Maybe<IObject> Peek();
 
       IObject Reset();
 

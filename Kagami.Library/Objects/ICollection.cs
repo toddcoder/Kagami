@@ -6,9 +6,9 @@ namespace Kagami.Library.Objects
    {
       IIterator GetIterator(bool lazy);
 
-      IMaybe<IObject> Next(int index);
+      Maybe<IObject> Next(int index);
 
-      IMaybe<IObject> Peek(int index);
+      Maybe<IObject> Peek(int index);
 
       Int Length { get; }
 

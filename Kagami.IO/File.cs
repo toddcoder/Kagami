@@ -13,7 +13,7 @@ namespace Kagami.IO
 {
    public class File : IObject, ICollection
    {
-      FileName fileName;
+      protected FileName fileName;
 
       public File(string fileName) => this.fileName = fileName;
 
@@ -35,9 +35,9 @@ namespace Kagami.IO
 
       public IIterator GetIterator(bool lazy) => new FileIterator(this);
 
-      public IMaybe<IObject> Next(int index) => none<IObject>();
+      public Maybe<IObject> Next(int index) => nil;
 
-      public IMaybe<IObject> Peek(int index) => none<IObject>();
+      public Maybe<IObject> Peek(int index) => nil;
 
       public Int Length => (int)fileName.Length;
 
@@ -57,7 +57,7 @@ namespace Kagami.IO
 
       public String Text => fileName.Text;
 
-      public Array Lines => new Array(fileName.Lines.Select(String.StringObject).ToArray());
+      public Array Lines => new (fileName.Lines.Select(String.StringObject).ToArray());
 
       public IObject this[SkipTake skipTake] => skipTakeThis(this, skipTake);
    }

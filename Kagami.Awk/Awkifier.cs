@@ -16,14 +16,14 @@ namespace Kagami.Awk
 {
    public class Awkifier : IObject, ICollection
    {
-      string source;
-      Regex recordPattern;
-      Regex fieldPattern;
-      string[] records;
-      string[] fields;
-      string recordSeparator;
-      string fieldSeparator;
-      bool recordsCreated;
+      protected string source;
+      protected Regex recordPattern;
+      protected Regex fieldPattern;
+      protected string[] records;
+      protected string[] fields;
+      protected string recordSeparator;
+      protected string fieldSeparator;
+      protected bool recordsCreated;
 
       public Awkifier(string source, bool asFile)
       {
@@ -76,20 +76,7 @@ namespace Kagami.Awk
          }
       }
 
-      public String this[int index]
-      {
-         get
-         {
-            if (index.Between(0).Until(getLength()))
-            {
-               return fields[index];
-            }
-            else
-            {
-               return "";
-            }
-         }
-      }
+      public String this[int index] => index.Between(0).Until(getLength()) ? fields[index] : "";
 
       public string ClassName => "Awkifier";
 
@@ -127,7 +114,7 @@ namespace Kagami.Awk
 
       public bool IsTrue => source.IsNotEmpty();
 
-      void splitIfRecordNotCreated()
+      protected void splitIfRecordNotCreated()
       {
          if (!recordsCreated)
          {
@@ -136,7 +123,7 @@ namespace Kagami.Awk
          }
       }
 
-      void split(int index)
+      protected void split(int index)
       {
          splitIfRecordNotCreated();
 
@@ -146,7 +133,7 @@ namespace Kagami.Awk
 
       public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new Iterator(this);
 
-      public IMaybe<IObject> Next(int index)
+      public Maybe<IObject> Next(int index)
       {
          if (index < records.Length)
          {
@@ -158,15 +145,15 @@ namespace Kagami.Awk
                currentFields.New($"__${i}", array[i]);
             }
 
-            return new Tuple(array).Some<IObject>();
+            return new Tuple(array);
          }
          else
          {
-            return none<IObject>();
+            return nil;
          }
       }
 
-      public IMaybe<IObject> Peek(int index) => Next(index);
+      public Maybe<IObject> Peek(int index) => Next(index);
 
       int getLength()
       {

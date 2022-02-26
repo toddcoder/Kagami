@@ -20,10 +20,19 @@ namespace Kagami.Library.Parsers.Expressions
       protected ConjunctionParsers conjunctionParsers;
       protected int whateverCount;
       protected IMaybe<IPrefixCode> prefixCode;
+      protected bool isComparisand;
 
-      public ExpressionParser(Bits32<ExpressionFlags> flags) : base(false) => this.flags = flags;
+      public ExpressionParser(Bits32<ExpressionFlags> flags) : base(false)
+      {
+         this.flags = flags;
+         FieldName = "";
+
+         isComparisand = this.flags[ExpressionFlags.Comparisand];
+      }
 
       public Expression Expression { get; set; }
+
+      public string FieldName { get; set; }
 
       public override IMatched<Unit> Parse(ParseState state, Token[] tokens)
       {
@@ -234,11 +243,21 @@ namespace Kagami.Library.Parsers.Expressions
 
       protected virtual IMatched<Unit> getValue(ParseState state)
       {
+         if (isComparisand)
+         {
+            builder.Add(new FieldSymbol(FieldName));
+         }
+
          if (valuesParser.Scan(state).ValueOrOriginal(out _, out var original))
          {
             if (builder.LastSymbol.If(out var lastSymbol) && lastSymbol is WhateverSymbol whatever)
             {
                whatever.Count = whateverCount++;
+            }
+
+            if (isComparisand)
+            {
+               builder.Add(new MatchSymbol());
             }
 
             return Unit.Matched();

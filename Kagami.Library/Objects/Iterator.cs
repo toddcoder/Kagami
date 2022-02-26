@@ -11,7 +11,6 @@ using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.CollectionFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Operations.NumericFunctions;
-using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Objects
 {
@@ -56,9 +55,9 @@ namespace Kagami.Library.Objects
 
       public virtual bool IsLazy => false;
 
-      public virtual IMaybe<IObject> Next() => collection.Next(index++);
+      public virtual Maybe<IObject> Next() => collection.Next(index++);
 
-      public virtual IMaybe<IObject> Peek() => collection.Peek(index);
+      public virtual Maybe<IObject> Peek() => collection.Peek(index);
 
       public IObject Reset()
       {
@@ -68,21 +67,21 @@ namespace Kagami.Library.Objects
 
       public virtual IEnumerable<IObject> List()
       {
-         var item = none<IObject>();
+         var _item = Maybe<IObject>.nil;
          index = 0;
          do
          {
-            item = Next();
-            if (item.If(out var obj))
+            _item = Next();
+            if (_item.If(out var item))
             {
-               yield return obj;
+               yield return item;
             }
 
             if (index % 1000 == 0 && Machine.Current.Context.Cancelled())
             {
                yield break;
             }
-         } while (item.IsSome);
+         } while (_item.IsSome);
       }
 
       public virtual IIterator Clone() => new Iterator(collection);
@@ -91,6 +90,7 @@ namespace Kagami.Library.Objects
       {
          var list = List().ToList();
          list.Reverse();
+
          return collectionClass.Revert(list);
       }
 
@@ -306,11 +306,15 @@ namespace Kagami.Library.Objects
          return collectionClass.Revert(list);
       }
 
-      public virtual IObject If(Lambda predicate) =>
-         collectionClass.Revert(List().ToList().Where(value => predicate.Invoke(value).IsTrue));
+      public virtual IObject If(Lambda predicate)
+      {
+         return collectionClass.Revert(List().ToList().Where(value => predicate.Invoke(value).IsTrue));
+      }
 
-      public virtual IObject IfNot(Lambda predicate) =>
-         collectionClass.Revert(List().ToList().Where(value => !predicate.Invoke(value).IsTrue));
+      public virtual IObject IfNot(Lambda predicate)
+      {
+         return collectionClass.Revert(List().ToList().Where(value => !predicate.Invoke(value).IsTrue));
+      }
 
       public virtual IObject Skip(int count)
       {
@@ -558,6 +562,7 @@ namespace Kagami.Library.Objects
       {
          var list = List().ToList();
          list.Reverse();
+
          return list.FirstOrNone().Map(Some.Object).DefaultTo(() => Objects.None.NoneValue);
       }
 
@@ -960,14 +965,14 @@ namespace Kagami.Library.Objects
          return collectionClass.Revert(result);
       }
 
-      static void rotateRight(List<IObject> list, int count)
+      protected void rotateRight(List<IObject> list, int count)
       {
          var temp = list[count - 1];
          list.RemoveAt(count - 1);
          list.Insert(0, temp);
       }
 
-      IEnumerable<List<IObject>> permutate(List<IObject> list, int count)
+      protected IEnumerable<List<IObject>> permutate(List<IObject> list, int count)
       {
          if (count == 1)
          {
@@ -995,14 +1000,14 @@ namespace Kagami.Library.Objects
          return collectionClass.Revert(enumerable);
       }
 
-      static void rotateLeft(List<IObject> list, int start, int count)
+      protected static void rotateLeft(List<IObject> list, int start, int count)
       {
          var temp = list[start];
          list.RemoveAt(start);
          list.Insert(start + count - 1, temp);
       }
 
-      static IEnumerable<List<IObject>> combinations(List<IObject> list, int start, int count, int choose)
+      protected static IEnumerable<List<IObject>> combinations(List<IObject> list, int start, int count, int choose)
       {
          if (choose == 0)
          {
@@ -1030,7 +1035,7 @@ namespace Kagami.Library.Objects
          return collectionClass.Revert(result.Select(l => collectionClass.Revert(l)));
       }
 
-      static IEnumerable<IObject> flatten(IIterator iterator)
+      protected static IEnumerable<IObject> flatten(IIterator iterator)
       {
          var className = ((IObject)iterator.Collection).ClassName;
 
@@ -1051,7 +1056,7 @@ namespace Kagami.Library.Objects
          }
       }
 
-      static IEnumerable<IObject> flatten(IEnumerable<IObject> enumerable, string className)
+      protected static IEnumerable<IObject> flatten(IEnumerable<IObject> enumerable, string className)
       {
          foreach (var item in enumerable)
          {
@@ -1078,8 +1083,8 @@ namespace Kagami.Library.Objects
       {
          var lambdas = List().ToList().Select(l => (Lambda)l).ToList();
          var list = collection.GetIterator(false).List().ToList();
-
          var result = applyAgainst(lambdas, list).ToList();
+
          return collectionClass.Revert(result);
       }
 
@@ -1117,8 +1122,7 @@ namespace Kagami.Library.Objects
          {
             for (var i = 0; i < step - 1; i++)
             {
-               if (Next().HasValue) { }
-               else
+               if (Next().IsNone)
                {
                   break;
                }
@@ -1137,7 +1141,7 @@ namespace Kagami.Library.Objects
          return collectionClass.Revert(result);
       }
 
-      static IEnumerable<IObject> applyAgainst(List<Lambda> lambdas, List<IObject> enumerable)
+      protected static IEnumerable<IObject> applyAgainst(List<Lambda> lambdas, List<IObject> enumerable)
       {
          foreach (var lambda in lambdas)
          {
@@ -1148,7 +1152,7 @@ namespace Kagami.Library.Objects
          }
       }
 
-      IObject shuffle(IObject[] array, int count)
+      protected IObject shuffle(IObject[] array, int count)
       {
          var result = new Hash<int, IObject>();
          var random = new Random(NowServer.Now.Millisecond);

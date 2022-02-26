@@ -5,8 +5,8 @@ using System.Linq;
 using Kagami.Library.Objects;
 using Core.Collections;
 using Core.Enumerables;
+using Core.Matching;
 using Core.Monads;
-using Core.RegularExpressions;
 using Core.Strings;
 using static Kagami.Library.AllExceptions;
 using static Core.Monads.MonadFunctions;
@@ -17,37 +17,34 @@ namespace Kagami.Library.Runtime
    {
       protected const int MAX_DEPTH = 1024;
 
-      protected Hash<string, Field> fields;
-      protected AutoHash<string, List<string>> buckets;
+      protected StringHash<Field> fields;
+      protected AutoStringHash<List<string>> buckets;
 
       public Fields()
       {
-         fields = new Hash<string, Field>();
-         buckets = new AutoHash<string, List<string>>(key => new List<string>(), true);
+         fields = new StringHash<Field>(false);
+         buckets = new AutoStringHash<List<string>>(false, key => new List<string>(), true);
       }
 
-      public IMatched<Field> Find(string name, bool getting, int depth = 0)
+      public Responding<Field> Find(string name, bool getting, int depth = 0)
       {
          if (depth > MAX_DEPTH)
          {
-            return failedMatch<Field>(exceededMaxDepth());
+            return exceededMaxDepth();
          }
          else if (fields.ContainsKey(name))
          {
             var field = fields[name];
-            switch (field.Value)
+            return field.Value switch
             {
-               case Unassigned _ when getting:
-                  return failedMatch<Field>(fieldUnassigned(name));
-               case Reference r:
-                  return r.Field.Matched();
-               default:
-                  return field.Matched();
-            }
+               Unassigned _ when getting => fieldUnassigned(name),
+               Reference r => r.Field,
+               _ => field,
+            };
          }
          else
          {
-            return notMatched<Field>();
+            return nil;
          }
       }
 

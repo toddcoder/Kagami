@@ -67,7 +67,7 @@ namespace Kagami.Library.Parsers
 
       public static IMatched<Expression> getComparisandExpression(ParseState state, Bits32<ExpressionFlags> flags, string fieldName)
       {
-         var expressionParser = new ComparisandExpressionParser(flags, fieldName);
+         var expressionParser = new ExpressionParser(flags) { FieldName = fieldName };
          return expressionParser.Scan(state).Map(_ => expressionParser.Expression);
       }
 

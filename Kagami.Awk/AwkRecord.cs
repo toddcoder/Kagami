@@ -17,9 +17,9 @@ namespace Kagami.Awk
 {
    public class AwkRecord : IObject, ICollection, ITextFinding
    {
-      string[] fields;
-      Regex fieldPattern;
-      string fieldSeparator;
+      protected string[] fields;
+      protected Regex fieldPattern;
+      protected string fieldSeparator;
 
       public AwkRecord(string[] fields, Regex fieldPattern, string fieldSeparator)
       {
@@ -30,17 +30,7 @@ namespace Kagami.Awk
 
       public String this[int index]
       {
-         get
-         {
-            if (index.Between(0).Until(fields.Length))
-            {
-               return fields[index];
-            }
-            else
-            {
-               return "";
-            }
-         }
+         get => index.Between(0).Until(fields.Length) ? fields[index] : "";
          set
          {
             if (index == 0)
@@ -88,19 +78,9 @@ namespace Kagami.Awk
 
       public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new Iterator(this);
 
-      public IMaybe<IObject> Next(int index)
-      {
-         if (index < fields.Length)
-         {
-            return StringObject(fields[index]).Some();
-         }
-         else
-         {
-            return none<IObject>();
-         }
-      }
+      public Maybe<IObject> Next(int index) => maybe(index < fields.Length, () => StringObject(fields[index]));
 
-      public IMaybe<IObject> Peek(int index) => Next(index);
+      public Maybe<IObject> Peek(int index) => Next(index);
 
       public Int Length => fields.Length;
 
