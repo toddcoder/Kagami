@@ -5,8 +5,9 @@ using System.Linq;
 using Kagami.Library.Objects;
 using Core.Collections;
 using Core.Enumerables;
+using Core.Matching;
 using Core.Monads;
-using Core.RegularExpressions;
+using Core.Matching;
 using Core.Strings;
 using static Kagami.Library.AllExceptions;
 using static Core.Monads.MonadFunctions;
@@ -26,42 +27,39 @@ namespace Kagami.Library.Runtime
          buckets = new AutoHash<string, List<string>>(key => new List<string>(), true);
       }
 
-      public IMatched<Field> Find(string name, bool getting, int depth = 0)
+      public Responding<Field> Find(string name, bool getting, int depth = 0)
       {
          if (depth > MAX_DEPTH)
          {
-            return failedMatch<Field>(exceededMaxDepth());
+            return exceededMaxDepth();
          }
          else if (fields.ContainsKey(name))
          {
             var field = fields[name];
-            switch (field.Value)
+            return field.Value switch
             {
-               case Unassigned _ when getting:
-                  return failedMatch<Field>(fieldUnassigned(name));
-               case Reference r:
-                  return r.Field.Matched();
-               default:
-                  return field.Matched();
-            }
+               Unassigned when getting => fieldUnassigned(),
+               Reference r => r.Field,
+               _ => field
+            };
          }
          else
          {
-            return notMatched<Field>();
+            return nil;
          }
       }
 
-      public IMatched<Field> Find(Selector selector, int depth = 0)
+      public Responding<Field> Find(Selector selector, int depth = 0)
       {
          if (depth > MAX_DEPTH)
          {
-            return failedMatch<Field>(exceededMaxDepth());
+            return exceededMaxDepth();
          }
          else
          {
             if (fields.ContainsKey(selector.Image))
             {
-               return fields[selector.Image].Matched();
+               return fields[selector.Image];
             }
             else
             {
@@ -73,23 +71,23 @@ namespace Kagami.Library.Runtime
                      Selector matchSelector = bucket;
                      if (selector.IsEquivalentTo(matchSelector))
                      {
-                        return fields[matchSelector.Image].Matched();
+                        return fields[matchSelector.Image];
                      }
                   }
                }
 
-               return fields[labelsOnlyImage].Matched();
+               return fields[labelsOnlyImage];
             }
          }
       }
 
       public bool ContainsSelector(Selector selector) => buckets.ContainsKey(selector);
 
-      public IResult<Unit> FindByPattern(string pattern, List<Field> list, int depth = 0)
+      public Result<Unit> FindByPattern(string pattern, List<Field> list, int depth = 0)
       {
          if (depth > MAX_DEPTH)
          {
-            return failure<Unit>(exceededMaxDepth());
+            return exceededMaxDepth();
          }
          else
          {
@@ -98,21 +96,21 @@ namespace Kagami.Library.Runtime
                list.Add(fields[key]);
             }
 
-            return Unit.Success();
+            return unit;
          }
       }
 
-      public IResult<Field> New(string name, IObject value, bool mutable = false, bool visible = true)
+      public Result<Field> New(string name, IObject value, bool mutable = false, bool visible = true)
       {
          return New(name, new Field { Value = value, Mutable = mutable, Visible = visible });
       }
 
-      public IResult<Field> New(string name, bool mutable = false, bool visible = true)
+      public Result<Field> New(string name, bool mutable = false, bool visible = true)
       {
          return New(name, Unassigned.Value, mutable, visible);
       }
 
-      public IResult<Field> New(string name, IMaybe<TypeConstraint> typeConstraint, bool mutable, bool visible)
+      public Result<Field> New(string name, Maybe<TypeConstraint> typeConstraint, bool mutable, bool visible)
       {
          return New(name, new Field
          {
@@ -120,11 +118,11 @@ namespace Kagami.Library.Runtime
          });
       }
 
-      public IResult<Field> New(Selector selector, bool mutable = false, bool visible = true)
+      public Result<Field> New(Selector selector, bool mutable = false, bool visible = true)
       {
          if (fields.ContainsKey(selector))
          {
-            return failure<Field>(fieldAlreadyExists(selector));
+            return fieldAlreadyExists(selector);
          }
          else
          {
@@ -132,15 +130,15 @@ namespace Kagami.Library.Runtime
             fields[selector] = field;
             buckets[selector.LabelsOnly()].Add(selector);
 
-            return field.Success();
+            return field;
          }
       }
 
-      public IResult<Field> New(Selector selector, IObject value, bool mutable = false, bool visible = true)
+      public Result<Field> New(Selector selector, IObject value, bool mutable = false, bool visible = true)
       {
          if (fields.ContainsKey(selector))
          {
-            return failure<Field>(fieldAlreadyExists(selector));
+            return fieldAlreadyExists(selector);
          }
          else
          {
@@ -148,55 +146,56 @@ namespace Kagami.Library.Runtime
             fields[selector] = field;
             buckets[selector.LabelsOnly()].Add(selector);
 
-            return field.Success();
+            return field;
          }
       }
 
-      public IResult<Field> New(string name, Field field)
+      public Result<Field> New(string name, Field field)
       {
          if (fields.ContainsKey(name))
          {
-            return failure<Field>(fieldAlreadyExists(name));
+            return fieldAlreadyExists(name);
          }
          else
          {
             fields[name] = field;
-            return field.Success();
+            return field;
          }
       }
 
-      public IResult<Field> Assign(string name, IObject value, bool overriden = false)
+      public Result<Field> Assign(string name, IObject value, bool overriden = false)
       {
-         if (Find(name, false).ValueOrOriginal(out var field, out var original))
+         var responding = Find(name, false);
+         if (responding.Map(out var field, out var _exception))
          {
             if (field.Mutable)
             {
                field.Value = value;
-               return field.Success();
+               return field;
             }
             else if (field.Value is Unassigned || overriden)
             {
                field.Value = value;
-               return field.Success();
+               return field;
             }
             else
             {
-               return failure<Field>(immutableField(name));
+               return immutableField(name);
             }
          }
-         else if (original.IfNot(out var anyException) && anyException.If(out var exception))
+         else if (_exception.Map(out var exception))
          {
-            return failure<Field>(exception);
+            return exception;
          }
          else
          {
-            return failure<Field>(fieldNotFound(name));
+            return fieldNotFound(name);
          }
       }
 
-      public IResult<Field> AssignToExisting(string name, IObject value, bool overriden = false)
+      public Result<Field> AssignToExisting(string name, IObject value, bool overriden = false)
       {
-         if (Machine.Current.Find(name, false).ValueOrOriginal(out var field, out var original))
+         if (Machine.Current.Find(name, false).(out var field, out var original))
          {
             if (field.Mutable)
             {

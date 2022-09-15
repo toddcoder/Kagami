@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Kagami.Library.Objects;
 using Core.Enumerables;
+using Array = System.Array;
 
 namespace Kagami.Library.Invokables
 {
@@ -16,8 +17,8 @@ namespace Kagami.Library.Invokables
 
 		public static Parameters Empty => new Parameters();
 
-		Parameter[] parameters;
-		Parameter[] capturingParameters;
+		protected Parameter[] parameters;
+		protected Parameter[] capturingParameters;
 
 		public Parameters(params Parameter[] parameters)
 		{
@@ -25,7 +26,7 @@ namespace Kagami.Library.Invokables
 			capturingParameters = parameters.Where(p => p.Capturing).ToArray();
 		}
 
-		public Parameters() : this(new Parameter[0]) { }
+		public Parameters() : this(Array.Empty<Parameter>()) { }
 
 		public Parameters(int count) :
 			this(Enumerable.Range(0, count).Select(i => Parameter.New(false, $"__${i}")).ToArray()) { }
@@ -60,7 +61,7 @@ namespace Kagami.Library.Invokables
 			}
 		}
 
-		public override string ToString() => parameters.Stringify();
+		public override string ToString() => parameters.ToString(", ");
 
 		public Selector Selector(string name) => name.Selector(parameters.Select(p => p.NameForFunction).ToArray());
 	}

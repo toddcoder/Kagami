@@ -421,45 +421,45 @@ namespace Kagami.Library.Runtime
 
       public IObject Z { get; set; } = Unassigned.Value;
 
-      public IMatched<Field> Find(string fieldName, bool getting)
+      public Responding<Field> Find(string fieldName, bool getting)
       {
          var depth = 0;
          foreach (var frame in stack)
          {
-            if (frame.Fields.Find(fieldName, getting).If(out var field, out var anyException))
+            if (frame.Fields.Find(fieldName, getting).Map(out var field, out var _exception))
             {
-               return field.Matched();
+               return field;
             }
-            else if (anyException.If(out var exception))
+            else if (_exception.Map(out var exception))
             {
-               return failedMatch<Field>(exception);
+               return exception;
             }
             else
             {
                if (depth++ > MAX_DEPTH)
                {
-                  return failedMatch<Field>(exceededMaxDepth());
+                  return exceededMaxDepth();
                }
             }
          }
 
-         return notMatched<Field>();
+         return nil;
       }
 
-      public IResult<Unit> FindByPattern(string pattern, List<Field> list)
+      public Result<Unit> FindByPattern(string pattern, List<Field> list)
       {
          foreach (var frame in stack)
          {
-            if (frame.Fields.FindByPattern(pattern, list).IfNot(out var exception))
+            if (frame.Fields.FindByPattern(pattern, list).UnMap(out var exception))
             {
-               return failure<Unit>(exception);
+               return exception;
             }
          }
 
-         return Unit.Success();
+         return unit;
       }
 
-      public IMatched<Field> Find(Selector selector)
+      public Responding<Field> Find(Selector selector)
       {
          var labelsOnly = selector.LabelsOnly();
          foreach (var frame in stack)
@@ -467,7 +467,7 @@ namespace Kagami.Library.Runtime
             if (frame.Fields.ContainsSelector(labelsOnly))
             {
                var match = frame.Fields.Find(selector);
-               if (match.If(out var field) && field != null)
+               if (match.Map(out var field) && field != null)
                {
                   field.Fields = frame.Fields;
                }
@@ -476,38 +476,38 @@ namespace Kagami.Library.Runtime
             }
          }
 
-         return notMatched<Field>();
+         return nil;
       }
 
-      IMatched<Field> findExact(Selector selector) => Find(selector.Image, true);
+      protected Responding<Field> findExact(Selector selector) => Find(selector.Image, true);
 
-      IMatched<Field> findEquivalent(Selector selector)
+      protected Responding<Field> findEquivalent(Selector selector)
       {
          var count = selector.SelectorItems.Length;
          var iterator = new BitIterator(count);
          foreach (var booleans in iterator)
          {
             var newSelector = selector.Equivalent(booleans);
-            if (findExact(newSelector).If(out var matched, out var anyException))
+            if (findExact(newSelector).Map(out var matched, out var _exception))
             {
-               return matched.Matched();
+               return matched;
             }
-            else if (anyException.If(out var exception))
+            else if (_exception.Map(out var exception))
             {
-               return failedMatch<Field>(exception);
+               return exception;
             }
          }
 
-         return notMatched<Field>();
+         return nil;
       }
 
-      IMatched<Field> findTypeless(Selector selector) => Find(selector.LabelsOnly().Image, true);
+      protected Responding<Field> findTypeless(Selector selector) => Find(selector.LabelsOnly().Image, true);
 
-      IMatched<Field> findField(Selector selector) => Find(selector.Name, true);
+      protected Responding<Field> findField(Selector selector) => Find(selector.Name, true);
 
-      public IResult<Field> Assign(string fieldName, IObject value, bool getting, bool overriden = false)
+      public Result<Field> Assign(string fieldName, IObject value, bool getting, bool overriden = false)
       {
-         if (Find(fieldName, getting).If(out var field, out var anyException))
+         if (Find(fieldName, getting).Map(out var field, out var _exception))
          {
             if (field.Mutable)
             {
@@ -520,7 +520,7 @@ namespace Kagami.Library.Runtime
                   field.Value = value;
                }
 
-               return field.Success();
+               return field;
             }
             else if (field.Value is Unassigned || overriden)
             {
@@ -533,24 +533,24 @@ namespace Kagami.Library.Runtime
                   field.Value = value;
                }
 
-               return field.Success();
+               return field;
             }
             else
             {
-               return failure<Field>(immutableField(fieldName));
+               return immutableField(fieldName);
             }
          }
-         else if (anyException.If(out var exception))
+         else if (_exception.Map(out var exception))
          {
-            return failure<Field>(exception);
+            return exception;
          }
          else
          {
-            return failure<Field>(fieldNotFound(fieldName));
+            return fieldNotFound(fieldName);
          }
       }
 
-      public IResult<Field> Assign(Selector selector, IObject value, bool overriden = false)
+      public Result<Field> Assign(Selector selector, IObject value, bool overriden = false)
       {
          var ((isFound, field), (isFailure, exception)) = Find(selector);
          if (isFound)

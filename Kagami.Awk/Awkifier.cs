@@ -98,7 +98,7 @@ namespace Kagami.Awk
 			get
 			{
 				split(0);
-				return records.Stringify(recordSeparator).Elliptical(80, '\n');
+				return records.ToString(recordSeparator).Elliptical(80, '\n');
 			}
 		}
 
@@ -127,7 +127,7 @@ namespace Kagami.Awk
 
 		public bool IsTrue => source.IsNotEmpty();
 
-		void splitIfRecordNotCreated()
+		protected void splitIfRecordNotCreated()
 		{
 			if (!recordsCreated)
 			{
@@ -136,7 +136,7 @@ namespace Kagami.Awk
 			}
 		}
 
-		void split(int index)
+		protected void split(int index)
 		{
 			splitIfRecordNotCreated();
 
@@ -146,7 +146,7 @@ namespace Kagami.Awk
 
 		public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new Iterator(this);
 
-		public IMaybe<IObject> Next(int index)
+		public Maybe<IObject> Next(int index)
 		{
 			if (index < records.Length)
 			{
@@ -161,9 +161,9 @@ namespace Kagami.Awk
 				return new Tuple(array).Some<IObject>();
 			}
 			else
-			{
-				return none<IObject>();
-			}
+         {
+            return nil;
+         }
 		}
 
 		public IMaybe<IObject> Peek(int index) => Next(index);

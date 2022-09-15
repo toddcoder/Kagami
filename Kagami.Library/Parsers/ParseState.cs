@@ -29,7 +29,7 @@ namespace Kagami.Library.Parsers
 		IndexTransaction indexTransaction;
 		TokenTransaction tokenTransaction;
 		List<Symbol> postGenerationSymbols;
-		IMaybe<int> exceptionIndex;
+		Maybe<int> exceptionIndex;
 		Stack<bool> yieldingStack;
 		Stack<IMaybe<TypeConstraint>> returnTypesStack;
 		Hash<string, Expression> defExpressions;
@@ -62,7 +62,7 @@ namespace Kagami.Library.Parsers
 			patterns = new Set<string>();
 		}
 
-		public IMaybe<int> ExceptionIndex
+		public Maybe<int> ExceptionIndex
 		{
 			get => exceptionIndex;
 			set => exceptionIndex = value;

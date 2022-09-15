@@ -57,14 +57,14 @@ namespace Kagami.Library.Invokables
 			return lazy ? new LazyIterator(clone) : new Iterator(clone);
 		}
 
-		public IMaybe<IObject> Next(int index)
+		public Maybe<IObject> Next(int index)
 		{
 			if (Machine.Current.Invoke(this).If(out var result, out var anyException))
 			{
 				switch (result)
 				{
-					case None _:
-						return none<IObject>();
+					case None:
+                  return nil;
 					case YieldReturn yr:
 						Address = yr.Address + 1;
 						Frames = yr.Frames;

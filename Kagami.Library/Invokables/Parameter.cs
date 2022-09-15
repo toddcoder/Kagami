@@ -11,25 +11,25 @@ namespace Kagami.Library.Invokables
    {
       public static Parameter New(bool mutable, string name)
       {
-         return new Parameter(mutable, "", name, none<IInvokable>(), none<TypeConstraint>(), false, false);
+         return new Parameter(mutable, "", name, nil, nil, false, false);
       }
 
-      bool mutable;
-      string label;
-      string name;
-      IMaybe<IInvokable> defaultValue;
-      IMaybe<TypeConstraint> typeConstraint;
-      bool reference;
-      bool capturing;
+      protected bool mutable;
+      protected string label;
+      protected string name;
+      protected Maybe<IInvokable> _defaultValue;
+      protected Maybe<TypeConstraint> _typeConstraint;
+      protected bool reference;
+      protected bool capturing;
 
-      public Parameter(bool mutable, string label, string name, IMaybe<IInvokable> defaultValue, IMaybe<TypeConstraint> typeConstraint,
+      public Parameter(bool mutable, string label, string name, Maybe<IInvokable> defaultValue, Maybe<TypeConstraint> typeConstraint,
          bool reference, bool capturing)
       {
          this.mutable = mutable;
          this.label = label;
          this.name = name == "_" ? label : name;
-         this.defaultValue = defaultValue;
-         this.typeConstraint = typeConstraint;
+         _defaultValue = defaultValue;
+         _typeConstraint = typeConstraint;
          this.reference = reference;
          this.capturing = capturing;
       }
@@ -40,9 +40,9 @@ namespace Kagami.Library.Invokables
 
       public string Name => name;
 
-      public IMaybe<IInvokable> DefaultValue => defaultValue;
+      public Maybe<IInvokable> DefaultValue => _defaultValue;
 
-      public IMaybe<TypeConstraint> TypeConstraint => typeConstraint;
+      public Maybe<TypeConstraint> TypeConstraint => _typeConstraint;
 
       public bool Reference => reference;
 
@@ -53,7 +53,7 @@ namespace Kagami.Library.Invokables
       public bool Equals(Parameter other)
       {
          return mutable == other.mutable && string.Equals(label, other.label) && string.Equals(name, other.name) &&
-            defaultValue.IsSome == other.defaultValue.IsSome && typeConstraint.IsSome == other.typeConstraint.IsSome &&
+            (bool)_defaultValue == (bool)_defaultValue && (bool)_typeConstraint == (bool)other._typeConstraint &&
             reference == other.reference;
       }
 
@@ -66,8 +66,8 @@ namespace Kagami.Library.Invokables
             var hashCode = mutable.GetHashCode();
             hashCode = hashCode * 397 ^ (name?.GetHashCode() ?? 0);
             hashCode = hashCode * 397 ^ (label?.GetHashCode() ?? 0);
-            hashCode = hashCode * 397 ^ (defaultValue?.GetHashCode() ?? 0);
-            hashCode = hashCode * 397 ^ typeConstraint.Map(tc => tc.Hash).DefaultTo(() => 0);
+            hashCode = hashCode * 397 ^ (_defaultValue?.GetHashCode() ?? 0);
+            hashCode = hashCode * 397 ^ _typeConstraint.Map(tc => tc.Hash) | 0;
             hashCode = hashCode * 397 ^ reference.GetHashCode();
             hashCode = hashCode * 397 ^ capturing.GetHashCode();
             return hashCode;
@@ -81,22 +81,22 @@ namespace Kagami.Library.Invokables
             var builder = new StringBuilder();
             if (label.IsNotEmpty())
             {
-	            builder.Append($"{label}:");
+               builder.Append($"{label}:");
             }
 
             builder.Append("_");
-            if (typeConstraint.If(out var tc))
+            if (_typeConstraint.Map(out var typeConstraint))
             {
-	            builder.Append(tc.Image);
+               builder.Append(typeConstraint.Image);
             }
 
             if (Variadic)
             {
-	            builder.Append("...");
+               builder.Append("...");
             }
-            else if (defaultValue.IsSome)
+            else if (_defaultValue)
             {
-	            builder.Append("=");
+               builder.Append("=");
             }
 
             return builder.ToString();
@@ -105,8 +105,9 @@ namespace Kagami.Library.Invokables
 
       public override string ToString()
       {
-         return (StringStream)"" / (reference, "ref ") / (mutable, "var ") / label.Extend(after: ": ") / name
-            / typeConstraint.Map(t => t.Image).DefaultTo(() => "") / defaultValue.Map(i => $" = {i.Image}").DefaultTo(() => "");
+         /*return (StringStream)"" / (reference, "ref ") / (mutable, "var ") / label.Map(after: ": ") / name
+            / _typeConstraint.Map(t => t.Image) | "" / (_defaultValue.Map(i => $" = {i.Image}") | "");*/
+         return name;
       }
    }
 }

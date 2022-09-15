@@ -426,7 +426,7 @@ namespace Kagami.Library.Operations
 
 		public void ArgumentLabel(string label) => add(new ArgumentLabel(label));
 
-		public IResult<Operations> ToOperations(ParseState state)
+		public Result<Operations> ToOperations(ParseState state)
 		{
 			operations.Add(new Stop());
 			for (var i = 0; i < invokables.Count; i++)
