@@ -39,28 +39,28 @@ namespace Kagami.Library.Parsers
 		Stack<ImplicitExpressionState> implicitExpressionStates;
 		Set<string> patterns;
 
-		public ParseState(string source)
-		{
-			this.source = source;
-			index = 0;
-			indentations = new Stack<string>();
-			indentation = "";
-			statements = new List<Statement>();
-			statementStack = new Stack<List<Statement>>();
-			tokens = new List<Token>();
-			indexTransaction = new IndexTransaction();
-			tokenTransaction = new TokenTransaction(tokens);
-			postGenerationSymbols = new List<Symbol>();
-			exceptionIndex = none<int>();
-			yieldingStack = new Stack<bool>();
-			returnTypesStack = new Stack<IMaybe<TypeConstraint>>();
-			defExpressions = new Hash<string, Expression>();
-			macros = new Hash<string, Function>();
-			prefixCodes = new Stack<IMaybe<IPrefixCode>>();
-			implicitStates = new Stack<IMaybe<ImplicitState>>();
-			implicitExpressionStates = new Stack<ImplicitExpressionState>();
-			patterns = new Set<string>();
-		}
+      public ParseState(string source)
+      {
+         this.source = source;
+         index = 0;
+         indentations = new Stack<string>();
+         indentation = "";
+         statements = new List<Statement>();
+         statementStack = new Stack<List<Statement>>();
+         tokens = new List<Token>();
+         indexTransaction = new IndexTransaction();
+         tokenTransaction = new TokenTransaction(tokens);
+         postGenerationSymbols = new List<Symbol>();
+         exceptionIndex = none<int>();
+         yieldingStack = new Stack<bool>();
+         returnTypesStack = new Stack<IMaybe<TypeConstraint>>();
+         defExpressions = new Hash<string, Expression>();
+         macros = new Hash<string, Function>();
+         prefixCodes = new Stack<IMaybe<IPrefixCode>>();
+         implicitStates = new Stack<IMaybe<ImplicitState>>();
+         implicitExpressionStates = new Stack<ImplicitExpressionState>();
+         patterns = new Set<string>();
+      }
 
 		public Maybe<int> ExceptionIndex
 		{
@@ -68,301 +68,274 @@ namespace Kagami.Library.Parsers
 			set => exceptionIndex = value;
 		}
 
-		public void SetExceptionIndex() => exceptionIndex = index.Some();
+      public void SetExceptionIndex() => exceptionIndex = index.Some();
 
-		public Statement[] Statements() => statements.ToArray();
+      public Statement[] Statements() => statements.ToArray();
 
-		public void BeginTransaction()
-		{
-			indexTransaction.Begin(index);
-			tokenTransaction.Begin();
-		}
+      public void BeginTransaction()
+      {
+         indexTransaction.Begin(index);
+         tokenTransaction.Begin();
+      }
 
-		public void RollBackTransaction()
-		{
-			index = indexTransaction.RollBack();
-			tokenTransaction.RollBack();
-		}
+      public void RollBackTransaction()
+      {
+         index = indexTransaction.RollBack();
+         tokenTransaction.RollBack();
+      }
 
-		public void CommitTransaction()
-		{
-			indexTransaction.Commit();
-			tokenTransaction.Commit();
-		}
+      public void CommitTransaction()
+      {
+         indexTransaction.Commit();
+         tokenTransaction.Commit();
+      }
 
-		public IMatched<Unit> RollBackTransactionIf<T>(bool enabled, IMatched<T> previousMatch)
-		{
-			if (enabled && !previousMatch.IsMatched)
-			{
-				RollBackTransaction();
-			}
+      public IMatched<Unit> RollBackTransactionIf<T>(bool enabled, IMatched<T> previousMatch)
+      {
+         if (enabled && !previousMatch.IsMatched)
+         {
+            RollBackTransaction();
+         }
 
-			return previousMatch.Map(t => Unit.Value);
-		}
+         return previousMatch.Map(_ => Unit.Value);
+      }
 
-		public void PushStatements()
-		{
-			statementStack.Push(statements);
-			statements = new List<Statement>();
-		}
+      public void PushStatements()
+      {
+         statementStack.Push(statements);
+         statements = new List<Statement>();
+      }
 
-		public IResult<List<Statement>> PopStatements() => tryTo(() =>
-		{
-			var returnStatements = statements;
-			statements = new List<Statement>(statementStack.Pop());
-			return returnStatements;
-		});
+      public IResult<List<Statement>> PopStatements() => tryTo(() =>
+      {
+         var returnStatements = statements;
+         statements = new List<Statement>(statementStack.Pop());
+         return returnStatements;
+      });
 
-		public bool More => index < source.Length;
+      public bool More => index < source.Length;
 
-		public void AddStatement(Statement statement)
-		{
-			statement.Index = index;
+      public void AddStatement(Statement statement)
+      {
+         statement.Index = index;
 
-			if (ForExpression.If(out var tuple))
-			{
-				var (fieldName, expression) = tuple;
-				statements.Add(new For2(new PlaceholderSymbol("+" + fieldName), expression, new Block(statement)));
-				ForExpression = none<(string, Expression)>();
-			}
-			else
-			{
-				statements.Add(statement);
-			}
-		}
+         if (ForExpression.If(out var tuple))
+         {
+            var (fieldName, expression) = tuple;
+            statements.Add(new For(new PlaceholderSymbol("+" + fieldName), expression, new Block(statement)));
+            ForExpression = none<(string, Expression)>();
+         }
+         else
+         {
+            statements.Add(statement);
+         }
+      }
 
-		public void AddToken(int index, int length, Color color, string text = "")
-		{
-			var token = new Token(index, length, text);
-			setTokenColor(token, color);
+      public void AddToken(int index, int length, Color color, string text = "")
+      {
+         var token = new Token(index, length, text);
+         setTokenColor(token, color);
 
-			tokens.Add(token);
-		}
+         tokens.Add(token);
+      }
 
-		public void AddToken(Color color, int length = 1, string text = "") => AddToken(index, length, color, text);
+      public void AddToken(Color color, int length = 1, string text = "") => AddToken(index, length, color, text);
 
-		public string Indentation => indentation;
+      public string Indentation => indentation;
 
-		public IMatched<Unit> Advance()
-		{
-			SkipEndOfLine();
-			if (Scan($"{Indentation.FriendlyString()} /(/s+)").If(out var newIndentation, out var anyException))
-			{
-				PushIndentation(newIndentation);
-				return Unit.Matched();
-			}
-			else if (anyException.If(out var exception))
-			{
-				exceptionIndex = index.Some();
-				return failedMatch<Unit>(exception);
-			}
-			else
-			{
-				exceptionIndex = index.Some();
-				return failedMatch<Unit>(badIndentation());
-			}
-		}
+      public IMatched<Unit> Advance()
+      {
+         SkipEndOfLine();
+         if (Scan($"{Indentation.FriendlyString()} /(/s+)").If(out var newIndentation, out var anyException))
+         {
+            PushIndentation(newIndentation);
+            return Unit.Matched();
+         }
+         else if (anyException.If(out var exception))
+         {
+            exceptionIndex = index.Some();
+            return failedMatch<Unit>(exception);
+         }
+         else
+         {
+            exceptionIndex = index.Some();
+            return failedMatch<Unit>(badIndentation());
+         }
+      }
 
-		public void Regress() => PopIndentation();
+      public void Regress() => PopIndentation();
 
-		public IMatched<Unit> Retreat()
-		{
-			try
-			{
-				PopIndentation();
-				return Unit.Matched();
-			}
-			catch (Exception exception)
-			{
-				return failedMatch<Unit>(exception);
-			}
-		}
+      public IMatched<Unit> Retreat()
+      {
+         try
+         {
+            PopIndentation();
+            return Unit.Matched();
+         }
+         catch (Exception exception)
+         {
+            return failedMatch<Unit>(exception);
+         }
+      }
 
-		public void PushIndentation(string text)
-		{
-			indentations.Push(indentation);
-			indentation = text;
-		}
+      public void PushIndentation(string text)
+      {
+         indentations.Push(indentation);
+         indentation = text;
+      }
 
-		public void PopIndentation() => indentation = indentations.Pop();
+      public void PopIndentation() => indentation = indentations.Pop();
 
-		public int Index => index;
+      public int Index => index;
 
-		public string Source => source;
+      public string Source => source;
 
-		public string CurrentSource => source.Drop(index);
+      public string CurrentSource => source.Drop(index);
 
-		public string RealizePattern(string pattern)
-		{
-			var previous = indentations.Count > 0 ? indentations.Peek() : "";
-			return pattern.Replace(("|i|", indentation), ("|i-|", previous), ("|s|", "[' ' /t]*"), ("|s+|", "[' ' /t]+"),
-				("|tl|", "[/t /r /n]*"), ("|tl+|", "[/t /r /n]+"));
-		}
+      public string RealizePattern(string pattern)
+      {
+         var previous = indentations.Count > 0 ? indentations.Peek() : "";
+         return pattern.Replace(("|i|", indentation), ("|i-|", previous), ("|s|", "[' ' /t]*"), ("|s+|", "[' ' /t]+"),
+            ("|tl|", "[/t /r /n]*"), ("|tl+|", "[/t /r /n]+"));
+      }
 
-		public IEnumerator<Statement> GetEnumerator() => statements.GetEnumerator();
+      public IEnumerator<Statement> GetEnumerator() => statements.GetEnumerator();
 
-		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+      IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-		public void Move(int length) => index += length;
+      public void Move(int length) => index += length;
 
-		public void Move(Token[] tokens)
-		{
-			if (tokens.Length != 0)
-			{
-				Move(tokens[0].Length);
-			}
-		}
+      public void Move(Token[] tokens)
+      {
+         if (tokens.Length != 0)
+         {
+            Move(tokens[0].Length);
+         }
+      }
 
-		public Token[] Tokens => tokens.ToArray();
+      public Token[] Tokens => tokens.ToArray();
 
-		void setTokenColor(Token token, Color color)
-		{
-			switch (token.Text.Trim())
-			{
-				case "(":
-				case "[":
-					if (token.Length == 0)
-					{
-						token.Color = Color.Structure;
-					}
-					else
-					{
-						token.Color = color;
-					}
+      protected void setTokenColor(Token token, Color color) => token.Color = token.Text.Trim() switch
+      {
+         "(" => token.Length == 0 ? Color.Structure : color,
+         "[" => token.Length == 0 ? Color.Structure : color,
+         ")" => token.Length == 0 ? Color.Structure : color,
+         "]" => token.Length == 0 ? Color.Structure : color,
+         "," => Color.Structure,
+         _ => color
+      };
 
-					break;
-				case ")":
-				case "]":
-					if (token.Length == 0)
-					{
-						token.Color = Color.Structure;
-					}
-					else
-					{
-						token.Color = color;
-					}
+      public IMatched<string> Scan(string pattern, params Color[] colors)
+      {
+         return CurrentSource.MatchOne(RealizePattern(pattern)).Map(m =>
+         {
+            var groupArray = m.Groups.Slice(1, m.Groups.Length - 1);
+            for (var i = 0; i < Math.Min(groupArray.Length, colors.Length); i++)
+            {
+               var length = groupArray[i].Length;
+               AddToken(colors[i], length, groupArray[i].Text);
+               Move(length);
+            }
 
-					break;
-				case ",":
-					token.Color = Color.Structure;
-					break;
-				default:
-					token.Color = color;
-					break;
-			}
-		}
+            return m.Text.Matched();
+         });
+      }
 
-		public IMatched<string> Scan(string pattern, params Color[] colors)
-		{
-			return CurrentSource.MatchOne(RealizePattern(pattern)).Map(m =>
-			{
-				var groupArray = m.Groups.Slice(1, m.Groups.Length - 1);
-				for (var i = 0; i < Math.Min(groupArray.Length, colors.Length); i++)
-				{
-					var length = groupArray[i].Length;
-					AddToken(colors[i], length, groupArray[i].Text);
-					Move(length);
-				}
+      public IMatched<string> SkipEndOfLine() => Scan("/(^ /r /n | ^ /r | ^ /n)", Color.Whitespace);
 
-				return m.Text.Matched();
-			});
-		}
+      public void Colorize(Token[] tokens, params Color[] colors)
+      {
+         for (var i = 0; i < colors.Length; i++)
+         {
+            setTokenColor(tokens[i + 1], colors[i]);
+         }
 
-		public IMatched<string> SkipEndOfLine() => Scan("/(^ /r /n | ^ /r | ^ /n)", Color.Whitespace);
+         foreach (var token in tokens.Skip(1))
+         {
+            this.tokens.Add(token);
+         }
 
-		public void Colorize(Token[] tokens, params Color[] colors)
-		{
-			for (var i = 0; i < colors.Length; i++)
-			{
-				setTokenColor(tokens[i + 1], colors[i]);
-			}
+         Move(tokens);
+      }
 
-			foreach (var token in tokens.Skip(1))
-			{
-				this.tokens.Add(token);
-			}
+      public void AddSymbol(Symbol symbol) => postGenerationSymbols.Add(symbol);
 
-			Move(tokens);
-		}
+      public List<Symbol> PostGenerationSymbols => postGenerationSymbols;
 
-		public void AddSymbol(Symbol symbol) => postGenerationSymbols.Add(symbol);
+      public void UpdateStatement(int index, int length)
+      {
+         var count = statements.Count;
 
-		public List<Symbol> PostGenerationSymbols => postGenerationSymbols;
+         if (count > 0)
+         {
+            var statement = statements[count - 1];
+            statement.Index = index;
+            statement.Length = length;
+         }
+      }
 
-		public void UpdateStatement(int index, int length)
-		{
-			var count = statements.Count;
+      public Statement LastStatement => statements[statements.Count - 1];
 
-			if (count > 0)
-			{
-				var statement = statements[count - 1];
-				statement.Index = index;
-				statement.Length = length;
-			}
-		}
+      public IMatched<IMaybe<Expression>> getAnd()
+      {
+         var builder = new ExpressionBuilder(ExpressionFlags.OmitIf);
+         var parser = new IfAsAndParser(builder);
+         if (parser.Scan(this).If(out _, out var anyException))
+         {
+            if (builder.ToExpression().If(out var expression, out var exception))
+            {
+               return expression.Some().Matched();
+            }
+            else
+            {
+               return failedMatch<IMaybe<Expression>>(exception);
+            }
+         }
+         else if (anyException.If(out var exception))
+         {
+            return failedMatch<IMaybe<Expression>>(exception);
+         }
+         else
+         {
+            return none<Expression>().Matched();
+         }
+      }
 
-		public Statement LastStatement => statements[statements.Count - 1];
+      public void CreateYieldFlag() => yieldingStack.Push(false);
 
-		public IMatched<IMaybe<Expression>> getAnd()
-		{
-			var builder = new ExpressionBuilder(ExpressionFlags.OmitIf);
-			var parser = new IfAsAndParser(builder);
-			if (parser.Scan(this).If(out _, out var anyException))
-			{
-				if (builder.ToExpression().If(out var expression, out var exception))
-				{
-					return expression.Some().Matched();
-				}
-				else
-				{
-					return failedMatch<IMaybe<Expression>>(exception);
-				}
-			}
-			else if (anyException.If(out var exception))
-			{
-				return failedMatch<IMaybe<Expression>>(exception);
-			}
-			else
-			{
-				return none<Expression>().Matched();
-			}
-		}
+      public void CreateReturnType() => returnTypesStack.Push(none<TypeConstraint>());
 
-		public void CreateYieldFlag() => yieldingStack.Push(false);
+      public void SetYieldFlag()
+      {
+         yieldingStack.Pop();
+         yieldingStack.Push(true);
+      }
 
-		public void CreateReturnType() => returnTypesStack.Push(none<TypeConstraint>());
+      public void SetReturnType(IMaybe<TypeConstraint> typeConstraint)
+      {
+         returnTypesStack.Pop();
+         returnTypesStack.Push(typeConstraint);
+      }
 
-		public void SetYieldFlag()
-		{
-			yieldingStack.Pop();
-			yieldingStack.Push(true);
-		}
+      public bool RemoveYieldFlag() => yieldingStack.Pop();
 
-		public void SetReturnType(IMaybe<TypeConstraint> typeConstraint)
-		{
-			returnTypesStack.Pop();
-			returnTypesStack.Push(typeConstraint);
-		}
+      public IMaybe<TypeConstraint> GetReturnType() => returnTypesStack.Peek();
 
-		public bool RemoveYieldFlag() => yieldingStack.Pop();
+      public void RemoveReturnType() => returnTypesStack.Pop();
 
-		public IMaybe<TypeConstraint> GetReturnType() => returnTypesStack.Peek();
+      public void RegisterDefExpression(string fieldName, Expression expression) => defExpressions[fieldName] = expression;
 
-		public void RemoveReturnType() => returnTypesStack.Pop();
+      public IMaybe<Expression> DefExpression(string fieldName) => defExpressions.Map(fieldName);
 
-		public void RegisterDefExpression(string fieldName, Expression expression) => defExpressions[fieldName] = expression;
+      public void RegisterMacro(Function function) => macros[function.Selector] = function;
 
-		public IMaybe<Expression> DefExpression(string fieldName) => defExpressions.Map(fieldName);
+      public IMaybe<Function> Macro(string fullFunctionName) => macros.Map(fullFunctionName);
 
-		public void RegisterMacro(Function function) => macros[function.Selector] = function;
+      public bool BlockFollows() => CurrentSource.IsMatch($"^ ':' (/r /n | /r | /n) '{indentation}' [' /t']+", multiline: true);
 
-		public IMaybe<Function> Macro(string fullFunctionName) => macros.Map(fullFunctionName);
+      //public IMaybe<ImplicitState> ImplicitState { get; set; } = none<ImplicitState>();
 
-		public bool BlockFollows() => CurrentSource.IsMatch($"^ ':' (/r /n | /r | /n) '{indentation}' [' /t']+", multiline: true);
-
-		//public IMaybe<ImplicitState> ImplicitState { get; set; } = none<ImplicitState>();
-
-		public IMaybe<(string, Expression)> ForExpression { get; set; } = none<(string, Expression)>();
+      public IMaybe<(string, Expression)> ForExpression { get; set; } = none<(string, Expression)>();
 
 /*
 		public IMaybe<(string, Symbol)> MapExpression { get; set; } = none<(string, Symbol)>();
@@ -370,9 +343,9 @@ namespace Kagami.Library.Parsers
 		public IMaybe<(string, Symbol)> IfExpression { get; set; } = none<(string, Symbol)>();
 */
 
-		public IMaybe<(string, Symbol)> LeftZipExpression { get; set; } = none<(string, Symbol)>();
+      public IMaybe<(string, Symbol)> LeftZipExpression { get; set; } = none<(string, Symbol)>();
 
-		public IMaybe<(string, Symbol)> RightZipExpression { get; set; } = none<(string, Symbol)>();
+      public IMaybe<(string, Symbol)> RightZipExpression { get; set; } = none<(string, Symbol)>();
 
 /*
 		public IMaybe<(bool, Symbol)> LeftFoldExpression { get; set; } = none<(bool, Symbol)>();
@@ -382,42 +355,42 @@ namespace Kagami.Library.Parsers
 		public IMaybe<(string, Symbol)> BindExpression { get; set; } = none<(string, Symbol)>();
 */
 
-		public void BeginPrefixCode() => prefixCodes.Push(none<IPrefixCode>());
+      public void BeginPrefixCode() => prefixCodes.Push(none<IPrefixCode>());
 
-		public IMaybe<IPrefixCode> PrefixCode
-		{
-			get => prefixCodes.Peek();
-			set
-			{
-				_ = prefixCodes.Pop();
-				prefixCodes.Push(value);
-			}
-		}
+      public IMaybe<IPrefixCode> PrefixCode
+      {
+         get => prefixCodes.Peek();
+         set
+         {
+            _ = prefixCodes.Pop();
+            prefixCodes.Push(value);
+         }
+      }
 
-		public void EndPrefixCode() => prefixCodes.Pop();
+      public void EndPrefixCode() => prefixCodes.Pop();
 
-		public void BeginImplicitState() => implicitStates.Push(none<ImplicitState>());
+      public void BeginImplicitState() => implicitStates.Push(none<ImplicitState>());
 
-		public IMaybe<ImplicitState> ImplicitState
-		{
-			get => implicitStates.Peek();
-			set
-			{
-				_ = implicitStates.Pop();
-				implicitStates.Push(value);
-			}
-		}
+      public IMaybe<ImplicitState> ImplicitState
+      {
+         get => implicitStates.Peek();
+         set
+         {
+            _ = implicitStates.Pop();
+            implicitStates.Push(value);
+         }
+      }
 
-		public void EndImplicitState() => implicitStates.Pop();
+      public void EndImplicitState() => implicitStates.Pop();
 
-		public void BeginImplicitExpressionState() => implicitExpressionStates.Push(new ImplicitExpressionState());
+      public void BeginImplicitExpressionState() => implicitExpressionStates.Push(new ImplicitExpressionState());
 
-		public ImplicitExpressionState ImplicitExpressionState => implicitExpressionStates.Peek();
+      public ImplicitExpressionState ImplicitExpressionState => implicitExpressionStates.Peek();
 
-		public void EndImplicitExpressionState() => implicitExpressionStates.Pop();
+      public void EndImplicitExpressionState() => implicitExpressionStates.Pop();
 
-		public void RegisterPattern(string patternName) => patterns.Add(patternName);
+      public void RegisterPattern(string patternName) => patterns.Add(patternName);
 
-		public bool ContainsPattern(string patternName) => patternName.Contains(patternName);
-	}
+      public bool ContainsPattern(string patternName) => patternName.Contains(patternName);
+   }
 }

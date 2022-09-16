@@ -6,32 +6,25 @@ using static Kagami.Library.Operations.NumericFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct Byte : IObject, INumeric, IObjectCompare, IComparable<Byte>, IEquatable<Byte>, IFormattable, IComparable
+   public readonly struct Byte : IObject, INumeric, IObjectCompare, IComparable<Byte>, IEquatable<Byte>, IFormattable, IComparable
    {
-      public static implicit operator Byte(byte value) => new Byte(value);
+      public static implicit operator Byte(byte value) => new(value);
 
       public static IObject ByteObject(byte value) => new Byte(value);
 
-      byte value;
+      private readonly byte value;
 
       public Byte(byte value) : this() => this.value = value;
 
       public byte Value => value;
 
-      public (INumeric, INumeric) Compatible(INumeric obj)
+      public (INumeric, INumeric) Compatible(INumeric obj) => obj.ClassName switch
       {
-         switch (obj.ClassName)
-         {
-            case "Int":
-               return (ToInt(), obj.ToInt());
-            case "Float":
-               return (ToFloat(), obj.ToFloat());
-            case "Byte":
-               return (this, obj.ToByte());
-            default:
-               return (this, obj.ToByte());
-         }
-      }
+         "Int" => (ToInt(), obj.ToInt()),
+         "Float" => (ToFloat(), obj.ToFloat()),
+         "Byte" => (this, obj.ToByte()),
+         _ => (this, obj.ToByte())
+      };
 
       public string ClassName => "Byte";
 
@@ -69,7 +62,7 @@ namespace Kagami.Library.Objects
 
       public INumeric ToComplex() => (Complex)AsComplex();
 
-      public System.Numerics.Complex AsComplex() => new System.Numerics.Complex(value, 0);
+      public System.Numerics.Complex AsComplex() => new(value, 0);
 
       public bool IsComplex => false;
 
@@ -81,7 +74,7 @@ namespace Kagami.Library.Objects
 
       public String ZFill(int count) => zfill(value.ToString(), count);
 
-	   public IObject Raise(INumeric power) => raise(this, power);
+      public IObject Raise(INumeric power) => raise(this, power);
 
       public string AsString => ((char)value).ToString();
 
@@ -93,7 +86,7 @@ namespace Kagami.Library.Objects
 
       public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
-	   public bool IsTrue => value > 0;
+      public bool IsTrue => value > 0;
 
       public int Compare(IObject obj) => compatibleCompare(this, obj);
 

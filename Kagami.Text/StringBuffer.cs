@@ -7,7 +7,7 @@ namespace Kagami.Text
 {
    public class StringBuffer : IObject
    {
-      StringBuilder builder;
+      protected StringBuilder builder;
 
       public StringBuffer() => builder = new StringBuilder();
 

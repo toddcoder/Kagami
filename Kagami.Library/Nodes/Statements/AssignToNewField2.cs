@@ -5,8 +5,8 @@ namespace Kagami.Library.Nodes.Statements
 {
    public class AssignToNewField2 : Statement
    {
-      Expression comparisand;
-      Expression expression;
+      protected Expression comparisand;
+      protected Expression expression;
 
       public AssignToNewField2(Expression comparisand, Expression expression)
       {

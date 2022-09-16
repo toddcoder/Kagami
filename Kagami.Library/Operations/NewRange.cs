@@ -10,27 +10,23 @@ namespace Kagami.Library.Operations
 {
    public class NewRange : TwoOperandOperation
    {
-      bool inclusive;
+      protected bool inclusive;
 
       public NewRange(bool inclusive) => this.inclusive = inclusive;
 
       public override IMatched<IObject> Execute(Machine machine, IObject x, IObject y)
       {
-         switch (x)
+         return x switch
          {
-            case IRangeItem start when y is Any:
-               return new Range(start, new Infinity(true), inclusive).Matched<IObject>();
-            case IRangeItem start when y is IObjectCompare stop:
-               return new Range(start, stop, inclusive).Matched<IObject>();
-            case Range range when y is Int increment:
-               return new Range(range, increment).Matched<IObject>();
-            case UserObject userObject when y is UserObject stop:
-               return new Range(new UserRangeItem(userObject), new UserCompare(stop), inclusive).Matched<IObject>();
-            default:
-               return failedMatch<IObject>(incompatibleClasses(x, "RangeItem"));
-         }
+            IRangeItem start when y is Any => new Range(start, new Infinity(true), inclusive).Matched<IObject>(),
+            IRangeItem start when y is IObjectCompare stop => new Range(start, stop, inclusive).Matched<IObject>(),
+            Range range when y is Int increment => new Range(range, increment).Matched<IObject>(),
+            UserObject userObject when y is UserObject stop => new Range(new UserRangeItem(userObject), new UserCompare(stop), inclusive)
+               .Matched<IObject>(),
+            _ => failedMatch<IObject>(incompatibleClasses(x, "RangeItem"))
+         };
       }
 
-      public override string ToString() => (StringStream)"new.range(" / inclusive.Extend("inclusive","exclusive") / ")";
+      public override string ToString() => (StringStream)"new.range(" / inclusive.Extend("inclusive", "exclusive") / ")";
    }
 }

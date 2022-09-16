@@ -6,7 +6,7 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class LongSymbol : Symbol, IConstant
    {
-      BigInteger value;
+      protected BigInteger value;
 
       public LongSymbol(BigInteger value) => this.value = value;
 

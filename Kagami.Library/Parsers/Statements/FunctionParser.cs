@@ -14,6 +14,11 @@ namespace Kagami.Library.Parsers.Statements
 {
    public class FunctionParser : StatementParser
    {
+      public FunctionParser()
+      {
+         TraitName = "";
+      }
+
       public override string Pattern => $"^ /('override' /s+)? /('func' | 'op' | 'def') /(/s+) (/({REGEX_CLASS_GETTING}) /'.')?" +
          $" /({REGEX_FUNCTION_NAME}) /'('?";
 
@@ -104,18 +109,11 @@ namespace Kagami.Library.Parsers.Statements
          }
       }
 
-      public string TraitName { get; set; } = "";
+      public string TraitName { get; set; }
 
       public static IMatched<Parameters> GetAnyParameters(bool needsParameters, ParseState state)
       {
-         if (needsParameters)
-         {
-            return getParameters(state);
-         }
-         else
-         {
-            return Parameters.Empty.Matched();
-         }
+         return needsParameters ? getParameters(state) : Parameters.Empty.Matched();
       }
 
       protected static IMatched<Function> getCurriedFunction(ParseState state, string functionName, Parameters firstParameters,
@@ -177,7 +175,7 @@ namespace Kagami.Library.Parsers.Statements
 
       protected static LambdaSymbol getLambda(Parameters parameters, LambdaSymbol previousLambdaSymbol)
       {
-         return new LambdaSymbol(parameters, new Block(new Return(new Expression(previousLambdaSymbol), none<TypeConstraint>())));
+         return new(parameters, new Block(new Return(new Expression(previousLambdaSymbol), none<TypeConstraint>())));
       }
 
       protected static IMatched<Unit> getMatchFunction(ParseState state, string functionName, Parameters parameters, bool overriding,

@@ -8,8 +8,8 @@ namespace Kagami.Drawing
 {
    public class Size : IObject
    {
-      IObject width;
-      IObject height;
+      protected IObject width;
+      protected IObject height;
 
       public Size(IObject width, IObject height)
       {

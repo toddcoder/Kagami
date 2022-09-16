@@ -9,26 +9,27 @@ namespace Kagami.Library.Nodes.Statements
 {
    public class AssignToNewField : Statement
    {
-      bool mutable;
-      string fieldName;
-      Expression expression;
-	   IMaybe<TypeConstraint> typeConstraint;
+      protected bool mutable;
+      protected string fieldName;
+      protected Expression expression;
+      protected IMaybe<TypeConstraint> typeConstraint;
 
       public AssignToNewField(bool mutable, string fieldName, Expression expression, IMaybe<TypeConstraint> typeConstraint)
       {
          this.mutable = mutable;
          this.fieldName = fieldName;
          this.expression = expression;
-	      this.typeConstraint = typeConstraint;
+         this.typeConstraint = typeConstraint;
       }
 
-	   public AssignToNewField(bool mutable, string fieldName, Expression expression)
-	   {
-		   this.mutable = mutable;
-		   this.fieldName = fieldName;
-		   this.expression = expression;
-		   typeConstraint = none<TypeConstraint>();
-	   }
+      public AssignToNewField(bool mutable, string fieldName, Expression expression)
+      {
+         this.mutable = mutable;
+         this.fieldName = fieldName;
+         this.expression = expression;
+
+         typeConstraint = none<TypeConstraint>();
+      }
 
       public bool Mutable => mutable;
 

@@ -3,9 +3,9 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct Class : IObject
+   public readonly struct Class : IObject
    {
-      string className;
+      private readonly string className;
 
       public Class(string className) : this() => this.className = className;
 
@@ -21,6 +21,6 @@ namespace Kagami.Library.Objects
 
       public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
-	   public bool IsTrue => true;
+      public bool IsTrue => true;
    }
 }

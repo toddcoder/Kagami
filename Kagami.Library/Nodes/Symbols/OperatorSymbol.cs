@@ -4,7 +4,7 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class OperatorSymbol : Symbol
    {
-      string operatorName;
+      protected string operatorName;
 
       public OperatorSymbol(string operatorName) => this.operatorName = operatorName;
 

@@ -4,8 +4,8 @@ namespace Kagami.Library.Objects
 {
    public class SkipAction : IStreamAction
    {
-      int count;
-      int index;
+      protected int count;
+      protected int index;
 
       public SkipAction(int count)
       {
@@ -13,27 +13,17 @@ namespace Kagami.Library.Objects
          index = -1;
       }
 
-      public ILazyStatus Next(ILazyStatus status)
-      {
-         if (++index < count)
-         {
-	         return new Skipped();
-         }
-         else
-         {
-	         return status;
-         }
-      }
+      public ILazyStatus Next(ILazyStatus status) => ++index < count ? new Skipped() : status;
 
       public IEnumerable<IObject> Execute(IIterator iterator)
       {
          var i = -1;
          foreach (var value in iterator.List())
          {
-	         if (++i >= count)
-	         {
-		         yield return value;
-	         }
+            if (++i >= count)
+            {
+               yield return value;
+            }
          }
       }
 

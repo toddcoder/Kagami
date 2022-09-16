@@ -14,8 +14,8 @@ namespace Kagami.Library.Classes
          messageNumberMessages();
          compareMessages();
 
-         messages["real".get()] = (obj, msg) => function<Complex>(obj, c => c.Real);
-         messages["imaginary".get()] = (obj, msg) => function<Complex>(obj, c => c.Imaginary);
+         messages["real".get()] = (obj, _) => function<Complex>(obj, c => c.Real);
+         messages["imaginary".get()] = (obj, _) => function<Complex>(obj, c => c.Imaginary);
       }
 
       public override bool IsNumeric => true;

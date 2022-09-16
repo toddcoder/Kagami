@@ -7,7 +7,7 @@ namespace Kagami.Library.Operations
 {
    public class Advance : Operation
    {
-      int increment;
+      protected int increment;
 
       public Advance(int increment) => this.increment = increment;
 

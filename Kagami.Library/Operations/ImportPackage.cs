@@ -14,7 +14,8 @@ namespace Kagami.Library.Operations
 {
    public class ImportPackage : Operation
    {
-      static AutoHash<string, Assembly> assemblyCache;
+      // ReSharper disable once CollectionNeverUpdated.Global
+      protected static AutoHash<string, Assembly> assemblyCache;
 
       static ImportPackage()
       {
@@ -26,7 +27,7 @@ namespace Kagami.Library.Operations
          }, true);
       }
 
-      string packageName;
+      protected string packageName;
 
       public ImportPackage(string packageName) => this.packageName = packageName;
 
@@ -48,7 +49,7 @@ namespace Kagami.Library.Operations
          var type = assembly.GetType($"Kagami.{ns}.{packageClassName}");
          if (type is null)
          {
-	         return failedMatch<IObject>(classNotFound(ns));
+            return failedMatch<IObject>(classNotFound(ns));
          }
          else
          {

@@ -11,9 +11,9 @@ namespace Kagami.Library.Classes
       {
          base.RegisterMessages();
 
-         messages["text".get()] = (obj, msg) => function<RegexGroup>(obj, g => g.Text);
-         messages["index".get()] = (obj, msg) => function<RegexGroup>(obj, g => g.Index);
-         messages["length".get()] = (obj, msg) => function<RegexGroup>(obj, g => g.Length);
+         messages["text".get()] = (obj, _) => function<RegexGroup>(obj, g => g.Text);
+         messages["index".get()] = (obj, _) => function<RegexGroup>(obj, g => g.Index);
+         messages["length".get()] = (obj, _) => function<RegexGroup>(obj, g => g.Length);
       }
    }
 }

@@ -4,7 +4,7 @@ namespace Kagami.Library.Parsers.Expressions
 {
    public class ConstantsParser : MultiParser
    {
-      ExpressionBuilder builder;
+      protected ExpressionBuilder builder;
 
       public ConstantsParser(ExpressionBuilder builder) => this.builder = builder;
 

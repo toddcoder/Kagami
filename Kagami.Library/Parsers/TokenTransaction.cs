@@ -4,8 +4,8 @@ namespace Kagami.Library.Parsers
 {
    public class TokenTransaction
    {
-      List<Token> tokens;
-      Stack<int> lengths;
+      protected List<Token> tokens;
+      protected Stack<int> lengths;
 
       public TokenTransaction(List<Token> tokens)
       {

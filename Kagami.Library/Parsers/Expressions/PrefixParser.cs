@@ -4,7 +4,7 @@ namespace Kagami.Library.Parsers.Expressions
 {
    public class PrefixParser : MultiParser
    {
-      ExpressionBuilder builder;
+      protected ExpressionBuilder builder;
 
       public PrefixParser(ExpressionBuilder builder) => this.builder = builder;
 
@@ -18,6 +18,7 @@ namespace Kagami.Library.Parsers.Expressions
             yield return new NotParser(builder);
             yield return new RangePrefixParser(builder);
             yield return new BNotParser(builder);
+            yield return new TakeOperatorParser(builder);
          }
       }
    }

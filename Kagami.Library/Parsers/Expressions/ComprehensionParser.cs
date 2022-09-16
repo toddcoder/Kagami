@@ -52,7 +52,7 @@ namespace Kagami.Library.Parsers.Expressions
                stack.Push(item);
             }
 
-            For2 forStatement;
+            For forStatement;
             var images = new StringBuilder();
             if (stack.Count > 0)
             {
@@ -65,7 +65,7 @@ namespace Kagami.Library.Parsers.Expressions
                   block = new Block(new If(boolean, block));
                }
 
-               forStatement = new For2(symbol, source, block);
+               forStatement = new For(symbol, source, block);
             }
             else
             {
@@ -82,7 +82,7 @@ namespace Kagami.Library.Parsers.Expressions
                   block = new Block(new If(boolean, block));
                }
 
-               forStatement = new For2(symbol, source, block);
+               forStatement = new For(symbol, source, block);
             }
 
             builder.Clear();

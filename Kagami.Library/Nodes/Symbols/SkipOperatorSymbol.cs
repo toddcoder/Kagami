@@ -2,20 +2,18 @@
 
 namespace Kagami.Library.Nodes.Symbols
 {
-   public class MapOperatorSymbol : Symbol
+   public class SkipOperatorSymbol : Symbol
    {
-      LambdaSymbol lambdaSymbol;
-
-      public MapOperatorSymbol(LambdaSymbol lambdaSymbol) => this.lambdaSymbol = lambdaSymbol;
-
       public override void Generate(OperationsBuilder builder)
       {
-         lambdaSymbol.Generate(builder);
-         builder.SendMessage("map()", 1);
+         builder.PushNone();
+         builder.SkipTake();
       }
 
       public override Precedence Precedence => Precedence.PostfixOperator;
 
       public override Arity Arity => Arity.Postfix;
+
+      public override string ToString() => ";*";
    }
 }

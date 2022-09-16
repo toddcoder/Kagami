@@ -5,8 +5,8 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class BindingSymbol : Symbol
    {
-      string name;
-      Symbol value;
+      protected string name;
+      protected Symbol value;
 
       public BindingSymbol(string name, Symbol value)
       {
@@ -29,7 +29,6 @@ namespace Kagami.Library.Nodes.Symbols
       }
 
       public override Precedence Precedence => Precedence.KeyValue;
-
 
       public override Arity Arity => Arity.Binary;
 

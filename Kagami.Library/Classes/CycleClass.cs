@@ -5,21 +5,21 @@ using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Classes
 {
-	public class CycleClass : BaseClass, ICollectionClass
-	{
-		public override string Name => "Cycle";
+   public class CycleClass : BaseClass, ICollectionClass
+   {
+      public override string Name => "Cycle";
 
-		public override void RegisterMessages()
-		{
-			base.RegisterMessages();
+      public override void RegisterMessages()
+      {
+         base.RegisterMessages();
 
-			collectionMessages();
+         collectionMessages();
 
-			messages["items".get()] = (obj, msg) => function<Cycle>(obj, c => c.Items);
-		}
+         messages["items".get()] = (obj, _) => function<Cycle>(obj, c => c.Items);
+      }
 
-		public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
+      public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
 
-		public IObject Revert(IEnumerable<IObject> list) => new Tuple(list.ToArray());
-	}
+      public IObject Revert(IEnumerable<IObject> list) => new Tuple(list.ToArray());
+   }
 }

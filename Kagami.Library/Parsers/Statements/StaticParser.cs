@@ -11,7 +11,7 @@ namespace Kagami.Library.Parsers.Statements
 {
    public class StaticParser : StatementParser
    {
-      ClassBuilder classBuilder;
+      protected ClassBuilder classBuilder;
 
       public StaticParser(ClassBuilder classBuilder) => this.classBuilder = classBuilder;
 
@@ -32,7 +32,9 @@ namespace Kagami.Library.Parsers.Statements
                var classItemsParser = new ClassItemsParser(metaClassBuilder);
                while (state.More)
                {
-                  if (classItemsParser.Scan(state).If(out _, out var anyException)) { }
+                  if (classItemsParser.Scan(state).If(out _, out var anyException))
+                  {
+                  }
                   else if (anyException.If(out var exception))
                   {
                      return failedMatch<Unit>(exception);

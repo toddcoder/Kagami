@@ -30,11 +30,11 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>7.1</LangVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Core">
-      <HintPath>..\..\Libraries\Core.dll</HintPath>
+      <HintPath>..\References\Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -52,14 +52,12 @@
     <Compile Include="Classes\ArgumentsClass.cs" />
     <Compile Include="Classes\ArrayClass.cs" />
     <Compile Include="Classes\BaseClass.cs" />
-    <Compile Include="Classes\BindingClass.cs" />
     <Compile Include="Classes\BooleanClass.cs" />
     <Compile Include="Classes\ByteArrayClass.cs" />
     <Compile Include="Classes\ByteClass.cs" />
     <Compile Include="Classes\CharClass.cs" />
     <Compile Include="Classes\ClassFunctions.cs" />
     <Compile Include="Classes\CollectionClass.cs" />
-    <Compile Include="Classes\CollectionProxyClass.cs" />
     <Compile Include="Classes\ComplexClass.cs" />
     <Compile Include="Classes\ConstructorClass.cs" />
     <Compile Include="Classes\CycleClass.cs" />
@@ -82,8 +80,6 @@
     <Compile Include="Classes\IntervalClass.cs" />
     <Compile Include="Classes\IParse.cs" />
     <Compile Include="Classes\IteratorClass.cs" />
-    <Compile Include="Classes\IType.cs" />
-    <Compile Include="Classes\KeyCollectingHash.cs" />
     <Compile Include="Classes\KeyValueClass.cs" />
     <Compile Include="Classes\LambdaClass.cs" />
     <Compile Include="Classes\LazyClass.cs" />
@@ -113,7 +109,6 @@
     <Compile Include="Classes\SelectorHash.cs" />
     <Compile Include="Classes\SelectorSet.cs" />
     <Compile Include="Classes\SetClass.cs" />
-    <Compile Include="Classes\Signature.cs" />
     <Compile Include="Classes\SkipTakeClass.cs" />
     <Compile Include="Classes\SliceClass.cs" />
     <Compile Include="Classes\SomeClass.cs" />
@@ -122,7 +117,6 @@
     <Compile Include="Classes\SuccessClass.cs" />
     <Compile Include="Classes\SymbolClass.cs" />
     <Compile Include="Classes\TextFindingClass.cs" />
-    <Compile Include="Classes\TraitClass.cs" />
     <Compile Include="Classes\TupleClass.cs" />
     <Compile Include="Classes\TypeConstraintClass.cs" />
     <Compile Include="Classes\UnassignedClass.cs" />
@@ -166,7 +160,6 @@
     <Compile Include="Nodes\Statements\Exit.cs" />
     <Compile Include="Nodes\Statements\ExpressionStatement.cs" />
     <Compile Include="Nodes\Statements\For.cs" />
-    <Compile Include="Nodes\Statements\For2.cs" />
     <Compile Include="Nodes\Statements\Function.cs" />
     <Compile Include="Nodes\Statements\If.cs" />
     <Compile Include="Nodes\Statements\ConditionalAssign.cs" />
@@ -175,12 +168,9 @@
     <Compile Include="Nodes\Statements\MatchAssign.cs" />
     <Compile Include="Nodes\Statements\MatchFunction.cs" />
     <Compile Include="Nodes\Statements\MetaClass.cs" />
-    <Compile Include="Nodes\Statements\NoOp.cs" />
     <Compile Include="Nodes\Statements\OpenPackage.cs" />
     <Compile Include="Nodes\Statements\Pass.cs" />
     <Compile Include="Nodes\Statements\Pattern.cs" />
-    <Compile Include="Nodes\Statements\Print.cs" />
-    <Compile Include="Nodes\Statements\Put.cs" />
     <Compile Include="Nodes\Statements\Repeat.cs" />
     <Compile Include="Nodes\Statements\Return.cs" />
     <Compile Include="Nodes\Statements\ReturnNewObject.cs" />
@@ -208,8 +198,6 @@
     <Compile Include="Nodes\Symbols\ByteArraySymbol.cs" />
     <Compile Include="Nodes\Symbols\ByteSymbol.cs" />
     <Compile Include="Nodes\Symbols\CallSysFunctionSymbol0.cs" />
-    <Compile Include="Nodes\Symbols\CallSysFunctionSymbol1.cs" />
-    <Compile Include="Nodes\Symbols\CallSysFunctionSymbol2.cs" />
     <Compile Include="Nodes\Symbols\CharSymbol.cs" />
     <Compile Include="Nodes\Symbols\ClassSymbol.cs" />
     <Compile Include="Nodes\Symbols\CommaSymbol.cs" />
@@ -223,8 +211,6 @@
     <Compile Include="Nodes\Symbols\DateSymbol.cs" />
     <Compile Include="Nodes\Symbols\DelSymbol.cs" />
     <Compile Include="Nodes\Symbols\DictionarySymbol.cs" />
-    <Compile Include="Nodes\Symbols\DoesSymbol.cs" />
-    <Compile Include="Nodes\Symbols\DoSymbol.cs" />
     <Compile Include="Nodes\Symbols\EmptyArraySymbol.cs" />
     <Compile Include="Nodes\Symbols\EmptyDictionarySymbol.cs" />
     <Compile Include="Nodes\Symbols\EmptyListSymbol.cs" />
@@ -233,22 +219,18 @@
     <Compile Include="Nodes\Symbols\EqualSymbol.cs" />
     <Compile Include="Nodes\Symbols\Expression.cs" />
     <Compile Include="Nodes\Symbols\FieldSymbol.cs" />
-    <Compile Include="Nodes\Symbols\FilterSymbol.cs" />
     <Compile Include="Nodes\Symbols\FloatDivideSymbol.cs" />
     <Compile Include="Nodes\Symbols\FloatSymbol.cs" />
     <Compile Include="Nodes\Symbols\FoldSymbol.cs" />
     <Compile Include="Nodes\Symbols\FormatSymbol.cs" />
-    <Compile Include="Nodes\Symbols\GetSliceSymbol.cs" />
     <Compile Include="Nodes\Symbols\GreaterThanEqualSymbol.cs" />
     <Compile Include="Nodes\Symbols\GreaterThanSymbol.cs" />
     <Compile Include="Nodes\Symbols\ImplicitExpressionSymbol.cs" />
     <Compile Include="Nodes\Symbols\IPrefixCode.cs" />
     <Compile Include="Nodes\Symbols\IConstant.cs" />
-    <Compile Include="Nodes\Symbols\IfSomeNoneSymbol.cs" />
     <Compile Include="Nodes\Symbols\ImageSymbol.cs" />
     <Compile Include="Nodes\Symbols\IndexSetterSymbol.cs" />
     <Compile Include="Nodes\Symbols\IndexerSymbol.cs" />
-    <Compile Include="Nodes\Symbols\IndexSymbol.cs" />
     <Compile Include="Nodes\Symbols\InitializeParentConstructorSymbol.cs" />
     <Compile Include="Nodes\Symbols\InitializeSymbol.cs" />
     <Compile Include="Nodes\Symbols\InlineIfSymbol.cs" />
@@ -258,31 +240,22 @@
     <Compile Include="Nodes\Symbols\IntSymbol.cs" />
     <Compile Include="Nodes\Symbols\InvokeParentConstructorSymbol.cs" />
     <Compile Include="Nodes\Symbols\InvokeSymbol.cs" />
-    <Compile Include="Nodes\Symbols\IMakeComparisand.cs" />
-    <Compile Include="Nodes\Symbols\IsSymbol.cs" />
     <Compile Include="Nodes\Symbols\KeyValueSymbol.cs" />
     <Compile Include="Nodes\Symbols\IteratorSymbol.cs" />
     <Compile Include="Nodes\Symbols\LazySymbol.cs" />
     <Compile Include="Nodes\Symbols\ListSymbol.cs" />
     <Compile Include="Nodes\Symbols\LongSymbol.cs" />
     <Compile Include="Nodes\Symbols\MacroInvokeSymbol.cs" />
-    <Compile Include="Nodes\Symbols\MapOperatorBinarySymbol.cs" />
-    <Compile Include="Nodes\Symbols\MapOperatorSymbol.cs" />
     <Compile Include="Nodes\Symbols\MatchExpressionSymbol.cs" />
-    <Compile Include="Nodes\Symbols\MatchItemSymbol.cs" />
-    <Compile Include="Nodes\Symbols\MaybeSymbol.cs" />
     <Compile Include="Nodes\Symbols\MessageSymbol.cs" />
-    <Compile Include="Nodes\Symbols\MonadBindSymbol.cs" />
     <Compile Include="Nodes\Symbols\MutStringSymbol.cs" />
     <Compile Include="Nodes\Symbols\NewObjectSymbol.cs" />
-    <Compile Include="Nodes\Symbols\MatchMapSymbol.cs" />
     <Compile Include="Nodes\Symbols\MatchSymbol.cs" />
     <Compile Include="Nodes\Symbols\MaxSymbol.cs" />
     <Compile Include="Nodes\Symbols\MinSymbol.cs" />
     <Compile Include="Nodes\Symbols\ObjectSymbol.cs" />
     <Compile Include="Nodes\Symbols\OpenRangeSymbol.cs" />
     <Compile Include="Nodes\Symbols\OperatorSymbol.cs" />
-    <Compile Include="Nodes\Symbols\PeekSymbol.cs" />
     <Compile Include="Nodes\Symbols\PipelineSymbol.cs" />
     <Compile Include="Nodes\Symbols\PostfixInvokeSymbol.cs" />
     <Compile Include="Nodes\Symbols\LambdaSymbol.cs" />
@@ -305,23 +278,15 @@
     <Compile Include="Nodes\Symbols\RegexSymbol.cs" />
     <Compile Include="Nodes\Symbols\RemainderZeroSymbol.cs" />
     <Compile Include="Nodes\Symbols\RemainderSymbol.cs" />
-    <Compile Include="Nodes\Symbols\ResultSymbol.cs" />
     <Compile Include="Nodes\Symbols\SendBinaryMessageSymbol.cs" />
     <Compile Include="Nodes\Symbols\SendBindingMessageSymbol.cs" />
-    <Compile Include="Nodes\Symbols\SendOperatorMessage.cs" />
     <Compile Include="Nodes\Symbols\SendMessageSymbol.cs" />
     <Compile Include="Nodes\Symbols\SendPrefixMessage.cs" />
     <Compile Include="Nodes\Symbols\SeqSymbol.cs" />
-    <Compile Include="Nodes\Symbols\SetSliceSymbol.cs" />
     <Compile Include="Nodes\Symbols\SetSymbol.cs" />
-    <Compile Include="Nodes\Symbols\SkipTakeRestSymbol.cs" />
-    <Compile Include="Nodes\Symbols\SkipTakeRestInitSymbol.cs" />
-    <Compile Include="Nodes\Symbols\SkipTakeSymbol.cs" />
-    <Compile Include="Nodes\Symbols\SkipTakeInitSymbol.cs" />
-    <Compile Include="Nodes\Symbols\SkipTakeInitLiteralSymbol.cs" />
+    <Compile Include="Nodes\Symbols\SkipOperatorSymbol.cs" />
+    <Compile Include="Nodes\Symbols\SkipTakeOperatorPopSymbol.cs" />
     <Compile Include="Nodes\Symbols\SkipTakeItem.cs" />
-    <Compile Include="Nodes\Symbols\SkipTakeLiteralSymbol.cs" />
-    <Compile Include="Nodes\Symbols\SkipTakeOperatorSymbol.cs" />
     <Compile Include="Nodes\Symbols\SliceAssignSymbol.cs" />
     <Compile Include="Nodes\Symbols\SliceSymbol.cs" />
     <Compile Include="Nodes\Symbols\SomeSymbol.cs" />
@@ -336,12 +301,12 @@
     <Compile Include="Nodes\Symbols\SuperSymbol.cs" />
     <Compile Include="Nodes\Symbols\Symbol.cs" />
     <Compile Include="Nodes\Symbols\SymbolSymbol.cs" />
+    <Compile Include="Nodes\Symbols\TakeOperatorSymbol.cs" />
     <Compile Include="Nodes\Symbols\ThrowSymbol.cs" />
     <Compile Include="Nodes\Symbols\TrySymbol.cs" />
     <Compile Include="Nodes\Symbols\TypeConstraintSymbol.cs" />
     <Compile Include="Nodes\Symbols\UnitSymbol.cs" />
     <Compile Include="Nodes\Symbols\WhateverSymbol.cs" />
-    <Compile Include="Nodes\Symbols\WhenSymbol.cs" />
     <Compile Include="Nodes\Symbols\WhereSymbol.cs" />
     <Compile Include="Nodes\Symbols\ZipLambdaSymbol.cs" />
     <Compile Include="Nodes\Symbols\ZipOperatorSymbol.cs" />
@@ -363,7 +328,6 @@
     <Compile Include="Objects\Constructor.cs" />
     <Compile Include="Objects\Cycle.cs" />
     <Compile Include="Objects\CycleCollection.cs" />
-    <Compile Include="Objects\CycleIterator.cs" />
     <Compile Include="Objects\DataComparisand.cs" />
     <Compile Include="Objects\DataType.cs" />
     <Compile Include="Objects\Date.cs" />
@@ -429,11 +393,9 @@
     <Compile Include="Objects\NameValue.cs" />
     <Compile Include="Objects\None.cs" />
     <Compile Include="Objects\ObjectCollection.cs" />
-    <Compile Include="Objects\ObjectExtensions.cs" />
     <Compile Include="Objects\ObjectFunctions.cs" />
     <Compile Include="Objects\OpenRange.cs" />
     <Compile Include="Objects\OpenRangeCollection.cs" />
-    <Compile Include="Objects\OpenRangeIterator.cs" />
     <Compile Include="Objects\Pattern.cs" />
     <Compile Include="Objects\Placeholder.cs" />
     <Compile Include="Objects\Range.cs" />
@@ -443,7 +405,6 @@
     <Compile Include="Objects\Regex.cs" />
     <Compile Include="Objects\RegexGroup.cs" />
     <Compile Include="Objects\RegexMatch.cs" />
-    <Compile Include="Objects\RuntimeFunction.cs" />
     <Compile Include="Objects\RuntimeInvokable.cs" />
     <Compile Include="Objects\RuntimeLambda.cs" />
     <Compile Include="Objects\Selector.cs" />
@@ -454,6 +415,7 @@
     <Compile Include="Objects\SkipAction.cs" />
     <Compile Include="Objects\Skipped.cs" />
     <Compile Include="Objects\SkipTake.cs" />
+    <Compile Include="Objects\ISkipTakeable.cs" />
     <Compile Include="Objects\SkipUntilAction.cs" />
     <Compile Include="Objects\SkipWhileAction.cs" />
     <Compile Include="Objects\Slice.cs" />
@@ -500,7 +462,6 @@
     <Compile Include="Operations\Drop.cs" />
     <Compile Include="Operations\Dup.cs" />
     <Compile Include="Operations\Dup2.cs" />
-    <Compile Include="Operations\EmptyTuple.cs" />
     <Compile Include="Operations\EndOfLine.cs" />
     <Compile Include="Operations\Equal.cs" />
     <Compile Include="Operations\Failure.cs" />
@@ -567,7 +528,6 @@
     <Compile Include="Operations\OneBooleanOperation.cs" />
     <Compile Include="Operations\OneNumericOperation.cs" />
     <Compile Include="Operations\OneOperandOperation.cs" />
-    <Compile Include="Operations\OneTuple.cs" />
     <Compile Include="Operations\Operation.cs" />
     <Compile Include="Operations\OperationFunctions.cs" />
     <Compile Include="Operations\Operations.cs" />
@@ -603,6 +563,7 @@
     <Compile Include="Operations\SetErrorHandler.cs" />
     <Compile Include="Operations\SetFields.cs" />
     <Compile Include="Operations\SetX.cs" />
+    <Compile Include="Operations\SkipTake.cs" />
     <Compile Include="Operations\Some.cs" />
     <Compile Include="Operations\Stop.cs" />
     <Compile Include="Operations\Subtract.cs" />
@@ -612,8 +573,6 @@
     <Compile Include="Operations\SwapAt.cs" />
     <Compile Include="Operations\Throw.cs" />
     <Compile Include="Operations\ToArguments.cs" />
-    <Compile Include="Operations\ToTuple.cs" />
-    <Compile Include="Operations\OneTupleOperation.cs" />
     <Compile Include="Operations\TryBegin.cs" />
     <Compile Include="Operations\TryEnd.cs" />
     <Compile Include="Operations\TwoBooleanOperation.cs" />
@@ -643,7 +602,6 @@
     <Compile Include="Parsers\Expressions\BNotParser.cs" />
     <Compile Include="Parsers\Expressions\BooleanParser.cs" />
     <Compile Include="Parsers\Expressions\ByteParser.cs" />
-    <Compile Include="Parsers\Expressions\CaseExpressionParser.cs" />
     <Compile Include="Parsers\Expressions\CharParser.cs" />
     <Compile Include="Parsers\Expressions\ClassReferenceParser.cs" />
     <Compile Include="Parsers\Expressions\ComparisandParser.cs" />
@@ -659,10 +617,8 @@
     <Compile Include="Parsers\Expressions\EmptyValueParser.cs" />
     <Compile Include="Parsers\Expressions\EndingInExpressionParser.cs" />
     <Compile Include="Parsers\Expressions\EndingInValueParser.cs" />
-    <Compile Include="Parsers\Expressions\EndOfCurrentExpressionParser.cs" />
     <Compile Include="Parsers\Expressions\ExpressionBuilder.cs" />
     <Compile Include="Parsers\Expressions\ExpressionFlags.cs" />
-    <Compile Include="Parsers\Expressions\ExpressionInMiddleParser.cs" />
     <Compile Include="Parsers\Expressions\ExpressionParser.cs" />
     <Compile Include="Parsers\Expressions\FieldParser.cs" />
     <Compile Include="Parsers\Expressions\FoldOperatorParser.cs" />
@@ -686,35 +642,30 @@
     <Compile Include="Parsers\Expressions\InterpolatedStringParser.cs" />
     <Compile Include="Parsers\Expressions\IntParser.cs" />
     <Compile Include="Parsers\Expressions\InvokeParser.cs" />
-    <Compile Include="Parsers\Expressions\IsParser.cs" />
     <Compile Include="Parsers\Expressions\KeywordOperatorsParser.cs" />
     <Compile Include="Parsers\Expressions\IteratorParser.cs" />
     <Compile Include="Parsers\Expressions\LazyParser.cs" />
     <Compile Include="Parsers\Expressions\ListParser.cs" />
-    <Compile Include="Parsers\Expressions\ImplicitZipParser.cs" />
     <Compile Include="Parsers\Expressions\MatchExpressionParser.cs" />
     <Compile Include="Parsers\Expressions\MatchLambdaParser.cs" />
-    <Compile Include="Parsers\Expressions\MaybeParser.cs" />
     <Compile Include="Parsers\Expressions\MessageParser.cs" />
-    <Compile Include="Parsers\Expressions\MonadBindParser.cs" />
     <Compile Include="Parsers\Expressions\MultilineStringParser.cs" />
+    <Compile Include="Parsers\Expressions\NameValueParser.cs" />
     <Compile Include="Parsers\Expressions\PlaceholderParser.cs" />
     <Compile Include="Parsers\Expressions\RangeOperatorParser.cs" />
     <Compile Include="Parsers\Expressions\RangePrefixParser.cs" />
     <Compile Include="Parsers\Expressions\ReductionParser.cs" />
     <Compile Include="Parsers\Expressions\RefParser.cs" />
-    <Compile Include="Parsers\Expressions\ResultParser.cs" />
     <Compile Include="Parsers\Expressions\SelectorParser.cs" />
     <Compile Include="Parsers\Expressions\SendBindingMessageParser.cs" />
     <Compile Include="Parsers\Expressions\SeqParser.cs" />
     <Compile Include="Parsers\Expressions\SetParser.cs" />
     <Compile Include="Parsers\Expressions\SetPropertyParser.cs" />
+    <Compile Include="Parsers\Expressions\SkipOperatorParser.cs" />
     <Compile Include="Parsers\Expressions\SkipTakeItemParser.cs" />
-    <Compile Include="Parsers\Expressions\IfSomeNoneSymbolParser.cs" />
     <Compile Include="Parsers\Expressions\NotParser.cs" />
     <Compile Include="Parsers\Expressions\OctalParser.cs" />
     <Compile Include="Parsers\Expressions\PartialLambdaParser.cs" />
-    <Compile Include="Parsers\Expressions\PeekParser.cs" />
     <Compile Include="Parsers\Expressions\PostfixInvokeParser.cs" />
     <Compile Include="Parsers\Expressions\KeywordValueParser.cs" />
     <Compile Include="Parsers\Expressions\LambdaParser.cs" />
@@ -725,15 +676,15 @@
     <Compile Include="Parsers\Expressions\RegexParser.cs" />
     <Compile Include="Parsers\Expressions\RegexParsingType.cs" />
     <Compile Include="Parsers\Expressions\SendMessageAssignParser.cs" />
-    <Compile Include="Parsers\Expressions\SeparatedKeywordOperatorsParser.cs" />
-    <Compile Include="Parsers\Expressions\SkipTakeOperatorParser.cs" />
     <Compile Include="Parsers\Expressions\SliceAssignParser.cs" />
     <Compile Include="Parsers\Expressions\SliceParser.cs" />
     <Compile Include="Parsers\Expressions\StringArrayParser.cs" />
     <Compile Include="Parsers\Expressions\SubexpressionParser.cs" />
     <Compile Include="Parsers\Expressions\SuperParser.cs" />
     <Compile Include="Parsers\Expressions\SymbolObjectParser.cs" />
+    <Compile Include="Parsers\Expressions\TakeOperatorParser.cs" />
     <Compile Include="Parsers\Expressions\ThrowParser.cs" />
+    <Compile Include="Parsers\Expressions\ToEndParser.cs" />
     <Compile Include="Parsers\Expressions\TryBlockParser.cs" />
     <Compile Include="Parsers\Expressions\TryParser.cs" />
     <Compile Include="Parsers\Expressions\TwoKeywordOperatorsParser.cs" />
@@ -744,7 +695,6 @@
     <Compile Include="Parsers\Expressions\WhereItemParser.cs" />
     <Compile Include="Parsers\Expressions\WhereParser.cs" />
     <Compile Include="Parsers\Expressions\ZeroParameterLambdaParser.cs" />
-    <Compile Include="Parsers\Expressions\NameValueParser.cs" />
     <Compile Include="Parsers\Expressions\NegateParser.cs" />
     <Compile Include="Parsers\Expressions\OperatorsParser.cs" />
     <Compile Include="Parsers\Expressions\OrParser.cs" />
@@ -769,7 +719,6 @@
     <Compile Include="Parsers\Statements\AssignFromLoopParser.cs" />
     <Compile Include="Parsers\Statements\AssignToFieldParser.cs" />
     <Compile Include="Parsers\Statements\AssignToMatchParser.cs" />
-    <Compile Include="Parsers\Statements\AssignToNewFieldParser2.cs" />
     <Compile Include="Parsers\Statements\AssignToNewFieldParser.cs" />
     <Compile Include="Parsers\Statements\BlockStatementParser.cs" />
     <Compile Include="Parsers\Statements\CaseParser.cs" />
@@ -792,12 +741,10 @@
     <Compile Include="Parsers\Statements\ExpressionBlockParser.cs" />
     <Compile Include="Parsers\Statements\ExpressionStatementParser.cs" />
     <Compile Include="Parsers\Statements\ForParser.cs" />
-    <Compile Include="Parsers\Statements\ForParser2.cs" />
     <Compile Include="Parsers\Statements\FunctionParser.cs" />
     <Compile Include="Parsers\Statements\GuardParser.cs" />
     <Compile Include="Parsers\Statements\IfParser.cs" />
     <Compile Include="Parsers\Statements\ImportPackageParser.cs" />
-    <Compile Include="Parsers\Statements\IncludeParser.cs" />
     <Compile Include="Parsers\Statements\LoopParser.cs" />
     <Compile Include="Parsers\Statements\MatchAssignParser.cs" />
     <Compile Include="Parsers\Statements\MatchParser.cs" />
@@ -808,9 +755,6 @@
     <Compile Include="Parsers\Statements\ParentClassParser.cs" />
     <Compile Include="Parsers\Statements\PassParser.cs" />
     <Compile Include="Parsers\Statements\PatternParser.cs" />
-    <Compile Include="Parsers\Statements\PrintLnParser.cs" />
-    <Compile Include="Parsers\Statements\PrintParser.cs" />
-    <Compile Include="Parsers\Statements\PutParser.cs" />
     <Compile Include="Parsers\Statements\RecordParser.cs" />
     <Compile Include="Parsers\Statements\RepeatParser.cs" />
     <Compile Include="Parsers\Statements\ReturnFromLoopParser.cs" />
@@ -833,10 +777,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Putter.cs" />
     <Compile Include="Runtime\BitIterator.cs" />
-    <Compile Include="Runtime\Breakpoint.cs" />
-    <Compile Include="Runtime\BreakpointType.cs" />
     <Compile Include="Runtime\DebugState.cs" />
-    <Compile Include="Runtime\ExecutionContext.cs" />
     <Compile Include="Runtime\Field.cs" />
     <Compile Include="Runtime\Fields.cs" />
     <Compile Include="Runtime\Frame.cs" />

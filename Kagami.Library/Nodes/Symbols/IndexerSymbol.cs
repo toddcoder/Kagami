@@ -6,33 +6,33 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class IndexerSymbol : Symbol
    {
-	   public static void Get(OperationsBuilder builder, Expression[] arguments)
-	   {
-		   GetIndex(builder, arguments);
-		   builder.SendMessage("[](_)", 1);
-	   }
+      public static void Get(OperationsBuilder builder, Expression[] arguments)
+      {
+         GetIndex(builder, arguments);
+         builder.SendMessage("[](_)", 1);
+      }
 
-	   public static void GetIndex(OperationsBuilder builder, Expression[] arguments)
-	   {
-		   if (arguments.Length == 1)
-		   {
-			   arguments[0].Generate(builder);
-		   }
-		   else
-		   {
-			   arguments[0].Generate(builder);
-			   arguments[1].Generate(builder);
-			   builder.NewContainer();
+      public static void GetIndex(OperationsBuilder builder, Expression[] arguments)
+      {
+         if (arguments.Length == 1)
+         {
+            arguments[0].Generate(builder);
+         }
+         else
+         {
+            arguments[0].Generate(builder);
+            arguments[1].Generate(builder);
+            builder.NewContainer();
 
-			   foreach (var argument in arguments.Skip(2))
-			   {
-				   argument.Generate(builder);
-				   builder.NewContainer();
-			   }
-		   }
-	   }
+            foreach (var argument in arguments.Skip(2))
+            {
+               argument.Generate(builder);
+               builder.NewContainer();
+            }
+         }
+      }
 
-	   Expression[] arguments;
+      protected Expression[] arguments;
 
       public IndexerSymbol(Expression[] arguments) => this.arguments = arguments;
 
@@ -42,6 +42,6 @@ namespace Kagami.Library.Nodes.Symbols
 
       public override void Generate(OperationsBuilder builder) => Get(builder, arguments);
 
-      public override string ToString() => $"[{arguments.Stringify()}]";
+      public override string ToString() => $"[{arguments.ToString(", ")}]";
    }
 }

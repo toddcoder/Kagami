@@ -5,7 +5,7 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class ComplexSymbol : Symbol, IConstant
    {
-      double value;
+      protected double value;
 
       public ComplexSymbol(double value) => this.value = value;
 

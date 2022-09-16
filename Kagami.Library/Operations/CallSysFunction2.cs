@@ -8,8 +8,8 @@ namespace Kagami.Library.Operations
 {
    public class CallSysFunction2 : TwoOperandOperation
    {
-      Func<Sys, IObject, IObject, IResult<IObject>> func;
-      string image;
+      protected Func<Sys, IObject, IObject, IResult<IObject>> func;
+      protected string image;
 
       public CallSysFunction2(Func<Sys, IObject, IObject, IResult<IObject>> func, string image)
       {

@@ -8,48 +8,48 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Operations
 {
-	public class OpenPackage : Operation
-	{
-		string packageName;
+   public class OpenPackage : Operation
+   {
+      protected string packageName;
 
-		public OpenPackage(string packageName) => this.packageName = packageName;
+      public OpenPackage(string packageName) => this.packageName = packageName;
 
-		public override IMatched<IObject> Execute(Machine machine)
-		{
-			var fieldName = packageName.ToLower1();
-			if (machine.Find(fieldName, true).If(out var field, out var anyException))
-			{
-				switch (field.Value)
-				{
-					case Package package when Module.Global.Class(package.ClassName).If(out var baseClass):
-						if (baseClass is PackageClass packageClass)
-						{
-							packageClass.RegisterMessages();
-							packageClass.CopyToGlobalFrame(package);
+      public override IMatched<IObject> Execute(Machine machine)
+      {
+         var fieldName = packageName.ToLower1();
+         if (machine.Find(fieldName, true).If(out var field, out var _exception))
+         {
+            switch (field.Value)
+            {
+               case Package package when Module.Global.Class(package.ClassName).If(out var baseClass):
+                  if (baseClass is PackageClass packageClass)
+                  {
+                     packageClass.RegisterMessages();
+                     packageClass.CopyToGlobalFrame(package);
 
-							return notMatched<IObject>();
-						}
-						else
-						{
-							return failedMatch<IObject>(unableToConvert(baseClass.Name, "Package class"));
-						}
+                     return notMatched<IObject>();
+                  }
+                  else
+                  {
+                     return failedMatch<IObject>(unableToConvert(baseClass.Name, "Package class"));
+                  }
 
-					case Package package:
-						return failedMatch<IObject>(classNotFound(package.ClassName));
-					default:
-						return failedMatch<IObject>(unableToConvert(field.Value.Image, "Package"));
-				}
-			}
-			else if (anyException.If(out var exception))
-			{
-				return failedMatch<IObject>(exception);
-			}
-			else
-			{
-				return failedMatch<IObject>(fieldNotFound(fieldName));
-			}
-		}
+               case Package package:
+                  return failedMatch<IObject>(classNotFound(package.ClassName));
+               default:
+                  return failedMatch<IObject>(unableToConvert(field.Value.Image, "Package"));
+            }
+         }
+         else if (_exception.If(out var exception))
+         {
+            return failedMatch<IObject>(exception);
+         }
+         else
+         {
+            return failedMatch<IObject>(fieldNotFound(fieldName));
+         }
+      }
 
-		public override string ToString() => $"open.package({packageName})";
-	}
+      public override string ToString() => $"open.package({packageName})";
+   }
 }

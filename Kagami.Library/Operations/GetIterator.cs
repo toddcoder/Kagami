@@ -9,7 +9,7 @@ namespace Kagami.Library.Operations
 {
    public class GetIterator : OneOperandOperation
    {
-      bool lazy;
+      protected bool lazy;
 
       public GetIterator(bool lazy) => this.lazy = lazy;
 

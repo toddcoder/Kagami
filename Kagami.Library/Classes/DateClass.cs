@@ -15,43 +15,36 @@ namespace Kagami.Library.Classes
          compareMessages();
          rangeMessages();
 
-         messages["year".get()] = (obj, msg) => function<Date>(obj, d => d.Year);
-         messages["month".get()] = (obj, msg) => function<Date>(obj, d => d.Month);
-         messages["day".get()] = (obj, msg) => function<Date>(obj, d => d.Day);
-         messages["hour".get()] = (obj, msg) => function<Date>(obj, d => d.Hour);
-         messages["minute".get()] = (obj, msg) => function<Date>(obj, d => d.Minute);
-         messages["second".get()] = (obj, msg) => function<Date>(obj, d => d.Second);
-         messages["millisecond".get()] = (obj, msg) => function<Date>(obj, d => d.Millisecond);
-         messages["ticks".get()] = (obj, msg) => function<Date>(obj, d => d.Ticks);
+         messages["year".get()] = (obj, _) => function<Date>(obj, d => d.Year);
+         messages["month".get()] = (obj, _) => function<Date>(obj, d => d.Month);
+         messages["day".get()] = (obj, _) => function<Date>(obj, d => d.Day);
+         messages["hour".get()] = (obj, _) => function<Date>(obj, d => d.Hour);
+         messages["minute".get()] = (obj, _) => function<Date>(obj, d => d.Minute);
+         messages["second".get()] = (obj, _) => function<Date>(obj, d => d.Second);
+         messages["millisecond".get()] = (obj, _) => function<Date>(obj, d => d.Millisecond);
+         messages["ticks".get()] = (obj, _) => function<Date>(obj, d => d.Ticks);
          messages["+"] = (obj, msg) => function<Date, Interval>(obj, msg, (d, i) => d.Add(i));
          messages["-"] = (obj, msg) => function<Date, IObject>(obj, msg, (d, i) => d.Subtract(i));
-	      messages["dayOfWeek".get()] = (obj, msg) => function<Date>(obj, d => d.DayOfWeek);
+         messages["dayOfWeek".get()] = (obj, _) => function<Date>(obj, d => d.DayOfWeek);
       }
 
       public override void RegisterClassMessages()
       {
          base.RegisterClassMessages();
 
-         classMessages["now".get()] = (bc, msg) => new Date(DateTime.Now);
-         classMessages["today".get()] = (bc, msg) => new Date(DateTime.Today);
-         classMessages["min".get()] = (bc, msg) => new Date(DateTime.MinValue);
-         classMessages["max".get()] = (bc, msg) => new Date(DateTime.MaxValue);
-         classMessages["utcNow".get()] = (bc, msg) => new Date(DateTime.UtcNow);
-         classMessages["parse"] = (bc, msg) => parse(msg.Arguments[0].AsString);
-         classMessages["months".get()] = (bc, msg) => Date.Months;
-         classMessages["daysOfTheWeek".get()] = (bc, msg) => Date.DaysOfTheWeek;
+         classMessages["now".get()] = (_, _) => new Date(DateTime.Now);
+         classMessages["today".get()] = (_, _) => new Date(DateTime.Today);
+         classMessages["min".get()] = (_, _) => new Date(DateTime.MinValue);
+         classMessages["max".get()] = (_, _) => new Date(DateTime.MaxValue);
+         classMessages["utcNow".get()] = (_, _) => new Date(DateTime.UtcNow);
+         classMessages["parse"] = (_, msg) => parse(msg.Arguments[0].AsString);
+         classMessages["months".get()] = (_, _) => Date.Months;
+         classMessages["daysOfTheWeek".get()] = (_, _) => Date.DaysOfTheWeek;
       }
 
-      static IObject parse(string source)
+      protected static IObject parse(string source)
       {
-         if (DateTime.TryParse(source, out var dateTime))
-         {
-	         return Some.Object((Date)dateTime);
-         }
-         else
-         {
-	         return None.NoneValue;
-         }
+         return DateTime.TryParse(source, out var dateTime) ? Some.Object((Date)dateTime) : None.NoneValue;
       }
    }
 }

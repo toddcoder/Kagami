@@ -1,14 +1,13 @@
 ﻿using System;
 using Kagami.Library.Objects;
-using Kagami.Library.Runtime;
 using Core.Monads;
 
 namespace Kagami.Library.Operations
 {
    public class NewValue : ArgumentsOperation
    {
-      string className;
-      Func<Arguments, IObject> initializer;
+      protected string className;
+      protected Func<Arguments, IObject> initializer;
 
       public NewValue(string className, Func<Arguments, IObject> initializer)
       {
@@ -18,6 +17,6 @@ namespace Kagami.Library.Operations
 
       public override string ToString() => $"new.value({className})";
 
-      public override IMatched<IObject> Execute(Machine machine, Arguments arguments) => initializer(arguments).Matched();
+      public override IMatched<IObject> Execute(Arguments arguments) => initializer(arguments).Matched();
    }
 }

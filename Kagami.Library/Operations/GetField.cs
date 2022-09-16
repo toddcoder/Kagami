@@ -8,7 +8,7 @@ namespace Kagami.Library.Operations
 {
    public class GetField : Operation
    {
-      string fieldName;
+      protected string fieldName;
 
       public GetField(string fieldName) => this.fieldName = fieldName;
 

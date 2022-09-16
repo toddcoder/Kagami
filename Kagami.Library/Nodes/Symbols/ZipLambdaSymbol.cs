@@ -4,7 +4,7 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class ZipLambdaSymbol : Symbol
    {
-      Expression expression;
+      protected Expression expression;
 
       public ZipLambdaSymbol(Expression expression) => this.expression = expression;
 

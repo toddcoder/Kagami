@@ -5,7 +5,7 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class ByteSymbol : Symbol, IConstant
    {
-      byte value;
+      protected byte value;
 
       public ByteSymbol(byte value) => this.value = value;
 

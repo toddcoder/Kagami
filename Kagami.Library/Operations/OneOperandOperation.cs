@@ -13,11 +13,11 @@ namespace Kagami.Library.Operations
       {
          if (machine.Pop().If(out var value, out var exception))
          {
-	         return Execute(machine, value);
+            return Execute(machine, value);
          }
          else
          {
-	         return failedMatch<IObject>(exception);
+            return failedMatch<IObject>(exception);
          }
       }
    }

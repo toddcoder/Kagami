@@ -15,8 +15,8 @@ namespace Kagami.Library.Classes
          compareMessages();
          numericConversionMessages();
 
-         registerMessage("numerator".get(), (obj, msg) => function<Rational>(obj, r => Long.LongObject(r.Numerator)));
-         registerMessage("denominator".get(), (obj, msg) => function<Rational>(obj, r => Long.LongObject(r.Denominator)));
+         registerMessage("numerator".get(), (obj, _) => function<Rational>(obj, r => Long.LongObject(r.Numerator)));
+         registerMessage("denominator".get(), (obj, _) => function<Rational>(obj, r => Long.LongObject(r.Denominator)));
       }
 
       public override bool IsNumeric => true;

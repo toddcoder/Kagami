@@ -5,7 +5,7 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class OrSymbol : Symbol
    {
-      Expression expression;
+      protected Expression expression;
 
       public OrSymbol(Expression expression) => this.expression = expression;
 

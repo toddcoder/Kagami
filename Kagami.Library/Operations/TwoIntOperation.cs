@@ -14,7 +14,7 @@ namespace Kagami.Library.Operations
          {
 	         if (y is Int yInt)
 	         {
-		         return Execute(machine, xInt.Value, yInt.Value).Map(Int.IntObject);
+		         return Execute(xInt.Value, yInt.Value).Map(Int.IntObject);
 	         }
 	         else
 	         {
@@ -27,6 +27,6 @@ namespace Kagami.Library.Operations
          }
       }
 
-      public abstract IMatched<int> Execute(Machine machine, int x, int y);
+      public abstract IMatched<int> Execute(int x, int y);
    }
 }

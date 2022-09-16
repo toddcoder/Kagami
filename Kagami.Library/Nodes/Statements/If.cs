@@ -9,22 +9,22 @@ namespace Kagami.Library.Nodes.Statements
 {
    public class If : Statement
    {
-      Expression expression;
-      Block block;
-      IMaybe<If> elseIf;
-      IMaybe<Block> elseBlock;
-      string fieldName;
-      bool mutable;
-      bool assignment;
-      bool top;
+      protected Expression expression;
+      protected Block block;
+      protected IMaybe<If> _elseIf;
+      protected IMaybe<Block> _elseBlock;
+      protected string fieldName;
+      protected bool mutable;
+      protected bool assignment;
+      protected bool top;
 
-      public If(Expression expression, Block block, IMaybe<If> elseIf, IMaybe<Block> elseBlock, string fieldName,
-         bool mutable, bool assignment, bool top)
+      public If(Expression expression, Block block, IMaybe<If> elseIf, IMaybe<Block> elseBlock, string fieldName, bool mutable, bool assignment,
+         bool top)
       {
          this.expression = expression;
          this.block = block;
-         this.elseIf = elseIf;
-         this.elseBlock = elseBlock;
+         _elseIf = elseIf;
+         _elseBlock = elseBlock;
          this.fieldName = fieldName;
          this.mutable = mutable;
          this.assignment = assignment;
@@ -35,8 +35,8 @@ namespace Kagami.Library.Nodes.Statements
       {
          this.expression = expression;
          this.block = block;
-         elseIf = none<If>();
-         elseBlock = none<Block>();
+         _elseIf = none<If>();
+         _elseBlock = none<Block>();
          fieldName = "";
          mutable = false;
          assignment = false;
@@ -45,35 +45,35 @@ namespace Kagami.Library.Nodes.Statements
 
       public void AddReturnIf()
       {
-			block.AddReturnIf(new UnitSymbol());
-			if (elseBlock.If(out var b))
-			{
-				b.AddReturnIf(new UnitSymbol());
-			}
+         block.AddReturnIf(new UnitSymbol());
+         if (_elseBlock.If(out var elseBlock))
+         {
+            elseBlock.AddReturnIf(new UnitSymbol());
+         }
 
-			if (elseIf.If(out var ei))
-			{
-				ei.AddReturnIf();
-			}
+         if (_elseIf.If(out var elseIf))
+         {
+            elseIf.AddReturnIf();
+         }
       }
 
       public IMaybe<If> ElseIf
       {
-         get => elseIf;
-         set => elseIf = value;
+         get => _elseIf;
+         set => _elseIf = value;
       }
 
       public IMaybe<Block> Else
       {
-         get => elseBlock;
-         set => elseBlock = value;
+         get => _elseBlock;
+         set => _elseBlock = value;
       }
 
       public override void Generate(OperationsBuilder builder)
       {
          if (assignment && top)
          {
-	         builder.NewField(fieldName, mutable, true);
+            builder.NewField(fieldName, mutable, true);
          }
 
          var nextLabel = newLabel("next");
@@ -88,7 +88,7 @@ namespace Kagami.Library.Nodes.Statements
          block.Generate(builder);
          if (assignment)
          {
-	         builder.AssignField(fieldName, false);
+            builder.AssignField(fieldName, false);
          }
 
          builder.PopFrame();
@@ -97,17 +97,17 @@ namespace Kagami.Library.Nodes.Statements
 
          builder.Label(nextLabel);
          builder.PopFrame();
-         if (elseIf.If(out var ei))
+         if (_elseIf.If(out var elseIf))
          {
-	         ei.Generate(builder);
+            elseIf.Generate(builder);
          }
-         else if (elseBlock.If(out var eBlock))
+         else if (_elseBlock.If(out var elseBlock))
          {
             builder.PushFrame();
-            eBlock.Generate(builder);
+            elseBlock.Generate(builder);
             if (assignment)
             {
-	            builder.AssignField(fieldName, false);
+               builder.AssignField(fieldName, false);
             }
 
             builder.PopFrame();
@@ -119,8 +119,8 @@ namespace Kagami.Library.Nodes.Statements
 
       public override string ToString()
       {
-         return (StringStream)"if " / expression / block % elseIf.Map(i => $"else {i}").DefaultTo(() => "") %
-            elseBlock.Map(b => b.ToString()).DefaultTo(() => "");
+         return (StringStream)"if " / expression / block % _elseIf.Map(i => $"else {i}").DefaultTo(() => "") %
+            _elseBlock.Map(b => b.ToString()).DefaultTo(() => "");
       }
    }
 }

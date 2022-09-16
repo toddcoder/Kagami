@@ -10,15 +10,16 @@ namespace Kagami.Library.Parsers.Expressions
    {
       public override string Pattern => $"^ /(|s|) /({REGEX_FIELD}) /b (> |s| ('->' | '=>' [/r/n]+))";
 
-      public OneParameterLambdaParser(ExpressionBuilder builder) : base(builder) { }
+      public OneParameterLambdaParser(ExpressionBuilder builder) : base(builder)
+      {
+      }
 
       public override IMatched<Parameters> ParseParameters(ParseState state, Token[] tokens)
       {
          var name = tokens[2].Text;
          state.Colorize(tokens, Color.Whitespace, Color.Identifier);
 
-         return new Parameters(new[] { new Parameter(false, "", name, none<IInvokable>(), none<TypeConstraint>(), false, false) })
-            .Matched();
+         return new Parameters(new Parameter(false, "", name, none<IInvokable>(), none<TypeConstraint>(), false, false)).Matched();
       }
    }
 }

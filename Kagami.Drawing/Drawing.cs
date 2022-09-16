@@ -16,16 +16,16 @@ namespace Kagami.Drawing
          module.RegisterClass(new RectangleClass());
       }
 
-      public Point Point(IObject x, IObject y) => new Point(x, y);
+      public Point Point(IObject x, IObject y) => new(x, y);
 
-      public Point Point(Size size) => new Point(size.Width, size.Height);
+      public Point Point(Size size) => new(size.Width, size.Height);
 
-      public Size Size(IObject width, IObject height) => new Size(width, height);
+      public Size Size(IObject width, IObject height) => new(width, height);
 
-      public Size Size(Point point) => new Size(point.X, point.Y);
+      public Size Size(Point point) => new(point.X, point.Y);
 
-      public Rectangle Rectangle(IObject x, IObject y, IObject width, IObject height) => new Rectangle(x, y, width, height);
+      public Rectangle Rectangle(IObject x, IObject y, IObject width, IObject height) => new(x, y, width, height);
 
-      public Rectangle Rectangle(Point origin, Size size) => new Rectangle(origin, size);
+      public Rectangle Rectangle(Point origin, Size size) => new(origin, size);
    }
 }

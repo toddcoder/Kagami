@@ -8,176 +8,171 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Runtime
 {
-	public class Module
-	{
-		public static Module Global { get; set; }
+   public class Module
+   {
+      public static Module Global { get; set; }
 
-		Hash<string, BaseClass> classes;
-		Hash<string, Mixin> mixins;
-		Set<string> forwardReferences;
-		Hash<string, string> dataReferences;
-		Set<string> operators;
+      protected Hash<string, BaseClass> classes;
+      protected Hash<string, Mixin> mixins;
+      protected Set<string> forwardReferences;
+      protected Hash<string, string> dataReferences;
+      protected Set<string> operators;
 
-		public Module()
-		{
-			classes = new Hash<string, BaseClass>();
-			mixins = new Hash<string, Mixin>();
-			forwardReferences = new Set<string>();
-			dataReferences = new Hash<string, string>();
-			operators = new Set<string>();
-		}
+      public Module()
+      {
+         classes = new Hash<string, BaseClass>();
+         mixins = new Hash<string, Mixin>();
+         forwardReferences = new Set<string>();
+         dataReferences = new Hash<string, string>();
+         operators = new Set<string>();
+      }
 
-		public void LoadBuiltinClasses()
-		{
-			classes["Int"] = new IntClass();
-			classes["Float"] = new FloatClass();
-			classes["Boolean"] = new BooleanClass();
-			classes["String"] = new StringClass();
-			classes["Char"] = new CharClass();
-			classes["Byte"] = new ByteClass();
-			classes["Message"] = new MessageClass();
-			classes["Unassigned"] = new UnassignedClass();
-			classes["Tuple"] = new TupleClass();
-			classes["NameValue"] = new NameValueClass();
-			classes["Lambda"] = new LambdaClass();
-			classes["Void"] = new VoidClass();
-			classes["Some"] = new SomeClass();
-			classes["None"] = new NoneClass();
-			classes["Array"] = new ArrayClass();
-			classes["Iterator"] = new IteratorClass();
-			classes["LazyIterator"] = new LazyIteratorClass();
-			classes["StreamIterator"] = new StreamIteratorClass();
-			classes["Any"] = new AnyClass();
-			classes["Placeholder"] = new PlaceholderClass();
-			classes["Range"] = new RangeClass();
-			classes["Dictionary"] = new DictionaryClass();
-			classes["Container"] = new ContainerClass();
-			classes["Unmatched"] = new UnmatchedClass();
-			classes["Complex"] = new ComplexClass();
-			classes["Rational"] = new RationalClass();
-			classes["Long"] = new LongClass();
-			classes["Lazy"] = new LazyClass();
-			classes["YieldingInvokable"] = new YieldingInvokableClass();
-			classes["Del"] = new DelClass();
-			classes["Slice"] = new SliceClass();
-			classes["End"] = new EndClass();
-			classes["List"] = new ListClass();
-			classes["Arguments"] = new ArgumentsClass();
-			classes["Symbol"] = new SymbolClass();
-			classes["Infinity"] = new InfinityClass();
-			classes["OpenRange"] = new OpenRangeClass();
-			classes["KeyValue"] = new KeyValueClass();
-			classes["Regex"] = new RegexClass();
-			classes["Pattern"] = new PatternClass();
-			classes["PackageFunction"] = new PackageFunctionClass();
-			classes["Sys"] = new SysClass();
-			classes["Math"] = new MathClass();
-			classes["RuntimeFunction"] = new RuntimeFunctionClass();
-			classes["Reference"] = new ReferenceClass();
-			classes["Group"] = new RegexGroupClass();
-			classes["Match"] = new RegexMatchClass();
-			classes["Date"] = new DateClass();
-			classes["Interval"] = new IntervalClass();
-			classes["TypeConstraint"] = new TypeConstraintClass();
-			classes["ByteArray"] = new ByteArrayClass();
-			classes["Selector"] = new SelectorClass();
-			classes["Number"] = new NumberClass();
-			classes["Collection"] = new CollectionClass();
-			classes["TextFinding"] = new TextFindingClass();
-			classes["SkipTake"] = new SkipTakeClass();
-			classes["Constructor"] = new ConstructorClass();
-			classes["MutString"] = new MutStringClass();
-			classes["Error"] = new ErrorClass();
-			classes["Success"] = new SuccessClass();
-			classes["Failure"] = new FailureClass();
-			classes["Optional"] = new OptionalClass();
-			classes["Result"] = new ResultClass();
-			classes["Monad"] = new MonadClass();
-			classes["Unit"] = new UnitClass();
-			classes["YieldReturn"] = new YieldReturnClass();
-			classes["Index"] = new IndexClass();
-			classes["Cycle"] = new CycleClass();
-			classes["Set"] = new SetClass();
-		}
+      public void LoadBuiltinClasses()
+      {
+         classes["Int"] = new IntClass();
+         classes["Float"] = new FloatClass();
+         classes["Boolean"] = new BooleanClass();
+         classes["String"] = new StringClass();
+         classes["Char"] = new CharClass();
+         classes["Byte"] = new ByteClass();
+         classes["Message"] = new MessageClass();
+         classes["Unassigned"] = new UnassignedClass();
+         classes["Tuple"] = new TupleClass();
+         classes["NameValue"] = new NameValueClass();
+         classes["Lambda"] = new LambdaClass();
+         classes["Void"] = new VoidClass();
+         classes["Some"] = new SomeClass();
+         classes["None"] = new NoneClass();
+         classes["Array"] = new ArrayClass();
+         classes["Iterator"] = new IteratorClass();
+         classes["LazyIterator"] = new LazyIteratorClass();
+         classes["StreamIterator"] = new StreamIteratorClass();
+         classes["Any"] = new AnyClass();
+         classes["Placeholder"] = new PlaceholderClass();
+         classes["Range"] = new RangeClass();
+         classes["Dictionary"] = new DictionaryClass();
+         classes["Container"] = new ContainerClass();
+         classes["Unmatched"] = new UnmatchedClass();
+         classes["Complex"] = new ComplexClass();
+         classes["Rational"] = new RationalClass();
+         classes["Long"] = new LongClass();
+         classes["Lazy"] = new LazyClass();
+         classes["YieldingInvokable"] = new YieldingInvokableClass();
+         classes["Del"] = new DelClass();
+         classes["Slice"] = new SliceClass();
+         classes["End"] = new EndClass();
+         classes["List"] = new ListClass();
+         classes["Arguments"] = new ArgumentsClass();
+         classes["Symbol"] = new SymbolClass();
+         classes["Infinity"] = new InfinityClass();
+         classes["OpenRange"] = new OpenRangeClass();
+         classes["KeyValue"] = new KeyValueClass();
+         classes["Regex"] = new RegexClass();
+         classes["Pattern"] = new PatternClass();
+         classes["PackageFunction"] = new PackageFunctionClass();
+         classes["Sys"] = new SysClass();
+         classes["Math"] = new MathClass();
+         classes["RuntimeFunction"] = new RuntimeFunctionClass();
+         classes["Reference"] = new ReferenceClass();
+         classes["Group"] = new RegexGroupClass();
+         classes["Match"] = new RegexMatchClass();
+         classes["Date"] = new DateClass();
+         classes["Interval"] = new IntervalClass();
+         classes["TypeConstraint"] = new TypeConstraintClass();
+         classes["ByteArray"] = new ByteArrayClass();
+         classes["Selector"] = new SelectorClass();
+         classes["Number"] = new NumberClass();
+         classes["Collection"] = new CollectionClass();
+         classes["TextFinding"] = new TextFindingClass();
+         classes["SkipTake"] = new SkipTakeClass();
+         classes["Constructor"] = new ConstructorClass();
+         classes["MutString"] = new MutStringClass();
+         classes["Error"] = new ErrorClass();
+         classes["Success"] = new SuccessClass();
+         classes["Failure"] = new FailureClass();
+         classes["Optional"] = new OptionalClass();
+         classes["Result"] = new ResultClass();
+         classes["Monad"] = new MonadClass();
+         classes["Unit"] = new UnitClass();
+         classes["YieldReturn"] = new YieldReturnClass();
+         classes["Index"] = new IndexClass();
+         classes["Cycle"] = new CycleClass();
+         classes["Set"] = new SetClass();
+      }
 
-		public IMaybe<BaseClass> Class(string name, bool forwardsIncluded = false)
-		{
-			if (classes.ContainsKey(name))
-			{
-				return classes[name].Some();
-			}
-			else if (forwardsIncluded)
-			{
-				return new ForwardedClass(name).Some<BaseClass>();
-			}
-			else
-			{
-				return none<BaseClass>();
-			}
-		}
+      public IMaybe<BaseClass> Class(string name, bool forwardsIncluded = false)
+      {
+         if (classes.ContainsKey(name))
+         {
+            return classes[name].Some();
+         }
+         else if (forwardsIncluded)
+         {
+            return new ForwardedClass(name).Some<BaseClass>();
+         }
+         else
+         {
+            return none<BaseClass>();
+         }
+      }
 
-		public IMaybe<Mixin> Mixin(string name) => mixins.Map(name);
+      public IMaybe<Mixin> Mixin(string name) => mixins.Map(name);
 
-		public IResult<Unit> RegisterClass(BaseClass cls)
-		{
-			if (classes.ContainsKey(cls.Name))
-			{
-				return failure<Unit>(classAlreadyExists(cls.Name));
-			}
-			else
-			{
-				classes[cls.Name] = cls;
-				return Unit.Success();
-			}
-		}
+      public IResult<Unit> RegisterClass(BaseClass cls)
+      {
+         if (classes.ContainsKey(cls.Name))
+         {
+            return failure<Unit>(classAlreadyExists(cls.Name));
+         }
+         else
+         {
+            classes[cls.Name] = cls;
+            return Unit.Success();
+         }
+      }
 
-		public IResult<Unit> RegisterMixin(Mixin mixin)
-		{
-			if (mixins.ContainsKey(mixin.ClassName))
-			{
-				return failure<Unit>(mixinAlreadyExists(mixin.ClassName));
-			}
-			else
-			{
-				mixins[mixin.ClassName] = mixin;
-				return Unit.Success();
-			}
-		}
+      public void RegisterMixin(Mixin mixin)
+      {
+         if (!mixins.ContainsKey(mixin.ClassName))
+         {
+            mixins[mixin.ClassName] = mixin;
+         }
+      }
 
-		public void ForwardReference(string name) => forwardReferences.Add(name);
+      public void ForwardReference(string name) => forwardReferences.Add(name);
 
-		public bool Forwarded(string name) => forwardReferences.Contains(name);
+      public bool Forwarded(string name) => forwardReferences.Contains(name);
 
-		public void RegisterDataComparisand(string dataType, string dataComparisand) => dataReferences[dataComparisand] = dataType;
+      public void RegisterDataComparisand(string dataType, string dataComparisand) => dataReferences[dataComparisand] = dataType;
 
-		public IMaybe<string> FullDataComparisandName(string name) => dataReferences.Map(name).Map(s => $"{s}.{name}");
+      public IMaybe<string> FullDataComparisandName(string name) => dataReferences.Map(name).Map(s => $"{s}.{name}");
 
-		public bool RegisterOperator(string name)
-		{
-			if (operators.Contains(name))
-			{
-				return false;
-			}
-			else
-			{
-				operators.Add(name);
-				return true;
-			}
-		}
+      public bool RegisterOperator(string name)
+      {
+         if (operators.Contains(name))
+         {
+            return false;
+         }
+         else
+         {
+            operators.Add(name);
+            return true;
+         }
+      }
 
-		public bool OperatorExists(string name) => operators.Contains(name);
+      public bool OperatorExists(string name) => operators.Contains(name);
 
-		public IResult<Unit> Alias(string alias, string className)
-		{
-			if (classes.ContainsKey(className))
-			{
-				classes[alias] = classes[className];
-				return Unit.Success();
-			}
-			else
-			{
-				return failure<Unit>(classNotFound(className));
-			}
-		}
-	}
+      public IResult<Unit> Alias(string alias, string className)
+      {
+         if (classes.ContainsKey(className))
+         {
+            classes[alias] = classes[className];
+            return Unit.Success();
+         }
+         else
+         {
+            return failure<Unit>(classNotFound(className));
+         }
+      }
+   }
 }

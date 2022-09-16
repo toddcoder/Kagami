@@ -10,9 +10,15 @@ namespace Kagami.Library.Parsers.Expressions
    {
       public class SkipTake
       {
-         public IMaybe<Expression> Skip { get; set; } = none<Expression>();
+         public SkipTake()
+         {
+            Take = none<Expression>();
+            Skip = none<Expression>();
+         }
 
-         public IMaybe<Expression> Take { get; set; } = none<Expression>();
+         public IMaybe<Expression> Skip { get; set; }
+
+         public IMaybe<Expression> Take { get; set; }
 
          public bool Terminal { get; set; }
 
@@ -22,7 +28,9 @@ namespace Kagami.Library.Parsers.Expressions
          }
       }
 
-      public SliceParser(ExpressionBuilder builder) : base(builder) { }
+      public SliceParser(ExpressionBuilder builder) : base(builder)
+      {
+      }
 
       public override string Pattern => "^ /'{'";
 
@@ -35,7 +43,7 @@ namespace Kagami.Library.Parsers.Expressions
          while (state.More)
          {
             var skipTakeMatch = getSkipTake(state, builder.Flags | ExpressionFlags.OmitComma);
-            if (skipTakeMatch.If(out var skipTake, out var anyException))
+            if (skipTakeMatch.If(out var skipTake, out var _exception))
             {
                skipTakes.Add(skipTake);
                if (skipTake.Terminal)
@@ -43,7 +51,7 @@ namespace Kagami.Library.Parsers.Expressions
                   break;
                }
             }
-            else if (anyException.If(out var exception))
+            else if (_exception.If(out var exception))
             {
                return failedMatch<Unit>(exception);
             }
@@ -54,30 +62,32 @@ namespace Kagami.Library.Parsers.Expressions
          return Unit.Matched();
       }
 
-      IMatched<SkipTake> getSkipTake(ParseState state, ExpressionFlags flags)
+      protected IMatched<SkipTake> getSkipTake(ParseState state, ExpressionFlags flags)
       {
          var skipTake = new SkipTake();
 
          var noSkipMatch = state.Scan("^ /(|s|) /','", Color.Whitespace, Color.Structure);
-         if (noSkipMatch.If(out _, out var anyException)) { }
-         else if (anyException.If(out var exception))
+         if (noSkipMatch.If(out _, out var _exception))
+         {
+         }
+         else if (_exception.If(out var exception))
          {
             return failedMatch<SkipTake>(exception);
          }
          else
          {
             var skipMatch = getExpression(state, flags);
-            if (skipMatch.If(out var skipExpression, out anyException))
+            if (skipMatch.If(out var skipExpression, out _exception))
             {
                skipTake.Skip = skipExpression.Some();
             }
-            else if (anyException.If(out exception))
+            else if (_exception.If(out exception))
             {
                return failedMatch<SkipTake>(exception);
             }
 
             var semiOrEndMatch = state.Scan("^ /(|s|) /[';,}']", Color.Whitespace, Color.CloseParenthesis);
-            if (semiOrEndMatch.If(out var semiOrEnd, out anyException))
+            if (semiOrEndMatch.If(out var semiOrEnd, out _exception))
             {
                switch (semiOrEnd)
                {
@@ -88,24 +98,24 @@ namespace Kagami.Library.Parsers.Expressions
                      return skipTake.Matched();
                }
             }
-            else if (anyException.If(out exception))
+            else if (_exception.If(out exception))
             {
                return failedMatch<SkipTake>(exception);
             }
          }
 
          var takeMatch = getExpression(state, flags);
-         if (takeMatch.If(out var takeExpression, out anyException))
+         if (takeMatch.If(out var takeExpression, out _exception))
          {
             skipTake.Take = takeExpression.Some();
          }
-         else if (anyException.If(out var exception))
+         else if (_exception.If(out var exception))
          {
             return failedMatch<SkipTake>(exception);
          }
 
          var endMatch = state.Scan("^ /(|s|) /['};']", Color.Whitespace, Color.CloseParenthesis);
-         if (endMatch.If(out var end, out anyException))
+         if (endMatch.If(out var end, out _exception))
          {
             switch (end)
             {
@@ -114,7 +124,7 @@ namespace Kagami.Library.Parsers.Expressions
                   return skipTake.Matched();
             }
          }
-         else if (anyException.If(out var exception))
+         else if (_exception.If(out var exception))
          {
             return failedMatch<SkipTake>(exception);
          }

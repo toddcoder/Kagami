@@ -10,21 +10,23 @@ using CComplex = System.Numerics.Complex;
 
 namespace Kagami.Library.Objects
 {
-   public struct Complex : IObject, INumeric, IObjectCompare, IComparable<Complex>, IEquatable<Complex>, IFormattable, IMessageNumber,
+   public readonly struct Complex : IObject, INumeric, IObjectCompare, IComparable<Complex>, IEquatable<Complex>, IFormattable, IMessageNumber,
       IComparable
    {
-      public static implicit operator Complex((double real, double imaginary) values) => new Complex(values.real, values.imaginary);
+      public static implicit operator Complex((double real, double imaginary) values) => new(values.real, values.imaginary);
 
-      public static implicit operator Complex(CComplex value) => new Complex(value);
+      public static implicit operator Complex(CComplex value) => new(value);
 
       public static IObject ComplexObject((double real, double imaginary) values) => new Complex(values.real, values.imaginary);
 
-      CComplex value;
+      private readonly CComplex value;
 
       public Complex(CComplex value) : this() => this.value = value;
 
-      public Complex(double real, double imaginary, bool isPolar = false) : this() =>
+      public Complex(double real, double imaginary, bool isPolar = false) : this()
+      {
          value = isPolar ? CComplex.FromPolarCoordinates(real, imaginary) : new CComplex(real, imaginary);
+      }
 
       public Complex(Float number) : this() => value = new CComplex(number.Value, 0.0);
 
@@ -36,26 +38,16 @@ namespace Kagami.Library.Objects
 
       public Float Imaginary => value.Imaginary;
 
-      public (INumeric, INumeric) Compatible(INumeric obj)
+      public (INumeric, INumeric) Compatible(INumeric obj) => obj.ClassName switch
       {
-         switch (obj.ClassName)
-         {
-            case "Int":
-               return (this, obj.ToComplex());
-            case "Float":
-               return (this, obj.ToComplex());
-            case "Byte":
-               return (this, obj.ToComplex());
-            case "Long":
-               return (this, obj.ToComplex());
-            case "Complex":
-               return (this, obj.ToComplex());
-            case "Rational":
-               return (ToRational(), obj.ToRational());
-            default:
-               return (this, obj.ToComplex());
-         }
-      }
+         "Int" => (this, obj.ToComplex()),
+         "Float" => (this, obj.ToComplex()),
+         "Byte" => (this, obj.ToComplex()),
+         "Long" => (this, obj.ToComplex()),
+         "Complex" => (this, obj.ToComplex()),
+         "Rational" => (ToRational(), obj.ToRational()),
+         _ => (this, obj.ToComplex())
+      };
 
       public string ClassName => "Complex";
 
@@ -107,8 +99,11 @@ namespace Kagami.Library.Objects
 
       public bool IsRational => false;
 
-      public String ZFill(int count) =>
-         $"{zfill(value.Real.ToString(), count)}{(value.Imaginary >= 0.0).Extend("+")}{zfill(value.Imaginary.ToString(), count)}";
+      public String ZFill(int count)
+      {
+         return $"{zfill(value.Real.ToString(), count)}{(value.Imaginary >= 0.0).Extend("+")}" +
+            $"{zfill(value.Imaginary.ToString(), count)}";
+      }
 
       public string AsString => $"{value.Real}{(value.Imaginary >= 0.0).Extend("+")}{value.Imaginary}i";
 
@@ -136,8 +131,8 @@ namespace Kagami.Library.Objects
 
       public String Format(string format)
       {
-	      return $"{value.Real.FormatUsing<double>(format, d => d.ToString(format))}" +
-		      $"{(value.Imaginary >= 0.0).Extend("+")}{value.Imaginary.FormatUsing<double>(format, d => d.ToString(format))}";
+         return $"{value.Real.FormatUsing<double>(format, d => d.ToString(format))}" +
+            $"{(value.Imaginary >= 0.0).Extend("+")}{value.Imaginary.FormatUsing<double>(format, d => d.ToString(format))}i";
       }
 
       public IObject Negate() => (Complex)CComplex.Negate(value);

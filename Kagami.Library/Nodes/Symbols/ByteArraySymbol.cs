@@ -6,7 +6,7 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class ByteArraySymbol : Symbol
    {
-      ByteArray byteArray;
+      protected ByteArray byteArray;
 
       public ByteArraySymbol(string source)
       {

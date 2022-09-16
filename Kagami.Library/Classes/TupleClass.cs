@@ -16,35 +16,29 @@ namespace Kagami.Library.Classes
          base.RegisterMessages();
 
          collectionMessages();
-         messages["tuple"] = (obj, msg) => function<Tuple>(obj, t => t);
-         messages["first".get()] = (obj, msg) => function<Tuple>(obj, t => t[0]);
-         messages["second".get()] = (obj, msg) => function<Tuple>(obj, t => t[1]);
-         messages["third".get()] = (obj, msg) => function<Tuple>(obj, t => t[2]);
-         messages["fourth".get()] = (obj, msg) => function<Tuple>(obj, t => t[3]);
-         messages["fifth".get()] = (obj, msg) => function<Tuple>(obj, t => t[4]);
-         messages["sixth".get()] = (obj, msg) => function<Tuple>(obj, t => t[5]);
-         messages["seventh".get()] = (obj, msg) => function<Tuple>(obj, t => t[6]);
-         messages["eighth".get()] = (obj, msg) => function<Tuple>(obj, t => t[7]);
-         messages["nineth".get()] = (obj, msg) => function<Tuple>(obj, t => t[8]);
-         messages["tenth".get()] = (obj, msg) => function<Tuple>(obj, t => t[9]);
+         messages["tuple"] = (obj, _) => function<Tuple>(obj, t => t);
+         messages["first".get()] = (obj, _) => function<Tuple>(obj, t => t[0]);
+         messages["second".get()] = (obj, _) => function<Tuple>(obj, t => t[1]);
+         messages["third".get()] = (obj, _) => function<Tuple>(obj, t => t[2]);
+         messages["fourth".get()] = (obj, _) => function<Tuple>(obj, t => t[3]);
+         messages["fifth".get()] = (obj, _) => function<Tuple>(obj, t => t[4]);
+         messages["sixth".get()] = (obj, _) => function<Tuple>(obj, t => t[5]);
+         messages["seventh".get()] = (obj, _) => function<Tuple>(obj, t => t[6]);
+         messages["eighth".get()] = (obj, _) => function<Tuple>(obj, t => t[7]);
+         messages["ninth".get()] = (obj, _) => function<Tuple>(obj, t => t[8]);
+         messages["tenth".get()] = (obj, _) => function<Tuple>(obj, t => t[9]);
          messages["[]"] = (obj, msg) => function<Tuple, IObject>(obj, msg, indexed);
-         messages["head".get()] = (obj, msg) => function<Tuple>(obj, t => t.Head);
-         messages["tail".get()] = (obj, msg) => function<Tuple>(obj, t => t.Tail);
-         messages["headTail".get()] = (obj, msg) => function<Tuple>(obj, t => t.HeadTail);
+         messages["head".get()] = (obj, _) => function<Tuple>(obj, t => t.Head);
+         messages["tail".get()] = (obj, _) => function<Tuple>(obj, t => t.Tail);
+         messages["headTail".get()] = (obj, _) => function<Tuple>(obj, t => t.HeadTail);
       }
 
-      static IObject indexed(Tuple tuple, IObject index)
+      protected static IObject indexed(Tuple tuple, IObject index) => index switch
       {
-         switch (index)
-         {
-            case Int i:
-               return tuple[i.Value];
-            case String s:
-               return tuple[s.Value];
-            default:
-               throw "Invalid index".Throws();
-         }
-      }
+         Int i => tuple[i.Value],
+         String s => tuple[s.Value],
+         _ => throw "Invalid index".Throws()
+      };
 
       public override bool DynamicRespondsTo(Selector selector) => true;
 
@@ -52,7 +46,7 @@ namespace Kagami.Library.Classes
       {
          if (base.DynamicRespondsTo(message.Selector))
          {
-	         return base.DynamicInvoke(obj, message);
+            return base.DynamicInvoke(obj, message);
          }
          else
          {
@@ -60,11 +54,11 @@ namespace Kagami.Library.Classes
             var name = message.Selector.Name.unget();
             if (tuple.ContainsName(name))
             {
-	            return tuple[name];
+               return tuple[name];
             }
             else
             {
-	            throw messageNotFound(this, name);
+               throw messageNotFound(this, name);
             }
          }
       }

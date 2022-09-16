@@ -66,7 +66,7 @@ namespace Kagami.Library.Parsers.Expressions
                }
                else if (state.Macro(functionName).If(out var function))
                {
-                  builder.Add(new MacroInvokeSymbol(function, arguments, possibleLambda));
+                  builder.Add(new MacroInvokeSymbol(function, arguments));
                }
                else
                {

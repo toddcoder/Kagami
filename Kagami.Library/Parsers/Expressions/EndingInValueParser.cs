@@ -6,7 +6,9 @@ namespace Kagami.Library.Parsers.Expressions
 {
    public abstract class EndingInValueParser : SymbolParser
    {
-	   public EndingInValueParser(ExpressionBuilder builder) : base(builder) { }
+      public EndingInValueParser(ExpressionBuilder builder) : base(builder)
+      {
+      }
 
       public abstract IMatched<Unit> Prefix(ParseState state, Token[] tokens);
 
@@ -14,7 +16,7 @@ namespace Kagami.Library.Parsers.Expressions
 
       public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
       {
-         return Prefix(state, tokens).Map(u => getValue(state, builder.Flags)).Map(s => Suffix(state, s));
+         return Prefix(state, tokens).Map(_ => getValue(state, builder.Flags)).Map(s => Suffix(state, s));
       }
    }
 }

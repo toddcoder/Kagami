@@ -5,7 +5,7 @@ namespace Kagami.Library.Nodes.Statements
 {
    public class Yield : Statement
    {
-      Expression expression;
+      protected Expression expression;
 
       public Yield(Expression expression) => this.expression = expression;
 

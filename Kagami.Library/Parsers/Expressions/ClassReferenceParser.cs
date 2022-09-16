@@ -10,7 +10,9 @@ namespace Kagami.Library.Parsers.Expressions
    {
       public override string Pattern => $"^ /(|s|) /({REGEX_CLASS_GETTING}) /b";
 
-      public ClassReferenceParser(ExpressionBuilder builder) : base(builder) { }
+      public ClassReferenceParser(ExpressionBuilder builder) : base(builder)
+      {
+      }
 
       public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
       {
@@ -22,7 +24,7 @@ namespace Kagami.Library.Parsers.Expressions
             builder.Add(new ClassSymbol(cls.Name));
             return Unit.Matched();
          }
-         else if (Module.Global.FullDataComparisandName(className).If(out var _))
+         else if (Module.Global.FullDataComparisandName(className).If(out _))
          {
             builder.Add(new FieldSymbol(className));
             return Unit.Matched();
@@ -32,14 +34,14 @@ namespace Kagami.Library.Parsers.Expressions
             builder.Add(new ClassSymbol(className));
             return Unit.Matched();
          }
-			else if (state.ContainsPattern(className))
+         else if (state.ContainsPattern(className))
          {
-	         builder.Add(new FieldSymbol(className));
-	         return Unit.Matched();
+            builder.Add(new FieldSymbol(className));
+            return Unit.Matched();
          }
          else
          {
-	         return notMatched<Unit>();
+            return notMatched<Unit>();
          }
       }
    }

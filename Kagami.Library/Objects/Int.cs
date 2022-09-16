@@ -7,9 +7,9 @@ using static Kagami.Library.Operations.NumericFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct Int : IObject, INumeric, IComparable<Int>, IEquatable<Int>, IFormattable, IRangeItem, IComparable
+   public readonly struct Int : IObject, INumeric, IComparable<Int>, IEquatable<Int>, IFormattable, IRangeItem, IComparable
    {
-      public static implicit operator Int(int value) => new Int(value);
+      public static implicit operator Int(int value) => new(value);
 
       public static IObject IntObject(int value) => new Int(value);
 
@@ -17,7 +17,7 @@ namespace Kagami.Library.Objects
 
       public static IObject One => IntObject(1);
 
-      int value;
+      private readonly int value;
 
       public Int(int value) : this() => this.value = value;
 
@@ -45,26 +45,16 @@ namespace Kagami.Library.Objects
 
       public bool IsTrue => value != 0;
 
-      public (INumeric, INumeric) Compatible(INumeric obj)
+      public (INumeric, INumeric) Compatible(INumeric obj) => obj.ClassName switch
       {
-         switch (obj.ClassName)
-         {
-            case "Int":
-               return (this, obj.ToInt());
-            case "Float":
-               return (ToFloat(), obj.ToFloat());
-            case "Byte":
-               return (this, obj.ToByte());
-            case "Long":
-               return (ToLong(), obj.ToLong());
-            case "Complex":
-               return (ToComplex(), obj.ToComplex());
-            case "Rational":
-               return (ToRational(), obj.ToRational());
-            default:
-               return (this, obj.ToInt());
-         }
-      }
+         "Int" => (this, obj.ToInt()),
+         "Float" => (ToFloat(), obj.ToFloat()),
+         "Byte" => (this, obj.ToByte()),
+         "Long" => (ToLong(), obj.ToLong()),
+         "Complex" => (ToComplex(), obj.ToComplex()),
+         "Rational" => (ToRational(), obj.ToRational()),
+         _ => (this, obj.ToInt())
+      };
 
       public INumeric ToByte() => new Byte(AsByte());
 
@@ -92,7 +82,7 @@ namespace Kagami.Library.Objects
 
       public INumeric ToComplex() => new Complex(AsComplex());
 
-      public System.Numerics.Complex AsComplex() => new System.Numerics.Complex(value, 0);
+      public System.Numerics.Complex AsComplex() => new(value, 0);
 
       public bool IsComplex => false;
 
@@ -104,9 +94,9 @@ namespace Kagami.Library.Objects
 
       public String ZFill(int count) => zfill(AsString, count);
 
-	   public IObject Raise(INumeric power) => raise(this, power);
+      public IObject Raise(INumeric power) => raise(this, power);
 
-	   public int Compare(IObject obj) => compatibleCompare(this, obj);
+      public int Compare(IObject obj) => compatibleCompare(this, obj);
 
       public IObject Object => this;
 
@@ -126,7 +116,7 @@ namespace Kagami.Library.Objects
 
       public String Format(string format) => formatNumber(value, format);
 
-	   public Boolean IsEven => value % 2 == 0;
+      public Boolean IsEven => value % 2 == 0;
 
       public Boolean IsOdd => value % 2 != 0;
 
@@ -136,7 +126,7 @@ namespace Kagami.Library.Objects
          {
             if ((value & 1) == 0)
             {
-	            return value == 2;
+               return value == 2;
             }
             else
             {
@@ -145,7 +135,7 @@ namespace Kagami.Library.Objects
                {
                   if (value % num == 0)
                   {
-	                  return false;
+                     return false;
                   }
 
                   num += 2;
@@ -160,14 +150,14 @@ namespace Kagami.Library.Objects
       {
          if (value <= 1)
          {
-	         return 1;
+            return 1;
          }
          else
          {
             var num = 1;
             for (var index = 2; index <= value; index++)
             {
-	            num *= index;
+               num *= index;
             }
 
             return num;
@@ -178,7 +168,7 @@ namespace Kagami.Library.Objects
 
       public IRangeItem Predecessor => (Int)(value - 1);
 
-      public Range Range() => new Range((Int)0, this, false);
+      public Range Range() => new((Int)0, this, false);
 
       public Interval Millisecond => value.Millisecond();
 
@@ -190,20 +180,20 @@ namespace Kagami.Library.Objects
 
       public Interval Day => value.Day();
 
-	   public Interval Week => (7 * value).Day();
+      public Interval Week => (7 * value).Day();
 
-      public Char Char() => new Char((char)value);
+      public Char Char() => new((char)value);
 
-      public Byte Byte() => new Byte((byte)value);
+      public Byte Byte() => new((byte)value);
 
       public IObject Times(Lambda lambda)
       {
-	      for (var i = 0; i < value; i++)
-	      {
-		      lambda.Invoke();
-	      }
+         for (var i = 0; i < value; i++)
+         {
+            lambda.Invoke();
+         }
 
-	      return Void.Value;
+         return Void.Value;
       }
    }
 }

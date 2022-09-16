@@ -5,10 +5,10 @@ namespace Kagami.Library.Runtime
 {
    public class BitIterator : IEnumerable<bool[]>
    {
-      static bool isBitSet(int value, int position) => (value & 1 << position) != 0;
+      protected static bool isBitSet(int value, int position) => (value & 1 << position) != 0;
 
-      int limit;
-      bool[] digits;
+      protected int limit;
+      protected bool[] digits;
 
       public BitIterator(int digitCount)
       {
@@ -22,7 +22,7 @@ namespace Kagami.Library.Runtime
          {
             for (var j = 0; j < digits.Length; j++)
             {
-	            digits[j] = isBitSet(i, j);
+               digits[j] = isBitSet(i, j);
             }
 
             yield return digits;

@@ -7,13 +7,13 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct Interval : IObject, IRangeItem
+   public readonly struct Interval : IObject, IRangeItem
    {
-      public static implicit operator Interval(TimeSpan timeSpan) => new Interval(timeSpan);
+      public static implicit operator Interval(TimeSpan timeSpan) => new(timeSpan);
 
       public static IObject IntervalObject(TimeSpan timeSpan) => new Interval(timeSpan);
 
-      TimeSpan value;
+      private readonly TimeSpan value;
 
       public Interval(TimeSpan value) : this() => this.value = value;
 
@@ -37,11 +37,11 @@ namespace Kagami.Library.Objects
       {
          if (obj is Interval i)
          {
-	         return value.CompareTo(i.value);
+            return value.CompareTo(i.value);
          }
          else
          {
-	         throw incompatibleClasses(obj, "Interval");
+            throw incompatibleClasses(obj, "Interval");
          }
       }
 
@@ -51,11 +51,11 @@ namespace Kagami.Library.Objects
       {
          if (min is Interval minInterval && max is Interval maxInterval)
          {
-	         return value >= minInterval.value && (inclusive ? value <= maxInterval.value : value < maxInterval.value);
+            return value >= minInterval.value && (inclusive ? value <= maxInterval.value : value < maxInterval.value);
          }
          else
          {
-	         return false;
+            return false;
          }
       }
 
@@ -65,7 +65,7 @@ namespace Kagami.Library.Objects
 
       public IRangeItem Predecessor => (Interval)value.Add(-1.Second());
 
-      public Range Range() => new Range((Interval)value.Add(-value.Seconds.Seconds()), this, true);
+      public Range Range() => new((Interval)value.Add(-value.Seconds.Seconds()), this, true);
 
       public Int Milliseconds => value.Milliseconds;
 

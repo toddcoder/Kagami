@@ -6,8 +6,8 @@ namespace Kagami.Library.Nodes.Statements
 {
    public class Loop : Statement
    {
-      Block block;
-      Expression expression;
+      protected Block block;
+      protected Expression expression;
 
       public Loop(Block block, Expression expression)
       {

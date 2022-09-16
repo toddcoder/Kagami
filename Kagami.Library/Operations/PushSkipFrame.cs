@@ -11,7 +11,7 @@ namespace Kagami.Library.Operations
       {
          increment = true;
 
-         var frame = new Frame() { Address = address, FrameType = FrameType.Skip };
+         var frame = new Frame { Address = address, FrameType = FrameType.Skip };
          machine.PushFrame(frame);
 
          return notMatched<IObject>();

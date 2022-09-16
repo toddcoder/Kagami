@@ -8,7 +8,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct Arguments : IObject, IEnumerable<IObject>
+   public readonly struct Arguments : IObject, IEnumerable<IObject>
    {
       public static Arguments Append(Arguments arguments, IObject item)
       {
@@ -19,10 +19,10 @@ namespace Kagami.Library.Objects
          return new Arguments(newArguments);
       }
 
-      public static Arguments Empty => new Arguments(new IObject[] { });
+      public static Arguments Empty => new(new IObject[] { });
 
-      IObject[] arguments;
-      string[] labels;
+      private readonly IObject[] arguments;
+      private readonly string[] labels;
 
       public Arguments(params IObject[] arguments) : this()
       {
@@ -32,9 +32,9 @@ namespace Kagami.Library.Objects
 
       public string ClassName => "Arguments";
 
-      public string AsString => arguments.Select(i => i.AsString).Stringify();
+      public string AsString => arguments.Select(i => i.AsString).ToString(", ");
 
-      public string Image => arguments.Select(i => i.Image).Stringify();
+      public string Image => arguments.Select(i => i.Image).ToString(", ");
 
       public int Hash => arguments.GetHashCode();
 
@@ -52,15 +52,15 @@ namespace Kagami.Library.Objects
          {
             if (index >= arguments.Length)
             {
-	            throw "Argument missing".Throws();
+               throw "Argument missing".Throws();
             }
             else if (index < 0)
             {
-	            throw "Malformed argument request".Throws();
+               throw "Malformed argument request".Throws();
             }
             else
             {
-	            return arguments[index];
+               return arguments[index];
             }
          }
       }
@@ -73,13 +73,13 @@ namespace Kagami.Library.Objects
       {
          foreach (var argument in arguments)
          {
-	         yield return argument;
+            yield return argument;
          }
       }
 
       IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-      public Arguments Pass(int count) => new Arguments(arguments.Skip(count).ToArray());
+      public Arguments Pass(int count) => new(arguments.Skip(count).ToArray());
 
       public Arguments Prepend(IObject prefix)
       {

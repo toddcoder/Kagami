@@ -24,26 +24,25 @@ namespace Kagami.Library.Classes
       {
          base.RegisterClassMessages();
 
-         classMessages["e".get()] = (cls, msg) => (Float)Math.E;
-         classMessages["pi".get()] = (cls, msg) => (Float)Math.PI;
-         classMessages["nan".get()] = (cls, msg) => (Float)double.NaN;
-         classMessages["parse"] = (cls, msg) => parse(msg.Arguments[0].AsString);
-         classMessages["max".get()] = (cls, msg) => Float.FloatObject(double.MaxValue);
-         classMessages["min".get()] = (cls, msg) => Float.FloatObject(double.MinValue);
+         classMessages["e".get()] = (_, _) => (Float)Math.E;
+         classMessages["pi".get()] = (_, _) => (Float)Math.PI;
+         classMessages["nan".get()] = (_, _) => (Float)double.NaN;
+         classMessages["parse"] = (_, msg) => parse(msg.Arguments[0].AsString);
+         classMessages["max".get()] = (_, _) => Float.FloatObject(double.MaxValue);
+         classMessages["min".get()] = (_, _) => Float.FloatObject(double.MinValue);
       }
 
       public static IObject parse(string value)
       {
-	      try
-	      {
-		      var number = double.Parse(value.Replace("_", ""));
-		      return Success.Object(Float.FloatObject(number));
-
-	      }
-	      catch (Exception exception)
-	      {
-		      return Failure.Object(exception.Message);
-	      }
+         try
+         {
+            var number = double.Parse(value.Replace("_", ""));
+            return Success.Object(Float.FloatObject(number));
+         }
+         catch (Exception exception)
+         {
+            return Failure.Object(exception.Message);
+         }
       }
 
       public IObject Parse(string source) => Float.FloatObject(source.ToDouble());

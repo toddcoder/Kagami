@@ -7,7 +7,7 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Objects
 {
-	public struct SelectorItem : IEnumerable<SelectorItem>
+	public readonly struct SelectorItem : IEnumerable<SelectorItem>
 	{
 		public SelectorItem(string label, IMaybe<TypeConstraint> typeConstraint, SelectorItemType selectorItemType) : this()
 		{
@@ -22,7 +22,7 @@ namespace Kagami.Library.Objects
 
 		public SelectorItemType SelectorItemType { get; }
 
-		public SelectorItem LabelOnly() => new SelectorItem(Label, none<TypeConstraint>(), SelectorItemType);
+		public SelectorItem LabelOnly() => new(Label, none<TypeConstraint>(), SelectorItemType);
 
 		public IEnumerator<SelectorItem> GetEnumerator()
 		{

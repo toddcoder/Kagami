@@ -6,7 +6,7 @@ namespace Kagami.Library.Operations
 {
    public class PushString : Operation
    {
-      String value;
+      protected String value;
 
       public PushString(string value) => this.value = value;
 

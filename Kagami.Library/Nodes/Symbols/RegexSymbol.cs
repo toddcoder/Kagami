@@ -5,7 +5,7 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class RegexSymbol : Symbol, IConstant
    {
-      Regex regex;
+      protected Regex regex;
 
       public RegexSymbol(string pattern, bool ignoreCase, bool multiline, bool global, bool textOnly)
       {

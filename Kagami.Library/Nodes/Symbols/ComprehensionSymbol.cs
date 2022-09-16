@@ -7,8 +7,8 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class ComprehensionSymbol : Symbol
    {
-      Block block;
-      string image;
+      protected Block block;
+      protected string image;
 
       public ComprehensionSymbol(Block block, string image)
       {
@@ -22,11 +22,11 @@ namespace Kagami.Library.Nodes.Symbols
          var yieldingInvokable = new YieldingInvokable(functionName, Parameters.Empty, image);
          if (builder.RegisterInvokable(yieldingInvokable, block, true).If(out _, out var exception))
          {
-	         builder.PushObject(yieldingInvokable);
+            builder.PushObject(yieldingInvokable);
          }
          else
          {
-	         throw exception;
+            throw exception;
          }
       }
 

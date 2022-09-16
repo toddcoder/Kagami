@@ -5,7 +5,7 @@ namespace Kagami.Library.Objects
 {
    public class DistinctAction : IStreamAction
    {
-      Set<IObject> existing;
+      protected Set<IObject> existing;
 
       public DistinctAction() => existing = new Set<IObject>();
 
@@ -15,11 +15,11 @@ namespace Kagami.Library.Objects
          {
             if (existing.Contains(status.Object))
             {
-	            return new Skipped();
+               return new Skipped();
             }
             else
             {
-	            existing.Add(status.Object);
+               existing.Add(status.Object);
             }
          }
 
@@ -31,11 +31,11 @@ namespace Kagami.Library.Objects
          existing.Clear();
          foreach (var value in iterator.List())
          {
-	         if (!existing.Contains(value))
-	         {
-		         existing.Add(value);
-		         yield return value;
-	         }
+            if (!existing.Contains(value))
+            {
+               existing.Add(value);
+               yield return value;
+            }
          }
       }
 

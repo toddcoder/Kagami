@@ -5,9 +5,9 @@ namespace Kagami.Library.Objects
 {
 	public class OpenRangeCollection : ICollection, IObject
 	{
-		IObject current;
-		Lambda lambda;
-		OpenRange openRange;
+		protected IObject current;
+		protected Lambda lambda;
+		protected OpenRange openRange;
 
 		public OpenRangeCollection(OpenRange openRange)
 		{
@@ -55,5 +55,7 @@ namespace Kagami.Library.Objects
 		public bool Match(IObject comparisand, Hash<string, IObject> bindings) => openRange.Match(comparisand, bindings);
 
 		public bool IsTrue => openRange.IsTrue;
-	}
+
+      public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
+   }
 }

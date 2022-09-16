@@ -5,8 +5,8 @@ namespace Kagami.Library.Nodes.Statements
 {
    public class ReturnNewObject : Statement
    {
-      string className;
-      Parameters parameters;
+      protected string className;
+      protected Parameters parameters;
 
       public ReturnNewObject(string className, Parameters parameters)
       {

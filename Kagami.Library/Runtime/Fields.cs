@@ -24,7 +24,7 @@ namespace Kagami.Library.Runtime
       public Fields()
       {
          fields = new Hash<string, Field>();
-         buckets = new AutoHash<string, List<string>>(key => new List<string>(), true);
+         buckets = new AutoHash<string, List<string>>(_ => new List<string>(), true);
       }
 
       public Responding<Field> Find(string name, bool getting, int depth = 0)
@@ -66,7 +66,7 @@ namespace Kagami.Library.Runtime
                var labelsOnlyImage = selector.LabelsOnly().Image;
                if (buckets.ContainsKey(labelsOnlyImage))
                {
-                  foreach (var bucket in buckets[labelsOnlyImage])
+                  foreach (var matchSelector in buckets[labelsOnlyImage].Where(matchSelector => selector.IsEquivalentTo((Selector)matchSelector)))
                   {
                      Selector matchSelector = bucket;
                      if (selector.IsEquivalentTo(matchSelector))
@@ -267,7 +267,7 @@ namespace Kagami.Library.Runtime
          }
       }
 
-      public override string ToString() => fields.Select(i => $"{i.Key} = {i.Value.Value.Image}").Stringify();
+      public override string ToString() => fields.Select(i => $"{i.Key} = {i.Value.Value.Image}").ToString(", ");
 
       public void SetBindings(Hash<string, IObject> bindings)
       {

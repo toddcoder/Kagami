@@ -9,10 +9,10 @@ namespace Kagami.Library.Parsers.Statements
    {
       public override string Pattern => $"^ /'loop' {REGEX_ANTICIPATE_END}";
 
-      static IMatched<Expression> getUntil(ParseState state)
+      protected static IMatched<Expression> getUntil(ParseState state)
       {
          var untilParser = new UntilParser();
-         return untilParser.Scan(state).Map(u => untilParser.Expression);
+         return untilParser.Scan(state).Map(_ => untilParser.Expression);
       }
 
       public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)

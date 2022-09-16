@@ -6,13 +6,13 @@ namespace Kagami.Library.Nodes.Statements
 {
    public class For : Statement
    {
-      string fieldName;
-      Expression source;
-      Block block;
+      protected Symbol comparisand;
+      protected Expression source;
+      protected Block block;
 
-      public For(string fieldName, Expression source, Block block)
+      public For(Symbol comparisand, Expression source, Block block)
       {
-         this.fieldName = fieldName;
+         this.comparisand = comparisand;
          this.source = source;
          this.block = block;
       }
@@ -21,8 +21,11 @@ namespace Kagami.Library.Nodes.Statements
       {
          var topLabel = newLabel("top");
          var endLabel = newLabel("end");
+         var exitLabel = newLabel("exit");
+         var skipLabel = newLabel("skip");
+         var backToTopLabel = newLabel("back.to.top");
 
-         builder.PushFrame();
+         builder.PushExitFrame(exitLabel);
          var iteratorName = newLabel("iterator");
          builder.NewField(iteratorName, false, true);
          source.Generate(builder);
@@ -32,23 +35,33 @@ namespace Kagami.Library.Nodes.Statements
 
          builder.Label(topLabel);
          builder.PushFrame();
-         builder.NewField(fieldName, true, true);
+         comparisand.Generate(builder);
          builder.GetField(iteratorName);
          builder.SendMessage("next()", 0);
          builder.GoToIfNone(endLabel);
+         builder.Swap();
+         builder.Match();
+         builder.GoToIfTrue(backToTopLabel);
 
-         builder.AssignField(fieldName, false);
-         builder.GetField(fieldName);
+         builder.PopFrame();
+         builder.GoTo(topLabel);
 
+         builder.Label(backToTopLabel);
+         builder.PushSkipFrame(skipLabel);
          block.Generate(builder);
+         builder.PopFrame();
+         builder.Label(skipLabel);
          builder.PopFrame();
          builder.GoTo(topLabel);
 
          builder.Label(endLabel);
          builder.PopFrame();
          builder.PopFrame();
+
+         builder.Label(exitLabel);
+         builder.NoOp();
       }
 
-      public override string ToString() => $"for {fieldName} <- {source} {block}";
+      public override string ToString() => $"for {comparisand} <- {source} {block}";
    }
 }

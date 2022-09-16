@@ -4,9 +4,9 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public struct Boolean : IObject, IObjectCompare, IComparable<Boolean>, IEquatable<Boolean>, IComparable
+   public readonly struct Boolean : IObject, IObjectCompare, IComparable<Boolean>, IEquatable<Boolean>, IComparable
    {
-      public static implicit operator Boolean(bool value) => new Boolean(value);
+      public static implicit operator Boolean(bool value) => new(value);
 
       public static IObject BooleanObject(bool value) => new Boolean(value);
 
@@ -14,7 +14,7 @@ namespace Kagami.Library.Objects
 
       public static IObject False => BooleanObject(false);
 
-      bool value;
+      private readonly bool value;
 
       public Boolean(bool value) : this() => this.value = value;
 
@@ -32,7 +32,7 @@ namespace Kagami.Library.Objects
 
       public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
-	   public bool IsTrue => value;
+      public bool IsTrue => value;
 
       public int Compare(IObject obj) => CompareTo((Boolean)obj);
 

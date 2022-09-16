@@ -8,8 +8,8 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class CallSysFunctionSymbol0 : Symbol
    {
-      Func<Sys, IResult<IObject>> func;
-      string image;
+      protected Func<Sys, IResult<IObject>> func;
+      protected string image;
 
       public CallSysFunctionSymbol0(Func<Sys, IResult<IObject>> func, string image)
       {

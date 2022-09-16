@@ -7,7 +7,7 @@ namespace Kagami.IO
 {
    public class FileIterator : Iterator
    {
-      TextReader reader;
+      protected TextReader reader;
 
       public FileIterator(File file) : base(file) => reader = file.Reader();
 
@@ -21,7 +21,7 @@ namespace Kagami.IO
          }
          else
          {
-	         return String.StringObject(line).Some();
+            return String.StringObject(line).Some();
          }
       }
 

@@ -5,23 +5,16 @@ namespace Kagami.Library.Objects
 {
 	public class FlatMapAction : IStreamAction
 	{
-		Lambda lambda;
+		protected Lambda lambda;
 
 		public FlatMapAction(Lambda lambda) => this.lambda = lambda;
 
 		public ILazyStatus Next(ILazyStatus status)
 		{
 			try
-			{
-				if (status.IsAccepted)
-				{
-					return Accepted.New(lambda.Invoke(status.Object));
-				}
-				else
-				{
-					return status;
-				}
-			}
+         {
+            return status.IsAccepted ? Accepted.New(lambda.Invoke(status.Object)) : status;
+         }
 			catch (Exception exception)
 			{
 				return new Failed(exception);

@@ -5,7 +5,7 @@ namespace Kagami.Library.Nodes.Symbols
 {
    public class AndSymbol : Symbol
    {
-      Expression expression;
+      protected Expression expression;
 
       public AndSymbol(Expression expression) => this.expression = expression;
 

@@ -7,8 +7,7 @@ namespace Kagami.Library.Parsers.Statements
 {
    public class AliasParser : StatementParser
    {
-      public override string Pattern =>
-         $"^ /'alias' /(|s+|) /({REGEX_CLASS}) /(|s|) /'=' /(|s|) /({REGEX_CLASS}) {REGEX_ANTICIPATE_END}";
+      public override string Pattern => $"^ /'alias' /(|s+|) /({REGEX_CLASS}) /(|s|) /'=' /(|s|) /({REGEX_CLASS}) {REGEX_ANTICIPATE_END}";
 
       public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
       {
@@ -18,11 +17,11 @@ namespace Kagami.Library.Parsers.Statements
 
          if (Module.Global.Alias(aliasName, className).IfNot(out var exception))
          {
-	         return failedMatch<Unit>(exception);
+            return failedMatch<Unit>(exception);
          }
          else
          {
-	         return Unit.Matched();
+            return Unit.Matched();
          }
       }
    }

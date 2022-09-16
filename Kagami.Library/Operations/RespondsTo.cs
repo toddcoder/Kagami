@@ -9,7 +9,7 @@ namespace Kagami.Library.Operations
 {
    public class RespondsTo : Operation
    {
-      string message;
+      protected string message;
 
       public RespondsTo(string message) => this.message = message;
 
@@ -17,11 +17,11 @@ namespace Kagami.Library.Operations
       {
          if (machine.Peek().If(out var value))
          {
-	         return Boolean.BooleanObject(classOf(value).RespondsTo(message)).Matched();
+            return Boolean.BooleanObject(classOf(value).RespondsTo(message)).Matched();
          }
          else
          {
-	         return failedMatch<IObject>(emptyStack());
+            return failedMatch<IObject>(emptyStack());
          }
       }
 

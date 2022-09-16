@@ -6,7 +6,7 @@ namespace Kagami.Library.Operations
 {
    public class PushBoolean : Operation
    {
-      Boolean value;
+      protected Boolean value;
 
       public PushBoolean(bool value) => this.value = value;
 

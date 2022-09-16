@@ -3,18 +3,18 @@ using Kagami.Library.Runtime;
 
 namespace Kagami.IO
 {
-    public class IO : Package
-    {
-       public override string ClassName => "IO";
+   public class IO : Package
+   {
+      public override string ClassName => "IO";
 
-       public override void LoadTypes(Module module)
-       {
-          module.RegisterClass(new IOClass());
-          module.RegisterClass(new FileClass());
-       }
+      public override void LoadTypes(Module module)
+      {
+         module.RegisterClass(new IOClass());
+         module.RegisterClass(new FileClass());
+      }
 
-       public File File(string path) => new File(path);
+      public File File(string path) => new(path);
 
-       public Folder Folder(string path) => new Folder(path);
-    }
+      public Folder Folder(string path) => new(path);
+   }
 }

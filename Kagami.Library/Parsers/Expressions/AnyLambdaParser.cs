@@ -4,7 +4,7 @@ namespace Kagami.Library.Parsers.Expressions
 {
    public class AnyLambdaParser : MultiParser
    {
-      ExpressionBuilder builder;
+      protected ExpressionBuilder builder;
 
       public AnyLambdaParser(ExpressionBuilder builder) => this.builder = builder;
 
