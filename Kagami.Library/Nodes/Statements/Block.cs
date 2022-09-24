@@ -42,30 +42,30 @@ namespace Kagami.Library.Nodes.Statements
       }
 
       protected List<Statement> statements;
-      protected IMaybe<TypeConstraint> typeConstraint;
+      protected Maybe<TypeConstraint> _typeConstraint;
 
-      public Block(List<Statement> statements, IMaybe<TypeConstraint> typeConstraint)
+      public Block(List<Statement> statements, Maybe<TypeConstraint> _typeConstraint)
       {
          this.statements = statements;
-         this.typeConstraint = typeConstraint;
+         this._typeConstraint = _typeConstraint;
       }
 
       public Block(List<Statement> statements)
       {
          this.statements = statements;
-         typeConstraint = none<TypeConstraint>();
+         _typeConstraint = none<TypeConstraint>();
       }
 
-      public Block(Statement statement, IMaybe<TypeConstraint> typeConstraint)
+      public Block(Statement statement, Maybe<TypeConstraint> _typeConstraint)
       {
          statements = new List<Statement> { statement };
-         this.typeConstraint = typeConstraint;
+         this._typeConstraint = _typeConstraint;
       }
 
       public Block(Statement statement)
       {
          statements = new List<Statement> { statement };
-         typeConstraint = none<TypeConstraint>();
+         _typeConstraint = none<TypeConstraint>();
       }
 
       public Block(Expression expression) : this(new Return(expression, none<TypeConstraint>()))
@@ -75,7 +75,7 @@ namespace Kagami.Library.Nodes.Statements
       public Block()
       {
          statements = new List<Statement>();
-         typeConstraint = none<TypeConstraint>();
+         _typeConstraint = none<TypeConstraint>();
       }
 
       public bool Yielding { get; set; }
@@ -92,7 +92,7 @@ namespace Kagami.Library.Nodes.Statements
             builder.PushNone();
             builder.Return(true);
          }
-         else if (typeConstraint.If(out var tc))
+         else if (_typeConstraint.If(out var tc))
          {
             builder.ReturnType(true, tc);
          }

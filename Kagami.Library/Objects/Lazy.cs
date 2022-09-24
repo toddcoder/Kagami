@@ -10,26 +10,26 @@ namespace Kagami.Library.Objects
    public class Lazy : IObject
    {
       protected IInvokable invokable;
-      protected IMaybe<IObject> _value;
+      protected Maybe<IObject> _value;
 
       public Lazy(IInvokable invokable)
       {
          this.invokable = invokable;
-         _value = none<IObject>();
+         _value = nil;
       }
 
       protected IObject getValue()
       {
-         if (_value.If(out var value))
+         if (_value.Map(out var value))
          {
             return value;
          }
-         else if (Machine.Current.Invoke(invokable, Arguments.Empty, 0).If(out var result, out var _exception))
+         else if (Machine.Current.Invoke(invokable, Arguments.Empty, 0).Map(out var result, out var _exception))
          {
             _value = result.Some();
             return result;
          }
-         else if (_exception.If(out var exception))
+         else if (_exception.Map(out var exception))
          {
             throw exception;
          }

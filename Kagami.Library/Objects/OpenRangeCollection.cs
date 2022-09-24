@@ -18,7 +18,7 @@ namespace Kagami.Library.Objects
 
 		public IIterator GetIterator(bool lazy) => new LazyIterator(this);
 
-		public IMaybe<IObject> Next(int index)
+		public Maybe<IObject> Next(int index)
 		{
 			var result = current;
 			current = lambda.Invoke(current);
@@ -26,7 +26,7 @@ namespace Kagami.Library.Objects
 			return result.Some();
 		}
 
-		public IMaybe<IObject> Peek(int index) => current.Some();
+		public Maybe<IObject> Peek(int index) => current.Some();
 
 		public Int Length => openRange.Length;
 

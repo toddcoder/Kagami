@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Text;
 using Core.Collections;
+using Core.Matching;
 using Core.Monads;
 using Core.Numbers;
-using Core.RegularExpressions;
 using Core.Strings;
 using static Kagami.Library.Objects.ObjectFunctions;
 
@@ -14,37 +14,36 @@ namespace Kagami.Library.Objects
    {
       private static IObject getMatchOrText(RegexMatch match, bool textOnly) => textOnly ? match.Text : match;
 
-      private readonly string pattern;
+      private readonly Core.Matching.Pattern pattern;
       private readonly bool ignoreCase;
       private readonly bool multiline;
       private readonly bool global;
       private readonly bool textOnly;
-      private readonly Matcher matcher;
-      private readonly Func<Matcher, Func<string, IMaybe<int>>> nameToIndex;
+      private readonly Func<MatchResult, Func<string, Maybe<int>>> nameToIndex;
 
       public Regex(string pattern, bool ignoreCase, bool multiline, bool global, bool textOnly) : this()
       {
          this.pattern = pattern;
+         this.pattern = this.pattern.WithIgnoreCase(ignoreCase);
+         this.pattern = this.pattern.WithMultiline(multiline);
          this.ignoreCase = ignoreCase;
          this.multiline = multiline;
          this.global = global;
          this.textOnly = textOnly;
 
-         matcher = new Matcher();
          nameToIndex = m => m.IndexFromName;
       }
 
       public string ClassName => "Regex";
 
-      public string AsString => matcher.Pattern;
+      public string AsString => pattern.Regex;
 
       public string Image
       {
          get
          {
             var builder = new StringBuilder("/");
-            matcher.IsMatch("", pattern);
-            builder.Append(matcher.Pattern);
+            builder.Append(pattern.Regex);
             if (ignoreCase || multiline || global)
             {
                builder.Append(";");
@@ -82,19 +81,20 @@ namespace Kagami.Library.Objects
 
       public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
-      public bool IsTrue => pattern.Length > 0;
+      public bool IsTrue => pattern.Regex.Length > 0;
 
-      private bool isMatch(string input) => matcher.IsMatch(input, pattern, ignoreCase, multiline);
+      private Maybe<MatchResult> isMatch(string input) => input.Matches(pattern);
 
       public IObject Matches(string input)
       {
          var self = this;
+         var _result = isMatch(input);
 
          if (global)
          {
-            if (isMatch(input))
+            if (_result)
             {
-               return new Tuple(matcher.Select(m => new RegexMatch(m, self.nameToIndex(self.matcher)))
+               return new Tuple(_result.Value.Select(m => new RegexMatch(m, self.nameToIndex(self.matcher)))
                   .Select(m => getMatchOrText(m, self.textOnly)).ToArray());
             }
             else

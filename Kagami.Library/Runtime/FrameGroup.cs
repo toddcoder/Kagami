@@ -26,7 +26,7 @@ namespace Kagami.Library.Runtime
 
       public FrameGroup()
       {
-         frames = new Frame[0];
+         frames = Array.Empty<Frame>();
          functionFrameIndex = -1;
       }
 
@@ -38,7 +38,7 @@ namespace Kagami.Library.Runtime
          }
       }
 
-      public IMaybe<Frame> FunctionFrame => maybe(functionFrameIndex > -1, () => frames[functionFrameIndex]);
+      public Maybe<Frame> FunctionFrame => maybe(functionFrameIndex > -1, () => frames[functionFrameIndex]);
 
       public int FunctionFrameIndex
       {
@@ -48,11 +48,11 @@ namespace Kagami.Library.Runtime
 
       public int Count => frames.Length;
 
-      public IMaybe<Frame> ExitFrame => frames.FirstOrNone(f => f.FrameType == FrameType.Exit);
+      public Maybe<Frame> ExitFrame => frames.FirstOrNone(f => f.FrameType == FrameType.Exit);
 
-      public IMaybe<Frame> SkipFrame => frames.FirstOrNone(f => f.FrameType == FrameType.Skip);
+      public Maybe<Frame> SkipFrame => frames.FirstOrNone(f => f.FrameType == FrameType.Skip);
 
-      public IMaybe<Frame> TopFrame => maybe(frames.Length > 0, () => frames[0]);
+      public Maybe<Frame> TopFrame => maybe(frames.Length > 0, () => frames[0]);
 
       public IEnumerator<Frame> GetEnumerator()
       {

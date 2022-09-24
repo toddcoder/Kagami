@@ -6,11 +6,10 @@ using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Collections;
 using Core.Enumerables;
+using Core.Matching;
 using Core.Monads;
-using Core.RegularExpressions;
 using Core.Strings;
 using static Kagami.Library.AllExceptions;
-using static Core.Monads.MonadFunctions;
 using Boolean = Kagami.Library.Objects.Boolean;
 using String = Kagami.Library.Objects.String;
 using Tuple = Kagami.Library.Objects.Tuple;
@@ -83,7 +82,7 @@ namespace Kagami.Library.Packages
          return obj;
       }
 
-      public IResult<IObject> Match(IObject x, IObject y)
+      public Result<IObject> Match(IObject x, IObject y)
       {
          var bindings = new Hash<string, IObject>();
          if (x.Match(y, bindings))
@@ -99,14 +98,15 @@ namespace Kagami.Library.Packages
 
       public Long Ticks() => new(DateTime.Now.Ticks);
 
-      public IResult<IObject> NewParameterlessObject(string className, string fieldName)
+      public Result<IObject> NewParameterlessObject(string className, string fieldName)
       {
          try
          {
             var userObject = new UserObject(className, new Fields(), Parameters.Empty);
-            if (Machine.Current.CurrentFrame.Fields.New(fieldName, userObject).IfNot(out var exception))
+            var _field = Machine.Current.CurrentFrame.Fields.New(fieldName, userObject);
+            if (!_field)
             {
-               return failure<IObject>(exception);
+               return _field.Exception;
             }
             else
             {
@@ -115,7 +115,7 @@ namespace Kagami.Library.Packages
          }
          catch (Exception exception)
          {
-            return failure<IObject>(exception);
+            return exception;
          }
       }
 
@@ -123,10 +123,21 @@ namespace Kagami.Library.Packages
 
       public IObject Second(Tuple tuple) => tuple[1];
 
-      public IResult<IObject> GetReference(string fieldName)
+      public Result<IObject> GetReference(string fieldName)
       {
-         return Machine.Current.Find(fieldName, true).FlatMap(f => new Reference(f).Success<IObject>(),
-            () => failure<IObject>(fieldNotFound(fieldName)), failure<IObject>);
+         var _response = Machine.Current.Find(fieldName, true);
+         if (_response)
+         {
+            return new Reference(_response);
+         }
+         else if (_response.AnyException)
+         {
+            return _response.AnyException.Value;
+         }
+         else
+         {
+            return fieldNotFound(fieldName);
+         }
       }
 
       public IObject Tuple(IObject value) => new Tuple(value);
@@ -194,13 +205,14 @@ namespace Kagami.Library.Packages
 
       public Regex Regex(string pattern)
       {
-         if (pattern.Matcher("';' /(['IiMmGgTt']+) $").If(out var matcher))
+         var _result = pattern.Matches("';' /(['IiMmGgTt']+) $");
+         if (_result)
          {
             var ignoreCase = false;
             var multiline = false;
             var global = false;
             var textOnly = true;
-            foreach (var option in matcher.FirstGroup)
+            foreach (var option in _result.Value.FirstGroup)
             {
                switch (option)
                {
@@ -223,7 +235,7 @@ namespace Kagami.Library.Packages
                }
             }
 
-            pattern = pattern.Drop(-matcher.Length);
+            pattern = pattern.Drop(-_result.Value.Length);
             return new Regex(pattern, ignoreCase, multiline, global, textOnly);
          }
          else

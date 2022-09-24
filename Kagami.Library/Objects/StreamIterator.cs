@@ -42,24 +42,25 @@ namespace Kagami.Library.Objects
 
       protected IEnumerable<IObject> list()
       {
-         IMaybe<IObject> item;
+         Maybe<IObject> _item = nil;
          do
          {
-            item = Next();
-            if (item.If(out var obj))
+            _item = Next();
+            if (_item)
             {
-               yield return obj;
+               yield return _item.Value;
             }
-         } while (item.IsSome);
+         } while (_item);
       }
 
-      public IMaybe<IObject> Next()
+      public Maybe<IObject> Next()
       {
          while (!Machine.Current.Context.Cancelled())
          {
-            if (iterator.Next().If(out var value))
+            var _next = iterator.Next();
+            if (_next)
             {
-               var status = Accepted.New(value);
+               var status = Accepted.New(_next.Value);
 
                foreach (var action in actions)
                {
@@ -70,7 +71,7 @@ namespace Kagami.Library.Objects
                   }
                   else if (status.IsEnded)
                   {
-                     return none<IObject>();
+                     return nil;
                   }
                }
 
@@ -80,19 +81,19 @@ namespace Kagami.Library.Objects
                }
                else if (status.IsEnded)
                {
-                  return none<IObject>();
+                  return nil;
                }
             }
             else
             {
-               return none<IObject>();
+               return nil;
             }
          }
 
-         return none<IObject>();
+         return nil;
       }
 
-      public IMaybe<IObject> Peek() => Next();
+      public Maybe<IObject> Peek() => Next();
 
       public IObject Reset()
       {

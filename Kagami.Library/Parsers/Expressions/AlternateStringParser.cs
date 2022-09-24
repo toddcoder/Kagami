@@ -13,7 +13,7 @@ namespace Kagami.Library.Parsers.Expressions
 
       public override string Pattern => "^ /(|s|) /['rl'] /[dquote]";
 
-      public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+      public override Responding<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
       {
          var type = AlternateStringType.Standard;
          switch (tokens[2].Text)

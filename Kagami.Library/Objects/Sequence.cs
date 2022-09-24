@@ -29,7 +29,7 @@ namespace Kagami.Library.Objects
          i = 0;
       }
 
-      public override IMaybe<IObject> Next()
+      public override Maybe<IObject> Next()
       {
          if (i < count)
          {
@@ -39,7 +39,7 @@ namespace Kagami.Library.Objects
          }
          else
          {
-            return none<IObject>();
+            return nil;
          }
       }
    }

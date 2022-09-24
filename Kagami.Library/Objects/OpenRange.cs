@@ -37,9 +37,9 @@ namespace Kagami.Library.Objects
 
       public IIterator GetIterator(bool lazy) => new OpenRangeCollection(this).GetIterator(lazy);
 
-      public IMaybe<IObject> Next(int index) => none<IObject>();
+      public Maybe<IObject> Next(int index) => nil;
 
-      public IMaybe<IObject> Peek(int index) => none<IObject>();
+      public Maybe<IObject> Peek(int index) => nil;
 
       public Int Length => -1;
 

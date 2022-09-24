@@ -17,7 +17,7 @@ namespace Kagami.Library.Objects
          stop = range.StopObj;
       }
 
-      public override IMaybe<IObject> Next()
+      public override Maybe<IObject> Next()
       {
          if (range.Compare(current, stop))
          {
@@ -27,11 +27,11 @@ namespace Kagami.Library.Objects
          }
          else
          {
-            return none<IObject>();
+            return nil;
          }
       }
 
-      public override IMaybe<IObject> Peek() => maybe(range.Compare(current, stop), () => current.Object);
+      public override Maybe<IObject> Peek() => maybe(range.Compare(current, stop), () => current.Object);
 
       public override IEnumerable<IObject> List()
       {

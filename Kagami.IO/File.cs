@@ -35,9 +35,9 @@ namespace Kagami.IO
 
       public IIterator GetIterator(bool lazy) => new FileIterator(this);
 
-      public IMaybe<IObject> Next(int index) => none<IObject>();
+      public Maybe<IObject> Next(int index) => nil;
 
-      public IMaybe<IObject> Peek(int index) => none<IObject>();
+      public Maybe<IObject> Peek(int index) => nil;
 
       public Int Length => (int)fileName.Length;
 

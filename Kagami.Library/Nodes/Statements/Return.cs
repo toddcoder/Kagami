@@ -8,17 +8,17 @@ namespace Kagami.Library.Nodes.Statements
    public class Return : Statement
    {
       protected Expression expression;
-      protected IMaybe<TypeConstraint> typeConstraint;
+      protected Maybe<TypeConstraint> _typeConstraint;
 
-      public Return(Expression expression, IMaybe<TypeConstraint> typeConstraint)
+      public Return(Expression expression, Maybe<TypeConstraint> _typeConstraint)
       {
          this.expression = expression;
-         this.typeConstraint = typeConstraint;
+         this._typeConstraint = _typeConstraint;
       }
 
       public override void Generate(OperationsBuilder builder)
       {
-         builder.Return(expression, this, typeConstraint);
+         builder.Return(expression, this, _typeConstraint);
       }
 
       public override string ToString() => $"return {expression}";

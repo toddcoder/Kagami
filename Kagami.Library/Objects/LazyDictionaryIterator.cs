@@ -16,13 +16,13 @@ namespace Kagami.Library.Objects
          keys = dictionary.KeyArray;
       }
 
-      public override IMaybe<IObject> Next() => maybe(index < keys.Length, () =>
+      public override Maybe<IObject> Next() => maybe(index < keys.Length, () =>
       {
          var key = keys[index++];
          return Tuple.NewTuple(key, dictionary.GetRaw(key)).Some();
       });
 
-      public override IMaybe<IObject> Peek() => maybe(index < keys.Length, () =>
+      public override Maybe<IObject> Peek() => maybe(index < keys.Length, () =>
       {
          var key = keys[index];
          return Tuple.NewTuple(key, dictionary.GetRaw(key)).Some();
@@ -30,12 +30,12 @@ namespace Kagami.Library.Objects
 
       public override IEnumerable<IObject> List()
       {
-         var item = none<IObject>();
+         Maybe<IObject> _item = nil;
          index = 0;
          do
          {
-            item = Next();
-            if (item.If(out var obj))
+            _item = Next();
+            if (_item.Map(out var obj))
             {
 	            yield return obj;
             }
@@ -44,7 +44,7 @@ namespace Kagami.Library.Objects
             {
 	            yield break;
             }
-         } while (item.IsSome);
+         } while (_item);
       }
    }
 }

@@ -91,10 +91,13 @@ namespace Kagami.Library.Objects
             {
                for (var i = 0; i < length; i++)
                {
-                  var left = selectorItems[i];
-                  var right = otherItems[i];
-                  if (right.TypeConstraint.If(out var rTypeConstraint) && left.TypeConstraint.If(out var lTypeConstraint) &&
-                     !rTypeConstraint.Matches(lTypeConstraint))
+                  /*var left = selectorItems[i];
+                  var right = otherItems[i];*/
+                  var _result =
+                     from left in selectorItems[i].TypeConstraint
+                     from right in otherItems[i].TypeConstraint
+                     select (left, right);
+                  if (_result && !_result.Value.left.Matches(_result.Value.right))
                   {
                      return false;
                   }
@@ -113,7 +116,8 @@ namespace Kagami.Library.Objects
          }
       }
 
-      public IMaybe<Selector> Optional()
+
+      public Maybe<Selector> Optional()
       {
          var self = this;
          return maybe(selectorItems.Length > 0, () => new Selector(self.name, self.selectorItems.Skip(-1).ToArray(), ""));

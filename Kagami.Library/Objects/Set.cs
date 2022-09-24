@@ -68,9 +68,9 @@ namespace Kagami.Library.Objects
          return lazy ? new LazyIterator(this) : new Iterator(this);
       }
 
-      public IMaybe<IObject> Next(int index) => maybe(index < set.Count, () => list[index]);
+      public Maybe<IObject> Next(int index) => maybe(index < set.Count, () => list[index]);
 
-      public IMaybe<IObject> Peek(int index) => Next(index);
+      public Maybe<IObject> Peek(int index) => Next(index);
 
       public Int Length => set.Count;
 
@@ -118,9 +118,9 @@ namespace Kagami.Library.Objects
       {
          var iterator = GetIterator(false);
          var _next = iterator.Next();
-         while (_next.If(out var next))
+         while (_next)
          {
-            Append(next);
+            Append(_next.Value);
             _next = iterator.Next();
          }
 

@@ -100,7 +100,7 @@ namespace Kagami.Library.Runtime
          classes["Set"] = new SetClass();
       }
 
-      public IMaybe<BaseClass> Class(string name, bool forwardsIncluded = false)
+      public Maybe<BaseClass> Class(string name, bool forwardsIncluded = false)
       {
          if (classes.ContainsKey(name))
          {
@@ -108,26 +108,26 @@ namespace Kagami.Library.Runtime
          }
          else if (forwardsIncluded)
          {
-            return new ForwardedClass(name).Some<BaseClass>();
+            return new ForwardedClass(name);
          }
          else
          {
-            return none<BaseClass>();
+            return nil;
          }
       }
 
-      public IMaybe<Mixin> Mixin(string name) => mixins.Map(name);
+      public Maybe<Mixin> Mixin(string name) => mixins.Map(name);
 
-      public IResult<Unit> RegisterClass(BaseClass cls)
+      public Result<Unit> RegisterClass(BaseClass cls)
       {
          if (classes.ContainsKey(cls.Name))
          {
-            return failure<Unit>(classAlreadyExists(cls.Name));
+            return classAlreadyExists(cls.Name);
          }
          else
          {
             classes[cls.Name] = cls;
-            return Unit.Success();
+            return unit;
          }
       }
 
@@ -145,7 +145,7 @@ namespace Kagami.Library.Runtime
 
       public void RegisterDataComparisand(string dataType, string dataComparisand) => dataReferences[dataComparisand] = dataType;
 
-      public IMaybe<string> FullDataComparisandName(string name) => dataReferences.Map(name).Map(s => $"{s}.{name}");
+      public Maybe<string> FullDataComparisandName(string name) => dataReferences.Map(name).Map(s => $"{s}.{name}");
 
       public bool RegisterOperator(string name)
       {
@@ -162,16 +162,16 @@ namespace Kagami.Library.Runtime
 
       public bool OperatorExists(string name) => operators.Contains(name);
 
-      public IResult<Unit> Alias(string alias, string className)
+      public Result<Unit> Alias(string alias, string className)
       {
          if (classes.ContainsKey(className))
          {
             classes[alias] = classes[className];
-            return Unit.Success();
+            return unit;
          }
          else
          {
-            return failure<Unit>(classNotFound(className));
+            return classNotFound(className);
          }
       }
    }

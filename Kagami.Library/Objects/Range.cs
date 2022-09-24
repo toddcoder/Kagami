@@ -120,13 +120,13 @@ namespace Kagami.Library.Objects
 
       public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(new Array(list(this))) : new RangeIterator(this);
 
-      public IMaybe<IObject> Next(int index)
+      public Maybe<IObject> Next(int index)
       {
          var self = this;
          return maybe(index == 0, () => (IObject)self.GetIterator(false).ToArray());
       }
 
-      public IMaybe<IObject> Peek(int index) => none<IObject>();
+      public Maybe<IObject> Peek(int index) => nil;
 
       public Int Length => list(this).Count();
 

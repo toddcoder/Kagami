@@ -6,7 +6,7 @@ namespace Kagami.Library.Objects
    {
       Slice Slice(ICollection collection);
 
-      IMaybe<IObject> Get(IObject index);
+      Maybe<IObject> Get(IObject index);
 
       IObject Set(IObject index, IObject value);
 

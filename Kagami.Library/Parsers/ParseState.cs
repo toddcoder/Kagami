@@ -31,11 +31,11 @@ namespace Kagami.Library.Parsers
 		List<Symbol> postGenerationSymbols;
 		Maybe<int> exceptionIndex;
 		Stack<bool> yieldingStack;
-		Stack<IMaybe<TypeConstraint>> returnTypesStack;
+		Stack<Maybe<TypeConstraint>> returnTypesStack;
 		Hash<string, Expression> defExpressions;
 		Hash<string, Function> macros;
-		Stack<IMaybe<IPrefixCode>> prefixCodes;
-		Stack<IMaybe<ImplicitState>> implicitStates;
+		Stack<Maybe<IPrefixCode>> prefixCodes;
+		Stack<Maybe<ImplicitState>> implicitStates;
 		Stack<ImplicitExpressionState> implicitExpressionStates;
 		Set<string> patterns;
 
@@ -53,11 +53,11 @@ namespace Kagami.Library.Parsers
          postGenerationSymbols = new List<Symbol>();
          exceptionIndex = none<int>();
          yieldingStack = new Stack<bool>();
-         returnTypesStack = new Stack<IMaybe<TypeConstraint>>();
+         returnTypesStack = new Stack<Maybe<TypeConstraint>>();
          defExpressions = new Hash<string, Expression>();
          macros = new Hash<string, Function>();
-         prefixCodes = new Stack<IMaybe<IPrefixCode>>();
-         implicitStates = new Stack<IMaybe<ImplicitState>>();
+         prefixCodes = new Stack<Maybe<IPrefixCode>>();
+         implicitStates = new Stack<Maybe<ImplicitState>>();
          implicitExpressionStates = new Stack<ImplicitExpressionState>();
          patterns = new Set<string>();
       }
@@ -106,7 +106,7 @@ namespace Kagami.Library.Parsers
          statements = new List<Statement>();
       }
 
-      public IResult<List<Statement>> PopStatements() => tryTo(() =>
+      public Result<List<Statement>> PopStatements() => tryTo(() =>
       {
          var returnStatements = statements;
          statements = new List<Statement>(statementStack.Pop());
@@ -143,7 +143,7 @@ namespace Kagami.Library.Parsers
 
       public string Indentation => indentation;
 
-      public IMatched<Unit> Advance()
+      public Responding<Unit> Advance()
       {
          SkipEndOfLine();
          if (Scan($"{Indentation.FriendlyString()} /(/s+)").If(out var newIndentation, out var anyException))
@@ -225,7 +225,7 @@ namespace Kagami.Library.Parsers
          _ => color
       };
 
-      public IMatched<string> Scan(string pattern, params Color[] colors)
+      public Responding<string> Scan(string pattern, params Color[] colors)
       {
          return CurrentSource.MatchOne(RealizePattern(pattern)).Map(m =>
          {
@@ -241,7 +241,7 @@ namespace Kagami.Library.Parsers
          });
       }
 
-      public IMatched<string> SkipEndOfLine() => Scan("/(^ /r /n | ^ /r | ^ /n)", Color.Whitespace);
+      public Responding<string> SkipEndOfLine() => Scan("/(^ /r /n | ^ /r | ^ /n)", Color.Whitespace);
 
       public void Colorize(Token[] tokens, params Color[] colors)
       {
@@ -276,7 +276,7 @@ namespace Kagami.Library.Parsers
 
       public Statement LastStatement => statements[statements.Count - 1];
 
-      public IMatched<IMaybe<Expression>> getAnd()
+      public IMatched<Maybe<Expression>> getAnd()
       {
          var builder = new ExpressionBuilder(ExpressionFlags.OmitIf);
          var parser = new IfAsAndParser(builder);
@@ -288,12 +288,12 @@ namespace Kagami.Library.Parsers
             }
             else
             {
-               return failedMatch<IMaybe<Expression>>(exception);
+               return failedMatch<Maybe<Expression>>(exception);
             }
          }
          else if (anyException.If(out var exception))
          {
-            return failedMatch<IMaybe<Expression>>(exception);
+            return failedMatch<Maybe<Expression>>(exception);
          }
          else
          {
@@ -311,7 +311,7 @@ namespace Kagami.Library.Parsers
          yieldingStack.Push(true);
       }
 
-      public void SetReturnType(IMaybe<TypeConstraint> typeConstraint)
+      public void SetReturnType(Maybe<TypeConstraint> typeConstraint)
       {
          returnTypesStack.Pop();
          returnTypesStack.Push(typeConstraint);
@@ -319,45 +319,45 @@ namespace Kagami.Library.Parsers
 
       public bool RemoveYieldFlag() => yieldingStack.Pop();
 
-      public IMaybe<TypeConstraint> GetReturnType() => returnTypesStack.Peek();
+      public Maybe<TypeConstraint> GetReturnType() => returnTypesStack.Peek();
 
       public void RemoveReturnType() => returnTypesStack.Pop();
 
       public void RegisterDefExpression(string fieldName, Expression expression) => defExpressions[fieldName] = expression;
 
-      public IMaybe<Expression> DefExpression(string fieldName) => defExpressions.Map(fieldName);
+      public Maybe<Expression> DefExpression(string fieldName) => defExpressions.Map(fieldName);
 
       public void RegisterMacro(Function function) => macros[function.Selector] = function;
 
-      public IMaybe<Function> Macro(string fullFunctionName) => macros.Map(fullFunctionName);
+      public Maybe<Function> Macro(string fullFunctionName) => macros.Map(fullFunctionName);
 
       public bool BlockFollows() => CurrentSource.IsMatch($"^ ':' (/r /n | /r | /n) '{indentation}' [' /t']+", multiline: true);
 
-      //public IMaybe<ImplicitState> ImplicitState { get; set; } = none<ImplicitState>();
+      //public Maybe<ImplicitState> ImplicitState { get; set; } = none<ImplicitState>();
 
-      public IMaybe<(string, Expression)> ForExpression { get; set; } = none<(string, Expression)>();
+      public Maybe<(string, Expression)> ForExpression { get; set; } = none<(string, Expression)>();
 
 /*
-		public IMaybe<(string, Symbol)> MapExpression { get; set; } = none<(string, Symbol)>();
+		public Maybe<(string, Symbol)> MapExpression { get; set; } = none<(string, Symbol)>();
 
-		public IMaybe<(string, Symbol)> IfExpression { get; set; } = none<(string, Symbol)>();
+		public Maybe<(string, Symbol)> IfExpression { get; set; } = none<(string, Symbol)>();
 */
 
-      public IMaybe<(string, Symbol)> LeftZipExpression { get; set; } = none<(string, Symbol)>();
+      public Maybe<(string, Symbol)> LeftZipExpression { get; set; } = none<(string, Symbol)>();
 
-      public IMaybe<(string, Symbol)> RightZipExpression { get; set; } = none<(string, Symbol)>();
+      public Maybe<(string, Symbol)> RightZipExpression { get; set; } = none<(string, Symbol)>();
 
 /*
-		public IMaybe<(bool, Symbol)> LeftFoldExpression { get; set; } = none<(bool, Symbol)>();
+		public Maybe<(bool, Symbol)> LeftFoldExpression { get; set; } = none<(bool, Symbol)>();
 
-		public IMaybe<(bool, Symbol)> RightFoldExpression { get; set; } = none<(bool, Symbol)>();
+		public Maybe<(bool, Symbol)> RightFoldExpression { get; set; } = none<(bool, Symbol)>();
 
-		public IMaybe<(string, Symbol)> BindExpression { get; set; } = none<(string, Symbol)>();
+		public Maybe<(string, Symbol)> BindExpression { get; set; } = none<(string, Symbol)>();
 */
 
       public void BeginPrefixCode() => prefixCodes.Push(none<IPrefixCode>());
 
-      public IMaybe<IPrefixCode> PrefixCode
+      public Maybe<IPrefixCode> PrefixCode
       {
          get => prefixCodes.Peek();
          set
@@ -371,7 +371,7 @@ namespace Kagami.Library.Parsers
 
       public void BeginImplicitState() => implicitStates.Push(none<ImplicitState>());
 
-      public IMaybe<ImplicitState> ImplicitState
+      public Maybe<ImplicitState> ImplicitState
       {
          get => implicitStates.Peek();
          set

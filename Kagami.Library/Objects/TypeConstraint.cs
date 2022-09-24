@@ -31,9 +31,10 @@ namespace Kagami.Library.Objects
             var comparisand = comparisands[i];
             if (comparisand is ForwardedClass forwardedClass)
             {
-               if (Module.Global.Class(forwardedClass.Name).If(out var actualClass))
+               var _actualClass = Module.Global.Class(forwardedClass.Name);
+               if (_actualClass)
                {
-                  comparisands[i] = actualClass;
+                  comparisands[i] = _actualClass;
                }
                else
                {

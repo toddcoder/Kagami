@@ -52,11 +52,11 @@ namespace Kagami.Library.Objects
 
       public virtual IObject Invoke(params IObject[] arguments)
       {
-	      if (Machine.Current.Invoke(invokable1, new Arguments(arguments), fields, 0).If(out var value, out var _exception))
+	      if (Machine.Current.Invoke(invokable1, new Arguments(arguments), fields, 0).Map(out var value, out var _exception))
 	      {
 		      return value;
 	      }
-	      else if (_exception.If(out var exception))
+	      else if (_exception.Map(out var exception))
 	      {
 		      throw exception;
 	      }
@@ -80,7 +80,7 @@ namespace Kagami.Library.Objects
          foreach (var parameter in parameters.GetCapturingParameters())
          {
             var fieldName = parameter.Name;
-            if (Machine.Current.Find(fieldName, true).If(out var field))
+            if (Machine.Current.Find(fieldName, true).Map(out var field))
             {
                if (!fields.ContainsKey(fieldName))
                {
@@ -88,7 +88,7 @@ namespace Kagami.Library.Objects
                }
 
                var value = field.Value;
-               if (parameter.TypeConstraint.If(out var typeConstraint) && !typeConstraint.Matches(classOf(value)))
+               if (parameter.TypeConstraint.Map(out var typeConstraint) && !typeConstraint.Matches(classOf(value)))
                {
 	               throw incompatibleClasses(value, typeConstraint.AsString);
                }

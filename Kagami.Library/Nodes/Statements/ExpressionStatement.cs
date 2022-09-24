@@ -11,27 +11,27 @@ namespace Kagami.Library.Nodes.Statements
    {
       protected Expression expression;
       protected bool returnExpression;
-      protected IMaybe<TypeConstraint> _typeConstraint;
+      protected Maybe<TypeConstraint> _typeConstraint;
 
-      public ExpressionStatement(Expression expression, bool returnExpression, IMaybe<TypeConstraint> typeConstraint)
+      public ExpressionStatement(Expression expression, bool returnExpression, Maybe<TypeConstraint> _typeConstraint)
       {
          this.expression = expression;
          this.returnExpression = returnExpression;
-         _typeConstraint = typeConstraint;
+         this._typeConstraint = _typeConstraint;
       }
 
-      public ExpressionStatement(Expression expression, bool returnExpression) : this(expression, returnExpression, none<TypeConstraint>())
+      public ExpressionStatement(Expression expression, bool returnExpression) : this(expression, returnExpression, nil)
       {
       }
 
-      public ExpressionStatement(Symbol symbol, bool returnExpression, IMaybe<TypeConstraint> typeConstraint)
+      public ExpressionStatement(Symbol symbol, bool returnExpression, Maybe<TypeConstraint> _typeConstraint)
       {
          expression = new Expression(symbol);
          this.returnExpression = returnExpression;
-         _typeConstraint = typeConstraint;
+         this._typeConstraint = _typeConstraint;
       }
 
-      public ExpressionStatement(Symbol symbol, bool returnExpression) : this(symbol, returnExpression, none<TypeConstraint>())
+      public ExpressionStatement(Symbol symbol, bool returnExpression) : this(symbol, returnExpression, nil)
       {
       }
 
@@ -41,9 +41,9 @@ namespace Kagami.Library.Nodes.Statements
          builder.Peek(Index);
          if (returnExpression)
          {
-            if (_typeConstraint.If(out var typeConstraint))
+            if (_typeConstraint)
             {
-               builder.ReturnType(true, typeConstraint);
+               builder.ReturnType(true, _typeConstraint);
             }
             else
             {

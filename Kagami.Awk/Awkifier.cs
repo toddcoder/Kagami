@@ -134,27 +134,27 @@ namespace Kagami.Awk
 
       public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new Iterator(this);
 
-		public Maybe<IObject> Next(int index)
-		{
-			if (index < records.Length)
-			{
-				split(index);
-				var array = fields.Select(String.StringObject).ToArray();
-				var currentFields = Machine.Fields;
-				for (var i = 0; i < array.Length; i++)
-				{
-					currentFields.New($"__${i}", array[i]);
-				}
+      public Maybe<IObject> Next(int index)
+      {
+         if (index < records.Length)
+         {
+            split(index);
+            var array = fields.Select(String.StringObject).ToArray();
+            var currentFields = Machine.Fields;
+            for (var i = 0; i < array.Length; i++)
+            {
+               currentFields.New($"__${i}", array[i]);
+            }
 
-				return new Tuple(array).Some<IObject>();
-			}
-			else
+            return new Tuple(array).Some<IObject>();
+         }
+         else
          {
             return nil;
          }
-		}
+      }
 
-      public IMaybe<IObject> Peek(int index) => Next(index);
+      public Maybe<IObject> Peek(int index) => Next(index);
 
       protected int getLength()
       {

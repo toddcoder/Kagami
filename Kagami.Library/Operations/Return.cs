@@ -9,39 +9,39 @@ namespace Kagami.Library.Operations
 {
    public class Return : Operation
    {
-      public static IMatched<IObject> ReturnAction(Machine machine, bool returnTopOfStack)
+      public static Responding<IObject> ReturnAction(Machine machine, bool returnTopOfStack)
       {
-         var rtn = Machine.Current.CurrentFrame.Pop().Map(o => o.Matched()).Recover(_ => notMatched<IObject>());
+         var _response = Machine.Current.CurrentFrame.Pop().Responding();
 
          var frames = machine.PopFrames();
-         if (frames.FunctionFrame.If(out var frame))
+         if (frames.FunctionFrame.Map(out var frame))
          {
             var returnAddress = frame.Address;
             if (returnTopOfStack)
             {
-               if (rtn.If(out var v, out var anyException))
+               if (_response.Map(out var v, out var _exception))
                {
-                  rtn = copyFields(v, frames).Matched();
+                  _response = copyFields(v, frames).Response();
                }
-               else if (anyException.If(out var exception))
+               else if (_exception.Map(out var exception))
                {
-                  return failedMatch<IObject>(exception);
+                  return exception;
                }
                else
                {
-                  return failedMatch<IObject>(emptyStack());
+                  return emptyStack();
                }
             }
             else
             {
-               rtn = notMatched<IObject>();
+               _response = nil;
             }
 
-            return machine.GoTo(returnAddress) ? rtn : failedMatch<IObject>(badAddress(returnAddress));
+            return machine.GoTo(returnAddress) ? _response : badAddress(returnAddress);
          }
          else
          {
-            return failedMatch<IObject>(invalidStack());
+            return invalidStack();
          }
       }
 
@@ -49,7 +49,7 @@ namespace Kagami.Library.Operations
 
       public Return(bool returnTopOfStack) => this.returnTopOfStack = returnTopOfStack;
 
-      public override IMatched<IObject> Execute(Machine machine) => ReturnAction(machine, returnTopOfStack);
+      public override Responding<IObject> Execute(Machine machine) => ReturnAction(machine, returnTopOfStack);
 
       public override bool Increment => false;
 

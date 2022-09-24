@@ -2,26 +2,25 @@
 using Kagami.Library.Runtime;
 using Core.Monads;
 using static Kagami.Library.AllExceptions;
-using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Operations
 {
    public class Yield : Operation
    {
-      public static IMatched<IObject> YieldAction(Machine machine)
+      public static Responding<IObject> YieldAction(Machine machine)
       {
          var topFrame = machine.CurrentFrame;
          var frames = machine.PopFrames();
-         IMatched<IObject> returnValue;
+         Responding<IObject> _value;
          if (topFrame.IsEmpty)
          {
-	         returnValue = None.NoneValue.Matched();
+            _value = None.NoneValue.Response();
          }
-         else if (topFrame.Pop().If(out var popped, out var exception))
+         else if (topFrame.Pop().Map(out var popped, out var exception))
          {
 	         if (popped is None)
 	         {
-		         returnValue = popped.Matched();
+		         _value = popped.Response();
 	         }
 	         else
 	         {
@@ -41,34 +40,34 @@ namespace Kagami.Library.Operations
 		         }
 
 		         popped = copy;
-		         returnValue = new YieldReturn(popped, machine.Address, frames).Matched<IObject>();
+		         _value = new YieldReturn(popped, machine.Address, frames).Response<IObject>();
 	         }
          }
          else
          {
-	         return failedMatch<IObject>(exception);
+            return exception;
          }
 
-         if (frames.FunctionFrame.If(out var frame))
+         if (frames.FunctionFrame.Map(out var frame))
          {
             var returnAddress = frame.Address;
 
             if (machine.GoTo(returnAddress))
             {
-	            return returnValue;
+	            return _value;
             }
             else
             {
-	            return failedMatch<IObject>(badAddress(returnAddress));
+               return badAddress(returnAddress);
             }
          }
          else
          {
-	         return failedMatch<IObject>(invalidStack());
+            return invalidStack();
          }
       }
 
-      public override IMatched<IObject> Execute(Machine machine) => YieldAction(machine);
+      public override Responding<IObject> Execute(Machine machine) => YieldAction(machine);
 
       public override string ToString() => "yield";
 

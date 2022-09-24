@@ -160,9 +160,10 @@ namespace Kagami.Library.Packages
             case INumeric n:
                return func(n);
             case String s:
-               if (Module.Global.Class(className).If(out var baseClass))
+               var _baseClass = Module.Global.Class(className);
+               if (_baseClass)
                {
-                  if (baseClass is IParse parse)
+                  if (_baseClass.Value is IParse parse)
                   {
                      return (T)parse.Parse(s.Value);
                   }

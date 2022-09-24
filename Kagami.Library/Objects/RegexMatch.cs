@@ -3,9 +3,8 @@ using System.Linq;
 using Core.Collections;
 using Core.Monads;
 using Core.Numbers;
-using Core.Objects;
-using Core.RegularExpressions;
 using static Core.Monads.MonadFunctions;
+using static Core.Objects.GetHashCodeGenerator;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
@@ -16,12 +15,11 @@ namespace Kagami.Library.Objects
       private readonly int index;
       private readonly int length;
       private readonly RegexGroup[] groups;
-      private readonly Func<string, IMaybe<int>> nameToIndex;
+      private readonly Func<string, Maybe<int>> nameToIndex;
       private readonly Hash<string, IObject> passed;
       private readonly Hash<string, IObject> internals;
-      private readonly Equatable<RegexMatch> equatable;
 
-      public RegexMatch(Matcher.Match match, Func<string, IMaybe<int>> nameToIndex) : this()
+      public RegexMatch(Core.Matching.Match match, Func<string, Maybe<int>> nameToIndex) : this()
       {
          text = match.Text;
          index = match.Index;
@@ -37,8 +35,6 @@ namespace Kagami.Library.Objects
             ["length"] = (Int)length,
             ["groups"] = new Tuple(groups.Select(g => (IObject)g).ToArray())
          };
-
-         equatable = new Equatable<RegexMatch>(this, "text", "index", "length", "groups");
       }
 
       public RegexMatch(Hash<string, IObject> passed) : this()
@@ -46,13 +42,11 @@ namespace Kagami.Library.Objects
          text = "";
          index = 0;
          length = 0;
-         groups = new RegexGroup[0];
-         nameToIndex = _ => none<int>();
+         groups = System.Array.Empty<RegexGroup>();
+         nameToIndex = _ => nil;
 
          this.passed = passed;
          internals = new Hash<string, IObject>();
-
-         equatable = new Equatable<RegexMatch>(this, "text", "index", "length", "groups");
       }
 
       public string ClassName => "Match";
@@ -87,12 +81,26 @@ namespace Kagami.Library.Objects
 
       public String this[int index] => index.Between(0).Until(groups.Length) ? groups[index].Text : "";
 
-      public String this[string name] => nameToIndex(name).If(out var i) ? this[i] : "";
+      public String this[string name]
+      {
+         get
+         {
+            var self = this;
+            return nameToIndex(name).Map(i => self[i]) | "";
+         }
+      }
 
-      public bool Equals(RegexMatch other) => equatable.Equals(other);
+      public bool Equals(RegexMatch other)
+      {
+         return text == other.text && index == other.index && length == other.length &&
+            groups.Length == other.groups.Length && groups.Zip(other.groups, (g1, g2) => g1.IsEqualTo(g2)).All(x => x);
+      }
 
       public override bool Equals(object obj) => obj is RegexMatch other && Equals(other);
 
-      public override int GetHashCode() => equatable.GetHashCode();
+      public override int GetHashCode()
+      {
+         return hashCode() + text.GetHashCode() + index.GetHashCode() + length.GetHashCode() + groups.GetHashCode();
+      }
    }
 }

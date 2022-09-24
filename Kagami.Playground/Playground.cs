@@ -15,7 +15,7 @@ using Core.Enumerables;
 using Core.Exceptions;
 using Core.Monads;
 using Core.Numbers;
-using Core.RegularExpressions;
+using Core.Matching;
 using Core.Strings;
 using Core.WinForms.Consoles;
 using Core.WinForms.Documents;
@@ -45,10 +45,10 @@ namespace Kagami.Playground
       protected Colorizer colorizer;
       protected bool dumpOperations;
       protected bool tracing;
-      protected IMaybe<int> _exceptionIndex;
+      protected Maybe<int> _exceptionIndex;
       protected bool cancelled;
       protected FolderName packageFolder;
-      protected IMaybe<ExceptionData> _exceptionData;
+      protected Maybe<ExceptionData> _exceptionData;
       protected int firstEditorLine;
 
       public Playground()
@@ -57,29 +57,28 @@ namespace Kagami.Playground
          firstEditorLine = 0;
       }
 
-      protected static IResult<FileName> existingConfigurationFile()
+      protected static Result<FileName> existingConfigurationFile()
       {
          foreach (var drive in array('C', 'E'))
          {
             FileName configurationFile = $"{drive}{PLAYGROUND_CONFIGURATION_FILE}";
             if (configurationFile.Exists())
             {
-               return configurationFile.Success();
+               return configurationFile;
             }
          }
 
-         return "Couldn't find configuration file".Failure<FileName>();
+         return fail("Couldn't find configuration file");
       }
 
-      protected static IResult<PlaygroundConfiguration> getConfiguration(FileName configurationFile) =>
+      protected static Result<PlaygroundConfiguration> getConfiguration(FileName configurationFile) =>
          from source in configurationFile.TryTo.Text
-         let parser = new Parser(source)
-         from configuration in parser.Parse()
+         from configuration in Setting.FromString(source)
          from obj in configuration.Deserialize<PlaygroundConfiguration>()
          select obj;
 
-      protected static IResult<Unit> setConfiguration(PlaygroundConfiguration configuration, FileName configurationFile) =>
-         from serialized in Configuration.Serialize(configuration, "kagami")
+      protected static Result<Unit> setConfiguration(PlaygroundConfiguration configuration, FileName configurationFile) =>
+         from serialized in Setting.Serialize(configuration, "kagami")
          from unit in configurationFile.TryTo.SetText(serialized.ToString())
          select unit;
 
@@ -87,11 +86,11 @@ namespace Kagami.Playground
       {
          try
          {
-            var result =
+            var _result =
                from file in existingConfigurationFile()
                from config in getConfiguration(file)
                select config;
-            if (result.If(out playgroundConfiguration))
+            if (_result.Map(out playgroundConfiguration))
             {
             }
             else
@@ -121,7 +120,7 @@ namespace Kagami.Playground
 
          try
          {
-            _exceptionData = none<ExceptionData>();
+            _exceptionData = nil;
             document = new Document(this, textEditor, ".kagami", "Kagami", playgroundConfiguration.FontName, playgroundConfiguration.FontSize);
             var menus = document.Menus;
             menus.Menu("&File");
@@ -199,7 +198,7 @@ namespace Kagami.Playground
             dumpOperations = false;
             tracing = false;
             stopwatch = new Stopwatch();
-            _exceptionIndex = none<int>();
+            _exceptionIndex = nil;
             cancelled = false;
             if (playgroundConfiguration.LastFile != null)
             {
@@ -235,23 +234,23 @@ namespace Kagami.Playground
                context.ClearPeeks();
                stopwatch.Reset();
                stopwatch.Start();
-               _exceptionIndex = none<int>();
-               _exceptionData = none<ExceptionData>();
+               _exceptionIndex = nil;
+               _exceptionData = nil;
 
                var kagamiConfiguration = new CompilerConfiguration { ShowOperations = dumpOperations, Tracing = tracing };
                var compiler = new Compiler(textEditor.Text, kagamiConfiguration, context);
-               if (compiler.Generate().If(out var machine, out var exception))
+               if (compiler.Generate().Map(out var machine, out var exception))
                {
                   machine.PackageFolder = packageFolder.FullPath;
                   if (execute)
                   {
-                     if (machine.Execute().IfNot(out exception))
+                     if (machine.Execute().UnMap(out exception))
                      {
                         textWriter.WriteLine(KAGAMI_EXCEPTION_PROMPT + exception.Message);
                         _exceptionIndex = compiler.ExceptionIndex;
-                        if (_exceptionIndex.IsNone)
+                        if (!_exceptionIndex)
                         {
-                           _exceptionIndex = textEditor.SelectionStart.Some();
+                           _exceptionIndex = textEditor.SelectionStart;
                         }
                      }
                      else
@@ -272,7 +271,7 @@ namespace Kagami.Playground
                      textEditor.ResumeAutoScrollingAlways(state);
                   }
 
-                  if (_exceptionIndex.If(out var index))
+                  if (_exceptionIndex.Map(out var index))
                   {
                      var remainingLineLength = getRemainingLineIndex(index);
                      if (remainingLineLength > -1)
@@ -281,7 +280,7 @@ namespace Kagami.Playground
                      }
                   }
 
-                  if (dumpOperations && compiler.Operations.If(out var operations))
+                  if (dumpOperations && compiler.Operations.Map(out var operations))
                   {
                      textWriter.WriteLine(operations);
                   }
@@ -294,12 +293,12 @@ namespace Kagami.Playground
                {
                   textWriter.WriteLine(KAGAMI_EXCEPTION_PROMPT + exception.Message);
                   _exceptionIndex = compiler.ExceptionIndex;
-                  if (_exceptionIndex.IsNone)
+                  if (!_exceptionIndex)
                   {
-                     _exceptionIndex = textEditor.SelectionStart.Some();
+                     _exceptionIndex = textEditor.SelectionStart;
                   }
 
-                  if (_exceptionIndex.If(out var index))
+                  if (_exceptionIndex.Map(out var index))
                   {
                      var remainingLineLength = getRemainingLineIndex(index);
                      if (remainingLineLength > -1)
@@ -383,17 +382,17 @@ namespace Kagami.Playground
       {
       }
 
-      protected IMaybe<(string[] lines, int index)> linesFromSelection()
+      protected Maybe<(string[] lines, int index)> linesFromSelection()
       {
          var lineFromCharIndex1 = textEditor.GetLineFromCharIndex(textEditor.SelectionStart);
          var lineFromCharIndex2 = textEditor.GetLineFromCharIndex(textEditor.SelectionStart + textEditor.SelectionLength);
          var lines = textEditor.Lines;
          if (lineFromCharIndex1.Between(0).Until(lines.Length) && lineFromCharIndex2.Between(0).Until(lines.Length))
          {
-            return (lines.RangeOf(lineFromCharIndex1, lineFromCharIndex2), lineFromCharIndex1).Some();
+            return (lines.RangeOf(lineFromCharIndex1, lineFromCharIndex2), lineFromCharIndex1);
          }
 
-         return none<(string[], int)>();
+         return nil;
       }
 
       protected (int start, int length) saveSelection() => (textEditor.SelectionStart, textEditor.SelectionLength);
@@ -485,7 +484,7 @@ namespace Kagami.Playground
 
                textEditor.DrawModificationGlyphs(e.Graphics);
 
-               if (_exceptionData.If(out var exceptionData))
+               if (_exceptionData.Map(out var exceptionData))
                {
                   var rectangle = textEditor.RectangleFrom(e.Graphics, exceptionData.Index, exceptionData.Length, false);
                   textEditor.DrawWavyUnderline(e.Graphics, rectangle, Color.Red);
@@ -533,7 +532,7 @@ namespace Kagami.Playground
       {
          try
          {
-            _exceptionData = none<ExceptionData>();
+            _exceptionData = nil;
 
             if (document != null)
             {
@@ -663,7 +662,7 @@ namespace Kagami.Playground
                setTextAtInsert(1);
                break;
             case Keys.F1:
-               if (getWord().If(out var begin) && findWord(begin).If(out var source))
+               if (getWord().Map(out var begin) && findWord(begin).Map(out var source))
                {
                   insertText(source.Drop(begin.Length), 0);
                }
@@ -673,19 +672,19 @@ namespace Kagami.Playground
          }
       }
 
-      protected IMaybe<string> getWord()
+      protected Maybe<string> getWord()
       {
-         return textEditor.Text.Keep(textEditor.SelectionStart).Matcher("/(/w+) $").Map(m => m.FirstGroup);
+         return textEditor.Text.Keep(textEditor.SelectionStart).Matches("/(/w+) $").Map(r => r.FirstGroup);
       }
 
-      protected IMaybe<string> findWord(string begin)
+      protected Maybe<string> findWord(string begin)
       {
-         return textEditor.Text.Split("-/w+").Distinct().Where(word => word.StartsWith(begin)).FirstOrNone();
+         return textEditor.Text.Unjoin("-/w+").Distinct().Where(word => word.StartsWith(begin)).FirstOrNone();
       }
 
       protected void Playground_FormClosing(object sender, FormClosingEventArgs e)
       {
-         if (document.FileName.If(out var fileName))
+         if (document.FileName.Map(out var fileName))
          {
             FileName file = fileName;
             if (file.Exists())

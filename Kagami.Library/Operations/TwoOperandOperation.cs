@@ -2,30 +2,38 @@
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Monads;
-using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Operations
 {
    public abstract class TwoOperandOperation : Operation
    {
-      public abstract IMatched<IObject> Execute(Machine machine, IObject x, IObject y);
+      public abstract Responding<IObject> Execute(Machine machine, IObject x, IObject y);
 
-      public override IMatched<IObject> Execute(Machine machine)
+      public override Responding<IObject> Execute(Machine machine)
       {
          try
          {
-            if (machine.Pop().If(out var y, out var exception) && machine.Pop().If(out var x, out exception))
+            var _y = machine.Pop();
+            if (_y)
             {
-	            return Execute(machine, x, y);
+               var _x = machine.Pop();
+               if (_x)
+               {
+                  return Execute(machine, _x.Value, _y.Value);
+               }
+               else
+               {
+                  return _x.Exception;
+               }
             }
             else
             {
-	            return failedMatch<IObject>(exception);
+               return _y.Exception;
             }
          }
          catch (Exception exception)
          {
-            return failedMatch<IObject>(exception);
+            return exception;
          }
       }
    }

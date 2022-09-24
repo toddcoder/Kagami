@@ -74,7 +74,7 @@ namespace Kagami.Library.Parsers.Expressions
          return Unit.Success();
       }
 
-      public IResult<Expression> ToExpression() => EndOfExpression().Map(_ => new Expression(symbols.ToArray()));
+      public Result<Expression> ToExpression() => EndOfExpression().Map(_ => new Expression(symbols.ToArray()));
 
       public IEnumerable<Symbol> Ordered => ordered;
 

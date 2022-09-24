@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
+using Core.Matching;
 using Core.Monads;
-using Core.RegularExpressions;
 using Core.Strings;
 using static Core.Monads.MonadFunctions;
 
@@ -13,7 +13,7 @@ namespace Kagami.Library.Parsers
 
       protected Parser(bool updateLastStatement) => this.updateLastStatement = updateLastStatement;
 
-      public static Token[] GetTokens(ParseState state, Matcher.Match match)
+      public static Token[] GetTokens(ParseState state, Match match)
       {
          return match.Groups.Select(g => new Token(state.Index + g.Index, g.Length, g.Text)).ToArray();
       }
@@ -24,55 +24,53 @@ namespace Kagami.Library.Parsers
 
       public virtual bool Multiline => false;
 
-      public abstract IMatched<Unit> Parse(ParseState state, Token[] tokens);
+      public abstract Responding<Unit> Parse(ParseState state, Token[] tokens);
 
-      public virtual IMatched<Unit> Scan(ParseState state)
+      public virtual Responding<Unit> Scan(ParseState state)
       {
-         IMaybe<Exception> _exception;
-
          if (Pattern.IsEmpty())
          {
             var index = state.Index;
-            var parsed = Parse(state, new Token[0]);
-            if (parsed.If(out _, out _exception))
+            var _parsed = Parse(state, Array.Empty<Token>());
+            if (_parsed)
             {
                if (UpdateIndexOnParseOnly)
                {
                   state.UpdateStatement(index, 1);
                }
             }
-            else if (_exception.IsSome)
+            else if (_parsed.AnyException)
             {
                state.SetExceptionIndex();
             }
 
-            return parsed;
+            return _parsed;
          }
 
-         if (new Matcher().MatchOne(state.CurrentSource, state.RealizePattern(Pattern), IgnoreCase, Multiline).If(out var match, out _exception))
+         Pattern pattern = state.RealizePattern(Pattern);
+         pattern = pattern.WithIgnoreCase(IgnoreCase).WithMultiline(Multiline);
+         var _result = state.CurrentSource.Matches(pattern);
+
+         if (_result)
          {
+            var match = _result.Value.Matches[0];
             var index = state.Index;
-            var parsed = Parse(state, GetTokens(state, match));
-            if (parsed.IsMatched && updateLastStatement)
+            var _parsed = Parse(state, GetTokens(state, match));
+            if (_parsed && updateLastStatement)
             {
                state.UpdateStatement(index, match.Length);
             }
 
-            if (parsed.IsFailedMatch)
+            if (_parsed.AnyException)
             {
                state.SetExceptionIndex();
             }
 
-            return parsed;
-         }
-         else if (_exception.If(out var exception))
-         {
-            state.SetExceptionIndex();
-            return failedMatch<Unit>(exception);
+            return _parsed;
          }
          else
          {
-            return notMatched<Unit>();
+            return nil;
          }
       }
 

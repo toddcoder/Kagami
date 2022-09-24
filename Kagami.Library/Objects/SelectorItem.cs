@@ -9,7 +9,7 @@ namespace Kagami.Library.Objects
 {
 	public readonly struct SelectorItem : IEnumerable<SelectorItem>
 	{
-		public SelectorItem(string label, IMaybe<TypeConstraint> typeConstraint, SelectorItemType selectorItemType) : this()
+		public SelectorItem(string label, Maybe<TypeConstraint> typeConstraint, SelectorItemType selectorItemType) : this()
 		{
 			Label = label;
 			TypeConstraint = typeConstraint;
@@ -18,19 +18,19 @@ namespace Kagami.Library.Objects
 
 		public string Label { get; }
 
-		public IMaybe<TypeConstraint> TypeConstraint { get; }
+		public Maybe<TypeConstraint> TypeConstraint { get; }
 
 		public SelectorItemType SelectorItemType { get; }
 
-		public SelectorItem LabelOnly() => new(Label, none<TypeConstraint>(), SelectorItemType);
+		public SelectorItem LabelOnly() => new(Label, nil, SelectorItemType);
 
 		public IEnumerator<SelectorItem> GetEnumerator()
 		{
-			if (TypeConstraint.If(out var typeConstraint))
+			if (TypeConstraint.Map(out var typeConstraint))
 			{
 				foreach (var tc in typeConstraint)
 				{
-					yield return new SelectorItem(Label, tc.Some(), SelectorItemType);
+					yield return new SelectorItem(Label, tc, SelectorItemType);
 				}
 			}
 			else
@@ -48,9 +48,9 @@ namespace Kagami.Library.Objects
 			}
 
 			builder.Append("_");
-			if (TypeConstraint.If(out var tc))
+			if (TypeConstraint.Map(out var typeConstraint))
 			{
-				builder.Append(tc.Image);
+				builder.Append(typeConstraint.Image);
 			}
 
 			return builder.ToString();

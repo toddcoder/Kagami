@@ -8,7 +8,6 @@ using Kagami.Library;
 using Kagami.Library.Runtime;
 using Core.Monads;
 using static System.Console;
-using static Core.Assertions.AssertionFunctions;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami
@@ -36,9 +35,9 @@ namespace Kagami
 
       protected void exec()
       {
-         if (File.If(out var sourceFile))
+         if (File.Map(out var sourceFile))
          {
-            if (sourceFile.TryTo.Text.If(out var source, out var exception))
+            if (sourceFile.TryTo.Text.Map(out var source, out var exception))
             {
                var stopwatch = new Stopwatch();
                if (Stopwatch)
@@ -48,7 +47,7 @@ namespace Kagami
 
                var configuration = new CompilerConfiguration { ShowOperations = ShowOps, Tracing = Trace };
                var compiler = new Compiler(source, configuration, this);
-               var result =
+               var _result =
                   from machine in compiler.Generate().OnSuccess(m =>
                   {
                      if (configuration.ShowOperations)
@@ -58,7 +57,7 @@ namespace Kagami
                   })
                   from executed in machine.Execute()
                   select executed;
-               if (result.IfNot(out var failureException))
+               if (_result.UnMap(out var failureException))
                {
                   WriteLine($"Exception: {failureException}");
                }
@@ -78,7 +77,7 @@ namespace Kagami
 
       public bool Exec { get; set; }
 
-      public IMaybe<FileName> File { get; set; } = none<FileName>();
+      public Maybe<FileName> File { get; set; } = nil;
 
       public bool Stopwatch { get; set; }
 
@@ -100,10 +99,10 @@ namespace Kagami
 
       public void Put(string value) => Write(putter.Put(value));
 
-      public IResult<string> ReadLine()
+      public Result<string> ReadLine()
       {
          var line = Console.ReadLine();
-         return assert(() => line).Must().Not.BeNull().OrFailure("Input cancelled");
+         return line.Must().Not.BeNull().OrFailure("Input cancelled");
       }
 
       public bool Cancelled() => KeyAvailable && ReadKey().Key == ConsoleKey.Escape;

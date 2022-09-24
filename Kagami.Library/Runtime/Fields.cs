@@ -7,7 +7,6 @@ using Core.Collections;
 using Core.Enumerables;
 using Core.Matching;
 using Core.Monads;
-using Core.Matching;
 using Core.Strings;
 using static Kagami.Library.AllExceptions;
 using static Core.Monads.MonadFunctions;
@@ -38,8 +37,8 @@ namespace Kagami.Library.Runtime
             var field = fields[name];
             return field.Value switch
             {
-               Unassigned when getting => fieldUnassigned(),
                Reference r => r.Field,
+               Unassigned when getting => fieldUnassigned(name),
                _ => field
             };
          }
@@ -66,7 +65,8 @@ namespace Kagami.Library.Runtime
                var labelsOnlyImage = selector.LabelsOnly().Image;
                if (buckets.ContainsKey(labelsOnlyImage))
                {
-                  foreach (var matchSelector in buckets[labelsOnlyImage].Where(matchSelector => selector.IsEquivalentTo((Selector)matchSelector)))
+                  foreach (var bucket in buckets[labelsOnlyImage]
+                              .Where(matchSelector => selector.IsEquivalentTo((Selector)matchSelector)))
                   {
                      Selector matchSelector = bucket;
                      if (selector.IsEquivalentTo(matchSelector))
@@ -195,59 +195,59 @@ namespace Kagami.Library.Runtime
 
       public Result<Field> AssignToExisting(string name, IObject value, bool overriden = false)
       {
-         if (Machine.Current.Find(name, false).(out var field, out var original))
+         if (Machine.Current.Find(name, false).Map(out var field, out var _exception))
          {
             if (field.Mutable)
             {
                field.Value = value;
-               return field.Success();
+               return field;
             }
             else if (field.Value is Unassigned || overriden)
             {
                field.Value = value;
-               return field.Success();
+               return field;
             }
             else
             {
-               return failure<Field>(immutableField(name));
+               return immutableField(name);
             }
          }
-         else if (original.IfNot(out var anyException) && anyException.If(out var exception))
+         else if (_exception.Map(out var exception))
          {
-            return failure<Field>(exception);
+            return exception;
          }
          else
          {
-            return failure<Field>(fieldNotFound(name));
+            return fieldNotFound(name);
          }
       }
 
-      public IResult<Field> Assign(Selector selector, bool overriden = false)
+      public Result<Field> Assign(Selector selector, bool overriden = false)
       {
-         var result = Assign(selector, selector, overriden);
-         if (result.If(out _))
+         var _result = Assign(selector, selector, overriden);
+         if (_result)
          {
             buckets[selector.LabelsOnly().Image].Add(selector);
          }
 
-         return result;
+         return _result;
       }
 
-      public IResult<IObject> GetFieldValue(string fieldName)
+      public Result<IObject> GetFieldValue(string fieldName)
       {
          return fields.Require(fieldName, messageFieldNotFound(fieldName)).Map(f => f.Value);
       }
 
-      public IResult<Unit> SetFieldValue(string fieldName, IObject value)
+      public Result<Unit> SetFieldValue(string fieldName, IObject value)
       {
          if (fields.ContainsKey(fieldName))
          {
             fields[fieldName].Value = value;
-            return Unit.Success();
+            return unit;
          }
          else
          {
-            return failure<Unit>(fieldNotFound(fieldName));
+            return fieldNotFound(fieldName);
          }
       }
 
@@ -277,12 +277,12 @@ namespace Kagami.Library.Runtime
             {
                var mutable = key.StartsWith("+");
                var fieldName = key.Drop(1);
-               if (New(fieldName, value, mutable).IfNot(out var exception))
+               if (New(fieldName, value, mutable).UnMap(out var exception))
                {
                   throw exception;
                }
             }
-            else if (AssignToExisting(key, value).IfNot(out var exception))
+            else if (AssignToExisting(key, value).UnMap(out var exception))
             {
                throw exception;
             }

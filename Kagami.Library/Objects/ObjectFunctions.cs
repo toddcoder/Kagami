@@ -7,12 +7,13 @@ using Kagami.Library.Runtime;
 using Core.Collections;
 using Core.Enumerables;
 using Core.Exceptions;
+using Core.Matching;
 using Core.Monads;
-using Core.RegularExpressions;
 using Core.Strings;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
+using static Core.Objects.ConversionFunctions;
 
 namespace Kagami.Library.Objects
 {
@@ -32,7 +33,8 @@ namespace Kagami.Library.Objects
          return Module.Global.Class(className).Required(messageClassNotFound(className));
       }
 
-      public static bool match<T>(T source, IObject comparisand, Func<T, T, bool> equalifier, Hash<string, IObject> bindings) where T : IObject
+      public static bool match<T>(T source, IObject comparisand, Func<T, T, bool> equalifier, Hash<string, IObject> bindings)
+         where T : IObject
       {
          switch (comparisand)
          {
@@ -373,7 +375,8 @@ namespace Kagami.Library.Objects
 
       public static int wrapIndex(int index, int length) => index > -1 ? index : length + index;
 
-      public static string show(ICollection collection, string begin, Func<IObject, string> func, string end, int breakOn = BREAK_EARLY)
+      public static string show(ICollection collection, string begin, Func<IObject, string> func, string end,
+         int breakOn = BREAK_EARLY)
       {
          var builder = new StringBuilder(begin);
          var obj = (IObject)collection;
@@ -389,14 +392,14 @@ namespace Kagami.Library.Objects
             var count = 0;
             var iterator = collection.GetIterator(false);
             var _next = iterator.Next();
-            if (_next.If(out var next))
+            if (_next.Map(out var next))
             {
                builder.Append(func(next));
                _next = iterator.Next();
                count++;
             }
 
-            while (_next.If(out next))
+            while (_next.Map(out next))
             {
                builder.Append(", ");
                builder.Append(func(next));
@@ -417,7 +420,7 @@ namespace Kagami.Library.Objects
 
       public static IEnumerable<IObject> list(ICollection collection) => collection.GetIterator(false).List();
 
-      public static IObject someOf(IMaybe<IObject> maybe) => maybe.Map(Some.Object).DefaultTo(() => None.NoneValue);
+      public static IObject someOf(Maybe<IObject> maybe) => maybe.Map(Some.Object) | (() => None.NoneValue);
 
       public static bool compareEnumerables(IEnumerable<IObject> left, IEnumerable<IObject> right)
       {
@@ -524,19 +527,18 @@ namespace Kagami.Library.Objects
             source = $"{source}(_)";
          }
 
-         var matcher = new Matcher();
-         if (matcher.IsMatch(source, $"^ /(('__$')? {REGEX_FUNCTION_NAME}) '(' /@"))
+         if (source.Matches($"^ /(('__$')? {REGEX_FUNCTION_NAME}) '(' /@").Map(out var result))
          {
-            var name = matcher.FirstGroup;
-            var rest = matcher.SecondGroup.KeepUntil(")");
+            var name = result.FirstGroup;
+            var rest = result.SecondGroup.KeepUntil(")");
             SelectorItem[] items;
             if (rest.IsEmpty())
             {
-               items = new SelectorItem[0];
+               items = System.Array.Empty<SelectorItem>();
             }
             else
             {
-               var sourceItems = rest.Split("/s* ',' /s*");
+               var sourceItems = rest.Unjoin("/s* ',' /s*");
                items = sourceItems.Select(parseSelectorItem).ToArray();
             }
 
@@ -551,26 +553,25 @@ namespace Kagami.Library.Objects
       public static SelectorItem parseSelectorItem(string source)
       {
          var label = "";
-         var typeConstraint = none<TypeConstraint>();
+         Maybe<TypeConstraint> _typeConstraint = nil;
 
-         var matcher = new Matcher();
-         if (matcher.IsMatch(source, $"^ /({REGEX_FIELD}) ':' /@"))
+         if (source.Matches($"^ /({REGEX_FIELD}) ':' /@").Map(out var result))
          {
-            label = matcher.FirstGroup;
-            source = matcher.SecondGroup;
+            label = result.FirstGroup;
+            source = result.SecondGroup;
          }
 
-         if (matcher.IsMatch(source, $"^ /({REGEX_FIELD}) /b /@"))
+         if (source.Matches($"^ /({REGEX_FIELD}) /b /@").Map(out result))
          {
-            source = matcher.SecondGroup;
+            source = result.SecondGroup;
          }
 
-         if (matcher.IsMatch(source, "^ '<' /(-['>']+) '>' /@"))
+         if (source.Matches("^ '<' /(-['>']+) '>' /@").Map(out result))
          {
-            var classNames = matcher.FirstGroup.Split("/s+");
+            var classNames = result.FirstGroup.Unjoin("/s+");
             var classes = classNames.Select(cn => Module.Global.Class(cn, true).Required(messageClassNotFound(cn))).ToArray();
-            typeConstraint = new TypeConstraint(classes).Some();
-            source = matcher.SecondGroup.Trim();
+            _typeConstraint = new TypeConstraint(classes);
+            source = result.SecondGroup.Trim();
          }
 
          var selectorItemType = source switch
@@ -580,7 +581,7 @@ namespace Kagami.Library.Objects
             _ => SelectorItemType.Normal
          };
 
-         return new SelectorItem(label, typeConstraint, selectorItemType);
+         return new SelectorItem(label, _typeConstraint, selectorItemType);
       }
 
       public static string selectorImage(string name, SelectorItem[] selectorItems) => $"{name}({selectorItems.ToString(",")})";
@@ -643,7 +644,7 @@ namespace Kagami.Library.Objects
                padding = '0';
             }
 
-            var length = size.ToInt();
+            var length = Value.Int32(size);
 
             switch (obj)
             {

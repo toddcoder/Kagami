@@ -60,7 +60,7 @@ namespace Kagami.Library.Runtime
 
       public GlobalFrame GlobalFrame => globalFrame;
 
-      public IResult<Unit> Execute()
+      public Result<Unit> Execute()
       {
          stack.Clear();
          globalFrame = new GlobalFrame();
@@ -70,29 +70,29 @@ namespace Kagami.Library.Runtime
 
          while (!context.Cancelled() && operations.More && running)
          {
-            if (operations.Current.If(out var operation))
+            if (operations.Current.Map(out var operation))
             {
                trace(operations.Address, () => operation.ToString());
                var currentAddress = operations.Address;
-               if (operation.Execute(this).ValueOrOriginal(out var result, out var original) && running && result.ClassName != "Void")
+               if (operation.Execute(this).Map(out var result, out var _exception) && running && result.ClassName != "Void")
                {
                   stack.Peek().Push(result);
                }
-               else if (original.IfNot(out var anyException) && anyException.If(out var exception))
+               else if (_exception.UnMap(out var exception))
                {
                   if (Tracing)
                   {
                      context.PrintLine(table.Value.ToString());
                   }
 
-                  if (GetErrorHandler().If(out var address))
+                  if (GetErrorHandler().Map(out var address))
                   {
                      stack.Peek().Push(new Failure(exception.Message));
                      operations.Goto(address);
                   }
                   else
                   {
-                     return failure<Unit>(exception);
+                     return exception;
                   }
                }
 
@@ -103,7 +103,7 @@ namespace Kagami.Library.Runtime
             }
             else
             {
-               return failure<Unit>(addressOutOfRange());
+               return addressOutOfRange();
             }
          }
 
@@ -112,10 +112,10 @@ namespace Kagami.Library.Runtime
             context.PrintLine(table.Value.ToString());
          }
 
-         return Unit.Success();
+         return unit;
       }
 
-      public IMatched<IObject> Invoke(IInvokable invokable, Arguments arguments, Fields fields, int increment = 1)
+      public Responding<IObject> Invoke(IInvokable invokable, Arguments arguments, Fields fields, int increment = 1)
       {
          var returnAddress = Address + increment;
          var frame = new Frame(returnAddress, fields);
@@ -136,11 +136,11 @@ namespace Kagami.Library.Runtime
          }
          else
          {
-            return failedMatch<IObject>(badAddress(invokable.Address));
+            return badAddress(invokable.Address);
          }
       }
 
-      public IMatched<IObject> Invoke(IInvokable invokable, Arguments arguments, int increment = 1)
+      public Responding<IObject> Invoke(IInvokable invokable, Arguments arguments, int increment = 1)
       {
          var returnAddress = Address + increment;
          var frame = new Frame(returnAddress, arguments);
@@ -153,13 +153,13 @@ namespace Kagami.Library.Runtime
          PushFrame(frame);
          frame.SetFields(invokable.Parameters);
 
-         return GoTo(invokable.Address) ? invoke() : failedMatch<IObject>(badAddress(invokable.Address));
+         return GoTo(invokable.Address) ? invoke() : badAddress(invokable.Address);
       }
 
-      public IMatched<IObject> Invoke(YieldingInvokable invokable)
+      public Responding<IObject> Invoke(YieldingInvokable invokable)
       {
          var frames = invokable.Frames;
-         if (frames.FunctionFrame.If(out var frame))
+         if (frames.FunctionFrame.Map(out var frame))
          {
             frame.Address = Address;
             PushFrames(frames);
@@ -176,24 +176,24 @@ namespace Kagami.Library.Runtime
          return invoke();
       }
 
-      public IMatched<IObject> Invoke(string fieldName)
+      public Responding<IObject> Invoke(string fieldName)
       {
-         if (Pop().If(out var value, out var popException))
+         if (Pop().Map(out var value, out var popException))
          {
             if (value is Arguments arguments)
             {
                var image = fieldName;
-               var ((isFound, field), (isFailure, exception)) = Find(fieldName, true);
-               if (!isFound && !isFailure)
+               var _field = Find(fieldName, true);
+               if (!_field && !_field.AnyException)
                {
                   var selector = arguments.Selector(fieldName);
                   image = selector.Image;
-                  ((isFound, field), (isFailure, exception)) = Find(selector);
+                  _field = Find(selector);
                }
 
-               if (isFound)
+               if (_field)
                {
-                  value = field.Value;
+                  value = _field.Value.Value;
                   switch (value)
                   {
                      case IInvokableObject io:
@@ -201,40 +201,40 @@ namespace Kagami.Library.Runtime
                      case IInvokable invokable:
                         return Invoke(invokable, arguments);
                      case PackageFunction pf:
-                        return pf.Invoke(arguments).Matched();
+                        return pf.Invoke(arguments).Response();
                      case Pattern pattern:
                         var copy = pattern.Copy();
                         copy.RegisterArguments(arguments);
-                        return copy.Matched<IObject>();
+                        return copy.Response<IObject>();
                      default:
-                        return failedMatch<IObject>(incompatibleClasses(value, "Invokable"));
+                        return incompatibleClasses(value, "Invokable");
                   }
                }
-               else if (!isFailure)
+               else if (!_field.AnyException)
                {
-                  return failedMatch<IObject>(fieldNotFound(image));
+                  return fieldNotFound(image);
                }
                else
                {
-                  return failedMatch<IObject>(exception);
+                  return _field.AnyException.Value;
                }
             }
             else
             {
-               return failedMatch<IObject>(incompatibleClasses(value, "Arguments"));
+               return incompatibleClasses(value, "Arguments");
             }
          }
          else
          {
-            return failedMatch<IObject>(popException);
+            return popException;
          }
       }
 
-      protected IMatched<IObject> invoke()
+      protected Responding<IObject> invoke()
       {
          while (!context.Cancelled() && operations.More && running)
          {
-            if (operations.Current.If(out var operation))
+            if (operations.Current.Map(out var operation))
             {
                trace(operations.Address, () => operation.ToString());
                var currentAddress = operations.Address;
@@ -245,20 +245,20 @@ namespace Kagami.Library.Runtime
                   case Yield:
                      return Yield.YieldAction(this);
                   case Invoke invoke:
-                     if (Invoke(invoke.FieldName).If(out var returnValue, out var anyException))
+                     if (Invoke(invoke.FieldName).Map(out var returnValue, out var _exception))
                      {
                         stack.Peek().Push(returnValue);
                      }
-                     else if (anyException.If(out var exception))
+                     else if (_exception.Map(out var exception))
                      {
-                        if (GetErrorHandler().If(out var address))
+                        if (GetErrorHandler().Map(out var address))
                         {
                            stack.Peek().Push(new Failure(exception.Message));
                            operations.Goto(address);
                         }
                         else
                         {
-                           return failedMatch<IObject>(exception);
+                           return exception;
                         }
                      }
 
@@ -270,20 +270,20 @@ namespace Kagami.Library.Runtime
                      continue;
                }
 
-               if (operation.Execute(this).If(out var result, out var mbResult) && running)
+               if (operation.Execute(this).Map(out var result, out var _exception1) && running)
                {
                   stack.Peek().Push(result);
                }
-               else if (mbResult.If(out var exception))
+               else if (_exception1.Map(out var exception))
                {
-                  if (GetErrorHandler().If(out var address))
+                  if (GetErrorHandler().Map(out var address))
                   {
                      stack.Peek().Push(new Failure(exception.Message));
                      operations.Goto(address);
                   }
                   else
                   {
-                     return failedMatch<IObject>(exception);
+                     return exception;
                   }
                }
 
@@ -294,11 +294,11 @@ namespace Kagami.Library.Runtime
             }
             else
             {
-               return "Address out of range".FailedMatch<IObject>();
+               return fail("Address out of range");
             }
          }
 
-         return "No return".FailedMatch<IObject>();
+         return fail("No return");
       }
 
       public bool Running
@@ -309,9 +309,9 @@ namespace Kagami.Library.Runtime
 
       public void Push(IObject value) => stack.Peek().Push(value);
 
-      public IMaybe<IObject> Peek() => stack.Peek().Peek();
+      public Maybe<IObject> Peek() => stack.Peek().Peek();
 
-      public IResult<IObject> Pop() => stack.Peek().Pop();
+      public Result<IObject> Pop() => stack.Peek().Pop();
 
       public bool IsEmpty => stack.Peek().IsEmpty;
 
@@ -342,7 +342,7 @@ namespace Kagami.Library.Runtime
          }
       }
 
-      public IResult<Frame> PopFrame() => tryTo(() => stack.Pop());
+      public Result<Frame> PopFrame() => tryTo(() => stack.Pop());
 
       public FrameGroup PopFrames() => PopFramesUntil(f => f.FrameType == FrameType.Function);
 
@@ -361,14 +361,14 @@ namespace Kagami.Library.Runtime
          return new FrameGroup(frames.ToArray());
       }
 
-      public IMaybe<Frame> FunctionFrame()
+      public Maybe<Frame> FunctionFrame()
       {
          foreach (var frame in stack.Where(frame => frame.FrameType == FrameType.Function))
          {
-            return frame.Some();
+            return frame;
          }
 
-         return none<Frame>();
+         return nil;
       }
 
       public FrameGroup PopFramesUntil(Predicate<Frame> predicate)
@@ -387,18 +387,18 @@ namespace Kagami.Library.Runtime
          return new FrameGroup(frames.ToArray());
       }
 
-      public IResult<int> GetErrorHandler()
+      public Result<int> GetErrorHandler()
       {
          while (stack.Count > 0)
          {
             var frame = stack.Pop();
             if (frame.FrameType == FrameType.Try)
             {
-               return frame.ErrorHandler.Map(i => i.Success()).DefaultTo(() => "No error handler set".Failure<int>());
+               return frame.ErrorHandler.Result("No error handler set");
             }
          }
 
-         return failure<int>(emptyStack());
+         return emptyStack();
       }
 
       public void Clear() => CurrentFrame.Clear();
@@ -542,42 +542,42 @@ namespace Kagami.Library.Runtime
 
       public Result<Field> Assign(Selector selector, IObject value, bool overriden = false)
       {
-         var ((isFound, field), (isFailure, exception)) = Find(selector);
-         if (isFound)
+         var _field = Find(selector);
+         if (_field)
          {
-            var fields = field.Fields;
-            if (field.Mutable)
+            var fields = _field.Value.Fields;
+            if (_field.Value.Mutable)
             {
-               switch (field.Value)
+               switch (_field.Value.Value)
                {
                   case Unassigned:
-                     field.Value = value;
+                     _field.Value.Value = value;
                      fields.SetBucket(selector);
-                     return field.Success();
+                     return _field.Value;
                   case TypeConstraint tc2:
-                     return failure<Field>(incompatibleClasses(selector, tc2.AsString));
+                     return incompatibleClasses(selector, tc2.AsString);
                   default:
-                     return failure<Field>(incompatibleClasses(selector, field.Value.ClassName));
+                     return incompatibleClasses(selector, _field.Value.Value.ClassName);
                }
             }
-            else if (field.Value is Unassigned || overriden)
+            else if (_field.Value.Value is Unassigned || overriden)
             {
-               field.Value = value;
+               _field.Value.Value = value;
                fields.SetBucket(selector);
-               return field.Success();
+               return _field.Value;
             }
             else
             {
-               return failure<Field>(immutableField(selector));
+               return immutableField(selector);
             }
          }
-         else if (isFailure)
+         else if (_field.AnyException)
          {
-            return failure<Field>(exception);
+            return _field.AnyException.Value;
          }
          else
          {
-            return failure<Field>(fieldNotFound(selector));
+            return fieldNotFound(selector);
          }
       }
 
@@ -598,7 +598,7 @@ namespace Kagami.Library.Runtime
 
          while (!context.Cancelled() && operations.More && debugState == DebugState.Active)
          {
-            if (operations.Current.If(out var operation))
+            if (operations.Current.Map(out var operation))
             {
                var currentAddress = operations.Address;
                switch (operation)
@@ -606,12 +606,11 @@ namespace Kagami.Library.Runtime
                   case Break:
                      return;
                   default:
-                     if (operation.Execute(this).ValueOrOriginal(out var result, out var original) && running &&
-                        result.ClassName != "Void")
+                     if (operation.Execute(this).Map(out var result, out var _exception) && running && result.ClassName != "Void")
                      {
                         stack.Peek().Push(result);
                      }
-                     else if (original.IfNot(out var _exception) && _exception.If(out _))
+                     else if (_exception)
                      {
                         return;
                      }
@@ -633,17 +632,17 @@ namespace Kagami.Library.Runtime
 
       public string PackageFolder { get; set; } = "";
 
-      public IResult<Unit> SetErrorHandler(int address)
+      public Result<Unit> SetErrorHandler(int address)
       {
-         var frame = stack.FirstOrNone(f => f.FrameType == FrameType.Try);
-         if (frame.If(out var tf))
+         var _frame = stack.FirstOrNone(f => f.FrameType == FrameType.Try);
+         if (_frame.Map(out var frame))
          {
-            tf.ErrorHandler = address.Some();
-            return Unit.Success();
+            frame.ErrorHandler = address;
+            return unit;
          }
          else
          {
-            return "Try frame not found".Failure<Unit>();
+            return fail("Try frame not found");
          }
       }
    }

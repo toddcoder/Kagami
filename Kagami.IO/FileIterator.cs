@@ -11,13 +11,13 @@ namespace Kagami.IO
 
       public FileIterator(File file) : base(file) => reader = file.Reader();
 
-      public override IMaybe<IObject> Next()
+      public override Maybe<IObject> Next()
       {
          var line = reader.ReadLine();
          if (line == null)
          {
             reader?.Dispose();
-            return none<IObject>();
+            return nil;
          }
          else
          {
@@ -25,6 +25,6 @@ namespace Kagami.IO
          }
       }
 
-      public override IMaybe<IObject> Peek() => Next();
+      public override Maybe<IObject> Peek() => Next();
    }
 }

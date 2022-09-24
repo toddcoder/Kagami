@@ -41,9 +41,9 @@ namespace Kagami.Library.Objects
 
       public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new Iterator(this);
 
-      public IMaybe<IObject> Next(int index) => maybe(index < indexes.Length, () => sliceable.Get(indexes[index]));
+      public Maybe<IObject> Next(int index) => maybe<IObject>() & index < indexes.Length & (() => sliceable.Get(indexes[index]));
 
-      public IMaybe<IObject> Peek(int index) => Next(index);
+      public Maybe<IObject> Peek(int index) => Next(index);
 
       public Int Length => indexes.Length;
 
@@ -53,9 +53,10 @@ namespace Kagami.Library.Objects
          {
             foreach (var index in indexes)
             {
-               if (sliceable.Get(index).If(out var value))
+               var _value = sliceable.Get(index);
+               if (_value)
                {
-                  yield return value;
+                  yield return _value.Value;
                }
                else
                {
@@ -67,12 +68,11 @@ namespace Kagami.Library.Objects
 
       public bool ExpandForArray => sliceable.ExpandForArray;
 
-      public Boolean In(IObject item) =>
-         indexes.Select(i => sliceable.Get(i).Map(o => o.IsEqualTo(item)).DefaultTo(() => false)).Any();
+      public Boolean In(IObject item) => indexes.Select(i => sliceable.Get(i).Map(o => o.IsEqualTo(item)) | false).Any();
 
       public Boolean NotIn(IObject item)
       {
-         return indexes.Select(i => sliceable.Get(i).Map(o => !o.IsEqualTo(item)).DefaultTo(() => false)).All(b => b);
+         return indexes.Select(i => sliceable.Get(i).Map(o => !o.IsEqualTo(item)) | false).All(b => b);
       }
 
       public IObject Times(int count) => ((ICollection)Reverted()).Times(count);

@@ -523,14 +523,14 @@ namespace Kagami.Library.Operations
          }
       }
 
-      public void Return(Expression expression, Statement statement, IMaybe<TypeConstraint> typeConstraint)
+      public void Return(Expression expression, Statement statement, Maybe<TypeConstraint> _typeConstraint)
       {
          expression.Generate(this);
          Peek(statement.Index);
 
          if (returnLabels.Count == 0)
          {
-            if (typeConstraint.If(out var tc))
+            if (_typeConstraint.If(out var tc))
             {
                ReturnType(true, tc);
             }

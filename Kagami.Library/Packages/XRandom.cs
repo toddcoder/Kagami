@@ -24,9 +24,9 @@ namespace Kagami.Library.Packages
 
       public IIterator GetIterator(bool lazy) => lazy ? new Iterator(this) : new LazyIterator(this);
 
-      IMaybe<IObject> ICollection.Next(int index) => Int.IntObject(random.Next()).Some();
+      Maybe<IObject> ICollection.Next(int index) => Int.IntObject(random.Next()).Some();
 
-      public IMaybe<IObject> Peek(int index) => Int.IntObject(random.Next()).Some();
+      public Maybe<IObject> Peek(int index) => Int.IntObject(random.Next()).Some();
 
       public Int Length => -1;
 

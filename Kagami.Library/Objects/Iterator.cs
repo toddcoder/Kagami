@@ -7,6 +7,7 @@ using Core.Collections;
 using Core.Dates.Now;
 using Core.Enumerables;
 using Core.Monads;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.CollectionFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
@@ -23,7 +24,7 @@ namespace Kagami.Library.Objects
       public Iterator(ICollection collection)
       {
          this.collection = collection;
-         if (Module.Global.Class(((IObject)this.collection).ClassName).If(out var baseClass))
+         if (Module.Global.Class(((IObject)this.collection).ClassName).Map(out var baseClass))
          {
             collectionClass = baseClass is ICollectionClass cc ? cc : new ArrayClass();
          }
@@ -55,9 +56,9 @@ namespace Kagami.Library.Objects
 
       public virtual bool IsLazy => false;
 
-      public virtual IMaybe<IObject> Next() => collection.Next(index++);
+      public virtual Maybe<IObject> Next() => collection.Next(index++);
 
-      public virtual IMaybe<IObject> Peek() => collection.Peek(index);
+      public virtual Maybe<IObject> Peek() => collection.Peek(index);
 
       public IObject Reset()
       {
@@ -67,12 +68,12 @@ namespace Kagami.Library.Objects
 
       public virtual IEnumerable<IObject> List()
       {
-         IMaybe<IObject> _item;
+         Maybe<IObject> _item = nil;
          index = 0;
          do
          {
             _item = Next();
-            if (_item.If(out var item))
+            if (_item.Map(out var item))
             {
                yield return item;
             }
@@ -81,7 +82,7 @@ namespace Kagami.Library.Objects
             {
                yield break;
             }
-         } while (_item.IsSome);
+         } while (_item);
       }
 
       public virtual IIterator Clone() => new Iterator(collection);
@@ -277,9 +278,11 @@ namespace Kagami.Library.Objects
          return collectionClass.Revert(list);
       }
 
-      public virtual IObject If(Lambda predicate) => collectionClass.Revert(List().ToList().Where(value => predicate.Invoke(value).IsTrue));
+      public virtual IObject If(Lambda predicate) =>
+         collectionClass.Revert(List().ToList().Where(value => predicate.Invoke(value).IsTrue));
 
-      public virtual IObject IfNot(Lambda predicate) => collectionClass.Revert(List().ToList().Where(value => !predicate.Invoke(value).IsTrue));
+      public virtual IObject IfNot(Lambda predicate) =>
+         collectionClass.Revert(List().ToList().Where(value => !predicate.Invoke(value).IsTrue));
 
       public virtual IObject Skip(int count)
       {
@@ -508,7 +511,7 @@ namespace Kagami.Library.Objects
          return result;
       }
 
-      public IObject First() => List().ToList().FirstOrNone().Map(Some.Object).DefaultTo(() => Objects.None.NoneValue);
+      public IObject First() => List().ToList().FirstOrNone().Map(Some.Object) | (() => Objects.None.NoneValue);
 
       public IObject First(Lambda predicate)
       {
@@ -524,7 +527,7 @@ namespace Kagami.Library.Objects
       {
          var list = List().ToList();
          list.Reverse();
-         return list.FirstOrNone().Map(Some.Object).DefaultTo(() => Objects.None.NoneValue);
+         return list.FirstOrNone().Map(Some.Object) | (() => Objects.None.NoneValue);
       }
 
       public IObject Last(Lambda predicate)
@@ -763,7 +766,7 @@ namespace Kagami.Library.Objects
             var innerList = new List<IObject>();
             for (var column = 0; column < columns; column++)
             {
-               if (Next().If(out var item))
+               if (Next().Map(out var item))
                {
                   innerList.Add(item);
                }
@@ -886,7 +889,7 @@ namespace Kagami.Library.Objects
          var item = Next();
          for (var i = 0; i < count; i++)
          {
-            if (item.If(out var obj))
+            if (item.Map(out var obj))
             {
                postfix.Add(obj);
             }
@@ -896,7 +899,7 @@ namespace Kagami.Library.Objects
 
          var result = new List<IObject>();
 
-         while (item.If(out var obj))
+         while (item.Map(out var obj))
          {
             result.Add(obj);
             item = Next();
@@ -981,7 +984,7 @@ namespace Kagami.Library.Objects
       {
          var className = ((IObject)iterator.Collection).ClassName;
 
-         while (iterator.Next().If(out var item))
+         while (iterator.Next().Map(out var item))
          {
             if (item.ClassName == className)
             {
@@ -1036,7 +1039,7 @@ namespace Kagami.Library.Objects
          var columnIndex = Int.IntObject(column);
          while (true)
          {
-            if (Next().If(out var item))
+            if (Next().Map(out var item))
             {
                if (classOf(item).RespondsTo("[](_)"))
                {

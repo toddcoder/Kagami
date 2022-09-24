@@ -5,19 +5,20 @@ using System.Numerics;
 using System.Text;
 using Core.Collections;
 using Core.Monads;
-using Core.Numbers;
 using Core.Objects;
-using Core.RegularExpressions;
 using Core.Strings;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Objects.TextFindingFunctions;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.CollectionFunctions;
+using Core.Matching;
+using Core.Numbers;
 
 namespace Kagami.Library.Objects
 {
-   public readonly struct String : IObject, IComparable<String>, IEquatable<String>, IFormattable, ICollection, IComparable, ISliceable,
+   public readonly struct String : IObject, IComparable<String>, IEquatable<String>, IFormattable, ICollection, IComparable,
+      ISliceable,
       IRangeItem, ITextFinding
    {
       public static implicit operator String(string value) => new(value);
@@ -77,7 +78,7 @@ namespace Kagami.Library.Objects
                amount = amount.Drop(1);
             }
 
-            return value.Center(amount.ToInt());
+            return value.Center(ConversionFunctions.Value.Int32(amount));
          }
          else
          {
@@ -87,16 +88,16 @@ namespace Kagami.Library.Objects
 
       public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new Iterator(this);
 
-      public IMaybe<IObject> Next(int index)
+      public Maybe<IObject> Next(int index)
       {
          var self = this;
-         return maybe(index < value.Length, () => Char.CharObject(self.value[index]));
+         return maybe<IObject>() & index < value.Length & (() => Char.CharObject(self.value[index]));
       }
 
-      public IMaybe<IObject> Peek(int index)
+      public Maybe<IObject> Peek(int index)
       {
          var self = this;
-         return maybe(index < value.Length, () => Char.CharObject(self.value[index]));
+         return maybe<IObject>() & index < value.Length & (() => Char.CharObject(self.value[index]));
       }
 
       public Int Length => value.Length;
@@ -114,7 +115,7 @@ namespace Kagami.Library.Objects
 
       public Slice Slice(ICollection collection) => new(this, collection.GetIterator(false).List().ToArray());
 
-      public IMaybe<IObject> Get(IObject index)
+      public Maybe<IObject> Get(IObject index)
       {
          var intIndex = wrapIndex(((Int)index).Value, value.Length);
          return Next(intIndex);
@@ -189,9 +190,10 @@ namespace Kagami.Library.Objects
 
       public String Replace(string old, string @new)
       {
-         if (value.Find(old).If(out var index))
+         var _index = value.Find(old);
+         if (_index)
          {
-            return value.Keep(index) + @new + value.Drop(index + old.Length);
+            return value.Keep(_index) + @new + value.Drop(_index.Value + old.Length);
          }
          else
          {
@@ -278,33 +280,31 @@ namespace Kagami.Library.Objects
 
       private static string expand(string value)
       {
-         var matcher = new Matcher();
-         if (matcher.IsMatch(value, "/(.) /'-' /(.)"))
+         var _result = value.Matches("/(.) /'-' /(.)");
+         if (_result)
          {
-            for (var i = 0; i < matcher.MatchCount; i++)
+            foreach (var match in _result.Value)
             {
-               var left = matcher[i, 1][0];
-               var right = matcher[i, 3][0];
+               var left = match.FirstGroup[0];
+               var right = match.ThirdGroup[0];
                var builder = new StringBuilder();
                if (left < right)
                {
-                  for (var j = left + 1; j < right; j++)
+                  for (var i = left + 1; i < right; i++)
                   {
-                     builder.Append((char)j);
+                     builder.Append((char)i);
                   }
                }
                else
                {
-                  for (var j = right - 1; j > left; j--)
+                  for (var i = right - 1; i > left; i--)
                   {
-                     builder.Append((char)j);
+                     builder.Append((char)i);
                   }
                }
-
-               matcher[i, 2] = builder.ToString();
             }
 
-            return matcher.ToString();
+            return _result.Value.ToString();
          }
          else
          {
@@ -391,20 +391,20 @@ namespace Kagami.Library.Objects
          return builder.ToString();
       }
 
-      public Tuple Fields => new(value.Split("/s+").Select(StringObject).ToArray());
+      public Tuple Fields => new(value.Unjoin("/s+").Select(StringObject).ToArray());
 
       public IObject Words(int count)
       {
-         var matcher = new Matcher();
-         if (matcher.IsMatch(value, "/w+"))
+         var _result = value.Matches("/w+");
+         if (_result)
          {
             var index = -1;
             var length = 0;
             var list = new List<string>();
-            for (var i = 0; i < matcher.MatchCount.MinOf(count); i++)
+            for (var i = 0; i < _result.Value.MatchCount.MinOf(count); i++)
             {
-               list.Add(matcher[i]);
-               var (_, index1, length1) = matcher.GetMatch(i);
+               list.Add(_result.Value[i]);
+               var (_, index1, length1) = _result.Value.GetMatch(i);
                index = index1;
                length = length1;
             }
@@ -420,7 +420,7 @@ namespace Kagami.Library.Objects
          }
       }
 
-      public Tuple Words() => new(value.Split("/s+").Select(StringObject).ToArray());
+      public Tuple Words() => new(value.Unjoin("/s+").Select(StringObject).ToArray());
 
       public MutString Append(IObject obj)
       {

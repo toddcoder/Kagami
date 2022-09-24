@@ -1,4 +1,5 @@
-﻿using Core.Monads;
+﻿using System;
+using Core.Monads;
 using Core.Numbers;
 using Core.Strings;
 using static Core.Monads.MonadFunctions;
@@ -18,7 +19,7 @@ namespace Kagami.Library.Operations
          length = operations.Length;
       }
 
-      public Operations() : this(new Operation[0])
+      public Operations() : this(Array.Empty<Operation>())
       {
       }
 
@@ -41,7 +42,7 @@ namespace Kagami.Library.Operations
 
       public Operation this[int index] => operations[index];
 
-      public IMaybe<Operation> Current => maybe(address.Between(0).Until(length), () => operations[address]);
+      public Maybe<Operation> Current => maybe(address.Between(0).Until(length), () => operations[address]);
 
       public override string ToString()
       {

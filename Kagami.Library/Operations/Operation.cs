@@ -6,7 +6,7 @@ namespace Kagami.Library.Operations
 {
    public abstract class Operation
    {
-      public abstract IMatched<IObject> Execute(Machine machine);
+      public abstract Responding<IObject> Execute(Machine machine);
 
       public virtual bool Increment => true;
    }

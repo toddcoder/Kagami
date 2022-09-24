@@ -57,13 +57,13 @@ namespace Kagami.Library.Nodes.Statements
          }
       }
 
-      public IMaybe<If> ElseIf
+      public Maybe<If> ElseIf
       {
          get => _elseIf;
          set => _elseIf = value;
       }
 
-      public IMaybe<Block> Else
+      public Maybe<Block> Else
       {
          get => _elseBlock;
          set => _elseBlock = value;

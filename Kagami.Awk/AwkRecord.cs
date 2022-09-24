@@ -79,9 +79,9 @@ namespace Kagami.Awk
 
       public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new Iterator(this);
 
-      public IMaybe<IObject> Next(int index) => maybe(index < fields.Length, () => StringObject(fields[index]));
+      public Maybe<IObject> Next(int index) => maybe(index < fields.Length, () => StringObject(fields[index]));
 
-      public IMaybe<IObject> Peek(int index) => Next(index);
+      public Maybe<IObject> Peek(int index) => Next(index);
 
       public Int Length => fields.Length;
 

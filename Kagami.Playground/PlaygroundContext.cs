@@ -5,7 +5,6 @@ using Kagami.Library;
 using Kagami.Library.Runtime;
 using Core.Collections;
 using Core.Monads;
-using static Core.Assertions.AssertionFunctions;
 
 namespace Kagami.Playground
 {
@@ -44,12 +43,12 @@ namespace Kagami.Playground
 
       public void Put(string value) => writer.Write(putter.Put(value));
 
-      public IResult<string> ReadLine()
+      public Result<string> ReadLine()
       {
          putter.Reset();
          var line = reader.ReadLine();
 
-         return assert(() => line).Must().Not.BeNull().OrFailure("Input cancelled");
+         return line.Must().Not.BeNull().OrFailure("Input cancelled");
       }
 
       public bool Cancelled()

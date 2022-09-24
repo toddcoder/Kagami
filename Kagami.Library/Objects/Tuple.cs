@@ -128,7 +128,7 @@ namespace Kagami.Library.Objects
 
       private string getItemImage(int index) => getItemString(index, items[index].Image);
 
-      public IMaybe<IObject[]> AllButLast
+      public Maybe<IObject[]> AllButLast
       {
          get
          {
@@ -137,7 +137,7 @@ namespace Kagami.Library.Objects
          }
       }
 
-      public IMaybe<IObject> Last
+      public Maybe<IObject> Last
       {
          get
          {
@@ -177,7 +177,10 @@ namespace Kagami.Library.Objects
       }
 
       public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand,
-         (t1, t2) => { return t1.Length.Value == t2.Length.Value && t1.items.Zip(t2.items, (i1, i2) => i1.Match(i2, bindings)).All(b => b); },
+         (t1, t2) =>
+         {
+            return t1.Length.Value == t2.Length.Value && t1.items.Zip(t2.items, (i1, i2) => i1.Match(i2, bindings)).All(b => b);
+         },
          bindings);
 
       public bool IsTrue => items.Length > 0;
@@ -202,17 +205,17 @@ namespace Kagami.Library.Objects
 
       public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new Iterator(this);
 
-      public IMaybe<IObject> Next(int index)
+      public Maybe<IObject> Next(int index)
       {
          var self = this;
-         return maybe(index < items.Length, () => self.items[index]);
+         return maybe<IObject>() & index < items.Length & (() => self.items[index]);
       }
 
-      public IMaybe<IObject> Peek(int index)
+      public Maybe<IObject> Peek(int index)
       {
          var self = this;
-         return maybe(index < items.Length, () => self.items[index]);
-      }
+         return maybe<IObject>() & index < items.Length & (() => self.items[index]);
+        }
 
       public Int Length => items.Length;
 

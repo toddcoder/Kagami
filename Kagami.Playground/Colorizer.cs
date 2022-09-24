@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Kagami.Library.Parsers;
-using Core.RegularExpressions;
+using Core.Matching;
 using Color = System.Drawing.Color;
 
 namespace Kagami.Playground
@@ -44,11 +44,11 @@ namespace Kagami.Playground
 
       protected void markText(string pattern, Color backColor)
       {
-         if (textBox.Text.Matcher(pattern).If(out var matcher))
+         if (textBox.Text.Matches(pattern).Map(out var result))
          {
-            for (var matchIndex = 0; matchIndex < matcher.MatchCount; ++matchIndex)
+            for (var matchIndex = 0; matchIndex < result.MatchCount; ++matchIndex)
             {
-               var (_, index, length) = matcher.GetMatch(matchIndex);
+               var (_, index, length) = result.GetMatch(matchIndex);
                textBox.Select(index, length);
                textBox.SelectionBackColor = backColor;
             }

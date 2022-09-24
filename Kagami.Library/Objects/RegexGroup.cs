@@ -1,7 +1,7 @@
 ﻿using System;
 using Core.Collections;
 using Core.Objects;
-using Core.RegularExpressions;
+using static Core.Objects.GetHashCodeGenerator;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
@@ -13,9 +13,8 @@ namespace Kagami.Library.Objects
       private readonly int length;
       private readonly Hash<string, IObject> passed;
       private readonly Hash<string, IObject> internals;
-      private readonly Equatable<RegexGroup> equatable;
 
-      public RegexGroup(Matcher.Group group) : this()
+      public RegexGroup(Core.Matching.Group group) : this()
       {
          var (groupText, groupIndex, groupLength) = group;
          text = groupText;
@@ -29,8 +28,6 @@ namespace Kagami.Library.Objects
             ["index"] = (Int)index,
             ["length"] = (Int)length
          };
-
-         equatable = new Equatable<RegexGroup>(this, "text", "index", "length");
       }
 
       public RegexGroup(Hash<string, IObject> passed) : this()
@@ -41,8 +38,6 @@ namespace Kagami.Library.Objects
 
          this.passed = passed;
          internals = new Hash<string, IObject>();
-
-         equatable = new Equatable<RegexGroup>(this, "text", "index", "length");
       }
 
       public string ClassName => "Group";
@@ -69,10 +64,10 @@ namespace Kagami.Library.Objects
 
       public Hash<string, IObject> Internals => internals;
 
-      public bool Equals(RegexGroup other) => equatable.Equals(other);
+      public bool Equals(RegexGroup other) => text == other.text && index == other.index && length == other.length;
 
-      public override bool Equals(object obj) => equatable.Equals(obj);
+      public override bool Equals(object obj) => obj is RegexGroup other && Equals(other);
 
-      public override int GetHashCode() => equatable.GetHashCode();
+      public override int GetHashCode() => hashCode() + text.GetHashCode() + index.GetHashCode() + length.GetHashCode();
    }
 }
