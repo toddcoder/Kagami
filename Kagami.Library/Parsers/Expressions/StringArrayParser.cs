@@ -1,5 +1,6 @@
 ﻿using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions
 {
@@ -9,14 +10,14 @@ namespace Kagami.Library.Parsers.Expressions
 
       public StringArrayParser(ExpressionBuilder builder) : base(builder) { }
 
-      public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+      public override Responding<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
       {
          var source = tokens[3].Text;
          state.Colorize(tokens, Color.Whitespace, Color.Collection, Color.Collection, Color.Collection);
 
          builder.Add(new StringArraySymbol(source));
 
-         return Unit.Matched();
+         return unit;
       }
    }
 }

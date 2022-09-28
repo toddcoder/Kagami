@@ -7,44 +7,52 @@ namespace Kagami.Library.Parsers.Expressions
 {
    public class SubexpressionParser : SymbolParser
    {
-      public SubexpressionParser(ExpressionBuilder builder) : base(builder) { }
+      public SubexpressionParser(ExpressionBuilder builder) : base(builder)
+      {
+      }
 
       public override string Pattern => "^ /(|s|) /'(' /','?";
 
-      public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+      public override Responding<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
       {
          state.BeginTransaction();
          var monoTuple = tokens[3].Text == ",";
          state.Colorize(tokens, Color.Whitespace, Color.OpenParenthesis, Color.Structure);
 
-         if (getExpression(state, "^ /')'", builder.Flags & ~ExpressionFlags.OmitComma, Color.CloseParenthesis)
-            .If(out var expression, out var anyException))
+         var _expression = getExpression(state, "^ /')'", builder.Flags & ~ExpressionFlags.OmitComma, Color.CloseParenthesis);
+         if (_expression)
          {
-            builder.Add(new SubexpressionSymbol(expression, monoTuple));
+            builder.Add(new SubexpressionSymbol(_expression, monoTuple));
             state.CommitTransaction();
 
-            return Unit.Matched();
+            return unit;
          }
-         else if (anyException.IsSome)
+         else if (_expression.AnyException)
          {
             state.RollBackTransaction();
             state.BeginTransaction();
-            if (getPartialLambda(state).ValueOrCast<Unit>(out var lambdaSymbol, out var asUnit))
+            var _lambdaSymbol = getPartialLambda(state);
+            if (_lambdaSymbol)
             {
                state.CommitTransaction();
-               builder.Add(lambdaSymbol);
+               builder.Add(_lambdaSymbol);
 
-               return Unit.Matched();
+               return unit;
+            }
+            else if (_lambdaSymbol.AnyException)
+            {
+               state.RollBackTransaction();
+               return _lambdaSymbol.Exception;
             }
             else
             {
                state.RollBackTransaction();
-               return asUnit;
+               return nil;
             }
          }
          else
          {
-            return notMatched<Unit>();
+            return nil;
          }
       }
    }

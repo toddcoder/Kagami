@@ -15,14 +15,15 @@ namespace Kagami.Library.Parsers.Expressions
 
 		public override string Pattern => "^ /(|s|) /'<' (> ['A-Z'])";
 
-		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+		public override Responding<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
 			state.Colorize(tokens, Color.Whitespace, Color.Class);
 
 			var list = new List<BaseClass>();
 			while (state.More)
-			{
-				if (state.Scan($"^ /(/s*) /({REGEX_CLASS})", Color.Whitespace, Color.Class).If(out var name, out var anyException))
+         {
+            var _name = state.Scan($"^ /(/s*) /({REGEX_CLASS})", Color.Whitespace, Color.Class);
+            if (_name)
 				{
 					name = name.TrimStart();
 					if (Module.Global.Class(name).If(out var baseClass))
@@ -55,7 +56,7 @@ namespace Kagami.Library.Parsers.Expressions
 				{
 					return "Open type constraint".FailedMatch<Unit>();
 				}
-			}
+         }
 
 			return Unit.Matched();
 		}

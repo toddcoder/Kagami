@@ -6,11 +6,13 @@ namespace Kagami.Library.Parsers.Expressions
 {
    public class TwoKeywordOperatorsParser : SymbolParser
    {
-      public TwoKeywordOperatorsParser(ExpressionBuilder builder) : base(builder) { }
+      public TwoKeywordOperatorsParser(ExpressionBuilder builder) : base(builder)
+      {
+      }
 
       public override string Pattern => "^ /(|s|) /('skip' | 'take') /(|s+|) /('while' | 'until') /b";
 
-      public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+      public override Responding<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
       {
          state.BeginTransaction();
 
@@ -30,14 +32,15 @@ namespace Kagami.Library.Parsers.Expressions
                      message = word1.Selector($"{word2}:");
                      break;
                }
+
                break;
             default:
                state.RollBackTransaction();
-               return notMatched<Unit>();
+               return nil;
          }
 
          builder.Add(new SendBinaryMessageSymbol(message, Precedence.ChainedOperator));
-         return Unit.Matched();
+         return unit;
       }
    }
 }

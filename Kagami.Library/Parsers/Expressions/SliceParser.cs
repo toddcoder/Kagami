@@ -12,19 +12,19 @@ namespace Kagami.Library.Parsers.Expressions
       {
          public SkipTake()
          {
-            Take = none<Expression>();
-            Skip = none<Expression>();
+            Take = nil;
+            Skip = nil;
          }
 
-         public IMaybe<Expression> Skip { get; set; }
+         public Maybe<Expression> Skip { get; set; }
 
-         public IMaybe<Expression> Take { get; set; }
+         public Maybe<Expression> Take { get; set; }
 
          public bool Terminal { get; set; }
 
          public override string ToString()
          {
-            return $"{Skip.Map(e => e.ToString()).DefaultTo(() => "")};{Take.Map(e => e.ToString()).DefaultTo(() => "")}";
+            return $"{Skip.Map(e => e.ToString()) | ""};{Take.Map(e => e.ToString()) | ""}";
          }
       }
 
@@ -34,7 +34,7 @@ namespace Kagami.Library.Parsers.Expressions
 
       public override string Pattern => "^ /'{'";
 
-      public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+      public override Responding<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
       {
          state.Colorize(tokens, Color.OpenParenthesis);
 
@@ -42,94 +42,94 @@ namespace Kagami.Library.Parsers.Expressions
 
          while (state.More)
          {
-            var skipTakeMatch = getSkipTake(state, builder.Flags | ExpressionFlags.OmitComma);
-            if (skipTakeMatch.If(out var skipTake, out var _exception))
+            var _skipTake = getSkipTake(state, builder.Flags | ExpressionFlags.OmitComma);
+            if (_skipTake)
             {
-               skipTakes.Add(skipTake);
-               if (skipTake.Terminal)
+               skipTakes.Add(_skipTake);
+               if (_skipTake.Value.Terminal)
                {
                   break;
                }
             }
-            else if (_exception.If(out var exception))
+            else if (_skipTake.AnyException)
             {
-               return failedMatch<Unit>(exception);
+               return _skipTake.Exception;
             }
          }
 
          builder.Add(new SliceSymbol(skipTakes.ToArray()));
 
-         return Unit.Matched();
+         return unit;
       }
 
-      protected IMatched<SkipTake> getSkipTake(ParseState state, ExpressionFlags flags)
+      protected Responding<SkipTake> getSkipTake(ParseState state, ExpressionFlags flags)
       {
          var skipTake = new SkipTake();
 
-         var noSkipMatch = state.Scan("^ /(|s|) /','", Color.Whitespace, Color.Structure);
-         if (noSkipMatch.If(out _, out var _exception))
+         var _noSkipMatch = state.Scan("^ /(|s|) /','", Color.Whitespace, Color.Structure);
+         if (_noSkipMatch)
          {
          }
-         else if (_exception.If(out var exception))
+         else if (_noSkipMatch.AnyException)
          {
-            return failedMatch<SkipTake>(exception);
+            return _noSkipMatch.Exception;
          }
          else
          {
-            var skipMatch = getExpression(state, flags);
-            if (skipMatch.If(out var skipExpression, out _exception))
+            var _skipExpression = getExpression(state, flags);
+            if (_skipExpression)
             {
-               skipTake.Skip = skipExpression.Some();
+               skipTake.Skip = _skipExpression.Maybe();
             }
-            else if (_exception.If(out exception))
+            else if (_skipExpression.AnyException)
             {
-               return failedMatch<SkipTake>(exception);
+               return _skipExpression.Exception;
             }
 
-            var semiOrEndMatch = state.Scan("^ /(|s|) /[';,}']", Color.Whitespace, Color.CloseParenthesis);
-            if (semiOrEndMatch.If(out var semiOrEnd, out _exception))
+            var _semiOrEnd = state.Scan("^ /(|s|) /[';,}']", Color.Whitespace, Color.CloseParenthesis);
+            if (_semiOrEnd)
             {
-               switch (semiOrEnd)
+               switch (_semiOrEnd.Value)
                {
                   case "}":
                      skipTake.Terminal = true;
-                     return skipTake.Matched();
+                     return skipTake;
                   case ";":
-                     return skipTake.Matched();
+                     return skipTake;
                }
             }
-            else if (_exception.If(out exception))
+            else if (_semiOrEnd.AnyException)
             {
-               return failedMatch<SkipTake>(exception);
+               return _semiOrEnd.Exception;
             }
          }
 
-         var takeMatch = getExpression(state, flags);
-         if (takeMatch.If(out var takeExpression, out _exception))
+         var _takeExpression = getExpression(state, flags);
+         if (_takeExpression)
          {
-            skipTake.Take = takeExpression.Some();
+            skipTake.Take = _takeExpression.Maybe();
          }
-         else if (_exception.If(out var exception))
+         else if (_takeExpression.AnyException)
          {
-            return failedMatch<SkipTake>(exception);
+            return _takeExpression.Exception;
          }
 
-         var endMatch = state.Scan("^ /(|s|) /['};']", Color.Whitespace, Color.CloseParenthesis);
-         if (endMatch.If(out var end, out _exception))
+         var _end = state.Scan("^ /(|s|) /['};']", Color.Whitespace, Color.CloseParenthesis);
+         if (_end)
          {
-            switch (end)
+            switch (_end.Value)
             {
                case "}":
                   skipTake.Terminal = true;
-                  return skipTake.Matched();
+                  return skipTake;
             }
          }
-         else if (_exception.If(out var exception))
+         else if (_end.AnyException)
          {
-            return failedMatch<SkipTake>(exception);
+            return _end.Exception;
          }
 
-         return skipTake.Matched();
+         return skipTake;
       }
    }
 }

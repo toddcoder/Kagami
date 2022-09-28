@@ -13,11 +13,11 @@ namespace Kagami.Library.Parsers.Expressions
          this.flags = flags;
       }
 
-      public abstract IMatched<Unit> Prefix(ParseState state, Token[] tokens);
+      public abstract Responding<Unit> Prefix(ParseState state, Token[] tokens);
 
-      public abstract IMatched<Unit> Suffix(ParseState state, Expression expression);
+      public abstract Responding<Unit> Suffix(ParseState state, Expression expression);
 
-      public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder) =>
+      public override Responding<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder) =>
          from prefix in Prefix(state, tokens)
          from expression in getExpression(state, builder.Flags | flags)
          from suffix in Suffix(state, expression)

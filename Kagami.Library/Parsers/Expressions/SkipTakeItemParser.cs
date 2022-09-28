@@ -11,6 +11,8 @@ namespace Kagami.Library.Parsers.Expressions
    {
       public SkipTakeItemParser() : base(false)
       {
+         Suffix = nil;
+         Prefix = nil;
       }
 
       public override string Pattern => "^ /(|s|) /((['+-'] [/d '_']+) | '0')? /':' /((['+-'] [/d '_']+) | '0')?";
@@ -33,48 +35,48 @@ namespace Kagami.Library.Parsers.Expressions
             }
             else if (_expression.AnyException)
             {
-               return 
+               return _expression.Exception;
             }
             else
             {
-               Prefix = none<Expression>();
+               Prefix = nil;
             }
          }
          else
          {
-            Prefix = none<Expression>();
+            Prefix = nil;
          }
 
-         if (state.Scan("^ /(|s|) /'~'", Color.Whitespace, Color.Operator).IsMatched)
+         if (state.Scan("^ /(|s|) /'~'", Color.Whitespace, Color.Operator))
          {
-            if (getExpression(state, ExpressionFlags.OmitComma | ExpressionFlags.OmitConcatenate)
-                .If(out var expression, out var anyException))
+            var _expression = getExpression(state, ExpressionFlags.OmitComma | ExpressionFlags.OmitConcatenate);
+            if (_expression)
             {
-               Suffix = expression.Some();
+               Suffix = _expression.Maybe();
             }
-            else if (anyException.If(out var exception))
+            else if (_expression.AnyException)
             {
-               return failedMatch<Unit>(exception);
+               return _expression.Exception;
             }
             else
             {
-               Suffix = none<Expression>();
+               Suffix = nil;
             }
          }
          else
          {
-            Suffix = none<Expression>();
+            Suffix = nil;
          }
 
-         return Unit.Matched();
+         return unit;
       }
 
       public int Skip { get; set; }
 
       public int Take { get; set; }
 
-      public Maybe<Expression> Prefix { get; set; } = none<Expression>();
+      public Maybe<Expression> Prefix { get; set; }
 
-      public Maybe<Expression> Suffix { get; set; } = none<Expression>();
+      public Maybe<Expression> Suffix { get; set; }
    }
 }

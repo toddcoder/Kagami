@@ -10,11 +10,13 @@ namespace Kagami.Library.Parsers.Expressions
 {
    public class StringParser : SymbolParser
    {
-      public StringParser(ExpressionBuilder builder) : base(builder) { }
+      public StringParser(ExpressionBuilder builder) : base(builder)
+      {
+      }
 
       public override string Pattern => "^ /(|s|) /['mb`']? /(['\"'])";
 
-      public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+      public override Responding<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
       {
          var prefix = tokens[2].Text;
          var mutable = prefix == "m";
@@ -45,17 +47,18 @@ namespace Kagami.Library.Parsers.Expressions
 
                   if (hex)
                   {
-                     if (fromHex(hexText.ToString()).If(out var matchedChar, out var anyException))
+                     var _matchedChar = fromHex(hexText.ToString());
+                     if (_matchedChar)
                      {
-                        text.Append(matchedChar);
+                        text.Append(_matchedChar.Value);
                      }
-                     else if (anyException.If(out var exception))
+                     else if (_matchedChar.AnyException)
                      {
-                        return failedMatch<Unit>(exception);
+                        return _matchedChar.Exception;
                      }
                      else
                      {
-                        return failedMatch<Unit>(badHex(hexText.ToString()));
+                        return badHex(hexText.ToString());
                      }
                   }
 
@@ -64,22 +67,22 @@ namespace Kagami.Library.Parsers.Expressions
                   if (mutable)
                   {
                      builder.Add(new MutStringSymbol(text.ToString()));
-                     return Unit.Matched();
+                     return unit;
                   }
                   else if (binary)
                   {
                      builder.Add(new ByteArraySymbol(text.ToString()));
-                     return Unit.Matched();
+                     return unit;
                   }
                   else if (symbol)
                   {
                      builder.Add(new SymbolSymbol(text.ToString()));
-                     return Unit.Matched();
+                     return unit;
                   }
                   else
                   {
                      builder.Add(new StringSymbol(text.ToString()));
-                     return Unit.Matched();
+                     return unit;
                   }
                case '\\':
                   if (escaped)
@@ -153,13 +156,14 @@ namespace Kagami.Library.Parsers.Expressions
                      else
                      {
                         hex = false;
-                        if (fromHex(hexText.ToString()).ValueOrCast<Unit>(out var matchedChar, out var asUnit))
+                        var _matchedChar = fromHex(hexText.ToString());
+                        if (_matchedChar)
                         {
-                           text.Append(matchedChar);
+                           text.Append(_matchedChar.Value);
                         }
-                        else if (asUnit.IsFailedMatch)
+                        else if (_matchedChar.AnyException)
                         {
-                           return asUnit;
+                           return _matchedChar.Exception;
                         }
 
                         if (ch == 96)
@@ -181,7 +185,7 @@ namespace Kagami.Library.Parsers.Expressions
             state.Move(1);
          }
 
-         return failedMatch<Unit>(openString());
+         return openString();
       }
    }
 }

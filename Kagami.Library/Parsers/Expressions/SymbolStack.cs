@@ -15,9 +15,9 @@ namespace Kagami.Library.Parsers.Expressions
 
       public void Push(Symbol symbol) => stack.Push(symbol);
 
-      public IResult<Symbol> Pop() => tryTo(() => stack.Pop());
+      public Result<Symbol> Pop() => tryTo(() => stack.Pop());
 
-      public IMaybe<Symbol> Peek() => maybe(!IsEmpty, () => stack.Peek());
+      public Maybe<Symbol> Peek() => maybe(!IsEmpty, () => stack.Peek());
 
       public bool IsEmpty => stack.Count == 0;
 
