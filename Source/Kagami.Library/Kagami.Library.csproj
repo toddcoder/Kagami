@@ -31,4 +31,9 @@
     <Compile Remove="Parsers\Statements\IndentationParser.cs" />
     <Compile Remove="Parsers\Statements\MatchFunctionCaseParser.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Core">
+      <HintPath>..\..\References\Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>

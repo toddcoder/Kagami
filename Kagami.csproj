@@ -12,9 +12,6 @@
     <LangVersion>preview</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="Kagami.Library\Kagami.Library.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
@@ -833,5 +830,10 @@
     <Compile Remove="Kagami.Text\StringBufferClass.cs" />
     <Compile Remove="Kagami.Text\Text.cs" />
     <Compile Remove="Kagami.Text\TextClass.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Core">
+      <HintPath>References\Core.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

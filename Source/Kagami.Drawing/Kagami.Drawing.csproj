@@ -3,9 +3,9 @@
     <TargetFramework>net8.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <AssemblyTitle>Kagami.Text</AssemblyTitle>
+    <AssemblyTitle>Kagami.Drawing</AssemblyTitle>
     <Company>HP Inc.</Company>
-    <Product>Kagami.Text</Product>
+    <Product>Kagami.Drawing</Product>
     <Copyright>Copyright © HP Inc. 2018</Copyright>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
@@ -19,7 +19,15 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Kagami.Library\Kagami.Library.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Core">
+      <HintPath>..\..\References\Core.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

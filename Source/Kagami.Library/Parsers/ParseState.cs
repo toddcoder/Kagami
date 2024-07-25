@@ -143,7 +143,7 @@ namespace Kagami.Library.Parsers
 
       public string Indentation => indentation;
 
-      public Responding<Unit> Advance()
+      public Optional<Unit> Advance()
       {
          SkipEndOfLine();
          if (Scan($"{Indentation.FriendlyString()} /(/s+)").If(out var newIndentation, out var anyException))
@@ -225,7 +225,7 @@ namespace Kagami.Library.Parsers
          _ => color
       };
 
-      public Responding<string> Scan(string pattern, params Color[] colors)
+      public Optional<string> Scan(string pattern, params Color[] colors)
       {
          return CurrentSource.MatchOne(RealizePattern(pattern)).Map(m =>
          {
@@ -241,7 +241,7 @@ namespace Kagami.Library.Parsers
          });
       }
 
-      public Responding<string> SkipEndOfLine() => Scan("/(^ /r /n | ^ /r | ^ /n)", Color.Whitespace);
+      public Optional<string> SkipEndOfLine() => Scan("/(^ /r /n | ^ /r | ^ /n)", Color.Whitespace);
 
       public void Colorize(Token[] tokens, params Color[] colors)
       {
