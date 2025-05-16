@@ -2,63 +2,62 @@
 using Core.Monads;
 using static Kagami.Library.Nodes.NodeFunctions;
 
-namespace Kagami.Library.Nodes.Symbols
+namespace Kagami.Library.Nodes.Symbols;
+
+public class AssertSymbol : Symbol
 {
-   public class AssertSymbol : Symbol
+   protected Expression condition;
+   protected Expression value;
+   protected Maybe<Expression> _error;
+
+   public AssertSymbol(Expression condition, Expression value, Maybe<Expression> _error)
    {
-      protected Expression condition;
-      protected Expression value;
-      protected IMaybe<Expression> _error;
+      this.condition = condition;
+      this.value = value;
+      this._error = _error;
+   }
 
-      public AssertSymbol(Expression condition, Expression value, IMaybe<Expression> error)
+   public override void Generate(OperationsBuilder builder)
+   {
+      var trueLabel = newLabel("true");
+      var endLabel = newLabel("end");
+
+      condition.Generate(builder);
+      builder.GoToIfTrue(trueLabel);
+
+      if (_error is (true, var error))
       {
-         this.condition = condition;
-         this.value = value;
-         _error = error;
+         error.Generate(builder);
+         builder.Failure();
+      }
+      else
+      {
+         builder.PushNone();
       }
 
-      public override void Generate(OperationsBuilder builder)
+      builder.GoTo(endLabel);
+
+      builder.Label(trueLabel);
+      value.Generate(builder);
+      if (_error)
       {
-         var trueLabel = newLabel("true");
-         var endLabel = newLabel("end");
-
-         condition.Generate(builder);
-         builder.GoToIfTrue(trueLabel);
-
-         if (_error.If(out var error))
-         {
-            error.Generate(builder);
-            builder.Failure();
-         }
-         else
-         {
-            builder.PushNone();
-         }
-
-         builder.GoTo(endLabel);
-
-         builder.Label(trueLabel);
-         value.Generate(builder);
-         if (_error.IsSome)
-         {
-            builder.Success();
-         }
-         else
-         {
-            builder.Some();
-         }
-
-         builder.Label(endLabel);
-         builder.NoOp();
+         builder.Success();
+      }
+      else
+      {
+         builder.Some();
       }
 
-      public override Precedence Precedence => Precedence.ChainedOperator;
+      builder.Label(endLabel);
+      builder.NoOp();
+   }
 
-      public override Arity Arity => Arity.Nullary;
+   public override Precedence Precedence => Precedence.ChainedOperator;
 
-      public override string ToString()
-      {
-         return $"assert{_error.Map(_ => "!").DefaultTo(() => "?")} {condition} : {value}{_error.Map(e => $" : {e}").DefaultTo(() => "")}";
-      }
+   public override Arity Arity => Arity.Nullary;
+
+   public override string ToString()
+   {
+      return $"assert{_error.Map(_ => "!")|(() => "?")} {condition} : {value}{_error.Map(e => $" : {e}") | (() => "")}";
    }
 }

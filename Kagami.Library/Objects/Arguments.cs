@@ -1,92 +1,108 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Core.Collections;
 using Core.Enumerables;
-using Core.Exceptions;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
-namespace Kagami.Library.Objects
+namespace Kagami.Library.Objects;
+
+public readonly struct Arguments : IObject, IEnumerable<IObject>, IEquatable<Arguments>
 {
-   public readonly struct Arguments : IObject, IEnumerable<IObject>
+   public static Arguments Append(Arguments arguments, IObject item)
    {
-      public static Arguments Append(Arguments arguments, IObject item)
+      var newArguments = new IObject[arguments.Length + 1];
+      System.Array.Copy(arguments.arguments, newArguments, arguments.Length);
+      newArguments[newArguments.Length - 1] = item;
+
+      return new Arguments(newArguments);
+   }
+
+   public static Arguments Empty => new([]);
+
+   private readonly IObject[] arguments;
+   private readonly string[] labels;
+
+   public Arguments(params IObject[] arguments) : this()
+   {
+      this.arguments = arguments.Select(a => a is NameValue nv ? nv.Value : a).ToArray();
+      labels = arguments.Select(a => a is NameValue nv ? nv.Name : "").ToArray();
+   }
+
+   public string ClassName => "Arguments";
+
+   public string AsString => arguments.Select(i => i.AsString).ToString(", ");
+
+   public string Image => arguments.Select(i => i.Image).ToString(", ");
+
+   public int Hash => arguments.GetHashCode();
+
+   public bool IsEqualTo(IObject obj) => obj is Arguments a && compareEnumerables(arguments, a.arguments);
+
+   public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
+
+   public bool IsTrue => arguments.Length > 0;
+
+   public int Length => arguments.Length;
+
+   public IObject this[int index]
+   {
+      get
       {
-         var newArguments = new IObject[arguments.Length + 1];
-         System.Array.Copy(arguments.arguments, newArguments, arguments.Length);
-         newArguments[newArguments.Length - 1] = item;
-
-         return new Arguments(newArguments);
-      }
-
-      public static Arguments Empty => new(new IObject[] { });
-
-      private readonly IObject[] arguments;
-      private readonly string[] labels;
-
-      public Arguments(params IObject[] arguments) : this()
-      {
-         this.arguments = arguments.Select(a => a is NameValue nv ? nv.Value : a).ToArray();
-         labels = arguments.Select(a => a is NameValue nv ? nv.Name : "").ToArray();
-      }
-
-      public string ClassName => "Arguments";
-
-      public string AsString => arguments.Select(i => i.AsString).ToString(", ");
-
-      public string Image => arguments.Select(i => i.Image).ToString(", ");
-
-      public int Hash => arguments.GetHashCode();
-
-      public bool IsEqualTo(IObject obj) => obj is Arguments a && compareEnumerables(arguments, a.arguments);
-
-      public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
-
-      public bool IsTrue => arguments.Length > 0;
-
-      public int Length => arguments.Length;
-
-      public IObject this[int index]
-      {
-         get
+         if (index >= arguments.Length)
          {
-            if (index >= arguments.Length)
-            {
-               throw "Argument missing".Throws();
-            }
-            else if (index < 0)
-            {
-               throw "Malformed argument request".Throws();
-            }
-            else
-            {
-               return arguments[index];
-            }
+            throw fail("Argument missing");
          }
-      }
-
-      public Selector Selector(string name) => selector(name, labels, arguments);
-
-      public IObject[] Value => arguments;
-
-      public IEnumerator<IObject> GetEnumerator()
-      {
-         foreach (var argument in arguments)
+         else if (index < 0)
          {
-            yield return argument;
+            throw fail("Malformed argument request");
          }
-      }
-
-      IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-      public Arguments Pass(int count) => new(arguments.Skip(count).ToArray());
-
-      public Arguments Prepend(IObject prefix)
-      {
-         var list = arguments.ToList();
-         list.Insert(0, prefix);
-
-         return new Arguments(list.ToArray());
+         else
+         {
+            return arguments[index];
+         }
       }
    }
+
+   public Selector Selector(string name) => selector(name, labels, arguments);
+
+   public IObject[] Value => arguments;
+
+   public IEnumerator<IObject> GetEnumerator()
+   {
+      foreach (var argument in arguments)
+      {
+         yield return argument;
+      }
+   }
+
+   IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+   public Arguments Pass(int count) => new(arguments.Skip(count).ToArray());
+
+   public Arguments Prepend(IObject prefix)
+   {
+      var list = arguments.ToList();
+      list.Insert(0, prefix);
+
+      return new Arguments(list.ToArray());
+   }
+
+   public bool Equals(Arguments other) => Equals(arguments, other.arguments) && Equals(labels, other.labels);
+
+   public override bool Equals(object obj) => obj is Arguments other && Equals(other);
+
+   public override int GetHashCode()
+   {
+      unchecked
+      {
+         return (arguments != null ? arguments.GetHashCode() : 0) * 397 ^ (labels != null ? labels.GetHashCode() : 0);
+      }
+   }
+
+   public static bool operator ==(Arguments left, Arguments right) => left.Equals(right);
+
+   public static bool operator !=(Arguments left, Arguments right) => !left.Equals(right);
 }

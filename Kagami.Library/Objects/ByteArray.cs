@@ -34,13 +34,13 @@ namespace Kagami.Library.Objects
 
       public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new Iterator(this);
 
-      public IMaybe<IObject> Next(int index)
+      public Maybe<IObject> Next(int index)
       {
          var self = this;
          return maybe(index < bytes.Length, () => Byte.ByteObject(self.bytes[index]));
       }
 
-      public IMaybe<IObject> Peek(int index) => Next(index);
+      public Maybe<IObject> Peek(int index) => Next(index);
 
       public Int Length => bytes.Length;
 

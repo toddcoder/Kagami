@@ -1,22 +1,21 @@
 ﻿using System.Linq;
+using Core.Matching;
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
-using Core.RegularExpressions;
 
-namespace Kagami.Library.Nodes.Symbols
+namespace Kagami.Library.Nodes.Symbols;
+
+public class StringArraySymbol : Symbol
 {
-   public class StringArraySymbol : Symbol
-   {
-      protected Array array;
+   protected Array array;
 
-      public StringArraySymbol(string source) => array = new Array(source.Trim().Split("/s+").Select(String.StringObject));
+   public StringArraySymbol(string source) => array = new Array(source.Trim().Unjoin("/s+").Select(String.StringObject));
 
-      public override void Generate(OperationsBuilder builder) => builder.PushObject(array);
+   public override void Generate(OperationsBuilder builder) => builder.PushObject(array);
 
-      public override Precedence Precedence => Precedence.Value;
+   public override Precedence Precedence => Precedence.Value;
 
-      public override Arity Arity => Arity.Nullary;
+   public override Arity Arity => Arity.Nullary;
 
-      public override string ToString() => array.Image;
-   }
+   public override string ToString() => array.Image;
 }

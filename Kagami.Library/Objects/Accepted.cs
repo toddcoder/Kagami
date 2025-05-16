@@ -1,24 +1,23 @@
 ﻿using System;
-using Core.Exceptions;
+using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Objects
+namespace Kagami.Library.Objects;
+
+public class Accepted : ILazyStatus
 {
-   public class Accepted : ILazyStatus
-   {
-      public static ILazyStatus New(IObject obj) => new Accepted(obj);
+   public static ILazyStatus New(IObject obj) => new Accepted(obj);
 
-      public Accepted(IObject obj) => Object = obj;
+   public Accepted(IObject obj) => Object = obj;
 
-      public IObject Object { get; }
+   public IObject Object { get; }
 
-      public bool IsAccepted => true;
+   public bool IsAccepted => true;
 
-      public bool IsSkipped => false;
+   public bool IsSkipped => false;
 
-      public bool IsEnded => false;
+   public bool IsEnded => false;
 
-      public bool IsFailed => false;
+   public bool IsFailed => false;
 
-      public Exception Exception => throw "No exception".Throws();
-   }
+   public Exception Exception => throw fail("No exception");
 }

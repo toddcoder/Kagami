@@ -6,7 +6,7 @@ namespace Kagami.Library.Nodes.Symbols
 	public class InvokeParentConstructorSymbol : InvokeSymbol
 	{
 		public InvokeParentConstructorSymbol(string functionName, Expression[] arguments, bool inComparisand) :
-			base(functionName, arguments, none<LambdaSymbol>(), inComparisand) { }
+			base(functionName, arguments, nil, inComparisand) { }
 
 		public override void Generate(OperationsBuilder builder)
 		{

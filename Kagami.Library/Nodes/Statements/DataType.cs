@@ -6,60 +6,60 @@ using Core.Collections;
 using Core.Enumerables;
 using static Kagami.Library.Nodes.NodeFunctions;
 
-namespace Kagami.Library.Nodes.Statements
+namespace Kagami.Library.Nodes.Statements;
+
+public class DataType : Statement
 {
-   public class DataType : Statement
+   protected string className;
+   protected Hash<string, (IObject[], IObject)> comparisands;
+
+   public DataType(string className, Hash<string, (IObject[], IObject)> comparisands)
    {
-      protected string className;
-      protected Hash<string, (IObject[], IObject)> comparisands;
+      this.className = className;
+      this.comparisands = comparisands;
+   }
 
-      public DataType(string className, Hash<string, (IObject[], IObject)> comparisands)
+   public override void Generate(OperationsBuilder builder)
+   {
+      foreach (var (key, value) in comparisands)
       {
-         this.className = className;
-         this.comparisands = comparisands;
-      }
+         var (data, ordinal) = value;
 
-      public override void Generate(OperationsBuilder builder)
-      {
-         foreach (var (key, value) in comparisands)
+         var skipLabel = newLabel("skip");
+
+         builder.FieldExists(key);
+         builder.GoToIfTrue(skipLabel);
+
+         if (data.Length == 0)
          {
-            var (data, ordinal) = value;
-
-            var skipLabel = newLabel("skip");
-
-            builder.FieldExists(key);
-            builder.GoToIfTrue(skipLabel);
-
-            if (data.Length == 0)
+            builder.NewField(key, false, true);
+            builder.PushObject(new DataComparisand(className, key, data, ordinal));
+            builder.AssignField(key, true);
+         }
+         else
+         {
+            var dataTypeCode = new DataTypeCode(className, key, data, ordinal);
+            var block = new Block(dataTypeCode);
+            var invokable =
+               new DataComparisandInvokable(key, new Parameters(data.Length), $"{key}({data.Select(d => d.Image).ToString(", ")})");
+            var _index = builder.RegisterInvokable(invokable, block, true);
+            if (_index)
             {
                builder.NewField(key, false, true);
-               builder.PushObject(new DataComparisand(className, key, data, ordinal));
+               builder.PushObject(new Lambda(invokable));
                builder.AssignField(key, true);
             }
             else
             {
-               var dataTypeCode = new DataTypeCode(className, key, data, ordinal);
-               var block = new Block(dataTypeCode);
-               var invokable =
-                  new DataComparisandInvokable(key, new Parameters(data.Length), $"{key}({data.Select(d => d.Image).ToString(", ")})");
-               if (builder.RegisterInvokable(invokable, block, true).If(out _, out var exception))
-               {
-                  builder.NewField(key, false, true);
-                  builder.PushObject(new Lambda(invokable));
-                  builder.AssignField(key, true);
-               }
-               else
-               {
-                  throw exception;
-               }
+               throw _index.Exception;
             }
-
-            builder.Label(skipLabel);
          }
 
-         builder.NewField(className, false, true);
-         builder.PushObject(new Objects.DataType(className, comparisands));
-         builder.AssignField(className, true);
+         builder.Label(skipLabel);
       }
+
+      builder.NewField(className, false, true);
+      builder.PushObject(new Objects.DataType(className, comparisands));
+      builder.AssignField(className, true);
    }
 }

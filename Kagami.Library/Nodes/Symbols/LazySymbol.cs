@@ -2,31 +2,31 @@
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 
-namespace Kagami.Library.Nodes.Symbols
+namespace Kagami.Library.Nodes.Symbols;
+
+public class LazySymbol : Symbol
 {
-   public class LazySymbol : Symbol
+   protected Expression expression;
+
+   public LazySymbol(Expression expression) => this.expression = expression;
+
+   public override void Generate(OperationsBuilder builder)
    {
-      protected Expression expression;
-
-      public LazySymbol(Expression expression) => this.expression = expression;
-
-      public override void Generate(OperationsBuilder builder)
+      var invokable = new ExpressionInvokable(expression.ToString());
+      var _index = builder.RegisterInvokable(invokable, expression, false);
+      if (_index)
       {
-         var invokable = new ExpressionInvokable(expression.ToString());
-         if (builder.RegisterInvokable(invokable, expression, false).If(out _, out var exception))
-         {
-            builder.PushObject(new Lazy(invokable));
-         }
-         else
-         {
-            throw exception;
-         }
+         builder.PushObject(new Lazy(invokable));
       }
-
-      public override Precedence Precedence => Precedence.Value;
-
-      public override Arity Arity => Arity.Nullary;
-
-      public override string ToString() => $"lazy {expression}";
+      else
+      {
+         throw _index.Exception;
+      }
    }
+
+   public override Precedence Precedence => Precedence.Value;
+
+   public override Arity Arity => Arity.Nullary;
+
+   public override string ToString() => $"lazy {expression}";
 }

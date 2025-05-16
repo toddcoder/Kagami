@@ -4,71 +4,70 @@ using Kagami.Library.Operations;
 using Core.Monads;
 using static Kagami.Library.Nodes.NodeFunctions;
 
-namespace Kagami.Library.Nodes.Statements
+namespace Kagami.Library.Nodes.Statements;
+
+public class AssignFromLoop : Statement
 {
-   public class AssignFromLoop : Statement
+   protected bool isNew;
+   protected bool mutable;
+   protected string fieldName;
+   protected Maybe<TypeConstraint> _typeConstraint;
+   protected Block block;
+   protected Expression condition;
+   protected Expression expression;
+
+   public AssignFromLoop(bool isNew, bool mutable, string fieldName, Maybe<TypeConstraint> _typeConstraint, Block block, Expression condition,
+      Expression expression)
    {
-      protected bool isNew;
-      protected bool mutable;
-      protected string fieldName;
-      protected IMaybe<TypeConstraint> typeConstraint;
-      protected Block block;
-      protected Expression condition;
-      protected Expression expression;
+      this.isNew = isNew;
+      this.mutable = mutable;
+      this.fieldName = fieldName;
+      this._typeConstraint = _typeConstraint;
+      this.block = block;
+      this.condition = condition;
+      this.expression = expression;
+   }
 
-      public AssignFromLoop(bool isNew, bool mutable, string fieldName, IMaybe<TypeConstraint> typeConstraint, Block block, Expression condition,
-         Expression expression)
+   public override void Generate(OperationsBuilder builder)
+   {
+      var beginLabel = newLabel("begin");
+      var exitLabel = newLabel("exit");
+      var skipLabel = newLabel("skip");
+      var untilLabel = newLabel("until");
+      var endLabel = newLabel("end");
+
+      if (isNew)
       {
-         this.isNew = isNew;
-         this.mutable = mutable;
-         this.fieldName = fieldName;
-         this.typeConstraint = typeConstraint;
-         this.block = block;
-         this.condition = condition;
-         this.expression = expression;
+         builder.NewField(fieldName, mutable, true, _typeConstraint);
       }
 
-      public override void Generate(OperationsBuilder builder)
-      {
-         var beginLabel = newLabel("begin");
-         var exitLabel = newLabel("exit");
-         var skipLabel = newLabel("skip");
-         var untilLabel = newLabel("until");
-         var endLabel = newLabel("end");
+      builder.Label(beginLabel);
 
-         if (isNew)
-         {
-            builder.NewField(fieldName, mutable, true, typeConstraint);
-         }
+      builder.PushFrame();
+      builder.PushExitFrame(exitLabel);
+      builder.PushSkipFrame(skipLabel);
 
-         builder.Label(beginLabel);
+      block.Generate(builder);
 
-         builder.PushFrame();
-         builder.PushExitFrame(exitLabel);
-         builder.PushSkipFrame(skipLabel);
+      builder.PopFrame();
+      builder.Label(skipLabel);
+      builder.PopFrame();
 
-         block.Generate(builder);
+      condition.Generate(builder);
+      builder.GoToIfFalse(untilLabel);
+      expression.Generate(builder);
 
-         builder.PopFrame();
-         builder.Label(skipLabel);
-         builder.PopFrame();
+      builder.PopFrameWithValue();
+      builder.AssignField(fieldName, true);
 
-         condition.Generate(builder);
-         builder.GoToIfFalse(untilLabel);
-         expression.Generate(builder);
+      builder.Label(exitLabel);
+      builder.GoTo(endLabel);
 
-         builder.PopFrameWithValue();
-         builder.AssignField(fieldName, true);
+      builder.Label(untilLabel);
+      builder.PopFrame();
+      builder.GoTo(beginLabel);
 
-         builder.Label(exitLabel);
-         builder.GoTo(endLabel);
-
-         builder.Label(untilLabel);
-         builder.PopFrame();
-         builder.GoTo(beginLabel);
-
-         builder.Label(endLabel);
-         builder.NoOp();
-      }
+      builder.Label(endLabel);
+      builder.NoOp();
    }
 }
