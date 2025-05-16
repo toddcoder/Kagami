@@ -4,32 +4,31 @@ using Core.Monads;
 using static Kagami.Library.AllExceptions;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Operations
+namespace Kagami.Library.Operations;
+
+public class PopSkipFrame : Operation
 {
-   public class PopSkipFrame : Operation
+   public override Optional<IObject> Execute(Machine machine)
    {
-      public override IMatched<IObject> Execute(Machine machine)
+      var frameGroup = machine.PopFramesUntil(f => f.FrameType == FrameType.Skip);
+      if (frameGroup.SkipFrame is (true, var skipFrame))
       {
-         var frameGroup = machine.PopFramesUntil(f => f.FrameType == FrameType.Skip);
-         if (frameGroup.SkipFrame.If(out var skipFrame))
+         if (machine.GoTo(skipFrame.Address))
          {
-	         if (machine.GoTo(skipFrame.Address))
-	         {
-		         return notMatched<IObject>();
-	         }
-	         else
-	         {
-		         return failedMatch<IObject>(badAddress(skipFrame.Address));
-	         }
+            return nil;
          }
          else
          {
-	         return "Can't skip here".FailedMatch<IObject>();
+            return badAddress(skipFrame.Address);
          }
       }
-
-      public override bool Increment => false;
-
-      public override string ToString() => "pop.skip.frame";
+      else
+      {
+         return fail("Can't skip here");
+      }
    }
+
+   public override bool Increment => false;
+
+   public override string ToString() => "pop.skip.frame";
 }

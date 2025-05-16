@@ -2,16 +2,15 @@
 using Kagami.Library.Runtime;
 using Core.Monads;
 
-namespace Kagami.Library.Operations
+namespace Kagami.Library.Operations;
+
+public class PushByte : Operation
 {
-   public class PushByte : Operation
-   {
-      protected Byte value;
+   protected Byte value;
 
-      public PushByte(byte value) => this.value = value;
+   public PushByte(byte value) => this.value = value;
 
-      public override IMatched<IObject> Execute(Machine machine) => value.Matched<IObject>();
+   public override Optional<IObject> Execute(Machine machine) => value;
 
-      public override string ToString() => $"push.byte({value.Image})";
-   }
+   public override string ToString() => $"push.byte({value.Image})";
 }

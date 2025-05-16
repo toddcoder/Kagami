@@ -3,38 +3,37 @@ using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Monads;
 
-namespace Kagami.Library.Operations
-{
-   public abstract class TwoOperandOperation : Operation
-   {
-      public abstract Responding<IObject> Execute(Machine machine, IObject x, IObject y);
+namespace Kagami.Library.Operations;
 
-      public override Responding<IObject> Execute(Machine machine)
+public abstract class TwoOperandOperation : Operation
+{
+   public abstract Optional<IObject> Execute(Machine machine, IObject x, IObject y);
+
+   public override Optional<IObject> Execute(Machine machine)
+   {
+      try
       {
-         try
+         var _y = machine.Pop();
+         if (_y is (true, var y))
          {
-            var _y = machine.Pop();
-            if (_y)
+            var _x = machine.Pop();
+            if (_x is (true, var x))
             {
-               var _x = machine.Pop();
-               if (_x)
-               {
-                  return Execute(machine, _x.Value, _y.Value);
-               }
-               else
-               {
-                  return _x.Exception;
-               }
+               return Execute(machine, x, y);
             }
             else
             {
-               return _y.Exception;
+               return _x.Exception;
             }
          }
-         catch (Exception exception)
+         else
          {
-            return exception;
+            return _y.Exception;
          }
+      }
+      catch (Exception exception)
+      {
+         return exception;
       }
    }
 }

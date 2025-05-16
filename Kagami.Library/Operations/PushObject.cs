@@ -10,7 +10,7 @@ namespace Kagami.Library.Operations
 
       public PushObject(IObject obj) => this.obj = obj;
 
-      public override IMatched<IObject> Execute(Machine machine)
+      public override Optional<IObject> Execute(Machine machine)
       {
          if (obj is Lambda lambda)
          {

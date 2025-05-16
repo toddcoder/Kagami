@@ -1,21 +1,16 @@
 ﻿using Core.Monads;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
-using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Operations
+namespace Kagami.Library.Operations;
+
+public class Pick : Operation
 {
-   public class Pick : Operation
-   {
-      protected int index;
+   protected int index;
 
-      public Pick(int index) => this.index = index;
+   public Pick(int index) => this.index = index;
 
-      public override IMatched<IObject> Execute(Machine machine)
-      {
-         return machine.CurrentFrame.Pick(index).Map(i => i.Matched()).DefaultTo(notMatched<IObject>);
-      }
+   public override Optional<IObject> Execute(Machine machine) => machine.CurrentFrame.Pick(index).Optional();
 
-      public override string ToString() => $"pick({index})";
-   }
+   public override string ToString() => $"pick({index})";
 }

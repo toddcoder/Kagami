@@ -2,16 +2,15 @@
 using Kagami.Library.Runtime;
 using Core.Monads;
 
-namespace Kagami.Library.Operations
+namespace Kagami.Library.Operations;
+
+public class PushBoolean : Operation
 {
-   public class PushBoolean : Operation
-   {
-      protected Boolean value;
+   protected Boolean value;
 
-      public PushBoolean(bool value) => this.value = value;
+   public PushBoolean(bool value) => this.value = value;
 
-      public override IMatched<IObject> Execute(Machine machine) => value.Matched<IObject>();
+   public override Optional<IObject> Execute(Machine machine) => value;
 
-      public override string ToString() => $"push.boolean({value.Image})";
-   }
+   public override string ToString() => $"push.boolean({value.Image})";
 }

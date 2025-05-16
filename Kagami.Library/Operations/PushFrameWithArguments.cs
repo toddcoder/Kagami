@@ -4,26 +4,24 @@ using Core.Monads;
 using static Kagami.Library.AllExceptions;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Operations
+namespace Kagami.Library.Operations;
+
+public class PushFrameWithArguments : OneOperandOperation
 {
-   public class PushFrameWithArguments : OneOperandOperation
+   public override Optional<IObject> Execute(Machine machine, IObject value)
    {
-      public override IMatched<IObject> Execute(Machine machine, IObject value)
+      if (value is Arguments arguments)
       {
-         if (value is Arguments arguments)
-         {
-            var frame = new Frame(arguments);
-            machine.PushFrame(frame);
+         var frame = new Frame(arguments);
+         machine.PushFrame(frame);
 
-            return notMatched<IObject>();
-         }
-         else
-         {
-	         return failedMatch<IObject>(incompatibleClasses(value, "Arguments"));
-         }
+         return nil;
       }
-
-
-      public override string ToString() => "push.frame.with.arguments";
+      else
+      {
+         return incompatibleClasses(value, "Arguments");
+      }
    }
+
+   public override string ToString() => "push.frame.with.arguments";
 }

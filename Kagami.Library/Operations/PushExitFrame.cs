@@ -3,20 +3,19 @@ using Kagami.Library.Runtime;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Operations
+namespace Kagami.Library.Operations;
+
+public class PushExitFrame : AddressedOperation
 {
-   public class PushExitFrame : AddressedOperation
+   public override Optional<IObject> Execute(Machine machine)
    {
-      public override IMatched<IObject> Execute(Machine machine)
-      {
-         increment = true;
+      increment = true;
 
-         var frame = new Frame { Address = address, FrameType = FrameType.Exit };
-         machine.PushFrame(frame);
+      var frame = new Frame { Address = address, FrameType = FrameType.Exit };
+      machine.PushFrame(frame);
 
-         return notMatched<IObject>();
-      }
-
-      public override string ToString() => "push.exit.frame";
+      return nil;
    }
+
+   public override string ToString() => "push.exit.frame";
 }

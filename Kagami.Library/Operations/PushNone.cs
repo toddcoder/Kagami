@@ -2,12 +2,11 @@
 using Kagami.Library.Runtime;
 using Core.Monads;
 
-namespace Kagami.Library.Operations
-{
-   public class PushNone : Operation
-   {
-      public override IMatched<IObject> Execute(Machine machine) => None.NoneValue.Matched();
+namespace Kagami.Library.Operations;
 
-      public override string ToString() => "push.none";
-   }
+public class PushNone : Operation
+{
+   public override Optional<IObject> Execute(Machine machine) => None.NoneValue.Just();
+
+   public override string ToString() => "push.none";
 }

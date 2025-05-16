@@ -4,230 +4,223 @@ using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Collections;
-using Core.Exceptions;
 using Core.Monads;
 using Core.Strings;
 using static Kagami.Library.Classes.ClassFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Classes
+namespace Kagami.Library.Classes;
+
+public class UserClass : BaseClass
 {
-   public class UserClass : BaseClass
+   protected string className;
+   protected string parentClassName;
+   protected Maybe<UserClass> _parentClass;
+   protected Set<Selector> signatures = [];
+   protected Maybe<UserObject> _metaObject = nil;
+   protected SelectorHash<UserClass> mixins = [];
+
+   public UserClass(string className, string parentClassName)
    {
-      protected string className;
-      protected string parentClassName;
-      protected IMaybe<UserClass> parentClass;
-      protected Set<Selector> signatures;
-      protected IMaybe<UserObject> metaObject;
-      protected SelectorHash<UserClass> mixins;
+      this.className = className;
+      this.parentClassName = parentClassName;
 
-      public UserClass(string className, string parentClassName)
+      _parentClass = maybe<UserClass>() & this.parentClassName.IsNotEmpty() &
+         (() => Module.Global.Class(parentClassName).Map(bc => (UserClass)bc));
+   }
+
+   public void Include(Mixin mixin)
+   {
+      var mixinClass = (UserClass)classOf(mixin);
+      foreach (var (selector, _) in mixinClass.messages)
       {
-         this.className = className;
-         this.parentClassName = parentClassName;
+         mixins[selector] = mixinClass;
+      }
+   }
 
-         parentClass = maybe(this.parentClassName.IsNotEmpty(), () => Module.Global.Class(parentClassName)).Map(bc => (UserClass)bc);
-         signatures = new Set<Selector>();
-         metaObject = none<UserObject>();
-         mixins = new SelectorHash<UserClass>();
+   public bool Includes(string mixinClassName) => mixins.Values.Select(uc => uc.Name).Any(n => n == mixinClassName);
+
+   public override string Name => className;
+
+   public string ParentClassName => parentClassName;
+
+   public Maybe<UserClass> ParentClass => _parentClass;
+
+   public override bool UserDefined => true;
+
+   public Maybe<UserObject> MetaObject
+   {
+      get => _metaObject;
+      set => _metaObject = value;
+   }
+
+   public void InheritFrom(UserClass parentClass)
+   {
+      foreach (var (key, value) in parentClass.messages)
+      {
+         messages[key] = value;
       }
 
-      public void Include(Mixin mixin)
+      foreach (var selector in parentClass.signatures)
       {
-         var mixinClass = (UserClass)classOf(mixin);
-         foreach (var (selector, _) in mixinClass.messages)
-         {
-            mixins[selector] = mixinClass;
-         }
+         signatures.Add(selector);
       }
+   }
 
-      public bool Includes(string mixinClassName) => mixins.Values.Select(uc => uc.Name).Any(n => n == mixinClassName);
-
-      public override string Name => className;
-
-      public string ParentClassName => parentClassName;
-
-      public IMaybe<UserClass> ParentClass => parentClass;
-
-      public override bool UserDefined => true;
-
-      public IMaybe<UserObject> MetaObject
+   public virtual bool RegisterMethod(Selector selector, Lambda lambda, bool overriding)
+   {
+      if (messages.ContainsExact(selector) && !overriding)
       {
-         get => metaObject;
-         set => metaObject = value;
+         return false;
       }
-
-      public void InheritFrom(UserClass parentClass)
+      else
       {
-         foreach (var (key, value) in parentClass.messages)
-         {
-            messages[key] = value;
-         }
+         var clone = lambda.Clone();
+         messages[selector] = (obj, msg) => Invoke((UserObject)obj, msg.Arguments, clone);
+         signatures.Add(selector);
 
-         foreach (var selector in parentClass.signatures)
-         {
-            signatures.Add(selector);
-         }
+         return true;
       }
+   }
 
-      public virtual bool RegisterMethod(Selector selector, Lambda lambda, bool overriding)
+   public void RegisterFields(Fields fields)
+   {
+      foreach (var item in fields)
       {
-         if (messages.ContainsExact(selector) && !overriding)
+         var (fieldName, field) = item;
+         if (fieldName.StartsWith("__$") || field.Value is IInvokableObject)
          {
-            return false;
-         }
-         else
-         {
-            var clone = lambda.Clone();
-            messages[selector] = (obj, msg) => Invoke((UserObject)obj, msg.Arguments, clone);
-            signatures.Add(selector);
-
-            return true;
-         }
-      }
-
-      public void RegisterFields(Fields fields)
-      {
-         foreach (var item in fields)
-         {
-            var (fieldName, field) = item;
-            if (fieldName.StartsWith("__$") || field.Value is IInvokableObject)
-            {
-               continue;
-            }
-
-            var getter = fieldName.get();
-            messages[getter] = (obj, _) => ((UserObject)obj).Fields[fieldName];
-            if (field.Mutable)
-            {
-               var setter = fieldName.set();
-               messages[setter] = (obj, msg) => ((UserObject)obj).Fields[fieldName] = msg.Arguments[0];
-            }
-         }
-      }
-
-      public void RegisterParameters(Parameters parameters)
-      {
-         foreach (var parameter in parameters)
-         {
-            var name = parameter.Name;
-            Selector getter = name.get();
-            messages[getter] = (obj, _) => ((UserObject)obj).Fields[name];
-            signatures.Add(getter);
-            if (parameter.Mutable)
-            {
-               Selector setter = name.set();
-               messages[setter] = (obj, msg) => ((UserObject)obj).Fields[name] = msg.Arguments[0];
-               signatures.Add(setter);
-            }
-         }
-      }
-
-      public override void RegisterMessages()
-      {
-         registerMessage("className".get(), (obj, _) => String.StringObject(obj.ClassName));
-         registerMessage("class".get(), (obj, _) => new Class(obj.ClassName));
-         registerMessage("send",
-            (obj, msg) => function<IObject, String>(obj, msg, (o, n) => sendMessage(o, n.Value, msg.Arguments.Pass(1))));
-      }
-
-      public IMatched<Selector> MatchImplemented(IEnumerable<Selector> traitSignatures)
-      {
-         foreach (var signature in traitSignatures)
-         {
-            if (!signatures.Contains(signature))
-            {
-               return signature.Matched();
-            }
+            continue;
          }
 
-         return notMatched<Selector>();
-      }
-
-      public override void RegisterClassMessages()
-      {
-      }
-
-      public override bool ClassRespondsTo(Selector selector)
-      {
-         return metaObject.Map(uo => classOf(uo).RespondsTo(selector)).DefaultTo(() => false);
-      }
-
-      public override IObject ClassDynamicInvoke(Message message)
-      {
-         if (metaObject.If(out var uo))
+         var getter = fieldName.get();
+         messages[getter] = (obj, _) => ((UserObject)obj).Fields[fieldName];
+         if (field.Mutable)
          {
-            return sendMessage(uo, message);
+            var setter = fieldName.set();
+            messages[setter] = (obj, msg) => ((UserObject)obj).Fields[fieldName] = msg.Arguments[0];
          }
-         else
+      }
+   }
+
+   public void RegisterParameters(Parameters parameters)
+   {
+      foreach (var parameter in parameters)
+      {
+         var name = parameter.Name;
+         Selector getter = name.get();
+         messages[getter] = (obj, _) => ((UserObject)obj).Fields[name];
+         signatures.Add(getter);
+         if (parameter.Mutable)
          {
-            throw "No metaobject".Throws();
+            Selector setter = name.set();
+            messages[setter] = (obj, msg) => ((UserObject)obj).Fields[name] = msg.Arguments[0];
+            signatures.Add(setter);
+         }
+      }
+   }
+
+   public override void RegisterMessages()
+   {
+      registerMessage("className".get(), (obj, _) => String.StringObject(obj.ClassName));
+      registerMessage("class".get(), (obj, _) => new Class(obj.ClassName));
+      registerMessage("send",
+         (obj, msg) => function<IObject, String>(obj, msg, (o, n) => sendMessage(o, n.Value, msg.Arguments.Pass(1))));
+   }
+
+   public Optional<Selector> MatchImplemented(IEnumerable<Selector> traitSignatures)
+   {
+      foreach (var signature in traitSignatures)
+      {
+         if (!signatures.Contains(signature))
+         {
+            return signature;
          }
       }
 
-      public override bool RespondsTo(Selector selector)
+      return nil;
+   }
+
+   public override void RegisterClassMessages()
+   {
+   }
+
+   public override bool ClassRespondsTo(Selector selector) => _metaObject.Map(uo => classOf(uo).RespondsTo(selector)) | false;
+
+   public override IObject ClassDynamicInvoke(Message message)
+   {
+      if (_metaObject is (true, var metaObject))
       {
-         if (base.RespondsTo(selector))
-         {
-            return true;
-         }
-         else if (mixins.ContainsKey(selector))
-         {
-            return true;
-         }
-         else
-         {
-            return messages.ContainsKey("missing(_<String>,_<Tuple>)");
-         }
+         return sendMessage(metaObject, message);
       }
-
-      public override IObject DynamicInvoke(IObject obj, Message message)
+      else
       {
-         if (mixins.ContainsKey(message.Selector))
-         {
-            return mixins[message.Selector].SendMessage(obj, message);
-         }
-         else
-         {
-            var originalMessage = String.StringObject(message.Selector.Name);
-            var args = message.Arguments.ToArray();
-            var tuple = new Tuple(args);
-
-            return sendMessage(obj, "missing(_<String>,_<Tuple>)", originalMessage, tuple);
-         }
+         throw fail("No metaobject");
       }
+   }
 
-      public override bool AssignCompatible(BaseClass otherClass)
+   public override bool RespondsTo(Selector selector)
+   {
+      if (base.RespondsTo(selector))
       {
-         if (Name == otherClass.Name)
-         {
-            return true;
-         }
-         else if (parentClass.If(out var pc))
-         {
-            return pc.AssignCompatible(otherClass);
-         }
-         else
-         {
-            return false;
-         }
+         return true;
       }
-
-      public override bool MatchCompatible(BaseClass otherClass)
+      else if (mixins.ContainsKey(selector))
       {
-         if (Name == otherClass.Name)
-         {
-            return true;
-         }
-         else if (parentClass.If(out var pc))
-         {
-            return pc.MatchCompatible(otherClass);
-         }
-         else
-         {
-            return false;
-         }
+         return true;
+      }
+      else
+      {
+         return messages.ContainsKey("missing(_<String>,_<Tuple>)");
+      }
+   }
+
+   public override IObject DynamicInvoke(IObject obj, Message message)
+   {
+      if (mixins.ContainsKey(message.Selector))
+      {
+         return mixins[message.Selector].SendMessage(obj, message);
+      }
+      else
+      {
+         var originalMessage = String.StringObject(message.Selector.Name);
+         var args = message.Arguments.ToArray();
+         var tuple = new Tuple(args);
+
+         return sendMessage(obj, "missing(_<String>,_<Tuple>)", originalMessage, tuple);
+      }
+   }
+
+   public override bool AssignCompatible(BaseClass otherClass)
+   {
+      if (Name == otherClass.Name)
+      {
+         return true;
+      }
+      else if (_parentClass is (true, var parentClass))
+      {
+         return parentClass.AssignCompatible(otherClass);
+      }
+      else
+      {
+         return false;
+      }
+   }
+
+   public override bool MatchCompatible(BaseClass otherClass)
+   {
+      if (Name == otherClass.Name)
+      {
+         return true;
+      }
+      else if (_parentClass is (true, var parentClass))
+      {
+         return parentClass.MatchCompatible(otherClass);
+      }
+      else
+      {
+         return false;
       }
    }
 }

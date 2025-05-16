@@ -3,52 +3,50 @@ using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Monads;
 using static Kagami.Library.AllExceptions;
-using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
-namespace Kagami.Library.Operations
+namespace Kagami.Library.Operations;
+
+public class Pipeline : TwoOperandOperation
 {
-	public class Pipeline : TwoOperandOperation
-	{
-		public override IMatched<IObject> Execute(Machine machine, IObject x, IObject y)
-		{
-			switch (y)
-			{
-				case Lambda lambda:
-					if (x is ICollection collection)
-					{
-						var array = collection.GetIterator(false).List().ToArray();
-						return lambda.Invoke(array).Matched();
-					}
-					else
-					{
-						return lambda.Invoke(x).Matched();
-					}
+   public override Optional<IObject> Execute(Machine machine, IObject x, IObject y)
+   {
+      switch (y)
+      {
+         case Lambda lambda:
+            if (x is ICollection collection)
+            {
+               var array = collection.GetIterator(false).List().ToArray();
+               return lambda.Invoke(array).Just();
+            }
+            else
+            {
+               return lambda.Invoke(x).Just();
+            }
 
-				case IMayInvoke mi:
-					return mi.Invoke(x).Matched();
-				case Message message:
-					return classOf(x).SendMessage(x, message).Matched();
-				case Selector selector:
-					if (Machine.Current.Find(selector).If(out var field, out var anyException))
-					{
-						var _ = false;
-						return Invoke.InvokeObject(machine, field.Value, new Arguments(x), ref _);
-					}
-					else if (anyException.If(out var exception))
-					{
-						return failedMatch<IObject>(exception);
-					}
-					else
-					{
-						return failedMatch<IObject>(fieldNotFound(selector));
-					}
+         case IMayInvoke mi:
+            return mi.Invoke(x).Just();
+         case Message message:
+            return classOf(x).SendMessage(x, message).Just();
+         case Selector selector:
+            if (Machine.Current.Find(selector).If(out var field, out var anyException))
+            {
+               var _ = false;
+               return Invoke.InvokeObject(machine, field.Value, new Arguments(x), ref _).Just();
+            }
+            else if (anyException.If(out var exception))
+            {
+               return exception;
+            }
+            else
+            {
+               return fieldNotFound(selector);
+            }
 
-				default:
-					return failedMatch<IObject>(incompatibleClasses(y, "Lambda"));
-			}
-		}
+         default:
+            return incompatibleClasses(y, "Lambda");
+      }
+   }
 
-		public override string ToString() => "pipeline";
-	}
+   public override string ToString() => "pipeline";
 }

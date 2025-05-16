@@ -2,38 +2,40 @@
 using Kagami.Library.Runtime;
 using Core.Monads;
 using static Kagami.Library.AllExceptions;
-using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Operations
+namespace Kagami.Library.Operations;
+
+public abstract class TwoBooleanOperation : Operation
 {
-   public abstract class TwoBooleanOperation : Operation
-   {
-      public abstract IMatched<bool> Execute(bool x, bool y);
+   public abstract Optional<bool> Execute(bool x, bool y);
 
-      public override IMatched<IObject> Execute(Machine machine)
+   public override Optional<IObject> Execute(Machine machine)
+   {
+      var _xy =
+         from yValue in machine.Pop()
+         from xValue in machine.Pop()
+         select (xValue, yValue);
+      if (_xy is (true, var (x, y)))
       {
-         if (machine.Pop().If(out var y, out var exception) && machine.Pop().If(out var x, out exception))
+         if (x is Boolean bx)
          {
-            if (x is Boolean bx)
+            if (y is Boolean by)
             {
-               if (y is Boolean by)
-               {
-                  return Execute(bx.Value, by.Value).Map(Boolean.BooleanObject);
-               }
-               else
-               {
-                  return failedMatch<IObject>(incompatibleClasses(y, "Boolean"));
-               }
+               return Execute(bx.Value, by.Value).Map(Boolean.BooleanObject);
             }
             else
             {
-               return failedMatch<IObject>(incompatibleClasses(x, "Boolean"));
+               return incompatibleClasses(y, "Boolean");
             }
          }
          else
          {
-            return failedMatch<IObject>(exception);
+            return incompatibleClasses(x, "Boolean");
          }
+      }
+      else
+      {
+         return _xy.Exception;
       }
    }
 }

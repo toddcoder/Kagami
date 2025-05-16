@@ -1,5 +1,4 @@
-﻿using System;
-using Kagami.Library.Operations;
+﻿using Kagami.Library.Operations;
 using Kagami.Library.Parsers;
 using Kagami.Library.Parsers.Statements;
 using Kagami.Library.Runtime;
@@ -8,78 +7,79 @@ using static Kagami.Library.Nodes.NodeFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library
+namespace Kagami.Library;
+
+public class Compiler
 {
-   public class Compiler
+   protected string source;
+   protected CompilerConfiguration configuration;
+   protected IContext context;
+
+   public Compiler(string source, CompilerConfiguration configuration, IContext context)
    {
-      protected string source;
-      protected CompilerConfiguration configuration;
-      protected IContext context;
+      this.source = source;
+      this.configuration = configuration;
+      this.context = context;
+   }
 
-      public Compiler(string source, CompilerConfiguration configuration, IContext context)
+   public Result<Machine> Generate()
+   {
+      Module.Global = new Module();
+      Module.Global.LoadBuiltinClasses();
+
+      var state = new ParseState(source);
+      var statementsParser = new StatementsParser();
+
+      ResetUniqueID();
+
+      resetUniqueID();
+
+      while (state.More)
       {
-         this.source = source;
-         this.configuration = configuration;
-         this.context = context;
-      }
-
-      public Result<Machine> Generate()
-      {
-         Module.Global = new Module();
-         Module.Global.LoadBuiltinClasses();
-
-         var state = new ParseState(source);
-         var statementsParser = new StatementsParser();
-
-         ResetUniqueID();
-
-         resetUniqueID();
-
-         while (state.More)
+         if (statementsParser.Scan(state).If(out _, out var _exception))
          {
-            if (statementsParser.Scan(state).If(out _, out var _exception))
-            {
-            }
-            else if (_exception.If(out var innerException))
-            {
-               ExceptionIndex = state.ExceptionIndex;
-               return innerException;
-            }
-            else
-            {
-               ExceptionIndex = state.CurrentSource.Length;
-               return fail($"Didn't understand {state.CurrentSource}");
-            }
          }
-
-         Tokens = state.Tokens;
-
-         var statements = state.Statements();
-         var builder = new OperationsBuilder();
-         foreach (var statement in statements)
+         else if (_exception.If(out var innerException))
          {
-            statement.Generate(builder);
-            statement.AddBreak(builder);
-         }
-
-         if (builder.ToOperations(state).Map(out var operations, out var exception))
-         {
-            var machine = new Machine(context) { Tracing = configuration.Tracing };
-            machine.Load(operations);
-            Machine.Current = machine;
-            Operations = operations;
-            return machine;
+            ExceptionIndex = state.ExceptionIndex;
+            return innerException;
          }
          else
          {
-            return exception;
+            ExceptionIndex = state.CurrentSource.Length;
+            return fail($"Didn't understand {state.CurrentSource}");
          }
       }
 
-      public Maybe<int> ExceptionIndex { get; set; } = nil;
+      Tokens = state.Tokens;
 
-      public Token[] Tokens { get; set; } = Array.Empty<Token>();
+      var statements = state.Statements();
+      var builder = new OperationsBuilder();
+      foreach (var statement in statements)
+      {
+         statement.Generate(builder);
+         statement.AddBreak(builder);
+      }
 
-      public Maybe<Operations.Operations> Operations { get; set; } = nil;
+      var _operations = builder.ToOperations(state);
+      if (_operations is (true, var operations))
+      {
+         var machine = new Machine(context) { Tracing = configuration.Tracing };
+         machine.Load(operations);
+         Machine.Current = machine;
+         Operations = operations;
+
+         return machine;
+      }
+      else
+      {
+         return _operations.Exception;
+      }
    }
+
+   public Maybe<int> ExceptionIndex { get; set; } = nil;
+
+   public Token[] Tokens { get; set; } = [];
+
+   public Maybe<Operations.Operations> Operations { get; set; } = nil;
 }

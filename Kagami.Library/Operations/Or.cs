@@ -1,11 +1,10 @@
 ﻿using Core.Monads;
 
-namespace Kagami.Library.Operations
-{
-   public class Or : TwoBooleanOperation
-   {
-      public override IMatched<bool> Execute(bool x, bool y) => (x || y).Matched();
+namespace Kagami.Library.Operations;
 
-      public override string ToString() => "or";
-   }
+public class Or : TwoBooleanOperation
+{
+   public override Optional<bool> Execute(bool x, bool y) => x || y;
+
+   public override string ToString() => "or";
 }
