@@ -45,13 +45,13 @@ public class ArrayClass : BaseClass, ICollectionClass
          function<Array, IObject>(obj, msg, (a, o) => a.FindAll(o));
       messages["default".get()] = (obj, _) => function<Array>(obj, array =>
       {
-         if (array.DefaultValue.If(out var dv))
+         if (array.DefaultValue is (true, var defaultValue))
          {
-            return dv;
+            return defaultValue;
          }
-         else if (array.DefaultLambda.If(out var dl))
+         else if (array.DefaultLambda is (true, var defaultLambda))
          {
-            return dl;
+            return defaultLambda;
          }
          else
          {

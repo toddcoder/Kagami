@@ -4,22 +4,21 @@ using Kagami.Library.Runtime;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Operations
+namespace Kagami.Library.Operations;
+
+public class SetFields : Operation
 {
-   public class SetFields : Operation
+   protected Parameters parameters;
+
+   public SetFields(Parameters parameters) => this.parameters = parameters;
+
+   public override Optional<IObject> Execute(Machine machine)
    {
-      protected Parameters parameters;
+      var frame = machine.CurrentFrame;
+      frame.SetFields(parameters);
 
-      public SetFields(Parameters parameters) => this.parameters = parameters;
-
-      public override IMatched<IObject> Execute(Machine machine)
-      {
-         var frame = machine.CurrentFrame;
-         frame.SetFields(parameters);
-
-         return notMatched<IObject>();
-      }
-
-      public override string ToString() => $"set.fields({parameters})";
+      return nil;
    }
+
+   public override string ToString() => $"set.fields({parameters})";
 }

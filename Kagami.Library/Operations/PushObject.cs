@@ -2,24 +2,23 @@
 using Kagami.Library.Runtime;
 using Core.Monads;
 
-namespace Kagami.Library.Operations
+namespace Kagami.Library.Operations;
+
+public class PushObject : Operation
 {
-   public class PushObject : Operation
+   protected IObject obj;
+
+   public PushObject(IObject obj) => this.obj = obj;
+
+   public override Optional<IObject> Execute(Machine machine)
    {
-      protected IObject obj;
-
-      public PushObject(IObject obj) => this.obj = obj;
-
-      public override Optional<IObject> Execute(Machine machine)
+      if (obj is Lambda lambda)
       {
-         if (obj is Lambda lambda)
-         {
-            lambda.Capture();
-         }
-
-         return obj.Matched();
+         lambda.Capture();
       }
 
-      public override string ToString() => $"push.object({obj.Image})";
+      return obj.Just();
    }
+
+   public override string ToString() => $"push.object({obj.Image})";
 }

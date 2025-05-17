@@ -4,37 +4,37 @@ using Kagami.Library.Runtime;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Operations
+namespace Kagami.Library.Operations;
+
+public class Rotate : Operation
 {
-   public class Rotate : Operation
+   protected int count;
+
+   public Rotate(int count) => this.count = count;
+
+   public override Optional<IObject> Execute(Machine machine)
    {
-      protected int count;
-
-      public Rotate(int count) => this.count = count;
-
-      public override IMatched<IObject> Execute(Machine machine)
+      List<IObject> list = [];
+      for (var i = 0; i < count; i++)
       {
-         var list = new List<IObject>();
-         for (var i = 0; i < count; i++)
+         var _value = machine.Pop();
+         if (_value is (true, var value))
          {
-            if (machine.Pop().If(out var value, out var exception))
-            {
-               list.Add(value);
-            }
-            else
-            {
-               return failedMatch<IObject>(exception);
-            }
+            list.Add(value);
          }
-
-         foreach (var value in list)
+         else
          {
-            machine.Push(value);
+            return _value.Exception;
          }
-
-         return notMatched<IObject>();
       }
 
-      public override string ToString() => $"rotate({count})";
+      foreach (var value in list)
+      {
+         machine.Push(value);
+      }
+
+      return nil;
    }
+
+   public override string ToString() => $"rotate({count})";
 }

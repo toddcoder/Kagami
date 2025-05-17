@@ -3,48 +3,50 @@ using Kagami.Library.Runtime;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Objects
+namespace Kagami.Library.Objects;
+
+public class LazyDictionaryIterator : LazyIterator
 {
-   public class LazyDictionaryIterator : LazyIterator
+   protected IObject[] keys;
+   protected Dictionary dictionary;
+
+   public LazyDictionaryIterator(ICollection collection) : base(collection)
    {
-      protected IObject[] keys;
-      protected Dictionary dictionary;
+      dictionary = (Dictionary)collection;
+      keys = dictionary.KeyArray;
+   }
 
-      public LazyDictionaryIterator(ICollection collection) : base(collection)
-      {
-         dictionary = (Dictionary)collection;
-         keys = dictionary.KeyArray;
-      }
+   public override Maybe<IObject> Next() => maybe<IObject>() & index < keys.Length & (() =>
+   {
+      var key = keys[index++];
+      return Tuple.NewTuple(key, dictionary.GetRaw(key)).Some();
+   });
 
-      public override Maybe<IObject> Next() => maybe(index < keys.Length, () =>
-      {
-         var key = keys[index++];
-         return Tuple.NewTuple(key, dictionary.GetRaw(key)).Some();
-      });
+   public override Maybe<IObject> Peek() => maybe<IObject>() & index < keys.Length & (() =>
+   {
+      var key = keys[index];
+      return Tuple.NewTuple(key, dictionary.GetRaw(key)).Some();
+   });
 
-      public override Maybe<IObject> Peek() => maybe(index < keys.Length, () =>
+   public override IEnumerable<IObject> List()
+   {
+      index = 0;
+      do
       {
-         var key = keys[index];
-         return Tuple.NewTuple(key, dictionary.GetRaw(key)).Some();
-      });
-
-      public override IEnumerable<IObject> List()
-      {
-         Maybe<IObject> _item = nil;
-         index = 0;
-         do
+         var _item = Next();
+         if (_item is (true, var obj))
          {
-            _item = Next();
-            if (_item.Map(out var obj))
-            {
-	            yield return obj;
-            }
+            yield return obj;
+         }
+         else
+         {
+            break;
+         }
 
-            if (index % 1000 == 0 && Machine.Current.Context.Cancelled())
-            {
-	            yield break;
-            }
-         } while (_item);
-      }
+         if (index % 1000 == 0 && Machine.Current.Context.Cancelled())
+         {
+            yield break;
+         }
+      } while (true);
    }
 }

@@ -1,22 +1,21 @@
-﻿namespace Kagami.Library.Operations
+﻿namespace Kagami.Library.Operations;
+
+public abstract class AddressedOperation : Operation
 {
-   public abstract class AddressedOperation : Operation
+   protected int address;
+   protected bool increment;
+
+   public AddressedOperation()
    {
-      protected int address;
-      protected bool increment;
+      address = -1;
+      increment = false;
+   }
 
-      public AddressedOperation()
-      {
-         address = -1;
-         increment = false;
-      }
+   public override bool Increment => increment;
 
-      public override bool Increment => increment;
-
-      public int Address
-      {
-         get => address;
-         set => address = value;
-      }
+   public int Address
+   {
+      get => address;
+      set => address = value;
    }
 }

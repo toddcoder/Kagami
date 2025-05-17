@@ -10,21 +10,22 @@ namespace Kagami.Library.Operations
 {
 	public class Super : Operation
 	{
-		public override IMatched<IObject> Execute(Machine machine)
-		{
-			if (machine.Find("self", true).If(out var selfField, out var anyException))
+		public override Optional<IObject> Execute(Machine machine)
+      {
+         var _selfField = machine.Find("self", true);
+         if (_selfField.If(out var selfField, out var anyException))
 			{
 				var self = (UserObject)selfField.Value;
 				var selfClass = (UserClass)classOf(self);
 				var parentClassName = selfClass.ParentClassName;
 				if (parentClassName.IsEmpty())
 				{
-					return $"Class {selfClass.Name} has no parent class".FailedMatch<IObject>();
+					return fail($"Class {selfClass.Name} has no parent class");
 				}
 				else
 				{
 					var superObject = new UserObject(parentClassName, self.Fields, self.Parameters);
-					return superObject.Matched<IObject>();
+					return superObject;
 				}
 			}
 			else if (anyException.If(out var exception))
@@ -35,7 +36,7 @@ namespace Kagami.Library.Operations
 			{
 				return "self not defined".FailedMatch<IObject>();
 			}
-		}
+      }
 
 		public override string ToString() => "super";
 	}

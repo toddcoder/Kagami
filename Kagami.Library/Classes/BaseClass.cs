@@ -1,4 +1,5 @@
 ﻿using System;
+using Core.Objects;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using static Kagami.Library.AllExceptions;
@@ -441,11 +442,12 @@ public abstract class BaseClass
          fields.Assign("self", obj);
       }
 
-      if (Machine.Current.Invoke(lambda.Invokable, arguments, fields).If(out var value, out var anyException))
+      var _value = Machine.Current.Invoke(lambda.Invokable, arguments, fields);
+      if (_value is (true, var value))
       {
          return value;
       }
-      else if (anyException.If(out var exception))
+      else if (_value.Exception is (true, var exception))
       {
          throw exception;
       }

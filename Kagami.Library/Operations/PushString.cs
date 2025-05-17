@@ -2,16 +2,15 @@
 using Kagami.Library.Runtime;
 using Core.Monads;
 
-namespace Kagami.Library.Operations
+namespace Kagami.Library.Operations;
+
+public class PushString : Operation
 {
-   public class PushString : Operation
-   {
-      protected String value;
+   protected String value;
 
-      public PushString(string value) => this.value = value;
+   public PushString(string value) => this.value = value;
 
-      public override IMatched<IObject> Execute(Machine machine) => value.Matched<IObject>();
+   public override Optional<IObject> Execute(Machine machine) => value;
 
-      public override string ToString() => $"push.string({value.Image})";
-   }
+   public override string ToString() => $"push.string({value.Image})";
 }

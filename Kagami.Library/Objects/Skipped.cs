@@ -1,20 +1,19 @@
 ﻿using System;
-using Core.Exceptions;
+using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Objects
+namespace Kagami.Library.Objects;
+
+public class Skipped : ILazyStatus
 {
-   public class Skipped : ILazyStatus
-   {
-      public IObject Object => throw "No object".Throws();
+   public IObject Object => throw fail("No object");
 
-      public bool IsAccepted => false;
+   public bool IsAccepted => false;
 
-      public bool IsSkipped => true;
+   public bool IsSkipped => true;
 
-      public bool IsEnded => false;
+   public bool IsEnded => false;
 
-      public bool IsFailed => false;
+   public bool IsFailed => false;
 
-      public Exception Exception => throw "No exception".Throws();
-   }
+   public Exception Exception => throw fail("No exception");
 }

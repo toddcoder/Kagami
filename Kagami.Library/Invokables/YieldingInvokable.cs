@@ -57,7 +57,8 @@ public class YieldingInvokable : IInvokable, ICollection, IObject
 
    public Maybe<IObject> Next(int index)
    {
-      if (Machine.Current.Invoke(this).If(out var result, out var anyException))
+      var _result = Machine.Current.Invoke(this);
+      if (_result is (true, var result))
       {
          switch (result)
          {
@@ -71,7 +72,7 @@ public class YieldingInvokable : IInvokable, ICollection, IObject
                throw incompatibleClasses(result, "YieldReturn");
          }
       }
-      else if (anyException.If(out var exception))
+      else if (_result.Exception is (true, var exception))
       {
          throw exception;
       }

@@ -2,21 +2,20 @@
 using Kagami.Library.Runtime;
 using Core.Monads;
 
-namespace Kagami.Library.Operations
-{
-   public class ReadLine : Operation
-   {
-      public override IMatched<IObject> Execute(Machine machine)
-      {
-         if (machine.Context.ReadLine().If(out var line))
-         {
-	         return String.StringObject(line).Matched();
-         }
+namespace Kagami.Library.Operations;
 
-         machine.Running = false;
-         return String.Empty.Matched();
+public class ReadLine : Operation
+{
+   public override Optional<IObject> Execute(Machine machine)
+   {
+      if (machine.Context.ReadLine() is (true, var line))
+      {
+         return String.StringObject(line).Just();
       }
 
-      public override string ToString() => "readln";
+      machine.Running = false;
+      return String.Empty.Just();
    }
+
+   public override string ToString() => "readln";
 }

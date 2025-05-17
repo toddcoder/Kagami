@@ -10,105 +10,105 @@ using Core.Monads;
 using static System.Console;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami
+namespace Kagami;
+
+internal class Program : CommandLineInterface, IContext
 {
-   internal class Program : CommandLineInterface, IContext
+   protected Putter putter;
+
+   public Program() => putter = new Putter();
+
+   public static void Main()
    {
-      protected Putter putter;
+      using var program = new Program();
+      program.Run();
+   }
 
-      public Program() => putter = new Putter();
-
-      public static void Main()
+   [EntryPoint(EntryPointType.This)]
+   public void EntryPoint()
+   {
+      if (Exec)
       {
-         using var program = new Program();
-         program.Run();
+         exec();
       }
+   }
 
-      [EntryPoint(EntryPointType.This)]
-      public void EntryPoint()
+   protected void exec()
+   {
+      if (File is (true, var sourceFile))
       {
-         if (Exec)
+         var _source = sourceFile.TryTo.Text;
+         if (_source is (true, var source))
          {
-            exec();
-         }
-      }
-
-      protected void exec()
-      {
-         if (File.Map(out var sourceFile))
-         {
-            if (sourceFile.TryTo.Text.Map(out var source, out var exception))
+            var stopwatch = new Stopwatch();
+            if (Stopwatch)
             {
-               var stopwatch = new Stopwatch();
-               if (Stopwatch)
-               {
-                  stopwatch.Start();
-               }
+               stopwatch.Start();
+            }
 
-               var configuration = new CompilerConfiguration { ShowOperations = ShowOps, Tracing = Trace };
-               var compiler = new Compiler(source, configuration, this);
-               var _result =
-                  from machine in compiler.Generate().OnSuccess(m =>
+            var configuration = new CompilerConfiguration { ShowOperations = ShowOps, Tracing = Trace };
+            var compiler = new Compiler(source, configuration, this);
+            var _result =
+               from machine in compiler.Generate().OnSuccess(m =>
+               {
+                  if (configuration.ShowOperations)
                   {
-                     if (configuration.ShowOperations)
-                     {
-                        WriteLine(m.Operations);
-                     }
-                  })
-                  from executed in machine.Execute()
-                  select executed;
-               if (_result.UnMap(out var failureException))
-               {
-                  WriteLine($"Exception: {failureException}");
-               }
-
-               if (Stopwatch)
-               {
-                  stopwatch.Stop();
-                  WriteLine(stopwatch.Elapsed.ToLongString(true));
-               }
-            }
-            else
+                     WriteLine(m.Operations);
+                  }
+               })
+               from executed in machine.Execute()
+               select executed;
+            if (!_result)
             {
-               WriteLine($"Exception: {exception}");
+               WriteLine($"Exception: {_result.Exception}");
+            }
+
+            if (Stopwatch)
+            {
+               stopwatch.Stop();
+               WriteLine(stopwatch.Elapsed.ToLongString(true));
             }
          }
+         else
+         {
+            WriteLine($"Exception: {_source.Exception}");
+         }
       }
+   }
 
-      public bool Exec { get; set; }
+   public bool Exec { get; set; }
 
-      public Maybe<FileName> File { get; set; } = nil;
+   public Maybe<FileName> File { get; set; } = nil;
 
-      public bool Stopwatch { get; set; }
+   public bool Stopwatch { get; set; }
 
-      public bool ShowOps { get; set; }
+   public bool ShowOps { get; set; }
 
-      public bool Trace { get; set; }
+   public bool Trace { get; set; }
 
-      public void Print(string value)
-      {
-         putter.Reset();
-         Write(value);
-      }
+   public void Print(string value)
+   {
+      putter.Reset();
+      Write(value);
+   }
 
-      public void PrintLine(string value)
-      {
-         putter.Reset();
-         WriteLine(value);
-      }
+   public void PrintLine(string value)
+   {
+      putter.Reset();
+      WriteLine(value);
+   }
 
-      public void Put(string value) => Write(putter.Put(value));
+   public void Put(string value) => Write(putter.Put(value));
 
-      public Result<string> ReadLine()
-      {
-         var line = Console.ReadLine();
-         return line.Must().Not.BeNull().OrFailure("Input cancelled");
-      }
+   public Result<string> ReadLine()
+   {
+      var line = Console.ReadLine();
+      return line.Must().Not.BeNull().OrFailure("Input cancelled");
+   }
 
-      public bool Cancelled() => KeyAvailable && ReadKey().Key == ConsoleKey.Escape;
+   public bool Cancelled() => KeyAvailable && ReadKey().Key == ConsoleKey.Escape;
 
-      public void Peek(string message, int index)
-      {
-      }
+   public void Peek(string message, int index)
+   {
    }
 }

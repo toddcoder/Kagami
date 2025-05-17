@@ -6,7 +6,6 @@ using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using Kagami.Library.Packages;
 using Core.Enumerables;
-using Core.Exceptions;
 using Core.Monads;
 using Core.Strings;
 using static Kagami.Library.AllExceptions;
@@ -14,636 +13,652 @@ using static Core.Monads.AttemptFunctions;
 using static Core.Monads.MonadFunctions;
 using Failure = Kagami.Library.Objects.Failure;
 
-namespace Kagami.Library.Runtime
+namespace Kagami.Library.Runtime;
+
+public class Machine
 {
-   public class Machine
+   protected const int MAX_DEPTH = 128;
+
+   public static Machine Current { get; set; }
+
+   public static Fields Fields => Current.CurrentFrame.Fields;
+
+   protected IContext context;
+   protected Stack<Frame> stack;
+   protected Operations.Operations operations;
+   protected bool running;
+   protected Lazy<TableMaker> table;
+   protected DebugState debugState;
+   protected GlobalFrame globalFrame;
+
+   public Machine(IContext context)
    {
-      protected const int MAX_DEPTH = 128;
+      this.context = context;
+      stack = new Stack<Frame>();
+      operations = new Operations.Operations();
+      running = false;
+      table = new Lazy<TableMaker>(() =>
+         new TableMaker(("Address", Justification.Left), ("Operation", Justification.Left), ("Stack", Justification.Left)));
+      debugState = DebugState.Starting;
+      globalFrame = new GlobalFrame();
+   }
 
-      public static Machine Current { get; set; }
+   public IContext Context => context;
 
-      public static Fields Fields => Current.CurrentFrame.Fields;
+   public Operations.Operations Operations => operations;
 
-      protected IContext context;
-      protected Stack<Frame> stack;
-      protected Operations.Operations operations;
-      protected bool running;
-      protected Lazy<TableMaker> table;
-      protected DebugState debugState;
-      protected GlobalFrame globalFrame;
+   public void Load(Operations.Operations operations) => this.operations = operations;
 
-      public Machine(IContext context)
+   protected void trace(int address, Func<string> message)
+   {
+      if (Tracing)
       {
-         this.context = context;
-         stack = new Stack<Frame>();
-         operations = new Operations.Operations();
-         running = false;
-         table = new Lazy<TableMaker>(() =>
-            new TableMaker(("Address", Justification.Left), ("Operation", Justification.Left), ("Stack", Justification.Left)));
-         debugState = DebugState.Starting;
-         globalFrame = new GlobalFrame();
+         table.Value.Add(address.ToString("D5"), message().Truncate(80), StackImage.Truncate(80));
       }
+   }
 
-      public IContext Context => context;
+   public GlobalFrame GlobalFrame => globalFrame;
 
-      public Operations.Operations Operations => operations;
+   public Result<Unit> Execute()
+   {
+      stack.Clear();
+      globalFrame = new GlobalFrame();
+      stack.Push(globalFrame);
+      operations.Goto(0);
+      running = true;
 
-      public void Load(Operations.Operations operations) => this.operations = operations;
-
-      protected void trace(int address, Func<string> message)
+      while (!context.Cancelled() && operations.More && running)
       {
-         if (Tracing)
+         if (operations.Current is (true, var operation))
          {
-            table.Value.Add(address.ToString("D5"), message().Truncate(80), StackImage.Truncate(80));
-         }
-      }
-
-      public GlobalFrame GlobalFrame => globalFrame;
-
-      public Result<Unit> Execute()
-      {
-         stack.Clear();
-         globalFrame = new GlobalFrame();
-         stack.Push(globalFrame);
-         operations.Goto(0);
-         running = true;
-
-         while (!context.Cancelled() && operations.More && running)
-         {
-            if (operations.Current.Map(out var operation))
+            trace(operations.Address, () => operation.ToString());
+            var currentAddress = operations.Address;
+            var _result = operation.Execute(this);
+            if (_result is (true, var result) && running && result.ClassName != "Void")
             {
-               trace(operations.Address, () => operation.ToString());
-               var currentAddress = operations.Address;
-               if (operation.Execute(this).Map(out var result, out var _exception) && running && result.ClassName != "Void")
+               stack.Peek().Push(result);
+            }
+            else if (_result.Exception is (true, var exception))
+            {
+               if (Tracing)
                {
-                  stack.Peek().Push(result);
-               }
-               else if (_exception.UnMap(out var exception))
-               {
-                  if (Tracing)
-                  {
-                     context.PrintLine(table.Value.ToString());
-                  }
-
-                  if (GetErrorHandler().Map(out var address))
-                  {
-                     stack.Peek().Push(new Failure(exception.Message));
-                     operations.Goto(address);
-                  }
-                  else
-                  {
-                     return exception;
-                  }
+                  context.PrintLine(table.Value.ToString());
                }
 
-               if (operation.Increment && currentAddress == operations.Address)
+               var _errorHandler = GetErrorHandler();
+               if (_errorHandler is (true, var address))
                {
-                  operations.Advance(1);
+                  stack.Peek().Push(new Failure(exception.Message));
+                  operations.Goto(address);
+               }
+               else
+               {
+                  return _errorHandler.Exception;
                }
             }
-            else
+
+            if (operation.Increment && currentAddress == operations.Address)
             {
-               return addressOutOfRange();
+               operations.Advance(1);
             }
-         }
-
-         if (Tracing)
-         {
-            context.PrintLine(table.Value.ToString());
-         }
-
-         return unit;
-      }
-
-      public Responding<IObject> Invoke(IInvokable invokable, Arguments arguments, Fields fields, int increment = 1)
-      {
-         var returnAddress = Address + increment;
-         var frame = new Frame(returnAddress, fields);
-
-         if (invokable is YieldingInvokable yfi)
-         {
-            yfi.Arguments = arguments;
-         }
-
-         PushFrame(frame);
-         frame = new Frame(arguments);
-         PushFrame(frame);
-         frame.SetFields(invokable.Parameters);
-         if (GoTo(invokable.Address))
-         {
-            var result = invoke();
-            return result;
          }
          else
          {
-            return badAddress(invokable.Address);
+            return addressOutOfRange();
          }
       }
 
-      public Responding<IObject> Invoke(IInvokable invokable, Arguments arguments, int increment = 1)
+      if (Tracing)
       {
-         var returnAddress = Address + increment;
-         var frame = new Frame(returnAddress, arguments);
-
-         if (invokable is YieldingInvokable yfi)
-         {
-            yfi.Arguments = arguments;
-         }
-
-         PushFrame(frame);
-         frame.SetFields(invokable.Parameters);
-
-         return GoTo(invokable.Address) ? invoke() : badAddress(invokable.Address);
+         context.PrintLine(table.Value.ToString());
       }
 
-      public Responding<IObject> Invoke(YieldingInvokable invokable)
+      return unit;
+   }
+
+   public Optional<IObject> Invoke(IInvokable invokable, Arguments arguments, Fields fields, int increment = 1)
+   {
+      var returnAddress = Address + increment;
+      var frame = new Frame(returnAddress, fields);
+
+      if (invokable is YieldingInvokable yfi)
       {
-         var frames = invokable.Frames;
-         if (frames.FunctionFrame.Map(out var frame))
-         {
-            frame.Address = Address;
-            PushFrames(frames);
-         }
-         else
-         {
-            frame = new Frame(Address, invokable.Arguments);
-            PushFrame(frame);
-         }
+         yfi.Arguments = arguments;
+      }
 
-         frame.SetFields(invokable.Parameters);
-         GoTo(invokable.Address);
-
+      PushFrame(frame);
+      frame = new Frame(arguments);
+      PushFrame(frame);
+      frame.SetFields(invokable.Parameters);
+      if (GoTo(invokable.Address))
+      {
          return invoke();
       }
-
-      public Responding<IObject> Invoke(string fieldName)
+      else
       {
-         if (Pop().Map(out var value, out var popException))
-         {
-            if (value is Arguments arguments)
-            {
-               var image = fieldName;
-               var _field = Find(fieldName, true);
-               if (!_field && !_field.AnyException)
-               {
-                  var selector = arguments.Selector(fieldName);
-                  image = selector.Image;
-                  _field = Find(selector);
-               }
+         return badAddress(invokable.Address);
+      }
+   }
 
-               if (_field)
+   public Optional<IObject> Invoke(IInvokable invokable, Arguments arguments, int increment = 1)
+   {
+      var returnAddress = Address + increment;
+      var frame = new Frame(returnAddress, arguments);
+
+      if (invokable is YieldingInvokable yfi)
+      {
+         yfi.Arguments = arguments;
+      }
+
+      PushFrame(frame);
+      frame.SetFields(invokable.Parameters);
+
+      return GoTo(invokable.Address) ? invoke() : badAddress(invokable.Address);
+   }
+
+   public Optional<IObject> Invoke(YieldingInvokable invokable)
+   {
+      var frames = invokable.Frames;
+      if (frames.FunctionFrame is (true, var frame))
+      {
+         frame.Address = Address;
+         PushFrames(frames);
+      }
+      else
+      {
+         frame = new Frame(Address, invokable.Arguments);
+         PushFrame(frame);
+      }
+
+      frame.SetFields(invokable.Parameters);
+      GoTo(invokable.Address);
+
+      return invoke();
+   }
+
+   public Optional<IObject> Invoke(string fieldName)
+   {
+      var _value = Pop();
+      if (_value is (true, var value))
+      {
+         if (value is Arguments arguments)
+         {
+            var image = fieldName;
+            var _field = Find(fieldName, true);
+            if (!_field && !_field.Exception)
+            {
+               var selector = arguments.Selector(fieldName);
+               image = selector.Image;
+               _field = Find(selector);
+            }
+
+            if (_field is (true, var field))
+            {
+               value = field.Value;
+               switch (value)
                {
-                  value = _field.Value.Value;
-                  switch (value)
-                  {
-                     case IInvokableObject io:
-                        return Invoke(io.Invokable, arguments);
-                     case IInvokable invokable:
-                        return Invoke(invokable, arguments);
-                     case PackageFunction pf:
-                        return pf.Invoke(arguments).Response();
-                     case Pattern pattern:
-                        var copy = pattern.Copy();
-                        copy.RegisterArguments(arguments);
-                        return copy.Response<IObject>();
-                     default:
-                        return incompatibleClasses(value, "Invokable");
-                  }
+                  case IInvokableObject io:
+                     return Invoke(io.Invokable, arguments);
+                  case IInvokable invokable:
+                     return Invoke(invokable, arguments);
+                  case PackageFunction pf:
+                     return pf.Invoke(arguments).Just();
+                  case Pattern pattern:
+                     var copy = pattern.Copy();
+                     copy.RegisterArguments(arguments);
+                     return copy;
+                  default:
+                     return incompatibleClasses(value, "Invokable");
                }
-               else if (!_field.AnyException)
-               {
-                  return fieldNotFound(image);
-               }
-               else
-               {
-                  return _field.AnyException.Value;
-               }
+            }
+            else if (!_field.Exception)
+            {
+               return fieldNotFound(image);
             }
             else
             {
-               return incompatibleClasses(value, "Arguments");
+               return _field.Exception;
             }
          }
          else
          {
-            return popException;
+            return incompatibleClasses(value, "Arguments");
          }
       }
-
-      protected Responding<IObject> invoke()
+      else
       {
-         while (!context.Cancelled() && operations.More && running)
+         return _value.Exception;
+      }
+   }
+
+   protected Optional<IObject> invoke()
+   {
+      while (!context.Cancelled() && operations.More && running)
+      {
+         if (operations.Current is (true, var operation))
          {
-            if (operations.Current.Map(out var operation))
+            trace(operations.Address, () => operation.ToString());
+            var currentAddress = operations.Address;
+            switch (operation)
             {
-               trace(operations.Address, () => operation.ToString());
-               var currentAddress = operations.Address;
-               switch (operation)
+               case Return rtn:
+                  return Return.ReturnAction(this, rtn.ReturnTopOfStack);
+               case Yield:
+                  return Yield.YieldAction(this).Just();
+               case Invoke invoke:
                {
-                  case Return rtn:
-                     return Return.ReturnAction(this, rtn.ReturnTopOfStack);
-                  case Yield:
-                     return Yield.YieldAction(this);
-                  case Invoke invoke:
-                     if (Invoke(invoke.FieldName).Map(out var returnValue, out var _exception))
-                     {
-                        stack.Peek().Push(returnValue);
-                     }
-                     else if (_exception.Map(out var exception))
-                     {
-                        if (GetErrorHandler().Map(out var address))
-                        {
-                           stack.Peek().Push(new Failure(exception.Message));
-                           operations.Goto(address);
-                        }
-                        else
-                        {
-                           return exception;
-                        }
-                     }
-
-                     if (currentAddress == operations.Address)
-                     {
-                        operations.Advance(1);
-                     }
-
-                     continue;
-               }
-
-               if (operation.Execute(this).Map(out var result, out var _exception1) && running)
-               {
-                  stack.Peek().Push(result);
-               }
-               else if (_exception1.Map(out var exception))
-               {
-                  if (GetErrorHandler().Map(out var address))
+                  var _returnValue = Invoke(invoke.FieldName);
+                  if (_returnValue is (true, var returnValue))
                   {
-                     stack.Peek().Push(new Failure(exception.Message));
-                     operations.Goto(address);
+                     stack.Peek().Push(returnValue);
                   }
-                  else
+                  else if (_returnValue.Exception is (true, var exception))
                   {
-                     return exception;
+                     var _address = GetErrorHandler();
+                     if (_address is (true, var address))
+                     {
+                        stack.Peek().Push(new Failure(exception.Message));
+                        operations.Goto(address);
+                     }
+                     else
+                     {
+                        return _address.Exception;
+                     }
                   }
-               }
 
-               if (operation.Increment && currentAddress == operations.Address)
-               {
-                  operations.Advance(1);
-               }
-            }
-            else
-            {
-               return fail("Address out of range");
-            }
-         }
+                  if (currentAddress == operations.Address)
+                  {
+                     operations.Advance(1);
+                  }
 
-         return fail("No return");
-      }
-
-      public bool Running
-      {
-         get => running;
-         set => running = value;
-      }
-
-      public void Push(IObject value) => stack.Peek().Push(value);
-
-      public Maybe<IObject> Peek() => stack.Peek().Peek();
-
-      public Result<IObject> Pop() => stack.Peek().Pop();
-
-      public bool IsEmpty => stack.Peek().IsEmpty;
-
-      public bool GoTo(int address) => operations.Goto(address);
-
-      public void Advance(int increment) => operations.Advance(increment);
-
-      public bool Tracing { get; set; }
-
-      public int Address => operations.Address;
-
-      public Frame CurrentFrame => stack.Peek();
-
-      public void PushFrame(Frame frame)
-      {
-         stack.Push(frame);
-         if (stack.Count > MAX_DEPTH)
-         {
-            throw "Max stack depth".Throws();
-         }
-      }
-
-      public void PushFrames(FrameGroup frames)
-      {
-         foreach (var frame in frames.Reverse())
-         {
-            PushFrame(frame);
-         }
-      }
-
-      public Result<Frame> PopFrame() => tryTo(() => stack.Pop());
-
-      public FrameGroup PopFrames() => PopFramesUntil(f => f.FrameType == FrameType.Function);
-
-      public FrameGroup PeekFrames(Predicate<Frame> predicate)
-      {
-         var frames = new List<Frame>();
-         foreach (var frame in stack)
-         {
-            frames.Add(frame);
-            if (predicate(frame))
-            {
-               break;
-            }
-         }
-
-         return new FrameGroup(frames.ToArray());
-      }
-
-      public Maybe<Frame> FunctionFrame()
-      {
-         foreach (var frame in stack.Where(frame => frame.FrameType == FrameType.Function))
-         {
-            return frame;
-         }
-
-         return nil;
-      }
-
-      public FrameGroup PopFramesUntil(Predicate<Frame> predicate)
-      {
-         var frames = new List<Frame>();
-         while (stack.Count > 0)
-         {
-            var frame = stack.Pop();
-            frames.Add(frame);
-            if (predicate(frame))
-            {
-               break;
-            }
-         }
-
-         return new FrameGroup(frames.ToArray());
-      }
-
-      public Result<int> GetErrorHandler()
-      {
-         while (stack.Count > 0)
-         {
-            var frame = stack.Pop();
-            if (frame.FrameType == FrameType.Try)
-            {
-               return frame.ErrorHandler.Result("No error handler set");
-            }
-         }
-
-         return emptyStack();
-      }
-
-      public void Clear() => CurrentFrame.Clear();
-
-      public string StackImage => stack.Select(f => f.ToString()).ToString(", ");
-
-      public IObject X { get; set; } = Unassigned.Value;
-
-      public IObject Y { get; set; } = Unassigned.Value;
-
-      public IObject Z { get; set; } = Unassigned.Value;
-
-      public Responding<Field> Find(string fieldName, bool getting)
-      {
-         var depth = 0;
-         foreach (var frame in stack)
-         {
-            if (frame.Fields.Find(fieldName, getting).Map(out var field, out var _exception))
-            {
-               return field;
-            }
-            else if (_exception.Map(out var exception))
-            {
-               return exception;
-            }
-            else
-            {
-               if (depth++ > MAX_DEPTH)
-               {
-                  return exceededMaxDepth();
+                  continue;
                }
             }
-         }
 
-         return nil;
-      }
-
-      public Result<Unit> FindByPattern(string pattern, List<Field> list)
-      {
-         foreach (var frame in stack)
-         {
-            if (frame.Fields.FindByPattern(pattern, list).UnMap(out var exception))
+            var _result = operation.Execute(this);
+            if (_result is (true, var result) && running)
             {
-               return exception;
+               stack.Peek().Push(result);
             }
-         }
-
-         return unit;
-      }
-
-      public Responding<Field> Find(Selector selector)
-      {
-         var labelsOnly = selector.LabelsOnly();
-         foreach (var frame in stack)
-         {
-            if (frame.Fields.ContainsSelector(labelsOnly))
+            else if (_result.Exception is (true, var exception))
             {
-               var match = frame.Fields.Find(selector);
-               if (match.Map(out var field) && field != null)
+               var _address = GetErrorHandler();
+               if (_address is (true, var address))
                {
-                  field.Fields = frame.Fields;
-               }
-
-               return match;
-            }
-         }
-
-         return nil;
-      }
-
-      protected Responding<Field> findExact(Selector selector) => Find(selector.Image, true);
-
-      protected Responding<Field> findEquivalent(Selector selector)
-      {
-         var count = selector.SelectorItems.Length;
-         var iterator = new BitIterator(count);
-         foreach (var booleans in iterator)
-         {
-            var newSelector = selector.Equivalent(booleans);
-            if (findExact(newSelector).Map(out var matched, out var _exception))
-            {
-               return matched;
-            }
-            else if (_exception.Map(out var exception))
-            {
-               return exception;
-            }
-         }
-
-         return nil;
-      }
-
-      protected Responding<Field> findTypeless(Selector selector) => Find(selector.LabelsOnly().Image, true);
-
-      protected Responding<Field> findField(Selector selector) => Find(selector.Name, true);
-
-      public Result<Field> Assign(string fieldName, IObject value, bool getting, bool overriden = false)
-      {
-         if (Find(fieldName, getting).Map(out var field, out var _exception))
-         {
-            if (field.Mutable)
-            {
-               if (field.Value is Reference r)
-               {
-                  r.Field.Value = value;
+                  stack.Peek().Push(new Failure(exception.Message));
+                  operations.Goto(address);
                }
                else
                {
-                  field.Value = value;
+                  return _address.Exception;
                }
-
-               return field;
             }
-            else if (field.Value is Unassigned || overriden)
-            {
-               if (field.Value is Reference r)
-               {
-                  r.Field.Value = value;
-               }
-               else
-               {
-                  field.Value = value;
-               }
 
-               return field;
-            }
-            else
+            if (operation.Increment && currentAddress == operations.Address)
             {
-               return immutableField(fieldName);
+               operations.Advance(1);
             }
          }
-         else if (_exception.Map(out var exception))
+         else
+         {
+            return fail("Address out of range");
+         }
+      }
+
+      return fail("No return");
+   }
+
+   public bool Running
+   {
+      get => running;
+      set => running = value;
+   }
+
+   public void Push(IObject value) => stack.Peek().Push(value);
+
+   public Maybe<IObject> Peek() => stack.Peek().Peek();
+
+   public Result<IObject> Pop() => stack.Peek().Pop();
+
+   public bool IsEmpty => stack.Peek().IsEmpty;
+
+   public bool GoTo(int address) => operations.Goto(address);
+
+   public void Advance(int increment) => operations.Advance(increment);
+
+   public bool Tracing { get; set; }
+
+   public int Address => operations.Address;
+
+   public Frame CurrentFrame => stack.Peek();
+
+   public void PushFrame(Frame frame)
+   {
+      stack.Push(frame);
+      if (stack.Count > MAX_DEPTH)
+      {
+         throw fail("Max stack depth");
+      }
+   }
+
+   public void PushFrames(FrameGroup frames)
+   {
+      foreach (var frame in frames.Reverse())
+      {
+         PushFrame(frame);
+      }
+   }
+
+   public Result<Frame> PopFrame() => tryTo(() => stack.Pop());
+
+   public FrameGroup PopFrames() => PopFramesUntil(f => f.FrameType == FrameType.Function);
+
+   public FrameGroup PeekFrames(Predicate<Frame> predicate)
+   {
+      var frames = new List<Frame>();
+      foreach (var frame in stack)
+      {
+         frames.Add(frame);
+         if (predicate(frame))
+         {
+            break;
+         }
+      }
+
+      return new FrameGroup(frames.ToArray());
+   }
+
+   public Maybe<Frame> FunctionFrame()
+   {
+      foreach (var frame in stack.Where(frame => frame.FrameType == FrameType.Function))
+      {
+         return frame;
+      }
+
+      return nil;
+   }
+
+   public FrameGroup PopFramesUntil(Predicate<Frame> predicate)
+   {
+      var frames = new List<Frame>();
+      while (stack.Count > 0)
+      {
+         var frame = stack.Pop();
+         frames.Add(frame);
+         if (predicate(frame))
+         {
+            break;
+         }
+      }
+
+      return new FrameGroup(frames.ToArray());
+   }
+
+   public Result<int> GetErrorHandler()
+   {
+      while (stack.Count > 0)
+      {
+         var frame = stack.Pop();
+         if (frame.FrameType == FrameType.Try)
+         {
+            return frame.ErrorHandler.Result("No error handler set");
+         }
+      }
+
+      return emptyStack();
+   }
+
+   public void Clear() => CurrentFrame.Clear();
+
+   public string StackImage => stack.Select(f => f.ToString()).ToString(", ");
+
+   public IObject X { get; set; } = Unassigned.Value;
+
+   public IObject Y { get; set; } = Unassigned.Value;
+
+   public IObject Z { get; set; } = Unassigned.Value;
+
+   public Optional<Field> Find(string fieldName, bool getting)
+   {
+      var depth = 0;
+      foreach (var frame in stack)
+      {
+         var _field = frame.Fields.Find(fieldName, getting);
+         if (_field is (true, var field))
+         {
+            return field;
+         }
+         else if (_field.Exception is (true, var exception))
          {
             return exception;
          }
          else
          {
-            return fieldNotFound(fieldName);
+            if (depth++ > MAX_DEPTH)
+            {
+               return exceededMaxDepth();
+            }
          }
       }
 
-      public Result<Field> Assign(Selector selector, IObject value, bool overriden = false)
+      return nil;
+   }
+
+   public Result<Unit> FindByPattern(string pattern, List<Field> list)
+   {
+      foreach (var frame in stack)
       {
-         var _field = Find(selector);
-         if (_field)
+         var _found = frame.Fields.FindByPattern(pattern, list);
+         if (!_found)
          {
-            var fields = _field.Value.Fields;
-            if (_field.Value.Mutable)
+            return _found.Exception;
+         }
+      }
+
+      return unit;
+   }
+
+   public Optional<Field> Find(Selector selector)
+   {
+      var labelsOnly = selector.LabelsOnly();
+      foreach (var frame in stack)
+      {
+         if (frame.Fields.ContainsSelector(labelsOnly))
+         {
+            var _field = frame.Fields.Find(selector);
+            if (_field is (true, var field))
             {
-               switch (_field.Value.Value)
-               {
-                  case Unassigned:
-                     _field.Value.Value = value;
-                     fields.SetBucket(selector);
-                     return _field.Value;
-                  case TypeConstraint tc2:
-                     return incompatibleClasses(selector, tc2.AsString);
-                  default:
-                     return incompatibleClasses(selector, _field.Value.Value.ClassName);
-               }
+               field.Fields = frame.Fields;
             }
-            else if (_field.Value.Value is Unassigned || overriden)
+
+            return _field;
+         }
+      }
+
+      return nil;
+   }
+
+   protected Optional<Field> findExact(Selector selector) => Find(selector.Image, true);
+
+   protected Optional<Field> findEquivalent(Selector selector)
+   {
+      var count = selector.SelectorItems.Length;
+      var iterator = new BitIterator(count);
+      foreach (var booleans in iterator)
+      {
+         var newSelector = selector.Equivalent(booleans);
+         var _field = findExact(newSelector);
+         if (_field is (true, var field))
+         {
+            return field;
+         }
+         else if (_field.Exception is (true, var exception))
+         {
+            return exception;
+         }
+      }
+
+      return nil;
+   }
+
+   protected Optional<Field> findTypeless(Selector selector) => Find(selector.LabelsOnly().Image, true);
+
+   protected Optional<Field> findField(Selector selector) => Find(selector.Name, true);
+
+   public Result<Field> Assign(string fieldName, IObject value, bool getting, bool overriden = false)
+   {
+      var _field = Find(fieldName, getting);
+      if (_field is (true, var field))
+      {
+         if (field.Mutable)
+         {
+            if (field.Value is Reference r)
             {
-               _field.Value.Value = value;
-               fields.SetBucket(selector);
-               return _field.Value;
+               r.Field.Value = value;
             }
             else
             {
-               return immutableField(selector);
+               field.Value = value;
             }
+
+            return field;
          }
-         else if (_field.AnyException)
+         else if (field.Value is Unassigned || overriden)
          {
-            return _field.AnyException.Value;
+            if (field.Value is Reference r)
+            {
+               r.Field.Value = value;
+            }
+            else
+            {
+               field.Value = value;
+            }
+
+            return field;
          }
          else
          {
-            return fieldNotFound(selector);
+            return immutableField(fieldName);
          }
       }
-
-      public void BeginDebugging()
+      else if (_field.Exception is (true, var exception))
       {
-         debugState = DebugState.Active;
-         stack.Clear();
-         stack.Push(new Frame());
-         operations.Goto(0);
+         return exception;
       }
-
-      public void Step()
+      else
       {
-         if (debugState == DebugState.Starting)
-         {
-            BeginDebugging();
-         }
+         return fieldNotFound(fieldName);
+      }
+   }
 
-         while (!context.Cancelled() && operations.More && debugState == DebugState.Active)
+   public Result<Field> Assign(Selector selector, IObject value, bool overriden = false)
+   {
+      var _field = Find(selector);
+      if (_field is (true, var field))
+      {
+         var fields = field.Fields;
+         if (field.Mutable)
          {
-            if (operations.Current.Map(out var operation))
+            switch (field.Value)
             {
-               var currentAddress = operations.Address;
-               switch (operation)
+               case Unassigned:
+                  field.Value = value;
+                  fields.SetBucket(selector);
+
+                  return field;
+               case TypeConstraint tc2:
+                  return incompatibleClasses(selector, tc2.AsString);
+               default:
+                  return incompatibleClasses(selector, field.Value.ClassName);
+            }
+         }
+         else if (field.Value is Unassigned || overriden)
+         {
+            field.Value = value;
+            fields.SetBucket(selector);
+
+            return field;
+         }
+         else
+         {
+            return immutableField(selector);
+         }
+      }
+      else if (_field.Exception is(true, var exception))
+      {
+         return exception;
+      }
+      else
+      {
+         return fieldNotFound(selector);
+      }
+   }
+
+   public void BeginDebugging()
+   {
+      debugState = DebugState.Active;
+      stack.Clear();
+      stack.Push(new Frame());
+      operations.Goto(0);
+   }
+
+   public void Step()
+   {
+      if (debugState == DebugState.Starting)
+      {
+         BeginDebugging();
+      }
+
+      while (!context.Cancelled() && operations.More && debugState == DebugState.Active)
+      {
+         if (operations.Current is (true, var operation))
+         {
+            var currentAddress = operations.Address;
+            switch (operation)
+            {
+               case Break:
+                  return;
+               default:
                {
-                  case Break:
+                  var _result = operation.Execute(this);
+                  if (_result is (true, var result) && running && result.ClassName != "Void")
+                  {
+                     stack.Peek().Push(result);
+                  }
+                  else if (_result)
+                  {
                      return;
-                  default:
-                     if (operation.Execute(this).Map(out var result, out var _exception) && running && result.ClassName != "Void")
-                     {
-                        stack.Peek().Push(result);
-                     }
-                     else if (_exception)
-                     {
-                        return;
-                     }
+                  }
 
-                     break;
-               }
-
-               if (operation.Increment && currentAddress == operations.Address)
-               {
-                  operations.Advance(1);
+                  break;
                }
             }
-            else
+
+            if (operation.Increment && currentAddress == operations.Address)
             {
-               return;
+               operations.Advance(1);
             }
-         }
-      }
-
-      public string PackageFolder { get; set; } = "";
-
-      public Result<Unit> SetErrorHandler(int address)
-      {
-         var _frame = stack.FirstOrNone(f => f.FrameType == FrameType.Try);
-         if (_frame.Map(out var frame))
-         {
-            frame.ErrorHandler = address;
-            return unit;
          }
          else
          {
-            return fail("Try frame not found");
+            return;
          }
+      }
+   }
+
+   public string PackageFolder { get; set; } = "";
+
+   public Result<Unit> SetErrorHandler(int address)
+   {
+      var _frame = stack.FirstOrNone(f => f.FrameType == FrameType.Try);
+      if (_frame is (true, var frame))
+      {
+         frame.ErrorHandler = address;
+         return unit;
+      }
+      else
+      {
+         return fail("Try frame not found");
       }
    }
 }

@@ -4,37 +4,37 @@ using Kagami.Library.Runtime;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Operations
+namespace Kagami.Library.Operations;
+
+public class Roll : Operation
 {
-   public class Roll : Operation
+   protected int count;
+
+   public Roll(int count) => this.count = count;
+
+   public override Optional<IObject> Execute(Machine machine)
    {
-      protected int count;
-
-      public Roll(int count) => this.count = count;
-
-      public override IMatched<IObject> Execute(Machine machine)
+      var stack = new Stack<IObject>();
+      for (var i = 0; i < count; i++)
       {
-         var stack = new Stack<IObject>();
-         for (var i = 0; i < count; i++)
+         var _value = machine.Pop();
+         if (_value is (true, var value))
          {
-            if (machine.Pop().If(out var value, out var exception))
-            {
-               stack.Push(value);
-            }
-            else
-            {
-               return failedMatch<IObject>(exception);
-            }
+            stack.Push(value);
          }
-
-         while (stack.Count > 0)
+         else
          {
-            machine.Push(stack.Pop());
+            return _value.Exception;
          }
-
-         return notMatched<IObject>();
       }
 
-      public override string ToString() => $"roll({count})";
+      while (stack.Count > 0)
+      {
+         machine.Push(stack.Pop());
+      }
+
+      return nil;
    }
+
+   public override string ToString() => $"roll({count})";
 }

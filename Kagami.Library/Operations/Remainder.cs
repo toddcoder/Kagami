@@ -3,15 +3,14 @@ using Kagami.Library.Runtime;
 using Core.Monads;
 using static Kagami.Library.Operations.NumericFunctions;
 
-namespace Kagami.Library.Operations
-{
-   public class Remainder : TwoOperandOperation
-   {
-      public override IMatched<IObject> Execute(Machine machine, IObject x, IObject y)
-      {
-         return apply(x, y, (a, b) => a % b, (a, b) => a % b, (a, b) => a % b, (a, b) => a.Remainder(b), "%").Matched();
-      }
+namespace Kagami.Library.Operations;
 
-      public override string ToString() => "remainder";
+public class Remainder : TwoOperandOperation
+{
+   public override Optional<IObject> Execute(Machine machine, IObject x, IObject y)
+   {
+      return apply(x, y, (a, b) => a % b, (a, b) => a % b, (a, b) => a % b, (a, b) => a.Remainder(b), "%").Just();
    }
+
+   public override string ToString() => "remainder";
 }
