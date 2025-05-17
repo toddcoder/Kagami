@@ -2,12 +2,11 @@
 using Kagami.Library.Runtime;
 using Core.Monads;
 
-namespace Kagami.Library.Operations
-{
-   public class AsString : OneOperandOperation
-   {
-      public override IMatched<IObject> Execute(Machine machine, IObject value) => String.StringObject(value.AsString).Matched();
+namespace Kagami.Library.Operations;
 
-      public override string ToString() => "string";
-   }
+public class AsString : OneOperandOperation
+{
+   public override Optional<IObject> Execute(Machine machine, IObject value) => String.StringObject(value.AsString).Just();
+
+   public override string ToString() => "string";
 }

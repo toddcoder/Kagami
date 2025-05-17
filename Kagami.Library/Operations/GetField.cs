@@ -2,22 +2,31 @@
 using Kagami.Library.Runtime;
 using Core.Monads;
 using static Kagami.Library.AllExceptions;
-using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Operations
+namespace Kagami.Library.Operations;
+
+public class GetField : Operation
 {
-   public class GetField : Operation
+   protected string fieldName;
+
+   public GetField(string fieldName) => this.fieldName = fieldName;
+
+   public override Optional<IObject> Execute(Machine machine)
    {
-      protected string fieldName;
-
-      public GetField(string fieldName) => this.fieldName = fieldName;
-
-      public override IMatched<IObject> Execute(Machine machine)
+      var _field = machine.Find(fieldName, true);
+      if (_field is (true, var field))
       {
-         return machine.Find(fieldName, true).FlatMap(f => f.Value.Matched(), () => failedMatch<IObject>(fieldNotFound(fieldName)),
-            failedMatch<IObject>);
+         return field.Value.Just();
       }
-
-      public override string ToString() => $"get.field({fieldName})";
+      else if (_field.Exception is (true, var exception))
+      {
+         return exception;
+      }
+      else
+      {
+         return fieldNotFound(fieldName);
+      }
    }
+
+   public override string ToString() => $"get.field({fieldName})";
 }

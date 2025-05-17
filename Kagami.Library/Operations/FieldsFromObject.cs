@@ -4,25 +4,24 @@ using Core.Monads;
 using static Kagami.Library.AllExceptions;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Operations
+namespace Kagami.Library.Operations;
+
+public class FieldsFromObject : OneOperandOperation
 {
-   public class FieldsFromObject : OneOperandOperation
+   public override Optional<IObject> Execute(Machine machine, IObject value)
    {
-      public override IMatched<IObject> Execute(Machine machine, IObject value)
+      if (value is UserObject userObject)
       {
-         if (value is UserObject userObject)
-         {
-            var fields = userObject.Fields;
-            machine.CurrentFrame.Fields.CopyFrom(fields, (n, _) => n != "self");
+         var fields = userObject.Fields;
+         machine.CurrentFrame.Fields.CopyFrom(fields, (n, _) => n != "self");
 
-            return notMatched<IObject>();
-         }
-         else
-         {
-            return failedMatch<IObject>(classNotFound("UserObject"));
-         }
+         return nil;
       }
-
-      public override string ToString() => "fields.from.object";
+      else
+      {
+         return classNotFound("UserObject");
+      }
    }
+
+   public override string ToString() => "fields.from.object";
 }

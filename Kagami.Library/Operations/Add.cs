@@ -3,15 +3,14 @@ using Kagami.Library.Runtime;
 using Core.Monads;
 using static Kagami.Library.Operations.NumericFunctions;
 
-namespace Kagami.Library.Operations
-{
-   public class Add : TwoOperandOperation
-   {
-      public override Responding<IObject> Execute(Machine machine, IObject x, IObject y)
-      {
-         return apply(x, y, (a, b) => a + b, (a, b) => a + b, (a, b) => a + b, (a, b) => a.Add(b), "+").Response();
-      }
+namespace Kagami.Library.Operations;
 
-      public override string ToString() => "add";
+public class Add : TwoOperandOperation
+{
+   public override Optional<IObject> Execute(Machine machine, IObject x, IObject y)
+   {
+      return apply(x, y, (a, b) => a + b, (a, b) => a + b, (a, b) => a + b, (a, b) => a.Add(b), "+").Just();
    }
+
+   public override string ToString() => "add";
 }

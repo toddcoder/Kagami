@@ -3,48 +3,46 @@ using Kagami.Library.Runtime;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Operations
+namespace Kagami.Library.Operations;
+
+public class AssignSelector : OneOperandOperation
 {
-   public class AssignSelector : OneOperandOperation
+   protected Selector selector;
+   protected bool overriding;
+
+   public AssignSelector(Selector selector, bool overriding)
    {
-      protected Selector selector;
-      protected bool overriding;
+      this.selector = selector;
+      this.overriding = overriding;
+   }
 
-      public AssignSelector(Selector selector, bool overriding)
+   public override Optional<IObject> Execute(Machine machine, IObject value)
+   {
+      var createNewField = false;
+      foreach (var subSelector in selector.AllSelectors())
       {
-         this.selector = selector;
-         this.overriding = overriding;
-      }
-
-      public override IMatched<IObject> Execute(Machine machine, IObject value)
-      {
-         var createNewField = false;
-         foreach (var subSelector in selector.AllSelectors())
+         if (createNewField)
          {
-            if (createNewField)
+            var _fields = machine.CurrentFrame.Fields.New(subSelector, overriding);
+            if (!_fields)
             {
-               if (machine.CurrentFrame.Fields.New(subSelector, overriding).If(out _, out var exception))
-               {
-               }
-               else
-               {
-                  return failedMatch<IObject>(exception);
-               }
-            }
-
-            if (machine.Assign(subSelector, value, overriding).If(out _, out var exception1))
-            {
-               createNewField = true;
-            }
-            else
-            {
-               return failedMatch<IObject>(exception1);
+               return _fields.Exception;
             }
          }
 
-         return notMatched<IObject>();
+         var _field = machine.Assign(subSelector, value, overriding);
+         if (_field)
+         {
+            createNewField = true;
+         }
+         else
+         {
+            return _field.Exception;
+         }
       }
 
-      public override string ToString() => $"assign.selector({selector.Image}, {overriding})";
+      return nil;
    }
+
+   public override string ToString() => $"assign.selector({selector.Image}, {overriding})";
 }

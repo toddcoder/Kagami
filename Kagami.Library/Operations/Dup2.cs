@@ -2,19 +2,18 @@
 using Kagami.Library.Runtime;
 using Core.Monads;
 
-namespace Kagami.Library.Operations
+namespace Kagami.Library.Operations;
+
+public class Dup2 : TwoOperandOperation
 {
-   public class Dup2 : TwoOperandOperation
+   public override Optional<IObject> Execute(Machine machine, IObject x, IObject y)
    {
-      public override IMatched<IObject> Execute(Machine machine, IObject x, IObject y)
-      {
-         machine.Push(x);
-         machine.Push(y);
-         machine.Push(x);
+      machine.Push(x);
+      machine.Push(y);
+      machine.Push(x);
 
-         return y.Matched();
-      }
-
-      public override string ToString() => "dup2";
+      return y.Just();
    }
+
+   public override string ToString() => "dup2";
 }

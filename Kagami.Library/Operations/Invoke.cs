@@ -3,132 +3,160 @@ using Kagami.Library.Objects;
 using Kagami.Library.Packages;
 using Kagami.Library.Runtime;
 using Core.Monads;
+using Kagami.Library.Parsers.Statements;
 using static Kagami.Library.AllExceptions;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
-namespace Kagami.Library.Operations
+namespace Kagami.Library.Operations;
+
+public class Invoke : OneOperandOperation
 {
-   public class Invoke : OneOperandOperation
+   public static void InvokeInvokableObject(Machine machine, IInvokableObject invokableObject, Arguments arguments)
    {
-      public static void InvokeInvokableObject(Machine machine, IInvokableObject invokableObject, Arguments arguments)
+      var invokable = invokableObject.Invokable;
+      if (invokable is YieldingInvokable yi)
       {
-         var invokable = invokableObject.Invokable;
-         if (invokable is YieldingInvokable yi)
-         {
-            InvokeYieldingInvokable(machine, yi, arguments);
-         }
-         else
-         {
-            InvokeInvokable(machine, invokable, arguments,
-               invokableObject is IProvidesFields { ProvidesFields: true } pf ? pf.Fields : new Fields());
-         }
+         InvokeYieldingInvokable(machine, yi, arguments);
       }
-
-      protected static void InvokeYieldingInvokable(Machine machine, YieldingInvokable invokable, Arguments arguments)
+      else
       {
-         invokable.Arguments = arguments;
-         var iterator = invokable.GetIterator(false);
-         machine.Push((IObject)iterator);
+         InvokeInvokable(machine, invokable, arguments,
+            invokableObject is IProvidesFields { ProvidesFields: true } pf ? pf.Fields : new Fields());
       }
+   }
 
-      public static void InvokeInvokable(Machine machine, IInvokable invokable, Arguments arguments, Fields fields)
+   protected static void InvokeYieldingInvokable(Machine machine, YieldingInvokable invokable, Arguments arguments)
+   {
+      invokable.Arguments = arguments;
+      var iterator = invokable.GetIterator(false);
+      machine.Push((IObject)iterator);
+   }
+
+   public static void InvokeInvokable(Machine machine, IInvokable invokable, Arguments arguments, Fields fields)
+   {
+      if (invokable.Constructing)
       {
-         if (invokable.Constructing)
-         {
-            InvokeConstructor(machine, invokable, arguments, fields);
-         }
-         else
-         {
-            var returnAddress = machine.Address + 1;
-            var frame = new Frame(returnAddress, fields);
-            machine.PushFrame(frame);
-            frame = new Frame(arguments);
-            frame.SetFields(invokable.Parameters);
-            machine.PushFrame(frame);
-            machine.GoTo(invokable.Address);
-         }
+         InvokeConstructor(machine, invokable, arguments, fields);
       }
-
-      public static void InvokeConstructor(Machine machine, IInvokable invokable, Arguments arguments, Fields fields)
+      else
       {
          var returnAddress = machine.Address + 1;
-         var frame = new Frame(returnAddress, arguments, fields);
+         var frame = new Frame(returnAddress, fields);
          machine.PushFrame(frame);
+         frame = new Frame(arguments);
          frame.SetFields(invokable.Parameters);
+         machine.PushFrame(frame);
          machine.GoTo(invokable.Address);
       }
+   }
 
-      public static IMatched<IObject> InvokeObject(Machine machine, IObject value, Arguments arguments, ref bool increment)
+   public static void InvokeConstructor(Machine machine, IInvokable invokable, Arguments arguments, Fields fields)
+   {
+      var returnAddress = machine.Address + 1;
+      var frame = new Frame(returnAddress, arguments, fields);
+      machine.PushFrame(frame);
+      frame.SetFields(invokable.Parameters);
+      machine.GoTo(invokable.Address);
+   }
+
+   public static Optional<IObject> InvokeObject(Machine machine, IObject value, Arguments arguments, ref bool increment)
+   {
+      switch (value)
       {
-         switch (value)
-         {
-            case IInvokableObject io:
-               InvokeInvokableObject(machine, io, arguments);
-               increment = io.Invokable is YieldingInvokable;
+         case IInvokableObject io:
+            InvokeInvokableObject(machine, io, arguments);
+            increment = io.Invokable is YieldingInvokable;
 
-               return notMatched<IObject>();
-            case PackageFunction pf:
-               increment = true;
-               return pf.Invoke(arguments).Matched();
-            case IMayInvoke mi:
-               increment = true;
-               return mi.Invoke(arguments.Value).Matched();
-            case Pattern pattern:
-               increment = true;
-               var copy = pattern.Copy();
-               copy.RegisterArguments(arguments);
-               return copy.Matched<IObject>();
-            case UserObject userObject:
-               increment = true;
-               return sendMessage(userObject, "invoke(_...)", arguments).Matched();
-            default:
-               return failedMatch<IObject>(incompatibleClasses(value, "Invokable object"));
-         }
+            return nil;
+         case PackageFunction pf:
+            increment = true;
+            return pf.Invoke(arguments).Just();
+         case IMayInvoke mi:
+            increment = true;
+            return mi.Invoke(arguments.Value).Just();
+         case Pattern pattern:
+            increment = true;
+            var copy = pattern.Copy();
+            copy.RegisterArguments(arguments);
+            return copy;
+         case UserObject userObject:
+            increment = true;
+            return sendMessage(userObject, "invoke(_...)", arguments).Just();
+         default:
+            return incompatibleClasses(value, "Invokable object");
       }
+   }
 
-      protected string fieldName;
-      protected bool increment;
+   protected string fieldName;
+   protected bool increment;
 
-      public Invoke(string fieldName) => this.fieldName = fieldName;
+   public Invoke(string fieldName) => this.fieldName = fieldName;
 
-      public override IMatched<IObject> Execute(Machine machine, IObject value)
+   public override Optional<IObject> Execute(Machine machine, IObject value)
+   {
+      increment = false;
+      if (value is Arguments arguments)
       {
-         increment = false;
-         if (value is Arguments arguments)
+         var image = fieldName;
+         var _field = machine.Find(fieldName, true);
+         if (_field is (true, var foundField))
          {
-            var image = fieldName;
-            var ((isFound, field), (isFailure, exception)) = machine.Find(fieldName, true);
-            if (!isFound && !isFailure)
+            return InvokeObject(machine, foundField.Value, arguments, ref increment);
+         }
+         else
+         {
+            var selector = arguments.Selector(fieldName);
+            image = selector.Image;
+            _field = machine.Find(selector);
+            if (_field is (true, var selectedField))
             {
-               var selector = arguments.Selector(fieldName);
-               image = selector.Image;
-               ((isFound, field), (isFailure, exception)) = machine.Find(selector);
+               return InvokeObject(machine, selectedField.Value, arguments, ref increment);
             }
-
-            if (isFound && field != null)
+            else if (_field.Exception is (true, var exception))
             {
-               return InvokeObject(machine, field.Value, arguments, ref increment);
-            }
-            else if (isFailure)
-            {
-               return failedMatch<IObject>(exception);
+               return exception;
             }
             else
             {
-               return failedMatch<IObject>(fieldNotFound(image));
+               return fieldNotFound(image);
             }
          }
          else
          {
-            return failedMatch<IObject>(incompatibleClasses(value, "Arguments"));
+
+         }
+
+         /*var ((isFound, field), (isFailure, exception)) = machine.Find(fieldName, true);
+         if (!isFound && !isFailure)
+         {
+            var selector = arguments.Selector(fieldName);
+            image = selector.Image;
+            ((isFound, field), (isFailure, exception)) = machine.Find(selector);
+         }*/
+
+         if (isFound && field != null)
+         {
+            return InvokeObject(machine, field.Value, arguments, ref increment);
+         }
+         else if (isFailure)
+         {
+            return failedMatch<IObject>(exception);
+         }
+         else
+         {
+            return failedMatch<IObject>(fieldNotFound(image));
          }
       }
-
-      public override bool Increment => increment;
-
-      public string FieldName => fieldName;
-
-      public override string ToString() => $"invoke({fieldName})";
+      else
+      {
+         return failedMatch<IObject>(incompatibleClasses(value, "Arguments"));
+      }
    }
+
+   public override bool Increment => increment;
+
+   public string FieldName => fieldName;
+
+   public override string ToString() => $"invoke({fieldName})";
 }

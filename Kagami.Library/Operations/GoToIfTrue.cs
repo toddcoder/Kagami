@@ -6,41 +6,41 @@ using static Kagami.Library.AllExceptions;
 using static Core.Monads.MonadFunctions;
 using Boolean = Kagami.Library.Objects.Boolean;
 
-namespace Kagami.Library.Operations
+namespace Kagami.Library.Operations;
+
+public class GoToIfTrue : AddressedOperation
 {
-   public class GoToIfTrue : AddressedOperation
+   protected Predicate<Boolean> predicate;
+
+   public GoToIfTrue() => predicate = b => b.Value;
+
+   public override Optional<IObject> Execute(Machine machine)
    {
-      protected Predicate<Boolean> predicate;
+      increment = false;
 
-      public GoToIfTrue() => predicate = b => b.Value;
-
-      public override IMatched<IObject> Execute(Machine machine)
+      var _x = machine.Pop();
+      if (_x is (true, var x))
       {
-         increment = false;
-
-         if (machine.Pop().If(out var x, out var exception))
+         if (x is Boolean bx)
          {
-            if (x is Boolean bx)
+            if (predicate(bx))
             {
-               if (predicate(bx))
-               {
-                  return machine.GoTo(address) ? notMatched<IObject>() : failedMatch<IObject>(badAddress(address));
-               }
+               return machine.GoTo(address) ? nil : badAddress(address);
+            }
 
-               increment = true;
-               return notMatched<IObject>();
-            }
-            else
-            {
-               return failedMatch<IObject>(incompatibleClasses(x, "Boolean"));
-            }
+            increment = true;
+            return nil;
          }
          else
          {
-            return failedMatch<IObject>(exception);
+            return incompatibleClasses(x, "Boolean");
          }
       }
-
-      public override string ToString() => $"goto.if.true({address})";
+      else
+      {
+         return _x.Exception;
+      }
    }
+
+   public override string ToString() => $"goto.if.true({address})";
 }

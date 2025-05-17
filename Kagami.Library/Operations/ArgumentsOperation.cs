@@ -2,31 +2,30 @@
 using Kagami.Library.Runtime;
 using Core.Monads;
 using static Kagami.Library.AllExceptions;
-using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Operations
+namespace Kagami.Library.Operations;
+
+public abstract class ArgumentsOperation : Operation
 {
-   public abstract class ArgumentsOperation : Operation
+   public override Optional<IObject> Execute(Machine machine)
    {
-      public override IMatched<IObject> Execute(Machine machine)
+      var _value = machine.Pop();
+      if (_value is (true, var value))
       {
-         if (machine.Pop().If(out var value, out var exception))
+         if (value is Arguments arguments)
          {
-            if (value is Arguments arguments)
-            {
-               return Execute(arguments);
-            }
-            else
-            {
-               return failedMatch<IObject>(incompatibleClasses(value, "Arguments"));
-            }
+            return Execute(arguments);
          }
          else
          {
-            return failedMatch<IObject>(exception);
+            return incompatibleClasses(value, "Arguments");
          }
       }
-
-      public abstract IMatched<IObject> Execute(Arguments arguments);
+      else
+      {
+         return _value.Exception;
+      }
    }
+
+   public abstract Optional<IObject> Execute(Arguments arguments);
 }

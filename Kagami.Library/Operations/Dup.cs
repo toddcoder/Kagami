@@ -2,17 +2,22 @@
 using Kagami.Library.Runtime;
 using Core.Monads;
 using static Kagami.Library.AllExceptions;
-using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Operations
+namespace Kagami.Library.Operations;
+
+public class Dup : Operation
 {
-   public class Dup : Operation
+   public override Optional<IObject> Execute(Machine machine)
    {
-      public override IMatched<IObject> Execute(Machine machine)
+      if (machine.Peek() is (true, var value))
       {
-         return machine.Peek().Map(v => v.Matched()).DefaultTo(() => failedMatch<IObject>(requiresNOperands(1)));
+         return value.Just();
       }
-
-      public override string ToString() => "dup";
+      else
+      {
+         return requiresNOperands(1);
+      }
    }
+
+   public override string ToString() => "dup";
 }

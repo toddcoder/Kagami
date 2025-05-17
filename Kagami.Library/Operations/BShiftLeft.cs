@@ -1,11 +1,10 @@
 ﻿using Core.Monads;
 
-namespace Kagami.Library.Operations
-{
-   public class BShiftLeft : TwoIntOperation
-   {
-      public override IMatched<int> Execute(int x, int y) => (x << y).Matched();
+namespace Kagami.Library.Operations;
 
-      public override string ToString() => "bsl";
-   }
+public class BShiftLeft : TwoIntOperation
+{
+   public override Optional<int> Execute(int x, int y) => x << y;
+
+   public override string ToString() => "bsl";
 }

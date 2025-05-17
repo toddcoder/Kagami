@@ -3,16 +3,15 @@ using Kagami.Library.Runtime;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Operations
-{
-   public class Break : Operation
-   {
-      public override IMatched<IObject> Execute(Machine machine)
-      {
-			machine.Clear();
-	      return notMatched<IObject>();
-      }
+namespace Kagami.Library.Operations;
 
-      public override string ToString() => "break";
+public class Break : Operation
+{
+   public override Optional<IObject> Execute(Machine machine)
+   {
+      machine.Clear();
+      return nil;
    }
+
+   public override string ToString() => "break";
 }
