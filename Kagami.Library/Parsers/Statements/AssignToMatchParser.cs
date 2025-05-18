@@ -2,38 +2,39 @@
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Parsers.Expressions;
 using Core.Monads;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
-namespace Kagami.Library.Parsers.Statements
+namespace Kagami.Library.Parsers.Statements;
+
+public class AssignToMatchParser : EndingInExpressionParser
 {
-   public class AssignToMatchParser : EndingInExpressionParser
+   protected Symbol comparisand;
+
+   public override string Pattern => "^ /'set' /(/s+)";
+
+   public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {
-      protected Symbol comparisand;
+      state.Colorize(tokens, Color.Keyword, Color.Whitespace);
 
-      public override string Pattern => "^ /'set' /(/s+)";
-
-      public override IMatched<Unit> Prefix(ParseState state, Token[] tokens)
+      var _result =
+         from comparisandValue in getValue(state, ExpressionFlags.Comparisand)
+         from scanned in state.Scan("^ /(|s|) /'='", Color.Whitespace, Color.Structure)
+         select comparisandValue;
+      if (_result is (true, var symbol))
       {
-         state.Colorize(tokens, Color.Keyword, Color.Whitespace);
-
-         var result =
-            from comparisand in getValue(state, ExpressionFlags.Comparisand)
-            from scanned in state.Scan("^ /(|s|) /'='", Color.Whitespace, Color.Structure)
-            select comparisand;
-         if (result.ValueOrCast<Unit>(out comparisand, out var asUnit))
-         {
-            return Unit.Matched();
-         }
-         else
-         {
-            return asUnit;
-         }
+         comparisand = symbol;
+         return unit;
       }
-
-      public override IMatched<Unit> Suffix(ParseState state, Expression expression)
+      else
       {
-         state.AddStatement(new AssignToMatch(comparisand, expression));
-         return Unit.Matched();
+         return _result.Exception;
       }
+   }
+
+   public override Optional<Unit> Suffix(ParseState state, Expression expression)
+   {
+      state.AddStatement(new AssignToMatch(comparisand, expression));
+      return unit;
    }
 }

@@ -2,22 +2,21 @@
 using Kagami.Library.Nodes.Symbols;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Parsers.Expressions
+namespace Kagami.Library.Parsers.Expressions;
+
+public class TakeOperatorParser : SymbolParser
 {
-   public class TakeOperatorParser : SymbolParser
+   public TakeOperatorParser(ExpressionBuilder builder) : base(builder)
    {
-      public TakeOperatorParser(ExpressionBuilder builder) : base(builder)
-      {
-      }
+   }
 
-      public override string Pattern => "^ /(|s|) /'*;'";
+   public override string Pattern => "^ /(|s|) /'*;'";
 
-      public override Responding<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
-      {
-         state.Colorize(tokens, Color.Whitespace, Color.Operator);
-         builder.Add(new TakeOperatorSymbol());
+   public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+   {
+      state.Colorize(tokens, Color.Whitespace, Color.Operator);
+      builder.Add(new TakeOperatorSymbol());
 
-         return unit;
-      }
+      return unit;
    }
 }

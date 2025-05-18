@@ -4,40 +4,38 @@ using Core.Strings;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Parsers.Statements
+namespace Kagami.Library.Parsers.Statements;
+
+public class AssignFromBlockParser : StatementParser
 {
-	public class AssignFromBlockParser : StatementParser
-	{
-		public override string Pattern => $"^ (/('var' | 'let') /(|s+|))? /({REGEX_FIELD}) /b";
+   public override string Pattern => $"^ (/('var' | 'let') /(|s+|))? /({REGEX_FIELD}) /b";
 
-		public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
-		{
-			state.BeginTransaction();
+   public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
+   {
+      state.BeginTransaction();
 
-			var isNew = tokens[1].Text.IsNotEmpty();
-			var mutable = tokens[1].Text == "var";
-			var fieldName = tokens[3].Text;
-			state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Identifier);
+      var isNew = tokens[1].Text.IsNotEmpty();
+      var mutable = tokens[1].Text == "var";
+      var fieldName = tokens[3].Text;
+      state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Identifier);
 
-			var result =
-				from typeConstraint in parseTypeConstraint(state)
-				from scanned in state.Scan($"^ /(|s|) /'=' /({REGEX_EOL})", Color.Whitespace, Color.Structure, Color.Whitespace)
-				from block in getBlock(state)
-				select (typeConstraint, block);
+      var _result =
+         from typeConstraintValue in parseTypeConstraint(state)
+         from scanned in state.Scan($"^ /(|s|) /'=' /({REGEX_EOL})", Color.Whitespace, Color.Structure, Color.Whitespace)
+         from blockValue in getBlock(state)
+         select (typeConstraintValue, blockValue);
 
-			if (result.If(out var tuple, out _))
-			{
-				var (typeConstraint, block) = tuple;
-				state.AddStatement(new AssignToFieldWithBlock(isNew, mutable, fieldName, typeConstraint, block));
-				state.CommitTransaction();
+      if (_result is (true, var (typeConstraint, block)))
+      {
+         state.AddStatement(new AssignToFieldWithBlock(isNew, mutable, fieldName, typeConstraint, block));
+         state.CommitTransaction();
 
-				return Unit.Matched();
-			}
-			else
-			{
-				state.RollBackTransaction();
-				return notMatched<Unit>();
-			}
-		}
-	}
+         return unit;
+      }
+      else
+      {
+         state.RollBackTransaction();
+         return nil;
+      }
+   }
 }

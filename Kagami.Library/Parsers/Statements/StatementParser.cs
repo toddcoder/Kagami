@@ -1,67 +1,71 @@
 ﻿using Core.Monads;
-using Core.RegularExpressions;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Parsers.Statements
+namespace Kagami.Library.Parsers.Statements;
+
+public abstract class StatementParser : Parser
 {
-   public abstract class StatementParser : Parser
+   public static Optional<int> ExceptionIndex { get; set; } = nil;
+
+   public abstract Optional<Unit> ParseStatement(ParseState state, Token[] tokens);
+
+   public override Optional<Unit> Scan(ParseState state)
    {
-      public static IMaybe<int> ExceptionIndex { get; set; } = none<int>();
-
-      public abstract IMatched<Unit> ParseStatement(ParseState state, Token[] tokens);
-
-      public override IMatched<Unit> Scan(ParseState state)
+      state.BeginTransaction();
+      //state.Indentation.FriendlyString
+      if (IgnoreIndentation || SingleLine || state.Scan($"^ /({state.Indentation})", Color.Whitespace))
       {
-         state.BeginTransaction();
-         if (IgnoreIndentation || SingleLine || state.Scan($"^ /({state.Indentation.FriendlyString()})", Color.Whitespace).IsMatched)
+         var _scan = base.Scan(state);
+         if (_scan)
          {
-            if (base.Scan(state).If(out _, out var anyException))
-            {
-               state.CommitTransaction();
-               return Unit.Matched();
-            }
-            else if (anyException.If(out var exception))
-            {
-               ExceptionIndex = state.Index.Some();
-               state.RollBackTransaction();
-               return failedMatch<Unit>(exception);
-            }
-            else
-            {
-               state.RollBackTransaction();
-               return notMatched<Unit>();
-            }
+            state.CommitTransaction();
+            return unit;
+         }
+         else if (_scan.Exception is (true, var exception))
+         {
+            ExceptionIndex = state.Index;
+            state.RollBackTransaction();
+
+            return exception;
          }
          else
          {
             state.RollBackTransaction();
-            return notMatched<Unit>();
+            return nil;
          }
       }
-
-      public override IMatched<Unit> Parse(ParseState state, Token[] tokens)
+      else
       {
-         if (ParseStatement(state, tokens).ValueOrOriginal(out _, out var original))
-         {
-            if (MatchEndOfLine)
-            {
-               state.SkipEndOfLine();
-            }
-
-            return Unit.Matched();
-         }
-         else
-         {
-            return original;
-         }
+         state.RollBackTransaction();
+         return nil;
       }
+   }
 
-      public virtual bool MatchEndOfLine => true;
+   public override Optional<Unit> Parse(ParseState state, Token[] tokens)
+   {
+      var _statement = ParseStatement(state, tokens);
+      if (_statement)
+      {
+         if (MatchEndOfLine)
+         {
+            state.SkipEndOfLine();
+         }
 
-      public virtual bool IgnoreIndentation => false;
+         return unit;
+      }
+      else
+      {
+         return _statement.Exception;
+      }
+   }
 
-      public bool SingleLine { get; set; }
+   public virtual bool MatchEndOfLine => true;
 
-      protected StatementParser() : base(true) { }
+   public virtual bool IgnoreIndentation => false;
+
+   public bool SingleLine { get; set; }
+
+   protected StatementParser() : base(true)
+   {
    }
 }
