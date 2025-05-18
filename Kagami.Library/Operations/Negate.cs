@@ -2,33 +2,22 @@
 using Kagami.Library.Runtime;
 using Core.Monads;
 using static Kagami.Library.AllExceptions;
-using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Operations
+namespace Kagami.Library.Operations;
+
+public class Negate : OneNumericOperation
 {
-   public class Negate : OneNumericOperation
+   public override Optional<IObject> Execute(Machine machine, INumeric x) => Evaluate(x);
+
+   public static Optional<IObject> Evaluate(INumeric x) => x switch
    {
-      public override IMatched<IObject> Execute(Machine machine, INumeric x) => Evaluate(x);
+      Int i => Int.IntObject(-i.Value).Just(),
+      Float f => Float.FloatObject(-f.Value).Just(),
+      Long l => Long.LongObject(-l.Value).Just(),
+      Complex c => c.Negate().Just(),
+      Rational r => r.Negate().Just(),
+      _ => notNumeric((IObject)x)
+   };
 
-      public static IMatched<IObject> Evaluate(INumeric x)
-      {
-         switch (x)
-         {
-            case Int i:
-               return Int.IntObject(-i.Value).Matched();
-            case Float f:
-               return Float.FloatObject(-f.Value).Matched();
-            case Long l:
-               return Long.LongObject(-l.Value).Matched();
-            case Complex c:
-               return c.Negate().Matched();
-            case Rational r:
-               return r.Negate().Matched();
-            default:
-               return failedMatch<IObject>(notNumeric((IObject)x));
-         }
-      }
-
-      public override string ToString() => "negate";
-   }
+   public override string ToString() => "negate";
 }

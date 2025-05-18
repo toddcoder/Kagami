@@ -3,7 +3,6 @@ using Kagami.Library.Objects;
 using Kagami.Library.Packages;
 using Kagami.Library.Runtime;
 using Core.Monads;
-using Kagami.Library.Parsers.Statements;
 using static Kagami.Library.AllExceptions;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
@@ -98,7 +97,6 @@ public class Invoke : OneOperandOperation
       increment = false;
       if (value is Arguments arguments)
       {
-         var image = fieldName;
          var _field = machine.Find(fieldName, true);
          if (_field is (true, var foundField))
          {
@@ -107,7 +105,7 @@ public class Invoke : OneOperandOperation
          else
          {
             var selector = arguments.Selector(fieldName);
-            image = selector.Image;
+            var image = selector.Image;
             _field = machine.Find(selector);
             if (_field is (true, var selectedField))
             {
@@ -122,35 +120,10 @@ public class Invoke : OneOperandOperation
                return fieldNotFound(image);
             }
          }
-         else
-         {
-
-         }
-
-         /*var ((isFound, field), (isFailure, exception)) = machine.Find(fieldName, true);
-         if (!isFound && !isFailure)
-         {
-            var selector = arguments.Selector(fieldName);
-            image = selector.Image;
-            ((isFound, field), (isFailure, exception)) = machine.Find(selector);
-         }*/
-
-         if (isFound && field != null)
-         {
-            return InvokeObject(machine, field.Value, arguments, ref increment);
-         }
-         else if (isFailure)
-         {
-            return failedMatch<IObject>(exception);
-         }
-         else
-         {
-            return failedMatch<IObject>(fieldNotFound(image));
-         }
       }
       else
       {
-         return failedMatch<IObject>(incompatibleClasses(value, "Arguments"));
+         return incompatibleClasses(value, "Arguments");
       }
    }
 

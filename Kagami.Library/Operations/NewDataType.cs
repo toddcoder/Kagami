@@ -3,57 +3,55 @@ using Kagami.Library.Runtime;
 using Core.Collections;
 using Core.Monads;
 using static Kagami.Library.AllExceptions;
-using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Operations
+namespace Kagami.Library.Operations;
+
+public class NewDataType : OneOperandOperation
 {
-   public class NewDataType : OneOperandOperation
+   protected string className;
+
+   public NewDataType(string className) => this.className = className;
+
+   public override Optional<IObject> Execute(Machine machine, IObject value)
    {
-      protected string className;
-
-      public NewDataType(string className) => this.className = className;
-
-      public override IMatched<IObject> Execute(Machine machine, IObject value)
+      if (value is Dictionary dictionary)
       {
-         if (value is Dictionary dictionary)
+         var hash = new Hash<string, (IObject[], IObject)>();
+         foreach (var (key, objectValue) in dictionary.InternalHash)
          {
-            var hash = new Hash<string, (IObject[], IObject)>();
-            foreach (var (key, objectValue) in dictionary.InternalHash)
+            if (key is String name)
             {
-               if (key is String name)
+               if (objectValue is Tuple tuple)
                {
-                  if (objectValue is Tuple tuple)
+                  var dataComparisandName = name.Value;
+                  if (tuple[0] is Tuple comparisands)
                   {
-                     var dataComparisandName = name.Value;
-                     if (tuple[0] is Tuple comparisands)
-                     {
-                        var ordinal = tuple[1];
-                        hash[dataComparisandName] = (comparisands.Value, ordinal);
-                     }
-                     else
-                     {
-                        return failedMatch<IObject>(incompatibleClasses(tuple[0], "Tuple"));
-                     }
+                     var ordinal = tuple[1];
+                     hash[dataComparisandName] = (comparisands.Value, ordinal);
                   }
                   else
                   {
-                     return failedMatch<IObject>(incompatibleClasses(objectValue, "Tuple"));
+                     return incompatibleClasses(tuple[0], "Tuple");
                   }
                }
                else
                {
-                  return failedMatch<IObject>(incompatibleClasses(key, "String"));
+                  return incompatibleClasses(objectValue, "Tuple");
                }
             }
+            else
+            {
+               return incompatibleClasses(key, "String");
+            }
+         }
 
-            return new DataType(className, hash).Matched<IObject>();
-         }
-         else
-         {
-            return failedMatch<IObject>(incompatibleClasses(value, "Dictionary"));
-         }
+         return new DataType(className, hash);
       }
-
-      public override string ToString() => "new.data.type";
+      else
+      {
+         return incompatibleClasses(value, "Dictionary");
+      }
    }
+
+   public override string ToString() => "new.data.type";
 }

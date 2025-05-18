@@ -6,61 +6,59 @@ using Core.Monads;
 using static Kagami.Library.AllExceptions;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Operations
+namespace Kagami.Library.Operations;
+
+public abstract class MultipleOperandOperation : Operation
 {
-   public abstract class MultipleOperandOperation : Operation
+   protected int count;
+
+   protected MultipleOperandOperation(int count) => this.count = count;
+
+   public abstract Result<Unit> Execute(int index, IObject value);
+
+   public abstract Optional<IObject> Final();
+
+   public override Optional<IObject> Execute(Machine machine)
    {
-      protected int count;
+      var stack = new Stack<IObject>();
 
-      protected MultipleOperandOperation(int count) => this.count = count;
-
-      public abstract IResult<Unit> Execute(int index, IObject value);
-
-      public abstract IMatched<IObject> Final();
-
-      public override IMatched<IObject> Execute(Machine machine)
+      for (var i = 0; i < count; i++)
       {
-         var stack = new Stack<IObject>();
-
-         for (var i = 0; i < count; i++)
+         var _value = machine.Pop();
+         if (_value is (true, var value))
          {
-            if (machine.Pop().If(out var obj, out var exception))
-            {
-               stack.Push(obj);
-            }
-            else
-            {
-               return failedMatch<IObject>(exception);
-            }
-         }
-
-         var index = 0;
-         while (stack.Count > 0)
-         {
-            var value = stack.Pop();
-            if (Execute(index++, value).If(out _, out var exception))
-            {
-            }
-            else
-            {
-               return failedMatch<IObject>(exception);
-            }
-         }
-
-         return Final();
-      }
-
-      protected static IResult<Unit> match<T>(IObject value, Action<T> action) where T : IObject
-      {
-         if (value is T x)
-         {
-            action(x);
-            return Unit.Success();
+            stack.Push(value);
          }
          else
          {
-            return failure<Unit>(incompatibleClasses(value, typeof(T).Name));
+            return _value.Exception;
          }
+      }
+
+      var index = 0;
+      while (stack.Count > 0)
+      {
+         var value = stack.Pop();
+         var _result = Execute(index++, value);
+         if (!_result)
+         {
+            return _result.Exception;
+         }
+      }
+
+      return Final();
+   }
+
+   protected static Result<Unit> match<T>(IObject value, Action<T> action) where T : IObject
+   {
+      if (value is T x)
+      {
+         action(x);
+         return unit;
+      }
+      else
+      {
+         return incompatibleClasses(value, typeof(T).Name);
       }
    }
 }

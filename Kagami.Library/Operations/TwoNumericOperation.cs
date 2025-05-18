@@ -3,45 +3,47 @@ using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Monads;
 using static Kagami.Library.AllExceptions;
-using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Operations
+namespace Kagami.Library.Operations;
+
+public abstract class TwoNumericOperation : Operation
 {
-   public abstract class TwoNumericOperation : Operation
-   {
-      public abstract IMatched<IObject> Execute(INumeric x, INumeric y);
+   public abstract Optional<IObject> Execute(INumeric x, INumeric y);
 
-      public override IMatched<IObject> Execute(Machine machine)
+   public override Optional<IObject> Execute(Machine machine)
+   {
+      try
       {
-         try
+         var _xy =
+            from yValue in machine.Pop()
+            from xValue in machine.Pop()
+            select (xValue, yValue);
+         if (_xy is (true, var (x, y)))
          {
-            if (machine.Pop().If(out var y, out var exception) && machine.Pop().If(out var x, out exception))
+            if (x is INumeric nx)
             {
-               if (x is INumeric nx)
+               if (y is INumeric ny)
                {
-                  if (y is INumeric ny)
-                  {
-                     return Execute(nx, ny);
-                  }
-                  else
-                  {
-                     return failedMatch<IObject>(notNumeric(y.Image));
-                  }
+                  return Execute(nx, ny);
                }
                else
                {
-                  return failedMatch<IObject>(notNumeric(x.Image));
+                  return notNumeric(y.Image);
                }
             }
             else
             {
-               return failedMatch<IObject>(exception);
+               return notNumeric(x.Image);
             }
          }
-         catch (Exception exception)
+         else
          {
-            return failedMatch<IObject>(exception);
+            return _xy.Exception;
          }
+      }
+      catch (Exception exception)
+      {
+         return exception;
       }
    }
 }

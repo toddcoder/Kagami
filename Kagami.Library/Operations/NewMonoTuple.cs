@@ -2,12 +2,11 @@
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 
-namespace Kagami.Library.Operations
-{
-	public class NewMonoTuple : OneOperandOperation
-	{
-		public override IMatched<IObject> Execute(Machine machine, IObject value) => new Tuple(value).Matched<IObject>();
+namespace Kagami.Library.Operations;
 
-		public override string ToString() => "new.mono.tuple";
-	}
+public class NewMonoTuple : OneOperandOperation
+{
+   public override Optional<IObject> Execute(Machine machine, IObject value) => new Tuple(value);
+
+   public override string ToString() => "new.mono.tuple";
 }

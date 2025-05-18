@@ -3,22 +3,21 @@ using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Monads;
 
-namespace Kagami.Library.Operations
+namespace Kagami.Library.Operations;
+
+public class NewLambda : Operation
 {
-   public class NewLambda : Operation
+   protected IInvokable invokable;
+
+   public NewLambda(IInvokable invokable) => this.invokable = invokable;
+
+   public override Optional<IObject> Execute(Machine machine)
    {
-      protected IInvokable invokable;
+      var lambda = new Lambda(invokable);
+      lambda.Capture();
 
-      public NewLambda(IInvokable invokable) => this.invokable = invokable;
-
-      public override IMatched<IObject> Execute(Machine machine)
-      {
-         var lambda = new Lambda(invokable);
-         lambda.Capture();
-
-         return lambda.Matched<IObject>();
-      }
-
-      public override string ToString() => $"new.lambda({invokable.Image})";
+      return lambda;
    }
+
+   public override string ToString() => $"new.lambda({invokable.Image})";
 }
