@@ -2,22 +2,21 @@
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Parsers.Expressions
+namespace Kagami.Library.Parsers.Expressions;
+
+public class StringArrayParser : SymbolParser
 {
-   public class StringArrayParser : SymbolParser
+   public override string Pattern => "^ /(|s|) /'a\"' /(-['\"']*) /'\"'";
+
+   public StringArrayParser(ExpressionBuilder builder) : base(builder) { }
+
+   public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      public override string Pattern => "^ /(|s|) /'a\"' /(-['\"']*) /'\"'";
+      var source = tokens[3].Text;
+      state.Colorize(tokens, Color.Whitespace, Color.Collection, Color.Collection, Color.Collection);
 
-      public StringArrayParser(ExpressionBuilder builder) : base(builder) { }
+      builder.Add(new StringArraySymbol(source));
 
-      public override Responding<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
-      {
-         var source = tokens[3].Text;
-         state.Colorize(tokens, Color.Whitespace, Color.Collection, Color.Collection, Color.Collection);
-
-         builder.Add(new StringArraySymbol(source));
-
-         return unit;
-      }
+      return unit;
    }
 }

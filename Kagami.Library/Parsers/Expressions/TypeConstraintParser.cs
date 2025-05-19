@@ -15,18 +15,18 @@ namespace Kagami.Library.Parsers.Expressions
 
 		public override string Pattern => "^ /(|s|) /'<' (> ['A-Z'])";
 
-		public override Responding<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+		public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
 		{
 			state.Colorize(tokens, Color.Whitespace, Color.Class);
 
-			var list = new List<BaseClass>();
+			List<BaseClass> list = [];
 			while (state.More)
          {
             var _name = state.Scan($"^ /(/s*) /({REGEX_CLASS})", Color.Whitespace, Color.Class);
-            if (_name)
+            if (_name is (true, var name))
 				{
 					name = name.TrimStart();
-					if (Module.Global.Class(name).If(out var baseClass))
+					if (Module.Global.Class(name) is (true, var baseClass))
 					{
 						list.Add(baseClass);
 					}
@@ -35,13 +35,13 @@ namespace Kagami.Library.Parsers.Expressions
 						list.Add(new ForwardedClass(name));
 					}
 					else
-					{
-						return failedMatch<Unit>(classNotFound(name));
-					}
+               {
+                  return classNotFound(name);
+               }
 				}
-				else if (anyException.If(out var exception))
+				else if (_name.Exception is (true, var exception))
 				{
-					return failedMatch<Unit>(exception);
+					return exception;
 				}
 				else if (state.Scan("^ /'>'", Color.Class).If(out _, out anyException))
 				{

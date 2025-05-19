@@ -6,50 +6,52 @@ using Core.Strings;
 using static Kagami.Library.AllExceptions;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Operations
+namespace Kagami.Library.Operations;
+
+public class OpenPackage : Operation
 {
-   public class OpenPackage : Operation
+   protected string packageName;
+
+   public OpenPackage(string packageName) => this.packageName = packageName;
+
+   public override Optional<IObject> Execute(Machine machine)
    {
-      protected string packageName;
-
-      public OpenPackage(string packageName) => this.packageName = packageName;
-
-      public override IMatched<IObject> Execute(Machine machine)
+      var fieldName = packageName.ToLower1();
+      var _field = machine.Find(fieldName, true);
+      if (_field is (true, var field))
       {
-         var fieldName = packageName.ToLower1();
-         if (machine.Find(fieldName, true).If(out var field, out var _exception))
+         switch (field.Value)
          {
-            switch (field.Value)
+            case Package package when Module.Global.Class(package.ClassName) is (true, var baseClass):
             {
-               case Package package when Module.Global.Class(package.ClassName).If(out var baseClass):
-                  if (baseClass is PackageClass packageClass)
-                  {
-                     packageClass.RegisterMessages();
-                     packageClass.CopyToGlobalFrame(package);
+               if (baseClass is PackageClass packageClass)
+               {
+                  packageClass.RegisterMessages();
+                  packageClass.CopyToGlobalFrame(package);
 
-                     return notMatched<IObject>();
-                  }
-                  else
-                  {
-                     return failedMatch<IObject>(unableToConvert(baseClass.Name, "Package class"));
-                  }
-
-               case Package package:
-                  return failedMatch<IObject>(classNotFound(package.ClassName));
-               default:
-                  return failedMatch<IObject>(unableToConvert(field.Value.Image, "Package"));
+                  return nil;
+               }
+               else
+               {
+                  return unableToConvert(baseClass.Name, "Package class");
+               }
             }
-         }
-         else if (_exception.If(out var exception))
-         {
-            return failedMatch<IObject>(exception);
-         }
-         else
-         {
-            return failedMatch<IObject>(fieldNotFound(fieldName));
+
+            case Package package:
+               return classNotFound(package.ClassName);
+            default:
+               return unableToConvert(field.Value.Image, "Package");
          }
       }
-
-      public override string ToString() => $"open.package({packageName})";
+      else if (_field.Exception is (true, var exception))
+      {
+         return exception;
+      }
+      else
+      {
+         return fieldNotFound(fieldName);
+      }
    }
+
+   public override string ToString() => $"open.package({packageName})";
 }

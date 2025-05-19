@@ -1,15 +1,14 @@
 ﻿using Kagami.Library.Objects;
 using Core.Monads;
 
-namespace Kagami.Library.Operations
-{
-   public class NewTuple : InternalListOperation
-   {
-      public override IMatched<IObject> Execute(Container list)
-      {
-         return new Tuple(list.List.ToArray()).Matched<IObject>();
-      }
+namespace Kagami.Library.Operations;
 
-      public override string ToString() => "new.tuple";
+public class NewTuple : InternalListOperation
+{
+   public override Optional<IObject> Execute(Container list)
+   {
+      return new Tuple(list.List.ToArray());
    }
+
+   public override string ToString() => "new.tuple";
 }

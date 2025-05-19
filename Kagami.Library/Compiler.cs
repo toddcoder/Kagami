@@ -36,13 +36,14 @@ public class Compiler
 
       while (state.More)
       {
-         if (statementsParser.Scan(state).If(out _, out var _exception))
+         var _scan = statementsParser.Scan(state);
+         if (_scan)
          {
          }
-         else if (_exception.If(out var innerException))
+         else if (_scan.Exception is (true, var exception))
          {
             ExceptionIndex = state.ExceptionIndex;
-            return innerException;
+            return exception;
          }
          else
          {

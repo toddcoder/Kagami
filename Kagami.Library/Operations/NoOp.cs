@@ -3,12 +3,11 @@ using Kagami.Library.Runtime;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Operations
-{
-   public class NoOp : Operation
-   {
-      public override IMatched<IObject> Execute(Machine machine) => notMatched<IObject>();
+namespace Kagami.Library.Operations;
 
-      public override string ToString() => "no.op";
-   }
+public class NoOp : Operation
+{
+   public override Optional<IObject> Execute(Machine machine) => nil;
+
+   public override string ToString() => "no.op";
 }

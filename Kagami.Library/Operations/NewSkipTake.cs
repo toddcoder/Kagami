@@ -3,12 +3,11 @@ using Kagami.Library.Runtime;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Operations
-{
-	public class NewSkipTake : OneOperandOperation
-   {
-      public override IMatched<IObject> Execute(Machine machine, IObject value) => notMatched<IObject>();//new SkipTake(value).Matched<IObject>();
+namespace Kagami.Library.Operations;
 
-		public override string ToString() => "new.skip.take";
-	}
+public class NewSkipTake : OneOperandOperation
+{
+   public override Optional<IObject> Execute(Machine machine, IObject value) => nil; //new SkipTake(value).Matched<IObject>();
+
+   public override string ToString() => "new.skip.take";
 }

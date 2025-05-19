@@ -29,12 +29,14 @@ public class Pipeline : TwoOperandOperation
          case Message message:
             return classOf(x).SendMessage(x, message).Just();
          case Selector selector:
-            if (Machine.Current.Find(selector).If(out var field, out var anyException))
+         {
+            var _field = Machine.Current.Find(selector);
+            if (_field is (true, var field))
             {
                var _ = false;
                return Invoke.InvokeObject(machine, field.Value, new Arguments(x), ref _).Just();
             }
-            else if (anyException.If(out var exception))
+            else if (_field.Exception is (true, var exception))
             {
                return exception;
             }
@@ -42,6 +44,7 @@ public class Pipeline : TwoOperandOperation
             {
                return fieldNotFound(selector);
             }
+         }
 
          default:
             return incompatibleClasses(y, "Lambda");
