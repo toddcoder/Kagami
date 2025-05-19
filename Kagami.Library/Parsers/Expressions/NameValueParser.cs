@@ -1,29 +1,29 @@
 ﻿using Core.Monads;
 using Kagami.Library.Nodes.Symbols;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
-namespace Kagami.Library.Parsers.Expressions
+namespace Kagami.Library.Parsers.Expressions;
+
+public class NameValueParser : EndingInExpressionParser
 {
-   public class NameValueParser : EndingInExpressionParser
+   protected string name;
+
+   public NameValueParser(ExpressionBuilder builder) : base(builder, ExpressionFlags.OmitColon | ExpressionFlags.OmitComma) { }
+
+   public override string Pattern => $"^ /(|s|) /({REGEX_FIELD}) /':'";
+
+   public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {
-      protected string name;
+      name = tokens[2].Text;
+      state.Colorize(tokens, Color.Whitespace, Color.Label, Color.Operator);
 
-      public NameValueParser(ExpressionBuilder builder) : base(builder, ExpressionFlags.OmitColon | ExpressionFlags.OmitComma) { }
+      return unit;
+   }
 
-      public override string Pattern => $"^ /(|s|) /({REGEX_FIELD}) /':'";
-
-      public override IMatched<Unit> Prefix(ParseState state, Token[] tokens)
-      {
-         name = tokens[2].Text;
-         state.Colorize(tokens, Color.Whitespace, Color.Label, Color.Operator);
-
-         return Unit.Matched();
-      }
-
-      public override IMatched<Unit> Suffix(ParseState state, Expression expression)
-      {
-         builder.Add(new NameValueSymbol(name, expression));
-         return Unit.Matched();
-      }
+   public override Optional<Unit> Suffix(ParseState state, Expression expression)
+   {
+      builder.Add(new NameValueSymbol(name, expression));
+      return unit;
    }
 }

@@ -1,36 +1,35 @@
 ﻿using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
-namespace Kagami.Library.Parsers.Expressions
+namespace Kagami.Library.Parsers.Expressions;
+
+public class InlineIfParser : SymbolParser
 {
-   public class InlineIfParser : SymbolParser
+   public InlineIfParser(ExpressionBuilder builder) : base(builder) { }
+
+   public override string Pattern => "^ /(|s+|) /'?'";
+
+   public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      public InlineIfParser(ExpressionBuilder builder) : base(builder) { }
+      state.Colorize(tokens, Color.Whitespace, Color.Operator);
 
-      public override string Pattern => "^ /(|s+|) /'?'";
+      var _result =
+         from ifTrueValue in getExpression(state, builder.Flags | ExpressionFlags.OmitColon)
+         from scanned in state.Scan("^ /(|s|) /':'", Color.Whitespace, Color.Operator)
+         from ifFalseValue in getExpression(state, builder.Flags)
+         select (ifTrueValue, ifFalseValue);
 
-      public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+      if (_result is (true, var (ifTrue, ifFalse)))
       {
-         state.Colorize(tokens, Color.Whitespace, Color.Operator);
+         builder.Add(new InlineIfSymbol(ifTrue, ifFalse));
 
-         var result =
-            from ifTrue in getExpression(state, builder.Flags | ExpressionFlags.OmitColon)
-            from scanned in state.Scan("^ /(|s|) /':'", Color.Whitespace, Color.Operator)
-            from ifFalse in getExpression(state, builder.Flags)
-            select (ifTrue, ifFalse);
-
-         if (result.ValueOrCast<Unit>(out var tuple, out var asUnit))
-         {
-            var (ifTrue, ifFalse) = tuple;
-            builder.Add(new InlineIfSymbol(ifTrue, ifFalse));
-
-            return Unit.Matched();
-         }
-         else
-         {
-            return asUnit;
-         }
+         return unit;
+      }
+      else
+      {
+         return _result.Exception;
       }
    }
 }

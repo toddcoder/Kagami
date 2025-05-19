@@ -1,24 +1,24 @@
 ﻿using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
-namespace Kagami.Library.Parsers.Expressions
+namespace Kagami.Library.Parsers.Expressions;
+
+public class IndexOptionalParser : SymbolParser
 {
-   public class IndexOptionalParser : SymbolParser
+   public IndexOptionalParser(ExpressionBuilder builder) : base(builder) { }
+
+   public override string Pattern => "^ /'[?'";
+
+   public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      public IndexOptionalParser(ExpressionBuilder builder) : base(builder) { }
+      state.Colorize(tokens, Color.Structure);
 
-      public override string Pattern => "^ /'[?'";
-
-      public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+      return getArguments(state, builder.Flags).Map(e =>
       {
-         state.Colorize(tokens, Color.Structure);
-
-         return getArguments(state, builder.Flags).Map(e =>
-         {
-            builder.Add(new SendMessageSymbol("[?]", e));
-            return Unit.Value;
-         });
-      }
+         builder.Add(new SendMessageSymbol("[?]", e));
+         return unit;
+      });
    }
 }

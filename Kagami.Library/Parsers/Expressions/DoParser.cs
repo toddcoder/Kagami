@@ -3,131 +3,134 @@ using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
-using Core.RegularExpressions;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Parsers.Expressions
+namespace Kagami.Library.Parsers.Expressions;
+
+public class DoParser : SymbolParser
 {
-   public class DoParser : SymbolParser
+   protected class BoundItemParser : EndingInExpressionParser
    {
-      protected class BoundItemParser : EndingInExpressionParser
+      protected string fieldName;
+
+      public BoundItemParser(ExpressionBuilder builder) : base(builder) => fieldName = "";
+
+      public override string Pattern => $"^ /({REGEX_FIELD}) /(|s|) /'<-'";
+
+      public (string, Expression) NameExpression { get; set; }
+
+      public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
       {
-         protected string fieldName;
+         fieldName = tokens[1].Text;
+         state.Colorize(tokens, Color.Identifier, Color.Whitespace, Color.Structure);
 
-         public BoundItemParser(ExpressionBuilder builder) : base(builder) => fieldName = "";
-
-         public override string Pattern => $"^ /({REGEX_FIELD}) /(|s|) /'<-'";
-
-         public (string, Expression) NameExpression { get; set; }
-
-         public override IMatched<Unit> Prefix(ParseState state, Token[] tokens)
-         {
-            fieldName = tokens[1].Text;
-            state.Colorize(tokens, Color.Identifier, Color.Whitespace, Color.Structure);
-
-            return Unit.Matched();
-         }
-
-         public override IMatched<Unit> Suffix(ParseState state, Expression expression)
-         {
-            NameExpression = (fieldName, expression);
-            return Unit.Matched();
-         }
+         return unit;
       }
 
-      public DoParser(ExpressionBuilder builder) : base(builder)
+      public override Optional<Unit> Suffix(ParseState state, Expression expression)
       {
+         NameExpression = (fieldName, expression);
+         return unit;
       }
+   }
 
-      public override string Pattern => $"^ /(|s|) /'do' {REGEX_ANTICIPATE_END}";
+   public DoParser(ExpressionBuilder builder) : base(builder)
+   {
+   }
 
-      public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+   public override string Pattern => $"^ /(|s|) /'do' {REGEX_ANTICIPATE_END}";
+
+   public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+   {
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword);
+      var innerBuilder = new ExpressionBuilder(builder.Flags);
+      var boundItemParser = new BoundItemParser(innerBuilder);
+      var stack = new Stack<(string, Expression)>();
+
+      var _advanced = state.Advance();
+      if (_advanced)
       {
-         state.Colorize(tokens, Color.Whitespace, Color.Keyword);
-         var innerBuilder = new ExpressionBuilder(builder.Flags);
-         var boundItemParser = new BoundItemParser(innerBuilder);
-         var stack = new Stack<(string, Expression)>();
-
-         if (state.Advance().ValueOrOriginal(out _, out var original))
+         while (state.More)
          {
-            while (state.More)
+            //friendlyString
+            var _nameExpression =
+               from tabs in state.Scan($"^ /({state.Indentation})", Color.Whitespace)
+               from unit in boundItemParser.Scan(state)
+               select boundItemParser.NameExpression;
+            if (_nameExpression is (true, var nameExpression))
             {
-               var result =
-                  from tabs in state.Scan($"^ /({state.Indentation.FriendlyString()})", Color.Whitespace)
-                  from unit in boundItemParser.Scan(state)
-                  select boundItemParser.NameExpression;
-               if (result.If(out var nameExpression, out var anyException))
-               {
-                  stack.Push(nameExpression);
-                  state.SkipEndOfLine();
-               }
-               else if (anyException.If(out var exception))
-               {
-                  return failedMatch<Unit>(exception);
-               }
-               else
-               {
-                  break;
-               }
+               stack.Push(nameExpression);
+               state.SkipEndOfLine();
             }
-
-            var lambdaResult = getExpression(state, builder.Flags);
-
-            state.Regress();
-
-            if (lambdaResult.If(out var lambdaExpression, out var mbLambdaException))
+            else if (_nameExpression.Exception is (true, var exception))
             {
-               var (parameterName, targetExpression) = stack.Pop();
-               if (getSymbol(targetExpression, parameterName, lambdaExpression, stack).If(out var symbol, out var exception))
-               {
-                  builder.Add(symbol);
-                  return Unit.Matched();
-               }
-               else
-               {
-                  return failedMatch<Unit>(exception);
-               }
-            }
-            else if (mbLambdaException.If(out var exception))
-            {
-               return failedMatch<Unit>(exception);
+               return exception;
             }
             else
             {
-               return "Missing 'gather' expression".FailedMatch<Unit>();
+               break;
             }
          }
-         else
-         {
-            return original;
-         }
-      }
 
-      protected static IResult<Symbol> getSymbol(Expression targetExpression, string parameterName, Expression lambdaExpression,
-         Stack<(string, Expression)> stack)
-      {
-         var block = new Block(lambdaExpression);
-         var lambda = new LambdaSymbol(new Parameters(parameterName), block);
-         var builder = new ExpressionBuilder(ExpressionFlags.Standard);
-         builder.Add(targetExpression);
-         builder.Add(new SendMessageSymbol("bind(_<Lambda>)", lambda.Some()));
-         if (builder.ToExpression().If(out var expression, out var exception))
+         var _lambdaExpression = getExpression(state, builder.Flags);
+
+         state.Regress();
+
+         if (_lambdaExpression is (true, var lambdaExpression))
          {
-            if (stack.Count == 0)
+            var (parameterName, targetExpression) = stack.Pop();
+            var _symbol = getSymbol(targetExpression, parameterName, lambdaExpression, stack);
+            if (_symbol is (true, var symbol))
             {
-               return new SubexpressionSymbol(expression).Success<Symbol>();
+               builder.Add(symbol);
+               return unit;
             }
             else
             {
-               var (nextName, nextExpression) = stack.Pop();
-               return getSymbol(nextExpression, nextName, expression, stack);
+               return _symbol.Exception;
             }
+         }
+         else if (_lambdaExpression.Exception is (true, var exception))
+         {
+            return exception;
          }
          else
          {
-            return failure<Symbol>(exception);
+            return fail("Missing 'gather' expression");
          }
+      }
+      else
+      {
+         return _advanced.Exception;
+      }
+   }
+
+   protected static Result<Symbol> getSymbol(Expression targetExpression, string parameterName, Expression lambdaExpression,
+      Stack<(string, Expression)> stack)
+   {
+      var block = new Block(lambdaExpression);
+      var lambda = new LambdaSymbol(new Parameters(parameterName), block);
+      var builder = new ExpressionBuilder(ExpressionFlags.Standard);
+      builder.Add(targetExpression);
+      builder.Add(new SendMessageSymbol("bind(_<Lambda>)", lambda));
+
+      var _expression = builder.ToExpression();
+      if (_expression is (true, var expression))
+      {
+         if (stack.Count == 0)
+         {
+            return new SubexpressionSymbol(expression);
+         }
+         else
+         {
+            var (nextName, nextExpression) = stack.Pop();
+            return getSymbol(nextExpression, nextName, expression, stack);
+         }
+      }
+      else
+      {
+         return _expression.Exception;
       }
    }
 }

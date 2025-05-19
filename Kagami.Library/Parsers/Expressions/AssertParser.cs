@@ -3,61 +3,56 @@ using Core.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Parsers.Expressions
+namespace Kagami.Library.Parsers.Expressions;
+
+public class AssertParser : SymbolParser
 {
-	public class AssertParser : SymbolParser
-	{
-		public AssertParser(ExpressionBuilder builder) : base(builder) { }
+   public AssertParser(ExpressionBuilder builder) : base(builder) { }
 
-		public override string Pattern => "^ /(|s|) /('assert' | 'maybe') /b";
+   public override string Pattern => "^ /(|s|) /('assert' | 'maybe') /b";
 
-		public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
-		{
-			var isSuccess = tokens[2].Text == "assert";
-			state.Colorize(tokens, Color.Whitespace, Color.Keyword);
+   public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+   {
+      var isSuccess = tokens[2].Text == "assert";
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword);
 
-			var result =
-				from condition in getExpression(state, builder.Flags | ExpressionFlags.OmitColon)
-				from colon1 in state.Scan("^ /(|s|) /':'", Color.Whitespace, Color.Structure)
-				from value in getExpression(state, builder.Flags | ExpressionFlags.OmitColon)
-				select (condition, value);
+      var _result =
+         from conditionValue in getExpression(state, builder.Flags | ExpressionFlags.OmitColon)
+         from colon1 in state.Scan("^ /(|s|) /':'", Color.Whitespace, Color.Structure)
+         from valueValue in getExpression(state, builder.Flags | ExpressionFlags.OmitColon)
+         select (conditionValue, valueValue);
 
-			if (isSuccess)
-			{
-				if (result.ValueOrOriginal(out var tuple, out var original))
-				{
-					var (condition, value) = tuple;
-
-					var result2 =
-						from colon2 in state.Scan("^ /(|s|) /':'", Color.Whitespace, Color.Structure)
-						from error in getExpression(state, builder.Flags | ExpressionFlags.OmitColon)
-						select error;
-					if (result2.ValueOrOriginal(out var expression, out var original2))
-					{
-						builder.Add(new AssertSymbol(condition, value, expression.Some()));
-						return Unit.Matched();
-					}
-					else
-					{
-						return original2.Unmatched<Unit>();
-					}
-				}
-				else
-				{
-					return original.Unmatched<Unit>();
-				}
-			}
-			else if (result.ValueOrOriginal(out var tuple, out var original))
-			{
-				var (condition, value) = tuple;
-				builder.Add(new AssertSymbol(condition, value, none<Expression>()));
-
-				return Unit.Matched();
-			}
-			else
-			{
-				return original.Unmatched<Unit>();
-			}
-		}
-	}
+      if (isSuccess)
+      {
+         if (_result is (true, var (condition, value)))
+         {
+            var _expression =
+               from colon2 in state.Scan("^ /(|s|) /':'", Color.Whitespace, Color.Structure)
+               from error in getExpression(state, builder.Flags | ExpressionFlags.OmitColon)
+               select error;
+            if (_expression is (true, var expression))
+            {
+               builder.Add(new AssertSymbol(condition, value, expression));
+               return unit;
+            }
+            else
+            {
+               return _expression.Exception;
+            }
+         }
+         else
+         {
+            return _result.Exception;
+         }
+      }
+      else if (_result is (true, var (condition, value)))
+      {
+         builder.Add(new AssertSymbol(condition, value, nil));
+         return unit;
+      }
+      else
+      {
+         return _result.Exception;
+      }
+   }
 }

@@ -4,63 +4,62 @@ using Kagami.Library.Nodes.Symbols;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
-namespace Kagami.Library.Parsers.Expressions
+namespace Kagami.Library.Parsers.Expressions;
+
+public class MatchExpressionParser : SymbolParser
 {
-   public class MatchExpressionParser : SymbolParser
+   protected static Optional<(Expression, Expression)> getMatchItem(ParseState state)
    {
-      protected static IMatched<(Expression, Expression)> getMatchItem(ParseState state)
+      if (state.Scan("^ /(/s*) /')'", Color.Whitespace, Color.Structure))
       {
-         if (state.Scan("^ /(/s*) /')'", Color.Whitespace, Color.Structure).IsMatched)
+         return nil;
+      }
+      else
+      {
+         var _matchItem =
+            from key in getExpression(state, ExpressionFlags.Comparisand | ExpressionFlags.OmitNameValue)
+            from _ in state.Scan("^ /(/s*) /'=>' /(/s*)", Color.Whitespace, Color.Operator, Color.Whitespace)
+            from expression in getExpression(state, ExpressionFlags.OmitComma)
+            select (key, expression);
+         if (_matchItem)
          {
-            return notMatched<(Expression, Expression)>();
+            state.Scan("^ /(/s*) /',' /(/s*)", Color.Whitespace, Color.Structure, Color.Whitespace);
+         }
+
+         return _matchItem;
+      }
+   }
+
+   public MatchExpressionParser(ExpressionBuilder builder) : base(builder)
+   {
+   }
+
+   public override string Pattern => "^ /(|s|) /'||' /(/s*) /'(' /(/s*)";
+
+   public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+   {
+      state.Colorize(tokens, Color.Whitespace, Color.Structure, Color.Whitespace, Color.Structure, Color.Whitespace);
+
+      List<(Expression, Expression)> matchItems = [];
+
+      while (state.More)
+      {
+         var _matchItem = getMatchItem(state);
+         if (_matchItem is (true, var matchItem))
+         {
+            matchItems.Add(matchItem);
+         }
+         else if (_matchItem.Exception is (true, var exception))
+         {
+            return exception;
          }
          else
          {
-            var matchItem =
-               from key in getExpression(state, ExpressionFlags.Comparisand | ExpressionFlags.OmitNameValue)
-               from _ in state.Scan("^ /(/s*) /'=>' /(/s*)", Color.Whitespace, Color.Operator, Color.Whitespace)
-               from expression in getExpression(state, ExpressionFlags.OmitComma)
-               select (key, expression);
-            if (matchItem.IsMatched)
-            {
-               state.Scan("^ /(/s*) /',' /(/s*)", Color.Whitespace, Color.Structure, Color.Whitespace);
-            }
-
-            return matchItem;
+            break;
          }
       }
 
-      public MatchExpressionParser(ExpressionBuilder builder) : base(builder)
-      {
-      }
-
-      public override string Pattern => "^ /(|s|) /'||' /(/s*) /'(' /(/s*)";
-
-      public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
-      {
-         state.Colorize(tokens, Color.Whitespace, Color.Structure, Color.Whitespace, Color.Structure, Color.Whitespace);
-
-         var matchItems = new List<(Expression, Expression)>();
-
-         while (state.More)
-         {
-            if (getMatchItem(state).If(out var matchItem, out var anyException))
-            {
-               matchItems.Add(matchItem);
-            }
-            else if (anyException.If(out var exception))
-            {
-               return failedMatch<Unit>(exception);
-            }
-            else
-            {
-               break;
-            }
-         }
-
-         builder.Add(new MatchExpressionSymbol(matchItems.ToArray()));
-
-         return Unit.Matched();
-      }
+      builder.Add(new MatchExpressionSymbol(matchItems.ToArray()));
+      return unit;
    }
 }

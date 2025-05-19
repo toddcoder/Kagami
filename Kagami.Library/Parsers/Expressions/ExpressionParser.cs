@@ -7,261 +7,276 @@ using Kagami.Library.Objects;
 using System.Linq;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Parsers.Expressions
+namespace Kagami.Library.Parsers.Expressions;
+
+public class ExpressionParser : Parser
 {
-   public class ExpressionParser : Parser
+   protected Bits32<ExpressionFlags> flags;
+   protected ExpressionBuilder builder;
+   protected PrefixParser prefixParser;
+   protected ValuesParser valuesParser;
+   protected InfixParser infixParser;
+   protected PostfixParser postfixParser;
+   protected ConjunctionParsers conjunctionParsers;
+   protected int whateverCount;
+
+   public ExpressionParser(Bits32<ExpressionFlags> flags) : base(false) => this.flags = flags;
+
+   public Expression Expression { get; set; }
+
+   public override Optional<Unit> Parse(ParseState state, Token[] tokens)
    {
-      protected Bits32<ExpressionFlags> flags;
-      protected ExpressionBuilder builder;
-      protected PrefixParser prefixParser;
-      protected ValuesParser valuesParser;
-      protected InfixParser infixParser;
-      protected PostfixParser postfixParser;
-      protected ConjunctionParsers conjunctionParsers;
-      protected int whateverCount;
-
-      public ExpressionParser(Bits32<ExpressionFlags> flags) : base(false) => this.flags = flags;
-
-      public Expression Expression { get; set; }
-
-      public override IMatched<Unit> Parse(ParseState state, Token[] tokens)
+      if (!state.More)
       {
-         if (!state.More)
+         return nil;
+      }
+
+      builder = new ExpressionBuilder(flags);
+      prefixParser = new PrefixParser(builder);
+      valuesParser = new ValuesParser(builder);
+      infixParser = new InfixParser(builder);
+      postfixParser = new PostfixParser(builder);
+      conjunctionParsers = new ConjunctionParsers(builder);
+      whateverCount = 0;
+
+      state.BeginPrefixCode();
+      state.BeginImplicitState();
+
+      try
+      {
+         var _term0 = getTerm(state);
+         if (_term0)
          {
-            return notMatched<Unit>();
-         }
-
-         builder = new ExpressionBuilder(flags);
-         prefixParser = new PrefixParser(builder);
-         valuesParser = new ValuesParser(builder);
-         infixParser = new InfixParser(builder);
-         postfixParser = new PostfixParser(builder);
-         conjunctionParsers = new ConjunctionParsers(builder);
-         whateverCount = 0;
-
-         state.BeginPrefixCode();
-         state.BeginImplicitState();
-
-         try
-         {
-            if (getTerm(state).If(out _, out var anyException))
+            while (state.More)
             {
-               while (state.More)
+               if (!flags[ExpressionFlags.OmitConjunction])
                {
-                  if (!flags[ExpressionFlags.OmitConjunction])
+                  var _conjunction = conjunctionParsers.Scan(state);
+                  if (_conjunction)
                   {
-                     var conjunction = conjunctionParsers.Scan(state);
-                     if (conjunction.IsMatched)
-                     {
-                        break;
-                     }
-                     else if (conjunction.IsFailedMatch)
-                     {
-                        return conjunction;
-                     }
+                     break;
                   }
+                  else if (_conjunction.Exception)
+                  {
+                     return _conjunction.Exception;
+                  }
+               }
 
-                  if (infixParser.Scan(state).If(out _, out anyException))
+               var _infix = infixParser.Scan(state);
+               if (_infix)
+               {
+                  var _term1 = getTerm(state);
+                  if (_term1)
                   {
-                     if (getTerm(state).If(out _, out anyException))
-                     {
-                     }
-                     else if (anyException.If(out var exception))
-                     {
-                        return failedMatch<Unit>(exception);
-                     }
-                     else
-                     {
-                        break;
-                     }
                   }
-                  else if (anyException.If(out var exception))
+                  else if (_term1.Exception is (true, var exception))
                   {
-                     return failedMatch<Unit>(exception);
+                     return exception;
                   }
                   else
                   {
                      break;
                   }
                }
-
-               if (builder.ToExpression().If(out var expression, out var expException))
+               else if (_infix.Exception is (true, var exception))
                {
-                  if (state.ImplicitState.If(out var implicitState) && implicitState.Two.IsNone)
-                  {
-                     if (getMessageWithLambda(implicitState.Symbol, implicitState.Message, implicitState.ParameterCount, expression)
-                        .If(out var newExpression, out expException))
-                     {
-                        Expression = newExpression;
-                        state.ImplicitState = none<ImplicitState>();
-                     }
-                     else
-                     {
-                        return failedMatch<Unit>(expException);
-                     }
-                  }
-                  else if (state.ImplicitState.If(out implicitState) && implicitState.Two.If(out var symbol))
-                  {
-                     if (getDualMessageWithLambda("__$0", "__$1", implicitState.Symbol, symbol, implicitState.Message, expression)
-                        .If(out var newExpression, out _))
-                     {
-                        Expression = newExpression;
-                        state.ImplicitState = none<ImplicitState>();
-                     }
-                  }
-                  else if (whateverCount > 0)
-                  {
-                     var lambda = new LambdaSymbol(whateverCount,
-                        new Block(new ExpressionStatement(expression, true)) { Index = expression.Index });
-                     Expression = new Expression(lambda);
-                  }
-                  else
-                  {
-                     Expression = expression;
-                  }
-
-                  return Unit.Matched();
+                  return exception;
                }
                else
                {
-                  return failedMatch<Unit>(expException);
+                  break;
                }
             }
-            else if (anyException.If(out var exception))
+
+            var _expression = builder.ToExpression();
+            if (_expression is (true, var expression))
             {
-               return failedMatch<Unit>(exception);
-            }
-            else
-            {
-               return "Invalid expression syntax".FailedMatch<Unit>();
-            }
-         }
-         finally
-         {
-            state.EndPrefixCode();
-            state.EndImplicitState();
-         }
-      }
-
-      protected bool keep(string fieldName)
-      {
-         var exp = builder.Ordered.ToArray();
-         if (exp.Length != 1)
-         {
-            return true;
-         }
-         else
-         {
-            return exp[0] is not FieldSymbol fieldSymbol || fieldSymbol.FieldName != fieldName;
-         }
-      }
-
-      protected static IResult<Expression> getMessageWithLambda(Symbol symbol, Selector selector, int parameterCount, Expression expression)
-      {
-         var parameters = new Parameters(Enumerable.Range(0, parameterCount).Select(i => $"__${i}").ToArray());
-         var lambdaSymbol = new LambdaSymbol(parameters, new Block(new Return(expression, none<TypeConstraint>())));
-         var sendMessage = new SendMessageSymbol(selector, lambdaSymbol.Some());
-
-         var builder = new ExpressionBuilder(ExpressionFlags.Standard);
-         builder.Add(symbol);
-         builder.Add(sendMessage);
-
-         return builder.ToExpression();
-      }
-
-      protected static IResult<Expression> getMessage2WithLambda(string leftName, string rightName, Symbol symbol, Selector selector,
-         Expression expression)
-      {
-         var leftParameter = Parameter.New(false, leftName);
-         var rightParameter = Parameter.New(false, rightName);
-         var parameters = new Parameters(leftParameter, rightParameter);
-         var lambdaSymbol = new LambdaSymbol(parameters, new Block(new Return(expression, none<TypeConstraint>())));
-         var sendMessage = new SendMessageSymbol(selector, lambdaSymbol.Some());
-
-         var builder = new ExpressionBuilder(ExpressionFlags.Standard);
-         builder.Add(symbol);
-         builder.Add(sendMessage);
-
-         return builder.ToExpression();
-      }
-
-      protected static IResult<Expression> getDualMessageWithLambda(string leftName, string rightName, Symbol leftSymbol, Symbol rightSymbol,
-         Selector selector, Expression expression)
-      {
-         var leftParameter = Parameter.New(false, leftName);
-         var rightParameter = Parameter.New(false, rightName);
-         var parameters = new Parameters(leftParameter, rightParameter);
-         var lambdaSymbol = new LambdaSymbol(parameters, new Block(new Return(expression, none<TypeConstraint>())));
-         var sendMessage = new SendMessageSymbol(selector, lambdaSymbol.Some(), new Expression(rightSymbol));
-
-         var builder = new ExpressionBuilder(ExpressionFlags.Standard);
-         builder.Add(leftSymbol);
-         builder.Add(sendMessage);
-
-         return builder.ToExpression();
-      }
-
-      protected static IMatched<Unit> getOutfixOperator(ParseState state, Parser parser)
-      {
-         var matched = parser.Scan(state);
-         if (matched.IsFailedMatch)
-         {
-            return matched;
-         }
-         else
-         {
-            while (matched.IsMatched)
-            {
-               matched = parser.Scan(state);
-               if (matched.IsFailedMatch)
+               var _implicitState = state.ImplicitState;
+               if (_implicitState is (true, var implicitState) && !implicitState.Two)
                {
-                  return matched;
+                  var _messageWithLambda = getMessageWithLambda(implicitState.Symbol, implicitState.Message, implicitState.ParameterCount, expression);
+                  if (_messageWithLambda is (true, var messageWithLambda))
+                  {
+                     Expression = messageWithLambda;
+                     state.ImplicitState = nil;
+                  }
+                  else
+                  {
+                     return _messageWithLambda.Exception;
+                  }
                }
-            }
+               else if (state.ImplicitState is (true, var implicitState2) && implicitState2.Two is (true, var symbol))
+               {
+                  if (getDualMessageWithLambda("__$0", "__$1", implicitState2.Symbol, symbol, implicitState2.Message, expression) is (true, var newExpression))
+                  {
+                     Expression = newExpression;
+                     state.ImplicitState = nil;
+                  }
+               }
+               else if (whateverCount > 0)
+               {
+                  var lambda = new LambdaSymbol(whateverCount,
+                     new Block(new ExpressionStatement(expression, true)) { Index = expression.Index });
+                  Expression = new Expression(lambda);
+               }
+               else
+               {
+                  Expression = expression;
+               }
 
-            if (matched.IsFailedMatch)
-            {
-               return matched;
+               return unit;
             }
             else
             {
-               return notMatched<Unit>();
+               return _expression.Exception;
             }
          }
-      }
-
-      protected IMatched<Unit> getValue(ParseState state)
-      {
-         if (valuesParser.Scan(state).ValueOrOriginal(out _, out var original))
+         else if (_term0.Exception is (true, var exception))
          {
-            if (builder.LastSymbol.If(out var lastSymbol) && lastSymbol is WhateverSymbol whatever)
+            return exception;
+         }
+         else
+         {
+            return fail("Invalid expression syntax");
+         }
+      }
+      finally
+      {
+         state.EndPrefixCode();
+         state.EndImplicitState();
+      }
+   }
+
+   protected bool keep(string fieldName)
+   {
+      var exp = builder.Ordered.ToArray();
+      if (exp.Length != 1)
+      {
+         return true;
+      }
+      else
+      {
+         return exp[0] is not FieldSymbol fieldSymbol || fieldSymbol.FieldName != fieldName;
+      }
+   }
+
+   protected static Result<Expression> getMessageWithLambda(Symbol symbol, Selector selector, int parameterCount, Expression expression)
+   {
+      var parameters = new Parameters(Enumerable.Range(0, parameterCount).Select(i => $"__${i}").ToArray());
+      var lambdaSymbol = new LambdaSymbol(parameters, new Block(new Return(expression, nil)));
+      var sendMessage = new SendMessageSymbol(selector, lambdaSymbol.Some());
+
+      var builder = new ExpressionBuilder(ExpressionFlags.Standard);
+      builder.Add(symbol);
+      builder.Add(sendMessage);
+
+      return builder.ToExpression();
+   }
+
+   protected static Result<Expression> getMessage2WithLambda(string leftName, string rightName, Symbol symbol, Selector selector,
+      Expression expression)
+   {
+      var leftParameter = Parameter.New(false, leftName);
+      var rightParameter = Parameter.New(false, rightName);
+      var parameters = new Parameters(leftParameter, rightParameter);
+      var lambdaSymbol = new LambdaSymbol(parameters, new Block(new Return(expression, nil)));
+      var sendMessage = new SendMessageSymbol(selector, lambdaSymbol.Some());
+
+      var builder = new ExpressionBuilder(ExpressionFlags.Standard);
+      builder.Add(symbol);
+      builder.Add(sendMessage);
+
+      return builder.ToExpression();
+   }
+
+   protected static Result<Expression> getDualMessageWithLambda(string leftName, string rightName, Symbol leftSymbol, Symbol rightSymbol,
+      Selector selector, Expression expression)
+   {
+      var leftParameter = Parameter.New(false, leftName);
+      var rightParameter = Parameter.New(false, rightName);
+      var parameters = new Parameters(leftParameter, rightParameter);
+      var lambdaSymbol = new LambdaSymbol(parameters, new Block(new Return(expression, nil)));
+      var sendMessage = new SendMessageSymbol(selector, lambdaSymbol.Some(), new Expression(rightSymbol));
+
+      var builder = new ExpressionBuilder(ExpressionFlags.Standard);
+      builder.Add(leftSymbol);
+      builder.Add(sendMessage);
+
+      return builder.ToExpression();
+   }
+
+   protected static Optional<Unit> getOutfixOperator(ParseState state, Parser parser)
+   {
+      var _matched = parser.Scan(state);
+      if (_matched.Exception)
+      {
+         return _matched.Exception;
+      }
+      else
+      {
+         while (_matched)
+         {
+            _matched = parser.Scan(state);
+            if (_matched.Exception)
             {
-               whatever.Count = whateverCount++;
+               return _matched.Exception;
             }
-
-            return Unit.Matched();
          }
-         else if (original.IsFailedMatch)
+
+         if (_matched.Exception)
          {
-            return valuesParser.Scan(state);
+            return _matched.Exception;
          }
          else
          {
-            return "Invalid expression syntax".FailedMatch<Unit>();
+            return nil;
          }
       }
+   }
 
-      protected IMatched<Unit> getTerm(ParseState state)
+   protected Optional<Unit> getValue(ParseState state)
+   {
+      var _scan = valuesParser.Scan(state);
+      if (_scan)
       {
-         if ((getOutfixOperator(state, prefixParser).ValueOrOriginal(out _, out var original) || original.IsNotMatched) &&
-            getValue(state).ValueOrOriginal(out _, out original) &&
-            (getOutfixOperator(state, postfixParser).ValueOrOriginal(out _, out original) || original.IsNotMatched))
+         if (builder.LastSymbol is (true, WhateverSymbol whatever))
          {
-            return Unit.Matched();
+            whatever.Count = whateverCount++;
+         }
+
+         return unit;
+      }
+      else if (_scan.Exception)
+      {
+         return valuesParser.Scan(state);
+      }
+      else
+      {
+         return fail("Invalid expression syntax");
+      }
+   }
+
+   protected Optional<Unit> getTerm(ParseState state)
+   {
+      return
+         from outfix1 in notExceptional(getOutfixOperator(state, prefixParser))
+         from value in getValue(state)
+         from outfix2 in notExceptional(getOutfixOperator(state, postfixParser))
+         select unit;
+
+      Optional<Unit> notExceptional(Optional<Unit> _original)
+      {
+         if (_original)
+         {
+            return unit;
+         }
+         else if (_original.Exception is (true, var exception))
+         {
+            return exception;
          }
          else
          {
-            return original;
+            return unit;
          }
       }
    }

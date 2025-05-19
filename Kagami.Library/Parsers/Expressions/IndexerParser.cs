@@ -1,67 +1,72 @@
-﻿using System.Linq;
-using Kagami.Library.Nodes.Symbols;
-using Core.Monads;
+﻿using Core.Monads;
 using Core.Strings;
-using static Kagami.Library.Parsers.ParserFunctions;
+using Kagami.Library.Nodes.Symbols;
+using System.Linq;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.Parsers.ParserFunctions;
 
-namespace Kagami.Library.Parsers.Expressions
+namespace Kagami.Library.Parsers.Expressions;
+
+public class IndexerParser : SymbolParser
 {
-   public class IndexerParser : SymbolParser
+   public IndexerParser(ExpressionBuilder builder) : base(builder)
    {
-      public IndexerParser(ExpressionBuilder builder) : base(builder) { }
+   }
 
-      public override string Pattern => "^ /'[' /'+'?";
+   public override string Pattern => "^ /'[' /'+'?";
 
-      public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+   public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+   {
+      var insert = tokens[2].Text == "+";
+      state.Colorize(tokens, Color.OpenParenthesis, Color.Structure);
+
+      var _expressions = getArguments(state, builder.Flags);
+      if (_expressions is (true, var expressions))
       {
-         var insert = tokens[2].Text == "+";
-         state.Colorize(tokens, Color.OpenParenthesis, Color.Structure);
-
-         return getArguments(state, builder.Flags).Map(e =>
+         var _scan = state.Scan($"^ /(|s|) /({REGEX_ASSIGN_OPS})? /'=' -(> '=')", Color.Whitespace, Color.Operator, Color.Structure);
+         if (_scan is (true, var opSource))
          {
-            if (state.Scan($"^ /(|s|) /({REGEX_ASSIGN_OPS})? /'=' -(> '=')", Color.Whitespace, Color.Operator, Color.Structure)
-               .If(out var opSource, out var anyException))
+            var _expression = getExpression(state, builder.Flags);
+            if (_expression is (true, var expression))
             {
-               if (getExpression(state, builder.Flags).ValueOrCast<Unit>(out var expression, out var asUnit))
+               opSource = opSource.DropWhile(" ").Keep(1);
+               var operation = matchOperator(opSource) | nil;
+               if (!operation && insert)
                {
-                  opSource = opSource.DropWhile(" ").Keep(1);
-                  var operation = matchOperator(opSource)
-                     .FlatMap(o => o.Some(), none<Operations.Operation>, _ => none<Operations.Operation>());
-                  if (operation.IsNone && insert)
-                  {
-                     var list = e.ToList();
-                     list.Add(expression);
-                     builder.Add(new SendMessageSymbol("insert(at:_<Int>,value:_)", none<LambdaSymbol>(),
-                        none<Operations.Operation>(), list.ToArray()));
-                  }
-                  else
-                  {
-                     builder.Add(new IndexSetterSymbol(e, expression, operation));
-                  }
-
-                  return Unit.Matched();
+                  var list = expressions.ToList();
+                  list.Add(expression);
+                  builder.Add(new SendMessageSymbol("insert(at:_<Int>,value:_)", nil, nil, [.. list]));
                }
                else
                {
-                  return asUnit;
+                  builder.Add(new IndexSetterSymbol(expressions, expression, operation.Maybe()));
                }
-            }
-            else if (anyException.If(out var exception))
-            {
-               return failedMatch<Unit>(exception);
-            }
-            else if (e.Length > 0)
-            {
-               builder.Add(new IndexerSymbol(e));
+
+               return unit;
             }
             else
             {
-               return notMatched<Unit>();
+               return _expression.Exception;
             }
+         }
+         else if (_scan.Exception is (true, var exception))
+         {
+            return exception;
+         }
+         else if (expressions.Length > 0)
+         {
+            builder.Add(new IndexerSymbol(expressions));
+         }
+         else
+         {
+            return nil;
+         }
 
-            return Unit.Matched();
-         });
+         return unit;
+      }
+      else
+      {
+         return _expressions.Exception;
       }
    }
 }

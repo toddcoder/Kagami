@@ -2,34 +2,33 @@
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Monads;
-using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Operations
+namespace Kagami.Library.Operations;
+
+public class ToArguments : OneNumericOperation
 {
-   public class ToArguments : OneNumericOperation
+   public override Optional<IObject> Execute(Machine machine, INumeric x)
    {
-      public override IMatched<IObject> Execute(Machine machine, INumeric x)
+      var count = x.AsInt32();
+      var stack = new Stack<IObject>();
+      for (var i = 0; i < count; i++)
       {
-         var count = x.AsInt32();
-         var stack = new Stack<IObject>();
-         for (var i = 0; i < count; i++)
+         var _obj = machine.Pop();
+         if (_obj is (true, var obj))
          {
-	         if (machine.Pop().If(out var obj, out var exception))
-	         {
-		         stack.Push(obj);
-	         }
-	         else
-	         {
-		         return failedMatch<IObject>(exception);
-	         }
+            stack.Push(obj);
          }
-
-         var array = stack.ToArray();
-         var arguments = new Arguments(array);
-
-         return arguments.Matched<IObject>();
+         else
+         {
+            return _obj.Exception;
+         }
       }
 
-      public override string ToString() => "to.arguments";
+      var array = stack.ToArray();
+      var arguments = new Arguments(array);
+
+      return arguments;
    }
+
+   public override string ToString() => "to.arguments";
 }

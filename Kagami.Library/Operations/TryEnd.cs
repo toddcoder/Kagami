@@ -1,44 +1,38 @@
 ﻿using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Monads;
+using Core.Monads.Lazy;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Operations
+namespace Kagami.Library.Operations;
+
+public class TryEnd : Operation
 {
-	public class TryEnd : Operation
-	{
-		public override IMatched<IObject> Execute(Machine machine)
-		{
-			if (machine.IsEmpty)
-			{
-				var result = new Objects.Success(KUnit.Value).Matched<IObject>();
-				machine.PopFramesUntil(f => f.FrameType == FrameType.Try);
-				return result;
-			}
-			else if (machine.Pop().If(out var value, out var exception))
-			{
-				IObject result;
-				switch (value)
-				{
-               case Objects.Success success:
-	               result = success;
-						break;
-               case Objects.Failure failure:
-	               result = failure;
-						break;
-					default:
-						result = new Objects.Success(value);
-						break;
-            }
+   public override Optional<IObject> Execute(Machine machine)
+   {
+      LazyResult<IObject> _value = nil;
+      if (machine.IsEmpty)
+      {
+         Optional<IObject> _result = new Objects.Success(KUnit.Value);
+         machine.PopFramesUntil(f => f.FrameType == FrameType.Try);
+         return _result;
+      }
+      else if (_value.ValueOf(machine.Pop()) is (true, var value))
+      {
+         IObject result = value switch
+         {
+            Objects.Success success => success,
+            Objects.Failure failure => failure,
+            _ => new Objects.Success(value)
+         };
 
-				return result.Matched();
-			}
-			else
-			{
-				return failedMatch<IObject>(exception);
-			}
-		}
+         return result.Just();
+      }
+      else
+      {
+         return _value.Exception;
+      }
+   }
 
-		public override string ToString() => "try.end";
-	}
+   public override string ToString() => "try.end";
 }

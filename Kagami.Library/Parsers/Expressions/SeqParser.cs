@@ -1,37 +1,40 @@
 ﻿using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
-namespace Kagami.Library.Parsers.Expressions
+namespace Kagami.Library.Parsers.Expressions;
+
+public class SeqParser : SymbolParser
 {
-   public class SeqParser : SymbolParser
+   public SeqParser(ExpressionBuilder builder) : base(builder)
    {
-      public SeqParser(ExpressionBuilder builder) : base(builder) { }
+   }
 
-      public override string Pattern => $"^ /(|s|) /'seq' /({REGEX_EOL})";
+   public override string Pattern => $"^ /(|s|) /'seq' /({REGEX_EOL})";
 
-      public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+   public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+   {
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace);
+      state.CreateYieldFlag();
+
+      var _block = getBlock(state);
+      if (_block is (true, var block))
       {
-         state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace);
-         state.CreateYieldFlag();
-
-         if (getBlock(state).ValueOrCast<Unit>(out var block, out var asUnit))
+         var yielding = state.RemoveYieldFlag();
+         if (yielding)
          {
-            var yielding = state.RemoveYieldFlag();
-            if (yielding)
-            {
-               builder.Add(new SeqSymbol(block));
-               return Unit.Matched();
-            }
-            else
-            {
-               return "Yield required".FailedMatch<Unit>();
-            }
+            builder.Add(new SeqSymbol(block));
+            return unit;
          }
          else
          {
-            return asUnit;
+            return fail("Yield required");
          }
+      }
+      else
+      {
+         return _block.Exception;
       }
    }
 }

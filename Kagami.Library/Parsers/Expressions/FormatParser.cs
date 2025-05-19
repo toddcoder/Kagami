@@ -1,36 +1,36 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using Core.Matching;
+using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
-using Core.RegularExpressions;
 using Core.Strings;
+using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Parsers.Expressions
+namespace Kagami.Library.Parsers.Expressions;
+
+public class FormatParser : SymbolParser
 {
-   public class FormatParser : SymbolParser
+   public override string Pattern => "^ /(|s|) /('$' ['cdefgnprxsboi'] ('-'? /d+)? ('.' /d+)?)";
+
+   public FormatParser(ExpressionBuilder builder) : base(builder) { }
+
+   public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      public override string Pattern => "^ /(|s|) /('$' ['cdefgnprxsboi'] ('-'? /d+)? ('.' /d+)?)";
-
-      public FormatParser(ExpressionBuilder builder) : base(builder) { }
-
-      public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+      var input = tokens[2].Text.Drop(1);
+      if (!input.Contains("."))
       {
-         var input = tokens[2].Text.Drop(1);
-         if (!input.Contains("."))
+         if (input.IsMatch("^ ['efgnp']"))
          {
-            if (input.IsMatch("^ ['efgnp']"))
-            {
-	            input += ".6";
-            }
-            else if (input == "c")
-            {
-	            input += ".2";
-            }
+            input += ".6";
          }
-
-         state.Colorize(tokens, Color.Whitespace, Color.Format);
-
-         builder.Add(new StringSymbol(input));
-
-         return Unit.Matched();
+         else if (input == "c")
+         {
+            input += ".2";
+         }
       }
+
+      state.Colorize(tokens, Color.Whitespace, Color.Format);
+
+      builder.Add(new StringSymbol(input));
+
+      return unit;
    }
 }

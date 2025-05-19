@@ -4,49 +4,54 @@ using Core.Strings;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Parsers.Expressions
+namespace Kagami.Library.Parsers.Expressions;
+
+public class CharParser : SymbolParser
 {
-   public class CharParser : SymbolParser
+   public CharParser(ExpressionBuilder builder) : base(builder) { }
+
+   public override string Pattern => "^ /(|s|) /(\"'\" ('\\' ['xu'] ['a-f0-9']1%6 | '\\'? .) \"'\")";
+
+   public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      public CharParser(ExpressionBuilder builder) : base(builder) { }
+      state.Colorize(tokens, Color.Whitespace, Color.Char);
+      var source = tokens[2].Text.Drop(1).Drop(-1);
 
-      public override string Pattern => "^ /(|s|) /(\"'\" ('\\' ['xu'] ['a-f0-9']1%6 | '\\'? .) \"'\")";
-
-      public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+      switch (source.Length)
       {
-         state.Colorize(tokens, Color.Whitespace, Color.Char);
-         var source = tokens[2].Text.Drop(1).Drop(-1);
-
-         switch (source.Length)
+         case 1:
+            builder.Add(new CharSymbol(source[0]));
+            break;
+         case 2 when source.StartsWith("\\"):
          {
-            case 1:
-               builder.Add(new CharSymbol(source[0]));
-               break;
-            case 2 when source.StartsWith("\\"):
-               if (fromBackslash(source[1]).If(out var ch, out var exception))
-               {
-                  builder.Add(new CharSymbol(ch));
-               }
-               else
-               {
-                  return failedMatch<Unit>(exception);
-               }
+            var _ch = fromBackslash(source[1]);
+            if (_ch is (true, var ch))
+            {
+               builder.Add(new CharSymbol(ch));
+            }
+            else
+            {
+               return _ch.Exception;
+            }
 
-               break;
-            default:
-               if (fromHex(source.Drop(2)).ValueOrCast<Unit>(out ch, out var original))
-               {
-                  builder.Add(new CharSymbol(ch));
-               }
-               else
-               {
-                  return original;
-               }
-
-               break;
+            break;
          }
+         default:
+         {
+            var _ch = fromHex(source.Drop(2));
+            if (_ch is (true, var ch))
+            {
+               builder.Add(new CharSymbol(ch));
+            }
+            else
+            {
+               return _ch.Exception;
+            }
 
-         return Unit.Matched();
+            break;
+         }
       }
+
+      return unit;
    }
 }

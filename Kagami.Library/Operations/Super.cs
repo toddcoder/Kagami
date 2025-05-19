@@ -6,38 +6,37 @@ using Core.Strings;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Operations
-{
-	public class Super : Operation
-	{
-		public override Optional<IObject> Execute(Machine machine)
-      {
-         var _selfField = machine.Find("self", true);
-         if (_selfField.If(out var selfField, out var anyException))
-			{
-				var self = (UserObject)selfField.Value;
-				var selfClass = (UserClass)classOf(self);
-				var parentClassName = selfClass.ParentClassName;
-				if (parentClassName.IsEmpty())
-				{
-					return fail($"Class {selfClass.Name} has no parent class");
-				}
-				else
-				{
-					var superObject = new UserObject(parentClassName, self.Fields, self.Parameters);
-					return superObject;
-				}
-			}
-			else if (anyException.If(out var exception))
-			{
-				return failedMatch<IObject>(exception);
-			}
-			else
-			{
-				return "self not defined".FailedMatch<IObject>();
-			}
-      }
+namespace Kagami.Library.Operations;
 
-		public override string ToString() => "super";
-	}
+public class Super : Operation
+{
+   public override Optional<IObject> Execute(Machine machine)
+   {
+      var _selfField = machine.Find("self", true);
+      if (_selfField is (true, var selfField))
+      {
+         var self = (UserObject)selfField.Value;
+         var selfClass = (UserClass)classOf(self);
+         var parentClassName = selfClass.ParentClassName;
+         if (parentClassName.IsEmpty())
+         {
+            return fail($"Class {selfClass.Name} has no parent class");
+         }
+         else
+         {
+            var superObject = new UserObject(parentClassName, self.Fields, self.Parameters);
+            return superObject;
+         }
+      }
+      else if (_selfField.Exception is (true, var exception))
+      {
+         return exception;
+      }
+      else
+      {
+         return fail("self not defined");
+      }
+   }
+
+   public override string ToString() => "super";
 }

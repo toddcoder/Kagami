@@ -1,20 +1,20 @@
 ﻿using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
+using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Parsers.Expressions
+namespace Kagami.Library.Parsers.Expressions;
+
+public class BNotParser : SymbolParser
 {
-   public class BNotParser : SymbolParser
+   public BNotParser(ExpressionBuilder builder) : base(builder) { }
+
+   public override string Pattern => "^ /(|s|) /'bnot' /b";
+
+   public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      public BNotParser(ExpressionBuilder builder) : base(builder) { }
+      state.Colorize(tokens, Color.Whitespace, Color.Operator);
+      builder.Add(new BNotSymbol());
 
-      public override string Pattern => "^ /(|s|) /'bnot' /b";
-
-      public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
-      {
-         state.Colorize(tokens, Color.Whitespace, Color.Operator);
-         builder.Add(new BNotSymbol());
-
-         return Unit.Matched();
-      }
+      return unit;
    }
 }

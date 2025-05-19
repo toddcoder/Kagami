@@ -3,19 +3,26 @@ using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Operations
+namespace Kagami.Library.Operations;
+
+public class SwapAt : Operation
 {
-   public class SwapAt : Operation
+   protected int index;
+
+   public SwapAt(int index) => this.index = index;
+
+   public override Optional<IObject> Execute(Machine machine)
    {
-      protected int index;
-
-      public SwapAt(int index) => this.index = index;
-
-      public override IMatched<IObject> Execute(Machine machine)
+      var _swapped = machine.CurrentFrame.Swap(index);
+      if (_swapped)
       {
-         return machine.CurrentFrame.Swap(index).Map(_ => notMatched<IObject>()).DefaultTo(() => "Swap at out of range".FailedMatch<IObject>());
+         return nil;
       }
-
-      public override string ToString() => $"swap.at({index})";
+      else
+      {
+         return fail("Swap at out of range");
+      }
    }
+
+   public override string ToString() => $"swap.at({index})";
 }

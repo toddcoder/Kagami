@@ -4,81 +4,88 @@ using static Kagami.Library.Nodes.NodeFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Parsers.Expressions
+namespace Kagami.Library.Parsers.Expressions;
+
+public class InvokeParser : SymbolParser
 {
-   public class InvokeParser : SymbolParser
+   public InvokeParser(ExpressionBuilder builder) : base(builder)
    {
-      public InvokeParser(ExpressionBuilder builder) : base(builder) { }
+   }
 
-      public override string Pattern => $"^ /(|s|) /({REGEX_FUNCTION_NAME}) /'('";
+   public override string Pattern => $"^ /(|s|) /({REGEX_FUNCTION_NAME}) /'('";
 
-      public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+   public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+   {
+      var functionName = tokens[2].Text;
+      if (functionName == @"\/")
       {
-         var functionName = tokens[2].Text;
-         if (functionName == @"\/")
-         {
-            return notMatched<Unit>();
-         }
-         else
-         {
-            state.Colorize(tokens, Color.Whitespace, Color.Invokable, Color.OpenParenthesis);
+         return nil;
+      }
+      else
+      {
+         state.Colorize(tokens, Color.Whitespace, Color.Invokable, Color.OpenParenthesis);
 
-            if (getArgumentsPlusLambda(state, builder.Flags).ValueOrCast<Unit>(out var tuple, out var asUnit))
+         var _argumentsPlusLambda = getArgumentsPlusLambda(state, builder.Flags);
+         if (_argumentsPlusLambda is (true, var (arguments, possibleLambda)))
+         {
+            //var (arguments, possibleLambda) = tuple;
+
+            if (state.BlockFollows())
             {
-               var (arguments, possibleLambda) = tuple;
-
-               if (state.BlockFollows())
+               state.Scan("^ /':'", Color.Structure);
+               var _advanced = state.Advance();
+               if (_advanced)
                {
-                  state.Scan("^ /':'", Color.Structure);
-                  if (state.Advance().ValueOrOriginal(out _, out var unitMatched))
+                  var tempObjectField = newLabel("object");
+                  var outerBuilder = new ExpressionBuilder(ExpressionFlags.Standard);
+                  var setPropertyParser = new SetPropertyParser(builder, tempObjectField, outerBuilder);
+                  while (state.More)
                   {
-                     var tempObjectField = newLabel("object");
-                     var outerBuilder = new ExpressionBuilder(ExpressionFlags.Standard);
-                     var setPropertyParser = new SetPropertyParser(builder, tempObjectField, outerBuilder);
-                     while (state.More)
+                     var _property = setPropertyParser.Scan(state);
+                     if (_property)
                      {
-                        if (setPropertyParser.Scan(state).If(out _, out var anyException)) { }
-                        else if (anyException.If(out var exception))
-                        {
-                           return failedMatch<Unit>(exception);
-                        }
-                        else
-                        {
-                           break;
-                        }
                      }
-
-                     state.Regress();
-
-                     if (outerBuilder.ToExpression().If(out var outerExpression, out var outerException))
+                     else if (_property.Exception is (true, var exception))
                      {
-                        builder.Add(new NewObjectSymbol(tempObjectField, functionName, outerExpression));
+                        return exception;
                      }
                      else
                      {
-                        return failedMatch<Unit>(outerException);
+                        break;
                      }
+                  }
+
+                  state.Regress();
+
+                  var _outerExpression = outerBuilder.ToExpression();
+                  if (_outerExpression is (true, var outerExpression))
+                  {
+                     builder.Add(new NewObjectSymbol(tempObjectField, functionName, outerExpression));
                   }
                   else
                   {
-                     return unitMatched;
+                     return _outerExpression.Exception;
                   }
-               }
-               else if (state.Macro(functionName).If(out var function))
-               {
-                  builder.Add(new MacroInvokeSymbol(function, arguments));
                }
                else
                {
-                  builder.Add(new InvokeSymbol(functionName, arguments, possibleLambda, builder.Flags[ExpressionFlags.Comparisand]));
+                  return _advanced.Exception;
                }
-
-               return Unit.Matched();
+            }
+            else if (state.Macro(functionName) is (true, var function))
+            {
+               builder.Add(new MacroInvokeSymbol(function, arguments));
             }
             else
             {
-               return asUnit;
+               builder.Add(new InvokeSymbol(functionName, arguments, possibleLambda, builder.Flags[ExpressionFlags.Comparisand]));
             }
+
+            return unit;
+         }
+         else
+         {
+            return _argumentsPlusLambda.Exception;
          }
       }
    }

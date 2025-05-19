@@ -3,37 +3,36 @@ using Core.Monads;
 using static Kagami.Library.AllExceptions;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Parsers.Expressions
+namespace Kagami.Library.Parsers.Expressions;
+
+public class FloatParser : SymbolParser
 {
-   public class FloatParser : SymbolParser
+   public override string Pattern => "^ /(|s|) /([/d '_']+ '.' [/d '_']+) (/'e' /(['-+']? /d+))? /'i'?";
+
+   public FloatParser(ExpressionBuilder builder) : base(builder) { }
+
+   public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      public override string Pattern => "^ /(|s|) /([/d '_']+ '.' [/d '_']+) (/'e' /(['-+']? /d+))? /'i'?";
+      var source = tokens[2].Text.Replace("_", "") + tokens[3].Text + tokens[4].Text;
+      var type = tokens[5].Text;
+      state.Colorize(tokens, Color.Whitespace, Color.Number, Color.NumberPart, Color.Number, Color.NumberPart);
 
-      public FloatParser(ExpressionBuilder builder) : base(builder) { }
-
-      public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+      if (double.TryParse(source, out var result))
       {
-         var source = tokens[2].Text.Replace("_", "") + tokens[3].Text + tokens[4].Text;
-         var type = tokens[5].Text;
-         state.Colorize(tokens, Color.Whitespace, Color.Number, Color.NumberPart, Color.Number, Color.NumberPart);
-
-         if (double.TryParse(source, out var result))
+         if (type == "i")
          {
-            if (type == "i")
-            {
-	            builder.Add(new ComplexSymbol(result));
-            }
-            else
-            {
-	            builder.Add(new FloatSymbol(result));
-            }
-
-            return Unit.Matched();
+            builder.Add(new ComplexSymbol(result));
          }
          else
          {
-	         return failedMatch<Unit>(unableToConvert(source, "Float"));
+            builder.Add(new FloatSymbol(result));
          }
+
+         return unit;
+      }
+      else
+      {
+         return unableToConvert(source, "Float");
       }
    }
 }

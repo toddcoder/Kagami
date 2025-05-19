@@ -1,26 +1,27 @@
 ﻿using Core.Monads;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
-namespace Kagami.Library.Parsers.Expressions
+namespace Kagami.Library.Parsers.Expressions;
+
+public class ComparisandParser : SymbolParser
 {
-   public class ComparisandParser : SymbolParser
+   public ComparisandParser(ExpressionBuilder builder) : base(builder) { }
+
+   public override string Pattern => "^ /(|s|) /'|'";
+
+   public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      public ComparisandParser(ExpressionBuilder builder) : base(builder) { }
-
-      public override string Pattern => "^ /(|s|) /'|'";
-
-      public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+      state.Colorize(tokens, Color.Whitespace, Color.Operator);
+      var _expression = getTerm(state, ExpressionFlags.Comparisand);
+      if (_expression is (true, var expression))
       {
-         state.Colorize(tokens, Color.Whitespace, Color.Operator);
-         if (getTerm(state, ExpressionFlags.Comparisand).ValueOrCast<Unit>(out var expression, out var asUnit))
-         {
-            builder.Add(expression);
-            return Unit.Matched();
-         }
-         else
-         {
-            return asUnit;
-         }
+         builder.Add(expression);
+         return unit;
+      }
+      else
+      {
+         return _expression.Exception;
       }
    }
 }

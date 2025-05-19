@@ -1,20 +1,20 @@
 ﻿using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
+using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Parsers.Expressions
+namespace Kagami.Library.Parsers.Expressions;
+
+public class AnyParser : SymbolParser
 {
-   public class AnyParser : SymbolParser
+   public AnyParser(ExpressionBuilder builder) : base(builder) { }
+
+   public override string Pattern => "^ /(|s|) /'_' /b";
+
+   public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      public AnyParser(ExpressionBuilder builder) : base(builder) { }
+      state.Colorize(tokens, Color.Whitespace, Color.Identifier);
+      builder.Add(new AnySymbol());
 
-      public override string Pattern => "^ /(|s|) /'_' /b";
-
-      public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
-      {
-         state.Colorize(tokens, Color.Whitespace, Color.Identifier);
-         builder.Add(new AnySymbol());
-
-         return Unit.Matched();
-      }
+      return unit;
    }
 }
