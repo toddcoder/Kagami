@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Core.Applications;
 using Core.Assertions;
 using Core.Computers;
@@ -103,7 +102,7 @@ internal class Program : CommandLineInterface, IContext
    public Result<string> ReadLine()
    {
       var line = Console.ReadLine();
-      return line.Must().Not.BeNull().OrFailure("Input cancelled");
+      return line!.Must().Not.BeNull().OrFailure("Input cancelled");
    }
 
    public bool Cancelled() => KeyAvailable && ReadKey().Key == ConsoleKey.Escape;
