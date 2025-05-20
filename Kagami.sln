@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kagami.Playground", "Kagami
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kagami.Drawing", "Kagami.Drawing\Kagami.Drawing.csproj", "{992CA2AD-10DB-4DC6-9EF2-EB991C2B45FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kagami.Text", "Kagami.Text\Kagami.Text.csproj", "{0F7CC9F8-FD96-4F5D-94B3-F9EB6A415CB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kagami.Text", "Kagami.Text\Kagami.Text.csproj", "{0F7CC9F8-FD96-4F5D-94B3-F9EB6A415CB6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kagami.IO", "Kagami.IO\Kagami.IO.csproj", "{7488FC4E-403C-45F6-9E71-EA7902B3C17A}"
 EndProject
