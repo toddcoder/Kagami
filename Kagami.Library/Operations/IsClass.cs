@@ -47,7 +47,7 @@ public class IsClass : Operation
 
    public override Optional<IObject> Execute(Machine machine)
    {
-      return getValue(pop, machine, className).Map(value => Boolean.BooleanObject(value.ClassName == className));
+      return getValue(pop, machine, className).Map(value => KBoolean.BooleanObject(value.ClassName == className));
    }
 
    public override string ToString() => $"is.class({className}{pop.Extend(", pop")})";

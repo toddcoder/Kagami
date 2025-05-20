@@ -56,7 +56,7 @@ namespace Kagami.Library.Objects
          _ => (this, obj.ToInt())
       };
 
-      public INumeric ToByte() => new Byte(AsByte());
+      public INumeric ToByte() => new KByte(AsByte());
 
       public byte AsByte() => (byte)value;
 
@@ -92,7 +92,7 @@ namespace Kagami.Library.Objects
 
       public bool IsRational => false;
 
-      public String ZFill(int count) => zfill(AsString, count);
+      public KString ZFill(int count) => zfill(AsString, count);
 
       public IObject Raise(INumeric power) => raise(this, power);
 
@@ -100,9 +100,9 @@ namespace Kagami.Library.Objects
 
       public IObject Object => this;
 
-      public Boolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
+      public KBoolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
 
-      public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
+      public KBoolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
 
       public int CompareTo(Int other) => value.CompareTo(other.value);
 
@@ -114,13 +114,13 @@ namespace Kagami.Library.Objects
 
       public int CompareTo(object obj) => CompareTo((Int)obj);
 
-      public String Format(string format) => formatNumber(value, format);
+      public KString Format(string format) => formatNumber(value, format);
 
-      public Boolean IsEven => value % 2 == 0;
+      public KBoolean IsEven => value % 2 == 0;
 
-      public Boolean IsOdd => value % 2 != 0;
+      public KBoolean IsOdd => value % 2 != 0;
 
-      public Boolean IsPrime
+      public KBoolean IsPrime
       {
          get
          {
@@ -168,7 +168,7 @@ namespace Kagami.Library.Objects
 
       public IRangeItem Predecessor => (Int)(value - 1);
 
-      public Range Range() => new((Int)0, this, false);
+      public KRange Range() => new((Int)0, this, false);
 
       public Interval Millisecond => value.Millisecond();
 
@@ -182,9 +182,9 @@ namespace Kagami.Library.Objects
 
       public Interval Week => (7 * value).Day();
 
-      public Char Char() => new((char)value);
+      public KChar Char() => new((char)value);
 
-      public Byte Byte() => new((byte)value);
+      public KByte Byte() => new((byte)value);
 
       public IObject Times(Lambda lambda)
       {
@@ -193,7 +193,7 @@ namespace Kagami.Library.Objects
             lambda.Invoke();
          }
 
-         return Void.Value;
+         return KVoid.Value;
       }
    }
 }

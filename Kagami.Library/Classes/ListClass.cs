@@ -23,7 +23,7 @@ namespace Kagami.Library.Classes
          messages["init".get()] = (obj, _) => function<List>(obj, l => l.Init);
          messages["last".get()] = (obj, _) => function<List>(obj, l => someOf(l.Last));
          messages["~"] = (obj, msg) => function<List, List>(obj, msg, (l1, l2) => l1.Concatenate(l2));
-         messages["isEmpty".get()] = (obj, _) => function<List>(obj, l => Boolean.BooleanObject(l.IsEmpty));
+         messages["isEmpty".get()] = (obj, _) => function<List>(obj, l => KBoolean.BooleanObject(l.IsEmpty));
          messages["[]"] = (obj, msg) => function<List, Int>(obj, msg, (l, i) => l[i.Value]);
       }
 

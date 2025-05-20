@@ -13,7 +13,7 @@ public readonly struct Date : IObject, IRangeItem, IFormattable
 
    public static IObject DateObject(DateTime dateTime) => new Date(dateTime);
 
-   public static Tuple Months
+   public static KTuple Months
    {
       get
       {
@@ -22,13 +22,13 @@ public readonly struct Date : IObject, IRangeItem, IFormattable
             "January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
             "November", "December"
          ];
-         var names = months.Select(String.StringObject).ToArray();
+         var names = months.Select(KString.StringObject).ToArray();
 
-         return new Tuple(names);
+         return new KTuple(names);
       }
    }
 
-   public static Tuple DaysOfTheWeek
+   public static KTuple DaysOfTheWeek
    {
       get
       {
@@ -36,9 +36,9 @@ public readonly struct Date : IObject, IRangeItem, IFormattable
          [
             "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
          ];
-         var names = days.Select(String.StringObject).ToArray();
+         var names = days.Select(KString.StringObject).ToArray();
 
-         return new Tuple(names);
+         return new KTuple(names);
       }
    }
 
@@ -77,7 +77,7 @@ public readonly struct Date : IObject, IRangeItem, IFormattable
 
    public IObject Object => this;
 
-   public Boolean Between(IObject min, IObject max, bool inclusive)
+   public KBoolean Between(IObject min, IObject max, bool inclusive)
    {
       if (min is Date minDate && max is Date maxDate)
       {
@@ -89,7 +89,7 @@ public readonly struct Date : IObject, IRangeItem, IFormattable
       }
    }
 
-   public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
+   public KBoolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
 
    public Int Year => value.Year;
 
@@ -111,7 +111,7 @@ public readonly struct Date : IObject, IRangeItem, IFormattable
 
    public IRangeItem Predecessor => new Date(value.AddDays(-1));
 
-   public Range Range() => new(new Date(value.Truncate()), this, true);
+   public KRange Range() => new(new Date(value.Truncate()), this, true);
 
    public Date Add(Interval interval) => new(value.Add(interval.Value));
 
@@ -122,7 +122,7 @@ public readonly struct Date : IObject, IRangeItem, IFormattable
       _ => throw incompatibleClasses(obj, "Interval or Date")
    };
 
-   public String Format(string format) => value.ToString(format);
+   public KString Format(string format) => value.ToString(format);
 
-   public String DayOfWeek => value.DayOfWeek.ToString();
+   public KString DayOfWeek => value.DayOfWeek.ToString();
 }

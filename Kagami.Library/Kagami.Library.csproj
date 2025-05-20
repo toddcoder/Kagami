@@ -1,9 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <LangVersion>latest</LangVersion>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <LangVersion>preview</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateResourceWarnOnBinaryFormatterUse>false</GenerateResourceWarnOnBinaryFormatterUse>
     <AssemblyTitle>Kagami.Library</AssemblyTitle>
     <Product>Kagami.Library</Product>
     <Copyright>Copyright ©  2018</Copyright>
@@ -34,5 +38,8 @@
     <Compile Remove="Parsers\ParserExceptions.cs" />
     <Compile Remove="Parsers\Statements\IndentationParser.cs" />
     <Compile Remove="Parsers\Statements\MatchFunctionCaseParser.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
 </Project>

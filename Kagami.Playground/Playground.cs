@@ -1,9 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Windows.Forms;
+﻿using System.Diagnostics;
 using Core.Arrays;
 using Kagami.Library;
 using Kagami.Library.Runtime;

@@ -19,13 +19,13 @@ public class DictionaryIterator : Iterator
    public override Maybe<IObject> Next() => maybe(index < keys.Length, () =>
    {
       var key = keys[index++];
-      return Tuple.NewTupleNamed("key", key, "value", dictionary.GetRaw(key)).Some();
+      return KTuple.NewTupleNamed("key", key, "value", dictionary.GetRaw(key)).Some();
    });
 
    public override Maybe<IObject> Peek() => maybe(index < keys.Length, () =>
    {
       var key = keys[index];
-      return Tuple.NewTupleNamed("key", key, "value", dictionary.GetRaw(key)).Some();
+      return KTuple.NewTupleNamed("key", key, "value", dictionary.GetRaw(key)).Some();
    });
 
    public override IEnumerable<IObject> List()

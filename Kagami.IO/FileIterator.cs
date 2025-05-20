@@ -1,30 +1,28 @@
-﻿using System.IO;
-using Kagami.Library.Objects;
+﻿using Kagami.Library.Objects;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.IO
+namespace Kagami.IO;
+
+public class FileIterator : Iterator
 {
-   public class FileIterator : Iterator
+   protected TextReader reader;
+
+   public FileIterator(File file) : base(file) => reader = file.Reader();
+
+   public override Maybe<IObject> Next()
    {
-      protected TextReader reader;
-
-      public FileIterator(File file) : base(file) => reader = file.Reader();
-
-      public override Maybe<IObject> Next()
+      var line = reader.ReadLine();
+      if (line == null)
       {
-         var line = reader.ReadLine();
-         if (line == null)
-         {
-            reader?.Dispose();
-            return nil;
-         }
-         else
-         {
-            return String.StringObject(line).Some();
-         }
+         reader?.Dispose();
+         return nil;
       }
-
-      public override Maybe<IObject> Peek() => Next();
+      else
+      {
+         return KString.StringObject(line).Some();
+      }
    }
+
+   public override Maybe<IObject> Peek() => Next();
 }

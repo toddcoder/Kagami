@@ -175,9 +175,9 @@ public class List : IObject, ICollection
 
    public bool ExpandForArray => true;
 
-   public Boolean In(IObject item) => list(this).Any(i => i.IsEqualTo(item));
+   public KBoolean In(IObject item) => list(this).Any(i => i.IsEqualTo(item));
 
-   public Boolean NotIn(IObject item) => list(this).All(i => !i.IsEqualTo(item));
+   public KBoolean NotIn(IObject item) => list(this).All(i => !i.IsEqualTo(item));
 
    public IObject Times(int count)
    {
@@ -190,7 +190,7 @@ public class List : IObject, ICollection
       return accum;
    }
 
-   public String MakeString(string connector) => makeString(this, connector);
+   public KString MakeString(string connector) => makeString(this, connector);
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 

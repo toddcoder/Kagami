@@ -2,6 +2,6 @@
 {
    public interface IFormattable
    {
-      String Format(string format);
+      KString Format(string format);
    }
 }

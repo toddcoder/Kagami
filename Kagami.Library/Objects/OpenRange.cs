@@ -45,13 +45,13 @@ namespace Kagami.Library.Objects
 
       public bool ExpandForArray => false;
 
-      public Boolean In(IObject item) => false;
+      public KBoolean In(IObject item) => false;
 
-      public Boolean NotIn(IObject item) => false;
+      public KBoolean NotIn(IObject item) => false;
 
       public IObject Times(int count) => this;
 
-      public String MakeString(string connector) => makeString(this, connector);
+      public KString MakeString(string connector) => makeString(this, connector);
 
       public IIterator GetIndexedIterator() => new IndexedIterator(this);
 

@@ -1,15 +1,12 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29009.5
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36109.1 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kagami", "Kagami.csproj", "{CAB6B0FE-9E58-468A-B92A-AC0A0DE106A2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kagami.Library", "Kagami.Library\Kagami.Library.csproj", "{BBF33B73-9D27-4CB7-AC3F-DF39B9A566B1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kagami.Playground", "Kagami.Playground\Kagami.Playground.csproj", "{11BB8466-99A3-439C-8814-881105F84F4F}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kagami.Drawing", "Kagami.Drawing\Kagami.Drawing.csproj", "{992CA2AD-10DB-4DC6-9EF2-EB991C2B45FB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kagami.Text", "Kagami.Text\Kagami.Text.csproj", "{0F7CC9F8-FD96-4F5D-94B3-F9EB6A415CB6}"
 EndProject
@@ -37,10 +34,6 @@ Global
 		{11BB8466-99A3-439C-8814-881105F84F4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11BB8466-99A3-439C-8814-881105F84F4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11BB8466-99A3-439C-8814-881105F84F4F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{992CA2AD-10DB-4DC6-9EF2-EB991C2B45FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{992CA2AD-10DB-4DC6-9EF2-EB991C2B45FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{992CA2AD-10DB-4DC6-9EF2-EB991C2B45FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{992CA2AD-10DB-4DC6-9EF2-EB991C2B45FB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0F7CC9F8-FD96-4F5D-94B3-F9EB6A415CB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0F7CC9F8-FD96-4F5D-94B3-F9EB6A415CB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F7CC9F8-FD96-4F5D-94B3-F9EB6A415CB6}.Release|Any CPU.ActiveCfg = Release|Any CPU

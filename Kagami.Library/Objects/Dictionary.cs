@@ -13,7 +13,7 @@ namespace Kagami.Library.Objects;
 
 public class Dictionary : IObject, IMutableCollection
 {
-   public static IObject New(IObject defaultValue, Boolean caching)
+   public static IObject New(IObject defaultValue, KBoolean caching)
    {
       var dictionary = new Dictionary();
       if (defaultValue is Lambda lambda)
@@ -62,7 +62,7 @@ public class Dictionary : IObject, IMutableCollection
             case IKeyValue kv:
                dictionary[kv.Key] = kv.Value;
                break;
-            case Tuple tuple:
+            case KTuple tuple:
                dictionary[tuple[0]] = tuple[1];
                break;
          }
@@ -90,7 +90,7 @@ public class Dictionary : IObject, IMutableCollection
       }
    }
 
-   public Boolean Caching { get; set; }
+   public KBoolean Caching { get; set; }
 
    protected IObject getValue(IObject key)
    {
@@ -167,7 +167,7 @@ public class Dictionary : IObject, IMutableCollection
       get
       {
          var list = container.List.Where(key => dictionary.ContainsKey(key)).Select(key => this[key]).ToList();
-         return new Array(list);
+         return new KArray(list);
       }
       set
       {
@@ -183,7 +183,7 @@ public class Dictionary : IObject, IMutableCollection
                }
             }
                break;
-            case ICollection and not String:
+            case ICollection and not KString:
             case IIterator:
             {
                var _iterator = getIterator(value, false);
@@ -298,7 +298,7 @@ public class Dictionary : IObject, IMutableCollection
 
    public Int Length => dictionary.Count;
 
-   public IEnumerable<IObject> List => dictionary.Select(i => (IObject)new Tuple(i.Key, i.Value));
+   public IEnumerable<IObject> List => dictionary.Select(i => (IObject)new KTuple(i.Key, i.Value));
 
    public bool ExpandForArray => false;
 
@@ -318,15 +318,15 @@ public class Dictionary : IObject, IMutableCollection
 
    public IObject Keys => new Set(dictionary.KeyArray());
 
-   public IObject Values => new Array(dictionary.ValueArray());
+   public IObject Values => new KArray(dictionary.ValueArray());
 
-   public Boolean In(IObject key) => dictionary.ContainsKey(key);
+   public KBoolean In(IObject key) => dictionary.ContainsKey(key);
 
-   public Boolean NotIn(IObject key) => !dictionary.ContainsKey(key);
+   public KBoolean NotIn(IObject key) => !dictionary.ContainsKey(key);
 
    public IObject Times(int count) => this;
 
-   public String MakeString(string connector) => makeString(this, connector);
+   public KString MakeString(string connector) => makeString(this, connector);
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
@@ -366,7 +366,7 @@ public class Dictionary : IObject, IMutableCollection
 
    public IObject Append(IObject obj)
    {
-      if (obj is Tuple t)
+      if (obj is KTuple t)
       {
          var key = t[0];
          var value = t[1];
@@ -410,7 +410,7 @@ public class Dictionary : IObject, IMutableCollection
       return index.Between(0).Until(keyArray.Length) ? Update(keyArray[index], obj) : None.NoneValue;
    }
 
-   public Boolean IsEmpty => dictionary.Count == 0;
+   public KBoolean IsEmpty => dictionary.Count == 0;
 
    public IObject Assign(IObject indexes, IObject values)
    {
@@ -477,7 +477,7 @@ public class Dictionary : IObject, IMutableCollection
       var iterator = collection.GetIterator(false);
       foreach (var item in iterator.List())
       {
-         if (item is Tuple { Length: { Value: 2 } } tuple)
+         if (item is KTuple { Length: { Value: 2 } } tuple)
          {
             newDictionary[tuple[0]] = tuple[1];
          }

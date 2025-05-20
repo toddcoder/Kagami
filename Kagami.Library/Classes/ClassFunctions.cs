@@ -2,7 +2,6 @@
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Collections;
-using Boolean = Kagami.Library.Objects.Boolean;
 
 namespace Kagami.Library.Classes
 {
@@ -71,11 +70,11 @@ namespace Kagami.Library.Classes
          if (result)
          {
             Machine.Fields.SetBindings(bindings);
-            return Boolean.True;
+            return KBoolean.True;
          }
          else
          {
-	         return Boolean.False;
+	         return KBoolean.False;
          }
       }
 

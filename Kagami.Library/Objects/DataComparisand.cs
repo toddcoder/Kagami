@@ -20,9 +20,9 @@ namespace Kagami.Library.Objects
          this.ordinal = ordinal;
       }
 
-      public String Name => name;
+      public KString Name => name;
 
-      public Tuple Comparisands => new(comparisands);
+      public KTuple Comparisands => new(comparisands);
 
       public IObject Ordinal => ordinal;
 

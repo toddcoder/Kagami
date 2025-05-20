@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 using Kagami.Library.Classes;
 using Kagami.Library.Runtime;
 using Core.Collections;
@@ -56,7 +53,7 @@ public static class ObjectFunctions
          case Placeholder ph:
             bindings[ph.Name] = source;
             return true;
-         case Range range:
+         case KRange range:
             return range.In(source).IsTrue;
          case Lambda lambda:
             if (lambda.Invoke(source).IsTrue)
@@ -114,7 +111,7 @@ public static class ObjectFunctions
          case Placeholder ph:
             bindings[ph.Name] = source;
             return true;
-         case Range range:
+         case KRange range:
             return range.In(source).IsTrue;
          case Lambda lambda:
             if (lambda.Invoke(source).IsTrue)
@@ -239,7 +236,7 @@ public static class ObjectFunctions
 
       if (classOf(obj).RespondsTo("match(_,_)"))
       {
-         var objectHash = bindings.ToHash(i => String.StringObject(i.Key), i => i.Value);
+         var objectHash = bindings.ToHash(i => KString.StringObject(i.Key), i => i.Value);
          var dictionary = new Dictionary(objectHash);
          if (sendMessage(obj, "match(_,_)", comparisand, dictionary).IsTrue)
          {
@@ -271,8 +268,6 @@ public static class ObjectFunctions
                      return false;
                   }
                }
-
-               return true;
             }
             else
             {
@@ -332,7 +327,7 @@ public static class ObjectFunctions
    {
       var message = "string".get();
       var cls = classOf(obj);
-      return cls.RespondsTo(message) ? ((String)sendMessage(obj, message)).Value : obj.AsString;
+      return cls.RespondsTo(message) ? ((KString)sendMessage(obj, message)).Value : obj.AsString;
    }
 
    public static IObject[] setObjects(IObject[] target, IEnumerable<IObject> source, Func<int, IObject> defaultValue)
@@ -365,7 +360,7 @@ public static class ObjectFunctions
             list.Add(s[i]);
          }
 
-         target[lastIndex] = new Tuple(list.ToArray());
+         target[lastIndex] = new KTuple(list.ToArray());
       }
 
       return target;
@@ -447,8 +442,8 @@ public static class ObjectFunctions
 
    public static bool compareEnumerables<T>(IEnumerable<T> left, IEnumerable<T> right)
    {
-      var lArray = left.ToArray();
-      var rArray = right.ToArray();
+      T[] lArray = [.. left];
+      T[] rArray = [.. right];
 
       var lLength = lArray.Length;
       var rLength = rArray.Length;
@@ -460,7 +455,7 @@ public static class ObjectFunctions
       {
          for (var i = 0; i < lLength; i++)
          {
-            if (!lArray[i].Equals(rArray[i]))
+            if (!lArray[i]!.Equals(rArray[i]))
             {
                return false;
             }
@@ -630,7 +625,7 @@ public static class ObjectFunctions
          {
             int i => Convert.ToString(i, toBase),
             long l => Convert.ToString(l, toBase),
-            _ => obj.ToString()
+            _ => obj.ToString() ?? ""
          };
       }
       else
@@ -651,7 +646,7 @@ public static class ObjectFunctions
             case long l:
                return format(l, toBase, length, padding);
             default:
-               var result = obj.ToString();
+               var result = obj.ToString() ?? "";
                return length > 0 ? result.RightJustify(length, padding) : result.LeftJustify(-length, padding);
          }
       }

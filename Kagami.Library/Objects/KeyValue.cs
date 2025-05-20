@@ -14,7 +14,7 @@ namespace Kagami.Library.Objects
          this.value = value;
       }
 
-      public KeyValue(string key, IObject value) : this((String)key, value)
+      public KeyValue(string key, IObject value) : this((KString)key, value)
       {
       }
 

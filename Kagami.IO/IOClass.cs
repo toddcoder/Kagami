@@ -2,18 +2,17 @@
 using Kagami.Library.Packages;
 using static Kagami.Library.Classes.ClassFunctions;
 
-namespace Kagami.IO
+namespace Kagami.IO;
+
+public class IOClass : PackageClass
 {
-   public class IOClass : PackageClass
+   public override string Name => "IO";
+
+   public override void RegisterMessages()
    {
-      public override string Name => "IO";
+      base.RegisterMessages();
 
-      public override void RegisterMessages()
-      {
-         base.RegisterMessages();
-
-         registerPackageFunction("File", (obj, msg) => function<IO, String>(obj, msg, (io, path) => io.File(path.Value)));
-         registerPackageFunction("Folder", (obj, msg) => function<IO, String>(obj, msg, (io, path) => io.File(path.Value)));
-      }
+      registerPackageFunction("File", (obj, msg) => function<IO, KString>(obj, msg, (io, path) => io.File(path.Value)));
+      registerPackageFunction("Folder", (obj, msg) => function<IO, KString>(obj, msg, (io, path) => io.File(path.Value)));
    }
 }

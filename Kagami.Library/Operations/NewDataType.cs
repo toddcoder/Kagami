@@ -19,12 +19,12 @@ public class NewDataType : OneOperandOperation
          var hash = new Hash<string, (IObject[], IObject)>();
          foreach (var (key, objectValue) in dictionary.InternalHash)
          {
-            if (key is String name)
+            if (key is KString name)
             {
-               if (objectValue is Tuple tuple)
+               if (objectValue is KTuple tuple)
                {
                   var dataComparisandName = name.Value;
-                  if (tuple[0] is Tuple comparisands)
+                  if (tuple[0] is KTuple comparisands)
                   {
                      var ordinal = tuple[1];
                      hash[dataComparisandName] = (comparisands.Value, ordinal);

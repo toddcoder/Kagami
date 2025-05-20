@@ -15,7 +15,7 @@ public class FieldExists : Operation
       var _field = machine.Find(fieldName, true);
       if (_field)
       {
-         return Boolean.True.Just();
+         return KBoolean.True.Just();
       }
       else if (_field.Exception is (true, var exception))
       {
@@ -23,7 +23,7 @@ public class FieldExists : Operation
       }
       else
       {
-         return Boolean.False.Just();
+         return KBoolean.False.Just();
       }
    }
 

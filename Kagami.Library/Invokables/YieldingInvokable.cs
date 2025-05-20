@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Kagami.Library.Objects;
+﻿using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Collections;
 using Core.Monads;
@@ -111,13 +110,13 @@ public class YieldingInvokable : IInvokable, ICollection, IObject
 
    public bool ExpandForArray => true;
 
-   public Boolean In(IObject item) => cached.Contains(item);
+   public KBoolean In(IObject item) => cached.Contains(item);
 
-   public Boolean NotIn(IObject item) => !cached.Contains(item);
+   public KBoolean NotIn(IObject item) => !cached.Contains(item);
 
    public IObject Times(int count) => this;
 
-   public String MakeString(string connector) => makeString(this, connector);
+   public KString MakeString(string connector) => makeString(this, connector);
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 

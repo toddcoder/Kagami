@@ -1,25 +1,22 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Kagami.Library.Objects;
+﻿using Kagami.Library.Objects;
 using static Kagami.Library.Classes.ClassFunctions;
 
-namespace Kagami.Library.Classes
+namespace Kagami.Library.Classes;
+
+public class CycleClass : BaseClass, ICollectionClass
 {
-   public class CycleClass : BaseClass, ICollectionClass
+   public override string Name => "Cycle";
+
+   public override void RegisterMessages()
    {
-      public override string Name => "Cycle";
+      base.RegisterMessages();
 
-      public override void RegisterMessages()
-      {
-         base.RegisterMessages();
+      collectionMessages();
 
-         collectionMessages();
-
-         messages["items".get()] = (obj, _) => function<Cycle>(obj, c => c.Items);
-      }
-
-      public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
-
-      public IObject Revert(IEnumerable<IObject> list) => new Tuple(list.ToArray());
+      messages["items".get()] = (obj, _) => function<Cycle>(obj, c => c.Items);
    }
+
+   public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
+
+   public IObject Revert(IEnumerable<IObject> list) => new KTuple(list.ToArray());
 }

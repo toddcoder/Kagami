@@ -6,23 +6,23 @@ namespace Kagami.Library.Objects
 {
    public class RangeIterator : Iterator
    {
-      protected Range range;
+      protected KRange kRange;
       protected IRangeItem current;
       protected IObject stop;
 
-      public RangeIterator(Range range) : base(range)
+      public RangeIterator(KRange kRange) : base(kRange)
       {
-         this.range = range;
-         current = range.Start;
-         stop = range.StopObj;
+         this.kRange = kRange;
+         current = kRange.Start;
+         stop = kRange.StopObj;
       }
 
       public override Maybe<IObject> Next()
       {
-         if (range.Compare(current, stop))
+         if (kRange.Compare(current, stop))
          {
             var result = current;
-            current = range.NextValue(current);
+            current = kRange.NextValue(current);
             return result.Object.Some();
          }
          else
@@ -31,15 +31,15 @@ namespace Kagami.Library.Objects
          }
       }
 
-      public override Maybe<IObject> Peek() => maybe(range.Compare(current, stop), () => current.Object);
+      public override Maybe<IObject> Peek() => maybe(kRange.Compare(current, stop), () => current.Object);
 
       public override IEnumerable<IObject> List()
       {
-         while (range.Compare(current, stop))
+         while (kRange.Compare(current, stop))
          {
             yield return current.Object;
 
-            current = range.NextValue(current);
+            current = kRange.NextValue(current);
          }
       }
    }

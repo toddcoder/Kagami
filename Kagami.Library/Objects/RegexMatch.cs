@@ -30,10 +30,10 @@ namespace Kagami.Library.Objects
          passed = new Hash<string, IObject>();
          internals = new Hash<string, IObject>
          {
-            ["text"] = (String)text,
+            ["text"] = (KString)text,
             ["index"] = (Int)index,
             ["length"] = (Int)length,
-            ["groups"] = new Tuple(groups.Select(g => (IObject)g).ToArray())
+            ["groups"] = new KTuple(groups.Select(g => (IObject)g).ToArray())
          };
       }
 
@@ -53,7 +53,7 @@ namespace Kagami.Library.Objects
 
       public string AsString => text;
 
-      public string Image => $"Match({((String)text).Image}, {index}, {length})";
+      public string Image => $"Match({((KString)text).Image}, {index}, {length})";
 
       public int Hash => GetHashCode();
 
@@ -67,21 +67,21 @@ namespace Kagami.Library.Objects
 
       public bool IsTrue => text.Length > 0;
 
-      public String Text => text;
+      public KString Text => text;
 
       public Int Index => index;
 
       public Int Length => length;
 
-      public Tuple Groups => new(groups.Select(g => (IObject)g).ToArray());
+      public KTuple Groups => new(groups.Select(g => (IObject)g).ToArray());
 
       public Hash<string, IObject> Passed => passed;
 
       public Hash<string, IObject> Internals => internals;
 
-      public String this[int index] => index.Between(0).Until(groups.Length) ? groups[index].Text : "";
+      public KString this[int index] => index.Between(0).Until(groups.Length) ? groups[index].Text : "";
 
-      public String this[string name]
+      public KString this[string name]
       {
          get
          {

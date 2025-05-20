@@ -1,17 +1,11 @@
-﻿using System;
-using Core.Objects;
+﻿using Core.Objects;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Classes.ClassFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Operations.NumericFunctions;
-using Boolean = Kagami.Library.Objects.Boolean;
-using String = Kagami.Library.Objects.String;
-using Byte = Kagami.Library.Objects.Byte;
 using IFormattable = Kagami.Library.Objects.IFormattable;
-using Tuple = Kagami.Library.Objects.Tuple;
-using Void = Kagami.Library.Objects.Void;
 
 namespace Kagami.Library.Classes;
 
@@ -63,22 +57,22 @@ public abstract class BaseClass
 
    public virtual void RegisterMessages()
    {
-      registerMessage("string".get(), (obj, _) => String.StringObject(obj.AsString));
-      registerMessage("image".get(), (obj, _) => String.StringObject(obj.Image));
+      registerMessage("string".get(), (obj, _) => KString.StringObject(obj.AsString));
+      registerMessage("image".get(), (obj, _) => KString.StringObject(obj.Image));
       registerMessage("hash".get(), (obj, _) => Int.IntObject(obj.Hash));
-      registerMessage("equals(_)", (obj, message) => Boolean.BooleanObject(obj.IsEqualTo(message.Arguments[0])));
-      registerMessage("className".get(), (obj, _) => String.StringObject(obj.ClassName));
+      registerMessage("equals(_)", (obj, message) => KBoolean.BooleanObject(obj.IsEqualTo(message.Arguments[0])));
+      registerMessage("className".get(), (obj, _) => KString.StringObject(obj.ClassName));
       registerMessage("class".get(), (obj, _) => new Class(obj.ClassName));
       registerMessage("match(_)", match);
-      messages["isNumber".get()] = (_, _) => Boolean.False;
+      messages["isNumber".get()] = (_, _) => KBoolean.False;
       registerMessage("send(_,_)",
-         (obj, message) => function<IObject, String>(obj, message, (o, n) => sendMessage(o, n.Value, message.Arguments.Pass(1))));
-      registerMessage("respondsTo(_)", (obj, message) => (Boolean)classOf(obj).RespondsTo(message.Arguments[0].AsString));
+         (obj, message) => function<IObject, KString>(obj, message, (o, n) => sendMessage(o, n.Value, message.Arguments.Pass(1))));
+      registerMessage("respondsTo(_)", (obj, message) => (KBoolean)classOf(obj).RespondsTo(message.Arguments[0].AsString));
       registerMessage("seq(_)", (obj, message) => new OpenRange(obj, (Lambda)message.Arguments[0]));
       registerMessage("format(_)", (obj, message) => format(obj, message.Arguments[0].AsString));
    }
 
-   protected static String format(IObject obj, string formattingString)
+   protected static KString format(IObject obj, string formattingString)
    {
       if (formattingString == "i")
       {
@@ -96,7 +90,7 @@ public abstract class BaseClass
 
    public virtual void RegisterClassMessages()
    {
-      registerClassMessage("name".get(), (_, _) => String.StringObject(Name));
+      registerClassMessage("name".get(), (_, _) => KString.StringObject(Name));
    }
 
    public virtual void RegisterMessage(Selector selector, Func<IObject, Message, IObject> func) => messages[selector] = func;
@@ -148,19 +142,6 @@ public abstract class BaseClass
       else
       {
          throw messageNotFound(classOf(obj), selector);
-      }
-   }
-
-   protected IObject invokeDirectly(IObject obj, Message message)
-   {
-      var result = messages[message.Selector];
-      if (result == null)
-      {
-         throw messageNotFound(classOf(obj), message.Selector);
-      }
-      else
-      {
-         return result(obj, message);
       }
    }
 
@@ -229,11 +210,11 @@ public abstract class BaseClass
          (obj, _) => function(obj, x => x, x => Math.Ceiling(x), x => x, x => (Float)x.Ceiling(), "ceil()"));
       registerMessage("floor()", (obj, _) => function(obj, x => x, x => Math.Floor(x), x => x, x => (Float)x.Floor(), "floor()"));
       registerMessage("frac()", (obj, _) => function(obj, _ => 0, x => x - (int)x, _ => 0, x => (Float)x.Fraction(), "frac()"));
-      messages["isNumber".get()] = (_, _) => Boolean.True;
-      registerMessage("isZero".get(), (obj, _) => function(obj, numeric => (Boolean)numeric.IsZero));
-      registerMessage("isPositive".get(), (obj, _) => function(obj, numeric => (Boolean)numeric.IsPositive));
-      registerMessage("isNegative".get(), (obj, _) => function(obj, numeric => (Boolean)numeric.IsNegative));
-      registerMessage("isPrimitive".get(), (obj, _) => function(obj, numeric => (Boolean)numeric.IsPrimitive));
+      messages["isNumber".get()] = (_, _) => KBoolean.True;
+      registerMessage("isZero".get(), (obj, _) => function(obj, numeric => (KBoolean)numeric.IsZero));
+      registerMessage("isPositive".get(), (obj, _) => function(obj, numeric => (KBoolean)numeric.IsPositive));
+      registerMessage("isNegative".get(), (obj, _) => function(obj, numeric => (KBoolean)numeric.IsNegative));
+      registerMessage("isPrimitive".get(), (obj, _) => function(obj, numeric => (KBoolean)numeric.IsPrimitive));
       registerMessage("zfill(_<Int>)",
          (obj, message) => function<IObject, Int>(obj, message, (numeric, i) => ((INumeric)numeric).ZFill(i.Value)));
    }
@@ -245,19 +226,19 @@ public abstract class BaseClass
       registerMessage("f".get(),
          (obj, _) => function(obj, i => i, d => d, b => b, m => (Float)((INumeric)m).ToFloat(), "f".get()));
       registerMessage("b".get(),
-         (obj, _) => function(obj, i => (byte)i, d => (byte)d, b => b, m => (Byte)((INumeric)m).ToByte(), "b".get()));
+         (obj, _) => function(obj, i => (byte)i, d => (byte)d, b => b, m => (KByte)((INumeric)m).ToByte(), "b".get()));
    }
 
    protected void collectionMessages()
    {
       registerMessage("getIterator(_<Boolean>)",
-         (obj, message) => collectionFunc<Boolean>(obj, message, (c, l) => (IObject)c.GetIterator(l.Value)));
+         (obj, message) => collectionFunc<KBoolean>(obj, message, (c, l) => (IObject)c.GetIterator(l.Value)));
       registerMessage("length".get(), (obj, _) => collectionFunc(obj, c => c.Length));
       registerMessage("in(_)", (obj, message) => collectionFunc<IObject>(obj, message, (c, i) => c.In(i)));
       registerMessage("notIn(_)", (obj, message) => collectionFunc<IObject>(obj, message, (c, i) => c.NotIn(i)));
       registerMessage("*(_<Int>)", (obj, message) => collectionFunc<Int>(obj, message, (c, i) => c.Times(i.Value)));
       registerMessage("*(_<String>)",
-         (obj, message) => collectionFunc<String>(obj, message, (c, connector) => c.MakeString(connector.Value)));
+         (obj, message) => collectionFunc<KString>(obj, message, (c, connector) => c.MakeString(connector.Value)));
       registerMessage("indexed()", (obj, _) => collectionFunc(obj, c => (IObject)c.GetIndexedIterator()));
       registerMessage("[](_<SkipTake>)", (obj, message) => ((ISkipTakeable)obj)[(SkipTake)message.Arguments[0]]);
 
@@ -322,16 +303,16 @@ public abstract class BaseClass
    protected void iteratorMessages()
    {
       registerMessage("collection".get(), (obj, _) => iteratorFunc(obj, i => (IObject)i.Collection));
-      registerMessage("isLazy".get(), (obj, _) => iteratorFunc(obj, i => (Boolean)i.IsLazy));
+      registerMessage("isLazy".get(), (obj, _) => iteratorFunc(obj, i => (KBoolean)i.IsLazy));
       registerMessage("next()", (obj, _) => iteratorFunc(obj, i => i.Next().Map(Some.Object) | (() => None.NoneValue)));
       registerMessage("peek()", (obj, _) => iteratorFunc(obj, i => i.Peek().Map(Some.Object) | (() => None.NoneValue)));
       registerMessage("reset()", (obj, _) => iteratorFunc(obj, i => i.Reset()));
       registerMessage("reverse()", (obj, _) => iteratorFunc(obj, i => i.Reverse()));
-      registerMessage("join(_<String>)", (obj, message) => iteratorFunc<String>(obj, message, (i, s) => i.Join(s.Value)));
+      registerMessage("join(_<String>)", (obj, message) => iteratorFunc<KString>(obj, message, (i, s) => i.Join(s.Value)));
       registerMessage("sort(_<Lambda>,asc:_<Boolean>)",
-         (obj, message) => iteratorFunc<Lambda, Boolean>(obj, message, (i, l, b) => i.Sort(l, b.Value)));
+         (obj, message) => iteratorFunc<Lambda, KBoolean>(obj, message, (i, l, b) => i.Sort(l, b.Value)));
       registerMessage("sort(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Sort(l, true)));
-      registerMessage("sort(_<Boolean>)", (obj, message) => iteratorFunc<Boolean>(obj, message, (i, b) => i.Sort(b.Value)));
+      registerMessage("sort(_<Boolean>)", (obj, message) => iteratorFunc<KBoolean>(obj, message, (i, b) => i.Sort(b.Value)));
       registerMessage("sort()", (obj, _) => iteratorFunc(obj, i => i.Sort(true)));
       registerMessage("foldl".Selector("_", "_<Lambda>"),
          (obj, message) => iteratorFunc<IObject, Lambda>(obj, message, (i, o, l) => i.FoldLeft(o, l)));
@@ -408,7 +389,7 @@ public abstract class BaseClass
       registerMessage("copy()", (obj, _) => iteratorFunc(obj, i => i.Copy()));
       registerMessage("collect()", (obj, _) => iteratorFunc(obj, i => i.Collect()));
       registerMessage("*(_)", (obj, message) => iteratorFunc<IObject>(obj, message, (i1, i2) => i1.Apply((ICollection)i2)));
-      registerMessage("format(_)", (obj, message) => iteratorFunc<Objects.Index>(obj, message, (i, index) => index.IndexOf(i.Collection)));
+      registerMessage("format(_)", (obj, message) => iteratorFunc<KIndex>(obj, message, (i, index) => index.IndexOf(i.Collection)));
       registerMessage("replace(_<Lambda>,_<Lambda>)",
          (obj, message) => iteratorFunc<Lambda, Lambda>(obj, message, (i, l1, l2) => i.Replace(l1, l2)));
       registerMessage("set()", (obj, _) => iteratorFunc(obj, i => i.ToSet()));
@@ -453,7 +434,7 @@ public abstract class BaseClass
       }
       else
       {
-         return Void.Value;
+         return KVoid.Value;
       }
    }
 
@@ -506,7 +487,7 @@ public abstract class BaseClass
             var sliceable = (ISliceable)o1;
             switch (o2)
             {
-               case Objects.Range range:
+               case KRange range:
                   if (range.StopObj is End)
                   {
                      var length = sliceable.Length;
@@ -516,7 +497,7 @@ public abstract class BaseClass
                         start = (Int)wrapIndex(i.Value, length);
                      }
 
-                     var newRange = new Objects.Range((IRangeItem)start, (Int)(length - 1), range.Inclusive, range.Increment);
+                     var newRange = new KRange((IRangeItem)start, (Int)(length - 1), range.Inclusive, range.Increment);
                      return sliceable.Slice(newRange);
                   }
                   else
@@ -527,7 +508,7 @@ public abstract class BaseClass
                case ICollection collection:
                   return sliceable.Slice(collection);
                default:
-                  var tuple = new Tuple(o2);
+                  var tuple = new KTuple(o2);
                   return sliceable.Slice(tuple);
             }
          }));
@@ -552,36 +533,36 @@ public abstract class BaseClass
       registerMessage("find(_<TextFinding>,startAt:_<Int>)",
          (obj, message) => apply1<Int>(obj, message, (s, tf, i) => s.Find(tf, i.Value, false)));
       registerMessage("find(_<TextFinding>,reverse:_<Boolean>)",
-         (obj, message) => apply1<Boolean>(obj, message, (s, tf, b) => s.Find(tf, 0, b.Value)));
+         (obj, message) => apply1<KBoolean>(obj, message, (s, tf, b) => s.Find(tf, 0, b.Value)));
       registerMessage("find(_<TextFinding>,startAt:_<Int>,reverse:_<Boolean>)",
-         (obj, message) => apply2<Int, Boolean>(obj, message, (s, tf, i, b) => s.Find(tf, i.Value, b.Value)));
+         (obj, message) => apply2<Int, KBoolean>(obj, message, (s, tf, i, b) => s.Find(tf, i.Value, b.Value)));
       registerMessage("find(all:_<TextFinding>)", (obj, message) => apply(obj, message, (s, tf) => s.FindAll(tf)));
       registerMessage("replace(_<TextFinding>,new:_<String>)",
-         (obj, message) => apply1<String>(obj, message, (s1, tf, s2) => s1.Replace(tf, s2.Value, false)));
+         (obj, message) => apply1<KString>(obj, message, (s1, tf, s2) => s1.Replace(tf, s2.Value, false)));
       registerMessage("replace(_<TextFinding>,new:_<String>,reverse:_<Boolean>)",
-         (obj, message) => apply2<String, Boolean>(obj, message, (s1, tf, s2, b) => s1.Replace(tf, s2.Value, b.Value)));
+         (obj, message) => apply2<KString, KBoolean>(obj, message, (s1, tf, s2, b) => s1.Replace(tf, s2.Value, b.Value)));
       registerMessage("replace(all:_<TextFinding>,new:_<String>)",
-         (obj, message) => apply1<String>(obj, message, (s1, tf, s2) => s1.ReplaceAll(tf, s2.Value)));
+         (obj, message) => apply1<KString>(obj, message, (s1, tf, s2) => s1.ReplaceAll(tf, s2.Value)));
       registerMessage("replace(_<TextFinding>,with:_<Lambda>)",
          (obj, message) => apply1<Lambda>(obj, message, (s, tf, l) => s.Replace(tf, l, false)));
       registerMessage("replace(_<TextFinding>,with:_<Lambda>,reverse:_<Boolean>)",
-         (obj, message) => apply2<Lambda, Boolean>(obj, message, (s, tf, l, b) => s.Replace(tf, l, b.Value)));
+         (obj, message) => apply2<Lambda, KBoolean>(obj, message, (s, tf, l, b) => s.Replace(tf, l, b.Value)));
       registerMessage("replace(all:_<TextFinding>,with:_<Lambda>)",
          (obj, message) => apply1<Lambda>(obj, message, (s, tf, l) => s.ReplaceAll(tf, l)));
       registerMessage("split(on:_<TextFinding>)", (obj, message) => apply(obj, message, (s, tf) => s.Split(tf)));
       registerMessage("partition(_<TextFinding>)", (obj, message) => apply(obj, message, (s, tf) => s.Partition(tf, false)));
       registerMessage("partition(_<TextFinding>,reverse:_<Boolean>)",
-         (obj, message) => apply1<Boolean>(obj, message, (s, tf, b) => s.Partition(tf, b.Value)));
+         (obj, message) => apply1<KBoolean>(obj, message, (s, tf, b) => s.Partition(tf, b.Value)));
       registerMessage("count(_<String>)", (obj, message) => apply(obj, message, (s, tf) => s.Count(tf)));
       registerMessage("count(_<String>,_<Lambda>)", (obj, message) => apply1<Lambda>(obj, message, (s, tf, l) => s.Count(tf, l)));
 
       return;
 
-      IObject apply2<T1, T2>(IObject obj, Message message, Func<String, ITextFinding, T1, T2, IObject> func)
+      IObject apply2<T1, T2>(IObject obj, Message message, Func<KString, ITextFinding, T1, T2, IObject> func)
          where T1 : IObject
          where T2 : IObject
       {
-         String input = obj.AsString;
+         KString input = obj.AsString;
          var textFinding = (ITextFinding)message.Arguments[0];
          var arg1 = (T1)message.Arguments[1];
          var arg2 = (T2)message.Arguments[2];
@@ -589,19 +570,19 @@ public abstract class BaseClass
          return func(input, textFinding, arg1, arg2);
       }
 
-      IObject apply1<T>(IObject obj, Message message, Func<String, ITextFinding, T, IObject> func)
+      IObject apply1<T>(IObject obj, Message message, Func<KString, ITextFinding, T, IObject> func)
          where T : IObject
       {
-         String input = obj.AsString;
+         KString input = obj.AsString;
          var textFinding = (ITextFinding)message.Arguments[0];
          var arg1 = (T)message.Arguments[1];
 
          return func(input, textFinding, arg1);
       }
 
-      IObject apply(IObject obj, Message message, Func<String, ITextFinding, IObject> func)
+      IObject apply(IObject obj, Message message, Func<KString, ITextFinding, IObject> func)
       {
-         String input = obj.AsString;
+         KString input = obj.AsString;
          var textFinding = (ITextFinding)message.Arguments[0];
 
          return func(input, textFinding);

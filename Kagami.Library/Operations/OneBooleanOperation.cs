@@ -14,9 +14,9 @@ public abstract class OneBooleanOperation : Operation
       var _value = machine.Pop();
       if (_value is (true, var value))
       {
-         if (value is Boolean b)
+         if (value is KBoolean b)
          {
-            return Execute(b.Value).Map(Boolean.BooleanObject);
+            return Execute(b.Value).Map(KBoolean.BooleanObject);
          }
          else
          {

@@ -18,11 +18,11 @@ public class ByteClass : BaseClass, IParse, IEquivalentClass
    {
       base.RegisterClassMessages();
 
-      classMessages["min".get()] = (_, _) => (Byte)byte.MinValue;
-      classMessages["max".get()] = (_, _) => (Byte)byte.MaxValue;
+      classMessages["min".get()] = (_, _) => (KByte)byte.MinValue;
+      classMessages["max".get()] = (_, _) => (KByte)byte.MaxValue;
    }
 
-   public IObject Parse(string source) => Byte.ByteObject(source.Value().Byte());
+   public IObject Parse(string source) => KByte.ByteObject(source.Value().Byte());
 
    public override bool IsNumeric => true;
 

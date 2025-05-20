@@ -17,7 +17,7 @@ public class IndexedIterator : Iterator
          var x = new NameValue("index", newIndex);
          var y = new NameValue("value", value);
 
-         return Tuple.NewTuple(x, y).Some();
+         return KTuple.NewTuple(x, y).Some();
       }
       else
       {

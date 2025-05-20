@@ -32,13 +32,13 @@ namespace Kagami.Library.Objects
 
 		public bool ExpandForArray => openRange.ExpandForArray;
 
-		public Boolean In(IObject item) => openRange.In(item);
+		public KBoolean In(IObject item) => openRange.In(item);
 
-		public Boolean NotIn(IObject item) => openRange.NotIn(item);
+		public KBoolean NotIn(IObject item) => openRange.NotIn(item);
 
 		public IObject Times(int count) => openRange.Times(count);
 
-		public String MakeString(string connector) => openRange.MakeString(connector);
+		public KString MakeString(string connector) => openRange.MakeString(connector);
 
 		public IIterator GetIndexedIterator() => new IndexedIterator(this);
 

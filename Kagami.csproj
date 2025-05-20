@@ -1,9 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <OutputType>Exe</OutputType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <LangVersion>latest</LangVersion>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <LangVersion>preview</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyTitle>Kagami</AssemblyTitle>
     <Product>Kagami</Product>
     <Copyright>Copyright ©  2018</Copyright>
@@ -38,17 +41,6 @@
     <Compile Remove="Kagami.Collections\SequenceIterator.cs" />
     <Compile Remove="Kagami.Collections\Set.cs" />
     <Compile Remove="Kagami.Collections\SetClass.cs" />
-    <Compile Remove="Kagami.Drawing\Drawing.cs" />
-    <Compile Remove="Kagami.Drawing\DrawingClass.cs" />
-    <Compile Remove="Kagami.Drawing\DrawingFunctions.cs" />
-    <Compile Remove="Kagami.Drawing\obj\Debug\.NETFramework,Version=v4.7.2.AssemblyAttributes.cs" />
-    <Compile Remove="Kagami.Drawing\Point.cs" />
-    <Compile Remove="Kagami.Drawing\PointClass.cs" />
-    <Compile Remove="Kagami.Drawing\Properties\AssemblyInfo.cs" />
-    <Compile Remove="Kagami.Drawing\Rectangle.cs" />
-    <Compile Remove="Kagami.Drawing\RectangleClass.cs" />
-    <Compile Remove="Kagami.Drawing\Size.cs" />
-    <Compile Remove="Kagami.Drawing\SizeClass.cs" />
     <Compile Remove="Kagami.IO\File.cs" />
     <Compile Remove="Kagami.IO\FileClass.cs" />
     <Compile Remove="Kagami.IO\FileIterator.cs" />
@@ -837,5 +829,8 @@
     <Compile Remove="Kagami.Text\StringBufferClass.cs" />
     <Compile Remove="Kagami.Text\Text.cs" />
     <Compile Remove="Kagami.Text\TextClass.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
 </Project>

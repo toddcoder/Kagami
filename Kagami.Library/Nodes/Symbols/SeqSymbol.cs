@@ -10,9 +10,12 @@ namespace Kagami.Library.Nodes.Symbols;
 public class SeqSymbol : Symbol
 {
    protected Block block;
-   protected string image;
+   protected string image = "";
 
-   public SeqSymbol(Block block) => this.block = block;
+   public SeqSymbol(Block block)
+   {
+      this.block = block;
+   }
 
    public override void Generate(OperationsBuilder builder)
    {
@@ -24,7 +27,7 @@ public class SeqSymbol : Symbol
       var invokeSymbol = new InvokeSymbol(functionName, [], nil, false);
       invokeSymbol.Generate(builder);
 
-      builder.PushObject(Void.Value);
+      builder.PushObject(KVoid.Value);
    }
 
    public override Precedence Precedence => Precedence.Value;

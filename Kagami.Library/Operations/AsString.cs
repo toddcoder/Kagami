@@ -6,7 +6,7 @@ namespace Kagami.Library.Operations;
 
 public class AsString : OneOperandOperation
 {
-   public override Optional<IObject> Execute(Machine machine, IObject value) => String.StringObject(value.AsString).Just();
+   public override Optional<IObject> Execute(Machine machine, IObject value) => KString.StringObject(value.AsString).Just();
 
    public override string ToString() => "string";
 }

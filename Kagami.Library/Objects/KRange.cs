@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Core.Collections;
+﻿using Core.Collections;
 using Core.Monads;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Core.Monads.MonadFunctions;
@@ -8,7 +6,7 @@ using static Kagami.Library.Objects.CollectionFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public readonly struct Range : IObject, ICollection
+   public readonly struct KRange : IObject, ICollection
    {
       private readonly IRangeItem start;
       private readonly IObject startObj;
@@ -19,7 +17,7 @@ namespace Kagami.Library.Objects
       private readonly Func<IRangeItem, IRangeItem> next;
       private readonly Func<IRangeItem, IObject, bool> compare;
 
-      public Range(IRangeItem start, IObjectCompare stop, bool inclusive, int increment = 1) : this()
+      public KRange(IRangeItem start, IObjectCompare stop, bool inclusive, int increment = 1) : this()
       {
          this.start = start;
          startObj = this.start.Object;
@@ -71,7 +69,7 @@ namespace Kagami.Library.Objects
          }
       }
 
-      public Range(Range range, Int increment) : this(range.start, range.stop, range.inclusive, increment.Value)
+      public KRange(KRange kRange, Int increment) : this(kRange.start, kRange.stop, kRange.inclusive, increment.Value)
       {
       }
 
@@ -111,19 +109,19 @@ namespace Kagami.Library.Objects
 
       public bool IsEqualTo(IObject obj)
       {
-         return obj is Range r && startObj.IsEqualTo(r.startObj) && stopObj.IsEqualTo(r.stopObj) && increment == r.increment;
+         return obj is KRange r && startObj.IsEqualTo(r.startObj) && stopObj.IsEqualTo(r.stopObj) && increment == r.increment;
       }
 
       public bool Match(IObject comparisand, Hash<string, IObject> bindings) => false;
 
       public bool IsTrue => list(this).Any();
 
-      public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(new Array(list(this))) : new RangeIterator(this);
+      public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(new KArray(list(this))) : new RangeIterator(this);
 
       public Maybe<IObject> Next(int index)
       {
          var self = this;
-         return maybe(index == 0, () => (IObject)self.GetIterator(false).ToArray());
+         return maybe<IObject>() & index == 0 & (IObject () => self.GetIterator(false).ToArray());
       }
 
       public Maybe<IObject> Peek(int index) => nil;
@@ -132,7 +130,7 @@ namespace Kagami.Library.Objects
 
       public bool ExpandForArray => true;
 
-      public Boolean In(IObject comparisand)
+      public KBoolean In(IObject comparisand)
       {
          if (comparisand is IObjectCompare oc && startObj is IObjectCompare left)
          {
@@ -155,34 +153,34 @@ namespace Kagami.Library.Objects
          }
       }
 
-      public Boolean NotIn(IObject comparisand) => !In(comparisand).IsTrue;
+      public KBoolean NotIn(IObject comparisand) => !In(comparisand).IsTrue;
 
       public IObject Times(int count)
       {
          if (start is Int iStart && stop is Int iStop)
          {
-            return new Range((Int)(iStart.Value * count), (Int)(iStop.Value * count), inclusive, increment * count);
+            return new KRange((Int)(iStart.Value * count), (Int)(iStop.Value * count), inclusive, increment * count);
          }
          else
          {
-            return new Range(start, stop, inclusive, increment * 4);
+            return new KRange(start, stop, inclusive, increment * 4);
          }
       }
 
-      public String MakeString(string connector) => makeString(this, connector);
+      public KString MakeString(string connector) => makeString(this, connector);
 
       public IIterator GetIndexedIterator()
       {
          var iterator = GetIterator(false);
-         var array = new Array(iterator.List());
+         var array = new KArray(iterator.List());
          return new IndexedIterator(array);
       }
 
-      public IObject Add(int increment) => new Range(this, increment);
+      public IObject Add(int increment) => new KRange(this, increment);
 
-      public IObject Subtract(int increment) => new Range(this, -increment);
+      public IObject Subtract(int increment) => new KRange(this, -increment);
 
-      public Range Reverse() => new((IRangeItem)stop, start, true, -increment);
+      public KRange Reverse() => new((IRangeItem)stop, start, true, -increment);
 
       public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
    }

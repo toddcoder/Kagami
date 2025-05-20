@@ -51,7 +51,7 @@ namespace Kagami.Library.Objects
 
       public bool IsPrimitive => false;
 
-      public INumeric ToByte() => (Byte)AsByte();
+      public INumeric ToByte() => (KByte)AsByte();
 
       public byte AsByte() => (byte)AsDouble();
 
@@ -87,7 +87,7 @@ namespace Kagami.Library.Objects
 
       public bool IsRational => true;
 
-      public String ZFill(int count) => $"{zfill(numerator.ToString(), count)}/{zfill(denominator.ToString(), count)}";
+      public KString ZFill(int count) => $"{zfill(numerator.ToString(), count)}/{zfill(denominator.ToString(), count)}";
 
       public string AsString => $"{numerator}/{denominator}";
 
@@ -105,19 +105,19 @@ namespace Kagami.Library.Objects
 
       public IObject Object => this;
 
-      public Boolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
+      public KBoolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
 
-      public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
+      public KBoolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
 
       public IRangeItem Successor => (IRangeItem)Add((Rational)(BigInteger.One, BigInteger.Zero));
 
       public IRangeItem Predecessor => (IRangeItem)Subtract((Rational)(BigInteger.One, BigInteger.Zero));
 
-      public Range Range() => new((Rational)0.0, this, false);
+      public KRange Range() => new((Rational)0.0, this, false);
 
       public int CompareTo(Rational other) => (numerator * other.denominator - other.numerator * denominator).Sign;
 
-      public String Format(string format) => $"{numerator.ToString(format)}/{denominator.ToString(format)}";
+      public KString Format(string format) => $"{numerator.ToString(format)}/{denominator.ToString(format)}";
 
       public IObject Negate() => (Rational)(-numerator, denominator);
 
@@ -141,7 +141,7 @@ namespace Kagami.Library.Objects
          return (Rational)(numerator * d, denominator * n);
       }
 
-      public IObject DivRem(INumeric other) => new Tuple(Divide(other), Remainder(other));
+      public IObject DivRem(INumeric other) => new KTuple(Divide(other), Remainder(other));
 
       public IObject Add(INumeric other)
       {

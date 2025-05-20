@@ -1,19 +1,18 @@
-﻿namespace Kagami.Library.Objects
+﻿namespace Kagami.Library.Objects;
+
+public interface IMutableCollection : ICollection
 {
-   public interface IMutableCollection : ICollection
-   {
-      IObject Append(IObject obj);
+   IObject Append(IObject obj);
 
-      IObject Remove(IObject obj);
+   IObject Remove(IObject obj);
 
-      IObject RemoveAt(int index);
+   IObject RemoveAt(int index);
 
-      IObject RemoveAll(IObject obj);
+   IObject RemoveAll(IObject obj);
 
-      IObject InsertAt(int index, IObject obj);
+   IObject InsertAt(int index, IObject obj);
 
-		Boolean IsEmpty { get; }
+   KBoolean IsEmpty { get; }
 
-		IObject Assign(IObject indexes, IObject values);
-   }
+   IObject Assign(IObject indexes, IObject values);
 }

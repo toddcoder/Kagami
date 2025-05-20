@@ -1,13 +1,12 @@
-﻿namespace Kagami.Library.Objects
+﻿namespace Kagami.Library.Objects;
+
+public interface IObjectCompare
 {
-   public interface IObjectCompare
-   {
-      int Compare(IObject obj);
+   int Compare(IObject obj);
 
-      IObject Object { get; }
+   IObject Object { get; }
 
-      Boolean Between(IObject min, IObject max, bool inclusive);
+   KBoolean Between(IObject min, IObject max, bool inclusive);
 
-      Boolean After(IObject min, IObject max, bool inclusive);
-   }
+   KBoolean After(IObject min, IObject max, bool inclusive);
 }

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Kagami.Library.Invokables;
+﻿using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Collections;
@@ -123,10 +121,10 @@ public class UserClass : BaseClass
 
    public override void RegisterMessages()
    {
-      registerMessage("className".get(), (obj, _) => String.StringObject(obj.ClassName));
+      registerMessage("className".get(), (obj, _) => KString.StringObject(obj.ClassName));
       registerMessage("class".get(), (obj, _) => new Class(obj.ClassName));
       registerMessage("send",
-         (obj, msg) => function<IObject, String>(obj, msg, (o, n) => sendMessage(o, n.Value, msg.Arguments.Pass(1))));
+         (obj, msg) => function<IObject, KString>(obj, msg, (o, n) => sendMessage(o, n.Value, msg.Arguments.Pass(1))));
    }
 
    public Optional<Selector> MatchImplemented(IEnumerable<Selector> traitSignatures)
@@ -184,9 +182,9 @@ public class UserClass : BaseClass
       }
       else
       {
-         var originalMessage = String.StringObject(message.Selector.Name);
+         var originalMessage = KString.StringObject(message.Selector.Name);
          var args = message.Arguments.ToArray();
-         var tuple = new Tuple(args);
+         var tuple = new KTuple(args);
 
          return sendMessage(obj, "missing(_<String>,_<Tuple>)", originalMessage, tuple);
       }
