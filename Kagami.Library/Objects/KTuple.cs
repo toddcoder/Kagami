@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Core.Collections;
+﻿using Core.Collections;
 using Core.Enumerables;
 using Core.Monads;
 using static Kagami.Library.AllExceptions;
@@ -11,39 +8,39 @@ using static Kagami.Library.Objects.CollectionFunctions;
 
 namespace Kagami.Library.Objects;
 
-public readonly struct Tuple : IObject, IEquatable<Tuple>, ICollection, IObjectCompare, IComparable<Tuple>, IComparable
+public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjectCompare, IComparable<KTuple>, IComparable
 {
    public static IObject NewTuple(IObject x, IObject y)
    {
-      if (x is Tuple t)
+      if (x is KTuple t)
       {
-         return new Tuple(t, y);
+         return new KTuple(t, y);
       }
       else
       {
-         return new Tuple(x, y);
+         return new KTuple(x, y);
       }
    }
 
    public static IObject NewTupleNamed(string nameX, IObject x, string nameY, IObject y)
    {
-      return new Tuple([new KeyValue(nameX, x), new KeyValue(nameY, y)]);
+      return new KTuple([new KeyValue(nameX, x), new KeyValue(nameY, y)]);
    }
 
-   public static Tuple Empty => new([]);
+   public static KTuple Empty => new([]);
 
-   public static Tuple Tuple3(string left, string middle, string right)
+   public static KTuple Tuple3(string left, string middle, string right)
    {
-      return new([String.StringObject(left), String.StringObject(middle), String.StringObject(right)]);
+      return new([KString.StringObject(left), KString.StringObject(middle), KString.StringObject(right)]);
    }
 
    private readonly IObject[] items;
    private readonly Hash<string, int> names;
    private readonly Hash<int, string> indexes;
 
-   public Tuple(IObject[] items) : this()
+   public KTuple(IObject[] items) : this()
    {
-      if (items.Length == 1 && items[0] is Container { ExpandInTuple: true } il)
+      if (items is [Container { ExpandInTuple: true } il])
       {
          this.items = il.List.ToArray();
       }
@@ -58,7 +55,7 @@ public readonly struct Tuple : IObject, IEquatable<Tuple>, ICollection, IObjectC
       denameify();
    }
 
-   public Tuple(IObject x, IObject y)
+   public KTuple(IObject x, IObject y)
    {
       items = [x, y];
       names = [];
@@ -67,7 +64,7 @@ public readonly struct Tuple : IObject, IEquatable<Tuple>, ICollection, IObjectC
       denameify();
    }
 
-   public Tuple(IObject value) : this([value])
+   public KTuple(IObject value) : this([value])
    {
    }
 
@@ -84,13 +81,13 @@ public readonly struct Tuple : IObject, IEquatable<Tuple>, ICollection, IObjectC
       }
    }
 
-   public Tuple(Tuple tuple, IObject item) : this()
+   public KTuple(KTuple kTuple, IObject item) : this()
    {
-      var tupleItems = tuple.items;
+      var tupleItems = kTuple.items;
       var length = tupleItems.Length;
 
       items = new IObject[length + 1];
-      System.Array.Copy(tupleItems, items, length);
+      Array.Copy(tupleItems, items, length);
       items[length] = item;
 
       names = new Hash<string, int>();
@@ -113,7 +110,7 @@ public readonly struct Tuple : IObject, IEquatable<Tuple>, ICollection, IObjectC
          }
          else
          {
-            throw keyNotFound((String)name);
+            throw keyNotFound((KString)name);
          }
       }
    }
@@ -138,7 +135,7 @@ public readonly struct Tuple : IObject, IEquatable<Tuple>, ICollection, IObjectC
       get
       {
          var self = this;
-         return maybe<IObject>() & items.Length > 0 & (() => self.items[self.items.Length - 1]);
+         return maybe<IObject>() & items.Length > 0 & (() => self.items[^1]);
       }
    }
 
@@ -168,7 +165,7 @@ public readonly struct Tuple : IObject, IEquatable<Tuple>, ICollection, IObjectC
 
    public bool IsEqualTo(IObject obj)
    {
-      return obj is Tuple t && items.Length == t.items.Length &&
+      return obj is KTuple t && items.Length == t.items.Length &&
          items.Zip(t.items, (t1, t2) => (x: t1, y: t2)).All(tu => tu.x.IsEqualTo(tu.y));
    }
 
@@ -178,21 +175,21 @@ public readonly struct Tuple : IObject, IEquatable<Tuple>, ICollection, IObjectC
 
    public bool IsTrue => items.Length > 0;
 
-   public bool Equals(Tuple other) => IsEqualTo(other);
+   public bool Equals(KTuple other) => IsEqualTo(other);
 
-   public override bool Equals(object obj) => obj is Tuple tuple && Equals(tuple);
+   public override bool Equals(object? obj) => obj is KTuple tuple && Equals(tuple);
 
    public override int GetHashCode() => Hash;
 
-   public int CompareTo(object obj)
+   public int CompareTo(object? obj)
    {
-      if (obj is Tuple tuple)
+      if (obj is KTuple tuple)
       {
          return CompareTo(tuple);
       }
       else
       {
-         return Compare((IObject)obj);
+         return Compare((IObject)obj!);
       }
    }
 
@@ -225,9 +222,9 @@ public readonly struct Tuple : IObject, IEquatable<Tuple>, ICollection, IObjectC
 
    public bool ExpandForArray => false;
 
-   public Boolean In(IObject item) => items.Contains(item);
+   public KBoolean In(IObject item) => items.Contains(item);
 
-   public Boolean NotIn(IObject item) => !items.Contains(item);
+   public KBoolean NotIn(IObject item) => !items.Contains(item);
 
    public IObject Times(int count)
    {
@@ -237,16 +234,16 @@ public readonly struct Tuple : IObject, IEquatable<Tuple>, ICollection, IObjectC
          result.AddRange(items);
       }
 
-      return new Tuple(result.ToArray());
+      return new KTuple(result.ToArray());
    }
 
-   public String MakeString(string connector) => makeString(this, connector);
+   public KString MakeString(string connector) => makeString(this, connector);
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
    public int Compare(IObject obj)
    {
-      if (obj is Tuple tuple)
+      if (obj is KTuple tuple)
       {
          var tupleItems = tuple.items;
          var length = Math.Min(items.Length, tupleItems.Length);
@@ -274,11 +271,11 @@ public readonly struct Tuple : IObject, IEquatable<Tuple>, ICollection, IObjectC
 
    public IObject Object => this;
 
-   public Boolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
+   public KBoolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
 
-   public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
+   public KBoolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
 
-   public int CompareTo(Tuple other) => Compare(other);
+   public int CompareTo(KTuple other) => Compare(other);
 
    public IObject Head
    {
@@ -296,9 +293,9 @@ public readonly struct Tuple : IObject, IEquatable<Tuple>, ICollection, IObjectC
       }
    }
 
-   public IObject Tail => items.Length == 0 ? Empty : new Tuple(items.Skip(1).ToArray());
+   public IObject Tail => items.Length == 0 ? Empty : new KTuple(items.Skip(1).ToArray());
 
-   public IObject HeadTail => new Tuple(Head, Tail);
+   public IObject HeadTail => new KTuple(Head, Tail);
 
    public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
 }

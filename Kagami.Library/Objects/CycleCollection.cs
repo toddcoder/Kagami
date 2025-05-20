@@ -75,13 +75,13 @@ public class CycleCollection : IObject, ICollection
 
    public bool ExpandForArray => cycle.ExpandForArray;
 
-   public Boolean In(IObject item) => cycle.In(item);
+   public KBoolean In(IObject item) => cycle.In(item);
 
-   public Boolean NotIn(IObject item) => cycle.NotIn(item);
+   public KBoolean NotIn(IObject item) => cycle.NotIn(item);
 
    public IObject Times(int count) => cycle.Times(count);
 
-   public String MakeString(string connector) => cycle.MakeString(connector);
+   public KString MakeString(string connector) => cycle.MakeString(connector);
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 

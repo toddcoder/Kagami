@@ -22,8 +22,8 @@ public class SysClass : PackageClass
       registerPackageFunction("peek(_)", (obj, msg) => function<Sys>(obj, sys => sys.Peek(msg.Arguments[0])));
       registerPackageFunction("peek(_,_)", (obj, msg) => function<Sys>(obj, sys => sys.Peek(msg.Arguments[0], msg.Arguments[1])));
       registerPackageFunction("ticks()", (obj, _) => function<Sys>(obj, sys => sys.Ticks()));
-      registerPackageFunction("fst(_)", (obj, msg) => function<Sys, Tuple>(obj, msg, (sys, t) => sys.First(t)));
-      registerPackageFunction("snd(_)", (obj, msg) => function<Sys, Tuple>(obj, msg, (sys, t) => sys.Second(t)));
+      registerPackageFunction("fst(_)", (obj, msg) => function<Sys, KTuple>(obj, msg, (sys, t) => sys.First(t)));
+      registerPackageFunction("snd(_)", (obj, msg) => function<Sys, KTuple>(obj, msg, (sys, t) => sys.Second(t)));
       registerPackageFunction("id".get(), (obj, _) => function<Sys>(obj, sys => sys.ID));
       registerPackageFunction("Tuple(_)", (obj, msg) => function<Sys>(obj, sys => sys.Tuple(msg.Arguments[0])));
       registerPackageFunction("Tuple(_,_)", (obj, msg) => function<Sys>(obj, sys => sys.Tuple(msg.Arguments[0], msg.Arguments[1])));
@@ -33,9 +33,9 @@ public class SysClass : PackageClass
       registerPackageFunction("Random(seed:<Int>)",
          (obj, msg) => function<Sys, Int>(obj, msg, (sys, i) => sys.Random(i.Value)));
       registerPackageFunction("Complex(_,_)", (obj, msg) => function<Sys, IObject, IObject>(obj, msg, (s, o1, o2) => s.Complex(o1, o2)));
-      registerPackageFunction("sel(_)", (obj, msg) => function<Sys, String>(obj, msg, (sys, s) => sys.Selector(s.Value)));
+      registerPackageFunction("sel(_)", (obj, msg) => function<Sys, KString>(obj, msg, (sys, s) => sys.Selector(s.Value)));
       registerPackageFunction("fields()", (obj, _) => function<Sys>(obj, sys => sys.XFields()));
       registerPackageFunction("Date(_<Float>)", (obj, msg) => function<Sys, Float>(obj, msg, (sys, f) => sys.Date(f.Value)));
-      registerPackageFunction("Regex(_<String>)", (obj, msg) => function<Sys, String>(obj, msg, (sys, s) => sys.Regex(s.Value)));
+      registerPackageFunction("Regex(_<String>)", (obj, msg) => function<Sys, KString>(obj, msg, (sys, s) => sys.Regex(s.Value)));
    }
 }

@@ -4,13 +4,12 @@ using Kagami.Library.Runtime;
 using Core.Monads;
 using static Kagami.Library.AllExceptions;
 using static Core.Monads.MonadFunctions;
-using Boolean = Kagami.Library.Objects.Boolean;
 
 namespace Kagami.Library.Operations;
 
 public class GoToIfTrue : AddressedOperation
 {
-   protected Predicate<Boolean> predicate;
+   protected Predicate<KBoolean> predicate;
 
    public GoToIfTrue() => predicate = b => b.Value;
 
@@ -21,7 +20,7 @@ public class GoToIfTrue : AddressedOperation
       var _x = machine.Pop();
       if (_x is (true, var x))
       {
-         if (x is Boolean bx)
+         if (x is KBoolean bx)
          {
             if (predicate(bx))
             {

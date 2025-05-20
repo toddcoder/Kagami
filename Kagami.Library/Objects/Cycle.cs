@@ -64,17 +64,17 @@ public class Cycle : IObject, ICollection
 
    public bool ExpandForArray => true;
 
-   public Boolean In(IObject item) => items.Contains(item);
+   public KBoolean In(IObject item) => items.Contains(item);
 
-   public Boolean NotIn(IObject item) => !items.Contains(item);
+   public KBoolean NotIn(IObject item) => !items.Contains(item);
 
    public IObject Times(int count) => GetIterator(false).Take(count);
 
-   public String MakeString(string connector) => makeString(this, connector);
+   public KString MakeString(string connector) => makeString(this, connector);
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
-   public Tuple Items => new(items);
+   public KTuple Items => new(items);
 
    public IObject this[int index] => items[index];
 

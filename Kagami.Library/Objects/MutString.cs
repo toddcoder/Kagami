@@ -19,11 +19,11 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
 {
    public static implicit operator MutString(string source) => new(source);
 
-   public static implicit operator MutString(String source) => new(source.AsString);
+   public static implicit operator MutString(KString source) => new(source.AsString);
 
    public static implicit operator string(MutString source) => source.AsString;
 
-   public static implicit operator String(MutString source) => source.AsString;
+   public static implicit operator KString(MutString source) => source.AsString;
 
    protected StringBuilder mutable;
 
@@ -37,7 +37,7 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
 
    public int Hash => mutable.GetHashCode();
 
-   public bool IsEqualTo(IObject obj) => obj is MutString ms && mutable == ms.mutable || obj is String s && AsString == s.AsString;
+   public bool IsEqualTo(IObject obj) => obj is MutString ms && mutable == ms.mutable || obj is KString s && AsString == s.AsString;
 
    public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
@@ -47,14 +47,14 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
 
    public bool Equals(MutString other) => AsString == other.AsString;
 
-   public String Format(string format) => AsString.FormatAs(format);
+   public KString Format(string format) => AsString.FormatAs(format);
 
    public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new Iterator(this);
 
    public Maybe<IObject> Next(int index)
    {
       var self = this;
-      return maybe<IObject>() & index < mutable.Length & (() => Char.CharObject(self.mutable[index]));
+      return maybe<IObject>() & index < mutable.Length & (() => KChar.CharObject(self.mutable[index]));
    }
 
    public Maybe<IObject> Peek(int index) => Next(index);
@@ -69,7 +69,7 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
       return Next(intIndex);
    }
 
-   public Char this[int index]
+   public KChar this[int index]
    {
       get
       {
@@ -95,16 +95,16 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
 
    public int Length => mutable.Length;
 
-   public Boolean In(IObject item)
+   public KBoolean In(IObject item)
    {
-      return AsString.Contains(item.AsString) || item is Char c && AsString.IndexOf(c.Value) > 0;
+      return AsString.Contains(item.AsString) || item is KChar c && AsString.IndexOf(c.Value) > 0;
    }
 
-   public Boolean NotIn(IObject item) => !In(item).Value;
+   public KBoolean NotIn(IObject item) => !In(item).Value;
 
    public IObject Times(int count) => new MutString(AsString.Repeat(count));
 
-   public String MakeString(string connector) => makeString(this, connector);
+   public KString MakeString(string connector) => makeString(this, connector);
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
@@ -114,9 +114,9 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
 
    public IObject Object => this;
 
-   public Boolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
+   public KBoolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
 
-   public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
+   public KBoolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
 
    public IRangeItem Successor
    {
@@ -136,13 +136,13 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
       }
    }
 
-   public Range Range() => new(this, (MutString)"z".Repeat(mutable.Length), true);
+   public KRange Range() => new(this, (MutString)"z".Repeat(mutable.Length), true);
 
    public IObject Find(string input, int startIndex, bool reverse) => find(AsString, input, startIndex, reverse);
 
-   public Tuple FindAll(string input) => findAll(AsString, input);
+   public KTuple FindAll(string input) => findAll(AsString, input);
 
-   public String Replace(string input, string replacement, bool reverse)
+   public KString Replace(string input, string replacement, bool reverse)
    {
       var result = replace(AsString, input, replacement, reverse);
       mutable.Clear();
@@ -150,7 +150,7 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
       return result;
    }
 
-   public String Replace(string input, Lambda lambda, bool reverse)
+   public KString Replace(string input, Lambda lambda, bool reverse)
    {
       var result = replace(AsString, input, lambda, reverse);
       mutable.Clear();
@@ -158,7 +158,7 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
       return result;
    }
 
-   public String ReplaceAll(string input, string replacement)
+   public KString ReplaceAll(string input, string replacement)
    {
       var result = replaceAll(AsString, input, replacement);
       mutable.Clear();
@@ -166,7 +166,7 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
       return result;
    }
 
-   public String ReplaceAll(string input, Lambda lambda)
+   public KString ReplaceAll(string input, Lambda lambda)
    {
       var result = replaceAll(AsString, input, lambda);
       mutable.Clear();
@@ -174,9 +174,9 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
       return result;
    }
 
-   public Tuple Split(string input) => split(AsString, input);
+   public KTuple Split(string input) => split(AsString, input);
 
-   public Tuple Partition(string input, bool reverse) => partition(AsString, input, reverse);
+   public KTuple Partition(string input, bool reverse) => partition(AsString, input, reverse);
 
    public Int Count(string input) => count(AsString, input);
 
@@ -226,7 +226,7 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
       return this;
    }
 
-   public Boolean IsEmpty => mutable.Length == 0;
+   public KBoolean IsEmpty => mutable.Length == 0;
 
    public IObject Assign(IObject indexes, IObject values)
    {
@@ -236,7 +236,7 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
          {
             if (valuesIterator.Next() is (true, var value))
             {
-               if (index is Int i && i.Value.Between(0).Until(mutable.Length) && value is Char ch)
+               if (index is Int i && i.Value.Between(0).Until(mutable.Length) && value is KChar ch)
                {
                   mutable[i.Value] = ch.Value;
                }

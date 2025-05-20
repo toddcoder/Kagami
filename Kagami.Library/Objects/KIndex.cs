@@ -3,14 +3,14 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects
 {
-   public readonly struct Index : IObject
+   public readonly struct KIndex : IObject
    {
-      public static IObject New(int skipCount, int takeCount) => new Index(skipCount, takeCount);
+      public static IObject New(int skipCount, int takeCount) => new KIndex(skipCount, takeCount);
 
       private readonly int skipCount;
       private readonly int takeCount;
 
-      public Index(int skipCount, int takeCount) : this()
+      public KIndex(int skipCount, int takeCount) : this()
       {
          this.skipCount = skipCount;
          this.takeCount = takeCount;
@@ -24,7 +24,7 @@ namespace Kagami.Library.Objects
 
       public int Hash => (skipCount + takeCount).GetHashCode();
 
-      public bool IsEqualTo(IObject obj) => obj is Index index && skipCount == index.skipCount && takeCount == index.takeCount;
+      public bool IsEqualTo(IObject obj) => obj is KIndex index && skipCount == index.skipCount && takeCount == index.takeCount;
 
       public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 

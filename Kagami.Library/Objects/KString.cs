@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
+﻿using System.Numerics;
 using System.Text;
 using Core.Collections;
 using Core.Monads;
@@ -17,18 +14,18 @@ using Core.Numbers;
 
 namespace Kagami.Library.Objects;
 
-public readonly struct String : IObject, IComparable<String>, IEquatable<String>, IFormattable, ICollection, IComparable, ISliceable, IRangeItem,
+public readonly struct KString : IObject, IComparable<KString>, IEquatable<KString>, IFormattable, ICollection, IComparable, ISliceable, IRangeItem,
    ITextFinding
 {
-   public static implicit operator String(string value) => new(value);
+   public static implicit operator KString(string value) => new(value);
 
-   public static IObject StringObject(string value) => new String(value);
+   public static IObject StringObject(string value) => new KString(value);
 
    public static IObject Empty => StringObject("");
 
    private readonly string value;
 
-   public String(string value) : this() => this.value = value;
+   public KString(string value) : this() => this.value = value;
 
    public string Value => value;
 
@@ -42,32 +39,32 @@ public readonly struct String : IObject, IComparable<String>, IEquatable<String>
 
    public bool IsEqualTo(IObject obj)
    {
-      return obj is String s && value == s.value || obj is Regex regex && regex.IsMatch(value).IsTrue;
+      return obj is KString s && value == s.value || obj is Regex regex && regex.IsMatch(value).IsTrue;
    }
 
    public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
    public bool IsTrue => value.Length > 0;
 
-   public int Compare(IObject obj) => CompareTo((String)obj);
+   public int Compare(IObject obj) => CompareTo((KString)obj);
 
    public IObject Object => this;
 
-   public Boolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
+   public KBoolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
 
-   public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
+   public KBoolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
 
-   public int CompareTo(String other) => string.Compare(value, other.value, StringComparison.Ordinal);
+   public int CompareTo(KString other) => string.Compare(value, other.value, StringComparison.Ordinal);
 
-   public bool Equals(String other) => string.Equals(value, other.value);
+   public bool Equals(KString other) => string.Equals(value, other.value);
 
-   public override bool Equals(object obj) => obj is String s && Equals(s);
+   public override bool Equals(object? obj) => obj is KString s && Equals(s);
 
    public override int GetHashCode() => Hash;
 
-   public int CompareTo(object obj) => CompareTo((String)obj);
+   public int CompareTo(object? obj) => CompareTo((KString)obj!);
 
-   public String Format(string format)
+   public KString Format(string format)
    {
       if (format.StartsWith("s."))
       {
@@ -90,13 +87,13 @@ public readonly struct String : IObject, IComparable<String>, IEquatable<String>
    public Maybe<IObject> Next(int index)
    {
       var self = this;
-      return maybe<IObject>() & index < value.Length & (() => Char.CharObject(self.value[index]));
+      return maybe<IObject>() & index < value.Length & (() => KChar.CharObject(self.value[index]));
    }
 
    public Maybe<IObject> Peek(int index)
    {
       var self = this;
-      return maybe<IObject>() & index < value.Length & (() => Char.CharObject(self.value[index]));
+      return maybe<IObject>() & index < value.Length & (() => KChar.CharObject(self.value[index]));
    }
 
    public Int Length => value.Length;
@@ -107,7 +104,7 @@ public readonly struct String : IObject, IComparable<String>, IEquatable<String>
       {
          foreach (var c in value)
          {
-            yield return (Char)c;
+            yield return (KChar)c;
          }
       }
    }
@@ -122,7 +119,7 @@ public readonly struct String : IObject, IComparable<String>, IEquatable<String>
 
    public IObject Set(IObject index, IObject value) => throw immutableValue(ClassName);
 
-   public Char this[int index]
+   public KChar this[int index]
    {
       get
       {
@@ -131,7 +128,7 @@ public readonly struct String : IObject, IComparable<String>, IEquatable<String>
       }
    }
 
-   public String this[Container container]
+   public KString this[Container container]
    {
       get
       {
@@ -149,45 +146,45 @@ public readonly struct String : IObject, IComparable<String>, IEquatable<String>
 
    int ISliceable.Length => value.Length;
 
-   public Boolean In(IObject item) => item switch
+   public KBoolean In(IObject item) => item switch
    {
-      String other => value.Contains(other.value),
-      Char c => value.IndexOf(c.Value) >= 0,
+      KString other => value.Contains(other.value),
+      KChar c => value.IndexOf(c.Value) >= 0,
       _ => false
    };
 
-   public Boolean NotIn(IObject item) => item switch
+   public KBoolean NotIn(IObject item) => item switch
    {
-      String other => !value.Contains(other.value),
-      Char c => value.IndexOf(c.Value) == -1,
+      KString other => !value.Contains(other.value),
+      KChar c => value.IndexOf(c.Value) == -1,
       _ => false
    };
 
-   public IObject Times(int count) => (String)value.Repeat(count);
+   public IObject Times(int count) => (KString)value.Repeat(count);
 
-   public String MakeString(string connector) => makeString(this, connector);
+   public KString MakeString(string connector) => makeString(this, connector);
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
-   public String Repeat(int count) => value.Repeat(count);
+   public KString Repeat(int count) => value.Repeat(count);
 
-   public Char GetChar(int index) => value[index];
+   public KChar GetChar(int index) => value[index];
 
-   public String Upper() => value.ToUpper();
+   public KString Upper() => value.ToUpper();
 
-   public String Lower() => value.ToLower();
+   public KString Lower() => value.ToLower();
 
-   public String Title() => value.ToTitleCase();
+   public KString Title() => value.ToTitleCase();
 
-   public String Upper1() => value.ToUpper1();
+   public KString Upper1() => value.ToUpper1();
 
-   public String Lower1() => value.ToLower1();
+   public KString Lower1() => value.ToLower1();
 
-   public Boolean IsPrefix(string substring) => value.StartsWith(substring);
+   public KBoolean IsPrefix(string substring) => value.StartsWith(substring);
 
-   public Boolean IsSuffix(string substring) => value.EndsWith(substring);
+   public KBoolean IsSuffix(string substring) => value.EndsWith(substring);
 
-   public String Replace(string old, string @new)
+   public KString Replace(string old, string @new)
    {
       var _index = value.Find(old);
       if (_index is (true, var index))
@@ -196,40 +193,40 @@ public readonly struct String : IObject, IComparable<String>, IEquatable<String>
       }
       else
       {
-         return new String(value);
+         return new KString(value);
       }
    }
 
-   public Tuple FindAll(ITextFinding textFinding) => textFinding.FindAll(value);
+   public KTuple FindAll(ITextFinding textFinding) => textFinding.FindAll(value);
 
-   public Tuple FindAll(string input) => findAll(value, input);
+   public KTuple FindAll(string input) => findAll(value, input);
 
-   public String Replace(ITextFinding textFinding, string replacement, bool reverse)
+   public KString Replace(ITextFinding textFinding, string replacement, bool reverse)
    {
       return textFinding.Replace(value, replacement, reverse);
    }
 
-   public String Replace(string input, string replacement, bool reverse) => replace(value, input, replacement, reverse);
+   public KString Replace(string input, string replacement, bool reverse) => replace(value, input, replacement, reverse);
 
-   public String Replace(ITextFinding textFinding, Lambda lambda, bool reverse) => textFinding.Replace(value, lambda, reverse);
+   public KString Replace(ITextFinding textFinding, Lambda lambda, bool reverse) => textFinding.Replace(value, lambda, reverse);
 
-   public String Replace(string input, Lambda lambda, bool reverse) => replace(value, input, lambda, reverse);
+   public KString Replace(string input, Lambda lambda, bool reverse) => replace(value, input, lambda, reverse);
 
-   public String ReplaceAll(ITextFinding textFinding, string replacement) => textFinding.ReplaceAll(value, replacement);
+   public KString ReplaceAll(ITextFinding textFinding, string replacement) => textFinding.ReplaceAll(value, replacement);
 
-   public String ReplaceAll(string input, string replacement) => replaceAll(value, input, replacement);
+   public KString ReplaceAll(string input, string replacement) => replaceAll(value, input, replacement);
 
-   public String ReplaceAll(ITextFinding textFinding, Lambda lambda) => textFinding.ReplaceAll(value, lambda);
+   public KString ReplaceAll(ITextFinding textFinding, Lambda lambda) => textFinding.ReplaceAll(value, lambda);
 
-   public String ReplaceAll(string input, Lambda lambda) => replaceAll(value, input, lambda);
+   public KString ReplaceAll(string input, Lambda lambda) => replaceAll(value, input, lambda);
 
-   public Tuple Split(ITextFinding textFinding) => textFinding.Split(value);
+   public KTuple Split(ITextFinding textFinding) => textFinding.Split(value);
 
-   public Tuple Split(string input) => split(value, input);
+   public KTuple Split(string input) => split(value, input);
 
-   public Tuple Partition(ITextFinding textFinding, bool reverse) => textFinding.Partition(value, reverse);
+   public KTuple Partition(ITextFinding textFinding, bool reverse) => textFinding.Partition(value, reverse);
 
-   public Tuple Partition(string input, bool reverse) => partition(value, input, reverse);
+   public KTuple Partition(string input, bool reverse) => partition(value, input, reverse);
 
    public Int Count(ITextFinding textFinding) => textFinding.Count(value);
 
@@ -239,43 +236,43 @@ public readonly struct String : IObject, IComparable<String>, IEquatable<String>
 
    public Int Count(string input, Lambda lambda) => count(value, input, lambda);
 
-   public String LStrip() => value.TrimStart();
+   public KString LStrip() => value.TrimStart();
 
-   public String RStrip() => value.TrimEnd();
+   public KString RStrip() => value.TrimEnd();
 
-   public String Strip() => value.Trim();
+   public KString Strip() => value.Trim();
 
-   public String Center(int width, char padding) => value.Center(width, padding);
+   public KString Center(int width, char padding) => value.Center(width, padding);
 
-   public String Center(int width) => value.Center(width);
+   public KString Center(int width) => value.Center(width);
 
-   public String LJust(int width, char padding) => value.LeftJustify(width, padding);
+   public KString LJust(int width, char padding) => value.LeftJustify(width, padding);
 
-   public String LJust(int width) => value.LeftJustify(width);
+   public KString LJust(int width) => value.LeftJustify(width);
 
-   public String RJust(int width, char padding) => value.RightJustify(width, padding);
+   public KString RJust(int width, char padding) => value.RightJustify(width, padding);
 
-   public String RJust(int width) => value.RightJustify(width);
+   public KString RJust(int width) => value.RightJustify(width);
 
-   public Boolean IsEmpty => value.IsEmpty();
+   public KBoolean IsEmpty => value.IsEmpty();
 
-   public Boolean IsNotEmpty => value.IsNotEmpty();
+   public KBoolean IsNotEmpty => value.IsNotEmpty();
 
-   public String Concatenate(string otherString) => value + otherString;
+   public KString Concatenate(string otherString) => value + otherString;
 
-   public Boolean IsAlphaDigit => value.All(char.IsLetterOrDigit);
+   public KBoolean IsAlphaDigit => value.All(char.IsLetterOrDigit);
 
-   public Boolean IsAlpha => value.All(char.IsLetter);
+   public KBoolean IsAlpha => value.All(char.IsLetter);
 
-   public Boolean IsDigit => value.All(char.IsDigit);
+   public KBoolean IsDigit => value.All(char.IsDigit);
 
-   public Boolean IsLower => value.All(char.IsLower);
+   public KBoolean IsLower => value.All(char.IsLower);
 
-   public Boolean IsUpper => value.All(char.IsUpper);
+   public KBoolean IsUpper => value.All(char.IsUpper);
 
-   public Boolean IsSpace => value.All(char.IsWhiteSpace);
+   public KBoolean IsSpace => value.All(char.IsWhiteSpace);
 
-   public Boolean IsTitle => value == value.ToTitleCase();
+   public KBoolean IsTitle => value == value.ToTitleCase();
 
    private static string expand(string value)
    {
@@ -311,7 +308,7 @@ public readonly struct String : IObject, IComparable<String>, IEquatable<String>
       }
    }
 
-   public String Translate(string from, string to)
+   public KString Translate(string from, string to)
    {
       from = expand(from);
       to = expand(to);
@@ -342,7 +339,7 @@ public readonly struct String : IObject, IComparable<String>, IEquatable<String>
       return result.ToString();
    }
 
-   public String Truncate(int width, bool ellipses = true) => value.Truncate(width, ellipses);
+   public KString Truncate(int width, bool ellipses = true) => value.Truncate(width, ellipses);
 
    public IObject Find(ITextFinding textFinding, int startIndex, bool reverse) => textFinding.Find(value, startIndex, reverse);
 
@@ -352,27 +349,27 @@ public readonly struct String : IObject, IComparable<String>, IEquatable<String>
 
    public IObject Float() => double.TryParse(value, out var result) ? new Some((Float)result) : None.NoneValue;
 
-   public IObject Byte() => byte.TryParse(value, out var result) ? new Some((Byte)result) : None.NoneValue;
+   public IObject Byte() => byte.TryParse(value, out var result) ? new Some((KByte)result) : None.NoneValue;
 
    public IObject Long() => BigInteger.TryParse(value, out var result) ? new Some((Long)result) : None.NoneValue;
 
-   public Tuple SplitRegex(Regex regex) => regex.Split(value);
+   public KTuple SplitRegex(Regex regex) => regex.Split(value);
 
-   public Tuple SplitOn(string on) => new(value.Split([on], StringSplitOptions.None).Select(StringObject).ToArray());
+   public KTuple SplitOn(string on) => new(value.Split([on], StringSplitOptions.None).Select(StringObject).ToArray());
 
-   public String Subtract(string substring) => value.Replace(substring, "");
+   public KString Subtract(string substring) => value.Replace(substring, "");
 
-   public IRangeItem Successor => (String)value.Succ();
+   public IRangeItem Successor => (KString)value.Succ();
 
-   public IRangeItem Predecessor => (String)value.Pred();
+   public IRangeItem Predecessor => (KString)value.Pred();
 
-   public Range Range() => new(this, (String)"z".Repeat(value.Length), true);
+   public KRange Range() => new(this, (KString)"z".Repeat(value.Length), true);
 
-   public String Get() => value.get();
+   public KString Get() => value.get();
 
-   public String Set() => value.set();
+   public KString Set() => value.set();
 
-   public String SwapCase()
+   public KString SwapCase()
    {
       var builder = new StringBuilder();
       foreach (var ch in value)
@@ -390,7 +387,7 @@ public readonly struct String : IObject, IComparable<String>, IEquatable<String>
       return builder.ToString();
    }
 
-   public Tuple Fields => new(value.Unjoin("/s+").Select(StringObject).ToArray());
+   public KTuple Fields => new(value.Unjoin("/s+").Select(StringObject).ToArray());
 
    public IObject Words(int count)
    {
@@ -411,7 +408,7 @@ public readonly struct String : IObject, IComparable<String>, IEquatable<String>
          var remainder = value.Drop(index + length);
          list.Add(remainder.TrimStart());
 
-         return Some.Object(new Tuple(list.Select(StringObject).ToArray()));
+         return Some.Object(new KTuple(list.Select(StringObject).ToArray()));
       }
       else
       {
@@ -419,7 +416,7 @@ public readonly struct String : IObject, IComparable<String>, IEquatable<String>
       }
    }
 
-   public Tuple Words() => new(value.Unjoin("/s+").Select(StringObject).ToArray());
+   public KTuple Words() => new(value.Unjoin("/s+").Select(StringObject).ToArray());
 
    public MutString Append(IObject obj)
    {

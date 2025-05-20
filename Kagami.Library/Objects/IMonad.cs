@@ -6,6 +6,6 @@
 
 		IObject Unit(IObject obj);
 
-		Boolean CanBind { get; }
+		KBoolean CanBind { get; }
 	}
 }

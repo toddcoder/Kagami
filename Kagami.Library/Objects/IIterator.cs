@@ -24,7 +24,7 @@ namespace Kagami.Library.Objects
 
       IObject Reverse();
 
-      String Join(string connector);
+      KString Join(string connector);
 
       IObject Sort(Lambda lambda, bool ascending);
 
@@ -102,13 +102,13 @@ namespace Kagami.Library.Objects
 
       IObject GroupBy(Lambda lambda);
 
-      Boolean One(Lambda predicate);
+      KBoolean One(Lambda predicate);
 
-      Boolean None(Lambda predicate);
+      KBoolean None(Lambda predicate);
 
-      Boolean Any(Lambda predicate);
+      KBoolean Any(Lambda predicate);
 
-      Boolean All(Lambda predicate);
+      KBoolean All(Lambda predicate);
 
       INumeric Sum();
 
@@ -138,11 +138,11 @@ namespace Kagami.Library.Objects
 
       IObject Collect();
 
-      Array ToArray();
+      KArray ToArray();
 
       List ToList();
 
-      Tuple ToTuple();
+      KTuple ToTuple();
 
       Dictionary ToDictionary(Lambda keyLambda, Lambda valueLambda);
 

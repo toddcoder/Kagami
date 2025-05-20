@@ -13,7 +13,7 @@ public class NewIndex : TwoOperandOperation
       {
          if (y is Int yInt)
          {
-            return Index.New(xInt.Value, yInt.Value).Just();
+            return KIndex.New(xInt.Value, yInt.Value).Just();
          }
          else
          {

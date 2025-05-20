@@ -97,7 +97,7 @@ public class Iterator : IObject, IIterator
       return collectionClass.Revert(list);
    }
 
-   public String Join(string connector) => List().ToList().Select(i => i.AsString).ToString(connector);
+   public KString Join(string connector) => List().ToList().Select(i => i.AsString).ToString(connector);
 
    public IObject Sort(Lambda lambda, bool ascending)
    {
@@ -601,14 +601,14 @@ public class Iterator : IObject, IIterator
       return new Dictionary(result);
    }
 
-   public Boolean One(Lambda predicate)
+   public KBoolean One(Lambda predicate)
    {
       var one = false;
       foreach (var _ in List().ToList().Where(value => predicate.Invoke(value).IsTrue))
       {
          if (one)
          {
-            return new Boolean(false);
+            return new KBoolean(false);
          }
          else
          {
@@ -616,17 +616,17 @@ public class Iterator : IObject, IIterator
          }
       }
 
-      return new Boolean(true);
+      return new KBoolean(true);
    }
 
-   public Boolean None(Lambda predicate)
+   public KBoolean None(Lambda predicate)
    {
       return List().ToList().All(value => !predicate.Invoke(value).IsTrue);
    }
 
-   public Boolean Any(Lambda predicate) => List().ToList().Any(value => predicate.Invoke(value).IsTrue);
+   public KBoolean Any(Lambda predicate) => List().ToList().Any(value => predicate.Invoke(value).IsTrue);
 
-   public Boolean All(Lambda predicate) => List().ToList().All(value => predicate.Invoke(value).IsTrue);
+   public KBoolean All(Lambda predicate) => List().ToList().All(value => predicate.Invoke(value).IsTrue);
 
    public INumeric Sum()
    {
@@ -850,11 +850,11 @@ public class Iterator : IObject, IIterator
 
    public IObject Collect() => collectionClass.Revert(List().ToList());
 
-   public Array ToArray() => new(List().ToList());
+   public KArray ToArray() => new(List().ToList());
 
    public List ToList() => Objects.List.NewList(List().ToList());
 
-   public Tuple ToTuple() => new(List().ToArray());
+   public KTuple ToTuple() => new(List().ToArray());
 
    public Dictionary ToDictionary(Lambda keyLambda, Lambda valueLambda)
    {
@@ -870,7 +870,7 @@ public class Iterator : IObject, IIterator
       return new Dictionary(hash);
    }
 
-   public IObject ToDictionary() => Array.CreateObject(List().ToList());
+   public IObject ToDictionary() => KArray.CreateObject(List().ToList());
 
    public IObject ToSet() => new Set(List().ToArray());
 

@@ -10,9 +10,6 @@ using Core.Matching;
 using Core.Monads;
 using Core.Strings;
 using static Kagami.Library.AllExceptions;
-using Boolean = Kagami.Library.Objects.Boolean;
-using String = Kagami.Library.Objects.String;
-using Tuple = Kagami.Library.Objects.Tuple;
 
 namespace Kagami.Library.Packages;
 
@@ -35,7 +32,7 @@ public class Sys : Package
       module.RegisterClass(new RandomClass());
    }
 
-   public String Println(Arguments arguments)
+   public KString Println(Arguments arguments)
    {
       var value = arguments.Select(a => a.AsString).ToString(" ");
       Machine.Current.Context.PrintLine(value);
@@ -43,7 +40,7 @@ public class Sys : Package
       return value;
    }
 
-   public String Print(Arguments arguments)
+   public KString Print(Arguments arguments)
    {
       var value = arguments.Select(a => a.AsString).ToString(" ");
       Machine.Current.Context.Print(value);
@@ -51,7 +48,7 @@ public class Sys : Package
       return value;
    }
 
-   public String Put(Arguments arguments)
+   public KString Put(Arguments arguments)
    {
       var value = arguments.Select(a => a.AsString).ToString(" ");
 
@@ -66,7 +63,7 @@ public class Sys : Package
    public IObject Readln()
    {
       return Machine.Current.Context.ReadLine()
-         .Map(s => Success.Object(String.StringObject(s)))
+         .Map(s => Success.Object(KString.StringObject(s)))
          .Recover(e => Failure.Object(e.Message));
    }
 
@@ -88,11 +85,11 @@ public class Sys : Package
       if (x.Match(y, bindings))
       {
          Machine.Current.CurrentFrame.Fields.SetBindings(bindings);
-         return Boolean.True.Success();
+         return KBoolean.True.Success();
       }
       else
       {
-         return Boolean.False.Success();
+         return KBoolean.False.Success();
       }
    }
 
@@ -119,9 +116,9 @@ public class Sys : Package
       }
    }
 
-   public IObject First(Tuple tuple) => tuple[0];
+   public IObject First(KTuple kTuple) => kTuple[0];
 
-   public IObject Second(Tuple tuple) => tuple[1];
+   public IObject Second(KTuple kTuple) => kTuple[1];
 
    public Result<IObject> GetReference(string fieldName)
    {
@@ -140,9 +137,9 @@ public class Sys : Package
       }
    }
 
-   public IObject Tuple(IObject value) => new Tuple(value);
+   public IObject Tuple(IObject value) => new KTuple(value);
 
-   public IObject Tuple(IObject value1, IObject value2) => new Tuple(value1, value2);
+   public IObject Tuple(IObject value1, IObject value2) => new KTuple(value1, value2);
 
    public RegexGroup RegexGroup(Arguments arguments)
    {
@@ -198,7 +195,7 @@ public class Sys : Package
 
    public Dictionary XFields()
    {
-      return new(Machine.Current.CurrentFrame.Fields.ToHash(t => String.StringObject(t.fieldName), t => t.field.Value));
+      return new(Machine.Current.CurrentFrame.Fields.ToHash(t => KString.StringObject(t.fieldName), t => t.field.Value));
    }
 
    public Date Date(double floating) => DateTime.FromOADate(floating);

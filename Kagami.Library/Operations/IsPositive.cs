@@ -6,7 +6,7 @@ namespace Kagami.Library.Operations;
 
 public class IsPositive : OneNumericOperation
 {
-   public override Optional<IObject> Execute(Machine machine, INumeric x) => Boolean.BooleanObject(x.IsPositive).Just();
+   public override Optional<IObject> Execute(Machine machine, INumeric x) => KBoolean.BooleanObject(x.IsPositive).Just();
 
    public override string ToString() => "is.positive";
 }

@@ -19,13 +19,13 @@ public class LazyDictionaryIterator : LazyIterator
    public override Maybe<IObject> Next() => maybe<IObject>() & index < keys.Length & (() =>
    {
       var key = keys[index++];
-      return Tuple.NewTuple(key, dictionary.GetRaw(key)).Some();
+      return KTuple.NewTuple(key, dictionary.GetRaw(key)).Some();
    });
 
    public override Maybe<IObject> Peek() => maybe<IObject>() & index < keys.Length & (() =>
    {
       var key = keys[index];
-      return Tuple.NewTuple(key, dictionary.GetRaw(key)).Some();
+      return KTuple.NewTuple(key, dictionary.GetRaw(key)).Some();
    });
 
    public override IEnumerable<IObject> List()

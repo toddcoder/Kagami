@@ -24,6 +24,6 @@ namespace Kagami.Library.Objects
 
       public bool IsTrue => message.IsNotEmpty();
 
-      public String Message => message;
+      public KString Message => message;
    }
 }

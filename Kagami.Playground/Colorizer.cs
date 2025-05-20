@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Runtime.InteropServices;
-using System.Windows.Forms;
+﻿using System.Runtime.InteropServices;
 using Kagami.Library.Parsers;
 using Core.Matching;
 using Color = System.Drawing.Color;
@@ -20,7 +16,6 @@ public class Colorizer
    public Colorizer(RichTextBox textBox)
    {
       this.textBox = textBox;
-      parenthesesCount = 0;
    }
 
    public void Colorize(IEnumerable<Token> tokens)

@@ -10,11 +10,11 @@ public class ReadLine : Operation
    {
       if (machine.Context.ReadLine() is (true, var line))
       {
-         return String.StringObject(line).Just();
+         return KString.StringObject(line).Just();
       }
 
       machine.Running = false;
-      return String.Empty.Just();
+      return KString.Empty.Just();
    }
 
    public override string ToString() => "readln";

@@ -6,6 +6,6 @@
 
       IRangeItem Predecessor { get; }
 
-      Range Range();
+      KRange Range();
    }
 }

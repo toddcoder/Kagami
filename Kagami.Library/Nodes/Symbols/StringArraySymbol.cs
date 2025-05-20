@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Core.Matching;
+﻿using Core.Matching;
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 
@@ -7,9 +6,9 @@ namespace Kagami.Library.Nodes.Symbols;
 
 public class StringArraySymbol : Symbol
 {
-   protected Array array;
+   protected KArray array;
 
-   public StringArraySymbol(string source) => array = new Array(source.Trim().Unjoin("/s+").Select(String.StringObject));
+   public StringArraySymbol(string source) => array = new KArray(source.Trim().Unjoin("/s+").Select(KString.StringObject));
 
    public override void Generate(OperationsBuilder builder) => builder.PushObject(array);
 

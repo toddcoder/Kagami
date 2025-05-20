@@ -47,7 +47,7 @@ namespace Kagami.Library.Objects
 
       public IObject Object => this;
 
-      public Boolean Between(IObject min, IObject max, bool inclusive)
+      public KBoolean Between(IObject min, IObject max, bool inclusive)
       {
          if (min is Interval minInterval && max is Interval maxInterval)
          {
@@ -59,13 +59,13 @@ namespace Kagami.Library.Objects
          }
       }
 
-      public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
+      public KBoolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
 
       public IRangeItem Successor => (Interval)value.Add(1.Second());
 
       public IRangeItem Predecessor => (Interval)value.Add(-1.Second());
 
-      public Range Range() => new((Interval)value.Add(-value.Seconds.Seconds()), this, true);
+      public KRange Range() => new((Interval)value.Add(-value.Seconds.Seconds()), this, true);
 
       public Int Milliseconds => value.Milliseconds;
 

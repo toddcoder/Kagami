@@ -12,7 +12,7 @@
 
       IObject InsertAt(int index, IObject obj);
 
-		Boolean IsEmpty { get; }
+		KBoolean IsEmpty { get; }
 
 		IObject Assign(IObject indexes, IObject values);
    }

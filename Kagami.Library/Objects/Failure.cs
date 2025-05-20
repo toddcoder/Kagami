@@ -45,6 +45,6 @@ namespace Kagami.Library.Objects
 
 		public IObject Unit(IObject obj) => new Failure(Error);
 
-		public Boolean CanBind => false;
+		public KBoolean CanBind => false;
 	}
 }

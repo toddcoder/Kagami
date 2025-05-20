@@ -56,7 +56,7 @@ public static class ObjectFunctions
          case Placeholder ph:
             bindings[ph.Name] = source;
             return true;
-         case Range range:
+         case KRange range:
             return range.In(source).IsTrue;
          case Lambda lambda:
             if (lambda.Invoke(source).IsTrue)
@@ -114,7 +114,7 @@ public static class ObjectFunctions
          case Placeholder ph:
             bindings[ph.Name] = source;
             return true;
-         case Range range:
+         case KRange range:
             return range.In(source).IsTrue;
          case Lambda lambda:
             if (lambda.Invoke(source).IsTrue)
@@ -239,7 +239,7 @@ public static class ObjectFunctions
 
       if (classOf(obj).RespondsTo("match(_,_)"))
       {
-         var objectHash = bindings.ToHash(i => String.StringObject(i.Key), i => i.Value);
+         var objectHash = bindings.ToHash(i => KString.StringObject(i.Key), i => i.Value);
          var dictionary = new Dictionary(objectHash);
          if (sendMessage(obj, "match(_,_)", comparisand, dictionary).IsTrue)
          {
@@ -332,7 +332,7 @@ public static class ObjectFunctions
    {
       var message = "string".get();
       var cls = classOf(obj);
-      return cls.RespondsTo(message) ? ((String)sendMessage(obj, message)).Value : obj.AsString;
+      return cls.RespondsTo(message) ? ((KString)sendMessage(obj, message)).Value : obj.AsString;
    }
 
    public static IObject[] setObjects(IObject[] target, IEnumerable<IObject> source, Func<int, IObject> defaultValue)
@@ -365,7 +365,7 @@ public static class ObjectFunctions
             list.Add(s[i]);
          }
 
-         target[lastIndex] = new Tuple(list.ToArray());
+         target[lastIndex] = new KTuple(list.ToArray());
       }
 
       return target;

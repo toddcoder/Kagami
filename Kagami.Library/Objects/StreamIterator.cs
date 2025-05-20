@@ -114,14 +114,14 @@ public class StreamIterator : IObject, IIterator
    public IIterator terminate()
    {
       var list = List().ToList();
-      var array = new Array(list);
+      var array = new KArray(list);
 
       return array.GetIterator(false);
    }
 
    public IObject Reverse() => terminate().Reverse();
 
-   public String Join(string connector) => terminate().Join(connector);
+   public KString Join(string connector) => terminate().Join(connector);
 
    public IObject Sort(Lambda lambda, bool ascending) => terminate().Sort(lambda, ascending);
 
@@ -248,13 +248,13 @@ public class StreamIterator : IObject, IIterator
 
    public IObject GroupBy(Lambda lambda) => terminate().GroupBy(lambda);
 
-   public Boolean One(Lambda predicate) => terminate().One(predicate);
+   public KBoolean One(Lambda predicate) => terminate().One(predicate);
 
-   public Boolean None(Lambda predicate) => terminate().None(predicate);
+   public KBoolean None(Lambda predicate) => terminate().None(predicate);
 
-   public Boolean Any(Lambda predicate) => terminate().Any(predicate);
+   public KBoolean Any(Lambda predicate) => terminate().Any(predicate);
 
-   public Boolean All(Lambda predicate) => terminate().All(predicate);
+   public KBoolean All(Lambda predicate) => terminate().All(predicate);
 
    public INumeric Sum() => terminate().Sum();
 
@@ -284,11 +284,11 @@ public class StreamIterator : IObject, IIterator
 
    public IObject Collect() => terminate().Collect();
 
-   public Array ToArray() => new(List());
+   public KArray ToArray() => new(List());
 
    public List ToList() => Objects.List.NewList(List());
 
-   public Tuple ToTuple() => new(List().ToArray());
+   public KTuple ToTuple() => new(List().ToArray());
 
    public Dictionary ToDictionary(Lambda keyLambda, Lambda valueLambda)
    {
@@ -304,7 +304,7 @@ public class StreamIterator : IObject, IIterator
       return new Dictionary(hash);
    }
 
-   public IObject ToDictionary() => Array.CreateObject(List());
+   public IObject ToDictionary() => KArray.CreateObject(List());
 
    public IObject ToSet() => new Set(List().ToArray());
 
