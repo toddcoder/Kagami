@@ -408,7 +408,7 @@ public abstract class BaseClass
       registerMessage("copy()", (obj, _) => iteratorFunc(obj, i => i.Copy()));
       registerMessage("collect()", (obj, _) => iteratorFunc(obj, i => i.Collect()));
       registerMessage("*(_)", (obj, message) => iteratorFunc<IObject>(obj, message, (i1, i2) => i1.Apply((ICollection)i2)));
-      registerMessage("format(_)", (obj, message) => iteratorFunc<Index>(obj, message, (i, index) => index.IndexOf(i.Collection)));
+      registerMessage("format(_)", (obj, message) => iteratorFunc<Objects.Index>(obj, message, (i, index) => index.IndexOf(i.Collection)));
       registerMessage("replace(_<Lambda>,_<Lambda>)",
          (obj, message) => iteratorFunc<Lambda, Lambda>(obj, message, (i, l1, l2) => i.Replace(l1, l2)));
       registerMessage("set()", (obj, _) => iteratorFunc(obj, i => i.ToSet()));
@@ -506,7 +506,7 @@ public abstract class BaseClass
             var sliceable = (ISliceable)o1;
             switch (o2)
             {
-               case Range range:
+               case Objects.Range range:
                   if (range.StopObj is End)
                   {
                      var length = sliceable.Length;
@@ -516,7 +516,7 @@ public abstract class BaseClass
                         start = (Int)wrapIndex(i.Value, length);
                      }
 
-                     var newRange = new Range((IRangeItem)start, (Int)(length - 1), range.Inclusive, range.Increment);
+                     var newRange = new Objects.Range((IRangeItem)start, (Int)(length - 1), range.Inclusive, range.Increment);
                      return sliceable.Slice(newRange);
                   }
                   else

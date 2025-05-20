@@ -1,23 +1,23 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kagami", "Kagami.csproj", "{CAB6B0FE-9E58-468A-B92A-AC0A0DE106A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kagami", "Kagami.csproj", "{CAB6B0FE-9E58-468A-B92A-AC0A0DE106A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kagami.Library", "Kagami.Library\Kagami.Library.csproj", "{BBF33B73-9D27-4CB7-AC3F-DF39B9A566B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kagami.Library", "Kagami.Library\Kagami.Library.csproj", "{BBF33B73-9D27-4CB7-AC3F-DF39B9A566B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kagami.Playground", "Kagami.Playground\Kagami.Playground.csproj", "{11BB8466-99A3-439C-8814-881105F84F4F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kagami.Playground", "Kagami.Playground\Kagami.Playground.csproj", "{11BB8466-99A3-439C-8814-881105F84F4F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kagami.Drawing", "Kagami.Drawing\Kagami.Drawing.csproj", "{992CA2AD-10DB-4DC6-9EF2-EB991C2B45FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kagami.Drawing", "Kagami.Drawing\Kagami.Drawing.csproj", "{992CA2AD-10DB-4DC6-9EF2-EB991C2B45FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kagami.Text", "Kagami.Text\Kagami.Text.csproj", "{0F7CC9F8-FD96-4F5D-94B3-F9EB6A415CB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kagami.Text", "Kagami.Text\Kagami.Text.csproj", "{0F7CC9F8-FD96-4F5D-94B3-F9EB6A415CB6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kagami.IO", "Kagami.IO\Kagami.IO.csproj", "{7488FC4E-403C-45F6-9E71-EA7902B3C17A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kagami.IO", "Kagami.IO\Kagami.IO.csproj", "{7488FC4E-403C-45F6-9E71-EA7902B3C17A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kagami.Awk", "Kagami.Awk\Kagami.Awk.csproj", "{813AE038-7D32-4D61-8262-912176D08EB8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kagami.Awk", "Kagami.Awk\Kagami.Awk.csproj", "{813AE038-7D32-4D61-8262-912176D08EB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kagami.Plots", "Kagami.Plots\Kagami.Plots.csproj", "{60492EBA-8BB0-4E3C-855F-1ACF1EFEDA8C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kagami.Plots", "Kagami.Plots\Kagami.Plots.csproj", "{60492EBA-8BB0-4E3C-855F-1ACF1EFEDA8C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
