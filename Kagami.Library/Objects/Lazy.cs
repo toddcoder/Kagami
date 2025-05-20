@@ -25,7 +25,7 @@ public class Lazy : IObject
       {
          return value;
       }
-      else if (_result.ValueOf(Machine.Current.Invoke(invokable, Arguments.Empty, 0)) is (true, var result))
+      else if (_result.ValueOf(Machine.Current.Value.Invoke(invokable, Arguments.Empty, 0)) is (true, var result))
       {
          _value = result.Some();
          return result;

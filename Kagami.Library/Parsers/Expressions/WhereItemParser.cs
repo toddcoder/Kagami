@@ -12,7 +12,7 @@ public class WhereItemParser : EndingInExpressionParser
    {
    }
 
-   protected string propertyName;
+   protected string propertyName = "";
 
    public override string Pattern => $"^ /(|s|) /({REGEX_FIELD}) /(|s|) /':'";
 
@@ -32,5 +32,5 @@ public class WhereItemParser : EndingInExpressionParser
 
    public string PropertyName => propertyName;
 
-   public Expression Expression { get; set; }
+   public Expression Expression { get; set; } = Expression.Empty;
 }

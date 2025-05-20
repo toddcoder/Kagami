@@ -7,7 +7,7 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public class NameValueParser : EndingInExpressionParser
 {
-   protected string name;
+   protected string name = "";
 
    public NameValueParser(ExpressionBuilder builder) : base(builder, ExpressionFlags.OmitColon | ExpressionFlags.OmitComma) { }
 

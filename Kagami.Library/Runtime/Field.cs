@@ -8,7 +8,7 @@ namespace Kagami.Library.Runtime;
 
 public class Field
 {
-   protected IObject value;
+   protected IObject value = None.NoneValue;
 
    public IObject Value
    {
@@ -63,5 +63,5 @@ public class Field
       Visible = Visible
    };
 
-   public Fields Fields { get; set; }
+   public Fields Fields { get; set; } = [];
 }

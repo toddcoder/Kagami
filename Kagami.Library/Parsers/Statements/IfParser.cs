@@ -10,7 +10,7 @@ namespace Kagami.Library.Parsers.Statements;
 public class IfParser : ExpressionBlockParser
 {
    protected bool mutable;
-   protected string fieldName;
+   protected string fieldName = "";
    protected bool assignment;
 
    public override string Pattern => $"^ (/('var' | 'let') /(|s|) /({REGEX_FIELD}) /(|s|) /'=' /(|s|))? /'if' -(> ['>^']) /b";

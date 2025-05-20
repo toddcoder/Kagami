@@ -1,5 +1,4 @@
-﻿using System;
-using Kagami.Library.Invokables;
+﻿using Kagami.Library.Invokables;
 using Kagami.Library.Runtime;
 using Core.Collections;
 using static Kagami.Library.AllExceptions;
@@ -22,7 +21,7 @@ public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields
 
    public string ClassName => "Lambda";
 
-   public virtual string AsString => invokable1.ToString();
+   public virtual string AsString => invokable1.ToString() ?? "";
 
    public virtual string Image => invokable1.Image;
 
@@ -34,9 +33,9 @@ public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields
 
    public bool IsTrue => true;
 
-   public bool Equals(Lambda other) => IsEqualTo(other);
+   public bool Equals(Lambda? other) => IsEqualTo(other!);
 
-   public override bool Equals(object obj) => Equals((Lambda)obj);
+   public override bool Equals(object? obj) => Equals((Lambda)obj!);
 
    public override int GetHashCode() => Hash;
 
@@ -52,7 +51,7 @@ public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields
 
    public virtual IObject Invoke(params IObject[] arguments)
    {
-      var _value = Machine.Current.Invoke(invokable1, new Arguments(arguments), fields, 0);
+      var _value = Machine.Current.Value.Invoke(invokable1, new Arguments(arguments), fields, 0);
       if (_value is (true, var value))
       {
          return value;
@@ -81,7 +80,7 @@ public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields
       foreach (var parameter in parameters.GetCapturingParameters())
       {
          var fieldName = parameter.Name;
-         if (Machine.Current.Find(fieldName, true) is (true, var field))
+         if (Machine.Current.Value.Find(fieldName, true) is (true, var field))
          {
             if (!fields.ContainsKey(fieldName))
             {

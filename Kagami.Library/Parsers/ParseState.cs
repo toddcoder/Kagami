@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
@@ -72,7 +69,7 @@ public class ParseState : IEnumerable<Statement>
       tokenTransaction.Commit();
    }
 
-   public Optional<Unit> RollBackTransactionIf<T>(bool enabled, Optional<T> _previousMatch)
+   public Optional<Unit> RollBackTransactionIf<T>(bool enabled, Optional<T> _previousMatch) where T : notnull
    {
       if (enabled && !_previousMatch)
       {

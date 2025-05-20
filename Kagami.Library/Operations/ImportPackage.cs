@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Kagami.Library.Objects;
 using Kagami.Library.Packages;
 using Kagami.Library.Runtime;
@@ -14,10 +13,9 @@ namespace Kagami.Library.Operations;
 
 public class ImportPackage : Operation
 {
-   // ReSharper disable once CollectionNeverUpdated.Global
    protected static Memo<string, Assembly> assemblyCache = new Memo<string, Assembly>.Function(packageName =>
    {
-      var fullPath = System.IO.Path.Combine(Machine.Current.PackageFolder, $"Kagami.{packageName}.dll");
+      var fullPath = Path.Combine(Machine.Current.Value.PackageFolder, $"Kagami.{packageName}.dll");
       var assembly = Assembly.LoadFile(fullPath);
       return assembly;
    });
@@ -48,7 +46,7 @@ public class ImportPackage : Operation
       }
       else
       {
-         var package = (Package)Activator.CreateInstance(type, null);
+         var package = (Package)Activator.CreateInstance(type, null)!;
          package.LoadTypes(Module.Global);
          var globalFrame = machine.GlobalFrame;
          var fields = globalFrame.Fields;

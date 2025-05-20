@@ -28,7 +28,7 @@ public class Function : Statement
    protected bool yielding;
    protected bool overriding;
    protected string className;
-   protected Lambda lambda;
+   protected Lazy<Lambda> lambda;
 
    public Function(string functionName, Parameters parameters, Block block, bool yielding, bool overriding, string className)
    {
@@ -39,6 +39,12 @@ public class Function : Statement
       block.Yielding = this.yielding;
       this.overriding = overriding;
       this.className = className;
+
+      lambda = new Lazy<Lambda>(() =>
+      {
+         var invokable = GetInvokable();
+         return new Lambda(invokable);
+      });
    }
 
    public void Deconstruct(out Selector selector, out Parameters parameters, out Block block, out bool yielding,
@@ -82,12 +88,14 @@ public class Function : Statement
 
    public override void Generate(OperationsBuilder builder)
    {
+      /*
       var invokable = GetInvokable();
       lambda = new Lambda(invokable);
-      var _index = builder.RegisterInvokable(invokable, block, overriding);
+      */
+      var _index = builder.RegisterInvokable(lambda.Value.Invokable, block, overriding);
       if (_index)
       {
-         if (parameters.Length > 0 && parameters[parameters.Length - 1].Variadic)
+         if (parameters.Length > 0 && parameters[^1].Variadic)
          {
             var lambdaName = selector.Name;
             lambdaName = className.IsNotEmpty() ? $"{className}.{lambdaName}" : lambdaName;
@@ -96,7 +104,7 @@ public class Function : Statement
                builder.NewField(lambdaName, false, true);
             }
 
-            builder.PushObject(lambda);
+            builder.PushObject(lambda.Value);
             builder.Peek(Index);
             builder.AssignField(lambdaName, overriding);
          }
@@ -109,7 +117,7 @@ public class Function : Statement
                builder.NewSelector(selector, false, true);
             }
 
-            builder.PushObject(lambda);
+            builder.PushObject(lambda.Value);
             builder.Peek(Index);
             builder.AssignSelector(selector, overriding);
          }
@@ -123,7 +131,7 @@ public class Function : Statement
       {
          if (Module.Global.Class(className) is (true, var cls))
          {
-            cls.RegisterMessage(selector, (obj, msg) => BaseClass.Invoke(obj, msg.Arguments, lambda));
+            cls.RegisterMessage(selector, (obj, msg) => BaseClass.Invoke(obj, msg.Arguments, lambda.Value));
          }
          else
          {

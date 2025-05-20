@@ -7,7 +7,7 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public class BindingParser : EndingInExpressionParser
 {
-   protected string name;
+   protected string name = "";
 
    public BindingParser(ExpressionBuilder builder) : base(builder)
    {

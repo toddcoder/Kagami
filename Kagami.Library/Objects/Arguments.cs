@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections;
 using Core.Collections;
 using Core.Enumerables;
 using static Core.Monads.MonadFunctions;
@@ -14,8 +11,8 @@ public readonly struct Arguments : IObject, IEnumerable<IObject>, IEquatable<Arg
    public static Arguments Append(Arguments arguments, IObject item)
    {
       var newArguments = new IObject[arguments.Length + 1];
-      System.Array.Copy(arguments.arguments, newArguments, arguments.Length);
-      newArguments[newArguments.Length - 1] = item;
+      Array.Copy(arguments.arguments, newArguments, arguments.Length);
+      newArguments[^1] = item;
 
       return new Arguments(newArguments);
    }
@@ -92,15 +89,9 @@ public readonly struct Arguments : IObject, IEnumerable<IObject>, IEquatable<Arg
 
    public bool Equals(Arguments other) => Equals(arguments, other.arguments) && Equals(labels, other.labels);
 
-   public override bool Equals(object obj) => obj is Arguments other && Equals(other);
+   public override bool Equals(object? obj) => obj is Arguments other && Equals(other);
 
-   public override int GetHashCode()
-   {
-      unchecked
-      {
-         return (arguments != null ? arguments.GetHashCode() : 0) * 397 ^ (labels != null ? labels.GetHashCode() : 0);
-      }
-   }
+   public override int GetHashCode() => HashCode.Combine(arguments, labels);
 
    public static bool operator ==(Arguments left, Arguments right) => left.Equals(right);
 

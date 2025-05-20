@@ -1,5 +1,4 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using Core.Collections;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Operations.NumericFunctions;
@@ -99,11 +98,11 @@ public readonly struct KByte : IObject, INumeric, IObjectCompare, IComparable<KB
 
    public bool Equals(KByte other) => value == other.value;
 
-   public override bool Equals(object obj) => obj is KByte b && Equals(b);
+   public override bool Equals(object? obj) => obj is KByte b && Equals(b);
 
    public override int GetHashCode() => Hash;
 
-   public int CompareTo(object obj) => CompareTo((KByte)obj);
+   public int CompareTo(object? obj) => CompareTo((KByte)obj!);
 
    public KString Format(string format) => value.FormatUsing<byte>(format, b => b.ToString(format));
 }

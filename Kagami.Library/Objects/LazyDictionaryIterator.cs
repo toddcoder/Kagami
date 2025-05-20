@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Kagami.Library.Runtime;
+﻿using Kagami.Library.Runtime;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 
@@ -43,7 +42,7 @@ public class LazyDictionaryIterator : LazyIterator
             break;
          }
 
-         if (index % 1000 == 0 && Machine.Current.Context.Cancelled())
+         if (index % 1000 == 0 && Machine.Current.Value.Context.Cancelled())
          {
             yield break;
          }

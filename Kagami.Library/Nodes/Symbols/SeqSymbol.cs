@@ -10,9 +10,12 @@ namespace Kagami.Library.Nodes.Symbols;
 public class SeqSymbol : Symbol
 {
    protected Block block;
-   protected string image;
+   protected string image = "";
 
-   public SeqSymbol(Block block) => this.block = block;
+   public SeqSymbol(Block block)
+   {
+      this.block = block;
+   }
 
    public override void Generate(OperationsBuilder builder)
    {

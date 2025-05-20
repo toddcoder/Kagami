@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using Kagami.Library.Objects;
 using Core.Monads;
 using Core.Strings;
@@ -50,30 +49,16 @@ public class Parameter : IEquatable<Parameter>
 
    public bool Capturing => capturing;
 
-   public bool Equals(Parameter other)
+   public bool Equals(Parameter? other)
    {
-      return mutable == other.mutable && string.Equals(label, other.label) && string.Equals(name, other.name) &&
+      return other is not null && mutable == other.mutable && string.Equals(label, other.label) && string.Equals(name, other.name) &&
          (bool)_defaultValue == (bool)other._defaultValue && (bool)_typeConstraint == (bool)other._typeConstraint &&
          reference == other.reference;
    }
 
-   public override bool Equals(object obj) => Equals((Parameter)obj);
+   public override bool Equals(object? obj) => Equals((Parameter)obj!);
 
-   public override int GetHashCode()
-   {
-      unchecked
-      {
-         var hashCode = mutable.GetHashCode();
-         hashCode = hashCode * 397 ^ (name?.GetHashCode() ?? 0);
-         hashCode = hashCode * 397 ^ (label?.GetHashCode() ?? 0);
-         hashCode = hashCode * 397 ^ (_defaultValue?.GetHashCode() ?? 0);
-         hashCode = hashCode * 397 ^ _typeConstraint.Map(tc => tc.Hash) | 0;
-         hashCode = hashCode * 397 ^ reference.GetHashCode();
-         hashCode = hashCode * 397 ^ capturing.GetHashCode();
-
-         return hashCode;
-      }
-   }
+   public override int GetHashCode() => HashCode.Combine(name, label, _defaultValue, _typeConstraint.Map(tc => tc.Hash) | 0, reference, capturing);
 
    public string NameForFunction
    {

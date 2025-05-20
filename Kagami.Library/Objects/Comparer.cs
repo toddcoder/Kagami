@@ -1,24 +1,22 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 
-namespace Kagami.Library.Objects
+namespace Kagami.Library.Objects;
+
+public class Comparer : IComparer
 {
-   public class Comparer : IComparer
+   protected Func<object, object, int> function;
+
+   public Comparer(bool ascending)
    {
-      protected Func<object, object, int> function;
-
-      public Comparer(bool ascending)
+      if (ascending)
       {
-         if (ascending)
-         {
-            function = (x, y) => ((IObjectCompare)x).Compare((IObject)y);
-         }
-         else
-         {
-            function = (x, y) => ((IObjectCompare)y).Compare((IObject)x);
-         }
+         function = (x, y) => ((IObjectCompare)x).Compare((IObject)y);
       }
-
-      public int Compare(object x, object y) => function(x, y);
+      else
+      {
+         function = (x, y) => ((IObjectCompare)y).Compare((IObject)x);
+      }
    }
+
+   public int Compare(object? x, object? y) => function(x!, y!);
 }

@@ -20,5 +20,5 @@ public class UntilParser : EndingInExpressionParser
       return unit;
    }
 
-   public Expression Expression { get; set; }
+   public Expression Expression { get; set; } = Expression.Empty;
 }

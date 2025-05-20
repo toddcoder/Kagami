@@ -6,10 +6,10 @@ namespace Kagami.Library.Operations;
 
 public class NewDataComparisand : MultipleOperandOperation
 {
-   protected string className;
-   protected string name;
-   protected IObject[] comparisands;
-   protected IObject ordinal;
+   protected string className = "";
+   protected string name = "";
+   protected IObject[] comparisands = [];
+   protected IObject ordinal = None.NoneValue;
 
    public NewDataComparisand() : base(4)
    {

@@ -1,5 +1,4 @@
-﻿using System;
-using Core.Collections;
+﻿using Core.Collections;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
@@ -27,9 +26,9 @@ public class Mixin : IObject, IEquatable<Mixin>
 
    public bool IsTrue => true;
 
-   public bool Equals(Mixin other) => other.name == name;
+   public bool Equals(Mixin? other) => other!.name == name;
 
-   public override bool Equals(object obj) => obj is Mixin otherMixin && Equals(otherMixin);
+   public override bool Equals(object? obj) => obj is Mixin otherMixin && Equals(otherMixin);
 
    public override int GetHashCode() => name.GetHashCode();
 }

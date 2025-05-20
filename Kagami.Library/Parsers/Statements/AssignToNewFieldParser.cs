@@ -10,8 +10,8 @@ namespace Kagami.Library.Parsers.Statements;
 public class AssignToNewFieldParser : EndingInExpressionParser
 {
    protected bool mutable;
-   protected string fieldName;
-   protected Maybe<TypeConstraint> _typeConstraint;
+   protected string fieldName = "";
+   protected Maybe<TypeConstraint> _typeConstraint = nil;
 
    public override string Pattern => $"^ /('let' | 'var') /(/s+) /({REGEX_FIELD}) /b";
 

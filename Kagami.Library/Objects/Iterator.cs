@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Kagami.Library.Classes;
+﻿using Kagami.Library.Classes;
 using Kagami.Library.Runtime;
 using Core.Collections;
 using Core.Dates.Now;
@@ -80,7 +77,7 @@ public class Iterator : IObject, IIterator
             break;
          }
 
-         if (index % 1000 == 0 && Machine.Current.Context.Cancelled())
+         if (index % 1000 == 0 && Machine.Current.Value.Context.Cancelled())
          {
             yield break;
          }
@@ -110,7 +107,7 @@ public class Iterator : IObject, IIterator
             return collectionClass.Revert(result);
          case 2:
             var array = List().ToArray();
-            System.Array.Sort(array, (i, j) => ((Int)lambda.Invoke(i, j)).Value);
+            Array.Sort(array, (i, j) => ((Int)lambda.Invoke(i, j)).Value);
 
             return collectionClass.Revert(array);
          default:
@@ -122,7 +119,7 @@ public class Iterator : IObject, IIterator
    {
       var array = List().ToArray();
       var comparer = new Comparer(ascending);
-      System.Array.Sort(array, comparer);
+      Array.Sort(array, comparer);
 
       return collectionClass.Revert(array);
    }

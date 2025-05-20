@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
+﻿using System.Numerics;
 using System.Text;
 using Core.Collections;
 using Core.Monads;
@@ -61,11 +58,11 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
    public bool Equals(KString other) => string.Equals(value, other.value);
 
-   public override bool Equals(object obj) => obj is KString s && Equals(s);
+   public override bool Equals(object? obj) => obj is KString s && Equals(s);
 
    public override int GetHashCode() => Hash;
 
-   public int CompareTo(object obj) => CompareTo((KString)obj);
+   public int CompareTo(object? obj) => CompareTo((KString)obj!);
 
    public KString Format(string format)
    {

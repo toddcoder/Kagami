@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 using Core.Collections;
 using Core.Monads;
 using Core.Numbers;
@@ -43,9 +41,9 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
 
    public bool IsTrue => mutable.Length > 0;
 
-   public int CompareTo(MutString other) => Compare(other);
+   public int CompareTo(MutString? other) => Compare(other!);
 
-   public bool Equals(MutString other) => AsString == other.AsString;
+   public bool Equals(MutString? other) => AsString == other!.AsString;
 
    public KString Format(string format) => AsString.FormatAs(format);
 
@@ -108,7 +106,7 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
-   public int CompareTo(object obj) => AsString.CompareTo(obj.ToString());
+   public int CompareTo(object? obj) => AsString.CompareTo(obj!.ToString());
 
    public int Compare(IObject obj) => AsString.CompareTo(obj.AsString);
 

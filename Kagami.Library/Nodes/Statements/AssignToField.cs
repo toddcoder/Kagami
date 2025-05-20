@@ -27,7 +27,7 @@ public class AssignToField : Statement
 
       expression.Generate(builder);
 
-      if (_operation is(true, var operation))
+      if (_operation is (true, var operation))
       {
          builder.AddRaw(operation);
       }
@@ -38,6 +38,6 @@ public class AssignToField : Statement
 
    public override string ToString()
    {
-      return stream() / fieldName / " " / (_operation.Map(o => o.ToString()) | (() => "")) / "= " / expression;
+      return stream() / fieldName / " " / (_operation.Map(o => o.ToString() ?? "") | (() => "")) / "= " / expression;
    }
 }

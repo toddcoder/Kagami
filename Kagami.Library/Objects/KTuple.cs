@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Core.Collections;
+﻿using Core.Collections;
 using Core.Enumerables;
 using Core.Monads;
 using static Kagami.Library.AllExceptions;
@@ -43,7 +40,7 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
 
    public KTuple(IObject[] items) : this()
    {
-      if (items.Length == 1 && items[0] is Container { ExpandInTuple: true } il)
+      if (items is [Container { ExpandInTuple: true } il])
       {
          this.items = il.List.ToArray();
       }
@@ -90,7 +87,7 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
       var length = tupleItems.Length;
 
       items = new IObject[length + 1];
-      System.Array.Copy(tupleItems, items, length);
+      Array.Copy(tupleItems, items, length);
       items[length] = item;
 
       names = new Hash<string, int>();
@@ -138,7 +135,7 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
       get
       {
          var self = this;
-         return maybe<IObject>() & items.Length > 0 & (() => self.items[self.items.Length - 1]);
+         return maybe<IObject>() & items.Length > 0 & (() => self.items[^1]);
       }
    }
 
@@ -180,11 +177,11 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
 
    public bool Equals(KTuple other) => IsEqualTo(other);
 
-   public override bool Equals(object obj) => obj is KTuple tuple && Equals(tuple);
+   public override bool Equals(object? obj) => obj is KTuple tuple && Equals(tuple);
 
    public override int GetHashCode() => Hash;
 
-   public int CompareTo(object obj)
+   public int CompareTo(object? obj)
    {
       if (obj is KTuple tuple)
       {
@@ -192,7 +189,7 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
       }
       else
       {
-         return Compare((IObject)obj);
+         return Compare((IObject)obj!);
       }
    }
 

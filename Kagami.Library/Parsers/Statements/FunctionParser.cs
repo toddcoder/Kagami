@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Core.Matching;
+﻿using Core.Matching;
 using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
@@ -187,8 +186,11 @@ public class FunctionParser : StatementParser
             var _scan = caseParser.Scan(state);
             if (_scan)
             {
-               caseParser.If.AddReturnIf();
-               list.Add(caseParser.If);
+               if (caseParser.If is (true, var @if))
+               {
+                  @if.AddReturnIf();
+                  list.Add(@if);
+               }
             }
             else if (_scan.Exception is (true, var exception))
             {

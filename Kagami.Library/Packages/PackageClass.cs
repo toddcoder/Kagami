@@ -1,46 +1,43 @@
-﻿using System;
-using Kagami.Library.Classes;
+﻿using Kagami.Library.Classes;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
-using Core.Collections;
 
-namespace Kagami.Library.Packages
+namespace Kagami.Library.Packages;
+
+public abstract class PackageClass : BaseClass
 {
-   public abstract class PackageClass : BaseClass
+   protected SelectorHash<Func<IObject, Message, IObject>> functions;
+
+   public PackageClass()
    {
-      protected SelectorHash<Func<IObject, Message, IObject>> functions;
+      functions = new SelectorHash<Func<IObject, Message, IObject>>();
+   }
 
-      public PackageClass()
+   protected void registerPackageFunction(Selector selector, Func<IObject, Message, IObject> function)
+   {
+      registerMessage(selector, function);
+      functions[selector] = function;
+   }
+
+   public void CopyToGlobalFrame(Package package)
+   {
+      var globalFrame = Machine.Current.Value.GlobalFrame;
+      var fields = globalFrame.Fields;
+
+      foreach (var (functionName, func) in functions)
       {
-         functions = new SelectorHash<Func<IObject, Message, IObject>>();
-      }
-
-      protected void registerPackageFunction(Selector selector, Func<IObject, Message, IObject> function)
-      {
-         registerMessage(selector, function);
-         functions[selector] = function;
-      }
-
-      public void CopyToGlobalFrame(Package package)
-      {
-         var globalFrame = Machine.Current.GlobalFrame;
-         var fields = globalFrame.Fields;
-
-         foreach (var (functionName, func) in functions)
+         Selector selector = functionName;
+         if (!functionName.StartsWith("_") && !fields.ContainsKey(selector))
          {
-            Selector selector = functionName;
-            if (!functionName.StartsWith("_") && !fields.ContainsKey(selector))
-            {
-               fields.New(selector, new PackageFunction(package, functionName, func));
-            }
+            fields.New(selector, new PackageFunction(package, functionName, func));
          }
+      }
 
-         foreach (var (fieldName, field) in package.Fields)
+      foreach (var (fieldName, field) in package.Fields)
+      {
+         if (!fieldName.StartsWith("_") && !fields.ContainsKey(fieldName))
          {
-            if (!fieldName.StartsWith("_") && !fields.ContainsKey(fieldName))
-            {
-               fields.New(fieldName, field);
-            }
+            fields.New(fieldName, field);
          }
       }
    }

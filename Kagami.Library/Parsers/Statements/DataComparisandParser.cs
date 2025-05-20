@@ -41,7 +41,7 @@ public class DataComparisandParser : StatementParser
       if (_result is (true, var (comparisands, newOrdinal)))
       {
          values[name] = (comparisands, newOrdinal);
-         Ordinal = newOrdinal;
+         Ordinal = newOrdinal.Some();
          state.CommitTransaction();
          Module.Global.RegisterDataComparisand(className, name);
 
@@ -115,7 +115,7 @@ public class DataComparisandParser : StatementParser
       }
    }
 
-   public string Name { get; set; }
+   public string Name { get; set; } = "";
 
-   public IRangeItem Ordinal { get; set; }
+   public Maybe<IRangeItem> Ordinal { get; set; } = nil;
 }

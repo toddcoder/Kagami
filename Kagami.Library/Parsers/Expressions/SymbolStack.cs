@@ -1,34 +1,31 @@
-﻿using System.Collections.Generic;
+﻿using Core.DataStructures;
 using Kagami.Library.Nodes.Symbols;
 using Core.Enumerables;
 using Core.Monads;
-using static Core.Monads.AttemptFunctions;
-using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Parsers.Expressions
+namespace Kagami.Library.Parsers.Expressions;
+
+public class SymbolStack
 {
-   public class SymbolStack
+   protected MaybeStack<Symbol> stack = [];
+
+   public void Push(Symbol symbol) => stack.Push(symbol);
+
+   public Result<Symbol> Pop() => stack.Pop().Result("Stack is empty");
+
+   public Maybe<Symbol> Peek() => stack.Peek();
+
+   public bool IsEmpty => stack.Count == 0;
+
+   public bool IsPending(Symbol next)
    {
-      protected Stack<Symbol> stack;
-
-      public SymbolStack() => stack = new Stack<Symbol>();
-
-      public void Push(Symbol symbol) => stack.Push(symbol);
-
-      public Result<Symbol> Pop() => tryTo(() => stack.Pop());
-
-      public Maybe<Symbol> Peek() => maybe(!IsEmpty, () => stack.Peek());
-
-      public bool IsEmpty => stack.Count == 0;
-
-      public bool IsPending(Symbol next)
+      if (IsEmpty)
       {
-         if (IsEmpty)
-         {
-            return false;
-         }
+         return false;
+      }
 
-         var symbol = stack.Peek();
+      if (stack.Peek() is (true, var symbol))
+      {
          if (!symbol.LeftToRight)
          {
             return symbol.Precedence < next.Precedence;
@@ -36,9 +33,13 @@ namespace Kagami.Library.Parsers.Expressions
 
          return symbol.Precedence <= next.Precedence;
       }
-
-      public void Clear() => stack.Clear();
-
-      public override string ToString() => stack.ToString(" ");
+      else
+      {
+         return false;
+      }
    }
+
+   public void Clear() => stack.Clear();
+
+   public override string ToString() => stack.ToString(" ");
 }

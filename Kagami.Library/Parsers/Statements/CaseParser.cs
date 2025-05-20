@@ -96,5 +96,5 @@ public class CaseParser : StatementParser
       }
    }
 
-   public If If { get; set; }
+   public Maybe<If> If { get; set; } = nil;
 }

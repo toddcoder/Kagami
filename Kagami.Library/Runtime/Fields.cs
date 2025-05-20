@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections;
 using Kagami.Library.Objects;
 using Core.Collections;
 using Core.Enumerables;
@@ -284,13 +281,13 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       }
    }
 
-   public bool Equals(Fields other)
+   public bool Equals(Fields? other)
    {
-      return fields.Count == other.fields.Count &&
+      return other is not null && fields.Count == other.fields.Count &&
          fields.Select(i => i.Value.Value.IsEqualTo(other.fields[i.Key].Value)).All(b => b);
    }
 
-   public override bool Equals(object obj) => obj is Fields f && Equals(f);
+   public override bool Equals(object? obj) => obj is Fields f && Equals(f);
 
    public override int GetHashCode() => fields.GetHashCode();
 

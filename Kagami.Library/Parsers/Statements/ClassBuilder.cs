@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Kagami.Library.Classes;
+﻿using Kagami.Library.Classes;
 using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
@@ -28,7 +26,7 @@ public class ClassBuilder
    protected Block constructorBlock;
    protected Hash<string, (ConstructorInvokable, Block)> constructorInvokables = [];
    protected List<(IInvokable, Block, bool)> functions = [];
-   protected UserClass userClass;
+   protected UserClass userClass = new("", "");
    protected IEnumerable<Mixin> mixins;
 
    public ClassBuilder(string className, Parameters parameters, string parentClassName, Expression[] parentArguments,

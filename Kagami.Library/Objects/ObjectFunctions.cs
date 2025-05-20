@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 using Kagami.Library.Classes;
 using Kagami.Library.Runtime;
 using Core.Collections;
@@ -271,8 +268,6 @@ public static class ObjectFunctions
                      return false;
                   }
                }
-
-               return true;
             }
             else
             {
@@ -460,7 +455,7 @@ public static class ObjectFunctions
       {
          for (var i = 0; i < lLength; i++)
          {
-            if (!lArray[i].Equals(rArray[i]))
+            if (!lArray[i]!.Equals(rArray[i]))
             {
                return false;
             }
@@ -630,7 +625,7 @@ public static class ObjectFunctions
          {
             int i => Convert.ToString(i, toBase),
             long l => Convert.ToString(l, toBase),
-            _ => obj.ToString()
+            _ => obj.ToString() ?? ""
          };
       }
       else
@@ -651,7 +646,7 @@ public static class ObjectFunctions
             case long l:
                return format(l, toBase, length, padding);
             default:
-               var result = obj.ToString();
+               var result = obj.ToString() ?? "";
                return length > 0 ? result.RightJustify(length, padding) : result.LeftJustify(-length, padding);
          }
       }

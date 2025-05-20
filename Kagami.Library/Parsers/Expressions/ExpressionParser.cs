@@ -4,7 +4,6 @@ using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
-using System.Linq;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
@@ -20,9 +19,19 @@ public class ExpressionParser : Parser
    protected ConjunctionParsers conjunctionParsers;
    protected int whateverCount;
 
-   public ExpressionParser(Bits32<ExpressionFlags> flags) : base(false) => this.flags = flags;
+   public ExpressionParser(Bits32<ExpressionFlags> flags) : base(false)
+   {
+      this.flags = flags;
 
-   public Expression Expression { get; set; }
+      builder = new ExpressionBuilder(flags);
+      prefixParser = new PrefixParser(builder);
+      valuesParser = new ValuesParser(builder);
+      infixParser = new InfixParser(builder);
+      postfixParser = new PostfixParser(builder);
+      conjunctionParsers = new ConjunctionParsers(builder);
+   }
+
+   public Expression Expression { get; set; } = Expression.Empty;
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens)
    {
@@ -31,12 +40,6 @@ public class ExpressionParser : Parser
          return nil;
       }
 
-      builder = new ExpressionBuilder(flags);
-      prefixParser = new PrefixParser(builder);
-      valuesParser = new ValuesParser(builder);
-      infixParser = new InfixParser(builder);
-      postfixParser = new PostfixParser(builder);
-      conjunctionParsers = new ConjunctionParsers(builder);
       whateverCount = 0;
 
       state.BeginPrefixCode();
@@ -94,7 +97,8 @@ public class ExpressionParser : Parser
                var _implicitState = state.ImplicitState;
                if (_implicitState is (true, var implicitState) && !implicitState.Two)
                {
-                  var _messageWithLambda = getMessageWithLambda(implicitState.Symbol, implicitState.Message, implicitState.ParameterCount, expression);
+                  var _messageWithLambda =
+                     getMessageWithLambda(implicitState.Symbol, implicitState.Message, implicitState.ParameterCount, expression);
                   if (_messageWithLambda is (true, var messageWithLambda))
                   {
                      Expression = messageWithLambda;
@@ -105,9 +109,10 @@ public class ExpressionParser : Parser
                      return _messageWithLambda.Exception;
                   }
                }
-               else if (state.ImplicitState is (true, var implicitState2) && implicitState2.Two is (true, var symbol))
+               else if (state.ImplicitState is (true, { Two: (true, var symbol) } implicitState2))
                {
-                  if (getDualMessageWithLambda("__$0", "__$1", implicitState2.Symbol, symbol, implicitState2.Message, expression) is (true, var newExpression))
+                  if (getDualMessageWithLambda("__$0", "__$1", implicitState2.Symbol, symbol, implicitState2.Message, expression) is
+                      (true, var newExpression))
                   {
                      Expression = newExpression;
                      state.ImplicitState = nil;

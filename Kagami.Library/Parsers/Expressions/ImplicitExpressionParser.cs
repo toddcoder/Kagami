@@ -7,9 +7,9 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public class ImplicitExpressionParser : EndingInExpressionParser
 {
-   protected string message;
+   protected string message = "";
    protected int parameterCount;
-   protected string fieldName;
+   protected string fieldName = "";
 
    public ImplicitExpressionParser(ExpressionBuilder builder) : base(builder)
    {

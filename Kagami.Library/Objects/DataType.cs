@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Kagami.Library.Classes;
+﻿using Kagami.Library.Classes;
 using Kagami.Library.Runtime;
 using Core.Collections;
 using Core.Enumerables;
@@ -67,7 +66,7 @@ public class DataType : IObject
             }
          }
 
-         Machine.Current.CurrentFrame.Fields.SetBindings(bindings);
+         Machine.Current.Value.CurrentFrame.Fields.SetBindings(bindings);
          return true;
       }
    }

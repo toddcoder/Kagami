@@ -11,7 +11,7 @@ public class Return : Operation
 {
    public static Optional<IObject> ReturnAction(Machine machine, bool returnTopOfStack)
    {
-      var _response = Machine.Current.CurrentFrame.Pop().Optional();
+      var _response = Machine.Current.Value.CurrentFrame.Pop().Optional();
 
       var frames = machine.PopFrames();
       if (frames.FunctionFrame is (true, var frame))

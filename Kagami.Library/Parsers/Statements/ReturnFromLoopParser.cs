@@ -37,7 +37,7 @@ public class ReturnFromLoopParser : StatementParser
       }
    }
 
-   public Expression Condition { get; set; }
+   public Expression Condition { get; set; } = Expression.Empty;
 
-   public Expression Expression { get; set; }
+   public Expression Expression { get; set; } = Expression.Empty;
 }

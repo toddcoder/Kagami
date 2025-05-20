@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Kagami.Library.Objects;
+﻿using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Collections;
 using Core.Monads;
@@ -12,14 +10,12 @@ namespace Kagami.Library.Classes;
 
 public class DataTypeClass : UserClass
 {
-   protected DataType dataType;
-   protected Hash<string, IObject> dataComparisands;
-   protected Hash<IObject, string> ordinals;
+   protected DataType dataType = new("", []);
+   protected Hash<string, IObject> dataComparisands = new();
+   protected Hash<IObject, string> ordinals = new();
 
    public DataTypeClass(string className) : base(className, "")
    {
-      dataComparisands = new Hash<string, IObject>();
-      ordinals = new Hash<IObject, string>();
    }
 
    public void RegisterDataType(DataType dataType) => this.dataType = dataType;

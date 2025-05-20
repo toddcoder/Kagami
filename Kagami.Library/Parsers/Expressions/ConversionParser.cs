@@ -6,7 +6,7 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public class ConversionParser : EndingInValueParser
 {
-   protected string message;
+   protected string message = "";
 
    public ConversionParser(ExpressionBuilder builder) : base(builder)
    {

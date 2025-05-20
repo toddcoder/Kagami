@@ -1,5 +1,4 @@
-﻿using System;
-using Core.Objects;
+﻿using Core.Objects;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using static Kagami.Library.AllExceptions;
@@ -149,14 +148,7 @@ public abstract class BaseClass
    protected IObject invokeDirectly(IObject obj, Message message)
    {
       var result = messages[message.Selector];
-      if (result == null)
-      {
-         throw messageNotFound(classOf(obj), message.Selector);
-      }
-      else
-      {
-         return result(obj, message);
-      }
+      return result(obj, message);
    }
 
    protected IObject invokeClassMessage(Message message)
@@ -437,7 +429,7 @@ public abstract class BaseClass
          fields.Assign("self", obj);
       }
 
-      var _value = Machine.Current.Invoke(lambda.Invokable, arguments, fields);
+      var _value = Machine.Current.Value.Invoke(lambda.Invokable, arguments, fields);
       if (_value is (true, var value))
       {
          return value;
@@ -454,7 +446,7 @@ public abstract class BaseClass
 
    public static IObject Invoke(UserClass userClass, Arguments arguments, Lambda lambda)
    {
-      return Machine.Current.Invoke(lambda.Invokable, arguments, userClass.ClassFields)
+      return Machine.Current.Value.Invoke(lambda.Invokable, arguments, userClass.ClassFields)
          .RequiredCast<IObject>(() => "Return value required");
    }
 

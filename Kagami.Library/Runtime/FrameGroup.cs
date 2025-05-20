@@ -1,82 +1,79 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using Core.Enumerables;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Runtime
+namespace Kagami.Library.Runtime;
+
+public class FrameGroup : IEnumerable<Frame>
 {
-   public class FrameGroup : IEnumerable<Frame>
+   protected Frame[] frames;
+   protected int functionFrameIndex;
+
+   public FrameGroup(Frame[] frames)
    {
-      protected Frame[] frames;
-      protected int functionFrameIndex;
+      this.frames = frames;
+      functionFrameIndex = Array.FindIndex(frames, f => f.FrameType == FrameType.Function);
+   }
 
-      public FrameGroup(Frame[] frames)
+   public FrameGroup(Frame[] frames, int functionFrameIndex)
+   {
+      this.frames = frames;
+      this.functionFrameIndex = functionFrameIndex;
+   }
+
+   public FrameGroup()
+   {
+      frames = [];
+      functionFrameIndex = -1;
+   }
+
+   public void Push(Machine machine)
+   {
+      foreach (var frame in frames)
       {
-         this.frames = frames;
-         functionFrameIndex = Array.FindIndex(frames, f => f.FrameType == FrameType.Function);
+         machine.PushFrame(frame);
       }
+   }
 
-      public FrameGroup(Frame[] frames, int functionFrameIndex)
+   public Maybe<Frame> FunctionFrame => maybe<Frame>() & functionFrameIndex > -1 & (() => frames[functionFrameIndex]);
+
+   public int FunctionFrameIndex
+   {
+      get => functionFrameIndex;
+      set => functionFrameIndex = value;
+   }
+
+   public int Count => frames.Length;
+
+   public Maybe<Frame> ExitFrame => frames.FirstOrNone(f => f.FrameType == FrameType.Exit);
+
+   public Maybe<Frame> SkipFrame => frames.FirstOrNone(f => f.FrameType == FrameType.Skip);
+
+   public Maybe<Frame> TopFrame => maybe<Frame>() & frames.Length > 0 & (() => frames[0]);
+
+   public IEnumerator<Frame> GetEnumerator()
+   {
+      foreach (var frame in frames)
       {
-         this.frames = frames;
-         this.functionFrameIndex = functionFrameIndex;
+         yield return frame;
       }
+   }
 
-      public FrameGroup()
-      {
-         frames = Array.Empty<Frame>();
-         functionFrameIndex = -1;
-      }
+   IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-      public void Push(Machine machine)
+   public Fields Fields
+   {
+      get
       {
-         foreach (var frame in frames)
+         var fields = new Fields();
+
+         for (var i = functionFrameIndex; i >= 0; i--)
          {
-            machine.PushFrame(frame);
+            fields.CopyFrom(frames[i].Fields);
          }
-      }
 
-      public Maybe<Frame> FunctionFrame => maybe(functionFrameIndex > -1, () => frames[functionFrameIndex]);
-
-      public int FunctionFrameIndex
-      {
-         get => functionFrameIndex;
-         set => functionFrameIndex = value;
-      }
-
-      public int Count => frames.Length;
-
-      public Maybe<Frame> ExitFrame => frames.FirstOrNone(f => f.FrameType == FrameType.Exit);
-
-      public Maybe<Frame> SkipFrame => frames.FirstOrNone(f => f.FrameType == FrameType.Skip);
-
-      public Maybe<Frame> TopFrame => maybe(frames.Length > 0, () => frames[0]);
-
-      public IEnumerator<Frame> GetEnumerator()
-      {
-         foreach (var frame in frames)
-         {
-            yield return frame;
-         }
-      }
-
-      IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-      public Fields Fields
-      {
-         get
-         {
-            var fields = new Fields();
-
-            for (var i = functionFrameIndex; i >= 0; i--)
-            {
-               fields.CopyFrom(frames[i].Fields);
-            }
-
-            return fields;
-         }
+         return fields;
       }
    }
 }

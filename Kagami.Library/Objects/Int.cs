@@ -1,199 +1,197 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using Core.Collections;
 using Core.Dates.DateIncrements;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Operations.NumericFunctions;
 
-namespace Kagami.Library.Objects
+namespace Kagami.Library.Objects;
+
+public readonly struct Int : IObject, INumeric, IComparable<Int>, IEquatable<Int>, IFormattable, IRangeItem, IComparable
 {
-   public readonly struct Int : IObject, INumeric, IComparable<Int>, IEquatable<Int>, IFormattable, IRangeItem, IComparable
+   public static implicit operator Int(int value) => new(value);
+
+   public static IObject IntObject(int value) => new Int(value);
+
+   public static IObject Zero => IntObject(0);
+
+   public static IObject One => IntObject(1);
+
+   private readonly int value;
+
+   public Int(int value) : this() => this.value = value;
+
+   public int Value => value;
+
+   public string ClassName => "Int";
+
+   public bool IsZero => value == 0;
+
+   public bool IsPositive => value > 0;
+
+   public bool IsNegative => value < 0;
+
+   public bool IsPrimitive => true;
+
+   public string AsString => value.ToString();
+
+   public string Image => value.ToString();
+
+   public int Hash => value.GetHashCode();
+
+   public bool IsEqualTo(IObject obj) => obj is Int i && value == i.value;
+
+   public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
+
+   public bool IsTrue => value != 0;
+
+   public (INumeric, INumeric) Compatible(INumeric obj) => obj.ClassName switch
    {
-      public static implicit operator Int(int value) => new(value);
+      "Int" => (this, obj.ToInt()),
+      "Float" => (ToFloat(), obj.ToFloat()),
+      "Byte" => (this, obj.ToByte()),
+      "Long" => (ToLong(), obj.ToLong()),
+      "Complex" => (ToComplex(), obj.ToComplex()),
+      "Rational" => (ToRational(), obj.ToRational()),
+      _ => (this, obj.ToInt())
+   };
 
-      public static IObject IntObject(int value) => new Int(value);
+   public INumeric ToByte() => new KByte(AsByte());
 
-      public static IObject Zero => IntObject(0);
+   public byte AsByte() => (byte)value;
 
-      public static IObject One => IntObject(1);
+   public bool IsByte => false;
 
-      private readonly int value;
+   public INumeric ToInt() => this;
 
-      public Int(int value) : this() => this.value = value;
+   public int AsInt32() => value;
 
-      public int Value => value;
+   public bool IsInt => true;
 
-      public string ClassName => "Int";
+   public INumeric ToFloat() => new Float(value);
 
-      public bool IsZero => value == 0;
+   public double AsDouble() => value;
 
-      public bool IsPositive => value > 0;
+   public bool IsFloat => false;
 
-      public bool IsNegative => value < 0;
+   public INumeric ToLong() => new Long(value);
 
-      public bool IsPrimitive => true;
+   public BigInteger AsBigInteger() => value;
 
-      public string AsString => value.ToString();
+   public bool IsLong => false;
 
-      public string Image => value.ToString();
+   public INumeric ToComplex() => new Complex(AsComplex());
 
-      public int Hash => value.GetHashCode();
+   public System.Numerics.Complex AsComplex() => new(value, 0);
 
-      public bool IsEqualTo(IObject obj) => obj is Int i && value == i.value;
+   public bool IsComplex => false;
 
-      public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
+   public INumeric ToRational() => new Rational(AsRational());
 
-      public bool IsTrue => value != 0;
+   public (BigInteger, BigInteger) AsRational() => (value, 1);
 
-      public (INumeric, INumeric) Compatible(INumeric obj) => obj.ClassName switch
+   public bool IsRational => false;
+
+   public KString ZFill(int count) => zfill(AsString, count);
+
+   public IObject Raise(INumeric power) => raise(this, power);
+
+   public int Compare(IObject obj) => compatibleCompare(this, obj);
+
+   public IObject Object => this;
+
+   public KBoolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
+
+   public KBoolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
+
+   public int CompareTo(Int other) => value.CompareTo(other.value);
+
+   public bool Equals(Int other) => value == other.value;
+
+   public override bool Equals(object? obj) => obj is Int i && Equals(i);
+
+   public override int GetHashCode() => Hash;
+
+   public int CompareTo(object? obj) => CompareTo((Int)obj!);
+
+   public KString Format(string format) => formatNumber(value, format);
+
+   public KBoolean IsEven => value % 2 == 0;
+
+   public KBoolean IsOdd => value % 2 != 0;
+
+   public KBoolean IsPrime
+   {
+      get
       {
-         "Int" => (this, obj.ToInt()),
-         "Float" => (ToFloat(), obj.ToFloat()),
-         "Byte" => (this, obj.ToByte()),
-         "Long" => (ToLong(), obj.ToLong()),
-         "Complex" => (ToComplex(), obj.ToComplex()),
-         "Rational" => (ToRational(), obj.ToRational()),
-         _ => (this, obj.ToInt())
-      };
-
-      public INumeric ToByte() => new KByte(AsByte());
-
-      public byte AsByte() => (byte)value;
-
-      public bool IsByte => false;
-
-      public INumeric ToInt() => this;
-
-      public int AsInt32() => value;
-
-      public bool IsInt => true;
-
-      public INumeric ToFloat() => new Float(value);
-
-      public double AsDouble() => value;
-
-      public bool IsFloat => false;
-
-      public INumeric ToLong() => new Long(value);
-
-      public BigInteger AsBigInteger() => value;
-
-      public bool IsLong => false;
-
-      public INumeric ToComplex() => new Complex(AsComplex());
-
-      public System.Numerics.Complex AsComplex() => new(value, 0);
-
-      public bool IsComplex => false;
-
-      public INumeric ToRational() => new Rational(AsRational());
-
-      public (BigInteger, BigInteger) AsRational() => (value, 1);
-
-      public bool IsRational => false;
-
-      public KString ZFill(int count) => zfill(AsString, count);
-
-      public IObject Raise(INumeric power) => raise(this, power);
-
-      public int Compare(IObject obj) => compatibleCompare(this, obj);
-
-      public IObject Object => this;
-
-      public KBoolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
-
-      public KBoolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
-
-      public int CompareTo(Int other) => value.CompareTo(other.value);
-
-      public bool Equals(Int other) => value == other.value;
-
-      public override bool Equals(object obj) => obj is Int i && Equals(i);
-
-      public override int GetHashCode() => Hash;
-
-      public int CompareTo(object obj) => CompareTo((Int)obj);
-
-      public KString Format(string format) => formatNumber(value, format);
-
-      public KBoolean IsEven => value % 2 == 0;
-
-      public KBoolean IsOdd => value % 2 != 0;
-
-      public KBoolean IsPrime
-      {
-         get
+         if ((value & 1) == 0)
          {
-            if ((value & 1) == 0)
-            {
-               return value == 2;
-            }
-            else
-            {
-               var num = 3;
-               while (num * num <= value)
-               {
-                  if (value % num == 0)
-                  {
-                     return false;
-                  }
-
-                  num += 2;
-               }
-
-               return value != 1;
-            }
-         }
-      }
-
-      public Int Factorial()
-      {
-         if (value <= 1)
-         {
-            return 1;
+            return value == 2;
          }
          else
          {
-            var num = 1;
-            for (var index = 2; index <= value; index++)
+            var num = 3;
+            while (num * num <= value)
             {
-               num *= index;
+               if (value % num == 0)
+               {
+                  return false;
+               }
+
+               num += 2;
             }
 
-            return num;
+            return value != 1;
          }
       }
+   }
 
-      public IRangeItem Successor => (Int)(value + 1);
-
-      public IRangeItem Predecessor => (Int)(value - 1);
-
-      public KRange Range() => new((Int)0, this, false);
-
-      public Interval Millisecond => value.Millisecond();
-
-      public Interval Second => value.Second();
-
-      public Interval Minute => value.Minute();
-
-      public Interval Hour => value.Hour();
-
-      public Interval Day => value.Day();
-
-      public Interval Week => (7 * value).Day();
-
-      public KChar Char() => new((char)value);
-
-      public KByte Byte() => new((byte)value);
-
-      public IObject Times(Lambda lambda)
+   public Int Factorial()
+   {
+      if (value <= 1)
       {
-         for (var i = 0; i < value; i++)
+         return 1;
+      }
+      else
+      {
+         var num = 1;
+         for (var index = 2; index <= value; index++)
          {
-            lambda.Invoke();
+            num *= index;
          }
 
-         return KVoid.Value;
+         return num;
       }
+   }
+
+   public IRangeItem Successor => (Int)(value + 1);
+
+   public IRangeItem Predecessor => (Int)(value - 1);
+
+   public KRange Range() => new((Int)0, this, false);
+
+   public Interval Millisecond => value.Millisecond();
+
+   public Interval Second => value.Second();
+
+   public Interval Minute => value.Minute();
+
+   public Interval Hour => value.Hour();
+
+   public Interval Day => value.Day();
+
+   public Interval Week => (7 * value).Day();
+
+   public KChar Char() => new((char)value);
+
+   public KByte Byte() => new((byte)value);
+
+   public IObject Times(Lambda lambda)
+   {
+      for (var i = 0; i < value; i++)
+      {
+         lambda.Invoke();
+      }
+
+      return KVoid.Value;
    }
 }

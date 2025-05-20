@@ -1,73 +1,59 @@
-﻿using System.Collections.Generic;
-using Kagami.Library.Objects;
+﻿using Kagami.Library.Objects;
 using Core.Collections;
 
-namespace Kagami.Library.Classes
+namespace Kagami.Library.Classes;
+
+public class SelectorHash<TValue> : Hash<string, TValue> where TValue : notnull
 {
-   public class SelectorHash<TValue> : Hash<string, TValue>
+   protected Memo<string, List<string>> buckets = new Memo<string, List<string>>.Function(_ => []);
+
+   public TValue this[Selector selector]
    {
-      protected AutoHash<string, List<string>> buckets;
-
-      public SelectorHash() => buckets = new AutoHash<string, List<string>>(_ => new List<string>(), true);
-
-      public TValue this[Selector selector]
-      {
-         get
-         {
-            if (base.ContainsKey(selector.Image))
-            {
-               return base[selector.Image];
-            }
-            else
-            {
-               var labelsOnlyImage = selector.LabelsOnly().Image;
-               if (buckets.ContainsKey(labelsOnlyImage))
-               {
-                  foreach (var bucket in buckets[labelsOnlyImage])
-                  {
-                     Selector matchSelector = bucket;
-                     if (selector.IsEquivalentTo(matchSelector))
-                     {
-                        return base[matchSelector.Image];
-                     }
-                  }
-               }
-
-               return base[labelsOnlyImage];
-            }
-         }
-         set
-         {
-            base[selector.Image] = value;
-            buckets[selector.LabelsOnly()].Add(selector.Image);
-         }
-      }
-
-      public bool ContainsKey(Selector selector)
+      get
       {
          if (base.ContainsKey(selector.Image))
          {
-            return true;
+            return base[selector.Image];
          }
          else
          {
             var labelsOnlyImage = selector.LabelsOnly().Image;
-            if (buckets.ContainsKey(labelsOnlyImage))
+            foreach (var matchSelector in buckets[labelsOnlyImage].Where(matchSelector => selector.IsEquivalentTo((Selector)matchSelector)))
             {
-               foreach (var bucket in buckets[labelsOnlyImage])
-               {
-                  Selector matchSelector = bucket;
-                  if (selector.IsEquivalentTo(matchSelector))
-                  {
-                     return true;
-                  }
-               }
+               return base[((Selector)matchSelector).Image];
             }
 
-            return base.ContainsKey(labelsOnlyImage);
+            return base[labelsOnlyImage];
          }
       }
-
-      public bool ContainsExact(Selector selector) => base.ContainsKey(selector.Image);
+      set
+      {
+         base[selector.Image] = value;
+         buckets[selector.LabelsOnly()].Add(selector.Image);
+      }
    }
+
+   public bool ContainsKey(Selector selector)
+   {
+      if (base.ContainsKey(selector.Image))
+      {
+         return true;
+      }
+      else
+      {
+         var labelsOnlyImage = selector.LabelsOnly().Image;
+         foreach (var bucket in buckets[labelsOnlyImage])
+         {
+            Selector matchSelector = bucket;
+            if (selector.IsEquivalentTo(matchSelector))
+            {
+               return true;
+            }
+         }
+
+         return base.ContainsKey(labelsOnlyImage);
+      }
+   }
+
+   public bool ContainsExact(Selector selector) => base.ContainsKey(selector.Image);
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Core.Collections;
+﻿using Core.Collections;
 using Core.Enumerables;
 using Core.Monads;
 using Core.Numbers;
@@ -86,9 +83,9 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public KBoolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
 
-   public int CompareTo(KArray other) => compareCollections(this, other);
+   public int CompareTo(KArray? other) => compareCollections(this, other!);
 
-   public bool Equals(KArray other) => isEqualTo(this, other);
+   public bool Equals(KArray? other) => isEqualTo(this, other!);
 
    public Maybe<TypeConstraint> TypeConstraint
    {

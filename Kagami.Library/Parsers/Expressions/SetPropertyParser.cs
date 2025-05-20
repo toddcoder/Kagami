@@ -5,17 +5,11 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class SetPropertyParser : EndingInExpressionParser
+public class SetPropertyParser(ExpressionBuilder builder, string tempObjectField, ExpressionBuilder outerBuilder) : EndingInExpressionParser(builder)
 {
-   protected string tempObjectField;
-   protected ExpressionBuilder outerBuilder;
-   protected string propertyName;
-
-   public SetPropertyParser(ExpressionBuilder builder, string tempObjectField, ExpressionBuilder outerBuilder) : base(builder)
-   {
-      this.tempObjectField = tempObjectField;
-      this.outerBuilder = outerBuilder;
-   }
+   protected string tempObjectField = tempObjectField;
+   protected ExpressionBuilder outerBuilder = outerBuilder;
+   protected string propertyName = "";
 
    public override string Pattern => $"^ /(/s*) /({REGEX_FIELD}) /(|s|) /'='";
 

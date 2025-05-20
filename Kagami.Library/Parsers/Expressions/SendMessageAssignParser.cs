@@ -8,8 +8,8 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public class SendMessageAssignParser : EndingInExpressionParser
 {
-   protected string messageName;
-   protected string operationSource;
+   protected string messageName = "";
+   protected string operationSource = "";
 
    public SendMessageAssignParser(ExpressionBuilder builder) : base(builder)
    {

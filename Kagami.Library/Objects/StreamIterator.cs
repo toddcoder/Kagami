@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Kagami.Library.Classes;
+﻿using Kagami.Library.Classes;
 using Kagami.Library.Runtime;
 using Core.Collections;
 using Core.Enumerables;
@@ -55,7 +53,7 @@ public class StreamIterator : IObject, IIterator
 
    public Maybe<IObject> Next()
    {
-      while (!Machine.Current.Context.Cancelled())
+      while (!Machine.Current.Value.Context.Cancelled())
       {
          var _next = iterator.Next();
          if (_next is (true, var next))

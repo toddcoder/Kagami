@@ -1,9 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Windows.Forms;
+﻿using System.Diagnostics;
 using Core.Arrays;
 using Kagami.Library;
 using Kagami.Library.Runtime;
@@ -32,22 +27,22 @@ public partial class Playground : Form
    protected const string PLAYGROUND_PACKAGE_FOLDER = CONFIGURATION_FOLDER + "Packages";
    protected const string KAGAMI_EXCEPTION_PROMPT = "Kagami exception >>> ";
 
-   protected Document document;
-   protected TextBoxConsole outputConsole;
-   protected TextWriter textWriter;
-   protected TextReader textReader;
+   protected Document document = null!;
+   protected TextBoxConsole outputConsole = null!;
+   protected TextWriter textWriter = null!;
+   protected TextReader textReader = null!;
    protected bool locked;
    protected bool manual;
-   protected Stopwatch stopwatch;
-   protected PlaygroundConfiguration playgroundConfiguration;
-   protected PlaygroundContext context;
-   protected Colorizer colorizer;
+   protected Stopwatch stopwatch = null!;
+   protected PlaygroundConfiguration playgroundConfiguration = null!;
+   protected PlaygroundContext context = null!;
+   protected Colorizer colorizer = null!;
    protected bool dumpOperations;
    protected bool tracing;
-   protected Maybe<int> _exceptionIndex;
+   protected Maybe<int> _exceptionIndex = nil;
    protected bool cancelled;
-   protected FolderName packageFolder;
-   protected Maybe<ExceptionData> _exceptionData;
+   protected FolderName packageFolder = null!;
+   protected Maybe<ExceptionData> _exceptionData = nil;
    protected int firstEditorLine;
 
    public Playground()
@@ -317,9 +312,9 @@ public partial class Playground : Form
       }
    }
 
-   protected static void stepInto() => Machine.Current?.Step();
+   protected static void stepInto() => Machine.Current.Value.Step();
 
-   protected static void stepOver() => Machine.Current?.Step();
+   protected static void stepOver() => Machine.Current.Value.Step();
 
    protected int getRemainingLineIndex(int index)
    {

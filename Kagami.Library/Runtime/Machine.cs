@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Kagami.Library.Invokables;
+﻿using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using Kagami.Library.Packages;
 using Core.Enumerables;
 using Core.Monads;
+using Core.Objects;
 using Core.Strings;
 using static Kagami.Library.AllExceptions;
 using static Core.Monads.AttemptFunctions;
@@ -19,9 +17,9 @@ public class Machine
 {
    protected const int MAX_DEPTH = 128;
 
-   public static Machine Current { get; set; }
+   public static LateLazy<Machine> Current { get; set; } = new(true);
 
-   public static Fields Fields => Current.CurrentFrame.Fields;
+   public static Fields Fields => Current.Value.CurrentFrame.Fields;
 
    protected IContext context;
    protected Stack<Frame> stack;
@@ -71,7 +69,7 @@ public class Machine
       {
          if (operations.Current is (true, var operation))
          {
-            trace(operations.Address, () => operation.ToString());
+            trace(operations.Address, () => operation.ToString() ?? "");
             var currentAddress = operations.Address;
             var _result = operation.Execute(this);
             if (_result is (true, var result) && running && result.ClassName != "Void")
@@ -237,7 +235,7 @@ public class Machine
       {
          if (operations.Current is (true, var operation))
          {
-            trace(operations.Address, () => operation.ToString());
+            trace(operations.Address, () => operation.ToString() ?? "");
             var currentAddress = operations.Address;
             switch (operation)
             {
@@ -584,7 +582,7 @@ public class Machine
             return immutableField(selector);
          }
       }
-      else if (_field.Exception is(true, var exception))
+      else if (_field.Exception is (true, var exception))
       {
          return exception;
       }

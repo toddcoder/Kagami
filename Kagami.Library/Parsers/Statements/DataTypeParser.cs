@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Kagami.Library.Classes;
+﻿using Kagami.Library.Classes;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Collections;
@@ -37,11 +36,21 @@ public class DataTypeParser : StatementParser
                var _scan = parser.Scan(state);
                if (_scan)
                {
-                  var _registerDataComparisand = dataTypeClass.RegisterDataComparisand(parser.Name, (IObject)parser.Ordinal);
+                  var _possibleOrdinal = parser.Ordinal.Result("Serious error: ordinal not provided");
+                  if (_possibleOrdinal is (true, var possibleOrdinal))
+                  {
+                     ordinal = possibleOrdinal;
+                  }
+                  else
+                  {
+                     return _possibleOrdinal.Exception;
+                  }
+
+                  var _registerDataComparisand = dataTypeClass.RegisterDataComparisand(parser.Name, (IObject)ordinal);
                   if (_registerDataComparisand)
                   {
                      dataComparisandNames.Add(parser.Name);
-                     ordinal = parser.Ordinal.Successor;
+                     ordinal = ordinal.Successor;
                   }
                   else
                   {

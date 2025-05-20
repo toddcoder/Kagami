@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 using Core.Collections;
 using Core.Matching;
 using Core.Strings;
@@ -47,7 +45,7 @@ public readonly struct KChar : IObject, IComparable<KChar>, IEquatable<KChar>, I
 
    public bool Equals(KChar other) => value == other.value;
 
-   public override bool Equals(object obj) => obj is KChar c && Equals(c);
+   public override bool Equals(object? obj) => obj is KChar c && Equals(c);
 
    public override int GetHashCode() => Hash;
 

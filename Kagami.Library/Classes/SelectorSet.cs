@@ -1,55 +1,43 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Kagami.Library.Objects;
+﻿using Kagami.Library.Objects;
 using Core.Collections;
 
-namespace Kagami.Library.Classes
+namespace Kagami.Library.Classes;
+
+public class SelectorSet : Set<string>
 {
-   public class SelectorSet : Set<string>
+   protected Memo<string, List<string>> buckets = new Memo<string, List<string>>.Function(_ => []);
+
+   public void Add(Selector selector)
    {
-      protected AutoHash<string, List<string>> buckets;
+      base.Add(selector);
+      buckets[selector.LabelsOnly().Image].Add(selector);
+   }
 
-      public SelectorSet() => buckets = new AutoHash<string, List<string>>(_ => new List<string>(), true);
-
-      public void Add(Selector selector)
+   public void AddRange(IEnumerable<Selector> selectors)
+   {
+      foreach (var selector in selectors)
       {
-         base.Add(selector);
-         buckets[selector.LabelsOnly().Image].Add(selector);
+         Add(selector);
       }
+   }
 
-      public void AddRange(IEnumerable<Selector> selectors)
+   public new void AddRange(IEnumerable<string> sources) => AddRange(sources.Select(s => (Selector)s));
+
+   public bool Contains(Selector selector)
+   {
+      if (base.Contains(selector.Image))
       {
-         foreach (var selector in selectors)
-         {
-            Add(selector);
-         }
+         return true;
       }
-
-      public new void AddRange(IEnumerable<string> sources) => AddRange(sources.Select(s => (Selector)s));
-
-      public bool Contains(Selector selector)
+      else
       {
-         if (base.Contains(selector.Image))
+         var labelsOnlyImage = selector.LabelsOnly().Image;
+         if (buckets[labelsOnlyImage].Any(matchSelector => selector.IsEquivalentTo((Selector)matchSelector)))
          {
             return true;
          }
-         else
-         {
-            var labelsOnlyImage = selector.LabelsOnly().Image;
-            if (buckets.ContainsKey(labelsOnlyImage))
-            {
-               foreach (var bucket in buckets[labelsOnlyImage])
-               {
-                  Selector matchSelector = bucket;
-                  if (selector.IsEquivalentTo(matchSelector))
-                  {
-                     return true;
-                  }
-               }
-            }
 
-            return base.Contains(labelsOnlyImage);
-         }
+         return base.Contains(labelsOnlyImage);
       }
    }
 }

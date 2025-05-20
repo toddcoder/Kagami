@@ -9,8 +9,8 @@ namespace Kagami.Library.Parsers.Statements;
 
 public class AssignToFieldParser : EndingInExpressionParser
 {
-   protected string fieldName;
-   protected string operationSource;
+   protected string fieldName = "";
+   protected string operationSource = "";
 
    public override string Pattern => $"^ /({REGEX_FIELD}) /(/s*) /({REGEX_ASSIGN_OPS})? /'=' -(> ['=>'])";
 

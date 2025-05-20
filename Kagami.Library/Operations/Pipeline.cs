@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Kagami.Library.Objects;
+﻿using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Monads;
 using static Kagami.Library.AllExceptions;
@@ -30,7 +29,7 @@ public class Pipeline : TwoOperandOperation
             return classOf(x).SendMessage(x, message).Just();
          case Selector selector:
          {
-            var _field = Machine.Current.Find(selector);
+            var _field = Machine.Current.Value.Find(selector);
             if (_field is (true, var field))
             {
                var _ = false;

@@ -35,7 +35,7 @@ public class Sys : Package
    public KString Println(Arguments arguments)
    {
       var value = arguments.Select(a => a.AsString).ToString(" ");
-      Machine.Current.Context.PrintLine(value);
+      Machine.Current.Value.Context.PrintLine(value);
 
       return value;
    }
@@ -43,7 +43,7 @@ public class Sys : Package
    public KString Print(Arguments arguments)
    {
       var value = arguments.Select(a => a.AsString).ToString(" ");
-      Machine.Current.Context.Print(value);
+      Machine.Current.Value.Context.Print(value);
 
       return value;
    }
@@ -54,7 +54,7 @@ public class Sys : Package
 
       foreach (var argument in arguments)
       {
-         Machine.Current.Context.Put(argument.AsString);
+         Machine.Current.Value.Context.Put(argument.AsString);
       }
 
       return value;
@@ -62,20 +62,20 @@ public class Sys : Package
 
    public IObject Readln()
    {
-      return Machine.Current.Context.ReadLine()
+      return Machine.Current.Value.Context.ReadLine()
          .Map(s => Success.Object(KString.StringObject(s)))
          .Recover(e => Failure.Object(e.Message));
    }
 
    public IObject Peek(IObject obj)
    {
-      Machine.Current.Context.PrintLine(obj.Image);
+      Machine.Current.Value.Context.PrintLine(obj.Image);
       return obj;
    }
 
    public IObject Peek(IObject prefix, IObject obj)
    {
-      Machine.Current.Context.PrintLine($"{prefix.AsString}: {obj.Image}");
+      Machine.Current.Value.Context.PrintLine($"{prefix.AsString}: {obj.Image}");
       return obj;
    }
 
@@ -84,7 +84,7 @@ public class Sys : Package
       var bindings = new Hash<string, IObject>();
       if (x.Match(y, bindings))
       {
-         Machine.Current.CurrentFrame.Fields.SetBindings(bindings);
+         Machine.Current.Value.CurrentFrame.Fields.SetBindings(bindings);
          return KBoolean.True.Success();
       }
       else
@@ -100,7 +100,7 @@ public class Sys : Package
       try
       {
          var userObject = new UserObject(className, new Fields(), Parameters.Empty);
-         var _field = Machine.Current.CurrentFrame.Fields.New(fieldName, userObject);
+         var _field = Machine.Current.Value.CurrentFrame.Fields.New(fieldName, userObject);
          if (!_field)
          {
             return _field.Exception;
