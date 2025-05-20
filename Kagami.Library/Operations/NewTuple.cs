@@ -7,7 +7,7 @@ public class NewTuple : InternalListOperation
 {
    public override Optional<IObject> Execute(Container list)
    {
-      return new Tuple(list.List.ToArray());
+      return new KTuple(list.List.ToArray());
    }
 
    public override string ToString() => "new.tuple";

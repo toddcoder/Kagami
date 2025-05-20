@@ -17,12 +17,12 @@ public static class OperationFunctions
          case IIterator iterator:
             return iterator.Success();
          case Int i:
-            return new Range((Int)0, i, false).GetIterator(lazy).Success();
+            return new KRange((Int)0, i, false).GetIterator(lazy).Success();
          case UserObject uo:
             var objectCollection = new ObjectCollection(uo);
             return objectCollection.GetIterator(lazy).Success();
          case Container internalList:
-            var array = new Array(internalList.List);
+            var array = new KArray(internalList.List);
             return array.GetIterator(lazy).Success();
          default:
             return fail($"{value.Image} isn't an iterator nor can it return one");

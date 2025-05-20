@@ -59,7 +59,7 @@ namespace Kagami.Library.Objects
 
       public bool IsPrimitive => false;
 
-      public INumeric ToByte() => (Byte)AsByte();
+      public INumeric ToByte() => (KByte)AsByte();
 
       public byte AsByte() => (byte)value.Real;
 
@@ -99,7 +99,7 @@ namespace Kagami.Library.Objects
 
       public bool IsRational => false;
 
-      public String ZFill(int count)
+      public KString ZFill(int count)
       {
          return $"{zfill(value.Real.ToString(), count)}{(value.Imaginary >= 0.0).Extend("+")}" +
             $"{zfill(value.Imaginary.ToString(), count)}";
@@ -121,15 +121,15 @@ namespace Kagami.Library.Objects
 
       public IObject Object => this;
 
-      public Boolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
+      public KBoolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
 
-      public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
+      public KBoolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
 
       public int CompareTo(Complex other) => Math.Sign(value.Real * other.value.Real * value.Imaginary * other.value.Imaginary);
 
       public bool Equals(Complex other) => value.Equals(other.value);
 
-      public String Format(string format)
+      public KString Format(string format)
       {
          return $"{value.Real.FormatUsing<double>(format, d => d.ToString(format))}" +
             $"{(value.Imaginary >= 0.0).Extend("+")}{value.Imaginary.FormatUsing<double>(format, d => d.ToString(format))}i";

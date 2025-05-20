@@ -16,7 +16,7 @@ public class RespondsTo : Operation
    {
       if (machine.Peek() is (true, var value))
       {
-         return Boolean.BooleanObject(classOf(value).RespondsTo(message)).Just();
+         return KBoolean.BooleanObject(classOf(value).RespondsTo(message)).Just();
       }
       else
       {

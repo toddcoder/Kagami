@@ -17,11 +17,11 @@ public abstract class TwoBooleanOperation : Operation
          select (xValue, yValue);
       if (_xy is (true, var (x, y)))
       {
-         if (x is Boolean bx)
+         if (x is KBoolean bx)
          {
-            if (y is Boolean by)
+            if (y is KBoolean by)
             {
-               return Execute(bx.Value, by.Value).Map(Boolean.BooleanObject);
+               return Execute(bx.Value, by.Value).Map(KBoolean.BooleanObject);
             }
             else
             {

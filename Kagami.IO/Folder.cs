@@ -44,7 +44,7 @@ public class Folder : IObject, ICollection
 
    public bool ExpandForArray => true;
 
-   public Boolean In(IObject item)
+   public KBoolean In(IObject item)
    {
       return item switch
       {
@@ -54,7 +54,7 @@ public class Folder : IObject, ICollection
       };
    }
 
-   public Boolean NotIn(IObject item)
+   public KBoolean NotIn(IObject item)
    {
       switch (item)
       {
@@ -69,7 +69,7 @@ public class Folder : IObject, ICollection
 
    public IObject Times(int count) => this;
 
-   public String MakeString(string connector) => makeString(this, connector);
+   public KString MakeString(string connector) => makeString(this, connector);
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 

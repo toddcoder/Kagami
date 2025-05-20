@@ -21,7 +21,7 @@ namespace Kagami.IO
          }
          else
          {
-            return String.StringObject(line).Some();
+            return KString.StringObject(line).Some();
          }
       }
 

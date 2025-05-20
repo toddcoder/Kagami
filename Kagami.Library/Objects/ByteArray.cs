@@ -24,7 +24,7 @@ namespace Kagami.Library.Objects
 
       public int Hash => bytes.GetHashCode();
 
-      private IEnumerable<IObject> list() => bytes.Select(Byte.ByteObject);
+      private IEnumerable<IObject> list() => bytes.Select(KByte.ByteObject);
 
       public bool IsEqualTo(IObject obj) => obj is ByteArray ba && compareEnumerables(list(), ba.list());
 
@@ -37,7 +37,7 @@ namespace Kagami.Library.Objects
       public Maybe<IObject> Next(int index)
       {
          var self = this;
-         return maybe(index < bytes.Length, () => Byte.ByteObject(self.bytes[index]));
+         return maybe(index < bytes.Length, () => KByte.ByteObject(self.bytes[index]));
       }
 
       public Maybe<IObject> Peek(int index) => Next(index);
@@ -46,13 +46,13 @@ namespace Kagami.Library.Objects
 
       public bool ExpandForArray => true;
 
-      public Boolean In(IObject item) => item is Byte b && bytes.Contains(b.Value);
+      public KBoolean In(IObject item) => item is KByte b && bytes.Contains(b.Value);
 
-      public Boolean NotIn(IObject item) => !(item is Byte b && bytes.Contains(b.Value));
+      public KBoolean NotIn(IObject item) => !(item is KByte b && bytes.Contains(b.Value));
 
       public IObject Times(int count) => new ByteArray(bytes.Repeat(count));
 
-      public String MakeString(string connector) => makeString(this, connector);
+      public KString MakeString(string connector) => makeString(this, connector);
 
       public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
@@ -60,11 +60,11 @@ namespace Kagami.Library.Objects
 
       public IObject Object => this;
 
-      public Boolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
+      public KBoolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
 
-      public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
+      public KBoolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
 
-      public Byte this[int index] => bytes[wrapIndex(index, bytes.Length)];
+      public KByte this[int index] => bytes[wrapIndex(index, bytes.Length)];
 
       public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
    }

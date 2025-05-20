@@ -46,14 +46,14 @@ namespace Kagami.Library.Objects
          var result = lambda.Invoke(comparisand);
          switch (result)
          {
-            case Boolean boolean when arguments.Length == 0:
+            case KBoolean boolean when arguments.Length == 0:
                return boolean.Value;
-            case Boolean boolean when arguments.Length == 1:
+            case KBoolean boolean when arguments.Length == 1:
                return match(boolean, arguments[0], bindings);
             case Some some when arguments.Length == 1:
                return match(some.Value, arguments[0], bindings);
             default:
-               if (result is Some { Value: Tuple tuple } && tuple.Length.Value == arguments.Length)
+               if (result is Some { Value: KTuple tuple } && tuple.Length.Value == arguments.Length)
                {
                   return tuple.Value.Zip(arguments, (l, r) => match(l, r, bindings)).All(b => b);
                }

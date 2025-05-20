@@ -59,7 +59,7 @@ namespace Kagami.Library.Objects
 
 		public bool IsRational => false;
 
-		public String ZFill(int count) => AsString;
+		public KString ZFill(int count) => AsString;
 
 		public IObject Raise(INumeric power) => raise(this, power);
 
@@ -79,8 +79,8 @@ namespace Kagami.Library.Objects
 
 		public IObject Object => this;
 
-		public Boolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
+		public KBoolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
 
-		public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
+		public KBoolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
 	}
 }

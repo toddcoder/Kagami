@@ -11,7 +11,7 @@ namespace Kagami.Library.Objects
       protected IObject offset;
       protected int i;
 
-      public Sequence(int count, IObject offset) : base((ICollection)Array.Empty)
+      public Sequence(int count, IObject offset) : base((ICollection)KArray.Empty)
       {
          this.count = count;
          factor = Int.IntObject(1);
@@ -20,7 +20,7 @@ namespace Kagami.Library.Objects
          i = 0;
       }
 
-      public Sequence(Sequence sequence, IObject factor) : base((ICollection)Array.Empty)
+      public Sequence(Sequence sequence, IObject factor) : base((ICollection)KArray.Empty)
       {
          count = sequence.count;
          offset = sequence.offset;

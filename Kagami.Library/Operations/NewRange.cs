@@ -17,10 +17,10 @@ public class NewRange : TwoOperandOperation
    {
       return x switch
       {
-         IRangeItem start when y is Any => new Range(start, new Infinity(true), inclusive),
-         IRangeItem start when y is IObjectCompare stop => new Range(start, stop, inclusive),
-         Range range when y is Int increment => new Range(range, increment),
-         UserObject userObject when y is UserObject stop => new Range(new UserRangeItem(userObject), new UserCompare(stop), inclusive),
+         IRangeItem start when y is Any => new KRange(start, new Infinity(true), inclusive),
+         IRangeItem start when y is IObjectCompare stop => new KRange(start, stop, inclusive),
+         KRange range when y is Int increment => new KRange(range, increment),
+         UserObject userObject when y is UserObject stop => new KRange(new UserRangeItem(userObject), new UserCompare(stop), inclusive),
          _ => incompatibleClasses(x, "RangeItem")
       };
    }

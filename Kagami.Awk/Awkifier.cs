@@ -57,7 +57,7 @@ namespace Kagami.Awk
          }
       }
 
-      public String RecordSeparator
+      public KString RecordSeparator
       {
          get => recordSeparator;
          set
@@ -67,7 +67,7 @@ namespace Kagami.Awk
          }
       }
 
-      public String FieldSeparator
+      public KString FieldSeparator
       {
          get => fieldSeparator;
          set
@@ -77,7 +77,7 @@ namespace Kagami.Awk
          }
       }
 
-      public String this[int index] => index.Between(0).Until(getLength()) ? fields[index] : "";
+      public KString this[int index] => index.Between(0).Until(getLength()) ? fields[index] : "";
 
       public string ClassName => "Awkifier";
 
@@ -139,14 +139,14 @@ namespace Kagami.Awk
          if (index < records.Length)
          {
             split(index);
-            var array = fields.Select(String.StringObject).ToArray();
+            var array = fields.Select(KString.StringObject).ToArray();
             var currentFields = Machine.Fields;
             for (var i = 0; i < array.Length; i++)
             {
                currentFields.New($"__${i}", array[i]);
             }
 
-            return new Tuple(array).Some<IObject>();
+            return new KTuple(array).Some<IObject>();
          }
          else
          {
@@ -166,7 +166,7 @@ namespace Kagami.Awk
 
       public bool ExpandForArray => true;
 
-      public Boolean In(IObject item)
+      public KBoolean In(IObject item)
       {
          var subject = item.AsString;
          splitIfRecordNotCreated();
@@ -174,11 +174,11 @@ namespace Kagami.Awk
          return records.Contains(subject);
       }
 
-      public Boolean NotIn(IObject item) => !In(item).Value;
+      public KBoolean NotIn(IObject item) => !In(item).Value;
 
       public IObject Times(int count) => this;
 
-      public String MakeString(string connector) => makeString(this, connector);
+      public KString MakeString(string connector) => makeString(this, connector);
 
       public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
@@ -186,7 +186,7 @@ namespace Kagami.Awk
       {
          return (IIterator)new LazyIterator(this).If(new InternalLambda(args =>
          {
-            var input = ((String)args[0]).Value;
+            var input = ((KString)args[0]).Value;
             var result = regex.IsMatch(input);
             return result;
          }));

@@ -27,7 +27,7 @@ namespace Kagami.Text
 
       public bool IsTrue => builder.Length > 0;
 
-      public Char this[int index]
+      public KChar this[int index]
       {
          get => builder[index];
          set => builder[index] = value.Value;

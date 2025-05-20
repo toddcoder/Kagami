@@ -51,6 +51,6 @@ namespace Kagami.Drawing
          return new Size(newWidth, newHeight);
       }
 
-      public Boolean IsEmpty => isZero(width) && isZero(height);
+      public KBoolean IsEmpty => isZero(width) && isZero(height);
    }
 }

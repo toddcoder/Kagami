@@ -13,7 +13,7 @@ using static Kagami.Library.Operations.OperationFunctions;
 
 namespace Kagami.Library.Objects;
 
-public class Array : IObject, IObjectCompare, IComparable<Array>, IEquatable<Array>, IMutableCollection, ISliceable
+public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<KArray>, IMutableCollection, ISliceable
 {
    public static IObject CreateObject(IEnumerable<IObject> items)
    {
@@ -24,16 +24,16 @@ public class Array : IObject, IObjectCompare, IComparable<Array>, IEquatable<Arr
       }
       else
       {
-         return new Array(list);
+         return new KArray(list);
       }
    }
 
-   public static IObject Empty => new Array([]);
+   public static IObject Empty => new KArray([]);
 
-   public static Array Repeat(IObject value, int times)
+   public static KArray Repeat(IObject value, int times)
    {
       var init = Enumerable.Repeat(value, times).ToList();
-      return new Array(init);
+      return new KArray(init);
    }
 
    protected List<IObject> list;
@@ -42,12 +42,12 @@ public class Array : IObject, IObjectCompare, IComparable<Array>, IEquatable<Arr
    protected Maybe<Lambda> _defaultLambda = nil;
    protected Maybe<IObject> _defaultValue = nil;
 
-   public Array(IEnumerable<IObject> objects)
+   public KArray(IEnumerable<IObject> objects)
    {
       list = [];
       foreach (var obj in objects)
       {
-         if (obj is Range range)
+         if (obj is KRange range)
          {
             list.AddRange(range.GetIterator(false).List());
          }
@@ -58,7 +58,7 @@ public class Array : IObject, IObjectCompare, IComparable<Array>, IEquatable<Arr
       }
    }
 
-   public Array(IObject value)
+   public KArray(IObject value)
    {
       list = [value];
    }
@@ -82,13 +82,13 @@ public class Array : IObject, IObjectCompare, IComparable<Array>, IEquatable<Arr
 
    public IObject Object => this;
 
-   public Boolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
+   public KBoolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
 
-   public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
+   public KBoolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
 
-   public int CompareTo(Array other) => compareCollections(this, other);
+   public int CompareTo(KArray other) => compareCollections(this, other);
 
-   public bool Equals(Array other) => isEqualTo(this, other);
+   public bool Equals(KArray other) => isEqualTo(this, other);
 
    public Maybe<TypeConstraint> TypeConstraint
    {
@@ -165,15 +165,15 @@ public class Array : IObject, IObjectCompare, IComparable<Array>, IEquatable<Arr
             result.Add(list[index]);
          }
 
-         return new Array(result);
+         return new KArray(result);
       }
       set
       {
          switch (value)
          {
-            case Array array when array.arrayID == arrayID:
+            case KArray array when array.arrayID == arrayID:
                return;
-            case ICollection collection and not String:
+            case ICollection collection and not KString:
             {
                var valueIterator = collection.GetIterator(false);
                foreach (var index in indexList(container, list.Count))
@@ -207,7 +207,7 @@ public class Array : IObject, IObjectCompare, IComparable<Array>, IEquatable<Arr
 
    protected void throwIfSelf(IObject value)
    {
-      if (value is Array array && array.arrayID == arrayID)
+      if (value is KArray array && array.arrayID == arrayID)
       {
          throw fail("Can't assign an array item to itself");
       }
@@ -240,9 +240,9 @@ public class Array : IObject, IObjectCompare, IComparable<Array>, IEquatable<Arr
 
    int ISliceable.Length => list.Count;
 
-   public Boolean In(IObject item) => list.Contains(item);
+   public KBoolean In(IObject item) => list.Contains(item);
 
-   public Boolean NotIn(IObject item) => !list.Contains(item);
+   public KBoolean NotIn(IObject item) => !list.Contains(item);
 
    public IObject Times(int count)
    {
@@ -252,10 +252,10 @@ public class Array : IObject, IObjectCompare, IComparable<Array>, IEquatable<Arr
          result.AddRange(list);
       }
 
-      return new Array(result);
+      return new KArray(result);
    }
 
-   public String MakeString(string connector) => makeString(this, connector);
+   public KString MakeString(string connector) => makeString(this, connector);
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
@@ -304,7 +304,7 @@ public class Array : IObject, IObjectCompare, IComparable<Array>, IEquatable<Arr
       return this;
    }
 
-   public Boolean IsEmpty => list.Count == 0;
+   public KBoolean IsEmpty => list.Count == 0;
 
    public IObject Assign(IObject indexes, IObject values)
    {
@@ -329,11 +329,11 @@ public class Array : IObject, IObjectCompare, IComparable<Array>, IEquatable<Arr
       return this;
    }
 
-   public IObject Concatenate(Array array)
+   public IObject Concatenate(KArray kArray)
    {
       if (_typeConstraint is (true, var typeConstraint))
       {
-         if (array._typeConstraint is (true, var otherConstraint))
+         if (kArray._typeConstraint is (true, var otherConstraint))
          {
             if (!typeConstraint.IsEqualTo(otherConstraint))
             {
@@ -345,15 +345,15 @@ public class Array : IObject, IObjectCompare, IComparable<Array>, IEquatable<Arr
             throw fail("Expected type constraint in RHS array");
          }
       }
-      else if (array._typeConstraint)
+      else if (kArray._typeConstraint)
       {
          throw fail("RHS array has a type constraint");
       }
 
       var newList = new List<IObject>(list);
-      newList.AddRange(array.list);
+      newList.AddRange(kArray.list);
 
-      return new Array(newList);
+      return new KArray(newList);
    }
 
    public IObject Pop() => list.Count > 0 ? Some.Object(RemoveAt(list.Count - 1)) : None.NoneValue;
@@ -382,14 +382,14 @@ public class Array : IObject, IObjectCompare, IComparable<Array>, IEquatable<Arr
          }
       }
 
-      return new Tuple(result.ToArray());
+      return new KTuple(result.ToArray());
    }
 
-   public Array Transpose()
+   public KArray Transpose()
    {
-      if (list.All(i => i is Array) && list.Count > 0)
+      if (list.All(i => i is KArray) && list.Count > 0)
       {
-         var listOfLists = list.Select(i => ((Array)i).list.ToArray()).ToArray();
+         var listOfLists = list.Select(i => ((KArray)i).list.ToArray()).ToArray();
          var minLength = listOfLists.Min(a => a.Length);
          var outerList = new List<IObject>();
          for (var i = 0; i < minLength; i++)
@@ -400,10 +400,10 @@ public class Array : IObject, IObjectCompare, IComparable<Array>, IEquatable<Arr
                innerList.Add(listOf[i]);
             }
 
-            outerList.Add(new Array(innerList));
+            outerList.Add(new KArray(innerList));
          }
 
-         return new Array(outerList);
+         return new KArray(outerList);
       }
       else
       {

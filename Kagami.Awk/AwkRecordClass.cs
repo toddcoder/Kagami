@@ -16,7 +16,7 @@ namespace Kagami.Awk
 
 			registerMessage("[]", (obj, msg) => function<AwkRecord, Int>(obj, msg, (ar, i) => ar[i.Value]));
 			registerMessage("[]=".Selector("<Int>", "<String>"),
-				(obj, msg) => function<AwkRecord, Int, String>(obj, msg, (ar, i, s) => ar[i.Value] = s.Value));
+				(obj, msg) => function<AwkRecord, Int, KString>(obj, msg, (ar, i, s) => ar[i.Value] = s.Value));
 		}
 	}
 }

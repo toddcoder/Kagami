@@ -24,7 +24,7 @@ namespace Kagami.Library.Objects
          passed = new Hash<string, IObject>();
          internals = new Hash<string, IObject>
          {
-            ["text"] = (String)text,
+            ["text"] = (KString)text,
             ["index"] = (Int)index,
             ["length"] = (Int)length
          };
@@ -44,7 +44,7 @@ namespace Kagami.Library.Objects
 
       public string AsString => text;
 
-      public string Image => $"Group({((String)text).Image}, {index}, {length})";
+      public string Image => $"Group({((KString)text).Image}, {index}, {length})";
 
       public int Hash => GetHashCode();
 
@@ -54,7 +54,7 @@ namespace Kagami.Library.Objects
 
       public bool IsTrue => text.Length > 0;
 
-      public String Text => text;
+      public KString Text => text;
 
       public Int Index => index;
 

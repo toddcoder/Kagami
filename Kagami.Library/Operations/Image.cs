@@ -6,7 +6,7 @@ namespace Kagami.Library.Operations;
 
 public class Image : OneOperandOperation
 {
-   public override Optional<IObject> Execute(Machine machine, IObject value) => String.StringObject(value.Image).Just();
+   public override Optional<IObject> Execute(Machine machine, IObject value) => KString.StringObject(value.Image).Just();
 
    public override string ToString() => "image";
 }

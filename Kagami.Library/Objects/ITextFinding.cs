@@ -4,19 +4,19 @@
    {
       IObject Find(string input, int startIndex, bool reverse);
 
-      Tuple FindAll(string input);
+      KTuple FindAll(string input);
 
-      String Replace(string input, string replacement, bool reverse);
+      KString Replace(string input, string replacement, bool reverse);
 
-      String Replace(string input, Lambda lambda, bool reverse);
+      KString Replace(string input, Lambda lambda, bool reverse);
 
-      String ReplaceAll(string input, string replacement);
+      KString ReplaceAll(string input, string replacement);
 
-      String ReplaceAll(string input, Lambda lambda);
+      KString ReplaceAll(string input, Lambda lambda);
 
-      Tuple Split(string input);
+      KTuple Split(string input);
 
-      Tuple Partition(string input, bool reverse);
+      KTuple Partition(string input, bool reverse);
 
       Int Count(string input);
 

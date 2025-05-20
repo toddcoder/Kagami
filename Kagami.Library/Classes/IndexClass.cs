@@ -11,8 +11,8 @@ namespace Kagami.Library.Classes
       {
          base.RegisterMessages();
 
-         registerMessage("skipCount".get(), (obj, _) => function<Index>(obj, i => i.SkipCount));
-         registerMessage("takeCount".get(), (obj, _) => function<Index>(obj, i => i.TakeCount));
+         registerMessage("skipCount".get(), (obj, _) => function<KIndex>(obj, i => i.SkipCount));
+         registerMessage("takeCount".get(), (obj, _) => function<KIndex>(obj, i => i.TakeCount));
       }
    }
 }

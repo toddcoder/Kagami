@@ -17,6 +17,6 @@ namespace Kagami.Library.Nodes.Symbols
 
       public override string ToString() => value.ToString().ToLower();
 
-      public IObject Object => (Boolean)value;
+      public IObject Object => (KBoolean)value;
    }
 }

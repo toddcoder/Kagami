@@ -51,33 +51,33 @@ namespace Kagami.Drawing
 
       public Size Size => size;
 
-      public Boolean IsEmpty => origin.IsEmpty.IsTrue && size.IsEmpty.IsTrue;
+      public KBoolean IsEmpty => origin.IsEmpty.IsTrue && size.IsEmpty.IsTrue;
 
       public IObject Bottom => add(Y, Height);
 
       public IObject Right => add(X, Width);
 
-      public Boolean In(IObject obj) => obj switch
+      public KBoolean In(IObject obj) => obj switch
       {
          Point point => In(point),
          Rectangle rectangle => In(rectangle),
          _ => false
       };
 
-      public Boolean NotIn(IObject obj) => !In(obj).IsTrue;
+      public KBoolean NotIn(IObject obj) => !In(obj).IsTrue;
 
-      public Boolean In(Point point)
+      public KBoolean In(Point point)
       {
          return compare(point.X, X) >= 0 && compare(point.X, Right) <= 0 && compare(point.Y, Y) >= 0 && compare(point.Y, Bottom) >= 0;
       }
 
-      public Boolean NotIn(Point point) => !In(point).IsTrue;
+      public KBoolean NotIn(Point point) => !In(point).IsTrue;
 
-      public Boolean In(Rectangle rectangle)
+      public KBoolean In(Rectangle rectangle)
       {
          return In(rectangle.origin).IsTrue && compare(rectangle.Width, Width) <= 0 && compare(rectangle.Height, Height) <= 0;
       }
 
-      public Boolean NotIn(Rectangle rectangle) => !In(rectangle).IsTrue;
+      public KBoolean NotIn(Rectangle rectangle) => !In(rectangle).IsTrue;
    }
 }

@@ -29,6 +29,6 @@ namespace Kagami.Library.Nodes.Symbols
 
       public override string ToString() => value;
 
-      public IObject Object => (String)value;
+      public IObject Object => (KString)value;
    }
 }

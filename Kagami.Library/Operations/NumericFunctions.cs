@@ -4,7 +4,6 @@ using Core.Matching;
 using Kagami.Library.Objects;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
-using Byte = Kagami.Library.Objects.Byte;
 using Complex = Kagami.Library.Objects.Complex;
 
 namespace Kagami.Library.Operations;
@@ -78,7 +77,7 @@ public static class NumericFunctions
       }
    }
 
-   public static IObject apply(IObject x, Func<int, Int> int32Func, Func<double, Float> doubleFunc, Func<byte, Byte> byteFunc,
+   public static IObject apply(IObject x, Func<int, Int> int32Func, Func<double, Float> doubleFunc, Func<byte, KByte> byteFunc,
       Func<IMessageNumber, IObject> message, string messageName)
    {
       if (x is INumeric n)
@@ -156,7 +155,7 @@ public static class NumericFunctions
       _ => throw notNumeric(x)
    };
 
-   public static IObject function(IObject x, Func<int, Int> int32Func, Func<double, Float> doubleFunc, Func<byte, Byte> byteFunc,
+   public static IObject function(IObject x, Func<int, Int> int32Func, Func<double, Float> doubleFunc, Func<byte, KByte> byteFunc,
       Func<IMessageNumber, IObject> messageFunc, string message)
    {
       return x is INumeric ? apply(x, int32Func, doubleFunc, byteFunc, messageFunc, message) : sendMessage(x, message);
@@ -227,7 +226,7 @@ public static class NumericFunctions
                {
                   Int i => i.CompareTo((Int)right),
                   Float f => f.CompareTo((Float)right),
-                  Byte b => b.CompareTo((Byte)right),
+                  KByte b => b.CompareTo((KByte)right),
                   Long l => l.CompareTo((Long)right),
                   Rational r => r.CompareTo((Rational)right),
                   Complex c => c.CompareTo((Complex)right),

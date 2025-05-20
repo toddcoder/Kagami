@@ -12,7 +12,7 @@ public class NewSet : OneOperandOperation
       return value switch
       {
          Container list => new Set(list.List.ToArray()),
-         ICollection collection and not String => new Set(collection.GetIterator(false).List().ToArray()),
+         ICollection collection and not KString => new Set(collection.GetIterator(false).List().ToArray()),
          IIterator iterator => new Set(iterator.List().ToArray()),
          _ => new Set(value)
       };

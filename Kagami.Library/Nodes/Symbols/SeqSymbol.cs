@@ -24,7 +24,7 @@ public class SeqSymbol : Symbol
       var invokeSymbol = new InvokeSymbol(functionName, [], nil, false);
       invokeSymbol.Generate(builder);
 
-      builder.PushObject(Void.Value);
+      builder.PushObject(KVoid.Value);
    }
 
    public override Precedence Precedence => Precedence.Value;

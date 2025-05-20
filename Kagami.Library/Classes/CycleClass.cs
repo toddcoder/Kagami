@@ -20,6 +20,6 @@ namespace Kagami.Library.Classes
 
       public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
 
-      public IObject Revert(IEnumerable<IObject> list) => new Tuple(list.ToArray());
+      public IObject Revert(IEnumerable<IObject> list) => new KTuple(list.ToArray());
    }
 }

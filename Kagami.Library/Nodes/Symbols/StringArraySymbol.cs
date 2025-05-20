@@ -7,15 +7,15 @@ namespace Kagami.Library.Nodes.Symbols;
 
 public class StringArraySymbol : Symbol
 {
-   protected Array array;
+   protected KArray kArray;
 
-   public StringArraySymbol(string source) => array = new Array(source.Trim().Unjoin("/s+").Select(String.StringObject));
+   public StringArraySymbol(string source) => kArray = new KArray(source.Trim().Unjoin("/s+").Select(KString.StringObject));
 
-   public override void Generate(OperationsBuilder builder) => builder.PushObject(array);
+   public override void Generate(OperationsBuilder builder) => builder.PushObject(kArray);
 
    public override Precedence Precedence => Precedence.Value;
 
    public override Arity Arity => Arity.Nullary;
 
-   public override string ToString() => array.Image;
+   public override string ToString() => kArray.Image;
 }

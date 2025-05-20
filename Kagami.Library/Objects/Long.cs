@@ -40,7 +40,7 @@ namespace Kagami.Library.Objects
 
       public bool IsPrimitive => false;
 
-      public INumeric ToByte() => (Byte)AsByte();
+      public INumeric ToByte() => (KByte)AsByte();
 
       public byte AsByte() => (byte)value;
 
@@ -76,7 +76,7 @@ namespace Kagami.Library.Objects
 
       public bool IsRational => false;
 
-      public String ZFill(int count) => zfill(AsString, count);
+      public KString ZFill(int count) => zfill(AsString, count);
 
       public string AsString => value.ToString();
 
@@ -98,15 +98,15 @@ namespace Kagami.Library.Objects
 
       public IObject Object => this;
 
-      public Boolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
+      public KBoolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
 
-      public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
+      public KBoolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
 
       public IRangeItem Successor => (Long)(value + 1);
 
       public IRangeItem Predecessor => (Long)(value - 1);
 
-      public Range Range() => new(new Long(0), this, false);
+      public KRange Range() => new(new Long(0), this, false);
 
       public IObject Negate() => (Long)(-value);
 
@@ -118,7 +118,7 @@ namespace Kagami.Library.Objects
 
       public IObject Divide(INumeric other) => (Long)(value / other.AsBigInteger());
 
-      public IObject DivRem(INumeric other) => new Tuple(Divide(other), Remainder(other));
+      public IObject DivRem(INumeric other) => new KTuple(Divide(other), Remainder(other));
 
       public IObject Add(INumeric other) => (Long)(value + other.AsBigInteger());
 

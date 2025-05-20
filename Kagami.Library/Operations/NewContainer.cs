@@ -16,7 +16,7 @@ public class NewContainer : Operation
       {
          if (machine.IsEmpty)
          {
-            return new Tuple(y);
+            return new KTuple(y);
          }
          else if (_x.ValueOf(machine.Pop()) is (true, var x))
          {

@@ -24,9 +24,9 @@ namespace Kagami.Library.Objects
 
       public IObject Object => userObject;
 
-      public Boolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
+      public KBoolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
 
-      public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
+      public KBoolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
 
       public IRangeItem Successor
       {
@@ -60,10 +60,10 @@ namespace Kagami.Library.Objects
          }
       }
 
-      public Range Range()
+      public KRange Range()
       {
          var result = sendMessage(userObject, "range");
-         if (result is Range range)
+         if (result is KRange range)
          {
             return range;
          }

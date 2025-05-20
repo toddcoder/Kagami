@@ -53,7 +53,7 @@ namespace Kagami.Library.Objects
 
       bool IsRational { get; }
 
-      String ZFill(int count);
+      KString ZFill(int count);
 
 	   IObject Raise(INumeric power);
    }

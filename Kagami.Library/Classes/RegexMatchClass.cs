@@ -16,7 +16,7 @@ namespace Kagami.Library.Classes
          messages["length".get()] = (obj, _) => function<RegexMatch>(obj, m => m.Length);
          messages["groups".get()] = (obj, _) => function<RegexMatch>(obj, m => m.Groups);
          messages["[](_<Int>)"] = (obj, msg) => function<RegexMatch, Int>(obj, msg, (m, i) => m[i.Value]);
-         messages["[](_<String>)"] = (obj, msg) => function<RegexMatch, String>(obj, msg, (m, s) => m[s.Value]);
+         messages["[](_<String>)"] = (obj, msg) => function<RegexMatch, KString>(obj, msg, (m, s) => m[s.Value]);
       }
    }
 }

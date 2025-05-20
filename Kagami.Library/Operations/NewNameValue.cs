@@ -9,7 +9,7 @@ public class NewNameValue : TwoOperandOperation
 {
    public override Optional<IObject> Execute(Machine machine, IObject x, IObject y)
    {
-      if (x is String s)
+      if (x is KString s)
       {
          return new NameValue(s.Value, y);
       }

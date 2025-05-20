@@ -19,7 +19,7 @@ namespace Kagami.Library.Classes
          messages["[]"] = (obj, msg) => function<ByteArray, Int>(obj, msg, (b, i) => b[i.Value]);
       }
 
-      public IObject Revert(IEnumerable<IObject> list) => new ByteArray(list.Select(o => (Byte)o).Select(b => b.Value).ToArray());
+      public IObject Revert(IEnumerable<IObject> list) => new ByteArray(list.Select(o => (KByte)o).Select(b => b.Value).ToArray());
 
       public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
    }

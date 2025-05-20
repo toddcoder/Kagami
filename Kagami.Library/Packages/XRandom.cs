@@ -5,8 +5,6 @@ using Core.Collections;
 using Core.Monads;
 using static Kagami.Library.Objects.CollectionFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
-using Boolean = Kagami.Library.Objects.Boolean;
-using String = Kagami.Library.Objects.String;
 
 namespace Kagami.Library.Packages
 {
@@ -32,16 +30,16 @@ namespace Kagami.Library.Packages
 
       public bool ExpandForArray => false;
 
-      public Boolean In(IObject item) => false;
+      public KBoolean In(IObject item) => false;
 
-      public Boolean NotIn(IObject item) => true;
+      public KBoolean NotIn(IObject item) => true;
 
       public IObject Times(int count)
       {
-         return new Objects.Tuple(Enumerable.Range(0, count).Select(_ => Int.IntObject(random.Next())).ToArray());
+         return new Objects.KTuple(Enumerable.Range(0, count).Select(_ => Int.IntObject(random.Next())).ToArray());
       }
 
-      public String MakeString(string connector) => makeString(this, connector);
+      public KString MakeString(string connector) => makeString(this, connector);
 
       public IIterator GetIndexedIterator() => new IndexedIterator(this);
 

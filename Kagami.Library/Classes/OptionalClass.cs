@@ -12,8 +12,8 @@ namespace Kagami.Library.Classes
          base.RegisterMessages();
 
          messages["value".get()] = (obj, _) => function<IObject>(obj, s => ((IOptional)s).Value);
-         messages["isSome".get()] = (obj, _) => function<IObject>(obj, s => (Boolean)((IOptional)s).IsSome);
-         messages["isNone".get()] = (obj, _) => function<IObject>(obj, s => (Boolean)((IOptional)s).IsNone);
+         messages["isSome".get()] = (obj, _) => function<IObject>(obj, s => (KBoolean)((IOptional)s).IsSome);
+         messages["isNone".get()] = (obj, _) => function<IObject>(obj, s => (KBoolean)((IOptional)s).IsNone);
          messages["map"] = (obj, msg) => function<IObject, Lambda>(obj, msg, (s, l) => ((IOptional)s).Map(l));
          messages["flatMap"] = (obj, msg) => function<IObject, Lambda, Lambda>(obj, msg, (s, l1, l2) => ((IOptional)s).FlatMap(l1, l2));
       }

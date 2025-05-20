@@ -8,7 +8,7 @@ using Core.Numbers;
 using Core.Strings;
 using static Kagami.Awk.AwkFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
-using static Kagami.Library.Objects.String;
+using static Kagami.Library.Objects.KString;
 using static Kagami.Library.Objects.TextFindingFunctions;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.CollectionFunctions;
@@ -29,7 +29,7 @@ namespace Kagami.Awk
          this.fieldSeparator = fieldSeparator;
       }
 
-      public String this[int index]
+      public KString this[int index]
       {
          get => index.Between(0).Until(fields.Length) ? fields[index] : "";
          set
@@ -87,13 +87,13 @@ namespace Kagami.Awk
 
       public bool ExpandForArray => false;
 
-      public Boolean In(IObject item) => fields.ContainsValue(item.AsString);
+      public KBoolean In(IObject item) => fields.ContainsValue(item.AsString);
 
-      public Boolean NotIn(IObject item) => !In(item).Value;
+      public KBoolean NotIn(IObject item) => !In(item).Value;
 
       public IObject Times(int count) => this;
 
-      public String MakeString(string connector) => makeString(this, connector);
+      public KString MakeString(string connector) => makeString(this, connector);
 
       public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
@@ -101,36 +101,36 @@ namespace Kagami.Awk
 
       public IObject Find(ITextFinding textFinding, int startIndex, bool reverse) => textFinding.Find(fields[0], startIndex, reverse);
 
-      public Tuple FindAll(string input) => findAll(fields[0], input);
+      public KTuple FindAll(string input) => findAll(fields[0], input);
 
-      public Tuple FindAll(ITextFinding textFinding, string input) => textFinding.FindAll(input);
+      public KTuple FindAll(ITextFinding textFinding, string input) => textFinding.FindAll(input);
 
-      public String Replace(string input, string replacement, bool reverse) => replace(fields[0], input, replacement, reverse);
+      public KString Replace(string input, string replacement, bool reverse) => replace(fields[0], input, replacement, reverse);
 
-      public String Replace(ITextFinding textFinding, string replacement, bool reverse)
+      public KString Replace(ITextFinding textFinding, string replacement, bool reverse)
       {
          return textFinding.Replace(fields[0], replacement, reverse);
       }
 
-      public String Replace(string input, Lambda lambda, bool reverse) => replace(fields[0], input, lambda, reverse);
+      public KString Replace(string input, Lambda lambda, bool reverse) => replace(fields[0], input, lambda, reverse);
 
-      public String Replace(ITextFinding textFinding, Lambda lambda, bool reverse) => textFinding.Replace(fields[0], lambda, reverse);
+      public KString Replace(ITextFinding textFinding, Lambda lambda, bool reverse) => textFinding.Replace(fields[0], lambda, reverse);
 
-      public String ReplaceAll(string input, string replacement) => replaceAll(fields[0], input, replacement);
+      public KString ReplaceAll(string input, string replacement) => replaceAll(fields[0], input, replacement);
 
-      public String ReplaceAll(ITextFinding textFinding, string replacement) => textFinding.ReplaceAll(fields[0], replacement);
+      public KString ReplaceAll(ITextFinding textFinding, string replacement) => textFinding.ReplaceAll(fields[0], replacement);
 
-      public String ReplaceAll(string input, Lambda lambda) => replaceAll(fields[0], input, lambda);
+      public KString ReplaceAll(string input, Lambda lambda) => replaceAll(fields[0], input, lambda);
 
-      public String ReplaceAll(ITextFinding textFinding, Lambda lambda) => textFinding.ReplaceAll(fields[0], lambda);
+      public KString ReplaceAll(ITextFinding textFinding, Lambda lambda) => textFinding.ReplaceAll(fields[0], lambda);
 
-      public Tuple Split(string input) => split(fields[0], input);
+      public KTuple Split(string input) => split(fields[0], input);
 
-      public Tuple Split(ITextFinding textFinding) => textFinding.Split(fields[0]);
+      public KTuple Split(ITextFinding textFinding) => textFinding.Split(fields[0]);
 
-      public Tuple Partition(string input, bool reverse) => partition(fields[0], input, reverse);
+      public KTuple Partition(string input, bool reverse) => partition(fields[0], input, reverse);
 
-      public Tuple Partition(ITextFinding textFinding, bool reverse) => textFinding.Partition(fields[0], reverse);
+      public KTuple Partition(ITextFinding textFinding, bool reverse) => textFinding.Partition(fields[0], reverse);
 
       public Int Count(string input) => count(fields[0], input);
 

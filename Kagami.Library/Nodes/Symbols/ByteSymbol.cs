@@ -17,6 +17,6 @@ namespace Kagami.Library.Nodes.Symbols
 
       public override string ToString() => value.ToString();
 
-      public IObject Object => (Byte)value;
+      public IObject Object => (KByte)value;
    }
 }

@@ -14,9 +14,9 @@ namespace Kagami.Awk
 			base.RegisterMessages();
 
 			registerPackageFunction("awkify".Selector("file:<String>"),
-				(obj, msg) => function<Awk, String>(obj, msg, (a, s) => a.Awkify(s.Value, true)));
+				(obj, msg) => function<Awk, KString>(obj, msg, (a, s) => a.Awkify(s.Value, true)));
 			registerPackageFunction("awkify".Selector("string:<String>"),
-				(obj, msg) => function<Awk, String>(obj, msg, (a, s) => a.Awkify(s.Value, false)));
+				(obj, msg) => function<Awk, KString>(obj, msg, (a, s) => a.Awkify(s.Value, false)));
       }
 	}
 }

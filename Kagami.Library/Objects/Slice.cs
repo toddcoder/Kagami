@@ -27,9 +27,9 @@ public class Slice : IObject, ICollection
 
    public IObject Reverted() => collectionClass.Revert(List);
 
-   public string AsString => collectionClass.Revert(List.Select(i => (IObject)(String)i.AsString)).AsString;
+   public string AsString => collectionClass.Revert(List.Select(i => (IObject)(KString)i.AsString)).AsString;
 
-   public string Image => collectionClass.Revert(List.Select(i => (IObject)(String)i.Image)).AsString;
+   public string Image => collectionClass.Revert(List.Select(i => (IObject)(KString)i.Image)).AsString;
 
    public int Hash => List.GetHashCode();
 
@@ -68,16 +68,16 @@ public class Slice : IObject, ICollection
 
    public bool ExpandForArray => sliceable.ExpandForArray;
 
-   public Boolean In(IObject item) => indexes.Select(i => sliceable.Get(i).Map(o => o.IsEqualTo(item)) | false).Any();
+   public KBoolean In(IObject item) => indexes.Select(i => sliceable.Get(i).Map(o => o.IsEqualTo(item)) | false).Any();
 
-   public Boolean NotIn(IObject item)
+   public KBoolean NotIn(IObject item)
    {
       return indexes.Select(i => sliceable.Get(i).Map(o => !o.IsEqualTo(item)) | false).All(b => b);
    }
 
    public IObject Times(int count) => ((ICollection)Reverted()).Times(count);
 
-   public String MakeString(string connector) => makeString(this, connector);
+   public KString MakeString(string connector) => makeString(this, connector);
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 

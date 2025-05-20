@@ -12,8 +12,8 @@ namespace Kagami.IO
       {
          base.RegisterMessages();
 
-         registerPackageFunction("File", (obj, msg) => function<IO, String>(obj, msg, (io, path) => io.File(path.Value)));
-         registerPackageFunction("Folder", (obj, msg) => function<IO, String>(obj, msg, (io, path) => io.File(path.Value)));
+         registerPackageFunction("File", (obj, msg) => function<IO, KString>(obj, msg, (io, path) => io.File(path.Value)));
+         registerPackageFunction("Folder", (obj, msg) => function<IO, KString>(obj, msg, (io, path) => io.File(path.Value)));
       }
    }
 }

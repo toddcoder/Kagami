@@ -7,7 +7,7 @@ namespace Kagami.Library.Classes
    {
       public override string Name => "StreamIterator";
 
-      public IObject Revert(IEnumerable<IObject> list) => new Array(list);
+      public IObject Revert(IEnumerable<IObject> list) => new KArray(list);
 
       public override void RegisterMessages()
       {

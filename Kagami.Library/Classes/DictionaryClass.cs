@@ -42,10 +42,10 @@ public class DictionaryClass : BaseClass, ICollectionClass
 
          d.DefaultValue = v.Some();
 
-         return Void.Value;
+         return KVoid.Value;
       });
       messages["caching".get()] = (obj, _) => function<Dictionary>(obj, d => d.Caching);
-      messages["caching".set()] = (obj, msg) => function<Dictionary, Boolean>(obj, msg, (d, b) => d.Caching = b);
+      messages["caching".set()] = (obj, msg) => function<Dictionary, KBoolean>(obj, msg, (d, b) => d.Caching = b);
       messages[">>(_)"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, k) => d.Delete(k));
       messages["keys".get()] = (obj, _) => function<Dictionary>(obj, d => d.Keys);
       messages["values".get()] = (obj, _) => function<Dictionary>(obj, d => d.Values);
@@ -65,7 +65,7 @@ public class DictionaryClass : BaseClass, ICollectionClass
    protected static IObject getKeyed(Dictionary dictionary, IObject key) => key switch
    {
       Container internalList => dictionary[internalList],
-      ICollection collection and not String => dictionary[new Container(collection.GetIterator(false).List())],
+      ICollection collection and not KString => dictionary[new Container(collection.GetIterator(false).List())],
       IIterator iterator => dictionary[new Container(iterator.List())],
       _ => dictionary[key]
    };
@@ -77,7 +77,7 @@ public class DictionaryClass : BaseClass, ICollectionClass
          case Container internalList:
             dictionary[internalList] = value;
             return dictionary;
-         case ICollection collection and not String:
+         case ICollection collection and not KString:
             dictionary[new Container(collection.GetIterator(false).List())] = value;
             return dictionary;
          case IIterator iterator:
@@ -94,7 +94,7 @@ public class DictionaryClass : BaseClass, ICollectionClass
       base.RegisterClassMessages();
 
       classMessages["new(default:_,caching:_<Boolean>)"] = (cls, msg) =>
-         classFunc<DictionaryClass, IObject, Boolean>(cls, msg, (_, d, c) => Dictionary.New(d, c));
+         classFunc<DictionaryClass, IObject, KBoolean>(cls, msg, (_, d, c) => Dictionary.New(d, c));
       classMessages["new(default:_)"] =
          (cls, msg) => classFunc<DictionaryClass, IObject>(cls, msg, (_, d) => Dictionary.New(d, false));
       classMessages["empty".get()] = (cls, _) => classFunc<DictionaryClass>(cls, _ => Dictionary.Empty);

@@ -10,7 +10,6 @@ using Core.Strings;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Core.Monads.MonadFunctions;
-using Tuple = Kagami.Library.Objects.Tuple;
 
 namespace Kagami.Library.Runtime;
 
@@ -88,7 +87,7 @@ public class Frame
          if (variadic)
          {
             var parameter = parameters[0];
-            var tuple = new Tuple(arguments.ToArray());
+            var tuple = new KTuple(arguments.ToArray());
             if (!fields.ContainsKey(parameter.Name))
             {
                fields.New(parameter.Name, parameter.Mutable).Force();
@@ -130,7 +129,7 @@ public class Frame
                tupleList.Add(arguments[i]);
             }
 
-            var tuple = new Tuple(tupleList.ToArray());
+            var tuple = new KTuple(tupleList.ToArray());
             fields.Assign(lastName, tuple, true).Force();
          }
          else if (length < parameters.Length)
@@ -182,7 +181,7 @@ public class Frame
                tupleList.Add(arguments[i]);
             }
 
-            var tuple = new Tuple(tupleList.ToArray());
+            var tuple = new KTuple(tupleList.ToArray());
             fields.Assign(lastName, tuple, true).Force();
          }
 

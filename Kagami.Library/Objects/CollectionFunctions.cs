@@ -70,7 +70,7 @@ namespace Kagami.Library.Objects
          }
       }
 
-      public static String makeString(ICollection collection, string connector)
+      public static KString makeString(ICollection collection, string connector)
       {
          return collection.GetIterator(false).List().Select(i => i.AsString).ToString(connector);
       }
@@ -118,7 +118,7 @@ namespace Kagami.Library.Objects
       {
          Int i => intGetter(obj, i.Value),
          Container container => listGetter(obj, conditionContainer(container)),
-         ICollection collection and not String => listGetter(obj, new Container(collection.GetIterator(false).List())),
+         ICollection collection and not KString => listGetter(obj, new Container(collection.GetIterator(false).List())),
          IIterator iterator => listGetter(obj, new Container(iterator.List())),
          _ => throw invalidIndex(index)
       };
@@ -134,7 +134,7 @@ namespace Kagami.Library.Objects
             case Container container:
                listSetter(obj, conditionContainer(container), value);
                return;
-            case ICollection collection and not String:
+            case ICollection collection and not KString:
                listSetter(obj, new Container(collection.GetIterator(false).List()), value);
                return;
             case IIterator iterator:

@@ -77,13 +77,13 @@ public class ObjectCollection : IObject, ICollection
 
    public bool ExpandForArray => true;
 
-   public Boolean In(IObject item) => cls.RespondsTo("in") ? (Boolean)sendMessage(obj, "in", item) : false;
+   public KBoolean In(IObject item) => cls.RespondsTo("in") ? (KBoolean)sendMessage(obj, "in", item) : false;
 
-   public Boolean NotIn(IObject item) => cls.RespondsTo("notIn") ? (Boolean)sendMessage(obj, "notIn", item) : false;
+   public KBoolean NotIn(IObject item) => cls.RespondsTo("notIn") ? (KBoolean)sendMessage(obj, "notIn", item) : false;
 
-   public IObject Times(int count) => cls.RespondsTo("*") ? (Boolean)sendMessage(obj, "*", (Int)count) : obj;
+   public IObject Times(int count) => cls.RespondsTo("*") ? (KBoolean)sendMessage(obj, "*", (Int)count) : obj;
 
-   public String MakeString(string connector) => makeString(this, connector);
+   public KString MakeString(string connector) => makeString(this, connector);
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 

@@ -15,8 +15,8 @@ namespace Kagami.Library.Classes
 
       protected static IObject parse(string source) => source switch
       {
-         "false" => Success.Object(Boolean.False),
-         "true" => Success.Object(Boolean.True),
+         "false" => Success.Object(KBoolean.False),
+         "true" => Success.Object(KBoolean.True),
          _ => Failure.Object($"Couldn't understand {source}")
       };
    }

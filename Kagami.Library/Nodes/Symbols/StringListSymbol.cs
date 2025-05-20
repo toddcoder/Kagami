@@ -13,7 +13,7 @@ namespace Kagami.Library.Nodes.Symbols
          list = List.Empty;
          foreach (var ch in source.Reverse())
          {
-            var obj = Char.CharObject(ch);
+            var obj = KChar.CharObject(ch);
             list = List.Cons(obj, list);
          }
 

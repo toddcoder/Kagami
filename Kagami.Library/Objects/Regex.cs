@@ -94,12 +94,12 @@ public readonly struct Regex : IObject, ITextFinding
       {
          if (_result is (true, var result))
          {
-            return new Tuple(result.Select(m => new RegexMatch(m, self.nameToIndex(result)))
+            return new KTuple(result.Select(m => new RegexMatch(m, self.nameToIndex(result)))
                .Select(m => getMatchOrText(m, self.textOnly)).ToArray());
          }
          else
          {
-            return Tuple.Empty;
+            return KTuple.Empty;
          }
       }
       else if (isMatch(input) is (true, var result2))
@@ -112,11 +112,11 @@ public readonly struct Regex : IObject, ITextFinding
       }
    }
 
-   public Boolean NotMatches(string input) => !isMatch(input);
+   public KBoolean NotMatches(string input) => !isMatch(input);
 
    private Core.Matching.Pattern getFixedPattern() => pattern.WithMultiline(multiline).WithIgnoreCase(ignoreCase);
 
-   public String Replace(string input, string replacement)
+   public KString Replace(string input, string replacement)
    {
       var fixedPattern = getFixedPattern();
       if (global)
@@ -129,7 +129,7 @@ public readonly struct Regex : IObject, ITextFinding
       }
    }
 
-   public Boolean IsMatch(string input) => input.IsMatch(getFixedPattern());
+   public KBoolean IsMatch(string input) => input.IsMatch(getFixedPattern());
 
    public IObject Find(string input, int startIndex, bool reverse)
    {
@@ -150,19 +150,19 @@ public readonly struct Regex : IObject, ITextFinding
       }
    }
 
-   public Tuple FindAll(string input)
+   public KTuple FindAll(string input)
    {
       if (input.Matches(getFixedPattern()) is (true, var result))
       {
-         return new Tuple([..result.Matches.Select(m => Int.IntObject(m.Index))]);
+         return new KTuple([..result.Matches.Select(m => Int.IntObject(m.Index))]);
       }
       else
       {
-         return Tuple.Empty;
+         return KTuple.Empty;
       }
    }
 
-   public String Replace(string input, string replacement, bool reverse)
+   public KString Replace(string input, string replacement, bool reverse)
    {
       var fixedPattern = getFixedPattern();
       if (reverse)
@@ -187,7 +187,7 @@ public readonly struct Regex : IObject, ITextFinding
       }
    }
 
-   public String Replace(string input, Lambda lambda, bool reverse)
+   public KString Replace(string input, Lambda lambda, bool reverse)
    {
       if (lambda.Invokable.Parameters.Length == 1)
       {
@@ -199,7 +199,7 @@ public readonly struct Regex : IObject, ITextFinding
       }
    }
 
-   private String replace3(string input, Lambda lambda, bool reverse)
+   private KString replace3(string input, Lambda lambda, bool reverse)
    {
       var fixedPattern = getFixedPattern();
       if (reverse)
@@ -208,7 +208,7 @@ public readonly struct Regex : IObject, ITextFinding
          {
             var matchIndex = result.MatchCount - 1;
             var (text, index, length) = result.GetMatch(matchIndex);
-            var replacement = lambda.Invoke((String)text, (Int)index, (Int)length);
+            var replacement = lambda.Invoke((KString)text, (Int)index, (Int)length);
             var substitute = text.Substitute(fixedPattern, replacement.AsString);
             result[matchIndex] = substitute;
 
@@ -224,7 +224,7 @@ public readonly struct Regex : IObject, ITextFinding
          if (input.Matches(fixedPattern) is (true, var result))
          {
             var (text, index, length) = result.GetMatch(0);
-            var replacement = lambda.Invoke((String)text, (Int)index, (Int)length);
+            var replacement = lambda.Invoke((KString)text, (Int)index, (Int)length);
             var substitute = text.Substitute(fixedPattern, replacement.AsString);
             result[0] = substitute;
 
@@ -237,7 +237,7 @@ public readonly struct Regex : IObject, ITextFinding
       }
    }
 
-   private String replace1(string input, Lambda lambda, bool reverse)
+   private KString replace1(string input, Lambda lambda, bool reverse)
    {
       var fixedPattern = getFixedPattern();
       if (reverse)
@@ -246,7 +246,7 @@ public readonly struct Regex : IObject, ITextFinding
          {
             var matchIndex = result.MatchCount - 1;
             var (text, _, _) = result.GetMatch(matchIndex);
-            var replacement = lambda.Invoke((String)text);
+            var replacement = lambda.Invoke((KString)text);
             var substitute = text.Substitute(fixedPattern, replacement.AsString);
             result[matchIndex] = substitute;
 
@@ -262,7 +262,7 @@ public readonly struct Regex : IObject, ITextFinding
          if (input.Matches(fixedPattern) is (true, var result))
          {
             var (text, _, _) = result.GetMatch(0);
-            var replacement = lambda.Invoke((String)text);
+            var replacement = lambda.Invoke((KString)text);
             var substitute = text.Substitute(fixedPattern, replacement.AsString);
             result[0] = substitute;
 
@@ -275,9 +275,9 @@ public readonly struct Regex : IObject, ITextFinding
       }
    }
 
-   public String ReplaceAll(string input, string replacement) => input.Substitute(getFixedPattern(), replacement);
+   public KString ReplaceAll(string input, string replacement) => input.Substitute(getFixedPattern(), replacement);
 
-   public String ReplaceAll(string input, Lambda lambda)
+   public KString ReplaceAll(string input, Lambda lambda)
    {
       if (lambda.Invokable.Parameters.Length == 1)
       {
@@ -289,7 +289,7 @@ public readonly struct Regex : IObject, ITextFinding
       }
    }
 
-   private String replaceAll3(string input, Lambda lambda)
+   private KString replaceAll3(string input, Lambda lambda)
    {
       var fixedPattern = getFixedPattern();
       if (input.Matches(fixedPattern) is (true, var result))
@@ -297,7 +297,7 @@ public readonly struct Regex : IObject, ITextFinding
          for (var i = 0; i < result.MatchCount; i++)
          {
             var (text, index, length) = result.GetMatch(i);
-            var replacement = lambda.Invoke((String)text, (Int)index, (Int)length);
+            var replacement = lambda.Invoke((KString)text, (Int)index, (Int)length);
             result[i] = replacement.AsString;
          }
 
@@ -309,7 +309,7 @@ public readonly struct Regex : IObject, ITextFinding
       }
    }
 
-   private String replaceAll1(string input, Lambda lambda)
+   private KString replaceAll1(string input, Lambda lambda)
    {
       var fixedPattern = getFixedPattern();
       if (input.Matches(fixedPattern) is (true, var result))
@@ -317,7 +317,7 @@ public readonly struct Regex : IObject, ITextFinding
          for (var i = 0; i < result.MatchCount; i++)
          {
             var (text, _, _) = result.GetMatch(i);
-            var replacement = lambda.Invoke((String)text);
+            var replacement = lambda.Invoke((KString)text);
             result[i] = replacement.AsString;
          }
 
@@ -329,9 +329,9 @@ public readonly struct Regex : IObject, ITextFinding
       }
    }
 
-   public Tuple Split(string input) => new(input.Unjoin(getFixedPattern()).Select(String.StringObject).ToArray());
+   public KTuple Split(string input) => new(input.Unjoin(getFixedPattern()).Select(KString.StringObject).ToArray());
 
-   public Tuple Partition(string input, bool reverse)
+   public KTuple Partition(string input, bool reverse)
    {
       var fixedPattern = getFixedPattern();
       if (reverse)
@@ -342,11 +342,11 @@ public readonly struct Regex : IObject, ITextFinding
             var left = input.Keep(index);
             var right = input.Drop(index + length);
 
-            return Tuple.Tuple3(left, delimiter, right);
+            return KTuple.Tuple3(left, delimiter, right);
          }
          else
          {
-            return Tuple.Tuple3(input, "", "");
+            return KTuple.Tuple3(input, "", "");
          }
       }
       else
@@ -357,11 +357,11 @@ public readonly struct Regex : IObject, ITextFinding
             var left = input.Keep(index);
             var right = input.Drop(index + length);
 
-            return Tuple.Tuple3(left, delimiter, right);
+            return KTuple.Tuple3(left, delimiter, right);
          }
          else
          {
-            return Tuple.Tuple3(input, "", "");
+            return KTuple.Tuple3(input, "", "");
          }
       }
    }
@@ -389,7 +389,7 @@ public readonly struct Regex : IObject, ITextFinding
          for (var i = 0; i < result.MatchCount; i++)
          {
             var (text, index, length) = result.GetMatch(i);
-            if (lambda.Invoke((String)text, (Int)index, (Int)length).IsTrue)
+            if (lambda.Invoke((KString)text, (Int)index, (Int)length).IsTrue)
             {
                count++;
             }
@@ -412,7 +412,7 @@ public readonly struct Regex : IObject, ITextFinding
          for (var i = 0; i < result.MatchCount; i++)
          {
             var (text, _, _) = result.GetMatch(i);
-            if (lambda.Invoke((String)text).IsTrue)
+            if (lambda.Invoke((KString)text).IsTrue)
             {
                count++;
             }
@@ -429,7 +429,7 @@ public readonly struct Regex : IObject, ITextFinding
    public Regex Concatenate(IObject obj) => obj switch
    {
       Regex regex => new Regex(pattern.Regex + regex.pattern.Regex, ignoreCase, multiline, global, textOnly),
-      String str => new Regex(pattern.Regex + str.Value, ignoreCase, multiline, global, textOnly),
+      KString str => new Regex(pattern.Regex + str.Value, ignoreCase, multiline, global, textOnly),
       _ => new Regex(pattern.Regex + obj.AsString, ignoreCase, multiline, global, textOnly)
    };
 

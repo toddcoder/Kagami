@@ -72,7 +72,7 @@ public class DataType : IObject
       }
    }
 
-   public Array Values
+   public KArray Values
    {
       get
       {
@@ -80,7 +80,7 @@ public class DataType : IObject
             .Where(i => i.Value.Item1.Length == 0)
             .OrderBy(i => i.Value.Item2)
             .Select(i => GetDataComparisand(i.Key, i.Value.Item1));
-         return new Array(values);
+         return new KArray(values);
       }
    }
 }

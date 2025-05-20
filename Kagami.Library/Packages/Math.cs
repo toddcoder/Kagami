@@ -7,9 +7,6 @@ using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Operations.NumericFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
-using Byte = Kagami.Library.Objects.Byte;
-using String = Kagami.Library.Objects.String;
-using Tuple = Kagami.Library.Objects.Tuple;
 
 namespace Kagami.Library.Packages;
 
@@ -160,7 +157,7 @@ public class Math : Package
       {
          case INumeric n:
             return func(n);
-         case String s:
+         case KString s:
             var _baseClass = Module.Global.Class(className);
             if (_baseClass is (true, var baseClass))
             {
@@ -187,7 +184,7 @@ public class Math : Package
 
    public Float XFloat(IObject source) => XConvert<Float>(source, n => n.AsDouble());
 
-   public Byte XByte(IObject source) => XConvert<Byte>(source, n => n.AsByte());
+   public KByte XByte(IObject source) => XConvert<KByte>(source, n => n.AsByte());
 
    public Long XLong(IObject source) => XConvert<Long>(source, n => n.AsBigInteger());
 
@@ -226,7 +223,7 @@ public class Math : Package
       return new(convertFloat(value.Replace("_", ""), baseNum, "0123456789abcdefghijklmnopqrstuvwxyz"));
    }
 
-   public Tuple Frexp(double number)
+   public KTuple Frexp(double number)
    {
       var bits = BitConverter.DoubleToInt64Bits(number);
       if (double.IsNaN(number) || number + number == number || double.IsInfinity(number))
@@ -264,12 +261,12 @@ public class Math : Package
       return getFrexpResult(realMantissa, exponent);
    }
 
-   protected static Tuple getFrexpResult(double mantissa, int exponent)
+   protected static KTuple getFrexpResult(double mantissa, int exponent)
    {
       var m = Float.FloatObject(mantissa);
       var e = Int.IntObject(exponent);
 
-      return new Tuple(m, e);
+      return new KTuple(m, e);
    }
 
    public Float Pi => (Float)fields["pi"];

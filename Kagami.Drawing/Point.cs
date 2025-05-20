@@ -43,6 +43,6 @@ namespace Kagami.Drawing
          return new Point(newX, newY);
       }
 
-      public Boolean IsEmpty => isZero(x) && isZero(y);
+      public KBoolean IsEmpty => isZero(x) && isZero(y);
    }
 }

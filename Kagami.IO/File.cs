@@ -7,7 +7,6 @@ using Core.Monads;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.CollectionFunctions;
-using Boolean = Kagami.Library.Objects.Boolean;
 
 namespace Kagami.IO
 {
@@ -43,21 +42,21 @@ namespace Kagami.IO
 
       public bool ExpandForArray => true;
 
-      public Boolean In(IObject item) => fileName.Text.Contains(item.AsString);
+      public KBoolean In(IObject item) => fileName.Text.Contains(item.AsString);
 
-      public Boolean NotIn(IObject item) => !fileName.Text.Contains(item.AsString);
+      public KBoolean NotIn(IObject item) => !fileName.Text.Contains(item.AsString);
 
       public IObject Times(int count) => this;
 
-      public String MakeString(string connector) => makeString(this, connector);
+      public KString MakeString(string connector) => makeString(this, connector);
 
       public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
       public IObject Flatten() => this;
 
-      public String Text => fileName.Text;
+      public KString Text => fileName.Text;
 
-      public Array Lines => new(fileName.Lines.Select(String.StringObject).ToArray());
+      public KArray Lines => new(fileName.Lines.Select(KString.StringObject).ToArray());
 
       public IObject this[SkipTake skipTake] => Library.Objects.CollectionFunctions.skipTake(this, skipTake);
    }

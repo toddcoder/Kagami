@@ -38,6 +38,6 @@ namespace Kagami.Library.Objects
 
 	   public IObject Unit(IObject obj) => this;
 
-	   public Boolean CanBind => false;
+	   public KBoolean CanBind => false;
    }
 }

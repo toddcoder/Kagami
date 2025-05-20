@@ -14,8 +14,8 @@ namespace Kagami.Library.Classes
          monadMessage();
 
          messages["value".get()] = (obj, _) => function<Success>(obj, s => s.Value);
-         messages["isSuccess".get()] = (obj, _) => function<Success>(obj, s => (Boolean)s.IsSuccess);
-         messages["isFailure".get()] = (obj, _) => function<Success>(obj, s => (Boolean)s.IsFailure);
+         messages["isSuccess".get()] = (obj, _) => function<Success>(obj, s => (KBoolean)s.IsSuccess);
+         messages["isFailure".get()] = (obj, _) => function<Success>(obj, s => (KBoolean)s.IsFailure);
          messages["map(_<Lambda>)"] = (obj, msg) => function<Success, Lambda>(obj, msg, (s, l) => s.Map(l));
          messages["flatMap(_<Lambda>,_<Lambda>)"] = (obj, msg) => function<Success, Lambda, Lambda>(obj, msg, (s, l1, l2) => s.FlatMap(l1, l2));
          messages["defaultTo(_)"] = (obj, msg) => function<Success, IObject>(obj, msg, (s, _) => s.Value);

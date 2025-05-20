@@ -14,13 +14,13 @@ namespace Kagami.Library.Objects
 
       bool ExpandForArray { get; }
 
-      Boolean In(IObject item);
+      KBoolean In(IObject item);
 
-      Boolean NotIn(IObject item);
+      KBoolean NotIn(IObject item);
 
       IObject Times(int count);
 
-      String MakeString(string connector);
+      KString MakeString(string connector);
 
       IIterator GetIndexedIterator();
    }

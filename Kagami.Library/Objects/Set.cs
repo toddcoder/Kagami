@@ -76,13 +76,13 @@ public class Set : IObject, ICollection, IObjectCompare
 
    public bool ExpandForArray => true;
 
-   public Boolean In(IObject item) => set.Contains(item);
+   public KBoolean In(IObject item) => set.Contains(item);
 
-   public Boolean NotIn(IObject item) => !set.Contains(item);
+   public KBoolean NotIn(IObject item) => !set.Contains(item);
 
    public IObject Times(int count) => this;
 
-   public String MakeString(string connector) => makeString(this, connector);
+   public KString MakeString(string connector) => makeString(this, connector);
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
@@ -146,9 +146,9 @@ public class Set : IObject, ICollection, IObjectCompare
 
    public IObject Object => this;
 
-   public Boolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
+   public KBoolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
 
-   public Boolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
+   public KBoolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
 
    public Set XOr(Set other) => Union(other).Difference(Intersection(other));
 
