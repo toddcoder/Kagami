@@ -2,40 +2,41 @@
 using Kagami.Library.Objects;
 using Kagami.Library.Parsers.Expressions;
 using Core.Monads;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
-namespace Kagami.Library.Parsers.Statements
+namespace Kagami.Library.Parsers.Statements;
+
+public class ExpressionStatementParser : StatementParser
 {
-   public class ExpressionStatementParser : StatementParser
+   protected bool returnExpression;
+   protected Maybe<TypeConstraint> _typeConstraint;
+
+   public ExpressionStatementParser(bool returnExpression, Maybe<TypeConstraint> _typeConstraint)
    {
-      protected bool returnExpression;
-      protected IMaybe<TypeConstraint> _typeConstraint;
-
-      public ExpressionStatementParser(bool returnExpression, IMaybe<TypeConstraint> typeConstraint)
-      {
-         this.returnExpression = returnExpression;
-         _typeConstraint = typeConstraint;
-      }
-
-      public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
-      {
-         var flags = ExpressionFlags.Standard;
-         if (returnExpression)
-         {
-            flags |= ExpressionFlags.OmitSendMessageAssign;
-         }
-
-         if (getExpression(state, flags).ValueOrCast<Unit>(out var expression, out var asUnit))
-         {
-            state.AddStatement(new ExpressionStatement(expression, returnExpression, _typeConstraint));
-            return Unit.Matched();
-         }
-         else
-         {
-            return asUnit;
-         }
-      }
-
-      public override bool UpdateIndexOnParseOnly => true;
+      this.returnExpression = returnExpression;
+      this._typeConstraint = _typeConstraint;
    }
+
+   public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
+   {
+      var flags = ExpressionFlags.Standard;
+      if (returnExpression)
+      {
+         flags |= ExpressionFlags.OmitSendMessageAssign;
+      }
+
+      var _expression = getExpression(state, flags);
+      if (_expression is (true, var expression))
+      {
+         state.AddStatement(new ExpressionStatement(expression, returnExpression, _typeConstraint));
+         return unit;
+      }
+      else
+      {
+         return _expression.Exception;
+      }
+   }
+
+   public override bool UpdateIndexOnParseOnly => true;
 }

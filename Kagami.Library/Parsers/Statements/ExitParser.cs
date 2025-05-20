@@ -1,18 +1,18 @@
 ﻿using Kagami.Library.Nodes.Statements;
 using Core.Monads;
+using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Parsers.Statements
+namespace Kagami.Library.Parsers.Statements;
+
+public class ExitParser : StatementParser
 {
-   public class ExitParser : StatementParser
+   public override string Pattern => "^ /'exit' /b";
+
+   public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      public override string Pattern => "^ /'exit' /b";
+      state.Colorize(tokens, Color.Keyword);
+      state.AddStatement(new Exit());
 
-      public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
-      {
-         state.Colorize(tokens, Color.Keyword);
-         state.AddStatement(new Exit());
-
-         return Unit.Matched();
-      }
+      return unit;
    }
 }

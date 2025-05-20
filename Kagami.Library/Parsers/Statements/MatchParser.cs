@@ -2,50 +2,52 @@
 using Kagami.Library.Parsers.Expressions;
 using Core.Monads;
 using Core.Strings;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Nodes.NodeFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
-namespace Kagami.Library.Parsers.Statements
+namespace Kagami.Library.Parsers.Statements;
+
+public class MatchParser : StatementParser
 {
-   public class MatchParser : StatementParser
+   public override string Pattern => $"^ (/('var' | 'let') /(|s|) /({REGEX_FIELD}) /(|s|) /'=' /(|s|))? /'match' /(/s+)";
+
+   public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      public override string Pattern => $"^ (/('var' | 'let') /(|s|) /({REGEX_FIELD}) /(|s|) /'=' /(|s|))? /'match' /(/s+)";
+      var mutable = tokens[1].Text == "var";
+      var fieldName = tokens[3].Text;
+      var assignment = fieldName.IsNotEmpty();
 
-      public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
+      state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Identifier, Color.Whitespace, Color.Structure, Color.Whitespace,
+         Color.Keyword, Color.Whitespace);
+
+      var _expression = getExpression(state, ExpressionFlags.Standard);
+      if (_expression is (true, var expression))
       {
-         var mutable = tokens[1].Text == "var";
-         var fieldName = tokens[3].Text;
-         var assignment = fieldName.IsNotEmpty();
+         var matchField = newLabel("match");
+         state.AddStatement(new AssignToNewField(false, matchField, expression));
 
-         state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Identifier, Color.Whitespace, Color.Structure, Color.Whitespace,
-            Color.Keyword, Color.Whitespace);
-
-         if (getExpression(state, ExpressionFlags.Standard).ValueOrCast<Unit>(out var expression, out var asUnit))
+         state.Advance();
+         var caseParser = new CaseParser(fieldName, mutable, assignment, matchField, true, CaseType.Statement);
+         var _scan = caseParser.Scan(state);
+         if (_scan)
          {
-            var matchField = newLabel("match");
-            state.AddStatement(new AssignToNewField(false, matchField, expression));
+            var ifStatement = caseParser.If;
+            addMatchElse(ifStatement);
+            state.AddStatement(ifStatement);
+            state.Regress();
 
-            state.Advance();
-            var caseParser = new CaseParser(fieldName, mutable, assignment, matchField, true, CaseType.Statement);
-            if (caseParser.Scan(state).ValueOrOriginal(out _, out asUnit))
-            {
-               var ifStatement = caseParser.If;
-               addMatchElse(ifStatement);
-               state.AddStatement(ifStatement);
-               state.Regress();
-
-               return Unit.Matched();
-            }
-            else
-            {
-               state.Regress();
-               return asUnit;
-            }
+            return unit;
          }
          else
          {
-            return asUnit;
+            state.Regress();
+            return _scan.Exception;
          }
+      }
+      else
+      {
+         return _expression.Exception;
       }
    }
 }

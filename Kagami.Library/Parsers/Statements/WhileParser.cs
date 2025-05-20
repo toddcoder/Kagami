@@ -1,31 +1,31 @@
 ﻿using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Parsers.Expressions;
 using Core.Monads;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
-namespace Kagami.Library.Parsers.Statements
+namespace Kagami.Library.Parsers.Statements;
+
+public class WhileParser : StatementParser
 {
-   public class WhileParser : StatementParser
+   public override string Pattern => "^ /'while' -(> ['>^']) /b";
+
+   public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      public override string Pattern => "^ /'while' -(> ['>^']) /b";
+      state.Colorize(tokens, Color.Keyword);
 
-      public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
+      var _result =
+         from expression in getExpression(state, ExpressionFlags.Standard)
+         from block in getBlock(state)
+         select new While(expression, block);
+      if (_result is (true, var statement))
       {
-         state.Colorize(tokens, Color.Keyword);
-
-         var result =
-            from expression in getExpression(state, ExpressionFlags.Standard)
-            from block in getBlock(state)
-            select new While(expression, block);
-         if (result.ValueOrCast<Unit>(out var statement, out var asUnit))
-         {
-            state.AddStatement(statement);
-            return Unit.Matched();
-         }
-         else
-         {
-            return asUnit;
-         }
+         state.AddStatement(statement);
+         return unit;
+      }
+      else
+      {
+         return _result.Exception;
       }
    }
 }

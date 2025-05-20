@@ -8,55 +8,57 @@ using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
 using Class = Kagami.Library.Nodes.Statements.Class;
 
-namespace Kagami.Library.Parsers.Statements
+namespace Kagami.Library.Parsers.Statements;
+
+public class RecordParser : StatementParser
 {
-   public class RecordParser : StatementParser
+   public override string Pattern => $"^ /'record' /(|s+|) /({REGEX_CLASS}) /'('";
+
+   public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      public override string Pattern => $"^ /'record' /(|s+|) /({REGEX_CLASS}) /'('";
+      var className = tokens[3].Text;
+      state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Class, Color.OpenParenthesis);
 
-      public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
+      var _parameters = getParameters(state);
+      if (_parameters is (true, var parameters))
       {
-         var className = tokens[3].Text;
-         state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Class, Color.OpenParenthesis);
+         var parentClassParser = new ParentClassParser();
 
-         if (getParameters(state).ValueOrCast<Unit>(out var parameters, out var asUnit))
+         var parentClassName = "";
+         Expression[] arguments = [];
+         var _scan = parentClassParser.Scan(state);
+         if (_scan)
          {
-            var parentClassParser = new ParentClassParser();
-
-            var parentClassName = "";
-            var arguments = new Expression[0];
-            if (parentClassParser.Scan(state).If(out _, out var anyException))
-            {
-               (parentClassName, _, arguments) = parentClassParser.Parent;
-            }
-            else if (anyException.If(out var exception))
-            {
-               return failedMatch<Unit>(exception);
-            }
-
-            Module.Global.ForwardReference(className);
-
-            var builder = new ClassBuilder(className, parameters, parentClassName, arguments, false, new Block(), new List<Mixin>());
-            if (builder.Register().ValueOrOriginal(out _, out var original))
-            {
-               var cls = new Class(builder);
-               state.AddStatement(cls);
-
-               return Unit.Matched();
-            }
-            else
-            {
-               return original;
-            }
+            (parentClassName, _, arguments) = parentClassParser.Parent;
          }
-         else if (asUnit.IsNotMatched)
+         else if (_scan.Exception is (true, var exception))
          {
-            return "parameters required".FailedMatch<Unit>();
+            return exception;
+         }
+
+         Module.Global.ForwardReference(className);
+
+         var builder = new ClassBuilder(className, parameters, parentClassName, arguments, false, new Block(), new List<Mixin>());
+         var _register = builder.Register();
+         if (_register)
+         {
+            var cls = new Class(builder);
+            state.AddStatement(cls);
+
+            return unit;
          }
          else
          {
-            return asUnit;
+            return _register.Exception;
          }
+      }
+      else if (_parameters.Exception is (true, var exception))
+      {
+         return exception;
+      }
+      else
+      {
+         return fail("parameters required");
       }
    }
 }

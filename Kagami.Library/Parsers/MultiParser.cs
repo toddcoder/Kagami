@@ -2,26 +2,27 @@
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Parsers
+namespace Kagami.Library.Parsers;
+
+public abstract class MultiParser : Parser
 {
-   public abstract class MultiParser : Parser
+   public abstract IEnumerable<Parser> Parsers { get; }
+
+   public override Optional<Unit> Parse(ParseState state, Token[] tokens)
    {
-      public abstract IEnumerable<Parser> Parsers { get; }
-
-      public override IMatched<Unit> Parse(ParseState state, Token[] tokens)
+      foreach (var parser in Parsers)
       {
-         foreach (var parser in Parsers)
+         var _matched = parser.Scan(state);
+         if (!_matched)
          {
-            var matched = parser.Scan(state);
-            if (!matched.IsNotMatched)
-            {
-	            return matched;
-            }
+            return _matched.Exception;
          }
-
-         return notMatched<Unit>();
       }
 
-      protected MultiParser() : base(false) { }
+      return nil;
+   }
+
+   protected MultiParser() : base(false)
+   {
    }
 }

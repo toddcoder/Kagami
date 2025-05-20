@@ -1,40 +1,39 @@
 ﻿using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Parsers.Expressions;
 using Core.Monads;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
-namespace Kagami.Library.Parsers.Statements
+namespace Kagami.Library.Parsers.Statements;
+
+public class ConditionalWhileParser : StatementParser
 {
-   public class ConditionalWhileParser : StatementParser
+   public override string Pattern => "^ /'while' /(|s+|)";
+
+   public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      public override string Pattern => "^ /'while' /(|s+|)";
+      state.BeginTransaction();
 
-      public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
+      state.Colorize(tokens, Color.Keyword, Color.Whitespace);
+
+      var _result =
+         from comparisandValue in getExpression(state, ExpressionFlags.Comparisand)
+         from scanned in state.Scan("^ /(|s|) /':='", Color.Whitespace, Color.Structure)
+         from expressionValue in getExpression(state, ExpressionFlags.Standard)
+         from blockValue in getBlock(state)
+         select (comparisandValue, expressionValue, blockValue);
+
+      if (_result is (true, var (comparisand, expression, block)))
       {
-         state.BeginTransaction();
+         state.CommitTransaction();
+         state.AddStatement(new ConditionalWhile(comparisand, expression, block));
 
-         state.Colorize(tokens, Color.Keyword, Color.Whitespace);
-
-         var result =
-            from comparisand in getExpression(state, ExpressionFlags.Comparisand)
-            from scanned in state.Scan("^ /(|s|) /':='", Color.Whitespace, Color.Structure)
-            from expression in getExpression(state, ExpressionFlags.Standard)
-            from block in getBlock(state)
-            select (comparisand, expression, block);
-
-         if (result.ValueOrCast<Unit>(out var tuple, out var asUnit))
-         {
-            state.CommitTransaction();
-            var (comparisand, expression, block) = tuple;
-            state.AddStatement(new ConditionalWhile(comparisand, expression, block));
-
-            return Unit.Matched();
-         }
-         else
-         {
-            state.RollBackTransaction();
-            return asUnit;
-         }
+         return unit;
+      }
+      else
+      {
+         state.RollBackTransaction();
+         return _result.Exception;
       }
    }
 }

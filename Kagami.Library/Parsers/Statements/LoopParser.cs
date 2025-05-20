@@ -1,45 +1,44 @@
 ﻿using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
-namespace Kagami.Library.Parsers.Statements
+namespace Kagami.Library.Parsers.Statements;
+
+public class LoopParser : StatementParser
 {
-   public class LoopParser : StatementParser
+   public override string Pattern => $"^ /'loop' {REGEX_ANTICIPATE_END}";
+
+   protected static Optional<Expression> getUntil(ParseState state)
    {
-      public override string Pattern => $"^ /'loop' {REGEX_ANTICIPATE_END}";
+      var untilParser = new UntilParser();
+      return untilParser.Scan(state).Map(_ => untilParser.Expression);
+   }
 
-      protected static IMatched<Expression> getUntil(ParseState state)
+   public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
+   {
+      state.BeginTransaction();
+
+      state.Colorize(tokens, Color.Keyword);
+
+      var _result =
+         from skipped in state.SkipEndOfLine()
+         from b in getBlock(state)
+         from e in getUntil(state)
+         select (b, e);
+
+      if (_result is (true, var (block, expression)))
       {
-         var untilParser = new UntilParser();
-         return untilParser.Scan(state).Map(_ => untilParser.Expression);
+         state.AddStatement(new Loop(block, expression));
+         state.CommitTransaction();
+
+         return unit;
       }
-
-      public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
+      else
       {
-         state.BeginTransaction();
-
-         state.Colorize(tokens, Color.Keyword);
-
-         var result =
-            from skipped in state.SkipEndOfLine()
-            from b in getBlock(state)
-            from e in getUntil(state)
-            select (b, e);
-
-         if (result.ValueOrCast<Unit>(out var tuple, out var asUnit))
-         {
-            var (block, expression) = tuple;
-            state.AddStatement(new Loop(block, expression));
-            state.CommitTransaction();
-
-            return Unit.Matched();
-         }
-         else
-         {
-            state.RollBackTransaction();
-            return asUnit;
-         }
+         state.RollBackTransaction();
+         return _result.Exception;
       }
    }
 }

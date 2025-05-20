@@ -1,27 +1,27 @@
 ﻿using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
-namespace Kagami.Library.Parsers.Statements
+namespace Kagami.Library.Parsers.Statements;
+
+public class DefAssignParser : EndingInExpressionParser
 {
-   public class DefAssignParser : EndingInExpressionParser
+   protected string fieldName;
+
+   public override string Pattern => $"^ /'def' /(|s+|) /({REGEX_FIELD}) /(|s|) /'=' -(> '=')";
+
+   public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {
-      protected string fieldName;
+      fieldName = tokens[3].Text;
+      state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Identifier, Color.Whitespace, Color.Structure);
 
-      public override string Pattern => $"^ /'def' /(|s+|) /({REGEX_FIELD}) /(|s|) /'=' -(> '=')";
+      return unit;
+   }
 
-      public override IMatched<Unit> Prefix(ParseState state, Token[] tokens)
-      {
-         fieldName = tokens[3].Text;
-         state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Identifier, Color.Whitespace, Color.Structure);
-
-         return Unit.Matched();
-      }
-
-      public override IMatched<Unit> Suffix(ParseState state, Expression expression)
-      {
-         state.RegisterDefExpression(fieldName, expression);
-         return Unit.Matched();
-      }
+   public override Optional<Unit> Suffix(ParseState state, Expression expression)
+   {
+      state.RegisterDefExpression(fieldName, expression);
+      return unit;
    }
 }

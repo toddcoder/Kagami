@@ -1,18 +1,18 @@
 ﻿using Core.Monads;
 using Kagami.Library.Nodes.Statements;
+using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Parsers.Statements
+namespace Kagami.Library.Parsers.Statements;
+
+public class StopParser : StatementParser
 {
-	public class StopParser : StatementParser
-	{
-		public override string Pattern => "^ /'stop' /b";
+   public override string Pattern => "^ /'stop' /b";
 
-		public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
-		{
-			state.Colorize(tokens, Color.Keyword);
-			state.AddStatement(new Stop());
+   public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
+   {
+      state.Colorize(tokens, Color.Keyword);
+      state.AddStatement(new Stop());
 
-			return Unit.Matched();
-		}
-	}
+      return unit;
+   }
 }

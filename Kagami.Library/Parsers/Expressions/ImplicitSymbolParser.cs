@@ -6,7 +6,9 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public class ImplicitSymbolParser : EndingInValueParser
 {
-   public ImplicitSymbolParser(ExpressionBuilder builder) : base(builder) { }
+   public ImplicitSymbolParser(ExpressionBuilder builder) : base(builder)
+   {
+   }
 
    public override string Pattern => "^ /(|s|) /'^' -(> /s)";
 
@@ -19,16 +21,16 @@ public class ImplicitSymbolParser : EndingInValueParser
    public override Optional<Unit> Suffix(ParseState state, Symbol value)
    {
       var implicitExpressionState = state.ImplicitExpressionState;
-      if (implicitExpressionState.Symbol1.IsNone)
+      if (!implicitExpressionState.Symbol1)
       {
-         implicitExpressionState.Symbol1 = value.Some();
+         implicitExpressionState.Symbol1 = value;
          builder.Add(new FieldSymbol(implicitExpressionState.FieldName1));
 
          return unit;
       }
-      else if (implicitExpressionState.Symbol2.IsNone)
+      else if (!implicitExpressionState.Symbol2)
       {
-         implicitExpressionState.Symbol2 = value.Some();
+         implicitExpressionState.Symbol2 = value;
          builder.Add(new FieldSymbol(implicitExpressionState.FieldName2));
 
          return unit;

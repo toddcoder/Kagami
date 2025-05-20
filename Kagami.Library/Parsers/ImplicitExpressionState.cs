@@ -2,16 +2,15 @@
 using Kagami.Library.Nodes.Symbols;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Parsers
+namespace Kagami.Library.Parsers;
+
+public class ImplicitExpressionState
 {
-	public class ImplicitExpressionState
-	{
-		public string FieldName1 { get; set; } = "";
+   public string FieldName1 { get; set; } = "";
 
-		public string FieldName2 { get; set; } = "";
+   public string FieldName2 { get; set; } = "";
 
-		public IMaybe<Symbol> Symbol1 { get; set; } = none<Symbol>();
+   public Maybe<Symbol> Symbol1 { get; set; } = nil;
 
-		public IMaybe<Symbol> Symbol2 { get; set; } = none<Symbol>();
-	}
+   public Maybe<Symbol> Symbol2 { get; set; } = nil;
 }

@@ -4,34 +4,33 @@ using Core.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Parsers.Statements
+namespace Kagami.Library.Parsers.Statements;
+
+public class GuardParser : EndingInExpressionParser
 {
-   public class GuardParser : EndingInExpressionParser
+   public override string Pattern => "^ /'guard' /b";
+
+   public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {
-      public override string Pattern => "^ /'guard' /b";
+      state.Colorize(tokens, Color.Keyword);
+      return unit;
+   }
 
-      public override IMatched<Unit> Prefix(ParseState state, Token[] tokens)
+   public override Optional<Unit> Suffix(ParseState state, Expression expression)
+   {
+      var block = new Block(new Pass());
+      var _elseBlock =
+         from keyword in state.Scan("^ /(|s+|) /'else'", Color.Whitespace, Color.Keyword)
+         from eBlock in getBlock(state)
+         select eBlock;
+      if (_elseBlock is (true, var elseBlock))
       {
-         state.Colorize(tokens, Color.Keyword);
-         return Unit.Matched();
+         state.AddStatement(new If(expression, block, nil, elseBlock.Some(), "", false, false, true));
+         return unit;
       }
-
-      public override IMatched<Unit> Suffix(ParseState state, Expression expression)
+      else
       {
-         var block = new Block(new Pass());
-         var result =
-            from keyword in state.Scan("^ /(|s+|) /'else'", Color.Whitespace, Color.Keyword)
-            from eBlock in getBlock(state)
-            select eBlock;
-         if (result.ValueOrCast<Unit>(out var elseBlock, out var asUnit))
-         {
-            state.AddStatement(new If(expression, block, none<If>(), elseBlock.Some(), "", false, false, true));
-            return Unit.Matched();
-         }
-         else
-         {
-            return asUnit;
-         }
+         return _elseBlock.Exception;
       }
    }
 }

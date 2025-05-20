@@ -7,38 +7,38 @@ using static Kagami.Library.AllExceptions;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
-namespace Kagami.Library.Parsers.Statements
+namespace Kagami.Library.Parsers.Statements;
+
+public class MixinNameParser : Parser
 {
-   public class MixinNameParser : Parser
+   protected List<Mixin> mixins;
+
+   public MixinNameParser(List<Mixin> mixins) : base(true) => this.mixins = mixins;
+
+   public override string Pattern => $"^ /(/s*) /({REGEX_CLASS}) (/(/s*) /',')?";
+
+   public override Optional<Unit> Parse(ParseState state, Token[] tokens)
    {
-      protected List<Mixin> mixins;
+      var mixinName = tokens[2].Text;
+      var more = tokens[4].Text == ",";
+      state.Colorize(tokens, Color.Whitespace, Color.Class, Color.Whitespace, Color.Structure);
 
-      public MixinNameParser(List<Mixin> mixins) : base(true) => this.mixins = mixins;
-
-      public override string Pattern => $"^ /(/s*) /({REGEX_CLASS}) (/(/s*) /',')?";
-
-      public override IMatched<Unit> Parse(ParseState state, Token[] tokens)
+      var _mixin = Module.Global.Mixin(mixinName);
+      if (_mixin is (true, var mixin))
       {
-         var mixinName = tokens[2].Text;
-         var more = tokens[4].Text == ",";
-         state.Colorize(tokens, Color.Whitespace, Color.Class, Color.Whitespace, Color.Structure);
-
-         if (Module.Global.Mixin(mixinName).If(out var mixin))
+         if (!mixins.FirstOrNone())
          {
-            if (mixins.FirstOrNone().IsNone)
-            {
-               mixins.Add(mixin);
-            }
+            mixins.Add(mixin);
+         }
 
-            More = more;
-            return Unit.Matched();
-         }
-         else
-         {
-            return failedMatch<Unit>(mixinNotFound(mixinName));
-         }
+         More = more;
+         return unit;
       }
-
-      public bool More { get; set; }
+      else
+      {
+         return mixinNotFound(mixinName);
+      }
    }
+
+   public bool More { get; set; }
 }

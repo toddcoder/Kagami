@@ -1,18 +1,18 @@
 ﻿using Kagami.Library.Nodes.Statements;
 using Core.Monads;
+using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Parsers.Statements
+namespace Kagami.Library.Parsers.Statements;
+
+public class PassParser : StatementParser
 {
-   public class PassParser : StatementParser
+   public override string Pattern => "^ /('pass' | 'endseq') /b";
+
+   public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      public override string Pattern => "^ /('pass' | 'endseq') /b";
+      state.Colorize(tokens, Color.Keyword);
+      state.AddStatement(new Pass());
 
-      public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
-      {
-         state.Colorize(tokens, Color.Keyword);
-         state.AddStatement(new Pass());
-
-         return Unit.Matched();
-      }
+      return unit;
    }
 }

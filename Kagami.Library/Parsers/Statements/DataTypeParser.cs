@@ -8,71 +8,74 @@ using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
 using DataType = Kagami.Library.Nodes.Statements.DataType;
 
-namespace Kagami.Library.Parsers.Statements
+namespace Kagami.Library.Parsers.Statements;
+
+public class DataTypeParser : StatementParser
 {
-   public class DataTypeParser : StatementParser
+   public override string Pattern => $"^ /'type' /(/s+) /({REGEX_CLASS}) {REGEX_ANTICIPATE_END}";
+
+   public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      public override string Pattern => $"^ /'type' /(/s+) /({REGEX_CLASS}) {REGEX_ANTICIPATE_END}";
+      var className = tokens[3].Text;
+      state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Class);
 
-      public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
+      var values = new Hash<string, (IObject[], IRangeItem)>();
+      var dataComparisandNames = new List<string>();
+      var dataTypeClass = new DataTypeClass(className);
+      var _registerClass = Module.Global.RegisterClass(dataTypeClass);
+      if (_registerClass)
       {
-         var className = tokens[3].Text;
-         state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Class);
+         Module.Global.ForwardReference(className);
+         IRangeItem ordinal = (Int)0;
 
-         var values = new Hash<string, (IObject[], IRangeItem)>();
-         var dataComparisandNames = new List<string>();
-         var dataTypeClass = new DataTypeClass(className);
-         if (Module.Global.RegisterClass(dataTypeClass).If(out _, out var exception))
+         var _advance = state.Advance();
+         if (_advance)
          {
-            Module.Global.ForwardReference(className);
-            IRangeItem ordinal = (Int)0;
-
-            if (state.Advance().ValueOrOriginal(out _, out var original))
+            while (state.More)
             {
-               while (state.More)
+               var parser = new DataComparisandParser(className, values, ordinal);
+               var _scan = parser.Scan(state);
+               if (_scan)
                {
-                  var parser = new DataComparisandParser(className, values, ordinal);
-                  if (parser.Scan(state).If(out _, out var anyException))
+                  var _registerDataComparisand = dataTypeClass.RegisterDataComparisand(parser.Name, (IObject)parser.Ordinal);
+                  if (_registerDataComparisand)
                   {
-                     if (dataTypeClass.RegisterDataComparisand(parser.Name, (IObject)parser.Ordinal).If(out _, out var regException))
-                     {
-                        dataComparisandNames.Add(parser.Name);
-                        ordinal = parser.Ordinal.Successor;
-                     }
-                     else
-                     {
-                        return failedMatch<Unit>(regException);
-                     }
-                  }
-                  else if (anyException.If(out exception))
-                  {
-                     return failedMatch<Unit>(exception);
+                     dataComparisandNames.Add(parser.Name);
+                     ordinal = parser.Ordinal.Successor;
                   }
                   else
                   {
-                     break;
+                     return _registerDataComparisand.Exception;
                   }
                }
-
-               state.Regress();
+               else if (_scan.Exception is (true, var exception))
+               {
+                  return exception;
+               }
+               else
+               {
+                  break;
+               }
             }
-            else
-            {
-               return original;
-            }
 
-            state.AddStatement(new DataType(className, values.ToHash(i => i.Key, i =>
-            {
-               var (data, rangeItem) = i.Value;
-               return (data, (IObject)rangeItem);
-            })));
-
-            return Unit.Matched();
+            state.Regress();
          }
          else
          {
-            return failedMatch<Unit>(exception);
+            return _advance.Exception;
          }
+
+         state.AddStatement(new DataType(className, values.ToHash(i => i.Key, i =>
+         {
+            var (data, rangeItem) = i.Value;
+            return (data, (IObject)rangeItem);
+         })));
+
+         return unit;
+      }
+      else
+      {
+         return _registerClass.Exception;
       }
    }
 }

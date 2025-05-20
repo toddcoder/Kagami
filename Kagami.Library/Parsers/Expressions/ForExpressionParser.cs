@@ -20,16 +20,16 @@ public class ForExpressionParser : EndingInExpressionParser
    public override Optional<Unit> Suffix(ParseState state, Expression expression)
    {
       var implicitExpressionState = state.ImplicitExpressionState;
-      if (implicitExpressionState.Symbol1.IsNone)
+      if (!implicitExpressionState.Symbol1)
       {
-         implicitExpressionState.Symbol1 = expression.Some<Symbol>();
+         implicitExpressionState.Symbol1 = expression;
          builder.Add(new FieldSymbol(implicitExpressionState.FieldName1));
 
          return unit;
       }
-      else if (implicitExpressionState.Symbol2.IsNone)
+      else if (!implicitExpressionState.Symbol2)
       {
-         implicitExpressionState.Symbol2 = expression.Some<Symbol>();
+         implicitExpressionState.Symbol2 = expression;
          builder.Add(new FieldSymbol(implicitExpressionState.FieldName2));
 
          return unit;

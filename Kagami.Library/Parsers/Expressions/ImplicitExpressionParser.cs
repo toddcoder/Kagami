@@ -101,7 +101,7 @@ public class ImplicitExpressionParser : EndingInExpressionParser
    {
       var implicitExpressionState = state.ImplicitExpressionState;
       state.EndImplicitExpressionState();
-      if (implicitExpressionState.Symbol1.If(out var symbol))
+      if (implicitExpressionState.Symbol1 is (true, var symbol))
       {
          var implicitExpressionSymbol = new ImplicitExpressionSymbol(expression, message, parameterCount, symbol, implicitExpressionState.Symbol2);
          builder.Add(implicitExpressionSymbol);

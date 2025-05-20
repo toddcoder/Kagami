@@ -1,44 +1,43 @@
 ﻿using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Parsers.Expressions;
 using Core.Monads;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
-namespace Kagami.Library.Parsers.Statements
+namespace Kagami.Library.Parsers.Statements;
+
+public class ReturnFromLoopParser : StatementParser
 {
-   public class ReturnFromLoopParser : StatementParser
+   public override string Pattern => "^ /'return' /b";
+
+   public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      public override string Pattern => "^ /'return' /b";
+      state.BeginTransaction();
+      state.Colorize(tokens, Color.Keyword);
 
-      public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
+      var _result =
+         from expressionValue in getExpression(state, ExpressionFlags.OmitIf)
+         from @if in state.Scan("^ /(|s|) /'if' /b", Color.Whitespace, Color.Keyword)
+         from conditionValue in getExpression(state, ExpressionFlags.Standard)
+         select (expressionValue, conditionValue);
+
+      if (_result is (true, var (expression, condition)))
       {
-         state.BeginTransaction();
-         state.Colorize(tokens, Color.Keyword);
+         Condition = condition;
+         Expression = expression;
 
-         var result =
-            from expression in getExpression(state, ExpressionFlags.OmitIf)
-            from @if in state.Scan("^ /(|s|) /'if' /b", Color.Whitespace, Color.Keyword)
-            from condition in getExpression(state, ExpressionFlags.Standard)
-            select (expression, condition);
+         state.CommitTransaction();
 
-         if (result.ValueOrCast<Unit>(out var tuple, out var asUnit))
-         {
-            var (expression, condition) = tuple;
-            Condition = condition;
-            Expression = expression;
-
-            state.CommitTransaction();
-
-            return Unit.Matched();
-         }
-         else
-         {
-            state.RollBackTransaction();
-            return asUnit;
-         }
+         return unit;
       }
-
-      public Expression Condition { get; set; }
-
-      public Expression Expression { get; set; }
+      else
+      {
+         state.RollBackTransaction();
+         return _result.Exception;
+      }
    }
+
+   public Expression Condition { get; set; }
+
+   public Expression Expression { get; set; }
 }

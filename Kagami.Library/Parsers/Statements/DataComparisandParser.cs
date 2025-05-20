@@ -5,116 +5,117 @@ using Kagami.Library.Parsers.Expressions;
 using Kagami.Library.Runtime;
 using Core.Collections;
 using Core.Monads;
+using Core.Monads.Lazy;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Parsers.Statements
+namespace Kagami.Library.Parsers.Statements;
+
+public class DataComparisandParser : StatementParser
 {
-   public class DataComparisandParser : StatementParser
+   protected string className;
+   protected Hash<string, (IObject[], IRangeItem)> values;
+   protected IRangeItem ordinal;
+
+   public DataComparisandParser(string className, Hash<string, (IObject[], IRangeItem)> values, IRangeItem ordinal)
    {
-      protected string className;
-      protected Hash<string, (IObject[], IRangeItem)> values;
-      protected IRangeItem ordinal;
-
-      public DataComparisandParser(string className, Hash<string, (IObject[], IRangeItem)> values, IRangeItem ordinal)
-      {
-         this.className = className;
-         this.values = values;
-         this.ordinal = ordinal;
-      }
-
-      public override string Pattern => $"^ /({REGEX_CLASS}) /'('?";
-
-      public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
-      {
-         state.BeginTransaction();
-         var name = tokens[1].Text;
-         Name = name;
-         var hasArguments = tokens[2].Text == "(";
-         state.Colorize(tokens, Color.Class, Color.OpenParenthesis);
-
-         var result =
-            from possibleComparisands in getPossibleComparisands(hasArguments, className, name, state)
-            from possibleOrdinal in getOrdinal(state, ordinal)
-            select (possibleComparisands, possibleOrdinal);
-         if (result.ValueOrCast<Unit>(out var item, out var asUnit))
-         {
-            var (comparisands, newOrdinal) = item;
-            values[name] = (comparisands, newOrdinal);
-            Ordinal = newOrdinal;
-            state.CommitTransaction();
-            Module.Global.RegisterDataComparisand(className, name);
-
-            return Unit.Matched();
-         }
-         else
-         {
-            state.RollBackTransaction();
-            return asUnit;
-         }
-      }
-
-      protected static IMatched<IObject[]> getPossibleComparisands(bool hasArguments, string className, string name, ParseState state)
-      {
-         Module.Global.ForwardReference($"{className}.{name}");
-         if (hasArguments)
-         {
-            var result =
-               from comparisandList in getComparisandList(state)
-               from registered in Module.Global.RegisterClass(new DataComparisandClass(className, name))
-                  .Map(_ => Unit.Matched()).Recover(failedMatch<Unit>)
-               select comparisandList;
-            if (result.ValueOrOriginal(out var comparisands, out var original))
-            {
-               return comparisands.Matched();
-            }
-            else
-            {
-               return original;
-            }
-         }
-         else if (Module.Global.RegisterClass(new DataComparisandClass(className, name)).If(out _, out var exception))
-         {
-            return new IObject[0].Matched();
-         }
-         else
-         {
-            return failedMatch<IObject[]>(exception);
-         }
-      }
-
-      protected static IMatched<IRangeItem> getOrdinal(ParseState state, IRangeItem ordinal)
-      {
-         if (state.Scan("^ /(|s|) /'='", Color.Whitespace, Color.Structure).If(out _, out var anyException))
-         {
-            if (getValue(state, ExpressionFlags.Standard).ValueOrCast<IRangeItem>(out var value, out var asIRangeItem))
-            {
-               if (value is IConstant { Object: IRangeItem ri })
-               {
-                  return ri.Matched();
-               }
-               else
-               {
-                  return $"Range item required, found {value}".FailedMatch<IRangeItem>();
-               }
-            }
-            else
-            {
-               return asIRangeItem;
-            }
-         }
-         else if (anyException.If(out var exception))
-         {
-            return failedMatch<IRangeItem>(exception);
-         }
-         else
-         {
-            return ordinal.Matched();
-         }
-      }
-
-      public string Name { get; set; }
-
-      public IRangeItem Ordinal { get; set; }
+      this.className = className;
+      this.values = values;
+      this.ordinal = ordinal;
    }
+
+   public override string Pattern => $"^ /({REGEX_CLASS}) /'('?";
+
+   public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
+   {
+      state.BeginTransaction();
+      var name = tokens[1].Text;
+      Name = name;
+      var hasArguments = tokens[2].Text == "(";
+      state.Colorize(tokens, Color.Class, Color.OpenParenthesis);
+
+      var _result =
+         from possibleComparisands in getPossibleComparisands(hasArguments, className, name, state)
+         from possibleOrdinal in getOrdinal(state, ordinal)
+         select (possibleComparisands, possibleOrdinal);
+      if (_result is (true, var (comparisands, newOrdinal)))
+      {
+         values[name] = (comparisands, newOrdinal);
+         Ordinal = newOrdinal;
+         state.CommitTransaction();
+         Module.Global.RegisterDataComparisand(className, name);
+
+         return unit;
+      }
+      else
+      {
+         state.RollBackTransaction();
+         return _result.Exception;
+      }
+   }
+
+   protected static Optional<IObject[]> getPossibleComparisands(bool hasArguments, string className, string name, ParseState state)
+   {
+      Module.Global.ForwardReference($"{className}.{name}");
+      LazyResult<Unit> _registered = nil;
+      if (hasArguments)
+      {
+         var _result =
+            from comparisandList in getComparisandList(state)
+            from registered in Module.Global.RegisterClass(new DataComparisandClass(className, name)).Unit
+            select comparisandList;
+         if (_result is (true, var comparisands))
+         {
+            return comparisands;
+         }
+         else
+         {
+            return _result.Exception;
+         }
+      }
+      else if (_registered.ValueOf(Module.Global.RegisterClass(new DataComparisandClass(className, name))))
+      {
+         return (IObject[]) [];
+      }
+      else
+      {
+         return _registered.Exception;
+      }
+   }
+
+   protected static Optional<IRangeItem> getOrdinal(ParseState state, IRangeItem ordinal)
+   {
+      var _scan = state.Scan("^ /(|s|) /'='", Color.Whitespace, Color.Structure);
+      if (_scan)
+      {
+         var _value = getValue(state, ExpressionFlags.Standard);
+         if (_value is (true, var value))
+         {
+            if (value is IConstant { Object: IRangeItem ri })
+            {
+               return ri.Just();
+            }
+            else
+            {
+               return fail("Range item required, found {value}");
+            }
+         }
+         else
+         {
+            return _value.Exception;
+         }
+      }
+      else if (_scan.Exception is (true, var exception))
+      {
+         return exception;
+      }
+      else
+      {
+         return ordinal.Just();
+      }
+   }
+
+   public string Name { get; set; }
+
+   public IRangeItem Ordinal { get; set; }
 }

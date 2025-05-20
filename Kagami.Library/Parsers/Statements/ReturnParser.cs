@@ -1,23 +1,23 @@
 ﻿using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
+using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Parsers.Statements
+namespace Kagami.Library.Parsers.Statements;
+
+public class ReturnParser : EndingInExpressionParser
 {
-   public class ReturnParser : EndingInExpressionParser
+   public override string Pattern => "^ /'return' /(|s+|)";
+
+   public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {
-      public override string Pattern => "^ /'return' /(|s+|)";
+      state.Colorize(tokens, Color.Keyword, Color.Whitespace);
+      return unit;
+   }
 
-      public override IMatched<Unit> Prefix(ParseState state, Token[] tokens)
-      {
-         state.Colorize(tokens, Color.Keyword, Color.Whitespace);
-         return Unit.Matched();
-      }
-
-      public override IMatched<Unit> Suffix(ParseState state, Expression expression)
-      {
-         state.AddStatement(new Return(expression, state.GetReturnType()));
-         return Unit.Matched();
-      }
+   public override Optional<Unit> Suffix(ParseState state, Expression expression)
+   {
+      state.AddStatement(new Return(expression, state.GetReturnType()));
+      return unit;
    }
 }

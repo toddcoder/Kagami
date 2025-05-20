@@ -1,45 +1,46 @@
 ﻿using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Parsers.Expressions;
 using Core.Monads;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
-namespace Kagami.Library.Parsers.Statements
+namespace Kagami.Library.Parsers.Statements;
+
+public class ParentClassParser : StatementParser
 {
-   public class ParentClassParser : StatementParser
+   public override string Pattern => $"^ /'inherits' /(|s+|) /({REGEX_CLASS}) " + "/['({']?";
+
+   public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      public override string Pattern => $"^ /'inherits' /(|s+|) /({REGEX_CLASS}) " + "/['({']?";
+      var parentClassName = tokens[3].Text;
+      var hasArguments = tokens[4].Length > 0;
+      var initialize = tokens[4].Text == "{";
+      state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Class, Color.Structure);
 
-      public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
+      if (hasArguments)
       {
-         var parentClassName = tokens[3].Text;
-         var hasArguments = tokens[4].Length > 0;
-         var initialize = tokens[4].Text == "{";
-         state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Class, Color.Structure);
-
-         if (hasArguments)
+         var _expressions = getArguments(state, ExpressionFlags.Standard);
+         if (_expressions is (true, var expressions))
          {
-            if (getArguments(state, ExpressionFlags.Standard).ValueOrCast<Unit>(out var expressions, out var asUnit))
-            {
-               Parent = (parentClassName, initialize, expressions);
-               return Unit.Matched();
-            }
-            else if (asUnit.IsNotMatched)
-            {
-               Parent = (parentClassName, initialize, new Expression[0]);
-               return Unit.Matched();
-            }
-            else
-            {
-               return asUnit;
-            }
+            Parent = (parentClassName, initialize, expressions);
+            return unit;
+         }
+         else if (_expressions.Exception is (true, var exception))
+         {
+            return exception;
          }
          else
          {
-            Parent = (parentClassName, initialize, new Expression[0]);
-            return Unit.Matched();
+            Parent = (parentClassName, initialize, []);
+            return unit;
          }
       }
-
-      public (string, bool, Expression[]) Parent { get; set; }
+      else
+      {
+         Parent = (parentClassName, initialize, []);
+         return unit;
+      }
    }
+
+   public (string, bool, Expression[]) Parent { get; set; }
 }

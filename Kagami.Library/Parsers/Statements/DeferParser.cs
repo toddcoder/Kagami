@@ -1,41 +1,48 @@
-﻿using Kagami.Library.Nodes.Statements;
+﻿using Core.Matching;
+using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Parsers.Expressions;
 using Core.Monads;
-using Core.RegularExpressions;
+using Core.Monads.Lazy;
+using Kagami.Library.Nodes.Symbols;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
-namespace Kagami.Library.Parsers.Statements
+namespace Kagami.Library.Parsers.Statements;
+
+public class DeferParser : StatementParser
 {
-   public class DeferParser : StatementParser
+   public override string Pattern => "^ /'defer' /b";
+
+   public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      public override string Pattern => "^ /'defer' /b";
+      state.Colorize(tokens, Color.Keyword);
 
-      public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
+      Block block;
+      LazyOptional<Expression> _expression = nil;
+      if (state.CurrentSource.IsMatch(REGEX_EOL))
       {
-         state.Colorize(tokens, Color.Keyword);
-
-         Block block;
-         if (state.CurrentSource.IsMatch(REGEX_EOL))
+         var _block = getBlock(state);
+         if (_block)
          {
-            if (getBlock(state).ValueOrCast<Unit>(out block, out var asUnit)) { }
-            else
-            {
-               return asUnit;
-            }
-         }
-         else if (getExpression(state, ExpressionFlags.Standard).ValueOrCast<Unit>(out var expression, out var asUnit))
-         {
-            block = new Block(new ExpressionStatement(expression, true));
+            block = _block;
          }
          else
          {
-            return asUnit;
+            return _block.Exception;
          }
-
-         block.AddReturnIf();
-         state.AddStatement(new Defer(block));
-
-         return Unit.Matched();
       }
+      else if (_expression.ValueOf(getExpression(state, ExpressionFlags.Standard)) is (true, var expression))
+      {
+         block = new Block(new ExpressionStatement(expression, true));
+      }
+      else
+      {
+         return _expression.Exception;
+      }
+
+      block.AddReturnIf();
+      state.AddStatement(new Defer(block));
+
+      return unit;
    }
 }

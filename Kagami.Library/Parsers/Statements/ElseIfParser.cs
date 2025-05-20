@@ -3,59 +3,59 @@ using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Parsers.Statements
+namespace Kagami.Library.Parsers.Statements;
+
+public class ElseIfParser : ExpressionBlockParser
 {
-   public class ElseIfParser : ExpressionBlockParser
+   protected string fieldName;
+   protected bool mutable;
+   protected bool assignment;
+
+   public ElseIfParser(string fieldName, bool mutable, bool assignment)
    {
-      protected string fieldName;
-      protected bool mutable;
-      protected bool assignment;
+      this.fieldName = fieldName;
+      this.mutable = mutable;
+      this.assignment = assignment;
+   }
 
-      public ElseIfParser(string fieldName, bool mutable, bool assignment)
+   public override string Pattern => "^ /'else' /(|s+|) /'if' /b";
+
+   public Maybe<If> If { get; set; } = nil;
+
+   public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
+   {
+      state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Keyword);
+      return unit;
+   }
+
+   public override Optional<Unit> Suffix(ParseState state, Expression expression, Block block)
+   {
+      Maybe<If> _elseIf = nil;
+      var elseIfParser = new ElseIfParser(fieldName, mutable, assignment);
+
+      var _scan = elseIfParser.Scan(state);
+      if (_scan)
       {
-         this.fieldName = fieldName;
-         this.mutable = mutable;
-         this.assignment = assignment;
-         If = none<If>();
+         _elseIf = elseIfParser.If;
+      }
+      else if (_scan.Exception is (true, var exception))
+      {
+         return exception;
       }
 
-      public override string Pattern => "^ /'else' /(|s+|) /'if' /b";
-
-      public IMaybe<If> If { get; set; }
-
-      public override IMatched<Unit> Prefix(ParseState state, Token[] tokens)
+      Maybe<Block> _elseBlock = nil;
+      var elseParser = new ElseParser();
+      _scan = elseParser.Scan(state);
+      if (_scan)
       {
-         state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Keyword);
-         return Unit.Matched();
+         _elseBlock = elseParser.Block;
+      }
+      else if (_scan.Exception is (true, var exception))
+      {
+         return exception;
       }
 
-      public override IMatched<Unit> Suffix(ParseState state, Expression expression, Block block)
-      {
-         var elseIf = none<If>();
-         var elseIfParser = new ElseIfParser(fieldName, mutable, assignment);
-
-         if (elseIfParser.Scan(state).If(out _, out var _exception))
-         {
-            elseIf = elseIfParser.If;
-         }
-         else if (_exception.If(out var exception))
-         {
-            return failedMatch<Unit>(exception);
-         }
-
-         var elseBlock = none<Block>();
-         var elseParser = new ElseParser();
-         if (elseParser.Scan(state).If(out _, out _exception))
-         {
-            elseBlock = elseParser.Block;
-         }
-         else if (_exception.If(out var exception))
-         {
-            return failedMatch<Unit>(exception);
-         }
-
-         If = new If(expression, block, elseIf, elseBlock, fieldName, mutable, assignment, false).Some();
-         return Unit.Matched();
-      }
+      If = new If(expression, block, _elseIf, _elseBlock, fieldName, mutable, assignment, false).Some();
+      return unit;
    }
 }

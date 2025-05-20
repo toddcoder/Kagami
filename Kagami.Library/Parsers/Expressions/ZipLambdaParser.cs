@@ -2,46 +2,48 @@
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Parsers.Expressions
+namespace Kagami.Library.Parsers.Expressions;
+
+public class ZipLambdaParser : SymbolParser
 {
-   public class ZipLambdaParser : SymbolParser
+   public ZipLambdaParser(ExpressionBuilder builder) : base(builder)
    {
-      public ZipLambdaParser(ExpressionBuilder builder) : base(builder) { }
+   }
 
-      public override string Pattern => "^ /(|s|) /'['";
+   public override string Pattern => "^ /(|s|) /'['";
 
-      public override IMatched<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+   public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+   {
+      state.Colorize(tokens, Color.Whitespace, Color.Operator);
+      state.BeginTransaction();
+
+      var expressionBuilder = new ExpressionBuilder(builder.Flags);
+      var parser = new AnyLambdaParser(expressionBuilder);
+      var _result =
+         from parsed in parser.Scan(state)
+         from endToken in state.Scan("/']'", Color.Operator)
+         select parsed;
+
+      if (_result)
       {
-         state.Colorize(tokens, Color.Whitespace, Color.Operator);
-         state.BeginTransaction();
-
-         var expressionBuilder = new ExpressionBuilder(builder.Flags);
-         var parser = new AnyLambdaParser(expressionBuilder);
-         var result =
-            from parsed in parser.Scan(state)
-            from endToken in state.Scan("/']'", Color.Operator)
-            select parsed;
-
-         if (result.ValueOrOriginal(out _, out var original))
+         var _expression = expressionBuilder.ToExpression();
+         if (_expression is (true, var expression))
          {
-            if (expressionBuilder.ToExpression().If(out var expression, out var exception))
-            {
-               builder.Add(new ZipLambdaSymbol(expression));
-               state.CommitTransaction();
+            builder.Add(new ZipLambdaSymbol(expression));
+            state.CommitTransaction();
 
-               return Unit.Matched();
-            }
-            else
-            {
-               state.RollBackTransaction();
-               return failedMatch<Unit>(exception);
-            }
+            return unit;
          }
          else
          {
             state.RollBackTransaction();
-            return original;
+            return _expression.Exception;
          }
+      }
+      else
+      {
+         state.RollBackTransaction();
+         return _result.Exception;
       }
    }
 }

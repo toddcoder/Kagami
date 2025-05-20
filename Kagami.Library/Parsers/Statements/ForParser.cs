@@ -1,35 +1,33 @@
 ﻿using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Parsers.Expressions;
 using Core.Monads;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
-namespace Kagami.Library.Parsers.Statements
+namespace Kagami.Library.Parsers.Statements;
+
+public class ForParser : StatementParser
 {
-   public class ForParser : StatementParser
+   public override string Pattern => "^ /'for' /(|s+|)";
+
+   public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      public override string Pattern => "^ /'for' /(|s+|)";
+      state.Colorize(tokens, Color.Keyword, Color.Whitespace);
 
-      public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
+      var _result =
+         from comparisandValue in getExpression(state, ExpressionFlags.Comparisand | ExpressionFlags.OmitColon)
+         from scanned in state.Scan("^ /(|s|) /':='", Color.Whitespace, Color.Structure)
+         from sourceValue in getExpression(state, ExpressionFlags.Standard)
+         from blockValue in getBlock(state)
+         select (comparisandValue, sourceValue, blockValue);
+      if (_result is (true, var (comparisand, source, block)))
       {
-         state.Colorize(tokens, Color.Keyword, Color.Whitespace);
-
-         var result =
-            from comparisand in getExpression(state, ExpressionFlags.Comparisand | ExpressionFlags.OmitColon)
-            from scanned in state.Scan("^ /(|s|) /':='", Color.Whitespace, Color.Structure)
-            from source in getExpression(state, ExpressionFlags.Standard)
-            from block in getBlock(state)
-            select (comparisand, source, block);
-         if (result.ValueOrCast<Unit>(out var tuple, out var asUnit))
-         {
-            var (comparisand, source, block) = tuple;
-            state.AddStatement(new For(comparisand, source, block));
-
-            return Unit.Matched();
-         }
-         else
-         {
-            return asUnit;
-         }
+         state.AddStatement(new For(comparisand, source, block));
+         return unit;
+      }
+      else
+      {
+         return _result.Exception;
       }
    }
 }

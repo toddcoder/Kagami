@@ -5,101 +5,96 @@ using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Parsers.Statements
+namespace Kagami.Library.Parsers.Statements;
+
+public class CaseParser : StatementParser
 {
-   public class CaseParser : StatementParser
+   protected string assignmentField;
+   protected string fieldName;
+   protected bool mutable;
+   protected bool assignment;
+   protected bool top;
+   protected CaseType caseType;
+
+   public CaseParser(string assignmentField, bool mutable, bool assignment, string fieldName, bool top, CaseType caseType)
    {
-      protected string assignmentField;
-      protected string fieldName;
-      protected bool mutable;
-      protected bool assignment;
-      protected bool top;
-      protected CaseType caseType;
+      this.assignmentField = assignmentField;
+      this.mutable = mutable;
+      this.assignment = assignment;
+      this.fieldName = fieldName;
+      this.top = top;
+      this.caseType = caseType;
+   }
 
-      public CaseParser(string assignmentField, bool mutable, bool assignment, string fieldName, bool top, CaseType caseType)
+   public CaseParser(string fieldName)
+   {
+      assignmentField = "";
+      mutable = false;
+      assignment = false;
+      this.fieldName = fieldName;
+      top = false;
+
+      caseType = CaseType.Function;
+   }
+
+   public override string Pattern => "^ /'|' /(|s|)";
+
+   protected static Optional<Block> getCaseBlock(CaseType caseType, ParseState state) => caseType switch
+   {
+      CaseType.Statement => getCaseStatementBlock(state),
+      CaseType.Function => getAnyBlock(state),
+      CaseType.Lambda => getBlock(state),
+      _ => fail($"Didn't understand case type {caseType}")
+   };
+
+   public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
+   {
+      state.Colorize(tokens, Color.Structure, Color.Whitespace);
+
+      var _result =
+         from comparisandValue in getCompoundComparisands(state, fieldName)
+         from andValue in andExpression(state)
+         let endValue = state.SkipEndOfLine() | ""
+         from blockValue in getCaseBlock(caseType, state)
+         select (comparisandValue, andValue, blockValue);
+
+      if (_result is (true, var (comparisand, _and, block)))
       {
-         this.assignmentField = assignmentField;
-         this.mutable = mutable;
-         this.assignment = assignment;
-         this.fieldName = fieldName;
-         this.top = top;
-         this.caseType = caseType;
-      }
-
-      public CaseParser(string fieldName)
-      {
-         assignmentField = "";
-         mutable = false;
-         assignment = false;
-         this.fieldName = fieldName;
-         top = false;
-
-         caseType = CaseType.Function;
-      }
-
-      public override string Pattern => "^ /'|' /(|s|)";
-
-      protected static IMatched<Block> getCaseBlock(CaseType caseType, ParseState state) => caseType switch
-      {
-         CaseType.Statement => getCaseStatementBlock(state),
-         CaseType.Function => getAnyBlock(state),
-         CaseType.Lambda => getBlock(state),
-         _ => $"Didn't understand case type {caseType}".FailedMatch<Block>()
-      };
-
-      public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
-      {
-         state.Colorize(tokens, Color.Structure, Color.Whitespace);
-
-         var result =
-            from comparisand in getCompoundComparisands(state, fieldName)
-            from and in andExpression(state)
-            from end in state.SkipEndOfLine().Or(() => "".Matched())
-            from block in getCaseBlock(caseType, state)
-            select (comparisand, and, block);
-
-         if (result.ValueOrCast<Unit>(out var tuple, out var asUnit))
+         var builder = new ExpressionBuilder(ExpressionFlags.Standard);
+         builder.Add(comparisand);
+         if (_and is (true, var and))
          {
-            var (comparisand, _and, block) = tuple;
-
-            var builder = new ExpressionBuilder(ExpressionFlags.Standard);
-            builder.Add(comparisand);
-            if (_and.If(out var and))
-            {
-               builder.Add(and);
-            }
-
-            if (builder.ToExpression().If(out var expression, out var exception))
-            {
-               var caseParser = new CaseParser(assignmentField, mutable, assignment, fieldName, false, caseType);
-               var ifStatement = none<If>();
-               if (caseParser.Scan(state).If(out _, out var _caseException))
-               {
-                  ifStatement = caseParser.If.Some();
-               }
-               else if (_caseException.If(out var caseException))
-               {
-                  return failedMatch<Unit>(caseException);
-               }
-
-               If = new If(expression, block, ifStatement, none<Block>(), assignmentField, mutable, assignment, top);
-               return Unit.Matched();
-            }
-            else
-            {
-               return failedMatch<Unit>(exception);
-            }
+            builder.Add(and);
          }
-         else if (asUnit.IsNotMatched)
+
+         var _expression = builder.ToExpression();
+         if (_expression is (true, var expression))
          {
-            return failedMatch<Unit>(expectedValue());
+            var caseParser = new CaseParser(assignmentField, mutable, assignment, fieldName, false, caseType);
+            Maybe<If> _ifStatement = nil;
+            var _scan = caseParser.Scan(state);
+            if (_scan)
+            {
+               _ifStatement = caseParser.If;
+            }
+            else if (_scan.Exception is (true, var exception))
+            {
+               return exception;
+            }
+
+            If = new If(expression, block, _ifStatement, nil, assignmentField, mutable, assignment, top);
+            return unit;
          }
          else
          {
-            return asUnit;
+            return _expression.Exception;
          }
       }
-
-      public If If { get; set; }
+      else
+      {
+         return _result.Exception | expectedValue;
+      }
    }
+
+   public If If { get; set; }
 }

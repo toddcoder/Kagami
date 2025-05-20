@@ -4,62 +4,71 @@ using Core.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Parsers.Statements
+namespace Kagami.Library.Parsers.Statements;
+
+public class ConditionalAssignParser : StatementParser
 {
-   public class ConditionalAssignParser : StatementParser
+   public override string Pattern => "^ /'if' /(|s+|)";
+
+   public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      public override string Pattern => "^ /'if' /(|s+|)";
+      state.BeginTransaction();
 
-      public override IMatched<Unit> ParseStatement(ParseState state, Token[] tokens)
+      state.Colorize(tokens, Color.Keyword, Color.Whitespace);
+
+      var _result =
+         from comparisandValue in getExpression(state, ExpressionFlags.Comparisand)
+         from scanned in state.Scan("^ /(|s|) /':='", Color.Whitespace, Color.Structure)
+         from expressionValue in getExpression(state, ExpressionFlags.Standard)
+         from andValue in getAnd(state)
+         from blockValue in getBlock(state)
+         select (comparisandValue, expressionValue, andValue, blockValue);
+
+      if (_result is (true, var (comparisand, expression, _and, block)))
       {
-         state.BeginTransaction();
-
-         state.Colorize(tokens, Color.Keyword, Color.Whitespace);
-
-         var result =
-            from comparisand in getExpression(state, ExpressionFlags.Comparisand)
-            from scanned in state.Scan("^ /(|s|) /':='", Color.Whitespace, Color.Structure)
-            from expression in getExpression(state, ExpressionFlags.Standard)
-            from and in getAnd(state)
-            from block in getBlock(state)
-            select (comparisand, expression, and, block);
-
-         if (result.ValueOrCast<Unit>(out var tuple, out var asUnit))
+         Maybe<Block> _elseBlock = nil;
+         var elseParser = new ElseParser();
+         var _scan = elseParser.Scan(state);
+         if (_scan)
          {
-            var (comparisand, expression, and, block) = tuple;
-            var elseBlock = none<Block>();
-            var elseParser = new ElseParser();
-            if (elseParser.Scan(state).If(out _, out var anyException))
-            {
-               elseBlock = elseParser.Block;
-            }
-            else if (anyException.If(out var exception))
+            _elseBlock = elseParser.Block;
+         }
+         else if (_scan.Exception is (true, var exception))
+         {
+            state.RollBackTransaction();
+            return exception;
+         }
+
+         if (_and is (true, var and))
+         {
+            var builder = new ExpressionBuilder(ExpressionFlags.Comparisand);
+            builder.Add(and);
+            var _expression = builder.ToExpression();
+            /*if (_expression.IfNot(out expression, out var exception))
             {
                state.RollBackTransaction();
                return failedMatch<Unit>(exception);
-            }
-
-            if (and.If(out var a))
+            }*/
+            if (_expression)
             {
-               var builder = new ExpressionBuilder(ExpressionFlags.Comparisand);
-               builder.Add(a);
-               if (builder.ToExpression().IfNot(out expression, out var exception))
-               {
-                  state.RollBackTransaction();
-                  return failedMatch<Unit>(exception);
-               }
+               expression = _expression;
             }
-
-            state.CommitTransaction();
-            state.AddStatement(new ConditionalAssign(comparisand, expression, block, elseBlock));
-
-            return Unit.Matched();
+            else
+            {
+               state.RollBackTransaction();
+               return _expression.Exception;
+            }
          }
-         else
-         {
-            state.RollBackTransaction();
-            return asUnit;
-         }
+
+         state.CommitTransaction();
+         state.AddStatement(new ConditionalAssign(comparisand, expression, block, _elseBlock));
+
+         return unit;
+      }
+      else
+      {
+         state.RollBackTransaction();
+         return _result.Exception;
       }
    }
 }
