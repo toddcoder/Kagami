@@ -1,22 +1,21 @@
 ﻿using Kagami.Library.Packages;
 
-namespace Kagami.Library.Runtime
+namespace Kagami.Library.Runtime;
+
+public class GlobalFrame : Frame
 {
-   public class GlobalFrame : Frame
+   public GlobalFrame()
    {
-      public GlobalFrame()
-      {
-         Sys = new Sys();
-         Sys.LoadTypes(Module.Global);
-         fields.New("sys", Sys);
+      Sys = new Sys();
+      Sys.LoadTypes(Module.Global);
+      fields.New("sys", Sys);
 
-         Math = new Math();
-         Sys.LoadTypes(Module.Global);
-         fields.New("math", Math);
-      }
-
-      public Sys Sys { get; }
-
-      public Math Math { get; }
+      Math = new KMath();
+      Sys.LoadTypes(Module.Global);
+      fields.New("math", Math);
    }
+
+   public Sys Sys { get; }
+
+   public KMath Math { get; }
 }
