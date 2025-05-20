@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kagami.Text", "Kagami.Text\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kagami.IO", "Kagami.IO\Kagami.IO.csproj", "{7488FC4E-403C-45F6-9E71-EA7902B3C17A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kagami.Awk", "Kagami.Awk\Kagami.Awk.csproj", "{813AE038-7D32-4D61-8262-912176D08EB8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kagami.Awk", "Kagami.Awk\Kagami.Awk.csproj", "{813AE038-7D32-4D61-8262-912176D08EB8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kagami.Plots", "Kagami.Plots\Kagami.Plots.csproj", "{60492EBA-8BB0-4E3C-855F-1ACF1EFEDA8C}"
 EndProject
