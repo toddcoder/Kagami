@@ -1,6 +1,7 @@
 ﻿using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Monads;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Operations;
 
@@ -21,7 +22,15 @@ public class NewField : Operation
 
    public override Optional<IObject> Execute(Machine machine)
    {
-      return machine.CurrentFrame.Fields.New(name, _typeConstraint, mutable, visible).Map(f => (IObject)f).Optional();
+      var _result = machine.CurrentFrame.Fields.New(name, _typeConstraint, mutable, visible);
+      if (_result)
+      {
+         return nil;
+      }
+      else
+      {
+         return _result.Exception;
+      }
    }
 
    public override string ToString() => $"new.field({name}, {mutable.ToString().ToLower()}, {visible.ToString().ToLower()})";

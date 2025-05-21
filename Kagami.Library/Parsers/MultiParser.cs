@@ -12,9 +12,13 @@ public abstract class MultiParser : Parser
       foreach (var parser in Parsers)
       {
          var _matched = parser.Scan(state);
-         if (!_matched)
+         if (_matched)
          {
-            return _matched.Exception;
+            return unit;
+         }
+         else if (_matched.Exception is (true, var exception))
+         {
+            return exception;
          }
       }
 
