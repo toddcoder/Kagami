@@ -176,8 +176,8 @@ public static class ParserFunctions
 
    public static Optional<Block> getBlock(ParseState state, Maybe<TypeConstraint> _typeConstraint)
    {
-      var _advanced = state.Advance();
-      if (_advanced)
+      var _result = state.BeginBlock();
+      if (_result)
       {
          var statementsParser = new StatementsParser();
          state.PushStatements();
@@ -197,13 +197,25 @@ public static class ParserFunctions
             }
          }
 
-         return state.PopStatements().Map(statements =>
+         var _statements = state.PopStatements();
+         if (_statements is (true, var statements))
          {
-            state.Regress();
-            return new Block(statements, _typeConstraint);
-         }).Optional();
+            _result = state.EndBlock();
+            if (!_result)
+            {
+               return _result.Exception;
+            }
+            else
+            {
+               return new Block(statements, _typeConstraint);
+            }
+         }
+         else
+         {
+            return nil;
+         }
       }
-      else if (_advanced.Exception is (true, var exception))
+      else if (_result.Exception is (true, var exception))
       {
          return exception;
       }
@@ -1289,7 +1301,7 @@ public static class ParserFunctions
       }
       else
       {
-         return (SkipTakeItem[])[.. list];
+         return (SkipTakeItem[]) [.. list];
       }
    }
 }

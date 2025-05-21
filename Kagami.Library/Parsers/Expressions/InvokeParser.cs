@@ -28,13 +28,11 @@ public class InvokeParser : SymbolParser
          var _argumentsPlusLambda = getArgumentsPlusLambda(state, builder.Flags);
          if (_argumentsPlusLambda is (true, var (arguments, possibleLambda)))
          {
-            //var (arguments, possibleLambda) = tuple;
-
             if (state.BlockFollows())
             {
                state.Scan("^ /':'", Color.Structure);
-               var _advanced = state.Advance();
-               if (_advanced)
+               var _result = state.BeginBlock();
+               if (_result)
                {
                   var tempObjectField = newLabel("object");
                   var outerBuilder = new ExpressionBuilder(ExpressionFlags.Standard);
@@ -55,7 +53,11 @@ public class InvokeParser : SymbolParser
                      }
                   }
 
-                  state.Regress();
+                  _result = state.EndBlock();
+                  if (!_result)
+                  {
+                     return _result.Exception;
+                  }
 
                   var _outerExpression = outerBuilder.ToExpression();
                   if (_outerExpression is (true, var outerExpression))
@@ -69,7 +71,7 @@ public class InvokeParser : SymbolParser
                }
                else
                {
-                  return _advanced.Exception;
+                  return _result.Exception;
                }
             }
             else if (state.Macro(functionName) is (true, var function))

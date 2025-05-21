@@ -2,7 +2,6 @@
 using Kagami.Library.Parsers.Expressions;
 using Core.Monads;
 using Core.Strings;
-using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Nodes.NodeFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
@@ -27,7 +26,12 @@ public class MatchParser : StatementParser
          var matchField = newLabel("match");
          state.AddStatement(new AssignToNewField(false, matchField, expression));
 
-         state.Advance();
+         var _result = state.BeginBlock();
+         if (!_result)
+         {
+            return _result.Exception;
+         }
+
          var caseParser = new CaseParser(fieldName, mutable, assignment, matchField, true, CaseType.Statement);
          var _scan = caseParser.Scan(state);
          if (_scan)
@@ -35,13 +39,11 @@ public class MatchParser : StatementParser
             var ifStatement = caseParser.If;
             addMatchElse(ifStatement);
             state.AddStatement(ifStatement);
-            state.Regress();
 
-            return unit;
+            return state.EndBlock();
          }
          else
          {
-            state.Regress();
             return _scan.Exception;
          }
       }

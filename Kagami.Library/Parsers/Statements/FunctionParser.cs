@@ -175,8 +175,8 @@ public class FunctionParser : StatementParser
    {
       List<If> list = [];
 
-      var _advance = state.Advance();
-      if (_advance)
+      var _result = state.BeginBlock();
+      if (_result)
       {
          state.CreateReturnType();
          while (state.More)
@@ -194,7 +194,6 @@ public class FunctionParser : StatementParser
             }
             else if (_scan.Exception is (true, var exception))
             {
-               state.Regress();
                return exception;
             }
             else
@@ -205,7 +204,6 @@ public class FunctionParser : StatementParser
 
          if (list.Count == 0)
          {
-            state.Regress();
             state.RemoveReturnType();
 
             return nil;
@@ -227,7 +225,12 @@ public class FunctionParser : StatementParser
             }
 
             state.AddStatement(new MatchFunction(functionName, parameters, previousIf, overriding, className));
-            state.Regress();
+            _result = state.EndBlock();
+            if (!_result)
+            {
+               return _result.Exception;
+            }
+
             state.RemoveReturnType();
 
             return unit;
@@ -235,7 +238,7 @@ public class FunctionParser : StatementParser
       }
       else
       {
-         return _advance.Exception;
+         return _result.Exception;
       }
    }
 }

@@ -12,8 +12,7 @@ public abstract class StatementParser : Parser
    public override Optional<Unit> Scan(ParseState state)
    {
       state.BeginTransaction();
-      //state.Indentation.FriendlyString
-      if (IgnoreIndentation || SingleLine || state.Scan($"^ /({state.Indentation})", Color.Whitespace))
+      if (IgnoreIndentation || SingleLine)
       {
          var _scan = base.Scan(state);
          if (_scan)

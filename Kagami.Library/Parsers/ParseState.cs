@@ -7,7 +7,6 @@ using Core.Collections;
 using Core.Matching;
 using Core.Monads;
 using Core.Strings;
-using static Kagami.Library.AllExceptions;
 using static Core.Monads.AttemptFunctions;
 using static Core.Monads.MonadFunctions;
 
@@ -17,8 +16,6 @@ public class ParseState : IEnumerable<Statement>
 {
    protected string source;
    protected int index;
-   protected Stack<string> indentations = new();
-   protected string indentation = "";
    protected List<Statement> statements = [];
    protected Stack<List<Statement>> statementStack = new();
    protected List<Token> tokens = [];
@@ -119,9 +116,7 @@ public class ParseState : IEnumerable<Statement>
 
    public void AddToken(Color color, int length = 1, string text = "") => AddToken(index, length, color, text);
 
-   public string Indentation => indentation;
-
-   public Optional<Unit> Advance()
+   /*public Optional<Unit> Advance()
    {
       SkipEndOfLine();
       //formerly Indentation.FriendlyString
@@ -143,47 +138,24 @@ public class ParseState : IEnumerable<Statement>
       }
    }
 
-   public void Regress() => PopIndentation();
+   public void Regress() => PopIndentation();*/
 
-   public Optional<Unit> Retreat()
+   public Optional<Unit> BeginBlock()
    {
-      try
-      {
-         PopIndentation();
-         return unit;
-      }
-      catch (Exception exception)
-      {
-         return exception;
-      }
+      SkipEndOfLine();
+      return Scan("^ /(/s*) '{'", Color.Whitespace, Color.Structure).Map(_ => unit);
    }
 
-   protected string friendlyString(string input)
+   public Optional<Unit> EndBlock()
    {
-      var replaced = input.Replace("\t", "/t").Replace("\n", "/n").Replace("\r", "/r");
-      return $"'{replaced}'";
+      return Scan("^ /(/s*) '}'", Color.Whitespace, Color.Structure).Map(_ => unit);
    }
-
-   public void PushIndentation(string text)
-   {
-      indentations.Push(indentation);
-      indentation = friendlyString(text);
-   }
-
-   public void PopIndentation() => indentation = indentations.Pop();
 
    public int Index => index;
 
    public string Source => source;
 
    public string CurrentSource => source.Drop(index);
-
-   public string RealizePattern(string pattern)
-   {
-      var previous = indentations.Count > 0 ? indentations.Peek() : "";
-      return pattern.Replace(("|i|", indentation), ("|i-|", previous), ("|s|", "[' ' /t]*"), ("|s+|", "[' ' /t]+"),
-         ("|tl|", "[/t /r /n]*"), ("|tl+|", "[/t /r /n]+"));
-   }
 
    public IEnumerator<Statement> GetEnumerator() => statements.GetEnumerator();
 
@@ -213,7 +185,7 @@ public class ParseState : IEnumerable<Statement>
 
    public Optional<string> Scan(string pattern, params Color[] colors)
    {
-      if (CurrentSource.Matches(RealizePattern(pattern)).Map(r => r.Matches[0]) is (true, var match))
+      if (CurrentSource.Matches(pattern).Map(r => r.Matches[0]) is (true, var match))
       {
          Group[] groupArray = [.. match.Groups.Skip(1).Take(match.Groups.Length - 1)];
          for (var i = 0; i < Math.Min(groupArray.Length, colors.Length); i++)
@@ -264,7 +236,7 @@ public class ParseState : IEnumerable<Statement>
       }
    }
 
-   public Statement LastStatement => statements[statements.Count - 1];
+   public Statement LastStatement => statements[^1];
 
    public Optional<Maybe<Expression>> getAnd()
    {
@@ -323,7 +295,7 @@ public class ParseState : IEnumerable<Statement>
 
    public Maybe<Function> Macro(string fullFunctionName) => macros.Maybe[fullFunctionName];
 
-   public bool BlockFollows() => CurrentSource.IsMatch($"^ ':' (/r /n | /r | /n) '{indentation}' [' /t']+; m");
+   public bool BlockFollows() => CurrentSource.IsMatch("^ ':' (/s*) '{'; m");
 
    public Maybe<(string, Expression)> ForExpression { get; set; } = nil;
 

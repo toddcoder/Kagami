@@ -42,9 +42,12 @@ public class ClassParser : StatementParser
          parameters = Parameters.Empty;
       }
 
-      state.SkipEndOfLine();
+      var _result = state.BeginBlock();
+      if (!_result)
+      {
+         return _result.Exception;
+      }
 
-      state.Advance();
       var parentClassParser = new ParentClassParser();
 
       var parentClassName = "";
@@ -57,7 +60,6 @@ public class ClassParser : StatementParser
       }
       else if (_scan.Exception is (true, var exception))
       {
-         state.Regress();
          return exception;
       }
 
@@ -71,7 +73,6 @@ public class ClassParser : StatementParser
          }
          else if (_scan2.Exception is (true, var exception))
          {
-            state.Regress();
             return exception;
          }
          else
@@ -80,8 +81,11 @@ public class ClassParser : StatementParser
          }
       }
 
-      state.SkipEndOfLine();
-      state.Regress();
+      _result = state.EndBlock();
+      if (!_result)
+      {
+         return _result.Exception;
+      }
 
       Module.Global.Value.ForwardReference(className);
 

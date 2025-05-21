@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Kagami.Library.Invokables;
+﻿using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
@@ -48,14 +47,12 @@ public class DoParser : SymbolParser
       var boundItemParser = new BoundItemParser(innerBuilder);
       var stack = new Stack<(string, Expression)>();
 
-      var _advanced = state.Advance();
-      if (_advanced)
+      var _result = state.BeginBlock();
+      if (_result)
       {
          while (state.More)
          {
-            //friendlyString
             var _nameExpression =
-               from tabs in state.Scan($"^ /({state.Indentation})", Color.Whitespace)
                from unit in boundItemParser.Scan(state)
                select boundItemParser.NameExpression;
             if (_nameExpression is (true, var nameExpression))
@@ -75,7 +72,11 @@ public class DoParser : SymbolParser
 
          var _lambdaExpression = getExpression(state, builder.Flags);
 
-         state.Regress();
+         _result = state.EndBlock();
+         if (!_result)
+         {
+            return _result.Exception;
+         }
 
          if (_lambdaExpression is (true, var lambdaExpression))
          {
@@ -102,7 +103,7 @@ public class DoParser : SymbolParser
       }
       else
       {
-         return _advanced.Exception;
+         return _result.Exception;
       }
    }
 

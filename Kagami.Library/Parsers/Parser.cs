@@ -45,7 +45,7 @@ public abstract class Parser
          return _parsed;
       }
 
-      Pattern pattern = state.RealizePattern(Pattern);
+      Pattern pattern = Pattern;
       pattern = pattern.WithIgnoreCase(IgnoreCase).WithMultiline(Multiline);
       var _result = state.CurrentSource.Matches(pattern);
 

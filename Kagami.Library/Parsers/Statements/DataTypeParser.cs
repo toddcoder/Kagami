@@ -27,8 +27,8 @@ public class DataTypeParser : StatementParser
          Module.Global.Value.ForwardReference(className);
          IRangeItem ordinal = (Int)0;
 
-         var _advance = state.Advance();
-         if (_advance)
+         var _result = state.BeginBlock();
+         if (_result)
          {
             while (state.More)
             {
@@ -67,11 +67,15 @@ public class DataTypeParser : StatementParser
                }
             }
 
-            state.Regress();
+            _result = state.EndBlock();
+            if (!_result)
+            {
+               return _result.Exception;
+            }
          }
          else
          {
-            return _advance.Exception;
+            return _result.Exception;
          }
 
          state.AddStatement(new DataType(className, values.ToHash(i => i.Key, i =>

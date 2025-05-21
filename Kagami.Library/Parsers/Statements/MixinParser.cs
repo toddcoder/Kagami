@@ -18,8 +18,11 @@ public class MixinParser : StatementParser
       Module.Global.Value.ForwardReference(className);
       state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Class);
 
-      state.SkipEndOfLine();
-      state.Advance();
+      var _result = state.BeginBlock();
+      if (!_result)
+      {
+         return _result.Exception;
+      }
 
       var mixins = new List<Mixin>();
       while (state.More)
@@ -31,7 +34,6 @@ public class MixinParser : StatementParser
          }
          else if (_scan.Exception is (true, var exception))
          {
-            state.Regress();
             return exception;
          }
          else
@@ -40,8 +42,11 @@ public class MixinParser : StatementParser
          }
       }
 
-      state.SkipEndOfLine();
-      state.Regress();
+      _result = state.EndBlock();
+      if (!_result)
+      {
+         return _result.Exception;
+      }
 
       var _block = getBlock(state);
       if (_block is (true, var block))
