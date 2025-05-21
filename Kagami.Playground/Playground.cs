@@ -4,7 +4,6 @@ using Kagami.Library;
 using Kagami.Library.Runtime;
 using Core.Computers;
 using Core.Collections;
-using Core.Configurations;
 using Core.Dates;
 using Core.Enumerables;
 using Core.Exceptions;
@@ -21,11 +20,6 @@ namespace Kagami.Playground;
 [System.Runtime.Versioning.SupportedOSPlatform("windows")]
 public partial class Playground : Form
 {
-   protected const string PLAYGROUND_FONT_NAME = "Consolas";
-   protected const float PLAYGROUND_FONT_SIZE = 14f;
-   protected const string CONFIGURATION_FOLDER = @":\Configurations\Kagami\";
-   protected const string PLAYGROUND_CONFIGURATION_FILE = CONFIGURATION_FOLDER + "Kagami.configuration";
-   protected const string PLAYGROUND_PACKAGE_FOLDER = CONFIGURATION_FOLDER + "Packages";
    protected const string KAGAMI_EXCEPTION_PROMPT = "Kagami exception >>> ";
 
    protected Document document = null!;
@@ -52,55 +46,17 @@ public partial class Playground : Form
       firstEditorLine = 0;
    }
 
-   protected static Result<FileName> existingConfigurationFile()
-   {
-      char[] drives = ['C', 'E'];
-      foreach (var drive in drives)
-      {
-         FileName configurationFile = $"{drive}{PLAYGROUND_CONFIGURATION_FILE}";
-         if (configurationFile.Exists())
-         {
-            return configurationFile;
-         }
-      }
-
-      return fail("Couldn't find configuration file");
-   }
-
-   protected static Result<PlaygroundConfiguration> getConfiguration(FileName configurationFile) =>
-      from source in configurationFile.TryTo.Text
-      from configuration in Setting.FromString(source)
-      from obj in configuration.Deserialize<PlaygroundConfiguration>()
-      select obj;
-
    protected void Playground_Load(object sender, EventArgs e)
    {
-      try
+      var _configuration = PlaygroundConfiguration.Retrieve();
+      if (_configuration is (true, var configuration))
       {
-         var _result =
-            from file in existingConfigurationFile()
-            from config in getConfiguration(file)
-            select config;
-         if (_result is (true, var newConfiguration))
-         {
-            playgroundConfiguration = newConfiguration;
-         }
-         else
-         {
-            playgroundConfiguration = new PlaygroundConfiguration
-            {
-               DefaultFolder = FolderName.Current,
-               FontName = PLAYGROUND_FONT_NAME,
-               FontSize = PLAYGROUND_FONT_SIZE,
-               PackageFolder = "C" + PLAYGROUND_PACKAGE_FOLDER
-            };
-         }
+         playgroundConfiguration = configuration;
       }
-      catch (Exception exception)
+      else
       {
-         labelStatus.Text = exception.Message;
+         playgroundConfiguration = new PlaygroundConfiguration();
       }
-
       packageFolder = playgroundConfiguration.PackageFolder;
 
       outputConsole = new TextBoxConsole(this, textConsole, playgroundConfiguration.FontName, playgroundConfiguration.FontSize,
@@ -517,7 +473,7 @@ public partial class Playground : Form
 
    protected void textEditor_TextChanged(object sender, EventArgs e)
    {
-      try
+      /*try
       {
          _exceptionData = nil;
          update(!manual, false);
@@ -525,7 +481,7 @@ public partial class Playground : Form
       }
       catch
       {
-      }
+      }*/
    }
 
    protected void textEditor_KeyPress(object sender, KeyPressEventArgs e)
@@ -608,28 +564,7 @@ public partial class Playground : Form
       switch (e.KeyCode)
       {
          case Keys.Escape:
-            if (textAtInsert(1) == "'" && textAtInsert(1, -1) == "'")
-            {
-               e.Handled = true;
-               setTextAtInsert(1);
-               break;
-            }
-
-            if (textAtInsert(1) == "\"" && textAtInsert(1, -1) == "\"")
-            {
-               e.Handled = true;
-               setTextAtInsert(1);
-               break;
-            }
-
-            if (textAtInsert(1) == ")" && textAtInsert(1, -1) == "(")
-            {
-               e.Handled = true;
-               setTextAtInsert(1);
-               break;
-            }
-
-            if (textAtInsert(1) == "]" && textAtInsert(1, -1) == "[")
+            if (textAtInsert(1) == "'" && textAtInsert(1, -1) == "'" || textAtInsert(1) == "\"" && textAtInsert(1, -1) == "\"" || textAtInsert(1) == ")" && textAtInsert(1, -1) == "(" || textAtInsert(1) == "]" && textAtInsert(1, -1) == "[")
             {
                e.Handled = true;
                setTextAtInsert(1);
@@ -675,7 +610,7 @@ public partial class Playground : Form
             try
             {
                playgroundConfiguration.LastFile = file;
-               playgroundConfiguration.DefaultFolder = FolderName.Current;
+               playgroundConfiguration.Save();
             }
             catch (Exception exception)
             {

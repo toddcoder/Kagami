@@ -13,13 +13,87 @@ public class Module
 {
    public static LateLazy<Module> Global { get; set; } = new(true);
 
-   protected Hash<string, BaseClass> classes = [];
+   protected static Maybe<BaseClass> getBuiltinClass(string name) => name switch
+   {
+      "Int" => new IntClass(),
+      "Float" => new FloatClass(),
+      "Boolean" => new BooleanClass(),
+      "String" => new StringClass(),
+      "Char" => new CharClass(),
+      "Byte" => new ByteClass(),
+      "Message" => new MessageClass(),
+      "Unassigned" => new UnassignedClass(),
+      "Tuple" => new TupleClass(),
+      "NameValue" => new NameValueClass(),
+      "Lambda" => new LambdaClass(),
+      "Void" => new VoidClass(),
+      "Some" => new SomeClass(),
+      "None" => new NoneClass(),
+      "Array" => new ArrayClass(),
+      "Iterator" => new IteratorClass(),
+      "LazyIterator" => new LazyIteratorClass(),
+      "StreamIterator" => new StreamIteratorClass(),
+      "Any" => new AnyClass(),
+      "Placeholder" => new PlaceholderClass(),
+      "Range" => new RangeClass(),
+      "Dictionary" => new DictionaryClass(),
+      "Container" => new ContainerClass(),
+      "Unmatched" => new UnmatchedClass(),
+      "Complex" => new ComplexClass(),
+      "Rational" => new RationalClass(),
+      "Long" => new LongClass(),
+      "Lazy" => new LazyClass(),
+      "YieldingInvokable" => new YieldingInvokableClass(),
+      "Del" => new DelClass(),
+      "Slice" => new SliceClass(),
+      "End" => new EndClass(),
+      "List" => new ListClass(),
+      "Arguments" => new ArgumentsClass(),
+      "Symbol" => new SymbolClass(),
+      "Infinity" => new InfinityClass(),
+      "OpenRange" => new OpenRangeClass(),
+      "KeyValue" => new KeyValueClass(),
+      "Regex" => new RegexClass(),
+      "Pattern" => new PatternClass(),
+      "PackageFunction" => new PackageFunctionClass(),
+      "Sys" => new SysClass(),
+      "Math" => new MathClass(),
+      "RuntimeFunction" => new RuntimeFunctionClass(),
+      "Reference" => new ReferenceClass(),
+      "Group" => new RegexGroupClass(),
+      "Match" => new RegexMatchClass(),
+      "Date" => new DateClass(),
+      "Interval" => new IntervalClass(),
+      "TypeConstraint" => new TypeConstraintClass(),
+      "ByteArray" => new ByteArrayClass(),
+      "Selector" => new SelectorClass(),
+      "Number" => new NumberClass(),
+      "Collection" => new CollectionClass(),
+      "TextFinding" => new TextFindingClass(),
+      "SkipTake" => new SkipTakeClass(),
+      "Constructor" => new ConstructorClass(),
+      "MutString" => new MutStringClass(),
+      "Error" => new ErrorClass(),
+      "Success" => new SuccessClass(),
+      "Failure" => new FailureClass(),
+      "Optional" => new OptionalClass(),
+      "Result" => new ResultClass(),
+      "Monad" => new MonadClass(),
+      "Unit" => new UnitClass(),
+      "YieldReturn" => new YieldReturnClass(),
+      "Index" => new IndexClass(),
+      "Cycle" => new CycleClass(),
+      "Set" => new SetClass(),
+      _ => nil
+   };
+
+   protected LazyMemo<string, BaseClass> classes = new(getBuiltinClass);
    protected Hash<string, Mixin> mixins = [];
    protected Set<string> forwardReferences = [];
    protected Hash<string, string> dataReferences = [];
    protected Set<string> operators = [];
 
-   public void LoadBuiltinClasses()
+   /*public void LoadBuiltinClasses()
    {
       classes["Int"] = new IntClass();
       classes["Float"] = new FloatClass();
@@ -90,13 +164,13 @@ public class Module
       classes["Index"] = new IndexClass();
       classes["Cycle"] = new CycleClass();
       classes["Set"] = new SetClass();
-   }
+   }*/
 
    public Maybe<BaseClass> Class(string name, bool forwardsIncluded = false)
    {
-      if (classes.ContainsKey(name))
+      if (classes.Maybe[name] is (true, var @class))
       {
-         return classes[name].Some();
+         return @class;
       }
       else if (forwardsIncluded)
       {
@@ -112,6 +186,7 @@ public class Module
 
    public Result<Unit> RegisterClass(BaseClass cls)
    {
+      // ReSharper disable once CanSimplifyDictionaryLookupWithTryAdd
       if (classes.ContainsKey(cls.Name))
       {
          return classAlreadyExists(cls.Name);
@@ -156,9 +231,9 @@ public class Module
 
    public Result<Unit> Alias(string alias, string className)
    {
-      if (classes.ContainsKey(className))
+      if (classes.Maybe[className] is (true, var @class))
       {
-         classes[alias] = classes[className];
+         classes[alias] = @class;
          return unit;
       }
       else

@@ -14,7 +14,7 @@ public static class NodeFunctions
 
    public static string newLabel(string name) => mangled(name, uniqueId++);
 
-   public static void ResetUniqueID() => uniqueId = 0;
+   public static void ResetFieldUniqueID() => uniqueId = 0;
 
    public static string id() => uniqueId++.ToString();
 

@@ -91,7 +91,7 @@ public class Machine
                }
                else
                {
-                  return _errorHandler.Exception;
+                  return exception;
                }
             }
 
@@ -508,20 +508,7 @@ public class Machine
       var _field = Find(fieldName, getting);
       if (_field is (true, var field))
       {
-         if (field.Mutable)
-         {
-            if (field.Value is Reference r)
-            {
-               r.Field.Value = value;
-            }
-            else
-            {
-               field.Value = value;
-            }
-
-            return field;
-         }
-         else if (field.Value is Unassigned || overriden)
+         if (field.Mutable || field.Value is Unassigned || overriden)
          {
             if (field.Value is Reference r)
             {

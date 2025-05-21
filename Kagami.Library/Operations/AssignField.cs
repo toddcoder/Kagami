@@ -19,7 +19,7 @@ public class AssignField : OneOperandOperation
 
    public override Optional<IObject> Execute(Machine machine, IObject value)
    {
-      var _field = machine.Assign(name, value, false);
+      var _field = machine.Assign(name, value, false, overriding);
       if (_field)
       {
          return nil;

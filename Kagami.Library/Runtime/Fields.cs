@@ -24,9 +24,8 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       {
          return exceededMaxDepth();
       }
-      else if (fields.ContainsKey(name))
+      else if (fields.Maybe[name] is (true, var field))
       {
-         var field = fields[name];
          return field.Value switch
          {
             Reference r => r.Field,
@@ -48,9 +47,9 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       }
       else
       {
-         if (fields.ContainsKey(selector.Image))
+         if (fields.Maybe[selector.Image] is (true, var field))
          {
-            return fields[selector.Image];
+            return field;
          }
          else
          {
@@ -157,12 +156,7 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       var _field = Find(name, false);
       if (_field is (true, var field))
       {
-         if (field.Mutable)
-         {
-            field.Value = value;
-            return field;
-         }
-         else if (field.Value is Unassigned || overriden)
+         if (field.Mutable || field.Value is Unassigned || overriden)
          {
             field.Value = value;
             return field;
@@ -187,12 +181,7 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       var _field = Machine.Current.Value.Find(name, false);
       if (_field is (true, var field))
       {
-         if (field.Mutable)
-         {
-            field.Value = value;
-            return field;
-         }
-         else if (field.Value is Unassigned || overriden)
+         if (field.Mutable || field.Value is Unassigned || overriden)
          {
             field.Value = value;
             return field;
@@ -230,9 +219,9 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
 
    public Result<Unit> SetFieldValue(string fieldName, IObject value)
    {
-      if (fields.ContainsKey(fieldName))
+      if (fields.Maybe[fieldName] is (true, var field))
       {
-         fields[fieldName].Value = value;
+         field.Value = value;
          return unit;
       }
       else
@@ -249,13 +238,7 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       }
    }
 
-   public void Remove(string fieldName)
-   {
-      if (fields.ContainsKey(fieldName))
-      {
-         fields.Remove(fieldName);
-      }
-   }
+   public void Remove(string fieldName) => fields.Remove(fieldName);
 
    public override string ToString() => fields.Select(i => $"{i.Key} = {i.Value.Value.Image}").ToString(", ");
 
@@ -299,9 +282,9 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
    {
       get
       {
-         if (fields.ContainsKey(name))
+         if (fields.Maybe[name] is (true, var field))
          {
-            return fields[name].Value;
+            return field.Value;
          }
          else
          {
@@ -310,9 +293,9 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       }
       set
       {
-         if (fields.ContainsKey(name))
+         if (fields.Maybe[name] is (true, var field))
          {
-            fields[name].Value = value;
+            field.Value = value;
          }
          else
          {

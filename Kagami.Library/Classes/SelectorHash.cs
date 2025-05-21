@@ -42,12 +42,16 @@ public class SelectorHash<TValue> : Hash<string, TValue> where TValue : notnull
       else
       {
          var labelsOnlyImage = selector.LabelsOnly().Image;
-         foreach (var bucket in buckets[labelsOnlyImage])
+         var _list = buckets.Maybe()[labelsOnlyImage];
+         if (_list is (true, var list))
          {
-            Selector matchSelector = bucket;
-            if (selector.IsEquivalentTo(matchSelector))
+            foreach (var bucket in list)
             {
-               return true;
+               Selector matchSelector = bucket;
+               if (selector.IsEquivalentTo(matchSelector))
+               {
+                  return true;
+               }
             }
          }
 

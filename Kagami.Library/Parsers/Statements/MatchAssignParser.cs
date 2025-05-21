@@ -12,8 +12,9 @@ public class MatchAssignParser : StatementParser
    {
       state.BeginTransaction();
       var _result =
+         from prefix in state.Scan("^ /(|s|) /'val' /b", Color.Whitespace, Color.Keyword)
          from comparisandValue in getExpression(state, ExpressionFlags.Comparisand | ExpressionFlags.OmitColon)
-         from stem in state.Scan("^ /(|s|) /':='", Color.Whitespace, Color.Structure)
+         from stem in state.Scan("^ /(/s+) /'='", Color.Whitespace, Color.Structure)
          from expressionValue in getExpression(state, ExpressionFlags.Standard)
          select (comparisandValue, expressionValue);
       if (_result is (true, var (comparisand, expression)))

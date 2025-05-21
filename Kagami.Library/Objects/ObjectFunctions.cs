@@ -19,7 +19,7 @@ public static class ObjectFunctions
 
    private static int uniqueID;
 
-   public static void resetUniqueID() => uniqueID = 0;
+   public static void ResetObjectUniqueID() => uniqueID = 0;
 
    public static int uniqueObjectID() => uniqueID++;
 

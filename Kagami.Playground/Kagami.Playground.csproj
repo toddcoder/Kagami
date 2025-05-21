@@ -13,6 +13,9 @@
     <Reference Include="Core">
       <HintPath>..\References\Core.dll</HintPath>
     </Reference>
+    <Reference Include="Core.Json">
+      <HintPath>..\..\DeploymentPalette\References\Core.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Core.WinForms">
       <HintPath>..\References\Core.WinForms.dll</HintPath>
     </Reference>

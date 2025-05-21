@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Kagami.Library.Parsers.Expressions
+﻿namespace Kagami.Library.Parsers.Expressions
 {
    public class InfixParser : MultiParser
    {
