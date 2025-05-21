@@ -25,7 +25,6 @@ public class Compiler
    public Result<Machine> Generate()
    {
       Module.Global.ActivateWith(() => new Module());
-      //Module.Global.Value.LoadBuiltinClasses();
 
       var state = new ParseState(source);
       var statementsParser = new StatementsParser();
