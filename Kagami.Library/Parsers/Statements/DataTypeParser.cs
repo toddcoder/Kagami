@@ -21,10 +21,10 @@ public class DataTypeParser : StatementParser
       var values = new Hash<string, (IObject[], IRangeItem)>();
       var dataComparisandNames = new List<string>();
       var dataTypeClass = new DataTypeClass(className);
-      var _registerClass = Module.Global.RegisterClass(dataTypeClass);
+      var _registerClass = Module.Global.Value.RegisterClass(dataTypeClass);
       if (_registerClass)
       {
-         Module.Global.ForwardReference(className);
+         Module.Global.Value.ForwardReference(className);
          IRangeItem ordinal = (Int)0;
 
          var _advance = state.Advance();

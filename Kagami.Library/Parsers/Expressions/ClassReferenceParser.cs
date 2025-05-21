@@ -19,17 +19,17 @@ public class ClassReferenceParser : SymbolParser
       var className = tokens[2].Text;
       state.Colorize(tokens, Color.Whitespace, Color.Class);
 
-      if (Module.Global.Class(className) is (true, var cls))
+      if (Module.Global.Value.Class(className) is (true, var cls))
       {
          builder.Add(new ClassSymbol(cls.Name));
          return unit;
       }
-      else if (Module.Global.FullDataComparisandName(className))
+      else if (Module.Global.Value.FullDataComparisandName(className))
       {
          builder.Add(new FieldSymbol(className));
          return unit;
       }
-      else if (Module.Global.Forwarded(className))
+      else if (Module.Global.Value.Forwarded(className))
       {
          builder.Add(new ClassSymbol(className));
          return unit;

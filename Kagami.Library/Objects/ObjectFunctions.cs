@@ -26,7 +26,7 @@ public static class ObjectFunctions
    public static BaseClass classOf(IObject value)
    {
       var className = value.ClassName;
-      return Module.Global.Class(className).Required(messageClassNotFound(className));
+      return Module.Global.Value.Class(className).Required(messageClassNotFound(className));
    }
 
    public static bool match<T>(T source, IObject comparisand, Func<T, T, bool> equalifier, Hash<string, IObject> bindings)
@@ -562,7 +562,7 @@ public static class ObjectFunctions
       if (source.Matches("^ '<' /(-['>']+) '>' /@") is (true, var result3))
       {
          var classNames = result3.FirstGroup.Unjoin("/s+");
-         var classes = classNames.Select(cn => Module.Global.Class(cn, true).Required(messageClassNotFound(cn))).ToArray();
+         var classes = classNames.Select(cn => Module.Global.Value.Class(cn, true).Required(messageClassNotFound(cn))).ToArray();
          _typeConstraint = new TypeConstraint(classes);
          source = result3.SecondGroup.Trim();
       }

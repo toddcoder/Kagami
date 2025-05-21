@@ -44,7 +44,7 @@ public class ClassBuilder
    public Optional<Unit> Register()
    {
       userClass = new UserClass(className, parentClassName);
-      var _result = Module.Global.RegisterClass(userClass);
+      var _result = Module.Global.Value.RegisterClass(userClass);
       if (_result)
       {
          return Constructor(parameters, constructorBlock, true);
@@ -74,7 +74,7 @@ public class ClassBuilder
 
       if (parentClassName.IsNotEmpty())
       {
-         if (Module.Global.Class(parentClassName) is (true, var baseClass))
+         if (Module.Global.Value.Class(parentClassName) is (true, var baseClass))
          {
             var parentClass = (UserClass)baseClass;
             if (standard)

@@ -43,7 +43,7 @@ public class DataComparisandParser : StatementParser
          values[name] = (comparisands, newOrdinal);
          Ordinal = newOrdinal.Some();
          state.CommitTransaction();
-         Module.Global.RegisterDataComparisand(className, name);
+         Module.Global.Value.RegisterDataComparisand(className, name);
 
          return unit;
       }
@@ -56,13 +56,13 @@ public class DataComparisandParser : StatementParser
 
    protected static Optional<IObject[]> getPossibleComparisands(bool hasArguments, string className, string name, ParseState state)
    {
-      Module.Global.ForwardReference($"{className}.{name}");
+      Module.Global.Value.ForwardReference($"{className}.{name}");
       LazyResult<Unit> _registered = nil;
       if (hasArguments)
       {
          var _result =
             from comparisandList in getComparisandList(state)
-            from registered in Module.Global.RegisterClass(new DataComparisandClass(className, name)).Unit
+            from registered in Module.Global.Value.RegisterClass(new DataComparisandClass(className, name)).Unit
             select comparisandList;
          if (_result is (true, var comparisands))
          {
@@ -73,7 +73,7 @@ public class DataComparisandParser : StatementParser
             return _result.Exception;
          }
       }
-      else if (_registered.ValueOf(Module.Global.RegisterClass(new DataComparisandClass(className, name))))
+      else if (_registered.ValueOf(Module.Global.Value.RegisterClass(new DataComparisandClass(className, name))))
       {
          return (IObject[]) [];
       }

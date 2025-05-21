@@ -20,7 +20,7 @@ public class AssignMetaObject : Operation
 
    public override Optional<IObject> Execute(Machine machine)
    {
-      if (Module.Global.Class(className) is (true, var targetClass))
+      if (Module.Global.Value.Class(className) is (true, var targetClass))
       {
          var selector = metaClassName.Selector(0);
          var _field = Machine.Current.Value.Find(selector);

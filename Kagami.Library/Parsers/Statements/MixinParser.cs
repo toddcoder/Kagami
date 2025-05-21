@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Core.Monads;
+﻿using Core.Monads;
 using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
@@ -16,7 +15,7 @@ public class MixinParser : StatementParser
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
       var className = tokens[3].Text;
-      Module.Global.ForwardReference(className);
+      Module.Global.Value.ForwardReference(className);
       state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Class);
 
       state.SkipEndOfLine();
@@ -71,7 +70,7 @@ public class MixinParser : StatementParser
                }
             }
 
-            Module.Global.RegisterMixin(new Mixin(className));
+            Module.Global.Value.RegisterMixin(new Mixin(className));
             return unit;
          }
          else

@@ -52,7 +52,7 @@ public class MatchFunction : Statement
 
       if (className.IsNotEmpty())
       {
-         if (Module.Global.Class(className) is (true, var cls))
+         if (Module.Global.Value.Class(className) is (true, var cls))
          {
             cls.RegisterMessage(selector, (obj, msg) => BaseClass.Invoke(obj, msg.Arguments, lambda));
          }

@@ -1,6 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using Kagami.Library.Classes;
 using Kagami.Library.Runtime;
 using Core.Collections;
@@ -15,7 +13,7 @@ public readonly struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
 {
    public static TypeConstraint FromList(params string[] classNames)
    {
-      return new(classNames.Select(cn => Module.Global.Class(cn).Required(messageClassNotFound(cn))).ToArray());
+      return new(classNames.Select(cn => Module.Global.Value.Class(cn).Required(messageClassNotFound(cn))).ToArray());
    }
 
    public static TypeConstraint SingleType(BaseClass baseClass) => new([baseClass]);
@@ -31,7 +29,7 @@ public readonly struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
          var comparisand = comparisands[i];
          if (comparisand is ForwardedClass forwardedClass)
          {
-            var _actualClass = Module.Global.Class(forwardedClass.Name);
+            var _actualClass = Module.Global.Value.Class(forwardedClass.Name);
             if (_actualClass)
             {
                comparisands[i] = _actualClass;
@@ -46,23 +44,11 @@ public readonly struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
 
    public string ClassName => "TypeConstraint";
 
-   public string AsString => comparisands.Select(c => c?.Name ?? "?").ToString(" or ");
+   public string AsString => comparisands.Select(c => c.Name).ToString(" or ");
 
-   public string Image => $"<{comparisands.Select(c => c?.Name ?? "?").ToString(" ")}>";
+   public string Image => $"<{comparisands.Select(c => c.Name).ToString(" ")}>";
 
-   public int Hash
-   {
-      get
-      {
-         var hash = 17;
-         foreach (var comparisand in comparisands)
-         {
-            hash += 37 * comparisand.GetHashCode();
-         }
-
-         return hash;
-      }
-   }
+   public int Hash => HashCode.Combine(comparisands);
 
    public bool IsEqualTo(IObject obj)
    {

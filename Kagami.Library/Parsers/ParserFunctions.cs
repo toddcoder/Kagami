@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
+﻿using System.Numerics;
 using Kagami.Library.Classes;
 using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
@@ -473,12 +470,12 @@ public static class ParserFunctions
          .Map(cn => cn.TrimStart());
       if (_className is (true, var className))
       {
-         var _baseClass = Module.Global.Class(className);
+         var _baseClass = Module.Global.Value.Class(className);
          if (_baseClass is (true, var baseClass))
          {
             return new TypeConstraint([baseClass]).Some();
          }
-         else if (Module.Global.Forwarded(className))
+         else if (Module.Global.Value.Forwarded(className))
          {
             return new TypeConstraint([new ForwardedClass(className)]).Some();
          }

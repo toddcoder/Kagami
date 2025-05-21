@@ -20,7 +20,7 @@ public class Iterator : IObject, IIterator
    public Iterator(ICollection collection)
    {
       this.collection = collection;
-      if (Module.Global.Class(((IObject)this.collection).ClassName) is (true, var baseClass))
+      if (Module.Global.Value.Class(((IObject)this.collection).ClassName) is (true, var baseClass))
       {
          collectionClass = baseClass as ICollectionClass ?? new ArrayClass();
       }

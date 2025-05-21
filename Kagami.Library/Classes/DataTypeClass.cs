@@ -46,7 +46,7 @@ public class DataTypeClass : UserClass
    {
       foreach (var key in dataComparisands.Select(item => $"{name}.{item.Key}"))
       {
-         if (Module.Global.Class(key) is (true, var cls))
+         if (Module.Global.Value.Class(key) is (true, var cls))
          {
             cls.RegisterMessage(key, func);
          }

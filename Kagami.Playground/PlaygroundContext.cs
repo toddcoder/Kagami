@@ -1,72 +1,64 @@
-﻿using System.IO;
-using System.Windows.Forms;
-using Core.Assertions;
-using Kagami.Library;
+﻿using Kagami.Library;
 using Kagami.Library.Runtime;
 using Core.Collections;
 using Core.Monads;
 
-namespace Kagami.Playground
+namespace Kagami.Playground;
+
+[System.Runtime.Versioning.SupportedOSPlatform("windows")]
+public class PlaygroundContext : IContext
 {
-   public class PlaygroundContext : IContext
+   protected TextWriter writer;
+   protected TextReader reader;
+   protected Memo<int, string> peeks = new Memo<int, string>.Function(_ => "");
+   protected bool cancelled;
+   protected Putter putter = new();
+
+   public PlaygroundContext(TextWriter writer, TextReader reader)
    {
-      protected TextWriter writer;
-      protected TextReader reader;
-      protected Hash<int, string> peeks;
-      protected bool cancelled;
-      protected Putter putter;
+      this.writer = writer;
+      this.reader = reader;
+   }
 
-      public PlaygroundContext(TextWriter writer, TextReader reader)
-      {
-         this.writer = writer;
-         this.reader = reader;
-         peeks = new AutoHash<int, string>(_ => "");
-         cancelled = false;
-         putter = new Putter();
-      }
+   public Memo<int, string> Peeks => peeks;
 
-      public Machine Machine { get; set; }
+   public void Print(string value)
+   {
+      putter.Reset();
+      writer.Write(value);
+   }
 
-      public Hash<int, string> Peeks => peeks;
+   public void PrintLine(string value)
+   {
+      putter.Reset();
+      writer.WriteLine(value);
+   }
 
-      public void Print(string value)
-      {
-         putter.Reset();
-         writer.Write(value);
-      }
+   public void Put(string value) => writer.Write(putter.Put(value));
 
-      public void PrintLine(string value)
-      {
-         putter.Reset();
-         writer.WriteLine(value);
-      }
+   public Result<string> ReadLine()
+   {
+      putter.Reset();
+      var line = reader.ReadLine();
 
-      public void Put(string value) => writer.Write(putter.Put(value));
+      return line ?? throw new NullReferenceException();
+   }
 
-      public Result<string> ReadLine()
-      {
-         putter.Reset();
-         var line = reader.ReadLine();
+   public bool Cancelled()
+   {
+      Application.DoEvents();
+      return cancelled;
+   }
 
-         return line.Must().Not.BeNull().OrFailure("Input cancelled");
-      }
+   public void Peek(string message, int index) => peeks[index] = message;
 
-      public bool Cancelled()
-      {
-         Application.DoEvents();
-         return cancelled;
-      }
+   public void ClearPeeks() => peeks.Clear();
 
-      public void Peek(string message, int index) => peeks[index] = message;
+   public void Cancel() => cancelled = true;
 
-      public void ClearPeeks() => peeks.Clear();
-
-      public void Cancel() => cancelled = true;
-
-      public void Reset()
-      {
-         cancelled = false;
-         putter.Reset();
-      }
+   public void Reset()
+   {
+      cancelled = false;
+      putter.Reset();
    }
 }

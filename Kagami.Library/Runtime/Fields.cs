@@ -184,7 +184,7 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
 
    public Result<Field> AssignToExisting(string name, IObject value, bool overriden = false)
    {
-      var _field = Machine.Current.Find(name, false);
+      var _field = Machine.Current.Value.Find(name, false);
       if (_field is (true, var field))
       {
          if (field.Mutable)

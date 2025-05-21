@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Kagami.Library.Invokables;
+﻿using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Collections;
@@ -27,7 +25,7 @@ public class UserClass : BaseClass
       this.parentClassName = parentClassName;
 
       _parentClass = maybe<UserClass>() & this.parentClassName.IsNotEmpty() &
-         (() => Module.Global.Class(parentClassName).Map(bc => (UserClass)bc));
+         (() => Module.Global.Value.Class(parentClassName).Map(bc => (UserClass)bc));
    }
 
    public void Include(Mixin mixin)

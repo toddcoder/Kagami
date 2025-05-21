@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Kagami.Library.Invokables;
+﻿using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Runtime;
 using Core.Monads;
@@ -84,7 +83,7 @@ public class ClassParser : StatementParser
       state.SkipEndOfLine();
       state.Regress();
 
-      Module.Global.ForwardReference(className);
+      Module.Global.Value.ForwardReference(className);
 
       state.SkipEndOfLine();
       var _block = getBlock(state);

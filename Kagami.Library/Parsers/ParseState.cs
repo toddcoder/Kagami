@@ -158,10 +158,16 @@ public class ParseState : IEnumerable<Statement>
       }
    }
 
+   protected string friendlyString(string input)
+   {
+      var replaced = input.Replace("\t", "/t").Replace("\n", "/n").Replace("\r", "/r");
+      return $"'{replaced}'";
+   }
+
    public void PushIndentation(string text)
    {
       indentations.Push(indentation);
-      indentation = text;
+      indentation = friendlyString(text);
    }
 
    public void PopIndentation() => indentation = indentations.Pop();
@@ -193,7 +199,7 @@ public class ParseState : IEnumerable<Statement>
       }
    }
 
-   public Token[] Tokens => tokens.ToArray();
+   public Token[] Tokens => [.. tokens];
 
    protected void setTokenColor(Token token, Color color) => token.Color = token.Text.Trim() switch
    {

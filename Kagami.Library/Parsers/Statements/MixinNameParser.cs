@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Core.Enumerables;
+﻿using Core.Enumerables;
 using Kagami.Library.Runtime;
 using Core.Monads;
 using Kagami.Library.Objects;
@@ -13,7 +12,10 @@ public class MixinNameParser : Parser
 {
    protected List<Mixin> mixins;
 
-   public MixinNameParser(List<Mixin> mixins) : base(true) => this.mixins = mixins;
+   public MixinNameParser(List<Mixin> mixins) : base(true)
+   {
+      this.mixins = mixins;
+   }
 
    public override string Pattern => $"^ /(/s*) /({REGEX_CLASS}) (/(/s*) /',')?";
 
@@ -23,7 +25,7 @@ public class MixinNameParser : Parser
       var more = tokens[4].Text == ",";
       state.Colorize(tokens, Color.Whitespace, Color.Class, Color.Whitespace, Color.Structure);
 
-      var _mixin = Module.Global.Mixin(mixinName);
+      var _mixin = Module.Global.Value.Mixin(mixinName);
       if (_mixin is (true, var mixin))
       {
          if (!mixins.FirstOrNone())

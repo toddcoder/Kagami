@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Kagami.Library.Classes;
+﻿using Kagami.Library.Classes;
 using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
@@ -122,7 +120,7 @@ public class Sys : Package
 
    public Result<IObject> GetReference(string fieldName)
    {
-      var _field = Machine.Current.Find(fieldName, true);
+      var _field = Machine.Current.Value.Find(fieldName, true);
       if (_field is (true, var field))
       {
          return new Reference(field);
@@ -195,7 +193,7 @@ public class Sys : Package
 
    public Dictionary XFields()
    {
-      return new(Machine.Current.CurrentFrame.Fields.ToHash(t => KString.StringObject(t.fieldName), t => t.field.Value));
+      return new(Machine.Current.Value.CurrentFrame.Fields.ToHash(t => KString.StringObject(t.fieldName), t => t.field.Value));
    }
 
    public Date Date(double floating) => DateTime.FromOADate(floating);

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 using Core.Collections;
 using Core.Matching;
 using Core.Monads;
@@ -10,7 +8,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
 
-public readonly struct Regex : IObject, ITextFinding
+public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
 {
    private static IObject getMatchOrText(RegexMatch match, bool textOnly) => textOnly ? match.Text : match;
 
@@ -442,4 +440,14 @@ public readonly struct Regex : IObject, ITextFinding
    public bool IgnoreCase => ignoreCase;
 
    public bool Multiline => multiline;
+
+   public bool Equals(Regex other) => pattern.Equals(other.pattern) && ignoreCase == other.ignoreCase && multiline == other.multiline && global == other.global && textOnly == other.textOnly && nameToIndex.Equals(other.nameToIndex);
+
+   public override bool Equals(object? obj) => obj is Regex other && Equals(other);
+
+   public override int GetHashCode() => HashCode.Combine(pattern, ignoreCase, multiline, global, textOnly, nameToIndex);
+
+   public static bool operator ==(Regex left, Regex right) => left.Equals(right);
+
+   public static bool operator !=(Regex left, Regex right) => !left.Equals(right);
 }

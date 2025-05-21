@@ -17,7 +17,7 @@ public class UserOperatorParser : SymbolParser
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
       var operatorName = tokens[2].Text;
-      if (Module.Global.OperatorExists(operatorName))
+      if (Module.Global.Value.OperatorExists(operatorName))
       {
          state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Whitespace);
          builder.Add(new OperatorSymbol(operatorName));

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Kagami.Library.Invokables;
+﻿using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Runtime;
@@ -24,7 +23,7 @@ public class ModuleParser : StatementParser
 
       var parentClassName = "";
       Expression[] arguments = [];
-      Module.Global.ForwardReference(className);
+      Module.Global.Value.ForwardReference(className);
 
       var builder = new ClassBuilder(className, parameters, parentClassName, arguments, false, new Block(), new List<Mixin>());
       var _register = builder.Register();

@@ -15,7 +15,7 @@ public class AliasParser : StatementParser
       var className = tokens[7].Text;
       state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Class, Color.Whitespace, Color.Structure, Color.Whitespace, Color.Class);
 
-      var _alias = Module.Global.Alias(aliasName, className);
+      var _alias = Module.Global.Value.Alias(aliasName, className);
       if (_alias)
       {
          return unit;

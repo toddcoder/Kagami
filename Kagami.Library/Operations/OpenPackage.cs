@@ -22,7 +22,7 @@ public class OpenPackage : Operation
       {
          switch (field.Value)
          {
-            case Package package when Module.Global.Class(package.ClassName) is (true, var baseClass):
+            case Package package when Module.Global.Value.Class(package.ClassName) is (true, var baseClass):
             {
                if (baseClass is PackageClass packageClass)
                {

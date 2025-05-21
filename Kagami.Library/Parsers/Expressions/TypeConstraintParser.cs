@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Kagami.Library.Classes;
+﻿using Kagami.Library.Classes;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Runtime;
 using Core.Monads;
@@ -30,11 +29,11 @@ public class TypeConstraintParser : SymbolParser
          if (_name is (true, var name))
          {
             name = name.TrimStart();
-            if (Module.Global.Class(name) is (true, var baseClass))
+            if (Module.Global.Value.Class(name) is (true, var baseClass))
             {
                list.Add(baseClass);
             }
-            else if (Module.Global.Forwarded(name))
+            else if (Module.Global.Value.Forwarded(name))
             {
                list.Add(new ForwardedClass(name));
             }

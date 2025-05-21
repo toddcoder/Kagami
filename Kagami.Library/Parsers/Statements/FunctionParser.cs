@@ -30,7 +30,7 @@ public class FunctionParser : StatementParser
       var functionName = tokens[6].Text;
       var type = tokens[7].Text;
 
-      if (isOperator && !Module.Global.RegisterOperator(functionName))
+      if (isOperator && !Module.Global.Value.RegisterOperator(functionName))
       {
          return fail($"Operator {functionName} already registered");
       }

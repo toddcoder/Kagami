@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Kagami.Library.Nodes.Statements;
+﻿using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Runtime;
 using Core.Monads;
@@ -36,7 +35,7 @@ public class RecordParser : StatementParser
             return exception;
          }
 
-         Module.Global.ForwardReference(className);
+         Module.Global.Value.ForwardReference(className);
 
          var builder = new ClassBuilder(className, parameters, parentClassName, arguments, false, new Block(), new List<Mixin>());
          var _register = builder.Register();

@@ -15,7 +15,7 @@ public class PostfixInvoke : TwoOperandOperation
          case Arguments arguments when x is IInvokableObject io:
             Invoke.InvokeInvokableObject(machine, io, arguments);
             return nil;
-         case Arguments arguments when Module.Global.Class(x.ClassName) is (true, var cls):
+         case Arguments arguments when Module.Global.Value.Class(x.ClassName) is (true, var cls):
          {
             if (cls.RespondsTo("invoke"))
             {

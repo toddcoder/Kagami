@@ -2,6 +2,7 @@
 using Kagami.Library.Packages;
 using Core.Collections;
 using Core.Monads;
+using Core.Objects;
 using Kagami.Library.Objects;
 using static Kagami.Library.AllExceptions;
 using static Core.Monads.MonadFunctions;
@@ -10,7 +11,7 @@ namespace Kagami.Library.Runtime;
 
 public class Module
 {
-   public static Module Global { get; set; }
+   public static LateLazy<Module> Global { get; set; } = new(true);
 
    protected Hash<string, BaseClass> classes = [];
    protected Hash<string, Mixin> mixins = [];

@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Runtime.InteropServices;
-using System.Windows.Forms;
+﻿using System.Runtime.InteropServices;
 using Kagami.Library.Parsers;
 using Core.Matching;
 using Color = System.Drawing.Color;
 
 namespace Kagami.Playground;
 
+[System.Runtime.Versioning.SupportedOSPlatform("windows")]
 public class Colorizer
 {
    protected RichTextBox textBox;

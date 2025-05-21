@@ -18,6 +18,7 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Playground;
 
+[System.Runtime.Versioning.SupportedOSPlatform("windows")]
 public partial class Playground : Form
 {
    protected const string PLAYGROUND_FONT_NAME = "Consolas";
@@ -147,17 +148,17 @@ public partial class Playground : Form
          menus.Menu("Build", "Manual", (s, _) =>
          {
             manual = !manual;
-            ((ToolStripMenuItem)s).Checked = manual;
+            ((ToolStripMenuItem)s!).Checked = manual;
          }, "^F5");
          menus.Menu("Build", "Dump operations", (s, _) =>
          {
             dumpOperations = !dumpOperations;
-            ((ToolStripMenuItem)s).Checked = dumpOperations;
+            ((ToolStripMenuItem)s!).Checked = dumpOperations;
          });
          menus.Menu("Build", "Trace", (s, _) =>
          {
             tracing = !tracing;
-            ((ToolStripMenuItem)s).Checked = tracing;
+            ((ToolStripMenuItem)s!).Checked = tracing;
          }, "^T");
          menus.Menu("&Insert");
          menus.Menu("Insert", "open sys", (_, _) => insertText("open sys\n\n", 0, 0), "^%S");
@@ -191,10 +192,7 @@ public partial class Playground : Form
          stopwatch = new Stopwatch();
          _exceptionIndex = nil;
          cancelled = false;
-         if (playgroundConfiguration.LastFile != null)
-         {
-            document.Open(playgroundConfiguration.LastFile);
-         }
+         document.Open(playgroundConfiguration.LastFile);
       }
       catch (Exception exception)
       {
@@ -522,12 +520,8 @@ public partial class Playground : Form
       try
       {
          _exceptionData = nil;
-
-         if (document != null)
-         {
-            update(!manual, false);
-            document.Dirty();
-         }
+         update(!manual, false);
+         document.Dirty();
       }
       catch
       {
