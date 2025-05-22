@@ -26,7 +26,7 @@ public class AssignToNewFieldParser : EndingInExpressionParser
       var _parsedTypeConstraint = parseTypeConstraint(state);
       if (_parsedTypeConstraint is (true, var parsedTypeConstraint))
       {
-         _typeConstraint= parsedTypeConstraint;
+         _typeConstraint= parsedTypeConstraint.Maybe;
       }
       else if (_parsedTypeConstraint.Exception is (true, var exception))
       {

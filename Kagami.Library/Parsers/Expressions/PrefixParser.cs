@@ -1,11 +1,7 @@
 ﻿namespace Kagami.Library.Parsers.Expressions;
 
-public class PrefixParser : MultiParser
+public class PrefixParser(ExpressionBuilder builder) : MultiParser
 {
-   protected ExpressionBuilder builder;
-
-   public PrefixParser(ExpressionBuilder builder) => this.builder = builder;
-
    public override IEnumerable<Parser> Parsers
    {
       get

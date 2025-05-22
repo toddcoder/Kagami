@@ -52,10 +52,6 @@ public abstract class StatementParser : Parser
 
    public virtual bool MatchEndOfLine => true;
 
-   public virtual bool IgnoreIndentation => false;
-
-   public bool SingleLine { get; set; }
-
    protected StatementParser() : base(true)
    {
    }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Kagami.Library.Nodes.Symbols;
+﻿using Kagami.Library.Nodes.Symbols;
 using Core.Enumerables;
 using Core.Monads;
 using Core.Numbers;
@@ -7,18 +6,13 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class ExpressionBuilder
+public class ExpressionBuilder(Bits32<ExpressionFlags> flags)
 {
    protected SymbolStack stack = new();
    protected List<Symbol> symbols = [];
    protected List<Symbol> ordered = [];
-   protected Bits32<ExpressionFlags> flags;
+   protected Bits32<ExpressionFlags> flags = flags;
    protected Maybe<Symbol> _lastSymbol = nil;
-
-   public ExpressionBuilder(Bits32<ExpressionFlags> flags)
-   {
-      this.flags = flags;
-   }
 
    public Bits32<ExpressionFlags> Flags
    {
@@ -29,7 +23,7 @@ public class ExpressionBuilder
    public void Add(Symbol symbol)
    {
       ordered.Add(symbol);
-      _lastSymbol = symbol.Some();
+      _lastSymbol = symbol;
 
       while (stack.IsPending(symbol))
       {

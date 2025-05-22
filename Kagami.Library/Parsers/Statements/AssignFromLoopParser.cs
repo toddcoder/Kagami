@@ -36,7 +36,7 @@ public class AssignFromLoopParser : StatementParser
 
       if (_result is (true, var (typeConstraint, block, (condition, expression))))
       {
-         state.AddStatement(new AssignFromLoop(isNew, mutable, fieldName, typeConstraint, block, condition, expression));
+         state.AddStatement(new AssignFromLoop(isNew, mutable, fieldName, typeConstraint.Maybe, block, condition, expression));
          state.CommitTransaction();
 
          return unit;

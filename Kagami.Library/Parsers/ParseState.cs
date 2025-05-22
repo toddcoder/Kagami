@@ -116,39 +116,14 @@ public class ParseState : IEnumerable<Statement>
 
    public void AddToken(Color color, int length = 1, string text = "") => AddToken(index, length, color, text);
 
-   /*public Optional<Unit> Advance()
-   {
-      SkipEndOfLine();
-      //formerly Indentation.FriendlyString
-      var _newIndentation = Scan($"{Indentation} /(/s+)");
-      if (_newIndentation is (true, var newIndentation))
-      {
-         PushIndentation(newIndentation);
-         return unit;
-      }
-      else if (_newIndentation.Exception is (true, var exception))
-      {
-         _exceptionIndex = index;
-         return exception;
-      }
-      else
-      {
-         _exceptionIndex = index;
-         return badIndentation();
-      }
-   }
-
-   public void Regress() => PopIndentation();*/
-
    public Optional<Unit> BeginBlock()
    {
-      SkipEndOfLine();
-      return Scan("^ /(/s*) '{'", Color.Whitespace, Color.Structure).Map(_ => unit);
+      return Scan("^ /(/s*) /'{'", Color.Whitespace, Color.Structure).Map(_ => unit);
    }
 
    public Optional<Unit> EndBlock()
    {
-      return Scan("^ /(/s*) '}'", Color.Whitespace, Color.Structure).Map(_ => unit);
+      return Scan("^ /(/s*) /'}'", Color.Whitespace, Color.Structure).Map(_ => unit);
    }
 
    public int Index => index;

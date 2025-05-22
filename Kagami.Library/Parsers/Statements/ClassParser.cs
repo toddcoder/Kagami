@@ -42,12 +42,6 @@ public class ClassParser : StatementParser
          parameters = Parameters.Empty;
       }
 
-      var _result = state.BeginBlock();
-      if (!_result)
-      {
-         return _result.Exception;
-      }
-
       var parentClassParser = new ParentClassParser();
 
       var parentClassName = "";
@@ -81,15 +75,8 @@ public class ClassParser : StatementParser
          }
       }
 
-      _result = state.EndBlock();
-      if (!_result)
-      {
-         return _result.Exception;
-      }
-
       Module.Global.Value.ForwardReference(className);
 
-      state.SkipEndOfLine();
       var _block = getBlock(state);
       if (_block is (true, var block))
       {

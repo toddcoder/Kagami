@@ -1,32 +1,25 @@
-﻿using System.Collections.Generic;
+﻿namespace Kagami.Library.Parsers.Expressions;
 
-namespace Kagami.Library.Parsers.Expressions
+public class ConjunctionParsers(ExpressionBuilder builder) : MultiParser
 {
-   public class ConjunctionParsers : MultiParser
+   public override IEnumerable<Parser> Parsers
    {
-      protected ExpressionBuilder builder;
-
-      public ConjunctionParsers(ExpressionBuilder builder) => this.builder = builder;
-
-      public override IEnumerable<Parser> Parsers
+      get
       {
-         get
+         yield return new MatchExpressionParser(builder);
+
+         if (!builder.Flags[ExpressionFlags.OmitComprehension])
          {
-            yield return new MatchExpressionParser(builder);
-
-            if (!builder.Flags[ExpressionFlags.OmitComprehension])
-            {
-               yield return new ComprehensionParser(builder);
-            }
-
-            if (!builder.Flags[ExpressionFlags.OmitAnd])
-            {
-               yield return new AndParser(builder);
-            }
-
-            yield return new OrParser(builder);
-            yield return new InlineIfParser(builder);
+            yield return new ComprehensionParser(builder);
          }
+
+         if (!builder.Flags[ExpressionFlags.OmitAnd])
+         {
+            yield return new AndParser(builder);
+         }
+
+         yield return new OrParser(builder);
+         yield return new InlineIfParser(builder);
       }
    }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using Core.Matching;
 using Kagami.Library.Classes;
 using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
@@ -138,10 +139,9 @@ public static class ParserFunctions
       }
 
       var _symbols = builder.ToExpression().Map(expression => expression.Symbols);
-      if (_symbols)
+      if (_symbols is (true, var symbols))
       {
-         Symbol[] symbols = _symbols;
-         var list = new List<IObject>();
+         List<IObject> list = [];
          foreach (var symbol in symbols)
          {
             if (symbol is IConstant c)
@@ -181,8 +181,19 @@ public static class ParserFunctions
       {
          var statementsParser = new StatementsParser();
          state.PushStatements();
+
          while (state.More)
          {
+            var _endBlock = state.EndBlock();
+            if (_endBlock)
+            {
+               break;
+            }
+            else if (_endBlock.Exception is (true, var exception))
+            {
+               return exception;
+            }
+
             var _scanned = statementsParser.Scan(state);
             if (_scanned)
             {
@@ -200,15 +211,7 @@ public static class ParserFunctions
          var _statements = state.PopStatements();
          if (_statements is (true, var statements))
          {
-            _result = state.EndBlock();
-            if (!_result)
-            {
-               return _result.Exception;
-            }
-            else
-            {
-               return new Block(statements, _typeConstraint);
-            }
+            return new Block(statements, _typeConstraint);
          }
          else
          {
@@ -230,7 +233,7 @@ public static class ParserFunctions
    public static Optional<Block> getSingleLine(ParseState state, Maybe<TypeConstraint> _typeConstraint,
       bool returnExpression = true)
    {
-      var statementsParser = new StatementsParser(true) { ReturnExpression = returnExpression, TypeConstraint = _typeConstraint };
+      var statementsParser = new StatementsParser { ReturnExpression = returnExpression, TypeConstraint = _typeConstraint };
       state.PushStatements();
       var _scanned = statementsParser.Scan(state);
       if (_scanned)
@@ -265,6 +268,7 @@ public static class ParserFunctions
    {
       var builder = new ExpressionBuilder(flags);
       var parser = new ValuesParser(builder);
+
       return parser.Scan(state).Map(_ => builder.Ordered.ToArray()[0]);
    }
 
@@ -280,7 +284,7 @@ public static class ParserFunctions
          return exception;
       }
 
-      var parameters = new List<Parameter>();
+      List<Parameter> parameters = [];
       var defaultRequired = false;
       var continuing = true;
 
@@ -310,7 +314,7 @@ public static class ParserFunctions
          {
             if (next.EndsWith(")"))
             {
-               return new Parameters(parameters.ToArray());
+               return new Parameters([.. parameters]);
             }
          }
          else
@@ -332,28 +336,28 @@ public static class ParserFunctions
       var _scanned = state.Scan("^ /[')]}']", Color.CloseParenthesis);
       if (_scanned)
       {
-         return Array.Empty<Expression>();
+         return (Expression[]) [];
       }
       else if (_scanned.Exception is (true, var exception))
       {
          return exception;
       }
 
-      var arguments = new List<Expression>();
+      List<Expression> arguments = [];
       var scanning = true;
 
       while (state.More && scanning)
       {
          var _expression = getExpression(state, flags | ExpressionFlags.OmitComma | ExpressionFlags.InArgument);
-         if (_expression)
+         if (_expression is (true, var expression))
          {
-            arguments.Add(_expression);
+            arguments.Add(expression);
             var _next = state.Scan("^ /(/s*) /[',)]}']", Color.Whitespace, Color.CloseParenthesis);
             if (_next is (true, var next))
             {
                if (next.EndsWith(")") || next.EndsWith("]") || next.EndsWith("}"))
                {
-                  return arguments.ToArray();
+                  return (Expression[]) [.. arguments];
                }
             }
             else
@@ -377,10 +381,27 @@ public static class ParserFunctions
    public static Optional<(Expression[], Maybe<LambdaSymbol>)> getArgumentsPlusLambda(ParseState state,
       Bits32<ExpressionFlags> flags)
    {
-      return
-         from arguments in getArguments(state, flags | ExpressionFlags.OmitColon)
-         from lambda in getPossibleLambda(state, flags)
-         select (arguments, lambda);
+      var _arguments = getArguments(state, flags | ExpressionFlags.OmitColon);
+      if (_arguments is (true, var arguments))
+      {
+         var _lambda = getPossibleLambda(state, flags);
+         if (_lambda is (true, var lambda))
+         {
+            return (arguments, lambda);
+         }
+         else if (_lambda.Exception is (true, var exception))
+         {
+            return exception;
+         }
+         else
+         {
+            return (arguments, nil);
+         }
+      }
+      else
+      {
+         return _arguments.Exception;
+      }
    }
 
    public static Optional<IObject> getComparisand(ParseState state)
@@ -476,7 +497,7 @@ public static class ParserFunctions
       return state.Scan($"^ /(/s* {REGEX_FIELD}) /b", Color.Identifier).Map(s => s.Trim());
    }
 
-   public static Optional<Maybe<TypeConstraint>> parseTypeConstraint(ParseState state)
+   public static Optional<PossibleTypeConstraint> parseTypeConstraint(ParseState state)
    {
       var _className = state.Scan($"^ /(/s*) /({REGEX_CLASS}) -(> '(') /b", Color.Whitespace, Color.Class)
          .Map(cn => cn.TrimStart());
@@ -485,11 +506,11 @@ public static class ParserFunctions
          var _baseClass = Module.Global.Value.Class(className);
          if (_baseClass is (true, var baseClass))
          {
-            return new TypeConstraint([baseClass]).Some();
+            return new PossibleTypeConstraint.Some(new TypeConstraint([baseClass]));
          }
          else if (Module.Global.Value.Forwarded(className))
          {
-            return new TypeConstraint([new ForwardedClass(className)]).Some();
+            return new PossibleTypeConstraint.Some(new TypeConstraint([new ForwardedClass(className)]));
          }
          else
          {
@@ -508,7 +529,7 @@ public static class ParserFunctions
          if (_scanned)
          {
             var typeConstraint = (TypeConstraint)((IConstant)builder.Ordered.ToArray()[0]).Object;
-            return typeConstraint.Some();
+            return new PossibleTypeConstraint.Some(typeConstraint);
          }
          else if (_scanned.Exception is (true, var exception2))
          {
@@ -516,7 +537,7 @@ public static class ParserFunctions
          }
          else
          {
-            return nil;
+            return new PossibleTypeConstraint.None();
          }
       }
    }
@@ -538,17 +559,27 @@ public static class ParserFunctions
       }
    }
 
-   private static Optional<Maybe<IInvokable>> parseDefaultValue(ParseState state, bool defaultRequired)
+   private static Optional<PossibleInvokable> parseDefaultValue(ParseState state, bool defaultRequired)
    {
       var _scanned = state.Scan("^ /(/s* '=') -(> '=')", Color.Structure);
       if (_scanned)
       {
-         return getExpression(state, ExpressionFlags.OmitComma).Map(e =>
+         var _expression = getExpression(state, ExpressionFlags.OmitComma);
+         if (_expression is (true, var expression))
          {
-            var symbol = new InvokableExpressionSymbol(e);
+            var symbol = new InvokableExpressionSymbol(expression);
             state.AddSymbol(symbol);
-            return symbol.Invokable.Some();
-         });
+
+            return new PossibleInvokable.Some(symbol.Invokable);
+         }
+         else if (_expression.Exception is (true, var exception))
+         {
+            return exception;
+         }
+         else
+         {
+            return nil;
+         }
       }
       else if (_scanned.Exception is (true, var exception))
       {
@@ -560,7 +591,7 @@ public static class ParserFunctions
       }
       else
       {
-         return nil;
+         return new PossibleInvokable.None();
       }
    }
 
@@ -580,15 +611,20 @@ public static class ParserFunctions
       var _response = parseTypeConstraint(state);
       if (_response is (true, var response))
       {
-         state.SetReturnType(response);
+         Maybe<TypeConstraint> _typeConstraint = response switch
+         {
+            PossibleTypeConstraint.Some some => some.TypeConstraint,
+            _ => nil
+         };
+         state.SetReturnType(_typeConstraint);
          var _scanned = state.Scan("^ /(/s*) /'=' /(/s*)", Color.Whitespace, Color.Structure, Color.Whitespace);
          if (_scanned)
          {
-            return getSingleLine(state, response);
+            return getSingleLine(state, _typeConstraint);
          }
          else
          {
-            return getBlock(state, response);
+            return getBlock(state, _typeConstraint);
          }
       }
       else if (_response.Exception is (true, var exception))
@@ -906,28 +942,15 @@ public static class ParserFunctions
       }
    }
 
-   public static Optional<Maybe<LambdaSymbol>> getPossibleLambda(ParseState state, Bits32<ExpressionFlags> flags)
+   public static Optional<LambdaSymbol> getPossibleLambda(ParseState state, Bits32<ExpressionFlags> flags)
    {
-      Maybe<LambdaSymbol> _none = nil;
-      if (state.CurrentSource.StartsWith("("))
+      if (state.CurrentSource.StartsWith('('))
       {
-         return _none;
+         return nil;
       }
       else
       {
-         var _lambda = getAnyLambda(state, flags);
-         if (_lambda is (true, var lambda))
-         {
-            return lambda.Some();
-         }
-         else if (_lambda.Exception is (true, var exception))
-         {
-            return exception;
-         }
-         else
-         {
-            return nil;
-         }
+         return getAnyLambda(state, flags);
       }
    }
 
@@ -1123,9 +1146,9 @@ public static class ParserFunctions
 
             break;
          }
-         case ";":
+         /*case ";":
             _symbol = new SkipTakeOperatorPopSymbol();
-            break;
+            break;*/
          case "::":
             _symbol = new ConsSymbol();
             break;
@@ -1304,4 +1327,6 @@ public static class ParserFunctions
          return (SkipTakeItem[]) [.. list];
       }
    }
+
+   public static Optional<Unit> anticipateBrackets(ParseState state) => state.CurrentSource.Matches("^ /s* ['{}']").Map(_ => unit).Optional();
 }

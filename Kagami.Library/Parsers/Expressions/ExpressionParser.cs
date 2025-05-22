@@ -4,6 +4,7 @@ using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
+using Kagami.Library.Parsers.Statements;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
@@ -17,6 +18,7 @@ public class ExpressionParser : Parser
    protected InfixParser infixParser;
    protected PostfixParser postfixParser;
    protected ConjunctionParsers conjunctionParsers;
+   protected EndOfLineParser endOfLineParser = new();
    protected int whateverCount;
 
    public ExpressionParser(Bits32<ExpressionFlags> flags) : base(false)
@@ -45,12 +47,34 @@ public class ExpressionParser : Parser
       state.BeginPrefixCode();
       state.BeginImplicitState();
 
+      var notEndOfLine = true;
+
       try
       {
          var _term0 = getTerm(state);
          if (_term0)
          {
-            while (state.More)
+            var _anticipated = ParserFunctions.anticipateBrackets(state);
+            if (_anticipated)
+            {
+               notEndOfLine = false;
+            }
+            else if (_anticipated.Exception is (true, var anticipatedException))
+            {
+               return anticipatedException;
+            }
+
+            var _endOfLine = endOfLineParser.Scan(state);
+            if (_endOfLine)
+            {
+               notEndOfLine = false;
+            }
+            else if (_endOfLine.Exception is (true, var endOfLineException))
+            {
+               return endOfLineException;
+            }
+
+            while (notEndOfLine && state.More)
             {
                if (!flags[ExpressionFlags.OmitConjunction])
                {
@@ -71,6 +95,25 @@ public class ExpressionParser : Parser
                   var _term1 = getTerm(state);
                   if (_term1)
                   {
+                     _anticipated = ParserFunctions.anticipateBrackets(state);
+                     if (_anticipated)
+                     {
+                        notEndOfLine = false;
+                     }
+                     else if (_anticipated.Exception is (true, var anticipatedException))
+                     {
+                        return anticipatedException;
+                     }
+
+                     _endOfLine = endOfLineParser.Scan(state);
+                     if (_endOfLine)
+                     {
+                        notEndOfLine = false;
+                     }
+                     else if (_endOfLine.Exception is (true, var endOfLineException))
+                     {
+                        return endOfLineException;
+                     }
                   }
                   else if (_term1.Exception is (true, var exception))
                   {
@@ -120,8 +163,8 @@ public class ExpressionParser : Parser
                }
                else if (whateverCount > 0)
                {
-                  var lambda = new LambdaSymbol(whateverCount,
-                     new Block(new ExpressionStatement(expression, true)) { Index = expression.Index });
+                  var block = new Block(new ExpressionStatement(expression, true)) { Index = expression.Index };
+                  var lambda = new LambdaSymbol(whateverCount, block);
                   Expression = new Expression(lambda);
                }
                else

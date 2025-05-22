@@ -1,11 +1,7 @@
 ﻿namespace Kagami.Library.Parsers.Expressions;
 
-public class PostfixParser : MultiParser
+public class PostfixParser(ExpressionBuilder builder) : MultiParser
 {
-   protected ExpressionBuilder builder;
-
-   public PostfixParser(ExpressionBuilder builder) => this.builder = builder;
-
    public override IEnumerable<Parser> Parsers
    {
       get

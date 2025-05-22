@@ -27,7 +27,7 @@ public class AssignFromBlockParser : StatementParser
 
       if (_result is (true, var (typeConstraint, block)))
       {
-         state.AddStatement(new AssignToFieldWithBlock(isNew, mutable, fieldName, typeConstraint, block));
+         state.AddStatement(new AssignToFieldWithBlock(isNew, mutable, fieldName, typeConstraint.Maybe, block));
          state.CommitTransaction();
 
          return unit;

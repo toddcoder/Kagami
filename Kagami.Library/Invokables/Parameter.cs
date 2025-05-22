@@ -2,6 +2,7 @@
 using Kagami.Library.Objects;
 using Core.Monads;
 using Core.Strings;
+using Kagami.Library.Parsers;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Invokables;
@@ -29,6 +30,18 @@ public class Parameter : IEquatable<Parameter>
       this.name = name == "_" ? label : name;
       _defaultValue = defaultValue;
       _typeConstraint = typeConstraint;
+      this.reference = reference;
+      this.capturing = capturing;
+   }
+
+   public Parameter(bool mutable, string label, string name, PossibleInvokable defaultValue, PossibleTypeConstraint typeConstraint, bool reference,
+      bool capturing)
+   {
+      this.mutable = mutable;
+      this.label = label;
+      this.name = name == "_" ? label : name;
+      _defaultValue = defaultValue.Maybe;
+      _typeConstraint = typeConstraint.Maybe;
       this.reference = reference;
       this.capturing = capturing;
    }
