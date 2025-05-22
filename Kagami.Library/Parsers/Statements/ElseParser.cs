@@ -7,11 +7,11 @@ namespace Kagami.Library.Parsers.Statements;
 
 public class ElseParser : StatementParser
 {
-   public override string Pattern => $"^ /'else' /({REGEX_EOL})";
+   public override string Pattern => "^ /(/s*) /'else' /b";
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      state.Colorize(tokens, Color.Keyword, Color.Whitespace);
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword);
       var _block = getBlock(state);
       if (_block is (true, var block))
       {

@@ -18,13 +18,13 @@ public class ElseIfParser : ExpressionBlockParser
       this.assignment = assignment;
    }
 
-   public override string Pattern => "^ /'else' /(/s+) /'if' /b";
+   public override string Pattern => "^ /(/s*) /'else' /(/s+) /'if' /b";
 
    public Maybe<If> If { get; set; } = nil;
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {
-      state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Keyword);
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Keyword);
       return unit;
    }
 
@@ -55,7 +55,7 @@ public class ElseIfParser : ExpressionBlockParser
          return exception;
       }
 
-      If = new If(expression, block, _elseIf, _elseBlock, fieldName, mutable, assignment, false).Some();
+      If = new If(expression, block, _elseIf, _elseBlock, fieldName, mutable, assignment, false);
       return unit;
    }
 }
