@@ -8,7 +8,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public class ForParser : StatementParser
 {
-   public override string Pattern => "^ /'for' /(|s+|)";
+   public override string Pattern => "^ /'for' /(/s+)";
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
@@ -16,7 +16,7 @@ public class ForParser : StatementParser
 
       var _result =
          from comparisandValue in getExpression(state, ExpressionFlags.Comparisand | ExpressionFlags.OmitColon)
-         from scanned in state.Scan("^ /(|s|) /':='", Color.Whitespace, Color.Structure)
+         from scanned in state.Scan("^ /(/s*) /':='", Color.Whitespace, Color.Structure)
          from sourceValue in getExpression(state, ExpressionFlags.Standard)
          from blockValue in getBlock(state)
          select (comparisandValue, sourceValue, blockValue);

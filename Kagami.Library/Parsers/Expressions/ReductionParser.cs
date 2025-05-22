@@ -6,7 +6,7 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public class ReductionParser : SymbolParser
 {
-   public override string Pattern => "^ /(|s+|) /'['";
+   public override string Pattern => "^ /(/s+) /'['";
 
    public ReductionParser(ExpressionBuilder builder) : base(builder)
    {

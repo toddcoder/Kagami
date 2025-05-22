@@ -8,7 +8,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public class ParentClassParser : StatementParser
 {
-   public override string Pattern => $"^ /'inherits' /(|s+|) /({REGEX_CLASS}) " + "/['({']?";
+   public override string Pattern => $"^ /'inherits' /(/s+) /({REGEX_CLASS}) " + "/['({']?";
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {

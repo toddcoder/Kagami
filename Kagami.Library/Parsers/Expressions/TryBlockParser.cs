@@ -11,7 +11,7 @@ public class TryBlockParser : SymbolParser
    {
    }
 
-   public override string Pattern => $"^ /(|s|) /'try' /({REGEX_EOL})";
+   public override string Pattern => $"^ /(/s*) /'try' /({REGEX_EOL})";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

@@ -81,7 +81,7 @@ public static class ParserFunctions
          builder.Add(new FieldSymbol(fieldName));
          builder.Add(_comparisand);
          builder.Add(new MatchSymbol());
-         var _scanned = state.Scan("^ /(|s|) /'&'", Color.Whitespace, Color.OpenParenthesis);
+         var _scanned = state.Scan("^ /(/s*) /'&'", Color.Whitespace, Color.OpenParenthesis);
          if (_scanned)
          {
             return getCompoundComparisands(state, fieldName).Map(nextExpression =>
@@ -115,7 +115,7 @@ public static class ParserFunctions
          var _result = constantsParser.Scan(state);
          if (_result)
          {
-            if (state.Scan("^ /(|s|) /','", Color.Whitespace, Color.Operator))
+            if (state.Scan("^ /(/s*) /','", Color.Whitespace, Color.Operator))
             {
             }
             else if (_result.Exception is (true, var exception))
@@ -478,7 +478,7 @@ public static class ParserFunctions
 
    public static Optional<Maybe<TypeConstraint>> parseTypeConstraint(ParseState state)
    {
-      var _className = state.Scan($"^ /(|s|) /({REGEX_CLASS}) -(> '(') /b", Color.Whitespace, Color.Class)
+      var _className = state.Scan($"^ /(/s*) /({REGEX_CLASS}) -(> '(') /b", Color.Whitespace, Color.Class)
          .Map(cn => cn.TrimStart());
       if (_className is (true, var className))
       {
@@ -523,7 +523,7 @@ public static class ParserFunctions
 
    private static Optional<bool> parseVaraidic(ParseState state)
    {
-      var _scanned = state.Scan("^ /(|s|) /'...'", Color.Whitespace, Color.Structure);
+      var _scanned = state.Scan("^ /(/s*) /'...'", Color.Whitespace, Color.Structure);
       if (_scanned)
       {
          return true;
@@ -581,7 +581,7 @@ public static class ParserFunctions
       if (_response is (true, var response))
       {
          state.SetReturnType(response);
-         var _scanned = state.Scan("^ /(|s|) /'=' /(|s|)", Color.Whitespace, Color.Structure, Color.Whitespace);
+         var _scanned = state.Scan("^ /(/s*) /'=' /(/s*)", Color.Whitespace, Color.Structure, Color.Whitespace);
          if (_scanned)
          {
             return getSingleLine(state, response);
@@ -685,7 +685,7 @@ public static class ParserFunctions
 
       state.BeginPrefixCode();
       state.BeginImplicitState();
-      state.Scan("^ /(|s|) /'('", Color.Whitespace, Color.OpenParenthesis);
+      state.Scan("^ /(/s*) /'('", Color.Whitespace, Color.OpenParenthesis);
 
       try
       {
@@ -933,14 +933,14 @@ public static class ParserFunctions
 
    public static Optional<(Symbol, Expression, Maybe<Expression>)> getInnerComprehension(ParseState state) =>
       from comparisand in getValue(state, ExpressionFlags.Comparisand)
-      from scanned in state.Scan("^ /(|s|) /':='", Color.Whitespace, Color.Structure)
+      from scanned in state.Scan("^ /(/s*) /':='", Color.Whitespace, Color.Structure)
       from source in getExpression(state, ExpressionFlags.OmitIf | ExpressionFlags.OmitComprehension)
       from ifExp in getIf(state)
       select (comparisand, source, ifExp);
 
    public static Optional<Maybe<Expression>> getIf(ParseState state)
    {
-      var _scanned = state.Scan("^ /(|s+|) /'if' /b", Color.Whitespace, Color.Keyword);
+      var _scanned = state.Scan("^ /(/s+) /'if' /b", Color.Whitespace, Color.Keyword);
       if (_scanned)
       {
          var _expression = getExpression(state, ExpressionFlags.OmitIf | ExpressionFlags.OmitComprehension);
@@ -1032,7 +1032,7 @@ public static class ParserFunctions
 
    public static Optional<Block> getCaseStatementBlock(ParseState state)
    {
-      if (state.Scan("^ /(|s|) /'=' -(> '=')", Color.Whitespace, Color.Structure))
+      if (state.Scan("^ /(/s*) /'=' -(> '=')", Color.Whitespace, Color.Structure))
       {
          return getSingleLine(state, false);
       }
@@ -1281,7 +1281,7 @@ public static class ParserFunctions
             break;
          }
 
-         var _scan = state.Scan("^ /(|s|) /',' /(|s|)", Color.Whitespace, Color.Structure, Color.Whitespace);
+         var _scan = state.Scan("^ /(/s*) /',' /(/s*)", Color.Whitespace, Color.Structure, Color.Whitespace);
          if (_scan)
          {
          }

@@ -11,7 +11,7 @@ public class ZipOperatorParser : SymbolParser
    {
    }
 
-   public override string Pattern => $"^ /(|s|) /'[|' /({REGEX_OPERATORS}1%2) /'|]'";
+   public override string Pattern => $"^ /(/s*) /'[|' /({REGEX_OPERATORS}1%2) /'|]'";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

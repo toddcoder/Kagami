@@ -11,7 +11,7 @@ public class SetPropertyParser(ExpressionBuilder builder, string tempObjectField
    protected ExpressionBuilder outerBuilder = outerBuilder;
    protected string propertyName = "";
 
-   public override string Pattern => $"^ /(/s*) /({REGEX_FIELD}) /(|s|) /'='";
+   public override string Pattern => $"^ /(/s*) /({REGEX_FIELD}) /(/s*) /'='";
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

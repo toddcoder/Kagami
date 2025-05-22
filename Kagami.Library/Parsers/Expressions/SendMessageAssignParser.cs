@@ -15,7 +15,7 @@ public class SendMessageAssignParser : EndingInExpressionParser
    {
    }
 
-   public override string Pattern => $"^ /(|s|) /'.' /({REGEX_FUNCTION_NAME}) /(|s|) /({REGEX_ASSIGN_OPS})? /'=' -(> ['=>'])";
+   public override string Pattern => $"^ /(/s*) /'.' /({REGEX_FUNCTION_NAME}) /(/s*) /({REGEX_ASSIGN_OPS})? /'=' -(> ['=>'])";
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

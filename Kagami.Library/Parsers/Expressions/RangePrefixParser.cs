@@ -10,7 +10,7 @@ public class RangePrefixParser : SymbolParser
    {
    }
 
-   public override string Pattern => "^ /(|s|) /'+' -(> /s+)";
+   public override string Pattern => "^ /(/s*) /'+' -(> /s+)";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

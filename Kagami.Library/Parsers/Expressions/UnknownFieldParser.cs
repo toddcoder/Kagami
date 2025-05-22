@@ -12,7 +12,7 @@ public class UnknownFieldParser : SymbolParser
    {
    }
 
-   public override string Pattern => "^ /(|s|) /('$' /d+) /b";
+   public override string Pattern => "^ /(/s*) /('$' /d+) /b";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

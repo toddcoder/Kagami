@@ -11,7 +11,7 @@ public class InternalListParser : SymbolParser
    {
    }
 
-   public override string Pattern => "^ /(|s|) /'in' /b";
+   public override string Pattern => "^ /(/s*) /'in' /b";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

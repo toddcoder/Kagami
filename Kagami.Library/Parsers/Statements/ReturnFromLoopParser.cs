@@ -17,7 +17,7 @@ public class ReturnFromLoopParser : StatementParser
 
       var _result =
          from expressionValue in getExpression(state, ExpressionFlags.OmitIf)
-         from @if in state.Scan("^ /(|s|) /'if' /b", Color.Whitespace, Color.Keyword)
+         from @if in state.Scan("^ /(/s*) /'if' /b", Color.Whitespace, Color.Keyword)
          from conditionValue in getExpression(state, ExpressionFlags.Standard)
          select (expressionValue, conditionValue);
 

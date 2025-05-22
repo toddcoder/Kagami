@@ -11,7 +11,7 @@ public class SubexpressionParser : SymbolParser
    {
    }
 
-   public override string Pattern => "^ /(|s|) /'(' /','?";
+   public override string Pattern => "^ /(/s*) /'(' /','?";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

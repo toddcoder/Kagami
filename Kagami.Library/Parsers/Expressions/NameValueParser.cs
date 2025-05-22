@@ -11,7 +11,7 @@ public class NameValueParser : EndingInExpressionParser
 
    public NameValueParser(ExpressionBuilder builder) : base(builder, ExpressionFlags.OmitColon | ExpressionFlags.OmitComma) { }
 
-   public override string Pattern => $"^ /(|s|) /({REGEX_FIELD}) /':'";
+   public override string Pattern => $"^ /(/s*) /({REGEX_FIELD}) /':'";
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

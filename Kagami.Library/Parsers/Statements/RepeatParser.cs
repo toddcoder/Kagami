@@ -16,7 +16,7 @@ public class RepeatParser : StatementParser
 
       var _result =
          from expressionValue in getExpression(state, ExpressionFlags.Standard)
-         from scanned in state.Scan($"^ /(|s+|) /'times' {REGEX_ANTICIPATE_END}", Color.Whitespace, Color.Keyword)
+         from scanned in state.Scan($"^ /(/s+) /'times' {REGEX_ANTICIPATE_END}", Color.Whitespace, Color.Keyword)
          from blockValue in getBlock(state)
          select (expressionValue, blockValue);
 

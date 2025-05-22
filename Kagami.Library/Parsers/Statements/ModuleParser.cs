@@ -12,7 +12,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public class ModuleParser : StatementParser
 {
-   public override string Pattern => $"^ /'module' /(|s+|) /({REGEX_CLASS}) /({REGEX_EOL})";
+   public override string Pattern => $"^ /'module' /(/s+) /({REGEX_CLASS}) /({REGEX_EOL})";
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {

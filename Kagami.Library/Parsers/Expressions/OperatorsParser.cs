@@ -9,7 +9,7 @@ public class OperatorsParser : SymbolParser
 {
    public OperatorsParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => $"^ /(|s|) /({REGEX_OPERATORS}1%2) -(>{REGEX_OPERATORS}) /(/s*)";
+   public override string Pattern => $"^ /(/s*) /({REGEX_OPERATORS}1%2) -(>{REGEX_OPERATORS}) /(/s*)";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

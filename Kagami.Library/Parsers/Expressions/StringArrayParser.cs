@@ -6,7 +6,7 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public class StringArrayParser : SymbolParser
 {
-   public override string Pattern => "^ /(|s|) /'a\"' /(-['\"']*) /'\"'";
+   public override string Pattern => "^ /(/s*) /'a\"' /(-['\"']*) /'\"'";
 
    public StringArrayParser(ExpressionBuilder builder) : base(builder) { }
 

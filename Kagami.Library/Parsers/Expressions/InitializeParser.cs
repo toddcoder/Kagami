@@ -11,7 +11,7 @@ public class InitializeParser : SymbolParser
 {
    public InitializeParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => $"^ /(|s|) /({REGEX_CLASS}) /'{{'";
+   public override string Pattern => $"^ /(/s*) /({REGEX_CLASS}) /'{{'";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
@@ -22,7 +22,7 @@ public class InitializeParser : SymbolParser
       while (state.More)
       {
          var _result =
-            from f in state.Scan($"^ /(/s*) /({REGEX_FIELD}) /(|s|) /':'", Color.Whitespace, Color.Label, Color.Whitespace, Color.Structure)
+            from f in state.Scan($"^ /(/s*) /({REGEX_FIELD}) /(/s*) /':'", Color.Whitespace, Color.Label, Color.Whitespace, Color.Structure)
             from e in getExpression(state, builder.Flags | ExpressionFlags.OmitComma | ExpressionFlags.OmitColon)
             from n in state.Scan("^ /(/s*) /[',}']", Color.Whitespace, Color.Structure)
             select (field: f.Trim().Drop(-1), expression: e, next: n);

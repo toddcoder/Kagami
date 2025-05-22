@@ -6,7 +6,7 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public class RangeOperatorParser : SymbolParser
 {
-   public override string Pattern => "^ /(|s|) /('..' /('<')?)";
+   public override string Pattern => "^ /(/s*) /('..' /('<')?)";
 
    public RangeOperatorParser(ExpressionBuilder builder) : base(builder) { }
 

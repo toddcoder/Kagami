@@ -15,7 +15,7 @@ public class DoParser : SymbolParser
 
       public BoundItemParser(ExpressionBuilder builder) : base(builder) => fieldName = "";
 
-      public override string Pattern => $"^ /({REGEX_FIELD}) /(|s|) /'<-'";
+      public override string Pattern => $"^ /({REGEX_FIELD}) /(/s*) /'<-'";
 
       public (string, Expression) NameExpression { get; set; }
 
@@ -38,7 +38,7 @@ public class DoParser : SymbolParser
    {
    }
 
-   public override string Pattern => $"^ /(|s|) /'do' {REGEX_ANTICIPATE_END}";
+   public override string Pattern => $"^ /(/s*) /'do' {REGEX_ANTICIPATE_END}";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

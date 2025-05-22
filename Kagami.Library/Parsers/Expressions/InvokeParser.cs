@@ -12,7 +12,7 @@ public class InvokeParser : SymbolParser
    {
    }
 
-   public override string Pattern => $"^ /(|s|) /({REGEX_FUNCTION_NAME}) /'('";
+   public override string Pattern => $"^ /(/s*) /({REGEX_FUNCTION_NAME}) /'('";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

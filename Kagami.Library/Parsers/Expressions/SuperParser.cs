@@ -10,7 +10,7 @@ public class SuperParser : SymbolParser
    {
    }
 
-   public override string Pattern => "^ /(|s|) /'super' /b";
+   public override string Pattern => "^ /(/s*) /'super' /b";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

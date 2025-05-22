@@ -23,7 +23,7 @@ public class IndexerParser : SymbolParser
       var _expressions = getArguments(state, builder.Flags);
       if (_expressions is (true, var expressions))
       {
-         var _scan = state.Scan($"^ /(|s|) /({REGEX_ASSIGN_OPS})? /'=' -(> '=')", Color.Whitespace, Color.Operator, Color.Structure);
+         var _scan = state.Scan($"^ /(/s*) /({REGEX_ASSIGN_OPS})? /'=' -(> '=')", Color.Whitespace, Color.Operator, Color.Structure);
          if (_scan is (true, var opSource))
          {
             var _expression = getExpression(state, builder.Flags);

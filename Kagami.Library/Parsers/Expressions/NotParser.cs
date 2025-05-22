@@ -8,7 +8,7 @@ public class NotParser : SymbolParser
 {
    public NotParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => "^ /(|s|) /'not' /b";
+   public override string Pattern => "^ /(/s*) /'not' /b";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

@@ -10,7 +10,7 @@ public class ThrowParser : EndingInExpressionParser
    {
    }
 
-   public override string Pattern => "^ /(|s|) /'throw' /b";
+   public override string Pattern => "^ /(/s*) /'throw' /b";
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

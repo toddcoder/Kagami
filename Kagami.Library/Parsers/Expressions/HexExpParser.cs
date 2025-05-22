@@ -10,7 +10,7 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public class HexExpParser : SymbolParser
 {
-   public override string Pattern => "^ /(|s|) /'0x' /([/d '_a-f']+ '.' [/d '_a-f']+) (/'p' /(['-+']? /d+))? /'i'?";
+   public override string Pattern => "^ /(/s*) /'0x' /([/d '_a-f']+ '.' [/d '_a-f']+) (/'p' /(['-+']? /d+))? /'i'?";
 
    public HexExpParser(ExpressionBuilder builder) : base(builder) { }
 

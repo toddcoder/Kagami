@@ -9,7 +9,7 @@ public class ByteParser : SymbolParser
 {
    public ByteParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => "^ /(|s|) /(/d1%3) /'b'";
+   public override string Pattern => "^ /(/s*) /(/d1%3) /'b'";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

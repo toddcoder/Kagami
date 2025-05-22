@@ -9,7 +9,7 @@ public class FoldOperatorParser : SymbolParser
 {
    public FoldOperatorParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => $"^ /(|s|) /(['<>'] ':') /({REGEX_OPERATORS}1%2) -(>{REGEX_OPERATORS})";
+   public override string Pattern => $"^ /(/s*) /(['<>'] ':') /({REGEX_OPERATORS}1%2) -(>{REGEX_OPERATORS})";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

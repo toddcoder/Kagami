@@ -15,7 +15,7 @@ public class AssignFromLoopParser : StatementParser
       return returnFromLoopParser.Scan(state).Map(_ => (returnFromLoopParser.Condition, returnFromLoopParser.Expression));
    }
 
-   public override string Pattern => $"^ (/('var' | 'let') /(|s+|))? /({REGEX_FIELD}) /b";
+   public override string Pattern => $"^ (/('var' | 'let') /(/s+))? /({REGEX_FIELD}) /b";
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
@@ -28,7 +28,7 @@ public class AssignFromLoopParser : StatementParser
 
       var _result =
          from typeConstraintValue in parseTypeConstraint(state)
-         from scanned in state.Scan($"^ /(|s|) /'=' /(|s|) /'loop' /({REGEX_EOL})", Color.Whitespace, Color.Structure,
+         from scanned in state.Scan($"^ /(/s*) /'=' /(/s*) /'loop' /({REGEX_EOL})", Color.Whitespace, Color.Structure,
             Color.Whitespace, Color.Keyword, Color.Whitespace)
          from blockValue in getBlock(state)
          from pair in getReturn(state)

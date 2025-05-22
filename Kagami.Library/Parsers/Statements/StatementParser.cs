@@ -12,26 +12,18 @@ public abstract class StatementParser : Parser
    public override Optional<Unit> Scan(ParseState state)
    {
       state.BeginTransaction();
-      if (IgnoreIndentation || SingleLine)
+      var _scan = base.Scan(state);
+      if (_scan)
       {
-         var _scan = base.Scan(state);
-         if (_scan)
-         {
-            state.CommitTransaction();
-            return unit;
-         }
-         else if (_scan.Exception is (true, var exception))
-         {
-            ExceptionIndex = state.Index;
-            state.RollBackTransaction();
+         state.CommitTransaction();
+         return unit;
+      }
+      else if (_scan.Exception is (true, var exception))
+      {
+         ExceptionIndex = state.Index;
+         state.RollBackTransaction();
 
-            return exception;
-         }
-         else
-         {
-            state.RollBackTransaction();
-            return nil;
-         }
+         return exception;
       }
       else
       {

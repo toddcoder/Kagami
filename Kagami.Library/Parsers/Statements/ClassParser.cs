@@ -11,7 +11,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public class ClassParser : StatementParser
 {
-   public override string Pattern => $"^ /'class' /(|s+|) /({REGEX_CLASS}) /'('?";
+   public override string Pattern => $"^ /'class' /(/s+) /({REGEX_CLASS}) /'('?";
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {

@@ -9,7 +9,7 @@ public class ForExpressionParser : EndingInExpressionParser
    public ForExpressionParser(ExpressionBuilder builder, ExpressionFlags flags = ExpressionFlags.Standard) :
       base(builder, flags) { }
 
-   public override string Pattern => "^ /(|s|) /'%' -(> '>')";
+   public override string Pattern => "^ /(/s*) /'%' -(> '>')";
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

@@ -8,7 +8,7 @@ public class AnyParser : SymbolParser
 {
    public AnyParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => "^ /(|s|) /'_' /b";
+   public override string Pattern => "^ /(/s*) /'_' /b";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

@@ -7,7 +7,7 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public class FloatParser : SymbolParser
 {
-   public override string Pattern => "^ /(|s|) /([/d '_']+ '.' [/d '_']+) (/'e' /(['-+']? /d+))? /'i'?";
+   public override string Pattern => "^ /(/s*) /([/d '_']+ '.' [/d '_']+) (/'e' /(['-+']? /d+))? /'i'?";
 
    public FloatParser(ExpressionBuilder builder) : base(builder) { }
 

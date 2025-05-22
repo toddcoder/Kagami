@@ -18,7 +18,7 @@ public class ImplicitMessageParser : SymbolParser
    {
    }
 
-   public override string Pattern => $"^ /(|s|) /({REGEX_ITERATOR_FUNCTIONS}) /'^'";
+   public override string Pattern => $"^ /(/s*) /({REGEX_ITERATOR_FUNCTIONS}) /'^'";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

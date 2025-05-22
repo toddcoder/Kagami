@@ -10,7 +10,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public class MixinParser : StatementParser
 {
-   public override string Pattern => $"^ /'mixin' /(|s+|) /({REGEX_CLASS})";
+   public override string Pattern => $"^ /'mixin' /(/s+) /({REGEX_CLASS})";
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {

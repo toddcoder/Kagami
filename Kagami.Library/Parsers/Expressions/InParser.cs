@@ -8,7 +8,7 @@ public class InParser : SymbolParser
 {
    public InParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => "^ /(|s|) (/'not' /(|s|))? /'in' /b";
+   public override string Pattern => "^ /(/s*) (/'not' /(/s*))? /'in' /b";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

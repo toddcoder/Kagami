@@ -10,7 +10,7 @@ public class ImplicitSymbolParser : EndingInValueParser
    {
    }
 
-   public override string Pattern => "^ /(|s|) /'^' -(> /s)";
+   public override string Pattern => "^ /(/s*) /'^' -(> /s)";
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

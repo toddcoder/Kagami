@@ -9,7 +9,7 @@ public class DefAssignParser : EndingInExpressionParser
 {
    protected string fieldName = "";
 
-   public override string Pattern => $"^ /'def' /(|s+|) /({REGEX_FIELD}) /(|s|) /'=' -(> '=')";
+   public override string Pattern => $"^ /'def' /(/s+) /({REGEX_FIELD}) /(/s*) /'=' -(> '=')";
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

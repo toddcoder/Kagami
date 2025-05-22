@@ -37,7 +37,7 @@ public class CaseParser : StatementParser
       caseType = CaseType.Function;
    }
 
-   public override string Pattern => "^ /'|' /(|s|)";
+   public override string Pattern => "^ /'|' /(/s*)";
 
    protected static Optional<Block> getCaseBlock(CaseType caseType, ParseState state) => caseType switch
    {

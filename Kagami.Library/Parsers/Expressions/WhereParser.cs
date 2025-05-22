@@ -11,7 +11,7 @@ public class WhereParser : SymbolParser
    {
    }
 
-   public override string Pattern => "^ /(|s|) /'.{'";
+   public override string Pattern => "^ /(/s*) /'.{'";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
@@ -26,7 +26,7 @@ public class WhereParser : SymbolParser
          if (_scan)
          {
             list.Add((itemParser.PropertyName, itemParser.Expression));
-            if (state.Scan("^ /(|s|) /[',}']", Color.Whitespace, Color.Structure) is (true, var value))
+            if (state.Scan("^ /(/s*) /[',}']", Color.Whitespace, Color.Structure) is (true, var value))
             {
                if (value.Trim() == "}")
                {

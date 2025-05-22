@@ -7,7 +7,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public class OpenPackageParser : StatementParser
 {
-   public override string Pattern => $"^ /'open' /(|s+|) /({REGEX_FIELD}) {REGEX_ANTICIPATE_END}";
+   public override string Pattern => $"^ /'open' /(/s+) /({REGEX_FIELD}) {REGEX_ANTICIPATE_END}";
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {

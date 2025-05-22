@@ -8,7 +8,7 @@ public class OrParser : EndingInExpressionParser
 {
    public OrParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => "^ /(|s|) /'or' /(/s+)";
+   public override string Pattern => "^ /(/s*) /'or' /(/s+)";
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

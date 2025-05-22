@@ -9,7 +9,7 @@ public class KeywordOperatorsParser : SymbolParser
 {
    public KeywordOperatorsParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => "^ /(|s|) /('to' | 'til' | 'by' | 'if' | 'map' | 'join' | 'sort' |" +
+   public override string Pattern => "^ /(/s*) /('to' | 'til' | 'by' | 'if' | 'map' | 'join' | 'sort' |" +
       "'foldl' | 'foldr' | 'all' | 'any' | 'none' | 'one' | 'zip' | 'downto' | 'skip' | 'take' | 'band' | 'bor' |" +
       " 'bxor' | 'bsl' | 'bsr' | 'while' | 'until' | 'min' | 'max' | 'does' | 'x') /(/s+)";
 

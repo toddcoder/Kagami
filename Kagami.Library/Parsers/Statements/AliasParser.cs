@@ -7,7 +7,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public class AliasParser : StatementParser
 {
-   public override string Pattern => $"^ /'alias' /(|s+|) /({REGEX_CLASS}) /(|s|) /'=' /(|s|) /({REGEX_CLASS}) {REGEX_ANTICIPATE_END}";
+   public override string Pattern => $"^ /'alias' /(/s+) /({REGEX_CLASS}) /(/s*) /'=' /(/s*) /({REGEX_CLASS}) {REGEX_ANTICIPATE_END}";
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {

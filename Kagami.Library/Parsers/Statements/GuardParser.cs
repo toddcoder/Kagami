@@ -20,7 +20,7 @@ public class GuardParser : EndingInExpressionParser
    {
       var block = new Block(new Pass());
       var _elseBlock =
-         from keyword in state.Scan("^ /(|s+|) /'else'", Color.Whitespace, Color.Keyword)
+         from keyword in state.Scan("^ /(/s+) /'else'", Color.Whitespace, Color.Keyword)
          from eBlock in getBlock(state)
          select eBlock;
       if (_elseBlock is (true, var elseBlock))

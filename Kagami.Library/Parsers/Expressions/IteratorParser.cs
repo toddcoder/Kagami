@@ -8,7 +8,7 @@ public class IteratorParser : SymbolParser
 {
    public IteratorParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => "^ /(|s|) /('!'1%2 | '?') -(> [/s '^>'])";
+   public override string Pattern => "^ /(/s*) /('!'1%2 | '?') -(> [/s '^>'])";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

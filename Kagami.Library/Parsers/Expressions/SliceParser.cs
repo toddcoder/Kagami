@@ -59,7 +59,7 @@ public class SliceParser : SymbolParser
    {
       var skipTake = new SkipTake();
 
-      var _noSkipMatch = state.Scan("^ /(|s|) /','", Color.Whitespace, Color.Structure);
+      var _noSkipMatch = state.Scan("^ /(/s*) /','", Color.Whitespace, Color.Structure);
       if (_noSkipMatch)
       {
       }
@@ -79,7 +79,7 @@ public class SliceParser : SymbolParser
             return exception2;
          }
 
-         var _semiOrEnd = state.Scan("^ /(|s|) /[';,}']", Color.Whitespace, Color.CloseParenthesis);
+         var _semiOrEnd = state.Scan("^ /(/s*) /[';,}']", Color.Whitespace, Color.CloseParenthesis);
          if (_semiOrEnd is (true, var semiOrEnd))
          {
             switch (semiOrEnd)
@@ -107,7 +107,7 @@ public class SliceParser : SymbolParser
          return exception;
       }
 
-      var _end = state.Scan("^ /(|s|) /['};']", Color.Whitespace, Color.CloseParenthesis);
+      var _end = state.Scan("^ /(/s*) /['};']", Color.Whitespace, Color.CloseParenthesis);
       if (_end is (true, var end))
       {
          switch (end)

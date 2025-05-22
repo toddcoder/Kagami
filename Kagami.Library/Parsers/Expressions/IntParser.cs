@@ -7,7 +7,7 @@ public class IntParser : SymbolParser
 {
    public IntParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => "^ /(|s|) /([/d '_']+) /['Lif']? /b";
+   public override string Pattern => "^ /(/s*) /([/d '_']+) /['Lif']? /b";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

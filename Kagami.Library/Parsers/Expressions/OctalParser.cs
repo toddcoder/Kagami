@@ -7,7 +7,7 @@ public class OctalParser : SymbolParser
 {
    public OctalParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => "^ /(|s|) /'0o' /(['0-7_']+) /['Lif']? /b";
+   public override string Pattern => "^ /(/s*) /'0o' /(['0-7_']+) /['Lif']? /b";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

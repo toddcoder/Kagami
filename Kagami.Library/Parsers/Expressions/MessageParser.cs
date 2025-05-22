@@ -10,7 +10,7 @@ public class MessageParser : SymbolParser
 {
    public MessageParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => $"^ /(|s|) /'&.' /({REGEX_FUNCTION_NAME}) /'('?";
+   public override string Pattern => $"^ /(/s*) /'&.' /({REGEX_FUNCTION_NAME}) /'('?";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

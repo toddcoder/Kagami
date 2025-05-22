@@ -8,7 +8,7 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public class SelectorParser : SymbolParser
 {
-   public override string Pattern => $"^ /(|s|) /'&' /({REGEX_FUNCTION_NAME}) /('(' -[')']+ ')')?";
+   public override string Pattern => $"^ /(/s*) /'&' /({REGEX_FUNCTION_NAME}) /('(' -[')']+ ')')?";
 
    public SelectorParser(ExpressionBuilder builder) : base(builder) { }
 

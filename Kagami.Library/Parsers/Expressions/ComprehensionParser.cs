@@ -14,7 +14,7 @@ public class ComprehensionParser : SymbolParser
    {
    }
 
-   public override string Pattern => "^ /(|s|) /'for' -(> ['>^']) /b";
+   public override string Pattern => "^ /(/s*) /'for' -(> ['>^']) /b";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

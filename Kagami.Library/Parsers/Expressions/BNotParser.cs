@@ -8,7 +8,7 @@ public class BNotParser : SymbolParser
 {
    public BNotParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => "^ /(|s|) /'bnot' /b";
+   public override string Pattern => "^ /(/s*) /'bnot' /b";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

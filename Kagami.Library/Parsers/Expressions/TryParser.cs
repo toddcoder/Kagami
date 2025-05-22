@@ -10,7 +10,7 @@ public class TryParser : EndingInExpressionParser
    {
    }
 
-   public override string Pattern => "^ /(|s|) /'try' /b";
+   public override string Pattern => "^ /(/s*) /'try' /b";
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

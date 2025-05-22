@@ -9,7 +9,7 @@ public class InlineIfParser : SymbolParser
 {
    public InlineIfParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => "^ /(|s+|) /'?'";
+   public override string Pattern => "^ /(/s+) /'?'";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
@@ -17,7 +17,7 @@ public class InlineIfParser : SymbolParser
 
       var _result =
          from ifTrueValue in getExpression(state, builder.Flags | ExpressionFlags.OmitColon)
-         from scanned in state.Scan("^ /(|s|) /':'", Color.Whitespace, Color.Operator)
+         from scanned in state.Scan("^ /(/s*) /':'", Color.Whitespace, Color.Operator)
          from ifFalseValue in getExpression(state, builder.Flags)
          select (ifTrueValue, ifFalseValue);
 

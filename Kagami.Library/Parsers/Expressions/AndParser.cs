@@ -8,7 +8,7 @@ public class AndParser : EndingInExpressionParser
 {
    public AndParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => "^ /(|s|) /'and' /(/s+)";
+   public override string Pattern => "^ /(/s*) /'and' /(/s+)";
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

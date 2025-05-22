@@ -14,7 +14,7 @@ public class StringParser : SymbolParser
    {
    }
 
-   public override string Pattern => "^ /(|s|) /['mb`']? /(['\"'])";
+   public override string Pattern => "^ /(/s*) /['mb`']? /(['\"'])";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

@@ -7,7 +7,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public class ImportPackageParser : StatementParser
 {
-   public override string Pattern => $"^ /'import' /(|s+|) /({REGEX_FIELD}) {REGEX_ANTICIPATE_END}";
+   public override string Pattern => $"^ /'import' /(/s+) /({REGEX_FIELD}) {REGEX_ANTICIPATE_END}";
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {

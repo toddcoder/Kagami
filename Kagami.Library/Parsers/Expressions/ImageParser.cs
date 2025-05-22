@@ -8,7 +8,7 @@ public class ImageParser : SymbolParser
 {
    public ImageParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => "^ /(|s|) /'~' -(> /s)";
+   public override string Pattern => "^ /(/s*) /'~' -(> /s)";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

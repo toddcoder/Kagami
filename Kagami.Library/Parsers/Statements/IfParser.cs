@@ -13,7 +13,7 @@ public class IfParser : ExpressionBlockParser
    protected string fieldName = "";
    protected bool assignment;
 
-   public override string Pattern => $"^ (/('var' | 'let') /(|s|) /({REGEX_FIELD}) /(|s|) /'=' /(|s|))? /'if' -(> ['>^']) /b";
+   public override string Pattern => $"^ (/('var' | 'let') /(/s*) /({REGEX_FIELD}) /(/s*) /'=' /(/s*))? /'if' -(> ['>^']) /b";
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

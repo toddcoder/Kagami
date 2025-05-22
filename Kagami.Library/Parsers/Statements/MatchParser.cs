@@ -9,7 +9,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public class MatchParser : StatementParser
 {
-   public override string Pattern => $"^ (/('var' | 'let') /(|s|) /({REGEX_FIELD}) /(|s|) /'=' /(|s|))? /'match' /(/s+)";
+   public override string Pattern => $"^ (/('var' | 'let') /(/s*) /({REGEX_FIELD}) /(/s*) /'=' /(/s*))? /'match' /(/s+)";
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {

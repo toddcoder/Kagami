@@ -11,7 +11,7 @@ public class FieldParser : SymbolParser
    {
    }
 
-   public override string Pattern => $"^ /(|s|) /({REGEX_FIELD}) /b";
+   public override string Pattern => $"^ /(/s*) /({REGEX_FIELD}) /b";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

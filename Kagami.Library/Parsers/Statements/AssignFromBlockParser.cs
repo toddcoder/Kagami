@@ -8,7 +8,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public class AssignFromBlockParser : StatementParser
 {
-   public override string Pattern => $"^ (/('var' | 'let') /(|s+|))? /({REGEX_FIELD}) /b";
+   public override string Pattern => $"^ (/('var' | 'let') /(/s+))? /({REGEX_FIELD}) /b";
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
@@ -21,7 +21,7 @@ public class AssignFromBlockParser : StatementParser
 
       var _result =
          from typeConstraintValue in parseTypeConstraint(state)
-         from scanned in state.Scan($"^ /(|s|) /'=' /({REGEX_EOL})", Color.Whitespace, Color.Structure, Color.Whitespace)
+         from scanned in state.Scan($"^ /(/s*) /'=' /({REGEX_EOL})", Color.Whitespace, Color.Structure, Color.Whitespace)
          from blockValue in getBlock(state)
          select (typeConstraintValue, blockValue);
 

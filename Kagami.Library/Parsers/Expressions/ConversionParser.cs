@@ -12,7 +12,7 @@ public class ConversionParser : EndingInValueParser
    {
    }
 
-   public override string Pattern => "^ /(|s|) /('int' | 'float' | 'byte' | 'long' | 'complex' | 'rational') /(|s+|)";
+   public override string Pattern => "^ /(/s*) /('int' | 'float' | 'byte' | 'long' | 'complex' | 'rational') /(/s+)";
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

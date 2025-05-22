@@ -13,7 +13,7 @@ public class SkipTakeItemParser : Parser
    {
    }
 
-   public override string Pattern => "^ /(|s|) /((['+-'] [/d '_']+) | '0')? /':' /((['+-'] [/d '_']+) | '0')?";
+   public override string Pattern => "^ /(/s*) /((['+-'] [/d '_']+) | '0')? /':' /((['+-'] [/d '_']+) | '0')?";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens)
    {
@@ -24,7 +24,7 @@ public class SkipTakeItemParser : Parser
       Skip = skip.Value().Int32();
       Take = take.Value().Int32();
 
-      if (state.Scan("^ /(|s|) /'='", Color.Whitespace, Color.Operator))
+      if (state.Scan("^ /(/s*) /'='", Color.Whitespace, Color.Operator))
       {
          var _expression = getExpression(state, ExpressionFlags.OmitComma);
          if (_expression is (true, var expression))
@@ -45,7 +45,7 @@ public class SkipTakeItemParser : Parser
          Prefix = nil;
       }
 
-      if (state.Scan("^ /(|s|) /'~'", Color.Whitespace, Color.Operator))
+      if (state.Scan("^ /(/s*) /'~'", Color.Whitespace, Color.Operator))
       {
          var _expression = getExpression(state, ExpressionFlags.OmitComma | ExpressionFlags.OmitConcatenate);
          if (_expression is (true, var expression))

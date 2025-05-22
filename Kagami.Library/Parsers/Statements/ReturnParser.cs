@@ -7,7 +7,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public class ReturnParser : EndingInExpressionParser
 {
-   public override string Pattern => "^ /'return' /(|s+|)";
+   public override string Pattern => "^ /'return' /(/s+)";
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

@@ -8,7 +8,7 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public class ClassReferenceParser : SymbolParser
 {
-   public override string Pattern => $"^ /(|s|) /({REGEX_CLASS_GETTING}) /b";
+   public override string Pattern => $"^ /(/s*) /({REGEX_CLASS_GETTING}) /b";
 
    public ClassReferenceParser(ExpressionBuilder builder) : base(builder)
    {

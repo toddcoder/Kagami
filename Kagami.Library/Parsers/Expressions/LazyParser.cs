@@ -8,7 +8,7 @@ public class LazyParser : EndingInExpressionParser
 {
    public LazyParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => "^ /(|s|) /'lazy' /b";
+   public override string Pattern => "^ /(/s*) /'lazy' /b";
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

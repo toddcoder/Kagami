@@ -12,7 +12,7 @@ public class UserOperatorParser : SymbolParser
    {
    }
 
-   public override string Pattern => $"^ /(|s|) /({REGEX_FUNCTION_NAME}) /(|s+|)";
+   public override string Pattern => $"^ /(/s*) /({REGEX_FUNCTION_NAME}) /(/s+)";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

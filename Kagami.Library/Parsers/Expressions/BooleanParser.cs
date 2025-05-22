@@ -8,7 +8,7 @@ public class BooleanParser : SymbolParser
 {
    public BooleanParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => "^ /(|s|) /('true' | 'false') /b";
+   public override string Pattern => "^ /(/s*) /('true' | 'false') /b";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

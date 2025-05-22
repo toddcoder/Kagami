@@ -13,7 +13,7 @@ public class InterpolatedStringParser : SymbolParser
 {
    public InterpolatedStringParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => "^ /(|s|) /['$f'] /[dquote]";
+   public override string Pattern => "^ /(/s*) /['$f'] /[dquote]";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

@@ -7,7 +7,7 @@ public class BinaryParser : SymbolParser
 {
    public BinaryParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => "^ /(|s|) /'0b' /(['01_']+) /['Lif']? /b";
+   public override string Pattern => "^ /(/s*) /'0b' /(['01_']+) /['Lif']? /b";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

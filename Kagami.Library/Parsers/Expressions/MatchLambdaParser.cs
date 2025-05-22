@@ -9,7 +9,7 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public class MatchLambdaParser : SymbolParser
 {
-   public override string Pattern => "^ /(|s|) /'|('";
+   public override string Pattern => "^ /(/s*) /'|('";
 
    public MatchLambdaParser(ExpressionBuilder builder) : base(builder)
    {
@@ -21,7 +21,7 @@ public class MatchLambdaParser : SymbolParser
 
       var _result =
          from c in getExpression(state, builder.Flags | ExpressionFlags.Comparisand)
-         from scanned in state.Scan("^ /')' /(|s|) /('->' | '=>')", Color.Structure, Color.Whitespace, Color.Structure)
+         from scanned in state.Scan("^ /')' /(/s*) /('->' | '=>')", Color.Structure, Color.Whitespace, Color.Structure)
          from typeConstraint in parseTypeConstraint(state)
          from b in getLambdaBlock(scanned.Contains("->"), state, builder.Flags, typeConstraint)
          select (c, b);

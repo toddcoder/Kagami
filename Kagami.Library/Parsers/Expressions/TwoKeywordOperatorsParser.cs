@@ -10,7 +10,7 @@ public class TwoKeywordOperatorsParser : SymbolParser
    {
    }
 
-   public override string Pattern => "^ /(|s|) /('skip' | 'take') /(|s+|) /('while' | 'until') /b";
+   public override string Pattern => "^ /(/s*) /('skip' | 'take') /(/s+) /('while' | 'until') /b";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

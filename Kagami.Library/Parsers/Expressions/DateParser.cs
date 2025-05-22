@@ -9,7 +9,7 @@ public class DateParser : SymbolParser
 {
    public DateParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => "^ /(|s|) /('d' [quote]) /(-[quote]*) /[quote]";
+   public override string Pattern => "^ /(/s*) /('d' [quote]) /(-[quote]*) /[quote]";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

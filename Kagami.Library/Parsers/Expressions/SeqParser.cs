@@ -11,7 +11,7 @@ public class SeqParser : SymbolParser
    {
    }
 
-   public override string Pattern => $"^ /(|s|) /'seq' /({REGEX_EOL})";
+   public override string Pattern => $"^ /(/s*) /'seq' /({REGEX_EOL})";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

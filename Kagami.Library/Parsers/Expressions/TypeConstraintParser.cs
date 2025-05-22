@@ -15,7 +15,7 @@ public class TypeConstraintParser : SymbolParser
    {
    }
 
-   public override string Pattern => "^ /(|s|) /'<' (> ['A-Z'])";
+   public override string Pattern => "^ /(/s*) /'<' (> ['A-Z'])";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

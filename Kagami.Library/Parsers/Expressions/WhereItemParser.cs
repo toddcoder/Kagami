@@ -14,7 +14,7 @@ public class WhereItemParser : EndingInExpressionParser
 
    protected string propertyName = "";
 
-   public override string Pattern => $"^ /(|s|) /({REGEX_FIELD}) /(|s|) /':'";
+   public override string Pattern => $"^ /(/s*) /({REGEX_FIELD}) /(/s*) /':'";
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

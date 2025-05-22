@@ -11,7 +11,7 @@ public class YieldParser : EndingInExpressionParser
 {
    protected bool all;
 
-   public override string Pattern => "^ /'yield' (/(|s+|) /'all')? /(|s+|)";
+   public override string Pattern => "^ /'yield' (/(/s+) /'all')? /(/s+)";
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

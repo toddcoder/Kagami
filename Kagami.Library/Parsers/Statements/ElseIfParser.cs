@@ -18,7 +18,7 @@ public class ElseIfParser : ExpressionBlockParser
       this.assignment = assignment;
    }
 
-   public override string Pattern => "^ /'else' /(|s+|) /'if' /b";
+   public override string Pattern => "^ /'else' /(/s+) /'if' /b";
 
    public Maybe<If> If { get; set; } = nil;
 

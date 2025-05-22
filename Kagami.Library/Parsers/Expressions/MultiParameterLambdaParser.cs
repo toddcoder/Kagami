@@ -6,7 +6,7 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public class MultiParameterLambdaParser : LambdaParser
 {
-   public override string Pattern => "^ /(|s|) /'('";
+   public override string Pattern => "^ /(/s*) /'('";
 
    public MultiParameterLambdaParser(ExpressionBuilder builder) : base(builder) { }
 

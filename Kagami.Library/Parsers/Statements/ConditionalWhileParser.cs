@@ -8,7 +8,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public class ConditionalWhileParser : StatementParser
 {
-   public override string Pattern => "^ /'while' /(|s+|)";
+   public override string Pattern => "^ /'while' /(/s+)";
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
@@ -18,7 +18,7 @@ public class ConditionalWhileParser : StatementParser
 
       var _result =
          from comparisandValue in getExpression(state, ExpressionFlags.Comparisand)
-         from scanned in state.Scan("^ /(|s|) /':='", Color.Whitespace, Color.Structure)
+         from scanned in state.Scan("^ /(/s*) /':='", Color.Whitespace, Color.Structure)
          from expressionValue in getExpression(state, ExpressionFlags.Standard)
          from blockValue in getBlock(state)
          select (comparisandValue, expressionValue, blockValue);

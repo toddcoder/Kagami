@@ -34,7 +34,7 @@ public class MatchExpressionParser : SymbolParser
    {
    }
 
-   public override string Pattern => "^ /(|s|) /'||' /(/s*) /'(' /(/s*)";
+   public override string Pattern => "^ /(/s*) /'||' /(/s*) /'(' /(/s*)";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

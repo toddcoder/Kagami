@@ -8,7 +8,7 @@ public class IfAsAndParser : EndingInExpressionParser
 {
    public IfAsAndParser(ExpressionBuilder builder) : base(builder, ExpressionFlags.OmitSendMessageAssign) { }
 
-   public override string Pattern => "^ /(|s|) /'if' /(/s+)";
+   public override string Pattern => "^ /(/s*) /'if' /(/s+)";
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

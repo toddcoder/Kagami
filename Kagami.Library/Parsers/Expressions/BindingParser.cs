@@ -13,7 +13,7 @@ public class BindingParser : EndingInExpressionParser
    {
    }
 
-   public override string Pattern => $"^ /(|s|) /('use' | 'var') /(|s+|) /({REGEX_FIELD}) /'@'";
+   public override string Pattern => $"^ /(/s*) /('use' | 'var') /(/s+) /({REGEX_FIELD}) /'@'";
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

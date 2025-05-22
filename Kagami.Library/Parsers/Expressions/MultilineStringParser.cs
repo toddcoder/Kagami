@@ -15,7 +15,7 @@ public class MultilineStringParser : SymbolParser
    {
    }
 
-   public override string Pattern => "^ /(|s|) /([dquote]3) /(/r /n | /r | /n)";
+   public override string Pattern => "^ /(/s*) /([dquote]3) /(/r /n | /r | /n)";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

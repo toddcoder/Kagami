@@ -9,7 +9,7 @@ public class PlaceholderParser : SymbolParser
 {
    public PlaceholderParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => $"^ /(|s|) /('use' | 'var') /(|s+|) /({REGEX_FIELD}) /b";
+   public override string Pattern => $"^ /(/s*) /('use' | 'var') /(/s+) /({REGEX_FIELD}) /b";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

@@ -11,7 +11,7 @@ public class AlternateStringParser : SymbolParser
 {
    public AlternateStringParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => "^ /(|s|) /['rl'] /[dquote]";
+   public override string Pattern => "^ /(/s*) /['rl'] /[dquote]";
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

@@ -15,7 +15,7 @@ public class ImplicitExpressionParser : EndingInExpressionParser
    {
    }
 
-   public override string Pattern => $"^ /(|s|) /({REGEX_ITERATOR_FUNCTIONS}) /'>'";
+   public override string Pattern => $"^ /(/s*) /({REGEX_ITERATOR_FUNCTIONS}) /'>'";
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {
