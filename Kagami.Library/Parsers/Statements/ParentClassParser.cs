@@ -8,14 +8,14 @@ namespace Kagami.Library.Parsers.Statements;
 
 public class ParentClassParser : StatementParser
 {
-   public override string Pattern => $"^ /'inherits' /(/s+) /({REGEX_CLASS}) " + "/['({']?";
+   public override string Pattern => $"^ /(/s+) /'inherits' /(/s+) /({REGEX_CLASS}) " + "/['([']?";
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      var parentClassName = tokens[3].Text;
-      var hasArguments = tokens[4].Length > 0;
-      var initialize = tokens[4].Text == "{";
-      state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Class, Color.Structure);
+      var parentClassName = tokens[4].Text;
+      var hasArguments = tokens[5].Length > 0;
+      var initialize = tokens[5].Text == "[";
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Class, Color.Structure);
 
       if (hasArguments)
       {

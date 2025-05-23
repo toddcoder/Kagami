@@ -11,15 +11,15 @@ namespace Kagami.Library.Parsers.Statements;
 
 public class DataTypeParser : StatementParser
 {
-   public override string Pattern => $"^ /'type' /(/s+) /({REGEX_CLASS}) {REGEX_ANTICIPATE_END}";
+   public override string Pattern => $"^ /(/s*) /'type' /(/s+) /({REGEX_CLASS})";
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      var className = tokens[3].Text;
-      state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Class);
+      var className = tokens[4].Text;
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Class);
 
-      var values = new Hash<string, (IObject[], IRangeItem)>();
-      var dataComparisandNames = new List<string>();
+      Hash<string, (IObject[], IRangeItem)> values = [];
+      List<string> dataComparisandNames = [];
       var dataTypeClass = new DataTypeClass(className);
       var _registerClass = Module.Global.Value.RegisterClass(dataTypeClass);
       if (_registerClass)

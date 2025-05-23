@@ -16,7 +16,7 @@ public class ForParser : StatementParser
 
       var _result =
          from comparisandValue in getExpression(state, ExpressionFlags.Comparisand | ExpressionFlags.OmitColon)
-         from scanned in state.Scan("^ /(/s*) /'='", Color.Whitespace, Color.Structure)
+         from scanned in state.Scan("^ /(/s+) /'of' /(/s+)", Color.Whitespace, Color.Keyword, Color.Whitespace)
          from sourceValue in getExpression(state, ExpressionFlags.Standard)
          from blockValue in getBlock(state)
          select (comparisandValue, sourceValue, blockValue);

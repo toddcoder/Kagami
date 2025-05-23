@@ -37,7 +37,7 @@ public class CaseParser : StatementParser
       caseType = CaseType.Function;
    }
 
-   public override string Pattern => "^ /'|' /(/s*)";
+   public override string Pattern => "^ /(/s*) /'case' /(/s*)";
 
    protected static Optional<Block> getCaseBlock(CaseType caseType, ParseState state) => caseType switch
    {
@@ -49,20 +49,19 @@ public class CaseParser : StatementParser
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      state.Colorize(tokens, Color.Structure, Color.Whitespace);
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace);
 
       var _result =
          from comparisandValue in getCompoundComparisands(state, fieldName)
          from andValue in andExpression(state)
-         let endValue = state.SkipEndOfLine() | ""
          from blockValue in getCaseBlock(caseType, state)
          select (comparisandValue, andValue, blockValue);
 
-      if (_result is (true, var (comparisand, _and, block)))
+      if (_result is (true, var (comparisand, possibleAnd, block)))
       {
          var builder = new ExpressionBuilder(ExpressionFlags.Standard);
          builder.Add(comparisand);
-         if (_and is (true, var and))
+         if (possibleAnd.Maybe is (true, var and))
          {
             builder.Add(and);
          }

@@ -2,6 +2,7 @@
 using Kagami.Library.Runtime;
 using Core.Collections;
 using Core.Monads;
+using Core.Objects;
 using Core.Strings;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Classes.ClassFunctions;
@@ -10,7 +11,7 @@ namespace Kagami.Library.Classes;
 
 public class DataTypeClass : UserClass
 {
-   protected DataType dataType = new("", []);
+   protected LateLazy<DataType> dataType = new();
    protected Hash<string, IObject> dataComparisands = new();
    protected Hash<IObject, string> ordinals = new();
 
@@ -18,13 +19,13 @@ public class DataTypeClass : UserClass
    {
    }
 
-   public void RegisterDataType(DataType dataType) => this.dataType = dataType;
+   public void RegisterDataType(DataType dataType) => this.dataType.ActivateWith(() => dataType);
 
    public Result<Unit> RegisterDataComparisand(string name, IObject ordinal)
    {
       if (dataComparisands.ContainsKey(name))
       {
-         return $"Data comparisand {name} already exists".Failure<Unit>();
+         return fail($"Data comparisand {name} already exists");
       }
       else
       {
@@ -72,10 +73,9 @@ public class DataTypeClass : UserClass
 
       registerMessage("fromOrdinal", (obj, msg) => function<DataType, IObject>(obj, msg, (_, ord) =>
       {
-         if (ordinals.ContainsKey(ord))
+         if (ordinals.Maybe[ord] is (true, var name))
          {
-            var name = ordinals[ord];
-            return new Some(dataType.GetDataComparisand(name, msg.Arguments.Value.Skip(1).ToArray()));
+            return new Some(dataType.Value.GetDataComparisand(name, msg.Arguments.Value.Skip(1).ToArray()));
          }
          else
          {
@@ -90,10 +90,9 @@ public class DataTypeClass : UserClass
 
       registerClassMessage("fromOrdinal", (bc, msg) => classFunc<DataTypeClass, IObject>(bc, msg, (td, ord) =>
       {
-         if (td.ordinals.ContainsKey(ord))
+         if (td.ordinals.Maybe[ord] is (true, var name))
          {
-            var name = td.ordinals[ord];
-            return new Some(dataType.GetDataComparisand(name, msg.Arguments.Value.Skip(1).ToArray()));
+            return new Some(dataType.Value.GetDataComparisand(name, msg.Arguments.Value.Skip(1).ToArray()));
          }
          else
          {
@@ -101,7 +100,7 @@ public class DataTypeClass : UserClass
          }
       }));
 
-      RegisterClassMessage("values".get(), (bc, _) => classFunc<DataTypeClass>(bc, dtc => dtc.dataType.Values));
+      RegisterClassMessage("values".get(), (bc, _) => classFunc<DataTypeClass>(bc, dtc => dtc.dataType.Value.Values));
    }
 
    public override bool ClassRespondsTo(Selector selector) => classMessages.ContainsKey(selector);

@@ -7,11 +7,11 @@ namespace Kagami.Library.Parsers.Statements;
 
 public class ReturnParser : EndingInExpressionParser
 {
-   public override string Pattern => "^ /'return' /(/s+)";
+   public override string Pattern => "^ /(/s*) /'return' /(/s+)";
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {
-      state.Colorize(tokens, Color.Keyword, Color.Whitespace);
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace);
       return unit;
    }
 

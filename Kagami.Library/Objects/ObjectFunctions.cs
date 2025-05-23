@@ -581,7 +581,7 @@ public static class ObjectFunctions
 
    public static Selector selector(string name, string[] labels, IObject[] objects)
    {
-      var enumerable = labels.Zip(objects, (l, o) => $"{l.Map(l1 => $"{l1}:")}_<{o.ClassName}>");
+      var enumerable = labels.Zip(objects, (l, o) => (l.IsNotEmpty() ? $"{l}:" : "") + $"_<{o.ClassName}");
       var selectItems = enumerable.Select(parseSelectorItem).ToArray();
 
       return new Selector(name, selectItems, selectorImage(name, selectItems));

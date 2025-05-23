@@ -1026,7 +1026,7 @@ public static class ParserFunctions
       current.Else = new Block(new Return(new Expression(new ObjectSymbol(Unmatched.Value)), nil));
    }
 
-   public static Optional<Maybe<AndSymbol>> andExpression(ParseState state)
+   public static Optional<PossibleAndSymbol> andExpression(ParseState state)
    {
       var builder = new ExpressionBuilder(ExpressionFlags.Standard);
       var andParser = new IfAsAndParser(builder);
@@ -1036,7 +1036,7 @@ public static class ParserFunctions
          var _andSymbol = builder.ToExpression().Map(e => (AndSymbol)e.Symbols[0]);
          if (_andSymbol is (true, var andSymbol))
          {
-            return andSymbol.Some();
+            return new PossibleAndSymbol.Some(andSymbol);
          }
          else
          {
@@ -1049,7 +1049,7 @@ public static class ParserFunctions
       }
       else
       {
-         return nil;
+         return new PossibleAndSymbol.None();
       }
    }
 

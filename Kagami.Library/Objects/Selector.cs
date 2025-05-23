@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Kagami.Library.Nodes.Symbols;
+﻿using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Operations;
 using Core.Collections;
 using Core.Enumerables;

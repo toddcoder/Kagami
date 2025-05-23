@@ -12,13 +12,13 @@ public class AssignToFieldParser : EndingInExpressionParser
    protected string fieldName = "";
    protected string operationSource = "";
 
-   public override string Pattern => $"^ /({REGEX_FIELD}) /(/s*) /({REGEX_ASSIGN_OPS})? /'=' -(> ['=>'])";
+   public override string Pattern => $"^ /(/s*) /({REGEX_FIELD}) /(/s*) /({REGEX_ASSIGN_OPS})? /'=' -(> ['=>'])";
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {
-      fieldName = tokens[1].Text;
-      operationSource = tokens[3].Text;
-      state.Colorize(tokens, Color.Identifier, Color.Whitespace, Color.Operator, Color.Structure);
+      fieldName = tokens[2].Text;
+      operationSource = tokens[4].Text;
+      state.Colorize(tokens, Color.Whitespace, Color.Identifier, Color.Whitespace, Color.Operator, Color.Structure);
 
       return unit;
    }

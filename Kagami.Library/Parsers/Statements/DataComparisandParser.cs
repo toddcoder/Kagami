@@ -24,15 +24,15 @@ public class DataComparisandParser : StatementParser
       this.ordinal = ordinal;
    }
 
-   public override string Pattern => $"^ /({REGEX_CLASS}) /'('?";
+   public override string Pattern => $"^ /(/s*) /({REGEX_CLASS}) /'('?";
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
       state.BeginTransaction();
-      var name = tokens[1].Text;
+      var name = tokens[2].Text;
       Name = name;
-      var hasArguments = tokens[2].Text == "(";
-      state.Colorize(tokens, Color.Class, Color.OpenParenthesis);
+      var hasArguments = tokens[3].Text == "(";
+      state.Colorize(tokens, Color.Whitespace, Color.Class, Color.OpenParenthesis);
 
       var _result =
          from possibleComparisands in getPossibleComparisands(hasArguments, className, name, state)
