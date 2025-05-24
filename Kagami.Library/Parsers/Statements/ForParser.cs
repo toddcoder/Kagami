@@ -15,8 +15,8 @@ public class ForParser : StatementParser
       state.Colorize(tokens, Color.Keyword, Color.Whitespace);
 
       var _result =
-         from comparisandValue in getExpression(state, ExpressionFlags.Comparisand | ExpressionFlags.OmitColon)
-         from scanned in state.Scan("^ /(/s+) /'of' /(/s+)", Color.Whitespace, Color.Keyword, Color.Whitespace)
+         from comparisandValue in getExpression(state, ExpressionFlags.Comparisand | ExpressionFlags.OmitColon | ExpressionFlags.OmitIn)
+         from scanned in state.Scan("^ /(/s+) /'in' /(/s+)", Color.Whitespace, Color.Keyword, Color.Whitespace)
          from sourceValue in getExpression(state, ExpressionFlags.Standard)
          from blockValue in getBlock(state)
          select (comparisandValue, sourceValue, blockValue);

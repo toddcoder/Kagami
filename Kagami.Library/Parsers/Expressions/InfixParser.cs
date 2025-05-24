@@ -12,7 +12,12 @@ public class InfixParser(ExpressionBuilder builder) : MultiParser
          yield return new RangeOperatorParser(builder);
          yield return new BindParser(builder);
          yield return new OperatorsParser(builder);
-         yield return new InParser(builder);
+
+         if (!builder.Flags[ExpressionFlags.OmitIn])
+         {
+            yield return new InParser(builder);
+         }
+
          yield return new TwoKeywordOperatorsParser(builder);
          yield return new KeywordOperatorsParser(builder);
       }
