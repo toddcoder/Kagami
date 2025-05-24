@@ -1,16 +1,20 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class ZipLambdaParser : SymbolParser
+public partial class ZipLambdaParser : SymbolParser
 {
    public ZipLambdaParser(ExpressionBuilder builder) : base(builder)
    {
    }
 
-   public override string Pattern => "^ /(/s*) /'['";
+   //public override string Pattern => "^ /(/s*) /'['";
+
+   [GeneratedRegex(@"^(\s*)(\[)", RegexOptions.Compiled)]
+   public partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
@@ -20,7 +24,7 @@ public class ZipLambdaParser : SymbolParser
       var expressionBuilder = new ExpressionBuilder(builder.Flags);
       var parser = new AnyLambdaParser(expressionBuilder);
       var _result =
-         from parsed in parser.Scan(state)
+         from parsed in parser.Scan(state, Regex())
          from endToken in state.Scan("/']'", Color.Operator)
          select parsed;
 

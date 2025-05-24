@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Classes;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Classes;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Runtime;
 using Core.Monads;
@@ -9,13 +10,16 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class TypeConstraintParser : SymbolParser
+public partial class TypeConstraintParser : SymbolParser
 {
    public TypeConstraintParser(ExpressionBuilder builder) : base(builder)
    {
    }
 
-   public override string Pattern => "^ /(/s*) /'<' (> ['A-Z'])";
+   //public override string Pattern => "^ /(/s*) /'<' (> ['A-Z'])";
+
+   [GeneratedRegex(@"^(\s*)(<)(?=[A-Z])", RegexOptions.Compiled)]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

@@ -2,7 +2,7 @@
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public abstract class SymbolParser : Parser
+public abstract class SymbolParser : PatternedParser
 {
    protected ExpressionBuilder builder;
 

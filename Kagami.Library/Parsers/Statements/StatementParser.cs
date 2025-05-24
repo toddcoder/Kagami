@@ -3,7 +3,7 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public abstract class StatementParser : Parser
+public abstract class StatementParser : PatternlessParser
 {
    public static Optional<int> ExceptionIndex { get; set; } = nil;
 

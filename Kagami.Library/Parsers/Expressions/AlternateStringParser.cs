@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Text.RegularExpressions;
 using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using Core.Strings;
@@ -7,11 +8,16 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class AlternateStringParser : SymbolParser
+public partial class AlternateStringParser : SymbolParser
 {
-   public AlternateStringParser(ExpressionBuilder builder) : base(builder) { }
+   public AlternateStringParser(ExpressionBuilder builder) : base(builder)
+   {
+   }
 
-   public override string Pattern => "^ /(/s*) /['rl'] /[dquote]";
+   //public override string Pattern => "^ /(/s*) /['rl'] /[dquote]";
+
+   [GeneratedRegex(@"^(\s*)([rl])("")", RegexOptions.Compiled)]
+   public partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

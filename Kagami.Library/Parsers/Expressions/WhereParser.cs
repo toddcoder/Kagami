@@ -1,17 +1,20 @@
-﻿using System.Collections.Generic;
-using Kagami.Library.Nodes.Symbols;
+﻿using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
+using System.Text.RegularExpressions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class WhereParser : SymbolParser
+public partial class WhereParser : SymbolParser
 {
    public WhereParser(ExpressionBuilder builder) : base(builder)
    {
    }
 
-   public override string Pattern => "^ /(/s*) /'.{'";
+   //public override string Pattern => "^ /(/s*) /'.{'";
+
+   [GeneratedRegex(@"^(\s*)(\.{)", RegexOptions.Compiled)]
+   public partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
@@ -22,7 +25,7 @@ public class WhereParser : SymbolParser
 
       while (state.More)
       {
-         var _scan = itemParser.Scan(state);
+         var _scan = itemParser.Scan(state, Regex());
          if (_scan)
          {
             list.Add((itemParser.PropertyName, itemParser.Expression));

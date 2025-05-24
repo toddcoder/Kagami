@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Runtime;
 using Core.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
@@ -6,13 +7,16 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class UserOperatorParser : SymbolParser
+public partial class UserOperatorParser : SymbolParser
 {
    public UserOperatorParser(ExpressionBuilder builder) : base(builder)
    {
    }
 
-   public override string Pattern => $"^ /(/s*) /({REGEX_FUNCTION_NAME}) /(/s+)";
+   //public override string Pattern => $"^ /(/s*) /({REGEX_FUNCTION_NAME}) /(/s+)";
+
+   [GeneratedRegex(@"^(\s*)()(\s+)", RegexOptions.Compiled)]
+   public override Regex Regex() => TODO_IMPLEMENT_ME;
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

@@ -1,14 +1,15 @@
-﻿using Core.Enumerables;
+﻿using System.Text.RegularExpressions;
+using Core.Enumerables;
 using Kagami.Library.Runtime;
 using Core.Monads;
 using Kagami.Library.Objects;
 using static Kagami.Library.AllExceptions;
 using static Core.Monads.MonadFunctions;
-using static Kagami.Library.Parsers.ParserFunctions;
+using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public class MixinNameParser : Parser
+public partial class MixinNameParser : PatternedParser
 {
    protected List<Mixin> mixins;
 
@@ -17,7 +18,10 @@ public class MixinNameParser : Parser
       this.mixins = mixins;
    }
 
-   public override string Pattern => $"^ /(/s*) /({REGEX_CLASS}) (/(/s*) /',')?";
+   //public override string Pattern => $"^ /(/s*) /({REGEX_CLASS}) (/(/s*) /',')?";
+
+   [GeneratedRegex(@"^(\s*)([A-Z][A-Za-z_]*)(?:(\s*)(,))?", RegexOptions.Compiled)]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens)
    {

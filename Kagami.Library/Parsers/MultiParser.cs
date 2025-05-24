@@ -3,7 +3,7 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers;
 
-public abstract class MultiParser : Parser
+public abstract class MultiParser : PatternlessParser
 {
    public abstract IEnumerable<Parser> Parsers { get; }
 

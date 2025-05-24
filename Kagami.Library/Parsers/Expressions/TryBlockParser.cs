@@ -1,17 +1,21 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class TryBlockParser : SymbolParser
+public partial class TryBlockParser : SymbolParser
 {
    public TryBlockParser(ExpressionBuilder builder) : base(builder)
    {
    }
 
-   public override string Pattern => $"^ /(/s*) /'try' /({REGEX_EOL})";
+   //public override string Pattern => $"^ /(/s*) /'try' /({REGEX_EOL})";
+
+   [GeneratedRegex(@"^(\s*)(try) \b", RegexOptions.Compiled)]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

@@ -9,7 +9,7 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class ExpressionParser : Parser
+public class ExpressionParser : PatternlessParser
 {
    protected Bits32<ExpressionFlags> flags;
    protected ExpressionBuilder builder;
