@@ -1,14 +1,20 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class StringArrayParser : SymbolParser
+public partial class StringArrayParser : SymbolParser
 {
-   public override string Pattern => "^ /(/s*) /'a\"' /(-['\"']*) /'\"'";
+   //public override string Pattern => "^ /(/s*) /'a\"' /(-['\"']*) /'\"'";
 
-   public StringArrayParser(ExpressionBuilder builder) : base(builder) { }
+   [GeneratedRegex("""^(\s*)(a")([^'"]*)(")""")]
+   public override partial Regex Regex();
+
+   public StringArrayParser(ExpressionBuilder builder) : base(builder)
+   {
+   }
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

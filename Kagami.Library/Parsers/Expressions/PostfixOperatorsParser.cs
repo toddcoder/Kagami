@@ -1,12 +1,16 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class PostfixOperatorsParser : SymbolParser
+public partial class PostfixOperatorsParser : SymbolParser
 {
-   public override string Pattern => "^ /(['?!']1%2) -(>['?!'])";
+   //public override string Pattern => "^ /(['?!']1%2) -(>['?!'])";
+
+   [GeneratedRegex(@"^([\?!]{1,2})(?![\?!])")]
+   public override partial Regex Regex();
 
    public PostfixOperatorsParser(ExpressionBuilder builder) : base(builder)
    {

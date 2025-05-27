@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Nodes.Statements;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Runtime;
 using Core.Monads;
@@ -6,12 +7,16 @@ using Kagami.Library.Objects;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
 using Class = Kagami.Library.Nodes.Statements.Class;
+using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public class RecordParser : StatementParser
+public partial class RecordParser : StatementParser
 {
-   public override string Pattern => $"^ /'record' /(/s+) /({REGEX_CLASS}) /'('";
+   //public override string Pattern => $"^ /'record' /(/s+) /({REGEX_CLASS}) /'('";
+
+   [GeneratedRegex($@"^(record)(\s+)({REGEX_CLASS})(\()")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {

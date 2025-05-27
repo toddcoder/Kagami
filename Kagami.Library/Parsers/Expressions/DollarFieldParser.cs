@@ -1,14 +1,18 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class DollarFieldParser : SymbolParser
+public partial class DollarFieldParser : SymbolParser
 {
    public DollarFieldParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => "^ /(/s*) /'$' /(/d+) /b";
+   //public override string Pattern => "^ /(/s*) /'$' /(/d+) /b";
+
+   [GeneratedRegex(@"^(\s*)(\$)(\d+)\b")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

@@ -1,15 +1,19 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using Core.Objects;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class DateParser : SymbolParser
+public partial class DateParser : SymbolParser
 {
    public DateParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => "^ /(/s*) /('d' [quote]) /(-[quote]*) /[quote]";
+   //public override string Pattern => "^ /(/s*) /('d' [quote]) /(-[quote]*) /[quote]";
+
+   [GeneratedRegex("""^(\s*)(d['"])([^'"]*)(['"])""")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

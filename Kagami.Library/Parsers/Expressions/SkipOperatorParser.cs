@@ -1,14 +1,20 @@
-﻿using Core.Monads;
+﻿using System.Text.RegularExpressions;
+using Core.Monads;
 using Kagami.Library.Nodes.Symbols;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class SkipOperatorParser : SymbolParser
+public partial class SkipOperatorParser : SymbolParser
 {
-   public SkipOperatorParser(ExpressionBuilder builder) : base(builder) { }
+   public SkipOperatorParser(ExpressionBuilder builder) : base(builder)
+   {
+   }
 
-   public override string Pattern => "^ /(/s*) /';*'";
+   //public override string Pattern => "^ /(/s*) /';*'";
+
+   [GeneratedRegex(@"^(\s*)(;\*)")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

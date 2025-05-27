@@ -1,11 +1,12 @@
-﻿using Kagami.Library.Nodes.Statements;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public class ElseIfParser : ExpressionBlockParser
+public partial class ElseIfParser : ExpressionBlockParser
 {
    protected string fieldName;
    protected bool mutable;
@@ -18,7 +19,10 @@ public class ElseIfParser : ExpressionBlockParser
       this.assignment = assignment;
    }
 
-   public override string Pattern => "^ /(/s*) /'else' /(/s+) /'if' /b";
+   //public override string Pattern => "^ /(/s*) /'else' /(/s+) /'if' /b";
+
+   [GeneratedRegex(@"^(\s*)(else)(\s+)(if)\b")]
+   public override partial Regex Regex();
 
    public Maybe<If> If { get; set; } = nil;
 

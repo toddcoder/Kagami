@@ -1,4 +1,5 @@
-﻿using Core.Matching;
+﻿using System.Text.RegularExpressions;
+using Core.Matching;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Parsers.Expressions;
 using Core.Monads;
@@ -9,9 +10,12 @@ using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public class DeferParser : StatementParser
+public partial class DeferParser : StatementParser
 {
-   public override string Pattern => "^ /'defer' /b";
+   //public override string Pattern => "^ /'defer' /b";
+
+   [GeneratedRegex(@"^(defer)\b")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {

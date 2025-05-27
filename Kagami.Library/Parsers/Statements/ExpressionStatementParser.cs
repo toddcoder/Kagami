@@ -1,13 +1,15 @@
-﻿using Kagami.Library.Nodes.Statements;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Objects;
 using Kagami.Library.Parsers.Expressions;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
+using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public class ExpressionStatementParser : StatementParser
+public partial class ExpressionStatementParser : StatementParser
 {
    protected bool returnExpression;
    protected Maybe<TypeConstraint> _typeConstraint;
@@ -17,6 +19,9 @@ public class ExpressionStatementParser : StatementParser
       this.returnExpression = returnExpression;
       this._typeConstraint = _typeConstraint;
    }
+
+   [GeneratedRegex(".+")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {

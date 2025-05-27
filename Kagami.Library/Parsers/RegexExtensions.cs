@@ -6,7 +6,7 @@ namespace Kagami.Library.Parsers;
 
 public static class RegexExtensions
 {
-   public static Maybe<MatchCollection> Matches(this string input, Regex regex)
+   public static Maybe<MatchCollection> MatchOf(this string input, Regex regex)
    {
       var collection = regex.Matches(input);
       return collection.Count > 0 ? collection : nil;

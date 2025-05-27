@@ -1,4 +1,5 @@
-﻿using Core.Matching;
+﻿using System.Text.RegularExpressions;
+using Core.Matching;
 using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using Core.Strings;
@@ -6,11 +7,16 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class FormatParser : SymbolParser
+public partial class FormatParser : SymbolParser
 {
-   public override string Pattern => "^ /(/s*) /('$' ['cdefgnprxsboi'] ('-'? /d+)? ('.' /d+)?)";
+   //public override string Pattern => "^ /(/s*) /('$' ['cdefgnprxsboi'] ('-'? /d+)? ('.' /d+)?)";
 
-   public FormatParser(ExpressionBuilder builder) : base(builder) { }
+   [GeneratedRegex(@"^(\s*)(\$[cdefgnprxsboi](?:-?\d+)?(?:\.\d+)?)")]
+   public override partial Regex Regex();
+
+   public FormatParser(ExpressionBuilder builder) : base(builder)
+   {
+   }
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

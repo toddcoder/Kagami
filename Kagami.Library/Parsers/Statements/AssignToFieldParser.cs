@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Nodes.Statements;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using Kagami.Library.Operations;
@@ -7,12 +8,15 @@ using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public class AssignToFieldParser : EndingInExpressionParser
+public partial class AssignToFieldParser : EndingInExpressionParser
 {
    protected string fieldName = "";
    protected string operationSource = "";
 
-   public override string Pattern => $"^ /(/s*) /({REGEX_FIELD}) /(/s*) /({REGEX_ASSIGN_OPS})? /'=' -(> ['=>'])";
+   //public override string Pattern => $"^ /(/s*) /({REGEX_FIELD}) /(/s*) /({REGEX_ASSIGN_OPS})? /'=' -(> ['=>'])";
+
+   [GeneratedRegex($@"^(\s*)({REGEX_FIELD})(\s*)({REGEX_ASSIGN_OPS})?=(?![=>])")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

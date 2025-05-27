@@ -1,16 +1,23 @@
-﻿using Core.Monads;
+﻿using System.Text.RegularExpressions;
+using Core.Monads;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
+using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class SelectorParser : SymbolParser
+public partial class SelectorParser : SymbolParser
 {
-   public override string Pattern => $"^ /(/s*) /'&' /({REGEX_FUNCTION_NAME}) /('(' -[')']+ ')')?";
+   //public override string Pattern => $"^ /(/s*) /'&' /({REGEX_FUNCTION_NAME}) /('(' -[')']+ ')')?";
 
-   public SelectorParser(ExpressionBuilder builder) : base(builder) { }
+   [GeneratedRegex($@"^(\s*)(&)({REGEX_FUNCTION_NAME})(\([^\)]+\))?")]
+   public override partial Regex Regex();
+
+   public SelectorParser(ExpressionBuilder builder) : base(builder)
+   {
+   }
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

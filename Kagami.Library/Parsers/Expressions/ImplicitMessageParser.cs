@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using System.Text.RegularExpressions;
 using Core.Enumerables;
 using Core.Monads;
 using Kagami.Library.Nodes.Symbols;
@@ -7,7 +7,7 @@ using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class ImplicitMessageParser : SymbolParser
+public partial class ImplicitMessageParser : SymbolParser
 {
    protected static string parameters(int count)
    {
@@ -18,7 +18,10 @@ public class ImplicitMessageParser : SymbolParser
    {
    }
 
-   public override string Pattern => $"^ /(/s*) /({REGEX_ITERATOR_FUNCTIONS}) /'^'";
+   //public override string Pattern => $"^ /(/s*) /({REGEX_ITERATOR_FUNCTIONS}) /'^'";
+
+   [GeneratedRegex(@$"^(\s*)({REGEX_ITERATOR_FUNCTIONS})(^)")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

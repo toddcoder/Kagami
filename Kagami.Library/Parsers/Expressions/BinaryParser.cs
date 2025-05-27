@@ -1,13 +1,17 @@
-﻿using Core.Monads;
+﻿using System.Text.RegularExpressions;
+using Core.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class BinaryParser : SymbolParser
+public partial class BinaryParser : SymbolParser
 {
    public BinaryParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => "^ /(/s*) /'0b' /(['01_']+) /['Lif']? /b";
+   //public override string Pattern => "^ /(/s*) /'0b' /(['01_']+) /['Lif']? /b";
+
+   [GeneratedRegex(@"^(\s*)(0b)([01_]+)([Lif])?\b")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

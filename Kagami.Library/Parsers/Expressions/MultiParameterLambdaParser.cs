@@ -1,14 +1,20 @@
-﻿using Kagami.Library.Invokables;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Invokables;
 using Core.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class MultiParameterLambdaParser : LambdaParser
+public partial class MultiParameterLambdaParser : LambdaParser
 {
-   public override string Pattern => "^ /(/s*) /'('";
+   //public override string Pattern => "^ /(/s*) /'('";
 
-   public MultiParameterLambdaParser(ExpressionBuilder builder) : base(builder) { }
+   [GeneratedRegex(@"^(\s*)(\()")]
+   public override partial Regex Regex();
+
+   public MultiParameterLambdaParser(ExpressionBuilder builder) : base(builder)
+   {
+   }
 
    public override Optional<Parameters> ParseParameters(ParseState state, Token[] tokens)
    {

@@ -1,14 +1,18 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class IfAsAndParser : EndingInExpressionParser
+public partial class IfAsAndParser : EndingInExpressionParser
 {
    public IfAsAndParser(ExpressionBuilder builder) : base(builder, ExpressionFlags.OmitSendMessageAssign) { }
 
-   public override string Pattern => "^ /(/s*) /'if' /(/s+)";
+   //public override string Pattern => "^ /(/s*) /'if' /(/s+)";
+
+   [GeneratedRegex(@"^(\s*)(if)(\s+)")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

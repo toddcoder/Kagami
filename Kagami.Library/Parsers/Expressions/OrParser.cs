@@ -1,14 +1,20 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class OrParser : EndingInExpressionParser
+public partial class OrParser : EndingInExpressionParser
 {
-   public OrParser(ExpressionBuilder builder) : base(builder) { }
+   public OrParser(ExpressionBuilder builder) : base(builder)
+   {
+   }
 
-   public override string Pattern => "^ /(/s*) /'or' /(/s+)";
+   //public override string Pattern => "^ /(/s*) /'or' /(/s+)";
+
+   [GeneratedRegex(@"^(\s*)(or)(\s+)")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

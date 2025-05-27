@@ -1,14 +1,19 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class AndParser : EndingInExpressionParser
+public partial class AndParser : EndingInExpressionParser
 {
    public AndParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => "^ /(/s*) /'and' /(/s+)";
+   //public override string Pattern => "^ /(/s*) /'and' /(/s+)";
+
+   [GeneratedRegex(@"^(\s *)(and) (\s+)")]
+   public override partial Regex Regex();
+
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

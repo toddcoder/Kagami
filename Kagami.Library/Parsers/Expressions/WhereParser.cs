@@ -13,8 +13,8 @@ public partial class WhereParser : SymbolParser
 
    //public override string Pattern => "^ /(/s*) /'.{'";
 
-   [GeneratedRegex(@"^(\s*)(\.{)", RegexOptions.Compiled)]
-   public partial Regex Regex();
+   [GeneratedRegex(@"^(\s*)(\.{)")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
@@ -25,7 +25,7 @@ public partial class WhereParser : SymbolParser
 
       while (state.More)
       {
-         var _scan = itemParser.Scan(state, Regex());
+         var _scan = itemParser.Scan(state);
          if (_scan)
          {
             list.Add((itemParser.PropertyName, itemParser.Expression));

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Text.RegularExpressions;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
@@ -9,6 +10,7 @@ using Core.Monads;
 using Core.Strings;
 using static Core.Monads.AttemptFunctions;
 using static Core.Monads.MonadFunctions;
+using Group = System.Text.RegularExpressions.Group;
 
 namespace Kagami.Library.Parsers;
 
@@ -158,23 +160,35 @@ public class ParseState : IEnumerable<Statement>
       _ => color
    };
 
-   public Optional<string> Scan(string pattern, params Color[] colors)
-   {
-      if (CurrentSource.Matches(pattern).Map(r => r.Matches[0]) is (true, var match))
-      {
-         Group[] groupArray = [.. match.Groups.Skip(1).Take(match.Groups.Length - 1)];
-         for (var i = 0; i < Math.Min(groupArray.Length, colors.Length); i++)
-         {
-            var length = groupArray[i].Length;
-            AddToken(colors[i], length, groupArray[i].Text);
-            Move(length);
-         }
+   public Optional<string> Scan(string pattern, params Color[] colors) => Scan(pattern, RegexOptions.None, colors);
 
-         return match.Text;
-      }
-      else
+   public Optional<string> Scan(string pattern, RegexOptions options, params Color[] colors)
+   {
+      try
       {
-         return nil;
+         var regex = new System.Text.RegularExpressions.Regex(pattern, options);
+         var matches = regex.Matches(CurrentSource);
+         if (matches.Count > 0)
+         {
+            var match = matches[0];
+            Group[] groupArray = [.. match.AllGroups().Skip(1).Take(match.Groups.Count - 1)];
+            for (var i = 0; i < Math.Min(groupArray.Length, colors.Length); i++)
+            {
+               var length = groupArray[i].Length;
+               AddToken(colors[i], length, groupArray[i].Value);
+               Move(length);
+            }
+
+            return match.Value;
+         }
+         else
+         {
+            return nil;
+         }
+      }
+      catch (Exception exception)
+      {
+         return exception;
       }
    }
 

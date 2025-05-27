@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Invokables;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
@@ -7,15 +8,18 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class DoParser : SymbolParser
+public partial class DoParser : SymbolParser
 {
-   protected class BoundItemParser : EndingInExpressionParser
+   protected partial class BoundItemParser : EndingInExpressionParser
    {
       protected string fieldName;
 
       public BoundItemParser(ExpressionBuilder builder) : base(builder) => fieldName = "";
 
-      public override string Pattern => $"^ /({REGEX_FIELD}) /(/s*) /'<-'";
+      //public override string Pattern => $"^ /({REGEX_FIELD}) /(/s*) /'<-'";
+
+      [GeneratedRegex(@$"^({REGEX_FIELD})(\s*)(<-)")]
+      public override partial Regex Regex();
 
       public (string, Expression) NameExpression { get; set; }
 
@@ -38,7 +42,10 @@ public class DoParser : SymbolParser
    {
    }
 
-   public override string Pattern => $"^ /(/s*) /'do' {REGEX_ANTICIPATE_END}";
+   //public override string Pattern => $"^ /(/s*) /'do' {REGEX_ANTICIPATE_END}";
+
+   [GeneratedRegex(@$"^(\s*)do{REGEX_ANTICIPATE_END}")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Nodes.Statements;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Parsers.Expressions;
 using Core.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
@@ -6,13 +7,16 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public class MatchAssignParser : StatementParser
+public partial class MatchAssignParser : StatementParser
 {
+   [GeneratedRegex(@"^(\s*)(val)\b")]
+   public override partial Regex Regex();
+
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
       state.BeginTransaction();
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword);
       var _result =
-         from prefix in state.Scan("^ /(/s*) /'val' /b", Color.Whitespace, Color.Keyword)
          from comparisandValue in getExpression(state, ExpressionFlags.Comparisand | ExpressionFlags.OmitColon)
          from stem in state.Scan("^ /(/s+) /'='", Color.Whitespace, Color.Structure)
          from expressionValue in getExpression(state, ExpressionFlags.Standard)

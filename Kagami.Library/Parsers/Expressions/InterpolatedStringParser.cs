@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
+using System.Text.RegularExpressions;
 using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using Core.Numbers;
@@ -9,11 +9,16 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class InterpolatedStringParser : SymbolParser
+public partial class InterpolatedStringParser : SymbolParser
 {
-   public InterpolatedStringParser(ExpressionBuilder builder) : base(builder) { }
+   public InterpolatedStringParser(ExpressionBuilder builder) : base(builder)
+   {
+   }
 
-   public override string Pattern => "^ /(/s*) /['$f'] /[dquote]";
+   //public override string Pattern => "^ /(/s*) /['$f'] /[dquote]";
+
+   [GeneratedRegex(@"^(\s*)([\$f])([""])")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

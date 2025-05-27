@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Nodes.Statements;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Parsers.Expressions;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
@@ -6,9 +7,13 @@ using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public class ForParser : StatementParser
+public partial class ForParser : StatementParser
 {
-   public override string Pattern => "^ /'for' /(/s+)";
+   //public override string Pattern => "^ /'for' /(/s+)";
+
+   [GeneratedRegex(@"^(for)(\s+)")]
+   public override partial Regex Regex();
+
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {

@@ -1,11 +1,12 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class BindingParser : EndingInExpressionParser
+public partial class BindingParser : EndingInExpressionParser
 {
    protected string name = "";
 
@@ -13,7 +14,10 @@ public class BindingParser : EndingInExpressionParser
    {
    }
 
-   public override string Pattern => $"^ /(/s*) /('use' | 'var') /(/s+) /({REGEX_FIELD}) /'@'";
+   //public override string Pattern => $"^ /(/s*) /('use' | 'var') /(/s+) /({REGEX_FIELD}) /'@'";
+
+   [GeneratedRegex(@$"^(\s*)(use|var)(\s+)({REGEX_FIELD})(@)")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

@@ -1,17 +1,21 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class ZipOperatorParser : SymbolParser
+public partial class ZipOperatorParser : SymbolParser
 {
    public ZipOperatorParser(ExpressionBuilder builder) : base(builder)
    {
    }
 
-   public override string Pattern => $"^ /(/s*) /'[|' /({REGEX_OPERATORS}1%2) /'|]'";
+   //public override string Pattern => $"^ /(/s*) /'[|' /({REGEX_OPERATORS}1%2) /'|]'";
+
+   [GeneratedRegex(@$"^(\s*)(\[\|)({REGEX_OPERATORS}{{1,2}})(\|\])")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

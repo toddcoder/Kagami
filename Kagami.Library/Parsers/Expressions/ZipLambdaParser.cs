@@ -13,8 +13,8 @@ public partial class ZipLambdaParser : SymbolParser
 
    //public override string Pattern => "^ /(/s*) /'['";
 
-   [GeneratedRegex(@"^(\s*)(\[)", RegexOptions.Compiled)]
-   public partial Regex Regex();
+   [GeneratedRegex(@"^(\s*)(\[)")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
@@ -24,7 +24,7 @@ public partial class ZipLambdaParser : SymbolParser
       var expressionBuilder = new ExpressionBuilder(builder.Flags);
       var parser = new AnyLambdaParser(expressionBuilder);
       var _result =
-         from parsed in parser.Scan(state, Regex())
+         from parsed in parser.Scan(state)
          from endToken in state.Scan("/']'", Color.Operator)
          select parsed;
 

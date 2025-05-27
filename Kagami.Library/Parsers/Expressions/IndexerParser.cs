@@ -1,19 +1,22 @@
 ﻿using Core.Monads;
 using Core.Strings;
 using Kagami.Library.Nodes.Symbols;
-using System.Linq;
+using System.Text.RegularExpressions;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class IndexerParser : SymbolParser
+public partial class IndexerParser : SymbolParser
 {
    public IndexerParser(ExpressionBuilder builder) : base(builder)
    {
    }
 
-   public override string Pattern => "^ /'[' /'+'?";
+   //public override string Pattern => "^ /'[' /'+'?";
+
+   [GeneratedRegex(@"^(\[)(\+)?")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

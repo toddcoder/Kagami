@@ -1,4 +1,5 @@
-﻿using Core.Matching;
+﻿using System.Text.RegularExpressions;
+using Core.Matching;
 using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
@@ -10,10 +11,12 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public class FunctionParser : StatementParser
+public partial class FunctionParser : StatementParser
 {
-   public override string Pattern => $"^ /('override' /s+)? /('func' | 'op' | 'def') /(/s+) (/({REGEX_CLASS_GETTING}) /'.')?" +
-      $" /({REGEX_FUNCTION_NAME}) /'('?";
+   //public override string Pattern => $"^ /('override' /s+)? /('func' | 'op' | 'def') /(/s+) (/({REGEX_CLASS_GETTING}) /'.')? /({REGEX_FUNCTION_NAME}) /'('?";
+
+   [GeneratedRegex($@"^(override\s+)?(func|op|def)(\s+)(?:({REGEX_CLASS_GETTING})(\.))?({REGEX_FUNCTION_NAME})(\()?")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {

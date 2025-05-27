@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Nodes.Statements;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using Core.Strings;
@@ -7,13 +8,16 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public class IfParser : ExpressionBlockParser
+public partial class IfParser : ExpressionBlockParser
 {
    protected bool mutable;
    protected string fieldName = "";
    protected bool assignment;
 
-   public override string Pattern => $"^ (/('var' | 'let') /(/s*) /({REGEX_FIELD}) /(/s*) /'=' /(/s*))? /'if' -(> ['>^']) /b";
+   //public override string Pattern => $"^ (/('var' | 'let') /(/s*) /({REGEX_FIELD}) /(/s*) /'=' /(/s*))? /'if' -(> ['>^']) /b";
+
+   [GeneratedRegex($@"^(?:(var|let)(\s*)({REGEX_FIELD})(\s*)(=)(\s*))?(if)(?![>\^])\b")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

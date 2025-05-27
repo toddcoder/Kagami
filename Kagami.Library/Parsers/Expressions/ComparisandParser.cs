@@ -1,14 +1,18 @@
-﻿using Core.Monads;
+﻿using System.Text.RegularExpressions;
+using Core.Monads;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class ComparisandParser : SymbolParser
+public partial class ComparisandParser : SymbolParser
 {
    public ComparisandParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => "^ /(/s*) /'|'";
+   //public override string Pattern => "^ /(/s*) /'|'";
+
+   [GeneratedRegex(@"^(\s*)\|")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

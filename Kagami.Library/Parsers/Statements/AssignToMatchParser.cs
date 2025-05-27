@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Nodes.Statements;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Parsers.Expressions;
 using Core.Monads;
@@ -7,11 +8,14 @@ using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public class AssignToMatchParser : EndingInExpressionParser
+public partial class AssignToMatchParser : EndingInExpressionParser
 {
    protected Symbol comparisand = new EmptySymbol();
 
-   public override string Pattern => "^ /'set' /(/s+)";
+   //public override string Pattern => "^ /'set' /(/s+)";
+
+   [GeneratedRegex(@"^(set)(\s+)")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

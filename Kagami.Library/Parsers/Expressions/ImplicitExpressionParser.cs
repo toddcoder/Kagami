@@ -1,11 +1,12 @@
-﻿using Core.Monads;
+﻿using System.Text.RegularExpressions;
+using Core.Monads;
 using Kagami.Library.Nodes.Symbols;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class ImplicitExpressionParser : EndingInExpressionParser
+public partial class ImplicitExpressionParser : EndingInExpressionParser
 {
    protected string message = "";
    protected int parameterCount;
@@ -15,7 +16,10 @@ public class ImplicitExpressionParser : EndingInExpressionParser
    {
    }
 
-   public override string Pattern => $"^ /(/s*) /({REGEX_ITERATOR_FUNCTIONS}) /'>'";
+   //public override string Pattern => $"^ /(/s*) /({REGEX_ITERATOR_FUNCTIONS}) /'>'";
+
+   [GeneratedRegex(@$"^(\s*)({REGEX_ITERATOR_FUNCTIONS})(>)")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

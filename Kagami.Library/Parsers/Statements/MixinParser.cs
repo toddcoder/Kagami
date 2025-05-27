@@ -1,16 +1,21 @@
-﻿using Core.Monads;
+﻿using System.Text.RegularExpressions;
+using Core.Monads;
 using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 using Class = Kagami.Library.Nodes.Statements.Class;
+using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public class MixinParser : StatementParser
+public partial class MixinParser : StatementParser
 {
-   public override string Pattern => $"^ /'mixin' /(/s+) /({REGEX_CLASS})";
+   //public override string Pattern => $"^ /'mixin' /(/s+) /({REGEX_CLASS})";
+
+   [GeneratedRegex($@"^(mixin)(\s+)({REGEX_CLASS})")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {

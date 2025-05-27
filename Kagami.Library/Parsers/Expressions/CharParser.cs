@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using Core.Strings;
 using static Kagami.Library.Parsers.ParserFunctions;
@@ -6,11 +7,14 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class CharParser : SymbolParser
+public partial class CharParser : SymbolParser
 {
    public CharParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => "^ /(/s*) /(\"'\" ('\\' ['xu'] ['a-f0-9']1%6 | '\\'? .) \"'\")";
+   //public override string Pattern => "^ /(/s*) /(\"'\" ('\\' ['xu'] ['a-f0-9']1%6 | '\\'? .) \"'\")";
+
+   [GeneratedRegex(@"^(\s*)('(?:\\[xu][a-f0-9]{1,6}|\\?.)')")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

@@ -1,13 +1,19 @@
-﻿using Core.Monads;
+﻿using System.Text.RegularExpressions;
+using Core.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class OctalParser : SymbolParser
+public partial class OctalParser : SymbolParser
 {
-   public OctalParser(ExpressionBuilder builder) : base(builder) { }
+   public OctalParser(ExpressionBuilder builder) : base(builder)
+   {
+   }
 
-   public override string Pattern => "^ /(/s*) /'0o' /(['0-7_']+) /['Lif']? /b";
+   //public override string Pattern => "^ /(/s*) /'0o' /(['0-7_']+) /['Lif']? /b";
+
+   [GeneratedRegex(@"^(\s*)(0o)([0-7_]+)([Lif])?\b")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

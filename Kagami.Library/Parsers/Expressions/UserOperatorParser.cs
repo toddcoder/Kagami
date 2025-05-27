@@ -15,8 +15,8 @@ public partial class UserOperatorParser : SymbolParser
 
    //public override string Pattern => $"^ /(/s*) /({REGEX_FUNCTION_NAME}) /(/s+)";
 
-   [GeneratedRegex(@"^(\s*)()(\s+)", RegexOptions.Compiled)]
-   public override Regex Regex() => TODO_IMPLEMENT_ME;
+   [GeneratedRegex(@$"^(\s*)({REGEX_FUNCTION_NAME})(\s+)", RegexOptions.Compiled)]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

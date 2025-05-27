@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Nodes.Statements;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Statements;
 using Core.Monads;
 using Core.Strings;
 using static Kagami.Library.Parsers.ParserFunctions;
@@ -6,9 +7,12 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public class AssignFromBlockParser : StatementParser
+public partial class AssignFromBlockParser : StatementParser
 {
-   public override string Pattern => $"^ (/('var' | 'let') /(/s+))? /({REGEX_FIELD}) /b";
+   //public override string Pattern => $"^ (/('var' | 'let') /(/s+))? /({REGEX_FIELD}) /b";
+
+   [GeneratedRegex($@"^(?:(var|let)(\s+))?({REGEX_FIELD})\b")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {

@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Text.RegularExpressions;
 using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using Core.Numbers;
@@ -8,13 +9,16 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class StringParser : SymbolParser
+public partial class StringParser : SymbolParser
 {
    public StringParser(ExpressionBuilder builder) : base(builder)
    {
    }
 
-   public override string Pattern => "^ /(/s*) /['mb`']? /(['\"'])";
+   //public override string Pattern => "^ /(/s*) /['mb`']? /(['\"'])";
+
+   [GeneratedRegex(@"^(\s*)([mb`])?([""])")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

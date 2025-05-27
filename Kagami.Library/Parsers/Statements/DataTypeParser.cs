@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Classes;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Classes;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Collections;
@@ -6,12 +7,16 @@ using Core.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
 using DataType = Kagami.Library.Nodes.Statements.DataType;
+using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public class DataTypeParser : StatementParser
+public partial class DataTypeParser : StatementParser
 {
-   public override string Pattern => $"^ /(/s*) /'type' /(/s+) /({REGEX_CLASS})";
+   //public override string Pattern => $"^ /(/s*) /'type' /(/s+) /({REGEX_CLASS})";
+
+   [GeneratedRegex($@"^(\s*)(type)(\s+)({REGEX_CLASS})")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {

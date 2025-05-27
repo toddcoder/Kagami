@@ -1,10 +1,11 @@
-﻿using Core.Monads;
+﻿using System.Text.RegularExpressions;
+using Core.Monads;
 using Kagami.Library.Nodes.Symbols;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class ConversionParser : EndingInValueParser
+public partial class ConversionParser : EndingInValueParser
 {
    protected string message = "";
 
@@ -12,7 +13,10 @@ public class ConversionParser : EndingInValueParser
    {
    }
 
-   public override string Pattern => "^ /(/s*) /('int' | 'float' | 'byte' | 'long' | 'complex' | 'rational') /(/s+)";
+   //public override string Pattern => "^ /(/s*) /('int' | 'float' | 'byte' | 'long' | 'complex' | 'rational') /(/s+)";
+
+   [GeneratedRegex(@"^(\s*)(int|float|byte|long|complex|rational)(\s+)")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

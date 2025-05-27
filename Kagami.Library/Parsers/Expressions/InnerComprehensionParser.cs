@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Text.RegularExpressions;
 using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
@@ -6,7 +6,7 @@ using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class InnerComprehensionParser : SymbolParser
+public partial class InnerComprehensionParser : SymbolParser
 {
    protected List<(Symbol, Expression, Maybe<Expression>, string)> comprehensions;
 
@@ -16,7 +16,10 @@ public class InnerComprehensionParser : SymbolParser
       this.comprehensions = comprehensions;
    }
 
-   public override string Pattern => "^ /(/s*) /'for' -(> ['^>']) /b";
+   //public override string Pattern => "^ /(/s*) /'for' -(> ['^>']) /b";
+
+   [GeneratedRegex(@"^(\s*)(for)(?![\^>])\b")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

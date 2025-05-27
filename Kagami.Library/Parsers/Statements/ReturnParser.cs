@@ -1,13 +1,17 @@
-﻿using Kagami.Library.Nodes.Statements;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public class ReturnParser : EndingInExpressionParser
+public partial class ReturnParser : EndingInExpressionParser
 {
-   public override string Pattern => "^ /(/s*) /'return' /(/s+)";
+   //public override string Pattern => "^ /(/s*) /'return' /(/s+)";
+
+   [GeneratedRegex(@"^(\s*)(return)(\s+)")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

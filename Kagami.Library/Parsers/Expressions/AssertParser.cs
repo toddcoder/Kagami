@@ -1,15 +1,19 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class AssertParser : SymbolParser
+public partial class AssertParser : SymbolParser
 {
    public AssertParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => "^ /(/s*) /('assert' | 'maybe') /b";
+   //public override string Pattern => "^ /(/s*) /('assert' | 'maybe') /b";
+
+   [GeneratedRegex(@"^(\s*)(assert|maybe)\b")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
@@ -18,7 +22,7 @@ public class AssertParser : SymbolParser
 
       var _result =
          from conditionValue in getExpression(state, builder.Flags | ExpressionFlags.OmitColon)
-         from colon1 in state.Scan("^ /(/s*) /':'", Color.Whitespace, Color.Structure)
+         from colon1 in state.Scan(@"^(\s*)(:)", Color.Whitespace, Color.Structure)
          from valueValue in getExpression(state, builder.Flags | ExpressionFlags.OmitColon)
          select (conditionValue, valueValue);
 
@@ -27,7 +31,7 @@ public class AssertParser : SymbolParser
          if (_result is (true, var (condition, value)))
          {
             var _expression =
-               from colon2 in state.Scan("^ /(/s*) /':'", Color.Whitespace, Color.Structure)
+               from colon2 in state.Scan(@"^(\s*)(:)", Color.Whitespace, Color.Structure)
                from error in getExpression(state, builder.Flags | ExpressionFlags.OmitColon)
                select error;
             if (_expression is (true, var expression))

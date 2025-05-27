@@ -1,11 +1,15 @@
-﻿using Kagami.Library.Invokables;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Invokables;
 using Core.Monads;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class ZeroParameterLambdaParser : LambdaParser
+public partial class ZeroParameterLambdaParser : LambdaParser
 {
-   public override string Pattern => "^ (> (/s*) ('->' | '=>' [/r/n]+))";
+   //public override string Pattern => "^ (> (/s*) ('->' | '=>' [/r/n]+))";
+
+   [GeneratedRegex(@"^(?=(?:\s*)(?:->|=>[\r\n]+))")]
+   public override partial Regex Regex();
 
    public ZeroParameterLambdaParser(ExpressionBuilder builder) : base(builder)
    {

@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using Core.Objects;
 using Core.Strings;
@@ -7,13 +8,16 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class SkipTakeItemParser : Parser
+public partial class SkipTakeItemParser : PatternedParser
 {
    public SkipTakeItemParser() : base(false)
    {
    }
 
-   public override string Pattern => "^ /(/s*) /((['+-'] [/d '_']+) | '0')? /':' /((['+-'] [/d '_']+) | '0')?";
+   //public override string Pattern => "^ /(/s*) /((['+-'] [/d '_']+) | '0')? /':' /((['+-'] [/d '_']+) | '0')?";
+
+   [GeneratedRegex(@"^(\s*)((?:[\+-][\d_]+)|0)?(:)((?:[\+-][\d_]+)|0)?")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens)
    {

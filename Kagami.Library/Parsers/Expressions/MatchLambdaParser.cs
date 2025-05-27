@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Nodes.Statements;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
@@ -6,9 +7,12 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class MatchLambdaParser : SymbolParser
+public partial class MatchLambdaParser : SymbolParser
 {
-   public override string Pattern => "^ /(/s*) /'|('";
+   //public override string Pattern => "^ /(/s*) /'|('";
+
+   [GeneratedRegex(@"^(\s*)(\|\()")]
+   public override partial Regex Regex();
 
    public MatchLambdaParser(ExpressionBuilder builder) : base(builder)
    {

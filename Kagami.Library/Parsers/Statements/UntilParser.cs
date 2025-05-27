@@ -1,12 +1,16 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public class UntilParser : EndingInExpressionParser
+public partial class UntilParser : EndingInExpressionParser
 {
-   public override string Pattern => "^ /'until' /b";
+   //public override string Pattern => "^ /'until' /b";
+
+   [GeneratedRegex(@"^(until)\b")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

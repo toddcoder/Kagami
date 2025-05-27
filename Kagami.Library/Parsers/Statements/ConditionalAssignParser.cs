@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Nodes.Statements;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Parsers.Expressions;
 using Core.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
@@ -6,9 +7,12 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public class ConditionalAssignParser : StatementParser
+public partial class ConditionalAssignParser : StatementParser
 {
-   public override string Pattern => "^ /'if' /(/s+)";
+   //public override string Pattern => "^ /'if' /(/s+)";
+
+   [GeneratedRegex(@"^(if)(\s+)")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {

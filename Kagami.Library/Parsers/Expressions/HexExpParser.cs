@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Text.RegularExpressions;
 using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using Core.Strings;
@@ -8,11 +8,16 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class HexExpParser : SymbolParser
+public partial class HexExpParser : SymbolParser
 {
-   public override string Pattern => "^ /(/s*) /'0x' /([/d '_a-f']+ '.' [/d '_a-f']+) (/'p' /(['-+']? /d+))? /'i'?";
+   //public override string Pattern => "^ /(/s*) /'0x' /([/d '_a-f']+ '.' [/d '_a-f']+) (/'p' /(['-+']? /d+))? /'i'?";
 
-   public HexExpParser(ExpressionBuilder builder) : base(builder) { }
+   public HexExpParser(ExpressionBuilder builder) : base(builder)
+   {
+   }
+
+   [GeneratedRegex(@"^(\s*)(0x)([\d_a-f]+\.[\d_a-f]+)(?:(p)([-\+]?\d+))?(i)?")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

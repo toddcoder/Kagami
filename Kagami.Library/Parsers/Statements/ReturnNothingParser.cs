@@ -1,13 +1,17 @@
-﻿using Kagami.Library.Nodes.Statements;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Statements;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public class ReturnNothingParser : StatementParser
+public partial class ReturnNothingParser : StatementParser
 {
-   public override string Pattern => $"^ /'return' /({REGEX_EOL})";
+   //public override string Pattern => $"^ /'return' /({REGEX_EOL})";
+
+   [GeneratedRegex($"^(return)({REGEX_EOL})")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {

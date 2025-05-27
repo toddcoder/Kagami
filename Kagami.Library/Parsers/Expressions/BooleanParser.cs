@@ -1,14 +1,20 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class BooleanParser : SymbolParser
+public partial class BooleanParser : SymbolParser
 {
-   public BooleanParser(ExpressionBuilder builder) : base(builder) { }
+   public BooleanParser(ExpressionBuilder builder) : base(builder)
+   {
+   }
 
-   public override string Pattern => "^ /(/s*) /('true' | 'false') /b";
+   //public override string Pattern => "^ /(/s*) /('true' | 'false') /b";
+
+   [GeneratedRegex(@"^ /(/s*) /('true' | 'false') /b")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

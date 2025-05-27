@@ -1,14 +1,20 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class IteratorParser : SymbolParser
+public partial class IteratorParser : SymbolParser
 {
-   public IteratorParser(ExpressionBuilder builder) : base(builder) { }
+   public IteratorParser(ExpressionBuilder builder) : base(builder)
+   {
+   }
 
-   public override string Pattern => "^ /(/s*) /('!'1%2 | '?') -(> [/s '^>'])";
+   //public override string Pattern => "^ /(/s*) /('!'1%2 | '?') -(> [/s '^>'])";
+
+   [GeneratedRegex(@"^(\s*)(!{1,2}|\?)(?![\s\^>])")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

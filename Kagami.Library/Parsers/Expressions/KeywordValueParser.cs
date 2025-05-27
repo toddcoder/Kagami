@@ -1,14 +1,21 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class KeywordValueParser : SymbolParser
+public partial class KeywordValueParser : SymbolParser
 {
-   public override string Pattern => "^ /(/s*) /('none' | 'true' | 'false' | 'del' | 'unit' | 'null') /b";
+   //public override string Pattern => "^ /(/s*) /('none' | 'true' | 'false' | 'del' | 'unit' | 'null') /b";
 
-   public KeywordValueParser(ExpressionBuilder builder) : base(builder) { }
+   public KeywordValueParser(ExpressionBuilder builder) : base(builder)
+   {
+   }
+
+   [GeneratedRegex(
+      @"^(\s*)(to|til|by|if|map|join|sort|foldl|foldr|all|any|none|one|zip|downto|skip|take|band|bor|bxor|bsl|bsr|while|until|min|max|does|x)(\s+)")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

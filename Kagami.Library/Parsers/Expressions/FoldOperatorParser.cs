@@ -1,15 +1,19 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class FoldOperatorParser : SymbolParser
+public partial class FoldOperatorParser : SymbolParser
 {
    public FoldOperatorParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => $"^ /(/s*) /(['<>'] ':') /({REGEX_OPERATORS}1%2) -(>{REGEX_OPERATORS})";
+   //public override string Pattern => $"^ /(/s*) /(['<>'] ':') /({REGEX_OPERATORS}1%2) -(>{REGEX_OPERATORS})";
+
+   [GeneratedRegex(@$"^(\s*)([<>]:)({REGEX_OPERATORS}{{1,2}})(?!{REGEX_OPERATORS})")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

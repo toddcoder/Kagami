@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Nodes.Statements;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Parsers.Expressions;
 using Core.Monads;
 using static Kagami.Library.AllExceptions;
@@ -7,7 +8,7 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public class CaseParser : StatementParser
+public partial class CaseParser : StatementParser
 {
    protected string assignmentField;
    protected string fieldName;
@@ -37,7 +38,10 @@ public class CaseParser : StatementParser
       caseType = CaseType.Function;
    }
 
-   public override string Pattern => "^ /(/s*) /'case' /(/s*)";
+   //public override string Pattern => "^ /(/s*) /'case' /(/s*)";
+
+   [GeneratedRegex(@"^(\s*)(case)(\s*)")]
+   public override partial Regex Regex();
 
    protected static Optional<Block> getCaseBlock(CaseType caseType, ParseState state) => caseType switch
    {

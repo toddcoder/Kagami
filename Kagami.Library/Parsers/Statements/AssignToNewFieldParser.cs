@@ -1,19 +1,24 @@
-﻿using Kagami.Library.Nodes.Statements;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
 using Core.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
+using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public class AssignToNewFieldParser : EndingInExpressionParser
+public partial class AssignToNewFieldParser : EndingInExpressionParser
 {
    protected bool mutable;
    protected string fieldName = "";
    protected Maybe<TypeConstraint> _typeConstraint = nil;
 
-   public override string Pattern => $"^ /('let' | 'var') /(/s+) /({REGEX_FIELD}) /b";
+   //public override string Pattern => $"^ /('let' | 'var') /(/s+) /({REGEX_FIELD}) /b";
+
+   [GeneratedRegex($@"^(let|var)(\s+)({REGEX_FIELD})\b")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {
@@ -26,7 +31,7 @@ public class AssignToNewFieldParser : EndingInExpressionParser
       var _parsedTypeConstraint = parseTypeConstraint(state);
       if (_parsedTypeConstraint is (true, var parsedTypeConstraint))
       {
-         _typeConstraint= parsedTypeConstraint.Maybe;
+         _typeConstraint = parsedTypeConstraint.Maybe;
       }
       else if (_parsedTypeConstraint.Exception is (true, var exception))
       {

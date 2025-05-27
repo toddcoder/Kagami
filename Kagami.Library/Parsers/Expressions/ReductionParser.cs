@@ -1,12 +1,16 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class ReductionParser : SymbolParser
+public partial class ReductionParser : SymbolParser
 {
-   public override string Pattern => "^ /(/s+) /'['";
+   //public override string Pattern => "^ /(/s+) /'['";
+
+   [GeneratedRegex(@"^(\s+)(\[)")]
+   public override partial Regex Regex();
 
    public ReductionParser(ExpressionBuilder builder) : base(builder)
    {

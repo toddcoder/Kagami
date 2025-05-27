@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Parsers.Expressions;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
@@ -6,9 +7,12 @@ using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public class ReturnFromLoopParser : StatementParser
+public partial class ReturnFromLoopParser : StatementParser
 {
-   public override string Pattern => "^ /'return' /b";
+   //public override string Pattern => "^ /'return' /b";
+
+   [GeneratedRegex(@"^(return)\b")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {

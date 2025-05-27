@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System.Text.RegularExpressions;
 using Core.Monads;
 using Kagami.Library.Objects;
 using static Core.Monads.MonadFunctions;
+using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public class MixinIncludesParser : StatementParser
+public partial class MixinIncludesParser : StatementParser
 {
    protected List<Mixin> mixins;
 
@@ -14,7 +15,10 @@ public class MixinIncludesParser : StatementParser
       this.mixins = mixins;
    }
 
-   public override string Pattern => "^ /'includes' /b";
+   //public override string Pattern => "^ /'includes' /b";
+
+   [GeneratedRegex("^(includes)\b")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {

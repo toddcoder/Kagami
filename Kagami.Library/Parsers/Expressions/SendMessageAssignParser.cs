@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using Kagami.Library.Operations;
 using static Kagami.Library.Parsers.ParserFunctions;
@@ -6,7 +7,7 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class SendMessageAssignParser : EndingInExpressionParser
+public partial class SendMessageAssignParser : EndingInExpressionParser
 {
    protected string messageName = "";
    protected string operationSource = "";
@@ -15,7 +16,10 @@ public class SendMessageAssignParser : EndingInExpressionParser
    {
    }
 
-   public override string Pattern => $"^ /(/s*) /'.' /({REGEX_FUNCTION_NAME}) /(/s*) /({REGEX_ASSIGN_OPS})? /'=' -(> ['=>'])";
+   //public override string Pattern => $"^ /(/s*) /'.' /({REGEX_FUNCTION_NAME}) /(/s*) /({REGEX_ASSIGN_OPS})? /'=' -(> ['=>'])";
+
+   [GeneratedRegex($@"^(\s*)(\.)({REGEX_FUNCTION_NAME})(\s*)({REGEX_ASSIGN_OPS})?=?(?![=>])")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

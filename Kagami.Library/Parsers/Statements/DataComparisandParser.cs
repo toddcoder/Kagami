@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Classes;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Classes;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
 using Kagami.Library.Parsers.Expressions;
@@ -8,10 +9,11 @@ using Core.Monads;
 using Core.Monads.Lazy;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
+using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public class DataComparisandParser : StatementParser
+public partial class DataComparisandParser : StatementParser
 {
    protected string className;
    protected Hash<string, (IObject[], IRangeItem)> values;
@@ -24,7 +26,10 @@ public class DataComparisandParser : StatementParser
       this.ordinal = ordinal;
    }
 
-   public override string Pattern => $"^ /(/s*) /({REGEX_CLASS}) /'('?";
+   //public override string Pattern => $"^ /(/s*) /({REGEX_CLASS}) /'('?";
+
+   [GeneratedRegex($@"^(\s*)({REGEX_CLASS})(\()?")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {

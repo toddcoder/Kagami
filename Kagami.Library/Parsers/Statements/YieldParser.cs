@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Nodes.Statements;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
@@ -7,11 +8,14 @@ using Yield = Kagami.Library.Nodes.Statements.Yield;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public class YieldParser : EndingInExpressionParser
+public partial class YieldParser : EndingInExpressionParser
 {
    protected bool all;
 
-   public override string Pattern => "^ /'yield' (/(/s+) /'all')? /(/s+)";
+   //public override string Pattern => "^ /'yield' (/(/s+) /'all')? /(/s+)";
+
+   [GeneratedRegex(@"^(yield)(?:(\s+)(all))?(\s+)")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

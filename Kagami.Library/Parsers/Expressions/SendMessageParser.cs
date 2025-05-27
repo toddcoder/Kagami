@@ -1,20 +1,25 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
 using Core.Monads;
 using Core.Monads.Lazy;
 using Core.Strings;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
+using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class SendMessageParser : SymbolParser
+public partial class SendMessageParser : SymbolParser
 {
    public SendMessageParser(ExpressionBuilder builder) : base(builder)
    {
    }
 
-   public override string Pattern => $"^ /(/s*) /'.' /({REGEX_FUNCTION_NAME}) /'('?";
+   //public override string Pattern => $"^ /(/s*) /'.' /({REGEX_FUNCTION_NAME}) /'('?";
+
+   [GeneratedRegex($@"^(\s*)(\.)({REGEX_FUNCTION_NAME})(\()?")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

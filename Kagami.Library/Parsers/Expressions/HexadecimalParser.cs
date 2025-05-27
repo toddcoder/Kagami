@@ -1,13 +1,17 @@
-﻿using Core.Monads;
+﻿using System.Text.RegularExpressions;
+using Core.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class HexadecimalParser : SymbolParser
+public partial class HexadecimalParser : SymbolParser
 {
    public HexadecimalParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => "^ /(/s*) /'0x' /(['0-9a-f_']+) /['Li']? /b";
+   //public override string Pattern => "^ /(/s*) /'0x' /(['0-9a-f_']+) /['Li']? /b";
+
+   [GeneratedRegex(@"^(\s*)(0x)([0-9a-f_]+)([Li])?\b")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

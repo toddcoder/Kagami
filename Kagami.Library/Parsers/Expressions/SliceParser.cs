@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Text.RegularExpressions;
 using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
@@ -6,7 +6,7 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class SliceParser : SymbolParser
+public partial class SliceParser : SymbolParser
 {
    public class SkipTake
    {
@@ -26,7 +26,10 @@ public class SliceParser : SymbolParser
    {
    }
 
-   public override string Pattern => "^ /'{'";
+//   public override string Pattern => "^ /'{'";
+
+   [GeneratedRegex(@"^({)")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

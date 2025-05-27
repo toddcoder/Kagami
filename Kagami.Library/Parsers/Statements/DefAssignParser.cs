@@ -1,15 +1,19 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public class DefAssignParser : EndingInExpressionParser
+public partial class DefAssignParser : EndingInExpressionParser
 {
    protected string fieldName = "";
 
-   public override string Pattern => $"^ /'def' /(/s+) /({REGEX_FIELD}) /(/s*) /'=' -(> '=')";
+   //public override string Pattern => $"^ /'def' /(/s+) /({REGEX_FIELD}) /(/s*) /'=' -(> '=')";
+
+   [GeneratedRegex($@"^(def)(\s+)({REGEX_FIELD})(\s*)(=)(?!=)")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

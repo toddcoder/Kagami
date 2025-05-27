@@ -1,14 +1,20 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class RangeOperatorParser : SymbolParser
+public partial class RangeOperatorParser : SymbolParser
 {
    public override string Pattern => "^ /(/s*) /('..' /('<')?)";
 
-   public RangeOperatorParser(ExpressionBuilder builder) : base(builder) { }
+   [GeneratedRegex(@"^(\s*)(\.\.(<)?)")]
+   public override partial Regex Regex();
+
+   public RangeOperatorParser(ExpressionBuilder builder) : base(builder)
+   {
+   }
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

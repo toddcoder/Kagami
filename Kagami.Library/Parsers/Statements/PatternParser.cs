@@ -1,13 +1,17 @@
-﻿using Core.Monads;
+﻿using System.Text.RegularExpressions;
+using Core.Monads;
 using Kagami.Library.Nodes.Statements;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public class PatternParser : StatementParser
+public partial class PatternParser : StatementParser
 {
-   public override string Pattern => $"^ /'pattern' /(/s+) /({REGEX_CLASS}) /'('";
+   //public override string Pattern => $"^ /'pattern' /(/s+) /({REGEX_CLASS}) /'('";
+
+   [GeneratedRegex($@"^(pattern)(\s+)({REGEX_CLASS})(\()")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {

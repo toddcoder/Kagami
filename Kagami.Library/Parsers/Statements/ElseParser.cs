@@ -1,13 +1,17 @@
-﻿using Kagami.Library.Nodes.Statements;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Statements;
 using Core.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public class ElseParser : StatementParser
+public partial class ElseParser : StatementParser
 {
-   public override string Pattern => "^ /(/s*) /'else' /b";
+   //public override string Pattern => "^ /(/s*) /'else' /b";
+
+   [GeneratedRegex(@"^(\s*)(else)\b")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {

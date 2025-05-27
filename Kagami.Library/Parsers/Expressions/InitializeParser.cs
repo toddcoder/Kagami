@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Text.RegularExpressions;
 using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using Core.Strings;
@@ -7,11 +7,16 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class InitializeParser : SymbolParser
+public partial class InitializeParser : SymbolParser
 {
-   public InitializeParser(ExpressionBuilder builder) : base(builder) { }
+   public InitializeParser(ExpressionBuilder builder) : base(builder)
+   {
+   }
 
-   public override string Pattern => $"^ /(/s*) /({REGEX_CLASS}) /'{{'";
+   //public override string Pattern => $"^ /(/s*) /({REGEX_CLASS}) /'{{'";
+
+   [GeneratedRegex($@"^(\s*)({REGEX_CLASS})({{)")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

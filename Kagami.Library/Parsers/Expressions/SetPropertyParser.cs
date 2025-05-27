@@ -1,17 +1,22 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class SetPropertyParser(ExpressionBuilder builder, string tempObjectField, ExpressionBuilder outerBuilder) : EndingInExpressionParser(builder)
+public partial class SetPropertyParser(ExpressionBuilder builder, string tempObjectField, ExpressionBuilder outerBuilder)
+   : EndingInExpressionParser(builder)
 {
    protected string tempObjectField = tempObjectField;
    protected ExpressionBuilder outerBuilder = outerBuilder;
    protected string propertyName = "";
 
-   public override string Pattern => $"^ /(/s*) /({REGEX_FIELD}) /(/s*) /'='";
+   //public override string Pattern => $"^ /(/s*) /({REGEX_FIELD}) /(/s*) /'='";
+
+   [GeneratedRegex($@"^(\s*)({REGEX_FIELD})(\s*)=")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {

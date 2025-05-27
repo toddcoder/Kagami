@@ -1,13 +1,17 @@
-﻿using Core.Monads;
+﻿using System.Text.RegularExpressions;
+using Core.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class IntParser : SymbolParser
+public partial class IntParser : SymbolParser
 {
    public IntParser(ExpressionBuilder builder) : base(builder) { }
 
-   public override string Pattern => "^ /(/s*) /([/d '_']+) /['Lif']? /b";
+   //public override string Pattern => "^ /(/s*) /([/d '_']+) /['Lif']? /b";
+
+   [GeneratedRegex(@"^(\s*)([\d_]+)([Lif])?\b")]
+   public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
