@@ -27,9 +27,9 @@ public partial class InitializeParser : SymbolParser
       while (state.More)
       {
          var _result =
-            from f in state.Scan($"^ /(/s*) /({REGEX_FIELD}) /(/s*) /':'", Color.Whitespace, Color.Label, Color.Whitespace, Color.Structure)
+            from f in state.Scan($@"^(\s*)({REGEX_FIELD})(\s*)(:)", Color.Whitespace, Color.Label, Color.Whitespace, Color.Structure)
             from e in getExpression(state, builder.Flags | ExpressionFlags.OmitComma | ExpressionFlags.OmitColon)
-            from n in state.Scan("^ /(/s*) /[',}']", Color.Whitespace, Color.Structure)
+            from n in state.Scan(@"^(\s*)([,\}])", Color.Whitespace, Color.Structure)
             select (field: f.Trim().Drop(-1), expression: e, next: n);
          if (_result is (true, var (field, expression, next)))
          {

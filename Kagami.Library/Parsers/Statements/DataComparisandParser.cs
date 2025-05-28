@@ -90,7 +90,7 @@ public partial class DataComparisandParser : StatementParser
 
    protected static Optional<IRangeItem> getOrdinal(ParseState state, IRangeItem ordinal)
    {
-      var _scan = state.Scan("^ /(/s*) /'='", Color.Whitespace, Color.Structure);
+      var _scan = state.Scan(@"^(\s*)(=)", Color.Whitespace, Color.Structure);
       if (_scan)
       {
          var _value = getValue(state, ExpressionFlags.Standard);

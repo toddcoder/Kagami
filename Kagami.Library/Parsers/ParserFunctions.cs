@@ -81,7 +81,7 @@ public static class ParserFunctions
          builder.Add(new FieldSymbol(fieldName));
          builder.Add(_comparisand);
          builder.Add(new MatchSymbol());
-         var _scanned = state.Scan("^ /(/s*) /'&'", Color.Whitespace, Color.OpenParenthesis);
+         var _scanned = state.Scan(@"^(\s*)(&)", Color.Whitespace, Color.OpenParenthesis);
          if (_scanned)
          {
             return getCompoundComparisands(state, fieldName).Map(nextExpression =>
@@ -115,7 +115,7 @@ public static class ParserFunctions
          var _result = constantsParser.Scan(state);
          if (_result)
          {
-            if (state.Scan("^ /(/s*) /','", Color.Whitespace, Color.Operator))
+            if (state.Scan(@"^(\s*)(,)", Color.Whitespace, Color.Operator))
             {
             }
             else if (_result.Exception is (true, var exception))
@@ -273,7 +273,7 @@ public static class ParserFunctions
 
    public static Optional<Parameters> getParameters(ParseState state)
    {
-      var _scanned = state.Scan("^ /[')]']", Color.CloseParenthesis);
+      var _scanned = state.Scan(@"^([\)\]])", Color.CloseParenthesis);
       if (_scanned)
       {
          return new Parameters();
@@ -308,7 +308,7 @@ public static class ParserFunctions
             return _parameter.Exception;
          }
 
-         var _next = state.Scan("^ /(/s*) /[',)']", Color.Whitespace, Color.CloseParenthesis);
+         var _next = state.Scan(@"^(\s*)([,\)])", Color.Whitespace, Color.CloseParenthesis);
          if (_next is (true, var next))
          {
             if (next.EndsWith(")"))
@@ -332,7 +332,7 @@ public static class ParserFunctions
 
    public static Optional<Expression[]> getArguments(ParseState state, Bits32<ExpressionFlags> flags)
    {
-      var _scanned = state.Scan("^ /[')]}']", Color.CloseParenthesis);
+      var _scanned = state.Scan(@"^([\)\]\}])", Color.CloseParenthesis);
       if (_scanned)
       {
          return (Expression[]) [];
@@ -351,7 +351,7 @@ public static class ParserFunctions
          if (_expression is (true, var expression))
          {
             arguments.Add(expression);
-            var _next = state.Scan("^ /(/s*) /[',)]}']", Color.Whitespace, Color.CloseParenthesis);
+            var _next = state.Scan(@"^(\s*)([,\)\]\}])", Color.Whitespace, Color.CloseParenthesis);
             if (_next is (true, var next))
             {
                if (next.EndsWith(")") || next.EndsWith("]") || next.EndsWith("}"))
@@ -425,7 +425,7 @@ public static class ParserFunctions
 
    public static Optional<IObject[]> getComparisandList(ParseState state)
    {
-      var _scanned = state.Scan("^ /[')]']", Color.CloseParenthesis);
+      var _scanned = state.Scan(@"^([\)\]])", Color.CloseParenthesis);
       if (_scanned)
       {
          return Array.Empty<IObject>();
@@ -444,7 +444,7 @@ public static class ParserFunctions
          if (_comparisand is (true, var comparisand))
          {
             arguments.Add(comparisand);
-            var _next = state.Scan("^ /(/s*) /[',)]']", Color.Whitespace, Color.CloseParenthesis);
+            var _next = state.Scan(@"^(\s*)([,\)\]])", Color.Whitespace, Color.CloseParenthesis);
             if (_next is (true, var next))
             {
                if (next.EndsWith(")") || next.EndsWith("]"))
@@ -472,33 +472,33 @@ public static class ParserFunctions
 
    private static Optional<bool> parseReference(ParseState state)
    {
-      return state.Scan("^ /(/s* 'ref' /s+)?", Color.Keyword).Map(s => s.IsNotEmpty());
+      return state.Scan(@"^(\s*ref\s+)?", Color.Keyword).Map(s => s.IsNotEmpty());
    }
 
    private static Optional<bool> parseMutable(ParseState state)
    {
-      return state.Scan("^ /(/s* 'var' /s+)?", Color.Keyword).Map(s => s.IsNotEmpty());
+      return state.Scan(@"^(\s*var\s+)?", Color.Keyword).Map(s => s.IsNotEmpty());
    }
 
    private static Optional<string> parseLabel(ParseState state)
    {
-      return state.Scan($"^ (/(/s*) /({REGEX_FIELD}) /':')?", Color.Whitespace, Color.Label, Color.Structure)
+      return state.Scan($@"^(?:(\s*)({REGEX_FIELD})(:))?", Color.Whitespace, Color.Label, Color.Structure)
          .Map(s => s.KeepUntil(":").Trim());
    }
 
    private static Optional<bool> parseCapturing(ParseState state)
    {
-      return state.Scan("^ /(/s* '+')?", Color.Structure).Map(s => s.IsNotEmpty());
+      return state.Scan(@"^(\s*\+)?", Color.Structure).Map(s => s.IsNotEmpty());
    }
 
    private static Optional<string> parseParameterName(ParseState state)
    {
-      return state.Scan($"^ /(/s* {REGEX_FIELD}) /b", Color.Identifier).Map(s => s.Trim());
+      return state.Scan(@$"^(\s*{REGEX_FIELD})\b", Color.Identifier).Map(s => s.Trim());
    }
 
    public static Optional<PossibleTypeConstraint> parseTypeConstraint(ParseState state)
    {
-      var _className = state.Scan($"^ /(/s*) /({REGEX_CLASS}) -(> '(') /b", Color.Whitespace, Color.Class)
+      var _className = state.Scan($@"^(\s*)({REGEX_CLASS})(?!\()\b", Color.Whitespace, Color.Class)
          .Map(cn => cn.TrimStart());
       if (_className is (true, var className))
       {
@@ -543,7 +543,7 @@ public static class ParserFunctions
 
    private static Optional<bool> parseVaraidic(ParseState state)
    {
-      var _scanned = state.Scan("^ /(/s*) /'...'", Color.Whitespace, Color.Structure);
+      var _scanned = state.Scan(@"^(\s*)(\.\.\.)", Color.Whitespace, Color.Structure);
       if (_scanned)
       {
          return true;
@@ -560,7 +560,7 @@ public static class ParserFunctions
 
    private static Optional<PossibleInvokable> parseDefaultValue(ParseState state, bool defaultRequired)
    {
-      var _scanned = state.Scan("^ /(/s* '=') -(> '=')", Color.Structure);
+      var _scanned = state.Scan(@"^(\s*=)(?!=)", Color.Structure);
       if (_scanned)
       {
          var _expression = getExpression(state, ExpressionFlags.OmitComma);
@@ -616,7 +616,7 @@ public static class ParserFunctions
             _ => nil
          };
          state.SetReturnType(_typeConstraint);
-         var _scanned = state.Scan("^ /(/s*) /'=' /(/s*)", Color.Whitespace, Color.Structure, Color.Whitespace);
+         var _scanned = state.Scan(@"^(\s*)(=)(\s*)", Color.Whitespace, Color.Structure, Color.Whitespace);
          if (_scanned)
          {
             return getSingleLine(state, _typeConstraint);
@@ -720,7 +720,7 @@ public static class ParserFunctions
 
       state.BeginPrefixCode();
       state.BeginImplicitState();
-      state.Scan("^ /(/s*) /'('", Color.Whitespace, Color.OpenParenthesis);
+      state.Scan(@"^(\s*)(\()", Color.Whitespace, Color.OpenParenthesis);
 
       try
       {
@@ -757,7 +757,7 @@ public static class ParserFunctions
          }
 
          var parameterCount = unknownFieldCount.MaxOf(maxFieldCount) + (addOne ? 1 : 0);
-         var _scanned = state.Scan("^ /')'", Color.CloseParenthesis);
+         var _scanned = state.Scan(@"^(\))", Color.CloseParenthesis);
          if (_scanned)
          {
             return builder.ToExpression().Map(expression => new LambdaSymbol(parameterCount, expression)).Optional();
@@ -955,14 +955,14 @@ public static class ParserFunctions
 
    public static Optional<(Symbol, Expression, Maybe<Expression>)> getInnerComprehension(ParseState state) =>
       from comparisand in getValue(state, ExpressionFlags.Comparisand)
-      from scanned in state.Scan("^ /(/s*) /':='", Color.Whitespace, Color.Structure)
-      from source in getExpression(state, ExpressionFlags.OmitIf | ExpressionFlags.OmitComprehension)
+      from scanned in state.Scan(@"^(\s*)(in)", Color.Whitespace, Color.Keyword)
+      from source in getExpression(state, ExpressionFlags.OmitIf | ExpressionFlags.OmitComprehension | ExpressionFlags.OmitIn)
       from ifExp in getIf(state)
       select (comparisand, source, ifExp);
 
    public static Optional<Maybe<Expression>> getIf(ParseState state)
    {
-      var _scanned = state.Scan("^ /(/s+) /'if' /b", Color.Whitespace, Color.Keyword);
+      var _scanned = state.Scan(@"^(\s+)(if)\b", Color.Whitespace, Color.Keyword);
       if (_scanned)
       {
          var _expression = getExpression(state, ExpressionFlags.OmitIf | ExpressionFlags.OmitComprehension);
@@ -1054,7 +1054,7 @@ public static class ParserFunctions
 
    public static Optional<Block> getCaseStatementBlock(ParseState state)
    {
-      if (state.Scan("^ /(/s*) /'=' -(> '=')", Color.Whitespace, Color.Structure))
+      if (state.Scan(@"^(\s*)(=)(?!=)", Color.Whitespace, Color.Structure))
       {
          return getSingleLine(state, false);
       }
@@ -1161,7 +1161,7 @@ public static class ParserFunctions
             }
             else
             {
-               state.Scan("^ /(/s*)", Color.Whitespace);
+               state.Scan(@"^(\s*)", Color.Whitespace);
                _symbol = new CommaSymbol();
             }
 
@@ -1298,12 +1298,12 @@ public static class ParserFunctions
       while (state.More && getSkipTakeItem(state) is (true, var (skip, take, prefix, suffix)))
       {
          list.Add(new SkipTakeItem(skip, take, prefix, suffix));
-         if (state.Scan("^ /'}'", Color.Structure))
+         if (state.Scan(@"^(\})", Color.Structure))
          {
             break;
          }
 
-         var _scan = state.Scan("^ /(/s*) /',' /(/s*)", Color.Whitespace, Color.Structure, Color.Whitespace);
+         var _scan = state.Scan(@"^(\s*)(,)(\s*)", Color.Whitespace, Color.Structure, Color.Whitespace);
          if (_scan)
          {
          }

@@ -120,12 +120,12 @@ public class ParseState : IEnumerable<Statement>
 
    public Optional<Unit> BeginBlock()
    {
-      return Scan("^ /(/s*) /'{'", Color.Whitespace, Color.Structure).Map(_ => unit);
+      return Scan(@"^(\s*)(\{)", Color.Whitespace, Color.Structure).Map(_ => unit);
    }
 
    public Optional<Unit> EndBlock()
    {
-      return Scan("^ /(/s*) /'}'", Color.Whitespace, Color.Structure).Map(_ => unit);
+      return Scan(@"^(\s*)(\})", Color.Whitespace, Color.Structure).Map(_ => unit);
    }
 
    public int Index => index;
@@ -192,7 +192,7 @@ public class ParseState : IEnumerable<Statement>
       }
    }
 
-   public Optional<string> SkipEndOfLine() => Scan("/(^ /r /n | ^ /r | ^ /n)", Color.Whitespace);
+   public Optional<string> SkipEndOfLine() => Scan("(^\r\n|^\r|^\n)", Color.Whitespace);
 
    public void Colorize(Token[] tokens, params Color[] colors)
    {

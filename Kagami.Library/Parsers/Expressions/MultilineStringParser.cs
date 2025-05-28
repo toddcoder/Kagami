@@ -137,7 +137,7 @@ public partial class MultilineStringParser : SymbolParser
          state.Move(1);
       }
 
-      var _scan = state.Scan("^ /(/r /n | /r | /n) /([dquote]3)", Color.Whitespace, Color.String);
+      var _scan = state.Scan(@"^(\r\n|\r|\n)([""]{3})", Color.Whitespace, Color.String);
       if (_scan)
       {
          if (hex)

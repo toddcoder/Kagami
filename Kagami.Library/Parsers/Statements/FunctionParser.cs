@@ -120,7 +120,7 @@ public partial class FunctionParser : StatementParser
       while (state.More)
       {
          var _parameters =
-            from prefix in state.Scan("^ /'('", Color.OpenParenthesis)
+            from prefix in state.Scan(@"^(\()", Color.OpenParenthesis)
             from p in getParameters(state)
             select p;
          if (_parameters is (true, var parameters))

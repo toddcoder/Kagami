@@ -42,7 +42,7 @@ public partial class AssignToNewFieldParser : EndingInExpressionParser
          _typeConstraint = nil;
       }
 
-      var _scan = state.Scan("^ /(/s*) /'='", Color.Whitespace, Color.Structure);
+      var _scan = state.Scan(@"^(\s*)(=)", Color.Whitespace, Color.Structure);
       if (_scan)
       {
          state.CommitTransaction();

@@ -28,7 +28,7 @@ public partial class SkipTakeItemParser : PatternedParser
       Skip = skip.Value().Int32();
       Take = take.Value().Int32();
 
-      if (state.Scan("^ /(/s*) /'='", Color.Whitespace, Color.Operator))
+      if (state.Scan(@"^(\s*)(=)", Color.Whitespace, Color.Operator))
       {
          var _expression = getExpression(state, ExpressionFlags.OmitComma);
          if (_expression is (true, var expression))
@@ -49,7 +49,7 @@ public partial class SkipTakeItemParser : PatternedParser
          Prefix = nil;
       }
 
-      if (state.Scan("^ /(/s*) /'~'", Color.Whitespace, Color.Operator))
+      if (state.Scan(@"^(\s*)(~)", Color.Whitespace, Color.Operator))
       {
          var _expression = getExpression(state, ExpressionFlags.OmitComma | ExpressionFlags.OmitConcatenate);
          if (_expression is (true, var expression))

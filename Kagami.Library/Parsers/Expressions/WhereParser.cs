@@ -29,7 +29,7 @@ public partial class WhereParser : SymbolParser
          if (_scan)
          {
             list.Add((itemParser.PropertyName, itemParser.Expression));
-            if (state.Scan("^ /(/s*) /[',}']", Color.Whitespace, Color.Structure) is (true, var value))
+            if (state.Scan(@"^(\s*)([,}])", Color.Whitespace, Color.Structure) is (true, var value))
             {
                if (value.Trim() == "}")
                {

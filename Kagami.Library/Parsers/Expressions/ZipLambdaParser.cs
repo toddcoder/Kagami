@@ -25,7 +25,7 @@ public partial class ZipLambdaParser : SymbolParser
       var parser = new AnyLambdaParser(expressionBuilder);
       var _result =
          from parsed in parser.Scan(state)
-         from endToken in state.Scan("/']'", Color.Operator)
+         from endToken in state.Scan(@"(\])", Color.Operator)
          select parsed;
 
       if (_result)

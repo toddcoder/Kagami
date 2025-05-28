@@ -21,7 +21,7 @@ public partial class ListParser : SymbolParser
    {
       state.Colorize(tokens, Color.Whitespace, Color.Collection, Color.Whitespace);
 
-      var _expression = getExpression(state, $"^ /(/s*) /'{REGEX_LIST_RIGHT}'", builder.Flags & ~ExpressionFlags.OmitComma, Color.Whitespace,
+      var _expression = getExpression(state, $@"^(\s*)({REGEX_LIST_RIGHT})", builder.Flags & ~ExpressionFlags.OmitComma, Color.Whitespace,
          Color.Collection);
       if (_expression is (true, var expression))
       {

@@ -21,7 +21,7 @@ public partial class InlineIfParser : SymbolParser
 
       var _result =
          from ifTrueValue in getExpression(state, builder.Flags | ExpressionFlags.OmitColon)
-         from scanned in state.Scan("^ /(/s*) /':'", Color.Whitespace, Color.Operator)
+         from scanned in state.Scan(@"^(\s*)(:)", Color.Whitespace, Color.Operator)
          from ifFalseValue in getExpression(state, builder.Flags)
          select (ifTrueValue, ifFalseValue);
 

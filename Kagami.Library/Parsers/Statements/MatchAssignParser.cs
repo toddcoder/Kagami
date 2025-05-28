@@ -18,7 +18,7 @@ public partial class MatchAssignParser : StatementParser
       state.Colorize(tokens, Color.Whitespace, Color.Keyword);
       var _result =
          from comparisandValue in getExpression(state, ExpressionFlags.Comparisand | ExpressionFlags.OmitColon)
-         from stem in state.Scan("^ /(/s+) /'='", Color.Whitespace, Color.Structure)
+         from stem in state.Scan(@"^(\s+)(=)", Color.Whitespace, Color.Structure)
          from expressionValue in getExpression(state, ExpressionFlags.Standard)
          select (comparisandValue, expressionValue);
       if (_result is (true, var (comparisand, expression)))

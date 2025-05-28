@@ -23,7 +23,7 @@ public partial class SliceAssignParser : SymbolParser
       state.Colorize(tokens, Color.Structure);
 
       var _symbol =
-         from indexes in getExpression(state, "^ /(/s*) /'}' /(/s*) /'='", builder.Flags, Color.Whitespace, Color.Structure,
+         from indexes in getExpression(state, @"^(\s*)(\})(\s*)(=)", builder.Flags, Color.Whitespace, Color.Structure,
             Color.Whitespace, Color.Structure)
          from values in getExpression(state, builder.Flags)
          select new SliceAssignSymbol(indexes, values);

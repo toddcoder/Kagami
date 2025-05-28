@@ -22,7 +22,7 @@ public partial class ConditionalAssignParser : StatementParser
 
       var _result =
          from comparisandValue in getExpression(state, ExpressionFlags.Comparisand)
-         from scanned in state.Scan("^ /(/s*) /':='", Color.Whitespace, Color.Structure)
+         from scanned in state.Scan(@"^(\s*)(:=)", Color.Whitespace, Color.Structure)
          from expressionValue in getExpression(state, ExpressionFlags.Standard)
          from andValue in getAnd(state)
          from blockValue in getBlock(state)

@@ -23,7 +23,7 @@ public partial class SubexpressionParser : SymbolParser
       var monoTuple = tokens[3].Text == ",";
       state.Colorize(tokens, Color.Whitespace, Color.OpenParenthesis, Color.Structure);
 
-      var _expression = getExpression(state, "^ /')'", builder.Flags & ~ExpressionFlags.OmitComma, Color.CloseParenthesis);
+      var _expression = getExpression(state, @"^(\))", builder.Flags & ~ExpressionFlags.OmitComma, Color.CloseParenthesis);
       if (_expression is (true, var expression))
       {
          builder.Add(new SubexpressionSymbol(expression, monoTuple));

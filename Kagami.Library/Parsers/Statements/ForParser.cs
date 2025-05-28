@@ -21,7 +21,7 @@ public partial class ForParser : StatementParser
 
       var _result =
          from comparisandValue in getExpression(state, ExpressionFlags.Comparisand | ExpressionFlags.OmitColon | ExpressionFlags.OmitIn)
-         from scanned in state.Scan("^ /(/s+) /'in' /(/s+)", Color.Whitespace, Color.Keyword, Color.Whitespace)
+         from scanned in state.Scan(@"^(\s+)(in)(\s+)", Color.Whitespace, Color.Keyword, Color.Whitespace)
          from sourceValue in getExpression(state, ExpressionFlags.Standard)
          from blockValue in getBlock(state)
          select (comparisandValue, sourceValue, blockValue);

@@ -27,7 +27,7 @@ public partial class ReductionParser : SymbolParser
 
       var _result =
          from op in operatorsParser.Scan(state)
-         from closing in state.Scan("^ /']'", Color.Operator)
+         from closing in state.Scan(@"^(\])", Color.Operator)
          select op;
 
       if (_result)

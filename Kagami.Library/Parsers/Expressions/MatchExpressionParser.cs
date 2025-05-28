@@ -10,7 +10,7 @@ public partial class MatchExpressionParser : SymbolParser
 {
    protected static Optional<(Expression, Expression)> getMatchItem(ParseState state)
    {
-      if (state.Scan("^ /(/s*) /')'", Color.Whitespace, Color.Structure))
+      if (state.Scan(@"^(\s*)(\))", Color.Whitespace, Color.Structure))
       {
          return nil;
       }
@@ -18,12 +18,12 @@ public partial class MatchExpressionParser : SymbolParser
       {
          var _matchItem =
             from key in getExpression(state, ExpressionFlags.Comparisand | ExpressionFlags.OmitNameValue)
-            from _ in state.Scan("^ /(/s*) /'=>' /(/s*)", Color.Whitespace, Color.Operator, Color.Whitespace)
+            from _ in state.Scan(@"^(\s*)(=>)(\s*)", Color.Whitespace, Color.Operator, Color.Whitespace)
             from expression in getExpression(state, ExpressionFlags.OmitComma)
             select (key, expression);
          if (_matchItem)
          {
-            state.Scan("^ /(/s*) /',' /(/s*)", Color.Whitespace, Color.Structure, Color.Whitespace);
+            state.Scan(@"^(\s*)(,)(\s*)", Color.Whitespace, Color.Structure, Color.Whitespace);
          }
 
          return _matchItem;

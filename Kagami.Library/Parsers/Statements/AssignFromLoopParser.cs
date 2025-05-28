@@ -32,7 +32,7 @@ public partial class AssignFromLoopParser : StatementParser
 
       var _result =
          from typeConstraintValue in parseTypeConstraint(state)
-         from scanned in state.Scan($"^ /(/s*) /'=' /(/s*) /'loop' /({REGEX_EOL})", Color.Whitespace, Color.Structure,
+         from scanned in state.Scan($@"^(\s*)(=)(\s*)(loop)({REGEX_EOL})", Color.Whitespace, Color.Structure,
             Color.Whitespace, Color.Keyword, Color.Whitespace)
          from blockValue in getBlock(state)
          from pair in getReturn(state)

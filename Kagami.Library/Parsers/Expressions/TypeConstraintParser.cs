@@ -29,7 +29,7 @@ public partial class TypeConstraintParser : SymbolParser
       while (state.More)
       {
          LazyOptional<string> _scan = nil;
-         var _name = state.Scan($"^ /(/s*) /({REGEX_CLASS})", Color.Whitespace, Color.Class);
+         var _name = state.Scan(@$"^(\s*)({REGEX_CLASS})", Color.Whitespace, Color.Class);
          if (_name is (true, var name))
          {
             name = name.TrimStart();
@@ -50,7 +50,7 @@ public partial class TypeConstraintParser : SymbolParser
          {
             return exception;
          }
-         else if (_scan.ValueOf(state.Scan("^ /'>'", Color.Class)))
+         else if (_scan.ValueOf(state.Scan("^(>)", Color.Class)))
          {
             builder.Add(new TypeConstraintSymbol(list));
             return unit;

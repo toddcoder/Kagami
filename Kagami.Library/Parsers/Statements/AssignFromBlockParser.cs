@@ -25,7 +25,7 @@ public partial class AssignFromBlockParser : StatementParser
 
       var _result =
          from typeConstraintValue in parseTypeConstraint(state)
-         from scanned in state.Scan($"^ /(/s*) /'=' /({REGEX_EOL})", Color.Whitespace, Color.Structure, Color.Whitespace)
+         from scanned in state.Scan($@"^(\s*)(=)({REGEX_EOL})", Color.Whitespace, Color.Structure, Color.Whitespace)
          from blockValue in getBlock(state)
          select (typeConstraintValue, blockValue);
 

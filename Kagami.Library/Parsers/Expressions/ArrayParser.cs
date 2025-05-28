@@ -19,7 +19,7 @@ public partial class ArrayParser : SymbolParser
    {
       state.Colorize(tokens, Color.Whitespace, Color.Collection, Color.Whitespace);
 
-      var _expression = getExpression(state, "^ /(/s*) /']'", builder.Flags & ~ExpressionFlags.OmitComma, Color.Whitespace, Color.Collection);
+      var _expression = getExpression(state, @"^(\s*)(\])", builder.Flags & ~ExpressionFlags.OmitComma, Color.Whitespace, Color.Collection);
       if (_expression is (true, var expression))
       {
          builder.Add(new ArraySymbol(expression));

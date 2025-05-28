@@ -105,7 +105,7 @@ public partial class InterpolatedStringParser : SymbolParser
 
                text.Clear();
 
-               var _expression = getExpression(state, "^ /')'", builder.Flags, Color.CloseParenthesis);
+               var _expression = getExpression(state, @"^(\))", builder.Flags, Color.CloseParenthesis);
                if (_expression is (true, var expression))
                {
                   expressions.Add(expression);

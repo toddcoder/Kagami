@@ -34,7 +34,7 @@ public partial class InvokeParser : SymbolParser
          {
             if (state.BlockFollows())
             {
-               state.Scan("^ /':'", Color.Structure);
+               state.Scan("^(:)", Color.Structure);
                var _result = state.BeginBlock();
                if (_result)
                {

@@ -23,7 +23,7 @@ public partial class AssignToMatchParser : EndingInExpressionParser
 
       var _result =
          from comparisandValue in getValue(state, ExpressionFlags.Comparisand)
-         from scanned in state.Scan("^ /(/s*) /'='", Color.Whitespace, Color.Structure)
+         from scanned in state.Scan(@"^(\s*)(=)", Color.Whitespace, Color.Structure)
          select comparisandValue;
       if (_result is (true, var symbol))
       {

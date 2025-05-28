@@ -20,9 +20,9 @@ public abstract class LambdaParser : SymbolParser
 
       var _result =
          from parameters in ParseParameters(state, tokens)
-         from scanned in state.Scan("^ /(/s*) /'->'", Color.Whitespace, Color.Structure)
+         from scanned in state.Scan(@"^(\s*)(->)", Color.Whitespace, Color.Structure)
          from typeConstraint in parseTypeConstraint(state)
-         from block in getLambdaBlock(!state.CurrentSource.IsMatch("^ (/r /n | /r | /n)"), state,
+         from block in getLambdaBlock(!state.CurrentSource.IsMatch("^(\r\n|\r|\n)"), state,
             builder.Flags & ~ExpressionFlags.Comparisand | ExpressionFlags.InLambda, typeConstraint.Maybe)
          select new LambdaSymbol(parameters, block);
       if (_result is (true, var lambdaSymbol))
