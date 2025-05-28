@@ -1,9 +1,11 @@
-﻿namespace Kagami.Library.Operations
-{
-   public class GoToIfFalse : GoToIfTrue
-   {
-      public GoToIfFalse() => predicate = b => !b.Value;
+﻿namespace Kagami.Library.Operations;
 
-      public override string ToString() => $"goto.if.false({address})";
+public class GoToIfFalse : GoToIfTrue
+{
+   public GoToIfFalse()
+   {
+      predicate = b => !b.IsTrue;
    }
+
+   public override string ToString() => $"goto.if.false({address})";
 }

@@ -9,7 +9,10 @@ public readonly struct Some : IObject, IOptional, IBoolean, IEquatable<Some>, IM
 
    private readonly IObject value;
 
-   public Some(IObject value) : this() => this.value = value;
+   public Some(IObject value) : this()
+   {
+      this.value = value;
+   }
 
    public string ClassName => "Some";
 

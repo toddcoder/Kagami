@@ -1,17 +1,16 @@
-﻿namespace Kagami.Library.Objects
+﻿namespace Kagami.Library.Objects;
+
+public interface IResult
 {
-	public interface IResult
-	{
-		IObject Value { get; }
+   IObject Value { get; }
 
-		Error Error { get; }
+   Error Error { get; }
 
-		bool IsSuccess { get; }
+   bool IsSuccess { get; }
 
-		bool IsFailure { get; }
+   bool IsFailure { get; }
 
-		IObject Map(Lambda lambda);
+   IObject Map(Lambda lambda);
 
-		IObject FlatMap(Lambda ifSuccess, Lambda ifFailure);
-	}
+   IObject FlatMap(Lambda ifSuccess, Lambda ifFailure);
 }

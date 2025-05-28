@@ -3,7 +3,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
 
-public readonly struct KBoolean : IObject, IObjectCompare, IComparable<KBoolean>, IEquatable<KBoolean>, IComparable
+public readonly struct KBoolean : IObject, IObjectCompare, IComparable<KBoolean>, IEquatable<KBoolean>, IComparable, IBoolean
 {
    public static implicit operator KBoolean(bool value) => new(value);
 

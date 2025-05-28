@@ -16,7 +16,7 @@ public partial class BindingParser : EndingInExpressionParser
 
    //public override string Pattern => $"^ /(/s*) /('use' | 'var') /(/s+) /({REGEX_FIELD}) /'@'";
 
-   [GeneratedRegex(@$"^(\s*)(use|var)(\s+)({REGEX_FIELD})(@)")]
+   [GeneratedRegex(@$"^(\s*)(use|var)(\s+)({REGEX_FIELD})(\s*)(@)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
@@ -29,7 +29,7 @@ public partial class BindingParser : EndingInExpressionParser
          "var" => $"+{placeholderName}",
          _ => $"-{placeholderName}"
       };
-      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Identifier, Color.Operator);
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Identifier, Color.Whitespace, Color.Operator);
 
       return unit;
    }

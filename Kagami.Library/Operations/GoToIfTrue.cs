@@ -1,5 +1,4 @@
-﻿using System;
-using Kagami.Library.Objects;
+﻿using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Monads;
 using static Kagami.Library.AllExceptions;
@@ -9,9 +8,7 @@ namespace Kagami.Library.Operations;
 
 public class GoToIfTrue : AddressedOperation
 {
-   protected Predicate<KBoolean> predicate;
-
-   public GoToIfTrue() => predicate = b => b.Value;
+   protected Predicate<IBoolean> predicate = b => b.IsTrue;
 
    public override Optional<IObject> Execute(Machine machine)
    {
@@ -20,7 +17,7 @@ public class GoToIfTrue : AddressedOperation
       var _x = machine.Pop();
       if (_x is (true, var x))
       {
-         if (x is KBoolean bx)
+         if (x is IBoolean bx)
          {
             if (predicate(bx))
             {

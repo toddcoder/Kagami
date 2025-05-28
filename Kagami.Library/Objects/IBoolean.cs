@@ -1,7 +1,6 @@
-﻿namespace Kagami.Library.Objects
+﻿namespace Kagami.Library.Objects;
+
+public interface IBoolean
 {
-   public interface IBoolean
-   {
-      bool IsTrue { get; }
-   }
+   bool IsTrue { get; }
 }

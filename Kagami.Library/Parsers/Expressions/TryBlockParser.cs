@@ -19,7 +19,7 @@ public partial class TryBlockParser : SymbolParser
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace);
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword);
 
       var _block = getBlock(state);
       if (_block is (true, var block))

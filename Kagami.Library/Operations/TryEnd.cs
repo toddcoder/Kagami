@@ -15,6 +15,7 @@ public class TryEnd : Operation
       {
          Optional<IObject> _result = new Objects.Success(KUnit.Value);
          machine.PopFramesUntil(f => f.FrameType == FrameType.Try);
+
          return _result;
       }
       else if (_value.ValueOf(machine.Pop()) is (true, var value))

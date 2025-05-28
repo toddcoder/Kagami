@@ -1,31 +1,30 @@
 ﻿using Kagami.Library.Operations;
 using static Kagami.Library.Nodes.NodeFunctions;
 
-namespace Kagami.Library.Nodes.Symbols
+namespace Kagami.Library.Nodes.Symbols;
+
+public class TrySymbol : Symbol
 {
-   public class TrySymbol : Symbol
+   protected Expression expression;
+
+   public TrySymbol(Expression expression) => this.expression = expression;
+
+   public override void Generate(OperationsBuilder builder)
    {
-      protected Expression expression;
+      var errorLabel = newLabel("error");
 
-      public TrySymbol(Expression expression) => this.expression = expression;
+      builder.TryBegin();
+      builder.SetErrorHandler(errorLabel);
+      expression.Generate(builder);
+      builder.TryEnd();
 
-      public override void Generate(OperationsBuilder builder)
-      {
-         var errorLabel = newLabel("error");
-
-         builder.TryBegin();
-         builder.SetErrorHandler(errorLabel);
-         expression.Generate(builder);
-         builder.TryEnd();
-
-         builder.Label(errorLabel);
-         builder.NoOp();
-      }
-
-      public override Precedence Precedence => Precedence.Value;
-
-      public override Arity Arity => Arity.Nullary;
-
-      public override string ToString() => $"try {expression}";
+      builder.Label(errorLabel);
+      builder.NoOp();
    }
+
+   public override Precedence Precedence => Precedence.Value;
+
+   public override Arity Arity => Arity.Nullary;
+
+   public override string ToString() => $"try {expression}";
 }

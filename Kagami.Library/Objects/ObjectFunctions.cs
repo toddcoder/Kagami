@@ -302,9 +302,8 @@ public static class ObjectFunctions
       {
          foreach (var (key, value) in ppInternals.Internals)
          {
-            if (ppPassed.Passed.ContainsKey(key))
+            if (ppPassed.Passed.Maybe[key] is (true, var passedValue))
             {
-               var passedValue = ppPassed.Passed[key];
                if (!value.Match(passedValue, bindings))
                {
                   return false;
