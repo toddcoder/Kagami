@@ -18,12 +18,12 @@ public partial class StaticParser : StatementParser
 
    //public override string Pattern => $"^ /'object' /({REGEX_EOL})";
 
-   [GeneratedRegex($@"^(object)({REGEX_EOL})")]
+   [GeneratedRegex(@"^(\s*)(static)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      state.Colorize(tokens, Color.Keyword, Color.Whitespace);
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword);
 
       var _block = getBlock(state);
       if (_block is (true, var block))

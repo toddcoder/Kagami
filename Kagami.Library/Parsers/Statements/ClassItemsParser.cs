@@ -1,20 +1,17 @@
-﻿using System.Collections.Generic;
+﻿namespace Kagami.Library.Parsers.Statements;
 
-namespace Kagami.Library.Parsers.Statements
+public class ClassItemsParser : MultiParser
 {
-   public class ClassItemsParser : MultiParser
+   protected ClassBuilder builder;
+
+   public ClassItemsParser(ClassBuilder builder) => this.builder = builder;
+
+   public override IEnumerable<Parser> Parsers
    {
-      protected ClassBuilder builder;
-
-      public ClassItemsParser(ClassBuilder builder) => this.builder = builder;
-
-      public override IEnumerable<Parser> Parsers
+      get
       {
-         get
-         {
-            yield return new ConstructorParser(builder);
-            yield return new StaticParser(builder);
-         }
+         yield return new ConstructorParser(builder);
+         yield return new StaticParser(builder);
       }
    }
 }

@@ -16,15 +16,15 @@ public partial class IfParser : ExpressionBlockParser
 
    //public override string Pattern => $"^ (/('var' | 'let') /(/s*) /({REGEX_FIELD}) /(/s*) /'=' /(/s*))? /'if' -(> ['>^']) /b";
 
-   [GeneratedRegex($@"^(?:(var|let)(\s*)({REGEX_FIELD})(\s*)(=)(\s*))?(if)(?![>\^])\b")]
+   [GeneratedRegex($@"^(\s*)(?:(var|let)(\s*)({REGEX_FIELD})(\s*)(=)(\s*))?(if)(?![>\^])\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {
-      mutable = tokens[1].Text == "var";
-      fieldName = tokens[3].Text;
+      mutable = tokens[2].Text == "var";
+      fieldName = tokens[4].Text;
       assignment = fieldName.IsNotEmpty();
-      state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Identifier, Color.Whitespace, Color.Structure, Color.Whitespace,
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Identifier, Color.Whitespace, Color.Structure, Color.Whitespace,
          Color.Keyword);
 
       return unit;
