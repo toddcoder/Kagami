@@ -76,10 +76,10 @@ public static class ParserFunctions
       var builder = new ExpressionBuilder(flags);
 
       var _comparisand = getExpression(state, flags);
-      if (_comparisand)
+      if (_comparisand is (true, var comparisand))
       {
          builder.Add(new FieldSymbol(fieldName));
-         builder.Add(_comparisand);
+         builder.Add(comparisand);
          builder.Add(new MatchSymbol());
          var _scanned = state.Scan(@"^(\s*)(&)", Color.Whitespace, Color.OpenParenthesis);
          if (_scanned)

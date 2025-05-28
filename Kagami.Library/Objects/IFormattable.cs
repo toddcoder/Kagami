@@ -1,7 +1,6 @@
-﻿namespace Kagami.Library.Objects
+﻿namespace Kagami.Library.Objects;
+
+public interface IFormattable
 {
-   public interface IFormattable
-   {
-      KString Format(string format);
-   }
+   KString Format(string format);
 }

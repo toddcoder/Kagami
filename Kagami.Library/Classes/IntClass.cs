@@ -1,5 +1,4 @@
-﻿using System;
-using Core.Objects;
+﻿using Core.Objects;
 using Kagami.Library.Objects;
 using static Kagami.Library.Classes.ClassFunctions;
 
@@ -37,6 +36,8 @@ public class IntClass : BaseClass, IParse, IEquivalentClass
       messages["char()"] = (obj, _) => function<Int>(obj, i => i.Char());
       messages["byte()"] = (obj, _) => function<Int>(obj, i => i.Byte());
       messages["times(_)"] = (obj, msg) => function<Int, Lambda>(obj, msg, (i, l) => i.Times(l));
+      messages["<<(_)"] = (obj, msg) => function<Int, IObject>(obj, msg, (i, o) => i.ShiftLeft(o));
+      messages[">>(_)"] = (obj, msg) => function<Int, IObject>(obj, msg, (i, o) => i.ShiftRight(o));
    }
 
    public override void RegisterClassMessages()

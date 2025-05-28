@@ -11,7 +11,7 @@ public partial class ParentClassParser : StatementParser
 {
    //public override string Pattern => $"^ /(/s+) /'inherits' /(/s+) /({REGEX_CLASS}) " + "/['([']?";
 
-   [GeneratedRegex($@"^(\s+)(inherits)(\s+)({REGEX_CLASS})([\(\[])?")]
+   [GeneratedRegex($@"^(\s*)(:)(\s*)({REGEX_CLASS})([\(\[])?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
@@ -19,7 +19,7 @@ public partial class ParentClassParser : StatementParser
       var parentClassName = tokens[4].Text;
       var hasArguments = tokens[5].Length > 0;
       var initialize = tokens[5].Text == "[";
-      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Class, Color.Structure);
+      state.Colorize(tokens, Color.Whitespace, Color.Structure, Color.Whitespace, Color.Class, Color.OpenParenthesis);
 
       if (hasArguments)
       {

@@ -40,7 +40,7 @@ public partial class CaseParser : StatementParser
 
    //public override string Pattern => "^ /(/s*) /'case' /(/s*)";
 
-   [GeneratedRegex(@"^(\s*)(case)(\s*)")]
+   [GeneratedRegex(@"^(\s*)(case)(\s+)")]
    public override partial Regex Regex();
 
    protected static Optional<Block> getCaseBlock(CaseType caseType, ParseState state) => caseType switch

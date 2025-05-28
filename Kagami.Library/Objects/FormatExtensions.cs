@@ -12,7 +12,7 @@ public static class FormatExtensions
       {
          return dateTime.ToString(format);
       }
-      else if (format.MatchOf(@"([cdefgnprxs])(-?\d+)?(?\.(\d+))?") is (true, var matches))
+      else if (format.MatchOf(@"([cdefgnprxs])(-?\d+)?(?:\.(\d+))?") is (true, var matches))
       {
          var match = matches[0];
          var specifier = match.Groups[1].Value;

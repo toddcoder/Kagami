@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using Core.Collections;
 using Core.Dates.DateIncrements;
+using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Operations.NumericFunctions;
 
@@ -194,4 +195,20 @@ public readonly struct Int : IObject, INumeric, IComparable<Int>, IEquatable<Int
 
       return KVoid.Value;
    }
+
+   public Int ShiftLeft(IObject obj) => obj switch
+   {
+      Int i => value << i.value,
+      KByte b => value << b.Value,
+      Long l => value << (int)l.Value,
+      _ => throw incompatibleClasses(obj, "Int, Byte or Long")
+   };
+
+   public Int ShiftRight(IObject obj) => obj switch
+   {
+      Int i => value >> i.value,
+      KByte b => value >> b.Value,
+      Long l => value >> (int)l.Value,
+      _ => throw incompatibleClasses(obj, "Int, Byte or Long")
+   };
 }

@@ -35,10 +35,10 @@ public class ExpressionParser : PatternlessParser
 
    public Expression Expression { get; set; } = Expression.Empty;
 
-   protected bool endOfLine(ParseState state)
+   protected static bool endOfLine(ParseState state)
    {
       var current = state.CurrentSource;
-      return current.IsMatch("^ /s* '{'") || current.IsMatch("/r/n | /r | /n");
+      return current.IsMatch("^ /s* '{'") || current.IsMatch("^ (/r/n | /r | /n)");
    }
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens)
@@ -53,14 +53,14 @@ public class ExpressionParser : PatternlessParser
       state.BeginPrefixCode();
       state.BeginImplicitState();
 
-      var notEndOfLine = true;
-
       try
       {
          var _term0 = getTerm(state);
          if (_term0)
          {
-            var _anticipated = ParserFunctions.anticipateBrackets(state);
+            /*
+            var _anticipated = anticipateBrackets(state);
+            var notEndOfLine = true;
             if (_anticipated)
             {
                notEndOfLine = false;
@@ -69,8 +69,9 @@ public class ExpressionParser : PatternlessParser
             {
                return anticipatedException;
             }
+            */
 
-            notEndOfLine = !endOfLine(state);
+            var isEndOfLine = endOfLine(state);
             /*var _endOfLine = endOfLineParser.Scan(state);
             if (_endOfLine)
             {
@@ -81,7 +82,7 @@ public class ExpressionParser : PatternlessParser
                return endOfLineException;
             }*/
 
-            while (notEndOfLine && state.More)
+            while (!isEndOfLine && state.More)
             {
                if (!flags[ExpressionFlags.OmitConjunction])
                {
@@ -102,7 +103,7 @@ public class ExpressionParser : PatternlessParser
                   var _term1 = getTerm(state);
                   if (_term1)
                   {
-                     _anticipated = ParserFunctions.anticipateBrackets(state);
+                     /*_anticipated = anticipateBrackets(state);
                      if (_anticipated)
                      {
                         notEndOfLine = false;
@@ -110,9 +111,9 @@ public class ExpressionParser : PatternlessParser
                      else if (_anticipated.Exception is (true, var anticipatedException))
                      {
                         return anticipatedException;
-                     }
+                     }*/
 
-                     notEndOfLine = !endOfLine(state);
+                     isEndOfLine = endOfLine(state);
                      /*_endOfLine = endOfLineParser.Scan(state);
                      if (_endOfLine)
                      {

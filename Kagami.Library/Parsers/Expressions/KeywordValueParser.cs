@@ -13,8 +13,7 @@ public partial class KeywordValueParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(
-      @"^(\s*)(to|til|by|if|map|join|sort|foldl|foldr|all|any|none|one|zip|downto|skip|take|band|bor|bxor|bsl|bsr|while|until|min|max|does|x)(\s+)")]
+   [GeneratedRegex(@"^(\s*)(none|true|false|del|unit|null)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)

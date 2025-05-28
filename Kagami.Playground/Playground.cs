@@ -57,6 +57,7 @@ public partial class Playground : Form
       {
          playgroundConfiguration = new PlaygroundConfiguration();
       }
+
       packageFolder = playgroundConfiguration.PackageFolder;
 
       outputConsole = new TextBoxConsole(this, textConsole, playgroundConfiguration.FontName, playgroundConfiguration.FontSize,
@@ -70,6 +71,22 @@ public partial class Playground : Form
       {
          _exceptionData = nil;
          document = new Document(this, textEditor, ".kagami", "Kagami", playgroundConfiguration.FontName, playgroundConfiguration.FontSize);
+         /*{
+            AboutToDisplayFile =
+            {
+               Handler = i =>
+               {
+                  if (i.File is (true, var file))
+                  {
+                     Console.WriteLine(file.FullPath);
+                  }
+                  else
+                  {
+                     Console.WriteLine("No file to display");
+                  }
+               }
+            }
+         };*/
          var menus = document.Menus;
          menus.Menu("&File");
          menus.Menu("File", "&New", (_, _) =>
@@ -322,8 +339,19 @@ public partial class Playground : Form
 
    protected void createBlock()
    {
-      textEditor.SelectedText = "{\n\t\n}";
-      textEditor.SelectionStart -= 2;
+      var (selectedLines, _) = textEditor.SelectedLines();
+      if (selectedLines.Length > 0)
+      {
+         var selectedLine = selectedLines[0];
+         var whitespace = selectedLine.KeepWhile(i => char.IsWhiteSpace(i[0]));
+         textEditor.SelectedText = $"{{\n{whitespace}\t\n{whitespace}}}";
+         textEditor.SelectionStart -= 2 + whitespace.Length;
+      }
+      else
+      {
+         textEditor.SelectedText = "{\n\t\n}";
+         textEditor.SelectionStart -= 2;
+      }
    }
 
    protected Maybe<(string[] lines, int index)> linesFromSelection()
@@ -561,7 +589,8 @@ public partial class Playground : Form
       switch (e.KeyCode)
       {
          case Keys.Escape:
-            if (textAtInsert(1) == "'" && textAtInsert(1, -1) == "'" || textAtInsert(1) == "\"" && textAtInsert(1, -1) == "\"" || textAtInsert(1) == ")" && textAtInsert(1, -1) == "(" || textAtInsert(1) == "]" && textAtInsert(1, -1) == "[")
+            if (textAtInsert(1) == "'" && textAtInsert(1, -1) == "'" || textAtInsert(1) == "\"" && textAtInsert(1, -1) == "\"" ||
+                textAtInsert(1) == ")" && textAtInsert(1, -1) == "(" || textAtInsert(1) == "]" && textAtInsert(1, -1) == "[")
             {
                e.Handled = true;
                setTextAtInsert(1);
