@@ -7,7 +7,7 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class RangeOperatorParser : SymbolParser
 {
-   public override string Pattern => "^ /(/s*) /('..' /('<')?)";
+   //public override string Pattern => "^ /(/s*) /('..' /('<')?)";
 
    [GeneratedRegex(@"^(\s*)(\.\.(<)?)")]
    public override partial Regex Regex();

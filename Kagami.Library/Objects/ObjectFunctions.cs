@@ -7,6 +7,7 @@ using Core.Matching;
 using Core.Monads;
 using Core.Objects;
 using Core.Strings;
+using Kagami.Library.Parsers;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
@@ -520,10 +521,11 @@ public static class ObjectFunctions
          source = $"{source}(_)";
       }
 
-      if (source.Matches($"^ /(('__$')? {REGEX_FUNCTION_NAME}) '(' /@") is (true, var result))
+      if (source.MatchOf(@$"^((?:__\$)?{REGEX_FUNCTION_NAME})\((.*)$") is (true, var matches))
       {
-         var name = result.FirstGroup;
-         var rest = result.SecondGroup.KeepUntil(")");
+         var match = matches[0];
+         var name = match.Groups[1].Value;
+         var rest = match.Groups[2].Value.KeepUntil(")");
          SelectorItem[] items;
          if (rest.IsEmpty())
          {
@@ -548,15 +550,17 @@ public static class ObjectFunctions
       var label = "";
       Maybe<TypeConstraint> _typeConstraint = nil;
 
-      if (source.Matches($"^ /({REGEX_FIELD}) ':' /@") is (true, var result1))
+      if (source.MatchOf($"^({REGEX_FIELD}):(.*)$") is (true, var matches))
       {
-         label = result1.FirstGroup;
-         source = result1.SecondGroup;
+         var match = matches[0];
+         label = match.Groups[1].Value;
+         source = match.Groups[2].Value;
       }
 
-      if (source.Matches($"^ /({REGEX_FIELD}) /b /@") is (true, var result2))
+      if (source.MatchOf($@"^({REGEX_FIELD})\b(.*)$") is (true, var matches2))
       {
-         source = result2.SecondGroup;
+         var match = matches2[0];
+         source = match.Groups[2].Value;
       }
 
       if (source.Matches("^ '<' /(-['>']+) '>' /@") is (true, var result3))

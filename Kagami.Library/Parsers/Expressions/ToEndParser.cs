@@ -9,7 +9,7 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class ToEndParser : SymbolParser
 {
-   public override string Pattern => "^ /'..' (>[')]'])";
+   //public override string Pattern => "^ /'..' (>[')]'])";
 
    [GeneratedRegex(@"^(\.\.)(?=[\)\]])", RegexOptions.Compiled)]
    public override partial Regex Regex();

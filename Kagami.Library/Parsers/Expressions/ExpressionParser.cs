@@ -1,10 +1,10 @@
-﻿using Core.Monads;
+﻿using Core.Matching;
+using Core.Monads;
 using Core.Numbers;
 using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
-using Kagami.Library.Parsers.Statements;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
@@ -18,7 +18,7 @@ public class ExpressionParser : PatternlessParser
    protected InfixParser infixParser;
    protected PostfixParser postfixParser;
    protected ConjunctionParsers conjunctionParsers;
-   protected EndOfLineParser endOfLineParser = new();
+   //protected EndOfLineParser endOfLineParser = new();
    protected int whateverCount;
 
    public ExpressionParser(Bits32<ExpressionFlags> flags) : base(false)
@@ -34,6 +34,12 @@ public class ExpressionParser : PatternlessParser
    }
 
    public Expression Expression { get; set; } = Expression.Empty;
+
+   protected bool endOfLine(ParseState state)
+   {
+      var current = state.CurrentSource;
+      return current.IsMatch("^ /s* '{'") || current.IsMatch("/r/n | /r | /n");
+   }
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens)
    {
@@ -64,7 +70,8 @@ public class ExpressionParser : PatternlessParser
                return anticipatedException;
             }
 
-            var _endOfLine = endOfLineParser.Scan(state);
+            notEndOfLine = !endOfLine(state);
+            /*var _endOfLine = endOfLineParser.Scan(state);
             if (_endOfLine)
             {
                notEndOfLine = false;
@@ -72,7 +79,7 @@ public class ExpressionParser : PatternlessParser
             else if (_endOfLine.Exception is (true, var endOfLineException))
             {
                return endOfLineException;
-            }
+            }*/
 
             while (notEndOfLine && state.More)
             {
@@ -105,7 +112,8 @@ public class ExpressionParser : PatternlessParser
                         return anticipatedException;
                      }
 
-                     _endOfLine = endOfLineParser.Scan(state);
+                     notEndOfLine = !endOfLine(state);
+                     /*_endOfLine = endOfLineParser.Scan(state);
                      if (_endOfLine)
                      {
                         notEndOfLine = false;
@@ -113,7 +121,7 @@ public class ExpressionParser : PatternlessParser
                      else if (_endOfLine.Exception is (true, var endOfLineException))
                      {
                         return endOfLineException;
-                     }
+                     }*/
                   }
                   else if (_term1.Exception is (true, var exception))
                   {

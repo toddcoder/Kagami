@@ -1,7 +1,6 @@
-﻿using System;
-using System.Text;
-using Core.Matching;
+﻿using System.Text;
 using Core.Strings;
+using Kagami.Library.Parsers;
 
 namespace Kagami.Library.Objects;
 
@@ -13,10 +12,14 @@ public static class FormatExtensions
       {
          return dateTime.ToString(format);
       }
-      else if (format.Matches("/['cdefgnprxs'] /('-'? /d+)? ('.' /(/d+))?") is (true, var result))
+      else if (format.MatchOf(@"([cdefgnprxs])(-?\d+)?(?\.(\d+))?") is (true, var matches))
       {
-         var (specifier, width, places) = result.Matches[0].Groups3();
+         var match = matches[0];
+         var specifier = match.Groups[1].Value;
+         var width = match.Groups[2].Value;
+         var places = match.Groups[3].Value;
          var builder = new StringBuilder("{0");
+
          if (width.IsNotEmpty())
          {
             builder.Append($",{width}");
@@ -32,7 +35,7 @@ public static class FormatExtensions
          }
 
          builder.Append("}");
-         return string.Format(result.ToString(), obj);
+         return string.Format(builder.ToString(), obj);
       }
       else
       {

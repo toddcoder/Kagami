@@ -15,7 +15,7 @@ public partial class AssignToFieldParser : EndingInExpressionParser
 
    //public override string Pattern => $"^ /(/s*) /({REGEX_FIELD}) /(/s*) /({REGEX_ASSIGN_OPS})? /'=' -(> ['=>'])";
 
-   [GeneratedRegex($@"^(\s*)({REGEX_FIELD})(\s*)({REGEX_ASSIGN_OPS})?=(?![=>])")]
+   [GeneratedRegex($@"^(\s*)({REGEX_FIELD})(\s*)({REGEX_ASSIGN_OPS})?(=)(?![=>])")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)

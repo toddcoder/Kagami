@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Operations;
+﻿using Core.Matching;
+using Kagami.Library.Operations;
 using Kagami.Library.Parsers;
 using Kagami.Library.Parsers.Statements;
 using Kagami.Library.Runtime;
@@ -11,6 +12,11 @@ namespace Kagami.Library;
 
 public class Compiler
 {
+   static Compiler()
+   {
+      Pattern.IsFriendly = true;
+   }
+
    protected string source;
    protected CompilerConfiguration configuration;
    protected IContext context;

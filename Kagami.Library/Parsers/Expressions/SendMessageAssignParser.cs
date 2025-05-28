@@ -18,7 +18,7 @@ public partial class SendMessageAssignParser : EndingInExpressionParser
 
    //public override string Pattern => $"^ /(/s*) /'.' /({REGEX_FUNCTION_NAME}) /(/s*) /({REGEX_ASSIGN_OPS})? /'=' -(> ['=>'])";
 
-   [GeneratedRegex($@"^(\s*)(\.)({REGEX_FUNCTION_NAME})(\s*)({REGEX_ASSIGN_OPS})?=?(?![=>])")]
+   [GeneratedRegex($@"^(\s*)(\.)({REGEX_FUNCTION_NAME})(\s*)({REGEX_ASSIGN_OPS})?(=)(?![=>])")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)

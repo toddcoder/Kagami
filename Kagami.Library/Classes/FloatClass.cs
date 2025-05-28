@@ -1,5 +1,4 @@
-﻿using System;
-using Core.Objects;
+﻿using Core.Objects;
 using Kagami.Library.Objects;
 using static Kagami.Library.Operations.NumericFunctions;
 

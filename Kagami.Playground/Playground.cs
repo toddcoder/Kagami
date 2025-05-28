@@ -97,8 +97,7 @@ public partial class Playground : Form
          document.StandardEditMenu();
 
          menus.Menu("Edit", "Duplicate", (_, _) => duplicate(), "^D");
-         menus.Menu("Edit", "Indent", (_, _) => indent(), "^I");
-         menus.Menu("Edit", "Unindent", (_, _) => unindent(), "^%I");
+         menus.Menu("Edit", "Create Block", (_, _) => createBlock(), "^B");
          menus.Menu("&Build");
          menus.Menu("Build", "Run", (_, _) => run(), "F5");
          menus.Menu("Build", "Manual", (s, _) =>
@@ -321,12 +320,10 @@ public partial class Playground : Form
       textEditor.AppendAtEnd(text, "/n");
    }
 
-   protected static void indent()
+   protected void createBlock()
    {
-   }
-
-   protected static void unindent()
-   {
+      textEditor.SelectedText = "{\n\t\n}";
+      textEditor.SelectionStart -= 2;
    }
 
    protected Maybe<(string[] lines, int index)> linesFromSelection()
@@ -473,7 +470,7 @@ public partial class Playground : Form
 
    protected void textEditor_TextChanged(object sender, EventArgs e)
    {
-      /*try
+      try
       {
          _exceptionData = nil;
          update(!manual, false);
@@ -481,7 +478,7 @@ public partial class Playground : Form
       }
       catch
       {
-      }*/
+      }
    }
 
    protected void textEditor_KeyPress(object sender, KeyPressEventArgs e)
