@@ -12,9 +12,11 @@ public partial class DoParser : SymbolParser
 {
    protected partial class BoundItemParser : EndingInExpressionParser
    {
-      protected string fieldName;
+      protected string fieldName = "";
 
-      public BoundItemParser(ExpressionBuilder builder) : base(builder) => fieldName = "";
+      public BoundItemParser(ExpressionBuilder builder) : base(builder)
+      {
+      }
 
       //public override string Pattern => $"^ /({REGEX_FIELD}) /(/s*) /'<-'";
 
@@ -44,7 +46,7 @@ public partial class DoParser : SymbolParser
 
    //public override string Pattern => $"^ /(/s*) /'do' {REGEX_ANTICIPATE_END}";
 
-   [GeneratedRegex(@$"^(\s*)do{REGEX_ANTICIPATE_END}")]
+   [GeneratedRegex(@$"^(\s*)(do)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
