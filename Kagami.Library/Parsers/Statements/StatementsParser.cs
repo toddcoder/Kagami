@@ -15,6 +15,7 @@ public class StatementsParser : MultiParser
          //yield return new EndOfLineParser();
 
          yield return new ClassParser();
+         yield return new NamedStaticParser();
          yield return new MixinParser();
          yield return new ModuleParser();
          yield return new RecordParser();

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Core.Collections;
+﻿using Core.Collections;
 using Core.Monads;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Core.Monads.MonadFunctions;
@@ -171,6 +169,7 @@ public readonly struct KRange : IObject, ICollection
    {
       var iterator = GetIterator(false);
       var array = new KArray(iterator.List());
+
       return new IndexedIterator(array);
    }
 

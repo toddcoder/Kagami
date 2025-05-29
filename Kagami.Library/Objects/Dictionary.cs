@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Core.Collections;
+﻿using Core.Collections;
 using Core.Enumerables;
 using Core.Monads;
 using Core.Numbers;
@@ -69,7 +67,7 @@ public class Dictionary : IObject, IMutableCollection
       }
    }
 
-   public Dictionary() : this(System.Array.Empty<IObject>())
+   public Dictionary() : this(Array.Empty<IObject>())
    {
    }
 
@@ -94,9 +92,8 @@ public class Dictionary : IObject, IMutableCollection
 
    protected IObject getValue(IObject key)
    {
-      if (dictionary.ContainsKey(key))
+      if (dictionary.Maybe[key] is (true, var value))
       {
-         var value = dictionary[key];
          if (DefaultValue || _defaultLambda)
          {
             return value;
@@ -117,7 +114,6 @@ public class Dictionary : IObject, IMutableCollection
       }
       else if (_defaultLambda is (true, var lambda))
       {
-         IObject value;
          switch (parameterCount)
          {
             case 1:
@@ -222,9 +218,8 @@ public class Dictionary : IObject, IMutableCollection
 
    public IObject Get(IObject key)
    {
-      if (dictionary.ContainsKey(key))
+      if (dictionary.Maybe[key] is (true, var value))
       {
-         var value = dictionary[key];
          if (DefaultValue || DefaultLambda)
          {
             return value;
@@ -304,9 +299,8 @@ public class Dictionary : IObject, IMutableCollection
 
    public IObject Delete(IObject key)
    {
-      if (dictionary.ContainsKey(key))
+      if (dictionary.Maybe[key] is (true, var value))
       {
-         var value = dictionary[key];
          dictionary.Remove(key);
          return new Some(value);
       }
@@ -350,11 +344,9 @@ public class Dictionary : IObject, IMutableCollection
 
    public IObject Update(IObject key, IObject value)
    {
-      if (dictionary.ContainsKey(key))
+      if (dictionary.Maybe[key] is (true, var oldValue))
       {
-         var oldValue = dictionary[key];
          dictionary[key] = value;
-
          return new Some(oldValue);
       }
       else
@@ -382,11 +374,9 @@ public class Dictionary : IObject, IMutableCollection
 
    public IObject Remove(IObject obj)
    {
-      if (dictionary.ContainsKey(obj))
+      if (dictionary.Maybe[obj] is (true, var oldValue))
       {
-         var oldValue = dictionary[obj];
          dictionary.Remove(obj);
-
          return new Some(oldValue);
       }
       else

@@ -1,27 +1,26 @@
 ﻿using Core.Monads;
 
-namespace Kagami.Library.Objects
+namespace Kagami.Library.Objects;
+
+public interface ICollection : ISkipTakeable
 {
-   public interface ICollection : ISkipTakeable
-   {
-      IIterator GetIterator(bool lazy);
+   IIterator GetIterator(bool lazy);
 
-      Maybe<IObject> Next(int index);
+   Maybe<IObject> Next(int index);
 
-      Maybe<IObject> Peek(int index);
+   Maybe<IObject> Peek(int index);
 
-      Int Length { get; }
+   Int Length { get; }
 
-      bool ExpandForArray { get; }
+   bool ExpandForArray { get; }
 
-      KBoolean In(IObject item);
+   KBoolean In(IObject item);
 
-      KBoolean NotIn(IObject item);
+   KBoolean NotIn(IObject item);
 
-      IObject Times(int count);
+   IObject Times(int count);
 
-      KString MakeString(string connector);
+   KString MakeString(string connector);
 
-      IIterator GetIndexedIterator();
-   }
+   IIterator GetIndexedIterator();
 }

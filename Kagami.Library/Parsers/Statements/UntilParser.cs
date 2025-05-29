@@ -9,12 +9,12 @@ public partial class UntilParser : EndingInExpressionParser
 {
    //public override string Pattern => "^ /'until' /b";
 
-   [GeneratedRegex(@"^(until)\b")]
+   [GeneratedRegex(@"^(\s*)(until)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {
-      state.Colorize(tokens, Color.Keyword);
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword);
       return unit;
    }
 

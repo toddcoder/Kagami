@@ -1,169 +1,167 @@
-﻿using System.Collections.Generic;
-using Kagami.Library.Classes;
+﻿using Kagami.Library.Classes;
 using Core.Monads;
 
-namespace Kagami.Library.Objects
+namespace Kagami.Library.Objects;
+
+public interface IIterator : IEquivalentClass
 {
-   public interface IIterator : IEquivalentClass
-   {
-      ICollection Collection { get; }
+   ICollection Collection { get; }
 
-      ICollectionClass CollectionClass { get; }
+   ICollectionClass CollectionClass { get; }
 
-      bool IsLazy { get; }
+   bool IsLazy { get; }
 
-      Maybe<IObject> Next();
+   Maybe<IObject> Next();
 
-      Maybe<IObject> Peek();
+   Maybe<IObject> Peek();
 
-      IObject Reset();
+   IObject Reset();
 
-      IEnumerable<IObject> List();
+   IEnumerable<IObject> List();
 
-      IIterator Clone();
+   IIterator Clone();
 
-      IObject Reverse();
+   IObject Reverse();
 
-      KString Join(string connector);
+   KString Join(string connector);
 
-      IObject Sort(Lambda lambda, bool ascending);
+   IObject Sort(Lambda lambda, bool ascending);
 
-      IObject Sort(bool ascending);
+   IObject Sort(bool ascending);
 
-      IObject FoldLeft(IObject initialValue, Lambda lambda);
+   IObject FoldLeft(IObject initialValue, Lambda lambda);
 
-      IObject FoldLeft(Lambda lambda);
+   IObject FoldLeft(Lambda lambda);
 
-      IObject FoldRight(IObject initialValue, Lambda lambda);
+   IObject FoldRight(IObject initialValue, Lambda lambda);
 
-      IObject FoldRight(Lambda lambda);
+   IObject FoldRight(Lambda lambda);
 
-      IObject ReduceLeft(IObject initialValue, Lambda lambda);
+   IObject ReduceLeft(IObject initialValue, Lambda lambda);
 
-      IObject ReduceLeft(Lambda lambda);
+   IObject ReduceLeft(Lambda lambda);
 
-      IObject ReduceRight(IObject initialValue, Lambda lambda);
+   IObject ReduceRight(IObject initialValue, Lambda lambda);
 
-      IObject ReduceRight(Lambda lambda);
+   IObject ReduceRight(Lambda lambda);
 
-      Int Count(IObject item);
+   Int Count(IObject item);
 
-      Int Count(Lambda predicate);
+   Int Count(Lambda predicate);
 
-      IObject Map(Lambda lambda);
+   IObject Map(Lambda lambda);
 
-      IObject FlatMap(Lambda lambda);
+   IObject FlatMap(Lambda lambda);
 
-      IObject Replace(Lambda predicate, Lambda lambda);
+   IObject Replace(Lambda predicate, Lambda lambda);
 
-      IObject If(Lambda predicate);
+   IObject If(Lambda predicate);
 
-      IObject IfNot(Lambda predicate);
+   IObject IfNot(Lambda predicate);
 
-      IObject Skip(int count);
+   IObject Skip(int count);
 
-      IObject SkipWhile(Lambda predicate);
+   IObject SkipWhile(Lambda predicate);
 
-      IObject SkipUntil(Lambda predicate);
+   IObject SkipUntil(Lambda predicate);
 
-      IObject Take(int count);
+   IObject Take(int count);
 
-      IObject TakeWhile(Lambda predicate);
+   IObject TakeWhile(Lambda predicate);
 
-      IObject TakeUntil(Lambda predicate);
+   IObject TakeUntil(Lambda predicate);
 
-      IObject Index(Lambda predicate);
+   IObject Index(Lambda predicate);
 
-      IObject Indexes(Lambda predicate);
+   IObject Indexes(Lambda predicate);
 
-      IObject Zip(ICollection collection);
+   IObject Zip(ICollection collection);
 
-      IObject Zip(ICollection collection, Lambda lambda);
+   IObject Zip(ICollection collection, Lambda lambda);
 
-      IObject Min();
+   IObject Min();
 
-      IObject Min(Lambda lambda);
+   IObject Min(Lambda lambda);
 
-      IObject Max();
+   IObject Max();
 
-      IObject Max(Lambda lambda);
+   IObject Max(Lambda lambda);
 
-      IObject First();
+   IObject First();
 
-      IObject First(Lambda predicate);
+   IObject First(Lambda predicate);
 
-      IObject Last();
+   IObject Last();
 
-      IObject Last(Lambda predicate);
+   IObject Last(Lambda predicate);
 
-      IObject Split(Lambda predicate);
+   IObject Split(Lambda predicate);
 
-      IObject Split(int count);
+   IObject Split(int count);
 
-      IObject GroupBy(Lambda lambda);
+   IObject GroupBy(Lambda lambda);
 
-      KBoolean One(Lambda predicate);
+   KBoolean One(Lambda predicate);
 
-      KBoolean None(Lambda predicate);
+   KBoolean None(Lambda predicate);
 
-      KBoolean Any(Lambda predicate);
+   KBoolean Any(Lambda predicate);
 
-      KBoolean All(Lambda predicate);
+   KBoolean All(Lambda predicate);
 
-      INumeric Sum();
+   INumeric Sum();
 
-      INumeric Average();
+   INumeric Average();
 
-      INumeric Product();
+   INumeric Product();
 
-      IObject Cross(ICollection collection);
+   IObject Cross(ICollection collection);
 
-      IObject Cross(ICollection collection, Lambda lambda);
+   IObject Cross(ICollection collection, Lambda lambda);
 
-      IObject By(int count);
+   IObject By(int count);
 
-      IObject Window(int count);
+   IObject Window(int count);
 
-      IObject Shape(int rows, int columns);
+   IObject Shape(int rows, int columns);
 
-      IObject Distinct();
+   IObject Distinct();
 
-      IObject Span(Lambda predicate);
+   IObject Span(Lambda predicate);
 
-      IObject Span(int count);
+   IObject Span(int count);
 
-      IObject Shuffle();
+   IObject Shuffle();
 
-      IObject Random();
+   IObject Random();
 
-      IObject Collect();
+   IObject Collect();
 
-      KArray ToArray();
+   KArray ToArray();
 
-      List ToList();
+   List ToList();
 
-      KTuple ToTuple();
+   KTuple ToTuple();
 
-      Dictionary ToDictionary(Lambda keyLambda, Lambda valueLambda);
+   Dictionary ToDictionary(Lambda keyLambda, Lambda valueLambda);
 
-      IObject ToDictionary();
+   IObject ToDictionary();
 
-      IObject ToSet();
+   IObject ToSet();
 
-      IObject Each(Lambda action);
+   IObject Each(Lambda action);
 
-      IObject Rotate(int count);
+   IObject Rotate(int count);
 
-      IObject Permutation(int count);
+   IObject Permutation(int count);
 
-      IObject Combination(int count);
+   IObject Combination(int count);
 
-      IObject Flatten();
+   IObject Flatten();
 
-      IObject Copy();
+   IObject Copy();
 
-      IObject Apply(ICollection collection);
+   IObject Apply(ICollection collection);
 
-      IObject Column(int column);
-   }
+   IObject Column(int column);
 }

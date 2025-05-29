@@ -11,13 +11,13 @@ public partial class AndParser : EndingInExpressionParser
 
    //public override string Pattern => "^ /(/s*) /'and' /(/s+)";
 
-   [GeneratedRegex(@"^(\s *)(and) (\s+)")]
+   [GeneratedRegex(@"^(\s*)(and)\b")]
    public override partial Regex Regex();
 
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {
-      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace);
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword);
       return unit;
    }
 

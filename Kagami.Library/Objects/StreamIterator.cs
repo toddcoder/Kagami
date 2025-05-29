@@ -10,12 +10,11 @@ namespace Kagami.Library.Objects;
 public class StreamIterator : IObject, IIterator
 {
    protected IIterator iterator;
-   protected List<IStreamAction> actions;
+   protected List<IStreamAction> actions = [];
 
    public StreamIterator(IIterator iterator)
    {
       this.iterator = iterator.Clone();
-      actions = new List<IStreamAction>();
    }
 
    public string ClassName => "StreamIterator";
@@ -30,7 +29,7 @@ public class StreamIterator : IObject, IIterator
 
    public bool Match(IObject comparisand, Hash<string, IObject> bindings) => false;
 
-   public bool IsTrue { get; } = true;
+   public bool IsTrue => true;
 
    public ICollection Collection => iterator.Collection;
 

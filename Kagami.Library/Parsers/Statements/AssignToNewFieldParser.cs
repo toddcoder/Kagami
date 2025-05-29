@@ -17,16 +17,16 @@ public partial class AssignToNewFieldParser : EndingInExpressionParser
 
    //public override string Pattern => $"^ /('let' | 'var') /(/s+) /({REGEX_FIELD}) /b";
 
-   [GeneratedRegex($@"^(let|var)(\s+)({REGEX_FIELD})\b")]
+   [GeneratedRegex($@"^(\s*)(let|var)(\s+)({REGEX_FIELD})\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {
       state.BeginTransaction();
 
-      mutable = tokens[1].Text == "var";
-      fieldName = tokens[3].Text;
-      state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Identifier);
+      mutable = tokens[2].Text == "var";
+      fieldName = tokens[4].Text;
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Identifier);
 
       var _parsedTypeConstraint = parseTypeConstraint(state);
       if (_parsedTypeConstraint is (true, var parsedTypeConstraint))

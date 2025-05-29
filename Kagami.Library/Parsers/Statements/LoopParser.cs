@@ -11,7 +11,7 @@ public partial class LoopParser : StatementParser
 {
    //public override string Pattern => $"^ /'loop' {REGEX_ANTICIPATE_END}";
 
-   [GeneratedRegex($"^(loop){REGEX_ANTICIPATE_END}")]
+   [GeneratedRegex($@"^(\s*)(loop)\b")]
    public override partial Regex Regex();
 
    protected static Optional<Expression> getUntil(ParseState state)
@@ -24,10 +24,9 @@ public partial class LoopParser : StatementParser
    {
       state.BeginTransaction();
 
-      state.Colorize(tokens, Color.Keyword);
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword);
 
       var _result =
-         from skipped in state.SkipEndOfLine()
          from b in getBlock(state)
          from e in getUntil(state)
          select (b, e);

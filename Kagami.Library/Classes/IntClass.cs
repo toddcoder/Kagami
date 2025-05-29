@@ -38,6 +38,7 @@ public class IntClass : BaseClass, IParse, IEquivalentClass
       messages["times(_)"] = (obj, msg) => function<Int, Lambda>(obj, msg, (i, l) => i.Times(l));
       messages["<<(_)"] = (obj, msg) => function<Int, IObject>(obj, msg, (i, o) => i.ShiftLeft(o));
       messages[">>(_)"] = (obj, msg) => function<Int, IObject>(obj, msg, (i, o) => i.ShiftRight(o));
+      messages["nextPrime()"] = (obj, _) => function<Int>(obj, i => i.NextPrime());
    }
 
    public override void RegisterClassMessages()

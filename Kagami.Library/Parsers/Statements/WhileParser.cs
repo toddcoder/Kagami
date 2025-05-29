@@ -11,12 +11,12 @@ public partial class WhileParser : StatementParser
 {
    //public override string Pattern => "^ /'while' -(> ['>^']) /b";
 
-   [GeneratedRegex(@"^(while)(?![>\^])\b")]
+   [GeneratedRegex(@"^(\s*)(while)(?![>\^])\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      state.Colorize(tokens, Color.Keyword);
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword);
 
       var _result =
          from expression in getExpression(state, ExpressionFlags.Standard)

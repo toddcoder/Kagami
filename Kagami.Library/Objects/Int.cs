@@ -1,6 +1,6 @@
-﻿using System.Numerics;
-using Core.Collections;
+﻿using Core.Collections;
 using Core.Dates.DateIncrements;
+using System.Numerics;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Operations.NumericFunctions;
@@ -120,31 +120,38 @@ public readonly struct Int : IObject, INumeric, IComparable<Int>, IEquatable<Int
 
    public KBoolean IsOdd => value % 2 != 0;
 
-   public KBoolean IsPrime
+   private static bool isPrime(int value)
    {
-      get
+      switch (value)
       {
-         if ((value & 1) == 0)
+         case < 2:
+            return false;
+         case 2 or 3:
+            return true;
+         default:
          {
-            return value == 2;
-         }
-         else
-         {
-            var num = 3;
-            while (num * num <= value)
+            if (value % 2 == 0 || value % 3 == 0)
             {
-               if (value % num == 0)
+               return false;
+            }
+            else
+            {
+               var limit = (int)Math.Sqrt(value);
+               for (var i = 5; i <= limit; i += 6)
                {
-                  return false;
+                  if (value % i == 0 || value % (i + 2) == 0)
+                  {
+                     return false;
+                  }
                }
 
-               num += 2;
+               return true;
             }
-
-            return value != 1;
          }
       }
    }
+
+   public KBoolean IsPrime => isPrime(value);
 
    public Int Factorial()
    {
@@ -211,4 +218,20 @@ public readonly struct Int : IObject, INumeric, IComparable<Int>, IEquatable<Int
       Long l => value >> (int)l.Value,
       _ => throw incompatibleClasses(obj, "Int, Byte or Long")
    };
+
+   public Int NextPrime()
+   {
+      if (value < 2)
+      {
+         return 2;
+      }
+
+      var candidate = value + 1;
+      while (!isPrime(candidate))
+      {
+         candidate++;
+      }
+
+      return candidate;
+   }
 }
