@@ -5,6 +5,7 @@ using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
 using Kagami.Library.Parsers.Expressions;
 using Core.Collections;
+using Core.DataStructures;
 using Core.Matching;
 using Core.Monads;
 using Core.Strings;
@@ -33,6 +34,7 @@ public class ParseState : IEnumerable<Statement>
    protected Stack<Maybe<ImplicitState>> implicitStates = new();
    protected Stack<ImplicitExpressionState> implicitExpressionStates = new();
    protected StringSet patterns = [];
+   protected MaybeStack<BeginType> beginTypes = [];
 
    public ParseState(string source)
    {
@@ -120,12 +122,37 @@ public class ParseState : IEnumerable<Statement>
 
    public Optional<Unit> BeginBlock()
    {
-      return Scan(@"^(\s*)(\{)", Color.Whitespace, Color.Structure).Map(_ => unit);
+      var _result = Scan(@"^(\s*)(\{)", Color.Whitespace, Color.Structure);
+      if (_result)
+      {
+         beginTypes.Push(BeginType.Brace);
+         return _result.Map(_ => unit);
+      }
+
+      _result = Scan(@"^(\s*)(::)", Color.Whitespace, Color.Structure);
+      if (_result)
+      {
+         beginTypes.Push(BeginType.DoKeyword);
+      }
+
+      return _result.Map(_ => unit);
    }
 
    public Optional<Unit> EndBlock()
    {
-      return Scan(@"^(\s*)(\})", Color.Whitespace, Color.Structure).Map(_ => unit);
+      if (beginTypes.Pop() is (true, var beginType))
+      {
+         return beginType switch
+         {
+            BeginType.Brace => Scan(@"^(\s*)(\})", Color.Whitespace, Color.Structure).Map(_ => unit),
+            BeginType.DoKeyword => Scan(@"^(\s*)(\.)", Color.Whitespace, Color.Structure).Map(_ => unit),
+            _ => nil
+         };
+      }
+      else
+      {
+         return nil;
+      }
    }
 
    public int Index => index;
