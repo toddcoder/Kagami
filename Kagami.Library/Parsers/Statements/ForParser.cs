@@ -11,13 +11,12 @@ public partial class ForParser : StatementParser
 {
    //public override string Pattern => "^ /'for' /(/s+)";
 
-   [GeneratedRegex(@"^(for)(\s+)")]
+   [GeneratedRegex(@"^(\s*)(for)(\s+)")]
    public override partial Regex Regex();
-
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      state.Colorize(tokens, Color.Keyword, Color.Whitespace);
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace);
 
       var _result =
          from comparisandValue in getExpression(state, ExpressionFlags.Comparisand | ExpressionFlags.OmitColon | ExpressionFlags.OmitIn)

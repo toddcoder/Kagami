@@ -16,7 +16,7 @@ public partial class ComprehensionParser : SymbolParser
 
    //public override string Pattern => "^ /(/s*) /'for' -(> ['>^']) /b";
 
-   [GeneratedRegex(@"^(\s*)(for)(?![>\^])\b")]
+   [GeneratedRegex(@"^(\s+)(for)(?![>\^])\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -25,13 +25,13 @@ public partial class ComprehensionParser : SymbolParser
       var _expression = builder.ToExpression();
       if (_expression is (true, var expression))
       {
-         var comprehensions = new List<(Symbol, Expression, Maybe<Expression>, string)>();
+         var comprehensions = new List<(Symbol, Expression, PossibleExpression, string)>();
 
          var _innerComprehension = getInnerComprehension(state);
-         if (_innerComprehension is (true, var (comparisand, innerSource, _innerIfExp)))
+         if (_innerComprehension is (true, var (comparisand, innerSource, possibleExpression)))
          {
-            var image = $"for {comparisand} := {innerSource}";
-            comprehensions.Add((comparisand, innerSource, _innerIfExp, image));
+            var image = $"for {comparisand} in {innerSource}";
+            comprehensions.Add((comparisand, innerSource, possibleExpression, image));
          }
          else
          {
@@ -55,7 +55,7 @@ public partial class ComprehensionParser : SymbolParser
             }
          }
 
-         var stack = new Stack<(Symbol, Expression, Maybe<Expression>, string)>();
+         var stack = new Stack<(Symbol, Expression, PossibleExpression, string)>();
          foreach (var item in comprehensions)
          {
             stack.Push(item);
@@ -65,11 +65,11 @@ public partial class ComprehensionParser : SymbolParser
          var images = new StringBuilder();
          if (stack.Count > 0)
          {
-            var (symbol, source, _ifExp, image) = stack.Pop();
+            var (symbol, source, expression1, image) = stack.Pop();
             images.Append(image);
             var yieldStatement = new Yield(expression);
             var block = new Block(yieldStatement);
-            if (_ifExp is (true, var boolean))
+            if (expression1.Maybe is (true, var boolean))
             {
                block = new Block(new If(boolean, block));
             }
@@ -83,10 +83,10 @@ public partial class ComprehensionParser : SymbolParser
 
          while (stack.Count > 0)
          {
-            var (symbol, source, _ifExp, image) = stack.Pop();
+            var (symbol, source, expression2, image) = stack.Pop();
             images.Append(image);
             var block = new Block(forStatement);
-            if (_ifExp is (true, var boolean))
+            if (expression2.Maybe is (true, var boolean))
             {
                block = new Block(new If(boolean, block));
             }

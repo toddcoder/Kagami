@@ -35,6 +35,8 @@ public partial class ExpressionStatementParser : StatementParser
       if (_expression is (true, var expression))
       {
          state.AddStatement(new ExpressionStatement(expression, returnExpression, _typeConstraint));
+         state.Scan(@"^(\s*)(\r\n|\r|\n|;)", Color.Whitespace, Color.Structure);
+
          return unit;
       }
       else

@@ -8,9 +8,9 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class InnerComprehensionParser : SymbolParser
 {
-   protected List<(Symbol, Expression, Maybe<Expression>, string)> comprehensions;
+   protected List<(Symbol, Expression, PossibleExpression, string)> comprehensions;
 
-   public InnerComprehensionParser(ExpressionBuilder builder, List<(Symbol, Expression, Maybe<Expression>, string)> comprehensions) :
+   public InnerComprehensionParser(ExpressionBuilder builder, List<(Symbol, Expression, PossibleExpression, string)> comprehensions) :
       base(builder)
    {
       this.comprehensions = comprehensions;
@@ -18,17 +18,17 @@ public partial class InnerComprehensionParser : SymbolParser
 
    //public override string Pattern => "^ /(/s*) /'for' -(> ['^>']) /b";
 
-   [GeneratedRegex(@"^(\s*)(for)(?![\^>])\b")]
+   [GeneratedRegex(@"^(\s+)(for)(?![\^>])\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
       state.Colorize(tokens, Color.Whitespace, Color.Keyword);
       var _innerComprehension = getInnerComprehension(state);
-      if (_innerComprehension is (true, var (comparisand, source, ifExp)))
+      if (_innerComprehension is (true, var (comparisand, source, possibleExpression)))
       {
-         var image = $"for {comparisand} := {source}";
-         comprehensions.Add((comparisand, source, ifExp, image));
+         var image = $"for {comparisand} in {source}";
+         comprehensions.Add((comparisand, source, possibleExpression, image));
 
          return unit;
       }

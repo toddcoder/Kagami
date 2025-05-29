@@ -953,14 +953,14 @@ public static class ParserFunctions
       }
    }
 
-   public static Optional<(Symbol, Expression, Maybe<Expression>)> getInnerComprehension(ParseState state) =>
-      from comparisand in getValue(state, ExpressionFlags.Comparisand)
-      from scanned in state.Scan(@"^(\s*)(in)", Color.Whitespace, Color.Keyword)
+   public static Optional<(Symbol, Expression, PossibleExpression)> getInnerComprehension(ParseState state) =>
+      from comparisand in getValue(state, ExpressionFlags.Comparisand | ExpressionFlags.OmitIn)
+      from scanned in state.Scan(@"^(\s+)(in)", Color.Whitespace, Color.Keyword)
       from source in getExpression(state, ExpressionFlags.OmitIf | ExpressionFlags.OmitComprehension | ExpressionFlags.OmitIn)
       from ifExp in getIf(state)
       select (comparisand, source, ifExp);
 
-   public static Optional<Maybe<Expression>> getIf(ParseState state)
+   public static Optional<PossibleExpression> getIf(ParseState state)
    {
       var _scanned = state.Scan(@"^(\s+)(if)\b", Color.Whitespace, Color.Keyword);
       if (_scanned)
@@ -968,7 +968,7 @@ public static class ParserFunctions
          var _expression = getExpression(state, ExpressionFlags.OmitIf | ExpressionFlags.OmitComprehension);
          if (_expression is (true, var expression))
          {
-            return expression.Some();
+            return new PossibleExpression.Some(expression);
          }
          else
          {
@@ -981,7 +981,7 @@ public static class ParserFunctions
       }
       else
       {
-         return nil;
+         return new PossibleExpression.None();
       }
    }
 
