@@ -35,7 +35,7 @@ public partial class SliceParser : SymbolParser
    {
       state.Colorize(tokens, Color.OpenParenthesis);
 
-      var skipTakes = new List<SkipTake>();
+      List<SkipTake> skipTakes = [];
 
       while (state.More)
       {

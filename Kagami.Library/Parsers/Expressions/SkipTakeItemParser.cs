@@ -21,8 +21,8 @@ public partial class SkipTakeItemParser : PatternedParser
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens)
    {
-      var skip = tokens[2].Text.Replace("_", "").DefaultTo("0");
-      var take = tokens[4].Text.Replace("_", "").DefaultTo("0");
+      var skip = tokens[1].Text.Replace("_", "").DefaultTo("0");
+      var take = tokens[3].Text.Replace("_", "").DefaultTo("0");
       state.Colorize(tokens, Color.Whitespace, Color.Number, Color.Operator, Color.Number);
 
       Skip = skip.Value().Int32();

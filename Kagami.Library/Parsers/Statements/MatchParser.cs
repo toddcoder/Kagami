@@ -12,16 +12,16 @@ public partial class MatchParser : StatementParser
 {
    //public override string Pattern => $"^ (/('var' | 'let') /(/s*) /({REGEX_FIELD}) /(/s*) /'=' /(/s*))? /'match' /(/s+)";
 
-   [GeneratedRegex($@"^(?:(var|let)(\s*)({REGEX_FIELD})(\s*)(=)(\s*))?(match)(\s+)")]
+   [GeneratedRegex($@"^(\s*)(?:(var|let)(\s*)({REGEX_FIELD})(\s*)(=)(\s*))?(match)(\s+)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      var mutable = tokens[1].Text == "var";
-      var fieldName = tokens[3].Text;
+      var mutable = tokens[2].Text == "var";
+      var fieldName = tokens[4].Text;
       var assignment = fieldName.IsNotEmpty();
 
-      state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Identifier, Color.Whitespace, Color.Structure, Color.Whitespace,
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Identifier, Color.Whitespace, Color.Structure, Color.Whitespace,
          Color.Keyword, Color.Whitespace);
 
       var _expression = getExpression(state, ExpressionFlags.Standard);

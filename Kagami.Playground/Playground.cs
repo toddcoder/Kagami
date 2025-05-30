@@ -71,22 +71,7 @@ public partial class Playground : Form
       {
          _exceptionData = nil;
          document = new Document(this, textEditor, ".kagami", "Kagami", playgroundConfiguration.FontName, playgroundConfiguration.FontSize);
-         /*{
-            AboutToDisplayFile =
-            {
-               Handler = i =>
-               {
-                  if (i.File is (true, var file))
-                  {
-                     Console.WriteLine(file.FullPath);
-                  }
-                  else
-                  {
-                     Console.WriteLine("No file to display");
-                  }
-               }
-            }
-         };*/
+
          var menus = document.Menus;
          menus.Menu("&File");
          menus.Menu("File", "&New", (_, _) =>
@@ -501,7 +486,11 @@ public partial class Playground : Form
       try
       {
          _exceptionData = nil;
-         update(!manual, false);
+         if (!manual)
+         {
+            update(!manual, false);
+         }
+
          document.Dirty();
       }
       catch
