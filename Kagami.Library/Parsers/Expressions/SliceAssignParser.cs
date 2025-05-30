@@ -14,7 +14,7 @@ public partial class SliceAssignParser : SymbolParser
 
    //public override string Pattern => "^ /'{'";
 
-   [GeneratedRegex(@"^({)")]
+   [GeneratedRegex("^({)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -23,10 +23,10 @@ public partial class SliceAssignParser : SymbolParser
       state.Colorize(tokens, Color.Structure);
 
       var _symbol =
-         from indexes in getExpression(state, @"^(\s*)(\})(\s*)(=)", builder.Flags, Color.Whitespace, Color.Structure,
-            Color.Whitespace, Color.Structure)
-         from values in getExpression(state, builder.Flags)
-         select new SliceAssignSymbol(indexes, values);
+         from skipTake in getSkipTake(state, builder.Flags | ExpressionFlags.OmitComma)
+         from scan in state.Scan(@"^(\s*)(=)", Color.Whitespace, Color.Structure)
+         from expression in getExpression(state, builder.Flags | ExpressionFlags.OmitComma)
+         select new SliceAssignSymbol(skipTake, expression);
       if (_symbol is (true, var symbol))
       {
          builder.Add(symbol);

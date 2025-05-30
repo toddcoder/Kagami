@@ -1,30 +1,53 @@
 ﻿using Kagami.Library.Operations;
+using SkipTake = Kagami.Library.Parsers.Expressions.SkipTake;
 
-namespace Kagami.Library.Nodes.Symbols
+namespace Kagami.Library.Nodes.Symbols;
+
+public class SliceAssignSymbol : Symbol
 {
-   public class SliceAssignSymbol : Symbol
+   protected SkipTake skipTake;
+   protected Expression values;
+
+   public SliceAssignSymbol(SkipTake skipTake, Expression values)
    {
-      protected Expression indexes;
-      protected Expression values;
-
-      public SliceAssignSymbol(Expression indexes, Expression values)
-      {
-         this.indexes = indexes;
-         this.values = values;
-      }
-
-      public override void Generate(OperationsBuilder builder)
-      {
-         indexes.Generate(builder);
-         values.Generate(builder);
-
-         builder.SendMessage("assign(_,_)", 2);
-      }
-
-      public override Precedence Precedence => Precedence.Value;
-
-      public override Arity Arity => Arity.Nullary;
-
-      public override string ToString() => $"{{{indexes}}} = {values}";
+      this.skipTake = skipTake;
+      this.values = values;
    }
+
+   public override void Generate(OperationsBuilder builder)
+   {
+      generateSkipTake(builder);
+      values.Generate(builder);
+
+      builder.SendMessage("assign(_,_)", 2);
+   }
+
+   protected void generateSkipTake(OperationsBuilder builder)
+   {
+      if (skipTake.Skip is (true, var skipExpression))
+      {
+         skipExpression.Generate(builder);
+      }
+      else
+      {
+         builder.PushInt(0);
+      }
+
+      if (skipTake.Take is (true, var takeExpression))
+      {
+         takeExpression.Generate(builder);
+      }
+      else
+      {
+         builder.PushInt(0);
+      }
+
+      builder.NewSkipTake();
+   }
+
+   public override Precedence Precedence => Precedence.Value;
+
+   public override Arity Arity => Arity.Nullary;
+
+   public override string ToString() => $"{{{skipTake}}} = {values}";
 }

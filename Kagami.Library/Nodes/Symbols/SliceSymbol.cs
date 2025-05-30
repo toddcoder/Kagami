@@ -1,14 +1,14 @@
 ﻿using Core.Enumerables;
 using Kagami.Library.Operations;
-using Kagami.Library.Parsers.Expressions;
+using SkipTake = Kagami.Library.Parsers.Expressions.SkipTake;
 
 namespace Kagami.Library.Nodes.Symbols;
 
 public class SliceSymbol : Symbol
 {
-   protected SliceParser.SkipTake[] skipTakes;
+   protected SkipTake[] skipTakes;
 
-   public SliceSymbol(SliceParser.SkipTake[] skipTakes) => this.skipTakes = skipTakes;
+   public SliceSymbol(SkipTake[] skipTakes) => this.skipTakes = skipTakes;
 
    public override void Generate(OperationsBuilder builder)
    {
@@ -38,7 +38,7 @@ public class SliceSymbol : Symbol
       builder.PopFrameWithValue();
    }
 
-   protected static void generate(OperationsBuilder builder, SliceParser.SkipTake _skipTake)
+   protected static void generate(OperationsBuilder builder, SkipTake _skipTake)
    {
       if (_skipTake.Skip is (true, var skipExpression))
       {

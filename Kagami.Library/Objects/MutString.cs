@@ -8,7 +8,6 @@ using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Objects.TextFindingFunctions;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.CollectionFunctions;
-using static Kagami.Library.Operations.OperationFunctions;
 
 namespace Kagami.Library.Objects;
 
@@ -226,26 +225,18 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
 
    public KBoolean IsEmpty => mutable.Length == 0;
 
-   public IObject Assign(IObject indexes, IObject values)
+   public IObject Assign(SkipTake skipTake, IEnumerable<IObject> values)
    {
-      if (getIterator(indexes, false)is (true, var indexesIterator) && getIterator(values, false) is (true, var valuesIterator))
-      {
-         while (indexesIterator.Next() is (true, var index))
-         {
-            if (valuesIterator.Next() is (true, var value))
-            {
-               if (index is Int i && i.Value.Between(0).Until(mutable.Length) && value is KChar ch)
-               {
-                  mutable[i.Value] = ch.Value;
-               }
-            }
-            else
-            {
-               break;
-            }
-         }
-      }
+      var array = mutable.ToString().ToCharArray();
+      var left = array.Skip(skipTake.Skip);
+      var right = left.Skip(skipTake.Skip + skipTake.Take);
 
+      var newMutable = new StringBuilder();
+      newMutable.Append(left);
+      newMutable.Append(values.Cast<KChar>());
+      newMutable.Append(right);
+
+      mutable = newMutable;
       return this;
    }
 

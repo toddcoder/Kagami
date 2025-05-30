@@ -17,6 +17,7 @@ using static Kagami.Library.AllExceptions;
 using static Core.Monads.MonadFunctions;
 using Array = System.Array;
 using Return = Kagami.Library.Nodes.Statements.Return;
+using SkipTake = Kagami.Library.Parsers.Expressions.SkipTake;
 
 namespace Kagami.Library.Parsers;
 
@@ -1328,4 +1329,74 @@ public static class ParserFunctions
    }
 
    public static Optional<Unit> anticipateBrackets(ParseState state) => state.CurrentSource.Matches("^ /s* ['{}']").Map(_ => unit).Optional();
+
+   public static Optional<SkipTake> getSkipTake(ParseState state, ExpressionFlags flags)
+   {
+      var skipTake = new SkipTake();
+
+      var _noSkipMatch = state.Scan(@"^(\s*)(,)", Color.Whitespace, Color.Structure);
+      if (_noSkipMatch)
+      {
+      }
+      else if (_noSkipMatch.Exception is (true, var exception))
+      {
+         return exception;
+      }
+      else
+      {
+         var _skipExpression = getExpression(state, flags);
+         if (_skipExpression is (true, var skipExpression))
+         {
+            skipTake.Skip = skipExpression;
+         }
+         else if (_skipExpression.Exception is (true, var exception2))
+         {
+            return exception2;
+         }
+
+         var _semiOrEnd = state.Scan(@"^(\s*)([;,}])", Color.Whitespace, Color.Structure);
+         if (_semiOrEnd is (true, var semiOrEnd))
+         {
+            switch (semiOrEnd)
+            {
+               case "}":
+                  skipTake.Terminal = true;
+                  return skipTake;
+               case ";":
+                  return skipTake;
+            }
+         }
+         else if (_semiOrEnd.Exception is (true, var exception3))
+         {
+            return exception3;
+         }
+      }
+
+      var _takeExpression = getExpression(state, flags);
+      if (_takeExpression is (true, var takeExpression))
+      {
+         skipTake.Take = takeExpression;
+      }
+      else if (_takeExpression.Exception is (true, var exception))
+      {
+         return exception;
+      }
+
+      var _end = state.Scan(@"^(\s*)([};])", Color.Whitespace, Color.Structure);
+      if (_end is (true, var end))
+      {
+         switch (end)
+         {
+            case "}":
+               skipTake.Terminal = true;
+               return skipTake;
+         }
+      }
+      else if (_end.Exception is (true, var exception4))
+      {
+         return exception4;
+      }
+
+      return skipTake;
+   }
 }

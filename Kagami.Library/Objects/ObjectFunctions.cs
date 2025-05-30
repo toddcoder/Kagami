@@ -654,4 +654,37 @@ public static class ObjectFunctions
          }
       }
    }
+
+   public static IObject assignToMutable(IObject collection, IObject possibleSkipTake, IObject source)
+   {
+      if (collection is IMutableCollection mutableCollection)
+      {
+         if (possibleSkipTake is SkipTake skipTake)
+         {
+            switch (source)
+            {
+               case Some some:
+               {
+                  List<IObject> list = [some.Value];
+                  return mutableCollection.Assign(skipTake, list);
+               }
+               case ICollection sourceCollection:
+               {
+                  var enumerable = sourceCollection.GetIterator(false).List();
+                  return mutableCollection.Assign(skipTake, enumerable);
+               }
+               default:
+                  throw fail("Source must be a collection");
+            }
+         }
+         else
+         {
+            throw fail("Index must be a skip and take");
+         }
+      }
+      else
+      {
+         throw fail("Target must be a mutable collection");
+      }
+   }
 }

@@ -265,8 +265,7 @@ public abstract class BaseClass
       registerMessage("insert(at:_<Int>,value:_)",
          (obj, message) => function<IObject, Int, IObject>(obj, message, (o, i, v) => ((IMutableCollection)o).InsertAt(i.Value, v)));
       registerMessage("isEmpty".get(), (obj, _) => function<IObject>(obj, o => ((IMutableCollection)o).IsEmpty));
-      registerMessage("assign(_,_)",
-         (obj, message) => function<IObject, IObject, IObject>(obj, message, (o, i, v) => ((IMutableCollection)o).Assign(i, v)));
+      registerMessage("assign(_,_)", (obj, message) => function<IObject, IObject, IObject>(obj, message, assignToMutable));
    }
 
    protected void loadIteratorMessages()

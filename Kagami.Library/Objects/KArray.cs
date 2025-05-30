@@ -6,11 +6,10 @@ using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.CollectionFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Core.Monads.MonadFunctions;
-using static Kagami.Library.Operations.OperationFunctions;
 
 namespace Kagami.Library.Objects;
 
-public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<KArray>, IMutableCollection, ISliceable
+public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<KArray>, IMutableCollection, ISliceable, IIndexed
 {
    public static IObject CreateObject(IEnumerable<IObject> items)
    {
@@ -303,26 +302,16 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public KBoolean IsEmpty => list.Count == 0;
 
-   public IObject Assign(IObject indexes, IObject values)
+   public IObject Assign(SkipTake skipTake, IEnumerable<IObject> values)
    {
-      if (getIterator(indexes, false) is (true, var indexesIterator) && getIterator(values, false) is (true, var valuesIterator))
-      {
-         while (indexesIterator.Next() is (true, var index))
-         {
-            if (valuesIterator.Next() is (true, var value))
-            {
-               if (index is Int i && i.Value.Between(0).Until(list.Count))
-               {
-                  list[i.Value] = value;
-               }
-            }
-            else
-            {
-               break;
-            }
-         }
-      }
+      var left = list.Skip(skipTake.Skip);
+      var right = list.Skip(skipTake.Skip + skipTake.Take);
 
+      List<IObject> newList = [.. left];
+      newList.AddRange(values);
+      newList.AddRange(right);
+
+      list = newList;
       return this;
    }
 

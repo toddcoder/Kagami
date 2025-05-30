@@ -402,25 +402,7 @@ public class Dictionary : IObject, IMutableCollection
 
    public KBoolean IsEmpty => dictionary.Count == 0;
 
-   public IObject Assign(IObject indexes, IObject values)
-   {
-      if (getIterator(indexes, false) is (true, var indexesIterator) && getIterator(values, false) is (true, var valuesIterator))
-      {
-         while (indexesIterator.Next() is (true, var index))
-         {
-            if (valuesIterator.Next() is (true, var value))
-            {
-               dictionary[index] = value;
-            }
-            else
-            {
-               break;
-            }
-         }
-      }
-
-      return this;
-   }
+   public IObject Assign(SkipTake skipTake, IEnumerable<IObject> values) => this;
 
    public IObject[] KeyArray => dictionary.KeyArray();
 
