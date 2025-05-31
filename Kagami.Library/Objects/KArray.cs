@@ -304,12 +304,10 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public IObject Assign(SkipTake skipTake, IEnumerable<IObject> values)
    {
-      var left = list.Skip(skipTake.Skip);
+      var left = list.Take(skipTake.Skip);
       var right = list.Skip(skipTake.Skip + skipTake.Take);
 
-      List<IObject> newList = [.. left];
-      newList.AddRange(values);
-      newList.AddRange(right);
+      List<IObject> newList = [.. left, .. values, .. right];
 
       list = newList;
       return this;
