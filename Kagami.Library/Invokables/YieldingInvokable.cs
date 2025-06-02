@@ -64,7 +64,7 @@ public class YieldingInvokable : IInvokable, ICollection, IObject
             case None:
                return nil;
             case YieldReturn yr:
-               Address = yr.Address + 1;
+               Address = yr.Address;
                Frames = yr.Frames;
                return yr.ReturnValue.Some();
             default:

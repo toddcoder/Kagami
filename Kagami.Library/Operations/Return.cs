@@ -51,7 +51,7 @@ public class Return : Operation
 
    public override Optional<IObject> Execute(Machine machine) => ReturnAction(machine, returnTopOfStack);
 
-   public override bool Increment => false;
+   public override bool Increment => true;
 
    public override string ToString() => $"return({returnTopOfStack.ToString().ToLower()})";
 
