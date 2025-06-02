@@ -13,7 +13,7 @@ public partial class PartialLambdaParser : SymbolParser
 
    //public override string Pattern => "^ /(/s*) /'('";
 
-   [GeneratedRegex(@"^(\s*)(\()")]
+   [GeneratedRegex(@"^([ \t]*)(\()")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)

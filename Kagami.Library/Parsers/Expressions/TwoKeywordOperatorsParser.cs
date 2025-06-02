@@ -13,7 +13,7 @@ public partial class TwoKeywordOperatorsParser : SymbolParser
 
    //public override string Pattern => "^ /(/s*) /('skip' | 'take') /(/s+) /('while' | 'until') /b";
 
-   [GeneratedRegex(@"^(\s*)(skip|take)(\s+)(while|until)\b", RegexOptions.Compiled)]
+   [GeneratedRegex(@"^(\s*)(skip|take|if)(\s+)(while|until|not)\b", RegexOptions.Compiled)]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -35,6 +35,9 @@ public partial class TwoKeywordOperatorsParser : SymbolParser
                _ => message
             };
 
+            break;
+         case "if" when word2 == "not":
+            message = "ifNot";
             break;
          default:
             state.RollBackTransaction();

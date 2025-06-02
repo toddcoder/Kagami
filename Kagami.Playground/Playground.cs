@@ -321,7 +321,7 @@ public partial class Playground : Form
 
    protected void showException(int index, int length)
    {
-      _exceptionData = new ExceptionData(index, length).Some();
+      _exceptionData = new ExceptionData(index, length);
       textEditor.Invalidate();
    }
 
@@ -453,9 +453,8 @@ public partial class Playground : Form
 
          foreach (var (lineNumber, line, _) in textEditor.VisibleLines)
          {
-            if (peeks.ContainsKey(lineNumber))
+            if (peeks.Maybe[lineNumber] is (true, var str))
             {
-               var str = peeks[lineNumber];
                str = sizedAnnotation(e.Graphics, line, str, textEditor.ClientSize.Width, textEditor.Font, textEditor.AnnotationFont);
                textEditor.AnnotateAt(e.Graphics, lineNumber, str, Color.Black, Color.LightGreen, Color.Black);
             }
@@ -509,23 +508,7 @@ public partial class Playground : Form
       }
    }
 
-   protected void textEditor_TextChanged(object sender, EventArgs e)
-   {
-      isDirty = true;
-      /*try
-      {
-         _exceptionData = nil;
-         if (!manual)
-         {
-            update(!manual, false);
-         }
-
-         document.Dirty();
-      }
-      catch
-      {
-      }*/
-   }
+   protected void textEditor_TextChanged(object sender, EventArgs e) => isDirty = true;
 
    protected void textEditor_KeyPress(object sender, KeyPressEventArgs e)
    {

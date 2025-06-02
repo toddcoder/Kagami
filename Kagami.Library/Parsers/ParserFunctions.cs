@@ -29,8 +29,8 @@ public static class ParserFunctions
    public const string REGEX_CLASS_GETTING = REGEX_CLASS + @"(?:\. " + REGEX_CLASS + ")?";
    public const string REGEX_ASSIGN_OPS = @"\+|-|\*|/|/|\^";
    public const string REGEX_FUNCTION_NAME = "(?:(?:" + REGEX_INVOKABLE + @")|(?:[~`!@\#\$%\^\*\+=\|\\;<>/\?-]+)|\[\])=?";
-   public const string REGEX_EOL = @"\r\n|\r|\n";
-   public const string REGEX_ANTICIPATE_END = "(?=(?:" + REGEX_EOL + ")|$)";
+   public const string REGEX_EOL = @"\r\n|\r|\n|$";
+   public const string REGEX_ANTICIPATE_END = "(?=(?:" + REGEX_EOL + "))";
    public const string REGEX_OPERATORS = @"[-\+\*/\\%<=>!\.~\|\?\#@&\^,;:]";
    public const string REGEX_ITERATOR_FUNCTIONS = "sort|foldl|foldr|reducel|reducer|count|map|flatMap|bind|if|ifNot|index|indexes|min|max|" +
       "first|last|split|one|none|any|all|span|groupBy|for|while|until|z|zip|x|cross|fold|seq|takeWhile|takeUntil|skipWhile|" +

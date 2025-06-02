@@ -1,11 +1,10 @@
-﻿namespace Kagami.Library.Objects
+﻿namespace Kagami.Library.Objects;
+
+public interface IRangeItem : IObjectCompare
 {
-   public interface IRangeItem : IObjectCompare
-   {
-      IRangeItem Successor { get; }
+   IRangeItem Successor { get; }
 
-      IRangeItem Predecessor { get; }
+   IRangeItem Predecessor { get; }
 
-      KRange Range();
-   }
+   KRange Range();
 }

@@ -1,6 +1,7 @@
 ﻿using Core.Matching;
 using Core.Monads;
 using Core.Numbers;
+using Core.Strings;
 using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
@@ -38,7 +39,7 @@ public class ExpressionParser : PatternlessParser
    protected static bool endOfLine(ParseState state)
    {
       var current = state.CurrentSource;
-      return current.IsMatch("^ /s* '{'") || current.IsMatch("^ (/r/n | /r | /n)");
+      return current.IsEmpty() || current.IsMatch("^ /s* '{'") || current.IsMatch("^ ((/r /n)+ | /r+ | /n+ |$)");
    }
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens)

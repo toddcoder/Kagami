@@ -9,7 +9,7 @@ public partial class EndOfLineParser : StatementParser
 {
    //public override string Pattern => "^ /(/r/n | /r | /n | ';') /(/s*)";
 
-   [GeneratedRegex(@"^(\r\n|\r|\n|;)(\s*)")]
+   [GeneratedRegex(@"^((?:\r\n)+|\r+|\n+|;+|$)(\s*)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)

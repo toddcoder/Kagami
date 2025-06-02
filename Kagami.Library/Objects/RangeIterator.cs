@@ -22,6 +22,7 @@ public class RangeIterator : Iterator
       {
          var result = current;
          current = kRange.NextValue(current);
+
          return result.Object.Some();
       }
       else

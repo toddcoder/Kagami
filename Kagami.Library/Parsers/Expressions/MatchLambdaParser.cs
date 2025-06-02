@@ -11,7 +11,7 @@ public partial class MatchLambdaParser : SymbolParser
 {
    //public override string Pattern => "^ /(/s*) /'|('";
 
-   [GeneratedRegex(@"^(\s*)(\|\()")]
+   [GeneratedRegex(@"^([ \t]*)(\|\()")]
    public override partial Regex Regex();
 
    public MatchLambdaParser(ExpressionBuilder builder) : base(builder)

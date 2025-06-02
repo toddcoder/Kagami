@@ -9,7 +9,7 @@ public partial class MultiParameterLambdaParser : LambdaParser
 {
    //public override string Pattern => "^ /(/s*) /'('";
 
-   [GeneratedRegex(@"^(\s*)(\()")]
+   [GeneratedRegex(@"^([ \t]*)(\()")]
    public override partial Regex Regex();
 
    public MultiParameterLambdaParser(ExpressionBuilder builder) : base(builder)
