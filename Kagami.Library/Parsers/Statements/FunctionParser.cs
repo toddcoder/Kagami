@@ -64,7 +64,7 @@ public partial class FunctionParser : StatementParser
          {
             return getMatchFunction(state, functionName, parameters, overriding, className);
          }
-         else if (state.CurrentSource.StartsWith("("))
+         else if (state.CurrentSource.StartsWith('('))
          {
             return getCurriedFunction(state, functionName, parameters, overriding, className).Map(f =>
             {

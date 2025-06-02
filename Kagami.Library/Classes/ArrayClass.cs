@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Kagami.Library.Objects;
+﻿using Kagami.Library.Objects;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Classes.ClassFunctions;
@@ -40,6 +39,10 @@ public class ArrayClass : BaseClass, ICollectionClass
          function<KArray, IObject>(obj, msg, (a, o) => a.Find(o, 0, false));
       messages["find".Selector("all:<Array>")] = (obj, msg) =>
          function<KArray, IObject>(obj, msg, (a, o) => a.FindAll(o));
+      messages["first".Selector("_<Lambda>")] = (obj, msg) =>
+         function<KArray, Lambda>(obj, msg, (a, p) => a.First(p));
+      messages["last".Selector("_<Lambda>")] = (obj, msg) =>
+         function<KArray, Lambda>(obj, msg, (a, p) => a.Last(p));
       messages["default".get()] = (obj, _) => function<KArray>(obj, array =>
       {
          if (array.DefaultValue is (true, var defaultValue))
@@ -59,10 +62,12 @@ public class ArrayClass : BaseClass, ICollectionClass
       {
          if (v is Lambda lambda)
          {
-            array.DefaultLambda = lambda.Some();
+            array.DefaultLambda = lambda;
          }
-
-         array.DefaultValue = v.Some();
+         else
+         {
+            array.DefaultValue = v.Some();
+         }
 
          return KVoid.Value;
       });

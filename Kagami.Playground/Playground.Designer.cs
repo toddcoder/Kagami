@@ -28,87 +28,115 @@
       /// </summary>
       private void InitializeComponent()
       {
-            this.table = new System.Windows.Forms.TableLayoutPanel();
-            this.textEditor = new Core.WinForms.Controls.ExRichTextBox();
-            this.textConsole = new Core.WinForms.Controls.ExRichTextBox();
-            this.labelStatus = new System.Windows.Forms.Label();
-            this.table.SuspendLayout();
-            this.SuspendLayout();
-            // 
-            // table
-            // 
-            this.table.ColumnCount = 1;
-            this.table.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.table.Controls.Add(this.textEditor, 0, 0);
-            this.table.Controls.Add(this.textConsole, 0, 2);
-            this.table.Controls.Add(this.labelStatus, 0, 1);
-            this.table.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.table.Location = new System.Drawing.Point(0, 0);
-            this.table.Name = "table";
-            this.table.RowCount = 3;
-            this.table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.table.Size = new System.Drawing.Size(856, 642);
-            this.table.TabIndex = 0;
-            // 
-            // textEditor
-            // 
-            this.textEditor.AnnotationFont = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold);
-            this.textEditor.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textEditor.DetectUrls = false;
-            this.textEditor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textEditor.Location = new System.Drawing.Point(3, 3);
-            this.textEditor.Name = "textEditor";
-            this.textEditor.Size = new System.Drawing.Size(850, 299);
-            this.textEditor.TabIndex = 0;
-            this.textEditor.Text = "";
-            this.textEditor.SelectionChanged += new System.EventHandler(this.textEditor_SelectionChanged);
-            this.textEditor.TextChanged += new System.EventHandler(this.textEditor_TextChanged);
-            this.textEditor.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textEditor_KeyPress);
-            this.textEditor.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textEditor_KeyUp);
-            // 
-            // textConsole
-            // 
-            this.textConsole.AnnotationFont = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold);
-            this.textConsole.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textConsole.DetectUrls = false;
-            this.textConsole.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textConsole.Location = new System.Drawing.Point(3, 340);
-            this.textConsole.Name = "textConsole";
-            this.textConsole.Size = new System.Drawing.Size(850, 299);
-            this.textConsole.TabIndex = 1;
-            this.textConsole.Text = "";
-            // 
-            // labelStatus
-            // 
-            this.labelStatus.AutoSize = true;
-            this.labelStatus.BackColor = System.Drawing.Color.SkyBlue;
-            this.labelStatus.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelStatus.Location = new System.Drawing.Point(3, 305);
-            this.labelStatus.Name = "labelStatus";
-            this.labelStatus.Size = new System.Drawing.Size(850, 32);
-            this.labelStatus.TabIndex = 2;
-            this.labelStatus.Text = "ready";
-            this.labelStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // Playground
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(856, 642);
-            this.Controls.Add(this.table);
-            this.KeyPreview = true;
-            this.Name = "Playground";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.WindowsDefaultBounds;
-            this.Text = "Kagami Playground";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Playground_FormClosing);
-            this.Load += new System.EventHandler(this.Playground_Load);
-            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Playground_KeyUp);
-            this.table.ResumeLayout(false);
-            this.table.PerformLayout();
-            this.ResumeLayout(false);
+         components = new System.ComponentModel.Container();
+         System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Playground));
+         table = new TableLayoutPanel();
+         textEditor = new Core.WinForms.Controls.ExRichTextBox();
+         textConsole = new Core.WinForms.Controls.ExRichTextBox();
+         labelStatus = new Label();
+         timerIdle = new System.Windows.Forms.Timer(components);
+         table.SuspendLayout();
+         SuspendLayout();
+         // 
+         // table
+         // 
+         table.ColumnCount = 1;
+         table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+         table.Controls.Add(textEditor, 0, 0);
+         table.Controls.Add(textConsole, 0, 2);
+         table.Controls.Add(labelStatus, 0, 1);
+         table.Dock = DockStyle.Fill;
+         table.Location = new Point(0, 0);
+         table.Margin = new Padding(4, 3, 4, 3);
+         table.Name = "table";
+         table.RowCount = 3;
+         table.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+         table.RowStyles.Add(new RowStyle(SizeType.Absolute, 37F));
+         table.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+         table.Size = new Size(999, 741);
+         table.TabIndex = 0;
+         // 
+         // textEditor
+         // 
+         textEditor.AnnotationFont = new Font("Calibri", 12F, FontStyle.Bold);
+         textEditor.BorderStyle = BorderStyle.None;
+         textEditor.DetectUrls = false;
+         textEditor.Dock = DockStyle.Fill;
+         textEditor.Location = new Point(4, 3);
+         textEditor.Margin = new Padding(4, 3, 4, 3);
+         textEditor.ModificationGlyphLeftMargin = 2;
+         textEditor.ModificationGlyphWidth = 4F;
+         textEditor.ModificationLocked = false;
+         textEditor.ModifiedGlyphColor = Color.Gold;
+         textEditor.Name = "textEditor";
+         textEditor.ObjectId = 0L;
+         textEditor.SavedGlyphColor = Color.Green;
+         textEditor.Selection = ((int, int))resources.GetObject("textEditor.Selection");
+         textEditor.Size = new Size(991, 346);
+         textEditor.TabIndex = 0;
+         textEditor.Text = "";
+         textEditor.SelectionChanged += textEditor_SelectionChanged;
+         textEditor.TextChanged += textEditor_TextChanged;
+         textEditor.KeyPress += textEditor_KeyPress;
+         textEditor.KeyUp += textEditor_KeyUp;
+         // 
+         // textConsole
+         // 
+         textConsole.AnnotationFont = new Font("Calibri", 12F, FontStyle.Bold);
+         textConsole.BorderStyle = BorderStyle.None;
+         textConsole.DetectUrls = false;
+         textConsole.Dock = DockStyle.Fill;
+         textConsole.Location = new Point(4, 392);
+         textConsole.Margin = new Padding(4, 3, 4, 3);
+         textConsole.ModificationGlyphLeftMargin = 2;
+         textConsole.ModificationGlyphWidth = 4F;
+         textConsole.ModificationLocked = false;
+         textConsole.ModifiedGlyphColor = Color.Gold;
+         textConsole.Name = "textConsole";
+         textConsole.ObjectId = 0L;
+         textConsole.SavedGlyphColor = Color.Green;
+         textConsole.Selection = ((int, int))resources.GetObject("textConsole.Selection");
+         textConsole.Size = new Size(991, 346);
+         textConsole.TabIndex = 1;
+         textConsole.Text = "";
+         // 
+         // labelStatus
+         // 
+         labelStatus.AutoSize = true;
+         labelStatus.BackColor = Color.SkyBlue;
+         labelStatus.Dock = DockStyle.Fill;
+         labelStatus.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+         labelStatus.Location = new Point(4, 352);
+         labelStatus.Margin = new Padding(4, 0, 4, 0);
+         labelStatus.Name = "labelStatus";
+         labelStatus.Size = new Size(991, 37);
+         labelStatus.TabIndex = 2;
+         labelStatus.Text = "ready";
+         labelStatus.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // timerIdle
+         // 
+         timerIdle.Enabled = true;
+         timerIdle.Interval = 500;
+         timerIdle.Tick += timerIdle_Tick;
+         // 
+         // Playground
+         // 
+         AutoScaleDimensions = new SizeF(7F, 15F);
+         AutoScaleMode = AutoScaleMode.Font;
+         ClientSize = new Size(999, 741);
+         Controls.Add(table);
+         KeyPreview = true;
+         Margin = new Padding(4, 3, 4, 3);
+         Name = "Playground";
+         StartPosition = FormStartPosition.WindowsDefaultBounds;
+         Text = "Kagami Playground";
+         FormClosing += Playground_FormClosing;
+         Load += Playground_Load;
+         KeyUp += Playground_KeyUp;
+         table.ResumeLayout(false);
+         table.PerformLayout();
+         ResumeLayout(false);
 
       }
 
@@ -118,6 +146,7 @@
       private Core.WinForms.Controls.ExRichTextBox textEditor;
       private Core.WinForms.Controls.ExRichTextBox textConsole;
       private System.Windows.Forms.Label labelStatus;
+      private System.Windows.Forms.Timer timerIdle;
    }
 }
 

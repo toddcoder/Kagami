@@ -69,6 +69,9 @@ public class StringClass : BaseClass, ICollectionClass
       messages["words()"] = (obj, _) => function<KString>(obj, s => s.Words());
       messages["<<(_}"] = (obj, msg) => function<KString, IObject>(obj, msg, (s, o) => s.Append(o));
       messages["mutable()"] = (obj, _) => function<KString>(obj, s => s.Mutable());
+      messages["succ()"] = (obj, _) => function<KString>(obj, s => s.Succ());
+      messages["pred()"] = (obj, _) => function<KString>(obj, s => s.Pred());
+      messages["range()"] = (obj, _) => function<KString>(obj, s => s.Range());
    }
 
    protected static IObject getIndexed(KString s, IObject i)

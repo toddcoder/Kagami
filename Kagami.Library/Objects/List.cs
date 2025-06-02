@@ -112,7 +112,7 @@ public class List : IObject, ICollection
 
    public string AsString => IsString ? getText("", v => v.AsString) : getText(" ", v => v.AsString);
 
-   public string Image => IsString ? show(this, "$\"", o => o.AsString, "\"") : show(this, "⌈", o => o.Image, "⌉");
+   public string Image => IsString ? show(this, "$\"", o => o.AsString, "\"") : show(this, "[(", o => o.Image, ")]");
 
    public int Hash => (_head.Map(h => h.Hash) | 0 + tail.Value.Hash).GetHashCode();
 

@@ -352,9 +352,32 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       return index == -1 ? None.NoneValue : Some.Object((Int)index);
    }
 
+   public IObject First(Lambda lambda)
+   {
+      foreach (var item in list.Where(item => lambda.Invoke(item).IsTrue))
+      {
+         return Some.Object((Int)item);
+      }
+
+      return None.NoneValue;
+   }
+
+   public IObject Last(Lambda lambda)
+   {
+      for (var i = list.Count - 1; i > -1; i--)
+      {
+         if (lambda.Invoke(list[i]).IsTrue)
+         {
+            return Some.Object((Int)list[i]);
+         }
+      }
+
+      return None.NoneValue;
+   }
+
    public IObject FindAll(IObject item)
    {
-      var result = new List<IObject>();
+      List<IObject> result = [];
       var index = 0;
       while (index > -1)
       {
@@ -366,7 +389,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
          }
       }
 
-      return new KTuple(result.ToArray());
+      return new KTuple([.. result]);
    }
 
    public KArray Transpose()

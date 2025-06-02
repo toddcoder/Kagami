@@ -197,4 +197,8 @@ public readonly struct KChar : IObject, IComparable<KChar>, IEquatable<KChar>, I
    }
 
    public KByte Byte() => new((byte)value);
+
+   public KChar Succ() => (KChar)(value + 1);
+
+   public KChar Pred() => (KChar)(value - 1);
 }

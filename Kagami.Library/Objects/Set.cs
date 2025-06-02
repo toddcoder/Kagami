@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Core.Collections;
+﻿using Core.Collections;
 using Core.Enumerables;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
@@ -18,39 +16,39 @@ public class Set : IObject, ICollection, IObjectCompare
 
    public Set(IObject[] items)
    {
-      set = new Set<IObject>(items);
-      list = new List<IObject>();
+      set = [.. items];
+      list = [];
    }
 
    public Set(Set<IObject> set)
    {
       this.set = set;
-      list = new List<IObject>();
+      list = [];
    }
 
    public Set(Set otherSet)
    {
       set = otherSet.set;
-      list = new List<IObject>();
+      list = [];
    }
 
    public Set(IObject obj)
    {
-      set = new Set<IObject>(obj);
-      list = new List<IObject>();
+      set = [obj];
+      list = [];
    }
 
    public Set()
    {
-      set = new Set<IObject>();
-      list = new List<IObject>();
+      set = [];
+      list = [];
    }
 
    public string ClassName => "Set";
 
    public string AsString => set.Select(i => i.AsString).ToString(" ");
 
-   public string Image => $"⎩{set.Select(i => i.Image).ToString(", ")}⎭";
+   public string Image => $"[.{set.Select(i => i.Image).ToString(", ")}.]";
 
    public int Hash => set.GetHashCode();
 
@@ -62,9 +60,7 @@ public class Set : IObject, ICollection, IObjectCompare
 
    public IIterator GetIterator(bool lazy)
    {
-      list = new List<IObject>();
-      list.AddRange(set);
-
+      list = [.. set];
       return lazy ? new LazyIterator(this) : new Iterator(this);
    }
 
@@ -108,8 +104,7 @@ public class Set : IObject, ICollection, IObjectCompare
    {
       get
       {
-         list = new List<IObject>();
-         list.AddRange(set);
+         list = [.. set];
          return list[wrapIndex(index, set.Count)];
       }
    }
@@ -154,7 +149,6 @@ public class Set : IObject, ICollection, IObjectCompare
 
    public Set Classify(Lambda lambda)
    {
-      //var classified = new AutoHash<IObject, Set>(_ => new Set(), true);
       var classified = new Memo<IObject, Set>.Function(_ => new Set());
       foreach (var item in set)
       {

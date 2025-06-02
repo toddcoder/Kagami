@@ -436,4 +436,8 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
          return StringObject(value.Drop(skip).Keep(take));
       }
    }
+
+   public KString Succ() => value.Succ();
+
+   public KString Pred() => value.Pred();
 }

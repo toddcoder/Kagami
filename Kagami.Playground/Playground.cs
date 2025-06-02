@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Core.Applications;
 using Core.Arrays;
 using Kagami.Library;
 using Kagami.Library.Runtime;
@@ -11,6 +12,7 @@ using Core.Monads;
 using Core.Numbers;
 using Core.Matching;
 using Core.Strings;
+using Core.WinForms;
 using Core.WinForms.Consoles;
 using Core.WinForms.Documents;
 using static Core.Monads.MonadFunctions;
@@ -39,6 +41,8 @@ public partial class Playground : Form
    protected FolderName packageFolder = null!;
    protected Maybe<ExceptionData> _exceptionData = nil;
    protected int firstEditorLine;
+   protected Idle idle = new(1);
+   protected bool isDirty;
 
    public Playground()
    {
@@ -149,6 +153,24 @@ public partial class Playground : Form
          stopwatch = new Stopwatch();
          _exceptionIndex = nil;
          cancelled = false;
+
+         idle.Triggered.Handler = _ =>
+         {
+            try
+            {
+               _exceptionData = nil;
+               if (!manual)
+               {
+                  textEditor.Do(() => update(!manual, false, false));
+               }
+
+               document.Dirty();
+            }
+            catch
+            {
+            }
+         };
+
          document.Open(playgroundConfiguration.LastFile);
       }
       catch (Exception exception)
@@ -157,10 +179,15 @@ public partial class Playground : Form
       }
    }
 
-   protected void run() => update(true, true);
+   protected void run() => update(true, true, true);
 
-   protected void update(bool execute, bool fromMenu)
+   protected void update(bool execute, bool fromMenu, bool ignoreDirtyFlag)
    {
+      if (!isDirty && !ignoreDirtyFlag)
+      {
+         return;
+      }
+
       if (!locked && textEditor.TextLength != 0)
       {
          locked = true;
@@ -263,6 +290,7 @@ public partial class Playground : Form
          finally
          {
             locked = false;
+            isDirty = false;
          }
       }
    }
@@ -483,7 +511,8 @@ public partial class Playground : Form
 
    protected void textEditor_TextChanged(object sender, EventArgs e)
    {
-      try
+      isDirty = true;
+      /*try
       {
          _exceptionData = nil;
          if (!manual)
@@ -495,7 +524,7 @@ public partial class Playground : Form
       }
       catch
       {
-      }
+      }*/
    }
 
    protected void textEditor_KeyPress(object sender, KeyPressEventArgs e)
@@ -652,4 +681,6 @@ public partial class Playground : Form
          textEditor.Invalidate();
       }
    }
+
+   protected void timerIdle_Tick(object sender, EventArgs e) => idle.CheckIdleTime();
 }

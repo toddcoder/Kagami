@@ -36,8 +36,11 @@ public partial class IndexerParser : SymbolParser
                var operation = matchOperator(opSource) | nil;
                if (!operation && insert)
                {
-                  var list = expressions.ToList();
-                  list.Add(expression);
+                  List<Expression> list =
+                  [
+                     .. expressions,
+                     expression
+                  ];
                   builder.Add(new SendMessageSymbol("insert(at:_<Int>,value:_)", nil, nil, [.. list]));
                }
                else
