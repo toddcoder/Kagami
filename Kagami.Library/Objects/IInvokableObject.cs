@@ -1,9 +1,10 @@
 ﻿using Kagami.Library.Invokables;
 
-namespace Kagami.Library.Objects
+namespace Kagami.Library.Objects;
+
+public interface IInvokableObject
 {
-   public interface IInvokableObject
-   {
-      IInvokable Invokable { get; }
-   }
+   IInvokable Invokable { get; }
+
+   bool IsUserInvokable { get; }
 }

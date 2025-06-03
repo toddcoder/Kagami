@@ -9,7 +9,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Operations;
 
-public class Invoke : OneOperandOperation
+public class Invoke : OneOperandOperation, INonAdvancing
 {
    public static void InvokeInvokableObject(Machine machine, IInvokableObject invokableObject, Arguments arguments)
    {
@@ -40,7 +40,7 @@ public class Invoke : OneOperandOperation
       }
       else
       {
-         var returnAddress = machine.Address + 1;
+         var returnAddress = machine.Address;
          var frame = new Frame(returnAddress, fields);
          machine.PushFrame(frame);
          frame = new Frame(arguments);
@@ -52,7 +52,7 @@ public class Invoke : OneOperandOperation
 
    public static void InvokeConstructor(Machine machine, IInvokable invokable, Arguments arguments, Fields fields)
    {
-      var returnAddress = machine.Address + 1;
+      var returnAddress = machine.Address;
       var frame = new Frame(returnAddress, arguments, fields);
       machine.PushFrame(frame);
       frame.SetFields(invokable.Parameters);
@@ -130,6 +130,8 @@ public class Invoke : OneOperandOperation
    public override bool Increment => increment;
 
    public string FieldName => fieldName;
+
+   public bool AdvanceAnyway() => increment;
 
    public override string ToString() => $"invoke({fieldName})";
 }

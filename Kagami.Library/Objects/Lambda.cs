@@ -49,6 +49,8 @@ public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields
 
    public IInvokable Invokable => invokable1;
 
+   public bool IsUserInvokable => true;
+
    public virtual IObject Invoke(params IObject[] arguments)
    {
       var _value = Machine.Current.Value.Invoke(invokable1, new Arguments(arguments), fields, 0);

@@ -18,6 +18,8 @@
 
       public bool Constructing => false;
 
+      public bool IsUserInvokable => true;
+
       public override string ToString() => Image;
    }
 }

@@ -1,30 +1,31 @@
 ﻿using Kagami.Library.Objects;
 
-namespace Kagami.Library.Invokables
+namespace Kagami.Library.Invokables;
+
+public class FunctionInvokable : IInvokable
 {
-	public class FunctionInvokable : IInvokable
-	{
-	   protected Selector selector;
+   protected Selector selector;
 
-		public FunctionInvokable(Selector selector, Parameters parameters, string image)
-		{
-		   this.selector = selector;
-			Parameters = parameters;
-			Image = image;
-		}
+   public FunctionInvokable(Selector selector, Parameters parameters, string image)
+   {
+      this.selector = selector;
+      Parameters = parameters;
+      Image = image;
+   }
 
-	   public Selector Selector => selector;
+   public Selector Selector => selector;
 
-		public int Index { get; set; } = -1;
+   public int Index { get; set; } = -1;
 
-		public int Address { get; set; } = -1;
+   public int Address { get; set; } = -1;
 
-		public Parameters Parameters { get; }
+   public Parameters Parameters { get; }
 
-		public string Image { get; }
+   public string Image { get; }
 
-	   public virtual bool Constructing => false;
+   public virtual bool Constructing => false;
 
-	   public override string ToString() => Image;
-	}
+   public bool IsUserInvokable => true;
+
+   public override string ToString() => Image;
 }

@@ -27,4 +27,6 @@ public class Constructor : IObject, IEquatable<Constructor>, IInvokableObject
    public bool Equals(Constructor? other) => IsEqualTo(other!);
 
    public IInvokable Invokable => invokable;
+
+   public bool IsUserInvokable => true;
 }

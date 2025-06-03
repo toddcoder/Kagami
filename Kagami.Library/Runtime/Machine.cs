@@ -70,7 +70,6 @@ public class Machine
          if (operations.Current is (true, var operation))
          {
             trace(operations.Address, () => operation.ToString() ?? "");
-            var currentAddress = operations.Address;
             var _result = operation.Execute(this);
             if (_result is (true, var result) && running && result.ClassName != "Void")
             {
@@ -95,7 +94,7 @@ public class Machine
                }
             }
 
-            if (operation.Increment && currentAddress == operations.Address)
+            if (operation is INonAdvancing nonAdvancing && nonAdvancing.AdvanceAnyway() || operation is not INonAdvancing)
             {
                operations.Advance(1);
             }
@@ -264,7 +263,7 @@ public class Machine
                      }
                   }
 
-                  if (currentAddress == operations.Address)
+                  if (operation is INonAdvancing nonAdvancing && nonAdvancing.AdvanceAnyway() || operation is not INonAdvancing)
                   {
                      operations.Advance(1);
                   }

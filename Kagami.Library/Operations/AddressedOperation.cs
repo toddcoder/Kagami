@@ -1,6 +1,6 @@
 ﻿namespace Kagami.Library.Operations;
 
-public abstract class AddressedOperation : Operation
+public abstract class AddressedOperation : Operation, INonAdvancing
 {
    protected int address;
    protected bool increment;

@@ -1,15 +1,16 @@
-﻿namespace Kagami.Library.Invokables
+﻿namespace Kagami.Library.Invokables;
+
+public interface IInvokable
 {
-   public interface IInvokable
-   {
-      int Index { get; set; }
+   int Index { get; set; }
 
-      int Address { get; set; }
+   int Address { get; set; }
 
-      Parameters Parameters { get; }
+   Parameters Parameters { get; }
 
-      string Image { get; }
+   string Image { get; }
 
-      bool Constructing { get; }
-   }
+   bool Constructing { get; }
+
+   bool IsUserInvokable { get; }
 }

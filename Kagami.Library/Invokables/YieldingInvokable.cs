@@ -36,6 +36,8 @@ public class YieldingInvokable : IInvokable, ICollection, IObject
 
    public bool Constructing => false;
 
+   public bool IsUserInvokable => true;
+
    public int Hash => selector.Hash;
 
    public bool IsEqualTo(IObject obj) => obj is YieldingInvokable yfi && selector.IsEqualTo(yfi.selector);
