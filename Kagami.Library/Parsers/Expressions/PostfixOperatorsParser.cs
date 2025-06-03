@@ -9,7 +9,7 @@ public partial class PostfixOperatorsParser : SymbolParser
 {
    //public override string Pattern => "^ /(['?!']1%2) -(>['?!'])";
 
-   [GeneratedRegex(@"^([\?!]{1,2})(?![\?!])")]
+   [GeneratedRegex(@"^([\?!&]{1,2})(?![\?!&])")]
    public override partial Regex Regex();
 
    public PostfixOperatorsParser(ExpressionBuilder builder) : base(builder)
@@ -28,6 +28,9 @@ public partial class PostfixOperatorsParser : SymbolParser
             break;
          case "!":
             builder.Add(new SuccessSymbol());
+            break;
+         case "&":
+            builder.Add(new SendMessageSymbol("value".get()));
             break;
          default:
             return nil;
