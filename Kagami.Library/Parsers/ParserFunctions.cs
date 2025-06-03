@@ -584,7 +584,7 @@ public static class ParserFunctions
          }
          else
          {
-            return nil;
+            return new PossibleInvokable.None();
          }
       }
       else if (_scanned.Exception is (true, var exception))
