@@ -92,7 +92,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
       {
          if (_result is (true, var result))
          {
-            return new KTuple(result.Select(m => new RegexMatch(m, self.nameToIndex(result)))
+            return new KTuple(result.Select(m => new RegexMatch(m, self.nameToIndex(result), input.Keep(m.Index), input.Drop(m.Index + m.Length)))
                .Select(m => getMatchOrText(m, self.textOnly)).ToArray());
          }
          else
@@ -102,7 +102,9 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
       }
       else if (isMatch(input) is (true, var result2))
       {
-         return Some.Object(getMatchOrText(new RegexMatch(result2.GetMatch(0), self.nameToIndex(result2)), self.textOnly));
+         var match = result2.GetMatch(0);
+         var regexMatch = new RegexMatch(match, self.nameToIndex(result2), input.Keep(match.Index), input.Drop(match.Index + match.Length));
+         return Some.Object(getMatchOrText(regexMatch, self.textOnly));
       }
       else
       {
@@ -441,7 +443,8 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
 
    public bool Multiline => multiline;
 
-   public bool Equals(Regex other) => pattern.Equals(other.pattern) && ignoreCase == other.ignoreCase && multiline == other.multiline && global == other.global && textOnly == other.textOnly && nameToIndex.Equals(other.nameToIndex);
+   public bool Equals(Regex other) => pattern.Equals(other.pattern) && ignoreCase == other.ignoreCase && multiline == other.multiline &&
+      global == other.global && textOnly == other.textOnly && nameToIndex.Equals(other.nameToIndex);
 
    public override bool Equals(object? obj) => obj is Regex other && Equals(other);
 

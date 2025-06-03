@@ -12,16 +12,20 @@ public readonly struct RegexMatch : IObject, IProcessPlaceholders, IEquatable<Re
    private readonly int index;
    private readonly int length;
    private readonly RegexGroup[] groups;
+   private readonly string prefix;
+   private readonly string suffix;
    private readonly Func<string, Maybe<int>> nameToIndex;
    private readonly Hash<string, IObject> passed;
    private readonly Hash<string, IObject> internals;
 
-   public RegexMatch(Core.Matching.Match match, Func<string, Maybe<int>> nameToIndex) : this()
+   public RegexMatch(Core.Matching.Match match, Func<string, Maybe<int>> nameToIndex, string prefix, string suffix) : this()
    {
       text = match.Text;
       index = match.Index;
       length = match.Length;
       groups = match.Groups.Select(g => new RegexGroup(g)).ToArray();
+      this.prefix = prefix;
+      this.suffix = suffix;
       this.nameToIndex = nameToIndex;
 
       passed = new Hash<string, IObject>();
@@ -30,7 +34,9 @@ public readonly struct RegexMatch : IObject, IProcessPlaceholders, IEquatable<Re
          ["text"] = (KString)text,
          ["index"] = (Int)index,
          ["length"] = (Int)length,
-         ["groups"] = new KTuple(groups.Select(g => (IObject)g).ToArray())
+         ["groups"] = new KTuple(groups.Select(g => (IObject)g).ToArray()),
+         ["prefix"] = (KString)prefix,
+         ["suffix"] = (KString)suffix
       };
    }
 
@@ -40,10 +46,12 @@ public readonly struct RegexMatch : IObject, IProcessPlaceholders, IEquatable<Re
       index = 0;
       length = 0;
       groups = [];
+      prefix = "";
+      suffix = "";
       nameToIndex = _ => nil;
 
       this.passed = passed;
-      internals = new Hash<string, IObject>();
+      internals = [];
    }
 
    public string ClassName => "Match";
@@ -71,6 +79,10 @@ public readonly struct RegexMatch : IObject, IProcessPlaceholders, IEquatable<Re
    public Int Length => length;
 
    public KTuple Groups => new(groups.Select(g => (IObject)g).ToArray());
+
+   public KString Prefix => prefix;
+
+   public KString Suffix => suffix;
 
    public Hash<string, IObject> Passed => passed;
 
