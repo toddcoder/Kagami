@@ -66,6 +66,24 @@ public class UserClass : BaseClass
       }
    }
 
+   public static IObject UserInvoke(UserObject userObject, Arguments arguments, Lambda lambda)
+   {
+      var machine = Machine.Current.Value;
+      var _value = machine.Invoke(lambda.Invokable, arguments, userObject.Fields);
+      if (_value is (true, var value))
+      {
+         return value;
+      }
+      else if (_value.Exception is (true, var exception))
+      {
+         throw exception;
+      }
+      else
+      {
+         return KVoid.Value;
+      }
+   }
+
    public virtual bool RegisterMethod(Selector selector, Lambda lambda, bool overriding)
    {
       if (messages.ContainsExact(selector) && !overriding)
@@ -75,7 +93,7 @@ public class UserClass : BaseClass
       else
       {
          var clone = lambda.Clone();
-         messages[selector] = (obj, msg) => Invoke((UserObject)obj, msg.Arguments, clone);
+         messages[selector] = (obj, msg) => UserInvoke((UserObject)obj, msg.Arguments, clone);
          signatures.Add(selector);
 
          return true;

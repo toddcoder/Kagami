@@ -20,7 +20,7 @@ public class RespondsTo : Operation
       }
       else
       {
-         return emptyStack();
+         return emptyStack("value");
       }
    }
 

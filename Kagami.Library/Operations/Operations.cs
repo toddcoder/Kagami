@@ -1,4 +1,6 @@
-﻿using Core.Monads;
+﻿using Core.DataStructures;
+using Core.Enumerables;
+using Core.Monads;
 using Core.Numbers;
 using Core.Strings;
 using static Core.Monads.MonadFunctions;
@@ -10,6 +12,7 @@ public class Operations
    protected Operation[] operations;
    protected int address;
    protected int length;
+   protected MaybeStack<int> addressStack = [];
 
    public Operations(Operation[] operations)
    {
@@ -23,6 +26,18 @@ public class Operations
    }
 
    public int Address => address;
+
+   public void PushAddress() => addressStack.Push(address + 1);
+
+   public void PopAddress()
+   {
+      if (addressStack.Pop() is (true, var previousAddress))
+      {
+         address = previousAddress;
+      }
+   }
+
+   public string AddressStackString => addressStack.ToString(", ");
 
    public bool Goto(int address)
    {

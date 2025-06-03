@@ -22,23 +22,17 @@ public class Machine
    public static Fields Fields => Current.Value.CurrentFrame.Fields;
 
    protected IContext context;
-   protected Stack<Frame> stack;
-   protected Operations.Operations operations;
+   protected Stack<Frame> stack = new();
+   protected Operations.Operations operations = new();
    protected bool running;
-   protected Lazy<TableMaker> table;
-   protected DebugState debugState;
-   protected GlobalFrame globalFrame;
+   protected Lazy<TableMaker> table = new(() =>
+      new TableMaker(("Address", Justification.Left), ("Operation", Justification.Left), ("Stack", Justification.Left)));
+   protected DebugState debugState = DebugState.Starting;
+   protected GlobalFrame globalFrame = new();
 
    public Machine(IContext context)
    {
       this.context = context;
-      stack = new Stack<Frame>();
-      operations = new Operations.Operations();
-      running = false;
-      table = new Lazy<TableMaker>(() =>
-         new TableMaker(("Address", Justification.Left), ("Operation", Justification.Left), ("Stack", Justification.Left)));
-      debugState = DebugState.Starting;
-      globalFrame = new GlobalFrame();
    }
 
    public IContext Context => context;
@@ -70,11 +64,15 @@ public class Machine
          if (operations.Current is (true, var operation))
          {
             trace(operations.Address, () => operation.ToString() ?? "");
-            var currentAddress = operations.Address;
             var _result = operation.Execute(this);
             if (_result is (true, var result) && running && result.ClassName != "Void")
             {
+               var address = operations.Address;
                stack.Peek().Push(result);
+               if (operations.Address != address)
+               {
+                  operations.Goto(address);
+               }
             }
             else if (_result.Exception is (true, var exception))
             {
@@ -95,7 +93,7 @@ public class Machine
                }
             }
 
-            if (operation.Increment && currentAddress == operations.Address)
+            if (operation.Increment)
             {
                operations.Advance(1);
             }
@@ -114,9 +112,9 @@ public class Machine
       return unit;
    }
 
-   public Optional<IObject> Invoke(IInvokable invokable, Arguments arguments, Fields fields, int increment = 1)
+   public Optional<IObject> Invoke(IInvokable invokable, Arguments arguments, Fields fields)
    {
-      var returnAddress = Address + increment;
+      var returnAddress = Address;
       var frame = new Frame(returnAddress, fields);
 
       if (invokable is YieldingInvokable yfi)
@@ -128,6 +126,7 @@ public class Machine
       frame = new Frame(arguments);
       PushFrame(frame);
       frame.SetFields(invokable.Parameters);
+      PushAddress();
       if (GoTo(invokable.Address))
       {
          return invoke();
@@ -138,9 +137,9 @@ public class Machine
       }
    }
 
-   public Optional<IObject> Invoke(IInvokable invokable, Arguments arguments, int increment = 1)
+   public Optional<IObject> Invoke(IInvokable invokable, Arguments arguments)
    {
-      var returnAddress = Address + increment;
+      var returnAddress = Address;
       var frame = new Frame(returnAddress, arguments);
 
       if (invokable is YieldingInvokable yfi)
@@ -151,6 +150,7 @@ public class Machine
       PushFrame(frame);
       frame.SetFields(invokable.Parameters);
 
+      PushAddress();
       return GoTo(invokable.Address) ? invoke() : badAddress(invokable.Address);
    }
 
@@ -169,6 +169,7 @@ public class Machine
       }
 
       frame.SetFields(invokable.Parameters);
+      PushAddress();
       GoTo(invokable.Address);
 
       return invoke();
@@ -240,15 +241,22 @@ public class Machine
             switch (operation)
             {
                case Return rtn:
+                  PopAddress();
                   return Return.ReturnAction(this, rtn.ReturnTopOfStack);
                case Yield:
+                  PopAddress();
                   return Yield.YieldAction(this).Just();
                case Invoke invoke:
                {
                   var _returnValue = Invoke(invoke.FieldName);
                   if (_returnValue is (true, var returnValue))
                   {
+                     var address = operations.Address;
                      stack.Peek().Push(returnValue);
+                     if (operations.Address != address)
+                     {
+                        operations.Goto(address);
+                     }
                   }
                   else if (_returnValue.Exception is (true, var exception))
                   {
@@ -276,7 +284,12 @@ public class Machine
             var _result = operation.Execute(this);
             if (_result is (true, var result) && running)
             {
+               var address = operations.Address;
                stack.Peek().Push(result);
+               if (operations.Address != address)
+               {
+                  operations.Goto(address);
+               }
             }
             else if (_result.Exception is (true, var exception))
             {
@@ -403,7 +416,7 @@ public class Machine
          }
       }
 
-      return emptyStack();
+      return emptyStack("frame");
    }
 
    public void Clear() => CurrentFrame.Clear();
@@ -646,4 +659,8 @@ public class Machine
          return fail("Try frame not found");
       }
    }
+
+   public void PushAddress() => operations.PushAddress();
+
+   public void PopAddress() => operations.PopAddress();
 }

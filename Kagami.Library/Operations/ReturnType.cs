@@ -32,7 +32,7 @@ public class ReturnType : Return
       }
       else
       {
-         return emptyStack();
+         return emptyStack("value");
       }
    }
 

@@ -143,7 +143,7 @@ public class Frame
                IObject value;
                if (_defaultValue is (true, var invokable))
                {
-                  var _value = Machine.Current.Value.Invoke(invokable, Arguments.Empty, 0);
+                  var _value = Machine.Current.Value.Invoke(invokable, Arguments.Empty);
                   if (_value is (true, var value2))
                   {
                      value = value2;

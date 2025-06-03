@@ -34,7 +34,7 @@ public class GoToIfFailure : AddressedOperation
       }
       else
       {
-         return emptyStack();
+         return emptyStack("value");
       }
    }
 

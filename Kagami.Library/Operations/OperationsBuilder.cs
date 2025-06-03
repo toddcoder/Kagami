@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Kagami.Library.Invokables;
+﻿using Kagami.Library.Invokables;
 using Kagami.Library.Nodes;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
@@ -163,18 +161,24 @@ public class OperationsBuilder
          argument.Generate(this);
       }
 
+      PushAddress();
       Invoke(functionName, arguments.Length);
    }
 
    public void Invoke(string functionName, int count)
    {
       ToArguments(count);
+      PushAddress();
       add(new Invoke(functionName));
    }
 
    public void PostfixInvoke() => add(new PostfixInvoke());
 
-   public void Return(bool returnTopOfStack) => add(new Return(returnTopOfStack));
+   public void Return(bool returnTopOfStack)
+   {
+      add(new Return(returnTopOfStack));
+      PopAddress();
+   }
 
    public void ReturnType(bool returnTopOfStack, TypeConstraint typeConstraint)
    {
@@ -522,4 +526,8 @@ public class OperationsBuilder
          GoTo(returnLabels.Peek());
       }
    }
+
+   public void PushAddress() => add(new PushAddress());
+
+   public void PopAddress() => add(new PopAddress());
 }

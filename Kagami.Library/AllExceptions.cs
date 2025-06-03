@@ -79,13 +79,13 @@ public static class AllExceptions
 
    public static Exception requiresNOperands(int n) => fail(messageRequiresNOperands(n));
 
-   public static string messageEmptyStack() => "Empty stack";
+   public static string messageEmptyStack(string type) => $"Empty {type} stack";
 
-   public static Exception emptyStack() => fail(messageEmptyStack());
+   public static Exception emptyStack(string type) => fail(messageEmptyStack(type));
 
-   public static string messageInvalidStack() => "Invalid stack";
+   public static string messageInvalidStack(string type) => $"Invalid {type} stack";
 
-   public static Exception invalidStack() => fail(messageInvalidStack());
+   public static Exception invalidStack(string type) => fail(messageInvalidStack(type));
 
    public static string messageMessageNotFound(BaseClass cls, string name) => $"{cls.Name} doesn't respond to message {name}";
 
