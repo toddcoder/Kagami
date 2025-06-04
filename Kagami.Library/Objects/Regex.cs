@@ -129,6 +129,44 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
       }
    }
 
+   public KString Replace(string input, Lambda lambda)
+   {
+      var _result = input.Matches(getFixedPattern());
+      if (_result is (true, var result))
+      {
+         var builder = new StringBuilder();
+         var lastIndex = 0;
+
+         foreach (var match in result)
+         {
+            if (match.Groups.Length == 1)
+            {
+               builder.Append(input.AsSpan(lastIndex, match.Index - lastIndex));
+               var replacement = lambda.Invoke((KString)match.Text);
+               builder.Append(replacement.AsString);
+               lastIndex = match.Index + match.Length;
+            }
+            else
+            {
+               foreach (var group in match)
+               {
+                  builder.Append(input.AsSpan(lastIndex, group.Index - lastIndex));
+                  var replacement = lambda.Invoke((KString)group.Text);
+                  builder.Append(replacement.AsString);
+                  lastIndex = group.Index + group.Length;
+               }
+            }
+         }
+
+         builder.Append(input.Drop(lastIndex));
+         return new KString(builder.ToString());
+      }
+      else
+      {
+         return input;
+      }
+   }
+
    public KBoolean IsMatch(string input) => input.IsMatch(getFixedPattern());
 
    public IObject Find(string input, int startIndex, bool reverse)

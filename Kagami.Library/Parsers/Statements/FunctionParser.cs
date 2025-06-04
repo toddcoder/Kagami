@@ -13,8 +13,6 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class FunctionParser : StatementParser
 {
-   //public override string Pattern => $"^ /('override' /s+)? /('func' | 'op' | 'def') /(/s+) (/({REGEX_CLASS_GETTING}) /'.')? /({REGEX_FUNCTION_NAME}) /'('?";
-
    [GeneratedRegex($@"^(\s*)(override\s+)?(func|op|def)(\s+)(?:({REGEX_CLASS_GETTING})(\.))?({REGEX_FUNCTION_NAME})(\()?")]
    public override partial Regex Regex();
 
@@ -60,7 +58,7 @@ public partial class FunctionParser : StatementParser
       var _parameters = GetAnyParameters(needsParameters, state);
       if (_parameters is (true, var parameters))
       {
-         if (state.CurrentSource.IsMatch("^ /s* '|'"))
+         if (state.CurrentSource.IsMatch("^ /s* 'case' /b"))
          {
             return getMatchFunction(state, functionName, parameters, overriding, className);
          }

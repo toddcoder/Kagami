@@ -150,7 +150,6 @@ public class Machine
       PushFrame(frame);
       frame.SetFields(invokable.Parameters);
 
-      PushAddress();
       return GoTo(invokable.Address) ? invoke() : badAddress(invokable.Address);
    }
 

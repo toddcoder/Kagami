@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Text;
 using Core.Applications;
 using Core.Arrays;
 using Kagami.Library;
@@ -28,7 +29,7 @@ public partial class Playground : Form
    protected TextBoxConsole outputConsole = null!;
    protected TextWriter textWriter = null!;
    protected TextReader textReader = null!;
-   protected bool locked;
+   protected bool locked = true;
    protected bool manual;
    protected Stopwatch stopwatch = null!;
    protected PlaygroundConfiguration playgroundConfiguration = null!;
@@ -74,68 +75,70 @@ public partial class Playground : Form
       try
       {
          _exceptionData = nil;
-         document = new Document(this, textEditor, ".kagami", "Kagami", playgroundConfiguration.FontName, playgroundConfiguration.FontSize);
+         document = new Document(this, textEditor, ".kagami", "Kagami", playgroundConfiguration.FontName, playgroundConfiguration.FontSize,
+            autoDirty: false);
 
          var menus = document.Menus;
          menus.Menu("&File");
-         menus.Menu("File", "&New", (_, _) =>
+         menus.Menu("&New", (_, _) =>
          {
             textEditor.ClearModificationGlyphs();
             document.New();
          });
-         menus.Menu("File", "&Open", (_, _) =>
+         menus.Menu("&Open", (_, _) =>
          {
             textEditor.ClearModificationGlyphs();
             document.Open();
          }, "^O");
-         menus.Menu("File", "&Save", (_, _) =>
+         menus.Menu("&Save", (_, _) =>
          {
             textEditor.SetToSavedGlyphs();
             document.Save();
          }, "^S");
-         menus.Menu("File", "Save As", (_, _) =>
+         menus.Menu("Save As", (_, _) =>
          {
             textEditor.SetToSavedGlyphs();
             document.SaveAs();
          });
-         menus.Menu("File", "Exit", (_, _) => Close(), "%F4");
+         menus.Menu("Exit", (_, _) => Close(), "%F4");
 
          document.StandardEditMenu();
 
-         menus.Menu("Edit", "Duplicate", (_, _) => duplicate(), "^D");
-         menus.Menu("Edit", "Create Block", (_, _) => createBlock(), "^B");
+         menus.Menu("&Edit");
+         menus.Menu("Duplicate", (_, _) => duplicate(), "^D");
+         menus.Menu("Create Block", (_, _) => createBlock(), "^B");
          menus.Menu("&Build");
-         menus.Menu("Build", "Run", (_, _) => run(), "F5");
-         menus.Menu("Build", "Manual", (s, _) =>
+         menus.Menu("Run", (_, _) => run(), "F5");
+         menus.Menu("Manual", (s, _) =>
          {
             manual = !manual;
             ((ToolStripMenuItem)s!).Checked = manual;
          }, "^F5");
-         menus.Menu("Build", "Dump operations", (s, _) =>
+         menus.Menu("Dump operations", (s, _) =>
          {
             dumpOperations = !dumpOperations;
             ((ToolStripMenuItem)s!).Checked = dumpOperations;
          });
-         menus.Menu("Build", "Trace", (s, _) =>
+         menus.Menu("Trace", (s, _) =>
          {
             tracing = !tracing;
             ((ToolStripMenuItem)s!).Checked = tracing;
          }, "^T");
          menus.Menu("&Insert");
-         menus.Menu("Insert", "open sys", (_, _) => insertText("open sys\n\n", 0, 0), "^%S");
-         menus.Menu("Insert", "open math", (_, _) => insertText("open math\n\n", 0, 0), "^%M");
-         menus.Menu("Insert", "println()", (_, _) => insertText("println()", -1, 0), "^P");
-         menus.Menu("Insert", "println() interpolated", (_, _) => insertText("println($\"\")", -2, 0), "^%P");
-         menus.Menu("Insert", "print()", (_, _) => insertText("print()", -1, 0));
-         menus.Menu("Insert", "put()", (_, _) => insertText("put()", -1, 0));
-         menus.Menu("Insert", "peek()", (_, _) => surround("peek(", ")"), "^K");
-         menus.Menu("Insert", "Triple quotes", (_, _) => insertText("\"\"\"\n\"\"\"", -3), "^Q");
-         menus.Menu("Insert", "List", (_, _) => insertText("⌈⌉", -1), "^L");
-         menus.Menu("Insert", "Set", (_, _) => insertText("⎩⎭", -1), "^E");
+         menus.Menu("open sys", (_, _) => insertText("open sys\n\n", 0, 0), "^%S");
+         menus.Menu("open math", (_, _) => insertText("open math\n\n", 0, 0), "^%M");
+         menus.Menu("println()", (_, _) => insertText("println()", -1, 0), "^P");
+         menus.Menu("println() interpolated", (_, _) => insertText("println($\"\")", -2, 0), "^%P");
+         menus.Menu("print()", (_, _) => insertText("print()", -1, 0));
+         menus.Menu("put()", (_, _) => insertText("put()", -1, 0));
+         menus.Menu("peek()", (_, _) => surround("peek(", ")"), "^K");
+         menus.Menu("Triple quotes", (_, _) => insertText("\"\"\"\n\"\"\"", -3), "^Q");
+         menus.Menu("List", (_, _) => insertText("⌈⌉", -1), "^L");
+         menus.Menu("Set", (_, _) => insertText("⎩⎭", -1), "^E");
 
          menus.Menu("&Debug");
-         menus.Menu("Debug", "Step Into", (_, _) => stepInto(), "F11");
-         menus.Menu("Debug", "Step Over", (_, _) => stepOver(), "F10");
+         menus.Menu("Step Into", (_, _) => stepInto(), "F11");
+         menus.Menu("Step Over", (_, _) => stepOver(), "F10");
 
          menus.CreateMainMenu(this);
          menus.StandardContextEdit(document);
@@ -145,6 +148,10 @@ public partial class Playground : Form
          textEditor.ReassignHandle();
          textEditor.Paint += (_, evt) => paint(evt);
          textEditor.AnnotationFont = new Font(textEditor.Font, FontStyle.Bold);
+
+         var contextMenu = new FreeMenus();
+         contextMenu.StandardContextEdit();
+         contextMenu.CreateContextMenu(textConsole);
 
          locked = false;
          manual = false;
@@ -163,8 +170,6 @@ public partial class Playground : Form
                {
                   textEditor.Do(() => update(!manual, false, false));
                }
-
-               document.Dirty();
             }
             catch
             {
@@ -176,6 +181,10 @@ public partial class Playground : Form
       catch (Exception exception)
       {
          textWriter.WriteLine(exception.Message);
+      }
+      finally
+      {
+         locked = false;
       }
    }
 
@@ -257,7 +266,14 @@ public partial class Playground : Form
 
                if (dumpOperations && compiler.Operations is (true, var operations))
                {
-                  textWriter.WriteLine(operations);
+                  var text = operations.ToString();
+                  textWriter.WriteLine(text);
+                  if (document.FileName is (true, var fileName))
+                  {
+                     FileName documentFile = fileName;
+                     var dumpFile = documentFile.Folder + $"{documentFile.Name}.txt";
+                     dumpFile.TryTo.SetText(text, Encoding.UTF8);
+                  }
                }
 
                document.Clean();
@@ -518,7 +534,7 @@ public partial class Playground : Form
       else
       {
          isDirty = true;
-         //document.Dirty();
+         document.Dirty();
       }
    }
 

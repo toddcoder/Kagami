@@ -4,7 +4,7 @@ using Core.Monads;
 
 namespace Kagami.Library.Operations;
 
-public class ToArguments : OneNumericOperation
+public class NewArguments : OneNumericOperation
 {
    public override Optional<IObject> Execute(Machine machine, INumeric x)
    {
@@ -29,5 +29,5 @@ public class ToArguments : OneNumericOperation
       return arguments;
    }
 
-   public override string ToString() => "to.arguments";
+   public override string ToString() => "new.arguments";
 }

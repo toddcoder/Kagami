@@ -357,7 +357,7 @@ public class OperationsBuilder
    public void ToArguments(int count)
    {
       PushInt(count);
-      add(new ToArguments());
+      add(new NewArguments());
    }
 
    public void Pipeline() => add(new Pipeline());

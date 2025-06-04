@@ -16,6 +16,8 @@ public class RegexClass : BaseClass, IEquivalentClass
       messages["isMatch"] = (obj, msg) => function<Regex, KString>(obj, msg, (r, s) => r.IsMatch(s.Value));
       messages["replace".Selector("<String>", "<String>")] = (obj, msg) =>
          function<Regex, KString, KString>(obj, msg, (r, s1, s2) => r.Replace(s1.Value, s2.Value));
+      messages["replace".Selector("<String>", "<Lambda>")] =
+         (obj, msg) => function<Regex, KString, Lambda>(obj, msg, (r, s, l) => r.Replace(s.Value, l));
       messages["split"] = (obj, msg) => function<Regex, KString>(obj, msg, (r, s) => r.Split(s.Value));
       messages["~"] = (obj, msg) => function<Regex, IObject>(obj, msg, (r1, r2) => r1.Concatenate(r2));
    }

@@ -157,6 +157,11 @@ public class Frame
                      return;
                   }
                }
+               else if (parameter.Variadic)
+               {
+                  value = KTuple.Empty;
+                  fields.Assign(parameter.Name, value, true);
+               }
                else
                {
                   value = Unassigned.Value;
