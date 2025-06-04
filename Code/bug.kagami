@@ -1,0 +1,2 @@
+﻿let vowels = [('e', 'i', 'o', 'u')]
+vowels :: 'a'

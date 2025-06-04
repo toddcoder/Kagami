@@ -12,15 +12,13 @@ public partial class YieldParser : EndingInExpressionParser
 {
    protected bool all;
 
-   //public override string Pattern => "^ /'yield' (/(/s+) /'all')? /(/s+)";
-
-   [GeneratedRegex(@"^(yield)(?:(\s+)(all))?(\s+)")]
+   [GeneratedRegex(@"^(\s*)(yield)(?:(\s+)(all))?(\s+)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {
-      all = tokens[3].Text == "all";
-      state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Keyword, Color.Whitespace);
+      all = tokens[4].Text == "all";
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Keyword, Color.Whitespace);
 
       return unit;
    }

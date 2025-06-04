@@ -42,7 +42,11 @@ public class Processor : CommandProcessor
          if (_machine is (true, var machine))
          {
             var _result = machine.Execute();
-            if (!_result)
+            if (_result is (true, var result) && !context.AnythingPrinted)
+            {
+               System.Console.WriteLine($"{result.Image} | {result.ClassName}");
+            }
+            else
             {
                System.Console.WriteLine(_result.Exception.Message);
             }

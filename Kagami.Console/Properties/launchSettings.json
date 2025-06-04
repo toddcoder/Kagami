@@ -2,7 +2,7 @@
   "profiles": {
     "Kagami.Console": {
       "commandName": "Project",
-      "commandLineArgs": "run --file C:\\Users\\TEBENNETT\\Documents\\Kagami\\bug.kagami"
+      "commandLineArgs": "run --file C:\\Users\\TEBENNETT\\source\\repos\\Kagami\\Code\\bug.kagami"
     }
   }
 }

@@ -29,6 +29,7 @@ public class Machine
       new TableMaker(("Address", Justification.Left), ("Operation", Justification.Left), ("Stack", Justification.Left)));
    protected DebugState debugState = DebugState.Starting;
    protected GlobalFrame globalFrame = new();
+   protected IObject lastValue = KVoid.Value;
 
    public Machine(IContext context)
    {
@@ -51,7 +52,7 @@ public class Machine
 
    public GlobalFrame GlobalFrame => globalFrame;
 
-   public Result<Unit> Execute()
+   public Result<IObject> Execute()
    {
       stack.Clear();
       globalFrame = new GlobalFrame();
@@ -69,6 +70,7 @@ public class Machine
             {
                var address = operations.Address;
                stack.Peek().Push(result);
+               lastValue = result;
                if (operations.Address != address)
                {
                   operations.Goto(address);
@@ -109,7 +111,7 @@ public class Machine
          context.PrintLine(table.Value.ToString());
       }
 
-      return unit;
+      return lastValue.Success();
    }
 
    public Optional<IObject> Invoke(IInvokable invokable, Arguments arguments, Fields fields)

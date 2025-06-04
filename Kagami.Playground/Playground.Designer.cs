@@ -33,7 +33,6 @@
          table = new TableLayoutPanel();
          textEditor = new Core.WinForms.Controls.ExRichTextBox();
          textConsole = new Core.WinForms.Controls.ExRichTextBox();
-         labelStatus = new Label();
          timerIdle = new System.Windows.Forms.Timer(components);
          table.SuspendLayout();
          SuspendLayout();
@@ -44,7 +43,6 @@
          table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
          table.Controls.Add(textEditor, 0, 0);
          table.Controls.Add(textConsole, 0, 2);
-         table.Controls.Add(labelStatus, 0, 1);
          table.Dock = DockStyle.Fill;
          table.Location = new Point(0, 0);
          table.Margin = new Padding(4, 3, 4, 3);
@@ -100,20 +98,6 @@
          textConsole.TabIndex = 1;
          textConsole.Text = "";
          // 
-         // labelStatus
-         // 
-         labelStatus.AutoSize = true;
-         labelStatus.BackColor = Color.SkyBlue;
-         labelStatus.Dock = DockStyle.Fill;
-         labelStatus.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
-         labelStatus.Location = new Point(4, 352);
-         labelStatus.Margin = new Padding(4, 0, 4, 0);
-         labelStatus.Name = "labelStatus";
-         labelStatus.Size = new Size(991, 37);
-         labelStatus.TabIndex = 2;
-         labelStatus.Text = "ready";
-         labelStatus.TextAlign = ContentAlignment.MiddleLeft;
-         // 
          // timerIdle
          // 
          timerIdle.Enabled = true;
@@ -135,7 +119,6 @@
          Load += Playground_Load;
          KeyUp += Playground_KeyUp;
          table.ResumeLayout(false);
-         table.PerformLayout();
          ResumeLayout(false);
 
       }
@@ -145,7 +128,6 @@
       private System.Windows.Forms.TableLayoutPanel table;
       private Core.WinForms.Controls.ExRichTextBox textEditor;
       private Core.WinForms.Controls.ExRichTextBox textConsole;
-      private System.Windows.Forms.Label labelStatus;
       private System.Windows.Forms.Timer timerIdle;
    }
 }

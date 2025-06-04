@@ -8,23 +8,28 @@ namespace Kagami.Console;
 public class ConsoleContext : IContext
 {
    protected Putter putter = new();
-   protected bool cancelled = false;
+   protected bool cancelled;
+   protected bool anythingPrinted;
 
    public ConsoleContext()
    {
       System.Console.CancelKeyPress += (_, _) => cancelled = true;
    }
 
+   public bool AnythingPrinted => anythingPrinted;
+
    public void Print(string value)
    {
       putter.Reset();
       System.Console.Write(value);
+      anythingPrinted = true;
    }
 
    public void PrintLine(string value)
    {
       putter.Reset();
       System.Console.WriteLine(value);
+      anythingPrinted = true;
    }
 
    public void Put(string value) => System.Console.Write(putter.Put(value));

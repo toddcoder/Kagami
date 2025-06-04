@@ -1,21 +1,23 @@
-﻿using System.Diagnostics;
-using System.Text;
-using Core.Applications;
+﻿using Core.Applications;
 using Core.Arrays;
-using Kagami.Library;
-using Kagami.Library.Runtime;
-using Core.Computers;
 using Core.Collections;
+using Core.Computers;
 using Core.Dates;
 using Core.Enumerables;
 using Core.Exceptions;
+using Core.Matching;
 using Core.Monads;
 using Core.Numbers;
-using Core.Matching;
 using Core.Strings;
 using Core.WinForms;
 using Core.WinForms.Consoles;
+using Core.WinForms.Controls;
 using Core.WinForms.Documents;
+using Core.WinForms.TableLayoutPanels;
+using Kagami.Library;
+using Kagami.Library.Runtime;
+using System.Diagnostics;
+using System.Text;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Playground;
@@ -23,8 +25,6 @@ namespace Kagami.Playground;
 [System.Runtime.Versioning.SupportedOSPlatform("windows")]
 public partial class Playground : Form
 {
-   protected const string KAGAMI_EXCEPTION_PROMPT = "Kagami exception >>> ";
-
    protected Document document = null!;
    protected TextBoxConsole outputConsole = null!;
    protected TextWriter textWriter = null!;
@@ -44,6 +44,10 @@ public partial class Playground : Form
    protected int firstEditorLine;
    protected Idle idle = new(1);
    protected bool isDirty;
+   protected UiAction uiValue = new() { AutoSizeText = true };
+   protected UiAction uiElapsed = new() { AutoSizeText = true };
+   protected UiAction uiStatus = new();
+   protected UiAction uiRun = new();
 
    public Playground()
    {
@@ -176,6 +180,24 @@ public partial class Playground : Form
             }
          };
 
+         uiRun.Button("Run");
+         uiRun.Click += (_, _) => run();
+         uiRun.ClickText = "Run code";
+
+         var builder = new TableLayoutBuilder(table);
+         _ = builder.Col + 30f + 200 + 70f + 200;
+         _ = builder.Row + 50f + 40 + 100f;
+         builder.SetUp();
+
+         (builder + textEditor).SpanCol(4).Row();
+
+         (builder + uiValue).Next();
+         (builder + uiElapsed).Next();
+         (builder + uiStatus).Next();
+         (builder + uiRun).Row();
+
+         (builder + textConsole).SpanCol(4).Row();
+
          document.Open(playgroundConfiguration.LastFile);
       }
       catch (Exception exception)
@@ -202,7 +224,7 @@ public partial class Playground : Form
          locked = true;
          if (manual)
          {
-            labelStatus.Text = "running...";
+            uiStatus.Message("Running...");
             Application.DoEvents();
          }
          else if (fromMenu)
@@ -210,6 +232,7 @@ public partial class Playground : Form
             document.Save();
          }
 
+         var status = (message: "Success", type: UiActionType.Success);
          try
          {
             textConsole.Clear();
@@ -225,22 +248,26 @@ public partial class Playground : Form
             if (_machine is (true, var machine))
             {
                machine.PackageFolder = packageFolder.FullPath;
+               var value = "not executed";
                if (execute)
                {
                   var _result = machine.Execute();
-                  if (!_result)
+                  if (_result is (true, var result))
                   {
-                     textWriter.WriteLine(KAGAMI_EXCEPTION_PROMPT + _result.Exception.Message);
+                     cancelled = context.Cancelled();
+                     context.Reset();
+                     value = $"{result.Image} | {result.ClassName}";
+                  }
+                  else
+                  {
                      _exceptionIndex = compiler.ExceptionIndex;
                      if (!_exceptionIndex)
                      {
                         _exceptionIndex = textEditor.SelectionStart;
                      }
-                  }
-                  else
-                  {
-                     cancelled = context.Cancelled();
-                     context.Reset();
+
+                     value = "exception";
+                     status = (message: _result.Exception.Message, type: UiActionType.Failure);
                   }
                }
 
@@ -278,11 +305,22 @@ public partial class Playground : Form
 
                document.Clean();
 
-               labelStatus.Text = stopwatch.Elapsed.ToLongString(true) + (cancelled ? " (cancelled)" : "");
+               uiElapsed.Message(stopwatch.Elapsed.ToLongString(true));
+               if (cancelled)
+               {
+                  uiValue.Failure("cancelled");
+               }
+               else if (value == "exception")
+               {
+                  uiValue.Failure(value);
+               }
+               else
+               {
+                  uiValue.Success(value);
+               }
             }
             else
             {
-               textWriter.WriteLine(KAGAMI_EXCEPTION_PROMPT + _machine.Exception.Message);
                _exceptionIndex = compiler.ExceptionIndex;
                if (!_exceptionIndex)
                {
@@ -297,16 +335,19 @@ public partial class Playground : Form
                      showException(index, remainingLineLength);
                   }
                }
+
+               status = (message: _machine.Exception.Message, type: UiActionType.Failure);
             }
          }
          catch (Exception exception)
          {
-            textWriter.WriteLine(KAGAMI_EXCEPTION_PROMPT + exception.Message);
+            status = (exception.Message, UiActionType.Failure);
          }
          finally
          {
             locked = false;
             isDirty = false;
+            uiStatus.ShowMessage(status.message, status.type);
          }
       }
    }

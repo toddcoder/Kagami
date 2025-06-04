@@ -1,6 +1,5 @@
 ﻿using Core.Collections;
 using Core.Monads;
-using Core.Objects;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.CollectionFunctions;
@@ -9,15 +8,15 @@ namespace Kagami.Library.Objects;
 
 public class List : IObject, ICollection
 {
-   public static List Empty => new();
+   public static List Empty => new(nil, null!);
 
    public static List Single(IObject value) => new(value.Some(), Empty);
 
    public static List Cons(IObject head, IObject tail)
    {
-      if (tail is List list)
+      if (head is List list)
       {
-         return new List(head.Some(), list);
+         return list.Concatenate()
       }
       else
       {
@@ -38,31 +37,26 @@ public class List : IObject, ICollection
 
    public static List NewList(Container list) => NewList(list.List);
 
-   protected Maybe<IObject> _head;
-   protected LateLazy<List> tail = new(true);
+   protected Maybe<IObject> _head = nil;
+   protected List tail = null!;
 
    public List(Maybe<IObject> head, List tail)
    {
       _head = head;
-      this.tail.ActivateWith(() => tail);
+      this.tail = tail;
    }
 
    public List(IObject head, IObject tail)
    {
       _head = head.Some();
-      this.tail.ActivateWith(() => Single(tail));
-   }
-
-   public List()
-   {
-      _head = nil;
+      this.tail = Single(tail);
    }
 
    public bool IsString { get; set; }
 
    public Maybe<IObject> Head => _head;
 
-   public List Tail => tail.Value;
+   public List Tail => tail;
 
    public List Init
    {
@@ -70,7 +64,7 @@ public class List : IObject, ICollection
       {
          if (_head is (true, var head))
          {
-            return tail.Value.IsEmpty ? Empty : Cons(head, tail.Value.Init);
+            return tail.IsEmpty ? Empty : Cons(head, tail.Init);
          }
          else
          {
@@ -85,7 +79,7 @@ public class List : IObject, ICollection
       {
          if (_head)
          {
-            return tail.Value.IsEmpty ? _head : tail.Value.Last;
+            return tail.IsEmpty ? _head : tail.Last;
          }
          else
          {
@@ -102,7 +96,7 @@ public class List : IObject, ICollection
    {
       if (_head is (true, var head))
       {
-         return (first ? "" : divider) + $"{mapping(head)}{tail.Value.getText(divider, mapping, false)}";
+         return (first ? "" : divider) + $"{mapping(head)}{tail.getText(divider, mapping, false)}";
       }
       else
       {
@@ -114,11 +108,11 @@ public class List : IObject, ICollection
 
    public string Image => IsString ? show(this, "$\"", o => o.AsString, "\"") : show(this, "[(", o => o.Image, ")]");
 
-   public int Hash => (_head.Map(h => h.Hash) | 0 + tail.Value.Hash).GetHashCode();
+   public int Hash => (_head.Map(h => h.Hash) | 0 + tail.Hash).GetHashCode();
 
    public bool IsEqualTo(IObject obj) => obj switch
    {
-      List list when _head is (true, var h1) && list._head is (true, var h2) => h1.IsEqualTo(h2) && tail.Value.IsEqualTo(list.tail.Value),
+      List list when _head is (true, var h1) && list._head is (true, var h2) => h1.IsEqualTo(h2) && tail.IsEqualTo(list.tail),
       List list when !_head && !list._head => true,
       _ => false
    };
@@ -142,7 +136,7 @@ public class List : IObject, ICollection
             var rHead = l2._head.Map(v => v) | (() => Empty);
             if (getPlaceholder(rHead) is (true, var placeholder))
             {
-               if (l2.tail.Value.IsEmpty)
+               if (l2.tail.IsEmpty)
                {
                   bindings[placeholder] = l1;
                   return true;
@@ -202,6 +196,15 @@ public class List : IObject, ICollection
       left.AddRange(other.GetIterator(false).List());
 
       return NewList(left);
+   }
+
+   public IObject Concatenate(IObject value)
+   {
+      if (_head is (true, var head))
+      {
+         var current = head;
+         var 
+      }
    }
 
    protected static IObject getItem(List list, int currentIndex, int expectedIndex)
