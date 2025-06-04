@@ -29,6 +29,8 @@ public class Operations
 
    public void PushAddress() => addressStack.Push(address + 1);
 
+   public void SaveAddress() => addressStack.Push(address);
+
    public void PopAddress()
    {
       if (addressStack.Pop() is (true, var previousAddress))

@@ -51,9 +51,12 @@ public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields
 
    public virtual IObject Invoke(params IObject[] arguments)
    {
-      var _value = Machine.Current.Value.Invoke(invokable1, new Arguments(arguments), fields);
+      var machine = Machine.Current.Value;
+      machine.SaveAddress();
+      var _value = machine.Invoke(invokable1, new Arguments(arguments), fields);
       if (_value is (true, var value))
       {
+         machine.PopAddress();
          return value;
       }
       else if (_value.Exception is (true, var exception))

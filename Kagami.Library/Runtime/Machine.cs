@@ -660,6 +660,8 @@ public class Machine
 
    public void PushAddress() => operations.PushAddress();
 
+   public void SaveAddress() => operations.SaveAddress();
+
    public void PopAddress() => operations.PopAddress();
 
    public string StackAsString => stack.Peek().ToString();

@@ -61,6 +61,27 @@ public class Processor : CommandProcessor
       }
    }
 
+   [Command("show")]
+   public void Show()
+   {
+      if (File is (true, var file))
+      {
+         var context = new ConsoleContext();
+         var compiler = new Compiler(file.Text, compilerConfiguration, context);
+         _machine = compiler.Generate();
+         if (_machine && compiler.Operations is (true, var operations))
+         {
+            System.Console.WriteLine();
+            System.Console.WriteLine("Operations:");
+            System.Console.WriteLine(operations);
+         }
+      }
+      else
+      {
+         System.Console.WriteLine("No file specified for compilation.");
+      }
+   }
+
    public override StringHash GetConfigurationDefaults()
    {
       StringHash hash = [];
