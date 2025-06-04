@@ -40,7 +40,7 @@ public class Invoke : OneOperandOperation
       }
       else
       {
-         var returnAddress = machine.Address + 1;
+         var returnAddress = machine.Address;
          var frame = new Frame(returnAddress, fields);
          machine.PushFrame(frame);
          frame = new Frame(arguments);
@@ -52,7 +52,7 @@ public class Invoke : OneOperandOperation
 
    public static void InvokeConstructor(Machine machine, IInvokable invokable, Arguments arguments, Fields fields)
    {
-      var returnAddress = machine.Address + 1;
+      var returnAddress = machine.Address;
       var frame = new Frame(returnAddress, arguments, fields);
       machine.PushFrame(frame);
       frame.SetFields(invokable.Parameters);
@@ -90,7 +90,10 @@ public class Invoke : OneOperandOperation
    protected string fieldName;
    protected bool increment;
 
-   public Invoke(string fieldName) => this.fieldName = fieldName;
+   public Invoke(string fieldName)
+   {
+      this.fieldName = fieldName;
+   }
 
    public override Optional<IObject> Execute(Machine machine, IObject value)
    {

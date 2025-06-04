@@ -88,10 +88,6 @@ public class Function : Statement
 
    public override void Generate(OperationsBuilder builder)
    {
-      /*
-      var invokable = GetInvokable();
-      lambda = new Lambda(invokable);
-      */
       var _index = builder.RegisterInvokable(lambda.Value.Invokable, block, overriding);
       if (_index)
       {

@@ -7,7 +7,10 @@ public class UserRangeItem : IRangeItem
 {
    protected UserObject userObject;
 
-   public UserRangeItem(UserObject userObject) => this.userObject = userObject;
+   public UserRangeItem(UserObject userObject)
+   {
+      this.userObject = userObject;
+   }
 
    public int Compare(IObject obj)
    {

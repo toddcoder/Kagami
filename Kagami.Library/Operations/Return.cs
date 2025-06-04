@@ -16,7 +16,7 @@ public class Return : Operation
       var frames = machine.PopFrames();
       if (frames.FunctionFrame is (true, var frame))
       {
-         var returnAddress = frame.Address;
+         //var returnAddress = frame.Address;
          if (returnTopOfStack)
          {
             if (_response is (true, var value))
@@ -29,7 +29,7 @@ public class Return : Operation
             }
             else
             {
-               return emptyStack();
+               return emptyStack("value");
             }
          }
          else
@@ -37,11 +37,11 @@ public class Return : Operation
             _response = nil;
          }
 
-         return machine.GoTo(returnAddress) ? _response : badAddress(returnAddress);
+         return _response; //machine.GoTo(returnAddress) ? _response : badAddress(returnAddress);
       }
       else
       {
-         return invalidStack();
+         return invalidStack("frame");
       }
    }
 
@@ -51,7 +51,7 @@ public class Return : Operation
 
    public override Optional<IObject> Execute(Machine machine) => ReturnAction(machine, returnTopOfStack);
 
-   public override bool Increment => false;
+   public override bool Increment => true;
 
    public override string ToString() => $"return({returnTopOfStack.ToString().ToLower()})";
 

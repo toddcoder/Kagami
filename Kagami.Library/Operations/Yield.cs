@@ -66,7 +66,7 @@ public class Yield : Operation
       }
       else
       {
-         return invalidStack();
+         return invalidStack("frame");
       }
    }
 
