@@ -12,6 +12,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+  <PropertyGroup>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Kagami.Library\Parsers\**" />
     <EmbeddedResource Remove="Kagami.Library\Parsers\**" />
@@ -28,6 +32,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="System.Resources.Extensions" Version="9.0.5" />
+    <PackageReference Include="System.Text.Encodings.Web" Version="9.0.5" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Kagami.Awk\Awk.cs" />
@@ -677,5 +683,8 @@
     <Compile Remove="Kagami.Text\StringBufferClass.cs" />
     <Compile Remove="Kagami.Text\Text.cs" />
     <Compile Remove="Kagami.Text\TextClass.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
 </Project>

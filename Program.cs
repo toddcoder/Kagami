@@ -101,7 +101,7 @@ internal class Program : CommandLineInterface, IContext
 
    public Result<string> ReadLine()
    {
-      var line = Console.ReadLine();
+      var line = System.Console.ReadLine();
       return line!.Must().Not.BeNull().OrFailure("Input cancelled");
    }
 
