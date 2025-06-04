@@ -28,9 +28,9 @@ public class Yield : Operation
          else
          {
             IObject copy;
-            if (popped is IPristineCopy pc)
+            if (popped is IPristineCopy pristineCopy)
             {
-               copy = pc.Copy();
+               copy = pristineCopy.Copy();
             }
             else
             {

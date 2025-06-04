@@ -1,13 +1,14 @@
-﻿using System.Text.RegularExpressions;
-using Core.Matching;
+﻿using Core.Matching;
+using Core.Monads;
+using Core.Strings;
 using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Runtime;
-using Core.Monads;
-using Core.Strings;
-using static Kagami.Library.Parsers.ParserFunctions;
+using System.Text.RegularExpressions;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.Parsers.ParserFunctions;
+using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Statements;
 
@@ -176,70 +177,56 @@ public partial class FunctionParser : StatementParser
    {
       List<If> list = [];
 
-      var _result = state.BeginBlock();
-      if (_result)
+      state.CreateReturnType();
+      while (state.More)
       {
-         state.CreateReturnType();
-         while (state.More)
+         var caseParser = new CaseParser(parameters[0].Name);
+         state.SkipEndOfLine();
+         var _scan = caseParser.Scan(state);
+         if (_scan)
          {
-            var caseParser = new CaseParser(parameters[0].Name);
-            state.SkipEndOfLine();
-            var _scan = caseParser.Scan(state);
-            if (_scan)
+            if (caseParser.If is (true, var @if))
             {
-               if (caseParser.If is (true, var @if))
-               {
-                  @if.AddReturnIf();
-                  list.Add(@if);
-               }
-            }
-            else if (_scan.Exception is (true, var exception))
-            {
-               return exception;
-            }
-            else
-            {
-               break;
+               @if.AddReturnIf();
+               list.Add(@if);
             }
          }
-
-         if (list.Count == 0)
+         else if (_scan.Exception is (true, var exception))
          {
-            state.RemoveReturnType();
-
-            return nil;
+            return exception;
          }
          else
          {
-            var stack = new Stack<If>();
-            foreach (var ifStatement in list)
-            {
-               stack.Push(ifStatement);
-            }
-
-            var previousIf = stack.Pop();
-            while (stack.Count > 0)
-            {
-               var current = stack.Pop();
-               current.ElseIf = previousIf.Some();
-               previousIf = current;
-            }
-
-            state.AddStatement(new MatchFunction(functionName, parameters, previousIf, overriding, className));
-            _result = state.EndBlock();
-            if (!_result)
-            {
-               return _result.Exception;
-            }
-
-            state.RemoveReturnType();
-
-            return unit;
+            break;
          }
+      }
+
+      if (list.Count == 0)
+      {
+         state.RemoveReturnType();
+
+         return nil;
       }
       else
       {
-         return _result.Exception;
+         var stack = new Stack<If>();
+         foreach (var ifStatement in list)
+         {
+            stack.Push(ifStatement);
+         }
+
+         var previousIf = stack.Pop();
+         while (stack.Count > 0)
+         {
+            var current = stack.Pop();
+            current.ElseIf = previousIf.Some();
+            previousIf = current;
+         }
+
+         state.AddStatement(new MatchFunction(functionName, parameters, previousIf, overriding, className));
+         state.RemoveReturnType();
+
+         return unit;
       }
    }
 }
