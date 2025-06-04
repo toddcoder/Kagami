@@ -72,6 +72,7 @@ public class StringClass : BaseClass, ICollectionClass
       messages["succ()"] = (obj, _) => function<KString>(obj, s => s.Succ());
       messages["pred()"] = (obj, _) => function<KString>(obj, s => s.Pred());
       messages["range()"] = (obj, _) => function<KString>(obj, s => s.Range());
+      messages["replace(_<Regex>, _<String>)"] = (obj, msg) => function<KString, Regex, KString>(obj, msg, (s, r, t) => r.Replace(s.Value, t.Value));
    }
 
    protected static IObject getIndexed(KString s, IObject i)

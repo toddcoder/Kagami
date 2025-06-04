@@ -508,7 +508,19 @@ public partial class Playground : Form
       }
    }
 
-   protected void textEditor_TextChanged(object sender, EventArgs e) => isDirty = true;
+   protected void textEditor_TextChanged(object sender, EventArgs e)
+   {
+      if (locked)
+      {
+         isDirty = false;
+         document.Clean();
+      }
+      else
+      {
+         isDirty = true;
+         //document.Dirty();
+      }
+   }
 
    protected void textEditor_KeyPress(object sender, KeyPressEventArgs e)
    {
