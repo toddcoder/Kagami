@@ -62,11 +62,12 @@ public class YieldingInvokable : IInvokable, ICollection, IObject
          switch (result)
          {
             case None:
+               Machine.Current.Value.Operations.Advance(-1);
                return nil;
-            case YieldReturn yr:
-               Address = yr.Address + 1;
-               Frames = yr.Frames;
-               return yr.ReturnValue.Some();
+            case YieldReturn yieldReturn:
+               Address = yieldReturn.Address + 1;
+               Frames = yieldReturn.Frames;
+               return yieldReturn.ReturnValue.Some();
             default:
                throw incompatibleClasses(result, "YieldReturn");
          }

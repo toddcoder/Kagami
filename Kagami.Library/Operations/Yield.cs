@@ -17,7 +17,7 @@ public class Yield : Operation
       LazyResult<IObject> _popped = nil;
       if (topFrame.IsEmpty)
       {
-         _value = None.NoneValue.Just();
+         _value = nil; //None.NoneValue.Just();
       }
       else if (_popped.ValueOf(topFrame.Pop()) is (true, var popped))
       {
@@ -43,7 +43,9 @@ public class Yield : Operation
             }
 
             popped = copy;
-            _value = new YieldReturn(popped, machine.Address, frames);
+            var machineAddress = machine.Address;
+            machine.PopAddress();
+            _value = new YieldReturn(popped, machineAddress, frames);
          }
       }
       else

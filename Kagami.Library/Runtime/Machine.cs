@@ -243,7 +243,6 @@ public class Machine
                   PopAddress();
                   return Return.ReturnAction(this, rtn.ReturnTopOfStack);
                case Yield:
-                  PopAddress();
                   return Yield.YieldAction(this).Just();
                case Invoke invoke:
                {

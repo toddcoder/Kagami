@@ -30,6 +30,7 @@ public class Invoke : OneOperandOperation
       invokable.Arguments = arguments;
       var iterator = invokable.GetIterator(false);
       machine.Push((IObject)iterator);
+      machine.PopAddress();
    }
 
    public static void InvokeInvokable(Machine machine, IInvokable invokable, Arguments arguments, Fields fields)

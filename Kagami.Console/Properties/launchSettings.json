@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Kagami.Console": {
+      "commandName": "Project",
+      "commandLineArgs": "run --file C:\\Users\\TEBENNETT\\Documents\\Kagami\\tutorial.kagami"
+    }
+  }
+}

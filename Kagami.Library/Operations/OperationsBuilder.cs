@@ -326,11 +326,7 @@ public class OperationsBuilder
 
    public void Failure() => add(new Failure());
 
-   public void Yield()
-   {
-      add(new Yield());
-      PopAddress();
-   }
+   public void Yield() => add(new Yield());
 
    public void NewObject(string className, Parameters parameters) => add(new NewObject(className, parameters));
 
