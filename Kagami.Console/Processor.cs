@@ -34,10 +34,10 @@ public class Processor : CommandProcessor
    [Command("run")]
    public void Compile()
    {
-      if (File is (true, var fileName))
+      if (File is (true, var file))
       {
          var context = new ConsoleContext();
-         var compiler = new Compiler(fileName.Text, compilerConfiguration, context);
+         var compiler = new Compiler(file.Text, compilerConfiguration, context);
          _machine = compiler.Generate();
          if (_machine is (true, var machine))
          {
