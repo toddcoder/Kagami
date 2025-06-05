@@ -12,8 +12,6 @@ public partial class ListParser : SymbolParser
    {
    }
 
-   //public override string Pattern => $"^ /(/s*) /'{REGEX_LIST_LEFT}' /(/s*)";
-
    [GeneratedRegex($@"^(\s*)({REGEX_LIST_LEFT})(\s*)")]
    public override partial Regex Regex();
 

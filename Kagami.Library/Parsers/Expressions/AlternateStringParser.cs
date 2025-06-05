@@ -14,8 +14,6 @@ public partial class AlternateStringParser : SymbolParser
    {
    }
 
-   //public override string Pattern => "^ /(/s*) /['rl'] /[dquote]";
-
    [GeneratedRegex(@"^(\s*)([rl])("")")]
    public override partial Regex Regex();
 

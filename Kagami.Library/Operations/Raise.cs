@@ -9,13 +9,20 @@ public class Raise : TwoOperandOperation
 {
    public override Optional<IObject> Execute(Machine machine, IObject x, IObject y)
    {
-      if (x is INumeric n1 && y is INumeric n2)
+      try
       {
-         return n1.Raise(n2).Just();
+         if (x is INumeric n1 && y is INumeric n2)
+         {
+            return n1.Raise(n2).Just();
+         }
+         else
+         {
+            return sendMessage(x, "^", y).Just();
+         }
       }
-      else
+      catch (Exception exception)
       {
-         return sendMessage(x, "^", y).Just();
+         return exception;
       }
    }
 

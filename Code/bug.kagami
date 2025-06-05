@@ -1,6 +1,5 @@
-﻿func square(x) = x * x
-square(2)
-square(5 + 3)
-square(square(4))
-func sumOfSquares(x, y) = square(x) + square(y)
-sumOfSquares(3, 2 + 2)
+﻿func square(x) = x ^ 2
+func toStr(x Int) = x.string
+func reverse(x String) = x.reverse()
+
+let result = 32 |> &square(_) |> &toStr(_<Int>) |> &reverse(_<String>)

@@ -94,9 +94,9 @@ public class List : IObject, ICollection
       }
    }
 
-   public string AsString => IsString ? getText("", v => v.AsString) : getText(" ", v => v.AsString);
+   public string AsString => IsString ? getText("", v => v.AsString) : getText(" ", v => v.AsString).Trim();
 
-   public string Image => IsString ? "[(" + getText(", ", o => o.AsString) + ")]" : "[(" + getText(", ", o => o.AsString) + ")]";
+   public string Image => IsString ? $"l\"{getText("", o => o.AsString)}\"" : $"[:{getText(" ", o => o.AsString).Trim()}:]";
 
    public int Hash => (_head.Map(h => h.Hash) | 0 + tail.Hash).GetHashCode();
 

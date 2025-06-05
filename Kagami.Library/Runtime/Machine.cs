@@ -268,7 +268,7 @@ public class Machine
                      }
                      else
                      {
-                        return _address.Exception;
+                        return exception;
                      }
                   }
 

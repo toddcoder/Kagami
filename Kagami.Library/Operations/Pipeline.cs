@@ -13,16 +13,7 @@ public class Pipeline : TwoOperandOperation
       switch (y)
       {
          case Lambda lambda:
-            if (x is ICollection collection)
-            {
-               var array = collection.GetIterator(false).List().ToArray();
-               return lambda.Invoke(array).Just();
-            }
-            else
-            {
-               return lambda.Invoke(x).Just();
-            }
-
+            return lambda.Invoke(x).Just();
          case IMayInvoke mi:
             return mi.Invoke(x).Just();
          case Message message:

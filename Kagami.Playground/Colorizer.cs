@@ -36,7 +36,7 @@ public class Colorizer
          textBox.SelectionFont = isBold(token.Color) ? boldFont : font;
       }
 
-      markText("/s+ (/r /n | /r | /n)", Color.PaleVioletRed);
+      markText("/s+ (/r /n | /r | /n)", Color.BlanchedAlmond);
    }
 
    protected void markText(string pattern, Color backColor)
@@ -62,6 +62,7 @@ public class Colorizer
       Library.Parsers.Color.CollectionPart => true,
       Library.Parsers.Color.Keyword => true,
       Library.Parsers.Color.Char => true,
+      Library.Parsers.Color.Selector => true,
       _ => false
    };
 
@@ -116,6 +117,7 @@ public class Colorizer
       Library.Parsers.Color.Type => Color.DarkCyan,
       Library.Parsers.Color.OpenParenthesis => getParenthesisColor(color, ref parenthesesCount),
       Library.Parsers.Color.CloseParenthesis => getParenthesisColor(color, ref parenthesesCount),
+      Library.Parsers.Color.Selector => Color.CadetBlue,
       _ => Color.Black
    };
 }

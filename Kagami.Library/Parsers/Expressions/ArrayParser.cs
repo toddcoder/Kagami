@@ -8,18 +8,19 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class ArrayParser : SymbolParser
 {
-   public ArrayParser(ExpressionBuilder builder) : base(builder) { }
+   public ArrayParser(ExpressionBuilder builder) : base(builder)
+   {
+   }
 
-   //public override string Pattern => "^ /(/s*) /'[' /(/s*)";
-
-   [GeneratedRegex(@"^(\s*)(\[)(?![\(\.])")]
+   [GeneratedRegex(@"^(\s*)(\[)(?![:\.])")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
       state.Colorize(tokens, Color.Whitespace, Color.Collection);
 
-      var _expression = getExpression(state, @"^(\s*)(?<![\)\.])(\])", builder.Flags & ~ExpressionFlags.OmitComma, Color.Whitespace, Color.Collection);
+      var _expression = getExpression(state, @"^(\s*)(?<![:\.])(\])", builder.Flags & ~ExpressionFlags.OmitComma, Color.Whitespace,
+         Color.Collection);
       if (_expression is (true, var expression))
       {
          builder.Add(new ArraySymbol(expression));

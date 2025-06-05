@@ -1,10 +1,9 @@
-﻿namespace Kagami.Library.Nodes.Symbols
+﻿namespace Kagami.Library.Nodes.Symbols;
+
+public enum Arity
 {
-   public enum Arity
-   {
-      Nullary,
-      Prefix,
-      Postfix,
-      Binary
-   }
+   Nullary,
+   Prefix,
+   Postfix,
+   Binary
 }

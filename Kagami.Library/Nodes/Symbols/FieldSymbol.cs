@@ -1,21 +1,20 @@
 ﻿using Kagami.Library.Operations;
 
-namespace Kagami.Library.Nodes.Symbols
+namespace Kagami.Library.Nodes.Symbols;
+
+public class FieldSymbol : Symbol
 {
-   public class FieldSymbol : Symbol
-   {
-      protected string fieldName;
+   protected string fieldName;
 
-      public FieldSymbol(string fieldName) => this.fieldName = fieldName;
+   public FieldSymbol(string fieldName) => this.fieldName = fieldName;
 
-      public override void Generate(OperationsBuilder builder) => builder.Field(this);
+   public override void Generate(OperationsBuilder builder) => builder.Field(this);
 
-      public override Precedence Precedence => Precedence.Value;
+   public override Precedence Precedence => Precedence.Value;
 
-      public override Arity Arity => Arity.Nullary;
+   public override Arity Arity => Arity.Nullary;
 
-      public override string ToString() => fieldName;
+   public override string ToString() => fieldName;
 
-      public string FieldName => fieldName;
-   }
+   public string FieldName => fieldName;
 }
