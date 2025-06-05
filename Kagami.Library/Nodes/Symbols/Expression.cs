@@ -53,4 +53,6 @@ public class Expression : Symbol
          }
       }
    }
+
+   public int SpecialComparisandIndex { get; set; } = -1;
 }

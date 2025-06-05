@@ -11,8 +11,6 @@ public partial class NegateParser : SymbolParser
    {
    }
 
-   //public override string Pattern => "^ /(/s*) /'-' -(> '>')";
-
    [GeneratedRegex(@"^(\s*)(-)(?!>)")]
    public override partial Regex Regex();
 

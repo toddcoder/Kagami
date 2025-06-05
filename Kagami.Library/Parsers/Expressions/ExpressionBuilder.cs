@@ -30,6 +30,11 @@ public class ExpressionBuilder(Bits32<ExpressionFlags> flags)
          if (stack.Pop() is (true, var poppedSymbol))
          {
             symbols.Add(poppedSymbol);
+
+            if (poppedSymbol is ISpecialComparisand)
+            {
+               SpecialComparisandIndex = symbols.Count - 1;
+            }
          }
          else
          {
@@ -44,6 +49,11 @@ public class ExpressionBuilder(Bits32<ExpressionFlags> flags)
       else
       {
          symbols.Add(symbol);
+
+         if (symbol is ISpecialComparisand)
+         {
+            SpecialComparisandIndex = symbols.Count - 1;
+         }
       }
    }
 
@@ -55,6 +65,11 @@ public class ExpressionBuilder(Bits32<ExpressionFlags> flags)
          if (_symbol is (true, var symbol))
          {
             symbols.Add(symbol);
+
+            if (symbol is ISpecialComparisand)
+            {
+               SpecialComparisandIndex = symbols.Count - 1;
+            }
          }
          else
          {
@@ -65,7 +80,8 @@ public class ExpressionBuilder(Bits32<ExpressionFlags> flags)
       return unit;
    }
 
-   public Result<Expression> ToExpression() => EndOfExpression().Map(_ => new Expression(symbols.ToArray()));
+   public Result<Expression> ToExpression() =>
+      EndOfExpression().Map(_ => new Expression(symbols.ToArray()) { SpecialComparisandIndex = SpecialComparisandIndex });
 
    public IEnumerable<Symbol> Ordered => ordered;
 
@@ -81,4 +97,6 @@ public class ExpressionBuilder(Bits32<ExpressionFlags> flags)
    }
 
    public Maybe<Symbol> LastSymbol => _lastSymbol;
+
+   public int SpecialComparisandIndex { get; set; } = -1;
 }

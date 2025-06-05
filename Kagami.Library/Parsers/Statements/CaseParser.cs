@@ -38,8 +38,6 @@ public partial class CaseParser : StatementParser
       caseType = CaseType.Function;
    }
 
-   //public override string Pattern => "^ /(/s*) /'case' /(/s*)";
-
    [GeneratedRegex(@"^(\s*)(case)(\s+)")]
    public override partial Regex Regex();
 

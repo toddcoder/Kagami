@@ -81,9 +81,23 @@ public static class ParserFunctions
       var _comparisand = getExpression(state, flags);
       if (_comparisand is (true, var comparisand))
       {
-         builder.Add(new FieldSymbol(fieldName));
-         builder.Add(comparisand);
-         builder.Add(new MatchSymbol());
+         var specialComparisandIndex = comparisand.SpecialComparisandIndex;
+         if (specialComparisandIndex == -1)
+         {
+            builder.Add(new FieldSymbol(fieldName));
+            builder.Add(comparisand);
+            builder.Add(new MatchSymbol());
+         }
+         else
+         {
+            if (comparisand.Symbols[specialComparisandIndex] is ISpecialComparisand specialComparisand)
+            {
+               specialComparisand.FieldName = fieldName;
+            }
+
+            builder.Add(comparisand);
+         }
+
          var _scanned = state.Scan(@"^(\s*)(&)", Color.Whitespace, Color.OpenParenthesis);
          if (_scanned)
          {
@@ -1148,9 +1162,6 @@ public static class ParserFunctions
 
             break;
          }
-         /*case ";":
-            _symbol = new SkipTakeOperatorPopSymbol();
-            break;*/
          case "::":
             _symbol = new ConsSymbol();
             break;

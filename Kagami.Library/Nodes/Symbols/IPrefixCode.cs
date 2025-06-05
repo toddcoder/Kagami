@@ -1,7 +1,6 @@
-﻿namespace Kagami.Library.Nodes.Symbols
+﻿namespace Kagami.Library.Nodes.Symbols;
+
+public interface IPrefixCode
 {
-	public interface IPrefixCode
-	{
-		void Prefix();
-	}
+   void Prefix();
 }

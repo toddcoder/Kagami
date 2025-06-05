@@ -19,7 +19,6 @@ public class ExpressionParser : PatternlessParser
    protected InfixParser infixParser;
    protected PostfixParser postfixParser;
    protected ConjunctionParsers conjunctionParsers;
-   //protected EndOfLineParser endOfLineParser = new();
    protected int whateverCount;
 
    public ExpressionParser(Bits32<ExpressionFlags> flags) : base(false)
@@ -59,29 +58,7 @@ public class ExpressionParser : PatternlessParser
          var _term0 = getTerm(state);
          if (_term0)
          {
-            /*
-            var _anticipated = anticipateBrackets(state);
-            var notEndOfLine = true;
-            if (_anticipated)
-            {
-               notEndOfLine = false;
-            }
-            else if (_anticipated.Exception is (true, var anticipatedException))
-            {
-               return anticipatedException;
-            }
-            */
-
             var isEndOfLine = endOfLine(state);
-            /*var _endOfLine = endOfLineParser.Scan(state);
-            if (_endOfLine)
-            {
-               notEndOfLine = false;
-            }
-            else if (_endOfLine.Exception is (true, var endOfLineException))
-            {
-               return endOfLineException;
-            }*/
 
             while (!isEndOfLine && state.More)
             {
@@ -104,26 +81,7 @@ public class ExpressionParser : PatternlessParser
                   var _term1 = getTerm(state);
                   if (_term1)
                   {
-                     /*_anticipated = anticipateBrackets(state);
-                     if (_anticipated)
-                     {
-                        notEndOfLine = false;
-                     }
-                     else if (_anticipated.Exception is (true, var anticipatedException))
-                     {
-                        return anticipatedException;
-                     }*/
-
                      isEndOfLine = endOfLine(state);
-                     /*_endOfLine = endOfLineParser.Scan(state);
-                     if (_endOfLine)
-                     {
-                        notEndOfLine = false;
-                     }
-                     else if (_endOfLine.Exception is (true, var endOfLineException))
-                     {
-                        return endOfLineException;
-                     }*/
                   }
                   else if (_term1.Exception is (true, var exception))
                   {
@@ -205,38 +163,9 @@ public class ExpressionParser : PatternlessParser
       }
    }
 
-   protected bool keep(string fieldName)
-   {
-      var exp = builder.Ordered.ToArray();
-      if (exp.Length != 1)
-      {
-         return true;
-      }
-      else
-      {
-         return exp[0] is not FieldSymbol fieldSymbol || fieldSymbol.FieldName != fieldName;
-      }
-   }
-
    protected static Result<Expression> getMessageWithLambda(Symbol symbol, Selector selector, int parameterCount, Expression expression)
    {
       var parameters = new Parameters(Enumerable.Range(0, parameterCount).Select(i => $"__${i}").ToArray());
-      var lambdaSymbol = new LambdaSymbol(parameters, new Block(new Return(expression, nil)));
-      var sendMessage = new SendMessageSymbol(selector, lambdaSymbol.Some());
-
-      var builder = new ExpressionBuilder(ExpressionFlags.Standard);
-      builder.Add(symbol);
-      builder.Add(sendMessage);
-
-      return builder.ToExpression();
-   }
-
-   protected static Result<Expression> getMessage2WithLambda(string leftName, string rightName, Symbol symbol, Selector selector,
-      Expression expression)
-   {
-      var leftParameter = Parameter.New(false, leftName);
-      var rightParameter = Parameter.New(false, rightName);
-      var parameters = new Parameters(leftParameter, rightParameter);
       var lambdaSymbol = new LambdaSymbol(parameters, new Block(new Return(expression, nil)));
       var sendMessage = new SendMessageSymbol(selector, lambdaSymbol.Some());
 

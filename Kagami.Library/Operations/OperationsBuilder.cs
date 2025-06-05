@@ -311,10 +311,7 @@ public class OperationsBuilder
 
    public void IsClass(string className, bool pop) => add(new IsClass(className, pop));
 
-   public void Match()
-   {
-      CallSysFunction2((sys, x, y) => sys.Match(x, y), "sys.match(x, y,)");
-   }
+   public void Match() => add(new Match());
 
    public void Drop() => add(new Drop());
 
