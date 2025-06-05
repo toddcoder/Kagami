@@ -8,7 +8,7 @@ public class ConsSymbol : Symbol
    public override void Generate(OperationsBuilder builder)
    {
       builder.ToArguments(2);
-      builder.NewValue("List", args => List.Cons(args[0], args[1]));
+      builder.NewValue("List", args => List.Cons(args[0], (List)args[1]));
    }
 
    public override Precedence Precedence => Precedence.Concatenate;

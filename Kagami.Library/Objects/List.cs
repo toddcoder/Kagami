@@ -12,17 +12,7 @@ public class List : IObject, ICollection
 
    public static List Single(IObject value) => new(value.Some(), Empty);
 
-   public static List Cons(IObject head, IObject tail)
-   {
-      if (head is List list)
-      {
-         return list.Concatenate()
-      }
-      else
-      {
-         return new List(head, tail);
-      }
-   }
+   public static List Cons(IObject @object, List list) => new(@object, list);
 
    public static List NewList(IEnumerable<IObject> list)
    {
@@ -106,7 +96,7 @@ public class List : IObject, ICollection
 
    public string AsString => IsString ? getText("", v => v.AsString) : getText(" ", v => v.AsString);
 
-   public string Image => IsString ? show(this, "$\"", o => o.AsString, "\"") : show(this, "[(", o => o.Image, ")]");
+   public string Image => IsString ? "[(" + getText(", ", o => o.AsString) + ")]" : "[(" + getText(", ", o => o.AsString) + ")]";
 
    public int Hash => (_head.Map(h => h.Hash) | 0 + tail.Hash).GetHashCode();
 
@@ -196,15 +186,6 @@ public class List : IObject, ICollection
       left.AddRange(other.GetIterator(false).List());
 
       return NewList(left);
-   }
-
-   public IObject Concatenate(IObject value)
-   {
-      if (_head is (true, var head))
-      {
-         var current = head;
-         var 
-      }
    }
 
    protected static IObject getItem(List list, int currentIndex, int expectedIndex)

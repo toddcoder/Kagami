@@ -1,2 +1,6 @@
-﻿let vowels = [('e', 'i', 'o', 'u')]
-vowels :: 'a'
+﻿func square(x) = x * x
+square(2)
+square(5 + 3)
+square(square(4))
+func sumOfSquares(x, y) = square(x) + square(y)
+sumOfSquares(3, 2 + 2)

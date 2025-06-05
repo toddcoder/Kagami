@@ -64,7 +64,7 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
                }
             }
 
-            return fields[labelsOnlyImage];
+            return fields.Maybe[labelsOnlyImage].Optional();
          }
       }
    }
