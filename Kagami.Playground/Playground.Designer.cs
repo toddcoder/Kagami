@@ -75,6 +75,7 @@
          textEditor.Text = "";
          textEditor.SelectionChanged += textEditor_SelectionChanged;
          textEditor.TextChanged += textEditor_TextChanged;
+         textEditor.KeyDown += textEditor_KeyDown;
          textEditor.KeyPress += textEditor_KeyPress;
          textEditor.KeyUp += textEditor_KeyUp;
          // 

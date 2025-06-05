@@ -51,6 +51,7 @@ public partial class Playground : Form
 
    public Playground()
    {
+      UiAction.BusyStyle = BusyStyle.BarberPole;
       InitializeComponent();
       firstEditorLine = 0;
    }
@@ -186,17 +187,17 @@ public partial class Playground : Form
 
          var builder = new TableLayoutBuilder(table);
          _ = builder.Col + 30f + 200 + 70f + 200;
-         _ = builder.Row + 50f + 40 + 100f;
+         _ = builder.Row + 50f + 50f + 40;
          builder.SetUp();
 
          (builder + textEditor).SpanCol(4).Row();
+
+         (builder + textConsole).SpanCol(4).Row();
 
          (builder + uiValue).Next();
          (builder + uiElapsed).Next();
          (builder + uiStatus).Next();
          (builder + uiRun).Row();
-
-         (builder + textConsole).SpanCol(4).Row();
 
          document.Open(playgroundConfiguration.LastFile);
       }
@@ -235,6 +236,7 @@ public partial class Playground : Form
          var status = (message: "Success", type: UiActionType.Success);
          try
          {
+            uiStatus.Busy(true);
             textConsole.Clear();
             context.ClearPeeks();
             stopwatch.Reset();
@@ -607,6 +609,17 @@ public partial class Playground : Form
             moveSelectionRelative();
             e.Handled = true;
             break;
+         case '\'':
+            if (textAtInsert(1) == "'")
+            {
+               moveSelectionRelative();
+               e.Handled = true;
+               break;
+            }
+
+            insertDelimiterText("''", -1, 0);
+            e.Handled = true;
+            break;
          case ',':
             if (textAtInsert(1) != ",")
             {
@@ -735,4 +748,31 @@ public partial class Playground : Form
    }
 
    protected void timerIdle_Tick(object sender, EventArgs e) => idle.CheckIdleTime();
+
+   protected void textEditor_KeyDown(object sender, KeyEventArgs e)
+   {
+      if (e.KeyCode == Keys.Back)
+      {
+         deleteMatching('(', ')');
+         deleteMatching('[', ']');
+         deleteMatching('{', '}');
+         deleteMatching('\'', '\'');
+         deleteMatching('"', '"');
+      }
+      return;
+
+      void deleteMatching(char left, char right)
+      {
+         var caretPosition = textEditor.SelectionStart;
+         if (caretPosition > 0 && textEditor.TextLength > 0)
+         {
+            if (textEditor.Text[caretPosition - 1] == left && caretPosition < textEditor.TextLength && textEditor.Text[caretPosition] == right)
+            {
+               textEditor.Text = textEditor.Text.Remove(caretPosition - 1, 2);
+               textEditor.SelectionStart = caretPosition - 1;
+               e.SuppressKeyPress = true;
+            }
+         }
+      }
+   }
 }
