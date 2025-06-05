@@ -1039,7 +1039,8 @@ public static class ParserFunctions
          _nextIf = nextIf.ElseIf;
       }
 
-      current.Else = new Block(new Return(new Expression(new ObjectSymbol(Unmatched.Value)), nil));
+      //current.Else = new Block(new Return(new Expression(new ObjectSymbol(Unmatched.Value)), nil));
+      current.Else = new Block(new FailedMatch());
    }
 
    public static Optional<PossibleAndSymbol> andExpression(ParseState state)

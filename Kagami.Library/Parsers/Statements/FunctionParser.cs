@@ -14,14 +14,14 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class FunctionParser : StatementParser
 {
-   [GeneratedRegex($@"^(\s*)(override\s+)?(func|op|def)(\s+)(?:({REGEX_CLASS_GETTING})(\.))?({REGEX_FUNCTION_NAME})(\()?")]
+   [GeneratedRegex($@"^(\s*)(override\s+)?(func|op|macro)(\s+)(?:({REGEX_CLASS_GETTING})(\.))?({REGEX_FUNCTION_NAME})(\()?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
       var overriding = tokens[2].Text.StartsWith("override");
       var isOperator = tokens[3].Text == "op";
-      var isMacro = tokens[4].Text == "def";
+      var isMacro = tokens[3].Text == "macro";
 
       var className = tokens[5].Text;
       if (className.IsEmpty() && TraitName.IsNotEmpty())

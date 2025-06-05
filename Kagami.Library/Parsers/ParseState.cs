@@ -280,7 +280,7 @@ public class ParseState : IEnumerable<Statement>
 
    public Maybe<Expression> DefExpression(string fieldName) => defExpressions.Maybe[fieldName];
 
-   public void RegisterMacro(Function function) => macros[function.Selector] = function;
+   public void RegisterMacro(Function function) => macros[function.Selector.Name] = function;
 
    public Maybe<Function> Macro(string fullFunctionName) => macros.Maybe[fullFunctionName];
 

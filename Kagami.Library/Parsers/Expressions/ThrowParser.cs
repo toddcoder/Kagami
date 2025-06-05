@@ -11,8 +11,6 @@ public partial class ThrowParser : EndingInExpressionParser
    {
    }
 
-   //public override string Pattern => "^ /(/s*) /'throw' /b";
-
    [GeneratedRegex(@"^(\s*)(throw)\b", RegexOptions.Compiled)]
    public override partial Regex Regex();
 
