@@ -9,7 +9,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class MatchAssignParser : StatementParser
 {
-   [GeneratedRegex(@"^(\s*)(val)\b")]
+   [GeneratedRegex(@"^(\s*)(case)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)

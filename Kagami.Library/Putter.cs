@@ -1,22 +1,32 @@
-﻿namespace Kagami.Library
+﻿namespace Kagami.Library;
+
+public class Putter
 {
-   public class Putter
+   protected bool putting;
+
+   public Putter() => putting = false;
+
+   public string Put(string value)
    {
-      protected bool putting;
-
-      public Putter() => putting = false;
-
-      public string Put(string value)
+      if (putting)
       {
-         if (putting)
-         {
-            return $" {value}";
-         }
-
-         putting = true;
-         return value;
+         return $" {value}";
       }
 
-      public void Reset() => putting = false;
+      putting = true;
+      return value;
    }
+
+   public string Put(string value, string separator)
+   {
+      if (putting)
+      {
+         return $"{separator}{value}";
+      }
+
+      putting = true;
+      return value;
+   }
+
+   public void Reset() => putting = false;
 }

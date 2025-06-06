@@ -1,19 +1,20 @@
 ﻿using Core.Monads;
 
-namespace Kagami.Library.Runtime
+namespace Kagami.Library.Runtime;
+
+public interface IContext
 {
-   public interface IContext
-   {
-      void Print(string value);
+   void Print(string value);
 
-      void PrintLine(string value);
+   void PrintLine(string value);
 
-      void Put(string value);
+   void Put(string value);
 
-      Result<string> ReadLine();
+   void Put(string value, string separator);
 
-      bool Cancelled();
+   Result<string> ReadLine();
 
-      void Peek(string message, int index);
-   }
+   bool Cancelled();
+
+   void Peek(string message, int index);
 }

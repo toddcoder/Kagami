@@ -12,8 +12,6 @@ public partial class SliceParser : SymbolParser
    {
    }
 
-//   public override string Pattern => "^ /'{'";
-
    [GeneratedRegex("^({)")]
    public override partial Regex Regex();
 
@@ -25,7 +23,7 @@ public partial class SliceParser : SymbolParser
 
       while (state.More)
       {
-         var _skipTake = getSkipTake(state, builder.Flags | ExpressionFlags.OmitComma);
+         var _skipTake = getSkipTake(state, builder.Flags | ExpressionFlags.OmitColon);
          if (_skipTake is (true, var skipTake))
          {
             skipTakes.Add(skipTake);

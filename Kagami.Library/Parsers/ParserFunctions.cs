@@ -16,6 +16,7 @@ using static System.Int32;
 using static Kagami.Library.AllExceptions;
 using static Core.Monads.MonadFunctions;
 using Array = System.Array;
+using Group = System.Text.RegularExpressions.Group;
 using SkipTake = Kagami.Library.Parsers.Expressions.SkipTake;
 
 namespace Kagami.Library.Parsers;
@@ -1283,60 +1284,19 @@ public static class ParserFunctions
       }
    }
 
-   public static Optional<(int, int, Maybe<Expression>, Maybe<Expression>)> getSkipTakeItem(ParseState state)
-   {
-      var parser = new SkipTakeItemParser();
-      return parser.Scan(state).Map(_ => (parser.Skip, parser.Take, parser.Prefix, parser.Suffix));
-   }
-
-   public static Optional<SkipTakeItem[]> getSkipTakeItems(ParseState state)
-   {
-      var list = new List<SkipTakeItem>();
-      while (state.More && getSkipTakeItem(state) is (true, var (skip, take, prefix, suffix)))
-      {
-         list.Add(new SkipTakeItem(skip, take, prefix, suffix));
-         if (state.Scan(@"^(\})", Color.Structure))
-         {
-            break;
-         }
-
-         var _scan = state.Scan(@"^(\s*)(,)(\s*)", Color.Whitespace, Color.Structure, Color.Whitespace);
-         if (_scan)
-         {
-         }
-         else if (_scan.Exception is (true, var exception))
-         {
-            return exception;
-         }
-         else
-         {
-            return fail("Expected ,");
-         }
-      }
-
-      if (list.Count == 0)
-      {
-         return nil;
-      }
-      else
-      {
-         return (SkipTakeItem[]) [.. list];
-      }
-   }
-
    public static Optional<Unit> anticipateBrackets(ParseState state) => state.CurrentSource.Matches("^ /s* ['{}']").Map(_ => unit).Optional();
 
    public static Optional<SkipTake> getSkipTake(ParseState state, ExpressionFlags flags)
    {
       var skipTake = new SkipTake();
 
-      var _noSkipMatch = state.Scan(@"^(\s*)(,)", Color.Whitespace, Color.Structure);
+      var _noSkipMatch = state.Scan(@"^(\s*)(:)", Color.Whitespace, Color.Structure);
       if (_noSkipMatch)
       {
       }
-      else if (_noSkipMatch.Exception is (true, var exception))
+      else if (_noSkipMatch.Exception is (true, var noSkipMatchException))
       {
-         return exception;
+         return noSkipMatchException;
       }
       else
       {
@@ -1345,12 +1305,12 @@ public static class ParserFunctions
          {
             skipTake.Skip = skipExpression;
          }
-         else if (_skipExpression.Exception is (true, var exception2))
+         else if (_skipExpression.Exception is (true, var skipExpressionException))
          {
-            return exception2;
+            return skipExpressionException;
          }
 
-         var _semiOrEnd = state.Scan(@"^(\s*)([;,}])", Color.Whitespace, Color.Structure);
+         var _semiOrEnd = state.Scan(@"^(\s*)([;:}])", colorize);
          if (_semiOrEnd is (true, var semiOrEnd))
          {
             switch (semiOrEnd)
@@ -1362,9 +1322,9 @@ public static class ParserFunctions
                   return skipTake;
             }
          }
-         else if (_semiOrEnd.Exception is (true, var exception3))
+         else if (_semiOrEnd.Exception is (true, var semiOrEndException))
          {
-            return exception3;
+            return semiOrEndException;
          }
       }
 
@@ -1378,7 +1338,7 @@ public static class ParserFunctions
          return exception;
       }
 
-      var _end = state.Scan(@"^(\s*)([};])", Color.Whitespace, Color.Structure);
+      var _end = state.Scan(@"^(\s*)([};])", colorize);
       if (_end is (true, var end))
       {
          switch (end)
@@ -1394,5 +1354,12 @@ public static class ParserFunctions
       }
 
       return skipTake;
+
+      Color colorize(Group g, int i) => i switch
+      {
+         1 => Color.Whitespace,
+         2 when g.Value == "}" => Color.CloseParenthesis,
+         _ => Color.Structure
+      };
    }
 }

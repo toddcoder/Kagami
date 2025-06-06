@@ -247,6 +247,7 @@ public abstract class BaseClass
          (obj, message) => collectionFunc<KString>(obj, message, (c, connector) => c.MakeString(connector.Value)));
       registerMessage("indexed()", (obj, _) => collectionFunc(obj, c => (IObject)c.GetIndexedIterator()));
       registerMessage("[](_<SkipTake>)", (obj, message) => ((ISkipTakeable)obj)[(SkipTake)message.Arguments[0]]);
+      registerMessage("range()", (obj, _) => collectionFunc(obj, c => new KRange(new Int(0), c.Length, false)));
 
       loadIteratorMessages();
    }

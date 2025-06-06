@@ -11,7 +11,6 @@ public partial class TakeOperatorParser : SymbolParser
    {
    }
 
-   //public override string Pattern => "^ /(/s*) /'*;'";
 
    [GeneratedRegex(@"^(\s*)(\*;)", RegexOptions.Compiled)]
    public override partial Regex Regex();

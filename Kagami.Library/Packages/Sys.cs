@@ -48,14 +48,35 @@ public class Sys : Package
 
    public KString Put(Arguments arguments)
    {
-      var value = arguments.Select(a => a.AsString).ToString(" ");
-
-      foreach (var argument in arguments)
+      switch (arguments.Length)
       {
-         Machine.Current.Value.Context.Put(argument.AsString);
-      }
+         case 1:
+         {
+            var value = arguments[0].AsString;
+            Machine.Current.Value.Context.Put(value);
 
-      return value;
+            return value;
+         }
+         case 2:
+         {
+            var value = arguments[0].AsString;
+            var separator = arguments[1].AsString;
+            Machine.Current.Value.Context.Put(value, separator);
+
+            return value;
+         }
+         default:
+         {
+            var value = arguments.Select(a => a.AsString).ToString(" ");
+
+            foreach (var argument in arguments)
+            {
+               Machine.Current.Value.Context.Put(argument.AsString);
+            }
+
+            return value;
+         }
+      }
    }
 
    public IObject Readln()

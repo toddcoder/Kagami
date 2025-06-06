@@ -36,6 +36,8 @@ public class PlaygroundContext : IContext
 
    public void Put(string value) => writer.Write(putter.Put(value));
 
+   public void Put(string value, string separator) => writer.Write(putter.Put(value, separator));
+
    public Result<string> ReadLine()
    {
       putter.Reset();

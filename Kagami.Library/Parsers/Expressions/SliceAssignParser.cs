@@ -12,20 +12,18 @@ public partial class SliceAssignParser : SymbolParser
    {
    }
 
-   //public override string Pattern => "^ /'{'";
-
    [GeneratedRegex("^({)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
       state.BeginTransaction();
-      state.Colorize(tokens, Color.Structure);
+      state.Colorize(tokens, Color.OpenParenthesis);
 
       var _symbol =
-         from skipTake in getSkipTake(state, builder.Flags | ExpressionFlags.OmitComma)
+         from skipTake in getSkipTake(state, builder.Flags | ExpressionFlags.OmitColon)
          from scan in state.Scan(@"^(\s*)(=)", Color.Whitespace, Color.Structure)
-         from expression in getExpression(state, builder.Flags | ExpressionFlags.OmitComma)
+         from expression in getExpression(state, builder.Flags | ExpressionFlags.OmitColon)
          select new SliceAssignSymbol(skipTake, expression);
       if (_symbol is (true, var symbol))
       {

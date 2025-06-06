@@ -7,8 +7,6 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class StopParser : StatementParser
 {
-   //public override string Pattern => "^ /'stop' /b";
-
    [GeneratedRegex(@"^(stop)\b")]
    public override partial Regex Regex();
 

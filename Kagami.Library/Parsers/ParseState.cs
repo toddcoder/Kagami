@@ -191,6 +191,39 @@ public class ParseState : IEnumerable<Statement>
          return exception;
       }
    }
+   
+   public Optional<string> Scan(string pattern, Func<Group, int, Color> colorFunc) => Scan(pattern, RegexOptions.None, colorFunc);
+
+   public Optional<string> Scan(string pattern, RegexOptions options, Func<Group, int, Color> colorFunc)
+   {
+      try
+      {
+         var regex = new System.Text.RegularExpressions.Regex(pattern, options);
+         var matches = regex.Matches(CurrentSource);
+         if (matches.Count > 0)
+         {
+            var match = matches[0];
+            Group[] groupArray = [.. match.AllGroups().Skip(1).Take(match.Groups.Count - 1)];
+            var groupIndex = 1;
+            foreach (var group in groupArray)
+            {
+               var length = group.Length;
+               AddToken(colorFunc(group, groupIndex++), length, group.Value);
+               Move(length);
+            }
+
+            return match.Value;
+         }
+         else
+         {
+            return nil;
+         }
+      }
+      catch (Exception exception)
+      {
+         return exception;
+      }
+   }
 
    public Optional<string> SkipEndOfLine() => Scan("(^\r\n|^\r|^\n)", Color.Whitespace);
 

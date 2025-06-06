@@ -9,8 +9,6 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class ConditionalWhileParser : StatementParser
 {
-   //public override string Pattern => "^ /'while' /(/s+)";
-
    [GeneratedRegex(@"^(while)(\s+)")]
    public override partial Regex Regex();
 

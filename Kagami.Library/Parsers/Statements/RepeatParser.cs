@@ -9,8 +9,6 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class RepeatParser : StatementParser
 {
-//public override string Pattern => "^ /'repeat' /b";
-
    [GeneratedRegex("^(repeat)\b")]
    public override partial Regex Regex();
 

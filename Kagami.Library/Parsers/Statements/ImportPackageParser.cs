@@ -8,8 +8,6 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class ImportPackageParser : StatementParser
 {
-   //public override string Pattern => $"^ /'import' /(/s+) /({REGEX_FIELD}) {REGEX_ANTICIPATE_END}";
-
    [GeneratedRegex($@"^(import)(\s+)({REGEX_FIELD}){REGEX_ANTICIPATE_END}")]
    public override partial Regex Regex();
 

@@ -12,7 +12,6 @@ public class StatementsParser : MultiParser
    {
       get
       {
-         //yield return new EndOfLineParser();
          yield return new CommentParser();
          yield return new ClassParser();
          yield return new NamedStaticParser();
@@ -27,6 +26,7 @@ public class StatementsParser : MultiParser
          yield return new WhileParser();
          yield return new ForParser();
          yield return new RepeatParser();
+         yield return new ExitContinueParser();
 
          yield return new MatchParser();
          yield return new YieldParser();

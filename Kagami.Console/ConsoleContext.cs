@@ -34,6 +34,8 @@ public class ConsoleContext : IContext
 
    public void Put(string value) => System.Console.Write(putter.Put(value));
 
+   public void Put(string value, string separator) => System.Console.Write(putter.Put(value, separator));
+
    public Result<string> ReadLine()
    {
       putter.Reset();
