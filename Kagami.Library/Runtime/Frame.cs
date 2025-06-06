@@ -120,13 +120,13 @@ public class Frame
 
          if (variadic)
          {
-            var tupleList = new List<IObject> { lastValue };
+            List<IObject> tupleList = [lastValue];
             for (var i = length; i < arguments.Length; i++)
             {
                tupleList.Add(arguments[i]);
             }
 
-            var tuple = new KTuple(tupleList.ToArray());
+            var tuple = new KTuple([.. tupleList]);
             fields.Assign(lastName, tuple, true).Force();
          }
          else if (length < parameters.Length)

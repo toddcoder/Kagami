@@ -1,5 +1,3 @@
 ﻿func square(x) = x ^ 2
-func toStr(x Int) = x.string
-func reverse(x String) = x.reverse()
-
-let result = 32 |> &square(_) |> &toStr(_<Int>) |> &reverse(_<String>)
+func sumOfSquares(x, y) = square(x) + square(y)
+func abs(x) = x ? x >= 0 : -x

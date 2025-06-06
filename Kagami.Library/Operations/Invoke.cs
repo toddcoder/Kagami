@@ -64,17 +64,17 @@ public class Invoke : OneOperandOperation
    {
       switch (value)
       {
-         case IInvokableObject io:
-            InvokeInvokableObject(machine, io, arguments);
-            increment = io.Invokable is YieldingInvokable;
+         case IInvokableObject invokableObject:
+            InvokeInvokableObject(machine, invokableObject, arguments);
+            increment = invokableObject.Invokable is YieldingInvokable;
 
             return nil;
-         case PackageFunction pf:
+         case PackageFunction packageFunction:
             increment = true;
-            return pf.Invoke(arguments).Just();
-         case IMayInvoke mi:
+            return packageFunction.Invoke(arguments).Just();
+         case IMayInvoke mayInvoke:
             increment = true;
-            return mi.Invoke(arguments.Value).Just();
+            return mayInvoke.Invoke(arguments.Value).Just();
          case Pattern pattern:
             increment = true;
             var copy = pattern.Copy();

@@ -15,7 +15,7 @@ namespace Kagami.Library.Runtime;
 
 public class Machine
 {
-   protected const int MAX_DEPTH = 128;
+   protected const int MAX_DEPTH = 1024;
 
    public static LateLazy<Machine> Current { get; set; } = new(true);
 

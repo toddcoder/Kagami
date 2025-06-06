@@ -23,7 +23,9 @@ public class Parameters : IEquatable<Parameters>, IEnumerable<Parameter>
       capturingParameters = parameters.Where(p => p.Capturing).ToArray();
    }
 
-   public Parameters() : this(Array.Empty<Parameter>()) { }
+   public Parameters() : this(Array.Empty<Parameter>())
+   {
+   }
 
    public Parameters(int count) : this(Enumerable.Range(0, count).Select(i => Parameter.New(false, $"__${i}")).ToArray())
    {
