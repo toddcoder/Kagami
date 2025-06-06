@@ -1,12 +1,12 @@
 ﻿using Core.DataStructures;
-using Kagami.Library.Invokables;
-using Kagami.Library.Objects;
 using Core.Enumerables;
 using Core.Monads;
 using Core.Strings;
+using Kagami.Library.Invokables;
+using Kagami.Library.Objects;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
-using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Runtime;
 
@@ -84,18 +84,36 @@ public class Frame
          if (variadic)
          {
             var parameter = parameters[0];
-            var tuple = new KTuple(arguments.ToArray());
-            if (!fields.ContainsKey(parameter.Name))
+            if (parameter.Singleton && arguments.Length == 1)
             {
-               fields.New(parameter.Name, parameter.Mutable).Force();
+               if (!fields.ContainsKey(parameter.Name))
+               {
+                  fields.New(parameter.Name, parameter.Mutable).Force();
+               }
+
+               if (parameter.TypeConstraint is (true, var typeConstraint) && !typeConstraint.Matches(classOf(lastValue)))
+               {
+                  throw incompatibleClasses(lastValue, typeConstraint.AsString);
+               }
+
+               fields.Assign(parameter.Name, arguments[0], true).Force();
+            }
+            else
+            {
+               var tuple = new KTuple([.. arguments]);
+               if (!fields.ContainsKey(parameter.Name))
+               {
+                  fields.New(parameter.Name, parameter.Mutable).Force();
+               }
+
+               if (parameter.TypeConstraint is (true, var typeConstraint) && !typeConstraint.Matches(classOf(lastValue)))
+               {
+                  throw incompatibleClasses(lastValue, typeConstraint.AsString);
+               }
+
+               fields.Assign(parameter.Name, tuple, true).Force();
             }
 
-            if (parameter.TypeConstraint is (true, var typeConstraint) && !typeConstraint.Matches(classOf(lastValue)))
-            {
-               throw incompatibleClasses(lastValue, typeConstraint.AsString);
-            }
-
-            fields.Assign(parameter.Name, tuple, true).Force();
             return;
          }
 

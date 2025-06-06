@@ -102,5 +102,7 @@ public class Parameter : IEquatable<Parameter>
       }
    }
 
+   public bool Singleton { get; set; }
+
    public override string ToString() => name;
 }

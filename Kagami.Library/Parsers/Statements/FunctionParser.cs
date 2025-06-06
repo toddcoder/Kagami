@@ -65,7 +65,8 @@ public partial class FunctionParser : StatementParser
             var parameterName = newLabel("match");
             var variadicParameter = new Parameter(false, "", parameterName, nil, nil, false, false)
             {
-               Variadic = true
+               Variadic = true,
+               Singleton = true
             };
             var newParameters = new Parameters(variadicParameter);
             return getMatchFunction(state, functionName, newParameters, overriding, className);

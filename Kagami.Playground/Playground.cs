@@ -236,6 +236,7 @@ public partial class Playground : Form
          var status = (message: "Success", type: UiActionType.Success);
          try
          {
+            uiValue.NoStatus("");
             uiStatus.Busy(true);
             textConsole.Clear();
             context.ClearPeeks();
