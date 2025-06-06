@@ -12,10 +12,8 @@ public partial class KeywordOperatorsParser : SymbolParser
    {
    }
 
-   //public override string Pattern => "^ /(/s*) /('to' | 'til' | 'by' | 'if' | 'map' | 'join' | 'sort' |'foldl' | 'foldr' | 'all' | 'any' | 'none' | 'one' | 'zip' | 'downto' | 'skip' | 'take' | 'band' | 'bor' | 'bxor' | 'bsl' | 'bsr' | 'while' | 'until' | 'min' | 'max' | 'does' | 'x') /(/s+)";
-
    [GeneratedRegex(
-      @"^(\s*)(to|til|by|if|map|join|sort|foldl|foldr|all|any|none|one|zip|downto|skip|take|band|bor|bxor|bsl|bsr|while|until|min|max|does|x)(\s+)")]
+      @"^(\s*)(to|til|by|if|map|join|sort|foldl|foldr|all|any|none|one|zip|downto|skip|take|band|bor|bxor|bsl|bsr|while|until|min|max|does|x|div|r)(\s+)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -98,6 +96,12 @@ public partial class KeywordOperatorsParser : SymbolParser
                   break;
                case "x":
                   builder.Add(new SendBinaryMessageSymbol("cross(_)", Precedence.Concatenate));
+                  break;
+               case "div":
+                  builder.Add(new IntDivideSymbol());
+                  break;
+               case "r":
+                  builder.Add(new RationalSymbol());
                   break;
                default:
                   return fail($"Keyword internal error for {keyword}");

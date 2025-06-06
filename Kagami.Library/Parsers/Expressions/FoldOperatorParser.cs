@@ -21,7 +21,7 @@ public partial class FoldOperatorParser : SymbolParser
       var source = tokens[3].Text;
       state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Operator);
 
-      var _operator = getOperator(state, source, builder.Flags, true);
+      var _operator = getOperator(state, source, builder.Flags);
       if (_operator is (true, var symbol))
       {
          builder.Add(new FoldSymbol(prefix == "<:", symbol));

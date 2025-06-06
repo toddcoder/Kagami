@@ -22,7 +22,7 @@ public partial class ZipOperatorParser : SymbolParser
       var source = tokens[3].Text;
       state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Operator, Color.Operator);
 
-      var _symbol = getOperator(state, source, builder.Flags, true);
+      var _symbol = getOperator(state, source, builder.Flags);
       if (_symbol is (true, var symbol))
       {
          builder.Add(new ZipOperatorSymbol(symbol));

@@ -1067,7 +1067,7 @@ public static class ParserFunctions
       }
    }
 
-   public static Optional<Symbol> getOperator(ParseState state, string source, Bits32<ExpressionFlags> flags, bool whitespace)
+   public static Optional<Symbol> getOperator(ParseState state, string source, Bits32<ExpressionFlags> flags)
    {
       Optional<Symbol> _symbol = nil;
 
@@ -1083,10 +1083,7 @@ public static class ParserFunctions
             _symbol = new MultiplySymbol();
             break;
          case "/":
-            _symbol = whitespace ? new FloatDivideSymbol() : new RationalSymbol();
-            break;
-         case "//":
-            _symbol = new IntDivideSymbol();
+            _symbol = new FloatDivideSymbol();
             break;
          case "%":
             _symbol = new RemainderSymbol();
