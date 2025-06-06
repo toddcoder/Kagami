@@ -652,19 +652,6 @@ public static class ParserFunctions
       }
    }
 
-   public static Result<If> getIf(string parameterName, Symbol comparisand, Maybe<Expression> _and, Block block)
-   {
-      var builder = new ExpressionBuilder(ExpressionFlags.Standard);
-      builder.Add(new FieldSymbol(parameterName));
-      builder.Add(new SendMessageSymbol("match", new Expression(comparisand)));
-      if (_and)
-      {
-         builder.Add(_and);
-      }
-
-      return builder.ToExpression().Map(expression => new If(expression, block));
-   }
-
    public static Optional<LambdaSymbol> getPartialLambda(ParseState state)
    {
       if (!state.More)
@@ -1038,7 +1025,6 @@ public static class ParserFunctions
          _nextIf = nextIf.ElseIf;
       }
 
-      //current.Else = new Block(new Return(new Expression(new ObjectSymbol(Unmatched.Value)), nil));
       current.Else = new Block(new FailedMatch());
    }
 

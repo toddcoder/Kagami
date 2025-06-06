@@ -7,6 +7,7 @@ using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Runtime;
 using System.Text.RegularExpressions;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.Nodes.NodeFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 using Regex = System.Text.RegularExpressions.Regex;
 
@@ -61,7 +62,13 @@ public partial class FunctionParser : StatementParser
       {
          if (state.CurrentSource.IsMatch("^ /s* 'case' /b"))
          {
-            return getMatchFunction(state, functionName, parameters, overriding, className);
+            var parameterName = newLabel("match");
+            var variadicParameter = new Parameter(false, "", parameterName, nil, nil, false, false)
+            {
+               Variadic = true
+            };
+            var newParameters = new Parameters(variadicParameter);
+            return getMatchFunction(state, functionName, newParameters, overriding, className);
          }
          else if (state.CurrentSource.StartsWith('('))
          {
@@ -222,6 +229,8 @@ public partial class FunctionParser : StatementParser
             current.ElseIf = previousIf.Some();
             previousIf = current;
          }
+
+         previousIf.Else = new Block(new FailedMatch());
 
          state.AddStatement(new MatchFunction(functionName, parameters, previousIf, overriding, className));
          state.RemoveReturnType();

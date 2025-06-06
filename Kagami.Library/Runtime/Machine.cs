@@ -486,7 +486,8 @@ public class Machine
          }
       }
 
-      return nil;
+      Selector variadicSelector = $"{selector.Name}(_...)";
+      return findExact(variadicSelector);
    }
 
    protected Optional<Field> findExact(Selector selector) => Find(selector.Image, true);

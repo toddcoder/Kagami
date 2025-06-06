@@ -12,8 +12,6 @@ public partial class SubexpressionParser : SymbolParser
    {
    }
 
-   //public override string Pattern => "^ /(/s*) /'(' /','?";
-
    [GeneratedRegex(@"^(\s*)(\()(,)?")]
    public override partial Regex Regex();
 

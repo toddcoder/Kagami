@@ -20,4 +20,6 @@ public class Match : TwoOperandOperation
          return KBoolean.False.Just();
       }
    }
+
+   public override string ToString() => "match";
 }

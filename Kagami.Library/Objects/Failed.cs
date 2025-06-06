@@ -1,5 +1,4 @@
-﻿using System;
-using static Core.Monads.MonadFunctions;
+﻿using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Objects;
 
