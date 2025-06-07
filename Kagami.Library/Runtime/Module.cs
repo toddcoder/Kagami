@@ -3,7 +3,7 @@ using Kagami.Library.Packages;
 using Core.Collections;
 using Core.Monads;
 using Core.Objects;
-using Kagami.Library.Objects;
+using Kagami.Library.Inclusions;
 using static Kagami.Library.AllExceptions;
 using static Core.Monads.MonadFunctions;
 
@@ -88,83 +88,10 @@ public class Module
    };
 
    protected LazyMemo<string, BaseClass> classes = new(getBuiltinClass);
-   protected Hash<string, Mixin> mixins = [];
+   protected StringHash<Inclusion> inclusions = [];
    protected Set<string> forwardReferences = [];
    protected Hash<string, string> dataReferences = [];
    protected Set<string> operators = [];
-
-   /*public void LoadBuiltinClasses()
-   {
-      classes["Int"] = new IntClass();
-      classes["Float"] = new FloatClass();
-      classes["Boolean"] = new BooleanClass();
-      classes["String"] = new StringClass();
-      classes["Char"] = new CharClass();
-      classes["Byte"] = new ByteClass();
-      classes["Message"] = new MessageClass();
-      classes["Unassigned"] = new UnassignedClass();
-      classes["Tuple"] = new TupleClass();
-      classes["NameValue"] = new NameValueClass();
-      classes["Lambda"] = new LambdaClass();
-      classes["Void"] = new VoidClass();
-      classes["Some"] = new SomeClass();
-      classes["None"] = new NoneClass();
-      classes["Array"] = new ArrayClass();
-      classes["Iterator"] = new IteratorClass();
-      classes["LazyIterator"] = new LazyIteratorClass();
-      classes["StreamIterator"] = new StreamIteratorClass();
-      classes["Any"] = new AnyClass();
-      classes["Placeholder"] = new PlaceholderClass();
-      classes["Range"] = new RangeClass();
-      classes["Dictionary"] = new DictionaryClass();
-      classes["Container"] = new ContainerClass();
-      classes["Unmatched"] = new UnmatchedClass();
-      classes["Complex"] = new ComplexClass();
-      classes["Rational"] = new RationalClass();
-      classes["Long"] = new LongClass();
-      classes["Lazy"] = new LazyClass();
-      classes["YieldingInvokable"] = new YieldingInvokableClass();
-      classes["Del"] = new DelClass();
-      classes["Slice"] = new SliceClass();
-      classes["End"] = new EndClass();
-      classes["List"] = new ListClass();
-      classes["Arguments"] = new ArgumentsClass();
-      classes["Symbol"] = new SymbolClass();
-      classes["Infinity"] = new InfinityClass();
-      classes["OpenRange"] = new OpenRangeClass();
-      classes["KeyValue"] = new KeyValueClass();
-      classes["Regex"] = new RegexClass();
-      classes["Pattern"] = new PatternClass();
-      classes["PackageFunction"] = new PackageFunctionClass();
-      classes["Sys"] = new SysClass();
-      classes["Math"] = new MathClass();
-      classes["RuntimeFunction"] = new RuntimeFunctionClass();
-      classes["Reference"] = new ReferenceClass();
-      classes["Group"] = new RegexGroupClass();
-      classes["Match"] = new RegexMatchClass();
-      classes["Date"] = new DateClass();
-      classes["Interval"] = new IntervalClass();
-      classes["TypeConstraint"] = new TypeConstraintClass();
-      classes["ByteArray"] = new ByteArrayClass();
-      classes["Selector"] = new SelectorClass();
-      classes["Number"] = new NumberClass();
-      classes["Collection"] = new CollectionClass();
-      classes["TextFinding"] = new TextFindingClass();
-      classes["SkipTake"] = new SkipTakeClass();
-      classes["Constructor"] = new ConstructorClass();
-      classes["MutString"] = new MutStringClass();
-      classes["Error"] = new ErrorClass();
-      classes["Success"] = new SuccessClass();
-      classes["Failure"] = new FailureClass();
-      classes["Optional"] = new OptionalClass();
-      classes["Result"] = new ResultClass();
-      classes["Monad"] = new MonadClass();
-      classes["Unit"] = new UnitClass();
-      classes["YieldReturn"] = new YieldReturnClass();
-      classes["Index"] = new IndexClass();
-      classes["Cycle"] = new CycleClass();
-      classes["Set"] = new SetClass();
-   }*/
 
    public Maybe<BaseClass> Class(string name, bool forwardsIncluded = false)
    {
@@ -182,7 +109,7 @@ public class Module
       }
    }
 
-   public Maybe<Mixin> Mixin(string name) => mixins.Maybe[name];
+   public Maybe<Inclusion> Inclusion(string name) => inclusions.Maybe[name];
 
    public Result<Unit> RegisterClass(BaseClass cls)
    {
@@ -198,11 +125,11 @@ public class Module
       }
    }
 
-   public void RegisterMixin(Mixin mixin)
+   public void RegisterInclusion(Inclusion inclusion)
    {
-      if (!mixins.ContainsKey(mixin.ClassName))
+      if (!inclusions.ContainsKey(inclusion.Name))
       {
-         mixins[mixin.ClassName] = mixin;
+         inclusions[inclusion.Name] = inclusion;
       }
    }
 

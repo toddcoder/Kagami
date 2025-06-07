@@ -1,9 +1,8 @@
-﻿namespace Kagami.Library.Classes
-{
-   public class ForwardedClass : BaseClass
-   {
-      public ForwardedClass(string name) => Name = name;
+﻿namespace Kagami.Library.Classes;
 
-      public override string Name { get; }
-   }
+public class ForwardedClass : BaseClass
+{
+   public ForwardedClass(string name) => Name = name;
+
+   public override string Name { get; }
 }

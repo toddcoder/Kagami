@@ -157,4 +157,8 @@ public static class AllExceptions
    public static string messageExceededMaxDepth() => "Exceeded max depth";
 
    public static Exception exceededMaxDepth() => fail(messageExceededMaxDepth());
+
+   public static string messageInclusionNotFound(string inclusionName)=> $"Inclusion {inclusionName} not found";
+
+   public static Exception inclusionNotFound(string inclusionName) => fail(messageInclusionNotFound(inclusionName));
 }
