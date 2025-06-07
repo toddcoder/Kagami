@@ -15,14 +15,12 @@ public partial class MixinIncludesParser : StatementParser
       this.mixins = mixins;
    }
 
-   //public override string Pattern => "^ /'includes' /b";
-
-   [GeneratedRegex("^(includes)\b")]
+   [GeneratedRegex(@"^(\s*)(:)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      state.Colorize(tokens, Color.Keyword);
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword);
 
       while (state.More)
       {

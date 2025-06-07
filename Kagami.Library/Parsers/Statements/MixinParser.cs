@@ -12,24 +12,16 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class MixinParser : StatementParser
 {
-   //public override string Pattern => $"^ /'mixin' /(/s+) /({REGEX_CLASS})";
-
-   [GeneratedRegex($@"^(mixin)(\s+)({REGEX_CLASS})")]
+   [GeneratedRegex($@"^(\s*)(mixin)(\s+)({REGEX_CLASS})")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      var className = tokens[3].Text;
+      var className = tokens[4].Text;
       Module.Global.Value.ForwardReference(className);
-      state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Class);
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Class);
 
-      var _result = state.BeginBlock();
-      if (!_result)
-      {
-         return _result.Exception;
-      }
-
-      var mixins = new List<Mixin>();
+      List<Mixin> mixins = [];
       while (state.More)
       {
          var mixinIncludesParser = new MixinIncludesParser(mixins);
@@ -37,20 +29,14 @@ public partial class MixinParser : StatementParser
          if (_scan)
          {
          }
-         else if (_scan.Exception is (true, var exception))
+         else if (_scan.Exception is (true, var exception2))
          {
-            return exception;
+            return exception2;
          }
          else
          {
             break;
          }
-      }
-
-      _result = state.EndBlock();
-      if (!_result)
-      {
-         return _result.Exception;
       }
 
       var _block = getBlock(state);
@@ -70,9 +56,9 @@ public partial class MixinParser : StatementParser
                if (_scan)
                {
                }
-               else if (_scan.Exception is (true, var exception))
+               else if (_scan.Exception is (true, var exception3))
                {
-                  return exception;
+                  return exception3;
                }
                else
                {

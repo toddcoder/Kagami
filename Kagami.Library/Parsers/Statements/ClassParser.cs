@@ -13,8 +13,6 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class ClassParser : StatementParser
 {
-   //public override string Pattern => $"^ /'class' /(/s+) /({REGEX_CLASS}) /'('?";
-
    [GeneratedRegex($@"^(class)(\s+)({REGEX_CLASS})(\()?")]
    public override partial Regex Regex();
 
