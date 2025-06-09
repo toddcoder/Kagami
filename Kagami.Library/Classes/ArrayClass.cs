@@ -35,7 +35,7 @@ public class ArrayClass : BaseClass, ICollectionClass
          function<KArray, IObject, Int>(obj, msg, (a, o, i) => a.Find(o, i.Value, false));
       messages["find".Selector("<Array>", "reverse:<Boolean>")] = (obj, msg) =>
          function<KArray, IObject, KBoolean>(obj, msg, (a, o, r) => a.Find(o, 0, r.Value));
-      messages["find"] = (obj, msg) =>
+      messages["find(_)"] = (obj, msg) =>
          function<KArray, IObject>(obj, msg, (a, o) => a.Find(o, 0, false));
       messages["find".Selector("all:<Array>")] = (obj, msg) =>
          function<KArray, IObject>(obj, msg, (a, o) => a.FindAll(o));

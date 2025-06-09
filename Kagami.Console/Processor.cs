@@ -1,6 +1,7 @@
 ﻿using Core.Applications.CommandProcessing;
 using Core.Collections;
 using Core.Computers;
+using Core.Enumerables;
 using Core.Monads;
 using Kagami.Library;
 using Kagami.Library.Runtime;
@@ -83,6 +84,57 @@ public class Processor : CommandProcessor
       else
       {
          System.Console.WriteLine("No file specified for compilation.");
+      }
+   }
+
+   [Command("repl")]
+   public void Repl()
+   {
+      List<string> source = [];
+      var context = new ConsoleContext();
+      while (true)
+      {
+         System.Console.Write("kagami> ");
+         var line = System.Console.ReadLine();
+         if (line is null or "quit")
+         {
+            break;
+         }
+         else
+         {
+            switch (line)
+            {
+               case "clear":
+                  source.Clear();
+                  System.Console.Clear();
+                  continue;
+               case "list":
+                  System.Console.WriteLine(source.ToString("\n"));
+                  continue;
+               case "reset":
+                  source.Clear();
+                  _machine = nil;
+                  System.Console.WriteLine("Reset complete.");
+                  continue;
+            }
+         }
+
+         source.Add(line);
+         var compiler = new Compiler(source.ToString("\n"), compilerConfiguration, context);
+         _machine = compiler.Generate();
+         if (_machine is (true, var machine))
+         {
+            var _result = machine.Execute();
+            if (_result is (true, var result) && !context.AnythingPrinted)
+            {
+               System.Console.WriteLine($"{result.Image} | {result.ClassName}");
+            }
+            else
+            {
+               source.RemoveAt(source.Count - 1);
+               System.Console.WriteLine(_result.Exception.Message);
+            }
+         }
       }
    }
 
