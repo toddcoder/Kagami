@@ -167,4 +167,12 @@ public static class AllExceptions
    public static string messageOperatorAlreadyExists(string name) => $"Operator {name} already exists";
 
    public static Exception operatorAlreadyExists(string name) => fail(messageOperatorAlreadyExists(name));
+
+   public static string messageSelectorIncorrectFormat(string selectorSource) => $"Selector {selectorSource} is incorrectly formatted";
+
+   public static Exception selectorIncorrectFormat(string selectorSource) => fail(messageSelectorIncorrectFormat(selectorSource));
+
+   public static string messageOperatorNotFound(string name) => $"Operator {name} not found";
+
+   public static Exception operatorNotFound(string name) => fail(messageOperatorNotFound(name));
 }

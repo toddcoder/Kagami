@@ -19,16 +19,14 @@ public partial class RequiredOrOptionalFunctionParser(Inclusion inclusion) : Sta
       try
       {
          var type = tokens[2].Text;
-         var selectorSource = tokens[4].Text;
-         var getterSetter = tokens[5].Text;
+         Selector selector = tokens[4].Text;
 
-         if 
-         state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Selector, Color.Selector);
+         state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Selector);
 
          Result<Unit> _result;
          if (type == "required")
          {
-            _result = inclusion.Register(new RequiredFunction(selector));
+            _result = inclusion.Register(new RequiredFunction(selector, inclusion));
          }
          else
          {

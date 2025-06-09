@@ -515,18 +515,21 @@ public static class ObjectFunctions
 
    public static Selector parseSelector(string source)
    {
-      if (!source.EndsWith(")"))
-      {
-         source = $"{source}(_)";
-      }
-
-      if (source.MatchOf(@$"^((?:__\$)?{REGEX_FUNCTION_NAME})\((.*)$") is (true, var matches))
+      if (source.MatchOf(@$"^((?:__\$)?{REGEX_FUNCTION_NAME})(.*)$") is (true, var matches))
       {
          var match = matches[0];
          var name = match.Groups[1].Value;
-         var rest = match.Groups[2].Value.KeepUntil(")");
+         var rest = match.Groups[2].Value;
+
+         if (!name.StartsWith("__$") && rest.IsEmpty())
+         {
+            rest = name.EndsWith('=') ? "(_)" : "()";
+            name = $"__${name}";
+         }
+
+         rest = rest.Substitute("^ '(' /(-[')']+) ')' $", "$1");
          SelectorItem[] items;
-         if (rest.IsEmpty())
+         if (rest.IsEmpty() || rest == "()")
          {
             items = [];
          }
@@ -536,11 +539,11 @@ public static class ObjectFunctions
             items = sourceItems.Select(parseSelectorItem).ToArray();
          }
 
-         return new Selector(name, items, source);
+         return new Selector(name, items, selectorImage(name, items));
       }
       else
       {
-         throw fail($"Can't convert {source} into a Selector");
+         throw selectorIncorrectFormat(source);
       }
    }
 

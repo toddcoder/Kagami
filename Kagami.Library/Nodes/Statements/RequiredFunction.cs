@@ -1,12 +1,15 @@
-﻿using Kagami.Library.Objects;
+﻿using Kagami.Library.Inclusions;
+using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using RequireFunction = Kagami.Library.Invokables.RequireFunction;
 
 namespace Kagami.Library.Nodes.Statements;
 
-public class RequiredFunction(Selector selector) : Statement
+public class RequiredFunction(Selector selector, Inclusion inclusion) : Statement
 {
    public Selector Selector => selector;
+
+   public Inclusion Inclusion => inclusion;
 
    public override void Generate(OperationsBuilder builder)
    {

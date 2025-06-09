@@ -9,6 +9,7 @@ using Core.Collections;
 using Core.Enumerables;
 using Core.Matching;
 using Core.Monads;
+using Core.Numbers;
 using Core.Strings;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.CommonFunctions;
@@ -27,6 +28,7 @@ public class ClassBuilder
    protected Hash<string, (ConstructorInvokable, Block)> constructorInvokables = [];
    protected List<(IInvokable, Block, bool)> functions = [];
    protected UserClass userClass = new("", "");
+   protected Set<Selector> requiredFunctions = [];
 
    public ClassBuilder(string className, Parameters parameters, string parentClassName, Expression[] parentArguments,
       bool initialize, Block constructorBlock)
@@ -121,8 +123,8 @@ public class ClassBuilder
                }
 
                statements.Add(statement);
-            }
                break;
+            }
             case AssignToNewField2 assignToNewField2:
             {
                var (comparisand, _) = assignToNewField2;
@@ -155,8 +157,9 @@ public class ClassBuilder
 
                   statements.Add(statement);
                }
-            }
+
                break;
+            }
             case Function function when standard:
             {
                var (selector, _, block, _, invokable, overriding) = function;
@@ -172,9 +175,14 @@ public class ClassBuilder
                   }
                }
 
+               if (requiredFunctions.Contains(selector))
+               {
+                  requiredFunctions.Remove(selector);
+               }
+
                statements.Add(statement);
-            }
                break;
+            }
             case MatchFunction matchFunction when standard:
             {
                var (functionName, _, block, _, invokable, overriding) = matchFunction;
@@ -191,12 +199,24 @@ public class ClassBuilder
                }
 
                statements.Add(statement);
-            }
                break;
+            }
+            case RequiredFunction requiredFunction:
+            {
+               requiredFunctions.Add(requiredFunction.Selector);
+               userClass.RegisterInclusion(requiredFunction.Inclusion);
+               break;
+            }
             default:
                statements.Add(statement);
                break;
          }
+      }
+
+      if (requiredFunctions.Count > 0)
+      {
+         var functionList = requiredFunctions.ToString(", ");
+         throw fail(requiredFunctions.Count.Plural($"Required function(s) {functionList} not implemented"));
       }
 
       statements.Add(new ReturnNewObject(className, parameters));

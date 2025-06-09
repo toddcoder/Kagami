@@ -37,8 +37,6 @@ public class UserClass : BaseClass
       }
    }
 
-   public bool Includes(string mixinClassName) => mixins.Values.Select(uc => uc.Name).Any(n => n == mixinClassName);
-
    public override string Name => className;
 
    public string ParentClassName => parentClassName;
@@ -158,11 +156,8 @@ public class UserClass : BaseClass
       return nil;
    }
 
-   public override void RegisterClassMessages()
-   {
-   }
-
-   public override bool ClassRespondsTo(Selector selector) => _metaObject.Map(uo => classOf(uo).RespondsTo(selector)) | false;
+   public override bool ClassRespondsTo(Selector selector) =>
+      _metaObject.Map(uo => classOf(uo).RespondsTo(selector)) | (() => base.ClassRespondsTo(selector));
 
    public override IObject ClassDynamicInvoke(Message message)
    {

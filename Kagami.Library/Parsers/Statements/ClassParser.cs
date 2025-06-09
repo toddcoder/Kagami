@@ -59,24 +59,6 @@ public partial class ClassParser : StatementParser
          return exception;
       }
 
-      /*List<Mixin> mixins = [];
-      while (state.More)
-      {
-         var mixinIncludesParser = new MixinIncludesParser(mixins);
-         var _scan2 = mixinIncludesParser.Scan(state);
-         if (_scan2)
-         {
-         }
-         else if (_scan2.Exception is (true, var exception))
-         {
-            return exception;
-         }
-         else
-         {
-            break;
-         }
-      }*/
-
       Module.Global.Value.ForwardReference(className);
 
       var _block = getBlock(state);

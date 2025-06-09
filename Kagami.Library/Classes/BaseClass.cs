@@ -1,4 +1,6 @@
-﻿using Core.Objects;
+﻿using Core.Collections;
+using Core.Objects;
+using Kagami.Library.Inclusions;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using static Kagami.Library.AllExceptions;
@@ -19,6 +21,7 @@ public abstract class BaseClass
    protected Func<IObject, Message, IObject> dynamicInvoke;
    protected Func<Message, IObject> classDynamicInvoke;
    protected Fields classFields = new();
+   protected StringHash<Inclusion> inclusions = [];
 
    public BaseClass()
    {
@@ -91,6 +94,7 @@ public abstract class BaseClass
    public virtual void RegisterClassMessages()
    {
       registerClassMessage("name".get(), (_, _) => KString.StringObject(Name));
+      registerClassMessage("includes(_<String>)", (_, message) => (KBoolean)inclusions.ContainsKey(message.Arguments[0].AsString));
    }
 
    public virtual void RegisterMessage(Selector selector, Func<IObject, Message, IObject> func) => messages[selector] = func;
@@ -600,4 +604,8 @@ public abstract class BaseClass
       registerMessage("bind(_<Lambda>)", (obj, message) => ((IMonad)obj).Bind((Lambda)message.Arguments[0]));
       registerMessage("unit(_)", (obj, message) => ((IMonad)obj).Unit(message.Arguments[0]));
    }
+
+   public void RegisterInclusion(Inclusion inclusion) => inclusions[inclusion.Name] = inclusion;
+
+   public bool Includes(string inclusionName) => inclusions.ContainsKey(inclusionName);
 }
