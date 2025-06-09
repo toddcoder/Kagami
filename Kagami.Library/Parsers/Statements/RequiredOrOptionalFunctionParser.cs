@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using Core.Monads;
 using Kagami.Library.Inclusions;
+using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Objects;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
@@ -18,8 +19,11 @@ public partial class RequiredOrOptionalFunctionParser(Inclusion inclusion) : Sta
       try
       {
          var type = tokens[2].Text;
-         Selector selector = tokens[4].Text;
-         state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Selector);
+         var selectorSource = tokens[4].Text;
+         var getterSetter = tokens[5].Text;
+
+         if 
+         state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Selector, Color.Selector);
 
          Result<Unit> _result;
          if (type == "required")

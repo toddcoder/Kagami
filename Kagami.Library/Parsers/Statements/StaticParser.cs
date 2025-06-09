@@ -30,7 +30,7 @@ public partial class StaticParser : StatementParser
       {
          var className = classBuilder.UserClass.Name;
          var metaClassName = $"__$meta{className}";
-         var metaClassBuilder = new ClassBuilder(metaClassName, Parameters.Empty, "", [], false, block, []);
+         var metaClassBuilder = new ClassBuilder(metaClassName, Parameters.Empty, "", [], false, block);
          var _register = metaClassBuilder.Register();
          if (_register)
          {

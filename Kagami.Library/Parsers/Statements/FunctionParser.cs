@@ -7,6 +7,7 @@ using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Runtime;
 using System.Text.RegularExpressions;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Nodes.NodeFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 using Regex = System.Text.RegularExpressions.Regex;
@@ -15,6 +16,8 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class FunctionParser : StatementParser
 {
+   protected Maybe<Function> _function = nil;
+
    [GeneratedRegex($@"^(\s*)(override\s+)?(func|op|macro)(\s+)(?:({REGEX_CLASS_GETTING})(\.))?({REGEX_FUNCTION_NAME})(\()?")]
    public override partial Regex Regex();
 
@@ -35,7 +38,7 @@ public partial class FunctionParser : StatementParser
 
       if (isOperator && !Module.Global.Value.RegisterOperator(functionName))
       {
-         return fail($"Operator {functionName} already registered");
+         return operatorAlreadyExists(functionName);
       }
 
       var needsParameters = type == "(";
@@ -73,27 +76,35 @@ public partial class FunctionParser : StatementParser
          }
          else if (state.CurrentSource.StartsWith('('))
          {
-            return getCurriedFunction(state, functionName, parameters, overriding, className).Map(f =>
+            var _curriedFunction = getCurriedFunction(state, functionName, parameters, overriding, className);
+            if (_curriedFunction is (true, var curriedFunction))
             {
+               _function = curriedFunction;
                if (isMacro)
                {
-                  state.RegisterMacro(f);
+                  state.RegisterMacro(curriedFunction);
                }
                else
                {
-                  state.AddStatement(f);
+                  state.AddStatement(curriedFunction);
                }
 
                return unit;
-            });
+            }
+            else
+            {
+               return _curriedFunction.Exception;
+            }
          }
          else
          {
-            return getAnyBlock(state).Map(block =>
+            var _block = getAnyBlock(state);
+            if (_block is (true, var block))
             {
                var yielding = state.RemoveYieldFlag();
                state.RemoveReturnType();
                var function = new Function(functionName, parameters, block, yielding, overriding, className);
+               _function = function;
                if (isMacro)
                {
                   state.RegisterMacro(function);
@@ -104,7 +115,11 @@ public partial class FunctionParser : StatementParser
                }
 
                return unit;
-            });
+            }
+            else
+            {
+               return _block.Exception;
+            }
          }
       }
       else

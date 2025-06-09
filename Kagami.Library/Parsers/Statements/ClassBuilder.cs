@@ -27,10 +27,9 @@ public class ClassBuilder
    protected Hash<string, (ConstructorInvokable, Block)> constructorInvokables = [];
    protected List<(IInvokable, Block, bool)> functions = [];
    protected UserClass userClass = new("", "");
-   protected IEnumerable<Mixin> mixins;
 
    public ClassBuilder(string className, Parameters parameters, string parentClassName, Expression[] parentArguments,
-      bool initialize, Block constructorBlock, IEnumerable<Mixin> mixins)
+      bool initialize, Block constructorBlock)
    {
       this.className = className;
       this.parameters = parameters;
@@ -38,7 +37,6 @@ public class ClassBuilder
       this.parentArguments = parentArguments;
       this.initialize = initialize;
       this.constructorBlock = constructorBlock;
-      this.mixins = mixins;
    }
 
    public Optional<Unit> Register()
@@ -199,11 +197,6 @@ public class ClassBuilder
                statements.Add(statement);
                break;
          }
-      }
-
-      foreach (var mixin in mixins)
-      {
-         userClass.Include(mixin);
       }
 
       statements.Add(new ReturnNewObject(className, parameters));

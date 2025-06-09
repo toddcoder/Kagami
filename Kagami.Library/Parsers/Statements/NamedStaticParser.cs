@@ -22,7 +22,7 @@ public partial class NamedStaticParser : StatementParser
 
       Module.Global.Value.ForwardReference(className);
 
-      var builder = new ClassBuilder(className, Parameters.Empty, "", [], false, new Block(), []);
+      var builder = new ClassBuilder(className, Parameters.Empty, "", [], false, new Block());
       var _register = builder.Register();
       if (_register)
       {
@@ -33,7 +33,7 @@ public partial class NamedStaticParser : StatementParser
          if (_block is (true, var block))
          {
             var metaClassName = $"__$meta{className}";
-            var metaClassBuilder = new ClassBuilder(metaClassName, Parameters.Empty, "", [], false, block, []);
+            var metaClassBuilder = new ClassBuilder(metaClassName, Parameters.Empty, "", [], false, block);
             _register = metaClassBuilder.Register();
             if (_register)
             {

@@ -9,6 +9,7 @@ public class InclusionMembersParser(Inclusion inclusion) : MultiParser
       get
       {
          yield return new RequiredOrOptionalFunctionParser(inclusion);
+         yield return new InclusionFunctionParser(inclusion);
       }
    }
 }

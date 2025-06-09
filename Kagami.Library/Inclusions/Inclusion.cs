@@ -74,4 +74,42 @@ public class Inclusion(string name)
    public Maybe<Function> Function(Selector selector) => functions.Maybe[selector];
 
    public Maybe<Inclusion> InheritedInclusion(string inclusionName) => inheritedInclusions.Maybe[inclusionName];
+
+   public IEnumerable<RequiredFunction> RequiredFunctions()
+   {
+      foreach (var requiredFunction in requiredFunctions.Values)
+      {
+         yield return requiredFunction;
+      }
+
+      foreach (var requiredFunction in inheritedInclusions.Values.SelectMany(inheritedInclusion => inheritedInclusion.RequiredFunctions()))
+      {
+         yield return requiredFunction;
+      }
+   }
+
+   public IEnumerable<OptionalFunction> OptionalFunctions()
+   {
+      foreach (var optionalFunction in optionalFunctions.Values)
+      {
+         yield return optionalFunction;
+      }
+
+      foreach (var optionalFunction in inheritedInclusions.Values.SelectMany(inheritedInclusion => inheritedInclusion.OptionalFunctions()))
+      {
+         yield return optionalFunction;
+      }
+   }
+
+   public IEnumerable<Function> Functions()
+   {
+      foreach (var function in functions.Values)
+      {
+         yield return function;
+      }
+      foreach (var function in inheritedInclusions.Values.SelectMany(inheritedInclusion => inheritedInclusion.Functions()))
+      {
+         yield return function;
+      }
+   }
 }

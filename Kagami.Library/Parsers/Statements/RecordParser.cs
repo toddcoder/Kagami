@@ -3,7 +3,6 @@ using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Runtime;
 using Core.Monads;
-using Kagami.Library.Objects;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
 using Class = Kagami.Library.Nodes.Statements.Class;
@@ -13,8 +12,6 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class RecordParser : StatementParser
 {
-   //public override string Pattern => $"^ /'record' /(/s+) /({REGEX_CLASS}) /'('";
-
    [GeneratedRegex($@"^(record)(\s+)({REGEX_CLASS})(\()")]
    public override partial Regex Regex();
 
@@ -42,7 +39,7 @@ public partial class RecordParser : StatementParser
 
          Module.Global.Value.ForwardReference(className);
 
-         var builder = new ClassBuilder(className, parameters, parentClassName, arguments, false, new Block(), new List<Mixin>());
+         var builder = new ClassBuilder(className, parameters, parentClassName, arguments, false, new Block());
          var _register = builder.Register();
          if (_register)
          {

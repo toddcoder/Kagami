@@ -19,6 +19,7 @@ public class OperationsBuilder
    protected Memo<int, string> addresses = new Memo<int, string>.Function(_ => "");
    protected Hash<int, IInvokable> invokables = [];
    protected Hash<int, Block> blocks = [];
+   // ReSharper disable once CollectionNeverUpdated.Global
    protected Memo<LabelType, Stack<string>> labelStack = new Memo<LabelType, Stack<string>>.Function(_ => new Stack<string>());
    protected Set<string> registeredBlocks = [];
    protected Stack<MacroParameters> macroParameters = new();
@@ -527,4 +528,6 @@ public class OperationsBuilder
    public void PushAddress() => add(new PushAddress());
 
    public void PopAddress() => add(new PopAddress());
+
+   public void RequireFunction(Selector selector) => add(new RequireFunction(selector));
 }

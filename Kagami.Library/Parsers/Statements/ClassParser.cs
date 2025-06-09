@@ -3,7 +3,6 @@ using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Runtime;
 using Core.Monads;
-using Kagami.Library.Objects;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
 using Class = Kagami.Library.Nodes.Statements.Class;
@@ -60,7 +59,7 @@ public partial class ClassParser : StatementParser
          return exception;
       }
 
-      List<Mixin> mixins = [];
+      /*List<Mixin> mixins = [];
       while (state.More)
       {
          var mixinIncludesParser = new MixinIncludesParser(mixins);
@@ -76,14 +75,14 @@ public partial class ClassParser : StatementParser
          {
             break;
          }
-      }
+      }*/
 
       Module.Global.Value.ForwardReference(className);
 
       var _block = getBlock(state);
       if (_block is (true, var block))
       {
-         var builder = new ClassBuilder(className, parameters, parentClassName, arguments, initialize, block, mixins);
+         var builder = new ClassBuilder(className, parameters, parentClassName, arguments, initialize, block);
          var _register = builder.Register();
          if (_register)
          {

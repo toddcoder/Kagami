@@ -1,5 +1,4 @@
-﻿using System;
-using Kagami.Library.Classes;
+﻿using Kagami.Library.Classes;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
 using Core.Numbers;
@@ -158,7 +157,14 @@ public static class AllExceptions
 
    public static Exception exceededMaxDepth() => fail(messageExceededMaxDepth());
 
-   public static string messageInclusionNotFound(string inclusionName)=> $"Inclusion {inclusionName} not found";
+   public static string messageInclusionNotFound(string inclusionName) => $"Inclusion {inclusionName} not found";
 
-   public static Exception inclusionNotFound(string inclusionName) => fail(messageInclusionNotFound(inclusionName));
+   public static Exception inclusionNotFound(string inclusionName)
+   {
+      return fail(messageInclusionNotFound(inclusionName));
+   }
+
+   public static string messageOperatorAlreadyExists(string name) => $"Operator {name} already exists";
+
+   public static Exception operatorAlreadyExists(string name) => fail(messageOperatorAlreadyExists(name));
 }
