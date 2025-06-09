@@ -190,18 +190,18 @@ public abstract class BaseClass
 
    protected void numericMessages()
    {
-      registerMessage("+",
+      registerMessage("+(_)",
          (obj, message) => function(obj, message, (x, y) => x + y, (x, y) => x + y, (x, y) => x + y, (x, y) => x.Add(y), "+"));
-      registerMessage("-", (obj, message) => function(obj, message, (x, y) => x - y, (x, y) => x - y, (x, y) => x - y,
+      registerMessage("-(_)", (obj, message) => function(obj, message, (x, y) => x - y, (x, y) => x - y, (x, y) => x - y,
          (x, y) => x.Subtract(y), "-"));
-      registerMessage("*", (obj, message) => function(obj, message, (x, y) => x * y, (x, y) => x * y, (x, y) => x * y,
+      registerMessage("*(_)", (obj, message) => function(obj, message, (x, y) => x * y, (x, y) => x * y, (x, y) => x * y,
          (x, y) => x.Multiply(y), "*"));
-      registerMessage("/", (obj, message) => function(obj, message, (x, y) => x / y, (x, y) => x.Divide(y), "/"));
-      registerMessage("//", integerDivision);
-      registerMessage("%", (obj, message) => function(obj, message, (x, y) => x % y, (x, y) => x % y, (x, y) => x % y,
+      registerMessage("/(_)", (obj, message) => function(obj, message, (x, y) => x / y, (x, y) => x.Divide(y), "/"));
+      registerMessage("//(_)", integerDivision);
+      registerMessage("%(_)", (obj, message) => function(obj, message, (x, y) => x % y, (x, y) => x % y, (x, y) => x % y,
          (x, y) => x.Remainder(y), "%"));
-      registerMessage("^", (obj, message) => function(obj, message, (x, y) => Math.Pow(x, y), (x, y) => x.Raise(y), "^"));
-      registerMessage("atan2", (obj, message) => function(obj, message, (x, y) => Math.Atan2(y, x), (x, y) => x.Atan2(y), "atan2"));
+      registerMessage("^(_)", (obj, message) => function(obj, message, (x, y) => Math.Pow(x, y), (x, y) => x.Raise(y), "^"));
+      registerMessage("atan2(_)", (obj, message) => function(obj, message, (x, y) => Math.Atan2(y, x), (x, y) => x.Atan2(y), "atan2"));
       registerMessage("sign()", (obj, _) => function(obj, x => Math.Sign(x), x => Math.Sign(x), x => Math.Sign(x),
          x => (Int)x.Sign(), "sign()"));
       registerMessage("sin()", (obj, _) => function(obj, x => Math.Sin(x), x => x.Sin()));

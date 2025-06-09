@@ -11,8 +11,6 @@ public partial class NotParser : SymbolParser
    {
    }
 
-   //public override string Pattern => "^ /(/s*) /'not' /b";
-
    [GeneratedRegex(@"^(\s*)(not)\b")]
    public override partial Regex Regex();
 

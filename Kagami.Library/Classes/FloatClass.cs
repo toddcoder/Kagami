@@ -16,7 +16,7 @@ public class FloatClass : BaseClass, IParse, IEquivalentClass
       numericConversionMessages();
       compareMessages();
 
-      messages["round"] = (obj, msg) => function(obj, msg, (a, b) => Math.Round(a, (int)b), (a, b) => a.Round(b), "round");
+      messages["round(_<Int>)"] = (obj, msg) => function(obj, msg, (a, b) => Math.Round(a, (int)b), (a, b) => a.Round(b), "round");
    }
 
    public override void RegisterClassMessages()
@@ -26,7 +26,7 @@ public class FloatClass : BaseClass, IParse, IEquivalentClass
       classMessages["e".get()] = (_, _) => (Float)Math.E;
       classMessages["pi".get()] = (_, _) => (Float)Math.PI;
       classMessages["nan".get()] = (_, _) => (Float)double.NaN;
-      classMessages["parse"] = (_, msg) => parse(msg.Arguments[0].AsString);
+      classMessages["parse(_)"] = (_, msg) => parse(msg.Arguments[0].AsString);
       classMessages["max".get()] = (_, _) => Float.FloatObject(double.MaxValue);
       classMessages["min".get()] = (_, _) => Float.FloatObject(double.MinValue);
    }

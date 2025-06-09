@@ -1178,7 +1178,7 @@ public static class ParserFunctions
             break;
          case "<<":
          case ">>":
-            _symbol = new SendBinaryMessageSymbol(source, Precedence.Shift);
+            _symbol = new SendBinaryMessageSymbol($"{source}(_)", Precedence.Shift);
             break;
          case "=>" when !flags[ExpressionFlags.OmitNameValue]:
             _symbol = new KeyValueSymbol();

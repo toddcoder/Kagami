@@ -1,11 +1,10 @@
-﻿namespace Kagami.Library.Classes
+﻿namespace Kagami.Library.Classes;
+
+public class NumberClass : BaseClass
 {
-   public class NumberClass : BaseClass
-   {
-      public override string Name => "Number";
+   public override string Name => "Number";
 
-      public override bool MatchCompatible(BaseClass otherClass) => otherClass.IsNumeric;
+   public override bool MatchCompatible(BaseClass otherClass) => otherClass.IsNumeric;
 
-      public override bool AssignCompatible(BaseClass otherClass) => otherClass.IsNumeric;
-   }
+   public override bool AssignCompatible(BaseClass otherClass) => otherClass.IsNumeric;
 }

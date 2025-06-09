@@ -7,9 +7,9 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class ImageParser : SymbolParser
 {
-   public ImageParser(ExpressionBuilder builder) : base(builder) { }
-
-   //public override string Pattern => "^ /(/s*) /'~' -(> /s)";
+   public ImageParser(ExpressionBuilder builder) : base(builder)
+   {
+   }
 
    [GeneratedRegex(@"^(\s*)(~)(?!\s)")]
    public override partial Regex Regex();

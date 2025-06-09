@@ -1,3 +1,4 @@
-﻿func square(x) = x ^ 2
-func sumOfSquares(x, y) = square(x) + square(y)
-func abs(x) = x ? x >= 0 : -x
+﻿open sys
+
+static Fib {
+}

@@ -11,15 +11,13 @@ public partial class RangePrefixParser : SymbolParser
    {
    }
 
-   //public override string Pattern => "^ /(/s*) /'+' -(> /s+)";
-
    [GeneratedRegex(@"^(\s*)(\+)(?!\s+)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
       state.Colorize(tokens, Color.Whitespace, Color.Operator);
-      builder.Add(new SendPrefixMessage("range"));
+      builder.Add(new SendPrefixMessage("range()"));
 
       return unit;
    }

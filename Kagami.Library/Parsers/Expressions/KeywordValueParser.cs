@@ -7,8 +7,6 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class KeywordValueParser : SymbolParser
 {
-   //public override string Pattern => "^ /(/s*) /('none' | 'true' | 'false' | 'del' | 'unit' | 'null') /b";
-
    public KeywordValueParser(ExpressionBuilder builder) : base(builder)
    {
    }

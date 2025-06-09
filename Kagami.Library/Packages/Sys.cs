@@ -259,4 +259,6 @@ public class Sys : Package
          return new Regex(pattern, false, false, false, false);
       }
    }
+
+   public KString String(IObject obj) => new(obj.AsString);
 }

@@ -16,8 +16,6 @@ public partial class StaticParser : StatementParser
       this.classBuilder = classBuilder;
    }
 
-   //public override string Pattern => $"^ /'object' /({REGEX_EOL})";
-
    [GeneratedRegex(@"^(\s*)(static)\b")]
    public override partial Regex Regex();
 

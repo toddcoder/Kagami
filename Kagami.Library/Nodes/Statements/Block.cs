@@ -109,7 +109,7 @@ public class Block : Statement, IEnumerable<Statement>
 
    public void AddReturnIf()
    {
-      if (statements[statements.Count - 1] is not ReturnNothing)
+      if (statements.Count > 0 && statements[^1] is not ReturnNothing)
       {
          statements.Add(new ReturnNothing());
       }
@@ -117,7 +117,7 @@ public class Block : Statement, IEnumerable<Statement>
 
    public void AddReturnIf(Symbol symbol)
    {
-      if (statements.Count > 0 && statements[statements.Count - 1] is not Return)
+      if (statements.Count > 0 && statements[^1] is not Return)
       {
          var expression = new Expression(symbol);
          statements.Add(new Return(expression, nil));

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using Core.Matching;
 using Kagami.Library.Objects;
 using static Kagami.Library.AllExceptions;

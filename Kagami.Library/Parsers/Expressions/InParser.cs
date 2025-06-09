@@ -11,8 +11,6 @@ public partial class InParser : SymbolParser
    {
    }
 
-   //public override string Pattern => "^ /(/s*) (/'not' /(/s*))? /'in' /b";
-
    [GeneratedRegex(@"^(\s*)(?:(not)(\s*))?(in)\b")]
    public override partial Regex Regex();
 
@@ -21,7 +19,7 @@ public partial class InParser : SymbolParser
       var not = tokens[2].Text.Contains("not");
       state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Keyword);
 
-      var message = not ? "notIn" : "in";
+      var message = not ? "notIn(_)" : "in(_)";
       builder.Add(new SendBinaryMessageSymbol(message, Precedence.Boolean, true));
 
       return unit;

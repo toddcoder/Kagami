@@ -20,7 +20,7 @@ public class IntDivide : TwoOperandOperation
       }
       else
       {
-         return sendMessage(x, "//", y).Just();
+         return sendMessage(x, "div(_)", y).Just();
       }
    }
 }

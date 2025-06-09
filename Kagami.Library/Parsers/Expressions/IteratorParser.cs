@@ -11,8 +11,6 @@ public partial class IteratorParser : SymbolParser
    {
    }
 
-   //public override string Pattern => "^ /(/s*) /('!'1%2 | '?') -(> [/s '^>'])";
-
    [GeneratedRegex(@"^(\s*)(!{1,2}|\?)(?![\s\^>])")]
    public override partial Regex Regex();
 

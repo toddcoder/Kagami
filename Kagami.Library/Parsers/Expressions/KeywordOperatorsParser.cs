@@ -13,7 +13,7 @@ public partial class KeywordOperatorsParser : SymbolParser
    }
 
    [GeneratedRegex(
-      @"^(\s*)(to|til|by|if|map|join|sort|foldl|foldr|all|any|none|one|zip|downto|skip|take|band|bor|bxor|bsl|bsr|while|until|min|max|does|x|div|r)(\s+)")]
+      @"^(\s*)(if|map|join|sort|foldl|foldr|all|any|none|one|zip|skip|take|band|bor|bxor|bsl|bsr|while|until|min|max|does|x|div|r)(\s+)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -31,6 +31,7 @@ public partial class KeywordOperatorsParser : SymbolParser
 
             switch (keyword)
             {
+               /*
                case "to":
                case "by":
                   builder.Add(new RangeSymbol(true));
@@ -38,6 +39,7 @@ public partial class KeywordOperatorsParser : SymbolParser
                case "til":
                   builder.Add(new RangeSymbol(false));
                   break;
+               */
                case "if":
                case "map":
                case "join":
@@ -46,25 +48,22 @@ public partial class KeywordOperatorsParser : SymbolParser
                case "none":
                case "one":
                case "zip":
-                  builder.Add(new SendBinaryMessageSymbol(keyword, Precedence.ChainedOperator));
+                  builder.Add(new SendBinaryMessageSymbol($"{keyword}(_)", Precedence.ChainedOperator));
                   break;
                case "sort":
                   builder.Add(new SendBinaryMessageSymbol("sort".Selector("<Lambda>"), Precedence.ChainedOperator));
                   break;
                case "foldl":
-                  builder.Add(new SendBinaryMessageSymbol("foldl", Precedence.ChainedOperator));
+                  builder.Add(new SendBinaryMessageSymbol("foldl(_)", Precedence.ChainedOperator));
                   break;
                case "foldr":
-                  builder.Add(new SendBinaryMessageSymbol("foldr", Precedence.ChainedOperator));
-                  break;
-               case "downto":
-                  builder.Add(new RangeSymbol(true));
+                  builder.Add(new SendBinaryMessageSymbol("foldr(_)", Precedence.ChainedOperator));
                   break;
                case "skip":
-                  builder.Add(new SendBinaryMessageSymbol("skip", Precedence.ChainedOperator));
+                  builder.Add(new SendBinaryMessageSymbol("skip(_)", Precedence.ChainedOperator));
                   break;
                case "take":
-                  builder.Add(new SendBinaryMessageSymbol("take", Precedence.ChainedOperator));
+                  builder.Add(new SendBinaryMessageSymbol("take(_)", Precedence.ChainedOperator));
                   break;
                case "band":
                   builder.Add(new BAndSymbol());
@@ -92,7 +91,7 @@ public partial class KeywordOperatorsParser : SymbolParser
                   builder.Add(new MaxSymbol());
                   break;
                case "does":
-                  builder.Add(new SendBinaryMessageSymbol("respondsTo", Precedence.Boolean));
+                  builder.Add(new SendBinaryMessageSymbol("respondsTo(_)", Precedence.Boolean));
                   break;
                case "x":
                   builder.Add(new SendBinaryMessageSymbol("cross(_)", Precedence.Concatenate));

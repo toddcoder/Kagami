@@ -9,8 +9,6 @@ public partial class BNotParser : SymbolParser
 {
    public BNotParser(ExpressionBuilder builder) : base(builder) { }
 
-   //public override string Pattern => "^ /(/s*) /'bnot' /b";
-
    [GeneratedRegex(@"^(\s*)(bnot)\b")]
    public override partial Regex Regex();
 

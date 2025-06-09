@@ -17,7 +17,7 @@ public class Raise : TwoOperandOperation
          }
          else
          {
-            return sendMessage(x, "^", y).Just();
+            return sendMessage(x, "^(_)", y).Just();
          }
       }
       catch (Exception exception)

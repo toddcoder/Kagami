@@ -38,5 +38,6 @@ public class SysClass : PackageClass
       registerPackageFunction("fields()", (obj, _) => function<Sys>(obj, sys => sys.XFields()));
       registerPackageFunction("Date(_<Float>)", (obj, msg) => function<Sys, Float>(obj, msg, (sys, f) => sys.Date(f.Value)));
       registerPackageFunction("Regex(_<String>)", (obj, msg) => function<Sys, KString>(obj, msg, (sys, s) => sys.Regex(s.Value)));
+      registerPackageFunction("string(_)", (obj, msg) => function<Sys, IObject>(obj, msg, (sys, o) => sys.String(o)));
    }
 }

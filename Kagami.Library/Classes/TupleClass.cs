@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Kagami.Library.Objects;
+﻿using Kagami.Library.Objects;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Classes.ClassFunctions;
@@ -27,7 +25,7 @@ public class TupleClass : BaseClass, ICollectionClass
       messages["eighth".get()] = (obj, _) => function<KTuple>(obj, t => t[7]);
       messages["ninth".get()] = (obj, _) => function<KTuple>(obj, t => t[8]);
       messages["tenth".get()] = (obj, _) => function<KTuple>(obj, t => t[9]);
-      messages["[]"] = (obj, msg) => function<KTuple, IObject>(obj, msg, indexed);
+      messages["[](_)"] = (obj, msg) => function<KTuple, IObject>(obj, msg, indexed);
       messages["head".get()] = (obj, _) => function<KTuple>(obj, t => t.Head);
       messages["tail".get()] = (obj, _) => function<KTuple>(obj, t => t.Tail);
       messages["headTail".get()] = (obj, _) => function<KTuple>(obj, t => t.HeadTail);

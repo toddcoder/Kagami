@@ -92,7 +92,7 @@ public readonly struct Selector : IObject, IEquatable<Selector>
                   from leftConstraint in selectorItems[i].TypeConstraint
                   from rightConstraint in otherItems[i].TypeConstraint
                   select (leftConstraint, rightConstraint);
-               if (_result is (true, var (left, right)) && !left.Matches(right))
+               if (_result is (true, var (left, right)) && !left.IsEquivalentTo(right))
                {
                   return false;
                }
