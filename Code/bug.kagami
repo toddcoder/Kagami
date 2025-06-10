@@ -1,17 +1,16 @@
-﻿type Expr {
-	Number(n)
-	Sum(e1, e2)
+﻿data Expr {
+	Number(Int)
+	Sum(Expr, Expr)
 }
 
-//func eval()
-//	case Number(n) = n
-//	case Sum(l, r) = eval(l) + eval(r)
+Sum(Number(1), Number(2))
 
-func eval(x) {
-	match x {
+func eval(e) {
+	let result = match e {
 		case Number(n) = n
-		case Sum(l, r) = eval(l) + eval(r)
+		case Sum(e1, e2) = eval(e1) + eval(e2)
 	}
+	return result
 }
 
 eval(Sum(Number(1), Number(2)))

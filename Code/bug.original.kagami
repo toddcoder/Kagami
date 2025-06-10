@@ -1,0 +1,13 @@
+﻿type Expr {
+	Number(n)
+	Sum(e1, e2)
+}
+
+func eval(x) {
+	match x {
+		case Number(n) = n
+		case Sum(l, r) = eval(l) + eval(r)
+	}
+}
+
+eval(Sum(Number(1), Number(2)))

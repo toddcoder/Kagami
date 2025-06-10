@@ -14,7 +14,7 @@ namespace Kagami.Library.Parsers.Statements;
 public partial class DataTypeParser : StatementParser
 {
 
-   [GeneratedRegex($@"^(\s*)(type)(\s+)({REGEX_CLASS})")]
+   [GeneratedRegex($@"^(\s*)(data)(\s+)({REGEX_CLASS})")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
