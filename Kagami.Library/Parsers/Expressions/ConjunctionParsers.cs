@@ -20,6 +20,7 @@ public class ConjunctionParsers(ExpressionBuilder builder) : MultiParser
 
          yield return new OrParser(builder);
          yield return new InlineIfParser(builder);
+         yield return new ImplicitCollectionExpressionParser(builder);
       }
    }
 }

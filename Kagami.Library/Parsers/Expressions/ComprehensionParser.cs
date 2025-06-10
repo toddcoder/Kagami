@@ -14,8 +14,6 @@ public partial class ComprehensionParser : SymbolParser
    {
    }
 
-   //public override string Pattern => "^ /(/s*) /'for' -(> ['>^']) /b";
-
    [GeneratedRegex(@"^(\s+)(for)(?![>\^])\b")]
    public override partial Regex Regex();
 

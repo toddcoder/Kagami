@@ -11,8 +11,6 @@ public partial class OrParser : EndingInExpressionParser
    {
    }
 
-   //public override string Pattern => "^ /(/s*) /'or' /(/s+)";
-
    [GeneratedRegex(@"^(\s*)(or)(\s+)")]
    public override partial Regex Regex();
 

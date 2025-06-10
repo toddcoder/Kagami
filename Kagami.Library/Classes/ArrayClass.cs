@@ -29,14 +29,8 @@ public class ArrayClass : BaseClass, ICollectionClass
       registerMessage("pop()", (obj, _) => function<KArray>(obj, a => a.Pop()));
       registerMessage("unshift(_)", (obj, msg) => function<KArray, IObject>(obj, msg, (a, v) => a.Unshift(v)));
       registerMessage("shift()", (obj, _) => function<KArray>(obj, a => a.Shift()));
-      messages["find".Selector("<Array>", "startAt:<Int>", "reverse:<Boolean>")] = (obj, msg) =>
-         function<KArray, IObject, Int, KBoolean>(obj, msg, (a, o, i, r) => a.Find(o, i.Value, r.Value));
-      messages["find".Selector("<Array>", "startAt:<Int>")] = (obj, msg) =>
-         function<KArray, IObject, Int>(obj, msg, (a, o, i) => a.Find(o, i.Value, false));
-      messages["find".Selector("<Array>", "reverse:<Boolean>")] = (obj, msg) =>
-         function<KArray, IObject, KBoolean>(obj, msg, (a, o, r) => a.Find(o, 0, r.Value));
-      messages["find(_)"] = (obj, msg) =>
-         function<KArray, IObject>(obj, msg, (a, o) => a.Find(o, 0, false));
+      registerMessage("index(of:_)", (obj, msg) => function<KArray, IObject>(obj, msg, (a, v) => a.IndexOf(v)));
+      registerMessage("reverseIndex(of:_)", (o, message) => function<KArray, IObject>(o, message, (a, v) => a.ReverseIndexOf(v)));
       messages["find".Selector("all:<Array>")] = (obj, msg) =>
          function<KArray, IObject>(obj, msg, (a, o) => a.FindAll(o));
       messages["first".Selector("_<Lambda>")] = (obj, msg) =>

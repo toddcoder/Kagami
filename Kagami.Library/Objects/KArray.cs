@@ -346,10 +346,35 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public IObject Shift() => list.Count > 0 ? Some.Object(RemoveAt(0)) : None.NoneValue;
 
-   public IObject Find(IObject item, int startIndex, bool reverse)
+   /*public IObject Find(IObject item, int startIndex, bool reverse)
    {
       var index = reverse ? list.LastIndexOf(item, startIndex) : list.IndexOf(item, startIndex);
       return index == -1 ? None.NoneValue : Some.Object((Int)index);
+   }*/
+   public IObject IndexOf(IObject item)
+   {
+      var index = list.IndexOf(item);
+      if (index > -1)
+      {
+         return Some.Object((Int)index);
+      }
+      else
+      {
+         return None.NoneValue;
+      }
+   }
+
+   public IObject ReverseIndexOf(IObject item)
+   {
+      var index = list.LastIndexOf(item);
+      if (index > -1)
+      {
+         return Some.Object((Int)index);
+      }
+      else
+      {
+         return None.NoneValue;
+      }
    }
 
    public IObject First(Lambda lambda)
