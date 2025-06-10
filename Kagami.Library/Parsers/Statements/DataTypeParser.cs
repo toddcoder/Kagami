@@ -13,7 +13,6 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class DataTypeParser : StatementParser
 {
-   //public override string Pattern => $"^ /(/s*) /'type' /(/s+) /({REGEX_CLASS})";
 
    [GeneratedRegex($@"^(\s*)(type)(\s+)({REGEX_CLASS})")]
    public override partial Regex Regex();

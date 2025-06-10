@@ -11,38 +11,36 @@ public class Return : Operation
 {
    public static Optional<IObject> ReturnAction(Machine machine, bool returnTopOfStack)
    {
-      var _response = Machine.Current.Value.CurrentFrame.Pop().Optional();
-
-      var frames = machine.PopFrames();
-      if (frames.FunctionFrame is (true, var frame))
+      var _value = Machine.Current.Value.CurrentFrame.Pop().Optional();
+      if (_value is (true, var value))
       {
-         //var returnAddress = frame.Address;
-         if (returnTopOfStack)
+         var frames = machine.PopFrames();
+         if (frames.FunctionFrame)
          {
-            if (_response is (true, var value))
+            if (returnTopOfStack)
             {
-               _response = copyFields(value, frames).Just();
-            }
-            else if (_response.Exception is (true, var exception))
-            {
-               return exception;
+               return copyFields(value, frames).Just();
             }
             else
             {
-               return emptyStack("value");
+               return nil;
             }
          }
          else
          {
-            _response = nil;
+            return nil;
          }
-
-         return _response; //machine.GoTo(returnAddress) ? _response : badAddress(returnAddress);
       }
-      else
+      else if (_value.Exception is (true, var exception))
       {
-         return invalidStack("frame");
+         return exception;
       }
+      else if (returnTopOfStack)
+      {
+         return emptyStack("value");
+      }
+
+      return nil;
    }
 
    protected bool returnTopOfStack;

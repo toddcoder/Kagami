@@ -26,8 +26,6 @@ public partial class DataComparisandParser : StatementParser
       this.ordinal = ordinal;
    }
 
-   //public override string Pattern => $"^ /(/s*) /({REGEX_CLASS}) /'('?";
-
    [GeneratedRegex($@"^(\s*)({REGEX_CLASS})(\()?")]
    public override partial Regex Regex();
 

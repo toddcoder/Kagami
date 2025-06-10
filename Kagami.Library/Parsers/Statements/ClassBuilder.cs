@@ -70,7 +70,7 @@ public class ClassBuilder
    {
       userClass.RegisterParameters(parameters);
 
-      var statements = new List<Statement>();
+      List<Statement> statements = [];
 
       if (parentClassName.IsNotEmpty())
       {

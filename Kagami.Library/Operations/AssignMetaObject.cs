@@ -33,7 +33,7 @@ public class AssignMetaObject : Operation
                if (_obj is (true, var obj))
                {
                   ((UserClass)targetClass).MetaObject = ((UserObject)obj).Some();
-                  return nil;
+                  return obj.Just();
                }
                else if (_obj.Exception is (true, var exception))
                {
