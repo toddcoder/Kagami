@@ -6,11 +6,10 @@
 Sum(Number(1), Number(2))
 
 func eval(e) {
-	let result = match e {
-		case Number(n) = n
-		case Sum(e1, e2) = eval(e1) + eval(e2)
+	match e {
+		case Number(n) return n
+		case Sum(e1, e2) return eval(e1) + eval(e2)
 	}
-	return result
 }
 
 eval(Sum(Number(1), Number(2)))

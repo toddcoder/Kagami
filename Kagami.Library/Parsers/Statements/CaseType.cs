@@ -1,9 +1,8 @@
-﻿namespace Kagami.Library.Parsers.Statements
+﻿namespace Kagami.Library.Parsers.Statements;
+
+public enum CaseType
 {
-   public enum CaseType
-   {
-      Statement,
-      Function,
-      Lambda
-   }
+   Statement,
+   Function,
+   Lambda
 }

@@ -44,7 +44,7 @@ public partial class CaseParser : StatementParser
    protected static Optional<Block> getCaseBlock(CaseType caseType, ParseState state) => caseType switch
    {
       CaseType.Statement => getCaseStatementBlock(state),
-      CaseType.Function => getAnyBlock(state),
+      CaseType.Function => getCaseReturnBlock(state),
       CaseType.Lambda => getBlock(state),
       _ => fail($"Didn't understand case type {caseType}")
    };

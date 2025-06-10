@@ -17,6 +17,7 @@ using static Kagami.Library.AllExceptions;
 using static Core.Monads.MonadFunctions;
 using Array = System.Array;
 using Group = System.Text.RegularExpressions.Group;
+using Return = Kagami.Library.Nodes.Statements.Return;
 using SkipTake = Kagami.Library.Parsers.Expressions.SkipTake;
 
 namespace Kagami.Library.Parsers;
@@ -186,7 +187,7 @@ public static class ParserFunctions
       "-" => new Subtract(),
       "*" => new Multiply(),
       "/" => new FloatDivide(),
-      "//" => new IntDivide(),
+      "div" => new IntDivide(),
       "^" => new Raise(),
       _ => fail($"Didn't recognize operator {source}")
    };
@@ -256,9 +257,9 @@ public static class ParserFunctions
       if (_scanned)
       {
          var _statements = state.PopStatements();
-         if (_statements)
+         if (_statements is (true, var statements))
          {
-            return new Block(_statements, _typeConstraint);
+            return new Block(statements, _typeConstraint);
          }
          else
          {
@@ -279,6 +280,20 @@ public static class ParserFunctions
    public static Optional<Block> getSingleLine(ParseState state, bool returnExpression = true)
    {
       return getSingleLine(state, nil, returnExpression);
+   }
+
+   public static Optional<Block> getSingleLineBlock(ParseState state, Maybe<TypeConstraint> _typeConstraint)
+   {
+      var _expression = getExpression(state, ExpressionFlags.Standard);
+      if (_expression is (true, var expression))
+      {
+         var returnStatement = new Return(expression, _typeConstraint);
+         return new Block(returnStatement, _typeConstraint);
+      }
+      else
+      {
+         return _expression.Exception;
+      }
    }
 
    public static Optional<Symbol> getValue(ParseState state, Bits32<ExpressionFlags> flags)
@@ -638,6 +653,41 @@ public static class ParserFunctions
          if (_scanned)
          {
             return getSingleLine(state, _typeConstraint);
+         }
+         else
+         {
+            return getBlock(state, _typeConstraint);
+         }
+      }
+      else if (_response.Exception is (true, var exception))
+      {
+         return exception;
+      }
+      else
+      {
+         return nil;
+      }
+   }
+
+   public static Optional<Block> getCaseReturnBlock(ParseState state)
+   {
+      var _response = parseTypeConstraint(state);
+      if (_response is (true, var response))
+      {
+         Maybe<TypeConstraint> _typeConstraint = response switch
+         {
+            PossibleTypeConstraint.Some some => some.TypeConstraint,
+            _ => nil
+         };
+         state.SetReturnType(_typeConstraint);
+         var _scanned = state.Scan(@"^(\s*)(=)(\s*)", Color.Whitespace, Color.Structure, Color.Whitespace);
+         if (_scanned)
+         {
+            return getSingleLine(state, _typeConstraint);
+         }
+         else if (state.Scan(@"^(\s+)(return)(\s+)", Color.Whitespace, Color.Keyword, Color.Whitespace))
+         {
+            return getSingleLineBlock(state, _typeConstraint);
          }
          else
          {
@@ -1062,6 +1112,10 @@ public static class ParserFunctions
       if (state.Scan(@"^(\s*)(=)(?!=)", Color.Whitespace, Color.Structure))
       {
          return getSingleLine(state, false);
+      }
+      else if (state.Scan(@"^(\s*)(return)(\s*)", Color.Whitespace, Color.Keyword, Color.Whitespace))
+      {
+         return getSingleLineBlock(state, nil);
       }
       else
       {
