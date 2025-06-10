@@ -8,13 +8,11 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class FloatParser : SymbolParser
 {
-   //public override string Pattern => "^ /(/s*) /([/d '_']+ '.' [/d '_']+) (/'e' /(['-+']? /d+))? /'i'?";
-
    public FloatParser(ExpressionBuilder builder) : base(builder)
    {
    }
 
-   [GeneratedRegex(@"^(\s*)([\d_]+\.[\d_]+)(?:(e)([-\+]?\d+))?(i)?")]
+   [GeneratedRegex(@"^(\s*)([\d_]+\.[\d_]+)(?:(e)([-\+]?\d+))?(i|d)?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -23,7 +21,19 @@ public partial class FloatParser : SymbolParser
       var type = tokens[5].Text;
       state.Colorize(tokens, Color.Whitespace, Color.Number, Color.NumberPart, Color.Number, Color.NumberPart);
 
-      if (double.TryParse(source, out var result))
+      if (type == "d")
+      {
+         if (decimal.TryParse(source, out var decimalResult))
+         {
+            builder.Add(new DecimalSymbol(decimalResult));
+            return unit;
+         }
+         else
+         {
+            return unableToConvert(source, "Decimal");
+         }
+      }
+      else if (double.TryParse(source, out var result))
       {
          if (type == "i")
          {

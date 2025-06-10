@@ -11,8 +11,6 @@ public partial class ImplicitSymbolParser : EndingInValueParser
    {
    }
 
-   //public override string Pattern => "^ /(/s*) /'^' -(> /s)";
-
    [GeneratedRegex(@"^(\s*)(\^)(?!\s)")]
    public override partial Regex Regex();
 

@@ -45,6 +45,7 @@ public readonly struct Complex : IObject, INumeric, IObjectCompare, IComparable<
       "Long" => (this, obj.ToComplex()),
       "Complex" => (this, obj.ToComplex()),
       "Rational" => (ToRational(), obj.ToRational()),
+      "Decimal" => (this, obj.ToDecimal()),
       _ => (this, obj.ToComplex())
    };
 
@@ -97,6 +98,12 @@ public readonly struct Complex : IObject, INumeric, IObjectCompare, IComparable<
    }
 
    public bool IsRational => false;
+
+   public INumeric ToDecimal() => new XDecimal(AsDecimal());
+
+   public decimal AsDecimal() => (decimal)value.Real;
+
+   public bool IsDecimal => false;
 
    public KString ZFill(int count)
    {

@@ -1,67 +1,66 @@
-﻿namespace Kagami.Library.Objects
+﻿namespace Kagami.Library.Objects;
+
+public interface IMessageNumber
 {
-   public interface IMessageNumber
-   {
-      IObject Negate();
+   IObject Negate();
 
-      IObject Sign();
+   IObject Sign();
 
-      IObject Raise(INumeric other);
+   IObject Raise(INumeric other);
 
-      IObject Remainder(INumeric other);
+   IObject Remainder(INumeric other);
 
-      IObject Divide(INumeric other);
+   IObject Divide(INumeric other);
 
-      IObject DivRem(INumeric other);
+   IObject DivRem(INumeric other);
 
-      IObject Add(INumeric other);
+   IObject Add(INumeric other);
 
-      IObject Subtract(INumeric other);
+   IObject Subtract(INumeric other);
 
-      IObject Multiply(INumeric other);
+   IObject Multiply(INumeric other);
 
-      IObject Sin();
+   IObject Sin();
 
-      IObject Cos();
+   IObject Cos();
 
-      IObject Tan();
+   IObject Tan();
 
-      IObject Asin();
+   IObject Asin();
 
-      IObject Acos();
+   IObject Acos();
 
-      IObject Atan();
+   IObject Atan();
 
-      IObject Atan2(INumeric other);
+   IObject Atan2(INumeric other);
 
-      IObject Sinh();
+   IObject Sinh();
 
-      IObject Cosh();
+   IObject Cosh();
 
-      IObject Tanh();
+   IObject Tanh();
 
-      IObject Asinh();
+   IObject Asinh();
 
-      IObject Acosh();
+   IObject Acosh();
 
-      IObject Atanh();
+   IObject Atanh();
 
-      IObject Sqrt();
+   IObject Sqrt();
 
-      IObject Log();
+   IObject Log();
 
-      IObject Ln();
+   IObject Ln();
 
-      IObject Exp();
+   IObject Exp();
 
-      IObject Abs();
+   IObject Abs();
 
-      IObject Ceiling();
+   IObject Ceiling();
 
-      IObject Floor();
+   IObject Floor();
 
-      IObject Fraction();
+   IObject Fraction();
 
-      IObject Round(INumeric other);
-   }
+   IObject Round(INumeric other);
 }

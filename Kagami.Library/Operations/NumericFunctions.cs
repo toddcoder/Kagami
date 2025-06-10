@@ -262,6 +262,12 @@ public static class NumericFunctions
       }
    }
 
+   public static string decimalImage(decimal value)
+   {
+      var str = value.ToString("g");
+      return str.IsMatch("['.Ee']") ? $"{str}d" : $"{value}.0d";
+   }
+
    public static double Asinh(double x) => Math.Log(x + Math.Sqrt(x * x + 1));
 
    public static double Acosh(double x) => Math.Log(x + Math.Sqrt(x * x - 1));

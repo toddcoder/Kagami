@@ -15,7 +15,10 @@ public readonly struct Float : IObject, INumeric, IObjectCompare, IComparable<Fl
 
    private readonly double value;
 
-   public Float(double value) : this() => this.value = value;
+   public Float(double value) : this()
+   {
+      this.value = value;
+   }
 
    public double Value => value;
 
@@ -93,6 +96,12 @@ public readonly struct Float : IObject, INumeric, IObjectCompare, IComparable<Fl
 
    public bool IsRational => false;
 
+   public INumeric ToDecimal() => new XDecimal(AsDecimal());
+
+   public decimal AsDecimal() => (decimal)value;
+
+   public bool IsDecimal => false;
+
    public KString ZFill(int count) => zfill(AsString, count);
 
    public IObject Raise(INumeric power) => raise(this, power);
@@ -117,6 +126,7 @@ public readonly struct Float : IObject, INumeric, IObjectCompare, IComparable<Fl
       "Long" => (ToLong(), obj.ToLong()),
       "Complex" => (ToComplex(), obj.ToComplex()),
       "Rational" => (ToRational(), obj.ToRational()),
+      "Decimal" => (this, obj.ToDecimal()),
       _ => (this, obj.ToFloat())
    };
 

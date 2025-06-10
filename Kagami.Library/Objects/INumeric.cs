@@ -1,60 +1,65 @@
 ﻿using System.Numerics;
 using CComplex = System.Numerics.Complex;
 
-namespace Kagami.Library.Objects
+namespace Kagami.Library.Objects;
+
+public interface INumeric
 {
-   public interface INumeric
-   {
-      (INumeric, INumeric) Compatible(INumeric obj);
+   (INumeric, INumeric) Compatible(INumeric obj);
 
-      string ClassName { get; }
+   string ClassName { get; }
 
-      bool IsZero { get; }
+   bool IsZero { get; }
 
-      bool IsPositive { get; }
+   bool IsPositive { get; }
 
-      bool IsNegative { get; }
+   bool IsNegative { get; }
 
-      bool IsPrimitive { get; }
+   bool IsPrimitive { get; }
 
-      INumeric ToByte();
+   INumeric ToByte();
 
-      byte AsByte();
+   byte AsByte();
 
-      bool IsByte { get; }
+   bool IsByte { get; }
 
-      INumeric ToInt();
+   INumeric ToInt();
 
-      int AsInt32();
+   int AsInt32();
 
-      bool IsInt { get; }
+   bool IsInt { get; }
 
-      INumeric ToFloat();
+   INumeric ToFloat();
 
-      double AsDouble();
+   double AsDouble();
 
-      bool IsFloat { get; }
+   bool IsFloat { get; }
 
-      INumeric ToLong();
+   INumeric ToLong();
 
-      BigInteger AsBigInteger();
+   BigInteger AsBigInteger();
 
-      bool IsLong { get; }
+   bool IsLong { get; }
 
-      INumeric ToComplex();
+   INumeric ToComplex();
 
-      CComplex AsComplex();
+   CComplex AsComplex();
 
-      bool IsComplex { get; }
+   bool IsComplex { get; }
 
-      INumeric ToRational();
+   INumeric ToRational();
 
-      (BigInteger, BigInteger) AsRational();
+   (BigInteger, BigInteger) AsRational();
 
-      bool IsRational { get; }
+   bool IsRational { get; }
 
-      KString ZFill(int count);
+   INumeric ToDecimal();
 
-	   IObject Raise(INumeric power);
-   }
+   decimal AsDecimal();
+
+   bool IsDecimal { get; }
+
+   KString ZFill(int count);
+
+   IObject Raise(INumeric power);
 }

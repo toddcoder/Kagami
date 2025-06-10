@@ -16,8 +16,6 @@ public partial class ImplicitExpressionParser : EndingInExpressionParser
    {
    }
 
-   //public override string Pattern => $"^ /(/s*) /({REGEX_ITERATOR_FUNCTIONS}) /'>'";
-
    [GeneratedRegex(@$"^(\s*)({REGEX_ITERATOR_FUNCTIONS})(>)")]
    public override partial Regex Regex();
 
@@ -27,7 +25,7 @@ public partial class ImplicitExpressionParser : EndingInExpressionParser
       state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Keyword);
 
       parameterCount = 1;
-      fieldName = "__$0"; //!?*%$
+      fieldName = "__$0";
       message = message switch
       {
          "!" => "map",

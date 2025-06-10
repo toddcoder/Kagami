@@ -197,7 +197,7 @@ public abstract class BaseClass
       registerMessage("*(_)", (obj, message) => function(obj, message, (x, y) => x * y, (x, y) => x * y, (x, y) => x * y,
          (x, y) => x.Multiply(y), "*"));
       registerMessage("/(_)", (obj, message) => function(obj, message, (x, y) => x / y, (x, y) => x.Divide(y), "/"));
-      registerMessage("//(_)", integerDivision);
+      registerMessage("div(_)", integerDivision);
       registerMessage("%(_)", (obj, message) => function(obj, message, (x, y) => x % y, (x, y) => x % y, (x, y) => x % y,
          (x, y) => x.Remainder(y), "%"));
       registerMessage("^(_)", (obj, message) => function(obj, message, (x, y) => Math.Pow(x, y), (x, y) => x.Raise(y), "^"));
@@ -237,6 +237,7 @@ public abstract class BaseClass
          (obj, _) => function(obj, i => i, d => d, b => b, m => (Float)((INumeric)m).ToFloat(), "f".get()));
       registerMessage("b".get(),
          (obj, _) => function(obj, i => (byte)i, d => (byte)d, b => b, m => (KByte)((INumeric)m).ToByte(), "b".get()));
+      registerMessage("d".get(), (obj, _) => function(obj, i => i, d => (decimal)d, b => b, m => (XDecimal)((INumeric)m).ToDecimal(), "d".get()));
    }
 
    protected void collectionMessages()
@@ -456,37 +457,37 @@ public abstract class BaseClass
 
    protected void messageNumberMessages()
    {
-      registerMessage("-(", (obj, _) => msgNumberFunction(obj, mn => mn.Negate()));
-      registerMessage("sign", (obj, _) => msgNumberFunction(obj, mn => mn.Sign()));
-      registerMessage("^", (obj, message) => msgNumberFunction(obj, message, (x, y) => x.Raise(y)));
-      registerMessage("mod", (obj, message) => msgNumberFunction(obj, message, (x, y) => x.Remainder(y)));
-      registerMessage("/", (obj, message) => msgNumberFunction(obj, message, (x, y) => x.Divide(y)));
-      registerMessage("/%", (obj, message) => msgNumberFunction(obj, message, (x, y) => x.DivRem(y)));
-      registerMessage("+", (obj, message) => msgNumberFunction(obj, message, (x, y) => x.Add(y)));
-      registerMessage("-", (obj, message) => msgNumberFunction(obj, message, (x, y) => x.Subtract(y)));
-      registerMessage("*", (obj, message) => msgNumberFunction(obj, message, (x, y) => x.Multiply(y)));
-      registerMessage("sin", (obj, _) => msgNumberFunction(obj, mn => mn.Sin()));
-      registerMessage("cos", (obj, _) => msgNumberFunction(obj, mn => mn.Cos()));
-      registerMessage("tan", (obj, _) => msgNumberFunction(obj, mn => mn.Tan()));
-      registerMessage("asin", (obj, _) => msgNumberFunction(obj, mn => mn.Asin()));
-      registerMessage("acos", (obj, _) => msgNumberFunction(obj, mn => mn.Acos()));
-      registerMessage("atan", (obj, _) => msgNumberFunction(obj, mn => mn.Atan()));
-      registerMessage("sinh", (obj, _) => msgNumberFunction(obj, mn => mn.Sinh()));
-      registerMessage("cosh", (obj, _) => msgNumberFunction(obj, mn => mn.Cosh()));
-      registerMessage("tanh", (obj, _) => msgNumberFunction(obj, mn => mn.Tanh()));
-      registerMessage("asinh", (obj, _) => msgNumberFunction(obj, mn => mn.Asinh()));
-      registerMessage("acosh", (obj, _) => msgNumberFunction(obj, mn => mn.Acosh()));
-      registerMessage("atanh", (obj, _) => msgNumberFunction(obj, mn => mn.Atanh()));
-      registerMessage("atan2", (obj, message) => msgNumberFunction(obj, message, (x, y) => x.Atan2(y)));
-      registerMessage("sqrt", (obj, _) => msgNumberFunction(obj, mn => mn.Sqrt()));
-      registerMessage("log", (obj, _) => msgNumberFunction(obj, mn => mn.Log()));
-      registerMessage("ln", (obj, _) => msgNumberFunction(obj, mn => mn.Ln()));
-      registerMessage("exp", (obj, _) => msgNumberFunction(obj, mn => mn.Exp()));
-      registerMessage("abs", (obj, _) => msgNumberFunction(obj, mn => mn.Abs()));
-      registerMessage("ceil", (obj, _) => msgNumberFunction(obj, mn => mn.Ceiling()));
-      registerMessage("floor", (obj, _) => msgNumberFunction(obj, mn => mn.Floor()));
-      registerMessage("frac", (obj, _) => msgNumberFunction(obj, mn => mn.Fraction()));
-      registerMessage("round", (obj, message) => msgNumberFunction(obj, message, (x, y) => x.Round(y)));
+      registerMessage("-(()", (obj, _) => msgNumberFunction(obj, mn => mn.Negate()));
+      registerMessage("sign()", (obj, _) => msgNumberFunction(obj, mn => mn.Sign()));
+      registerMessage("^(_)", (obj, message) => msgNumberFunction(obj, message, (x, y) => x.Raise(y)));
+      registerMessage("%(_)", (obj, message) => msgNumberFunction(obj, message, (x, y) => x.Remainder(y)));
+      registerMessage("/(_)", (obj, message) => msgNumberFunction(obj, message, (x, y) => x.Divide(y)));
+      registerMessage("/%(_)", (obj, message) => msgNumberFunction(obj, message, (x, y) => x.DivRem(y)));
+      registerMessage("+(_)", (obj, message) => msgNumberFunction(obj, message, (x, y) => x.Add(y)));
+      registerMessage("-(_)", (obj, message) => msgNumberFunction(obj, message, (x, y) => x.Subtract(y)));
+      registerMessage("*(_)", (obj, message) => msgNumberFunction(obj, message, (x, y) => x.Multiply(y)));
+      registerMessage("sin()", (obj, _) => msgNumberFunction(obj, mn => mn.Sin()));
+      registerMessage("cos()", (obj, _) => msgNumberFunction(obj, mn => mn.Cos()));
+      registerMessage("tan()", (obj, _) => msgNumberFunction(obj, mn => mn.Tan()));
+      registerMessage("asin()", (obj, _) => msgNumberFunction(obj, mn => mn.Asin()));
+      registerMessage("acos()", (obj, _) => msgNumberFunction(obj, mn => mn.Acos()));
+      registerMessage("atan()", (obj, _) => msgNumberFunction(obj, mn => mn.Atan()));
+      registerMessage("sinh()", (obj, _) => msgNumberFunction(obj, mn => mn.Sinh()));
+      registerMessage("cosh()", (obj, _) => msgNumberFunction(obj, mn => mn.Cosh()));
+      registerMessage("tanh()", (obj, _) => msgNumberFunction(obj, mn => mn.Tanh()));
+      registerMessage("asinh()", (obj, _) => msgNumberFunction(obj, mn => mn.Asinh()));
+      registerMessage("acosh()", (obj, _) => msgNumberFunction(obj, mn => mn.Acosh()));
+      registerMessage("atanh()", (obj, _) => msgNumberFunction(obj, mn => mn.Atanh()));
+      registerMessage("atan2(_)", (obj, message) => msgNumberFunction(obj, message, (x, y) => x.Atan2(y)));
+      registerMessage("sqrt()", (obj, _) => msgNumberFunction(obj, mn => mn.Sqrt()));
+      registerMessage("log()", (obj, _) => msgNumberFunction(obj, mn => mn.Log()));
+      registerMessage("ln()", (obj, _) => msgNumberFunction(obj, mn => mn.Ln()));
+      registerMessage("exp()", (obj, _) => msgNumberFunction(obj, mn => mn.Exp()));
+      registerMessage("abs()", (obj, _) => msgNumberFunction(obj, mn => mn.Abs()));
+      registerMessage("ceil()", (obj, _) => msgNumberFunction(obj, mn => mn.Ceiling()));
+      registerMessage("floor()", (obj, _) => msgNumberFunction(obj, mn => mn.Floor()));
+      registerMessage("frac()", (obj, _) => msgNumberFunction(obj, mn => mn.Fraction()));
+      registerMessage("round(_,_<Int>)", (obj, message) => msgNumberFunction(obj, message, (x, y) => x.Round(y)));
    }
 
    protected void sliceableMessages()

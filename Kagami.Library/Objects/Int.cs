@@ -53,6 +53,7 @@ public readonly struct Int : IObject, INumeric, IComparable<Int>, IEquatable<Int
       "Long" => (ToLong(), obj.ToLong()),
       "Complex" => (ToComplex(), obj.ToComplex()),
       "Rational" => (ToRational(), obj.ToRational()),
+      "Decimal" => (this, obj.ToDecimal()),
       _ => (this, obj.ToInt())
    };
 
@@ -91,6 +92,12 @@ public readonly struct Int : IObject, INumeric, IComparable<Int>, IEquatable<Int
    public (BigInteger, BigInteger) AsRational() => (value, 1);
 
    public bool IsRational => false;
+
+   public INumeric ToDecimal() => new XDecimal(AsDecimal());
+
+   public decimal AsDecimal() => value;
+
+   public bool IsDecimal => false;
 
    public KString ZFill(int count) => zfill(AsString, count);
 

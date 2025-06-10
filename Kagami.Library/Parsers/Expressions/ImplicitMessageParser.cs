@@ -18,8 +18,6 @@ public partial class ImplicitMessageParser : SymbolParser
    {
    }
 
-   //public override string Pattern => $"^ /(/s*) /({REGEX_ITERATOR_FUNCTIONS}) /'^'";
-
    [GeneratedRegex(@$"^(\s*)({REGEX_ITERATOR_FUNCTIONS})(^)")]
    public override partial Regex Regex();
 

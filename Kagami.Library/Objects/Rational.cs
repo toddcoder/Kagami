@@ -86,6 +86,12 @@ public struct Rational : IObject, INumeric, IRangeItem, IComparable<Rational>, I
 
    public bool IsRational => true;
 
+   public INumeric ToDecimal() => new XDecimal(AsDecimal());
+
+   public decimal AsDecimal() => (decimal)(numerator / denominator);
+
+   public bool IsDecimal => false;
+
    public KString ZFill(int count) => $"{zfill(numerator.ToString(), count)}/{zfill(denominator.ToString(), count)}";
 
    public string AsString => $"{numerator}/{denominator}";

@@ -84,6 +84,7 @@ public class Module
       "Index" => new IndexClass(),
       "Cycle" => new CycleClass(),
       "Set" => new SetClass(),
+      "Decimal" => new DecimalClass(),
       _ => nil
    };
 

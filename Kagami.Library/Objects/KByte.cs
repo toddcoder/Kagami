@@ -70,6 +70,12 @@ public readonly struct KByte : IObject, INumeric, IObjectCompare, IComparable<KB
 
    public bool IsRational => false;
 
+   public INumeric ToDecimal() => new XDecimal(AsDecimal());
+
+   public decimal AsDecimal() => value;
+
+   public bool IsDecimal => false;
+
    public KString ZFill(int count) => zfill(value.ToString(), count);
 
    public IObject Raise(INumeric power) => raise(this, power);

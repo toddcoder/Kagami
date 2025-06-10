@@ -105,6 +105,8 @@ public class OperationsBuilder
 
    public void PushByte(byte value) => add(new PushByte(value));
 
+   public void PushDecimal(decimal value) => add(new PushDecimal(value));
+
    public void PushObject(IObject obj) => add(new PushObject(obj));
 
    public void Print() => add(new Print());

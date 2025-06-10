@@ -10,7 +10,7 @@ public partial class IntParser : SymbolParser
 
    //public override string Pattern => "^ /(/s*) /([/d '_']+) /['Lif']? /b";
 
-   [GeneratedRegex(@"^(\s*)([\d_]+)([Lif])?\b")]
+   [GeneratedRegex(@"^(\s*)([\d_]+)([Lifd])?\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)

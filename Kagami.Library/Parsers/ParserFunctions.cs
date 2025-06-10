@@ -896,6 +896,7 @@ public static class ParserFunctions
       switch (type)
       {
          case "":
+         {
             if (TryParse(source, out var integer))
             {
                builder.Add(new IntSymbol(integer));
@@ -905,8 +906,10 @@ public static class ParserFunctions
             {
                return unableToConvert(source, "Int");
             }
+         }
 
          case "L":
+         {
             if (BigInteger.TryParse(source, out var bigInteger))
             {
                builder.Add(new LongSymbol(bigInteger));
@@ -916,9 +919,11 @@ public static class ParserFunctions
             {
                return unableToConvert(source, "Long");
             }
+         }
 
          case "i":
-            if (TryParse(source, out integer))
+         {
+            if (TryParse(source, out var integer))
             {
                builder.Add(new ComplexSymbol(integer));
                return unit;
@@ -927,8 +932,10 @@ public static class ParserFunctions
             {
                return unableToConvert(source, "Complex");
             }
+         }
 
          case "f":
+         {
             if (double.TryParse(source, out var real))
             {
                builder.Add(new FloatSymbol(real));
@@ -938,6 +945,19 @@ public static class ParserFunctions
             {
                return unableToConvert(source, "Float");
             }
+         }
+         case "d":
+         {
+            if (decimal.TryParse(source, out var decimalValue))
+            {
+               builder.Add(new DecimalSymbol(decimalValue));
+               return unit;
+            }
+            else
+            {
+               return unableToConvert(source, "Decimal");
+            }
+         }
 
          default:
             return unableToConvert(source, "Int");
@@ -968,6 +988,9 @@ public static class ParserFunctions
             return unit;
          case "f":
             builder.Add(new FloatSymbol((double)number));
+            return unit;
+         case "d":
+            builder.Add(new DecimalSymbol((decimal)number));
             return unit;
          default:
             return unableToConvert(number.ToString(), "Int");

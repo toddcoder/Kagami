@@ -3,16 +3,19 @@ using Kagami.Library.Operations;
 
 namespace Kagami.Library.Nodes.Symbols;
 
-public class FloatSymbol : Symbol, IConstant
+public class DecimalSymbol : Symbol, IConstant
 {
-   protected double value;
+   protected decimal value;
 
-   public FloatSymbol(double value)
+   public DecimalSymbol(decimal value)
    {
       this.value = value;
    }
 
-   public override void Generate(OperationsBuilder builder) => builder.PushFloat(value);
+   public override void Generate(OperationsBuilder builder)
+   {
+      builder.PushDecimal(value);
+   }
 
    public override Precedence Precedence => Precedence.Value;
 
@@ -20,5 +23,5 @@ public class FloatSymbol : Symbol, IConstant
 
    public override string ToString() => value.ToString();
 
-   public IObject Object => (Float)value;
+   public IObject Object => new XDecimal(value);
 }
