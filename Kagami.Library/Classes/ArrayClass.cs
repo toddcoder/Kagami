@@ -92,7 +92,7 @@ public class ArrayClass : BaseClass, ICollectionClass
       classMessages["repeat(value:_,times:_<Int>)"] = (bc, msg) =>
          classFunc<ArrayClass, IObject, Int>(bc, msg, (_, v, t) => KArray.Repeat(v, t.Value));
       classMessages["empty".get()] = (bc, _) => classFunc<ArrayClass>(bc, _ => KArray.Empty);
-      classMessages["typed"] = (_, msg) => getTypedArray(msg);
+      classMessages["typed(_)"] = (_, msg) => getTypedArray(msg);
    }
 
    protected static KArray getTypedArray(Message message)
