@@ -5,11 +5,8 @@
 
 Sum(Number(1), Number(2))
 
-func eval(e) {
-	match e {
-		case Number(n) return n
-		case Sum(e1, e2) return eval(e1) + eval(e2)
-	}
-}
+func eval(_)
+	case Number(n) return n
+	case Sum(e1, e2) return eval(e1) + eval(e2)
 
 eval(Sum(Number(1), Number(2)))
