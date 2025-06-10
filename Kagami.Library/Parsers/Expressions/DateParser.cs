@@ -8,9 +8,9 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class DateParser : SymbolParser
 {
-   public DateParser(ExpressionBuilder builder) : base(builder) { }
-
-   //public override string Pattern => "^ /(/s*) /('d' [quote]) /(-[quote]*) /[quote]";
+   public DateParser(ExpressionBuilder builder) : base(builder)
+   {
+   }
 
    [GeneratedRegex("""^(\s*)(d['"])([^'"]*)(['"])""")]
    public override partial Regex Regex();

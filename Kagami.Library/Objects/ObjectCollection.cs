@@ -22,7 +22,7 @@ public class ObjectCollection : IObject, ICollection
 
    public Maybe<IObject> Next(int index)
    {
-      var result = sendMessage(obj, "next", (Int)index);
+      var result = sendMessage(obj, "next(_)", (Int)index);
       if (result is Some some)
       {
          return some.Value.Some();
@@ -35,9 +35,9 @@ public class ObjectCollection : IObject, ICollection
 
    public Maybe<IObject> Peek(int index)
    {
-      if (cls.RespondsTo("peek"))
+      if (cls.RespondsTo("peek(_)"))
       {
-         var result = sendMessage(obj, "next", (Int)index);
+         var result = sendMessage(obj, "peek(_)", (Int)index);
          if (result is Some some)
          {
             return some.Value.Some();
@@ -76,11 +76,11 @@ public class ObjectCollection : IObject, ICollection
 
    public bool ExpandForArray => true;
 
-   public KBoolean In(IObject item) => cls.RespondsTo("in") ? (KBoolean)sendMessage(obj, "in", item) : false;
+   public KBoolean In(IObject item) => cls.RespondsTo("in(_)") ? (KBoolean)sendMessage(obj, "in(_)", item) : false;
 
-   public KBoolean NotIn(IObject item) => cls.RespondsTo("notIn") ? (KBoolean)sendMessage(obj, "notIn", item) : false;
+   public KBoolean NotIn(IObject item) => cls.RespondsTo("notIn(_)") ? (KBoolean)sendMessage(obj, "notIn(_)", item) : false;
 
-   public IObject Times(int count) => cls.RespondsTo("*") ? (KBoolean)sendMessage(obj, "*", (Int)count) : obj;
+   public IObject Times(int count) => cls.RespondsTo("*(_)") ? (KBoolean)sendMessage(obj, "*(_)", (Int)count) : obj;
 
    public KString MakeString(string connector) => makeString(this, connector);
 
