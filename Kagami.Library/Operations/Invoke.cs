@@ -108,7 +108,7 @@ public class Invoke : OneOperandOperation
          }
          else
          {
-            var selector = fieldName.Selector(arguments.Length);//arguments.Selector(fieldName);
+            var selector = arguments.Selector(fieldName);
             var image = selector.Image;
             _field = machine.Find(selector);
             if (_field is (true, var selectedField))
