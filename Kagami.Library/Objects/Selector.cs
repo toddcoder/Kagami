@@ -51,7 +51,7 @@ public readonly struct Selector : IObject, IEquatable<Selector>
    public Selector LabelsOnly()
    {
       var items = selectorItems.Select(si => si.LabelOnly()).ToArray();
-      return new Selector(name, items, $"{name}({items.Select(i => i.ToString()).ToString(",")})");
+      return new Selector(name, items, $"{name}({items.Select(i => i.ToString()).ToString(",")})".Replace("...", ""));
    }
 
    public Selector NewName(string newName) => new(newName, selectorItems, selectorImage(newName, selectorItems));
@@ -110,7 +110,6 @@ public readonly struct Selector : IObject, IEquatable<Selector>
          return false;
       }
    }
-
 
    public Maybe<Selector> Optional()
    {

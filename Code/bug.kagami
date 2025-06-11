@@ -5,7 +5,7 @@
 
 Sum(Number(1), Number(2))
 
-func eval(_)
+func eval()
 	case Number(n) return n
 	case Sum(e1, e2) return eval(e1) + eval(e2)
 

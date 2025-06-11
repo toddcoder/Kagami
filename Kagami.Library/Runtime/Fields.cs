@@ -60,7 +60,7 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
                Selector matchSelector = bucket;
                if (selector.IsEquivalentTo(matchSelector))
                {
-                  return fields.Maybe[matchSelector.Image].Optional();
+                  return fields.Maybe[bucket].Optional(); //fields.Maybe[matchSelector.Image].Optional();
                }
             }
 
