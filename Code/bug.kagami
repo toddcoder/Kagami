@@ -1,23 +1,9 @@
 ﻿open sys
 
-class BankAccount {
-	var balance = 0
-	func deposit(amount Int) {
-		if amount > 0 {
-			balance += amount
-		}
-	}
-	func withdraw(amount Int) Int {
-		if 0 < amount <= balance {
-			balance -= amount
-			return balance
-		}
-		else {
-			throw "insufficient funds"
-		}
-	}
+class Vector(x = 0, y = 0) {
+	func +(v Vector) = Vector(x + v.x, y + v.y)
 }
 
-let myAccount = BankAccount()
-myAccount.deposit(50)
-myAccount.withdraw(20)
+var a = Vector(3, 1)
+var b = Vector(1, 2)
+var c = a + b

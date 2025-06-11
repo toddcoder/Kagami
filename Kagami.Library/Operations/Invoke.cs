@@ -71,7 +71,10 @@ public class Invoke : OneOperandOperation
             return nil;
          case PackageFunction packageFunction:
             increment = true;
-            return packageFunction.Invoke(arguments).Just();
+            var result = packageFunction.Invoke(arguments);
+            machine.PopAddress();
+
+            return result.Just();
          case IMayInvoke mayInvoke:
             increment = true;
             return mayInvoke.Invoke(arguments.Value).Just();
