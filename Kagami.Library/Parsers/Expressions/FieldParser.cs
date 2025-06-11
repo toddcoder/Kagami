@@ -12,8 +12,6 @@ public partial class FieldParser : SymbolParser
    {
    }
 
-   //public override string Pattern => $"^ /(/s*) /({REGEX_FIELD}) /b";
-
    [GeneratedRegex(@$"^(\s*)({REGEX_FIELD})\b")]
    public override partial Regex Regex();
 

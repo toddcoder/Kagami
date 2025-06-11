@@ -13,7 +13,7 @@ public partial class ExitContinueParser : StatementParser
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
       state.Colorize(tokens, Color.Whitespace, Color.Keyword);
-      Statement statement = tokens[1].Text == "exit" ? new Exit() : new Continue();
+      Statement statement = tokens[2].Text == "exit" ? new Exit() : new Continue();
       state.AddStatement(statement);
 
       return unit;

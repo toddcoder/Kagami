@@ -10,8 +10,6 @@ public partial class DefAssignParser : EndingInExpressionParser
 {
    protected string fieldName = "";
 
-   //public override string Pattern => $"^ /'def' /(/s+) /({REGEX_FIELD}) /(/s*) /'=' -(> '=')";
-
    [GeneratedRegex($@"^(def)(\s+)({REGEX_FIELD})(\s*)(=)(?!=)")]
    public override partial Regex Regex();
 
