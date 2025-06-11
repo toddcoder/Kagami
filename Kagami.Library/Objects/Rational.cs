@@ -217,4 +217,8 @@ public struct Rational : IObject, INumeric, IRangeItem, IComparable<Rational>, I
    public IObject Round(INumeric other) => (Float)Math.Round(AsDouble(), other.AsInt32());
 
    public int CompareTo(object? obj) => CompareTo((Rational)obj!);
+
+   public IObject Increment(int amount = 1) => new Rational(numerator + amount, denominator + amount);
+
+   public IObject Decrement(int amount = 1) => new Rational(numerator - amount, denominator - amount);
 }

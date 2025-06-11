@@ -178,4 +178,8 @@ public readonly struct XDecimal : IObject, INumeric, IObjectCompare, IComparable
    public KString Format(string format) => value.FormatUsing<decimal>(format, d => d.ToString(format.Replace("@", "d")));
 
    public int CompareTo(object? obj) => CompareTo((XDecimal)obj!);
+
+   public IObject Increment(int amount = 1) => (XDecimal)(value + amount);
+
+   public IObject Decrement(int amount = 1) => (XDecimal)(value - amount);
 }

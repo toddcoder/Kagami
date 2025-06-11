@@ -195,4 +195,8 @@ public readonly struct Long : IObject, INumeric, IComparable<Long>, IEquatable<L
          return num;
       }
    }
+
+   public IObject Increment(int amount = 1) => (Long)(value + amount);
+
+   public IObject Decrement(int amount = 1) => (Long)(value - amount);
 }

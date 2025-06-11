@@ -534,4 +534,8 @@ public class OperationsBuilder
    public void PopAddress() => add(new PopAddress());
 
    public void RequireFunction(Selector selector) => add(new RequireFunction(selector));
+
+   public void PreIncrement(bool increment) => add(increment ? new PreIncrement() : new PreDecrement());
+
+   public void PostIncrement(bool increment) => add(increment ? new PostIncrement() : new PostDecrement());
 }

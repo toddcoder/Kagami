@@ -11,6 +11,7 @@ public class Return : Operation
 {
    public static Optional<IObject> ReturnAction(Machine machine, bool returnTopOfStack)
    {
+      machine.Operations.PopAddress();
       ReturnValue returnValue;
       if (returnTopOfStack)
       {

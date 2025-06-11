@@ -88,4 +88,8 @@ public readonly struct Infinity : IObject, IObjectCompare, INumeric
    public KBoolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
 
    public KBoolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
+
+   public IObject Increment(int amount = 1) => this;
+
+   public IObject Decrement(int amount = 1) => this;
 }

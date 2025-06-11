@@ -1,25 +1,25 @@
 ﻿using System.Text.RegularExpressions;
 using Core.Monads;
 using Kagami.Library.Nodes.Symbols;
-using Kagami.Library.Objects;
 using static Core.Monads.MonadFunctions;
-using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public partial class ToEndParser : SymbolParser
+public partial class PostfixIncrementParser : SymbolParser
 {
-   [GeneratedRegex(@"^(\.\.)(?=[\)\]\}])", RegexOptions.Compiled)]
-   public override partial Regex Regex();
-
-   public ToEndParser(ExpressionBuilder builder) : base(builder)
+   public PostfixIncrementParser(ExpressionBuilder builder) : base(builder)
    {
    }
 
+   [GeneratedRegex(@"^(\+\+|--)")]
+   public override partial Regex Regex();
+
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
+      var increment = tokens[1].Text == "++";
       state.Colorize(tokens, Color.Operator);
-      builder.Add(new PushObjectSymbol(End.Value));
+
+      builder.Add(new PostIncrementSymbol(increment));
 
       return unit;
    }

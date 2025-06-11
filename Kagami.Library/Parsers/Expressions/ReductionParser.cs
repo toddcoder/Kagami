@@ -7,8 +7,6 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class ReductionParser : SymbolParser
 {
-   //public override string Pattern => "^ /(/s+) /'['";
-
    [GeneratedRegex(@"^(\s+)(\[)")]
    public override partial Regex Regex();
 
@@ -37,7 +35,7 @@ public partial class ReductionParser : SymbolParser
          if (_expression is (true, var expression))
          {
             var lambda = new LambdaSymbol(2, expression);
-            builder.Add(new SendBinaryMessageSymbol("foldr", Precedence.ChainedOperator));
+            builder.Add(new SendBinaryMessageSymbol("foldr(_,_)", Precedence.ChainedOperator));
             builder.Add(lambda);
             state.CommitTransaction();
 

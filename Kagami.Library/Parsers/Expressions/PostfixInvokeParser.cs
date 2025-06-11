@@ -8,8 +8,6 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class PostfixInvokeParser : SymbolParser
 {
-   //public override string Pattern => "^ /'('";
-
    [GeneratedRegex(@"^(\()")]
    public override partial Regex Regex();
 

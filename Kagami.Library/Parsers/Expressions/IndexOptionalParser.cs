@@ -12,8 +12,6 @@ public partial class IndexOptionalParser : SymbolParser
    {
    }
 
-   //public override string Pattern => "^ /'[?'";
-
    [GeneratedRegex(@"^(\[\?)")]
    public override partial Regex Regex();
 

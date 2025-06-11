@@ -241,4 +241,8 @@ public readonly struct Int : IObject, INumeric, IComparable<Int>, IEquatable<Int
 
       return candidate;
    }
+
+   public IObject Increment(int amount = 1) => (Int)(value + amount);
+
+   public IObject Decrement(int amount = 1) => (Int)(value - amount);
 }

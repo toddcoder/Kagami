@@ -151,6 +151,7 @@ public class Machine
 
       PushFrame(frame);
       frame.SetFields(invokable.Parameters);
+      PushAddress();
 
       return GoTo(invokable.Address) ? invoke() : badAddress(invokable.Address);
    }
@@ -242,7 +243,7 @@ public class Machine
             switch (operation)
             {
                case Return rtn:
-                  PopAddress();
+                  //PopAddress();
                   return Return.ReturnAction(this, rtn.ReturnTopOfStack);
                case Yield:
                   return Yield.YieldAction(this).Just();
@@ -668,4 +669,6 @@ public class Machine
    public void PopAddress() => operations.PopAddress();
 
    public string StackAsString => stack.Peek().ToString();
+
+   public Maybe<Field> LastField { get; set; } = nil;
 }

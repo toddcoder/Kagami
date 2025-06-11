@@ -242,7 +242,7 @@ public static class ParserFunctions
       }
       else
       {
-         return badIndentation();
+         return badBlock();
       }
    }
 

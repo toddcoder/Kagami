@@ -10,8 +10,6 @@ public partial class FoldOperatorParser : SymbolParser
 {
    public FoldOperatorParser(ExpressionBuilder builder) : base(builder) { }
 
-   //public override string Pattern => $"^ /(/s*) /(['<>'] ':') /({REGEX_OPERATORS}1%2) -(>{REGEX_OPERATORS})";
-
    [GeneratedRegex(@$"^(\s*)([<>]:)({REGEX_OPERATORS}{{1,2}})(?!{REGEX_OPERATORS})")]
    public override partial Regex Regex();
 

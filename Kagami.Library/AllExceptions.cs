@@ -121,9 +121,9 @@ public static class AllExceptions
 
    public static Exception expectedValue() => fail(messageExpectedValue());
 
-   public static string messageBadIndentation() => "Bad indentation";
+   public static string messageBadBlock() => "Bad block";
 
-   public static Exception badIndentation() => fail(messageBadIndentation());
+   public static Exception badBlock() => fail(messageBadBlock());
 
    public static string messageBadHex(string value) => $"{value} is bad hex";
 

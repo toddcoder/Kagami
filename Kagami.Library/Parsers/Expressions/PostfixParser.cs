@@ -6,6 +6,7 @@ public class PostfixParser(ExpressionBuilder builder) : MultiParser
    {
       get
       {
+         yield return new PostfixIncrementParser(builder);
          yield return new ToEndParser(builder);
          yield return new PostfixOperatorsParser(builder);
          yield return new PostfixInvokeParser(builder);

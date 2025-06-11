@@ -3,7 +3,7 @@ using CComplex = System.Numerics.Complex;
 
 namespace Kagami.Library.Objects;
 
-public interface INumeric
+public interface INumeric : IIncrementDecrement
 {
    (INumeric, INumeric) Compatible(INumeric obj);
 

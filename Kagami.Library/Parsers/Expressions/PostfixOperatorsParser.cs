@@ -7,8 +7,6 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class PostfixOperatorsParser : SymbolParser
 {
-   //public override string Pattern => "^ /(['?!']1%2) -(>['?!'])";
-
    [GeneratedRegex(@"^([\?!&]{1,2})(?![\?!&])")]
    public override partial Regex Regex();
 
