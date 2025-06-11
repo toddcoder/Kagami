@@ -20,14 +20,14 @@ public class NewContainer : Operation
          }
          else if (_x.ValueOf(machine.Pop()) is (true, var x))
          {
-            if (x is Container container)
+            if (x is Sequence container)
             {
                container.Add(y);
                return container;
             }
             else
             {
-               return new Container(x, y);
+               return new Sequence(x, y);
             }
          }
          else

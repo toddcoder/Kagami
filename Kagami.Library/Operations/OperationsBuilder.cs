@@ -394,6 +394,8 @@ public class OperationsBuilder
 
    public void Throw() => add(new Throw());
 
+   public void DivRem() => add(new DivRem());
+
    public void ArgumentLabel(string label) => add(new ArgumentLabel(label));
 
    public Result<Operations> ToOperations(ParseState state)
@@ -406,8 +408,8 @@ public class OperationsBuilder
 
          invokable.Address = operations.Count;
          block.Generate(this);
-         var lastOperation = operations[operations.Count - 1];
-         if (!(lastOperation is Return) /* && !(lastOperation is NoOp)*/)
+         var lastOperation = operations[^1];
+         if (!(lastOperation is Return))
          {
             operations.Add(new Return(false));
          }

@@ -21,7 +21,7 @@ public static class OperationFunctions
          case UserObject uo:
             var objectCollection = new ObjectCollection(uo);
             return objectCollection.GetIterator(lazy).Success();
-         case Container internalList:
+         case Sequence internalList:
             var array = new KArray(internalList.List);
             return array.GetIterator(lazy).Success();
          default:

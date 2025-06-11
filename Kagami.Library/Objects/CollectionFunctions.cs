@@ -72,18 +72,18 @@ public static class CollectionFunctions
       return collection.GetIterator(false).List().Select(i => i.AsString).ToString(connector);
    }
 
-   public static IEnumerable<int> indexList(Container container, int length)
+   public static IEnumerable<int> indexList(Sequence sequence, int length)
    {
-      return container.List
+      return sequence.List
          .Cast<Int>()
          .Select(i => wrapIndex(i.Value, length))
          .Where(i => i.Between(0).Until(length));
    }
 
-   private static Container conditionContainer(Container container)
+   private static Sequence conditionContainer(Sequence sequence)
    {
       var list = new List<IObject>();
-      foreach (var obj in container.List)
+      foreach (var obj in sequence.List)
       {
          switch (obj)
          {
@@ -107,35 +107,35 @@ public static class CollectionFunctions
          }
       }
 
-      return new Container(list);
+      return new Sequence(list);
    }
 
    public static IObject getIndexed<T>(T obj, IObject index, Func<T, int, IObject> intGetter,
-      Func<T, Container, IObject> listGetter) where T : IObject => index switch
+      Func<T, Sequence, IObject> listGetter) where T : IObject => index switch
    {
       Int i => intGetter(obj, i.Value),
-      Container container => listGetter(obj, conditionContainer(container)),
-      ICollection collection and not KString => listGetter(obj, new Container(collection.GetIterator(false).List())),
-      IIterator iterator => listGetter(obj, new Container(iterator.List())),
+      Sequence container => listGetter(obj, conditionContainer(container)),
+      ICollection collection and not KString => listGetter(obj, new Sequence(collection.GetIterator(false).List())),
+      IIterator iterator => listGetter(obj, new Sequence(iterator.List())),
       _ => throw invalidIndex(index)
    };
 
    public static void setIndexed<T>(T obj, IObject index, IObject value, Action<T, int, IObject> intSetter,
-      Action<T, Container, IObject> listSetter) where T : IObject
+      Action<T, Sequence, IObject> listSetter) where T : IObject
    {
       switch (index)
       {
          case Int i:
             intSetter(obj, i.Value, value);
             return;
-         case Container container:
+         case Sequence container:
             listSetter(obj, conditionContainer(container), value);
             return;
          case ICollection collection and not KString:
-            listSetter(obj, new Container(collection.GetIterator(false).List()), value);
+            listSetter(obj, new Sequence(collection.GetIterator(false).List()), value);
             return;
          case IIterator iterator:
-            listSetter(obj, new Container(iterator.List()), value);
+            listSetter(obj, new Sequence(iterator.List()), value);
             return;
          default:
             throw invalidIndex(index);

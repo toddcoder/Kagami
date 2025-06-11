@@ -37,7 +37,7 @@ public class Module
       "Placeholder" => new PlaceholderClass(),
       "Range" => new RangeClass(),
       "Dictionary" => new DictionaryClass(),
-      "Container" => new ContainerClass(),
+      "Container" => new SequenceClass(),
       "Unmatched" => new UnmatchedClass(),
       "Complex" => new ComplexClass(),
       "Rational" => new RationalClass(),

@@ -1,46 +1,50 @@
-﻿using Core.Monads;
+﻿using Core.Collections;
+using Core.Enumerables;
 using static Kagami.Library.Objects.ObjectFunctions;
-using static Core.Monads.MonadFunctions;
 
-namespace Kagami.Library.Objects
+namespace Kagami.Library.Objects;
+
+public class Sequence : IObject
 {
-   public class Sequence : Iterator
+   protected List<IObject> list;
+
+   public Sequence(IObject x, IObject y)
    {
-      protected int count;
-      protected IObject factor;
-      protected IObject offset;
-      protected int i;
-
-      public Sequence(int count, IObject offset) : base((ICollection)KArray.Empty)
-      {
-         this.count = count;
-         factor = Int.IntObject(1);
-         this.offset = offset;
-
-         i = 0;
-      }
-
-      public Sequence(Sequence sequence, IObject factor) : base((ICollection)KArray.Empty)
-      {
-         count = sequence.count;
-         offset = sequence.offset;
-         this.factor = factor;
-
-         i = 0;
-      }
-
-      public override Maybe<IObject> Next()
-      {
-         if (i < count)
-         {
-            var result = sendMessage(Int.IntObject(i++), "*", factor);
-            result = sendMessage(result, "+", offset);
-            return result.Some();
-         }
-         else
-         {
-            return nil;
-         }
-      }
+      list = [x, y];
+      ExpandInTuple = true;
    }
+
+   public Sequence(IEnumerable<IObject> objects)
+   {
+      list = [..objects];
+      ExpandInTuple = true;
+   }
+
+   public List<IObject> List => list;
+
+   public string ClassName => "Sequence";
+
+   public string AsString => list.Select(i => i.AsString).ToString(" ");
+
+   public string Image => list.Select(i => i.Image).ToString(", ");
+
+   public int Hash => list.GetHashCode();
+
+   public bool IsEqualTo(IObject obj)
+   {
+      return obj is Sequence container && list.Count == container.list.Count && list.All(i => list.Contains(i));
+   }
+
+   public bool Match(IObject comparisand, Hash<string, IObject> bindings)
+   {
+      return matchSingle(this, comparisand, (container, o) => container.In(o), bindings);
+   }
+
+   public bool IsTrue => list.Count > 0;
+
+   public void Add(IObject item) => list.Add(item);
+
+   public bool In(IObject obj) => list.Contains(obj);
+
+   public bool ExpandInTuple { get; set; }
 }

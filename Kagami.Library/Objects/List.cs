@@ -25,7 +25,7 @@ public class List : IObject, ICollection
       return current;
    }
 
-   public static List NewList(Container list) => NewList(list.List);
+   public static List NewList(Sequence list) => NewList(list.List);
 
    protected Maybe<IObject> _head = nil;
    protected List tail = null!;

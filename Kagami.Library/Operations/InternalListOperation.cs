@@ -7,11 +7,11 @@ namespace Kagami.Library.Operations;
 
 public abstract class InternalListOperation : OneOperandOperation
 {
-   public abstract Optional<IObject> Execute(Container list);
+   public abstract Optional<IObject> Execute(Sequence list);
 
    public override Optional<IObject> Execute(Machine machine, IObject value)
    {
-      if (value is Container list)
+      if (value is Sequence list)
       {
          return Execute(list);
       }

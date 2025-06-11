@@ -128,12 +128,12 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
       }
    }
 
-   public KString this[Container container]
+   public KString this[Sequence sequence]
    {
       get
       {
          var builder = new StringBuilder();
-         foreach (var index in indexList(container, value.Length))
+         foreach (var index in indexList(sequence, value.Length))
          {
             builder.Append(value[index]);
          }

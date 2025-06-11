@@ -15,10 +15,10 @@ public class NewOpenRange : TwoOperandOperation
             return y switch
             {
                Lambda lambda1 => new OpenRange(x, lambda1),
-               _ => new Sequence(i.Value, y)
+               _ => new SequenceIterator(i.Value, y)
             };
-         case Sequence seq:
-            return new Sequence(seq, y);
+         case SequenceIterator seq:
+            return new SequenceIterator(seq, y);
          default:
             if (y is Lambda lambda2)
             {

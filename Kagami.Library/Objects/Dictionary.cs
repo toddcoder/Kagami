@@ -158,11 +158,11 @@ public class Dictionary : IObject, IMutableCollection
       }
    }
 
-   public IObject this[Container container]
+   public IObject this[Sequence sequence]
    {
       get
       {
-         var list = container.List.Where(key => dictionary.ContainsKey(key)).Select(key => this[key]).ToList();
+         var list = sequence.List.Where(key => dictionary.ContainsKey(key)).Select(key => this[key]).ToList();
          return new KArray(list);
       }
       set
@@ -173,7 +173,7 @@ public class Dictionary : IObject, IMutableCollection
                return;
             case None:
             {
-               foreach (var key in container.List)
+               foreach (var key in sequence.List)
                {
                   dictionary.Remove(key);
                }
@@ -185,7 +185,7 @@ public class Dictionary : IObject, IMutableCollection
                var _iterator = getIterator(value, false);
                if (_iterator is (true, var iterator))
                {
-                  foreach (var key in container.List)
+                  foreach (var key in sequence.List)
                   {
                      var _item = iterator.Next();
                      if (_item is (true, var item))
@@ -206,7 +206,7 @@ public class Dictionary : IObject, IMutableCollection
                break;
             default:
             {
-               foreach (var key in container.List)
+               foreach (var key in sequence.List)
                {
                   this[key] = value;
                }

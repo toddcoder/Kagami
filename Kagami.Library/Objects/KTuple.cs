@@ -40,7 +40,7 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
 
    public KTuple(IObject[] items) : this()
    {
-      if (items is [Container { ExpandInTuple: true } il])
+      if (items is [Sequence { ExpandInTuple: true } il])
       {
          this.items = il.List.ToArray();
       }

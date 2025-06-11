@@ -64,9 +64,9 @@ public class DictionaryClass : BaseClass, ICollectionClass
 
    protected static IObject getKeyed(Dictionary dictionary, IObject key) => key switch
    {
-      Container internalList => dictionary[internalList],
-      ICollection collection and not KString => dictionary[new Container(collection.GetIterator(false).List())],
-      IIterator iterator => dictionary[new Container(iterator.List())],
+      Sequence internalList => dictionary[internalList],
+      ICollection collection and not KString => dictionary[new Sequence(collection.GetIterator(false).List())],
+      IIterator iterator => dictionary[new Sequence(iterator.List())],
       _ => dictionary[key]
    };
 
@@ -74,14 +74,14 @@ public class DictionaryClass : BaseClass, ICollectionClass
    {
       switch (key)
       {
-         case Container internalList:
+         case Sequence internalList:
             dictionary[internalList] = value;
             return dictionary;
          case ICollection collection and not KString:
-            dictionary[new Container(collection.GetIterator(false).List())] = value;
+            dictionary[new Sequence(collection.GetIterator(false).List())] = value;
             return dictionary;
          case IIterator iterator:
-            dictionary[new Container(iterator.List())] = value;
+            dictionary[new Sequence(iterator.List())] = value;
             return dictionary;
          default:
             dictionary[key] = value;

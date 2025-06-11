@@ -124,7 +124,7 @@ public static class ParserFunctions
       }
    }
 
-   public static Optional<Container> getInternalList(ParseState state)
+   public static Optional<Sequence> getInternalList(ParseState state)
    {
       var builder = new ExpressionBuilder(ExpressionFlags.Standard);
       var constantsParser = new ConstantsParser(builder);
@@ -172,7 +172,7 @@ public static class ParserFunctions
             }
          }
 
-         return new Container(list);
+         return new Sequence(list);
       }
       else
       {
@@ -1173,6 +1173,9 @@ public static class ParserFunctions
          case "!%":
             _symbol = new RemainderZeroSymbol(true);
             break;
+         case "/%":
+            _symbol = new DivRemSymbol();
+            break;
          case "^":
             _symbol = new RaiseSymbol();
             break;
@@ -1284,7 +1287,7 @@ public static class ParserFunctions
          case ":-":
             _symbol = new BindSymbol();
             break;
-         case "##":
+         case "??":
             _symbol = new SendBinaryMessageSymbol("defaultTo(_)", Precedence.SendMessage);
             break;
       }

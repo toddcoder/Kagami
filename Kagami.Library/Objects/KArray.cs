@@ -151,12 +151,12 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       }
    }
 
-   public IObject this[Container container]
+   public IObject this[Sequence sequence]
    {
       get
       {
          var result = new List<IObject>();
-         foreach (var index in indexList(container, list.Count))
+         foreach (var index in indexList(sequence, list.Count))
          {
             result.Add(list[index]);
          }
@@ -172,7 +172,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
             case ICollection collection and not KString:
             {
                var valueIterator = collection.GetIterator(false);
-               foreach (var index in indexList(container, list.Count))
+               foreach (var index in indexList(sequence, list.Count))
                {
                   var _item = valueIterator.Next();
                   if (_item is (true, var item))
@@ -190,7 +190,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
             default:
             {
-               foreach (var index in indexList(container, list.Count))
+               foreach (var index in indexList(sequence, list.Count))
                {
                   list[index] = value;
                }

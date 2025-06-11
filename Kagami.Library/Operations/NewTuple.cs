@@ -5,7 +5,7 @@ namespace Kagami.Library.Operations;
 
 public class NewTuple : InternalListOperation
 {
-   public override Optional<IObject> Execute(Container list)
+   public override Optional<IObject> Execute(Sequence list)
    {
       return new KTuple(list.List.ToArray());
    }

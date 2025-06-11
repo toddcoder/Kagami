@@ -68,7 +68,7 @@ public static class ObjectFunctions
                return false;
             }
 
-         case Container internalList:
+         case Sequence internalList:
             return internalList.In(source);
          case Regex regex:
             return regex.IsMatch(source.AsString).IsTrue;
