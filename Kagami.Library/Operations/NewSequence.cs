@@ -6,7 +6,7 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Operations;
 
-public class NewContainer : Operation
+public class NewSequence : Operation
 {
    public override Optional<IObject> Execute(Machine machine)
    {
@@ -20,10 +20,10 @@ public class NewContainer : Operation
          }
          else if (_x.ValueOf(machine.Pop()) is (true, var x))
          {
-            if (x is Sequence container)
+            if (x is Sequence sequence)
             {
-               container.Add(y);
-               return container;
+               sequence.Add(y);
+               return sequence;
             }
             else
             {
@@ -41,5 +41,5 @@ public class NewContainer : Operation
       }
    }
 
-   public override string ToString() => "new.container";
+   public override string ToString() => "new.sequence";
 }

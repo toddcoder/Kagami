@@ -1,11 +1,6 @@
-﻿class Dummy {
-	Dummy.n++
+﻿var some = none
+let result = match some {
+	case x? = x
+	case _ = "foo"
 }
-static {
-	var n = 0
-}
-
-var dummy1 = Dummy()
-Dummy.n
-var dummy2 = Dummy()
-Dummy.n
+result

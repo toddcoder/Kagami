@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Core.Collections;
+﻿using Core.Collections;
 using Core.Enumerables;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
@@ -19,9 +17,9 @@ public class Cycle : IObject, ICollection
    public Cycle(params IObject[] items)
    {
       this.items = items;
-      if (this.items.Length == 2 && this.items[1] is Lambda lambda)
+      if (this.items is [_, Lambda lambda])
       {
-         _seedLambda = (this.items[0], lambda).Some();
+         _seedLambda = (this.items[0], lambda);
       }
       else
       {
