@@ -1,9 +1,11 @@
-﻿open sys
-
-class Vector(x = 0, y = 0) {
-	func +(v Vector) = Vector(x + v.x, y + v.y)
+﻿class Dummy {
+	Dummy.n++
+}
+static {
+	var n = 0
 }
 
-var a = Vector(3, 1)
-var b = Vector(1, 2)
-var c = a + b
+var dummy1 = Dummy()
+Dummy.n
+var dummy2 = Dummy()
+Dummy.n

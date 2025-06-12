@@ -217,11 +217,11 @@ public static class ObjectFunctions
       {
          return sendMessage(obj, "isEqualTo(_)", other).IsTrue;
       }
-      else if (other is UserObject otherUserObject && obj.ClassName == otherUserObject.ClassName)
+      /*else if (other is UserObject otherUserObject && obj.ClassName == otherUserObject.ClassName)
       {
          var fields = otherUserObject.Fields;
          return obj.Fields.All(f => fields.ContainsKey(f.fieldName) && f.field.Value.IsEqualTo(fields[f.fieldName]));
-      }
+      }*/
       else
       {
          return false;
@@ -565,12 +565,13 @@ public static class ObjectFunctions
          source = match.Groups[2].Value;
       }
 
-      if (source.Matches("^ '<' /(-['>']+) '>' /@") is (true, var result3))
+      if (source.MatchOf("^<([^>]+)>(.*)$") is (true, var matches3))
       {
-         var classNames = result3.FirstGroup.Unjoin("/s+");
+         var match = matches3[0];
+         var classNames = match.Groups[1].Value.Unjoin("/s+");
          var classes = classNames.Select(cn => Module.Global.Value.Class(cn, true).Required(messageClassNotFound(cn))).ToArray();
          _typeConstraint = new TypeConstraint(classes);
-         source = result3.SecondGroup.Trim();
+         source = match.Groups[2].Value.Trim();
       }
 
       var selectorItemType = source switch

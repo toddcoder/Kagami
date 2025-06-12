@@ -17,7 +17,6 @@ public class UserClass : BaseClass
    protected Maybe<UserClass> _parentClass;
    protected Set<Selector> signatures = [];
    protected Maybe<UserObject> _metaObject = nil;
-   protected SelectorHash<UserClass> mixins = [];
 
    public UserClass(string className, string parentClassName)
    {
@@ -26,15 +25,6 @@ public class UserClass : BaseClass
 
       _parentClass = maybe<UserClass>() & this.parentClassName.IsNotEmpty() &
          (() => Module.Global.Value.Class(parentClassName).Map(bc => (UserClass)bc));
-   }
-
-   public void Include(Mixin mixin)
-   {
-      var mixinClass = (UserClass)classOf(mixin);
-      foreach (var (selector, _) in mixinClass.messages)
-      {
-         mixins[selector] = mixinClass;
-      }
    }
 
    public override string Name => className;
@@ -168,38 +158,6 @@ public class UserClass : BaseClass
       else
       {
          throw fail("No metaobject");
-      }
-   }
-
-   public override bool RespondsTo(Selector selector)
-   {
-      if (base.RespondsTo(selector))
-      {
-         return true;
-      }
-      else if (mixins.ContainsKey(selector))
-      {
-         return true;
-      }
-      else
-      {
-         return messages.ContainsKey("missing(_<String>,_<Tuple>)");
-      }
-   }
-
-   public override IObject DynamicInvoke(IObject obj, Message message)
-   {
-      if (mixins.ContainsKey(message.Selector))
-      {
-         return mixins[message.Selector].SendMessage(obj, message);
-      }
-      else
-      {
-         var originalMessage = KString.StringObject(message.Selector.Name);
-         var args = message.Arguments.ToArray();
-         var tuple = new KTuple(args);
-
-         return sendMessage(obj, "missing(_<String>,_<Tuple>)", originalMessage, tuple);
       }
    }
 
