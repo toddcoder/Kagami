@@ -1,6 +1,11 @@
-﻿var some = none
-let result = match some {
-	case x? = x
-	case _ = "foo"
+﻿open sys
+
+class Philosopher(name) {
+	func eat() = println($"(name) eats")
 }
-result
+
+let list = [Philosopher("bob"), Philosopher("earl")]
+
+for p in list {
+	p.eat()
+}
