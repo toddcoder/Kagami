@@ -43,7 +43,7 @@ public class Return : Operation
       }
       else
       {
-         return nil;
+         return fail("Function frame not pushed");
       }
    }
 

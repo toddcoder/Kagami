@@ -76,4 +76,6 @@ public class FrameGroup : IEnumerable<Frame>
          return fields;
       }
    }
+
+   public string AsString => frames.Select(f => f.AsString).ToString(", ");
 }

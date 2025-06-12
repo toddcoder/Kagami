@@ -42,11 +42,11 @@ public class Invoke : OneOperandOperation
       else
       {
          var returnAddress = machine.Address;
-         var frame = new Frame(returnAddress, fields);
+         var frame = new Frame(returnAddress, arguments, fields);
          machine.PushFrame(frame);
-         frame = new Frame(arguments);
+         //frame = new Frame(arguments);
          frame.SetFields(invokable.Parameters);
-         machine.PushFrame(frame);
+         //machine.PushFrame(frame);
          machine.GoTo(invokable.Address);
       }
    }
