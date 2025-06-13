@@ -2,10 +2,13 @@
 
 inclusion Shape {
 	required area()
-	func string = $"Abstract area: (area())"
+	func string = "foobar"
 }
 
 class Square(width Int) {
 	include Shape
 	func area() = width ^ 2
 }
+var square = Square(100)
+println(square)
+println(square.width)

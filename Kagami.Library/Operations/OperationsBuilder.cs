@@ -29,7 +29,7 @@ public class OperationsBuilder
    {
       if (invokables.ContainsKey(invokable.Index) && !overriding)
       {
-         return fail($"Invokable {invokable.Image} already registered");
+         return invokable.Index; //fail($"Invokable {invokable.Image} already registered");
       }
       else
       {
