@@ -18,17 +18,15 @@ public partial class DoParser : SymbolParser
       {
       }
 
-      //public override string Pattern => $"^ /({REGEX_FIELD}) /(/s*) /'<-'";
-
-      [GeneratedRegex(@$"^({REGEX_FIELD})(\s*)(<-)")]
+      [GeneratedRegex(@$"^(\s*)({REGEX_FIELD})(\s*)(<-)")]
       public override partial Regex Regex();
 
       public (string, Expression) NameExpression { get; set; }
 
       public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
       {
-         fieldName = tokens[1].Text;
-         state.Colorize(tokens, Color.Identifier, Color.Whitespace, Color.Structure);
+         fieldName = tokens[2].Text;
+         state.Colorize(tokens, Color.Whitespace, Color.Identifier, Color.Whitespace, Color.Structure);
 
          return unit;
       }
@@ -44,9 +42,8 @@ public partial class DoParser : SymbolParser
    {
    }
 
-   //public override string Pattern => $"^ /(/s*) /'do' {REGEX_ANTICIPATE_END}";
 
-   [GeneratedRegex(@$"^(\s*)(do)\b")]
+   [GeneratedRegex(@"^(\s*)(do)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)

@@ -29,7 +29,6 @@ public class AssignMetaObject : Operation
             if (field.Value is IInvokableObject io)
             {
                var invokable = io.Invokable;
-               machine.PushAddress();
                var _obj = machine.Invoke(invokable, Arguments.Empty);
                if (_obj is (true, var obj))
                {

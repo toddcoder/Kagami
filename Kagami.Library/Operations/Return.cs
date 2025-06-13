@@ -11,7 +11,6 @@ public class Return : Operation
 {
    public static Optional<IObject> ReturnAction(Machine machine, bool returnTopOfStack)
    {
-      machine.Operations.PopAddress();
       ReturnValue returnValue;
       if (returnTopOfStack)
       {
@@ -31,8 +30,13 @@ public class Return : Operation
       }
 
       var frames = machine.PopFrames();
-      if (frames.FunctionFrame)
+      if (frames.FunctionFrame is (true, var frame))
       {
+         if (frame.Address is (true, var address))
+         {
+            machine.GoTo(address);
+         }
+
          return returnValue switch
          {
             ReturnValue.EmptyStack => emptyStack("return"),

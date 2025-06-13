@@ -30,7 +30,6 @@ public class Invoke : OneOperandOperation
       invokable.Arguments = arguments;
       var iterator = invokable.GetIterator(false);
       machine.Push((IObject)iterator);
-      machine.PopAddress();
    }
 
    public static void InvokeInvokable(Machine machine, IInvokable invokable, Arguments arguments, Fields fields)
@@ -41,20 +40,16 @@ public class Invoke : OneOperandOperation
       }
       else
       {
-         var returnAddress = machine.Address;
-         var frame = new Frame(returnAddress, arguments, fields);
+         var frame = new Frame(invokable.RequiresFunctionFrame ? machine.Address : nil, arguments, fields);
          machine.PushFrame(frame);
-         //frame = new Frame(arguments);
          frame.SetFields(invokable.Parameters);
-         //machine.PushFrame(frame);
          machine.GoTo(invokable.Address);
       }
    }
 
    public static void InvokeConstructor(Machine machine, IInvokable invokable, Arguments arguments, Fields fields)
    {
-      var returnAddress = machine.Address;
-      var frame = new Frame(returnAddress, arguments, fields);
+      var frame = new Frame(invokable.RequiresFunctionFrame ? machine.Address : nil, arguments, fields);
       machine.PushFrame(frame);
       frame.SetFields(invokable.Parameters);
       machine.GoTo(invokable.Address);
@@ -72,7 +67,6 @@ public class Invoke : OneOperandOperation
          case PackageFunction packageFunction:
             increment = true;
             var result = packageFunction.Invoke(arguments);
-            machine.PopAddress();
 
             return result.Just();
          case IMayInvoke mayInvoke:

@@ -21,4 +21,6 @@ public class ConstructorInvokable : IInvokable
    public string Image => $"{ClassName}({Parameters.Select(p => p.Name).ToString(", ")})";
 
    public bool Constructing => true;
+
+   public bool RequiresFunctionFrame => true;
 }

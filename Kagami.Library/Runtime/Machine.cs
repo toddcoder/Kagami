@@ -116,8 +116,7 @@ public class Machine
 
    public Optional<IObject> Invoke(IInvokable invokable, Arguments arguments, Fields fields)
    {
-      var returnAddress = Address;
-      var frame = new Frame(returnAddress, arguments, fields);
+      var frame = new Frame(Address + 1, arguments, fields);
 
       if (invokable is YieldingInvokable yfi)
       {
@@ -125,10 +124,7 @@ public class Machine
       }
 
       PushFrame(frame);
-      /*frame = new Frame(arguments);
-      PushFrame(frame);*/
       frame.SetFields(invokable.Parameters);
-      PushAddress();
       if (GoTo(invokable.Address))
       {
          return invoke();
@@ -141,8 +137,7 @@ public class Machine
 
    public Optional<IObject> Invoke(IInvokable invokable, Arguments arguments)
    {
-      var returnAddress = Address;
-      var frame = new Frame(returnAddress, arguments);
+      var frame = new Frame(invokable.RequiresFunctionFrame ? Address : nil, arguments);
 
       if (invokable is YieldingInvokable yfi)
       {
@@ -151,7 +146,6 @@ public class Machine
 
       PushFrame(frame);
       frame.SetFields(invokable.Parameters);
-      //PushAddress();
 
       return GoTo(invokable.Address) ? invoke() : badAddress(invokable.Address);
    }
@@ -663,12 +657,6 @@ public class Machine
          return fail("Try frame not found");
       }
    }
-
-   public void PushAddress() => operations.PushAddress();
-
-   public void SaveAddress() => operations.SaveAddress();
-
-   public void PopAddress() => operations.PopAddress();
 
    public string StackAsString => stack.Peek().ToString();
 

@@ -164,24 +164,18 @@ public class OperationsBuilder
          argument.Generate(this);
       }
 
-      PushAddress();
       Invoke(functionName, arguments.Length);
    }
 
    public void Invoke(string functionName, int count)
    {
       ToArguments(count);
-      PushAddress();
       add(new Invoke(functionName));
    }
 
    public void PostfixInvoke() => add(new PostfixInvoke());
 
-   public void Return(bool returnTopOfStack)
-   {
-      add(new Return(returnTopOfStack));
-      PopAddress();
-   }
+   public void Return(bool returnTopOfStack) => add(new Return(returnTopOfStack));
 
    public void ReturnType(bool returnTopOfStack, TypeConstraint typeConstraint)
    {
@@ -528,10 +522,6 @@ public class OperationsBuilder
          GoTo(returnLabels.Peek());
       }
    }
-
-   public void PushAddress() => add(new PushAddress());
-
-   public void PopAddress() => add(new PopAddress());
 
    public void RequireFunction(Selector selector) => add(new RequireFunction(selector));
 

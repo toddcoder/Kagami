@@ -45,6 +45,7 @@ public partial class Playground : Form
    protected Idle idle = new(1);
    protected bool isDirty;
    protected UiAction uiValue = new() { AutoSizeText = true };
+   protected UiAction uiType = new() { AutoSizeText = true };
    protected UiAction uiElapsed = new() { AutoSizeText = true };
    protected UiAction uiStatus = new();
    protected UiAction uiRun = new();
@@ -186,15 +187,22 @@ public partial class Playground : Form
          uiRun.ClickText = "Run code";
 
          var builder = new TableLayoutBuilder(table);
-         _ = builder.Col + 30f + 200 + 70f + 200;
-         _ = builder.Row + 50f + 50f + 40;
+         _ = builder.Col + 200 + 100f + 200;
+         _ = builder.Row + 50f + 50f + 40 + 40;
          builder.SetUp();
 
-         (builder + textEditor).SpanCol(4).Row();
+         (builder + textEditor).SpanCol(3).Row();
 
-         (builder + textConsole).SpanCol(4).Row();
+         (builder + textConsole).SpanCol(3).Row();
 
-         (builder + uiValue).Next();
+         uiValue.ZeroOut();
+         uiType.ZeroOut();
+         (builder + uiValue).SpanCol(2).Next();
+         (builder + uiType).Row();
+
+         uiElapsed.ZeroOut();
+         uiStatus.ZeroOut();
+         uiRun.ZeroOut();
          (builder + uiElapsed).Next();
          (builder + uiStatus).Next();
          (builder + uiRun).Row();
@@ -252,6 +260,7 @@ public partial class Playground : Form
             {
                machine.PackageFolder = packageFolder.FullPath;
                var value = "not executed";
+               var type = "";
                if (execute)
                {
                   var _result = machine.Execute();
@@ -259,7 +268,8 @@ public partial class Playground : Form
                   {
                      cancelled = context.Cancelled();
                      context.Reset();
-                     value = $"{result.Image} | {result.ClassName}";
+                     value = result.Image;
+                     type = result.ClassName;
                   }
                   else
                   {
@@ -270,6 +280,7 @@ public partial class Playground : Form
                      }
 
                      value = "exception";
+                     type = "";
                      status = (message: _result.Exception.Message, type: UiActionType.Failure);
                   }
                }
@@ -312,14 +323,18 @@ public partial class Playground : Form
                if (cancelled)
                {
                   uiValue.Failure("cancelled");
+                  uiType.Failure("");
+                  cancelled = false;
                }
                else if (value == "exception")
                {
                   uiValue.Failure(value);
+                  uiType.Failure("");
                }
                else
                {
                   uiValue.Success(value);
+                  uiType.Success(type);
                }
             }
             else

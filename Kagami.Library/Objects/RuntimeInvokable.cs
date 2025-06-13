@@ -23,5 +23,7 @@ namespace Kagami.Library.Objects
       public string Image { get; }
 
       public bool Constructing => false;
+
+      public bool RequiresFunctionFrame => false;
    }
 }

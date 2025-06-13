@@ -16,36 +16,36 @@ public class Frame
 
    protected MaybeStack<IObject> stack = [];
    protected Maybe<IObject> returnValue = nil;
-   protected int address;
+   protected Maybe<int> _address;
    protected Fields fields;
    protected Arguments arguments;
    protected FrameType frameType = FrameType.Function;
    protected bool parametersSet;
 
-   public Frame(int address, Arguments arguments)
+   public Frame(Maybe<int> _address, Arguments arguments)
    {
-      this.address = address;
+      this._address = _address;
       fields = new Fields();
       this.arguments = arguments;
    }
 
-   public Frame(int address, Fields fields)
+   public Frame(Maybe<int> _address, Fields fields)
    {
-      this.address = address;
+      this._address = _address;
       this.fields = fields;
       arguments = Arguments.Empty;
    }
 
-   public Frame(int address, Arguments arguments, Fields fields)
+   public Frame(Maybe<int> _address, Arguments arguments, Fields fields)
    {
-      this.address = address;
+      this._address = _address;
       this.fields = fields;
       this.arguments = arguments;
    }
 
-   public Frame(int address, IInvokable invokable)
+   public Frame(Maybe<int> _address, IInvokable invokable)
    {
-      this.address = address;
+      this._address = _address;
       if (invokable is IProvidesFields { ProvidesFields: true } pf)
       {
          fields = pf.Fields;
@@ -58,13 +58,13 @@ public class Frame
       arguments = Arguments.Empty;
    }
 
-   public Frame() : this(-1, Arguments.Empty) => frameType = FrameType.Standard;
+   public Frame() : this(nil, Arguments.Empty) => frameType = FrameType.Standard;
 
-   public Frame(Fields fields) : this(-1, fields) => frameType = FrameType.Standard;
+   public Frame(Fields fields) : this(nil, fields) => frameType = FrameType.Standard;
 
-   public Frame(IInvokable invokable) : this(-1, invokable) => frameType = FrameType.Standard;
+   public Frame(IInvokable invokable) : this(nil, invokable) => frameType = FrameType.Standard;
 
-   public Frame(Arguments arguments) : this(-1, arguments) => frameType = FrameType.Standard;
+   public Frame(Arguments arguments) : this(nil, arguments) => frameType = FrameType.Standard;
 
    public FrameType FrameType
    {
@@ -221,10 +221,10 @@ public class Frame
 
    public Maybe<IObject> ReturnValue => returnValue;
 
-   public int Address
+   public Maybe<int> Address
    {
-      get => address;
-      set => address = value;
+      get => _address;
+      set => _address = value;
    }
 
    public Fields Fields => fields;

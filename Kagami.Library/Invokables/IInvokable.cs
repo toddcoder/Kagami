@@ -11,4 +11,6 @@ public interface IInvokable
    string Image { get; }
 
    bool Constructing { get; }
+
+   public bool RequiresFunctionFrame { get; }
 }

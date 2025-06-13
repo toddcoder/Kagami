@@ -25,6 +25,8 @@ namespace Kagami.Library.Invokables
 
 	   public virtual bool Constructing => false;
 
-	   public override string ToString() => Image;
+      public bool RequiresFunctionFrame => true;
+
+      public override string ToString() => Image;
 	}
 }
