@@ -43,7 +43,7 @@ public class Yield : Operation
             }
 
             popped = copy;
-            var machineAddress = machine.Address;
+            var machineAddress = machine.Address + 1;
             _value = new YieldReturn(popped, machineAddress, frames);
          }
       }

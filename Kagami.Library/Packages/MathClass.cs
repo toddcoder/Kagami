@@ -42,6 +42,7 @@ public class MathClass : PackageClass
       registerPackageFunction("long(_)", (obj, msg) => function<KMath, IObject>(obj, msg, (m, n) => m.XLong(n)));
       registerPackageFunction("complex(_)", (obj, msg) => function<KMath, IObject>(obj, msg, (m, n) => m.XComplex(n)));
       registerPackageFunction("rational(_)", (obj, msg) => function<KMath, IObject>(obj, msg, (m, n) => m.XRational(n)));
+      registerPackageFunction("decimal(_)", (obj, msg) => function<KMath, IObject>(obj, msg, (m, n) => m.XDecimal(n)));
       registerPackageFunction("hypot(_,_)", (obj, msg) => function<KMath, IObject, IObject>(obj, msg, (m, x, y) => m.Hypot(x, y)));
       registerPackageFunction("convert(toLong:_<String>,base:_<Int>)",
          (obj, msg) => function<KMath, KString, Int>(obj, msg, (m, s, i) => m.StringToLong(s.Value, i.Value)));

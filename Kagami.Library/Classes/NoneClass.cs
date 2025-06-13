@@ -19,6 +19,7 @@ public class NoneClass : BaseClass
       messages["flatMap(_<Lambda>,_<Lambda>)"] = (obj, msg) => function<None, Lambda, Lambda>(obj, msg, (n, l1, l2) => n.FlatMap(l1, l2));
       messages["defaultTo(_)"] = (obj, msg) => function<None, IObject>(obj, msg, (_, o) => o);
       messages["canBind".get()] = (obj, _) => function<None>(obj, n => n.CanBind);
+      messages["value".get()] = (obj, _) => function<None>(obj, n => n.Value);
    }
 
    public override bool AssignCompatible(BaseClass otherClass) => otherClass is SomeClass or NoneClass;

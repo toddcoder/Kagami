@@ -1,4 +1,5 @@
 ﻿using Core.Collections;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
@@ -28,7 +29,7 @@ public readonly struct Failure : IObject, IResult, IMonad, IBoolean
 
    public bool IsTrue => false;
 
-   public IObject Value => throw new Exception("No value");
+   public IObject Value => throw fail(Error.Message.Value);
 
    public Error Error { get; }
 

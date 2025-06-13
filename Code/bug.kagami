@@ -1,10 +1,11 @@
 ﻿open sys
 
-func f() = (5, 6)
-
-if f() is (x, y) {
-	println(x, y)
+inclusion Shape {
+	required area()
+	func string = $"Abstract area: (area())"
 }
-else {
-	println("none")
+
+class Square(width Int) {
+	include Shape
+	func area() = width ^ 2
 }

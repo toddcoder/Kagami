@@ -52,7 +52,11 @@ public class YieldingInvokable : IInvokable, ICollection, IObject
 
    public IIterator GetIterator(bool lazy)
    {
-      var clone = new YieldingInvokable(selector, Parameters, Image) { Address = Address, Arguments = Arguments, Index = Index };
+      var clone = new YieldingInvokable(selector, Parameters, Image)
+      {
+         Arguments = Arguments, Index = Index,
+         Address = Address
+      };
       return lazy ? new LazyIterator(clone) : new Iterator(clone);
    }
 
@@ -64,10 +68,10 @@ public class YieldingInvokable : IInvokable, ICollection, IObject
          switch (result)
          {
             case None:
-               Machine.Current.Value.Operations.Advance(-1);
+               //Machine.Current.Value.Operations.Advance(-1);
                return nil;
             case YieldReturn yieldReturn:
-               Address = yieldReturn.Address + 1;
+               Address = yieldReturn.Address;
                Frames = yieldReturn.Frames;
                return yieldReturn.ReturnValue.Some();
             default:

@@ -1,4 +1,5 @@
 ﻿using Core.Collections;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
@@ -19,7 +20,7 @@ public struct None : IObject, IOptional, IBoolean, IEquatable<None>, IMonad
 
    public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
-   public IObject Value => Unassigned.Value;
+   public IObject Value => throw fail("No value is provided");
 
    public bool IsSome => false;
 

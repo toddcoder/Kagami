@@ -6,6 +6,7 @@ using Core.Collections;
 using Core.Enumerables;
 using Core.Matching;
 using Core.Monads;
+using Core.Objects;
 using Core.Strings;
 using static Kagami.Library.AllExceptions;
 
@@ -83,6 +84,22 @@ public class Sys : Package
    {
       return Machine.Current.Value.Context.ReadLine()
          .Map(s => Success.Object(KString.StringObject(s)))
+         .Recover(e => Failure.Object(e.Message));
+   }
+
+   public IObject ReadInt()
+   {
+      return Machine.Current.Value.Context.ReadLine()
+         .Map(s => s.Result().Int32())
+         .Map(i => Success.Object(Int.IntObject(i)))
+         .Recover(e => Failure.Object(e.Message));
+   }
+
+   public IObject ReadFloat()
+   {
+      return Machine.Current.Value.Context.ReadLine()
+         .Map(s => s.Result().Double())
+         .Map(f => Success.Object(Float.FloatObject(f)))
          .Recover(e => Failure.Object(e.Message));
    }
 

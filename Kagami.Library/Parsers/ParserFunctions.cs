@@ -1409,16 +1409,18 @@ public static class ParserFunctions
          }
       }
 
-      var _takeExpression = getExpression(state, flags);
-      if (_takeExpression is (true, var takeExpression))
+      if (!state.CurrentSource.IsMatch("^ /s* ['};']"))
       {
-         skipTake.Take = takeExpression;
+         var _takeExpression = getExpression(state, flags);
+         if (_takeExpression is (true, var takeExpression))
+         {
+            skipTake.Take = takeExpression;
+         }
+         else if (_takeExpression.Exception is (true, var exception))
+         {
+            return exception;
+         }
       }
-      else if (_takeExpression.Exception is (true, var exception))
-      {
-         return exception;
-      }
-
       var _end = state.Scan(@"^(\s*)([};])", colorize);
       if (_end is (true, var end))
       {
