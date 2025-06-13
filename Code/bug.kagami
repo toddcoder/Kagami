@@ -1,11 +1,10 @@
 ﻿open sys
 
-class Philosopher(name) {
-	func eat() = println($"(name) eats")
+func f() = (5, 6)
+
+if f() is (x, y) {
+	println(x, y)
 }
-
-let list = [Philosopher("bob"), Philosopher("earl")]
-
-for p in list {
-	p.eat()
+else {
+	println("none")
 }

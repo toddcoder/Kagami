@@ -9,4 +9,6 @@ public class PreIncrementSymbol(bool increment) : Symbol
    public override Precedence Precedence => Precedence.PrefixOperator;
 
    public override Arity Arity => Arity.Prefix;
+
+   public override string ToString() => increment ? "++" : "--";
 }

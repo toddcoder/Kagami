@@ -12,18 +12,16 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class DeferParser : StatementParser
 {
-   //public override string Pattern => "^ /'defer' /b";
-
-   [GeneratedRegex(@"^(defer)\b")]
+   [GeneratedRegex(@"^(\s+)(defer)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      state.Colorize(tokens, Color.Keyword);
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword);
 
       Block block;
       LazyOptional<Expression> _expression = nil;
-      if (state.CurrentSource.IsMatch(REGEX_EOL))
+      if (state.CurrentSource.IsMatch("/s* '{'"))
       {
          var _block = getBlock(state);
          if (_block)
