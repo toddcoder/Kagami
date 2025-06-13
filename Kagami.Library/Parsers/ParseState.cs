@@ -5,6 +5,7 @@ using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
 using Kagami.Library.Parsers.Expressions;
 using Core.Collections;
+using Core.DataStructures;
 using Core.Matching;
 using Core.Monads;
 using Core.Strings;
@@ -33,6 +34,7 @@ public class ParseState : IEnumerable<Statement>
    protected Stack<Maybe<ImplicitState>> implicitStates = new();
    protected Stack<ImplicitExpressionState> implicitExpressionStates = new();
    protected StringSet patterns = [];
+   protected MaybeStack<string> deferredBlocks = [];
 
    public ParseState(string source)
    {
@@ -191,7 +193,7 @@ public class ParseState : IEnumerable<Statement>
          return exception;
       }
    }
-   
+
    public Optional<string> Scan(string pattern, Func<Group, int, Color> colorFunc) => Scan(pattern, RegexOptions.None, colorFunc);
 
    public Optional<string> Scan(string pattern, RegexOptions options, Func<Group, int, Color> colorFunc)
@@ -362,4 +364,8 @@ public class ParseState : IEnumerable<Statement>
    public void RegisterPattern(string patternName) => patterns.Add(patternName);
 
    public bool ContainsPattern(string patternName) => patternName.Contains(patternName);
+
+   public void DeferBlock(string deferred) => deferredBlocks.Push(deferred);
+
+   public Maybe<string> DeferredBlock() => deferredBlocks.Pop();
 }

@@ -18,6 +18,10 @@ public class Return : Statement
 
    public override void Generate(OperationsBuilder builder)
    {
+      while (expression)
+      {
+         
+      }
       builder.Return(expression, this, _typeConstraint);
    }
 

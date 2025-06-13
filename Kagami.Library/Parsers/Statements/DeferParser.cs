@@ -4,6 +4,7 @@ using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Parsers.Expressions;
 using Core.Monads;
 using Core.Monads.Lazy;
+using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Symbols;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
@@ -41,6 +42,10 @@ public partial class DeferParser : StatementParser
       {
          return _expression.Exception;
       }
+
+      var functionName = $"__$deferred{Guid.NewGuid()}";
+      var function = new Function(functionName, Parameters.Empty, block, false, false, "");
+      state.RegisterMacro(function);
 
       block.AddReturnIf();
       state.AddStatement(new Defer(block));
