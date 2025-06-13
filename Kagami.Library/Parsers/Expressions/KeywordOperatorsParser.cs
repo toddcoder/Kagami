@@ -31,15 +31,6 @@ public partial class KeywordOperatorsParser : SymbolParser
 
             switch (keyword)
             {
-               /*
-               case "to":
-               case "by":
-                  builder.Add(new RangeSymbol(true));
-                  break;
-               case "til":
-                  builder.Add(new RangeSymbol(false));
-                  break;
-               */
                case "if":
                case "map":
                case "join":

@@ -6,6 +6,7 @@ public class ConjunctionParsers(ExpressionBuilder builder) : MultiParser
    {
       get
       {
+         yield return new IsParser(builder);
          yield return new MatchExpressionParser(builder);
 
          if (!builder.Flags[ExpressionFlags.OmitComprehension])

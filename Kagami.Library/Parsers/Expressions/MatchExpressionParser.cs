@@ -34,8 +34,6 @@ public partial class MatchExpressionParser : SymbolParser
    {
    }
 
-   //public override string Pattern => "^ /(/s*) /'||' /(/s*) /'(' /(/s*)";
-
    [GeneratedRegex(@"^(\s*)(\|\|)(\s*)(\()(\s*)")]
    public override partial Regex Regex();
 
