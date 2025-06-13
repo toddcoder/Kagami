@@ -116,7 +116,7 @@ public class Machine
 
    public Optional<IObject> Invoke(IInvokable invokable, Arguments arguments, Fields fields)
    {
-      var frame = new Frame(Address + 1, arguments, fields);
+      var frame = new Frame(invokable.RequiresFunctionFrame ? Address : nil, arguments, fields);
 
       if (invokable is YieldingInvokable yfi)
       {
