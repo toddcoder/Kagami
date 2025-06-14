@@ -301,11 +301,48 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
 
    public IObject IndexOf(IObject value) => items.IndexOf(value).Map(i => Some.Object(Int.IntObject(i))) | (() => None.NoneValue);
 
-   public IObject ReverseIndexOf(IObject value) => items.LastInd(i=>i.IsEqualTo(value)).Map(i => Some.Object(Int.IntObject(i))) | (() => None.NoneValue);
+   public IObject ReverseIndexOf(IObject value) => items.LastIndexOf(value).Map(i => Some.Object(Int.IntObject(i))) | (() => None.NoneValue);
 
-   public IObject FindAll(Lambda predicate) => TODO_IMPLEMENT_ME;
+   public IObject FindAll(Lambda predicate)
+   {
+      List<IObject> found = [];
+      foreach (var obj in items)
+      {
+         var result = predicate.Invoke(obj);
+         if (result.IsTrue)
+         {
+            found.Add(obj);
+         }
+      }
 
-   public IObject First(Lambda predicate) => TODO_IMPLEMENT_ME;
+      return new KTuple([.. found]);
+   }
 
-   IObject IFindIndex.Last(Lambda predicate) => TODO_IMPLEMENT_ME;
+   public IObject First(Lambda predicate)
+   {
+      foreach (var item in items)
+      {
+         var result = predicate.Invoke(item);
+         if (result.IsTrue)
+         {
+            return Some.Object(item);
+         }
+      }
+
+      return None.NoneValue;
+   }
+
+   IObject IFindIndex.Last(Lambda predicate)
+   {
+      foreach (var item in items.Reversed())
+      {
+         var result = predicate.Invoke(item);
+         if (result.IsTrue)
+         {
+            return Some.Object(item);
+         }
+      }
+
+      return None.NoneValue;
+   }
 }

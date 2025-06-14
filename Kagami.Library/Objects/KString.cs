@@ -184,18 +184,7 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
    public KBoolean IsSuffix(string substring) => value.EndsWith(substring);
 
-   public KString Replace(string old, string @new)
-   {
-      var _index = value.Find(old);
-      if (_index is (true, var index))
-      {
-         return value.Keep(_index) + @new + value.Drop(index + old.Length);
-      }
-      else
-      {
-         return new KString(value);
-      }
-   }
+   public KString Replace(KString old, KString @new) => value.Replace(old.value, @new.value);
 
    public KTuple FindAll(ITextFinding textFinding) => textFinding.FindAll(value);
 

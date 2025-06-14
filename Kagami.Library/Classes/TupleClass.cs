@@ -14,6 +14,7 @@ public class TupleClass : BaseClass, ICollectionClass
       base.RegisterMessages();
 
       collectionMessages();
+      findAndIndexMessages();
       messages["tuple"] = (obj, _) => function<KTuple>(obj, t => t);
       messages["first".get()] = (obj, _) => function<KTuple>(obj, t => t[0]);
       messages["second".get()] = (obj, _) => function<KTuple>(obj, t => t[1]);

@@ -7,9 +7,7 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class StringArrayParser : SymbolParser
 {
-   //public override string Pattern => "^ /(/s*) /'a\"' /(-['\"']*) /'\"'";
-
-   [GeneratedRegex("""^(\s*)(a")([^'"]*)(")""")]
+   [GeneratedRegex("""^(\s*)(a")([^"]*)(")""")]
    public override partial Regex Regex();
 
    public StringArrayParser(ExpressionBuilder builder) : base(builder)

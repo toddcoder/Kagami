@@ -15,8 +15,6 @@ public partial class StringParser : SymbolParser
    {
    }
 
-   //public override string Pattern => "^ /(/s*) /['mb`']? /(['\"'])";
-
    [GeneratedRegex(@"^(\s*)([mb`])?([""])")]
    public override partial Regex Regex();
 

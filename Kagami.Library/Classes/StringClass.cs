@@ -72,6 +72,7 @@ public class StringClass : BaseClass, ICollectionClass
       messages["succ()"] = (obj, _) => function<KString>(obj, s => s.Succ());
       messages["pred()"] = (obj, _) => function<KString>(obj, s => s.Pred());
       messages["range()"] = (obj, _) => function<KString>(obj, s => s.Range());
+      messages["replace(_<String>,_<String>)"] = (obj, msg) => function<KString, KString, KString>(obj, msg, (s1, s2, s3) => s1.Replace(s2, s3));
       messages["replace(_<Regex>, _<String>)"] = (obj, msg) => function<KString, Regex, KString>(obj, msg, (s, r, t) => r.Replace(s.Value, t.Value));
       messages["replace".Selector("<Regex>", "<Lambda>")] =
          (obj, msg) => function<KString, Regex, Lambda>(obj, msg, (s, r, l) => r.Replace(s.Value, l));

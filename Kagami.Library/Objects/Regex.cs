@@ -40,7 +40,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
    {
       get
       {
-         var builder = new StringBuilder("/");
+         var builder = new StringBuilder("\\");
          builder.Append(pattern.Regex);
          if (ignoreCase || multiline || global)
          {
@@ -67,7 +67,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
             builder.Append("t");
          }
 
-         builder.Append("/");
+         builder.Append("\\");
 
          return builder.ToString();
       }

@@ -65,7 +65,7 @@ public partial class FunctionParser : StatementParser
       {
          if (state.CurrentSource.IsMatch("^ /s* 'case' /b"))
          {
-            var parameterName = newLabel("match");
+            var parameterName = "__$0";
             var variadicParameter = new Parameter(false, "", parameterName, nil, nil, false, false)
             {
                Variadic = true,

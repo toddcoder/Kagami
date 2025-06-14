@@ -11,6 +11,7 @@ public class NewDictionary : OneOperandOperation
    public override Optional<IObject> Execute(Machine machine, IObject value) => value switch
    {
       Sequence list => Dictionary.New(list.List.ToArray()).Just(),
+      KArray array => Dictionary.New(array.List.ToArray()).Just(),
       IKeyValue => Dictionary.New([value]).Just(),
       ICollection { ExpandForArray: true } collection => Dictionary.New(collection.GetIterator(false).List().ToArray()).Just(),
       IIterator iterator => Dictionary.New(iterator.List().ToArray()).Just(),

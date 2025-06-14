@@ -61,4 +61,6 @@ public readonly struct ByteArray : IObject, ICollection, IObjectCompare
    public KByte this[int index] => bytes[wrapIndex(index, bytes.Length)];
 
    public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
+
+   public ByteArray Concatenate(ByteArray other) => new([.. bytes.Concat(other.bytes)]);
 }

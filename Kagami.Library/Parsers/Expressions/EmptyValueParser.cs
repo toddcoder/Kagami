@@ -9,9 +9,7 @@ public partial class EmptyValueParser : SymbolParser
 {
    public EmptyValueParser(ExpressionBuilder builder) : base(builder) { }
 
-   //public override string Pattern => "^ /(/s*) /('{}' | '{:}' | '()' | '[]' | '⌈⌉' | '⎩⎭')";
-
-   [GeneratedRegex(@"^(\s*)(\{}|\{:}|\(\)|\[\]|⌈⌉|⎩⎭)")]
+   [GeneratedRegex(@"^(\s*)(\{}|\{:}|\(\)|\[\]|\[::\]|\[\.\.\])")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -30,10 +28,10 @@ public partial class EmptyValueParser : SymbolParser
          case "()":
             builder.Add(new EmptyTupleSymbol());
             break;
-         case "⌈⌉":
+         case "[::]":
             builder.Add(new EmptyListSymbol());
             break;
-         case "⎩⎭":
+         case "[..]":
             builder.Add(new EmptySetSymbol());
             break;
          default:
