@@ -20,6 +20,7 @@ public class ArrayClass : BaseClass, ICollectionClass
       messages["array()"] = (obj, _) => function<KArray>(obj, a => a);
       mutableCollectionMessages();
       sliceableMessages();
+      findAndIndexMessages();
 
       messages["[](_)"] = (obj, msg) => function<KArray, IObject>(obj, msg, getIndexed);
       messages["get(_)"] = (obj, msg) => function<KArray, IObject>(obj, msg, (a, i) => someOf(a.Get(i)));
@@ -29,14 +30,6 @@ public class ArrayClass : BaseClass, ICollectionClass
       registerMessage("pop()", (obj, _) => function<KArray>(obj, a => a.Pop()));
       registerMessage("unshift(_)", (obj, msg) => function<KArray, IObject>(obj, msg, (a, v) => a.Unshift(v)));
       registerMessage("shift()", (obj, _) => function<KArray>(obj, a => a.Shift()));
-      registerMessage("index(of:_)", (obj, msg) => function<KArray, IObject>(obj, msg, (a, v) => a.IndexOf(v)));
-      registerMessage("reverseIndex(of:_)", (o, message) => function<KArray, IObject>(o, message, (a, v) => a.ReverseIndexOf(v)));
-      messages["find".Selector("all:<Array>")] = (obj, msg) =>
-         function<KArray, IObject>(obj, msg, (a, o) => a.FindAll(o));
-      messages["first".Selector("_<Lambda>")] = (obj, msg) =>
-         function<KArray, Lambda>(obj, msg, (a, p) => a.First(p));
-      messages["last".Selector("_<Lambda>")] = (obj, msg) =>
-         function<KArray, Lambda>(obj, msg, (a, p) => a.Last(p));
       messages["default".get()] = (obj, _) => function<KArray>(obj, array =>
       {
          if (array.DefaultValue is (true, var defaultValue))

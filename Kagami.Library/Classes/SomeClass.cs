@@ -11,7 +11,7 @@ public class SomeClass : BaseClass
    {
       base.RegisterMessages();
 
-      monadMessage();
+      monadMessages();
 
       messages["value".get()] = (obj, _) => function<Some>(obj, s => s.Value);
       messages["isSome".get()] = (obj, _) => function<Some>(obj, s => (KBoolean)s.IsSome);

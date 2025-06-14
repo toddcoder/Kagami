@@ -23,7 +23,7 @@ public partial class SliceParser : SymbolParser
 
       while (state.More)
       {
-         var _skipTake = getSkipTake(state, builder.Flags | ExpressionFlags.OmitColon);
+         var _skipTake = getSkipTake(state, builder.Flags | ExpressionFlags.OmitColon | ExpressionFlags.OmitBind);
          if (_skipTake is (true, var skipTake))
          {
             skipTakes.Add(skipTake);

@@ -14,6 +14,6 @@ public class SkipTake
 
    public override string ToString()
    {
-      return $"{Skip.Map(e => e.ToString()) | ""};{Take.Map(e => e.ToString()) | ""}";
+      return $"{Skip.Map(e => e.ToString()) | ""}:{Take.Map(e => e.ToString()) | ""}";
    }
 }

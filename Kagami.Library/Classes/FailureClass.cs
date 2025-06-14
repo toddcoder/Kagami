@@ -11,7 +11,7 @@ public class FailureClass : BaseClass
    {
       base.RegisterMessages();
 
-      monadMessage();
+      monadMessages();
 
       messages["error".get()] = (obj, _) => function<Failure>(obj, f => f.Error);
       messages["isSuccess".get()] = (obj, _) => function<Failure>(obj, f => (KBoolean)f.IsSuccess);

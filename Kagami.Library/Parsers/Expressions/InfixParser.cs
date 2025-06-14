@@ -10,7 +10,12 @@ public class InfixParser(ExpressionBuilder builder) : MultiParser
          yield return new ZipOperatorParser(builder);
          yield return new ZipLambdaParser(builder);
          yield return new RangeOperatorParser(builder);
-         yield return new BindParser(builder);
+
+         if (!builder.Flags[ExpressionFlags.OmitBind])
+         {
+            yield return new BindParser(builder);
+         }
+
          yield return new OperatorsParser(builder);
 
          if (!builder.Flags[ExpressionFlags.OmitIn])

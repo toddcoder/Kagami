@@ -16,7 +16,7 @@ public partial class SendMessageParser : SymbolParser
    {
    }
 
-   [GeneratedRegex($@"^(\s*)(\.)({REGEX_FUNCTION_NAME})(\()?")]
+   [GeneratedRegex($@"^(\s*)(\.|@)({REGEX_FUNCTION_NAME})(\()?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)

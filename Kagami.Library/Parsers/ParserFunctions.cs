@@ -28,7 +28,7 @@ public static class ParserFunctions
    public const string REGEX_INVOKABLE = "[A-Za-z_][A-Za-z_0-9]*";
    public const string REGEX_CLASS = "[A-Z][A-Za-z_0-9]*";
    public const string REGEX_CLASS_GETTING = $@"{REGEX_CLASS}(?:\. {REGEX_CLASS})?";
-   public const string REGEX_ASSIGN_OPS = @"\+|-|\*|/|/|\^";
+   public const string REGEX_ASSIGN_OPS = @"\+|-|\*|/|/|\^|~";
    public const string REGEX_FUNCTION_NAME = $@"(?:(?:{REGEX_INVOKABLE})|(?:[~`!@\#\$%\^\*\+=\|\\;<>/\?-]+)|\[\])=?";
    public const string REGEX_SELECTOR = @$"(?:__\$)?{REGEX_FUNCTION_NAME}(?:\(.*\))?=?";
    public const string REGEX_EOL = @"\r\n|\r|\n|$";
@@ -189,6 +189,7 @@ public static class ParserFunctions
       "/" => new FloatDivide(),
       "div" => new IntDivide(),
       "^" => new Raise(),
+      "~" => new SendMessage("~(_)"),
       _ => fail($"Didn't recognize operator {source}")
    };
 
@@ -1284,7 +1285,7 @@ public static class ParserFunctions
          case "=~":
             _symbol = new SendBinaryMessageSymbol("isMatch(_<String>)", Precedence.Boolean, true);
             break;
-         case ":-":
+         case ":-" when !flags[ExpressionFlags.OmitBind]:
             _symbol = new BindSymbol();
             break;
          case "??":
@@ -1421,6 +1422,7 @@ public static class ParserFunctions
             return exception;
          }
       }
+
       var _end = state.Scan(@"^(\s*)([};])", colorize);
       if (_end is (true, var end))
       {

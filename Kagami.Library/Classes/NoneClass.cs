@@ -11,7 +11,7 @@ public class NoneClass : BaseClass
    {
       base.RegisterMessages();
 
-      monadMessage();
+      monadMessages();
 
       messages["isSome".get()] = (obj, _) => function<None>(obj, n => (KBoolean)n.IsSome);
       messages["isNone".get()] = (obj, _) => function<None>(obj, n => (KBoolean)n.IsNone);

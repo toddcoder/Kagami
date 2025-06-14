@@ -9,7 +9,7 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Objects;
 
-public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<KArray>, IMutableCollection, ISliceable, IIndexed
+public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<KArray>, IMutableCollection, ISliceable, IIndexed, IFindIndex
 {
    public static IObject CreateObject(IEnumerable<IObject> items)
    {
@@ -375,6 +375,21 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       {
          return None.NoneValue;
       }
+   }
+
+   public IObject FindAll(Lambda predicate)
+   {
+      List<IObject> found = [];
+      foreach (var obj in list)
+      {
+         var result = predicate.Invoke(obj);
+         if (result.IsTrue)
+         {
+            found.Add(obj);
+         }
+      }
+
+      return new KArray(found);
    }
 
    public IObject First(Lambda lambda)

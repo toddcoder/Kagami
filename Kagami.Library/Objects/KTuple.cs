@@ -8,7 +8,7 @@ using static Kagami.Library.Objects.CollectionFunctions;
 
 namespace Kagami.Library.Objects;
 
-public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjectCompare, IComparable<KTuple>, IComparable
+public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjectCompare, IComparable<KTuple>, IComparable, IFindIndex
 {
    public static IObject NewTuple(IObject x, IObject y)
    {
@@ -298,4 +298,14 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
    public IObject HeadTail => new KTuple(Head, Tail);
 
    public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
+
+   public IObject IndexOf(IObject value) => items.IndexOf(value).Map(i => Some.Object(Int.IntObject(i))) | (() => None.NoneValue);
+
+   public IObject ReverseIndexOf(IObject value) => items.LastInd(i=>i.IsEqualTo(value)).Map(i => Some.Object(Int.IntObject(i))) | (() => None.NoneValue);
+
+   public IObject FindAll(Lambda predicate) => TODO_IMPLEMENT_ME;
+
+   public IObject First(Lambda predicate) => TODO_IMPLEMENT_ME;
+
+   IObject IFindIndex.Last(Lambda predicate) => TODO_IMPLEMENT_ME;
 }

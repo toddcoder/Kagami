@@ -18,5 +18,6 @@ public enum ExpressionFlags
    InLambda = 2048,
    InArgument = 4096,
    OmitNameValue = 8192,
-   OmitIn = 16384
+   OmitIn = 16384,
+   OmitBind = 32768
 }

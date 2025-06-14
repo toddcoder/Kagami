@@ -594,6 +594,7 @@ public partial class Playground : Form
       {
          isDirty = true;
          document.Dirty();
+         uiStatus.Message("changed...");
       }
    }
 
@@ -775,6 +776,7 @@ public partial class Playground : Form
          deleteMatching('\'', '\'');
          deleteMatching('"', '"');
       }
+
       return;
 
       void deleteMatching(char left, char right)

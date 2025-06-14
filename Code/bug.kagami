@@ -1,14 +1,25 @@
 ﻿open sys
 
-inclusion Shape {
-	required area()
-	func string = "foobar"
+var suffixes = {
+	1000 => a"KB MB GB TB PB EB ZB YB",
+	1024 => a"KiB MiB GiB TiB PiB EiB ZiB YiB"
 }
 
-class Square(width Int) {
-	include Shape
-	func area() = width ^ 2
+func approximateSize(var size, kbIs1024 = true) {
+	guard size >= 0 else {
+		return f"number must be non-negative"
+	}
+	var multiple = kbIs1024 ? 1024 : 1000
+	for suffix in suffixes[multiple]& {
+		size /= multiple
+		if size < multiple {
+			return $"(size \ $f.1) (suffix)"!
+		}
+	}
+	return f"number too large"
 }
-var square = Square(100)
-println(square)
-println(square.width)
+
+let _result = approximateSize(1000000000000f)
+if _result is result! {
+	println(result)
+}

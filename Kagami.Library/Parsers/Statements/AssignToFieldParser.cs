@@ -13,8 +13,6 @@ public partial class AssignToFieldParser : EndingInExpressionParser
    protected string fieldName = "";
    protected string operationSource = "";
 
-   //public override string Pattern => $"^ /(/s*) /({REGEX_FIELD}) /(/s*) /({REGEX_ASSIGN_OPS})? /'=' -(> ['=>'])";
-
    [GeneratedRegex($@"^(\s*)({REGEX_FIELD})(\s*)({REGEX_ASSIGN_OPS})?(=)(?![=>])")]
    public override partial Regex Regex();
 

@@ -600,10 +600,19 @@ public abstract class BaseClass
       }
    }
 
-   protected void monadMessage()
+   protected void monadMessages()
    {
       registerMessage("bind(_<Lambda>)", (obj, message) => ((IMonad)obj).Bind((Lambda)message.Arguments[0]));
       registerMessage("unit(_)", (obj, message) => ((IMonad)obj).Unit(message.Arguments[0]));
+   }
+
+   protected void findAndIndexMessages()
+   {
+      messages["index(of:_)"] = (obj, msg) => ((IFindIndex)obj).IndexOf(msg.Arguments[0]);
+      messages["reverseIndex(of:_)"] = (obj, msg) => ((IFindIndex)obj).ReverseIndexOf(msg.Arguments[0]);
+      messages["find(all:_<Lambda>)"] = (obj, msg) => ((IFindIndex)obj).FindAll((Lambda)msg.Arguments[0]);
+      messages["first(_<Lambda>)"] = (obj, msg) => ((IFindIndex)obj).First((Lambda)msg.Arguments[0]);
+      messages["last(_<Lambda>)"] = (obj, msg) => ((IFindIndex)obj).Last((Lambda)msg.Arguments[0]);
    }
 
    public void RegisterInclusion(Inclusion inclusion) => inclusions[inclusion.Name] = inclusion;

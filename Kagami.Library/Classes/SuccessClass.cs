@@ -11,7 +11,7 @@ public class SuccessClass : BaseClass
    {
       base.RegisterMessages();
 
-      monadMessage();
+      monadMessages();
 
       messages["value".get()] = (obj, _) => function<Success>(obj, s => s.Value);
       messages["isSuccess".get()] = (obj, _) => function<Success>(obj, s => (KBoolean)s.IsSuccess);
