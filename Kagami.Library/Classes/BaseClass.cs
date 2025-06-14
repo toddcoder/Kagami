@@ -141,7 +141,14 @@ public abstract class BaseClass
 
       if (RespondsTo(selector))
       {
-         return messages.ContainsKey(selector) ? messages[selector](obj, message) : DynamicInvoke(obj, message);
+         if (messages.Maybe[selector] is (true, var func))
+         {
+            return func(obj, message);
+         }
+         else
+         {
+            return DynamicInvoke(obj, message);
+         }
       }
       else
       {

@@ -180,4 +180,20 @@ public readonly struct KRange : IObject, ICollection
    public KRange Reverse() => new((IRangeItem)stop, start, true, -increment);
 
    public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
+
+   public IObject Concatenate(KRange otherRange)
+   {
+      var iterator = GetIterator(false);
+      var list = iterator.List();
+      var sequence = new Sequence(list);
+
+      var otherIterator = otherRange.GetIterator(false);
+      var otherList = otherIterator.List();
+      foreach (var obj in otherList)
+      {
+         sequence.Add(obj);
+      }
+
+      return sequence;
+   }
 }

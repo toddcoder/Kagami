@@ -51,7 +51,7 @@ public class StringClass : BaseClass, ICollectionClass
       messages["isUpper".get()] = (obj, _) => function<KString>(obj, s => s.IsUpper);
       messages["isSpace".get()] = (obj, _) => function<KString>(obj, s => s.IsSpace);
       messages["isTitle".get()] = (obj, _) => function<KString>(obj, s => s.IsTitle);
-      messages["translate".Selector("from:<String>", "to:<String>")] = (obj, msg) =>
+      messages["translate(from:_<String>,to:_<String>)"] = (obj, msg) =>
          function<KString, KString, KString>(obj, msg, (s, f, t) => s.Translate(f.Value, t.Value));
       messages["truncate".Selector("<Int>", "<Boolean>")] = (obj, msg) =>
          function<KString, Int, KBoolean>(obj, msg, (s, w, e) => s.Truncate(w.Value, e.Value));
