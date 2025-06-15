@@ -300,6 +300,8 @@ public class Frame
       FrameType.Standard => $"Standard frame ({stack.Count})",
       FrameType.Function => $"Function frame ({stack.Count})",
       FrameType.Try => $"Try frame ({stack.Count})",
+      FrameType.Exit => $"Exit frame ({stack.Count})",
+      FrameType.Skip => $"Skip frame ({stack.Count})",
       _ => "Unknown frame type"
    };
 }

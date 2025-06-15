@@ -51,6 +51,7 @@ public class MathClass : PackageClass
       registerPackageFunction("frexp(_)", (obj, msg) => function<KMath, Float>(obj, msg, (m, f) => m.Frexp(f.Value)));
       registerPackageFunction("pi".get(), (obj, _) => function<KMath>(obj, m => m.Pi));
       registerPackageFunction("e".get(), (obj, _) => function<KMath>(obj, m => m.E));
+      registerPackageFunction("i".get(), (obj, _) => function<KMath>(obj, m => m.I));
       registerPackageFunction("degrees(_)", (obj, msg) => function<KMath, Float>(obj, msg, (m, n) => m.Degrees(n.Value)));
       registerPackageFunction("radians(_)", (obj, msg) => function<KMath, Float>(obj, msg, (m, n) => m.Radians(n.Value)));
    }

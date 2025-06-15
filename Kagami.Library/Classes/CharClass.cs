@@ -28,8 +28,8 @@ public class CharClass : BaseClass, IEquivalentClass
       messages["isConsonant".get()] = (obj, _) => function<KChar>(obj, c => c.IsConsonant);
       messages["ord".get()] = (obj, _) => function<KChar>(obj, c => c.Ord);
       messages["byte()"] = (obj, _) => function<KChar>(obj, c => c.Byte());
-      messages["succ()"] = (obj, _) => function<KChar>(obj, c => c.Succ());
-      messages["pred()"] = (obj, _) => function<KChar>(obj, c => c.Pred());
+      messages["succ".get()] = (obj, _) => function<KChar>(obj, c => c.Succ());
+      messages["pred".get()] = (obj, _) => function<KChar>(obj, c => c.Pred());
    }
 
    public override void RegisterClassMessages()
@@ -39,7 +39,7 @@ public class CharClass : BaseClass, IEquivalentClass
       classMessages["cr".get()] = (_, _) => (KChar)'\r';
       classMessages["lf".get()] = (_, _) => (KChar)'\n';
       classMessages["tab".get()] = (_, _) => (KChar)'\t';
-      classMessages["fromOrd"] = (_, msg) => new KChar((char)((Int)msg.Arguments[0]).Value);
+      classMessages["fromOrd(_)"] = (_, msg) => new KChar((char)((Int)msg.Arguments[0]).Value);
    }
 
    public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("TextFinding");

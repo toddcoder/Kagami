@@ -141,7 +141,9 @@ public abstract class BaseClass
 
       if (RespondsTo(selector))
       {
-         if (messages.Maybe[selector] is (true, var func))
+         var func = messages[selector];
+         // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+         if (func is not null)
          {
             return func(obj, message);
          }
@@ -149,6 +151,14 @@ public abstract class BaseClass
          {
             return DynamicInvoke(obj, message);
          }
+         /*if (messages.Maybe[selector] is (true, var func))
+         {
+            return func(obj, message);
+         }
+         else
+         {
+            return DynamicInvoke(obj, message);
+         }*/
       }
       else
       {

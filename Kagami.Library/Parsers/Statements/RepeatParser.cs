@@ -9,12 +9,12 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class RepeatParser : StatementParser
 {
-   [GeneratedRegex("^(repeat)\b")]
+   [GeneratedRegex(@"^(\s*)(repeat)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      state.Colorize(tokens, Color.Keyword);
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword);
 
       var _result =
          from expressionValue in getExpression(state, ExpressionFlags.Standard)
