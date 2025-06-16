@@ -14,6 +14,7 @@ public class PreDecrement : Operation
       {
          if (field.Mutable)
          {
+            machine.Pop();
             var fieldValue = field.Value;
             if (fieldValue is IIncrementDecrement incrementDecrement)
             {

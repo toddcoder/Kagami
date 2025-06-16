@@ -238,7 +238,6 @@ public class Machine
             switch (operation)
             {
                case Return rtn:
-                  //PopAddress();
                   return Return.ReturnAction(this, rtn.ReturnTopOfStack);
                case Yield:
                   return Yield.YieldAction(this).Just();
