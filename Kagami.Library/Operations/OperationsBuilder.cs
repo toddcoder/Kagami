@@ -528,4 +528,6 @@ public class OperationsBuilder
    public void PreIncrement(bool increment) => add(increment ? new PreIncrement() : new PreDecrement());
 
    public void PostIncrement(bool increment) => add(increment ? new PostIncrement() : new PostDecrement());
+   
+   public void Concatenate()=> add(new Concatenate());
 }
