@@ -23,8 +23,13 @@ public partial class MatchAssignParser : StatementParser
          select (comparisandValue, expressionValue);
       if (_result is (true, var (comparisand, expression)))
       {
+         var _elseBlock =
+            from elseKeyword in state.Scan(@"^(\s*)(else)", Color.Whitespace, Color.Keyword).Maybe()
+            from elseBlock in getBlock(state)
+            select elseBlock;
+
          state.CommitTransaction();
-         state.AddStatement(new MatchAssign(comparisand, expression));
+         state.AddStatement(new MatchAssign(comparisand, expression, _elseBlock));
 
          return unit;
       }

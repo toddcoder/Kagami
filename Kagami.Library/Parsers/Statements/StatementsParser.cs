@@ -30,6 +30,7 @@ public class StatementsParser : MultiParser
          yield return new ForParser();
          yield return new RepeatParser();
          yield return new ExitContinueParser();
+         yield return new TryHandlerParser();
 
          yield return new MatchParser();
          yield return new YieldParser();

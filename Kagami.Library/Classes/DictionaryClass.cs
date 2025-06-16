@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Kagami.Library.Objects;
+﻿using Kagami.Library.Objects;
 using Core.Monads;
 using static Kagami.Library.Classes.ClassFunctions;
 
@@ -49,6 +48,7 @@ public class DictionaryClass : BaseClass, ICollectionClass
       messages[">>(_)"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, k) => d.Delete(k));
       messages["keys".get()] = (obj, _) => function<Dictionary>(obj, d => d.Keys);
       messages["values".get()] = (obj, _) => function<Dictionary>(obj, d => d.Values);
+      messages["items".get()] = (obj, _) => function<Dictionary>(obj, d => d.Items);
       messages["in(_)"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, k) => d.In(k));
       messages["notIn(_)"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, k) => d.NotIn(k));
       messages["swap(_,_)"] = (obj, msg) => function<Dictionary, IObject, IObject>(obj, msg, (d, k1, k2) => d.Swap(k1, k2));

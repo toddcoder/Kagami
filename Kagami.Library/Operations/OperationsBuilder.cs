@@ -296,6 +296,8 @@ public class OperationsBuilder
 
    public void PopSkipFrame() => add(new PopSkipFrame());
 
+   public void PopTryFrame() => add(new PopTryFrame());
+
    public void NewArray() => add(new NewArray());
 
    public void NewDictionary() => add(new NewDictionary());
@@ -378,7 +380,7 @@ public class OperationsBuilder
 
    public void ImportPackage(string packageName) => add(new ImportPackage(packageName));
 
-   public void TryBegin() => add(new TryBegin());
+   public void TryBegin(string label) => add(new TryBegin(), label);
 
    public void TryEnd() => add(new TryEnd());
 

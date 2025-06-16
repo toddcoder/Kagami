@@ -29,4 +29,6 @@ public class PopExitFrame : Operation
    }
 
    public override bool Increment => false;
+
+   public override string ToString() => "pop.exit.frame";
 }

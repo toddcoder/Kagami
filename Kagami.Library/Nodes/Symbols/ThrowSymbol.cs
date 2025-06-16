@@ -2,7 +2,7 @@
 
 namespace Kagami.Library.Nodes.Symbols;
 
-public class ThrowSymbol : Symbol
+public class ThrowSymbol : Symbol, IHasExpression
 {
    protected Expression expression;
 
@@ -19,4 +19,6 @@ public class ThrowSymbol : Symbol
    public override Arity Arity => Arity.Nullary;
 
    public override string ToString() => $"throw {expression}";
+
+   public Expression Expression => expression;
 }

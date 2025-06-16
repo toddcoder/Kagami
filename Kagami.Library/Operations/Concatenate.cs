@@ -15,6 +15,8 @@ public class Concatenate : TwoOperandOperation
             return (KString)(xs.Value + ys.Value);
          case (KArray xa, KArray xb):
             return xa.Concatenate(xb).Just();
+         case (KTuple xt, KTuple yt):
+            return xt.Concatenate(yt);
          default:
          {
             if (x is KString || y is KString)

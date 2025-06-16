@@ -55,6 +55,12 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
       denameify();
    }
 
+   public KTuple(IObject[] items, Hash<string, int> names, Hash<int, string> indexes) : this(items)
+   {
+      this.names = names;
+      this.indexes = indexes;
+   }
+
    public KTuple(IObject x, IObject y)
    {
       items = [x, y];
@@ -90,8 +96,8 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
       Array.Copy(tupleItems, items, length);
       items[length] = item;
 
-      names = new Hash<string, int>();
-      indexes = new Hash<int, string>();
+      names = [];
+      indexes = [];
 
       denameify();
    }
@@ -104,9 +110,9 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
    {
       get
       {
-         if (names.ContainsKey(name))
+         if (names.Maybe[name] is (true, var index))
          {
-            return items[names[name]];
+            return items[index];
          }
          else
          {
@@ -346,5 +352,33 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
       return None.NoneValue;
    }
 
-   public KTuple Append(IObject obj) => new([..items, obj]);
+   public KTuple Append(IObject obj)
+   {
+      if (obj is NameValue nameValue)
+      {
+         var name = nameValue.Name;
+         var value = nameValue.Value;
+
+         var index = names.Count;
+         indexes[index] = name;
+         names[name] = index;
+         obj = value;
+      }
+
+      return new KTuple([..items, obj], names, indexes);
+   }
+
+   public KTuple Concatenate(KTuple otherTuple)
+   {
+      var offset = items.Length;
+      var otherNames = otherTuple.names;
+
+      foreach (var (name, index) in otherNames)
+      {
+         names[name] = index + offset;
+         indexes[index + offset] = name;
+      }
+
+      return new KTuple([..items, ..otherTuple.items], names, indexes);
+   }
 }

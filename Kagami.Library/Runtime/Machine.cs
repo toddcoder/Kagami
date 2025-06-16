@@ -88,6 +88,7 @@ public class Machine
                {
                   stack.Peek().Push(new Failure(exception.Message));
                   operations.Goto(address);
+                  continue;
                }
                else
                {

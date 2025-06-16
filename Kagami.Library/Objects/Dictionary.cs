@@ -312,7 +312,7 @@ public class Dictionary : IObject, IMutableCollection
 
    public IObject Keys => new Set(dictionary.KeyArray());
 
-   public IObject Values => new KArray(dictionary.ValueArray());
+   public IObject Values => new KTuple(dictionary.ValueArray());
 
    public KBoolean In(IObject key) => dictionary.ContainsKey(key);
 
@@ -449,7 +449,7 @@ public class Dictionary : IObject, IMutableCollection
       var iterator = collection.GetIterator(false);
       foreach (var item in iterator.List())
       {
-         if (item is KTuple { Length: { Value: 2 } } tuple)
+         if (item is KTuple { Length.Value: 2 } tuple)
          {
             newDictionary[tuple[0]] = tuple[1];
          }
@@ -459,4 +459,19 @@ public class Dictionary : IObject, IMutableCollection
    }
 
    public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
+
+   public IObject Items
+   {
+      get
+      {
+         List<IObject> items = [];
+         foreach (var (key, value) in dictionary)
+         {
+            var tuple = new KTuple(key, value);
+            items.Add(tuple);
+         }
+
+         return new KTuple([.. items]);
+      }
+   }
 }

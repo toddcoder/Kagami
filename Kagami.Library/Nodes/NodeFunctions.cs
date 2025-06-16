@@ -31,4 +31,31 @@ public static class NodeFunctions
          return builder.RegisterInvokable(invokable, expression, true).Map(_ => new Lambda(invokable));
       });
    }
+
+   public static IEnumerable<string> placeholdersFromExpression(Expression expression)
+   {
+      foreach (var symbol in expression.Symbols)
+      {
+         switch (symbol)
+         {
+            case PlaceholderSymbol placeholder:
+               yield return placeholder.Name;
+
+               break;
+            case Expression innerExpression:
+               foreach (var innerPlaceholder in placeholdersFromExpression(innerExpression))
+               {
+                  yield return innerPlaceholder;
+               }
+
+               break;
+            case IHasExpression hasExpression:
+               foreach (var innerPlaceholder in placeholdersFromExpression(hasExpression.Expression))
+               {
+                  yield return innerPlaceholder;
+               }
+               break;
+         }
+      }
+   }
 }

@@ -139,7 +139,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
          throwIfSelf(value);
 
          var wrappedIndex = wrapIndex(index, list.Count);
-         if (value is KUnit)
+         if (value is None)
          {
             list.RemoveAt(wrappedIndex);
          }

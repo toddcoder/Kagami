@@ -2,7 +2,7 @@
 
 namespace Kagami.Library.Nodes.Symbols;
 
-public class IsSymbol(Expression expression) : Symbol
+public class IsSymbol(Expression expression) : Symbol, IHasExpression
 {
    public override void Generate(OperationsBuilder builder)
    {
@@ -15,4 +15,6 @@ public class IsSymbol(Expression expression) : Symbol
    public override Arity Arity => Arity.Binary;
 
    public override string ToString() => $"is {expression}";
+
+   public Expression Expression => expression;
 }

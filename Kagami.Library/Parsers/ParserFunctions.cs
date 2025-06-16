@@ -1036,7 +1036,7 @@ public static class ParserFunctions
    public static Optional<(Symbol, Expression, PossibleExpression)> getInnerComprehension(ParseState state) =>
       from comparisand in getValue(state, ExpressionFlags.Comparisand | ExpressionFlags.OmitIn)
       from scanned in state.Scan(@"^(\s+)(in)", Color.Whitespace, Color.Keyword)
-      from source in getExpression(state, ExpressionFlags.OmitIf | ExpressionFlags.OmitComprehension | ExpressionFlags.OmitIn)
+      from source in getExpression(state, ExpressionFlags.OmitIf | ExpressionFlags.OmitIn)
       from ifExp in getIf(state)
       select (comparisand, source, ifExp);
 

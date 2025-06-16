@@ -28,6 +28,7 @@ public class TupleClass : BaseClass, ICollectionClass
       messages["tenth".get()] = (obj, _) => function<KTuple>(obj, t => t[9]);
       messages["[](_)"] = (obj, msg) => function<KTuple, IObject>(obj, msg, indexed);
       messages["<<(_)"] = (obj, msg) => function<KTuple, IObject>(obj, msg, (t, o) => t.Append(o));
+      messages["~(_)"] = (obj, msg) => function<KTuple, KTuple>(obj, msg, (t1, t2) => t1.Concatenate(t2));
       messages["head".get()] = (obj, _) => function<KTuple>(obj, t => t.Head);
       messages["tail".get()] = (obj, _) => function<KTuple>(obj, t => t.Tail);
       messages["headTail".get()] = (obj, _) => function<KTuple>(obj, t => t.HeadTail);

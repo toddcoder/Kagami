@@ -1,47 +1,45 @@
-﻿using System.Linq;
-using Kagami.Library.Operations;
+﻿using Kagami.Library.Operations;
 using static Kagami.Library.Nodes.NodeFunctions;
 
-namespace Kagami.Library.Nodes.Symbols
+namespace Kagami.Library.Nodes.Symbols;
+
+public class WhereSymbol : Symbol
 {
-   public class WhereSymbol : Symbol
+   protected (string propertyName, Expression comparisand)[] items;
+
+   public WhereSymbol((string, Expression)[] items) => this.items = items;
+
+   public override void Generate(OperationsBuilder builder)
    {
-      protected (string propertyName, Expression comparisand)[] items;
+      var labelFalse = newLabel("false");
+      var labelEnd = newLabel("end");
+      var fieldName = newLabel("subject");
 
-      public WhereSymbol((string, Expression)[] items) => this.items = items;
+      builder.NewField(fieldName, false, true);
+      builder.AssignField(fieldName, true);
 
-      public override void Generate(OperationsBuilder builder)
+      foreach (var (propertyName, comparisand) in items)
       {
-         var labelFalse = newLabel("false");
-         var labelEnd = newLabel("end");
-         var fieldName = newLabel("subject");
-
-         builder.NewField(fieldName, false, true);
-         builder.AssignField(fieldName, true);
-
-         foreach (var (propertyName, comparisand) in items)
-         {
-            var getter = propertyName.get();
-            builder.GetField(fieldName);
-            builder.SendMessage(getter, 0);
-            comparisand.Generate(builder);
-            builder.Match();
-            builder.GoToIfFalse(labelFalse);
-         }
-
-         builder.PushBoolean(true);
-         builder.GoTo(labelEnd);
-
-         builder.Label(labelFalse);
-         builder.PushBoolean(false);
-
-         builder.Label(labelEnd);
+         var getter = propertyName.get();
+         builder.GetField(fieldName);
+         builder.SendMessage(getter, 0);
+         comparisand.Generate(builder);
+         builder.Match();
+         builder.GoToIfFalse(labelFalse);
       }
 
-      public override Precedence Precedence => Precedence.SendMessage;
+      builder.PushBoolean(true);
+      builder.GoTo(labelEnd);
 
-      public override Arity Arity => Arity.Postfix;
+      builder.Label(labelFalse);
+      builder.PushBoolean(false);
 
-      public override string ToString() => $"?{{{items.Select(i => $"{i.propertyName}: {i.comparisand}")}}}";
+      builder.Label(labelEnd);
    }
+
+   public override Precedence Precedence => Precedence.SendMessage;
+
+   public override Arity Arity => Arity.Postfix;
+
+   public override string ToString() => $"?{{{items.Select(i => $"{i.propertyName}: {i.comparisand}")}}}";
 }

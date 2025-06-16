@@ -16,8 +16,6 @@ public partial class InnerComprehensionParser : SymbolParser
       this.comprehensions = comprehensions;
    }
 
-   //public override string Pattern => "^ /(/s*) /'for' -(> ['^>']) /b";
-
    [GeneratedRegex(@"^(\s+)(for)(?![\^>])\b")]
    public override partial Regex Regex();
 
