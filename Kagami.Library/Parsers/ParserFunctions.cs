@@ -189,7 +189,7 @@ public static class ParserFunctions
       "/" => new FloatDivide(),
       "div" => new IntDivide(),
       "^" => new Raise(),
-      "~" => new SendMessage("~(_)"),
+      "~" => new Concatenate(),
       "%" => new Remainder(),
       _ => fail($"Didn't recognize operator {source}")
    };

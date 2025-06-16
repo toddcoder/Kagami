@@ -15,8 +15,6 @@ public partial class InterpolatedStringParser : SymbolParser
    {
    }
 
-   //public override string Pattern => "^ /(/s*) /['$f'] /[dquote]";
-
    [GeneratedRegex(@"^(\s*)([\$f])([""])")]
    public override partial Regex Regex();
 
