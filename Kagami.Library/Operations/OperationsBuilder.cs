@@ -48,6 +48,8 @@ public class OperationsBuilder
       return RegisterInvokable(invokable, new Block(new ExpressionStatement(expression, true)), overriding);
    }
 
+   public int Count => operations.Count;
+
    protected void add(Operation operation) => operations.Add(operation);
 
    public void AddRaw(Operation operation) => operations.Add(operation);
@@ -416,7 +418,7 @@ public class OperationsBuilder
          var invokable = ((IInvokableObject)symbol).Invokable;
          invokable.Address = operations.Count;
          symbol.Generate(this);
-         var lastOperation = operations[operations.Count - 1];
+         var lastOperation = operations[^1];
          if (!(lastOperation is Return) /* && !(lastOperation is NoOp)*/)
          {
             operations.Add(new Return(false));
@@ -538,4 +540,6 @@ public class OperationsBuilder
    public void GetRegister(int index) => add(new GetRegister(index));
 
    public void ClearRegister(int index) => add(new ClearRegister(index));
+
+   public void Defer(Selector selector) => add(new Defer(selector));
 }

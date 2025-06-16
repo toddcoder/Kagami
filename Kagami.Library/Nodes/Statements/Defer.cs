@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Operations;
+﻿using Kagami.Library.Invokables;
+using Kagami.Library.Operations;
 
 namespace Kagami.Library.Nodes.Statements;
 
@@ -10,7 +11,10 @@ public class Defer : Statement
 
    public override void Generate(OperationsBuilder builder)
    {
-      builder.Add();
+      var selector = $"__$defer{builder.Count}";
+      var function = new Function(selector, Parameters.Empty, block, false, false, "");
+      function.Generate(builder);
+      builder.Defer($"{selector}()");
    }
 
    public override string ToString() => $"defer {block}";

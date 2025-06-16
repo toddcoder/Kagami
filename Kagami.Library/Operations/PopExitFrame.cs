@@ -13,6 +13,7 @@ public class PopExitFrame : Operation
       var frameGroup = machine.PopFramesUntil(f => f.FrameType == FrameType.Exit);
       if (frameGroup.ExitFrame is (true, var exitFrame))
       {
+         exitFrame.ExecuteDeferred(machine);
          if (machine.GoTo(exitFrame.Address))
          {
             return nil;

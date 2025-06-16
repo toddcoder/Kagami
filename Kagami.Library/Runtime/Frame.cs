@@ -21,6 +21,7 @@ public class Frame
    protected Arguments arguments;
    protected FrameType frameType = FrameType.Function;
    protected bool parametersSet;
+   protected MaybeStack<Selector> deferred = [];
 
    public Frame(Maybe<int> _address, Arguments arguments)
    {
@@ -304,4 +305,15 @@ public class Frame
       FrameType.Skip => $"Skip frame ({stack.Count})",
       _ => "Unknown frame type"
    };
+
+   public void Defer(Selector selector) => deferred.Push(selector);
+
+   public void ExecuteDeferred(Machine machine)
+   {
+      while (deferred.Pop() is (true, var selector))
+      {
+         machine.Push(Arguments.Empty);
+         machine.Invoke(selector.Name);
+      }
+   }
 }

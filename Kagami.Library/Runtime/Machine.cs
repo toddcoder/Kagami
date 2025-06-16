@@ -112,6 +112,8 @@ public class Machine
          context.PrintLine(table.Value.ToString());
       }
 
+      globalFrame.ExecuteDeferred(this);
+
       return lastValue.Success();
    }
 
@@ -261,6 +263,7 @@ public class Machine
                      {
                         stack.Peek().Push(new Failure(exception.Message));
                         operations.Goto(address);
+                        continue;
                      }
                      else
                      {
@@ -361,6 +364,8 @@ public class Machine
    public Result<Frame> PopFrame() => tryTo(() => stack.Pop());
 
    public FrameGroup PopFrames() => PopFramesUntil(f => f.FrameType == FrameType.Function);
+
+   public Maybe<Frame> PeekFrame() => stack.Count > 0 ? stack.Peek() : nil;
 
    public FrameGroup PeekFrames(Predicate<Frame> predicate)
    {

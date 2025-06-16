@@ -12,7 +12,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class DeferParser : StatementParser
 {
-   [GeneratedRegex(@"^(\s+)(defer)\b")]
+   [GeneratedRegex(@"^(\s*)(defer)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)

@@ -13,6 +13,7 @@ public class PopTryFrame : Operation
       var frameGroup = machine.PopFramesUntil(f => f.FrameType == FrameType.Try);
       if (frameGroup.TryFrame is (true, var tryFrame))
       {
+         tryFrame.ExecuteDeferred(machine);
          if (machine.GoTo(tryFrame.Address))
          {
             return nil;

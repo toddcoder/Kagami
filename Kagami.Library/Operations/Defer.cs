@@ -1,25 +1,25 @@
-﻿using Kagami.Library.Objects;
+﻿using Core.Monads;
+using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
-using Core.Monads;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Operations;
 
-public class PopFrame : Operation
+public class Defer(Selector selector) : Operation
 {
    public override Optional<IObject> Execute(Machine machine)
    {
-      var _frame = machine.PopFrame();
+      var _frame = machine.PeekFrame();
       if (_frame is (true, var frame))
       {
-         frame.ExecuteDeferred(machine);
+         frame.Defer(selector);
          return nil;
       }
       else
       {
-         return _frame.Exception;
+         return fail("No frame to defer in");
       }
    }
 
-   public override string ToString() => "pop.frame";
+   public override string ToString() => $"defer({selector})";
 }

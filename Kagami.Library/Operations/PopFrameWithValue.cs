@@ -8,11 +8,16 @@ public class PopFrameWithValue : Operation
 {
    public override Optional<IObject> Execute(Machine machine)
    {
-      var _result =
-         from frame in machine.PopFrame()
-         from value in frame.Pop()
-         select value;
-      return _result.Optional();
+      var _frame = machine.PopFrame();
+      if (_frame is (true, var frame))
+      {
+         frame.ExecuteDeferred(machine);
+         return frame.Pop().Optional();
+      }
+      else
+      {
+         return _frame.Exception;
+      }
    }
 
    public override string ToString() => "pop.frame.with.value";

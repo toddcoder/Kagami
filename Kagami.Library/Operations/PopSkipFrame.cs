@@ -13,6 +13,7 @@ public class PopSkipFrame : Operation
       var frameGroup = machine.PopFramesUntil(f => f.FrameType == FrameType.Skip);
       if (frameGroup.SkipFrame is (true, var skipFrame))
       {
+         skipFrame.ExecuteDeferred(machine);
          if (machine.GoTo(skipFrame.Address))
          {
             return nil;
