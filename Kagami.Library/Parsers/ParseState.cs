@@ -191,7 +191,7 @@ public class ParseState : IEnumerable<Statement>
          return exception;
       }
    }
-   
+
    public Optional<string> Scan(string pattern, Func<Group, int, Color> colorFunc) => Scan(pattern, RegexOptions.None, colorFunc);
 
    public Optional<string> Scan(string pattern, RegexOptions options, Func<Group, int, Color> colorFunc)
@@ -240,6 +240,14 @@ public class ParseState : IEnumerable<Statement>
       }
 
       Move(tokens);
+   }
+
+   public void Colorize(int startIndex, string text, Color color)
+   {
+      var length = text.Length;
+      var token = new Token(startIndex, length, text);
+      setTokenColor(token, color);
+      tokens.Add(token);
    }
 
    public void AddSymbol(Symbol symbol) => postGenerationSymbols.Add(symbol);
