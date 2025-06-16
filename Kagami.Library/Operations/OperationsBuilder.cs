@@ -532,4 +532,10 @@ public class OperationsBuilder
    public void PostIncrement(bool increment) => add(increment ? new PostIncrement() : new PostDecrement());
 
    public void Concatenate() => add(new Concatenate());
+
+   public void SetRegister(int index) => add(new SetRegister(index));
+
+   public void GetRegister(int index) => add(new GetRegister(index));
+
+   public void ClearRegister(int index) => add(new ClearRegister(index));
 }

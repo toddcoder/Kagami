@@ -662,4 +662,12 @@ public class Machine
    public string StackAsString => stack.Peek().ToString();
 
    public Maybe<Field> LastField { get; set; } = nil;
+
+   public Maybe<IObject> R0 { get; set; } = nil;
+
+   public Maybe<IObject> R1 { get; set; } = nil;
+
+   public Maybe<IObject> R2 { get; set; } = nil;
+
+   public Maybe<IObject> R3 { get; set; } = nil;
 }

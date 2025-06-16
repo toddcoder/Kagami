@@ -22,7 +22,9 @@ public class TryHandler(Block block, Block handler, Maybe<string> _errorField, M
       builder.Label(errorLabel);
       if (_errorField is (true, var errorField))
       {
+         builder.SetRegister(0);
          builder.PushFrame();
+         builder.GetRegister(0);
          builder.NewField(errorField, false, true);
          builder.AssignField(errorField, true);
       }
@@ -41,7 +43,9 @@ public class TryHandler(Block block, Block handler, Maybe<string> _errorField, M
       builder.Label(endLabel);
       if (_finally is (true, var finallyBlock))
       {
+         builder.PushFrame();
          finallyBlock.Generate(builder);
+         builder.PopFrame();
       }
       else
       {
