@@ -12,6 +12,7 @@ public class StatementsParser : MultiParser
    {
       get
       {
+         yield return new MultilineCommentParser();
          yield return new NullStatementParser();
          yield return new CommentParser();
          yield return new ClassParser();
