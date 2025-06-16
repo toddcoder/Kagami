@@ -8,7 +8,6 @@ using Kagami.Library.Runtime;
 using System.Text.RegularExpressions;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
-using static Kagami.Library.Nodes.NodeFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 using Regex = System.Text.RegularExpressions.Regex;
 
@@ -63,7 +62,7 @@ public partial class FunctionParser : StatementParser
       var _parameters = GetAnyParameters(needsParameters, state);
       if (_parameters is (true, var parameters))
       {
-         if (state.CurrentSource.IsMatch("^ /s* 'case' /b"))
+         if (state.CurrentSource.IsMatch("^ /s* 'when' /b"))
          {
             var parameterName = "__$0";
             var variadicParameter = new Parameter(false, "", parameterName, nil, nil, false, false)

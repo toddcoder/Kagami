@@ -17,6 +17,7 @@ using Core.WinForms.TableLayoutPanels;
 using Kagami.Library;
 using Kagami.Library.Runtime;
 using System.Diagnostics;
+using System.Drawing.Drawing2D;
 using System.Text;
 using static Core.Monads.MonadFunctions;
 
@@ -45,7 +46,7 @@ public partial class Playground : Form
    protected Idle idle = new(1);
    protected bool isDirty;
    protected UiAction uiValue = new() { AutoSizeText = true };
-   protected UiAction uiType = new() { AutoSizeText = true };
+   protected UiAction uiType = new() { AutoSizeText = true, LeftStripe = DashStyle.Dash };
    protected UiAction uiElapsed = new() { AutoSizeText = true };
    protected UiAction uiStatus = new();
    protected UiAction uiRun = new();

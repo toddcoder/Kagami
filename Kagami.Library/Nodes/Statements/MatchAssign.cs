@@ -16,12 +16,17 @@ public class MatchAssign : Statement
 
    public override void Generate(OperationsBuilder builder)
    {
+      var fieldName = Guid.NewGuid().ToString();
+      builder.NewField(fieldName, false, true);
       expression.Generate(builder);
       builder.Peek(Index);
+      builder.AssignField(fieldName, false);
       comparisand.Generate(builder);
+      builder.GetField(fieldName);
+      builder.Swap();
       builder.Match();
       builder.Drop();
    }
 
-   public override string ToString() => $"case {comparisand} = {expression}";
+   public override string ToString() => $"when {comparisand} = {expression}";
 }

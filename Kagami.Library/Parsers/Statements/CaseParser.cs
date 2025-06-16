@@ -38,7 +38,7 @@ public partial class CaseParser : StatementParser
       caseType = CaseType.Function;
    }
 
-   [GeneratedRegex(@"^(\s*)(case)(\s+)")]
+   [GeneratedRegex(@"^(\s*)(when)(\s+)")]
    public override partial Regex Regex();
 
    protected static Optional<Block> getCaseBlock(CaseType caseType, ParseState state) => caseType switch

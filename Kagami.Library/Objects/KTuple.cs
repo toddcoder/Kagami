@@ -345,4 +345,6 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
 
       return None.NoneValue;
    }
+
+   public KTuple Append(IObject obj) => new([..items, obj]);
 }
