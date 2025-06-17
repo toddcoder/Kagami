@@ -99,6 +99,8 @@ public readonly struct RegexMatch : IObject, IProcessPlaceholders, IEquatable<Re
       }
    }
 
+   public KTuple Captures => new([.. groups.Skip(1).Select(g => g.Text)]);
+
    public bool Equals(RegexMatch other)
    {
       return text == other.text && index == other.index && length == other.length &&
