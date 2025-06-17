@@ -5,16 +5,16 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public partial class UntilParser : EndingInExpressionParser
+public partial class LoopControlParser : EndingInExpressionParser
 {
-   //public override string Pattern => "^ /'until' /b";
-
-   [GeneratedRegex(@"^(\s*)(until)\b")]
+   [GeneratedRegex(@"^(\s*)(until|while)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {
+      IsUntil = tokens[2].Text == "until";
       state.Colorize(tokens, Color.Whitespace, Color.Keyword);
+
       return unit;
    }
 
@@ -23,6 +23,8 @@ public partial class UntilParser : EndingInExpressionParser
       Expression = expression;
       return unit;
    }
+
+   public bool IsUntil { get; set; }
 
    public Expression Expression { get; set; } = Expression.Empty;
 }
