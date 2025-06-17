@@ -12,14 +12,12 @@ public partial class RegexParser : SymbolParser
    {
    }
 
-   //public override string Pattern => @"^ /(/s*) /'\'";
-
-   [GeneratedRegex(@"^(\s*)(\\)")]
+   [GeneratedRegex(@"^(\s*)(x"")")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      state.Colorize(tokens, Color.Whitespace, Color.Structure);
+      state.Colorize(tokens, Color.Whitespace, Color.Regex);
 
       var pattern = new StringBuilder();
       var type = RegexParsingType.Outside;
@@ -27,6 +25,7 @@ public partial class RegexParser : SymbolParser
       var multiline = false;
       var global = false;
       var textOnly = false;
+      var escaped = false;
 
       while (state.More)
       {
@@ -37,21 +36,29 @@ public partial class RegexParser : SymbolParser
             case RegexParsingType.Outside:
                switch (ch)
                {
+                  case '\\' when escaped:
+                     pattern.Append(ch);
+                     state.AddToken(Color.String);
+                     escaped = false;
+                     break;
                   case '\\':
-                     state.AddToken(Color.Structure);
+                     escaped = true;
+                     break;
+                  case '"' when escaped:
+                     pattern.Append('"');
+                     state.AddToken(Color.String);
+                     escaped = false;
+                     break;
+                  case '"':
+                     state.AddToken(Color.Regex);
                      state.Move(1);
                      builder.Add(new RegexSymbol(pattern.ToString(), ignoreCase, multiline, global, textOnly));
 
                      return unit;
                   case '\'':
-                     type = RegexParsingType.WaitingForSingleQuote;
                      pattern.Append(ch);
                      state.AddToken(Color.String);
-                     break;
-                  case '"':
-                     type = RegexParsingType.WaitingForDoubleQuote;
-                     pattern.Append(ch);
-                     state.AddToken(Color.String);
+                     type = RegexParsingType.SingleQuote;
                      break;
                   case ';':
                      type = RegexParsingType.AwaitingOption;
@@ -92,37 +99,32 @@ public partial class RegexParser : SymbolParser
                }
 
                break;
-            case RegexParsingType.WaitingForSingleQuote:
-               type = ch switch
+            case RegexParsingType.SingleQuote:
+               switch (ch)
                {
-                  '\'' => RegexParsingType.Outside,
-                  '\\' => RegexParsingType.EscapedSingleQuote,
-                  _ => type
-               };
-
-               pattern.Append(ch);
-               state.AddToken(Color.String);
-               break;
-            case RegexParsingType.WaitingForDoubleQuote:
-               type = ch switch
-               {
-                  '"' => RegexParsingType.Outside,
-                  '\\' => RegexParsingType.EscapedDoubleQuote,
-                  _ => type
-               };
-
-               pattern.Append(ch);
-               state.AddToken(Color.String);
-               break;
-            case RegexParsingType.EscapedSingleQuote:
-               type = RegexParsingType.WaitingForSingleQuote;
-               pattern.Append(ch);
-               state.AddToken(Color.String);
-               break;
-            case RegexParsingType.EscapedDoubleQuote:
-               type = RegexParsingType.WaitingForDoubleQuote;
-               pattern.Append(ch);
-               state.AddToken(Color.String);
+                  case '\\' when escaped:
+                     pattern.Append(ch);
+                     state.AddToken(Color.String);
+                     escaped = false;
+                     break;
+                  case '\\':
+                     escaped = true;
+                     break;
+                  case '\'' when escaped:
+                     pattern.Append('\'');
+                     state.AddToken(Color.String);
+                     escaped = false;
+                     break;
+                  case '\'':
+                     pattern.Append('\'');
+                     state.AddToken(Color.String);
+                     type = RegexParsingType.Outside;
+                     break;
+                  default:
+                     pattern.Append(ch);
+                     state.AddToken(Color.String);
+                     break;
+               }
                break;
             case RegexParsingType.AwaitingOption:
                switch (ch)

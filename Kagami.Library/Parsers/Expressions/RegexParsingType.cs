@@ -5,7 +5,7 @@
       Outside,
       WaitingForSingleQuote,
       WaitingForDoubleQuote,
-      EscapedSingleQuote,
+      SingleQuote,
       EscapedDoubleQuote,
       AwaitingOption
    }

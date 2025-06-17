@@ -40,34 +40,39 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
    {
       get
       {
-         var builder = new StringBuilder("\\");
+         var builder = new StringBuilder("x\"");
          builder.Append(pattern.Regex);
          if (ignoreCase || multiline || global)
          {
-            builder.Append(";");
+            builder.Append(';');
          }
 
          if (ignoreCase)
          {
-            builder.Append("i");
+            builder.Append('i');
          }
 
          if (multiline)
          {
-            builder.Append("m");
+            builder.Append('m');
          }
 
          if (global)
          {
-            builder.Append("g");
+            builder.Append('g');
          }
 
          if (textOnly)
          {
-            builder.Append("t");
+            builder.Append('t');
          }
 
-         builder.Append("\\");
+         if (textOnly)
+         {
+            builder.Append('t');
+         }
+
+         builder.Append('"');
 
          return builder.ToString();
       }

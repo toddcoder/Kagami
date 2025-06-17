@@ -26,5 +26,6 @@ public enum Color
    Type,
    OpenParenthesis,
    CloseParenthesis,
-   Selector
+   Selector,
+   Regex
 }
