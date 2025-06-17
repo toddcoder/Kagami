@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
+using Core.Strings;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
@@ -29,7 +30,7 @@ public partial class TwoKeywordOperatorsParser : SymbolParser
          case "take":
             message = word2 switch
             {
-               "while" or "until" => word1.Selector($"{word2}:"),
+               "while" or "until" => $"{word1}{word2.ToTitleCase()}".Selector(1),
                _ => message
             };
 
