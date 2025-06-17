@@ -162,7 +162,7 @@ public abstract class BaseClass
       }
       else
       {
-         throw messageNotFound(classOf(obj), selector);
+         return DynamicInvoke(obj, message); //throw messageNotFound(classOf(obj), selector);
       }
    }
 
