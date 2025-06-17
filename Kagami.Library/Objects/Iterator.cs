@@ -1058,6 +1058,27 @@ public class Iterator : IObject, IIterator
       return collectionClass.Revert(result);
    }
 
+   public IObject Partition(Lambda lambda)
+   {
+      List<IObject> matched = [];
+      List<IObject> notMatched = [];
+
+      foreach (var obj in List())
+      {
+         var result = lambda.Invoke(obj);
+         if (result.IsTrue)
+         {
+            matched.Add(obj);
+         }
+         else
+         {
+            notMatched.Add(obj);
+         }
+      }
+
+      return collectionClass.Revert([collectionClass.Revert(matched), collectionClass.Revert(notMatched)]);
+   }
+
    protected static IEnumerable<IObject> applyAgainst(List<Lambda> lambdas, List<IObject> enumerable)
    {
       return lambdas.SelectMany(_ => enumerable, (lambda, item) => lambda.Invoke(item));

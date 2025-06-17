@@ -164,4 +164,6 @@ public interface IIterator : IEquivalentClass
    IObject Apply(ICollection collection);
 
    IObject Column(int column);
+
+   IObject Partition(Lambda lambda);
 }
