@@ -1,9 +1,8 @@
-﻿namespace Kagami.Library.Objects
+﻿namespace Kagami.Library.Objects;
+
+public enum SelectorItemType
 {
-	public enum SelectorItemType
-	{
-		Normal,
-		Variadic,
-		Default
-	}
+   Normal,
+   Variadic,
+   Default
 }
