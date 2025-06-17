@@ -109,7 +109,8 @@ public readonly struct KRange : IObject, ICollection
 
    public bool IsEqualTo(IObject obj)
    {
-      return obj is KRange r && startObj.IsEqualTo(r.startObj) && stopObj.IsEqualTo(r.stopObj) && increment == r.increment;
+      return obj is KRange r && startObj.IsEqualTo(r.startObj) && stopObj.IsEqualTo(r.stopObj) && increment == r.increment &&
+         inclusive == r.inclusive;
    }
 
    public bool Match(IObject comparisand, Hash<string, IObject> bindings) => false;
