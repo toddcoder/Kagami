@@ -55,15 +55,15 @@ public class StringClass : BaseClass, ICollectionClass
          function<KString, KString, KString>(obj, msg, (s, f, t) => s.Translate(f.Value, t.Value));
       messages["truncate".Selector("<Int>", "<Boolean>")] = (obj, msg) =>
          function<KString, Int, KBoolean>(obj, msg, (s, w, e) => s.Truncate(w.Value, e.Value));
-      messages["truncate"] = (obj, msg) => function<KString, Int>(obj, msg, (s, w) => s.Truncate(w.Value));
-      messages["int"] = (obj, _) => function<KString>(obj, s => s.Int());
-      messages["float"] = (obj, _) => function<KString>(obj, s => s.Float());
-      messages["byte"] = (obj, _) => function<KString>(obj, s => s.Byte());
-      messages["long"] = (obj, _) => function<KString>(obj, s => s.Long());
+      messages["truncate(_,_)"] = (obj, msg) => function<KString, Int>(obj, msg, (s, w) => s.Truncate(w.Value));
+      messages["int()"] = (obj, _) => function<KString>(obj, s => s.Int());
+      messages["float()"] = (obj, _) => function<KString>(obj, s => s.Float());
+      messages["byte()"] = (obj, _) => function<KString>(obj, s => s.Byte());
+      messages["long()"] = (obj, _) => function<KString>(obj, s => s.Long());
       messages["-"] = (obj, msg) => function<KString, KString>(obj, msg, (s1, s2) => s1.Subtract(s2.Value));
-      messages["get"] = (obj, _) => function<KString>(obj, s => s.Get());
-      messages["set"] = (obj, _) => function<KString>(obj, s => s.Set());
-      messages["swapCase"] = (obj, _) => function<KString>(obj, s => s.SwapCase());
+      messages["get()"] = (obj, _) => function<KString>(obj, s => s.Get());
+      messages["set()"] = (obj, _) => function<KString>(obj, s => s.Set());
+      messages["swapCase()"] = (obj, _) => function<KString>(obj, s => s.SwapCase());
       messages["fields".get()] = (obj, _) => function<KString>(obj, s => s.Fields);
       messages["words(at:_<Int>)"] = (obj, msg) => function<KString, Int>(obj, msg, (s, i) => s.Words(i.Value));
       messages["words()"] = (obj, _) => function<KString>(obj, s => s.Words());
@@ -76,6 +76,7 @@ public class StringClass : BaseClass, ICollectionClass
       messages["replace(_<Regex>, _<String>)"] = (obj, msg) => function<KString, Regex, KString>(obj, msg, (s, r, t) => r.Replace(s.Value, t.Value));
       messages["replace".Selector("<Regex>", "<Lambda>")] =
          (obj, msg) => function<KString, Regex, Lambda>(obj, msg, (s, r, l) => r.Replace(s.Value, l));
+      messages["squeeze()"] = (obj, _) => function<KString>(obj, s => s.Squeeze());
    }
 
    protected static IObject getIndexed(KString s, IObject i)

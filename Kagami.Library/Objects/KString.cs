@@ -429,4 +429,15 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
    public KString Succ() => value.Succ();
 
    public KString Pred() => value.Pred();
+
+   public KString Squeeze()
+   {
+      var set = new Set<char>();
+      foreach (var ch in value)
+      {
+         set.Add(ch);
+      }
+
+      return new KString(new string([.. set]));
+   }
 }
