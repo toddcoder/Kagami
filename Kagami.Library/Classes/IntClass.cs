@@ -39,6 +39,8 @@ public class IntClass : BaseClass, IParse, IEquivalentClass
       messages["<<(_)"] = (obj, msg) => function<Int, IObject>(obj, msg, (i, o) => i.ShiftLeft(o));
       messages[">>(_)"] = (obj, msg) => function<Int, IObject>(obj, msg, (i, o) => i.ShiftRight(o));
       messages["nextPrime()"] = (obj, _) => function<Int>(obj, i => i.NextPrime());
+      messages["max(_<Int>)"] = (obj, msg) => function<Int, Int>(obj, msg, (i1, i2) => i1.Max(i2));
+      messages["min(_<Int>)"] = (obj, msg) => function<Int, Int>(obj, msg, (i1, i2) => i1.Min(i2));
    }
 
    public override void RegisterClassMessages()
@@ -47,7 +49,7 @@ public class IntClass : BaseClass, IParse, IEquivalentClass
 
       classMessages["min".get()] = (_, _) => Int.IntObject(int.MinValue);
       classMessages["max".get()] = (_, _) => Int.IntObject(int.MaxValue);
-      classMessages["parse"] = (_, msg) => parse(msg.Arguments[0].AsString);
+      classMessages["parse(_)"] = (_, msg) => parse(msg.Arguments[0].AsString);
    }
 
    public static IObject parse(string value)

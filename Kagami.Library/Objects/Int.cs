@@ -245,4 +245,8 @@ public readonly struct Int : IObject, INumeric, IComparable<Int>, IEquatable<Int
    public IObject Increment(int amount = 1) => (Int)(value + amount);
 
    public IObject Decrement(int amount = 1) => (Int)(value - amount);
+
+   public Int Max(Int other) => value > other.Value ? this : other;
+
+   public Int Min(Int other) => value < other.Value ? this : other;
 }
