@@ -90,6 +90,41 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
 
    private Maybe<MatchResult> isMatch(string input) => input.Matches(pattern);
 
+   public IObject MatchesIndex(string input)
+   {
+      var _result = isMatch(input);
+      if (_result is (true, var result))
+      {
+         return Int.IntObject(result.Index);
+      }
+      else
+      {
+         return None.NoneValue;
+      }
+   }
+
+   public IObject MatchesIndex(IObject obj, Func<IObject, int, IObject> getter)
+   {
+      var _result = isMatch(obj.AsString);
+      if (_result is (true, var result))
+      {
+         return getter(obj, result.Index);
+      }
+      else
+      {
+         return None.NoneValue;
+      }
+   }
+
+   public void MatchesIndex(IObject obj, Action<IObject, int, IObject> setter, IObject value)
+   {
+      var _result = isMatch(obj.AsString);
+      if (_result is (true, var result))
+      {
+         setter(obj, result.Index, value);
+      }
+   }
+
    public IObject Matches(string input)
    {
       var self = this;

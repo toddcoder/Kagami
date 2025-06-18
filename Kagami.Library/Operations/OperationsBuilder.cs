@@ -262,7 +262,7 @@ public class OperationsBuilder
 
    public void NewNameValue() => add(new NewNameValue());
 
-   public void NewContainer() => add(new NewSequence());
+   public void NewSequence() => add(new NewSequence());
 
    public void NewTuple() => add(new NewTuple());
 

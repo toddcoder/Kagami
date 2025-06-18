@@ -21,12 +21,12 @@ public class IndexerSymbol : Symbol
       {
          arguments[0].Generate(builder);
          arguments[1].Generate(builder);
-         builder.NewContainer();
+         builder.NewSequence();
 
          foreach (var argument in arguments.Skip(2))
          {
             argument.Generate(builder);
-            builder.NewContainer();
+            builder.NewSequence();
          }
       }
    }

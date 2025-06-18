@@ -63,12 +63,13 @@ public class ArrayClass : BaseClass, ICollectionClass
 
    protected static IObject getIndexed(KArray a, IObject i)
    {
-      return CollectionFunctions.getIndexed(a, i, (array, index) => array[index], (array, list) => array[list]);
+      return CollectionFunctions.getIndexed(a, i, (array, index) => ((KArray)array)[index], (array, list) => ((KArray)array)[list]);
    }
 
    protected static IObject setIndexed(KArray a, IObject i, IObject v)
    {
-      CollectionFunctions.setIndexed(a, i, v, (array, index, value) => array[index] = value, (array, list, value) => array[list] = value);
+      CollectionFunctions.setIndexed(a, i, v, (array, index, value) => ((KArray)array)[index] = value,
+         (array, list, value) => ((KArray)array)[list] = value);
       return a;
    }
 

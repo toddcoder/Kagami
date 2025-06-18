@@ -81,7 +81,7 @@ public class StringClass : BaseClass, ICollectionClass
 
    protected static IObject getIndexed(KString s, IObject i)
    {
-      return CollectionFunctions.getIndexed(s, i, (str, index) => str[index], (str, list) => str[list]);
+      return CollectionFunctions.getIndexed(s, i, (str, index) => ((KString)str)[index], (str, list) => ((KString)str)[list]);
    }
 
    public override void RegisterClassMessages()
