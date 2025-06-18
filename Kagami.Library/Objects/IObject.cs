@@ -17,4 +17,6 @@ public interface IObject
    bool Match(IObject comparisand, Hash<string, IObject> bindings);
 
    bool IsTrue { get; }
+
+   Guid Id { get; init; }
 }

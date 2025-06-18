@@ -1,10 +1,13 @@
-﻿using System;
-using Core.Collections;
+﻿using Core.Collections;
 
 namespace Kagami.Library.Objects;
 
-public struct KVoid : IObject, IEquatable<KVoid>
+public readonly struct KVoid : IObject, IEquatable<KVoid>
 {
+   public KVoid()
+   {
+   }
+
    public static IObject Value => new KVoid();
 
    public string ClassName => "Void";
@@ -20,6 +23,8 @@ public struct KVoid : IObject, IEquatable<KVoid>
    public bool Match(IObject comparisand, Hash<string, IObject> bindings) => comparisand is KVoid;
 
    public bool IsTrue => false;
+
+   public Guid Id { get; init; } = Guid.NewGuid();
 
    public bool Equals(KVoid other) => true;
 }

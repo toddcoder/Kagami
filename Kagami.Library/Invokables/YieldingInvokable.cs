@@ -46,6 +46,8 @@ public class YieldingInvokable : IInvokable, ICollection, IObject
 
    public bool IsTrue => false;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public Arguments Arguments { get; set; } = Arguments.Empty;
 
    public FrameGroup Frames { get; set; } = new();

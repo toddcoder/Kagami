@@ -56,6 +56,8 @@ namespace Kagami.Library.Objects
 
 		public bool IsTrue => openRange.IsTrue;
 
+      public Guid Id { get; init; } = Guid.NewGuid();
+
       public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
    }
 }

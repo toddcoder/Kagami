@@ -74,6 +74,8 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public bool IsTrue => list.Count > 0;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public int Compare(IObject obj) => compareCollections(this, obj);
 
    public IObject Object => this;

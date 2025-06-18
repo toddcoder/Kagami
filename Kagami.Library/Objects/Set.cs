@@ -58,6 +58,8 @@ public class Set : IObject, ICollection, IObjectCompare
 
    public bool IsTrue => set.Count > 0;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public IIterator GetIterator(bool lazy)
    {
       list = [.. set];

@@ -285,6 +285,8 @@ public class Dictionary : IObject, IMutableCollection
 
    public bool IsTrue => dictionary.Count > 0;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public IIterator GetIterator(bool lazy) => lazy ? new LazyDictionaryIterator(this) : new DictionaryIterator(this);
 
    public Maybe<IObject> Next(int index) => maybe<IObject>() & keys.Length < index & (() => dictionary[keys[index]]);

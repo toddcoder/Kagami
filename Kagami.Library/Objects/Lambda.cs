@@ -33,6 +33,8 @@ public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields
 
    public bool IsTrue => true;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public bool Equals(Lambda? other) => IsEqualTo(other!);
 
    public override bool Equals(object? obj) => Equals((Lambda)obj!);

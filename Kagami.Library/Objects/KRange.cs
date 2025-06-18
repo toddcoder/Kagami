@@ -117,6 +117,8 @@ public readonly struct KRange : IObject, ICollection
 
    public bool IsTrue => list(this).Any();
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(new KArray(list(this))) : new RangeIterator(this);
 
    public Maybe<IObject> Next(int index) => index == 0 ? GetIterator(false).ToArray() : nil;

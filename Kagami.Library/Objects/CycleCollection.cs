@@ -30,6 +30,8 @@ public class CycleCollection : IObject, ICollection
 
    public bool IsTrue => cycle.IsTrue;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public IIterator GetIterator(bool lazy) => new LazyIterator(this);
 
    public Maybe<IObject> Next(int index)

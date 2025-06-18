@@ -151,6 +151,8 @@ public class List : IObject, ICollection
 
    public bool IsTrue => _head;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new ListIterator(this);
 
    public Maybe<IObject> Next(int index) => nil;

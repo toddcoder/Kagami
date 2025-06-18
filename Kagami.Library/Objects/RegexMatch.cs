@@ -72,6 +72,8 @@ public readonly struct RegexMatch : IObject, IProcessPlaceholders, IEquatable<Re
 
    public bool IsTrue => text.Length > 0;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public KString Text => text;
 
    public Int Index => index;

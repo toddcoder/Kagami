@@ -38,6 +38,8 @@ public readonly struct Message : IObject, IEquatable<Message>
 
    public bool IsTrue => true;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public bool Equals(Message other) => selector.IsEqualTo(other.selector) && arguments.Equals(other.arguments);
 
    public override bool Equals(object? obj) => obj is Message message && Equals(message);

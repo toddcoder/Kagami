@@ -92,6 +92,8 @@ public readonly struct KByte : IObject, INumeric, IObjectCompare, IComparable<KB
 
    public bool IsTrue => value > 0;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public int Compare(IObject obj) => compatibleCompare(this, obj);
 
    public IObject Object => this;

@@ -50,6 +50,8 @@ public readonly struct Some : IObject, IOptional, IBoolean, IEquatable<Some>, IM
 
    public bool IsTrue => true;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public bool Equals(Some other) => value.IsEqualTo(other.value);
 
    public IObject Bind(Lambda map) => Map(map);

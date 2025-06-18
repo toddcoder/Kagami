@@ -29,6 +29,8 @@ public readonly struct Point : IObject
 
    public bool IsTrue => x.IsTrue && y.IsTrue;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
    public IObject X => x;

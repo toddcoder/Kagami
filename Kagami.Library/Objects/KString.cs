@@ -46,6 +46,8 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
    public bool IsTrue => value.Length > 0;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public int Compare(IObject obj) => CompareTo((KString)obj);
 
    public IObject Object => this;

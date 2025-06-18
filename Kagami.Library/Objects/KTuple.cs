@@ -181,6 +181,8 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
 
    public bool IsTrue => items.Length > 0;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public bool Equals(KTuple other) => IsEqualTo(other);
 
    public override bool Equals(object? obj) => obj is KTuple tuple && Equals(tuple);

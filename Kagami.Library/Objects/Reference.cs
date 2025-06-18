@@ -33,4 +33,6 @@ public class Reference : IObject
    public bool Match(IObject comparisand, Hash<string, IObject> bindings) => field.Value.Match(comparisand, bindings);
 
    public bool IsTrue => @field.Value.IsTrue;
+   
+   public Guid Id { get; init; } = Guid.NewGuid();
 }

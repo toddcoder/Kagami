@@ -90,6 +90,8 @@ public readonly struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
 
    public bool IsTrue => true;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public TypeConstraint Merge(TypeConstraint other)
    {
       var set = new Set<string>();

@@ -33,6 +33,8 @@ public readonly struct KChar : IObject, IComparable<KChar>, IEquatable<KChar>, I
 
    public bool IsTrue => value > 0;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public int Compare(IObject obj) => CompareTo((KChar)obj);
 
    public IObject Object => this;

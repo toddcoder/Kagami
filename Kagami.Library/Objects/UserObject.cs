@@ -53,4 +53,6 @@ public class UserObject : IObject
    public bool Match(IObject comparisand, Hash<string, IObject> bindings) => userObjectMatch(this, comparisand, bindings);
 
    public bool IsTrue => KBoolean.BooleanObject(fields.Length > 0).IsTrue;
+
+   public Guid Id { get; init; } = Guid.NewGuid();
 }

@@ -86,6 +86,8 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
 
    public bool IsTrue => pattern.Regex.Length > 0;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    private Maybe<MatchResult> isMatch(string input) => input.Matches(pattern);
 
    public IObject Matches(string input)

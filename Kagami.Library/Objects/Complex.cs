@@ -123,6 +123,8 @@ public readonly struct Complex : IObject, INumeric, IObjectCompare, IComparable<
 
    public bool IsTrue => !IsZero;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public int Compare(IObject obj) => compatibleCompare(this, obj);
 
    public IObject Object => this;

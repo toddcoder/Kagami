@@ -97,6 +97,8 @@ public class Awkifier : IObject, ICollection
 
    public bool IsTrue => source.IsNotEmpty();
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    protected void splitIfRecordNotCreated()
    {
       if (!recordsCreated)

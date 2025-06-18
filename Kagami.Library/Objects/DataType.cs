@@ -34,6 +34,8 @@ public class DataType : IObject
 
    public bool IsTrue => true;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public IObject GetDataComparisand(string name, IObject[] arguments)
    {
       var self = this;

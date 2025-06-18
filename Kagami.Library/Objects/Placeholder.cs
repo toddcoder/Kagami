@@ -46,6 +46,8 @@ public readonly struct Placeholder : IObject, IEquatable<Placeholder>
 
    public bool IsTrue => true;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public bool Equals(Placeholder other) => string.Equals(name, other.name);
 
    public override bool Equals(object? obj) => obj is Placeholder placeholder && Equals(placeholder);

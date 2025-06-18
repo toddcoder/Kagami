@@ -23,6 +23,8 @@ public readonly struct SymbolObject : IObject, IObjectCompare, IEquatable<Symbol
 
    public bool IsTrue => true;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public int Compare(IObject obj) => compareObjects(this, obj, (x, y) => x.name.CompareTo(y.name));
 
    public IObject Object => this;

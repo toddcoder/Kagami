@@ -6,7 +6,8 @@ using CComplex = System.Numerics.Complex;
 
 namespace Kagami.Library.Objects;
 
-public readonly struct XDecimal : IObject, INumeric, IObjectCompare, IComparable<XDecimal>, IEquatable<XDecimal>, IFormattable, IComparable, IMessageNumber
+public readonly struct XDecimal : IObject, INumeric, IObjectCompare, IComparable<XDecimal>, IEquatable<XDecimal>, IFormattable, IComparable,
+   IMessageNumber
 {
    public static implicit operator XDecimal(decimal value) => new(value);
 
@@ -48,6 +49,8 @@ public readonly struct XDecimal : IObject, INumeric, IObjectCompare, IComparable
    public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
    public bool IsTrue => value != 0;
+
+   public Guid Id { get; init; } = Guid.NewGuid();
 
    public bool IsZero => value == 0;
 

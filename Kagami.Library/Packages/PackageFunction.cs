@@ -31,6 +31,8 @@ public class PackageFunction : IObject, IEquatable<PackageFunction>, IMayInvoke
 
    public bool IsTrue => true;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public IObject Invoke(Arguments arguments)
    {
       var message = new Message(name, arguments);

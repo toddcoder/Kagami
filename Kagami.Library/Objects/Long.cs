@@ -96,6 +96,8 @@ public readonly struct Long : IObject, INumeric, IComparable<Long>, IEquatable<L
 
    public bool IsTrue => value != BigInteger.Zero;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public int CompareTo(Long other) => value.CompareTo(other.value);
 
    public bool Equals(Long other) => value == other.value;

@@ -33,6 +33,8 @@ public readonly struct KBoolean : IObject, IObjectCompare, IComparable<KBoolean>
 
    public bool IsTrue => value;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public int Compare(IObject obj) => CompareTo((KBoolean)obj);
 
    public IObject Object => this;

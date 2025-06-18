@@ -31,6 +31,8 @@ public class StreamIterator : IObject, IIterator
 
    public bool IsTrue => true;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public ICollection Collection => iterator.Collection;
 
    public ICollectionClass CollectionClass => iterator.CollectionClass;

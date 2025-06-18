@@ -61,6 +61,8 @@ public readonly struct Date : IObject, IRangeItem, IFormattable
 
    public bool IsTrue => value > DateTime.MinValue;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public int Compare(IObject obj)
    {
       if (obj is Date d)

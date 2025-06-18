@@ -40,6 +40,8 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
 
    public bool IsTrue => mutable.Length > 0;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public int CompareTo(MutString? other) => Compare(other!);
 
    public bool Equals(MutString? other) => AsString == other!.AsString;

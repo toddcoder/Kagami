@@ -26,6 +26,8 @@ public readonly struct Success : IObject, IResult, IMonad, IBoolean
 
    public bool IsTrue => true;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public IObject Value { get; }
 
    public Error Error => new("No error!");

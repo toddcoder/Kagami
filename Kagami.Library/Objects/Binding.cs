@@ -30,4 +30,6 @@ public readonly struct Binding : IObject
    public bool Match(IObject comparisand, Hash<string, IObject> bindings) => value.Match(comparisand, bindings);
 
    public bool IsTrue => value.IsTrue;
+
+   public Guid Id { get; init; } = Guid.NewGuid();
 }

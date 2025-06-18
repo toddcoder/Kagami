@@ -81,6 +81,8 @@ public readonly struct Infinity : IObject, IObjectCompare, INumeric
 
    public bool IsTrue => true;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public int Compare(IObject obj) => positive ? -1 : 1;
 
    public IObject Object => this;

@@ -73,6 +73,7 @@ public abstract class BaseClass
       registerMessage("respondsTo(_)", (obj, message) => (KBoolean)classOf(obj).RespondsTo(message.Arguments[0].AsString));
       registerMessage("seq(_)", (obj, message) => new OpenRange(obj, (Lambda)message.Arguments[0]));
       registerMessage("format(_)", (obj, message) => format(obj, message.Arguments[0].AsString));
+      registerMessage("id".get(), (obj, _) => KString.StringObject(obj.Id.ToString()));
    }
 
    protected static KString format(IObject obj, string formattingString)

@@ -31,6 +31,8 @@ public class Size : IObject
 
    public bool IsTrue => width.IsTrue && height.IsTrue;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public IObject Width => width;
 
    public IObject Height => height;

@@ -46,6 +46,8 @@ public class Iterator : IObject, IIterator
 
    public bool IsTrue => collection.Length.Value > 0;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public ICollection Collection => collection;
 
    public ICollectionClass CollectionClass => collectionClass;

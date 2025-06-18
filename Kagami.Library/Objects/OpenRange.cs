@@ -35,6 +35,8 @@ public readonly struct OpenRange : IObject, ICollection
 
    public bool IsTrue => seed.IsTrue;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public IIterator GetIterator(bool lazy) => new OpenRangeCollection(this).GetIterator(lazy);
 
    public Maybe<IObject> Next(int index) => nil;

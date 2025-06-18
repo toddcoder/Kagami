@@ -45,6 +45,8 @@ public readonly struct Int : IObject, INumeric, IComparable<Int>, IEquatable<Int
 
    public bool IsTrue => value != 0;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public (INumeric, INumeric) Compatible(INumeric obj) => obj.ClassName switch
    {
       "Int" => (this, obj.ToInt()),

@@ -103,5 +103,7 @@ public class ObjectCollection : IObject, ICollection
 
    public bool IsTrue => obj.IsTrue;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
 }
