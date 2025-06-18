@@ -10,7 +10,7 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class SelectorParser : SymbolParser
 {
-   [GeneratedRegex($@"^(\s*)(&)({REGEX_FUNCTION_NAME})(\([^\)]+\))?")]
+   [GeneratedRegex($@"^(\s*)(&)({REGEX_FUNCTION_NAME})(\([^\)]*\))?")]
    public override partial Regex Regex();
 
    public SelectorParser(ExpressionBuilder builder) : base(builder)
@@ -21,7 +21,7 @@ public partial class SelectorParser : SymbolParser
    {
       Selector selector = tokens[3].Text + tokens[4].Text;
       state.Colorize(tokens, Color.Whitespace, Color.Selector, Color.Selector, Color.Selector);
-      builder.Add(new FieldSymbol(selector));
+      builder.Add(new SelectorSymbol(selector));
 
       return unit;
    }

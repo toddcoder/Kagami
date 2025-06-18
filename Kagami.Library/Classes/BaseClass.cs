@@ -70,7 +70,7 @@ public abstract class BaseClass
       messages["isNumber".get()] = (_, _) => KBoolean.False;
       registerMessage("send(_,_)",
          (obj, message) => function<IObject, KString>(obj, message, (o, n) => sendMessage(o, n.Value, message.Arguments.Pass(1))));
-      registerMessage("respondsTo(_)", (obj, message) => (KBoolean)classOf(obj).RespondsTo(message.Arguments[0].AsString));
+      registerMessage("respondsTo(_)", (obj, message) => (KBoolean)classOf(obj).RespondsTo((Selector)message.Arguments[0]));
       registerMessage("seq(_)", (obj, message) => new OpenRange(obj, (Lambda)message.Arguments[0]));
       registerMessage("format(_)", (obj, message) => format(obj, message.Arguments[0].AsString));
       registerMessage("id".get(), (obj, _) => KString.StringObject(obj.Id.ToString()));
