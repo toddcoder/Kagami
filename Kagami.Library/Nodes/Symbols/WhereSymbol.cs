@@ -41,5 +41,5 @@ public class WhereSymbol : Symbol
 
    public override Arity Arity => Arity.Postfix;
 
-   public override string ToString() => $"?{{{items.Select(i => $"{i.propertyName}: {i.comparisand}")}}}";
+   public override string ToString() => $".{{{items.Select(i => $"{i.propertyName}: {i.comparisand}")}}}";
 }
