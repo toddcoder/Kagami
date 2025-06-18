@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using Core.Numbers;
+using Core.Strings;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
@@ -25,6 +26,7 @@ public partial class InterpolatedStringParser : SymbolParser
 
       Maybe<string> _firstString = nil;
       List<Expression> expressions = [];
+      List<string> formats = [];
       List<string> suffixes = [];
       var text = new StringBuilder();
       var escaped = false;
@@ -70,10 +72,11 @@ public partial class InterpolatedStringParser : SymbolParser
                var symbol = _firstString.Map(Symbol (prefix) =>
                {
                   suffixes.Add(text.ToString());
-                  var expressionsArray = expressions.ToArray();
-                  var suffixesArray = suffixes.ToArray();
+                  Expression[] expressionsArray = [.. expressions];
+                  string[] formatsArray = [.. formats];
+                  string[] suffixesArray = [.. suffixes];
 
-                  return new InterpolatedStringSymbol(prefix, expressionsArray, suffixesArray, isFailure);
+                  return new InterpolatedStringSymbol(prefix, expressionsArray, formatsArray, suffixesArray, isFailure);
                }) | (() => new StringSymbol(text.ToString(), isFailure));
                builder.Add(symbol);
 
@@ -109,6 +112,19 @@ public partial class InterpolatedStringParser : SymbolParser
                   expressions.Add(expression);
                   index = state.Index;
                   length = 0;
+
+                  var _format = state.ScanFormat();
+                  if (_format is (true, var format))
+                  {
+                     formats.Add(format.Drop(1).Drop(-1));
+                     index = state.Index;
+                     length = 0;
+                  }
+                  else
+                  {
+                     formats.Add("");
+                  }
+
                   continue;
                }
                else if (_expression.Exception is (true, var exception))

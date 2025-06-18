@@ -8,13 +8,15 @@ public class InterpolatedStringSymbol : Symbol
 {
    protected string prefix;
    protected Expression[] expressions;
+   protected string[] formats;
    protected string[] suffixes;
    protected bool isFailure;
 
-   public InterpolatedStringSymbol(string prefix, Expression[] expressions, string[] suffixes, bool isFailure)
+   public InterpolatedStringSymbol(string prefix, Expression[] expressions, string[] formats, string[] suffixes, bool isFailure)
    {
       this.prefix = prefix;
       this.expressions = expressions;
+      this.formats = formats;
       this.suffixes = suffixes;
       this.isFailure = isFailure;
    }
@@ -27,7 +29,16 @@ public class InterpolatedStringSymbol : Symbol
       for (var i = 0; i < length; i++)
       {
          expressions[i].Generate(builder);
-         builder.String();
+         if (formats[i].IsEmpty())
+         {
+            builder.String();
+         }
+         else
+         {
+            builder.PushString(formats[i]);
+            builder.SendMessage("format(_)", 1);
+         }
+
          builder.Concatenate();
          builder.PushString(suffixes[i]);
          builder.Concatenate();

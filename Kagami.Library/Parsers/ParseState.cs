@@ -8,7 +8,6 @@ using Kagami.Library.Objects;
 using Kagami.Library.Parsers.Expressions;
 using System.Collections;
 using System.Text.RegularExpressions;
-using static Core.Computers.Target;
 using static Core.Monads.AttemptFunctions;
 using static Core.Monads.MonadFunctions;
 using Group = System.Text.RegularExpressions.Group;
@@ -403,4 +402,9 @@ public class ParseState : IEnumerable<Statement>
    public void RegisterPattern(string patternName) => patterns.Add(patternName);
 
    public bool ContainsPattern(string patternName) => patternName.Contains(patternName);
+
+   public Optional<string> ScanFormat()
+   {
+      return Scan(@"^(\[)([cdefgnprxsboi](?:-?\d+)?(?:\.\d+)?)(\])", Color.OpenParenthesis, Color.Format, Color.CloseParenthesis);
+   }
 }

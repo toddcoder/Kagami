@@ -9,8 +9,6 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class FormatParser : SymbolParser
 {
-   //public override string Pattern => "^ /(/s*) /('$' ['cdefgnprxsboi'] ('-'? /d+)? ('.' /d+)?)";
-
    [GeneratedRegex(@"^(\s*)(\$[cdefgnprxsboi](?:-?\d+)?(?:\.\d+)?)")]
    public override partial Regex Regex();
 
