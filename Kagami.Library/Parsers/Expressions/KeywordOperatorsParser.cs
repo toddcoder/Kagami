@@ -13,7 +13,7 @@ public partial class KeywordOperatorsParser : SymbolParser
    }
 
    [GeneratedRegex(
-      @"^(\s*)(if|map|join|sort|foldl|foldr|all|any|none|one|zip|skip|take|band|bor|bxor|bsl|bsr|while|until|min|max|does|x|div|r)(\s+)")]
+      @"^(\s*)(if|map|join|sort|foldl|foldr|all|any|none|one|zip|skip|take|band|bor|bxor|bsl|bsr|while|until|min|max|does|x|div|r|each)(\s+)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -39,6 +39,7 @@ public partial class KeywordOperatorsParser : SymbolParser
                case "none":
                case "one":
                case "zip":
+               case "each":
                   builder.Add(new SendBinaryMessageSymbol($"{keyword}(_)", Precedence.ChainedOperator));
                   break;
                case "sort":
