@@ -3,7 +3,6 @@ using System.Text.RegularExpressions;
 using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using Core.Numbers;
-using Core.Strings;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
@@ -116,7 +115,7 @@ public partial class InterpolatedStringParser : SymbolParser
                   var _format = state.ScanFormat();
                   if (_format is (true, var format))
                   {
-                     formats.Add(format.Drop(1).Drop(-1));
+                     formats.Add(format);
                      index = state.Index;
                      length = 0;
                   }
