@@ -65,7 +65,7 @@ public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields
       }
       else
       {
-         throw fieldNotFound(invokable1.Image);
+         return KVoid.Value;
       }
    }
 
