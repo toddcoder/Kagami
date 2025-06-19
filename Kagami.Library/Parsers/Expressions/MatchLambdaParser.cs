@@ -9,8 +9,6 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class MatchLambdaParser : SymbolParser
 {
-   //public override string Pattern => "^ /(/s*) /'|('";
-
    [GeneratedRegex(@"^([ \t]*)(\|\()")]
    public override partial Regex Regex();
 

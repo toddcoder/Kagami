@@ -405,14 +405,14 @@ public class ParseState : IEnumerable<Statement>
 
    public Optional<string> ScanFormat()
    {
-      var _result = Scan(@"^(\[)([cdefgnprxsboi](?:-?\d+)?(?:\.\d+)?)(\])", Color.OpenParenthesis, Color.Format, Color.CloseParenthesis);
+      var _result = Scan(@"^(\[)([cdefgnprxsboi](?:-?\d+)?(?:\.\d+)?)(\])", Color.Format, Color.Format, Color.Format);
       if (_result)
       {
          return _result.Map(r => r.Drop(1).Drop(-1));
       }
       else
       {
-         _result = Scan(@"^(\[)([^\]]+)(\])", Color.OpenParenthesis, Color.Format, Color.CloseParenthesis);
+         _result = Scan(@"^(\[)([^\]]+)(\])", Color.Format, Color.Format, Color.Format);
          _result = _result.Map(r => r.Drop(1).Drop(-1));
       }
 
