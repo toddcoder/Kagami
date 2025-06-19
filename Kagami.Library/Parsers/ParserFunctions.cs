@@ -1352,14 +1352,21 @@ public static class ParserFunctions
       return builder.ToExpression().Optional();
    }
 
-   public static Optional<Block> getLambdaBlock(bool isExpression, ParseState state, Bits32<ExpressionFlags> flags,
+   public static Optional<Block> getLambdaBlock(bool isExpression, bool isSingleLine, ParseState state, Bits32<ExpressionFlags> flags,
       Maybe<TypeConstraint> _typeConstraint)
    {
       if (isExpression)
       {
-         var _expression = getExpression(state, flags);
-         return _expression.Map(e => new Block(new ExpressionStatement(e, true, _typeConstraint), _typeConstraint)
-            { Index = state.Index });
+         if (isSingleLine)
+         {
+            return getSingleLine(state, _typeConstraint);
+         }
+         else
+         {
+            var _expression = getExpression(state, flags);
+            return _expression.Map(e => new Block(new ExpressionStatement(e, true, _typeConstraint), _typeConstraint)
+               { Index = state.Index });
+         }
       }
       else
       {
