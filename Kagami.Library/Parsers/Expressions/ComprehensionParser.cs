@@ -23,22 +23,22 @@ public partial class ComprehensionParser : SymbolParser
       var _expression = builder.ToExpression();
       if (_expression is (true, var expression))
       {
-         var comprehensions = new List<(Symbol, Expression, PossibleExpression, string)>();
+         List<(Symbol, Expression, PossibleExpression, string)> comprehensions = [];
 
-         var _innerComprehension = getInnerComprehension(state);
-         if (_innerComprehension is (true, var (comparisand, innerSource, possibleExpression)))
+         var _comprehensionBody = getComprehensionBody(state);
+         if (_comprehensionBody is (true, var (comparisand, innerSource, possibleExpression)))
          {
             var image = $"for {comparisand} in {innerSource}";
             comprehensions.Add((comparisand, innerSource, possibleExpression, image));
          }
          else
          {
-            return _innerComprehension.Exception;
+            return _comprehensionBody.Exception;
          }
 
          while (state.More)
          {
-            var parser = new InnerComprehensionParser(builder, comprehensions);
+            var parser = new ComprehensionBodyParser(builder, comprehensions);
             var _scan = parser.Scan(state);
             if (_scan)
             {
@@ -53,7 +53,7 @@ public partial class ComprehensionParser : SymbolParser
             }
          }
 
-         var stack = new Stack<(Symbol, Expression, PossibleExpression, string)>();
+         Stack<(Symbol, Expression, PossibleExpression, string)> stack = [];
          foreach (var item in comprehensions)
          {
             stack.Push(item);

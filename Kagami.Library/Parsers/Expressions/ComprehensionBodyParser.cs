@@ -6,11 +6,11 @@ using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public partial class InnerComprehensionParser : SymbolParser
+public partial class ComprehensionBodyParser : SymbolParser
 {
    protected List<(Symbol, Expression, PossibleExpression, string)> comprehensions;
 
-   public InnerComprehensionParser(ExpressionBuilder builder, List<(Symbol, Expression, PossibleExpression, string)> comprehensions) :
+   public ComprehensionBodyParser(ExpressionBuilder builder, List<(Symbol, Expression, PossibleExpression, string)> comprehensions) :
       base(builder)
    {
       this.comprehensions = comprehensions;
@@ -22,7 +22,7 @@ public partial class InnerComprehensionParser : SymbolParser
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
       state.Colorize(tokens, Color.Whitespace, Color.Keyword);
-      var _innerComprehension = getInnerComprehension(state);
+      var _innerComprehension = getComprehensionBody(state);
       if (_innerComprehension is (true, var (comparisand, source, possibleExpression)))
       {
          var image = $"for {comparisand} in {source}";
