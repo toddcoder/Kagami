@@ -11,6 +11,11 @@ public class InfixParser(ExpressionBuilder builder) : MultiParser
          yield return new ZipLambdaParser(builder);
          yield return new RangeOperatorParser(builder);
 
+         if (!builder.Flags[ExpressionFlags.OmitColon] && !builder.Flags[ExpressionFlags.OmitNameValue])
+         {
+            yield return new KeyValueOperatorParser(builder);
+         }
+
          if (!builder.Flags[ExpressionFlags.OmitBind])
          {
             yield return new BindParser(builder);

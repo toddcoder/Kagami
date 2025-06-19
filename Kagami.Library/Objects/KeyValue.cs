@@ -20,9 +20,9 @@ public readonly struct KeyValue : IObject, IKeyValue
 
    public string ClassName => "KeyValue";
 
-   public string AsString => $"{key.AsString} => {value.AsString}";
+   public string AsString => $"{key.AsString} : {value.AsString}";
 
-   public string Image => $"{key.Image} => {value.Image}";
+   public string Image => $"{key.Image} : {value.Image}";
 
    public int Hash => (key.Hash + value.Hash).GetHashCode();
 

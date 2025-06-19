@@ -48,7 +48,7 @@ public class Set : IObject, ICollection, IObjectCompare
 
    public string AsString => set.Select(i => i.AsString).ToString(" ");
 
-   public string Image => $"[.{set.Select(i => i.Image).ToString(", ")}.]";
+   public string Image => $"{{{set.Select(i => i.Image).ToString(", ")}}}";
 
    public int Hash => set.GetHashCode();
 

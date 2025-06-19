@@ -2,26 +2,19 @@
 
 namespace Kagami.Library.Nodes.Symbols;
 
-public class DictionarySymbol : Symbol, IHasExpression
+public class DictionaryOrSetSymbol(Expression expression) : Symbol, IHasExpression
 {
-   protected Expression expression;
-
-   public DictionarySymbol(Expression expression)
-   {
-      this.expression = expression;
-   }
-
    public override void Generate(OperationsBuilder builder)
    {
       expression.Generate(builder);
-      builder.NewDictionary();
+      builder.NewDictionaryOrSet();
    }
 
    public override Precedence Precedence => Precedence.Value;
 
    public override Arity Arity => Arity.Nullary;
 
-   public override string ToString() => $"{{{expression}}}";
-
    public Expression Expression => expression;
+
+   public override string ToString() => $"{{{expression}}}";
 }

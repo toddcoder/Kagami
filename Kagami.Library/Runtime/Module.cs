@@ -44,7 +44,6 @@ public class Module
       "Long" => new LongClass(),
       "Lazy" => new LazyClass(),
       "YieldingInvokable" => new YieldingInvokableClass(),
-      "Del" => new DelClass(),
       "Slice" => new SliceClass(),
       "End" => new EndClass(),
       "List" => new ListClass(),

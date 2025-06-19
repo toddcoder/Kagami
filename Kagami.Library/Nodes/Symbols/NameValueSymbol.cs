@@ -1,6 +1,5 @@
 ﻿using Kagami.Library.Objects;
 using Kagami.Library.Operations;
-using System.Linq.Expressions;
 
 namespace Kagami.Library.Nodes.Symbols;
 

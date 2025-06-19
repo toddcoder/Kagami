@@ -302,6 +302,8 @@ public class OperationsBuilder
 
    public void NewDictionary() => add(new NewDictionary());
 
+   public void NewDictionaryOrSet() => add(new NewDictionaryOrSet());
+
    public void NewCycle() => add(new NewCycle());
 
    public void GetIterator(bool lazy) => add(new GetIterator(lazy));

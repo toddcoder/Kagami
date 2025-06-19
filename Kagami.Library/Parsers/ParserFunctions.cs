@@ -1262,9 +1262,9 @@ public static class ParserFunctions
          case ">>":
             _symbol = new SendBinaryMessageSymbol($"{source}(_)", Precedence.Shift);
             break;
-         case "=>" when !flags[ExpressionFlags.OmitNameValue]:
+         /*case "=>" when !flags[ExpressionFlags.OmitNameValue]:
             _symbol = new KeyValueSymbol();
-            break;
+            break;*/
          case "|>":
             _symbol = new PipelineSymbol();
             break;

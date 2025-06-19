@@ -8,9 +8,9 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class DictionaryParser : SymbolParser
 {
-   public DictionaryParser(ExpressionBuilder builder) : base(builder) { }
-
-   //public override string Pattern => "^ /(/s*) /'{' /(/s*)";
+   public DictionaryParser(ExpressionBuilder builder) : base(builder)
+   {
+   }
 
    [GeneratedRegex(@"^(\s*)(\{)(\s*)")]
    public override partial Regex Regex();
@@ -22,7 +22,7 @@ public partial class DictionaryParser : SymbolParser
       var _expression = getExpression(state, @"^(\s*)(\})", builder.Flags & ~ExpressionFlags.OmitComma, Color.Whitespace, Color.Collection);
       if (_expression is (true, var expression))
       {
-         builder.Add(new DictionarySymbol(expression));
+         builder.Add(new DictionaryOrSetSymbol(expression));
          return unit;
       }
       else

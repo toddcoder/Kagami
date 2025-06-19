@@ -258,11 +258,24 @@ public class Dictionary : IObject, IMutableCollection
 
    public string ClassName => "Dictionary";
 
-   public string AsString => $"{{{dictionary.Select(i => $"{i.Key.AsString} => {i.Value.AsString}").ToString(" ")}}}";
+   public string AsString
+   {
+      get
+      {
+         if (dictionary.Count == 0)
+         {
+            return "{:}";
+         }
+         else
+         {
+            return $"{{{dictionary.Select(i => $"{i.Key.AsString} : {i.Value.AsString}").ToString(" ")}}}";
+         }
+      }
+   }
 
    public string Image
    {
-      get => dictionary.Count == 0 ? "{}" : $"{{{dictionary.Select(i => $"{i.Key.Image} => {i.Value.Image}").ToString(", ")}}}";
+      get => dictionary.Count == 0 ? "{:}" : $"{{{dictionary.Select(i => $"{i.Key.Image} : {i.Value.Image}").ToString(", ")}}}";
    }
 
    public int Hash => dictionary.GetHashCode();
