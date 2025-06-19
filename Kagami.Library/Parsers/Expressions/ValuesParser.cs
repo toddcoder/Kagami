@@ -22,7 +22,7 @@ public class ValuesParser : MultiParser
          yield return new SubexpressionParser(builder);
          yield return new ArrayParser(builder);
          yield return new SelectorParser(builder);
-         yield return new DictionaryParser(builder);
+         yield return new DictionaryOrSetParser(builder);
          yield return new CycleParser(builder);
          yield return new ListParser(builder);
          yield return new SetParser(builder);

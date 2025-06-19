@@ -6,9 +6,9 @@ using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public partial class DictionaryParser : SymbolParser
+public partial class DictionaryOrSetParser : SymbolParser
 {
-   public DictionaryParser(ExpressionBuilder builder) : base(builder)
+   public DictionaryOrSetParser(ExpressionBuilder builder) : base(builder)
    {
    }
 
@@ -19,7 +19,7 @@ public partial class DictionaryParser : SymbolParser
    {
       state.Colorize(tokens, Color.Whitespace, Color.Collection, Color.Whitespace);
 
-      var _expression = getExpression(state, @"^(\s*)(\})", builder.Flags & ~ExpressionFlags.OmitComma, Color.Whitespace, Color.Collection);
+      var _expression = getExpression(state, @"^(\s*)(\})", ExpressionFlags.Standard, Color.Whitespace, Color.Collection);
       if (_expression is (true, var expression))
       {
          builder.Add(new DictionaryOrSetSymbol(expression));
