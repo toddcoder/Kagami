@@ -26,6 +26,8 @@ namespace Kagami.Playground;
 [System.Runtime.Versioning.SupportedOSPlatform("windows")]
 public partial class Playground : Form
 {
+   protected static char[] delimiters = [' ', '\t', '\n', '.', ',', ';', ':', '!', '?'];
+
    protected Document document = null!;
    protected TextBoxConsole outputConsole = null!;
    protected TextWriter textWriter = null!;
@@ -50,6 +52,7 @@ public partial class Playground : Form
    protected UiAction uiElapsed = new() { AutoSizeText = true };
    protected UiAction uiStatus = new();
    protected UiAction uiRun = new();
+   protected string[] fieldNames = [];
 
    public Playground()
    {
@@ -271,6 +274,7 @@ public partial class Playground : Form
                      context.Reset();
                      value = result.Image;
                      type = result.ClassName;
+                     fieldNames = [.. machine.AllFieldNames()];
                   }
                   else
                   {
@@ -283,6 +287,7 @@ public partial class Playground : Form
                      value = "exception";
                      type = "";
                      status = (message: _result.Exception.Message, type: UiActionType.Failure);
+                     //fieldNames = [];
                   }
                }
 
@@ -710,6 +715,7 @@ public partial class Playground : Form
             setTextAtInsert(1);
             break;
          case Keys.F1:
+         {
             if (getWord() is (true, var begin) && findWord(begin) is (true, var source))
             {
                insertText(source.Drop(begin.Length), 0);
@@ -717,6 +723,21 @@ public partial class Playground : Form
 
             e.Handled = true;
             break;
+         }
+         case Keys.F12:
+         {
+            var previousWord = getWordBeforeCursor();
+            var _foundWord = fieldNames.FirstOrNone(f => f.StartsWith(previousWord, StringComparison.InvariantCultureIgnoreCase))
+               .Map(stripParentheses);
+            if (_foundWord is (true, var foundWord))
+            {
+               var insert = foundWord.Drop(previousWord.Length);
+               textEditor.SelectedText = insert;
+            }
+
+            e.Handled = true;
+            break;
+         }
       }
    }
 
@@ -795,6 +816,38 @@ public partial class Playground : Form
                e.SuppressKeyPress = true;
             }
          }
+      }
+   }
+
+   protected string getWordBeforeCursor()
+   {
+      if (textEditor.TextLength == 0)
+      {
+         return "";
+      }
+
+      var caretPosition = textEditor.SelectionStart;
+      if (caretPosition == 0)
+      {
+         return "";
+      }
+
+      var textBeforeCaret = textEditor.Text.Keep(caretPosition);
+      var words = textBeforeCaret.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+
+      return words.Last() | "";
+   }
+
+   protected string stripParentheses(string word)
+   {
+      var _index = word.Find("(");
+      if (_index is (true, var index))
+      {
+         return word.Keep(index);
+      }
+      else
+      {
+         return word;
       }
    }
 }
