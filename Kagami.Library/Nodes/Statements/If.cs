@@ -17,9 +17,10 @@ public class If : Statement
    protected bool mutable;
    protected bool assignment;
    protected bool top;
+   protected bool retainExpressionFields;
 
    public If(Expression expression, Block block, Maybe<If> _elseIf, Maybe<Block> _elseBlock, string fieldName, bool mutable, bool assignment,
-      bool top)
+      bool top, bool retainExpressionFields = false)
    {
       this.expression = expression;
       this.block = block;
@@ -29,6 +30,7 @@ public class If : Statement
       this.mutable = mutable;
       this.assignment = assignment;
       this.top = top;
+      this.retainExpressionFields = retainExpressionFields;
    }
 
    public If(Expression expression, Block block)
@@ -78,7 +80,10 @@ public class If : Statement
 
       var nextLabel = newLabel("next");
       builder.PushLabel(LabelType.If, "end");
-      builder.PushFrame();
+      if (!retainExpressionFields)
+      {
+         builder.PushFrame();
+      }
 
       expression.Generate(builder);
       builder.Peek(Index);
@@ -92,11 +97,19 @@ public class If : Statement
       }
 
       builder.PopFrame();
-      builder.PopFrame();
+      if (!retainExpressionFields)
+      {
+         builder.PopFrame();
+      }
+
       builder.GoTo(LabelType.If);
 
       builder.Label(nextLabel);
-      builder.PopFrame();
+      if (!retainExpressionFields)
+      {
+         builder.PopFrame();
+      }
+
       if (_elseIf is (true, var elseIf))
       {
          elseIf.Generate(builder);

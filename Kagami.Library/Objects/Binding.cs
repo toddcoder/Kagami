@@ -21,7 +21,7 @@ public readonly struct Binding : IObject
 
    public string AsString => value.AsString;
 
-   public string Image => $"{name} @ {value.Image}";
+   public string Image => $"{name}' {value.Image}";
 
    public int Hash => Image.GetHashCode();
 

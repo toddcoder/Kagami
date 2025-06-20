@@ -540,4 +540,6 @@ public class OperationsBuilder
    public void GetRegister(int index) => add(new GetRegister(index));
 
    public void ClearRegister(int index) => add(new ClearRegister(index));
+
+   public void NewBinding(string name) => add(new NewBinding(name));
 }

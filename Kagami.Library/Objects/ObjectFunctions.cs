@@ -33,7 +33,7 @@ public static class ObjectFunctions
    public static bool match<T>(T source, IObject comparisand, Func<T, T, bool> equalifier, Hash<string, IObject> bindings)
       where T : IObject
    {
-      switch (comparisand)
+      /*switch (comparisand)
       {
          case Binding binding:
             comparisand = binding.Value;
@@ -43,6 +43,12 @@ public static class ObjectFunctions
             comparisand = nameValue.Value;
             bindings[$"-{nameValue.Name}"] = source;
             break;
+      }*/
+
+      var _name = Module.Global.Value.Bindings.Maybe[comparisand.Id];
+      if (_name is (true, var name))
+      {
+         bindings[name] = source;
       }
 
       switch (comparisand)
@@ -92,7 +98,7 @@ public static class ObjectFunctions
    public static bool matchSingle<T>(T source, IObject comparisand, Func<T, IObject, bool> equalifier,
       Hash<string, IObject> bindings) where T : IObject
    {
-      switch (comparisand)
+      /*switch (comparisand)
       {
          case Binding binding:
             comparisand = binding.Value;
@@ -102,6 +108,12 @@ public static class ObjectFunctions
             comparisand = nameValue.Value;
             bindings[$"-{nameValue.Name}"] = source;
             break;
+      }*/
+
+      var _name = Module.Global.Value.Bindings.Maybe[comparisand.Id];
+      if (_name is (true, var name))
+      {
+         bindings[name] = source;
       }
 
       switch (comparisand)

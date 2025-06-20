@@ -9,14 +9,12 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class GuardParser : EndingInExpressionParser
 {
-   //public override string Pattern => "^ /'guard' /b";
-
-   [GeneratedRegex(@"^(guard)\b")]
+   [GeneratedRegex(@"^(\s*)(guard)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {
-      state.Colorize(tokens, Color.Keyword);
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword);
       return unit;
    }
 
@@ -29,7 +27,7 @@ public partial class GuardParser : EndingInExpressionParser
          select eBlock;
       if (_elseBlock is (true, var elseBlock))
       {
-         state.AddStatement(new If(expression, block, nil, elseBlock, "", false, false, true));
+         state.AddStatement(new If(expression, block, nil, elseBlock, "", false, false, true, true));
          return unit;
       }
       else

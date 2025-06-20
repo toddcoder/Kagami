@@ -92,6 +92,7 @@ public class Module
    protected Set<string> forwardReferences = [];
    protected Hash<string, string> dataReferences = [];
    protected Set<string> operators = [];
+   protected Hash<Guid, string> bindings = [];
 
    public Maybe<BaseClass> Class(string name, bool forwardsIncluded = false)
    {
@@ -168,4 +169,6 @@ public class Module
          return classNotFound(className);
       }
    }
+
+   public Hash<Guid, string> Bindings => bindings;
 }

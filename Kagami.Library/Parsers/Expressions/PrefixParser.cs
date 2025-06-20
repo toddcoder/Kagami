@@ -20,6 +20,7 @@ public class PrefixParser(ExpressionBuilder builder) : MultiParser
          yield return new BNotParser(builder);
          yield return new TakeOperatorParser(builder);
          yield return new ImplicitOperatorParser(builder);
+         yield return new BindingParser(builder);
       }
    }
 }

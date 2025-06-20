@@ -47,7 +47,7 @@ public class ValuesParser : MultiParser
 
          if (!builder.Flags[ExpressionFlags.Subset])
          {
-            yield return new BindingParser(builder);
+            //yield return new BindingParser(builder);
             yield return new InitializeParser(builder);
             yield return new InvokeParser(builder);
          }
