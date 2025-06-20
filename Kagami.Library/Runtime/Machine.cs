@@ -669,4 +669,17 @@ public class Machine
    public Maybe<IObject> R2 { get; set; } = nil;
 
    public Maybe<IObject> R3 { get; set; } = nil;
+
+   public IEnumerable<string> AllFieldNames()
+   {
+      return allFieldNames().Distinct().Order();
+
+      IEnumerable<string> allFieldNames()
+      {
+         foreach (var fieldName in stack.SelectMany(frame => frame.AllFieldNames()))
+         {
+            yield return fieldName;
+         }
+      }
+   }
 }

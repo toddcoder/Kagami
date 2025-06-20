@@ -304,4 +304,12 @@ public class Frame
       FrameType.Skip => $"Skip frame ({stack.Count})",
       _ => "Unknown frame type"
    };
+
+   public IEnumerable<string> AllFieldNames()
+   {
+      foreach (var fieldName in fields.FieldNames.Distinct())
+      {
+         yield return fieldName;
+      }
+   }
 }
