@@ -1,25 +1,7 @@
 ﻿open sys
 
-var suffixes = {
-	1000 => a"KB MB GB TB PB EB ZB YB",
-	1024 => a"KiB MiB GiB TiB PiB EiB ZiB YiB"
-}
+func gcd()
+	when (m, n) if m % n == 0 return n
+	when (m, n) return gcd(n, m % n)
 
-func approximateSize(var size, kbIs1024 = true) {
-	guard size >= 0 else {
-		return f"number must be non-negative"
-	}
-	var multiple = kbIs1024 ? 1024 : 1000
-	for suffix in suffixes[multiple]& {
-		size /= multiple
-		if size < multiple {
-			return $"(size \ $f.1) (suffix)"!
-		}
-	}
-	return f"number too large"
-}
-
-let _result = approximateSize(1000000000000f)
-if _result is result! {
-	println(result)
-}
+gcd(10, 20)
