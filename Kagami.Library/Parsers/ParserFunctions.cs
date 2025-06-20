@@ -39,8 +39,6 @@ public static class ParserFunctions
       @"skipUntil|!|\?|\*|@|\$";
    public const string REGEX_LIST_LEFT = @"\[:";
    public const string REGEX_LIST_RIGHT = @":\]";
-   public const string REGEX_SET_LEFT = @"\[\.";
-   public const string REGEX_SET_RIGHT = @"\.\]";
 
    public static Optional<char> fromHex(string text)
    {
