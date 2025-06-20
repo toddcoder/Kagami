@@ -251,10 +251,25 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
          {
             var mutable = key.StartsWith("+");
             var fieldName = key.Drop(1);
-            var _field = New(fieldName, value, mutable);
-            if (!_field)
+            var _field = Find(fieldName, true);
+            if (_field is (true, var field))
             {
-               throw _field.Exception;
+               if (mutable)
+               {
+                  field.Value = value;
+               }
+               else
+               {
+                  throw immutableField(fieldName);
+               }
+            }
+            else
+            {
+               _field = New(fieldName, value, mutable).Optional();
+               if (!_field)
+               {
+                  throw _field.Exception;
+               }
             }
          }
          else if (!_assignedField.ValueOf(AssignToExisting(key, value)))

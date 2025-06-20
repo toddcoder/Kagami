@@ -1,7 +1,7 @@
 ﻿open sys
 
 func gcd()
-	when (m, n) if m % n == 0 return n
-	when (m, n) return gcd(n, m % n)
+	when (var m, var n) if m % n == 0 return n
+	when (var m, var n) return gcd(n, m % n)
 
 gcd(10, 20)
