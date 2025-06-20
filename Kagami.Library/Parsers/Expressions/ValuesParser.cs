@@ -25,7 +25,6 @@ public class ValuesParser : MultiParser
          yield return new DictionaryOrSetParser(builder);
          yield return new CycleParser(builder);
          yield return new ListParser(builder);
-         yield return new SetParser(builder);
          yield return new AnyParser(builder);
          yield return new FloatParser(builder);
          yield return new HexExpParser(builder);

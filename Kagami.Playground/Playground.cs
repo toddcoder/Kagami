@@ -627,7 +627,7 @@ public partial class Playground : Form
             moveSelectionRelative();
             e.Handled = true;
             break;
-         case '\'':
+         case '\'' when ModifierKeys != Keys.Control:
             if (textAtInsert(1) == "'")
             {
                moveSelectionRelative();
@@ -637,6 +637,9 @@ public partial class Playground : Form
 
             insertDelimiterText("''", -1, 0);
             e.Handled = true;
+            break;
+         case '\'':
+            e.Handled = false;
             break;
          case ',':
             if (textAtInsert(1) != ",")

@@ -108,7 +108,7 @@ public class Iterator : IObject, IIterator
 
             return collectionClass.Revert(result);
          case 2:
-            var array = List().ToArray();
+            IObject[] array = [.. List()];
             Array.Sort(array, (i, j) => ((Int)lambda.Invoke(i, j)).Value);
 
             return collectionClass.Revert(array);

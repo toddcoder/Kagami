@@ -29,7 +29,7 @@ public class OperationsBuilder
    {
       if (invokables.ContainsKey(invokable.Index) && !overriding)
       {
-         return invokable.Index; //fail($"Invokable {invokable.Image} already registered");
+         return invokable.Index;
       }
       else
       {
@@ -270,8 +270,6 @@ public class OperationsBuilder
 
    public void NewList() => add(new NewList());
 
-   public void NewSet() => add(new NewSet());
-
    public void NewLambda(IInvokable invokable) => add(new NewLambda(invokable));
 
    public void NewSkipTake() => add(new NewSkipTake());
@@ -299,8 +297,6 @@ public class OperationsBuilder
    public void PopTryFrame() => add(new PopTryFrame());
 
    public void NewArray() => add(new NewArray());
-
-   public void NewDictionary() => add(new NewDictionary());
 
    public void NewDictionaryOrSet() => add(new NewDictionaryOrSet());
 
