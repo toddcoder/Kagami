@@ -1,14 +1,13 @@
-﻿namespace Kagami.Library.Classes
+﻿namespace Kagami.Library.Classes;
+
+public class InfinityClass : BaseClass
 {
-   public class InfinityClass : BaseClass
+   public override string Name => "Infinity";
+
+   public override void RegisterMessages()
    {
-      public override string Name => "Infinity";
+      base.RegisterMessages();
 
-      public override void RegisterMessages()
-      {
-         base.RegisterMessages();
-
-         compareMessages();
-      }
+      compareMessages();
    }
 }

@@ -6,6 +6,8 @@ namespace Kagami.Library.Classes;
 
 public class FloatClass : BaseClass, IParse, IEquivalentClass
 {
+   protected Lazy<Random> random = new(() => new Random(DateTime.Now.Microsecond));
+
    public override string Name => "Float";
 
    public override void RegisterMessages()
@@ -29,6 +31,7 @@ public class FloatClass : BaseClass, IParse, IEquivalentClass
       classMessages["parse(_)"] = (_, msg) => parse(msg.Arguments[0].AsString);
       classMessages["max".get()] = (_, _) => Float.FloatObject(double.MaxValue);
       classMessages["min".get()] = (_, _) => Float.FloatObject(double.MinValue);
+      classMessages["rand()"] = (_, _) => (Float)random.Value.NextDouble();
    }
 
    public static IObject parse(string value)

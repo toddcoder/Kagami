@@ -199,4 +199,6 @@ public readonly struct KRange : IObject, ICollection
 
       return sequence;
    }
+
+   public IObject Max() => stopObj is Infinity ? stopObj : new RangeIterator(this).Max();
 }

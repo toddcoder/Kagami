@@ -6,6 +6,8 @@ namespace Kagami.Library.Classes;
 
 public class IntClass : BaseClass, IParse, IEquivalentClass
 {
+   protected Lazy<Random> random = new(() => new Random(DateTime.Now.Microsecond));
+
    public override string Name => "Int";
 
    public override void RegisterMessages()
@@ -50,6 +52,7 @@ public class IntClass : BaseClass, IParse, IEquivalentClass
       classMessages["min".get()] = (_, _) => Int.IntObject(int.MinValue);
       classMessages["max".get()] = (_, _) => Int.IntObject(int.MaxValue);
       classMessages["parse(_)"] = (_, msg) => parse(msg.Arguments[0].AsString);
+      classMessages["rand()"] = (_, _) => (Int)random.Value.Next();
    }
 
    public static IObject parse(string value)
