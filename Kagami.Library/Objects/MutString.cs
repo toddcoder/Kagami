@@ -230,12 +230,13 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
    public IObject Assign(SkipTake skipTake, IEnumerable<IObject> values)
    {
       var array = mutable.ToString().ToCharArray();
-      var left = array.Skip(skipTake.Skip);
-      var right = left.Skip(skipTake.Skip + skipTake.Take);
+      char[] left = [.. array.Take(skipTake.Skip)];
+      char[] middle = [.. values.Cast<KChar>().Select(kc => kc.Value)];
+      char[] right = [.. left.Skip(skipTake.Skip + skipTake.Take)];
 
       var newMutable = new StringBuilder();
       newMutable.Append(left);
-      newMutable.Append(values.Cast<KChar>());
+      newMutable.Append(middle);
       newMutable.Append(right);
 
       mutable = newMutable;

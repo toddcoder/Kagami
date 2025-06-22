@@ -1,5 +1,4 @@
 ﻿using Kagami.Library.Operations;
-using System.Linq.Expressions;
 using SkipTake = Kagami.Library.Parsers.Expressions.SkipTake;
 
 namespace Kagami.Library.Nodes.Symbols;
