@@ -535,7 +535,7 @@ public static class ObjectFunctions
 
          if (!name.StartsWith("__$") && rest.IsEmpty())
          {
-            rest = name.EndsWith('=') ? "(_)" : "()";
+            //rest = name.EndsWith('=') ? "(_)" : "()";
             name = $"__${name}";
          }
 

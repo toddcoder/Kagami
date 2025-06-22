@@ -5,7 +5,7 @@ namespace Kagami.Library.Objects;
 
 public readonly struct Success : IObject, IResult, IMonad, IBoolean
 {
-   public static IObject Object(IObject value) => new Success(value);
+   public static IObject Object(IObject value) => value is Failure ? value : new Success(value);
 
    public Success(IObject value) : this() => Value = value;
 

@@ -1173,9 +1173,6 @@ public static class ParserFunctions
          case "!%":
             _symbol = new RemainderZeroSymbol(true);
             break;
-         case "/%":
-            _symbol = new DivRemSymbol();
-            break;
          case "^":
             _symbol = new RaiseSymbol();
             break;

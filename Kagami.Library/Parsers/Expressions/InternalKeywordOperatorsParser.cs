@@ -1,19 +1,20 @@
-﻿using System.Text.RegularExpressions;
-using Kagami.Library.Nodes.Symbols;
-using Core.Monads;
+﻿using Core.Monads;
 using Core.Strings;
+using Kagami.Library.Nodes.Symbols;
+using System.Text.RegularExpressions;
 using static Core.Monads.MonadFunctions;
+using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public partial class KeywordOperatorsParser : SymbolParser
+public partial class InternalKeywordOperatorsParser : SymbolParser
 {
-   public KeywordOperatorsParser(ExpressionBuilder builder) : base(builder)
+   public InternalKeywordOperatorsParser(ExpressionBuilder builder) : base(builder)
    {
    }
 
    [GeneratedRegex(
-      @"^(\s+)(if|map|join|sort|foldl|foldr|all|any|none|one|zip|skip|take|band|bor|bxor|bsl|bsr|while|until|min|max|does|x|div|r|each|divmod)(\s+)")]
+      @"^\b(if|map|join|sort|foldl|foldr|all|any|none|one|zip|skip|take|band|bor|bxor|bsl|bsr|while|until|min|max|does|x|div|r|each|divmod)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -24,10 +25,10 @@ public partial class KeywordOperatorsParser : SymbolParser
       }
       else
       {
-         var keyword = tokens[2].Text;
+         var keyword = tokens[1].Text;
          if (keyword != "if" || !builder.Flags[ExpressionFlags.OmitIf])
          {
-            state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Whitespace);
+            state.Colorize(tokens, Color.Operator);
 
             switch (keyword)
             {

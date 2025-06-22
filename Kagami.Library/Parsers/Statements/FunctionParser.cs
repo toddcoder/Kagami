@@ -45,10 +45,6 @@ public partial class FunctionParser : StatementParser
       {
          state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Keyword, Color.Whitespace, Color.Class, Color.Structure, Color.Invokable,
             Color.OpenParenthesis);
-         if (functionName.IsMatch("^ /w+ '=' $"))
-         {
-            functionName = $"__${functionName.Drop(-1)}=";
-         }
       }
       else
       {

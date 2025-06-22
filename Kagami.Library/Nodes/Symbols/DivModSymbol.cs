@@ -2,7 +2,7 @@
 
 namespace Kagami.Library.Nodes.Symbols;
 
-public class DivRemSymbol : Symbol
+public class DivModSymbol : Symbol
 {
    public override void Generate(OperationsBuilder builder) => builder.DivRem();
 
@@ -10,5 +10,5 @@ public class DivRemSymbol : Symbol
 
    public override Arity Arity => Arity.Binary;
 
-   public override string ToString() => "/%";
+   public override string ToString() => "div.mod";
 }

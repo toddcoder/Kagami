@@ -13,7 +13,6 @@ public partial class SetPropertyParser(ExpressionBuilder builder, string tempObj
    protected ExpressionBuilder outerBuilder = outerBuilder;
    protected string propertyName = "";
 
-   //public override string Pattern => $"^ /(/s*) /({REGEX_FIELD}) /(/s*) /'='";
 
    [GeneratedRegex($@"^(\s*)({REGEX_FIELD})(\s*)=")]
    public override partial Regex Regex();

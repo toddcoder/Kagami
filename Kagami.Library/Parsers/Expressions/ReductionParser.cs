@@ -23,12 +23,20 @@ public partial class ReductionParser : SymbolParser
       innerBuilder.Add(new FieldSymbol("__$0"));
       var operatorsParser = new OperatorsParser(innerBuilder);
 
-      var _result =
+      var _operator =
          from op in operatorsParser.Scan(state)
          from closing in state.Scan(@"^(\])", Color.Operator)
          select op;
+      if (!_operator)
+      {
+         var keywordOperatorParser = new InternalKeywordOperatorsParser(innerBuilder);
+         _operator =
+            from op in keywordOperatorParser.Scan(state)
+            from closing in state.Scan(@"^(\])", Color.Operator)
+            select op;
+      }
 
-      if (_result)
+      if (_operator)
       {
          innerBuilder.Add(new FieldSymbol("__$1"));
          var _expression = innerBuilder.ToExpression();
@@ -50,7 +58,7 @@ public partial class ReductionParser : SymbolParser
       else
       {
          state.RollBackTransaction();
-         return _result.Exception;
+         return _operator.Exception;
       }
    }
 }
