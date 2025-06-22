@@ -11,21 +11,24 @@ public class AssignToNewField : Statement
 {
    protected bool mutable;
    protected string fieldName;
+   protected bool tolerant;
    protected Expression expression;
    protected Maybe<TypeConstraint> _typeConstraint;
 
-   public AssignToNewField(bool mutable, string fieldName, Expression expression, Maybe<TypeConstraint> _typeConstraint)
+   public AssignToNewField(bool mutable, string fieldName, bool tolerant, Expression expression, Maybe<TypeConstraint> _typeConstraint)
    {
       this.mutable = mutable;
       this.fieldName = fieldName;
+      this.tolerant = tolerant;
       this.expression = expression;
       this._typeConstraint = _typeConstraint;
    }
 
-   public AssignToNewField(bool mutable, string fieldName, Expression expression)
+   public AssignToNewField(bool mutable, string fieldName, bool tolerant, Expression expression)
    {
       this.mutable = mutable;
       this.fieldName = fieldName;
+      this.tolerant = tolerant;
       this.expression = expression;
 
       _typeConstraint = nil;
@@ -37,7 +40,15 @@ public class AssignToNewField : Statement
 
    public override void Generate(OperationsBuilder builder)
    {
-      builder.NewField(fieldName, mutable, true, _typeConstraint);
+      if (tolerant)
+      {
+         builder.NewFieldTolerant(fieldName, mutable, true, _typeConstraint);
+      }
+      else
+      {
+         builder.NewField(fieldName, mutable, true, _typeConstraint);
+      }
+
       expression.Generate(builder);
       builder.Peek(Index);
       builder.AssignField(fieldName, false);

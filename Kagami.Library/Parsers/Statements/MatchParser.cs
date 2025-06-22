@@ -26,7 +26,7 @@ public partial class MatchParser : StatementParser
       if (_expression is (true, var expression))
       {
          var matchField = newLabel("match");
-         state.AddStatement(new AssignToNewField(false, matchField, expression));
+         state.AddStatement(new AssignToNewField(true, matchField, true, expression));
 
          var _result = state.BeginBlock();
          if (!_result)

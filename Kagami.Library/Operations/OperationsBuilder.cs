@@ -194,6 +194,11 @@ public class OperationsBuilder
       add(new NewField(name, mutable, visible, nil));
    }
 
+   public void NewFieldTolerant(string name, bool mutable, bool visible, Maybe<TypeConstraint> _typeConstraint) =>
+      add(new NewFieldTolerant(name, mutable, visible, _typeConstraint));
+
+   public void NewFieldTolerant(string name, bool mutable, bool visible) => add(new NewFieldTolerant(name, mutable, visible, nil));
+
    public void NewSelector(Selector selector, bool mutable, bool visible) => add(new NewSelector(selector, mutable, visible));
 
    public void AssignField(string name, bool overriding) => add(new AssignField(name, overriding));
@@ -414,8 +419,8 @@ public class OperationsBuilder
          var invokable = ((IInvokableObject)symbol).Invokable;
          invokable.Address = operations.Count;
          symbol.Generate(this);
-         var lastOperation = operations[operations.Count - 1];
-         if (!(lastOperation is Return) /* && !(lastOperation is NoOp)*/)
+         var lastOperation = operations[^1];
+         if (lastOperation is not Library.Operations.Return)
          {
             operations.Add(new Return(false));
          }

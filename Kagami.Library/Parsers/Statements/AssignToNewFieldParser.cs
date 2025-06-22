@@ -61,7 +61,7 @@ public partial class AssignToNewFieldParser : EndingInExpressionParser
 
    public override Optional<Unit> Suffix(ParseState state, Expression expression)
    {
-      state.AddStatement(new AssignToNewField(mutable, fieldName, expression, _typeConstraint));
+      state.AddStatement(new AssignToNewField(mutable, fieldName, false, expression, _typeConstraint));
       return unit;
    }
 }
