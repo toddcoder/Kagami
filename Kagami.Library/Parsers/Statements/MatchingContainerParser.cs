@@ -6,6 +6,7 @@ using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 using Class = Kagami.Library.Nodes.Statements.Class;
 using Regex = System.Text.RegularExpressions.Regex;
@@ -86,23 +87,5 @@ public partial class MatchingContainerParser : StatementParser
       }
 
       return unit;
-   }
-
-   protected IObject createObject(Selector selector, Message message)
-   {
-      var machine = Machine.Current.Value;
-      var _field = machine.Find(selector);
-      if (_field is (true, { Value: Constructor constructor }))
-      {
-         return machine.Invoke(constructor.Invokable, message.Arguments).Force();
-      }
-      else if (_field.Exception is (true, var exception))
-      {
-         throw exception;
-      }
-      else
-      {
-         throw fail($"Constructor {selector} not found");
-      }
    }
 }

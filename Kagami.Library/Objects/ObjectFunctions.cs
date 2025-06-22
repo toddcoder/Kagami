@@ -703,4 +703,22 @@ public static class ObjectFunctions
          throw fail("Target must be a mutable collection");
       }
    }
+
+   public static IObject createObject(Selector selector, Message message)
+   {
+      var machine = Machine.Current.Value;
+      var _field = machine.Find(selector);
+      if (_field is (true, { Value: Constructor constructor }))
+      {
+         return machine.Invoke(constructor.Invokable, message.Arguments).Force();
+      }
+      else if (_field.Exception is (true, var exception))
+      {
+         throw exception;
+      }
+      else
+      {
+         throw fail($"Constructor {selector} not found");
+      }
+   }
 }
