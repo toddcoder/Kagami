@@ -527,7 +527,7 @@ public static class ObjectFunctions
 
    public static Selector parseSelector(string source)
    {
-      if (source.MatchOf(@$"^((?:__\$)?{REGEX_FUNCTION_NAME})(.*)$") is (true, var matches))
+      if (source.MatchOf(@$"^((?:__\$)?{REGEX_FUNCTION_NAME2})(.*)$") is (true, var matches))
       {
          var match = matches[0];
          var name = match.Groups[1].Value;

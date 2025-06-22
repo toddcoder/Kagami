@@ -55,6 +55,8 @@ public class ClassBuilder
       }
    }
 
+   public Parameters Parameters => parameters;
+
    public UserClass UserClass => userClass;
 
    public Statement[] Statements { get; set; } = [];
