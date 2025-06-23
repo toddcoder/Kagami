@@ -15,8 +15,6 @@ public partial class AssignToNewFieldParser : EndingInExpressionParser
    protected string fieldName = "";
    protected Maybe<TypeConstraint> _typeConstraint = nil;
 
-   //public override string Pattern => $"^ /('let' | 'var') /(/s+) /({REGEX_FIELD}) /b";
-
    [GeneratedRegex($@"^(\s*)(let|var)(\s+)({REGEX_FIELD})\b")]
    public override partial Regex Regex();
 

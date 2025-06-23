@@ -17,7 +17,7 @@ public class Yield : Operation
       LazyResult<IObject> _popped = nil;
       if (topFrame.IsEmpty)
       {
-         _value = nil; //None.NoneValue.Just();
+         _value = nil;
       }
       else if (_popped.ValueOf(topFrame.Pop()) is (true, var popped))
       {
