@@ -1,5 +1,7 @@
 ﻿open sys
 
-func distance(x1 Number) {
-	
+func greet(person Dictionary) {
+	guard person["name"] is name? else {
+		return
+	}
 }
