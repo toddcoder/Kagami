@@ -94,9 +94,9 @@ public class Colorizer
 
    protected static Color getForeColor(Library.Parsers.Color color, ref int parenthesesCount) => color switch
    {
-      Library.Parsers.Color.String => Color.FromArgb(38, 205, 0),
-      Library.Parsers.Color.StringPart => Color.FromArgb(38, 205, 0),
-      Library.Parsers.Color.Char => Color.FromArgb(38, 205, 0),
+      Library.Parsers.Color.String => Color.DarkGreen,
+      Library.Parsers.Color.StringPart => Color.DarkGreen,
+      Library.Parsers.Color.Char => Color.DarkGreen,
       Library.Parsers.Color.Number => Color.Green,
       Library.Parsers.Color.NumberPart => Color.Green,
       Library.Parsers.Color.Operator => Color.BlueViolet,

@@ -9,7 +9,10 @@ public class NewMessage : OneOperandOperation
 {
    protected Selector selector;
 
-   public NewMessage(Selector selector) => this.selector = selector;
+   public NewMessage(Selector selector)
+   {
+      this.selector = selector;
+   }
 
    public override Optional<IObject> Execute(Machine machine, IObject value)
    {

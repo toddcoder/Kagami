@@ -523,7 +523,7 @@ public static class ParserFunctions
 
    private static Optional<bool> parseCapturing(ParseState state)
    {
-      return state.Scan(@"^(\s*\+)?", Color.Structure).Map(s => s.IsNotEmpty());
+      return state.Scan(@"^(\s*cap\s+)?", Color.Keyword).Map(s => s.IsNotEmpty());
    }
 
    private static Optional<string> parseParameterName(ParseState state)
