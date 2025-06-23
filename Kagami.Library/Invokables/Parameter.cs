@@ -46,7 +46,11 @@ public class Parameter : IEquatable<Parameter>
       this.capturing = capturing;
    }
 
-   public bool Mutable => mutable;
+   public bool Mutable
+   {
+      get => mutable;
+      set => mutable = value;
+   }
 
    public string Label => label;
 

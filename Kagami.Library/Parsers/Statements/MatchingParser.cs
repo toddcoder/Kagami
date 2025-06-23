@@ -8,7 +8,7 @@ using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public partial class MatchingParser(string containerName) : StatementParser
+public partial class MatchingParser(string containerName, Block commonBlock) : StatementParser
 {
    [GeneratedRegex($@"^(\s*)(when)(\s+)({REGEX_CLASS})(\()?")]
    public override partial Regex Regex();
@@ -46,7 +46,7 @@ public partial class MatchingParser(string containerName) : StatementParser
          parameters = Parameters.Empty;
       }
 
-      var builder = new ClassBuilder(className, parameters, "", [], false, new Block());
+      var builder = new ClassBuilder(className, parameters, "", [], false, commonBlock);
       var _registered = builder.Register();
       if (_registered)
       {

@@ -254,18 +254,19 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
             var _field = Find(fieldName, true);
             if (_field is (true, var field))
             {
-               if (mutable)
+               field.Value = value;
+               /*if (mutable)
                {
                   field.Value = value;
                }
                else
                {
                   throw immutableField(fieldName);
-               }
+               }*/
             }
             else
             {
-               _field = New(fieldName, value, mutable).Optional();
+               _field = New(fieldName, value, true).Optional();
                if (!_field)
                {
                   throw _field.Exception;

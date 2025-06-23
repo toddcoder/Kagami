@@ -37,6 +37,17 @@ public partial class MatchingContainerParser : StatementParser
          var _beginBlock = state.BeginBlock();
          if (_beginBlock)
          {
+            var commonBlock = new Block();
+            var _common = state.Scan(@"^(\s*)(common)\b", Color.Whitespace, Color.Keyword);
+            if (_common)
+            {
+               var _commonBlock = getBlock(state);
+               if (_commonBlock)
+               {
+                  commonBlock = _commonBlock;
+               }
+            }
+
             while (state.More)
             {
                var _endBlock = state.EndBlock();
@@ -49,7 +60,7 @@ public partial class MatchingContainerParser : StatementParser
                   return exception;
                }
 
-               var matchingParser = new MatchingParser(className);
+               var matchingParser = new MatchingParser(className, commonBlock);
                var _result = matchingParser.Scan(state);
                if (_result)
                {
