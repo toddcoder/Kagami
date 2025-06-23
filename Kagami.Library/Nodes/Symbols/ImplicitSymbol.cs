@@ -2,8 +2,10 @@
 
 namespace Kagami.Library.Nodes.Symbols;
 
-public class ImplicitSymbol : Symbol
+public class ImplicitSymbol(string type) : Symbol
 {
+   public string Type => type;
+
    public override void Generate(OperationsBuilder builder)
    {
    }

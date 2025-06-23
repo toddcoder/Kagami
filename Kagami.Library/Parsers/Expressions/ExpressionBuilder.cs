@@ -3,6 +3,7 @@ using Core.Enumerables;
 using Core.Monads;
 using Core.Numbers;
 using Kagami.Library.Nodes.Statements;
+using Kagami.Library.Objects;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
@@ -99,6 +100,7 @@ public class ExpressionBuilder(Bits32<ExpressionFlags> flags, bool acknowlegeImp
       var _index = symbols.Find(s => s is ImplicitSymbol);
       if (_index is (true, var index))
       {
+         var implicitType = ((ImplicitSymbol)symbols[index]).Type;
          var sourceSymbol = symbols[index - 1];
          symbols[index - 1] = new FieldSymbol("__$0");
          symbols[index] = new NoOpSymbol();
@@ -108,7 +110,8 @@ public class ExpressionBuilder(Bits32<ExpressionFlags> flags, bool acknowlegeImp
 
          var builder = new ExpressionBuilder(flags, false);
          builder.Add(sourceSymbol);
-         builder.Add(new SendMessageSymbol("map(_)", lambda));
+         Selector selector = implicitType == "m" ? "map(_)" : "if(_)";
+         builder.Add(new SendMessageSymbol(selector, lambda));
 
          return builder.ToExpression();
       }

@@ -11,13 +11,14 @@ public partial class ImplicitOperatorParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(\^)")]
+   [GeneratedRegex(@"^(\s*)(m|i)(')")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      state.Colorize(tokens, Color.Whitespace, Color.Operator);
-      builder.Add(new ImplicitSymbol());
+      var type = tokens[2].Text;
+      state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Operator);
+      builder.Add(new ImplicitSymbol(type));
 
       return unit;
    }
