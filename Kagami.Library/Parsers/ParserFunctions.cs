@@ -1286,9 +1286,9 @@ public static class ParserFunctions
          case ":-" when !flags[ExpressionFlags.OmitBind]:
             _symbol = new BindSymbol();
             break;
-         case "|":
+         /*case "|":
             _symbol = new SendBinaryMessageSymbol("defaultTo(_)", Precedence.SendMessage);
-            break;
+            break;*/
       }
 
       return _symbol;

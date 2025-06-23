@@ -221,7 +221,7 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
 
    public IObject InsertAt(int index, IObject obj)
    {
-      mutable.Insert(index, obj.AsString);
+      mutable.Insert(wrapIndex(index, mutable.Length), obj.AsString);
       return this;
    }
 

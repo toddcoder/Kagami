@@ -13,9 +13,9 @@ using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public partial class MatchingContainerParser : StatementParser
+public partial class EnumParser : StatementParser
 {
-   [GeneratedRegex(@$"^(\s*)(matching)(\s+)({REGEX_CLASS})\b")]
+   [GeneratedRegex(@$"^(\s*)(enum)(\s+)({REGEX_CLASS})\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)

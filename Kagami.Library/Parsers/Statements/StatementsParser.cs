@@ -32,7 +32,7 @@ public class StatementsParser : MultiParser
          yield return new ExitContinueParser();
          yield return new TryHandlerParser();
 
-         yield return new MatchingContainerParser();
+         yield return new EnumParser();
          yield return new MatchParser();
          yield return new YieldParser();
          yield return new ReturnParser();

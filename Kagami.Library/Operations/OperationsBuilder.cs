@@ -543,4 +543,8 @@ public class OperationsBuilder
    public void ClearRegister(int index) => add(new ClearRegister(index));
 
    public void NewBinding(string name) => add(new NewBinding(name));
+
+   public void IsOptional() => add(new IsOptional());
+
+   public void IsResult() => add(new IsResult());
 }
