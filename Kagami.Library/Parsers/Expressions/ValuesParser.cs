@@ -74,13 +74,10 @@ public class ValuesParser : MultiParser
          yield return new RefParser(builder);
          yield return new DollarFieldParser(builder);
          yield return new DoParser(builder);
-         //yield return new TryBlockParser(builder);
-         //yield return new TryParser(builder);
          yield return new ThrowParser(builder);
          yield return new AssertParser(builder);
-         yield return new SeqParser(builder);
          yield return new ConversionParser(builder);
-         yield return new GatherParser(builder);
+         yield return new SeqParser(builder);
          yield return new FieldParser(builder);
       }
    }

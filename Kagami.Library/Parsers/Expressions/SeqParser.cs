@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
-using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
+using Kagami.Library.Nodes.Symbols;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
@@ -12,33 +12,31 @@ public partial class SeqParser : SymbolParser
    {
    }
 
-   //public override string Pattern => $"^ /(/s*) /'seq' /({REGEX_EOL})";
-
-   [GeneratedRegex($@"^(\s*)(seq)({REGEX_EOL})")]
+   [GeneratedRegex(@"^(\s*)(seq)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace);
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword);
+
       state.CreateYieldFlag();
+      state.CreateReturnType();
 
       var _block = getBlock(state);
       if (_block is (true, var block))
       {
-         var yielding = state.RemoveYieldFlag();
-         if (yielding)
-         {
-            builder.Add(new SeqSymbol(block));
-            return unit;
-         }
-         else
-         {
-            return fail("Yield required");
-         }
+         state.RemoveYieldFlag();
+         state.RemoveReturnType();
+         builder.Add(new SeqSymbol(block));
+         return unit;
+      }
+      else if (_block.Exception is (true, var exception))
+      {
+         return exception;
       }
       else
       {
-         return _block.Exception;
+         return nil;
       }
    }
 }
