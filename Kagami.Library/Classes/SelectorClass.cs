@@ -1,7 +1,6 @@
-﻿namespace Kagami.Library.Classes
+﻿namespace Kagami.Library.Classes;
+
+public class SelectorClass : BaseClass
 {
-   public class SelectorClass : BaseClass
-   {
-      public override string Name => "Selector";
-   }
+   public override string Name => "Selector";
 }

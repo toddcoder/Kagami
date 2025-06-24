@@ -1,7 +1,10 @@
 ﻿open sys
 
-func greet(person Dictionary) {
-	guard person["name"] is name? else {
-		return
+var array1 = [i * 10 for i in 0..<20]
+
+var array2 = gather {
+	for i in 0..<20 {
+		yield i * 10
 	}
 }
+[array2]

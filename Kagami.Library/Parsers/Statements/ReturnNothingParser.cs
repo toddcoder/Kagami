@@ -8,7 +8,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class ReturnNothingParser : StatementParser
 {
-   [GeneratedRegex($@"^(\s*)(return){REGEX_EOL}")]
+   [GeneratedRegex(@$"^(\s*)(return){REGEX_ANTICIPATE_END}")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
