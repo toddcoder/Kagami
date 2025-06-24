@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using Kagami.Library.Parsers;
+﻿using Kagami.Library.Parsers;
 using Core.Matching;
 using Color = System.Drawing.Color;
 
@@ -10,9 +9,6 @@ public class Colorizer
 {
    protected RichTextBox textBox;
    protected int parenthesesCount;
-
-   [DllImport("user32.dll")]
-   public static extern int SendMessage(IntPtr hWnd, int msg, bool wParam, int lParam);
 
    public Colorizer(RichTextBox textBox)
    {
@@ -94,9 +90,9 @@ public class Colorizer
 
    protected static Color getForeColor(Library.Parsers.Color color, ref int parenthesesCount) => color switch
    {
-      Library.Parsers.Color.String => Color.DarkGreen,
-      Library.Parsers.Color.StringPart => Color.DarkGreen,
-      Library.Parsers.Color.Char => Color.DarkGreen,
+      Library.Parsers.Color.String => Color.Teal,
+      Library.Parsers.Color.StringPart => Color.Teal,
+      Library.Parsers.Color.Char => Color.Teal,
       Library.Parsers.Color.Number => Color.Green,
       Library.Parsers.Color.NumberPart => Color.Green,
       Library.Parsers.Color.Operator => Color.BlueViolet,
@@ -106,7 +102,7 @@ public class Colorizer
       Library.Parsers.Color.Comment => Color.FromArgb(128, 128, 128),
       Library.Parsers.Color.Message => Color.Teal,
       Library.Parsers.Color.Format => Color.Violet,
-      Library.Parsers.Color.Date => Color.DarkOliveGreen,
+      Library.Parsers.Color.Date => Color.Olive,
       Library.Parsers.Color.Collection => Color.Purple,
       Library.Parsers.Color.CollectionPart => Color.Purple,
       Library.Parsers.Color.Symbol => Color.CornflowerBlue,
