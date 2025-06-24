@@ -93,6 +93,7 @@ public class Module
    protected Hash<string, string> dataReferences = [];
    protected Set<string> operators = [];
    protected Hash<Guid, string> bindings = [];
+   protected Hash<Guid, string> retrievedFields = [];
 
    public Maybe<BaseClass> Class(string name, bool forwardsIncluded = false)
    {
@@ -171,4 +172,6 @@ public class Module
    }
 
    public Hash<Guid, string> Bindings => bindings;
+
+   public Hash<Guid, string> RetrievedFields => retrievedFields;
 }

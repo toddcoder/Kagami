@@ -416,7 +416,11 @@ public class Machine
       return emptyStack("frame");
    }
 
-   public void Clear() => CurrentFrame.Clear();
+   public void Clear()
+   {
+      CurrentFrame.Clear();
+      Module.Global.Value.RetrievedFields.Clear();
+   }
 
    public string StackImage => stack.Select(f => f.ToString()).ToString(", ");
 
@@ -612,7 +616,7 @@ public class Machine
             var currentAddress = operations.Address;
             switch (operation)
             {
-               case Break:
+               case Reset:
                   return;
                default:
                {

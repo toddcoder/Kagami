@@ -1,6 +1,7 @@
 ﻿using Core.Collections;
 using Core.Enumerables;
 using Core.Monads;
+using Kagami.Library.Runtime;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Core.Monads.MonadFunctions;
@@ -76,6 +77,7 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
 
    private void denameify()
    {
+      var retrievedFields = Module.Global.Value.RetrievedFields;
       for (var i = 0; i < items.Length; i++)
       {
          if (items[i] is IKeyValue { ExpandInTuple: true } keyValue)
@@ -83,6 +85,11 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
             names[keyValue.Key.AsString] = i;
             indexes[i] = keyValue.Key.AsString;
             items[i] = keyValue.Value;
+         }
+         else if (retrievedFields.Maybe[items[i].Id] is (true, var fieldName))
+         {
+            names[fieldName] = i;
+            indexes[i] = fieldName;
          }
       }
    }

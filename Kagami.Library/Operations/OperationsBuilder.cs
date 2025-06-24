@@ -375,7 +375,7 @@ public class OperationsBuilder
 
    public void SetFields(Parameters parameters) => add(new SetFields(parameters));
 
-   public void Break() => add(new Break());
+   public void Break() => add(new Reset());
 
    public void OpenPackage(string packageName) => add(new OpenPackage(packageName));
 
