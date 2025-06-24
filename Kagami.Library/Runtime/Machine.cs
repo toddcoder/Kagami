@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Invokables;
+﻿using Core.Applications.Messaging;
+using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using Kagami.Library.Packages;
@@ -30,6 +31,8 @@ public class Machine
    protected DebugState debugState = DebugState.Starting;
    protected GlobalFrame globalFrame = new();
    protected IObject lastValue = KVoid.Value;
+
+   public readonly MessageEvent<string> TraceOutput = new();
 
    public Machine(IContext context)
    {
@@ -80,7 +83,7 @@ public class Machine
             {
                if (Tracing)
                {
-                  context.PrintLine(table.Value.ToString());
+                  TraceOutput.Invoke(table.Value.ToString());
                }
 
                var _errorHandler = GetErrorHandler();
@@ -109,7 +112,7 @@ public class Machine
 
       if (Tracing)
       {
-         context.PrintLine(table.Value.ToString());
+         TraceOutput.Invoke(table.Value.ToString());
       }
 
       return lastValue.Success();
@@ -126,6 +129,7 @@ public class Machine
 
       PushFrame(frame);
       frame.SetFields(invokable.Parameters);
+      PushFrame(new Frame());
       if (GoTo(invokable.Address))
       {
          return invoke();
@@ -166,7 +170,6 @@ public class Machine
       }
 
       frame.SetFields(invokable.Parameters);
-      //PushAddress();
       GoTo(invokable.Address);
 
       return invoke();

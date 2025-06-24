@@ -261,6 +261,11 @@ public partial class Playground : Form
             if (_machine is (true, var machine))
             {
                machine.PackageFolder = packageFolder.FullPath;
+               machine.TraceOutput.Handler = t =>
+               {
+                  var traceFile = document.FileName.Map(f => (FileName)f).Map(f => f.Folder + $"{f.Name}.trace.txt") | @"C:\Temp\trace.txt";
+                  traceFile.TryTo.SetText(t, Encoding.UTF8);
+               };
                var value = "not executed";
                var type = "";
                if (execute)
@@ -517,7 +522,7 @@ public partial class Playground : Form
             return;
          }
 
-         foreach (var (lineNumber, line, _) in textEditor.VisibleLines)
+         foreach (var (_, _, _) in textEditor.VisibleLines)
          {
             textEditor.DrawTabLines(e.Graphics);
             textEditor.DrawLineNumbers(e.Graphics, Color.Black, Color.White);

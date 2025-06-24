@@ -59,4 +59,6 @@ public class Loop : Statement
       builder.Label(endLabel);
       builder.NoOp();
    }
+
+   public override string ToString() => $"loop {{block}} {(isUntil ? "until" : "while")} {expression}";
 }
