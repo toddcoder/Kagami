@@ -20,7 +20,6 @@ public class RequiredFunction(Selector selector, Inclusion inclusion) : Statemen
       {
          var lambda = new Lambda(invokable);
          builder.PushObject(lambda);
-         builder.Peek(Index);
          builder.AssignSelector(selector, false);
       }
    }

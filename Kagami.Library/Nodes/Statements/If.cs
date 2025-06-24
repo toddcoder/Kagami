@@ -86,7 +86,6 @@ public class If : Statement
       }
 
       expression.Generate(builder);
-      builder.Peek(Index);
       builder.GoToIfFalse(nextLabel);
 
       builder.PushFrame();

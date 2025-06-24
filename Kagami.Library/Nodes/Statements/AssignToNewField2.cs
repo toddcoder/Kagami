@@ -17,7 +17,6 @@ public class AssignToNewField2 : Statement
    public override void Generate(OperationsBuilder builder)
    {
       expression.Generate(builder);
-      builder.Peek(Index);
       comparisand.Generate(builder);
       builder.Match();
       builder.Drop();

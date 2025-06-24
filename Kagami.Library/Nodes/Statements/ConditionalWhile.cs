@@ -29,7 +29,6 @@ namespace Kagami.Library.Nodes.Statements
 
          expression.Generate(builder);
          comparisand.Generate(builder);
-         builder.Peek(Index);
 
          builder.Match();
          builder.GoToIfFalse(endLabel);

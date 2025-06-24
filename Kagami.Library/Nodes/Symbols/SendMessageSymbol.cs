@@ -68,7 +68,6 @@ public class SendMessageSymbol : Symbol
          count = arguments.Length;
       }
 
-      builder.Peek(Index);
       builder.SendMessage(selector, count);
       builder.NoOp();
    }

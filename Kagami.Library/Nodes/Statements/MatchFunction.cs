@@ -42,7 +42,6 @@ public class MatchFunction : Statement
          }
 
          builder.PushObject(lambda);
-         builder.Peek(Index);
          builder.AssignField(selector, overriding);
       }
       else

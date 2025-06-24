@@ -231,8 +231,6 @@ public class OperationsBuilder
 
    public void Image() => add(new Image());
 
-   public void Peek(int index) => add(new Peek(index));
-
    public void EndOfLine() => add(new EndOfLine());
 
    public void String() => add(new AsString());
@@ -494,7 +492,6 @@ public class OperationsBuilder
    public void Return(Expression expression, Statement statement)
    {
       expression.Generate(this);
-      Peek(statement.Index);
 
       if (returnLabels.Count == 0)
       {
@@ -509,7 +506,6 @@ public class OperationsBuilder
    public void Return(Expression expression, Statement statement, Maybe<TypeConstraint> _typeConstraint)
    {
       expression.Generate(this);
-      Peek(statement.Index);
 
       if (returnLabels.Count == 0)
       {

@@ -1,6 +1,5 @@
 ﻿using Core.Applications;
 using Core.Arrays;
-using Core.Collections;
 using Core.Computers;
 using Core.Dates;
 using Core.Enumerables;
@@ -251,7 +250,6 @@ public partial class Playground : Form
             uiValue.NoStatus("");
             uiStatus.Busy(true);
             textConsole.Clear();
-            context.ClearPeeks();
             stopwatch.Reset();
             stopwatch.Start();
             _exceptionIndex = nil;
@@ -514,19 +512,6 @@ public partial class Playground : Form
    {
       try
       {
-         var peeks = new Hash<int, string>();
-         foreach (var (key, value) in context.Peeks)
-         {
-            try
-            {
-               var lineIndex = textEditor.GetLineFromCharIndex(key);
-               peeks[lineIndex] = value;
-            }
-            catch
-            {
-            }
-         }
-
          if (textEditor.TextLength == 0)
          {
             return;
@@ -534,12 +519,6 @@ public partial class Playground : Form
 
          foreach (var (lineNumber, line, _) in textEditor.VisibleLines)
          {
-            if (peeks.Maybe[lineNumber] is (true, var str))
-            {
-               str = sizedAnnotation(e.Graphics, line, str, textEditor.ClientSize.Width, textEditor.Font, textEditor.AnnotationFont);
-               textEditor.AnnotateAt(e.Graphics, lineNumber, str, Color.Black, Color.LightGreen, Color.Black);
-            }
-
             textEditor.DrawTabLines(e.Graphics);
             textEditor.DrawLineNumbers(e.Graphics, Color.Black, Color.White);
             if (textEditor.SelectionLength == 0)

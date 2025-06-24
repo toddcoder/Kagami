@@ -257,7 +257,6 @@ public class ClassBuilder
 
          builder.NewSelector(selector, false, true);
          builder.PushObject(new Constructor(invokable));
-         builder.Peek(index);
          builder.AssignSelector(selector, true);
       }
 

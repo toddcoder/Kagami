@@ -15,6 +15,4 @@ public interface IContext
    Result<string> ReadLine();
 
    bool Cancelled();
-
-   void Peek(string message, int index);
 }

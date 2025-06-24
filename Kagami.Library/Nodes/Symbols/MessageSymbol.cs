@@ -36,7 +36,6 @@ public class MessageSymbol : Symbol
          count = arguments.Length;
       }
 
-      builder.Peek(Index);
       builder.NewMessage(selector, count);
       builder.NoOp();
    }

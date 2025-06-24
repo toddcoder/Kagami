@@ -28,7 +28,6 @@ public class While : Statement
       builder.PushFrame();
 
       expression.Generate(builder);
-      builder.Peek(Index);
 
       if (isWhile)
       {

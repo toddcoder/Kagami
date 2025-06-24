@@ -50,7 +50,6 @@ public class AssignToNewField : Statement
       }
 
       expression.Generate(builder);
-      builder.Peek(Index);
       builder.AssignField(fieldName, false);
 
       builder.GetField(fieldName);

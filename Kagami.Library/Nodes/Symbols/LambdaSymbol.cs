@@ -34,7 +34,6 @@ public class LambdaSymbol : Symbol
       if (_index)
       {
          builder.NewLambda(invokable);
-         builder.Peek(Index);
       }
       else
       {

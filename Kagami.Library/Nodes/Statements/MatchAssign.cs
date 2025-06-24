@@ -24,7 +24,6 @@ public class MatchAssign : Statement
       var fieldName = Guid.NewGuid().ToString();
       builder.NewField(fieldName, false, true);
       expression.Generate(builder);
-      builder.Peek(Index);
       builder.AssignField(fieldName, false);
       comparisand.Generate(builder);
       builder.GetField(fieldName);
