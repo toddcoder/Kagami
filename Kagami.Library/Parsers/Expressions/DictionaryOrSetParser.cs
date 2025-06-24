@@ -19,7 +19,11 @@ public partial class DictionaryOrSetParser : SymbolParser
    {
       state.Colorize(tokens, Color.Whitespace, Color.Collection, Color.Whitespace);
 
-      var _expression = getExpression(state, @"^(\s*)(\})", builder.Flags & ~ExpressionFlags.OmitComma, Color.Whitespace, Color.Collection);
+      var flags = builder.Flags;
+      flags[ExpressionFlags.OmitColon] = false;
+      flags[ExpressionFlags.OmitComma] = false;
+
+      var _expression = getExpression(state, @"^(\s*)(\})", flags, Color.Whitespace, Color.Collection);
       if (_expression is (true, var expression))
       {
          builder.Add(new DictionaryOrSetSymbol(expression));
