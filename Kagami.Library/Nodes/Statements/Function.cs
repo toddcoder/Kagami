@@ -19,7 +19,7 @@ public class Function : Statement
    public static Function Setter(string fieldName)
    {
       var parameters = new Parameters(1);
-      return new Function($"__${fieldName}=", parameters, Block.Setter(fieldName, parameters[0].Name), false, false, "");
+      return new Function($"{fieldName}=", parameters, Block.Setter(fieldName, parameters[0].Name), false, false, "");
    }
 
    protected Selector selector;
