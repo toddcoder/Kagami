@@ -34,6 +34,17 @@ public class UserObject : IObject
 
       fields.New(fieldName, value);
    }
+   
+   public void UpdateData(Fields newFields, Parameters newParameters)
+   {
+      foreach (var (fieldName, field) in newFields)
+      {
+         if (field.Mutable && fields.ContainsKey(fieldName))
+         {
+            fields[fieldName] = field;
+         }
+      }
+   }
 
    public Fields Fields => fields;
 
@@ -66,9 +77,14 @@ public class UserObject : IObject
          {
             var iterator = tuple.GetIterator(false);
             var list = iterator.List();
-            foreach (var nameValue in list.Cast<NameValue>())
+            var index = 0;
+            foreach (var item in list)
             {
-               newFields[nameValue.Name] = nameValue.Value;
+               var _name = tuple.Rename(index++);
+               if (_name is (true, var name))
+               {
+                  newFields[name] = item;
+               }
             }
 
             break;
@@ -127,7 +143,26 @@ public class UserObject : IObject
          }
       }
 
+      var fieldsClone = fields.Clone();
+      foreach (var (fieldName, field) in fieldsClone)
+      {
+         if (newFields.Maybe[fieldName] is (true, var value))
+         {
+            field.Value = value;
+         }
+      }
+
       var message = new Message(selector, [.. arguments]);
-      return createObject(selector, message);
+      var obj = createObject(selector, message);
+      if (obj is UserObject userObject)
+      {
+         userObject.fields = fieldsClone;
+         userObject.parameters = parameters;
+      }
+      else
+      {
+         throw fail($"Expected UserObject, got {obj.ClassName}");
+      }
+      return obj;
    }
 }

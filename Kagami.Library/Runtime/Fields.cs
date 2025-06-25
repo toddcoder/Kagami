@@ -249,7 +249,7 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
          LazyResult<Field> _assignedField = nil;
          if (key.IsMatch("^ ['+-']"))
          {
-            var mutable = key.StartsWith("+");
+            //var mutable = key.StartsWith("+");
             var fieldName = key.Drop(1);
             var _field = Find(fieldName, true);
             if (_field is (true, var field))
@@ -351,4 +351,25 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
    }
 
    public void SetBucket(Selector selector) => buckets[selector.LabelsOnly()].Add(selector);
+
+   public Fields Clone()
+   {
+      Hash<string, Field> newFields = [];
+      foreach (var field in fields)
+      {
+         newFields[field.Key] = field.Value;
+      }
+
+      Memo<string, List<string>> newBuckets = new Memo<string, List<string>>.Function(_ => []);
+      foreach (var (key, value) in newBuckets)
+      {
+         newBuckets[key] = value;
+      }
+
+      return new Fields
+      {
+         fields = newFields,
+         buckets = newBuckets
+      };
+   }
 }

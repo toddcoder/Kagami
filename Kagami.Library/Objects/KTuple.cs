@@ -414,4 +414,6 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
 
       return new KTuple([..items, ..otherTuple.items], names, indexes);
    }
+
+   public Maybe<string> Rename(int index) => indexes.Maybe[index].Map(name => name);
 }
