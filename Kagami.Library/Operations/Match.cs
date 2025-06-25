@@ -9,7 +9,7 @@ public class Match : TwoOperandOperation
 {
    public override Optional<IObject> Execute(Machine machine, IObject x, IObject y)
    {
-      var bindings = new Hash<string, IObject>();
+      Hash<string, IObject> bindings = [];
       var _bindingX = Module.Global.Value.Bindings.Maybe[x.Id];
       if (_bindingX is (true, var bindingX))
       {

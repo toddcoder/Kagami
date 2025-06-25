@@ -1,16 +1,16 @@
-﻿using System.Text;
-using Kagami.Library.Classes;
-using Kagami.Library.Runtime;
-using Core.Collections;
+﻿using Core.Collections;
 using Core.Enumerables;
 using Core.Matching;
 using Core.Monads;
 using Core.Objects;
 using Core.Strings;
+using Kagami.Library.Classes;
 using Kagami.Library.Parsers;
+using Kagami.Library.Runtime;
+using System.Text;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Parsers.ParserFunctions;
-using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Objects;
 
@@ -270,6 +270,11 @@ public static class ObjectFunctions
       {
          return match(obj, comparisand, (uo1, uo2) =>
          {
+            if (uo1.ClassName != uo2.ClassName)
+            {
+               return false;
+            }
+
             if (obj.Parameters.Length == 0)
             {
                foreach (var (fieldName, field) in uo1.Fields.Where(f => includeFieldName(f.fieldName)))
@@ -701,6 +706,24 @@ public static class ObjectFunctions
       else
       {
          throw fail("Target must be a mutable collection");
+      }
+   }
+
+   public static IObject getConstructor(Selector selector)
+   {
+      var machine = Machine.Current.Value;
+      var _field = machine.Find(selector);
+      if (_field is (true, { Value: Constructor constructor }))
+      {
+         return constructor;
+      }
+      else if (_field.Exception is (true, var exception))
+      {
+         throw exception;
+      }
+      else
+      {
+         throw fail($"Constructor {selector} not found");
       }
    }
 

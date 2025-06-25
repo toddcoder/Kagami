@@ -13,7 +13,7 @@ using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public partial class MatchingParser(string containerName, Block commonBlock, Maybe<IRangeItem> _previousOrdinal) : StatementParser
+public partial class EnumMemberParser(string enumClassName, Block commonBlock, Maybe<IRangeItem> _previousOrdinal) : StatementParser
 {
    [GeneratedRegex($@"^(\s*)(when)(\s+)({REGEX_CLASS})(\()?")]
    public override partial Regex Regex();
@@ -25,7 +25,7 @@ public partial class MatchingParser(string containerName, Block commonBlock, May
       HasParameters = hasParameters;
       state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Class, Color.OpenParenthesis);
 
-      className = $"{containerName}${className}";
+      className = $"{enumClassName}${className}";
       Module.Global.Value.ForwardReference(className);
 
       Parameters parameters;
@@ -77,17 +77,16 @@ public partial class MatchingParser(string containerName, Block commonBlock, May
          _ordinal = _previousOrdinal.Map(po => po.Successor);
       }
 
-      var builder = new ClassBuilder(className, parameters, "", [], false, commonBlock);
+      var builder = new EnumMemberClassBuilder(className, parameters, enumClassName, commonBlock)
+      {
+         Selector = parameters.Selector(className),
+         Ordinal = _ordinal.Map(o => (IObject)o)
+      };
       var _registered = builder.Register();
       if (_registered)
       {
          var cls = new Class(builder);
          state.AddStatement(cls);
-
-         if (_ordinal is (true, var ordinal))
-         {
-            cls.ClassBuilder.UserClass.RegisterMessage("ordinal".get(), (_, _) => (IObject)ordinal);
-         }
 
          Ordinal = _ordinal;
 

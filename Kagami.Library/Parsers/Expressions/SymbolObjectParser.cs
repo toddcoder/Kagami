@@ -12,9 +12,8 @@ public partial class SymbolObjectParser : SymbolParser
    {
    }
 
-   //public override string Pattern => $"^ /(/s*) /'`' /({REGEX_FIELD}) /b";
 
-   [GeneratedRegex($@"^(\s*)(`)({REGEX_FIELD})\b")]
+   [GeneratedRegex($@"^(\s*)(\$)(?!=\d)({REGEX_FIELD})\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)

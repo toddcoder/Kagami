@@ -16,7 +16,7 @@ public class MetaClass : Statement
 
    public override void Generate(OperationsBuilder builder)
    {
-      classBuilder.Generate(builder, Index);
+      classBuilder.Generate(builder);
       builder.AssignMetaObject(className, classBuilder.UserClass.Name);
    }
 

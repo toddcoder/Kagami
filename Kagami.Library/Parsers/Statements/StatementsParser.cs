@@ -51,6 +51,7 @@ public class StatementsParser : MultiParser
          yield return new LoopParser();
          yield return new BlockStatementParser();
          yield return new ImportPackageParser();
+         yield return new OpenEnumParser();
          yield return new OpenPackageParser();
          yield return new UsePackageParser();
 

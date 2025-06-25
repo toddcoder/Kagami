@@ -37,6 +37,11 @@ public partial class SendMessageParser : SymbolParser
       }
       else if (name.EndsWith("="))
       {
+         if (builder.Flags[ExpressionFlags.OmitAssign])
+         {
+            return nil;
+         }
+
          name = name.Drop(-1).set();
          parseArguments = true;
       }

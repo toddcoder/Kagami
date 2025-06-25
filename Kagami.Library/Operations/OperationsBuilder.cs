@@ -379,6 +379,8 @@ public class OperationsBuilder
 
    public void OpenPackage(string packageName) => add(new OpenPackage(packageName));
 
+   public void OpenEnum(string enumName) => add(new OpenEnum(enumName));
+
    public void ImportPackage(string packageName) => add(new ImportPackage(packageName));
 
    public void TryBegin(string label) => add(new TryBegin(), label);

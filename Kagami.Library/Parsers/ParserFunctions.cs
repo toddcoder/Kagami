@@ -24,7 +24,7 @@ namespace Kagami.Library.Parsers;
 
 public static class ParserFunctions
 {
-   public const string REGEX_FIELD = "[A-Za-z_][A-Za-z_0-9]*";
+   public const string REGEX_FIELD = "`?[A-Za-z_][A-Za-z_0-9]*";
    public const string REGEX_INVOKABLE = "[A-Za-z_][A-Za-z_0-9]*";
    public const string REGEX_INVOKABLE2 = @"[A-Za-z_][A-Za-z_0-9\$]*";
    public const string REGEX_CLASS = "[A-Z][A-Za-z_0-9]*";
@@ -77,7 +77,7 @@ public static class ParserFunctions
 
    public static Optional<Expression> getCompoundComparisands(ParseState state, string fieldName)
    {
-      var flags = ExpressionFlags.Comparisand | ExpressionFlags.OmitAnd | ExpressionFlags.OmitIf;
+      var flags = ExpressionFlags.Comparisand | ExpressionFlags.OmitAnd | ExpressionFlags.OmitIf | ExpressionFlags.OmitAssign;
       var builder = new ExpressionBuilder(flags);
 
       var _comparisand = getExpression(state, flags);
@@ -651,7 +651,7 @@ public static class ParserFunctions
             _ => nil
          };
          state.SetReturnType(_typeConstraint);
-         var _scanned = state.Scan(@"^(\s*)(=)(\s*)", Color.Whitespace, Color.Structure, Color.Whitespace);
+         var _scanned = state.Scan(@"^(\s*)(=>)(\s*)", Color.Whitespace, Color.Structure, Color.Whitespace);
          if (_scanned)
          {
             return getSingleLine(state, _typeConstraint);
@@ -1134,7 +1134,7 @@ public static class ParserFunctions
 
    public static Optional<Block> getCaseStatementBlock(ParseState state)
    {
-      if (state.Scan(@"^(\s*)(=)(?!=)", Color.Whitespace, Color.Structure))
+      if (state.Scan(@"^(\s*)(=>)(?!=)", Color.Whitespace, Color.Structure))
       {
          return getSingleLine(state, false);
       }

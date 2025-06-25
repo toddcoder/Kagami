@@ -41,9 +41,11 @@ public class ClassBuilder
       this.constructorBlock = constructorBlock;
    }
 
+   public virtual UserClass CreateUserClass() => new(className, parentClassName);
+
    public Optional<Unit> Register()
    {
-      userClass = new UserClass(className, parentClassName);
+      userClass = CreateUserClass();
       var _result = Module.Global.Value.RegisterClass(userClass);
       if (_result)
       {
@@ -243,7 +245,7 @@ public class ClassBuilder
       }
    }
 
-   public void Generate(OperationsBuilder builder, int index)
+   public void Generate(OperationsBuilder builder)
    {
       foreach (var (key, value) in constructorInvokables)
       {

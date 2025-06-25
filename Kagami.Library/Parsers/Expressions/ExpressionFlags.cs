@@ -20,5 +20,5 @@ public enum ExpressionFlags
    OmitNameValue = 8192,
    OmitIn = 16384,
    OmitBind = 32768,
-   OmitWith = 65536
+   OmitAssign = 65536
 }

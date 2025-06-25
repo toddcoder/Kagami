@@ -1,12 +1,11 @@
 ﻿using System.Text.RegularExpressions;
 using Core.Matching;
 using Core.Monads;
-using Kagami.Library.Invokables;
+using Kagami.Library.Classes;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using static Core.Monads.MonadFunctions;
-using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 using Class = Kagami.Library.Nodes.Statements.Class;
 using Regex = System.Text.RegularExpressions.Regex;
@@ -25,14 +24,14 @@ public partial class EnumParser : StatementParser
 
       Module.Global.Value.ForwardReference(className);
 
-      var builder = new ClassBuilder(className, Parameters.Empty, "", [], false, new Block());
+      var builder = new EnumClassBuilder(className);
       var _registered = builder.Register();
       if (_registered)
       {
          var cls = new Class(builder);
          state.AddStatement(cls);
 
-         var userClass = builder.UserClass;
+         var userClass = (EnumClass)builder.UserClass;
 
          var _beginBlock = state.BeginBlock();
          if (_beginBlock)
@@ -62,7 +61,7 @@ public partial class EnumParser : StatementParser
                   return exception;
                }
 
-               var matchingParser = new MatchingParser(className, commonBlock, _ordinal);
+               var matchingParser = new EnumMemberParser(className, commonBlock, _ordinal);
                var _result = matchingParser.Scan(state);
                if (_result)
                {
@@ -76,9 +75,9 @@ public partial class EnumParser : StatementParser
                      var selector = hasParameters ? parameters.Selector(truncatedName) : (Selector)truncatedName.get();
                      var constructorSelector = parameters.Selector(name);
 
-                     userClass.RegisterClassMessage(selector, (_, msg) => createObject(constructorSelector, msg));
-
                      _ordinal = matchingParser.Ordinal;
+
+                     userClass.RegisterMember(constructorSelector, selector, _ordinal.Map(r => (IObject)r));
                   }
                   else
                   {

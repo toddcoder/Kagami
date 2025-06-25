@@ -14,7 +14,7 @@ public class Class : Statement
 
    public ClassBuilder ClassBuilder => classBuilder;
 
-   public override void Generate(OperationsBuilder builder) => classBuilder.Generate(builder, Index);
+   public override void Generate(OperationsBuilder builder) => classBuilder.Generate(builder);
 
    public override string ToString() => classBuilder.ToString();
 }
