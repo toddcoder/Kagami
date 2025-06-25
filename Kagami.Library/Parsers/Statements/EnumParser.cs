@@ -48,6 +48,8 @@ public partial class EnumParser : StatementParser
                }
             }
 
+            Maybe<IRangeItem> _ordinal = nil;
+
             while (state.More)
             {
                var _endBlock = state.EndBlock();
@@ -60,7 +62,7 @@ public partial class EnumParser : StatementParser
                   return exception;
                }
 
-               var matchingParser = new MatchingParser(className, commonBlock);
+               var matchingParser = new MatchingParser(className, commonBlock, _ordinal);
                var _result = matchingParser.Scan(state);
                if (_result)
                {
@@ -75,6 +77,8 @@ public partial class EnumParser : StatementParser
                      var constructorSelector = parameters.Selector(name);
 
                      userClass.RegisterClassMessage(selector, (_, msg) => createObject(constructorSelector, msg));
+
+                     _ordinal = matchingParser.Ordinal;
                   }
                   else
                   {
