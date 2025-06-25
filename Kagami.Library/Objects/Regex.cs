@@ -186,23 +186,12 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
 
          foreach (var match in result)
          {
-            if (match.Groups.Length == 1)
-            {
-               builder.Append(input.AsSpan(lastIndex, match.Index - lastIndex));
-               var replacement = lambda.Invoke((KString)match.Text);
-               builder.Append(replacement.AsString);
-               lastIndex = match.Index + match.Length;
-            }
-            else
-            {
-               foreach (var group in match)
-               {
-                  builder.Append(input.AsSpan(lastIndex, group.Index - lastIndex));
-                  var replacement = lambda.Invoke((KString)group.Text);
-                  builder.Append(replacement.AsString);
-                  lastIndex = group.Index + group.Length;
-               }
-            }
+            builder.Append(input.AsSpan(lastIndex, match.Index - lastIndex));
+            var regexMatch = new RegexMatch(match, nameToIndex(result), indexToName(result), input.Keep(match.Index),
+               input.Drop(match.Index + match.Length));
+            var replacement = lambda.Invoke(regexMatch);
+            builder.Append(replacement.AsString);
+            lastIndex = match.Index + match.Length;
          }
 
          builder.Append(input.Drop(lastIndex));

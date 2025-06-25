@@ -145,7 +145,9 @@ public partial class RegexParser : SymbolParser
                   case 'T':
                      textOnly = true;
                      break;
-                  case '\\':
+                  case ' ':
+                     break;
+                  case '"':
                      state.AddToken(Color.Structure);
                      state.Move(1);
                      builder.Add(new RegexSymbol(pattern.ToString(), ignoreCase, multiline, global, textOnly));

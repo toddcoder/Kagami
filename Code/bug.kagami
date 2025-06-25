@@ -1,10 +1,12 @@
 ﻿open sys
 
-var array1 = [i * 10 for i in 0..<20]
+var data = ["lemon", "lime", "grape", "apple", "pear", "watermelon", "canteloupe", "honeydew", "orange", "grapefruit"]
 
-var array2 = seq {
-	for i in 0..<20 {
-		yield i * 10
-	}
+func make_producer(collection, excludes) {
+	return item for item in collection if item not in excludes
 }
-[array2]
+
+var iter = make_producer(data, {"apple", "orange", "honeydew"})
+for fruit in iter {
+	println(fruit)
+}
