@@ -34,17 +34,6 @@ public class UserObject : IObject
 
       fields.New(fieldName, value);
    }
-   
-   public void UpdateData(Fields newFields, Parameters newParameters)
-   {
-      foreach (var (fieldName, field) in newFields)
-      {
-         if (field.Mutable && fields.ContainsKey(fieldName))
-         {
-            fields[fieldName] = field;
-         }
-      }
-   }
 
    public Fields Fields => fields;
 
@@ -154,14 +143,11 @@ public class UserObject : IObject
 
       var message = new Message(selector, [.. arguments]);
       var obj = createObject(selector, message);
-      if (obj is UserObject userObject)
+      var userObject = (UserObject)obj;
+      foreach (var (fieldName, value) in newFields)
       {
-         userObject.fields = fieldsClone;
-         userObject.parameters = parameters;
-      }
-      else
-      {
-         throw fail($"Expected UserObject, got {obj.ClassName}");
+         Selector settingSelector = fieldName.set();
+         sendMessage(userObject, settingSelector, value);
       }
       return obj;
    }
