@@ -1452,4 +1452,48 @@ public static class ParserFunctions
          _ => Color.Structure
       };
    }
+
+   public static Optional<Block> getPartialBlock(ParseState state) => getPartialBlock(state, nil);
+
+   public static Optional<Block> getPartialBlock(ParseState state, Maybe<TypeConstraint> _typeConstraint)
+   {
+      var statementsParser = new StatementsParser();
+      state.PushStatements();
+
+      while (state.More)
+      {
+         var _endBlock = state.EndBlock();
+         if (_endBlock)
+         {
+            break;
+         }
+         else if (_endBlock.Exception is (true, var exception))
+         {
+            return exception;
+         }
+
+         var _scanned = statementsParser.Scan(state);
+         if (_scanned)
+         {
+         }
+         else if (_scanned.Exception is (true, var exception))
+         {
+            return exception;
+         }
+         else
+         {
+            break;
+         }
+      }
+
+      var _statements = state.PopStatements();
+      if (_statements is (true, var statements))
+      {
+         return new Block(statements, _typeConstraint);
+      }
+      else
+      {
+         return nil;
+      }
+   }
 }

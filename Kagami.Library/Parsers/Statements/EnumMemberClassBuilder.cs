@@ -8,8 +8,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public class EnumMemberClassBuilder : ClassBuilder
 {
-   public EnumMemberClassBuilder(string className, Parameters parameters, string parentClassName, Block commonBlock) : base(className, parameters,
-      parentClassName, [], false, commonBlock)
+   public EnumMemberClassBuilder(string className, Parameters parameters, Block commonBlock) : base(className, parameters, "", [], false, commonBlock)
    {
    }
 

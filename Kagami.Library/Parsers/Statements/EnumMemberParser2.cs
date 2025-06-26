@@ -1,35 +1,30 @@
 ﻿using Core.Monads;
 using Kagami.Library.Invokables;
-using Kagami.Library.Runtime;
-using System.Text.RegularExpressions;
-using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
 using Kagami.Library.Parsers.Expressions;
+using System.Text.RegularExpressions;
+using Kagami.Library.Runtime;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
-using Class = Kagami.Library.Nodes.Statements.Class;
 using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public partial class EnumMemberParser(string enumClassName, Block commonBlock, Maybe<IRangeItem> _previousOrdinal) : StatementParser
+public partial class EnumMemberParser2(string enumClassName) : StatementParser
 {
    [GeneratedRegex($@"^(\s*)(when)(\s+)({REGEX_CLASS})(\()?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      var className = tokens[4].Text;
+      var className = $"{enumClassName}${tokens[4].Text}";
       var hasParameters = tokens[5].Text == "(";
-      HasParameters = hasParameters;
       state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Class, Color.OpenParenthesis);
 
-      className = $"{enumClassName}${className}";
       Module.Global.Value.ForwardReference(className);
 
       Parameters parameters;
-
       if (hasParameters)
       {
          var _parameters = getParameters(state);
@@ -51,7 +46,7 @@ public partial class EnumMemberParser(string enumClassName, Block commonBlock, M
          parameters = Parameters.Empty;
       }
 
-      Maybe<IRangeItem> _ordinal;
+      Maybe<IObject> _ordinal = nil;
       var _ordinalScan =
          from equal in state.Scan(@"^(\s*)(=)", Color.Whitespace, Color.Structure)
          from value in getExpression(state, ExpressionFlags.Standard)
@@ -61,7 +56,7 @@ public partial class EnumMemberParser(string enumClassName, Block commonBlock, M
          var firstSymbol = expression.Symbols[0];
          if (firstSymbol is IConstant { Object: IRangeItem rangeItem })
          {
-            _ordinal = rangeItem.Some();
+            _ordinal = ((IObject)rangeItem).Some();
          }
          else
          {
@@ -72,37 +67,13 @@ public partial class EnumMemberParser(string enumClassName, Block commonBlock, M
       {
          return exception;
       }
-      else
-      {
-         _ordinal = _previousOrdinal.Map(po => po.Successor);
-      }
 
-      /*var builder = new EnumMemberClassBuilder(className, parameters, enumClassName, commonBlock)
-      {
-         Selector = parameters.Selector(className),
-         Ordinal = _ordinal.Map(o => (IObject)o)
-      };*/
-      /*var _registered = builder.Register();
-      if (_registered)
-      {
-         var cls = new Class(builder);
-         state.AddStatement(cls);
+      var _block = getBlock(state).Maybe();
 
-         Ordinal = _ordinal;
-
-         Matching = cls;
-      }
-      else
-      {
-         return _registered.Exception;
-      }*/
+      EnumMemberData = new EnumMemberData(className, parameters, _ordinal, _block);
 
       return unit;
    }
 
-   public Maybe<Class> Matching { get; set; } = nil;
-
-   public Maybe<IRangeItem> Ordinal { get; set; } = nil;
-
-   public bool HasParameters { get; set; }
+   public Maybe<EnumMemberData> EnumMemberData { get; set; } = nil;
 }

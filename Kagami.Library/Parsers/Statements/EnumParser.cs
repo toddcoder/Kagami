@@ -36,7 +36,7 @@ public partial class EnumParser : StatementParser
          var _beginBlock = state.BeginBlock();
          if (_beginBlock)
          {
-            var commonBlock = new Block();
+            /*var commonBlock = new Block();
             var _common = state.Scan(@"^(\s*)(common)\b", Color.Whitespace, Color.Keyword);
             if (_common)
             {
@@ -45,7 +45,7 @@ public partial class EnumParser : StatementParser
                {
                   commonBlock = _commonBlock;
                }
-            }
+            }*/
 
             Maybe<IRangeItem> _ordinal = nil;
 
@@ -61,7 +61,7 @@ public partial class EnumParser : StatementParser
                   return exception;
                }
 
-               var matchingParser = new EnumMemberParser(className, commonBlock, _ordinal);
+               /*var matchingParser = new EnumMemberParser(className, commonBlock, _ordinal);
                var _result = matchingParser.Scan(state);
                if (_result)
                {
@@ -87,7 +87,7 @@ public partial class EnumParser : StatementParser
                else
                {
                   return _result.Exception;
-               }
+               }*/
             }
          }
          else

@@ -128,6 +128,8 @@ public class ParseState : IEnumerable<Statement>
       return Scan(@"^(\s*)(\})", Color.Whitespace, Color.Structure).Map(_ => unit);
    }
 
+   public bool PeekEndBlock() => CurrentSource.IsMatch(@"^\s*\}");
+
    public int Index => index;
 
    public string Source => source;
