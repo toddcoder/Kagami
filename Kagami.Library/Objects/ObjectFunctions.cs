@@ -242,10 +242,10 @@ public static class ObjectFunctions
 
    public static bool userObjectMatch(UserObject obj, IObject comparisand, Hash<string, IObject> bindings)
    {
-      static bool includeFieldName(string fieldName)
+      /*static bool includeFieldName(string fieldName)
       {
          return !fieldName.StartsWith("__$") && fieldName != "self" && fieldName != "id" && !fieldName.StartsWith("_");
-      }
+      }*/
 
       if (classOf(obj).RespondsTo("match(_,_)"))
       {
@@ -275,19 +275,7 @@ public static class ObjectFunctions
                return false;
             }
 
-            if (obj.Parameters.Length == 0)
-            {
-               foreach (var (fieldName, field) in uo1.Fields.Where(f => includeFieldName(f.fieldName)))
-               {
-                  var value1 = field.Value;
-                  var value2 = uo2.Fields[fieldName];
-                  if (!value1.Match(value2, bindings))
-                  {
-                     return false;
-                  }
-               }
-            }
-            else
+            if (obj.Parameters.Length > 0)
             {
                foreach (var parameter in obj.Parameters)
                {
@@ -307,6 +295,18 @@ public static class ObjectFunctions
                   }
                }
             }
+            /*else
+            {
+               foreach (var (fieldName, field) in uo1.Fields.Where(f => includeFieldName(f.fieldName)))
+               {
+                  var value1 = field.Value;
+                  var value2 = uo2.Fields[fieldName];
+                  if (!value1.Match(value2, bindings))
+                  {
+                     return false;
+                  }
+               }
+            }*/
 
             return true;
          }, bindings);
