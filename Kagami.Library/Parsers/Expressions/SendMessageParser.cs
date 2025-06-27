@@ -16,19 +16,20 @@ public partial class SendMessageParser : SymbolParser
    {
    }
 
-   [GeneratedRegex($@"^(\s*)(\.|@)({REGEX_FUNCTION_NAME})(\()?")]
+   [GeneratedRegex($@"^(\s*)(#)?(\.|@)({REGEX_FUNCTION_NAME})(\()?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      var precedence = tokens[2].Text == "." ? Precedence.SendMessage : Precedence.ChainedOperator;
+      var optional = tokens[2].Text == "#";
+      var precedence = tokens[3].Text == "." ? Precedence.SendMessage : Precedence.ChainedOperator;
       if (precedence == Precedence.ChainedOperator && builder.Flags[ExpressionFlags.InLambda])
       {
          return nil;
       }
 
-      var name = tokens[3].Text;
-      var parameterDelimiter = tokens[4].Text;
+      var name = tokens[4].Text;
+      var parameterDelimiter = tokens[5].Text;
       var parseArguments = true;
       if (parameterDelimiter.IsEmpty())
       {
@@ -48,18 +49,18 @@ public partial class SendMessageParser : SymbolParser
 
       if (parseArguments)
       {
-         state.Colorize(tokens, Color.Whitespace, Color.Message, Color.Message, Color.OpenParenthesis);
+         state.Colorize(tokens, Color.Whitespace, Color.Message, Color.Message, Color.Message, Color.OpenParenthesis);
       }
       else
       {
-         state.Colorize(tokens, Color.Whitespace, Color.Message, Color.Message);
+         state.Colorize(tokens, Color.Whitespace, Color.Message, Color.Message, Color.Message);
       }
 
       LazyOptional<(Expression[], Maybe<LambdaSymbol>)> _argumentsPlusLambda = nil;
       if (!parseArguments)
       {
          Selector selector = name;
-         builder.Add(new SendMessageSymbol(selector));
+         builder.Add(new SendMessageSymbol(selector, optional));
 
          return unit;
       }

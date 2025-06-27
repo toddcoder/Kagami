@@ -121,7 +121,7 @@ public partial class DoParser : SymbolParser
       var lambda = new LambdaSymbol(new Parameters(parameterName), block);
       var builder = new ExpressionBuilder(ExpressionFlags.Standard);
       builder.Add(targetExpression);
-      builder.Add(new SendMessageSymbol("bind(_<Lambda>)", lambda));
+      builder.Add(new SendMessageSymbol("bind(_<Lambda>)", false, lambda));
 
       var _expression = builder.ToExpression();
       if (_expression is (true, var expression))

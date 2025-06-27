@@ -34,7 +34,7 @@ public partial class ImplicitCollectionExpressionParser(ExpressionBuilder builde
          var block = new Block(expressionStatement);
          var lambdaSymbol = new LambdaSymbol(unknownCount, block);
 
-         builder.Add(new SendMessageSymbol(selector, lambdaSymbol));
+         builder.Add(new SendMessageSymbol(selector, false, lambdaSymbol));
 
          return unit;
       }

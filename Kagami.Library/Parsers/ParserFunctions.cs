@@ -24,7 +24,7 @@ namespace Kagami.Library.Parsers;
 
 public static class ParserFunctions
 {
-   public const string REGEX_FIELD = "`?[A-Za-z_][A-Za-z_0-9]*";
+   public const string REGEX_FIELD = "[A-Za-z_`][A-Za-z_0-9]*";
    public const string REGEX_INVOKABLE = "[A-Za-z_][A-Za-z_0-9]*";
    public const string REGEX_INVOKABLE2 = @"[A-Za-z_][A-Za-z_0-9\$]*";
    public const string REGEX_CLASS = "[A-Z][A-Za-z_0-9]*";

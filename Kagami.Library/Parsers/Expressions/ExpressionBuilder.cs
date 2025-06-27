@@ -111,7 +111,7 @@ public class ExpressionBuilder(Bits32<ExpressionFlags> flags, bool acknowlegeImp
          var builder = new ExpressionBuilder(flags, false);
          builder.Add(sourceSymbol);
          Selector selector = implicitType == "m" ? "map(_)" : "if(_)";
-         builder.Add(new SendMessageSymbol(selector, lambda));
+         builder.Add(new SendMessageSymbol(selector, false, lambda));
 
          return builder.ToExpression();
       }

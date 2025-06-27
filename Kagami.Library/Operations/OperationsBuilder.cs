@@ -546,5 +546,7 @@ public class OperationsBuilder
 
    public void IsResult() => add(new IsResult());
 
+   public void IsMonad(MonadType type) => add(new IsMonad(type));
+
    public override string ToString() => "operations";
 }

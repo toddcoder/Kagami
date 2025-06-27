@@ -8,22 +8,22 @@ namespace Kagami.Library.Nodes.Symbols;
 
 public class SendBindingMessageSymbol : SendMessageSymbol
 {
-   public SendBindingMessageSymbol(Selector selector, Maybe<LambdaSymbol> _lambda, Maybe<Operation> _operation,
-      params Expression[] arguments) : base(selector, _lambda, _operation, arguments)
+   public SendBindingMessageSymbol(Selector selector, bool optional, Maybe<LambdaSymbol> _lambda, Maybe<Operation> _operation,
+      params Expression[] arguments) : base(selector, optional, _lambda, _operation, arguments)
    {
    }
 
-   public SendBindingMessageSymbol(Selector selector, params Expression[] arguments) : base(selector, arguments)
+   public SendBindingMessageSymbol(Selector selector, bool optional, params Expression[] arguments) : base(selector, optional, arguments)
    {
    }
 
-   public SendBindingMessageSymbol(Selector selector, Maybe<Operation> operation, params Expression[] arguments) :
-      base(selector, operation, arguments)
+   public SendBindingMessageSymbol(Selector selector, bool optional, Maybe<Operation> operation, params Expression[] arguments) :
+      base(selector, optional, operation, arguments)
    {
    }
 
-   public SendBindingMessageSymbol(Selector selector, Maybe<LambdaSymbol> lambda, params Expression[] arguments) :
-      base(selector, lambda, arguments)
+   public SendBindingMessageSymbol(Selector selector, bool optional, Maybe<LambdaSymbol> lambda, params Expression[] arguments) :
+      base(selector, optional, lambda, arguments)
    {
    }
 

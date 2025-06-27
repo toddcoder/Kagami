@@ -76,6 +76,7 @@ public abstract class BaseClass
       registerMessage("seq(_)", (obj, message) => new OpenRange(obj, (Lambda)message.Arguments[0]));
       registerMessage("format(_)", (obj, message) => format(obj, message.Arguments[0].AsString));
       registerMessage("id".get(), (obj, _) => KString.StringObject(obj.Id.ToString()));
+      registerMessage("isTrue".get(), (obj, _) => KBoolean.BooleanObject(obj.IsTrue));
    }
 
    protected static KString format(IObject obj, string formattingString)

@@ -39,7 +39,7 @@ public partial class IndexerParser : SymbolParser
                      .. expressions,
                      expression
                   ];
-                  builder.Add(new SendMessageSymbol("insert(at:_<Int>,value:_)", nil, nil, [.. list]));
+                  builder.Add(new SendMessageSymbol("insert(at:_<Int>,value:_)", false, nil, nil, [.. list]));
                }
                else
                {

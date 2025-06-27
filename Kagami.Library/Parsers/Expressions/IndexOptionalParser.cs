@@ -21,7 +21,7 @@ public partial class IndexOptionalParser : SymbolParser
 
       return getArguments(state, builder.Flags).Map(e =>
       {
-         builder.Add(new SendMessageSymbol("[?]", e));
+         builder.Add(new SendMessageSymbol("[?]", false, e));
          return unit;
       });
    }

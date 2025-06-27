@@ -136,14 +136,12 @@ public partial class Playground : Form
          menus.Menu("&Insert");
          menus.Menu("open sys", (_, _) => insertText("open sys\n\n", 0, 0), "^%S");
          menus.Menu("open math", (_, _) => insertText("open math\n\n", 0, 0), "^%M");
-         menus.Menu("println()", (_, _) => insertText("println()", -1, 0), "^P");
-         menus.Menu("println() interpolated", (_, _) => insertText("println($\"\")", -2, 0), "^%P");
-         menus.Menu("print()", (_, _) => insertText("print()", -1, 0));
-         menus.Menu("put()", (_, _) => insertText("put()", -1, 0));
+         menus.Menu("println()", (_, _) => surround("println(", ")"), "^P");
+         menus.Menu("println() interpolated", (_, _) => surround("println($", ")"), "^%P");
+         menus.Menu("print()", (_, _) => surround("print(", ")"));
+         menus.Menu("put()", (_, _) => surround("put(", ")"));
          menus.Menu("peek()", (_, _) => surround("peek(", ")"), "^K");
          menus.Menu("Triple quotes", (_, _) => insertText("\"\"\"\n\"\"\"", -3), "^Q");
-         menus.Menu("List", (_, _) => insertText("⌈⌉", -1), "^L");
-         menus.Menu("Set", (_, _) => insertText("⎩⎭", -1), "^E");
 
          menus.Menu("&Debug");
          menus.Menu("Step Into", (_, _) => stepInto(), "F11");

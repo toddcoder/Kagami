@@ -41,7 +41,7 @@ public partial class SendBindingMessageParser : SymbolParser
       if (!parseArguments)
       {
          Selector selector = name;
-         builder.Add(new SendBindingMessageSymbol(selector));
+         builder.Add(new SendBindingMessageSymbol(selector, false));
          return unit;
       }
       else if (_argumentsPlusLambda.ValueOf(getArgumentsPlusLambda(state, builder.Flags)) is (true, var (arguments, _lambda)))

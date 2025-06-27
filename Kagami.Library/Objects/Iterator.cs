@@ -694,8 +694,8 @@ public class Iterator : IObject, IIterator
             return Flatten();
          case > 1:
          {
-            var outer = new List<IObject>();
-            var inner = new List<IObject>();
+            List<IObject> outer = [];
+            List<IObject> inner = [];
             foreach (var value in List().ToList())
             {
                inner.Add(value);
