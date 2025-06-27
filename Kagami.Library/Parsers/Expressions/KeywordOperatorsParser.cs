@@ -44,7 +44,7 @@ public partial class KeywordOperatorsParser : SymbolParser
                   builder.Add(new SendBinaryMessageSymbol($"{keyword}(_)", Precedence.ChainedOperator));
                   break;
                case "sort":
-                  builder.Add(new SendBinaryMessageSymbol("sort".Selector("<Lambda>"), Precedence.ChainedOperator));
+                  builder.Add(new SendBinaryMessageSymbol("sort(_<Lambda>)", Precedence.ChainedOperator));
                   break;
                case "foldl":
                   builder.Add(new SendBinaryMessageSymbol("foldl(_)", Precedence.ChainedOperator));

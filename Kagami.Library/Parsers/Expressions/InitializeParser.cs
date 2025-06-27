@@ -13,8 +13,6 @@ public partial class InitializeParser : SymbolParser
    {
    }
 
-   //public override string Pattern => $"^ /(/s*) /({REGEX_CLASS}) /'{{'";
-
    [GeneratedRegex($@"^(\s*)({REGEX_CLASS})({{)")]
    public override partial Regex Regex();
 
