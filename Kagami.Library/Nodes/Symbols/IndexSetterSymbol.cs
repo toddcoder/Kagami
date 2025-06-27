@@ -1,6 +1,8 @@
-﻿using Kagami.Library.Operations;
+﻿using Core.Arrays;
+using Kagami.Library.Operations;
 using Core.Enumerables;
 using Core.Monads;
+using Kagami.Library.Objects;
 
 namespace Kagami.Library.Nodes.Symbols;
 
@@ -17,6 +19,16 @@ public class IndexSetterSymbol : Symbol
       this._operation = _operation;
    }
 
+   public static void Set(OperationsBuilder builder, Expression[] arguments, Expression value)
+   {
+      foreach (var expression in arguments)
+      {
+         expression.Generate(builder);
+      }
+
+      value.Generate(builder);
+   }
+
    public override void Generate(OperationsBuilder builder)
    {
       if (_operation is (true, var operation))
@@ -25,16 +37,17 @@ public class IndexSetterSymbol : Symbol
          IndexerSymbol.Get(builder, arguments);
          value.Generate(builder);
          builder.AddRaw(operation);
-         IndexerSymbol.GetIndex(builder, arguments);
+         Set(builder, arguments, value);
          builder.Swap();
       }
       else
       {
-         IndexerSymbol.GetIndex(builder, arguments);
-         value.Generate(builder);
+         Set(builder, arguments, value);
       }
 
-      builder.SendMessage("[]=(_)", 2);
+      var length = arguments.Length + 1;
+      Selector selector = $"[]=({length.Repeat("_")})";
+      builder.SendMessage(selector, length);
    }
 
    public override Precedence Precedence => Precedence.SendMessage;
