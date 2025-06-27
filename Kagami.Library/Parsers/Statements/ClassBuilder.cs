@@ -225,7 +225,7 @@ public class ClassBuilder
 
       statements.Add(new ReturnNewObject(className, parameters));
 
-      Statements = statements.ToArray();
+      Statements = [.. statements];
 
       return new Block(statements);
    }

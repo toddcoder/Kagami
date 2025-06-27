@@ -446,7 +446,7 @@ public class OperationsBuilder
          }
       }
 
-      return new Operations(operations.ToArray()).Success();
+      return new Operations([.. operations]);
    }
 
    public void BeginMacro(Parameters parameters, Expression[] arguments, string returnLabel = "")
@@ -545,4 +545,6 @@ public class OperationsBuilder
    public void IsOptional() => add(new IsOptional());
 
    public void IsResult() => add(new IsResult());
+
+   public override string ToString() => "operations";
 }

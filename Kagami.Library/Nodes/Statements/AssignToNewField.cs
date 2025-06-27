@@ -51,8 +51,6 @@ public class AssignToNewField : Statement
 
       expression.Generate(builder);
       builder.AssignField(fieldName, false);
-
-      builder.GetField(fieldName);
    }
 
    public override string ToString() => stream() / (mutable ? "var" : "let") / " " / fieldName / " = " / expression;

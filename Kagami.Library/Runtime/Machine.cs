@@ -67,7 +67,9 @@ public class Machine
       {
          if (operations.Current is (true, var operation))
          {
+#if !NO_TRACE
             trace(operations.Address, () => operation.ToString() ?? "");
+#endif
             var _result = operation.Execute(this);
             if (_result is (true, var result) && running && result.ClassName != "Void")
             {
@@ -81,11 +83,13 @@ public class Machine
             }
             else if (_result.Exception is (true, var exception))
             {
+#if !NO_TRACE
                if (Tracing)
                {
                   TraceOutput.Invoke(table.Value.ToString());
                }
 
+#endif
                var _errorHandler = GetErrorHandler();
                if (_errorHandler is (true, var address))
                {

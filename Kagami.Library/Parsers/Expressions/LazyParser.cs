@@ -11,8 +11,6 @@ public partial class LazyParser : EndingInExpressionParser
    {
    }
 
-   //public override string Pattern => "^ /(/s*) /'lazy' /b";
-
    [GeneratedRegex(@"^(\s*)(lazy)\b")]
    public override partial Regex Regex();
 
