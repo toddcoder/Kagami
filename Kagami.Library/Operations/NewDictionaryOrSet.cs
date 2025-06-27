@@ -21,6 +21,7 @@ public class NewDictionaryOrSet : OneOperandOperation
          KTuple tuple => tuple.List.Some(),
          ICollection { ExpandForArray: true } collection => collection.GetIterator(false).List().Some(),
          Iterator iterator => iterator.List().Some(),
+         NameValue => new List<IObject> { value },
          _ => nil
       };
       if (_list is (true, var list))

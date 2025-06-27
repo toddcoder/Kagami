@@ -12,8 +12,8 @@ public partial class KeywordOperatorsParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(
-      @"^(\s+)(if|map|join|sort|foldl|foldr|all|any|none|one|zip|skip|take|band|bor|bxor|bsl|bsr|while|until|min|max|does|x|div|r|each|divmod|with)(\s+)")]
+   [GeneratedRegex(@"^(\s+)(if|map|join|sort|foldl|foldr|all|any|none|one|zip|skip|take|band|bor|bxor|bsl|bsr|while|until|min|max" +
+      @"|does|x|div|r|each|divmod|with)(\s+)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)

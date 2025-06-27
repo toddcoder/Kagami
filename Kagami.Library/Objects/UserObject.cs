@@ -59,96 +59,19 @@ public class UserObject : IObject
 
    public IObject With(IObject args)
    {
-      Hash<string, IObject> newFields = [];
-      switch (args)
+      if (args is Dictionary dictionary)
       {
-         case KTuple tuple:
+         var hash = dictionary.InternalHash;
+         foreach (var (key, value) in hash)
          {
-            var iterator = tuple.GetIterator(false);
-            var list = iterator.List();
-            var index = 0;
-            foreach (var item in list)
-            {
-               var _name = tuple.Rename(index++);
-               if (_name is (true, var name))
-               {
-                  newFields[name] = item;
-               }
-            }
-
-            break;
+            setField(key.AsString, value);
          }
-         case KArray array:
-         {
-            var iterator = array.GetIterator(false);
-            var list = iterator.List();
-            foreach (var nameValue in list.Cast<NameValue>())
-            {
-               newFields[nameValue.Name] = nameValue.Value;
-            }
 
-            break;
-         }
-         case Dictionary dictionary:
-         {
-            var hash = dictionary.InternalHash;
-            foreach (var (key, value) in hash)
-            {
-               var name = key.AsString;
-               newFields[name] = value;
-            }
-
-            break;
-         }
-         case NameValue nameValue:
-            newFields[nameValue.Name] = nameValue.Value;
-            break;
+         return this;
       }
-
-      var selector = parameters.Selector(className);
-
-      List<IObject> arguments = [];
-      foreach (var parameter in parameters)
+      else
       {
-         if (newFields.Maybe[parameter.Name] is (true, var value))
-         {
-            arguments.Add(value);
-         }
-         else
-         {
-            var _field = fields.Find(parameter.Name, true);
-            if (_field is (true, var field))
-            {
-               arguments.Add(field.Value);
-            }
-            else if (_field.Exception is (true, var exception))
-            {
-               throw exception;
-            }
-            else
-            {
-               throw fail($"Couldn't find field {parameter.Name}");
-            }
-         }
+         throw fail("Dictionary required as the argument for with");
       }
-
-      var fieldsClone = fields.Clone();
-      foreach (var (fieldName, field) in fieldsClone)
-      {
-         if (newFields.Maybe[fieldName] is (true, var value))
-         {
-            field.Value = value;
-         }
-      }
-
-      var message = new Message(selector, [.. arguments]);
-      var obj = createObject(selector, message);
-      var userObject = (UserObject)obj;
-      foreach (var (fieldName, value) in newFields)
-      {
-         Selector settingSelector = fieldName.set();
-         sendMessage(userObject, settingSelector, value);
-      }
-      return obj;
    }
 }
