@@ -333,6 +333,8 @@ public class StreamIterator : IObject, IIterator
 
    public IObject Partition(Lambda lambda) => terminate().Partition(lambda);
 
+   public IObject Pick(int count) => terminate().Pick(count);
+
    public BaseClass Equivalent() => new CollectionClass();
 
    public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");

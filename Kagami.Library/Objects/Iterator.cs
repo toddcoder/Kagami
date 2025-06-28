@@ -1081,6 +1081,33 @@ public class Iterator : IObject, IIterator
       return collectionClass.Revert([collectionClass.Revert(matched), collectionClass.Revert(notMatched)]);
    }
 
+   public IObject Pick(int count)
+   {
+      var random = new Random(NowServer.Now.Millisecond);
+      List<IObject> result = [];
+      Set<int> pickedIndexes = [];
+
+      var list = collection.GetIterator(false).List().ToList();
+      for (var i = 0; i < count; i++)
+      {
+         var randomIndex = random.Next(list.Count);
+         while (pickedIndexes.Contains(randomIndex))
+         {
+            randomIndex = random.Next(list.Count);
+         }
+
+         pickedIndexes.Add(randomIndex);
+         result.Add(list[randomIndex]);
+
+         if (pickedIndexes.Count == list.Count)
+         {
+            break;
+         }
+      }
+
+      return collectionClass.Revert(result);
+   }
+
    protected static IEnumerable<IObject> applyAgainst(List<Lambda> lambdas, List<IObject> enumerable)
    {
       return lambdas.SelectMany(_ => enumerable, (lambda, item) => lambda.Invoke(item));
