@@ -280,6 +280,8 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
+   public IObject One() => items.Length == 1 ? items[0] : this;
+
    public int Compare(IObject obj)
    {
       if (obj is KTuple tuple)

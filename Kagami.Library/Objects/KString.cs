@@ -168,6 +168,8 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
+   public IObject One() => this;
+
    public KString Repeat(int count) => value.Repeat(count);
 
    public KChar GetChar(int index) => value[index];

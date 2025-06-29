@@ -42,7 +42,9 @@ namespace Kagami.Library.Objects
 
 		public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
-		public string ClassName => openRange.ClassName;
+      public IObject One() => this;
+
+      public string ClassName => openRange.ClassName;
 
 		public string AsString => openRange.AsString;
 

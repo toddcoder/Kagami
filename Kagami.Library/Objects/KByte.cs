@@ -80,6 +80,8 @@ public readonly struct KByte : IObject, INumeric, IObjectCompare, IComparable<KB
 
    public IObject Raise(INumeric power) => raise(this, power);
 
+   public IObject Abs() => this;
+
    public string AsString => ((char)value).ToString();
 
    public string Image => $"{value}b";

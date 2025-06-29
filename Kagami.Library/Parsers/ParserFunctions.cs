@@ -1259,9 +1259,6 @@ public static class ParserFunctions
          case ">>":
             _symbol = new SendBinaryMessageSymbol($"{source}(_)", Precedence.Shift);
             break;
-         /*case "=>" when !flags[ExpressionFlags.OmitNameValue]:
-            _symbol = new KeyValueSymbol();
-            break;*/
          case "|>":
             _symbol = new PipelineSymbol();
             break;
@@ -1286,9 +1283,6 @@ public static class ParserFunctions
          case ":-" when !flags[ExpressionFlags.OmitBind]:
             _symbol = new BindSymbol();
             break;
-         /*case "|":
-            _symbol = new SendBinaryMessageSymbol("defaultTo(_)", Precedence.SendMessage);
-            break;*/
       }
 
       return _symbol;

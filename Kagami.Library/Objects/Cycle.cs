@@ -74,6 +74,8 @@ public class Cycle : IObject, ICollection
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
+   public IObject One() => this;
+
    public KTuple Items => new(items);
 
    public IObject this[int index] => items[index];

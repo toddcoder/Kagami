@@ -81,6 +81,8 @@ public class Slice : IObject, ICollection
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
+   public IObject One() => sliceable.Length == 1 ? sliceable.Get(Int.Zero).Required("Length must be > 0") : this;
+
    public IObject Assign(IObject value)
    {
       if (value is ICollection collection)

@@ -129,5 +129,7 @@ public class YieldingInvokable : IInvokable, ICollection, IObject
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
+   public IObject One() => this;
+
    public IObject this[SkipTake skipTake] => Objects.CollectionFunctions.skipTake(this, skipTake);
 }

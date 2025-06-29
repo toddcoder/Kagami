@@ -339,6 +339,19 @@ public class Dictionary : IObject, IMutableCollection
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
+   public IObject One()
+   {
+      if (dictionary.Count == 1)
+      {
+         var first = dictionary.First();
+         return new KTuple(first.Key, first.Value);
+      }
+      else
+      {
+         return this;
+      }
+   }
+
    public IObject Swap(IObject key1, IObject key2)
    {
       var value1 = getValue(key1);

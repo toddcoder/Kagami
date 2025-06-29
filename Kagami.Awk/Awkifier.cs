@@ -166,6 +166,8 @@ public class Awkifier : IObject, ICollection
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
+   public IObject One() => this;
+
    public IIterator If(Regex regex)
    {
       return (IIterator)new LazyIterator(this).If(new InternalLambda(args =>

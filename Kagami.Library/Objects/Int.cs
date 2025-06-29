@@ -105,6 +105,8 @@ public readonly struct Int : IObject, INumeric, IComparable<Int>, IEquatable<Int
 
    public IObject Raise(INumeric power) => raise(this, power);
 
+   public IObject Abs() => (Int)Math.Abs(value);
+
    public int Compare(IObject obj) => compatibleCompare(this, obj);
 
    public IObject Object => this;

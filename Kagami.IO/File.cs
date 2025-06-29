@@ -52,6 +52,8 @@ public class File : IObject, ICollection
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
+   public IObject One() => this;
+
    public IObject Flatten() => this;
 
    public KString Text => fileName.Text;

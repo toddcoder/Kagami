@@ -52,6 +52,8 @@ public readonly struct ByteArray : IObject, ICollection, IObjectCompare
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
+   public IObject One() => bytes.Length == 1 ? (KByte)bytes[0] : this;
+
    public int Compare(IObject obj) => compareCollections(this, obj);
 
    public IObject Object => this;

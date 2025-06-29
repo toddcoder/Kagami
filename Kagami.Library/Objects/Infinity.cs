@@ -69,6 +69,8 @@ public readonly struct Infinity : IObject, IObjectCompare, INumeric
 
    public IObject Raise(INumeric power) => raise(this, power);
 
+   public IObject Abs() => positive ? this : new Infinity(true);
+
    public string AsString => "_";
 
    public string Image => "_";

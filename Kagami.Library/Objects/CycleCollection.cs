@@ -87,5 +87,7 @@ public class CycleCollection : IObject, ICollection
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
+   public IObject One() => this;
+
    public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
 }

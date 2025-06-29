@@ -41,6 +41,8 @@ public class XRandom : IObject, ICollection
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
+   public IObject One() => Next();
+
    public Int Next(int max) => random.Next(max);
 
    public Int Next(int min, int max) => random.Next(min, max);

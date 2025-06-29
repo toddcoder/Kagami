@@ -257,6 +257,8 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
+   public IObject One() => list.Count == 0 ? list[0] : this;
+
    public void Add(IObject obj)
    {
       assertType(obj);

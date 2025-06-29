@@ -229,6 +229,8 @@ public class OperationsBuilder
 
    public void Negate() => add(new Negate());
 
+   public void Abs() => add(new Abs());
+
    public void Image() => add(new Image());
 
    public void EndOfLine() => add(new EndOfLine());

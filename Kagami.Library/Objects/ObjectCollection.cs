@@ -86,6 +86,8 @@ public class ObjectCollection : IObject, ICollection
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
+   public IObject One() => this;
+
    public string ClassName => obj.ClassName;
 
    public string AsString => obj.AsString;

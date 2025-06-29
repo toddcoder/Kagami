@@ -85,6 +85,8 @@ public class Set : IObject, ICollection, IObjectCompare
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
+   public IObject One() => set.Count == 1 ? set.Take(1).First() : this;
+
    protected void assertNotThisSet(IObject other)
    {
       if (Id == other.Id)

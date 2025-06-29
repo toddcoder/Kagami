@@ -106,6 +106,8 @@ public readonly struct Float : IObject, INumeric, IObjectCompare, IComparable<Fl
 
    public IObject Raise(INumeric power) => raise(this, power);
 
+   public IObject Abs() => (Float)Math.Abs(value);
+
    public string AsString => value.ToString();
 
    public string Image => floatImage(value);
