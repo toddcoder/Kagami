@@ -67,7 +67,7 @@ public partial class SendMessageParser : SymbolParser
       else if (_argumentsPlusLambda.ValueOf(getArgumentsPlusLambda(state, builder.Flags)) is (true, var (arguments, _lambda)))
       {
          var selector = name.Selector(arguments.Length);
-         builder.Add(new SendMessageSymbol(selector, _lambda, arguments));
+         builder.Add(new SendMessageSymbol(selector, optional, _lambda, arguments));
 
          return unit;
       }

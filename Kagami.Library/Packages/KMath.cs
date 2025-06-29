@@ -16,6 +16,7 @@ public class KMath : Package
       fields.New("pi", Float.FloatObject(Math.PI));
       fields.New("e", Float.FloatObject(Math.E));
       fields.New("i", Complex.ComplexObject((0, 1)));
+      fields.New("tau", Float.FloatObject(Math.Tau));
    }
 
    public override string ClassName => "Math";
@@ -274,8 +275,10 @@ public class KMath : Package
    public Float Pi => (Float)fields["pi"];
 
    public Float E => (Float)fields["e"];
-   
+
    public Complex I => (Complex)fields["i"];
+
+   public Float Tau => (Float)fields["tau"];
 
    public Float Radians(double degrees) => Math.PI / 180 * degrees;
 

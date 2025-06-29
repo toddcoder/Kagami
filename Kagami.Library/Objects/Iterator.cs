@@ -407,11 +407,7 @@ public class Iterator : IObject, IIterator
       {
          foreach (var value in List().ToList())
          {
-            if (result is Unassigned)
-            {
-               result = value;
-            }
-            else if (((Int)lambda.Invoke(value, result)).Value < 0)
+            if (result is Unassigned || ((Int)lambda.Invoke(value, result)).Value < 0)
             {
                result = value;
             }
@@ -475,11 +471,7 @@ public class Iterator : IObject, IIterator
       {
          foreach (var value in List().ToList())
          {
-            if (result is Unassigned)
-            {
-               result = value;
-            }
-            else if (((Int)lambda.Invoke(value, result)).Value < 0)
+            if (result is Unassigned || ((Int)lambda.Invoke(value, result)).Value < 0)
             {
                result = value;
             }
