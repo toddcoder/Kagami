@@ -43,6 +43,8 @@ public class IntClass : BaseClass, IParse, IEquivalentClass
       messages["nextPrime()"] = (obj, _) => function<Int>(obj, i => i.NextPrime());
       messages["max(_<Int>)"] = (obj, msg) => function<Int, Int>(obj, msg, (i1, i2) => i1.Max(i2));
       messages["min(_<Int>)"] = (obj, msg) => function<Int, Int>(obj, msg, (i1, i2) => i1.Min(i2));
+      messages["rand()"] = (obj, _) => function<Int>(obj, i => i.Rand(random.Value));
+      messages["rand(_<Int>)"] = (obj, msg) => function<Int, Int>(obj, msg, (i1, i2) => i1.Rand(random.Value, i2));
    }
 
    public override void RegisterClassMessages()

@@ -253,4 +253,8 @@ public readonly struct Int : IObject, INumeric, IComparable<Int>, IEquatable<Int
    public Int Max(Int other) => value > other.Value ? this : other;
 
    public Int Min(Int other) => value < other.Value ? this : other;
+
+   public Int Rand(Random random) => random.Next(value);
+
+   public Int Rand(Random random, Int max) => random.Next(value, max.Value);
 }

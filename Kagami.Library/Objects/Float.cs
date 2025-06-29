@@ -157,4 +157,8 @@ public readonly struct Float : IObject, INumeric, IObjectCompare, IComparable<Fl
    public IObject Increment(int amount = 1) => new Float(value + amount);
 
    public IObject Decrement(int amount = 1) => new Float(value - amount);
+
+   public Float Rand(Random random) => random.NextDouble() * value;
+
+   public Float Rand(Random random, Float max) => random.NextDouble() * (max.value - value) + value;
 }

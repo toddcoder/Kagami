@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Classes;
+﻿using System.Numerics;
+using Kagami.Library.Classes;
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using Kagami.Library.Runtime;
@@ -6,6 +7,7 @@ using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Operations.NumericFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
+using Complex = Kagami.Library.Objects.Complex;
 
 namespace Kagami.Library.Packages;
 
@@ -283,4 +285,40 @@ public class KMath : Package
    public Float Radians(double degrees) => Math.PI / 180 * degrees;
 
    public Float Degrees(double radians) => 180 / Math.PI * radians;
+
+   public IObject Gcd(IObject a, IObject b)
+   {
+      return (a, b) switch
+      {
+         (Int ai, Int bi) => (Int)gcd(ai.AsInt32(), bi.AsInt32()),
+         (Long al, Long bl) => (Long)bigGcd(al.AsBigInteger(), bl.AsBigInteger()),
+         (Int ai, Long bl) => (Long)bigGcd(ai.AsBigInteger(), bl.AsBigInteger()),
+         (Long al, Int bi) => (Long)bigGcd(al.AsBigInteger(), bi.AsBigInteger()),
+         _ => throw incompatibleClasses(a, "Int or Long")
+      };
+
+      int gcd(int a, int b)
+      {
+         while (b != 0)
+         {
+            var temp = b;
+            b = a % b;
+            a = temp;
+         }
+
+         return Math.Abs(a);
+      }
+
+      BigInteger bigGcd(BigInteger a, BigInteger b)
+      {
+         while (b != 0)
+         {
+            var temp = b;
+            b = a % b;
+            a = temp;
+         }
+
+         return a < 0 ? -a : a;
+      }
+   }
 }
