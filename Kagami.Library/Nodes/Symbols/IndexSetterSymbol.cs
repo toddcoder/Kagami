@@ -37,7 +37,10 @@ public class IndexSetterSymbol : Symbol
          IndexerSymbol.Get(builder, arguments);
          value.Generate(builder);
          builder.AddRaw(operation);
-         Set(builder, arguments, value);
+         foreach (var expression in arguments)
+         {
+            expression.Generate(builder);
+         }
          builder.Swap();
       }
       else
