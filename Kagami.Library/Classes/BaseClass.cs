@@ -345,7 +345,7 @@ public abstract class BaseClass
       registerMessage("sort(_<Lambda>,asc:_<Boolean>)",
          (obj, message) => iteratorFunc<Lambda, KBoolean>(obj, message, (i, l, b) => i.Sort(l, b.Value)));
       registerMessage("sort(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Sort(l, true)));
-      registerMessage("sort(_<Boolean>)", (obj, message) => iteratorFunc<KBoolean>(obj, message, (i, b) => i.Sort(b.Value)));
+      registerMessage("sort(ascending:_<Boolean>)", (obj, message) => iteratorFunc<KBoolean>(obj, message, (i, b) => i.Sort(b.Value)));
       registerMessage("sort()", (obj, _) => iteratorFunc(obj, i => i.Sort(true)));
       registerMessage("foldl".Selector("_", "_<Lambda>"),
          (obj, message) => iteratorFunc<IObject, Lambda>(obj, message, (i, o, l) => i.FoldLeft(o, l)));

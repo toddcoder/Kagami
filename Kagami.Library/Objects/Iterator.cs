@@ -628,6 +628,10 @@ public class Iterator : IObject, IIterator
          {
             sum = (INumeric)apply(sum, numeric, (x, y) => x + y, (x, y) => x + y, (x, y) => x + y, (x, y) => x.Add(y), "+");
          }
+         else
+         {
+            throw incompatibleClasses(value, "Numeric");
+         }
       }
 
       return sum;

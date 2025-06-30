@@ -52,7 +52,7 @@ public partial class Playground : Form
    protected UiAction uiStatus = new();
    protected UiAction uiRun = new();
    protected string[] fieldNames = [];
-   protected bool autoColorize = true;
+   protected bool autoColorize;
 
    public Playground()
    {
@@ -138,7 +138,7 @@ public partial class Playground : Form
          {
             autoColorize = !autoColorize;
             ((ToolStripMenuItem)s!).Checked = autoColorize;
-         }, isChecked: true);
+         });
          menus.Menu("&Insert");
          menus.Menu("open sys", (_, _) => insertText("open sys\n\n", 0, 0), "^%S");
          menus.Menu("open math", (_, _) => insertText("open math\n\n", 0, 0), "^%M");
