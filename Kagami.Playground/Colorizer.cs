@@ -60,6 +60,7 @@ public class Colorizer
       Library.Parsers.Color.Char => true,
       Library.Parsers.Color.Selector => true,
       Library.Parsers.Color.Regex => true,
+      Library.Parsers.Color.Structure => true,
       _ => false
    };
 
@@ -97,7 +98,7 @@ public class Colorizer
       Library.Parsers.Color.NumberPart => Color.Green,
       Library.Parsers.Color.Operator => Color.BlueViolet,
       Library.Parsers.Color.Identifier => Color.Blue,
-      Library.Parsers.Color.Structure => Color.Black,
+      Library.Parsers.Color.Structure => Color.DarkSlateBlue,
       Library.Parsers.Color.Whitespace => Color.Black,
       Library.Parsers.Color.Comment => Color.FromArgb(128, 128, 128),
       Library.Parsers.Color.Message => Color.Teal,

@@ -25,7 +25,7 @@ public partial class SendMessageAssignParser : EndingInExpressionParser
       isOptional = tokens[2].Text == "#";
       messageName = tokens[4].Text;
       operationSource = tokens[6].Text;
-      state.Colorize(tokens, Color.Whitespace, Color.Structure, Color.Message, Color.Whitespace, Color.Operator, Color.Structure);
+      state.Colorize(tokens, Color.Whitespace, Color.Structure, Color.Message, Color.Message, Color.Whitespace, Color.Operator, Color.Structure);
 
       return unit;
    }

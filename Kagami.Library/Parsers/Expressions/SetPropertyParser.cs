@@ -14,7 +14,7 @@ public partial class SetPropertyParser(ExpressionBuilder builder, string tempObj
    protected string propertyName = "";
 
 
-   [GeneratedRegex($@"^(\s*)({REGEX_FIELD})(\s*)=")]
+   [GeneratedRegex($@"^(\s*)({REGEX_FIELD})(\s*)(=)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)

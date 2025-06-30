@@ -52,6 +52,7 @@ public partial class Playground : Form
    protected UiAction uiStatus = new();
    protected UiAction uiRun = new();
    protected string[] fieldNames = [];
+   protected bool autoColorize = true;
 
    public Playground()
    {
@@ -133,6 +134,11 @@ public partial class Playground : Form
             tracing = !tracing;
             ((ToolStripMenuItem)s!).Checked = tracing;
          }, "^T");
+         menus.Menu("Auto colorize", (s, _) =>
+         {
+            autoColorize = !autoColorize;
+            ((ToolStripMenuItem)s!).Checked = autoColorize;
+         }, isChecked: true);
          menus.Menu("&Insert");
          menus.Menu("open sys", (_, _) => insertText("open sys\n\n", 0, 0), "^%S");
          menus.Menu("open math", (_, _) => insertText("open math\n\n", 0, 0), "^%M");
@@ -583,6 +589,24 @@ public partial class Playground : Form
          isDirty = true;
          document.Dirty();
          uiStatus.Message("changed...");
+
+         if (autoColorize)
+         {
+            var compiler = new Compiler(textEditor.Text, new CompilerConfiguration(), context);
+            var _result = compiler.Colorize();
+            if (_result)
+            {
+               var state = textEditor.StopAutoScrollingAlways();
+               try
+               {
+                  colorizer.Colorize(compiler.Tokens);
+               }
+               finally
+               {
+                  textEditor.ResumeAutoScrollingAlways(state);
+               }
+            }
+         }
       }
    }
 

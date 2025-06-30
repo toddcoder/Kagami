@@ -82,6 +82,39 @@ public class Compiler
       }
    }
 
+   public Result<Unit> Colorize()
+   {
+      Module.Global.ActivateWith(() => new Module());
+
+      var state = new ParseState(source);
+      var statementsParser = new StatementsParser();
+
+      ResetFieldUniqueID();
+      ResetObjectUniqueID();
+
+      while (state.More)
+      {
+         var _scan = statementsParser.Scan(state);
+         if (_scan)
+         {
+         }
+         else if (_scan.Exception is (true, var exception))
+         {
+            ExceptionIndex = state.ExceptionIndex;
+            return exception;
+         }
+         else
+         {
+            ExceptionIndex = state.CurrentSource.Length;
+            return fail($"Didn't understand {state.CurrentSource}");
+         }
+      }
+
+      Tokens = state.Tokens;
+
+      return unit;
+   }
+
    public Maybe<int> ExceptionIndex { get; set; } = nil;
 
    public Token[] Tokens { get; set; } = [];
