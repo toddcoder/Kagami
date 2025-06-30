@@ -1,9 +1,9 @@
-﻿using Kagami.Library.Classes;
-using Kagami.Library.Runtime;
-using Core.Collections;
+﻿using Core.Collections;
 using Core.Dates.Now;
 using Core.Enumerables;
 using Core.Monads;
+using Kagami.Library.Classes;
+using Kagami.Library.Runtime;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.CollectionFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
@@ -881,29 +881,25 @@ public class Iterator : IObject, IIterator
 
    public IObject Rotate(int count)
    {
-      var postfix = new List<IObject>();
-      var item = Next();
-      for (var i = 0; i < count; i++)
-      {
-         if (item is (true, var obj))
-         {
-            postfix.Add(obj);
-         }
+      var list = List().ToList();
 
-         item = Next();
+      if (count > 0)
+      {
+         var rotatedList = list.Take(count).ToList();
+         var retainedList = list.Skip(count).ToList();
+         retainedList.AddRange(rotatedList);
+         list = retainedList;
+      }
+      else
+      {
+         var length = list.Count;
+         var rotatedList = list.Skip(length + count).ToList();
+         var retainedList = list.Take(length + count).ToList();
+         rotatedList.AddRange(retainedList);
+         list = rotatedList;
       }
 
-      var result = new List<IObject>();
-
-      while (item is (true, var obj))
-      {
-         result.Add(obj);
-         item = Next();
-      }
-
-      result.AddRange(postfix);
-
-      return collectionClass.Revert(result);
+      return collectionClass.Revert(list);
    }
 
    protected static void rotateRight(List<IObject> list, int count)
