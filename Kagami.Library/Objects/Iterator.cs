@@ -780,7 +780,7 @@ public class Iterator : IObject, IIterator
       return collectionClass.Revert(outerList);
    }
 
-   public virtual IObject Distinct() => collectionClass.Revert(List().ToList().Distinct());
+   public virtual IObject Unique() => collectionClass.Revert(List().ToList().Distinct());
 
    public IObject Span(Lambda predicate)
    {
@@ -1095,6 +1095,20 @@ public class Iterator : IObject, IIterator
          {
             break;
          }
+      }
+
+      return collectionClass.Revert(result);
+   }
+
+   public IObject Roll(int count)
+   {
+      var random = new Random(NowServer.Now.Millisecond);
+      List<IObject> result = [];
+      IObject[] array = [.. List()];
+      for (var i = 0; i < count; i++)
+      {
+         var randomIndex = random.Next(array.Length);
+         result.Add(array[randomIndex]);
       }
 
       return collectionClass.Revert(result);

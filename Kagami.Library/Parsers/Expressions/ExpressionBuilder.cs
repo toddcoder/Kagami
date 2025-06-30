@@ -1,6 +1,7 @@
 ﻿using Kagami.Library.Nodes.Symbols;
 using Core.Enumerables;
 using Core.Monads;
+using Core.Monads.Lazy;
 using Core.Numbers;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Objects;
@@ -8,7 +9,7 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class ExpressionBuilder(Bits32<ExpressionFlags> flags, bool acknowlegeImplicit = true)
+public class ExpressionBuilder(Bits32<ExpressionFlags> flags, bool acknowledgeImplicit = true)
 {
    protected SymbolStack stack = new();
    protected List<Symbol> symbols = [];
@@ -31,7 +32,7 @@ public class ExpressionBuilder(Bits32<ExpressionFlags> flags, bool acknowlegeImp
 
    public void Add(Symbol symbol)
    {
-      if (acknowlegeImplicit && symbol is ImplicitSymbol)
+      if (acknowledgeImplicit && symbol is ImplicitSymbol or ImplicitZip)
       {
          containsImplicitOperator = true;
       }
@@ -97,6 +98,7 @@ public class ExpressionBuilder(Bits32<ExpressionFlags> flags, bool acknowlegeImp
    protected static Result<Expression> generateMap(Expression originalExpression, ExpressionFlags flags)
    {
       var symbols = originalExpression.Symbols;
+      LazyMaybe<int> _zipIndex1 = nil;
       var _index = symbols.Find(s => s is ImplicitSymbol);
       if (_index is (true, var index))
       {
@@ -114,6 +116,33 @@ public class ExpressionBuilder(Bits32<ExpressionFlags> flags, bool acknowlegeImp
          builder.Add(new SendMessageSymbol(selector, false, lambda));
 
          return builder.ToExpression();
+      }
+      else if (_zipIndex1.ValueOf(symbols.Find(s => s is ImplicitZip)) is (true, var zipIndex1))
+      {
+         var _zipIndex2 = symbols.Find(s => s is ImplicitZip, zipIndex1 + 1);
+         if (_zipIndex2 is (true, var zipIndex2))
+         {
+            var sourceSymbol1 = symbols[zipIndex1 - 1];
+            symbols[zipIndex1 - 1] = new FieldSymbol("__$0");
+            symbols[zipIndex1] = new NoOpSymbol();
+            var sourceSymbol2 = symbols[zipIndex2 - 1];
+            symbols[zipIndex2 - 1] = new FieldSymbol("__$1");
+            symbols[zipIndex2] = new NoOpSymbol();
+
+            var bodyExpression = new Expression(symbols);
+            var block = new Block(bodyExpression);
+            var lambda = new LambdaSymbol(2, block);
+
+            var builder = new ExpressionBuilder(flags, false);
+            builder.Add(sourceSymbol1);
+            builder.Add(new SendMessageSymbol("zip(_,_)", false, lambda, new Expression(sourceSymbol2)));
+
+            return builder.ToExpression();
+         }
+         else
+         {
+            return originalExpression;
+         }
       }
       else
       {

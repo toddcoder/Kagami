@@ -11,14 +11,14 @@ public partial class ImplicitOperatorParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(m|i)(')")]
+   [GeneratedRegex(@"^(\s*)(m|i|z)(`)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
       var type = tokens[2].Text;
       state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Operator);
-      builder.Add(new ImplicitSymbol(type));
+      builder.Add(type == "z" ? new ImplicitZip() : new ImplicitSymbol(type));
 
       return unit;
    }

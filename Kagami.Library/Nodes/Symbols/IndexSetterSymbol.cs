@@ -1,5 +1,4 @@
-﻿using Core.Arrays;
-using Kagami.Library.Operations;
+﻿using Kagami.Library.Operations;
 using Core.Enumerables;
 using Core.Monads;
 using Kagami.Library.Objects;
@@ -37,10 +36,8 @@ public class IndexSetterSymbol : Symbol
          IndexerSymbol.Get(builder, arguments);
          value.Generate(builder);
          builder.AddRaw(operation);
-         foreach (var expression in arguments)
-         {
-            expression.Generate(builder);
-         }
+         var newSequenceSymbol = new NewSequenceSymbol(arguments);
+         newSequenceSymbol.Generate(builder);
          builder.Swap();
       }
       else
@@ -48,9 +45,8 @@ public class IndexSetterSymbol : Symbol
          Set(builder, arguments, value);
       }
 
-      var length = arguments.Length + 1;
-      Selector selector = $"[]=({length.Repeat("_")})";
-      builder.SendMessage(selector, length);
+      Selector selector = "[]=(_,_)";
+      builder.SendMessage(selector, 2);
    }
 
    public override Precedence Precedence => Precedence.SendMessage;

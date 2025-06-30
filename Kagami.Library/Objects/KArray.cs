@@ -157,7 +157,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
    {
       get
       {
-         var result = new List<IObject>();
+         List<IObject> result = [];
          foreach (var index in indexList(sequence, list.Count))
          {
             result.Add(list[index]);
@@ -201,6 +201,20 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
             }
          }
       }
+   }
+
+   public IObject FromOpenRange(OpenRange openRange)
+   {
+      List<IObject> result = [];
+      var iterator = openRange.GetIterator(true);
+      var _item = iterator.Next();
+      while (_item is (true, Int { Value: > -1 } i) && i.Value < list.Count)
+      {
+         result.Add(list[i.Value]);
+         _item = iterator.Next();
+      }
+
+      return new KArray(result);
    }
 
    protected void throwIfSelf(IObject value)

@@ -78,6 +78,7 @@ public class StringClass : BaseClass, ICollectionClass
       messages["replace".Selector("<Regex>", "<Lambda>")] =
          (obj, msg) => function<KString, Regex, Lambda>(obj, msg, (s, r, l) => r.Replace(s.Value, l));
       messages["squeeze()"] = (obj, _) => function<KString>(obj, s => s.Squeeze());
+      messages["isMatch(_<Regex>)"] = (obj, msg) => function<KString, Regex>(obj, msg, (s, r) => r.IsMatch(s.Value));
    }
 
    protected static IObject getIndexed(KString s, IObject i)

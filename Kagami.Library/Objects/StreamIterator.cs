@@ -271,7 +271,7 @@ public class StreamIterator : IObject, IIterator
 
    public IObject Shape(int rows, int columns) => terminate().Shape(rows, columns);
 
-   public IObject Distinct() => Copy(new DistinctAction());
+   public IObject Unique() => Copy(new DistinctAction());
 
    public IObject Span(Lambda predicate) => terminate().Span(predicate);
 
@@ -334,6 +334,8 @@ public class StreamIterator : IObject, IIterator
    public IObject Partition(Lambda lambda) => terminate().Partition(lambda);
 
    public IObject Pick(int count) => terminate().Pick(count);
+
+   public IObject Roll(int count) => terminate().Roll(count);
 
    public BaseClass Equivalent() => new CollectionClass();
 

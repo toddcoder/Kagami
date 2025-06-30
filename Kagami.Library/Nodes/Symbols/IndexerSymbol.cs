@@ -1,7 +1,9 @@
 ﻿using Core.Arrays;
 using Kagami.Library.Operations;
 using Core.Enumerables;
+using Core.Monads;
 using Kagami.Library.Objects;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Nodes.Symbols;
 
@@ -9,17 +11,32 @@ public class IndexerSymbol : Symbol
 {
    public static void Get(OperationsBuilder builder, Expression[] arguments)
    {
-      GetIndex(builder, arguments);
-      Selector selector = $"[]({arguments.Length.Repeat("_")})";
-      builder.SendMessage(selector, arguments.Length);
+      var _symbol = GetIndex(builder, arguments);
+      if (_symbol is (true, OpenRangeSymbol))
+      {
+         Selector selector = "fromOpenRange(_)";
+         builder.SendMessage(selector, 1);
+      }
+      else
+      {
+         Selector selector = "[](_)";
+         builder.SendMessage(selector, 1);
+      }
    }
 
-   public static void GetIndex(OperationsBuilder builder, Expression[] arguments)
+   public static Maybe<Symbol> GetIndex(OperationsBuilder builder, Expression[] arguments)
    {
+      Maybe<Symbol> _symbol = nil;
       foreach (var expression in arguments)
       {
          expression.Generate(builder);
+         if (!_symbol && expression.Symbols.Last() is (true, OpenRangeSymbol openRange))
+         {
+            _symbol = openRange;
+         }
       }
+
+      return _symbol;
    }
 
    protected Expression[] arguments;
@@ -35,7 +52,19 @@ public class IndexerSymbol : Symbol
 
    public override void Generate(OperationsBuilder builder)
    {
-      Get(builder, arguments);
+      var newSequenceSymbol = new NewSequenceSymbol(arguments);
+      newSequenceSymbol.Generate(builder);
+      var isOpenRange = newSequenceSymbol.IsOpenRange;
+      if (isOpenRange)
+      {
+         Selector selector = "fromOpenRange(_)";
+         builder.SendMessage(selector, 1);
+      }
+      else
+      {
+         Selector selector = "[](_)";
+         builder.SendMessage(selector, 1);
+      }
    }
 
    public override string ToString() => $"[{arguments.ToString(", ")}]";

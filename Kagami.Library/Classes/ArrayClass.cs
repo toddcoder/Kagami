@@ -59,6 +59,8 @@ public class ArrayClass : BaseClass, ICollectionClass
          return KVoid.Value;
       });
       messages["transpose()"] = (obj, _) => function<KArray>(obj, a => a.Transpose());
+      messages["fromOpenRange(_<OpenRange>)"] = (obj, msg) =>
+         function<KArray, OpenRange>(obj, msg, (a, r) => a.FromOpenRange(r));
    }
 
    protected static IObject getIndexed(KArray a, IObject i)
