@@ -13,18 +13,17 @@ public partial class UserOperatorParser : SymbolParser
    {
    }
 
-   //public override string Pattern => $"^ /(/s*) /({REGEX_FUNCTION_NAME}) /(/s+)";
 
-   [GeneratedRegex(@$"^(\s*)({REGEX_FUNCTION_NAME})(\s+)", RegexOptions.Compiled)]
+   [GeneratedRegex(@$"^(\s*)({REGEX_FUNCTION_NAME})")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
       var operatorName = tokens[2].Text;
-      if (Module.Global.Value.OperatorExists(operatorName))
+      if (Module.Global.Value.GetOperator(operatorName) is (true, var operatorType))
       {
-         state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Whitespace);
-         builder.Add(new OperatorSymbol(operatorName));
+         state.Colorize(tokens, Color.Whitespace, Color.Operator);
+         builder.Add(new OperatorSymbol(operatorType));
          return unit;
       }
       else

@@ -4,6 +4,7 @@ using Core.Collections;
 using Core.Monads;
 using Core.Objects;
 using Kagami.Library.Inclusions;
+using Kagami.Library.Parsers;
 using static Kagami.Library.AllExceptions;
 using static Core.Monads.MonadFunctions;
 
@@ -91,7 +92,7 @@ public class Module
    protected StringHash<Inclusion> inclusions = [];
    protected Set<string> forwardReferences = [];
    protected Hash<string, string> dataReferences = [];
-   protected Set<string> operators = [];
+   protected StringHash<OperatorType> operators = [];
    protected Hash<Guid, string> bindings = [];
    protected Hash<Guid, string> retrievedFields = [];
 
@@ -143,20 +144,22 @@ public class Module
 
    public Maybe<string> FullDataComparisandName(string name) => dataReferences.Maybe[name].Map(s => $"{s}.{name}");
 
-   public bool RegisterOperator(string name)
+   public bool RegisterOperator(OperatorType operatorType)
    {
-      if (operators.Contains(name))
+      if (operators.ContainsKey(operatorType.FunctionName))
       {
          return false;
       }
       else
       {
-         operators.Add(name);
+         operators[operatorType.FunctionName] = operatorType;
          return true;
       }
    }
 
-   public bool OperatorExists(string name) => operators.Contains(name);
+   //public bool OperatorExists(OperatorType operatorType) => operators.ContainsKey(operatorType.FunctionName);
+
+   public Maybe<OperatorType> GetOperator(string functionName) => operators.Maybe[functionName];
 
    public Result<Unit> Alias(string alias, string className)
    {

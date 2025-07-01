@@ -6,6 +6,7 @@ public class PrefixParser(ExpressionBuilder builder) : MultiParser
    {
       get
       {
+         yield return new UserOperatorParser(builder);
          if (builder.Flags[ExpressionFlags.Comparisand])
          {
             yield return new ComparisandBooleanParser(builder);

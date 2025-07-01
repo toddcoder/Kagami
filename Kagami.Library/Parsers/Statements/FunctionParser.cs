@@ -17,13 +17,14 @@ public partial class FunctionParser : StatementParser
 {
    protected Maybe<Function> _function = nil;
 
-   [GeneratedRegex($@"^(\s*)(override\s+)?(func|op|macro)(\s+)(?:({REGEX_CLASS_GETTING})(\.))?({REGEX_FUNCTION_NAME})(\()?")]
+   [GeneratedRegex($@"^(\s*)(override\s+)?(func|infix|prefix|postfix|macro)(\s+)(?:({REGEX_CLASS_GETTING})(\.))?({REGEX_FUNCTION_NAME})(\()?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
       var overriding = tokens[2].Text.StartsWith("override");
-      var isOperator = tokens[3].Text == "op";
+      var operatorText = tokens[3].Text;
+      var isOperator = operatorText is "infix" or "prefix" or "postfix";
       var isMacro = tokens[3].Text == "macro";
 
       var className = tokens[5].Text;
@@ -35,9 +36,25 @@ public partial class FunctionParser : StatementParser
       var functionName = tokens[7].Text;
       var type = tokens[8].Text;
 
-      if (isOperator && !Module.Global.Value.RegisterOperator(functionName))
+      if (isOperator)
       {
-         return operatorAlreadyExists(functionName);
+         Maybe<OperatorType> _operatorType = operatorText switch
+         {
+            "infix" => new OperatorType.Infix(functionName),
+            "prefix" => new OperatorType.Prefix(functionName),
+            "postfix" => new OperatorType.Postfix(functionName),
+            _ => nil
+         };
+         if (_operatorType is (true, var operatorType))
+         {
+            if (Module.Global.Value.RegisterOperator(operatorType))
+            {
+            }
+            else
+            {
+               return operatorAlreadyExists(functionName);
+            }
+         }
       }
 
       var needsParameters = type == "(";
