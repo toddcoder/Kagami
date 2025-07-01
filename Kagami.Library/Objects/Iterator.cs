@@ -1146,6 +1146,10 @@ public class Iterator : IObject, IIterator
       }
    }
 
+   public IObject Chunked(int count) => new ChunkedIterator(collection, count);
+
+   public IObject Windowed(int size, int step) => new WindowedIterator(collection, size, step);
+
    protected static IEnumerable<IObject> applyAgainst(List<Lambda> lambdas, List<IObject> enumerable)
    {
       return lambdas.SelectMany(_ => enumerable, (lambda, item) => lambda.Invoke(item));

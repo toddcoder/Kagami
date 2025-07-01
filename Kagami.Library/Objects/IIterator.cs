@@ -172,4 +172,8 @@ public interface IIterator : IEquivalentClass
    IObject Roll(int count);
 
    IObject Splat(int count);
+
+   IObject Chunked(int count);
+
+   IObject Windowed(int size, int step);
 }

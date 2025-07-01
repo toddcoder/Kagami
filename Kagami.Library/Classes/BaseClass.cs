@@ -433,6 +433,10 @@ public abstract class BaseClass
       registerMessage("pick(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Pick(c.Value)));
       registerMessage("roll(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Roll(c.Value)));
       registerMessage("splat(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Splat(c.Value)));
+      registerMessage("chunked(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Chunked(c.Value)));
+      registerMessage("windowed(size:_<Int>,step:_<Int>)",
+         (obj, message) => iteratorFunc<Int, Int>(obj, message, (i, s1, s2) => i.Windowed(s1.Value, s2.Value)));
+      registerMessage("windowed(size:_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, s) => i.Windowed(s.Value, 1)));
    }
 
    public virtual bool MatchCompatible(BaseClass otherClass) => Name == otherClass.Name;

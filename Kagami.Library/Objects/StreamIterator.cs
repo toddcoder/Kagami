@@ -339,6 +339,10 @@ public class StreamIterator : IObject, IIterator
 
    public IObject Splat(int count) => terminate().Splat(count);
 
+   public IObject Chunked(int count) => terminate().Chunked(count);
+   
+   public IObject Windowed(int size, int step) => terminate().Windowed(size, step);
+
    public BaseClass Equivalent() => new CollectionClass();
 
    public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
