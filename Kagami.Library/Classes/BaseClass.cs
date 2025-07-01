@@ -68,11 +68,15 @@ public abstract class BaseClass
       registerMessage("class".get(), (obj, _) => new Class(obj.ClassName));
       registerMessage("match(_)", match);
       messages["isNumber".get()] = (_, _) => KBoolean.False;
-      registerMessage("send(_,_)",
-         (obj, message) => function<IObject, KString>(obj, message, (o, n) => sendMessage(o, n.Value, message.Arguments.Pass(1))));
-      registerMessage("respondsTo(_)", (obj, message) => (KBoolean)classOf(obj).RespondsTo(message.Arguments[0].AsString));
+      registerMessage("send(_,_...)",
+         (obj, message) => function<IObject, Selector>(obj, message, (o, n) => sendMessage(o, n, message.Arguments.Pass(1))));
+      registerMessage("send(_)",
+         (obj, message) => function<IObject, Selector>(obj, message, (o, n) => sendMessage(o, n, Arguments.Empty)));
+      registerMessage("receives(_)", (obj, message) => (KBoolean)classOf(obj).RespondsTo((Selector)message.Arguments[0]));
       registerMessage("seq(_)", (obj, message) => new OpenRange(obj, (Lambda)message.Arguments[0]));
       registerMessage("format(_)", (obj, message) => format(obj, message.Arguments[0].AsString));
+      registerMessage("id".get(), (obj, _) => KString.StringObject(obj.Id.ToString()));
+      registerMessage("isTrue".get(), (obj, _) => KBoolean.BooleanObject(obj.IsTrue));
    }
 
    protected static KString format(IObject obj, string formattingString)
@@ -162,7 +166,7 @@ public abstract class BaseClass
       }
       else
       {
-         throw messageNotFound(classOf(obj), selector);
+         return DynamicInvoke(obj, message); //throw messageNotFound(classOf(obj), selector);
       }
    }
 
@@ -270,6 +274,7 @@ public abstract class BaseClass
       registerMessage("indexed()", (obj, _) => collectionFunc(obj, c => (IObject)c.GetIndexedIterator()));
       registerMessage("[](_<SkipTake>)", (obj, message) => ((ISkipTakeable)obj)[(SkipTake)message.Arguments[0]]);
       registerMessage("range()", (obj, _) => collectionFunc(obj, c => new KRange(new Int(0), c.Length, false)));
+      registerMessage("one()", (obj, _) => collectionFunc(obj, c => c.One()));
 
       loadIteratorMessages();
    }
@@ -340,7 +345,7 @@ public abstract class BaseClass
       registerMessage("sort(_<Lambda>,asc:_<Boolean>)",
          (obj, message) => iteratorFunc<Lambda, KBoolean>(obj, message, (i, l, b) => i.Sort(l, b.Value)));
       registerMessage("sort(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Sort(l, true)));
-      registerMessage("sort(_<Boolean>)", (obj, message) => iteratorFunc<KBoolean>(obj, message, (i, b) => i.Sort(b.Value)));
+      registerMessage("sort(ascending:_<Boolean>)", (obj, message) => iteratorFunc<KBoolean>(obj, message, (i, b) => i.Sort(b.Value)));
       registerMessage("sort()", (obj, _) => iteratorFunc(obj, i => i.Sort(true)));
       registerMessage("foldl".Selector("_", "_<Lambda>"),
          (obj, message) => iteratorFunc<IObject, Lambda>(obj, message, (i, o, l) => i.FoldLeft(o, l)));
@@ -399,7 +404,7 @@ public abstract class BaseClass
       registerMessage("/(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.By(j.Value)));
       registerMessage("window(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Window(j.Value)));
       registerMessage("//(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Window(j.Value)));
-      registerMessage("distinct()", (obj, _) => iteratorFunc(obj, i => i.Distinct()));
+      registerMessage("distinct()", (obj, _) => iteratorFunc(obj, i => i.Unique()));
       registerMessage("span".Selector("_<Lambda>"), (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Span(l)));
       registerMessage("span".Selector("_<Int>"), (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Span(j.Value)));
       registerMessage("shuffle()", (obj, _) => iteratorFunc(obj, i => i.Shuffle()));
@@ -424,6 +429,10 @@ public abstract class BaseClass
       registerMessage("shape(_<Int>,_<Int>)",
          (obj, message) => iteratorFunc<Int, Int>(obj, message, (i, j, k) => i.Shape(j.Value, k.Value)));
       registerMessage("column(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Column(c.Value)));
+      registerMessage("partition(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Partition(l)));
+      registerMessage("pick(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Pick(c.Value)));
+      registerMessage("roll(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Roll(c.Value)));
+      registerMessage("splat(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Splat(c.Value)));
    }
 
    public virtual bool MatchCompatible(BaseClass otherClass) => Name == otherClass.Name;

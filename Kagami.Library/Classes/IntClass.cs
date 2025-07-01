@@ -6,6 +6,8 @@ namespace Kagami.Library.Classes;
 
 public class IntClass : BaseClass, IParse, IEquivalentClass
 {
+   protected Lazy<Random> random = new(() => new Random(DateTime.Now.Microsecond));
+
    public override string Name => "Int";
 
    public override void RegisterMessages()
@@ -39,6 +41,10 @@ public class IntClass : BaseClass, IParse, IEquivalentClass
       messages["<<(_)"] = (obj, msg) => function<Int, IObject>(obj, msg, (i, o) => i.ShiftLeft(o));
       messages[">>(_)"] = (obj, msg) => function<Int, IObject>(obj, msg, (i, o) => i.ShiftRight(o));
       messages["nextPrime()"] = (obj, _) => function<Int>(obj, i => i.NextPrime());
+      messages["max(_<Int>)"] = (obj, msg) => function<Int, Int>(obj, msg, (i1, i2) => i1.Max(i2));
+      messages["min(_<Int>)"] = (obj, msg) => function<Int, Int>(obj, msg, (i1, i2) => i1.Min(i2));
+      messages["rand()"] = (obj, _) => function<Int>(obj, i => i.Rand(random.Value));
+      messages["rand(_<Int>)"] = (obj, msg) => function<Int, Int>(obj, msg, (i1, i2) => i1.Rand(random.Value, i2));
    }
 
    public override void RegisterClassMessages()
@@ -47,7 +53,8 @@ public class IntClass : BaseClass, IParse, IEquivalentClass
 
       classMessages["min".get()] = (_, _) => Int.IntObject(int.MinValue);
       classMessages["max".get()] = (_, _) => Int.IntObject(int.MaxValue);
-      classMessages["parse"] = (_, msg) => parse(msg.Arguments[0].AsString);
+      classMessages["parse(_)"] = (_, msg) => parse(msg.Arguments[0].AsString);
+      classMessages["rand()"] = (_, _) => (Int)random.Value.Next();
    }
 
    public static IObject parse(string value)

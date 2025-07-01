@@ -12,9 +12,8 @@ public partial class TryBlockParser : SymbolParser
    {
    }
 
-   //public override string Pattern => $"^ /(/s*) /'try' /({REGEX_EOL})";
 
-   [GeneratedRegex(@"^(\s*)(try) \b", RegexOptions.Compiled)]
+   [GeneratedRegex(@"^(\s*)(try)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -32,7 +31,7 @@ public partial class TryBlockParser : SymbolParser
          var _invokeExpression = invokeBuilder.ToExpression();
          if (_invokeExpression is (true, var invokeExpression))
          {
-            builder.Add(new TrySymbol(invokeExpression));
+            //builder.Add(new TrySymbol(invokeExpression));
             return unit;
          }
          else

@@ -46,6 +46,8 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
    public bool IsTrue => value.Length > 0;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public int Compare(IObject obj) => CompareTo((KString)obj);
 
    public IObject Object => this;
@@ -165,6 +167,8 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
    public KString MakeString(string connector) => makeString(this, connector);
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
+
+   public IObject One() => this;
 
    public KString Repeat(int count) => value.Repeat(count);
 
@@ -328,6 +332,25 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
       return result.ToString();
    }
 
+   public KString Translate(Dictionary dictionary)
+   {
+      var builder = new StringBuilder();
+      foreach (var ch in value)
+      {
+         var result = dictionary[(KChar)ch];
+         if (result is Some some)
+         {
+            builder.Append(((KChar)some.Value).Value);
+         }
+         else
+         {
+            builder.Append(ch);
+         }
+      }
+
+      return builder.ToString();
+   }
+
    public KString Truncate(int width, bool ellipses = true) => value.Truncate(width, ellipses);
 
    public IObject Find(ITextFinding textFinding, int startIndex, bool reverse) => textFinding.Find(value, startIndex, reverse);
@@ -429,4 +452,15 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
    public KString Succ() => value.Succ();
 
    public KString Pred() => value.Pred();
+
+   public KString Squeeze()
+   {
+      var set = new Set<char>();
+      foreach (var ch in value)
+      {
+         set.Add(ch);
+      }
+
+      return new KString(new string([.. set]));
+   }
 }

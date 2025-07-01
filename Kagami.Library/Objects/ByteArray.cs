@@ -30,6 +30,8 @@ public readonly struct ByteArray : IObject, ICollection, IObjectCompare
 
    public bool IsTrue => bytes.Length > 0;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new Iterator(this);
 
    public Maybe<IObject> Next(int index) => index < bytes.Length ? KByte.ByteObject(bytes[index]).Some() : nil;
@@ -49,6 +51,8 @@ public readonly struct ByteArray : IObject, ICollection, IObjectCompare
    public KString MakeString(string connector) => makeString(this, connector);
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
+
+   public IObject One() => bytes.Length == 1 ? (KByte)bytes[0] : this;
 
    public int Compare(IObject obj) => compareCollections(this, obj);
 

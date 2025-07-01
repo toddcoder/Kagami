@@ -32,7 +32,6 @@ public class AssignToField : Statement
          builder.AddRaw(operation);
       }
 
-      builder.Peek(Index);
       builder.AssignField(fieldName, false);
    }
 

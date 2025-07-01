@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using Kagami.Library.Parsers;
+﻿using Kagami.Library.Parsers;
 using Core.Matching;
 using Color = System.Drawing.Color;
 
@@ -10,9 +9,6 @@ public class Colorizer
 {
    protected RichTextBox textBox;
    protected int parenthesesCount;
-
-   [DllImport("user32.dll")]
-   public static extern int SendMessage(IntPtr hWnd, int msg, bool wParam, int lParam);
 
    public Colorizer(RichTextBox textBox)
    {
@@ -63,6 +59,8 @@ public class Colorizer
       Library.Parsers.Color.Keyword => true,
       Library.Parsers.Color.Char => true,
       Library.Parsers.Color.Selector => true,
+      Library.Parsers.Color.Regex => true,
+      Library.Parsers.Color.Structure => true,
       _ => false
    };
 
@@ -93,19 +91,19 @@ public class Colorizer
 
    protected static Color getForeColor(Library.Parsers.Color color, ref int parenthesesCount) => color switch
    {
-      Library.Parsers.Color.String => Color.FromArgb(38, 205, 0),
-      Library.Parsers.Color.StringPart => Color.FromArgb(38, 205, 0),
-      Library.Parsers.Color.Char => Color.FromArgb(38, 205, 0),
+      Library.Parsers.Color.String => Color.Teal,
+      Library.Parsers.Color.StringPart => Color.Teal,
+      Library.Parsers.Color.Char => Color.Teal,
       Library.Parsers.Color.Number => Color.Green,
       Library.Parsers.Color.NumberPart => Color.Green,
       Library.Parsers.Color.Operator => Color.BlueViolet,
       Library.Parsers.Color.Identifier => Color.Blue,
-      Library.Parsers.Color.Structure => Color.Black,
+      Library.Parsers.Color.Structure => Color.DarkSlateBlue,
       Library.Parsers.Color.Whitespace => Color.Black,
       Library.Parsers.Color.Comment => Color.FromArgb(128, 128, 128),
       Library.Parsers.Color.Message => Color.Teal,
       Library.Parsers.Color.Format => Color.Violet,
-      Library.Parsers.Color.Date => Color.DarkOliveGreen,
+      Library.Parsers.Color.Date => Color.Olive,
       Library.Parsers.Color.Collection => Color.Purple,
       Library.Parsers.Color.CollectionPart => Color.Purple,
       Library.Parsers.Color.Symbol => Color.CornflowerBlue,
@@ -118,6 +116,7 @@ public class Colorizer
       Library.Parsers.Color.OpenParenthesis => getParenthesisColor(color, ref parenthesesCount),
       Library.Parsers.Color.CloseParenthesis => getParenthesisColor(color, ref parenthesesCount),
       Library.Parsers.Color.Selector => Color.CadetBlue,
+      Library.Parsers.Color.Regex => Color.OrangeRed,
       _ => Color.Black
    };
 }

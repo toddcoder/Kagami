@@ -1,13 +1,13 @@
-﻿using System.Collections;
-using System.Text.RegularExpressions;
+﻿using Core.Collections;
+using Core.Matching;
+using Core.Monads;
+using Core.Strings;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
 using Kagami.Library.Parsers.Expressions;
-using Core.Collections;
-using Core.Matching;
-using Core.Monads;
-using Core.Strings;
+using System.Collections;
+using System.Text.RegularExpressions;
 using static Core.Monads.AttemptFunctions;
 using static Core.Monads.MonadFunctions;
 using Group = System.Text.RegularExpressions.Group;
@@ -128,6 +128,8 @@ public class ParseState : IEnumerable<Statement>
       return Scan(@"^(\s*)(\})", Color.Whitespace, Color.Structure).Map(_ => unit);
    }
 
+   public bool PeekEndBlock() => CurrentSource.IsMatch(@"^\s*\}");
+
    public int Index => index;
 
    public string Source => source;
@@ -184,6 +186,38 @@ public class ParseState : IEnumerable<Statement>
          else
          {
             return nil;
+         }
+      }
+      catch (Exception exception)
+      {
+         return exception;
+      }
+   }
+
+   public Optional<OptionalScanResult> OptionalScan(string pattern, params Color[] colors) => OptionalScan(pattern, RegexOptions.None, colors);
+
+   public Optional<OptionalScanResult> OptionalScan(string pattern, RegexOptions options, params Color[] colors)
+   {
+      try
+      {
+         var regex = new System.Text.RegularExpressions.Regex(pattern, options);
+         var matches = regex.Matches(CurrentSource);
+         if (matches.Count > 0)
+         {
+            var match = matches[0];
+            Group[] groupArray = [.. match.AllGroups().Skip(1).Take(match.Groups.Count - 1)];
+            for (var i = 0; i < Math.Min(groupArray.Length, colors.Length); i++)
+            {
+               var length = groupArray[i].Length;
+               AddToken(colors[i], length, groupArray[i].Value);
+               Move(length);
+            }
+
+            return new OptionalScanResult.Value(match.Value);
+         }
+         else
+         {
+            return new OptionalScanResult.NoValue();
          }
       }
       catch (Exception exception)
@@ -370,4 +404,20 @@ public class ParseState : IEnumerable<Statement>
    public void RegisterPattern(string patternName) => patterns.Add(patternName);
 
    public bool ContainsPattern(string patternName) => patternName.Contains(patternName);
+
+   public Optional<string> ScanFormat()
+   {
+      var _result = Scan(@"^(\[)([cdefgnprxsboi](?:-?\d+)?(?:\.\d+)?)(\])", Color.Format, Color.Format, Color.Format);
+      if (_result)
+      {
+         return _result.Map(r => r.Drop(1).Drop(-1));
+      }
+      else
+      {
+         _result = Scan(@"^(\[)([^\]]+)(\])", Color.Format, Color.Format, Color.Format);
+         _result = _result.Map(r => r.Drop(1).Drop(-1));
+      }
+
+      return _result;
+   }
 }

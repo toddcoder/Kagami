@@ -66,6 +66,8 @@ public class AwkRecord : IObject, ICollection, ITextFinding
 
    public bool IsTrue => fields.Length > 0;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new Iterator(this);
 
    public Maybe<IObject> Next(int index) => maybe<IObject>() & index < fields.Length & (() => StringObject(fields[index]));
@@ -85,6 +87,8 @@ public class AwkRecord : IObject, ICollection, ITextFinding
    public KString MakeString(string connector) => makeString(this, connector);
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
+
+   public IObject One() => Length.Value == 1 ? this[0] : this;
 
    public IObject Find(string input, int startIndex, bool reverse) => find(fields[0], input, startIndex, reverse);
 

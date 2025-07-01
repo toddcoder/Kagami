@@ -7,9 +7,11 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class EmptyValueParser : SymbolParser
 {
-   public EmptyValueParser(ExpressionBuilder builder) : base(builder) { }
+   public EmptyValueParser(ExpressionBuilder builder) : base(builder)
+   {
+   }
 
-   [GeneratedRegex(@"^(\s*)(\{}|\{:}|\(\)|\[\]|\[::\]|\[\.\.\])")]
+   [GeneratedRegex(@"^(\s*)(\{}|\{:}|\(\)|\[\]|\[::\])")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -22,7 +24,7 @@ public partial class EmptyValueParser : SymbolParser
          case "[]":
             builder.Add(new EmptyArraySymbol());
             break;
-         case "{}":
+         case "{:}":
             builder.Add(new EmptyDictionarySymbol());
             break;
          case "()":
@@ -31,7 +33,7 @@ public partial class EmptyValueParser : SymbolParser
          case "[::]":
             builder.Add(new EmptyListSymbol());
             break;
-         case "[..]":
+         case "{}":
             builder.Add(new EmptySetSymbol());
             break;
          default:

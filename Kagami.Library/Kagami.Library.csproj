@@ -12,6 +12,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants);NO_TRACE</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Core">
       <HintPath>..\References\Core.dll</HintPath>

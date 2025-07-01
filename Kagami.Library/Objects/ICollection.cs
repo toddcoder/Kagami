@@ -23,4 +23,6 @@ public interface ICollection : ISkipTakeable
    KString MakeString(string connector);
 
    IIterator GetIndexedIterator();
+
+   IObject One();
 }

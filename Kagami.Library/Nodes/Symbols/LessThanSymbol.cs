@@ -2,8 +2,7 @@
 
 namespace Kagami.Library.Nodes.Symbols;
 
-public class 
-   LessThanSymbol : Symbol, IPrefixCode
+public class LessThanSymbol : Symbol, IPrefixCode
 {
    protected bool prefix;
 

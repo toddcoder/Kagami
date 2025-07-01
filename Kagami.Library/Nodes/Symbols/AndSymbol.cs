@@ -1,35 +1,36 @@
 ﻿using Kagami.Library.Operations;
 using static Kagami.Library.Nodes.NodeFunctions;
 
-namespace Kagami.Library.Nodes.Symbols
+namespace Kagami.Library.Nodes.Symbols;
+
+public class AndSymbol : Symbol, IHasExpression
 {
-   public class AndSymbol : Symbol
+   protected Expression expression;
+
+   public AndSymbol(Expression expression) => this.expression = expression;
+
+   public override void Generate(OperationsBuilder builder)
    {
-      protected Expression expression;
+      var label = newLabel("false");
+      builder.GoToIfFalse(label);
 
-      public AndSymbol(Expression expression) => this.expression = expression;
+      expression.Generate(builder);
+      builder.GoToIfFalse(label);
 
-      public override void Generate(OperationsBuilder builder)
-      {
-         var label = newLabel("false");
-         builder.GoToIfFalse(label);
+      builder.PushBoolean(true);
+      builder.Advance(2);
 
-         expression.Generate(builder);
-         builder.GoToIfFalse(label);
+      builder.Label(label);
+      builder.PushBoolean(false);
 
-         builder.PushBoolean(true);
-         builder.Advance(2);
-
-         builder.Label(label);
-         builder.PushBoolean(false);
-
-         builder.NoOp();
-      }
-
-      public override Precedence Precedence => Precedence.And;
-
-      public override Arity Arity => Arity.Binary;
-
-      public override string ToString() => $"and ({expression})";
+      builder.NoOp();
    }
+
+   public override Precedence Precedence => Precedence.And;
+
+   public override Arity Arity => Arity.Binary;
+
+   public override string ToString() => $"and ({expression})";
+
+   public Expression Expression => expression;
 }

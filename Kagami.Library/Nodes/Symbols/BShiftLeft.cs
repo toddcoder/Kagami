@@ -1,15 +1,14 @@
 ﻿using Kagami.Library.Operations;
 
-namespace Kagami.Library.Nodes.Symbols
+namespace Kagami.Library.Nodes.Symbols;
+
+public class BShiftLeft : Symbol
 {
-   public class BShiftLeft : Symbol
-   {
-      public override void Generate(OperationsBuilder builder) => builder.BShiftLeft();
+   public override void Generate(OperationsBuilder builder) => builder.BShiftLeft();
 
-      public override Precedence Precedence => Precedence.Shift;
+   public override Precedence Precedence => Precedence.Shift;
 
-      public override Arity Arity => Arity.Binary;
+   public override Arity Arity => Arity.Binary;
 
-      public override string ToString() => "bsl";
-   }
+   public override string ToString() => "bsl";
 }

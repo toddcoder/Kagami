@@ -9,15 +9,13 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class LoopParser : StatementParser
 {
-   //public override string Pattern => $"^ /'loop' {REGEX_ANTICIPATE_END}";
-
    [GeneratedRegex($@"^(\s*)(loop)\b")]
    public override partial Regex Regex();
 
-   protected static Optional<Expression> getUntil(ParseState state)
+   protected static Optional<(bool, Expression)> getUntil(ParseState state)
    {
-      var untilParser = new UntilParser();
-      return untilParser.Scan(state).Map(_ => untilParser.Expression);
+      var untilParser = new LoopControlParser();
+      return untilParser.Scan(state).Map(_ => (untilParser.IsUntil, untilParser.Expression));
    }
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
@@ -31,9 +29,9 @@ public partial class LoopParser : StatementParser
          from e in getUntil(state)
          select (b, e);
 
-      if (_result is (true, var (block, expression)))
+      if (_result is (true, var (block, (isUntil, expression))))
       {
-         state.AddStatement(new Loop(block, expression));
+         state.AddStatement(new Loop(block, expression, isUntil));
          state.CommitTransaction();
 
          return unit;

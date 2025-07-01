@@ -42,7 +42,9 @@ namespace Kagami.Library.Objects
 
 		public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
-		public string ClassName => openRange.ClassName;
+      public IObject One() => this;
+
+      public string ClassName => openRange.ClassName;
 
 		public string AsString => openRange.AsString;
 
@@ -55,6 +57,8 @@ namespace Kagami.Library.Objects
 		public bool Match(IObject comparisand, Hash<string, IObject> bindings) => openRange.Match(comparisand, bindings);
 
 		public bool IsTrue => openRange.IsTrue;
+
+      public Guid Id { get; init; } = Guid.NewGuid();
 
       public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
    }

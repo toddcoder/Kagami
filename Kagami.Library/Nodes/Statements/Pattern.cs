@@ -33,7 +33,6 @@ public class Pattern : Statement
          var pattern = new Objects.Pattern(name, lambda, skip1Parameters);
          builder.NewField(name, false, true);
          builder.PushObject(pattern);
-         builder.Peek(Index);
          builder.AssignField(name, true);
       }
       else

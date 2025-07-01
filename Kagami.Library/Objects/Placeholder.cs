@@ -29,7 +29,7 @@ public readonly struct Placeholder : IObject, IEquatable<Placeholder>
          }
          else
          {
-            return $"existing {name}";
+            return $"use {name}";
          }
       }
    }
@@ -45,6 +45,8 @@ public readonly struct Placeholder : IObject, IEquatable<Placeholder>
    }
 
    public bool IsTrue => true;
+
+   public Guid Id { get; init; } = Guid.NewGuid();
 
    public bool Equals(Placeholder other) => string.Equals(name, other.name);
 

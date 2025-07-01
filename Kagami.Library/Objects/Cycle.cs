@@ -43,6 +43,8 @@ public class Cycle : IObject, ICollection
 
    public bool IsTrue => items.Length > 0;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public IIterator GetIterator(bool lazy) => new CycleCollection(this).GetIterator(lazy);
 
    public Maybe<IObject> Next(int index)
@@ -71,6 +73,8 @@ public class Cycle : IObject, ICollection
    public KString MakeString(string connector) => makeString(this, connector);
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
+
+   public IObject One() => this;
 
    public KTuple Items => new(items);
 

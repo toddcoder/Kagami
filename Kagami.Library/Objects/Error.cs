@@ -24,5 +24,7 @@ public readonly struct Error : IObject
 
    public bool IsTrue => message.IsNotEmpty();
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public KString Message => message;
 }

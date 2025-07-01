@@ -15,8 +15,6 @@ public partial class AssignToNewFieldParser : EndingInExpressionParser
    protected string fieldName = "";
    protected Maybe<TypeConstraint> _typeConstraint = nil;
 
-   //public override string Pattern => $"^ /('let' | 'var') /(/s+) /({REGEX_FIELD}) /b";
-
    [GeneratedRegex($@"^(\s*)(let|var)(\s+)({REGEX_FIELD})\b")]
    public override partial Regex Regex();
 
@@ -61,7 +59,7 @@ public partial class AssignToNewFieldParser : EndingInExpressionParser
 
    public override Optional<Unit> Suffix(ParseState state, Expression expression)
    {
-      state.AddStatement(new AssignToNewField(mutable, fieldName, expression, _typeConstraint));
+      state.AddStatement(new AssignToNewField(mutable, fieldName, false, expression, _typeConstraint));
       return unit;
    }
 }

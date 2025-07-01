@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Core.Matching;
+﻿using Core.Matching;
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 

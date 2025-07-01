@@ -35,4 +35,6 @@ public readonly struct YieldReturn : IObject
    public bool Match(IObject comparisand, Hash<string, IObject> bindings) => returnValue.Match(comparisand, bindings);
 
    public bool IsTrue => true;
+
+   public Guid Id { get; init; } = Guid.NewGuid();
 }

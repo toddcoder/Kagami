@@ -70,6 +70,8 @@ public readonly struct Selector : IObject, IEquatable<Selector>
 
    public bool IsTrue => true;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public bool Equals(Selector other) => image == other.image;
 
    public Selector Equivalent(bool[] booleans)

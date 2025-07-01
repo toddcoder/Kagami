@@ -13,7 +13,7 @@ public static class CommonExtensions
 
    public static string unget(this string name) => name.Substitute("^ '__$' /(.*) $", "$1");
 
-   public static string set(this string name) => $"__${name}=(_)";
+   public static string set(this string name) => $"{name}=(_)";
 
    public static Selector Selector(this string baseName, params string[] selectorItemSources)
    {

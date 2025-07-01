@@ -28,7 +28,7 @@ public partial class PostfixOperatorsParser : SymbolParser
             builder.Add(new SuccessSymbol());
             break;
          case "&":
-            builder.Add(new SendMessageSymbol("value".get()));
+            builder.Add(new SendMessageSymbol("value".get(), false));
             break;
          default:
             return nil;

@@ -4,8 +4,12 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
 
-public struct None : IObject, IOptional, IBoolean, IEquatable<None>, IMonad
+public readonly struct None : IObject, IOptional, IBoolean, IEquatable<None>, IMonad
 {
+   public None()
+   {
+   }
+
    public static IObject NoneValue => new None();
 
    public string ClassName => "None";
@@ -31,6 +35,8 @@ public struct None : IObject, IOptional, IBoolean, IEquatable<None>, IMonad
    public IObject FlatMap(Lambda ifSome, Lambda ifNone) => ifNone.Invoke();
 
    public bool IsTrue => false;
+
+   public Guid Id { get; init; } = Guid.NewGuid();
 
    public bool Equals(None other) => true;
 

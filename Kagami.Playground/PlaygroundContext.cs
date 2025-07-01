@@ -10,7 +10,6 @@ public class PlaygroundContext : IContext
 {
    protected TextWriter writer;
    protected TextReader reader;
-   protected Memo<int, string> peeks = new Memo<int, string>.Function(_ => "");
    protected bool cancelled;
    protected Putter putter = new();
 
@@ -19,8 +18,6 @@ public class PlaygroundContext : IContext
       this.writer = writer;
       this.reader = reader;
    }
-
-   public Memo<int, string> Peeks => peeks;
 
    public void Print(string value)
    {
@@ -51,10 +48,6 @@ public class PlaygroundContext : IContext
       Application.DoEvents();
       return cancelled;
    }
-
-   public void Peek(string message, int index) => peeks[index] = message;
-
-   public void ClearPeeks() => peeks.Clear();
 
    public void Cancel() => cancelled = true;
 

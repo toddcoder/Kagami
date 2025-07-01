@@ -29,6 +29,8 @@ public readonly struct NameValue : IObject, IEquatable<NameValue>, IKeyValue
 
    public bool IsTrue => value.IsTrue;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public bool Equals(NameValue other) => IsEqualTo(other);
 
    public override bool Equals(object? obj) => obj is NameValue nameValue && Equals(nameValue);

@@ -47,6 +47,10 @@ public readonly struct SelectorItem : IEnumerable<SelectorItem>
       }
 
       builder.Append("_");
+      if (SelectorItemType is SelectorItemType.Variadic)
+      {
+         builder.Append("...");
+      }
       if (TypeConstraint is (true, var typeConstraint))
       {
          builder.Append(typeConstraint.Image);

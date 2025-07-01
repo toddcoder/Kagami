@@ -106,6 +106,8 @@ public struct Rational : IObject, INumeric, IRangeItem, IComparable<Rational>, I
 
    public bool IsTrue => numerator != 0;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public int Compare(IObject obj) => compatibleCompare(this, obj);
 
    public IObject Object => this;

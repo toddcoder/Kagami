@@ -7,8 +7,6 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class MultiParameterLambdaParser : LambdaParser
 {
-   //public override string Pattern => "^ /(/s*) /'('";
-
    [GeneratedRegex(@"^([ \t]*)(\()")]
    public override partial Regex Regex();
 

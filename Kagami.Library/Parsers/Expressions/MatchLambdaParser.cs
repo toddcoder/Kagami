@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using Core.Matching;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
@@ -9,8 +10,6 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class MatchLambdaParser : SymbolParser
 {
-   //public override string Pattern => "^ /(/s*) /'|('";
-
    [GeneratedRegex(@"^([ \t]*)(\|\()")]
    public override partial Regex Regex();
 
@@ -26,7 +25,7 @@ public partial class MatchLambdaParser : SymbolParser
          from c in getExpression(state, builder.Flags | ExpressionFlags.Comparisand)
          from scanned in state.Scan(@"^(\))(\s*)(->|=>)", Color.Structure, Color.Whitespace, Color.Structure)
          from typeConstraint in parseTypeConstraint(state)
-         from b in getLambdaBlock(scanned.Contains("->"), state, builder.Flags, typeConstraint.Maybe)
+         from b in getLambdaBlock(!state.CurrentSource.IsMatch("^ /s* '{'"), scanned.EndsWith("=>"), state, builder.Flags, typeConstraint.Maybe)
          select (c, b);
 
       if (_result is (true, var (comparisand, block)))

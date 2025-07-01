@@ -17,7 +17,6 @@ namespace Kagami.Library.Nodes.Statements
       public override void Generate(OperationsBuilder builder)
       {
          expression.Generate(builder);
-         builder.Peek(Index);
          comparisand.Generate(builder);
          builder.Match();
          builder.Drop();

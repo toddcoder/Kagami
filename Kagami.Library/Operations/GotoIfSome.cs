@@ -8,16 +8,9 @@ namespace Kagami.Library.Operations;
 
 public class GoToIfSome : AddressedOperation
 {
-   protected Predicate<IOptional> predicate;
-   protected Func<IObject, Optional<IObject>> returnIfTrue;
-   protected Func<IObject, Optional<IObject>> returnIfFalse;
-
-   public GoToIfSome()
-   {
-      predicate = o => o.IsSome;
-      returnIfTrue = s => s is Objects.Some some ? some.Value.Just() : nil;
-      returnIfFalse = s => s is Objects.Some some ? some.Value.Just() : nil;
-   }
+   protected Predicate<IOptional> predicate = o => o.IsSome;
+   protected Func<IObject, Optional<IObject>> returnIfTrue = s => s is Objects.Some some ? some.Value.Just() : nil;
+   protected Func<IObject, Optional<IObject>> returnIfFalse = s => s is Objects.Some some ? some.Value.Just() : nil;
 
    public override Optional<IObject> Execute(Machine machine)
    {

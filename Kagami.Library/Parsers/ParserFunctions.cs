@@ -24,12 +24,14 @@ namespace Kagami.Library.Parsers;
 
 public static class ParserFunctions
 {
-   public const string REGEX_FIELD = "[A-Za-z_][A-Za-z_0-9]*";
+   public const string REGEX_FIELD = "[A-Za-z_`][A-Za-z_0-9]*";
    public const string REGEX_INVOKABLE = "[A-Za-z_][A-Za-z_0-9]*";
+   public const string REGEX_INVOKABLE2 = @"[A-Za-z_][A-Za-z_0-9\$]*";
    public const string REGEX_CLASS = "[A-Z][A-Za-z_0-9]*";
    public const string REGEX_CLASS_GETTING = $@"{REGEX_CLASS}(?:\. {REGEX_CLASS})?";
-   public const string REGEX_ASSIGN_OPS = @"\+|-|\*|/|/|\^|~|%|div\b";
+   public const string REGEX_ASSIGN_OPS = @"\+|-|\*|/|/|\^|~|%|div|:\b";
    public const string REGEX_FUNCTION_NAME = $@"(?:(?:{REGEX_INVOKABLE})|(?:[~`!@\#\$%\^\*\+=\|\\;<>/\?-]+)|\[\])=?";
+   public const string REGEX_FUNCTION_NAME2 = $@"(?:(?:{REGEX_INVOKABLE2})|(?:[~`!@\#\$%\^\*\+=\|\\;<>/\?-]+)|\[\])=?";
    public const string REGEX_SELECTOR = @$"(?:__\$)?{REGEX_FUNCTION_NAME}(?:\(.*\))?=?";
    public const string REGEX_EOL = @"\r\n|\r|\n|$";
    public const string REGEX_ANTICIPATE_END = $"(?=(?:{REGEX_EOL}))";
@@ -39,8 +41,6 @@ public static class ParserFunctions
       @"skipUntil|!|\?|\*|@|\$";
    public const string REGEX_LIST_LEFT = @"\[:";
    public const string REGEX_LIST_RIGHT = @":\]";
-   public const string REGEX_SET_LEFT = @"\[\.";
-   public const string REGEX_SET_RIGHT = @"\.\]";
 
    public static Optional<char> fromHex(string text)
    {
@@ -77,7 +77,7 @@ public static class ParserFunctions
 
    public static Optional<Expression> getCompoundComparisands(ParseState state, string fieldName)
    {
-      var flags = ExpressionFlags.Comparisand | ExpressionFlags.OmitAnd | ExpressionFlags.OmitIf;
+      var flags = ExpressionFlags.Comparisand | ExpressionFlags.OmitAnd | ExpressionFlags.OmitIf | ExpressionFlags.OmitAssign;
       var builder = new ExpressionBuilder(flags);
 
       var _comparisand = getExpression(state, flags);
@@ -191,6 +191,7 @@ public static class ParserFunctions
       "^" => new Raise(),
       "~" => new Concatenate(),
       "%" => new Remainder(),
+      ":" => new NoOp(),
       _ => fail($"Didn't recognize operator {source}")
    };
 
@@ -523,7 +524,7 @@ public static class ParserFunctions
 
    private static Optional<bool> parseCapturing(ParseState state)
    {
-      return state.Scan(@"^(\s*\+)?", Color.Structure).Map(s => s.IsNotEmpty());
+      return state.Scan(@"^(\s*cap\s+)?", Color.Keyword).Map(s => s.IsNotEmpty());
    }
 
    private static Optional<string> parseParameterName(ParseState state)
@@ -651,7 +652,7 @@ public static class ParserFunctions
             _ => nil
          };
          state.SetReturnType(_typeConstraint);
-         var _scanned = state.Scan(@"^(\s*)(=)(\s*)", Color.Whitespace, Color.Structure, Color.Whitespace);
+         var _scanned = state.Scan(@"^(\s*)(=>)(\s*)", Color.Whitespace, Color.Structure, Color.Whitespace);
          if (_scanned)
          {
             return getSingleLine(state, _typeConstraint);
@@ -1033,10 +1034,10 @@ public static class ParserFunctions
       }
    }
 
-   public static Optional<(Symbol, Expression, PossibleExpression)> getInnerComprehension(ParseState state) =>
+   public static Optional<(Symbol, Expression, PossibleExpression)> getComprehensionBody(ParseState state) =>
       from comparisand in getValue(state, ExpressionFlags.Comparisand | ExpressionFlags.OmitIn)
       from scanned in state.Scan(@"^(\s+)(in)", Color.Whitespace, Color.Keyword)
-      from source in getExpression(state, ExpressionFlags.OmitIf | ExpressionFlags.OmitComprehension | ExpressionFlags.OmitIn)
+      from source in getExpression(state, ExpressionFlags.OmitIf | ExpressionFlags.OmitIn | ExpressionFlags.OmitComprehension)
       from ifExp in getIf(state)
       select (comparisand, source, ifExp);
 
@@ -1134,7 +1135,7 @@ public static class ParserFunctions
 
    public static Optional<Block> getCaseStatementBlock(ParseState state)
    {
-      if (state.Scan(@"^(\s*)(=)(?!=)", Color.Whitespace, Color.Structure))
+      if (state.Scan(@"^(\s*)(=>)(?!=)", Color.Whitespace, Color.Structure))
       {
          return getSingleLine(state, false);
       }
@@ -1174,9 +1175,6 @@ public static class ParserFunctions
             break;
          case "!%":
             _symbol = new RemainderZeroSymbol(true);
-            break;
-         case "/%":
-            _symbol = new DivRemSymbol();
             break;
          case "^":
             _symbol = new RaiseSymbol();
@@ -1262,9 +1260,6 @@ public static class ParserFunctions
          case ">>":
             _symbol = new SendBinaryMessageSymbol($"{source}(_)", Precedence.Shift);
             break;
-         case "=>" when !flags[ExpressionFlags.OmitNameValue]:
-            _symbol = new KeyValueSymbol();
-            break;
          case "|>":
             _symbol = new PipelineSymbol();
             break;
@@ -1288,9 +1283,6 @@ public static class ParserFunctions
             break;
          case ":-" when !flags[ExpressionFlags.OmitBind]:
             _symbol = new BindSymbol();
-            break;
-         case "|":
-            _symbol = new SendBinaryMessageSymbol("defaultTo(_)", Precedence.SendMessage);
             break;
       }
 
@@ -1352,14 +1344,21 @@ public static class ParserFunctions
       return builder.ToExpression().Optional();
    }
 
-   public static Optional<Block> getLambdaBlock(bool isExpression, ParseState state, Bits32<ExpressionFlags> flags,
+   public static Optional<Block> getLambdaBlock(bool isExpression, bool isSingleLine, ParseState state, Bits32<ExpressionFlags> flags,
       Maybe<TypeConstraint> _typeConstraint)
    {
       if (isExpression)
       {
-         var _expression = getExpression(state, flags);
-         return _expression.Map(e => new Block(new ExpressionStatement(e, true, _typeConstraint), _typeConstraint)
-            { Index = state.Index });
+         if (isSingleLine)
+         {
+            return getSingleLine(state, _typeConstraint);
+         }
+         else
+         {
+            var _expression = getExpression(state, flags);
+            return _expression.Map(e => new Block(new ExpressionStatement(e, true, _typeConstraint), _typeConstraint)
+               { Index = state.Index });
+         }
       }
       else
       {
@@ -1447,5 +1446,49 @@ public static class ParserFunctions
          2 when g.Value == "}" => Color.CloseParenthesis,
          _ => Color.Structure
       };
+   }
+
+   public static Optional<Block> getPartialBlock(ParseState state) => getPartialBlock(state, nil);
+
+   public static Optional<Block> getPartialBlock(ParseState state, Maybe<TypeConstraint> _typeConstraint)
+   {
+      var statementsParser = new StatementsParser();
+      state.PushStatements();
+
+      while (state.More)
+      {
+         var _endBlock = state.EndBlock();
+         if (_endBlock)
+         {
+            break;
+         }
+         else if (_endBlock.Exception is (true, var exception))
+         {
+            return exception;
+         }
+
+         var _scanned = statementsParser.Scan(state);
+         if (_scanned)
+         {
+         }
+         else if (_scanned.Exception is (true, var exception))
+         {
+            return exception;
+         }
+         else
+         {
+            break;
+         }
+      }
+
+      var _statements = state.PopStatements();
+      if (_statements is (true, var statements))
+      {
+         return new Block(statements, _typeConstraint);
+      }
+      else
+      {
+         return nil;
+      }
    }
 }

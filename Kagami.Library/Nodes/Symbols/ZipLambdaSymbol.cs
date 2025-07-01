@@ -2,7 +2,7 @@
 
 namespace Kagami.Library.Nodes.Symbols;
 
-public class ZipLambdaSymbol : Symbol
+public class ZipLambdaSymbol : Symbol, IHasExpression
 {
    protected Expression expression;
 
@@ -19,4 +19,6 @@ public class ZipLambdaSymbol : Symbol
    public override Arity Arity => Arity.Binary;
 
    public override string ToString() => $"[{expression}]";
+
+   public Expression Expression => expression;
 }

@@ -8,33 +8,32 @@ namespace Kagami.Library.Operations;
 
 public class GoToIfSuccess : AddressedOperation
 {
+   protected Predicate<IResult> predicate = o => o.IsSuccess;
+   protected Func<IObject, Optional<IObject>> returnIfTrue = s => s is Objects.Success success ? success.Value.Just() : nil;
+   protected Func<IObject, Optional<IObject>> returnIfFalse = s => s is Objects.Success success ? success.Value.Just() : nil;
+
    public override Optional<IObject> Execute(Machine machine)
    {
       increment = false;
 
-      if (machine.Peek() is (true, var value))
+      var _value = machine.Pop();
+      if (_value is (true, var value))
       {
-         if (value is IResult result)
+         switch (value)
          {
-            if (result.IsSuccess)
-            {
-               machine.GoTo(address);
-            }
-            else
-            {
-               increment = true;
-            }
-         }
-         else
-         {
-            increment = true;
-         }
+            case IResult o when predicate(o):
+               return machine.GoTo(address) ? returnIfTrue(value) : badAddress(address);
 
-         return nil;
+            case IResult:
+               increment = true;
+               return returnIfFalse(value);
+            default:
+               return incompatibleClasses(value, "Result");
+         }
       }
       else
       {
-         return emptyStack("value");
+         return _value.Exception;
       }
    }
 

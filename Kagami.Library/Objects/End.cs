@@ -4,8 +4,12 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
 
-public struct End : IObject, IObjectCompare
+public readonly struct End : IObject, IObjectCompare
 {
+   public End()
+   {
+   }
+
    public static IObject Value => new End();
 
    public string ClassName => "End";
@@ -21,6 +25,8 @@ public struct End : IObject, IObjectCompare
    public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
    public bool IsTrue => false;
+
+   public Guid Id { get; init; } = Guid.NewGuid();
 
    public int Compare(IObject obj) => throw fail("End not replaced");
 

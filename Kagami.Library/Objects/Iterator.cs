@@ -1,9 +1,10 @@
-﻿using Kagami.Library.Classes;
-using Kagami.Library.Runtime;
-using Core.Collections;
+﻿using Core.Collections;
 using Core.Dates.Now;
 using Core.Enumerables;
 using Core.Monads;
+using Kagami.Library.Classes;
+using Kagami.Library.Runtime;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.CollectionFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
@@ -45,6 +46,8 @@ public class Iterator : IObject, IIterator
    public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
    public bool IsTrue => collection.Length.Value > 0;
+
+   public Guid Id { get; init; } = Guid.NewGuid();
 
    public ICollection Collection => collection;
 
@@ -106,7 +109,7 @@ public class Iterator : IObject, IIterator
 
             return collectionClass.Revert(result);
          case 2:
-            var array = List().ToArray();
+            IObject[] array = [.. List()];
             Array.Sort(array, (i, j) => ((Int)lambda.Invoke(i, j)).Value);
 
             return collectionClass.Revert(array);
@@ -405,11 +408,7 @@ public class Iterator : IObject, IIterator
       {
          foreach (var value in List().ToList())
          {
-            if (result is Unassigned)
-            {
-               result = value;
-            }
-            else if (((Int)lambda.Invoke(value, result)).Value < 0)
+            if (result is Unassigned || ((Int)lambda.Invoke(value, result)).Value < 0)
             {
                result = value;
             }
@@ -473,11 +472,7 @@ public class Iterator : IObject, IIterator
       {
          foreach (var value in List().ToList())
          {
-            if (result is Unassigned)
-            {
-               result = value;
-            }
-            else if (((Int)lambda.Invoke(value, result)).Value < 0)
+            if (result is Unassigned || ((Int)lambda.Invoke(value, result)).Value < 0)
             {
                result = value;
             }
@@ -634,6 +629,10 @@ public class Iterator : IObject, IIterator
          {
             sum = (INumeric)apply(sum, numeric, (x, y) => x + y, (x, y) => x + y, (x, y) => x + y, (x, y) => x.Add(y), "+");
          }
+         else
+         {
+            throw incompatibleClasses(value, "Numeric");
+         }
       }
 
       return sum;
@@ -692,8 +691,8 @@ public class Iterator : IObject, IIterator
             return Flatten();
          case > 1:
          {
-            var outer = new List<IObject>();
-            var inner = new List<IObject>();
+            List<IObject> outer = [];
+            List<IObject> inner = [];
             foreach (var value in List().ToList())
             {
                inner.Add(value);
@@ -782,7 +781,7 @@ public class Iterator : IObject, IIterator
       return collectionClass.Revert(outerList);
    }
 
-   public virtual IObject Distinct() => collectionClass.Revert(List().ToList().Distinct());
+   public virtual IObject Unique() => collectionClass.Revert(List().ToList().Distinct());
 
    public IObject Span(Lambda predicate)
    {
@@ -883,29 +882,25 @@ public class Iterator : IObject, IIterator
 
    public IObject Rotate(int count)
    {
-      var postfix = new List<IObject>();
-      var item = Next();
-      for (var i = 0; i < count; i++)
-      {
-         if (item is (true, var obj))
-         {
-            postfix.Add(obj);
-         }
+      var list = List().ToList();
 
-         item = Next();
+      if (count > 0)
+      {
+         var rotatedList = list.Take(count).ToList();
+         var retainedList = list.Skip(count).ToList();
+         retainedList.AddRange(rotatedList);
+         list = retainedList;
+      }
+      else
+      {
+         var length = list.Count;
+         var rotatedList = list.Skip(length + count).ToList();
+         var retainedList = list.Take(length + count).ToList();
+         rotatedList.AddRange(retainedList);
+         list = rotatedList;
       }
 
-      var result = new List<IObject>();
-
-      while (item is (true, var obj))
-      {
-         result.Add(obj);
-         item = Next();
-      }
-
-      result.AddRange(postfix);
-
-      return collectionClass.Revert(result);
+      return collectionClass.Revert(list);
    }
 
    protected static void rotateRight(List<IObject> list, int count)
@@ -1056,6 +1051,99 @@ public class Iterator : IObject, IIterator
       }
 
       return collectionClass.Revert(result);
+   }
+
+   public IObject Partition(Lambda lambda)
+   {
+      List<IObject> matched = [];
+      List<IObject> notMatched = [];
+
+      foreach (var obj in List())
+      {
+         var result = lambda.Invoke(obj);
+         if (result.IsTrue)
+         {
+            matched.Add(obj);
+         }
+         else
+         {
+            notMatched.Add(obj);
+         }
+      }
+
+      return collectionClass.Revert([collectionClass.Revert(matched), collectionClass.Revert(notMatched)]);
+   }
+
+   public IObject Pick(int count)
+   {
+      var random = new Random(NowServer.Now.Millisecond);
+      List<IObject> result = [];
+      Set<int> pickedIndexes = [];
+
+      var list = collection.GetIterator(false).List().ToList();
+      for (var i = 0; i < count; i++)
+      {
+         var randomIndex = random.Next(list.Count);
+         while (pickedIndexes.Contains(randomIndex))
+         {
+            randomIndex = random.Next(list.Count);
+         }
+
+         pickedIndexes.Add(randomIndex);
+         result.Add(list[randomIndex]);
+
+         if (pickedIndexes.Count == list.Count)
+         {
+            break;
+         }
+      }
+
+      return collectionClass.Revert(result);
+   }
+
+   public IObject Roll(int count)
+   {
+      var random = new Random(NowServer.Now.Millisecond);
+      List<IObject> result = [];
+      IObject[] array = [.. List()];
+      for (var i = 0; i < count; i++)
+      {
+         var randomIndex = random.Next(array.Length);
+         result.Add(array[randomIndex]);
+      }
+
+      return collectionClass.Revert(result);
+   }
+
+   public IObject Splat(int count)
+   {
+      var list = List().ToList();
+      if (count <= list.Count)
+      {
+         List<IObject> result = [];
+         List<IObject> remainder = [];
+
+         for (var i = 0; i < count; i++)
+         {
+            result.Add(list[i]);
+         }
+
+         for (var i = count; i < list.Count; i++)
+         {
+            remainder.Add(list[i]);
+         }
+
+         if (remainder.Count > 0)
+         {
+            result.Add(collectionClass.Revert(remainder));
+         }
+
+         return collectionClass.Revert(result);
+      }
+      else
+      {
+         throw fail("Requested count must be less than collection length");
+      }
    }
 
    protected static IEnumerable<IObject> applyAgainst(List<Lambda> lambdas, List<IObject> enumerable)

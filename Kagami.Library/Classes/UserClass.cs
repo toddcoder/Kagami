@@ -131,6 +131,7 @@ public class UserClass : BaseClass
       registerMessage("class".get(), (obj, _) => new Class(obj.ClassName));
       registerMessage("send",
          (obj, msg) => function<IObject, KString>(obj, msg, (o, n) => sendMessage(o, n.Value, msg.Arguments.Pass(1))));
+      registerMessage("with(_)", (obj, msg) => ((UserObject)obj).With(msg.Arguments[0]));
    }
 
    public Optional<Selector> MatchImplemented(IEnumerable<Selector> traitSignatures)

@@ -1,6 +1,7 @@
 ﻿using Core.Collections;
 using Core.Enumerables;
 using Core.Monads;
+using Kagami.Library.Runtime;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Core.Monads.MonadFunctions;
@@ -55,6 +56,12 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
       denameify();
    }
 
+   public KTuple(IObject[] items, Hash<string, int> names, Hash<int, string> indexes) : this(items)
+   {
+      this.names = names;
+      this.indexes = indexes;
+   }
+
    public KTuple(IObject x, IObject y)
    {
       items = [x, y];
@@ -70,6 +77,7 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
 
    private void denameify()
    {
+      var retrievedFields = Module.Global.Value.RetrievedFields;
       for (var i = 0; i < items.Length; i++)
       {
          if (items[i] is IKeyValue { ExpandInTuple: true } keyValue)
@@ -77,6 +85,11 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
             names[keyValue.Key.AsString] = i;
             indexes[i] = keyValue.Key.AsString;
             items[i] = keyValue.Value;
+         }
+         else if (retrievedFields.Maybe[items[i].Id] is (true, var fieldName))
+         {
+            names[fieldName] = i;
+            indexes[i] = fieldName;
          }
       }
    }
@@ -90,8 +103,8 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
       Array.Copy(tupleItems, items, length);
       items[length] = item;
 
-      names = new Hash<string, int>();
-      indexes = new Hash<int, string>();
+      names = [];
+      indexes = [];
 
       denameify();
    }
@@ -104,9 +117,9 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
    {
       get
       {
-         if (names.ContainsKey(name))
+         if (names.Maybe[name] is (true, var index))
          {
-            return items[names[name]];
+            return items[index];
          }
          else
          {
@@ -169,11 +182,37 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
          items.Zip(t.items, (t1, t2) => (x: t1, y: t2)).All(tu => tu.x.IsEqualTo(tu.y));
    }
 
-   public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand,
-      (t1, t2) => { return t1.Length.Value == t2.Length.Value && t1.items.Zip(t2.items, (i1, i2) => i1.Match(i2, bindings)).All(b => b); },
-      bindings);
+   public bool Match(IObject comparisand, Hash<string, IObject> bindings)
+   {
+      return match(this, comparisand, compareTuples, bindings);
+
+      bool compareTuples(KTuple t1, KTuple t2)
+      {
+         var length = t1.Length.Value;
+         if (length != t2.Length.Value)
+         {
+            return false;
+         }
+
+         for (var i = 0; i < length; i++)
+         {
+            var item1 = t1.items[i];
+            var item2 = t2.items[i];
+
+            var matched = item1.Match(item2, bindings);
+            if (!matched)
+            {
+               return false;
+            }
+         }
+
+         return true;
+      }
+   }
 
    public bool IsTrue => items.Length > 0;
+
+   public Guid Id { get; init; } = Guid.NewGuid();
 
    public bool Equals(KTuple other) => IsEqualTo(other);
 
@@ -240,6 +279,8 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
    public KString MakeString(string connector) => makeString(this, connector);
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
+
+   public IObject One() => items.Length == 1 ? items[0] : this;
 
    public int Compare(IObject obj)
    {
@@ -346,5 +387,35 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
       return None.NoneValue;
    }
 
-   public KTuple Append(IObject obj) => new([..items, obj]);
+   public KTuple Append(IObject obj)
+   {
+      if (obj is NameValue nameValue)
+      {
+         var name = nameValue.Name;
+         var value = nameValue.Value;
+
+         var index = names.Count;
+         indexes[index] = name;
+         names[name] = index;
+         obj = value;
+      }
+
+      return new KTuple([..items, obj], names, indexes);
+   }
+
+   public KTuple Concatenate(KTuple otherTuple)
+   {
+      var offset = items.Length;
+      var otherNames = otherTuple.names;
+
+      foreach (var (name, index) in otherNames)
+      {
+         names[name] = index + offset;
+         indexes[index + offset] = name;
+      }
+
+      return new KTuple([..items, ..otherTuple.items], names, indexes);
+   }
+
+   public Maybe<string> Rename(int index) => indexes.Maybe[index].Map(name => name);
 }

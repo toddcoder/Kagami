@@ -52,7 +52,9 @@ public class MathClass : PackageClass
       registerPackageFunction("pi".get(), (obj, _) => function<KMath>(obj, m => m.Pi));
       registerPackageFunction("e".get(), (obj, _) => function<KMath>(obj, m => m.E));
       registerPackageFunction("i".get(), (obj, _) => function<KMath>(obj, m => m.I));
+      registerPackageFunction("tau".get(), (obj, _) => function<KMath>(obj, m => m.Tau));
       registerPackageFunction("degrees(_)", (obj, msg) => function<KMath, Float>(obj, msg, (m, n) => m.Degrees(n.Value)));
       registerPackageFunction("radians(_)", (obj, msg) => function<KMath, Float>(obj, msg, (m, n) => m.Radians(n.Value)));
+      registerPackageFunction("gcd(_,_)", (obj, msg) => function<KMath, IObject, IObject>(obj, msg, (m, a, b) => m.Gcd(a, b)));
    }
 }

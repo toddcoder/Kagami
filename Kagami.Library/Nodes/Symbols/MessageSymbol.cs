@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Kagami.Library.Objects;
+﻿using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using Core.Enumerables;
 using Core.Monads;
@@ -37,7 +36,6 @@ public class MessageSymbol : Symbol
          count = arguments.Length;
       }
 
-      builder.Peek(Index);
       builder.NewMessage(selector, count);
       builder.NoOp();
    }

@@ -52,6 +52,8 @@ public class FrameGroup : IEnumerable<Frame>
 
    public Maybe<Frame> TopFrame => maybe<Frame>() & frames.Length > 0 & (() => frames[0]);
 
+   public Maybe<Frame> TryFrame => frames.FirstOrNone(f => f.FrameType == FrameType.Try);
+
    public IEnumerator<Frame> GetEnumerator()
    {
       foreach (var frame in frames)

@@ -9,19 +9,18 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class WhileParser : StatementParser
 {
-   //public override string Pattern => "^ /'while' -(> ['>^']) /b";
-
-   [GeneratedRegex(@"^(\s*)(while)(?![>\^])\b")]
+   [GeneratedRegex(@"^(\s*)(while|until)(?![>\^])\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
+      var isWhile = tokens[2].Text == "while";
       state.Colorize(tokens, Color.Whitespace, Color.Keyword);
 
       var _result =
          from expression in getExpression(state, ExpressionFlags.Standard)
          from block in getBlock(state)
-         select new While(expression, block);
+         select new While(expression, block, isWhile);
       if (_result is (true, var statement))
       {
          state.AddStatement(statement);

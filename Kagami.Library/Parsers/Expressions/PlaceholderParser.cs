@@ -12,8 +12,6 @@ public partial class PlaceholderParser : SymbolParser
    {
    }
 
-   //public override string Pattern => $"^ /(/s*) /('use' | 'var') /(/s+) /({REGEX_FIELD}) /b";
-
    [GeneratedRegex($@"^(\s*)(use|var)(\s+)({REGEX_FIELD})\b")]
    public override partial Regex Regex();
 
@@ -21,6 +19,13 @@ public partial class PlaceholderParser : SymbolParser
    {
       var mutable = tokens[2].Text;
       var placeholderName = tokens[4].Text;
+      if (placeholderName.StartsWith('`'))
+      {
+         state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Identifier);
+         builder.Add(new FieldSymbol(placeholderName));
+         return unit;
+      }
+
       var name = mutable switch
       {
          "use" => placeholderName,
@@ -28,7 +33,6 @@ public partial class PlaceholderParser : SymbolParser
          _ => $"-{placeholderName}"
       };
       state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Identifier);
-
       builder.Add(new PlaceholderSymbol(name));
 
       return unit;

@@ -44,7 +44,6 @@ public class Module
       "Long" => new LongClass(),
       "Lazy" => new LazyClass(),
       "YieldingInvokable" => new YieldingInvokableClass(),
-      "Del" => new DelClass(),
       "Slice" => new SliceClass(),
       "End" => new EndClass(),
       "List" => new ListClass(),
@@ -93,6 +92,8 @@ public class Module
    protected Set<string> forwardReferences = [];
    protected Hash<string, string> dataReferences = [];
    protected Set<string> operators = [];
+   protected Hash<Guid, string> bindings = [];
+   protected Hash<Guid, string> retrievedFields = [];
 
    public Maybe<BaseClass> Class(string name, bool forwardsIncluded = false)
    {
@@ -169,4 +170,8 @@ public class Module
          return classNotFound(className);
       }
    }
+
+   public Hash<Guid, string> Bindings => bindings;
+
+   public Hash<Guid, string> RetrievedFields => retrievedFields;
 }

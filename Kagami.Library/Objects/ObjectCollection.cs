@@ -86,6 +86,8 @@ public class ObjectCollection : IObject, ICollection
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
+   public IObject One() => this;
+
    public string ClassName => obj.ClassName;
 
    public string AsString => obj.AsString;
@@ -102,6 +104,8 @@ public class ObjectCollection : IObject, ICollection
    }
 
    public bool IsTrue => obj.IsTrue;
+
+   public Guid Id { get; init; } = Guid.NewGuid();
 
    public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
 }

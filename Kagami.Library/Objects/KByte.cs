@@ -80,6 +80,8 @@ public readonly struct KByte : IObject, INumeric, IObjectCompare, IComparable<KB
 
    public IObject Raise(INumeric power) => raise(this, power);
 
+   public IObject Abs() => this;
+
    public string AsString => ((char)value).ToString();
 
    public string Image => $"{value}b";
@@ -91,6 +93,8 @@ public readonly struct KByte : IObject, INumeric, IObjectCompare, IComparable<KB
    public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
    public bool IsTrue => value > 0;
+
+   public Guid Id { get; init; } = Guid.NewGuid();
 
    public int Compare(IObject obj) => compatibleCompare(this, obj);
 

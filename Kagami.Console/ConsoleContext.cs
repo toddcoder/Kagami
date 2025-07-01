@@ -45,8 +45,4 @@ public class ConsoleContext : IContext
    }
 
    public bool Cancelled() => cancelled;
-
-   public void Peek(string message, int index)
-   {
-   }
 }

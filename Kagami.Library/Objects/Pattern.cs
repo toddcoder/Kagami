@@ -75,5 +75,7 @@ public class Pattern : IObject
 
    public bool IsTrue => true;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public Pattern Copy() => new(name, lambda, parameters);
 }

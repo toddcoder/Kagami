@@ -175,4 +175,8 @@ public static class AllExceptions
    public static string messageOperatorNotFound(string name) => $"Operator {name} not found";
 
    public static Exception operatorNotFound(string name) => fail(messageOperatorNotFound(name));
+
+   public static string messageCannotAddSelf() => "Cannot add self to self";
+
+   public static Exception cannotAddSelf() => fail(messageCannotAddSelf());
 }

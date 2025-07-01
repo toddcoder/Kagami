@@ -46,6 +46,8 @@ public class YieldingInvokable : IInvokable, ICollection, IObject
 
    public bool IsTrue => false;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public Arguments Arguments { get; set; } = Arguments.Empty;
 
    public FrameGroup Frames { get; set; } = new();
@@ -126,6 +128,8 @@ public class YieldingInvokable : IInvokable, ICollection, IObject
    public KString MakeString(string connector) => makeString(this, connector);
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
+
+   public IObject One() => this;
 
    public IObject this[SkipTake skipTake] => Objects.CollectionFunctions.skipTake(this, skipTake);
 }

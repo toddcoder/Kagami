@@ -39,6 +39,8 @@ public class Rectangle : IObject
 
    public bool IsTrue => origin.IsTrue && size.IsTrue;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public IObject X => origin.X;
 
    public IObject Y => origin.Y;

@@ -22,10 +22,9 @@ public class ValuesParser : MultiParser
          yield return new SubexpressionParser(builder);
          yield return new ArrayParser(builder);
          yield return new SelectorParser(builder);
-         yield return new DictionaryParser(builder);
+         yield return new DictionaryOrSetParser(builder);
          yield return new CycleParser(builder);
          yield return new ListParser(builder);
-         yield return new SetParser(builder);
          yield return new AnyParser(builder);
          yield return new FloatParser(builder);
          yield return new HexExpParser(builder);
@@ -47,7 +46,7 @@ public class ValuesParser : MultiParser
 
          if (!builder.Flags[ExpressionFlags.Subset])
          {
-            yield return new BindingParser(builder);
+            //yield return new BindingParser(builder);
             yield return new InitializeParser(builder);
             yield return new InvokeParser(builder);
          }
@@ -75,12 +74,10 @@ public class ValuesParser : MultiParser
          yield return new RefParser(builder);
          yield return new DollarFieldParser(builder);
          yield return new DoParser(builder);
-         yield return new TryBlockParser(builder);
-         yield return new TryParser(builder);
          yield return new ThrowParser(builder);
          yield return new AssertParser(builder);
-         yield return new SeqParser(builder);
          yield return new ConversionParser(builder);
+         yield return new SeqParser(builder);
          yield return new FieldParser(builder);
       }
    }

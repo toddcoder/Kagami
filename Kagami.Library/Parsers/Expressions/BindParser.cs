@@ -7,9 +7,9 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class BindParser : SymbolParser
 {
-   public BindParser(ExpressionBuilder builder) : base(builder) { }
-
-   //public override string Pattern => "^ /(/s*) /'>>='";
+   public BindParser(ExpressionBuilder builder) : base(builder)
+   {
+   }
 
    [GeneratedRegex(@"^(\s*)(>>=)")]
    public override partial Regex Regex();

@@ -18,6 +18,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
    private readonly bool global;
    private readonly bool textOnly;
    private readonly Func<MatchResult, Func<string, Maybe<int>>> nameToIndex;
+   private readonly Func<MatchResult, Func<int, Maybe<string>>> indexToName;
 
    public Regex(string pattern, bool ignoreCase, bool multiline, bool global, bool textOnly) : this()
    {
@@ -30,6 +31,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
       this.textOnly = textOnly;
 
       nameToIndex = m => m.IndexFromName;
+      indexToName = m => m.NameFromIndex;
    }
 
    public string ClassName => "Regex";
@@ -40,34 +42,39 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
    {
       get
       {
-         var builder = new StringBuilder("\\");
+         var builder = new StringBuilder("x\"");
          builder.Append(pattern.Regex);
          if (ignoreCase || multiline || global)
          {
-            builder.Append(";");
+            builder.Append(';');
          }
 
          if (ignoreCase)
          {
-            builder.Append("i");
+            builder.Append('i');
          }
 
          if (multiline)
          {
-            builder.Append("m");
+            builder.Append('m');
          }
 
          if (global)
          {
-            builder.Append("g");
+            builder.Append('g');
          }
 
          if (textOnly)
          {
-            builder.Append("t");
+            builder.Append('t');
          }
 
-         builder.Append("\\");
+         if (textOnly)
+         {
+            builder.Append('t');
+         }
+
+         builder.Append('"');
 
          return builder.ToString();
       }
@@ -81,7 +88,44 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
 
    public bool IsTrue => pattern.Regex.Length > 0;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    private Maybe<MatchResult> isMatch(string input) => input.Matches(pattern);
+
+   public IObject MatchesIndex(string input)
+   {
+      var _result = isMatch(input);
+      if (_result is (true, var result))
+      {
+         return Int.IntObject(result.Index);
+      }
+      else
+      {
+         return None.NoneValue;
+      }
+   }
+
+   public IObject MatchesIndex(IObject obj, Func<IObject, int, IObject> getter)
+   {
+      var _result = isMatch(obj.AsString);
+      if (_result is (true, var result))
+      {
+         return getter(obj, result.Index);
+      }
+      else
+      {
+         return None.NoneValue;
+      }
+   }
+
+   public void MatchesIndex(IObject obj, Action<IObject, int, IObject> setter, IObject value)
+   {
+      var _result = isMatch(obj.AsString);
+      if (_result is (true, var result))
+      {
+         setter(obj, result.Index, value);
+      }
+   }
 
    public IObject Matches(string input)
    {
@@ -92,7 +136,9 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
       {
          if (_result is (true, var result))
          {
-            return new KTuple(result.Select(m => new RegexMatch(m, self.nameToIndex(result), input.Keep(m.Index), input.Drop(m.Index + m.Length)))
+            return new KTuple(result
+               .Select(m => new RegexMatch(m, self.nameToIndex(result), self.indexToName(result), input.Keep(m.Index),
+                  input.Drop(m.Index + m.Length)))
                .Select(m => getMatchOrText(m, self.textOnly)).ToArray());
          }
          else
@@ -103,7 +149,8 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
       else if (isMatch(input) is (true, var result2))
       {
          var match = result2.GetMatch(0);
-         var regexMatch = new RegexMatch(match, self.nameToIndex(result2), input.Keep(match.Index), input.Drop(match.Index + match.Length));
+         var regexMatch = new RegexMatch(match, self.nameToIndex(result2), self.indexToName(result2), input.Keep(match.Index),
+            input.Drop(match.Index + match.Length));
          return Some.Object(getMatchOrText(regexMatch, self.textOnly));
       }
       else
@@ -139,23 +186,12 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
 
          foreach (var match in result)
          {
-            if (match.Groups.Length == 1)
-            {
-               builder.Append(input.AsSpan(lastIndex, match.Index - lastIndex));
-               var replacement = lambda.Invoke((KString)match.Text);
-               builder.Append(replacement.AsString);
-               lastIndex = match.Index + match.Length;
-            }
-            else
-            {
-               foreach (var group in match)
-               {
-                  builder.Append(input.AsSpan(lastIndex, group.Index - lastIndex));
-                  var replacement = lambda.Invoke((KString)group.Text);
-                  builder.Append(replacement.AsString);
-                  lastIndex = group.Index + group.Length;
-               }
-            }
+            builder.Append(input.AsSpan(lastIndex, match.Index - lastIndex));
+            var regexMatch = new RegexMatch(match, nameToIndex(result), indexToName(result), input.Keep(match.Index),
+               input.Drop(match.Index + match.Length));
+            var replacement = lambda.Invoke(regexMatch);
+            builder.Append(replacement.AsString);
+            lastIndex = match.Index + match.Length;
          }
 
          builder.Append(input.Drop(lastIndex));

@@ -30,6 +30,8 @@ public class CycleCollection : IObject, ICollection
 
    public bool IsTrue => cycle.IsTrue;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public IIterator GetIterator(bool lazy) => new LazyIterator(this);
 
    public Maybe<IObject> Next(int index)
@@ -84,6 +86,8 @@ public class CycleCollection : IObject, ICollection
    public KString MakeString(string connector) => cycle.MakeString(connector);
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
+
+   public IObject One() => this;
 
    public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
 }

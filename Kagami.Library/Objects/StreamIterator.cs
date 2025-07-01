@@ -31,6 +31,8 @@ public class StreamIterator : IObject, IIterator
 
    public bool IsTrue => true;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public ICollection Collection => iterator.Collection;
 
    public ICollectionClass CollectionClass => iterator.CollectionClass;
@@ -269,7 +271,7 @@ public class StreamIterator : IObject, IIterator
 
    public IObject Shape(int rows, int columns) => terminate().Shape(rows, columns);
 
-   public IObject Distinct() => Copy(new DistinctAction());
+   public IObject Unique() => Copy(new DistinctAction());
 
    public IObject Span(Lambda predicate) => terminate().Span(predicate);
 
@@ -328,6 +330,14 @@ public class StreamIterator : IObject, IIterator
    public IObject Apply(ICollection collection) => terminate().Apply(collection);
 
    public IObject Column(int column) => terminate().Column(column);
+
+   public IObject Partition(Lambda lambda) => terminate().Partition(lambda);
+
+   public IObject Pick(int count) => terminate().Pick(count);
+
+   public IObject Roll(int count) => terminate().Roll(count);
+
+   public IObject Splat(int count) => terminate().Splat(count);
 
    public BaseClass Equivalent() => new CollectionClass();
 

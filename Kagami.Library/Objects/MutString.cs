@@ -40,6 +40,8 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
 
    public bool IsTrue => mutable.Length > 0;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public int CompareTo(MutString? other) => Compare(other!);
 
    public bool Equals(MutString? other) => AsString == other!.AsString;
@@ -104,6 +106,8 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
    public KString MakeString(string connector) => makeString(this, connector);
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
+
+   public IObject One() => this;
 
    public int CompareTo(object? obj) => AsString.CompareTo(obj!.ToString());
 
@@ -219,7 +223,7 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
 
    public IObject InsertAt(int index, IObject obj)
    {
-      mutable.Insert(index, obj.AsString);
+      mutable.Insert(wrapIndex(index, mutable.Length), obj.AsString);
       return this;
    }
 
@@ -228,12 +232,13 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
    public IObject Assign(SkipTake skipTake, IEnumerable<IObject> values)
    {
       var array = mutable.ToString().ToCharArray();
-      var left = array.Skip(skipTake.Skip);
-      var right = left.Skip(skipTake.Skip + skipTake.Take);
+      char[] left = [.. array.Take(skipTake.Skip)];
+      char[] middle = [.. values.Cast<KChar>().Select(kc => kc.Value)];
+      char[] right = [.. left.Skip(skipTake.Skip + skipTake.Take)];
 
       var newMutable = new StringBuilder();
       newMutable.Append(left);
-      newMutable.Append(values.Cast<KChar>());
+      newMutable.Append(middle);
       newMutable.Append(right);
 
       mutable = newMutable;

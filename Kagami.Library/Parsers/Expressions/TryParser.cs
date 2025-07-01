@@ -11,7 +11,6 @@ public partial class TryParser : EndingInExpressionParser
    {
    }
 
-   //public override string Pattern => "^ /(/s*) /'try' /b";
 
    [GeneratedRegex(@"^(\s*)(try)\b", RegexOptions.Compiled)]
    public override partial Regex Regex();
@@ -25,7 +24,7 @@ public partial class TryParser : EndingInExpressionParser
 
    public override Optional<Unit> Suffix(ParseState state, Expression expression)
    {
-      builder.Add(new TrySymbol(expression));
+      //builder.Add(new TrySymbol(expression));
       return unit;
    }
 }

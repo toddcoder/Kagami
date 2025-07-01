@@ -38,7 +38,6 @@ namespace Kagami.Library.Nodes.Statements
       public override void Generate(OperationsBuilder builder)
       {
          expression.Generate(builder);
-         builder.Peek(Index);
          if (returnExpression)
          {
             if (_typeConstraint)

@@ -5,7 +5,7 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Operations;
 
-public class Break : Operation
+public class Reset : Operation
 {
    public override Optional<IObject> Execute(Machine machine)
    {
@@ -13,5 +13,5 @@ public class Break : Operation
       return nil;
    }
 
-   public override string ToString() => "break";
+   public override string ToString() => "reset";
 }

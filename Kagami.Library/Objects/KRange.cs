@@ -109,12 +109,15 @@ public readonly struct KRange : IObject, ICollection
 
    public bool IsEqualTo(IObject obj)
    {
-      return obj is KRange r && startObj.IsEqualTo(r.startObj) && stopObj.IsEqualTo(r.stopObj) && increment == r.increment;
+      return obj is KRange r && startObj.IsEqualTo(r.startObj) && stopObj.IsEqualTo(r.stopObj) && increment == r.increment &&
+         inclusive == r.inclusive;
    }
 
    public bool Match(IObject comparisand, Hash<string, IObject> bindings) => false;
 
    public bool IsTrue => list(this).Any();
+
+   public Guid Id { get; init; } = Guid.NewGuid();
 
    public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(new KArray(list(this))) : new RangeIterator(this);
 
@@ -173,6 +176,8 @@ public readonly struct KRange : IObject, ICollection
       return new IndexedIterator(array);
    }
 
+   public IObject One() => this;
+
    public IObject Add(int increment) => new KRange(this, increment);
 
    public IObject Subtract(int increment) => new KRange(this, -increment);
@@ -196,4 +201,6 @@ public readonly struct KRange : IObject, ICollection
 
       return sequence;
    }
+
+   public IObject Max() => stopObj is Infinity ? stopObj : new RangeIterator(this).Max();
 }

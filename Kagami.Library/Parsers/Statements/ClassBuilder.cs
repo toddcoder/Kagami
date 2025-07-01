@@ -41,9 +41,11 @@ public class ClassBuilder
       this.constructorBlock = constructorBlock;
    }
 
+   public virtual UserClass CreateUserClass() => new(className, parentClassName);
+
    public Optional<Unit> Register()
    {
-      userClass = new UserClass(className, parentClassName);
+      userClass = CreateUserClass();
       var _result = Module.Global.Value.RegisterClass(userClass);
       if (_result)
       {
@@ -54,6 +56,8 @@ public class ClassBuilder
          return _result.Exception;
       }
    }
+
+   public Parameters Parameters => parameters;
 
    public UserClass UserClass => userClass;
 
@@ -221,7 +225,7 @@ public class ClassBuilder
 
       statements.Add(new ReturnNewObject(className, parameters));
 
-      Statements = statements.ToArray();
+      Statements = [.. statements];
 
       return new Block(statements);
    }
@@ -241,7 +245,7 @@ public class ClassBuilder
       }
    }
 
-   public void Generate(OperationsBuilder builder, int index)
+   public void Generate(OperationsBuilder builder)
    {
       foreach (var (key, value) in constructorInvokables)
       {
@@ -255,7 +259,6 @@ public class ClassBuilder
 
          builder.NewSelector(selector, false, true);
          builder.PushObject(new Constructor(invokable));
-         builder.Peek(index);
          builder.AssignSelector(selector, true);
       }
 

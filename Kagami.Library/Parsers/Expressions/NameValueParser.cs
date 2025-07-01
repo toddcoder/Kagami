@@ -10,17 +10,17 @@ public partial class NameValueParser : EndingInExpressionParser
 {
    protected string name = "";
 
-   public NameValueParser(ExpressionBuilder builder) : base(builder, ExpressionFlags.OmitColon | ExpressionFlags.OmitComma) { }
+   public NameValueParser(ExpressionBuilder builder) : base(builder, ExpressionFlags.OmitColon | ExpressionFlags.OmitComma)
+   {
+   }
 
-   //public override string Pattern => $"^ /(/s*) /({REGEX_FIELD}) /':'";
-
-   [GeneratedRegex($@"^(\s*)({REGEX_FIELD})(:)")]
+   [GeneratedRegex($@"^(\s*)({REGEX_FIELD})(:)(\s+)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {
       name = tokens[2].Text;
-      state.Colorize(tokens, Color.Whitespace, Color.Label, Color.Operator);
+      state.Colorize(tokens, Color.Whitespace, Color.Label, Color.Operator, Color.Whitespace);
 
       return unit;
    }

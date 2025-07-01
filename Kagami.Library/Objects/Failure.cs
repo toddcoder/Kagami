@@ -10,7 +10,9 @@ public readonly struct Failure : IObject, IResult, IMonad, IBoolean
 
    public Failure(Error error) : this() => Error = error;
 
-   public Failure(string message) : this(new Error(message)) { }
+   public Failure(string message) : this(new Error(message))
+   {
+   }
 
    public string ClassName => "Failure";
 
@@ -28,6 +30,8 @@ public readonly struct Failure : IObject, IResult, IMonad, IBoolean
    }
 
    public bool IsTrue => false;
+
+   public Guid Id { get; init; } = Guid.NewGuid();
 
    public IObject Value => throw fail(Error.Message.Value);
 

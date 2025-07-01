@@ -29,7 +29,6 @@ namespace Kagami.Library.Nodes.Statements
          var iteratorName = newLabel("iterator");
          builder.NewField(iteratorName, false, true);
          source.Generate(builder);
-         builder.Peek(Index);
          builder.GetIterator(false);
          builder.AssignField(iteratorName, false);
 

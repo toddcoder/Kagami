@@ -1,6 +1,5 @@
 ﻿using Core.Applications;
 using Core.Arrays;
-using Core.Collections;
 using Core.Computers;
 using Core.Dates;
 using Core.Enumerables;
@@ -26,6 +25,8 @@ namespace Kagami.Playground;
 [System.Runtime.Versioning.SupportedOSPlatform("windows")]
 public partial class Playground : Form
 {
+   protected static char[] delimiters = [' ', '\t', '\n', '.', ',', ';', ':', '!', '?'];
+
    protected Document document = null!;
    protected TextBoxConsole outputConsole = null!;
    protected TextWriter textWriter = null!;
@@ -50,6 +51,8 @@ public partial class Playground : Form
    protected UiAction uiElapsed = new() { AutoSizeText = true };
    protected UiAction uiStatus = new();
    protected UiAction uiRun = new();
+   protected string[] fieldNames = [];
+   protected bool autoColorize;
 
    public Playground()
    {
@@ -131,17 +134,20 @@ public partial class Playground : Form
             tracing = !tracing;
             ((ToolStripMenuItem)s!).Checked = tracing;
          }, "^T");
+         menus.Menu("Auto colorize", (s, _) =>
+         {
+            autoColorize = !autoColorize;
+            ((ToolStripMenuItem)s!).Checked = autoColorize;
+         });
          menus.Menu("&Insert");
          menus.Menu("open sys", (_, _) => insertText("open sys\n\n", 0, 0), "^%S");
          menus.Menu("open math", (_, _) => insertText("open math\n\n", 0, 0), "^%M");
-         menus.Menu("println()", (_, _) => insertText("println()", -1, 0), "^P");
-         menus.Menu("println() interpolated", (_, _) => insertText("println($\"\")", -2, 0), "^%P");
-         menus.Menu("print()", (_, _) => insertText("print()", -1, 0));
-         menus.Menu("put()", (_, _) => insertText("put()", -1, 0));
+         menus.Menu("println()", (_, _) => surround("println(", ")"), "^P");
+         menus.Menu("println() interpolated", (_, _) => surround("println($", ")"), "^%P");
+         menus.Menu("print()", (_, _) => surround("print(", ")"));
+         menus.Menu("put()", (_, _) => surround("put(", ")"));
          menus.Menu("peek()", (_, _) => surround("peek(", ")"), "^K");
          menus.Menu("Triple quotes", (_, _) => insertText("\"\"\"\n\"\"\"", -3), "^Q");
-         menus.Menu("List", (_, _) => insertText("⌈⌉", -1), "^L");
-         menus.Menu("Set", (_, _) => insertText("⎩⎭", -1), "^E");
 
          menus.Menu("&Debug");
          menus.Menu("Step Into", (_, _) => stepInto(), "F11");
@@ -248,7 +254,6 @@ public partial class Playground : Form
             uiValue.NoStatus("");
             uiStatus.Busy(true);
             textConsole.Clear();
-            context.ClearPeeks();
             stopwatch.Reset();
             stopwatch.Start();
             _exceptionIndex = nil;
@@ -260,6 +265,11 @@ public partial class Playground : Form
             if (_machine is (true, var machine))
             {
                machine.PackageFolder = packageFolder.FullPath;
+               machine.TraceOutput.Handler = t =>
+               {
+                  var traceFile = document.FileName.Map(f => (FileName)f).Map(f => f.Folder + $"{f.Name}.trace.txt") | @"C:\Temp\trace.txt";
+                  traceFile.TryTo.SetText(t, Encoding.UTF8);
+               };
                var value = "not executed";
                var type = "";
                if (execute)
@@ -271,6 +281,7 @@ public partial class Playground : Form
                      context.Reset();
                      value = result.Image;
                      type = result.ClassName;
+                     fieldNames = [.. machine.AllFieldNames()];
                   }
                   else
                   {
@@ -283,6 +294,7 @@ public partial class Playground : Form
                      value = "exception";
                      type = "";
                      status = (message: _result.Exception.Message, type: UiActionType.Failure);
+                     //fieldNames = [];
                   }
                }
 
@@ -509,32 +521,13 @@ public partial class Playground : Form
    {
       try
       {
-         var peeks = new Hash<int, string>();
-         foreach (var (key, value) in context.Peeks)
-         {
-            try
-            {
-               var lineIndex = textEditor.GetLineFromCharIndex(key);
-               peeks[lineIndex] = value;
-            }
-            catch
-            {
-            }
-         }
-
          if (textEditor.TextLength == 0)
          {
             return;
          }
 
-         foreach (var (lineNumber, line, _) in textEditor.VisibleLines)
+         foreach (var (_, _, _) in textEditor.VisibleLines)
          {
-            if (peeks.Maybe[lineNumber] is (true, var str))
-            {
-               str = sizedAnnotation(e.Graphics, line, str, textEditor.ClientSize.Width, textEditor.Font, textEditor.AnnotationFont);
-               textEditor.AnnotateAt(e.Graphics, lineNumber, str, Color.Black, Color.LightGreen, Color.Black);
-            }
-
             textEditor.DrawTabLines(e.Graphics);
             textEditor.DrawLineNumbers(e.Graphics, Color.Black, Color.White);
             if (textEditor.SelectionLength == 0)
@@ -596,6 +589,24 @@ public partial class Playground : Form
          isDirty = true;
          document.Dirty();
          uiStatus.Message("changed...");
+
+         if (autoColorize)
+         {
+            var compiler = new Compiler(textEditor.Text, new CompilerConfiguration(), context);
+            var _result = compiler.Colorize();
+            if (_result)
+            {
+               var state = textEditor.StopAutoScrollingAlways();
+               try
+               {
+                  colorizer.Colorize(compiler.Tokens);
+               }
+               finally
+               {
+                  textEditor.ResumeAutoScrollingAlways(state);
+               }
+            }
+         }
       }
    }
 
@@ -627,7 +638,7 @@ public partial class Playground : Form
             moveSelectionRelative();
             e.Handled = true;
             break;
-         case '\'':
+         case '\'' when ModifierKeys != Keys.Control:
             if (textAtInsert(1) == "'")
             {
                moveSelectionRelative();
@@ -637,6 +648,9 @@ public partial class Playground : Form
 
             insertDelimiterText("''", -1, 0);
             e.Handled = true;
+            break;
+         case '\'':
+            e.Handled = false;
             break;
          case ',':
             if (textAtInsert(1) != ",")
@@ -707,6 +721,7 @@ public partial class Playground : Form
             setTextAtInsert(1);
             break;
          case Keys.F1:
+         {
             if (getWord() is (true, var begin) && findWord(begin) is (true, var source))
             {
                insertText(source.Drop(begin.Length), 0);
@@ -714,6 +729,21 @@ public partial class Playground : Form
 
             e.Handled = true;
             break;
+         }
+         case Keys.F12:
+         {
+            var previousWord = getWordBeforeCursor();
+            var _foundWord = fieldNames.FirstOrNone(f => f.StartsWith(previousWord, StringComparison.InvariantCultureIgnoreCase))
+               .Map(stripParentheses);
+            if (_foundWord is (true, var foundWord))
+            {
+               var insert = foundWord.Drop(previousWord.Length);
+               textEditor.SelectedText = insert;
+            }
+
+            e.Handled = true;
+            break;
+         }
       }
    }
 
@@ -792,6 +822,38 @@ public partial class Playground : Form
                e.SuppressKeyPress = true;
             }
          }
+      }
+   }
+
+   protected string getWordBeforeCursor()
+   {
+      if (textEditor.TextLength == 0)
+      {
+         return "";
+      }
+
+      var caretPosition = textEditor.SelectionStart;
+      if (caretPosition == 0)
+      {
+         return "";
+      }
+
+      var textBeforeCaret = textEditor.Text.Keep(caretPosition);
+      var words = textBeforeCaret.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+
+      return words.Last() | "";
+   }
+
+   protected string stripParentheses(string word)
+   {
+      var _index = word.Find("(");
+      if (_index is (true, var index))
+      {
+         return word.Keep(index);
+      }
+      else
+      {
+         return word;
       }
    }
 }

@@ -9,6 +9,7 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class SendMessageAssignParser : EndingInExpressionParser
 {
+   protected bool isOptional;
    protected string messageName = "";
    protected string operationSource = "";
 
@@ -16,14 +17,15 @@ public partial class SendMessageAssignParser : EndingInExpressionParser
    {
    }
 
-   [GeneratedRegex($@"^(\s*)(\.)({REGEX_FUNCTION_NAME})(\s*)({REGEX_ASSIGN_OPS})?(=)(?![=>])")]
+   [GeneratedRegex($@"^(\s*)(#)?(\.)({REGEX_FUNCTION_NAME})(\s*)({REGEX_ASSIGN_OPS})?(=)(?![=>])")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {
-      messageName = tokens[3].Text;
-      operationSource = tokens[5].Text;
-      state.Colorize(tokens, Color.Whitespace, Color.Structure, Color.Message, Color.Whitespace, Color.Operator, Color.Structure);
+      isOptional = tokens[2].Text == "#";
+      messageName = tokens[4].Text;
+      operationSource = tokens[6].Text;
+      state.Colorize(tokens, Color.Whitespace, Color.Structure, Color.Message, Color.Message, Color.Whitespace, Color.Operator, Color.Structure);
 
       return unit;
    }
@@ -33,7 +35,7 @@ public partial class SendMessageAssignParser : EndingInExpressionParser
       var _operation = matchOperator(operationSource);
       if (_operation is (true, var operation))
       {
-         builder.Add(new SendMessageSymbol(messageName.set(), operation, expression));
+         builder.Add(new SendMessageSymbol(messageName.set(), isOptional, operation, expression));
          return unit;
       }
       else if (_operation.Exception is (true, var exception))

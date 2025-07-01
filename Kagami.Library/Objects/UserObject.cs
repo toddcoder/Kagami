@@ -1,6 +1,7 @@
 ﻿using Kagami.Library.Invokables;
 using Kagami.Library.Runtime;
 using Core.Collections;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
@@ -53,4 +54,24 @@ public class UserObject : IObject
    public bool Match(IObject comparisand, Hash<string, IObject> bindings) => userObjectMatch(this, comparisand, bindings);
 
    public bool IsTrue => KBoolean.BooleanObject(fields.Length > 0).IsTrue;
+
+   public Guid Id { get; init; } = Guid.NewGuid();
+
+   public IObject With(IObject args)
+   {
+      if (args is Dictionary dictionary)
+      {
+         var hash = dictionary.InternalHash;
+         foreach (var (key, value) in hash)
+         {
+            setField(key.AsString, value);
+         }
+
+         return this;
+      }
+      else
+      {
+         throw fail("Dictionary required as the argument for with");
+      }
+   }
 }

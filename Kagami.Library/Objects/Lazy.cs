@@ -66,4 +66,6 @@ public class Lazy : IObject
    }
 
    public bool IsTrue => getValue().IsTrue;
+
+   public Guid Id { get; init; } = Guid.NewGuid();
 }

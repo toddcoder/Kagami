@@ -24,6 +24,8 @@ public class Constructor : IObject, IEquatable<Constructor>, IInvokableObject
 
    public bool IsTrue => true;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public bool Equals(Constructor? other) => IsEqualTo(other!);
 
    public IInvokable Invokable => invokable;

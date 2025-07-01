@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Kagami.Library.Classes;
+﻿using Kagami.Library.Classes;
 using Core.Collections;
 using Core.Monads;
 using static Kagami.Library.Objects.ObjectFunctions;
@@ -38,6 +36,8 @@ public class Slice : IObject, ICollection
    public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
    public bool IsTrue => List.Any();
+
+   public Guid Id { get; init; } = Guid.NewGuid();
 
    public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new Iterator(this);
 
@@ -80,6 +80,8 @@ public class Slice : IObject, ICollection
    public KString MakeString(string connector) => makeString(this, connector);
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
+
+   public IObject One() => sliceable.Length == 1 ? sliceable.Get(Int.Zero).Required("Length must be > 0") : this;
 
    public IObject Assign(IObject value)
    {

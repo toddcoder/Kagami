@@ -125,7 +125,7 @@ public interface IIterator : IEquivalentClass
 
    IObject Shape(int rows, int columns);
 
-   IObject Distinct();
+   IObject Unique();
 
    IObject Span(Lambda predicate);
 
@@ -164,4 +164,12 @@ public interface IIterator : IEquivalentClass
    IObject Apply(ICollection collection);
 
    IObject Column(int column);
+
+   IObject Partition(Lambda lambda);
+
+   IObject Pick(int count);
+
+   IObject Roll(int count);
+
+   IObject Splat(int count);
 }

@@ -4,7 +4,7 @@ using Kagami.Library.Operations;
 
 namespace Kagami.Library.Nodes.Symbols;
 
-public class LazySymbol : Symbol
+public class LazySymbol : Symbol, IHasExpression
 {
    protected Expression expression;
 
@@ -29,4 +29,6 @@ public class LazySymbol : Symbol
    public override Arity Arity => Arity.Nullary;
 
    public override string ToString() => $"lazy {expression}";
+
+   public Expression Expression => expression;
 }

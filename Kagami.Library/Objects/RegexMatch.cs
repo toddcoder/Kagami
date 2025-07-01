@@ -1,4 +1,5 @@
 ﻿using Core.Collections;
+using Core.Enumerables;
 using Core.Monads;
 using Core.Numbers;
 using static Core.Monads.MonadFunctions;
@@ -15,10 +16,12 @@ public readonly struct RegexMatch : IObject, IProcessPlaceholders, IEquatable<Re
    private readonly string prefix;
    private readonly string suffix;
    private readonly Func<string, Maybe<int>> nameToIndex;
+   private readonly Func<int, Maybe<string>> indexToName;
    private readonly Hash<string, IObject> passed;
    private readonly Hash<string, IObject> internals;
 
-   public RegexMatch(Core.Matching.Match match, Func<string, Maybe<int>> nameToIndex, string prefix, string suffix) : this()
+   public RegexMatch(Core.Matching.Match match, Func<string, Maybe<int>> nameToIndex, Func<int, Maybe<string>> indexToName, string prefix,
+      string suffix) : this()
    {
       text = match.Text;
       index = match.Index;
@@ -27,6 +30,7 @@ public readonly struct RegexMatch : IObject, IProcessPlaceholders, IEquatable<Re
       this.prefix = prefix;
       this.suffix = suffix;
       this.nameToIndex = nameToIndex;
+      this.indexToName = indexToName;
 
       passed = new Hash<string, IObject>();
       internals = new Hash<string, IObject>
@@ -49,6 +53,7 @@ public readonly struct RegexMatch : IObject, IProcessPlaceholders, IEquatable<Re
       prefix = "";
       suffix = "";
       nameToIndex = _ => nil;
+      indexToName = _ => nil;
 
       this.passed = passed;
       internals = [];
@@ -71,6 +76,8 @@ public readonly struct RegexMatch : IObject, IProcessPlaceholders, IEquatable<Re
    public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
    public bool IsTrue => text.Length > 0;
+
+   public Guid Id { get; init; } = Guid.NewGuid();
 
    public KString Text => text;
 
@@ -96,6 +103,24 @@ public readonly struct RegexMatch : IObject, IProcessPlaceholders, IEquatable<Re
       {
          var self = this;
          return nameToIndex(name).Map(i => self[i]) | "";
+      }
+   }
+
+   public KTuple Captures
+   {
+      get
+      {
+         IObject[] items = [.. groups.Skip(1).Select(g => g.Text)];
+         for (var i = 0; i < items.Length; i++)
+         {
+            if (indexToName(i + 1) is (true, var name))
+            {
+               var nameValue = new NameValue(name, items[i]);
+               items[i] = nameValue;
+            }
+         }
+
+         return new KTuple(items);
       }
    }
 

@@ -74,6 +74,8 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public bool IsTrue => list.Count > 0;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public int Compare(IObject obj) => compareCollections(this, obj);
 
    public IObject Object => this;
@@ -139,7 +141,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
          throwIfSelf(value);
 
          var wrappedIndex = wrapIndex(index, list.Count);
-         if (value is KUnit)
+         if (value is None)
          {
             list.RemoveAt(wrappedIndex);
          }
@@ -155,7 +157,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
    {
       get
       {
-         var result = new List<IObject>();
+         List<IObject> result = [];
          foreach (var index in indexList(sequence, list.Count))
          {
             result.Add(list[index]);
@@ -199,6 +201,20 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
             }
          }
       }
+   }
+
+   public IObject FromOpenRange(OpenRange openRange)
+   {
+      List<IObject> result = [];
+      var iterator = openRange.GetIterator(true);
+      var _item = iterator.Next();
+      while (_item is (true, Int { Value: > -1 } i) && i.Value < list.Count)
+      {
+         result.Add(list[i.Value]);
+         _item = iterator.Next();
+      }
+
+      return new KArray(result);
    }
 
    protected void throwIfSelf(IObject value)
@@ -254,6 +270,8 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
    public KString MakeString(string connector) => makeString(this, connector);
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
+
+   public IObject One() => list.Count == 1 ? list[0] : this;
 
    public void Add(IObject obj)
    {

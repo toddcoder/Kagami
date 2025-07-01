@@ -16,6 +16,7 @@ public class CharClass : BaseClass, IEquivalentClass
       messages["*(_)"] = (obj, msg) => function<KChar, Int>(obj, msg, (c, i) => c.Repeat(i.Value));
       messages["+(_)"] = (obj, msg) => function<KChar, IObject>(obj, msg, (c, i) => c.Add(i));
       messages["-(_)"] = (obj, msg) => function<KChar, IObject>(obj, msg, (c, i) => c.Subtract(i));
+      messages["~(_)"] = (obj, msg) => function<KChar, KString>(obj, msg, (c1, c2) => (KString)(c1.AsString + c2.AsString));
       messages["upper()"] = (obj, _) => function<KChar>(obj, c => c.Upper());
       messages["lower()"] = (obj, _) => function<KChar>(obj, c => c.Lower());
       messages["isUpper".get()] = (obj, _) => function<KChar>(obj, c => c.IsUpper);

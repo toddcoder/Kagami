@@ -9,8 +9,6 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class ForParser : StatementParser
 {
-   //public override string Pattern => "^ /'for' /(/s+)";
-
    [GeneratedRegex(@"^(\s*)(for)(\s+)")]
    public override partial Regex Regex();
 

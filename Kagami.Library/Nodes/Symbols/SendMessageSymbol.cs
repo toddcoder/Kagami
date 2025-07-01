@@ -4,41 +4,77 @@ using Core.Enumerables;
 using Core.Monads;
 using Core.Strings;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.Nodes.NodeFunctions;
 
 namespace Kagami.Library.Nodes.Symbols;
 
 public class SendMessageSymbol : Symbol
 {
    protected Selector selector;
+   protected Precedence precedence;
+   protected bool optional;
    protected Maybe<LambdaSymbol> _lambda;
    protected Maybe<Operation> _operation;
    protected Expression[] arguments;
 
-   public SendMessageSymbol(Selector selector, Maybe<LambdaSymbol> _lambda, Maybe<Operation> _operation,
+   public SendMessageSymbol(Selector selector, Precedence precedence, bool optional, Maybe<LambdaSymbol> _lambda, Maybe<Operation> _operation,
       params Expression[] arguments)
    {
       this.selector = selector;
+      this.precedence = precedence;
+      this.optional = optional;
       this._lambda = _lambda;
       this._operation = _operation;
       this.arguments = arguments;
    }
 
-   public SendMessageSymbol(Selector selector, params Expression[] arguments) : this(selector, nil, nil, arguments)
+   public SendMessageSymbol(Selector selector, bool optional, Maybe<LambdaSymbol> _lambda, Maybe<Operation> _operation,
+      params Expression[] arguments) : this(selector, Precedence.SendMessage, optional, _lambda, _operation, arguments)
    {
    }
 
-   public SendMessageSymbol(Selector selector, Maybe<Operation> _operation, params Expression[] arguments) :
-      this(selector, nil, _operation, arguments)
+   public SendMessageSymbol(Selector selector, Precedence precedence, bool optional, params Expression[] arguments) : this(selector, precedence,
+      optional, nil, nil, arguments)
    {
    }
 
-   public SendMessageSymbol(Selector selector, Maybe<LambdaSymbol> _lambda, params Expression[] arguments) :
-      this(selector, _lambda, nil, arguments)
+   public SendMessageSymbol(Selector selector, bool optional, params Expression[] arguments) : this(selector, Precedence.SendMessage,
+      optional, nil, nil, arguments)
+   {
+   }
+
+   public SendMessageSymbol(Selector selector, Precedence precedence, bool optional, Maybe<Operation> _operation, params Expression[] arguments) :
+      this(selector, precedence, optional, nil, _operation, arguments)
+   {
+   }
+
+   public SendMessageSymbol(Selector selector, bool optional, Maybe<Operation> _operation, params Expression[] arguments) :
+      this(selector, Precedence.SendMessage, optional, nil, _operation, arguments)
+   {
+   }
+
+   public SendMessageSymbol(Selector selector, Precedence precedence, bool optional, Maybe<LambdaSymbol> _lambda, params Expression[] arguments) :
+      this(selector, precedence, optional, _lambda, nil, arguments)
+   {
+   }
+
+   public SendMessageSymbol(Selector selector, bool optional, Maybe<LambdaSymbol> _lambda, params Expression[] arguments) :
+      this(selector, Precedence.SendMessage, optional, _lambda, nil, arguments)
    {
    }
 
    public override void Generate(OperationsBuilder builder)
    {
+      var endLabel = newLabel("end");
+
+      if (optional)
+      {
+         builder.Dup();
+         builder.IsMonad(MonadType.None | MonadType.Failure);
+         builder.GoToIfTrue(endLabel);
+         builder.SendMessage("value".get(), 0);
+      }
+
       if (_operation)
       {
          builder.Dup();
@@ -68,14 +104,20 @@ public class SendMessageSymbol : Symbol
          count = arguments.Length;
       }
 
-      builder.Peek(Index);
       builder.SendMessage(selector, count);
+
+      builder.Label(endLabel);
       builder.NoOp();
    }
 
-   public override Precedence Precedence => Precedence.SendMessage;
+   public override Precedence Precedence => precedence;
 
    public override Arity Arity => Arity.Postfix;
 
    public override string ToString() => $".{selector.Image}({arguments.ToString(", ")})";
+
+   public SendMessageSymbol AsChainOperator()
+   {
+      return new SendMessageSymbol(selector, Precedence.ChainedOperator, optional, _lambda, _operation, arguments);
+   }
 }

@@ -42,6 +42,24 @@ public class Block : Statement, IEnumerable<Statement>
       }
    }
 
+   public static Block Merge(Block leftBlock, Block rightBlock)
+   {
+      return new Block(merge().ToList());
+
+      IEnumerable<Statement> merge()
+      {
+         foreach (var statement in leftBlock)
+         {
+            yield return statement;
+         }
+
+         foreach (var statement in rightBlock)
+         {
+            yield return statement;
+         }
+      }
+   }
+
    protected List<Statement> statements;
    protected Maybe<TypeConstraint> _typeConstraint;
 

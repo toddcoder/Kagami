@@ -8,9 +8,7 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class OneParameterLambdaParser : LambdaParser
 {
-   //public override string Pattern => $"^ /(/s*) /({REGEX_FIELD}) /b (> /s* ('->' | '=>' [/r/n]+))";
-
-   [GeneratedRegex($@"^([ \t]*)({REGEX_FIELD})\b(?=\s*(?:->|=>[\r\n]+))")]
+   [GeneratedRegex($@"^([ \t]*)({REGEX_FIELD})\b(?=\s*(?:->|=>))")]
    public override partial Regex Regex();
 
    public OneParameterLambdaParser(ExpressionBuilder builder) : base(builder)

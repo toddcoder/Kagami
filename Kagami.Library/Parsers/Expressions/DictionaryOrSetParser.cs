@@ -6,25 +6,27 @@ using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public partial class SetParser : SymbolParser
+public partial class DictionaryOrSetParser : SymbolParser
 {
-   public SetParser(ExpressionBuilder builder) : base(builder)
+   public DictionaryOrSetParser(ExpressionBuilder builder) : base(builder)
    {
    }
 
-   //public override string Pattern => "^ /(/s*) /'⎩' /(/s*)";
-
-   [GeneratedRegex(@$"^(\s*)({REGEX_SET_LEFT})")]
+   [GeneratedRegex(@"^(\s*)(\{)(\s*)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      state.Colorize(tokens, Color.Whitespace, Color.Collection);
+      state.Colorize(tokens, Color.Whitespace, Color.Collection, Color.Whitespace);
 
-      var _expression = getExpression(state, @$"^(\s*)({REGEX_SET_RIGHT})", builder.Flags & ~ExpressionFlags.OmitComma, Color.Whitespace, Color.Collection);
+      var flags = builder.Flags;
+      flags[ExpressionFlags.OmitColon] = false;
+      flags[ExpressionFlags.OmitComma] = false;
+
+      var _expression = getExpression(state, @"^(\s*)(\})", flags, Color.Whitespace, Color.Collection);
       if (_expression is (true, var expression))
       {
-         builder.Add(new SetSymbol(expression));
+         builder.Add(new DictionaryOrSetSymbol(expression));
          return unit;
       }
       else

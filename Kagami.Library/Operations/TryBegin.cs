@@ -5,11 +5,15 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Operations;
 
-public class TryBegin : Operation
+public class TryBegin : AddressedOperation
 {
    public override Optional<IObject> Execute(Machine machine)
    {
-      machine.PushFrame(Frame.TryFrame());
+      increment = true;
+
+      var frame = new Frame { Address = address, FrameType = FrameType.Try };
+      machine.PushFrame(frame);
+
       return nil;
    }
 

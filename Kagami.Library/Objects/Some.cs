@@ -5,7 +5,7 @@ namespace Kagami.Library.Objects;
 
 public readonly struct Some : IObject, IOptional, IBoolean, IEquatable<Some>, IMonad
 {
-   public static IObject Object(IObject value) => new Some(value);
+   public static IObject Object(IObject value) => value is None ? value : new Some(value);
 
    private readonly IObject value;
 
@@ -49,6 +49,8 @@ public readonly struct Some : IObject, IOptional, IBoolean, IEquatable<Some>, IM
    public IObject FlatMap(Lambda ifSome, Lambda ifNone) => ifSome.Invoke(value);
 
    public bool IsTrue => true;
+
+   public Guid Id { get; init; } = Guid.NewGuid();
 
    public bool Equals(Some other) => value.IsEqualTo(other.value);
 

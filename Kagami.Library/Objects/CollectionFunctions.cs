@@ -110,24 +110,28 @@ public static class CollectionFunctions
       return new Sequence(list);
    }
 
-   public static IObject getIndexed<T>(T obj, IObject index, Func<T, int, IObject> intGetter,
-      Func<T, Sequence, IObject> listGetter) where T : IObject => index switch
+   public static IObject getIndexed(IObject obj, IObject index, Func<IObject, int, IObject> intGetter,
+      Func<IObject, Sequence, IObject> listGetter) => index switch
    {
       Int i => intGetter(obj, i.Value),
+      Regex r => r.MatchesIndex(obj, intGetter),
       Sequence container => listGetter(obj, conditionContainer(container)),
       ICollection collection and not KString => listGetter(obj, new Sequence(collection.GetIterator(false).List())),
       IIterator iterator => listGetter(obj, new Sequence(iterator.List())),
       _ => throw invalidIndex(index)
    };
 
-   public static void setIndexed<T>(T obj, IObject index, IObject value, Action<T, int, IObject> intSetter,
-      Action<T, Sequence, IObject> listSetter) where T : IObject
+   public static void setIndexed(IObject obj, IObject index, IObject value, Action<IObject, int, IObject> intSetter,
+      Action<IObject, Sequence, IObject> listSetter)
    {
       switch (index)
       {
          case Int i:
             intSetter(obj, i.Value, value);
             return;
+         case Regex r:
+            r.MatchesIndex(obj, intSetter, value);
+            break;
          case Sequence container:
             listSetter(obj, conditionContainer(container), value);
             return;

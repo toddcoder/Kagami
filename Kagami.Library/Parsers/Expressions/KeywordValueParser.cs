@@ -11,7 +11,7 @@ public partial class KeywordValueParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(none|true|false|del|unit|null)\b")]
+   [GeneratedRegex(@"^(\s*)(none|true|false|unit|null)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -29,9 +29,6 @@ public partial class KeywordValueParser : SymbolParser
             break;
          case "false":
             builder.Add(new BooleanSymbol(false));
-            break;
-         case "del":
-            builder.Add(new DelSymbol());
             break;
          case "unit":
             builder.Add(new UnitSymbol());

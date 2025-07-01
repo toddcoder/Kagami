@@ -13,19 +13,21 @@ public partial class DoParser : SymbolParser
    protected partial class BoundItemParser : EndingInExpressionParser
    {
       protected string fieldName = "";
+      protected bool isBinding;
 
       public BoundItemParser(ExpressionBuilder builder) : base(builder)
       {
       }
 
-      [GeneratedRegex(@$"^(\s*)({REGEX_FIELD})(\s*)(<-)")]
+      [GeneratedRegex(@$"^(\s*)({REGEX_FIELD})(\s*)(<-|=)")]
       public override partial Regex Regex();
 
-      public (string, Expression) NameExpression { get; set; }
+      public (string, Expression, bool) NameExpression { get; set; }
 
       public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
       {
          fieldName = tokens[2].Text;
+         isBinding = tokens[4].Text == "<-";
          state.Colorize(tokens, Color.Whitespace, Color.Identifier, Color.Whitespace, Color.Structure);
 
          return unit;
@@ -33,7 +35,7 @@ public partial class DoParser : SymbolParser
 
       public override Optional<Unit> Suffix(ParseState state, Expression expression)
       {
-         NameExpression = (fieldName, expression);
+         NameExpression = (fieldName, expression, isBinding);
          return unit;
       }
    }
@@ -41,7 +43,6 @@ public partial class DoParser : SymbolParser
    public DoParser(ExpressionBuilder builder) : base(builder)
    {
    }
-
 
    [GeneratedRegex(@"^(\s*)(do)\b")]
    public override partial Regex Regex();
@@ -51,7 +52,7 @@ public partial class DoParser : SymbolParser
       state.Colorize(tokens, Color.Whitespace, Color.Keyword);
       var innerBuilder = new ExpressionBuilder(builder.Flags);
       var boundItemParser = new BoundItemParser(innerBuilder);
-      var stack = new Stack<(string, Expression)>();
+      Stack<(string, Expression, bool)> stack = [];
 
       var _result = state.BeginBlock();
       if (_result)
@@ -86,8 +87,8 @@ public partial class DoParser : SymbolParser
 
          if (_lambdaExpression is (true, var lambdaExpression))
          {
-            var (parameterName, targetExpression) = stack.Pop();
-            var _symbol = getSymbol(targetExpression, parameterName, lambdaExpression, stack);
+            var (parameterName, targetExpression, isBinding) = stack.Pop();
+            var _symbol = getSymbol(targetExpression, parameterName, isBinding, lambdaExpression, stack);
             if (_symbol is (true, var symbol))
             {
                builder.Add(symbol);
@@ -113,14 +114,14 @@ public partial class DoParser : SymbolParser
       }
    }
 
-   protected static Result<Symbol> getSymbol(Expression targetExpression, string parameterName, Expression lambdaExpression,
-      Stack<(string, Expression)> stack)
+   protected static Result<Symbol> getSymbol(Expression targetExpression, string parameterName, bool isBinding, Expression lambdaExpression,
+      Stack<(string, Expression, bool)> stack)
    {
       var block = new Block(lambdaExpression);
       var lambda = new LambdaSymbol(new Parameters(parameterName), block);
       var builder = new ExpressionBuilder(ExpressionFlags.Standard);
       builder.Add(targetExpression);
-      builder.Add(new SendMessageSymbol("bind(_<Lambda>)", lambda));
+      builder.Add(new SendMessageSymbol("bind(_<Lambda>)", false, lambda));
 
       var _expression = builder.ToExpression();
       if (_expression is (true, var expression))
@@ -131,8 +132,8 @@ public partial class DoParser : SymbolParser
          }
          else
          {
-            var (nextName, nextExpression) = stack.Pop();
-            return getSymbol(nextExpression, nextName, expression, stack);
+            var (nextName, nextExpression, nextBinding) = stack.Pop();
+            return getSymbol(nextExpression, nextName, nextBinding, expression, stack);
          }
       }
       else

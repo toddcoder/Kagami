@@ -11,5 +11,5 @@ public class EmptySetSymbol :Symbol
 
    public override Arity Arity => Arity.Nullary;
 
-   public override string ToString() => "[..]";
+   public override string ToString() => "{}";
 }

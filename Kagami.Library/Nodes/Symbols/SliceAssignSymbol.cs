@@ -3,7 +3,7 @@ using SkipTake = Kagami.Library.Parsers.Expressions.SkipTake;
 
 namespace Kagami.Library.Nodes.Symbols;
 
-public class SliceAssignSymbol : Symbol
+public class SliceAssignSymbol : Symbol, IHasExpression
 {
    protected SkipTake skipTake;
    protected Expression values;
@@ -50,4 +50,6 @@ public class SliceAssignSymbol : Symbol
    public override Arity Arity => Arity.Nullary;
 
    public override string ToString() => $"{{{skipTake}}} = {values}";
+
+   public Expression Expression => values;
 }

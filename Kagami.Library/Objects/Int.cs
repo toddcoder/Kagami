@@ -45,6 +45,8 @@ public readonly struct Int : IObject, INumeric, IComparable<Int>, IEquatable<Int
 
    public bool IsTrue => value != 0;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public (INumeric, INumeric) Compatible(INumeric obj) => obj.ClassName switch
    {
       "Int" => (this, obj.ToInt()),
@@ -102,6 +104,8 @@ public readonly struct Int : IObject, INumeric, IComparable<Int>, IEquatable<Int
    public KString ZFill(int count) => zfill(AsString, count);
 
    public IObject Raise(INumeric power) => raise(this, power);
+
+   public IObject Abs() => (Int)Math.Abs(value);
 
    public int Compare(IObject obj) => compatibleCompare(this, obj);
 
@@ -245,4 +249,12 @@ public readonly struct Int : IObject, INumeric, IComparable<Int>, IEquatable<Int
    public IObject Increment(int amount = 1) => (Int)(value + amount);
 
    public IObject Decrement(int amount = 1) => (Int)(value - amount);
+
+   public Int Max(Int other) => value > other.Value ? this : other;
+
+   public Int Min(Int other) => value < other.Value ? this : other;
+
+   public Int Rand(Random random) => random.Next(value);
+
+   public Int Rand(Random random, Int max) => random.Next(value, max.Value);
 }

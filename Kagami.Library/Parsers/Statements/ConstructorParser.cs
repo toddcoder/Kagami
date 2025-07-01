@@ -10,14 +10,12 @@ public partial class ConstructorParser : ClassItemParser
    {
    }
 
-   //public override string Pattern => "^ /'init' /'('";
-
-   [GeneratedRegex(@"^(init)(\()")]
+   [GeneratedRegex(@"^(\s*)(init)(\()")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseClassItem(ParseState state, Token[] tokens, ClassBuilder builder)
    {
-      state.Colorize(tokens, Color.Keyword, Color.OpenParenthesis);
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.OpenParenthesis);
       state.CreateReturnType();
       return
          from parameters in getParameters(state)

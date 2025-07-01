@@ -3,7 +3,7 @@ using static Kagami.Library.Nodes.NodeFunctions;
 
 namespace Kagami.Library.Nodes.Symbols;
 
-public class SubexpressionSymbol : Symbol
+public class SubexpressionSymbol : Symbol, IHasExpression
 {
    protected Expression expression;
    protected bool monoTuple;

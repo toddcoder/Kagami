@@ -42,6 +42,8 @@ public class Sequence : IObject
 
    public bool IsTrue => list.Count > 0;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public void Add(IObject item) => list.Add(item);
 
    public bool In(IObject obj) => list.Contains(obj);

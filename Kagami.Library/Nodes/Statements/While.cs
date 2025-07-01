@@ -8,11 +8,13 @@ public class While : Statement
 {
    protected Expression expression;
    protected Block block;
+   protected bool isWhile;
 
-   public While(Expression expression, Block block)
+   public While(Expression expression, Block block, bool isWhile)
    {
       this.expression = expression;
       this.block = block;
+      this.isWhile = isWhile;
    }
 
    public override void Generate(OperationsBuilder builder)
@@ -26,9 +28,15 @@ public class While : Statement
       builder.PushFrame();
 
       expression.Generate(builder);
-      builder.Peek(Index);
 
-      builder.GoToIfFalse(endLabel);
+      if (isWhile)
+      {
+         builder.GoToIfFalse(endLabel);
+      }
+      else
+      {
+         builder.GoToIfTrue(endLabel);
+      }
 
       builder.PushExitFrame(exitLabel);
       builder.PushSkipFrame(skipLabel);
@@ -46,5 +54,5 @@ public class While : Statement
       builder.NoOp();
    }
 
-   public override string ToString() => $"while {expression} {block}";
+   public override string ToString() => $"{(isWhile ? "while" : "until")} {expression} {block}";
 }

@@ -3,7 +3,7 @@ using static Kagami.Library.Nodes.NodeFunctions;
 
 namespace Kagami.Library.Nodes.Symbols;
 
-public class TrySymbol : Symbol
+public class TrySymbol : Symbol, IHasExpression
 {
    protected Expression expression;
 
@@ -13,7 +13,7 @@ public class TrySymbol : Symbol
    {
       var errorLabel = newLabel("error");
 
-      builder.TryBegin();
+      //builder.TryBegin();
       builder.SetErrorHandler(errorLabel);
       expression.Generate(builder);
       builder.TryEnd();
@@ -27,4 +27,6 @@ public class TrySymbol : Symbol
    public override Arity Arity => Arity.Nullary;
 
    public override string ToString() => $"try {expression}";
+
+   public Expression Expression => expression;
 }

@@ -29,7 +29,7 @@ public class OperationsBuilder
    {
       if (invokables.ContainsKey(invokable.Index) && !overriding)
       {
-         return invokable.Index; //fail($"Invokable {invokable.Image} already registered");
+         return invokable.Index;
       }
       else
       {
@@ -194,6 +194,11 @@ public class OperationsBuilder
       add(new NewField(name, mutable, visible, nil));
    }
 
+   public void NewFieldTolerant(string name, bool mutable, bool visible, Maybe<TypeConstraint> _typeConstraint) =>
+      add(new NewFieldTolerant(name, mutable, visible, _typeConstraint));
+
+   public void NewFieldTolerant(string name, bool mutable, bool visible) => add(new NewFieldTolerant(name, mutable, visible, nil));
+
    public void NewSelector(Selector selector, bool mutable, bool visible) => add(new NewSelector(selector, mutable, visible));
 
    public void AssignField(string name, bool overriding) => add(new AssignField(name, overriding));
@@ -224,9 +229,9 @@ public class OperationsBuilder
 
    public void Negate() => add(new Negate());
 
-   public void Image() => add(new Image());
+   public void Abs() => add(new Abs());
 
-   public void Peek(int index) => add(new Peek(index));
+   public void Image() => add(new Image());
 
    public void EndOfLine() => add(new EndOfLine());
 
@@ -262,15 +267,13 @@ public class OperationsBuilder
 
    public void NewNameValue() => add(new NewNameValue());
 
-   public void NewContainer() => add(new NewSequence());
+   public void NewSequence() => add(new NewSequence());
 
    public void NewTuple() => add(new NewTuple());
 
    public void NewMonoTuple() => add(new NewMonoTuple());
 
    public void NewList() => add(new NewList());
-
-   public void NewSet() => add(new NewSet());
 
    public void NewLambda(IInvokable invokable) => add(new NewLambda(invokable));
 
@@ -296,9 +299,11 @@ public class OperationsBuilder
 
    public void PopSkipFrame() => add(new PopSkipFrame());
 
+   public void PopTryFrame() => add(new PopTryFrame());
+
    public void NewArray() => add(new NewArray());
 
-   public void NewDictionary() => add(new NewDictionary());
+   public void NewDictionaryOrSet() => add(new NewDictionaryOrSet());
 
    public void NewCycle() => add(new NewCycle());
 
@@ -372,13 +377,15 @@ public class OperationsBuilder
 
    public void SetFields(Parameters parameters) => add(new SetFields(parameters));
 
-   public void Break() => add(new Break());
+   public void Break() => add(new Reset());
 
    public void OpenPackage(string packageName) => add(new OpenPackage(packageName));
 
+   public void OpenEnum(string enumName) => add(new OpenEnum(enumName));
+
    public void ImportPackage(string packageName) => add(new ImportPackage(packageName));
 
-   public void TryBegin() => add(new TryBegin());
+   public void TryBegin(string label) => add(new TryBegin(), label);
 
    public void TryEnd() => add(new TryEnd());
 
@@ -414,8 +421,8 @@ public class OperationsBuilder
          var invokable = ((IInvokableObject)symbol).Invokable;
          invokable.Address = operations.Count;
          symbol.Generate(this);
-         var lastOperation = operations[operations.Count - 1];
-         if (!(lastOperation is Return) /* && !(lastOperation is NoOp)*/)
+         var lastOperation = operations[^1];
+         if (lastOperation is not Library.Operations.Return)
          {
             operations.Add(new Return(false));
          }
@@ -441,7 +448,7 @@ public class OperationsBuilder
          }
       }
 
-      return new Operations(operations.ToArray()).Success();
+      return new Operations([.. operations]);
    }
 
    public void BeginMacro(Parameters parameters, Expression[] arguments, string returnLabel = "")
@@ -489,7 +496,6 @@ public class OperationsBuilder
    public void Return(Expression expression, Statement statement)
    {
       expression.Generate(this);
-      Peek(statement.Index);
 
       if (returnLabels.Count == 0)
       {
@@ -504,7 +510,6 @@ public class OperationsBuilder
    public void Return(Expression expression, Statement statement, Maybe<TypeConstraint> _typeConstraint)
    {
       expression.Generate(this);
-      Peek(statement.Index);
 
       if (returnLabels.Count == 0)
       {
@@ -530,4 +535,20 @@ public class OperationsBuilder
    public void PostIncrement(bool increment) => add(increment ? new PostIncrement() : new PostDecrement());
 
    public void Concatenate() => add(new Concatenate());
+
+   public void SetRegister(int index) => add(new SetRegister(index));
+
+   public void GetRegister(int index) => add(new GetRegister(index));
+
+   public void ClearRegister(int index) => add(new ClearRegister(index));
+
+   public void NewBinding(string name) => add(new NewBinding(name));
+
+   public void IsOptional() => add(new IsOptional());
+
+   public void IsResult() => add(new IsResult());
+
+   public void IsMonad(MonadType type) => add(new IsMonad(type));
+
+   public override string ToString() => "operations";
 }

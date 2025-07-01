@@ -12,8 +12,8 @@ public partial class KeywordOperatorsParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(
-      @"^(\s*)(if|map|join|sort|foldl|foldr|all|any|none|one|zip|skip|take|band|bor|bxor|bsl|bsr|while|until|min|max|does|x|div|r)(\s+)")]
+   [GeneratedRegex(@"^(\s+)(if|map|join|sort|foldl|foldr|all|any|none|one|zip|skip|take|band|bor|bxor|bsl|bsr|while|until|min|max" +
+      @"|does|x|div|r|each|divmod|with|approx)(\s+)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -27,7 +27,7 @@ public partial class KeywordOperatorsParser : SymbolParser
          var keyword = tokens[2].Text;
          if (keyword != "if" || !builder.Flags[ExpressionFlags.OmitIf])
          {
-            state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace);
+            state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Whitespace);
 
             switch (keyword)
             {
@@ -39,10 +39,12 @@ public partial class KeywordOperatorsParser : SymbolParser
                case "none":
                case "one":
                case "zip":
+               case "each":
+               case "with":
                   builder.Add(new SendBinaryMessageSymbol($"{keyword}(_)", Precedence.ChainedOperator));
                   break;
                case "sort":
-                  builder.Add(new SendBinaryMessageSymbol("sort".Selector("<Lambda>"), Precedence.ChainedOperator));
+                  builder.Add(new SendBinaryMessageSymbol("sort(_<Lambda>)", Precedence.ChainedOperator));
                   break;
                case "foldl":
                   builder.Add(new SendBinaryMessageSymbol("foldl(_)", Precedence.ChainedOperator));
@@ -92,6 +94,12 @@ public partial class KeywordOperatorsParser : SymbolParser
                   break;
                case "r":
                   builder.Add(new RationalSymbol());
+                  break;
+               case "divmod":
+                  builder.Add(new DivModSymbol());
+                  break;
+               case "approx":
+                  builder.Add(new ApproximateSymbol());
                   break;
                default:
                   return fail($"Keyword internal error for {keyword}");

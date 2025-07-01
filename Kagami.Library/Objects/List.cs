@@ -151,6 +151,8 @@ public class List : IObject, ICollection
 
    public bool IsTrue => _head;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new ListIterator(this);
 
    public Maybe<IObject> Next(int index) => nil;
@@ -179,6 +181,8 @@ public class List : IObject, ICollection
    public KString MakeString(string connector) => makeString(this, connector);
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
+
+   public IObject One() => tail.IsEmpty ? Head.Required("Head not set") : this;
 
    public IObject Concatenate(List other)
    {

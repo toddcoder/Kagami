@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Invokables;
+﻿using Core.Applications.Messaging;
+using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using Kagami.Library.Packages;
@@ -30,6 +31,8 @@ public class Machine
    protected DebugState debugState = DebugState.Starting;
    protected GlobalFrame globalFrame = new();
    protected IObject lastValue = KVoid.Value;
+
+   public readonly MessageEvent<string> TraceOutput = new();
 
    public Machine(IContext context)
    {
@@ -64,7 +67,9 @@ public class Machine
       {
          if (operations.Current is (true, var operation))
          {
+#if !NO_TRACE
             trace(operations.Address, () => operation.ToString() ?? "");
+#endif
             var _result = operation.Execute(this);
             if (_result is (true, var result) && running && result.ClassName != "Void")
             {
@@ -78,16 +83,19 @@ public class Machine
             }
             else if (_result.Exception is (true, var exception))
             {
+#if !NO_TRACE
                if (Tracing)
                {
-                  context.PrintLine(table.Value.ToString());
+                  TraceOutput.Invoke(table.Value.ToString());
                }
 
+#endif
                var _errorHandler = GetErrorHandler();
                if (_errorHandler is (true, var address))
                {
                   stack.Peek().Push(new Failure(exception.Message));
                   operations.Goto(address);
+                  continue;
                }
                else
                {
@@ -108,7 +116,7 @@ public class Machine
 
       if (Tracing)
       {
-         context.PrintLine(table.Value.ToString());
+         TraceOutput.Invoke(table.Value.ToString());
       }
 
       return lastValue.Success();
@@ -125,6 +133,7 @@ public class Machine
 
       PushFrame(frame);
       frame.SetFields(invokable.Parameters);
+      PushFrame(new Frame());
       if (GoTo(invokable.Address))
       {
          return invoke();
@@ -165,7 +174,6 @@ public class Machine
       }
 
       frame.SetFields(invokable.Parameters);
-      //PushAddress();
       GoTo(invokable.Address);
 
       return invoke();
@@ -237,7 +245,6 @@ public class Machine
             switch (operation)
             {
                case Return rtn:
-                  //PopAddress();
                   return Return.ReturnAction(this, rtn.ReturnTopOfStack);
                case Yield:
                   return Yield.YieldAction(this).Just();
@@ -416,7 +423,11 @@ public class Machine
       return emptyStack("frame");
    }
 
-   public void Clear() => CurrentFrame.Clear();
+   public void Clear()
+   {
+      CurrentFrame.Clear();
+      Module.Global.Value.RetrievedFields.Clear();
+   }
 
    public string StackImage => stack.Select(f => f.ToString()).ToString(", ");
 
@@ -612,7 +623,7 @@ public class Machine
             var currentAddress = operations.Address;
             switch (operation)
             {
-               case Break:
+               case Reset:
                   return;
                default:
                {
@@ -661,4 +672,25 @@ public class Machine
    public string StackAsString => stack.Peek().ToString();
 
    public Maybe<Field> LastField { get; set; } = nil;
+
+   public Maybe<IObject> R0 { get; set; } = nil;
+
+   public Maybe<IObject> R1 { get; set; } = nil;
+
+   public Maybe<IObject> R2 { get; set; } = nil;
+
+   public Maybe<IObject> R3 { get; set; } = nil;
+
+   public IEnumerable<string> AllFieldNames()
+   {
+      return allFieldNames().Distinct().Order();
+
+      IEnumerable<string> allFieldNames()
+      {
+         foreach (var fieldName in stack.SelectMany(frame => frame.AllFieldNames()))
+         {
+            yield return fieldName;
+         }
+      }
+   }
 }

@@ -258,11 +258,24 @@ public class Dictionary : IObject, IMutableCollection
 
    public string ClassName => "Dictionary";
 
-   public string AsString => $"{{{dictionary.Select(i => $"{i.Key.AsString} => {i.Value.AsString}").ToString(" ")}}}";
+   public string AsString
+   {
+      get
+      {
+         if (dictionary.Count == 0)
+         {
+            return "{:}";
+         }
+         else
+         {
+            return $"{{{dictionary.Select(i => $"{i.Key.AsString} : {i.Value.AsString}").ToString(" ")}}}";
+         }
+      }
+   }
 
    public string Image
    {
-      get => dictionary.Count == 0 ? "{}" : $"{{{dictionary.Select(i => $"{i.Key.Image} => {i.Value.Image}").ToString(", ")}}}";
+      get => dictionary.Count == 0 ? "{:}" : $"{{{dictionary.Select(i => $"{i.Key.Image} : {i.Value.Image}").ToString(", ")}}}";
    }
 
    public int Hash => dictionary.GetHashCode();
@@ -284,6 +297,8 @@ public class Dictionary : IObject, IMutableCollection
    }
 
    public bool IsTrue => dictionary.Count > 0;
+
+   public Guid Id { get; init; } = Guid.NewGuid();
 
    public IIterator GetIterator(bool lazy) => lazy ? new LazyDictionaryIterator(this) : new DictionaryIterator(this);
 
@@ -312,7 +327,7 @@ public class Dictionary : IObject, IMutableCollection
 
    public IObject Keys => new Set(dictionary.KeyArray());
 
-   public IObject Values => new KArray(dictionary.ValueArray());
+   public IObject Values => new KTuple(dictionary.ValueArray());
 
    public KBoolean In(IObject key) => dictionary.ContainsKey(key);
 
@@ -323,6 +338,19 @@ public class Dictionary : IObject, IMutableCollection
    public KString MakeString(string connector) => makeString(this, connector);
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
+
+   public IObject One()
+   {
+      if (dictionary.Count == 1)
+      {
+         var first = dictionary.First();
+         return new KTuple(first.Key, first.Value);
+      }
+      else
+      {
+         return this;
+      }
+   }
 
    public IObject Swap(IObject key1, IObject key2)
    {
@@ -449,7 +477,7 @@ public class Dictionary : IObject, IMutableCollection
       var iterator = collection.GetIterator(false);
       foreach (var item in iterator.List())
       {
-         if (item is KTuple { Length: { Value: 2 } } tuple)
+         if (item is KTuple { Length.Value: 2 } tuple)
          {
             newDictionary[tuple[0]] = tuple[1];
          }
@@ -459,4 +487,19 @@ public class Dictionary : IObject, IMutableCollection
    }
 
    public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
+
+   public IObject Items
+   {
+      get
+      {
+         List<IObject> items = [];
+         foreach (var (key, value) in dictionary)
+         {
+            var tuple = new KTuple(key, value);
+            items.Add(tuple);
+         }
+
+         return new KTuple([.. items]);
+      }
+   }
 }

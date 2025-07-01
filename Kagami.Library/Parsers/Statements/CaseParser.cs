@@ -83,7 +83,7 @@ public partial class CaseParser : StatementParser
                return exception;
             }
 
-            If = new If(expression, block, _ifStatement, nil, assignmentField, mutable, assignment, top);
+            If = new If(expression, block, _ifStatement, nil, assignmentField, mutable, assignment, top, true);
             return unit;
          }
          else

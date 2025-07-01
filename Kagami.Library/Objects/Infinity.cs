@@ -69,6 +69,8 @@ public readonly struct Infinity : IObject, IObjectCompare, INumeric
 
    public IObject Raise(INumeric power) => raise(this, power);
 
+   public IObject Abs() => positive ? this : new Infinity(true);
+
    public string AsString => "_";
 
    public string Image => "_";
@@ -80,6 +82,8 @@ public readonly struct Infinity : IObject, IObjectCompare, INumeric
    public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
    public bool IsTrue => true;
+
+   public Guid Id { get; init; } = Guid.NewGuid();
 
    public int Compare(IObject obj) => positive ? -1 : 1;
 

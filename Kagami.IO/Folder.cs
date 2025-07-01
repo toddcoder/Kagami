@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Kagami.Library.Objects;
+﻿using Kagami.Library.Objects;
 using Core.Computers;
 using Core.Collections;
 using Core.Monads;
@@ -33,6 +31,8 @@ public class Folder : IObject, ICollection
    public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
    public bool IsTrue => false;
+
+   public Guid Id { get; init; } = Guid.NewGuid();
 
    public IIterator GetIterator(bool lazy) => new FolderIterator(this);
 
@@ -72,6 +72,8 @@ public class Folder : IObject, ICollection
    public KString MakeString(string connector) => makeString(this, connector);
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
+
+   public IObject One() => this;
 
    public IObject Flatten() => this;
 

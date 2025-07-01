@@ -32,7 +32,6 @@ public class AssignToFieldWithBlock : Statement
       builder.PushFrame();
       block.Generate(builder);
       builder.PopFrameWithValue();
-      builder.Peek(Index);
       builder.AssignField(fieldName, true);
    }
 

@@ -42,6 +42,8 @@ public class Plot : Form, IObject
 
    public bool IsTrue => true;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public IObject ShowPlot()
    {
       Show();

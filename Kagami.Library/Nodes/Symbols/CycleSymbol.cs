@@ -2,7 +2,7 @@
 
 namespace Kagami.Library.Nodes.Symbols;
 
-public class CycleSymbol : Symbol
+public class CycleSymbol : Symbol, IHasExpression
 {
    protected Expression expression;
 
@@ -19,4 +19,6 @@ public class CycleSymbol : Symbol
    public override Arity Arity => Arity.Nullary;
 
    public override string ToString() => $"?({expression})";
+
+   public Expression Expression => expression;
 }

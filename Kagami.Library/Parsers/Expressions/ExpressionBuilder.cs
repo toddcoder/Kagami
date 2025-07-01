@@ -1,18 +1,22 @@
 ﻿using Kagami.Library.Nodes.Symbols;
 using Core.Enumerables;
 using Core.Monads;
+using Core.Monads.Lazy;
 using Core.Numbers;
+using Kagami.Library.Nodes.Statements;
+using Kagami.Library.Objects;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public class ExpressionBuilder(Bits32<ExpressionFlags> flags)
+public class ExpressionBuilder(Bits32<ExpressionFlags> flags, bool acknowledgeImplicit = true)
 {
    protected SymbolStack stack = new();
    protected List<Symbol> symbols = [];
    protected List<Symbol> ordered = [];
    protected Bits32<ExpressionFlags> flags = flags;
    protected Maybe<Symbol> _lastSymbol = nil;
+   protected bool containsImplicitOperator;
 
    public Bits32<ExpressionFlags> Flags
    {
@@ -20,8 +24,19 @@ public class ExpressionBuilder(Bits32<ExpressionFlags> flags)
       set => flags = value;
    }
 
+   public Symbol[] Symbols
+   {
+      get => [.. symbols];
+      set => symbols = value.ToList();
+   }
+
    public void Add(Symbol symbol)
    {
+      if (acknowledgeImplicit && symbol is ImplicitSymbol or ImplicitZip)
+      {
+         containsImplicitOperator = true;
+      }
+
       ordered.Add(symbol);
       _lastSymbol = symbol;
 
@@ -80,10 +95,94 @@ public class ExpressionBuilder(Bits32<ExpressionFlags> flags)
       return unit;
    }
 
-   public Result<Expression> ToExpression() =>
-      EndOfExpression().Map(_ => new Expression(symbols.ToArray()) { SpecialComparisandIndex = SpecialComparisandIndex });
+   protected static Result<Expression> generateMap(Expression originalExpression, ExpressionFlags flags)
+   {
+      var symbols = originalExpression.Symbols;
+      LazyMaybe<int> _zipIndex1 = nil;
+      var _index = symbols.Find(s => s is ImplicitSymbol);
+      if (_index is (true, var index))
+      {
+         var implicitType = ((ImplicitSymbol)symbols[index]).Type;
+         var sourceSymbol = symbols[index - 1];
+         symbols[index - 1] = new FieldSymbol("__$0");
+         symbols[index] = new NoOpSymbol();
 
-   public IEnumerable<Symbol> Ordered => ordered;
+         for (var i = 0; i < symbols.Length; i++)
+         {
+            if (symbols[i] is SendMessageSymbol sendMessageSymbol)
+            {
+               symbols[i] = sendMessageSymbol.AsChainOperator();
+            }
+         }
+
+         var bodyExpression = new Expression(symbols);
+         var block = new Block(bodyExpression);
+         var lambda = new LambdaSymbol(1, block);
+
+         var builder = new ExpressionBuilder(flags, false);
+         builder.Add(sourceSymbol);
+         Selector selector = implicitType == "m" ? "map(_)" : "if(_)";
+         builder.Add(new SendMessageSymbol(selector, Precedence.ChainedOperator, false, lambda));
+
+         return builder.ToExpression();
+      }
+      else if (_zipIndex1.ValueOf(symbols.Find(s => s is ImplicitZip)) is (true, var zipIndex1))
+      {
+         var _zipIndex2 = symbols.Find(s => s is ImplicitZip, zipIndex1 + 1);
+         if (_zipIndex2 is (true, var zipIndex2))
+         {
+            var sourceSymbol1 = symbols[zipIndex1 - 1];
+            symbols[zipIndex1 - 1] = new FieldSymbol("__$0");
+            symbols[zipIndex1] = new NoOpSymbol();
+            var sourceSymbol2 = symbols[zipIndex2 - 1];
+            symbols[zipIndex2 - 1] = new FieldSymbol("__$1");
+            symbols[zipIndex2] = new NoOpSymbol();
+
+            for (var i = 0; i < symbols.Length; i++)
+            {
+               if (symbols[i] is SendMessageSymbol sendMessageSymbol)
+               {
+                  symbols[i] = sendMessageSymbol.AsChainOperator();
+               }
+            }
+
+            var bodyExpression = new Expression(symbols);
+            var block = new Block(bodyExpression);
+            var lambda = new LambdaSymbol(2, block);
+
+            var builder = new ExpressionBuilder(flags, false);
+            builder.Add(sourceSymbol1);
+            builder.Add(new SendMessageSymbol("zip(_,_)", Precedence.ChainedOperator, false, lambda, new Expression(sourceSymbol2)));
+
+            return builder.ToExpression();
+         }
+         else
+         {
+            return originalExpression;
+         }
+      }
+      else
+      {
+         return originalExpression;
+      }
+   }
+
+   public Result<Expression> ToExpression()
+   {
+      var _expression = EndOfExpression().Map(_ => new Expression([.. symbols]) { SpecialComparisandIndex = SpecialComparisandIndex });
+      if (containsImplicitOperator && _expression is (true, var expression))
+      {
+         return generateMap(expression, flags);
+      }
+
+      return _expression;
+   }
+
+   public Symbol[] Ordered
+   {
+      get => [.. ordered];
+      set => ordered = value.ToList();
+   }
 
    public override string ToString() => ordered.ToString(" ");
 

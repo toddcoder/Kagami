@@ -97,6 +97,8 @@ public class Awkifier : IObject, ICollection
 
    public bool IsTrue => source.IsNotEmpty();
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    protected void splitIfRecordNotCreated()
    {
       if (!recordsCreated)
@@ -163,6 +165,8 @@ public class Awkifier : IObject, ICollection
    public KString MakeString(string connector) => makeString(this, connector);
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
+
+   public IObject One() => this;
 
    public IIterator If(Regex regex)
    {

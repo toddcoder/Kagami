@@ -18,6 +18,7 @@ public class GetField : Operation
       if (_field is (true, var field))
       {
          machine.LastField = field;
+         Module.Global.Value.RetrievedFields[field.Value.Id] = fieldName;
          return field.Value.Just();
       }
       else if (_field.Exception is (true, var exception))

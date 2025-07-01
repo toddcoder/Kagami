@@ -106,6 +106,8 @@ public readonly struct Float : IObject, INumeric, IObjectCompare, IComparable<Fl
 
    public IObject Raise(INumeric power) => raise(this, power);
 
+   public IObject Abs() => (Float)Math.Abs(value);
+
    public string AsString => value.ToString();
 
    public string Image => floatImage(value);
@@ -117,6 +119,8 @@ public readonly struct Float : IObject, INumeric, IObjectCompare, IComparable<Fl
    public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
    public bool IsTrue => value != 0;
+
+   public Guid Id { get; init; } = Guid.NewGuid();
 
    public (INumeric, INumeric) Compatible(INumeric obj) => obj.ClassName switch
    {
@@ -153,4 +157,8 @@ public readonly struct Float : IObject, INumeric, IObjectCompare, IComparable<Fl
    public IObject Increment(int amount = 1) => new Float(value + amount);
 
    public IObject Decrement(int amount = 1) => new Float(value - amount);
+
+   public Float Rand(Random random) => random.NextDouble() * value;
+
+   public Float Rand(Random random, Float max) => random.NextDouble() * (max.value - value) + value;
 }

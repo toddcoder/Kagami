@@ -30,6 +30,8 @@ public readonly struct KIndex : IObject
 
    public bool IsTrue => skipCount != 0 || takeCount != 0;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public IObject IndexOf(ICollection collection)
    {
       var iterator = collection.GetIterator(false);

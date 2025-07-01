@@ -2,6 +2,7 @@
 using Core.Enumerables;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.CollectionFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
@@ -48,7 +49,7 @@ public class Set : IObject, ICollection, IObjectCompare
 
    public string AsString => set.Select(i => i.AsString).ToString(" ");
 
-   public string Image => $"[.{set.Select(i => i.Image).ToString(", ")}.]";
+   public string Image => $"{{{set.Select(i => i.Image).ToString(", ")}}}";
 
    public int Hash => set.GetHashCode();
 
@@ -57,6 +58,8 @@ public class Set : IObject, ICollection, IObjectCompare
    public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
    public bool IsTrue => set.Count > 0;
+
+   public Guid Id { get; init; } = Guid.NewGuid();
 
    public IIterator GetIterator(bool lazy)
    {
@@ -82,8 +85,19 @@ public class Set : IObject, ICollection, IObjectCompare
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
+   public IObject One() => set.Count == 1 ? set.Take(1).First() : this;
+
+   protected void assertNotThisSet(IObject other)
+   {
+      if (Id == other.Id)
+      {
+         throw cannotAddSelf();
+      }
+   }
+
    public Set Append(IObject item)
    {
+      assertNotThisSet(item);
       set.Add(item);
       return this;
    }
@@ -135,7 +149,7 @@ public class Set : IObject, ICollection, IObjectCompare
          Set otherSet when set.IsProperSubsetOf(otherSet.set) => -1,
          Set otherSet when set.IsSubsetOf(otherSet.set) => 0,
          Set => 1,
-         _ => throw AllExceptions.unableToConvert(obj.Image, "Set")
+         _ => throw unableToConvert(obj.Image, "Set")
       };
    }
 

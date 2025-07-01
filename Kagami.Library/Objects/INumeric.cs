@@ -62,4 +62,6 @@ public interface INumeric : IIncrementDecrement
    KString ZFill(int count);
 
    IObject Raise(INumeric power);
+
+   IObject Abs();
 }

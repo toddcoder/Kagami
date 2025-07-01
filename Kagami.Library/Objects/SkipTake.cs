@@ -28,6 +28,8 @@ public struct SkipTake : IObject, IEquatable<SkipTake>
 
    public bool IsTrue => skip != 0 && take != 0;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public int Skip => skip;
 
    public int Take => take;

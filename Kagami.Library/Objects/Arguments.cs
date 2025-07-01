@@ -42,6 +42,8 @@ public readonly struct Arguments : IObject, IEnumerable<IObject>, IEquatable<Arg
 
    public bool IsTrue => arguments.Length > 0;
 
+   public Guid Id { get; init; } = Guid.NewGuid();
+
    public int Length => arguments.Length;
 
    public IObject this[int index]

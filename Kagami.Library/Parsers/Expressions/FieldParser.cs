@@ -26,7 +26,14 @@ public partial class FieldParser : SymbolParser
       }
       else
       {
-         builder.Add(builder.Flags[ExpressionFlags.Comparisand] ? new PlaceholderSymbol($"-{source}") : new FieldSymbol(source));
+         if (!builder.Flags[ExpressionFlags.Comparisand] || source.StartsWith('`'))
+         {
+            builder.Add(new FieldSymbol(source));
+         }
+         else
+         {
+            builder.Add(new PlaceholderSymbol($"-{source}"));
+         }
       }
 
       return unit;

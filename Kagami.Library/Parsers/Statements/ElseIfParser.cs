@@ -19,8 +19,6 @@ public partial class ElseIfParser : ExpressionBlockParser
       this.assignment = assignment;
    }
 
-   //public override string Pattern => "^ /(/s*) /'else' /(/s+) /'if' /b";
-
    [GeneratedRegex(@"^(\s*)(else)(\s+)(if)\b")]
    public override partial Regex Regex();
 

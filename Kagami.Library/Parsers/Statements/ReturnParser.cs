@@ -8,9 +8,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class ReturnParser : EndingInExpressionParser
 {
-   //public override string Pattern => "^ /(/s*) /'return' /(/s+)";
-
-   [GeneratedRegex(@"^(\s*)(return)(\s+)")]
+   [GeneratedRegex(@"^(\s*)(return)([ \t]+)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)

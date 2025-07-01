@@ -30,7 +30,9 @@ public class StatementsParser : MultiParser
          yield return new ForParser();
          yield return new RepeatParser();
          yield return new ExitContinueParser();
+         yield return new TryHandlerParser();
 
+         yield return new EnumParser2();
          yield return new MatchParser();
          yield return new YieldParser();
          yield return new ReturnParser();
@@ -49,9 +51,11 @@ public class StatementsParser : MultiParser
          yield return new LoopParser();
          yield return new BlockStatementParser();
          yield return new ImportPackageParser();
+         yield return new OpenEnumParser();
          yield return new OpenPackageParser();
          yield return new UsePackageParser();
 
+         //yield return new ReassignmentParser();
          yield return new AssignToFieldParser();
 
          yield return new FunctionParser();

@@ -1,16 +1,16 @@
-﻿using System.Text;
-using Kagami.Library.Classes;
-using Kagami.Library.Runtime;
-using Core.Collections;
+﻿using Core.Collections;
 using Core.Enumerables;
 using Core.Matching;
 using Core.Monads;
 using Core.Objects;
 using Core.Strings;
+using Kagami.Library.Classes;
 using Kagami.Library.Parsers;
+using Kagami.Library.Runtime;
+using System.Text;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Parsers.ParserFunctions;
-using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Objects;
 
@@ -33,7 +33,7 @@ public static class ObjectFunctions
    public static bool match<T>(T source, IObject comparisand, Func<T, T, bool> equalifier, Hash<string, IObject> bindings)
       where T : IObject
    {
-      switch (comparisand)
+      /*switch (comparisand)
       {
          case Binding binding:
             comparisand = binding.Value;
@@ -43,6 +43,12 @@ public static class ObjectFunctions
             comparisand = nameValue.Value;
             bindings[$"-{nameValue.Name}"] = source;
             break;
+      }*/
+
+      var _name = Module.Global.Value.Bindings.Maybe[comparisand.Id];
+      if (_name is (true, var name))
+      {
+         bindings[name] = source;
       }
 
       switch (comparisand)
@@ -92,7 +98,7 @@ public static class ObjectFunctions
    public static bool matchSingle<T>(T source, IObject comparisand, Func<T, IObject, bool> equalifier,
       Hash<string, IObject> bindings) where T : IObject
    {
-      switch (comparisand)
+      /*switch (comparisand)
       {
          case Binding binding:
             comparisand = binding.Value;
@@ -102,6 +108,12 @@ public static class ObjectFunctions
             comparisand = nameValue.Value;
             bindings[$"-{nameValue.Name}"] = source;
             break;
+      }*/
+
+      var _name = Module.Global.Value.Bindings.Maybe[comparisand.Id];
+      if (_name is (true, var name))
+      {
+         bindings[name] = source;
       }
 
       switch (comparisand)
@@ -230,10 +242,10 @@ public static class ObjectFunctions
 
    public static bool userObjectMatch(UserObject obj, IObject comparisand, Hash<string, IObject> bindings)
    {
-      static bool includeFieldName(string fieldName)
+      /*static bool includeFieldName(string fieldName)
       {
          return !fieldName.StartsWith("__$") && fieldName != "self" && fieldName != "id" && !fieldName.StartsWith("_");
-      }
+      }*/
 
       if (classOf(obj).RespondsTo("match(_,_)"))
       {
@@ -258,19 +270,12 @@ public static class ObjectFunctions
       {
          return match(obj, comparisand, (uo1, uo2) =>
          {
-            if (obj.Parameters.Length == 0)
+            if (uo1.ClassName != uo2.ClassName)
             {
-               foreach (var (fieldName, field) in uo1.Fields.Where(f => includeFieldName(f.fieldName)))
-               {
-                  var value1 = field.Value;
-                  var value2 = uo2.Fields[fieldName];
-                  if (!value1.Match(value2, bindings))
-                  {
-                     return false;
-                  }
-               }
+               return false;
             }
-            else
+
+            if (obj.Parameters.Length > 0)
             {
                foreach (var parameter in obj.Parameters)
                {
@@ -290,6 +295,18 @@ public static class ObjectFunctions
                   }
                }
             }
+            /*else
+            {
+               foreach (var (fieldName, field) in uo1.Fields.Where(f => includeFieldName(f.fieldName)))
+               {
+                  var value1 = field.Value;
+                  var value2 = uo2.Fields[fieldName];
+                  if (!value1.Match(value2, bindings))
+                  {
+                     return false;
+                  }
+               }
+            }*/
 
             return true;
          }, bindings);
@@ -515,7 +532,7 @@ public static class ObjectFunctions
 
    public static Selector parseSelector(string source)
    {
-      if (source.MatchOf(@$"^((?:__\$)?{REGEX_FUNCTION_NAME})(.*)$") is (true, var matches))
+      if (source.MatchOf(@$"^((?:__\$)?{REGEX_FUNCTION_NAME2})(.*)$") is (true, var matches))
       {
          var match = matches[0];
          var name = match.Groups[1].Value;
@@ -523,7 +540,7 @@ public static class ObjectFunctions
 
          if (!name.StartsWith("__$") && rest.IsEmpty())
          {
-            rest = name.EndsWith('=') ? "(_)" : "()";
+            //rest = name.EndsWith('=') ? "(_)" : "()";
             name = $"__${name}";
          }
 
@@ -689,6 +706,42 @@ public static class ObjectFunctions
       else
       {
          throw fail("Target must be a mutable collection");
+      }
+   }
+
+   public static IObject getConstructor(Selector selector)
+   {
+      var machine = Machine.Current.Value;
+      var _field = machine.Find(selector);
+      if (_field is (true, { Value: Constructor constructor }))
+      {
+         return constructor;
+      }
+      else if (_field.Exception is (true, var exception))
+      {
+         throw exception;
+      }
+      else
+      {
+         throw fail($"Constructor {selector} not found");
+      }
+   }
+
+   public static IObject createObject(Selector selector, Message message)
+   {
+      var machine = Machine.Current.Value;
+      var _field = machine.Find(selector);
+      if (_field is (true, { Value: Constructor constructor }))
+      {
+         return machine.Invoke(constructor.Invokable, message.Arguments).Force();
+      }
+      else if (_field.Exception is (true, var exception))
+      {
+         throw exception;
+      }
+      else
+      {
+         throw fail($"Constructor {selector} not found");
       }
    }
 }

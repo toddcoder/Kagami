@@ -8,8 +8,6 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class ElseParser : StatementParser
 {
-   //public override string Pattern => "^ /(/s*) /'else' /b";
-
    [GeneratedRegex(@"^(\s*)(else)\b")]
    public override partial Regex Regex();
 

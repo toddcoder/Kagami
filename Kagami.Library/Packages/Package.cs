@@ -3,30 +3,31 @@ using Kagami.Library.Runtime;
 using Core.Collections;
 using static Kagami.Library.Objects.ObjectFunctions;
 
-namespace Kagami.Library.Packages
+namespace Kagami.Library.Packages;
+
+public abstract class Package : IObject
 {
-   public abstract class Package : IObject
-   {
-      protected Fields fields;
+   protected Fields fields;
 
-      public Package() => fields = new Fields();
+   public Package() => fields = new Fields();
 
-      public Fields Fields => fields;
+   public Fields Fields => fields;
 
-      public abstract string ClassName { get; }
+   public abstract string ClassName { get; }
 
-      public string AsString => ClassName;
+   public string AsString => ClassName;
 
-      public string Image => ClassName;
+   public string Image => ClassName;
 
-      public int Hash => ClassName.GetHashCode();
+   public int Hash => ClassName.GetHashCode();
 
-      public bool IsEqualTo(IObject obj) => obj.ClassName == ClassName;
+   public bool IsEqualTo(IObject obj) => obj.ClassName == ClassName;
 
-      public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
+   public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
-      public bool IsTrue => true;
+   public bool IsTrue => true;
 
-      public abstract void LoadTypes(Module module);
-   }
+   public Guid Id { get; init; } = Guid.NewGuid();
+
+   public abstract void LoadTypes(Module module);
 }

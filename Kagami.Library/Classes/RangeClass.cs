@@ -22,6 +22,7 @@ public class RangeClass : BaseClass, ICollectionClass
       messages["-(_)"] = (obj, msg) => function<KRange, Int>(obj, msg, (r, i) => r.Subtract(i.Value));
       messages["inverse()"] = (obj, _) => function<KRange>(obj, r => r.Reverse());
       messages["~(_)"] = (obj, msg) => function<KRange, KRange>(obj, msg, (r1, r2) => r1.Concatenate(r2));
+      messages["max".get()] = (obj, _) => function<KRange>(obj, r => r.Max());
    }
 
    public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
