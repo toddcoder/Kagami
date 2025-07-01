@@ -66,7 +66,7 @@ public class EnumClass : UserClass
          List<IObject> list = [];
          foreach (var (selector, value) in constructors)
          {
-            if (value is Unassigned)
+            if (value is None)
             {
                var message = new Message(selector, Arguments.Empty);
                var createdObject = createObject(selector, message);

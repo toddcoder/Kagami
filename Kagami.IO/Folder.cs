@@ -44,28 +44,19 @@ public class Folder : IObject, ICollection
 
    public bool ExpandForArray => true;
 
-   public KBoolean In(IObject item)
+   public KBoolean In(IObject item) => item switch
    {
-      return item switch
-      {
-         File f => folderName.Files.Contains(new FileName(f.AsString)),
-         Folder folder => folderName.Folders.Contains(new FolderName(folder.AsString)),
-         _ => false
-      };
-   }
+      File f => folderName.Files.Contains(new FileName(f.AsString)),
+      Folder folder => folderName.Folders.Contains(new FolderName(folder.AsString)),
+      _ => false
+   };
 
-   public KBoolean NotIn(IObject item)
+   public KBoolean NotIn(IObject item) => item switch
    {
-      switch (item)
-      {
-         case File f:
-            return !folderName.Files.Contains(new FileName(f.AsString));
-         case Folder folder:
-            return !folderName.Folders.Contains(new FolderName(folder.AsString));
-         default:
-            return true;
-      }
-   }
+      File f => !folderName.Files.Contains(new FileName(f.AsString)),
+      Folder folder => !folderName.Folders.Contains(new FolderName(folder.AsString)),
+      _ => true
+   };
 
    public IObject Times(int count) => this;
 

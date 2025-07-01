@@ -1,4 +1,6 @@
-﻿using Core.Monads;
+﻿using Core.Enumerables;
+using Core.Matching;
+using Core.Monads;
 using Kagami.Library.Objects;
 
 namespace Kagami.Library.Classes;
@@ -24,11 +26,23 @@ public class EnumMemberClass : UserClass
       }
    }
 
+   protected string asString(UserObject userObject)
+   {
+      var name = userObject.ClassName.Substitute(@"^.*\$(.+)$; u", "$1");
+      var parameters = userObject.ParameterValues.Select(p => p.AsString).ToString(", ");
+      if (parameters.Length > 0)
+      {
+         parameters = $"({parameters})";
+      }
+
+      return $"{name}{parameters}";
+   }
+
    public override void RegisterMessages()
    {
       base.RegisterMessages();
 
-      RegisterMessage("string".get(), (_, _) => (KString)className.Replace("$", "."));
+      RegisterMessage("string".get(), (obj, _) => (KString)asString((UserObject)obj));
    }
 
    public override bool AssignCompatible(BaseClass otherClass) =>

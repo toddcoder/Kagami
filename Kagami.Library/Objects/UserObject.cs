@@ -39,6 +39,8 @@ public class UserObject : IObject
 
    public Parameters Parameters => parameters;
 
+   public IEnumerable<IObject> ParameterValues => parameters.Select(p => fields.ContainsKey(p.Name) ? fields[p.Name] : Unassigned.Value);
+
    public int ObjectID => objectID;
 
    public string ClassName => className;

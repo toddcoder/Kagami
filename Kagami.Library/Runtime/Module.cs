@@ -157,8 +157,6 @@ public class Module
       }
    }
 
-   //public bool OperatorExists(OperatorType operatorType) => operators.ContainsKey(operatorType.FunctionName);
-
    public Maybe<OperatorType> GetOperator(string functionName) => operators.Maybe[functionName];
 
    public Result<Unit> Alias(string alias, string className)

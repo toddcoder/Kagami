@@ -1,21 +1,21 @@
 ﻿using Kagami.Library;
 using Kagami.Library.Classes;
+using Kagami.Library.Objects;
 using static Kagami.Library.Classes.ClassFunctions;
 
-namespace Kagami.IO
+namespace Kagami.IO;
+
+public class FileClass : BaseClass
 {
-   public class FileClass : BaseClass
+   public override string Name => "File";
+
+   public override void RegisterMessages()
    {
-      public override string Name => "File";
+      base.RegisterMessages();
 
-      public override void RegisterMessages()
-      {
-         base.RegisterMessages();
+      collectionMessages();
 
-         collectionMessages();
-
-         messages["text".get()] = (obj, _) => function<File>(obj, f => f.Text);
-         messages["lines".get()] = (obj, _) => function<File>(obj, f => f.Lines);
-      }
+      messages["text".get()] = (obj, _) => function<File>(obj, f => f.Text);
+      messages["lines".get()] = (obj, _) => function<File>(obj, f => new Iterator(f.Lines));
    }
 }

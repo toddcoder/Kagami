@@ -13,9 +13,15 @@ public class GlobalFrame : Frame
       Math = new KMath();
       Sys.LoadTypes(Module.Global);
       fields.New("math", Math);
+
+      IO = new Packages.IO();
+      IO.LoadTypes(Module.Global);
+      fields.New("io", IO);
    }
 
    public Sys Sys { get; }
 
    public KMath Math { get; }
+
+   public Packages.IO IO { get; }
 }
