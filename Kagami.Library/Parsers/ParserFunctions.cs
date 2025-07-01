@@ -29,7 +29,7 @@ public static class ParserFunctions
    public const string REGEX_INVOKABLE2 = @"[A-Za-z_][A-Za-z_0-9\$]*";
    public const string REGEX_CLASS = "[A-Z][A-Za-z_0-9]*";
    public const string REGEX_CLASS_GETTING = $@"{REGEX_CLASS}(?:\. {REGEX_CLASS})?";
-   public const string REGEX_ASSIGN_OPS = @"\+|-|\*|/|/|\^|~|%|div\b";
+   public const string REGEX_ASSIGN_OPS = @"\+|-|\*|/|/|\^|~|%|div|:\b";
    public const string REGEX_FUNCTION_NAME = $@"(?:(?:{REGEX_INVOKABLE})|(?:[~`!@\#\$%\^\*\+=\|\\;<>/\?-]+)|\[\])=?";
    public const string REGEX_FUNCTION_NAME2 = $@"(?:(?:{REGEX_INVOKABLE2})|(?:[~`!@\#\$%\^\*\+=\|\\;<>/\?-]+)|\[\])=?";
    public const string REGEX_SELECTOR = @$"(?:__\$)?{REGEX_FUNCTION_NAME}(?:\(.*\))?=?";
@@ -191,6 +191,7 @@ public static class ParserFunctions
       "^" => new Raise(),
       "~" => new Concatenate(),
       "%" => new Remainder(),
+      ":" => new NoOp(),
       _ => fail($"Didn't recognize operator {source}")
    };
 

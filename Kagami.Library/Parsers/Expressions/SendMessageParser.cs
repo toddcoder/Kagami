@@ -16,7 +16,7 @@ public partial class SendMessageParser : SymbolParser
    {
    }
 
-   [GeneratedRegex($@"^(\s*)(#)?(\.|@)({REGEX_FUNCTION_NAME})(\()?")]
+   [GeneratedRegex($@"^(\s*)(#)?(\.|:)({REGEX_FUNCTION_NAME})(\()?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -60,14 +60,14 @@ public partial class SendMessageParser : SymbolParser
       if (!parseArguments)
       {
          Selector selector = name;
-         builder.Add(new SendMessageSymbol(selector, optional));
+         builder.Add(new SendMessageSymbol(selector, precedence, optional));
 
          return unit;
       }
       else if (_argumentsPlusLambda.ValueOf(getArgumentsPlusLambda(state, builder.Flags)) is (true, var (arguments, _lambda)))
       {
          var selector = name.Selector(arguments.Length);
-         builder.Add(new SendMessageSymbol(selector, optional, _lambda, arguments));
+         builder.Add(new SendMessageSymbol(selector, precedence, optional, _lambda, arguments));
 
          return unit;
       }

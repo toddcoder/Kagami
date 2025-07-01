@@ -4,6 +4,7 @@ using Core.Enumerables;
 using Core.Monads;
 using Kagami.Library.Classes;
 using Kagami.Library.Runtime;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.CollectionFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
@@ -1112,6 +1113,37 @@ public class Iterator : IObject, IIterator
       }
 
       return collectionClass.Revert(result);
+   }
+
+   public IObject Splat(int count)
+   {
+      var list = List().ToList();
+      if (count <= list.Count)
+      {
+         List<IObject> result = [];
+         List<IObject> remainder = [];
+
+         for (var i = 0; i < count; i++)
+         {
+            result.Add(list[i]);
+         }
+
+         for (var i = count; i < list.Count; i++)
+         {
+            remainder.Add(list[i]);
+         }
+
+         if (remainder.Count > 0)
+         {
+            result.Add(collectionClass.Revert(remainder));
+         }
+
+         return collectionClass.Revert(result);
+      }
+      else
+      {
+         throw fail("Requested count must be less than collection length");
+      }
    }
 
    protected static IEnumerable<IObject> applyAgainst(List<Lambda> lambdas, List<IObject> enumerable)

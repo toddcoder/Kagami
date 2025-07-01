@@ -106,6 +106,15 @@ public class ExpressionBuilder(Bits32<ExpressionFlags> flags, bool acknowledgeIm
          var sourceSymbol = symbols[index - 1];
          symbols[index - 1] = new FieldSymbol("__$0");
          symbols[index] = new NoOpSymbol();
+
+         for (var i = 0; i < symbols.Length; i++)
+         {
+            if (symbols[i] is SendMessageSymbol sendMessageSymbol)
+            {
+               symbols[i] = sendMessageSymbol.AsChainOperator();
+            }
+         }
+
          var bodyExpression = new Expression(symbols);
          var block = new Block(bodyExpression);
          var lambda = new LambdaSymbol(1, block);
@@ -113,7 +122,7 @@ public class ExpressionBuilder(Bits32<ExpressionFlags> flags, bool acknowledgeIm
          var builder = new ExpressionBuilder(flags, false);
          builder.Add(sourceSymbol);
          Selector selector = implicitType == "m" ? "map(_)" : "if(_)";
-         builder.Add(new SendMessageSymbol(selector, false, lambda));
+         builder.Add(new SendMessageSymbol(selector, Precedence.ChainedOperator, false, lambda));
 
          return builder.ToExpression();
       }
@@ -129,13 +138,21 @@ public class ExpressionBuilder(Bits32<ExpressionFlags> flags, bool acknowledgeIm
             symbols[zipIndex2 - 1] = new FieldSymbol("__$1");
             symbols[zipIndex2] = new NoOpSymbol();
 
+            for (var i = 0; i < symbols.Length; i++)
+            {
+               if (symbols[i] is SendMessageSymbol sendMessageSymbol)
+               {
+                  symbols[i] = sendMessageSymbol.AsChainOperator();
+               }
+            }
+
             var bodyExpression = new Expression(symbols);
             var block = new Block(bodyExpression);
             var lambda = new LambdaSymbol(2, block);
 
             var builder = new ExpressionBuilder(flags, false);
             builder.Add(sourceSymbol1);
-            builder.Add(new SendMessageSymbol("zip(_,_)", false, lambda, new Expression(sourceSymbol2)));
+            builder.Add(new SendMessageSymbol("zip(_,_)", Precedence.ChainedOperator, false, lambda, new Expression(sourceSymbol2)));
 
             return builder.ToExpression();
          }

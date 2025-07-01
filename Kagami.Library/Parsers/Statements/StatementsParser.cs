@@ -55,6 +55,7 @@ public class StatementsParser : MultiParser
          yield return new OpenPackageParser();
          yield return new UsePackageParser();
 
+         //yield return new ReassignmentParser();
          yield return new AssignToFieldParser();
 
          yield return new FunctionParser();

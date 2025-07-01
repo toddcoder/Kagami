@@ -170,4 +170,6 @@ public interface IIterator : IEquivalentClass
    IObject Pick(int count);
 
    IObject Roll(int count);
+
+   IObject Splat(int count);
 }

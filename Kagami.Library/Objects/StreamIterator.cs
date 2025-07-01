@@ -337,6 +337,8 @@ public class StreamIterator : IObject, IIterator
 
    public IObject Roll(int count) => terminate().Roll(count);
 
+   public IObject Splat(int count) => terminate().Splat(count);
+
    public BaseClass Equivalent() => new CollectionClass();
 
    public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
