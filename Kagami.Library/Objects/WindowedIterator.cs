@@ -35,4 +35,6 @@ public class WindowedIterator : Iterator
          return nil;
       }
    }
+
+   public override IObject Windowed(int size, int step) => this;
 }

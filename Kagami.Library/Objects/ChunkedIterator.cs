@@ -32,4 +32,6 @@ public class ChunkedIterator : Iterator
          return nil;
       }
    }
+
+   public override IObject Chunked(int count) => this;
 }
