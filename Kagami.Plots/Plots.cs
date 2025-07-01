@@ -3,6 +3,7 @@ using Kagami.Library.Runtime;
 
 namespace Kagami.Plots
 {
+   [System.Runtime.Versioning.SupportedOSPlatform("windows")]
    public class Plots : Package
    {
       public override string ClassName => "Plots";

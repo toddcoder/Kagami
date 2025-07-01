@@ -1,7 +1,4 @@
-﻿using Core.Computers;
+﻿using Kagami.Tests;
 
-var testPath = Environment.ProcessPath ?? FolderName.Temp;
-testPath.Parents(3).Map(p => p["Code"]);
-
-var test = new Kagami.Tests.Tests(testPath);
-test.RunAllTests();
+var processor = new Processor();
+processor.Run();

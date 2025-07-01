@@ -13,13 +13,11 @@ public class Processor : CommandProcessor
       tests = new Tests(testFolder);
    }
 
-   [Command("run-all-tests", "Runs all tests in the Kagami.Tests project.")]
+   [Command("run-all", "Runs all tests in the Kagami.Tests project.")]
    public void RunAllTests() => tests.RunAllTests();
 
    [Command("generate-expected", "Generate expected files")]
-   public void GenerateExpected()
-   {
-   }
+   public void GenerateExpectedTests() => tests.GenerateExpectedTexts();
 
    public override StringHash GetConfigurationDefaults() => [];
 

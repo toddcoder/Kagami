@@ -18,6 +18,17 @@ public class Tests(FolderName testFolder)
       }
    }
 
+   public void GenerateExpectedTexts()
+   {
+      var testNames = testFolder.Files
+         .Where(file => file.Extension == ".kagami")
+         .Select(file => file.Name);
+      foreach (var testName in testNames)
+      {
+         generateExpectedText(testName);
+      }
+   }
+
    protected void runTest(string testName)
    {
       var sourceFile = testFolder + $"{testName}.kagami";

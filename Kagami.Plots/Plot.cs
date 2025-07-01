@@ -4,6 +4,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Plots;
 
+[System.Runtime.Versioning.SupportedOSPlatform("windows")]
 public class Plot : Form, IObject
 {
    protected List<Action<Graphics>> actions = [];
@@ -20,7 +21,7 @@ public class Plot : Form, IObject
       Paint += paint;
    }
 
-   protected void paint(object sender, PaintEventArgs e)
+   protected void paint(object? sender, PaintEventArgs e)
    {
       foreach (var action in actions)
       {
