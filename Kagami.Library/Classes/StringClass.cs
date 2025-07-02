@@ -53,7 +53,9 @@ public class StringClass : BaseClass, ICollectionClass
       messages["isTitle".get()] = (obj, _) => function<KString>(obj, s => s.IsTitle);
       messages["translate(from:_<String>,to:_<String>)"] = (obj, msg) =>
          function<KString, KString, KString>(obj, msg, (s, f, t) => s.Translate(f.Value, t.Value));
-      messages["translate(_<Dictionary>)"] = (obj, msg) => function<KString, Dictionary>(obj, msg, (s, d) => s.Translate(d));
+      messages["translate(_<Dictionary>)"] = (obj, msg) => function<KString, Dictionary>(obj, msg, (s, d) => s.Translate(d, false));
+      messages["translate(_<Dictionary>,omit:_<Boolean>)"] =
+         (obj, msg) => function<KString, Dictionary, KBoolean>(obj, msg, (s, d, o) => s.Translate(d, o.Value));
       messages["truncate".Selector("<Int>", "<Boolean>")] = (obj, msg) =>
          function<KString, Int, KBoolean>(obj, msg, (s, w, e) => s.Truncate(w.Value, e.Value));
       messages["truncate(_,_)"] = (obj, msg) => function<KString, Int>(obj, msg, (s, w) => s.Truncate(w.Value));

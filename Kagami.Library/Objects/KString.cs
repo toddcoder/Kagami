@@ -332,7 +332,7 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
       return result.ToString();
    }
 
-   public KString Translate(Dictionary dictionary)
+   public KString Translate(Dictionary dictionary, bool omit)
    {
       var builder = new StringBuilder();
       foreach (var ch in value)
@@ -342,7 +342,7 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
          {
             builder.Append(((KChar)some.Value).Value);
          }
-         else
+         else if (!omit)
          {
             builder.Append(ch);
          }
