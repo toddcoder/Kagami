@@ -85,6 +85,7 @@ public class Module
       "Cycle" => new CycleClass(),
       "Set" => new SetClass(),
       "Decimal" => new DecimalClass(),
+      "PendingRegex" => new PendingRegexClass(),
       _ => nil
    };
 

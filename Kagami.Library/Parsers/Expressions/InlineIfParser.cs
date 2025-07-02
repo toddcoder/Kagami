@@ -28,7 +28,6 @@ public partial class InlineIfParser : SymbolParser
       if (_result is (true, var (ifTrue, ifFalse)))
       {
          builder.Add(new InlineIfSymbol(ifTrue, ifFalse));
-
          return unit;
       }
       else

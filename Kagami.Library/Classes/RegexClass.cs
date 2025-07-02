@@ -19,6 +19,7 @@ public class RegexClass : BaseClass, IEquivalentClass
       messages["replace(_<String>,_<Lambda>)"] = (obj, msg) => function<Regex, KString, Lambda>(obj, msg, (r, s, l) => r.Replace(s.Value, l));
       messages["split"] = (obj, msg) => function<Regex, KString>(obj, msg, (r, s) => r.Split(s.Value));
       messages["~"] = (obj, msg) => function<Regex, IObject>(obj, msg, (r1, r2) => r1.Concatenate(r2));
+      messages["/(_<String>)"] = (obj, msg) => function<Regex, KString>(obj, msg, (r, s) => r.PendingRegex(s));
    }
 
    public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("TextFinding");

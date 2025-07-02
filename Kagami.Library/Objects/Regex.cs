@@ -511,6 +511,8 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
 
    public Optional<Match> MatchOne(string input) => getFixedPattern().MatchedBy(input).Map(r => r.Matches[0]);
 
+   public IObject PendingRegex(KString input) => new PendingRegex(this, input);
+
    public string Pattern => pattern.Regex;
 
    public bool IgnoreCase => ignoreCase;
