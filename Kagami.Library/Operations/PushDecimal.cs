@@ -6,7 +6,7 @@ namespace Kagami.Library.Operations;
 
 public class PushDecimal(decimal value) : Operation
 {
-   protected XDecimal value = new(value);
+   protected KDecimal value = new(value);
 
    public override Optional<IObject> Execute(Machine machine) => value;
 

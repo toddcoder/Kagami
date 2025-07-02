@@ -96,7 +96,7 @@ public readonly struct Float : IObject, INumeric, IObjectCompare, IComparable<Fl
 
    public bool IsRational => false;
 
-   public INumeric ToDecimal() => new XDecimal(AsDecimal());
+   public INumeric ToDecimal() => new KDecimal(AsDecimal());
 
    public decimal AsDecimal() => (decimal)value;
 
@@ -157,6 +157,8 @@ public readonly struct Float : IObject, INumeric, IObjectCompare, IComparable<Fl
    public IObject Increment(int amount = 1) => new Float(value + amount);
 
    public IObject Decrement(int amount = 1) => new Float(value - amount);
+
+   public IObject Increment(INumeric numeric) => FloatObject(value + numeric.AsDouble());
 
    public Float Rand(Random random) => random.NextDouble() * value;
 

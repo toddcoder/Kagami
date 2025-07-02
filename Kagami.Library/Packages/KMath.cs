@@ -195,7 +195,7 @@ public class KMath : Package
 
    public Rational XRational(IObject source) => XConvert<Rational>(source, n => n.AsRational());
 
-   public XDecimal XDecimal(IObject source) => XConvert<XDecimal>(source, n => n.AsDecimal());
+   public KDecimal XDecimal(IObject source) => XConvert<KDecimal>(source, n => n.AsDecimal());
 
    public IObject Hypot(IObject x, IObject y)
    {

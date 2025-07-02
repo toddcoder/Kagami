@@ -99,7 +99,7 @@ public readonly struct Complex : IObject, INumeric, IObjectCompare, IComparable<
 
    public bool IsRational => false;
 
-   public INumeric ToDecimal() => new XDecimal(AsDecimal());
+   public INumeric ToDecimal() => new KDecimal(AsDecimal());
 
    public decimal AsDecimal() => (decimal)value.Real;
 
@@ -210,4 +210,10 @@ public readonly struct Complex : IObject, INumeric, IObjectCompare, IComparable<
    public IObject Increment(int amount = 1) => new Complex(value.Real + amount, value.Imaginary);
 
    public IObject Decrement(int amount = 1) => new Complex(value.Real - amount, value.Imaginary);
+
+   public IObject Increment(INumeric numeric)
+   {
+      var complex = value + numeric.AsComplex();
+      return ComplexObject((complex.Real, complex.Imaginary));
+   }
 }

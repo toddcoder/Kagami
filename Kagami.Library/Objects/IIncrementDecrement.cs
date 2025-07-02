@@ -5,4 +5,6 @@ public interface IIncrementDecrement
    IObject Increment(int amount = 1);
 
    IObject Decrement(int amount = 1);
+
+   IObject Increment(INumeric numeric);
 }

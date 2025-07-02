@@ -86,7 +86,7 @@ public struct Rational : IObject, INumeric, IRangeItem, IComparable<Rational>, I
 
    public bool IsRational => true;
 
-   public INumeric ToDecimal() => new XDecimal(AsDecimal());
+   public INumeric ToDecimal() => new KDecimal(AsDecimal());
 
    public decimal AsDecimal() => (decimal)(numerator / denominator);
 
@@ -223,4 +223,10 @@ public struct Rational : IObject, INumeric, IRangeItem, IComparable<Rational>, I
    public IObject Increment(int amount = 1) => new Rational(numerator + amount, denominator + amount);
 
    public IObject Decrement(int amount = 1) => new Rational(numerator - amount, denominator - amount);
+
+   public IObject Increment(INumeric numeric)
+   {
+      var (otherNumerator, otherDenominator) = numeric.AsRational();
+      return RationalObject((numerator + otherNumerator, denominator + otherDenominator));
+   }
 }

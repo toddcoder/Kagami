@@ -258,7 +258,7 @@ public abstract class BaseClass
          (obj, _) => function(obj, i => i, d => d, b => b, m => (Float)((INumeric)m).ToFloat(), "f".get()));
       registerMessage("b".get(),
          (obj, _) => function(obj, i => (byte)i, d => (byte)d, b => b, m => (KByte)((INumeric)m).ToByte(), "b".get()));
-      registerMessage("d".get(), (obj, _) => function(obj, i => i, d => (decimal)d, b => b, m => (XDecimal)((INumeric)m).ToDecimal(), "d".get()));
+      registerMessage("d".get(), (obj, _) => function(obj, i => i, d => (decimal)d, b => b, m => (KDecimal)((INumeric)m).ToDecimal(), "d".get()));
    }
 
    protected void collectionMessages()

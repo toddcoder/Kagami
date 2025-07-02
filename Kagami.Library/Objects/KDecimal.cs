@@ -6,18 +6,18 @@ using CComplex = System.Numerics.Complex;
 
 namespace Kagami.Library.Objects;
 
-public readonly struct XDecimal : IObject, INumeric, IObjectCompare, IComparable<XDecimal>, IEquatable<XDecimal>, IFormattable, IComparable,
+public readonly struct KDecimal : IObject, INumeric, IObjectCompare, IComparable<KDecimal>, IEquatable<KDecimal>, IFormattable, IComparable,
    IMessageNumber
 {
-   public static implicit operator XDecimal(decimal value) => new(value);
+   public static implicit operator KDecimal(decimal value) => new(value);
 
-   public static IObject XDecimalObject(decimal value) => new XDecimal(value);
+   public static IObject KDecimalObject(decimal value) => new KDecimal(value);
 
-   public static IObject Zero => XDecimalObject(0.0m);
+   public static IObject Zero => KDecimalObject(0.0m);
 
    private readonly decimal value;
 
-   public XDecimal(decimal value) : this()
+   public KDecimal(decimal value) : this()
    {
       this.value = value;
    }
@@ -44,7 +44,7 @@ public readonly struct XDecimal : IObject, INumeric, IObjectCompare, IComparable
 
    public int Hash => value.GetHashCode();
 
-   public bool IsEqualTo(IObject obj) => obj is XDecimal xDecimal && value == xDecimal.value;
+   public bool IsEqualTo(IObject obj) => obj is KDecimal xDecimal && value == xDecimal.value;
 
    public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
@@ -104,23 +104,23 @@ public readonly struct XDecimal : IObject, INumeric, IObjectCompare, IComparable
 
    public KString ZFill(int count) => zfill(AsString, count);
 
-   public IObject Negate() => new XDecimal(-value);
+   public IObject Negate() => new KDecimal(-value);
 
-   public IObject Sign() => value > 0 ? new XDecimal(1) : value < 0 ? new XDecimal(-1) : new XDecimal(0);
+   public IObject Sign() => value > 0 ? new KDecimal(1) : value < 0 ? new KDecimal(-1) : new KDecimal(0);
 
    public IObject Raise(INumeric power) => raise(this, power);
 
-   public IObject Remainder(INumeric other) => new XDecimal(value % other.AsDecimal());
+   public IObject Remainder(INumeric other) => new KDecimal(value % other.AsDecimal());
 
-   public IObject Divide(INumeric other) => new XDecimal(value / other.AsDecimal());
+   public IObject Divide(INumeric other) => new KDecimal(value / other.AsDecimal());
 
    public IObject DivRem(INumeric other) => new KTuple(Divide(other), Remainder(other));
 
-   public IObject Add(INumeric other) => new XDecimal(value + other.AsDecimal());
+   public IObject Add(INumeric other) => new KDecimal(value + other.AsDecimal());
 
-   public IObject Subtract(INumeric other) => new XDecimal(value - other.AsDecimal());
+   public IObject Subtract(INumeric other) => new KDecimal(value - other.AsDecimal());
 
-   public IObject Multiply(INumeric other) => new XDecimal(value * other.AsDecimal());
+   public IObject Multiply(INumeric other) => new KDecimal(value * other.AsDecimal());
 
    public IObject Sin() => new Float(Math.Sin(AsDouble()));
 
@@ -156,15 +156,15 @@ public readonly struct XDecimal : IObject, INumeric, IObjectCompare, IComparable
 
    public IObject Exp() => new Float(Math.Exp(AsDouble()));
 
-   public IObject Abs() => new XDecimal(Math.Abs(value));
+   public IObject Abs() => new KDecimal(Math.Abs(value));
 
-   public IObject Ceiling() => new XDecimal(Math.Ceiling(value));
+   public IObject Ceiling() => new KDecimal(Math.Ceiling(value));
 
-   public IObject Floor() => new XDecimal(Math.Floor(value));
+   public IObject Floor() => new KDecimal(Math.Floor(value));
 
-   public IObject Fraction() => new XDecimal(value - Math.Floor(value));
+   public IObject Fraction() => new KDecimal(value - Math.Floor(value));
 
-   public IObject Round(INumeric other) => new XDecimal(Math.Round(AsDecimal(), other.AsInt32()));
+   public IObject Round(INumeric other) => new KDecimal(Math.Round(AsDecimal(), other.AsInt32()));
 
    public int Compare(IObject obj) => compatibleCompare(this, obj);
 
@@ -174,15 +174,17 @@ public readonly struct XDecimal : IObject, INumeric, IObjectCompare, IComparable
 
    public KBoolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
 
-   public int CompareTo(XDecimal other) => value.CompareTo(other.value);
+   public int CompareTo(KDecimal other) => value.CompareTo(other.value);
 
-   public bool Equals(XDecimal other) => value.Equals(other.value);
+   public bool Equals(KDecimal other) => value.Equals(other.value);
 
    public KString Format(string format) => value.FormatUsing<decimal>(format, d => d.ToString(format.Replace("@", "d")));
 
-   public int CompareTo(object? obj) => CompareTo((XDecimal)obj!);
+   public int CompareTo(object? obj) => CompareTo((KDecimal)obj!);
 
-   public IObject Increment(int amount = 1) => (XDecimal)(value + amount);
+   public IObject Increment(int amount = 1) => (KDecimal)(value + amount);
 
-   public IObject Decrement(int amount = 1) => (XDecimal)(value - amount);
+   public IObject Decrement(int amount = 1) => (KDecimal)(value - amount);
+
+   public IObject Increment(INumeric numeric) => KDecimalObject(value + numeric.AsDecimal());
 }

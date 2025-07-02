@@ -15,7 +15,15 @@ public class NewOpenRange : TwoOperandOperation
             return y switch
             {
                Lambda lambda1 => new OpenRange(x, lambda1),
+               INumeric numeric => new NumericOpenRange(i, numeric),
                _ => new SequenceIterator(i.Value, y)
+            };
+         case INumeric seed:
+            return y switch
+            {
+               INumeric incrementer => new NumericOpenRange(seed, incrementer),
+               Lambda lambda1 => new OpenRange(Int.IntObject(seed.AsInt32()), lambda1),
+               _ => new SequenceIterator(seed.AsInt32(), y)
             };
          case SequenceIterator seq:
             return new SequenceIterator(seq, y);

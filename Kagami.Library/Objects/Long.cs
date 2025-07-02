@@ -76,7 +76,7 @@ public readonly struct Long : IObject, INumeric, IComparable<Long>, IEquatable<L
 
    public bool IsRational => false;
 
-   public INumeric ToDecimal() => new XDecimal(AsDecimal());
+   public INumeric ToDecimal() => new KDecimal(AsDecimal());
 
    public decimal AsDecimal() => (decimal)value;
 
@@ -201,4 +201,6 @@ public readonly struct Long : IObject, INumeric, IComparable<Long>, IEquatable<L
    public IObject Increment(int amount = 1) => (Long)(value + amount);
 
    public IObject Decrement(int amount = 1) => (Long)(value - amount);
+
+   public IObject Increment(INumeric numeric) => LongObject(value + numeric.AsBigInteger());
 }

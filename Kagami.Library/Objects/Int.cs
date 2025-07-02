@@ -95,7 +95,7 @@ public readonly struct Int : IObject, INumeric, IComparable<Int>, IEquatable<Int
 
    public bool IsRational => false;
 
-   public INumeric ToDecimal() => new XDecimal(AsDecimal());
+   public INumeric ToDecimal() => new KDecimal(AsDecimal());
 
    public decimal AsDecimal() => value;
 
@@ -249,6 +249,8 @@ public readonly struct Int : IObject, INumeric, IComparable<Int>, IEquatable<Int
    public IObject Increment(int amount = 1) => (Int)(value + amount);
 
    public IObject Decrement(int amount = 1) => (Int)(value - amount);
+
+   public IObject Increment(INumeric numeric) => IntObject(value + numeric.AsInt32());
 
    public Int Max(Int other) => value > other.Value ? this : other;
 

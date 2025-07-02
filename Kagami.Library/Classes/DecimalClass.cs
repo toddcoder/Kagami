@@ -16,7 +16,7 @@ public class DecimalClass : BaseClass, IParse, IEquivalentClass
       compareMessages();
    }
 
-   public IObject Parse(string source) => new XDecimal(decimal.Parse(source.Replace("_", "").Replace("d", "")));
+   public IObject Parse(string source) => new KDecimal(decimal.Parse(source.Replace("_", "").Replace("d", "")));
 
    public override bool IsNumeric => true;
 

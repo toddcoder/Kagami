@@ -70,7 +70,7 @@ public readonly struct KByte : IObject, INumeric, IObjectCompare, IComparable<KB
 
    public bool IsRational => false;
 
-   public INumeric ToDecimal() => new XDecimal(AsDecimal());
+   public INumeric ToDecimal() => new KDecimal(AsDecimal());
 
    public decimal AsDecimal() => value;
 
@@ -119,4 +119,6 @@ public readonly struct KByte : IObject, INumeric, IObjectCompare, IComparable<KB
    public IObject Increment(int amount = 1) => (KByte)(value + amount);
 
    public IObject Decrement(int amount = 1) => (KByte)(value - amount);
+
+   public IObject Increment(INumeric numeric) => ByteObject((byte)(value + numeric.AsByte()));
 }

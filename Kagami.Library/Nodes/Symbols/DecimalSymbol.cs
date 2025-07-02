@@ -23,5 +23,5 @@ public class DecimalSymbol : Symbol, IConstant
 
    public override string ToString() => value.ToString();
 
-   public IObject Object => new XDecimal(value);
+   public IObject Object => new KDecimal(value);
 }

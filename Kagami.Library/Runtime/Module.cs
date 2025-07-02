@@ -52,6 +52,7 @@ public class Module
       "Symbol" => new SymbolClass(),
       "Infinity" => new InfinityClass(),
       "OpenRange" => new OpenRangeClass(),
+      "NumericOpenRange" => new NumericOpenRangeClass(),
       "KeyValue" => new KeyValueClass(),
       "Regex" => new RegexClass(),
       "Pattern" => new PatternClass(),

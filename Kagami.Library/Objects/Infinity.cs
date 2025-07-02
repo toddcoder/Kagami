@@ -96,4 +96,6 @@ public readonly struct Infinity : IObject, IObjectCompare, INumeric
    public IObject Increment(int amount = 1) => this;
 
    public IObject Decrement(int amount = 1) => this;
+
+   public IObject Increment(INumeric numeric) => this;
 }
