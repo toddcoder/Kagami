@@ -215,7 +215,7 @@ public partial class FunctionParser : StatementParser
       state.CreateReturnType();
       while (state.More)
       {
-         var caseParser = new CaseParser(parameters[0].Name);
+         var caseParser = new WhenParser(parameters[0].Name);
          state.SkipEndOfLine();
          var _scan = caseParser.Scan(state);
          if (_scan)

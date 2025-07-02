@@ -41,7 +41,7 @@ public class StatementsParser : MultiParser
          yield return new DeferParser();
          yield return new AssignFromBlockParser();
          yield return new AssignFromLoopParser();
-         yield return new MatchAssignParser();
+         yield return new WhenAssignParser();
          yield return new AssignToNewFieldParser();
 
          yield return new AssignToMatchParser();

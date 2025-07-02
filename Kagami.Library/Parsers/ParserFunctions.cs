@@ -75,7 +75,7 @@ public static class ParserFunctions
       return getExpression(state, flags).Map(e => state.Scan(pattern, colors).Map(_ => e));
    }
 
-   public static Optional<Expression> getCompoundComparisands(ParseState state, string fieldName)
+   public static Optional<Expression> getCompoundComparisands(ParseState state, string fieldName, bool not)
    {
       var flags = ExpressionFlags.Comparisand | ExpressionFlags.OmitAnd | ExpressionFlags.OmitIf | ExpressionFlags.OmitAssign;
       var builder = new ExpressionBuilder(flags);
@@ -88,7 +88,7 @@ public static class ParserFunctions
          {
             builder.Add(new FieldSymbol(fieldName));
             builder.Add(comparisand);
-            builder.Add(new MatchSymbol());
+            builder.Add(new MatchSymbol(not));
          }
          else
          {
@@ -103,7 +103,7 @@ public static class ParserFunctions
          var _scanned = state.Scan(@"^(\s*)(&)", Color.Whitespace, Color.OpenParenthesis);
          if (_scanned)
          {
-            return getCompoundComparisands(state, fieldName).Map(nextExpression =>
+            return getCompoundComparisands(state, fieldName, false).Map(nextExpression =>
             {
                builder.Add(new AndSymbol(nextExpression));
                return builder.ToExpression().Optional();
@@ -1270,7 +1270,7 @@ public static class ParserFunctions
             _symbol = new CompareSymbol();
             break;
          case "||":
-            _symbol = new MatchSymbol();
+            _symbol = new MatchSymbol(false);
             break;
          case "~~":
             _symbol = new SendBinaryMessageSymbol("matches(_<String>)", Precedence.Boolean, true);

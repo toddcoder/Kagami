@@ -32,7 +32,7 @@ public partial class MatchLambdaParser : SymbolParser
       {
          var expressionBuilder = new ExpressionBuilder(ExpressionFlags.Standard);
          expressionBuilder.Add(new FieldSymbol("__$0"));
-         expressionBuilder.Add(new MatchSymbol());
+         expressionBuilder.Add(new MatchSymbol(false));
          expressionBuilder.Add(comparisand);
 
          var _comparison = expressionBuilder.ToExpression();

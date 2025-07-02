@@ -1,13 +1,14 @@
-﻿using System.Text.RegularExpressions;
+﻿using Core.Monads;
+using Core.Strings;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Parsers.Expressions;
-using Core.Monads;
-using static Kagami.Library.Parsers.ParserFunctions;
+using System.Text.RegularExpressions;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public partial class MatchAssignParser : StatementParser
+public partial class WhenAssignParser : StatementParser
 {
    [GeneratedRegex(@"^(\s*)(when)\b")]
    public override partial Regex Regex();
@@ -16,6 +17,9 @@ public partial class MatchAssignParser : StatementParser
    {
       state.BeginTransaction();
       state.Colorize(tokens, Color.Whitespace, Color.Keyword);
+
+      var not = state.Scan(@"^\b(not)\b", Color.Keyword).Map(n => n.IsNotEmpty()) | false;
+
       var _result =
          from comparisandValue in getExpression(state, ExpressionFlags.Comparisand | ExpressionFlags.OmitColon)
          from stem in state.Scan(@"^(\s+)(=)", Color.Whitespace, Color.Structure)
@@ -29,7 +33,7 @@ public partial class MatchAssignParser : StatementParser
             select elseBlock;
 
          state.CommitTransaction();
-         state.AddStatement(new MatchAssign(comparisand, expression, _elseBlock));
+         state.AddStatement(new MatchAssign(comparisand, expression, _elseBlock, not));
 
          return unit;
       }

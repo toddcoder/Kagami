@@ -11,12 +11,14 @@ public class MatchAssign : Statement
    protected Expression comparisand;
    protected Expression expression;
    protected Maybe<Block> _block;
+   protected bool not;
 
-   public MatchAssign(Expression comparisand, Expression expression, Maybe<Block> _block)
+   public MatchAssign(Expression comparisand, Expression expression, Maybe<Block> _block, bool not)
    {
       this.comparisand = comparisand;
       this.expression = expression;
       this._block = _block;
+      this.not = not;
    }
 
    public override void Generate(OperationsBuilder builder)
@@ -29,6 +31,11 @@ public class MatchAssign : Statement
       builder.GetField(fieldName);
       builder.Swap();
       builder.Match();
+      if (not)
+      {
+         builder.PushBoolean(false);
+         builder.Equal();
+      }
 
       if (_block is (true, var block))
       {

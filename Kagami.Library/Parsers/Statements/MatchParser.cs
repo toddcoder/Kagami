@@ -34,7 +34,7 @@ public partial class MatchParser : StatementParser
             return _result.Exception;
          }
 
-         var caseParser = new CaseParser(fieldName, mutable, assignment, matchField, true, CaseType.Statement);
+         var caseParser = new WhenParser(fieldName, mutable, assignment, matchField, true, CaseType.Statement);
          var _scan = caseParser.Scan(state);
          if (_scan)
          {

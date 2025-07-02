@@ -7,6 +7,7 @@ public class PrefixParser(ExpressionBuilder builder) : MultiParser
       get
       {
          yield return new UserOperatorParser(builder);
+
          if (builder.Flags[ExpressionFlags.Comparisand])
          {
             yield return new ComparisandBooleanParser(builder);
@@ -16,7 +17,12 @@ public class PrefixParser(ExpressionBuilder builder) : MultiParser
          yield return new NegateParser(builder);
          yield return new ImageParser(builder);
          yield return new IteratorParser(builder);
-         yield return new NotParser(builder);
+
+         if (!builder.Flags[ExpressionFlags.Comparisand])
+         {
+            yield return new NotParser(builder);
+         }
+
          yield return new RangePrefixParser(builder);
          yield return new BNotParser(builder);
          yield return new TakeOperatorParser(builder);

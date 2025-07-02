@@ -2,13 +2,14 @@
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Parsers.Expressions;
 using Core.Monads;
+using Core.Strings;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public partial class CaseParser : StatementParser
+public partial class WhenParser : StatementParser
 {
    protected string assignmentField;
    protected string fieldName;
@@ -17,7 +18,7 @@ public partial class CaseParser : StatementParser
    protected bool top;
    protected CaseType caseType;
 
-   public CaseParser(string assignmentField, bool mutable, bool assignment, string fieldName, bool top, CaseType caseType)
+   public WhenParser(string assignmentField, bool mutable, bool assignment, string fieldName, bool top, CaseType caseType)
    {
       this.assignmentField = assignmentField;
       this.mutable = mutable;
@@ -27,7 +28,7 @@ public partial class CaseParser : StatementParser
       this.caseType = caseType;
    }
 
-   public CaseParser(string fieldName)
+   public WhenParser(string fieldName)
    {
       assignmentField = "";
       mutable = false;
@@ -53,8 +54,10 @@ public partial class CaseParser : StatementParser
    {
       state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace);
 
+      var not = state.Scan(@"^\b(not)\b", Color.Keyword).Map(n => n.IsNotEmpty()) | false;
+
       var _result =
-         from comparisandValue in getCompoundComparisands(state, fieldName)
+         from comparisandValue in getCompoundComparisands(state, fieldName, not)
          from andValue in andExpression(state)
          from blockValue in getCaseBlock(caseType, state)
          select (comparisandValue, andValue, blockValue);
@@ -71,7 +74,7 @@ public partial class CaseParser : StatementParser
          var _expression = builder.ToExpression();
          if (_expression is (true, var expression))
          {
-            var caseParser = new CaseParser(assignmentField, mutable, assignment, fieldName, false, caseType);
+            var caseParser = new WhenParser(assignmentField, mutable, assignment, fieldName, false, caseType);
             Maybe<If> _ifStatement = nil;
             var _scan = caseParser.Scan(state);
             if (_scan)
