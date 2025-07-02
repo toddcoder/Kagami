@@ -14,14 +14,14 @@ public class GlobalFrame : Frame
       Sys.LoadTypes(Module.Global);
       fields.New("math", Math);
 
-      /*IO = new Packages.IO();
+      IO = new IO();
       IO.LoadTypes(Module.Global);
-      fields.New("io", IO);*/
+      fields.New("io", IO);
    }
 
    public Sys Sys { get; }
 
    public KMath Math { get; }
 
-   //public Packages.IO IO { get; }
+   public IO IO { get; }
 }
