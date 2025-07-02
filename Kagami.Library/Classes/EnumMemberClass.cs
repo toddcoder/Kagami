@@ -28,7 +28,7 @@ public class EnumMemberClass : UserClass
 
    protected string asString(UserObject userObject)
    {
-      var name = userObject.ClassName.Substitute(@"^.*\$(.+)$; u", "$1");
+      var name = plainName(userObject);
       var parameters = userObject.ParameterValues.Select(p => p.AsString).ToString(", ");
       if (parameters.Length > 0)
       {
@@ -38,11 +38,14 @@ public class EnumMemberClass : UserClass
       return $"{name}{parameters}";
    }
 
+   protected static string plainName(UserObject userObject) => userObject.ClassName.Substitute(@"^.*\$(.+)$; u", "$1");
+
    public override void RegisterMessages()
    {
       base.RegisterMessages();
 
       RegisterMessage("string".get(), (obj, _) => (KString)asString((UserObject)obj));
+      RegisterMessage("name".get(), (obj, _) => (KString)plainName((UserObject)obj));
    }
 
    public override bool AssignCompatible(BaseClass otherClass) =>

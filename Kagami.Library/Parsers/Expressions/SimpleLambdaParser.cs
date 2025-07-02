@@ -10,13 +10,13 @@ using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public partial class AlternateLambdaParser : SymbolParser
+public partial class SimpleLambdaParser : SymbolParser
 {
-   public AlternateLambdaParser(ExpressionBuilder builder) : base(builder)
+   public SimpleLambdaParser(ExpressionBuilder builder) : base(builder)
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(=)(\()")]
+   [GeneratedRegex(@"^(\s*)(\.)(\()")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
