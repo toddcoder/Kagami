@@ -441,7 +441,7 @@ public abstract class BaseClass
 
    public virtual bool MatchCompatible(BaseClass otherClass) => Name == otherClass.Name;
 
-   public virtual bool AssignCompatible(BaseClass otherClass) => MatchCompatible(otherClass);
+   public virtual bool AssignCompatible(BaseClass otherClass) => otherClass.Name == "Placeholder" || MatchCompatible(otherClass);
 
    protected void rangeMessages()
    {

@@ -61,6 +61,7 @@ public class Colorizer
       Library.Parsers.Color.Selector => true,
       Library.Parsers.Color.Regex => true,
       Library.Parsers.Color.Structure => true,
+      Library.Parsers.Color.Lambda => true,
       _ => false
    };
 
@@ -117,6 +118,7 @@ public class Colorizer
       Library.Parsers.Color.CloseParenthesis => getParenthesisColor(color, ref parenthesesCount),
       Library.Parsers.Color.Selector => Color.CadetBlue,
       Library.Parsers.Color.Regex => Color.OrangeRed,
+      Library.Parsers.Color.Lambda => Color.DarkGoldenrod,
       _ => Color.Black
    };
 }

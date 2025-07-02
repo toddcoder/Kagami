@@ -8,7 +8,7 @@ using Return = Kagami.Library.Nodes.Statements.Return;
 
 namespace Kagami.Library.Nodes.Symbols;
 
-public class InvokeSymbol : Symbol
+public class InvokeSymbol : Symbol, IHasExpressions
 {
    protected string functionName;
    protected Expression[] arguments;
@@ -77,4 +77,6 @@ public class InvokeSymbol : Symbol
    public override Arity Arity => Arity.Nullary;
 
    public override string ToString() => $"{functionName}({arguments.ToString(", ")})";
+
+   public Expression[] Expressions => arguments;
 }

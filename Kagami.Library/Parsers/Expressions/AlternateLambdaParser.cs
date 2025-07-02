@@ -2,7 +2,6 @@
 using Core.Collections;
 using Core.Matching;
 using Core.Monads;
-using Kagami.Library.Invokables;
 using Kagami.Library.Nodes;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
@@ -17,21 +16,20 @@ public partial class AlternateLambdaParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(\^\()")]
+   [GeneratedRegex(@"^(\s*)(=)(\()")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
       state.BeginTransaction();
 
-      state.Colorize(tokens, Color.Structure, Color.OpenParenthesis);
-      var _expression = getExpression(state, @"\)", builder.Flags & ~ExpressionFlags.Comparisand | ExpressionFlags.InLambda, Color.CloseParenthesis);
+      state.Colorize(tokens, Color.Whitespace, Color.Lambda, Color.Lambda);
+      var _expression = getExpression(state, @"^(\))", builder.Flags & ~ExpressionFlags.Comparisand | ExpressionFlags.InLambda, Color.Lambda);
       if (_expression is (true, var expression))
       {
-         StringSet parameterNames = [.. getParameterNames(expression).Order()];
-         var parameters = new Parameters([.. parameterNames]);
+         StringSet parameterNames = [.. getParameterNames(expression)];
          var block = new Block(expression);
-         var lambdaSymbol = new LambdaSymbol(parameters, block);
+         var lambdaSymbol = new LambdaSymbol(parameterNames.Count, block);
          builder.Add(lambdaSymbol);
 
          state.CommitTransaction();
@@ -59,6 +57,18 @@ public partial class AlternateLambdaParser : SymbolParser
                   foreach (var parameterName in getParameterNames(hasExpression.Expression))
                   {
                      yield return parameterName;
+                  }
+
+                  break;
+               }
+               case IHasExpressions hasExpressions:
+               {
+                  foreach (var subExpression in hasExpressions.Expressions)
+                  {
+                     foreach (var parameterName in getParameterNames(subExpression))
+                     {
+                        yield return parameterName;
+                     }
                   }
 
                   break;

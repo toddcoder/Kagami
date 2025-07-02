@@ -5,7 +5,7 @@ using Core.Monads;
 
 namespace Kagami.Library.Nodes.Symbols;
 
-public class MessageSymbol : Symbol
+public class MessageSymbol : Symbol, IHasExpressions
 {
    protected Selector selector;
    protected Expression[] arguments;
@@ -48,4 +48,6 @@ public class MessageSymbol : Symbol
    {
       return $"?{selector}({arguments.Select(a => a.ToString()).ToString(", ")})" + (_lambda.Map(l => $" {l}") | (() => ""));
    }
+
+   public Expression[] Expressions => arguments;
 }

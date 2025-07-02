@@ -3,7 +3,7 @@ using Kagami.Library.Operations;
 
 namespace Kagami.Library.Nodes.Symbols;
 
-public class NewSequenceSymbol(Expression[] expressions) : Symbol
+public class NewSequenceSymbol(Expression[] expressions) : Symbol, IHasExpressions
 {
    public override void Generate(OperationsBuilder builder)
    {
@@ -32,4 +32,6 @@ public class NewSequenceSymbol(Expression[] expressions) : Symbol
    public override Arity Arity => Arity.Nullary;
 
    public bool IsOpenRange { get; set; }
+
+   public Expression[] Expressions => expressions;
 }

@@ -3,7 +3,7 @@ using Core.Enumerables;
 
 namespace Kagami.Library.Nodes.Symbols;
 
-public class PostfixInvokeSymbol : Symbol
+public class PostfixInvokeSymbol : Symbol, IHasExpressions
 {
    protected Expression[] arguments;
 
@@ -25,4 +25,6 @@ public class PostfixInvokeSymbol : Symbol
    public override Arity Arity => Arity.Postfix;
 
    public override string ToString() => $"({arguments.ToString(", ")})";
+
+   public Expression[] Expressions => arguments;
 }

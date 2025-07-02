@@ -4,7 +4,7 @@ using Core.Strings;
 
 namespace Kagami.Library.Nodes.Symbols;
 
-public class InterpolatedStringSymbol : Symbol
+public class InterpolatedStringSymbol : Symbol, IHasExpressions
 {
    protected string prefix;
    protected Expression[] expressions;
@@ -58,4 +58,6 @@ public class InterpolatedStringSymbol : Symbol
    {
       return (StringStream)"$\"" / prefix / expressions.Zip(suffixes, (e, s) => $"({e}){s}").ToString("");
    }
+
+   public Expression[] Expressions => expressions;
 }

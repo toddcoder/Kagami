@@ -8,7 +8,7 @@ using static Kagami.Library.Nodes.NodeFunctions;
 
 namespace Kagami.Library.Nodes.Symbols;
 
-public class SendMessageSymbol : Symbol
+public class SendMessageSymbol : Symbol, IHasExpressions
 {
    protected Selector selector;
    protected Precedence precedence;
@@ -120,4 +120,6 @@ public class SendMessageSymbol : Symbol
    {
       return new SendMessageSymbol(selector, Precedence.ChainedOperator, optional, _lambda, _operation, arguments);
    }
+
+   public Expression[] Expressions => arguments;
 }

@@ -5,7 +5,7 @@ using Kagami.Library.Objects;
 
 namespace Kagami.Library.Nodes.Symbols;
 
-public class IndexSetterSymbol : Symbol
+public class IndexSetterSymbol : Symbol, IHasExpressions, IHasExpression
 {
    protected Expression[] arguments;
    protected Expression value;
@@ -54,4 +54,8 @@ public class IndexSetterSymbol : Symbol
    public override Arity Arity => Arity.Postfix;
 
    public override string ToString() => $"[{arguments.ToString(", ")}] = {value}";
+
+   public Expression[] Expressions => arguments;
+
+   public Expression Expression => value;
 }

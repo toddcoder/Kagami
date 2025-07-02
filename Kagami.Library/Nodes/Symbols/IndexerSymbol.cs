@@ -7,7 +7,7 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Nodes.Symbols;
 
-public class IndexerSymbol : Symbol
+public class IndexerSymbol : Symbol, IHasExpressions
 {
    public static void Get(OperationsBuilder builder, Expression[] arguments)
    {
@@ -68,4 +68,6 @@ public class IndexerSymbol : Symbol
    }
 
    public override string ToString() => $"[{arguments.ToString(", ")}]";
+
+   public Expression[] Expressions => arguments;
 }

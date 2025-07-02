@@ -24,10 +24,18 @@ public class Field
                {
                   reference.Field.Value = value;
                }
+               else if (value is Placeholder)
+               {
+                  this.value = value;
+               }
                else
                {
                   this.value = value;
                }
+            }
+            else if (value is Placeholder)
+            {
+               this.value = value;
             }
             else
             {
@@ -39,6 +47,10 @@ public class Field
             if (this.value is Reference reference)
             {
                reference.Field.Value = value;
+            }
+            else if (value is Placeholder placeholder)
+            {
+               this.value = placeholder;
             }
             else
             {

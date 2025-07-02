@@ -164,7 +164,11 @@ public class UserClass : BaseClass
 
    public override bool AssignCompatible(BaseClass otherClass)
    {
-      if (Name == otherClass.Name)
+      if (otherClass.Name == "Placeholder")
+      {
+         return true;
+      }
+      else if (Name == otherClass.Name)
       {
          return true;
       }
@@ -180,7 +184,11 @@ public class UserClass : BaseClass
 
    public override bool MatchCompatible(BaseClass otherClass)
    {
-      if (Name == otherClass.Name)
+      if (otherClass.Name == "Placeholder")
+      {
+         return true;
+      }
+      else if (Name == otherClass.Name)
       {
          return true;
       }

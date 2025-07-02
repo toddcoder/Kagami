@@ -5,7 +5,7 @@ using static Kagami.Library.Nodes.NodeFunctions;
 
 namespace Kagami.Library.Nodes.Symbols;
 
-public class MacroInvokeSymbol : Symbol
+public class MacroInvokeSymbol : Symbol, IHasExpressions
 {
    protected Function function;
    protected Expression[] arguments;
@@ -43,4 +43,6 @@ public class MacroInvokeSymbol : Symbol
    public override Arity Arity => Arity.Nullary;
 
    public override string ToString() => $"{function.Selector}({arguments.ToString(", ")})";
+
+   public Expression[] Expressions => arguments;
 }
