@@ -1,5 +1,4 @@
 ﻿using Core.Monads;
-using Core.Strings;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Parsers.Expressions;
 using System.Text.RegularExpressions;
@@ -18,7 +17,7 @@ public partial class WhenAssignParser : StatementParser
       state.BeginTransaction();
       state.Colorize(tokens, Color.Whitespace, Color.Keyword);
 
-      var not = state.Scan(@"^\b(not)\b", Color.Keyword).Map(n => n.IsNotEmpty()) | false;
+      var not = state.NotKeyword();
 
       var _result =
          from comparisandValue in getExpression(state, ExpressionFlags.Comparisand | ExpressionFlags.OmitColon)

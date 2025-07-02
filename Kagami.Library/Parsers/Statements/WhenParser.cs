@@ -2,7 +2,6 @@
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Parsers.Expressions;
 using Core.Monads;
-using Core.Strings;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
@@ -54,7 +53,7 @@ public partial class WhenParser : StatementParser
    {
       state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace);
 
-      var not = state.Scan(@"^\b(not)\b", Color.Keyword).Map(n => n.IsNotEmpty()) | false;
+      var not = state.NotKeyword();
 
       var _result =
          from comparisandValue in getCompoundComparisands(state, fieldName, not)

@@ -20,10 +20,12 @@ public partial class IsParser : SymbolParser
       state.BeginTransaction();
       state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace);
 
+      var not = state.NotKeyword();
+
       var _result = getExpression(state, builder.Flags | ExpressionFlags.Comparisand);
       if (_result is (true, var comparisand))
       {
-         builder.Add(new IsSymbol(comparisand));
+         builder.Add(new IsSymbol(comparisand, not));
          state.CommitTransaction();
 
          return unit;

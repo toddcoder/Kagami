@@ -2,12 +2,17 @@
 
 namespace Kagami.Library.Nodes.Symbols;
 
-public class IsSymbol(Expression expression) : Symbol, IHasExpression
+public class IsSymbol(Expression expression, bool not) : Symbol, IHasExpression
 {
    public override void Generate(OperationsBuilder builder)
    {
       expression.Generate(builder);
       builder.Match();
+      if (not)
+      {
+         builder.PushBoolean(false);
+         builder.Equal();
+      }
    }
 
    public override Precedence Precedence => Precedence.Boolean;

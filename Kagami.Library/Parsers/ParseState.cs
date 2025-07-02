@@ -420,4 +420,6 @@ public class ParseState : IEnumerable<Statement>
 
       return _result;
    }
+
+   public bool NotKeyword() => Scan(@"^\b(not)\b", Color.Keyword).Map(n => n.IsNotEmpty()) | false;
 }
