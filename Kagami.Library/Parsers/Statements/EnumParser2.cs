@@ -106,7 +106,7 @@ public partial class EnumParser2 : StatementParser
             fullBlock = memberBlock;
          }
 
-         var (name, parameters, _ordinal, _) = enumMemberData;
+         var (name, _, parameters, _ordinal, _) = enumMemberData;
 
          var truncatedName = name.Substitute("^ -['$']+ '$' /(.+)$", "$1");
          var selector = parameters.Length > 0 ? parameters.Selector(truncatedName) : (Selector)truncatedName.get();

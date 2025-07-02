@@ -16,5 +16,5 @@ public class EnumMemberClassBuilder : ClassBuilder
 
    public required Maybe<IObject> Ordinal { get; set; }
 
-   public override UserClass CreateUserClass() => new EnumMemberClass(className, parentClassName) { Selector = Selector, Ordinal = Ordinal };
+   public override UserClass CreateUserClass() => new EnumMemberClass(className) { Selector = Selector, Ordinal = Ordinal };
 }

@@ -7,7 +7,7 @@ namespace Kagami.Library.Classes;
 
 public class EnumMemberClass : UserClass
 {
-   public EnumMemberClass(string className, string parentClassName) : base(className, parentClassName)
+   public EnumMemberClass(string className) : base(className, "")
    {
    }
 

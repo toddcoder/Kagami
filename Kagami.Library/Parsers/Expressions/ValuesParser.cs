@@ -47,9 +47,12 @@ public class ValuesParser : MultiParser
 
          if (!builder.Flags[ExpressionFlags.Subset])
          {
-            //yield return new BindingParser(builder);
             yield return new InitializeParser(builder);
-            yield return new InvokeParser(builder);
+
+            if (!builder.Flags[ExpressionFlags.Comparisand])
+            {
+               yield return new InvokeParser(builder);
+            }
          }
 
          yield return new NameValueParser(builder);
@@ -58,6 +61,7 @@ public class ValuesParser : MultiParser
          if (builder.Flags[ExpressionFlags.Comparisand])
          {
             yield return new InternalListParser(builder);
+            yield return new UserObjectPlaceholderParser(builder);
             yield return new PlaceholderParser(builder);
          }
          else

@@ -87,6 +87,7 @@ public class Module
       "Set" => new SetClass(),
       "Decimal" => new DecimalClass(),
       "PendingRegex" => new PendingRegexClass(),
+      "UserObjectPlaceholder" => new UserObjectPlaceholderClass(),
       _ => nil
    };
 

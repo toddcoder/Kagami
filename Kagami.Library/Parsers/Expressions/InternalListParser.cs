@@ -12,8 +12,6 @@ public partial class InternalListParser : SymbolParser
    {
    }
 
-   //public override string Pattern => "^ /(/s*) /'in' /b";
-
    [GeneratedRegex(@"^(\s*)(in)\b")]
    public override partial Regex Regex();
 

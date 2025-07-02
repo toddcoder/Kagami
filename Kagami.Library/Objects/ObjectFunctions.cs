@@ -242,11 +242,6 @@ public static class ObjectFunctions
 
    public static bool userObjectMatch(UserObject obj, IObject comparisand, Hash<string, IObject> bindings)
    {
-      /*static bool includeFieldName(string fieldName)
-      {
-         return !fieldName.StartsWith("__$") && fieldName != "self" && fieldName != "id" && !fieldName.StartsWith("_");
-      }*/
-
       if (classOf(obj).RespondsTo("match(_,_)"))
       {
          var objectHash = bindings.ToHash(i => KString.StringObject(i.Key), i => i.Value);
@@ -265,6 +260,10 @@ public static class ObjectFunctions
          {
             return false;
          }
+      }
+      else if (comparisand is UserObjectPlaceholder userObjectPlaceholder)
+      {
+         return userObjectPlaceholder.Match(obj, bindings);
       }
       else
       {

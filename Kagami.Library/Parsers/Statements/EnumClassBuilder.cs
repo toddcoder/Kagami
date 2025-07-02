@@ -10,5 +10,5 @@ public class EnumClassBuilder : ClassBuilder
    {
    }
 
-   public override UserClass CreateUserClass() => new EnumClass(className, parentClassName);
+   public override UserClass CreateUserClass() => new EnumClass(className, "");
 }

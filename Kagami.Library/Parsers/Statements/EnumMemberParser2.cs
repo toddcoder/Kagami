@@ -70,7 +70,7 @@ public partial class EnumMemberParser2(string enumClassName) : StatementParser
 
       var _block = getBlock(state).Maybe();
 
-      EnumMemberData = new EnumMemberData(className, parameters, _ordinal, _block);
+      EnumMemberData = new EnumMemberData(className, enumClassName, parameters, _ordinal, _block);
 
       return unit;
    }
