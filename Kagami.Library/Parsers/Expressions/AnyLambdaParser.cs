@@ -10,6 +10,7 @@ public class AnyLambdaParser : MultiParser
    {
       get
       {
+         yield return new AlternateLambdaParser(builder);
          yield return new ZeroParameterLambdaParser(builder);
          yield return new OneParameterLambdaParser(builder);
          yield return new MatchLambdaParser(builder);

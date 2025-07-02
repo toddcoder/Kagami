@@ -6,8 +6,6 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class ZeroParameterLambdaParser : LambdaParser
 {
-   //public override string Pattern => "^ (> (/s*) ('->' | '=>' [/r/n]+))";
-
    [GeneratedRegex(@"^(?=(?:[ \t]*)(?:->|=>[\r\n]+))")]
    public override partial Regex Regex();
 

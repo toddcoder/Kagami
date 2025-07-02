@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Core.Enumerables;
+﻿using Core.Enumerables;
 using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
