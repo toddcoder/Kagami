@@ -49,6 +49,8 @@ public readonly struct Success : IObject, IResult, IMonad, IBoolean
 
    public IObject FlatMap(Lambda ifSuccess, Lambda ifFailure) => ifSuccess.Invoke(Value);
 
+   public IObject Optional() => new Some(Value);
+
    public IObject Bind(Lambda map) => Map(map);
 
    public IObject Unit(IObject obj) => new Success(obj);

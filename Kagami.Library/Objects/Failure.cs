@@ -45,6 +45,8 @@ public readonly struct Failure : IObject, IResult, IMonad, IBoolean
 
    public IObject FlatMap(Lambda ifSuccess, Lambda ifFailure) => ifFailure.Invoke(Error);
 
+   public IObject Optional() => None.NoneValue;
+
    public IObject Bind(Lambda map) => Map(map);
 
    public IObject Unit(IObject obj) => new Failure(Error);

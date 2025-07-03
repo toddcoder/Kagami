@@ -1,15 +1,16 @@
-﻿namespace Kagami.Library.Objects
+﻿namespace Kagami.Library.Objects;
+
+public interface IOptional
 {
-   public interface IOptional
-   {
-      IObject Value { get; }
+   IObject Value { get; }
 
-      bool IsSome { get; }
+   bool IsSome { get; }
 
-      bool IsNone { get; }
+   bool IsNone { get; }
 
-      IObject Map(Lambda lambda);
+   IObject Map(Lambda lambda);
 
-      IObject FlatMap(Lambda ifSome, Lambda ifNone);
-   }
+   IObject FlatMap(Lambda ifSome, Lambda ifNone);
+
+   IObject Result(KString message);
 }

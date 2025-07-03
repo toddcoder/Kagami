@@ -20,6 +20,7 @@ public class NoneClass : BaseClass
       messages["defaultTo(_)"] = (obj, msg) => function<None, IObject>(obj, msg, (_, o) => o);
       messages["canBind".get()] = (obj, _) => function<None>(obj, n => n.CanBind);
       messages["value".get()] = (obj, _) => function<None>(obj, n => n.Value);
+      messages["result(_)"] = (obj, msg) => function<IObject, KString>(obj, msg, (s, l) => ((IOptional)s).Result(l));
    }
 
    public override bool AssignCompatible(BaseClass otherClass) => otherClass is SomeClass or NoneClass;

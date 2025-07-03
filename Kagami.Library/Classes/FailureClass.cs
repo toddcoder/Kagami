@@ -21,6 +21,7 @@ public class FailureClass : BaseClass
       messages["defaultTo(_)"] = (obj, msg) => function<Failure, IObject>(obj, msg, (_, o) => o);
       messages["canBind".get()] = (obj, _) => function<Failure>(obj, f => f.CanBind);
       messages["value".get()] = (obj, _) => function<Failure>(obj, f => f.Value);
+      messages["optional()"] = (obj, _) => function<IObject>(obj, s => ((IResult)s).Optional());
    }
 
    public override bool AssignCompatible(BaseClass otherClass) => otherClass is SuccessClass or FailureClass;

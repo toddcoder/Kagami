@@ -20,6 +20,7 @@ public class SomeClass : BaseClass
       messages["flatMap(_<Lambda>,_<Lambda>)"] = (obj, msg) => function<Some, Lambda, Lambda>(obj, msg, (s, l1, l2) => s.FlatMap(l1, l2));
       messages["defaultTo(_)"] = (obj, msg) => function<Some, IObject>(obj, msg, (s, _) => s.Value);
       messages["canBind".get()] = (obj, _) => function<Some>(obj, s => s.CanBind);
+      messages["result(_)"] = (obj, msg) => function<IObject, KString>(obj, msg, (s, l) => ((IOptional)s).Result(l));
    }
 
    public override bool AssignCompatible(BaseClass otherClass) => otherClass is SomeClass or NoneClass;

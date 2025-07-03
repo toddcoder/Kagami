@@ -20,6 +20,7 @@ public class SuccessClass : BaseClass
       messages["flatMap(_<Lambda>,_<Lambda>)"] = (obj, msg) => function<Success, Lambda, Lambda>(obj, msg, (s, l1, l2) => s.FlatMap(l1, l2));
       messages["defaultTo(_)"] = (obj, msg) => function<Success, IObject>(obj, msg, (s, _) => s.Value);
       messages["canBind".get()] = (obj, _) => function<Success>(obj, s => s.CanBind);
+      messages["optional()"] = (obj, _) => function<IObject>(obj, s => ((IResult)s).Optional());
    }
 
    public override bool AssignCompatible(BaseClass otherClass) => otherClass is SuccessClass or FailureClass;

@@ -1284,6 +1284,9 @@ public static class ParserFunctions
          case ":-" when !flags[ExpressionFlags.OmitBind]:
             _symbol = new BindSymbol();
             break;
+         case "//":
+            _symbol = new RationalSymbol();
+            break;
       }
 
       return _symbol;

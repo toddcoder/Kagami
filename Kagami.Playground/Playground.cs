@@ -142,8 +142,8 @@ public partial class Playground : Form
          menus.Menu("&Insert");
          menus.Menu("open sys", (_, _) => insertText("open sys\n\n", 0, 0), "^%S");
          menus.Menu("open math", (_, _) => insertText("open math\n\n", 0, 0), "^%M");
-         menus.Menu("println()", (_, _) => surround("println(", ")"), "^P");
-         menus.Menu("println() interpolated", (_, _) => surround("println($", ")"), "^%P");
+         menus.Menu("println() surround", (_, _) => surround("println(", ")"), "^%P");
+         menus.Menu("println() interpolated", (_, _) => insertText("println()", -1), "^P");
          menus.Menu("print()", (_, _) => surround("print(", ")"));
          menus.Menu("put()", (_, _) => surround("put(", ")"));
          menus.Menu("peek()", (_, _) => surround("peek(", ")"), "^K");

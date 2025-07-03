@@ -9,8 +9,6 @@ public partial class AnyParser : SymbolParser
 {
    public AnyParser(ExpressionBuilder builder) : base(builder) { }
 
-   //public override string Pattern => "^ /(/s*) /'_' /b";
-
    [GeneratedRegex(@"^(\s*)(_)\b")]
    public override partial Regex Regex();
 

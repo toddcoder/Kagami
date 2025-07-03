@@ -107,13 +107,13 @@ public readonly struct Complex : IObject, INumeric, IObjectCompare, IComparable<
 
    public KString ZFill(int count)
    {
-      return $"{zfill(value.Real.ToString(), count)}{(value.Imaginary >= 0.0).Extend("+")}" +
+      return $"{zfill(value.Real.ToString(), count)}{(value.Imaginary >= 0.0).Extend(" + ")}" +
          $"{zfill(value.Imaginary.ToString(), count)}";
    }
 
-   public string AsString => $"{value.Real}{(value.Imaginary >= 0.0).Extend("+")}{value.Imaginary}i";
+   public string AsString => $"{value.Real}{(value.Imaginary >= 0.0).Extend(" + ")}{value.Imaginary}i";
 
-   public string Image => $"{floatImage(value.Real)}{(value.Imaginary >= 0.0).Extend("+")}{floatImage(value.Imaginary)}i";
+   public string Image => $"{floatImage(value.Real)}{(value.Imaginary >= 0.0).Extend(" + ")}{floatImage(value.Imaginary)}i";
 
    public int Hash => value.GetHashCode();
 
@@ -140,7 +140,7 @@ public readonly struct Complex : IObject, INumeric, IObjectCompare, IComparable<
    public KString Format(string format)
    {
       return $"{value.Real.FormatUsing<double>(format, d => d.ToString(format))}" +
-         $"{(value.Imaginary >= 0.0).Extend("+")}{value.Imaginary.FormatUsing<double>(format, d => d.ToString(format))}i";
+         $"{(value.Imaginary >= 0.0).Extend(" + ")}{value.Imaginary.FormatUsing<double>(format, d => d.ToString(format))}i";
    }
 
    public IObject Negate() => (Complex)CComplex.Negate(value);

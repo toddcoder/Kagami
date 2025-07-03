@@ -34,6 +34,8 @@ public readonly struct None : IObject, IOptional, IBoolean, IEquatable<None>, IM
 
    public IObject FlatMap(Lambda ifSome, Lambda ifNone) => ifNone.Invoke();
 
+   public IObject Result(KString message) => new Failure(message.Value);
+
    public bool IsTrue => false;
 
    public Guid Id { get; init; } = Guid.NewGuid();

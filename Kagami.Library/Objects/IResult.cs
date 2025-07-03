@@ -13,4 +13,6 @@ public interface IResult
    IObject Map(Lambda lambda);
 
    IObject FlatMap(Lambda ifSuccess, Lambda ifFailure);
+
+   IObject Optional();
 }

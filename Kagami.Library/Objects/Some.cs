@@ -59,4 +59,6 @@ public readonly struct Some : IObject, IOptional, IBoolean, IEquatable<Some>, IM
    public IObject Unit(IObject obj) => new Some(obj);
 
    public KBoolean CanBind => true;
+
+   public IObject Result(KString message) => new Success(value);
 }
