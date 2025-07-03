@@ -197,6 +197,12 @@ public static class ParserFunctions
 
    public static Optional<Block> getBlock(ParseState state, Maybe<TypeConstraint> _typeConstraint)
    {
+      var _block = getRestOfLineBlock(state);
+      if (_block)
+      {
+         return _block;
+      }
+
       var _result = state.BeginBlock();
       if (_result)
       {
@@ -1493,5 +1499,22 @@ public static class ParserFunctions
       {
          return nil;
       }
+   }
+
+   public static Optional<Block> getRestOfLineBlock(ParseState state)
+   {
+      var _scanned = state.Scan(@"^(\s+)(\()", Color.Whitespace, Color.Structure);
+      if (_scanned)
+      {
+         state.PushStatements();
+         var statementsParser = new StatementsParser();
+         var _unitScanned = statementsParser.Scan(state);
+         if (_unitScanned && state.PopStatements() is (true, var statements))
+         {
+            return state.Scan(@"^(\))", Color.Structure).Map(_ => new Block(statements));
+         }
+      }
+
+      return nil;
    }
 }
