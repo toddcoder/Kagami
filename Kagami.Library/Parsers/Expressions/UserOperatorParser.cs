@@ -9,10 +9,12 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class UserOperatorParser : SymbolParser
 {
-   public UserOperatorParser(ExpressionBuilder builder) : base(builder)
-   {
-   }
+   protected Arity arity;
 
+   public UserOperatorParser(ExpressionBuilder builder, Arity arity) : base(builder)
+   {
+      this.arity = arity;
+   }
 
    [GeneratedRegex(@$"^(\s*)({REGEX_FUNCTION_NAME})")]
    public override partial Regex Regex();
@@ -20,7 +22,7 @@ public partial class UserOperatorParser : SymbolParser
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
       var operatorName = tokens[2].Text;
-      if (Module.Global.Value.GetOperator(operatorName) is (true, var operatorType))
+      if (Module.Global.Value.GetOperator(operatorName, arity) is (true, var operatorType))
       {
          state.Colorize(tokens, Color.Whitespace, Color.Operator);
          builder.Add(new OperatorSymbol(operatorType));

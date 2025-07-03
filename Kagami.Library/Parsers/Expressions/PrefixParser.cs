@@ -1,4 +1,6 @@
-﻿namespace Kagami.Library.Parsers.Expressions;
+﻿using Kagami.Library.Nodes.Symbols;
+
+namespace Kagami.Library.Parsers.Expressions;
 
 public class PrefixParser(ExpressionBuilder builder) : MultiParser
 {
@@ -6,7 +8,7 @@ public class PrefixParser(ExpressionBuilder builder) : MultiParser
    {
       get
       {
-         yield return new UserOperatorParser(builder);
+         yield return new UserOperatorParser(builder, Arity.Prefix);
 
          if (builder.Flags[ExpressionFlags.Comparisand])
          {

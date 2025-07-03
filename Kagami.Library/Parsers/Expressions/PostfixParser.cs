@@ -1,4 +1,6 @@
-﻿namespace Kagami.Library.Parsers.Expressions;
+﻿using Kagami.Library.Nodes.Symbols;
+
+namespace Kagami.Library.Parsers.Expressions;
 
 public class PostfixParser(ExpressionBuilder builder) : MultiParser
 {
@@ -6,7 +8,7 @@ public class PostfixParser(ExpressionBuilder builder) : MultiParser
    {
       get
       {
-         yield return new UserOperatorParser(builder);
+         yield return new UserOperatorParser(builder, Arity.Postfix);
          yield return new PostfixIncrementParser(builder);
          yield return new ToEndParser(builder);
          yield return new PostfixOperatorsParser(builder);

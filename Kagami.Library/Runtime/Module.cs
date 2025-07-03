@@ -4,6 +4,7 @@ using Core.Collections;
 using Core.Monads;
 using Core.Objects;
 using Kagami.Library.Inclusions;
+using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Parsers;
 using static Kagami.Library.AllExceptions;
 using static Core.Monads.MonadFunctions;
@@ -160,7 +161,20 @@ public class Module
       }
    }
 
-   public Maybe<OperatorType> GetOperator(string functionName) => operators.Maybe[functionName];
+   public Maybe<OperatorType> GetOperator(string functionName, Arity arity)
+   {
+      var _operator = operators.Maybe[functionName];
+      if (_operator is (true, var operatorType))
+      {
+         if (arity is Arity.Binary && operatorType is OperatorType.Infix || arity is Arity.Prefix && operatorType is OperatorType.Prefix ||
+             arity is Arity.Postfix && operatorType is OperatorType.Postfix)
+         {
+            return operatorType;
+         }
+      }
+
+      return nil;
+   }
 
    public Result<Unit> Alias(string alias, string className)
    {
