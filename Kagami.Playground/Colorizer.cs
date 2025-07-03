@@ -62,6 +62,7 @@ public class Colorizer
       Library.Parsers.Color.Regex => true,
       Library.Parsers.Color.Structure => true,
       Library.Parsers.Color.Lambda => true,
+      Library.Parsers.Color.Block => true,
       _ => false
    };
 
@@ -119,6 +120,7 @@ public class Colorizer
       Library.Parsers.Color.Selector => Color.CadetBlue,
       Library.Parsers.Color.Regex => Color.OrangeRed,
       Library.Parsers.Color.Lambda => Color.DarkGoldenrod,
+      Library.Parsers.Color.Block => Color.LightCoral,
       _ => Color.Black
    };
 }

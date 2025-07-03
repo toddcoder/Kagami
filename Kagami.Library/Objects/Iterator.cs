@@ -99,6 +99,21 @@ public class Iterator : IObject, IIterator
 
    public KString Join(string connector) => List().ToList().Select(i => i.AsString).ToString(connector);
 
+   public KString Join(string connector, int limit, string truncated)
+   {
+      var list = List().ToList();
+      if (list.Count > limit)
+      {
+         var truncatedList = list.Take(limit).ToList();
+         truncatedList.Add(new KString(truncated));
+         return truncatedList.Select(i => i.AsString).ToString(connector);
+      }
+      else
+      {
+         return list.Select(i => i.AsString).ToString(connector);
+      }
+   }
+
    public IObject Sort(Lambda lambda, bool ascending)
    {
       switch (lambda.Invokable.Parameters.Length)
@@ -376,6 +391,64 @@ public class Iterator : IObject, IIterator
       return collectionClass.Revert(List().ToList().Zip(rightList, (x, y) => lambda.Invoke(x, y)));
    }
 
+   public IObject Unzip()
+   {
+      var list = collection.GetIterator(false).List().ToList();
+      List<IObject> leftList = [];
+      List<IObject> rightList = [];
+
+      foreach (var obj in list)
+      {
+         if (obj is ICollection innerCollection)
+         {
+            var innerList = innerCollection.GetIterator(false).List().ToList();
+            IObject[] twoList = [.. innerList.Take(2)];
+            if (twoList.Length >= 2)
+            {
+               leftList.Add(twoList[0]);
+               rightList.Add(twoList[1]);
+            }
+         }
+      }
+
+      var leftCollection = collectionClass.Revert(leftList);
+      var rightCollection = collectionClass.Revert(rightList);
+      List<IObject> newCollection = [leftCollection, rightCollection];
+
+      return collectionClass.Revert(newCollection);
+   }
+
+   public IObject Unzip(Lambda lambda)
+   {
+      var list = collection.GetIterator(false).List().ToList();
+      List<IObject> leftList = [];
+      List<IObject> rightList = [];
+
+      foreach (var obj in list)
+      {
+         var result = lambda.Invoke(obj);
+         if (result is ICollection resultCollection)
+         {
+            var resultList = resultCollection.GetIterator(false).List().ToList();
+            if (resultList.Count >= 2)
+            {
+               leftList.Add(resultList[0]);
+               rightList.Add(resultList[1]);
+            }
+         }
+         else
+         {
+            throw incompatibleClasses(result, "Collection");
+         }
+      }
+
+      var leftCollection = collectionClass.Revert(leftList);
+      var rightCollection = collectionClass.Revert(rightList);
+      List<IObject> newCollection = [leftCollection, rightCollection];
+
+      return collectionClass.Revert(newCollection);
+   }
+
    public IObject Min()
    {
       var result = Unassigned.Value;
@@ -581,6 +654,26 @@ public class Iterator : IObject, IIterator
       {
          var key = lambda.Invoke(item);
          memo[key].Add(item);
+      }
+
+      var result = new Hash<IObject, IObject>();
+
+      foreach (var key in memo.GetHash().KeyArray())
+      {
+         result[key] = collectionClass.Revert(memo[key]);
+      }
+
+      return new Dictionary(result);
+   }
+
+   public IObject GroupBy(Lambda keyLambda, Lambda valueLambda)
+   {
+      var memo = new Memo<IObject, List<IObject>>.Function(_ => []);
+      foreach (var item in List().ToList())
+      {
+         var key = keyLambda.Invoke(item);
+         var value = valueLambda.Invoke(item);
+         memo[key].Add(value);
       }
 
       var result = new Hash<IObject, IObject>();
@@ -1148,7 +1241,7 @@ public class Iterator : IObject, IIterator
 
    public virtual IObject Chunked(int count) => new ChunkedIterator(collection, count);
 
-   public virtual IObject Windowed(int size, int step) => new WindowedIterator(collection, size, step);
+   public virtual IObject Windowed(int size, int step, bool partial) => new WindowedIterator(collection, size, step, partial);
 
    protected static IEnumerable<IObject> applyAgainst(List<Lambda> lambdas, List<IObject> enumerable)
    {

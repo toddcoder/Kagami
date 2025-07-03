@@ -1012,6 +1012,11 @@ public static class ParserFunctions
       var _scanned = new AnyLambdaParser(builder).Scan(state);
       if (_scanned)
       {
+         if (builder.Length == 0)
+         {
+            return fail("No lambda found");
+         }
+
          var _symbol = builder.ToExpression().Map(expression => expression.Symbols[0]);
          if (_symbol is (true, var symbol))
          {
@@ -1503,7 +1508,7 @@ public static class ParserFunctions
 
    public static Optional<Block> getRestOfLineBlock(ParseState state)
    {
-      var _scanned = state.Scan(@"^(\s+)(\()", Color.Whitespace, Color.Structure);
+      var _scanned = state.Scan(@"^(\s+)(\()", Color.Whitespace, Color.Block);
       if (_scanned)
       {
          state.PushStatements();
@@ -1511,7 +1516,7 @@ public static class ParserFunctions
          var _unitScanned = statementsParser.Scan(state);
          if (_unitScanned && state.PopStatements() is (true, var statements))
          {
-            return state.Scan(@"^(\))", Color.Structure).Map(_ => new Block(statements));
+            return state.Scan(@"^(\))", Color.Block).Map(_ => new Block(statements));
          }
       }
 

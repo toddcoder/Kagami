@@ -28,5 +28,6 @@ public enum Color
    CloseParenthesis,
    Selector,
    Regex,
-   Lambda
+   Lambda,
+   Block
 }

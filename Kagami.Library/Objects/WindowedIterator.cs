@@ -7,12 +7,14 @@ public class WindowedIterator : Iterator
 {
    protected int size;
    protected int step;
+   protected bool partial;
    protected List<IObject> list;
 
-   public WindowedIterator(ICollection collection, int size, int step) : base(collection)
+   public WindowedIterator(ICollection collection, int size, int step, bool partial) : base(collection)
    {
       this.size = size;
       this.step = step;
+      this.partial = partial;
 
       list = collection.GetIterator(false).List().ToList();
    }
@@ -28,7 +30,7 @@ public class WindowedIterator : Iterator
          }
 
          index += step;
-         return collectionClass.Revert(windowed).Some();
+         return windowed.Count == size || partial ? collectionClass.Revert(windowed).Some() : nil;
       }
       else
       {
@@ -36,5 +38,5 @@ public class WindowedIterator : Iterator
       }
    }
 
-   public override IObject Windowed(int size, int step) => this;
+   public override IObject Windowed(int size, int step, bool partial) => this;
 }

@@ -342,6 +342,10 @@ public abstract class BaseClass
       registerMessage("reset()", (obj, _) => iteratorFunc(obj, i => i.Reset()));
       registerMessage("reverse()", (obj, _) => iteratorFunc(obj, i => i.Reverse()));
       registerMessage("join(_<String>)", (obj, message) => iteratorFunc<KString>(obj, message, (i, s) => i.Join(s.Value)));
+      registerMessage("join(_<String>,limit:_<Int>,truncated:_<String>)",
+         (obj, msg) => iteratorFunc<KString, Int, KString>(obj, msg, (i, c, l, t) => i.Join(c.Value, l.Value, t.Value)));
+      registerMessage("join(_<String>,limit:_<Int>)",
+         (obj, msg) => iteratorFunc<KString, Int>(obj, msg, (i, c, l) => i.Join(c.Value, l.Value, "...")));
       registerMessage("sort(_<Lambda>,asc:_<Boolean>)",
          (obj, message) => iteratorFunc<Lambda, KBoolean>(obj, message, (i, l, b) => i.Sort(l, b.Value)));
       registerMessage("sort(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Sort(l, true)));
@@ -379,6 +383,8 @@ public abstract class BaseClass
       registerMessage("zip(_<Collection>,_<Lambda>)",
          (obj, message) => iteratorFunc<IObject, Lambda>(obj, message, (i, c, l) => i.Zip((ICollection)c, l)));
       registerMessage("zip(_)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, c) => i.Zip((ICollection)c)));
+      registerMessage("unzip()", (obj, _) => iteratorFunc(obj, i => i.Unzip()));
+      registerMessage("unzip(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Unzip(l)));
       registerMessage("min".get(), (obj, _) => iteratorFunc(obj, i => i.Min()));
       registerMessage("min(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Min(l)));
       registerMessage("max".get(), (obj, _) => iteratorFunc(obj, i => i.Max()));
@@ -391,6 +397,8 @@ public abstract class BaseClass
       registerMessage("split(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Split(j.Value)));
       registerMessage("random()", (obj, _) => iteratorFunc(obj, i => i.Random()));
       registerMessage("groupBy(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.GroupBy(l)));
+      registerMessage("groupBy(key:_<Lambda>,value:_<Lambda>)",
+         (obj, message) => iteratorFunc<Lambda, Lambda>(obj, message, (i, k, v) => i.GroupBy(k, v)));
       registerMessage("one(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.One(l)));
       registerMessage("none(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.None(l)));
       registerMessage("any(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Any(l)));
@@ -435,8 +443,10 @@ public abstract class BaseClass
       registerMessage("splat(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Splat(c.Value)));
       registerMessage("chunked(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Chunked(c.Value)));
       registerMessage("windowed(size:_<Int>,step:_<Int>)",
-         (obj, message) => iteratorFunc<Int, Int>(obj, message, (i, s1, s2) => i.Windowed(s1.Value, s2.Value)));
-      registerMessage("windowed(size:_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, s) => i.Windowed(s.Value, 1)));
+         (obj, message) => iteratorFunc<Int, Int>(obj, message, (i, s1, s2) => i.Windowed(s1.Value, s2.Value, true)));
+      registerMessage("windowed(size:_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, s) => i.Windowed(s.Value, 1, true)));
+      registerMessage("windowed(size:_<Int>,step:_<Int>,partial:_<Boolean>)",
+         (obj, message) => iteratorFunc<Int, Int, KBoolean>(obj, message, (i, s1, s2, p) => i.Windowed(s1.Value, s2.Value, p.Value)));
    }
 
    public virtual bool MatchCompatible(BaseClass otherClass) => Name == otherClass.Name;

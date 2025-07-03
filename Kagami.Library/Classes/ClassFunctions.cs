@@ -62,6 +62,11 @@ public static class ClassFunctions
       where T1 : IObject
       where T2 : IObject => func((IIterator)x, (T1)message.Arguments[0], (T2)message.Arguments[1]);
 
+   public static IObject iteratorFunc<T1, T2, T3>(IObject x, Message message, Func<IIterator, T1, T2, T3, IObject> func)
+      where T1 : IObject
+      where T2 : IObject
+      where T3 : IObject => func((IIterator)x, (T1)message.Arguments[0], (T2)message.Arguments[1], (T3)message.Arguments[2]);
+
    public static IObject match(IObject obj, Message message)
    {
       var bindings = new Hash<string, IObject>();

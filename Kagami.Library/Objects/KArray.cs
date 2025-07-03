@@ -290,7 +290,19 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public IObject Remove(IObject obj)
    {
-      list.Remove(obj);
+      if (obj is ICollection collection)
+      {
+         List<IObject> listToRemove = [..collection.GetIterator(false).List()];
+         foreach (var item in listToRemove)
+         {
+            list.Remove(item);
+         }
+      }
+      else
+      {
+         list.Remove(obj);
+      }
+
       return this;
    }
 

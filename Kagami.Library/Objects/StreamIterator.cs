@@ -122,6 +122,8 @@ public class StreamIterator : IObject, IIterator
 
    public KString Join(string connector) => terminate().Join(connector);
 
+   public KString Join(string connector, int limit, string truncated) => terminate().Join(connector, limit, truncated);
+
    public IObject Sort(Lambda lambda, bool ascending) => terminate().Sort(lambda, ascending);
 
    public IObject Sort(bool ascending) => terminate().Sort(ascending);
@@ -225,6 +227,10 @@ public class StreamIterator : IObject, IIterator
 
    public IObject Zip(ICollection collection, Lambda lambda) => terminate().Zip(collection, lambda);
 
+   public IObject Unzip() => terminate().Unzip();
+
+   public IObject Unzip(Lambda lambda) => terminate().Unzip(lambda);
+
    public IObject Min() => terminate().Min();
 
    public IObject Min(Lambda lambda) => terminate().Min(lambda);
@@ -246,6 +252,8 @@ public class StreamIterator : IObject, IIterator
    public IObject Split(int count) => terminate().Split(count);
 
    public IObject GroupBy(Lambda lambda) => terminate().GroupBy(lambda);
+
+   public IObject GroupBy(Lambda keyLambda, Lambda valueLambda) => terminate().GroupBy(keyLambda, valueLambda);
 
    public KBoolean One(Lambda predicate) => terminate().One(predicate);
 
@@ -340,8 +348,8 @@ public class StreamIterator : IObject, IIterator
    public IObject Splat(int count) => terminate().Splat(count);
 
    public IObject Chunked(int count) => terminate().Chunked(count);
-   
-   public IObject Windowed(int size, int step) => terminate().Windowed(size, step);
+
+   public IObject Windowed(int size, int step, bool partial) => terminate().Windowed(size, step, partial);
 
    public BaseClass Equivalent() => new CollectionClass();
 

@@ -25,6 +25,8 @@ public interface IIterator : IEquivalentClass
 
    KString Join(string connector);
 
+   KString Join(string connector, int limit, string truncated);
+
    IObject Sort(Lambda lambda, bool ascending);
 
    IObject Sort(bool ascending);
@@ -79,6 +81,10 @@ public interface IIterator : IEquivalentClass
 
    IObject Zip(ICollection collection, Lambda lambda);
 
+   IObject Unzip();
+
+   IObject Unzip(Lambda lambda);
+
    IObject Min();
 
    IObject Min(Lambda lambda);
@@ -100,6 +106,8 @@ public interface IIterator : IEquivalentClass
    IObject Split(int count);
 
    IObject GroupBy(Lambda lambda);
+
+   IObject GroupBy(Lambda keyLambda, Lambda valueLambda);
 
    KBoolean One(Lambda predicate);
 
@@ -175,5 +183,5 @@ public interface IIterator : IEquivalentClass
 
    IObject Chunked(int count);
 
-   IObject Windowed(int size, int step);
+   IObject Windowed(int size, int step, bool partial);
 }
