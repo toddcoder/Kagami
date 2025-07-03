@@ -30,7 +30,7 @@ public class OperatorSymbol : Symbol
 
    public override Precedence Precedence => operatorType switch
    {
-      OperatorType.Infix => Precedence.ChainedOperator,
+      OperatorType.Infix infix => infix.Precedence,
       OperatorType.Prefix => Precedence.PrefixOperator,
       OperatorType.Postfix => Precedence.PostfixOperator,
       _ => Precedence.ChainedOperator

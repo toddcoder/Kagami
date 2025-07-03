@@ -21,6 +21,5 @@ public enum Precedence
    Concatenate = 18,
    ChainedOperator = 20,
    KeyValue = 21,
-   Comma = 22,
-   Assignment = 23
+   Comma = 22
 }

@@ -17,14 +17,14 @@ public partial class FunctionParser : StatementParser
 {
    protected Maybe<Function> _function = nil;
 
-   [GeneratedRegex($@"^(\s*)(override\s+)?(func|infix|prefix|postfix|macro)(\s+)(?:({REGEX_CLASS_GETTING})(\.))?({REGEX_FUNCTION_NAME})(\()?")]
+   [GeneratedRegex($@"^(\s*)(override\s+)?(func|infix\s+\w+|prefix|postfix|macro)(\s+)(?:({REGEX_CLASS_GETTING})(\.))?({REGEX_FUNCTION_NAME})(\()?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
       var overriding = tokens[2].Text.StartsWith("override");
       var operatorText = tokens[3].Text;
-      var isOperator = operatorText is "infix" or "prefix" or "postfix";
+      var isOperator = operatorText.StartsWith("infix") || operatorText is "infix" or "prefix" or "postfix";
       var isMacro = tokens[3].Text == "macro";
 
       var className = tokens[5].Text;
@@ -38,9 +38,38 @@ public partial class FunctionParser : StatementParser
 
       if (isOperator)
       {
+         var precedence = operatorText switch
+         {
+            "prefix" => Precedence.PrefixOperator,
+            "postfix" => Precedence.PostfixOperator,
+            _ => operatorText.Drop(5).Trim() switch
+            {
+               "raise" => Precedence.Raise,
+               "multiply" => Precedence.MultiplyDivide,
+               "divide" => Precedence.MultiplyDivide,
+               "range" => Precedence.Range,
+               "add" => Precedence.AddSubtract,
+               "subtract" => Precedence.AddSubtract,
+               "shift" => Precedence.Shift,
+               "boolean" => Precedence.Boolean,
+               "bitand" => Precedence.BitAnd,
+               "bitor" => Precedence.BitOr,
+               "bitxor" => Precedence.BitXOr,
+               "and" => Precedence.And,
+               "or" => Precedence.Or,
+               "format" => Precedence.Format,
+               _ => Precedence.ChainedOperator
+            }
+         };
+
+         if (operatorText.StartsWith("infix"))
+         {
+            operatorText = operatorText.Keep(5);
+         }
+
          Maybe<OperatorType> _operatorType = operatorText switch
          {
-            "infix" => new OperatorType.Infix(functionName),
+            "infix" => new OperatorType.Infix(functionName, precedence),
             "prefix" => new OperatorType.Prefix(functionName),
             "postfix" => new OperatorType.Postfix(functionName),
             _ => nil

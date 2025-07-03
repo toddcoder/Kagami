@@ -1,6 +1,7 @@
 ﻿using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Monads;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Operations;
 
@@ -19,7 +20,7 @@ public class NewArguments : OneNumericOperation
          }
          else
          {
-            return _obj.Exception;
+            return fail($"Too few arguments: expected {count}, found {stack.Count}");
          }
       }
 
