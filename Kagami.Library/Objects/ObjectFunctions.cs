@@ -229,11 +229,28 @@ public static class ObjectFunctions
       {
          return sendMessage(obj, "isEqualTo(_)", other).IsTrue;
       }
-      /*else if (other is UserObject otherUserObject && obj.ClassName == otherUserObject.ClassName)
+      else if (other is UserObject otherUserObject)
       {
-         var fields = otherUserObject.Fields;
-         return obj.Fields.All(f => fields.ContainsKey(f.fieldName) && f.field.Value.IsEqualTo(fields[f.fieldName]));
-      }*/
+         if (otherUserObject.ClassName == obj.ClassName)
+         {
+            if (obj.Parameters.Length != otherUserObject.Parameters.Length)
+            {
+               return false;
+            }
+            foreach (var parameter in obj.Parameters)
+            {
+               if (!otherUserObject.Fields.ContainsKey(parameter.Name) || !obj.Fields[parameter.Name].IsEqualTo(otherUserObject.Fields[parameter.Name]))
+               {
+                  return false;
+               }
+            }
+            return true;
+         }
+         else
+         {
+            return false;
+         }
+      }
       else
       {
          return false;

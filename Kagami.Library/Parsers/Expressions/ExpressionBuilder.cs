@@ -3,6 +3,7 @@ using Core.Enumerables;
 using Core.Monads;
 using Core.Monads.Lazy;
 using Core.Numbers;
+using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Objects;
 using static Core.Monads.MonadFunctions;
@@ -32,7 +33,7 @@ public class ExpressionBuilder(Bits32<ExpressionFlags> flags, bool acknowledgeIm
 
    public void Add(Symbol symbol)
    {
-      if (acknowledgeImplicit && symbol is ImplicitSymbol or ImplicitZip)
+      if (acknowledgeImplicit && symbol is ImplicitSymbol or ImplicitZip or ImplicitFold)
       {
          containsImplicitOperator = true;
       }
@@ -99,6 +100,7 @@ public class ExpressionBuilder(Bits32<ExpressionFlags> flags, bool acknowledgeIm
    {
       var symbols = originalExpression.Symbols;
       LazyMaybe<int> _zipIndex1 = nil;
+      LazyMaybe<int> _foldIndex = nil;
       var _index = symbols.Find(s => s is ImplicitSymbol);
       if (_index is (true, var index))
       {
@@ -153,6 +155,53 @@ public class ExpressionBuilder(Bits32<ExpressionFlags> flags, bool acknowledgeIm
             var builder = new ExpressionBuilder(flags, false);
             builder.Add(sourceSymbol1);
             builder.Add(new SendMessageSymbol("zip(_,_)", Precedence.ChainedOperator, false, lambda, new Expression(sourceSymbol2)));
+
+            return builder.ToExpression();
+         }
+         else
+         {
+            return originalExpression;
+         }
+      }
+      else if (_foldIndex.ValueOf(symbols.Find(s => s is ImplicitFold)) is (true, var foldIndex))
+      {
+         var _foldVariableIndex = symbols.Find(s => s is ImplicitFoldVariable);
+         if (_foldVariableIndex is (true, var foldVariableIndex))
+         {
+            var sourceSymbol1 = symbols[foldIndex - 1];
+            symbols[foldIndex - 1] = new FieldSymbol("__$0");
+            symbols[foldIndex] = new NoOpSymbol();
+
+            var sourceSymbol2 = symbols[foldVariableIndex - 1];
+            symbols[foldVariableIndex - 1] = sourceSymbol2;
+            symbols[foldVariableIndex] = new NoOpSymbol();
+
+            for (var i = 0; i < symbols.Length; i++)
+            {
+               if (symbols[i] is SendMessageSymbol sendMessageSymbol)
+               {
+                  symbols[i] = sendMessageSymbol.AsChainOperator();
+               }
+            }
+
+            var bodyExpression = new Expression(symbols);
+            var block = new Block(bodyExpression);
+            var parameter1 = new Parameter(false, "", "__$0", nil, nil, false, false);
+            Parameter parameter2;
+            if (sourceSymbol2 is FieldSymbol fieldSymbol)
+            {
+               parameter2 = new Parameter(false, "", fieldSymbol.FieldName, nil, nil, false, false);
+            }
+            else
+            {
+               parameter2 = new Parameter(false, "", "__$1", nil, nil, false, false);
+            }
+            var parameters = new Parameters(parameter1, parameter2);
+            var lambda = new LambdaSymbol(parameters, block);
+
+            var builder = new ExpressionBuilder(flags, false);
+            builder.Add(sourceSymbol1);
+            builder.Add(new SendMessageSymbol("foldl(_)", Precedence.ChainedOperator, false, lambda));
 
             return builder.ToExpression();
          }
