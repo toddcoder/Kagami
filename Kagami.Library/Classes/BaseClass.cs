@@ -412,7 +412,7 @@ public abstract class BaseClass
       registerMessage("/(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.By(j.Value)));
       registerMessage("window(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Window(j.Value)));
       registerMessage("//(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Window(j.Value)));
-      registerMessage("distinct()", (obj, _) => iteratorFunc(obj, i => i.Unique()));
+      registerMessage("unique()", (obj, _) => iteratorFunc(obj, i => i.Unique()));
       registerMessage("span".Selector("_<Lambda>"), (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Span(l)));
       registerMessage("span".Selector("_<Int>"), (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Span(j.Value)));
       registerMessage("shuffle()", (obj, _) => iteratorFunc(obj, i => i.Shuffle()));
