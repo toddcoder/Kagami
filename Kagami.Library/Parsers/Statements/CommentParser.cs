@@ -8,7 +8,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class CommentParser : StatementParser
 {
-   [GeneratedRegex(@$"^(\s*)(#.*)({REGEX_EOL})")]
+   [GeneratedRegex(@$"^(\s*)(##.*)({REGEX_EOL})")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)

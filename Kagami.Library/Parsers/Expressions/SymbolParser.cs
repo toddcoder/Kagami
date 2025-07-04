@@ -6,7 +6,10 @@ public abstract class SymbolParser : PatternedParser
 {
    protected ExpressionBuilder builder;
 
-   protected SymbolParser(ExpressionBuilder builder) : base(false) => this.builder = builder;
+   protected SymbolParser(ExpressionBuilder builder) : base(false)
+   {
+      this.builder = builder;
+   }
 
    public abstract Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder);
 
