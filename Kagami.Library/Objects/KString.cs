@@ -463,4 +463,10 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
       return new KString(new string([.. set]));
    }
+
+   public KString PadLeft(int length, char paddingChar = ' ') => value.PadLeft(length, paddingChar);
+
+   public KString PadRight(int length, char paddingChar = ' ') => value.PadRight(length, paddingChar);
+
+   public KString PadCenter(int length, char paddingChar = ' ') => value.PadCenter(length, paddingChar);
 }

@@ -46,10 +46,10 @@ public partial class Playground : Form
    protected int firstEditorLine;
    protected Idle idle = new(1);
    protected bool isDirty;
-   protected UiAction uiValue = new() { AutoSizeText = true };
+   protected UiAction uiValue = new() { AutoSizeText = true, UseEmojis = false };
    protected UiAction uiType = new() { AutoSizeText = true, LeftStripe = DashStyle.Dash };
-   protected UiAction uiElapsed = new() { AutoSizeText = true };
-   protected UiAction uiStatus = new();
+   protected UiAction uiElapsed = new();
+   protected UiAction uiStatus = new() { UseEmojis = false };
    protected UiAction uiRun = new();
    protected string[] fieldNames = [];
    protected bool autoColorize;

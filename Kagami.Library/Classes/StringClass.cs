@@ -81,6 +81,15 @@ public class StringClass : BaseClass, ICollectionClass
          (obj, msg) => function<KString, Regex, Lambda>(obj, msg, (s, r, l) => r.Replace(s.Value, l));
       messages["squeeze()"] = (obj, _) => function<KString>(obj, s => s.Squeeze());
       messages["isMatch(_<Regex>)"] = (obj, msg) => function<KString, Regex>(obj, msg, (s, r) => r.IsMatch(s.Value));
+      messages["-(_)"] = (obj, msg) => function<KString, KString>(obj, msg, (s1, s2) => s1.Subtract(s2.Value));
+      messages["pad(left:_<Int>)"] = (obj, msg) => function<KString, Int>(obj, msg, (s, w) => s.PadLeft(w.Value));
+      messages["pad(left:_<Int>,padding:_<Char>)"] = (obj, msg) => function<KString, Int, KChar>(obj, msg, (s, w, c) => s.PadLeft(w.Value, c.Value));
+      messages["pad(right:_<Int>)"] = (obj, msg) => function<KString, Int>(obj, msg, (s, w) => s.PadRight(w.Value));
+      messages["pad(right:_<Int>,padding:_<Char>)"] =
+         (obj, msg) => function<KString, Int, KChar>(obj, msg, (s, w, c) => s.PadRight(w.Value, c.Value));
+      messages["pad(center:_<Int>)"] = (obj, msg) => function<KString, Int>(obj, msg, (s, w) => s.PadCenter(w.Value));
+      messages["pad(center:_<Int>,padding:_<Char>)"] =
+         (obj, msg) => function<KString, Int, KChar>(obj, msg, (s, w, c) => s.PadCenter(w.Value, c.Value));
    }
 
    protected static IObject getIndexed(KString s, IObject i)
