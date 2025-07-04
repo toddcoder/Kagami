@@ -29,7 +29,7 @@ public class AssignMetaObject : Operation
             if (field.Value is IInvokableObject io)
             {
                var invokable = io.Invokable;
-               var _obj = machine.Invoke(invokable, Arguments.Empty);
+               var _obj = machine.Invoke(invokable, Arguments.Empty, nil);
                if (_obj is (true, var obj))
                {
                   ((UserClass)targetClass).MetaObject = ((UserObject)obj).Some();

@@ -16,8 +16,6 @@ public partial class TypeConstraintParser : SymbolParser
    {
    }
 
-   //public override string Pattern => "^ /(/s*) /'<' (> ['A-Z'])";
-
    [GeneratedRegex(@"^(\s*)(<)(?=[A-Z])", RegexOptions.Compiled)]
    public override partial Regex Regex();
 

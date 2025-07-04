@@ -79,5 +79,20 @@ public class FrameGroup : IEnumerable<Frame>
       }
    }
 
+   public Fields AllFields
+   {
+      get
+      {
+         var fields = new Fields();
+
+         for (var i = frames.Length - 1; i >= 0; i--)
+         {
+            fields.CopyFrom(frames[i].Fields);
+         }
+
+         return fields;
+      }
+   }
+
    public string AsString => frames.Select(f => f.AsString).ToString(", ");
 }

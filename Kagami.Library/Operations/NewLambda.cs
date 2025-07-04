@@ -14,7 +14,7 @@ public class NewLambda : Operation
    public override Optional<IObject> Execute(Machine machine)
    {
       var lambda = new Lambda(invokable);
-      lambda.Capture();
+      lambda.Capture(machine, lambda);
 
       return lambda;
    }

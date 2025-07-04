@@ -749,7 +749,7 @@ public static class ObjectFunctions
       var _field = machine.Find(selector);
       if (_field is (true, { Value: Constructor constructor }))
       {
-         return machine.Invoke(constructor.Invokable, message.Arguments).Force();
+         return machine.Invoke(constructor.Invokable, message.Arguments, nil).Force();
       }
       else if (_field.Exception is (true, var exception))
       {

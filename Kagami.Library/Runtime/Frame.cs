@@ -72,6 +72,23 @@ public class Frame
       set => frameType = value;
    }
 
+   public void CopyFields(Fields fields)
+   {
+      foreach (var (fieldName, field) in fields)
+      {
+         var _field = this.fields.Find(fieldName);
+         if (_field is (true, var existingField))
+         {
+            existingField.Value = field.Value;
+         }
+         else
+         {
+            this.fields.New(fieldName, field.Mutable);
+            this.fields.Assign(fieldName, field.Value, true);
+         }
+      }
+   }
+
    public void SetFields(Parameters parameters)
    {
       if (!parametersSet)
@@ -161,7 +178,7 @@ public class Frame
                IObject value;
                if (_defaultValue is (true, var invokable))
                {
-                  var _value = Machine.Current.Value.Invoke(invokable, Arguments.Empty);
+                  var _value = Machine.Current.Value.Invoke(invokable, Arguments.Empty, nil);
                   if (_value is (true, var value2))
                   {
                      value = value2;

@@ -144,7 +144,7 @@ public class Machine
       }
    }
 
-   public Optional<IObject> Invoke(IInvokable invokable, Arguments arguments)
+   public Optional<IObject> Invoke(IInvokable invokable, Arguments arguments, Maybe<IInvokableObject> _invokableObject)
    {
       var frame = new Frame(invokable.RequiresFunctionFrame ? Address : nil, arguments);
 
@@ -155,6 +155,10 @@ public class Machine
 
       PushFrame(frame);
       frame.SetFields(invokable.Parameters);
+      if (_invokableObject is (true, Lambda lambda))
+      {
+         frame.CopyFields(lambda.Fields);
+      }
 
       return GoTo(invokable.Address) ? invoke() : badAddress(invokable.Address);
    }
@@ -201,9 +205,9 @@ public class Machine
                switch (value)
                {
                   case IInvokableObject io:
-                     return Invoke(io.Invokable, arguments);
+                     return Invoke(io.Invokable, arguments, io.Some());
                   case IInvokable invokable:
-                     return Invoke(invokable, arguments);
+                     return Invoke(invokable, arguments, nil);
                   case PackageFunction pf:
                      return pf.Invoke(arguments).Just();
                   case Pattern pattern:
@@ -370,7 +374,7 @@ public class Machine
 
    public FrameGroup PeekFrames(Predicate<Frame> predicate)
    {
-      var frames = new List<Frame>();
+      List<Frame> frames = [];
       foreach (var frame in stack)
       {
          frames.Add(frame);
@@ -380,7 +384,7 @@ public class Machine
          }
       }
 
-      return new FrameGroup(frames.ToArray());
+      return new FrameGroup([..frames]);
    }
 
    public Maybe<Frame> FunctionFrame()

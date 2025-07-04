@@ -102,5 +102,11 @@ public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields
       }
    }
 
+   public void Capture(Machine machine, Lambda lambda)
+   {
+      var frames = machine.PeekFrames(f => f.Fields.Length > 0);
+      lambda.CopyFields(frames.AllFields);
+   }
+
    public Int ParameterCount => invokable1.Parameters.Length;
 }

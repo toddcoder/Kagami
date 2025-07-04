@@ -14,7 +14,7 @@ public class PushObject : Operation
    {
       if (obj is Lambda lambda)
       {
-         lambda.Capture();
+         lambda.Capture(machine, lambda);
       }
 
       return obj.Just();
