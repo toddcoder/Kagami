@@ -1,11 +1,10 @@
 ﻿using Kagami.Library.Runtime;
 
-namespace Kagami.Library.Objects
-{
-   public interface IProvidesFields
-   {
-      bool ProvidesFields { get; }
+namespace Kagami.Library.Objects;
 
-      Fields Fields { get; }
-   }
+public interface IProvidesFields
+{
+   bool ProvidesFields { get; }
+
+   Fields Fields { get; }
 }

@@ -71,7 +71,26 @@ public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields
 
    public bool ProvidesFields => providesFields;
 
-   public Fields Fields => fields;
+   protected Fields getFields()
+   {
+      var newFields = new Fields();
+      foreach (var (fieldName, field) in fields)
+      {
+         var newField = new Field
+         {
+            Visible = field.Visible,
+            Mutable = field.Mutable,
+            Value = field.Value,
+            TypeConstraint = field.TypeConstraint,
+            Tolerant = true
+         };
+         newFields.New(fieldName, newField);
+      }
+
+      return newFields;
+   }
+
+   public Fields Fields => getFields();
 
    public Lambda Clone() => new(invokable1);
 

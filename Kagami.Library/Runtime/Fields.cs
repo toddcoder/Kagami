@@ -108,9 +108,16 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
 
    public Result<Field> New(Selector selector, bool mutable = false, bool visible = true)
    {
-      if (fields.ContainsKey(selector))
+      if (fields.Maybe[selector] is (true, var foundField))
       {
-         return fieldAlreadyExists(selector);
+         if (foundField.Tolerant)
+         {
+            return foundField;
+         }
+         else
+         {
+            return fieldAlreadyExists(selector);
+         }
       }
       else
       {
@@ -124,9 +131,17 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
 
    public Result<Field> New(Selector selector, IObject value, bool mutable = false, bool visible = true)
    {
-      if (fields.ContainsKey(selector))
+      if (fields.Maybe[selector] is (true, var foundField))
       {
-         return fieldAlreadyExists(selector);
+         if (foundField.Tolerant)
+         {
+            foundField.Value = value;
+            return foundField;
+         }
+         else
+         {
+            return fieldAlreadyExists(selector);
+         }
       }
       else
       {
@@ -140,7 +155,7 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
 
    public Result<Field> New(string name, Field field)
    {
-      if (fields.ContainsKey(name))
+      if (fields.ContainsKey(name) && !field.Tolerant)
       {
          return fieldAlreadyExists(name);
       }
@@ -326,7 +341,7 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
 
    public void CopyFrom(Fields sourceFields)
    {
-      StringSet keysToOmit = [..sourceFields.fields.Where(i => i.Value.Value.ClassName is not "Lambda").Select(i => i.Key)];
+      StringSet keysToOmit = [..sourceFields.fields.Where(i => i.Value.Value.ClassName is "Lambda").Select(i => i.Key)];
       foreach (var (key, value) in sourceFields.fields.Where(i => !keysToOmit.Contains(i.Key)))
       {
          fields[key] = value.Clone();

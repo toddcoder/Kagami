@@ -68,11 +68,15 @@ public class Field
 
    public Maybe<TypeConstraint> TypeConstraint { get; set; } = nil;
 
+   public bool Tolerant { get; set; }
+
    public Field Clone() => new()
    {
       Value = Value,
       Mutable = Mutable,
-      Visible = Visible
+      Visible = Visible,
+      TypeConstraint = TypeConstraint,
+      Tolerant = Tolerant
    };
 
    public Fields Fields { get; set; } = [];
