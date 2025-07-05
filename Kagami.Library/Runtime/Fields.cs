@@ -326,12 +326,13 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
 
    public void CopyFrom(Fields sourceFields)
    {
-      foreach (var (key, value) in sourceFields.fields)
+      StringSet keysToOmit = [..sourceFields.fields.Where(i => i.Value.Value.ClassName is not "Lambda").Select(i => i.Key)];
+      foreach (var (key, value) in sourceFields.fields.Where(i => !keysToOmit.Contains(i.Key)))
       {
          fields[key] = value.Clone();
       }
 
-      foreach (var (key, value) in sourceFields.buckets)
+      foreach (var (key, value) in sourceFields.buckets.Where(i => !keysToOmit.Contains(i.Key)))
       {
          buckets[key] = value;
       }
@@ -372,4 +373,6 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
          buckets = newBuckets
       };
    }
+
+   public string AsString => fields.Select(i => $"{i.Key}({i.Value.Value.ClassName})").ToString(", ");
 }

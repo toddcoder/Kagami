@@ -252,7 +252,7 @@ public class Frame
 
    public override string ToString()
    {
-      return (StringStream)"(" / stack.Select(v => v.Image).ToString(", ") / ")[" / fields.FieldNames.ToString(", ") / "]";
+      return (StringStream)"(" / stack.Select(v => v.Image).ToString(", ") / ")[" / fields.AsString / "]";
    }
 
    public void CopyFromFields(Fields sourceFields) => fields.CopyFrom(sourceFields);
