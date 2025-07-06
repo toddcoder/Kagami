@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Kagami.Tests": {
+      "commandName": "Project",
+      "commandLineArgs": "run --folder C:\\Users\\toddc\\source\\repos\\Kagami\\Kagami.Tests\\Code"
+    }
+  }
+}

@@ -41,7 +41,6 @@ public class TestContext : IContext, IDisposable, IAsyncDisposable
    public void Dispose()
    {
       stream.Dispose();
-      writer.Dispose();
    }
 
    public async ValueTask DisposeAsync()
