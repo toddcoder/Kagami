@@ -14,8 +14,6 @@ public partial class IfParser : ExpressionBlockParser
    protected string fieldName = "";
    protected bool assignment;
 
-   //public override string Pattern => $"^ (/('var' | 'let') /(/s*) /({REGEX_FIELD}) /(/s*) /'=' /(/s*))? /'if' -(> ['>^']) /b";
-
    [GeneratedRegex($@"^(\s*)(?:(var|let)(\s*)({REGEX_FIELD})(\s*)(=)(\s*))?(if)(?![>\^])\b")]
    public override partial Regex Regex();
 
