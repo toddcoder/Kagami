@@ -5,33 +5,34 @@ using Kagami.Library;
 
 namespace Kagami.Tests;
 
-public class Tests(FolderName testFolder)
+public class Tests
 {
-   public void RunAllTests()
+   public void RunAllTests(FolderName testFolder)
    {
       var testNames = testFolder.Files
          .Where(file => file.Extension == ".kagami")
          .Select(file => file.Name);
       foreach (var testName in testNames)
       {
-         runTest(testName);
+         RunTest(testName);
       }
    }
 
-   public void GenerateExpectedTexts()
+   public void GenerateExpectedTexts(FolderName testFolder)
    {
       var testNames = testFolder.Files
          .Where(file => file.Extension == ".kagami")
          .Select(file => file.Name);
       foreach (var testName in testNames)
       {
-         generateExpectedText(testName);
+         GenerateExpectedText(testName);
       }
    }
 
-   protected void runTest(string testName)
+   public void RunTest(FileName sourceFile)
    {
-      var sourceFile = testFolder + $"{testName}.kagami";
+      var testFolder = sourceFile.Folder;
+      var testName = sourceFile.Name;
       var outputFile = testFolder + $"{testName}.txt";
       var expectedFile = testFolder + $"{testName}.expected.txt";
 
@@ -85,9 +86,10 @@ public class Tests(FolderName testFolder)
       }
    }
 
-   protected void generateExpectedText(string testName)
+   public void GenerateExpectedText(FileName sourceFile)
    {
-      var sourceFile = testFolder + $"{testName}.kagami";
+      var testFolder = sourceFile.Folder;
+      var testName = sourceFile.Name;
       var expectedFile = testFolder + $"{testName}.expected.txt";
 
       using var context = new TestContext(expectedFile);
