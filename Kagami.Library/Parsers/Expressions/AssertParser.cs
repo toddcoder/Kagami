@@ -10,8 +10,6 @@ public partial class AssertParser : SymbolParser
 {
    public AssertParser(ExpressionBuilder builder) : base(builder) { }
 
-   //public override string Pattern => "^ /(/s*) /('assert' | 'maybe') /b";
-
    [GeneratedRegex(@"^(\s*)(assert|maybe)\b")]
    public override partial Regex Regex();
 

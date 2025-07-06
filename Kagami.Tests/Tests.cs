@@ -17,13 +17,13 @@ public class Tests
       }
    }
 
-   public void GenerateExpectedTexts(FolderName testFolder)
+   public void GenerateExpectedTexts(FolderName testFolder, bool overwrite)
    {
       var testNames = testFolder.Files
          .Where(file => file.Extension == ".kagami");
       foreach (var testName in testNames)
       {
-         GenerateExpectedText(testName);
+         GenerateExpectedText(testName, overwrite);
       }
    }
 
@@ -82,11 +82,16 @@ public class Tests
       }
    }
 
-   public void GenerateExpectedText(FileName sourceFile)
+   public void GenerateExpectedText(FileName sourceFile, bool overwrite)
    {
       var testFolder = sourceFile.Folder;
       var testName = sourceFile.Name;
       var expectedFile = testFolder + $"{testName}.expected.txt";
+
+      if (expectedFile && !overwrite)
+      {
+         return;
+      }
 
       expectedFile.TryTo.Delete();
       using var context = new TestContext(expectedFile);

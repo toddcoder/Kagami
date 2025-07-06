@@ -1,0 +1,24 @@
+﻿open sys
+
+class Athlete(firstName, lastName, dateOfBirth, gender, country) {
+	func string => $"(firstName ~ " " ~ lastName)[s-25] \((gender)) (country) (dateOfBirth)[yyyy-MM-dd]"
+}
+
+let athletes = [
+	Athlete("Paul", "Tergat", d"1969-06-17", 'M', "KEN"),
+	Athlete("Khalid", "Khannouchi", d"1971-12-22", 'M', "USA"),
+	Athlete("Sammy", "Korir", d"1971-12-12", 'M', "KEN"),
+	Athlete("Ronaldo", "da Costa", d"1970-06-07", 'M', "BRA"),
+	Athlete("Paula", "Radcliffe", d"1973-12-17", 'M', "GBR")
+]
+
+func asDate(date) => date \ "yyyy-MM-dd"
+
+let bornSince70 = .($0.dateOfBirth > d"1970-1-1")
+let excludingKh = .($0.lastName <= "Kg" or $0.lastName >= "Ki")
+let byGenderDescThenByCountry = (a, b) -> a.gender == b.gender ?
+	a.country <> b.country : b.gender <> a.gender
+let someYoungsters = athletes if bornSince70 if excludingKh sort byGenderDescThenByCountry
+for a in someYoungsters {
+	println(a)
+}

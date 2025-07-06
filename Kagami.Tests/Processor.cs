@@ -18,6 +18,9 @@ public class Processor : CommandProcessor
    [Switch("file", "string", "Individual test")]
    public Maybe<FileName> File { get; set; } = nil;
 
+   [Switch("overwrite", "bool", "Overwrite expected files")]
+   public bool Overwrite { get; set; }
+
    [Command("run", "Runs all tests in the Kagami.Tests project.")]
    public void RunTests()
    {
@@ -38,11 +41,11 @@ public class Processor : CommandProcessor
       var tests = new Tests();
       if (Folder is (true, var folder))
       {
-         tests.GenerateExpectedTexts(folder);
+         tests.GenerateExpectedTexts(folder, Overwrite);
       }
       else if (File is (true, var file))
       {
-         tests.GenerateExpectedText(file);
+         tests.GenerateExpectedText(file, Overwrite);
       }
    }
 
