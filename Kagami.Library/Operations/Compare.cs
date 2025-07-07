@@ -15,7 +15,7 @@ public class Compare : TwoOperandOperation
       }
       else
       {
-         return sendMessage(x, "<>", y).Just();
+         return sendMessage(x, "<>(_)", y).Just();
       }
    }
 

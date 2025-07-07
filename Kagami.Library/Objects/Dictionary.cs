@@ -430,6 +430,8 @@ public class Dictionary : IObject, IMutableCollection
 
    public KBoolean IsEmpty => dictionary.Count == 0;
 
+   public KBoolean IsNotEmpty => dictionary.Count > 0;
+
    public IObject Assign(SkipTake skipTake, IEnumerable<IObject> values) => this;
 
    public IObject[] KeyArray => dictionary.KeyArray();

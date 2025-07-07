@@ -14,7 +14,7 @@ public class UserRangeItem : IRangeItem
 
    public int Compare(IObject obj)
    {
-      var result = sendMessage(userObject, "<>", obj);
+      var result = sendMessage(userObject, "<>(_)", obj);
       if (result is Int i)
       {
          return i.Value;

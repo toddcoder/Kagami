@@ -293,6 +293,7 @@ public abstract class BaseClass
       registerMessage("insert(at:_<Int>,value:_)",
          (obj, message) => function<IObject, Int, IObject>(obj, message, (o, i, v) => ((IMutableCollection)o).InsertAt(i.Value, v)));
       registerMessage("isEmpty".get(), (obj, _) => function<IObject>(obj, o => ((IMutableCollection)o).IsEmpty));
+      registerMessage("isNotEmpty".get(), (obj, _) => function<IObject>(obj, o => ((IMutableCollection)o).IsNotEmpty));
       registerMessage("assign(_,_)", (obj, message) => function<IObject, IObject, IObject>(obj, message, assignToMutable));
    }
 
@@ -567,7 +568,7 @@ public abstract class BaseClass
 
    protected void compareMessages()
    {
-      registerMessage("<>", (o, m) => (Int)((IObjectCompare)o).Compare(m.Arguments[0]));
+      registerMessage("<>(_)", (o, m) => (Int)((IObjectCompare)o).Compare(m.Arguments[0]));
       registerMessage("between".Selector("", "and:"), (o, m) => ((IObjectCompare)o).Between(m.Arguments[0], m.Arguments[1], true));
       registerMessage("between".Selector("", "until:"),
          (o, m) => ((IObjectCompare)o).Between(m.Arguments[0], m.Arguments[1], false));

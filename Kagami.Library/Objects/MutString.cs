@@ -229,6 +229,8 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
 
    public KBoolean IsEmpty => mutable.Length == 0;
 
+   public KBoolean IsNotEmpty => mutable.Length > 0;
+
    public IObject Assign(SkipTake skipTake, IEnumerable<IObject> values)
    {
       var array = mutable.ToString().ToCharArray();

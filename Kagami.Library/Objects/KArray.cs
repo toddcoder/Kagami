@@ -334,6 +334,8 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public KBoolean IsEmpty => list.Count == 0;
 
+   public KBoolean IsNotEmpty => list.Count > 0;
+
    public IObject Assign(SkipTake skipTake, IEnumerable<IObject> values)
    {
       var left = list.Take(skipTake.Skip);
