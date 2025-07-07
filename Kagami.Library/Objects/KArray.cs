@@ -153,6 +153,8 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       }
    }
 
+   public IObject Get(int index) => index.Between(0).Until(list.Count) ? Some.Object(list[index]) : None.NoneValue;
+
    public IObject this[Sequence sequence]
    {
       get
@@ -426,7 +428,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
    {
       foreach (var item in list.Where(item => lambda.Invoke(item).IsTrue))
       {
-         return Some.Object((Int)item);
+         return Some.Object(item);
       }
 
       return None.NoneValue;
@@ -438,7 +440,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       {
          if (lambda.Invoke(list[i]).IsTrue)
          {
-            return Some.Object((Int)list[i]);
+            return Some.Object(list[i]);
          }
       }
 

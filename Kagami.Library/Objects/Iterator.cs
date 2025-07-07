@@ -850,10 +850,10 @@ public class Iterator : IObject, IIterator
    public IObject Shape(int rows, int columns)
    {
       var continuing = true;
-      var outerList = new List<IObject>();
+      List<IObject> outerList = [];
       for (var row = 0; row < rows && continuing; row++)
       {
-         var innerList = new List<IObject>();
+         List<IObject> innerList = [];
          for (var column = 0; column < columns; column++)
          {
             if (Next() is (true, var item))
