@@ -6,12 +6,8 @@ using static Kagami.Library.AllExceptions;
 
 namespace Kagami.Library.Operations;
 
-public class GetField : Operation
+public class GetField(string fieldName) : Operation
 {
-   protected string fieldName;
-
-   public GetField(string fieldName) => this.fieldName = fieldName;
-
    public override Optional<IObject> Execute(Machine machine)
    {
       var _field = machine.Find(fieldName, true);
