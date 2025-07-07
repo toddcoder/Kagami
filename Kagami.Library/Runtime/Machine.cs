@@ -11,6 +11,8 @@ using static Kagami.Library.AllExceptions;
 using static Core.Monads.AttemptFunctions;
 using static Core.Monads.MonadFunctions;
 using Failure = Kagami.Library.Objects.Failure;
+using Some = Kagami.Library.Objects.Some;
+using Success = Kagami.Library.Objects.Success;
 
 namespace Kagami.Library.Runtime;
 
@@ -684,6 +686,10 @@ public class Machine
    public Maybe<IObject> R2 { get; set; } = nil;
 
    public Maybe<IObject> R3 { get; set; } = nil;
+
+   public Maybe<(string fieldName, Some some)> LastSome { get; set; } = nil;
+
+   public Maybe<(string fieldName, Success success)> LastSuccess { get; set; } = nil;
 
    public IEnumerable<string> AllFieldNames()
    {

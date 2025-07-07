@@ -89,6 +89,13 @@ public class If : Statement
       builder.GoToIfFalse(nextLabel);
 
       builder.PushFrame();
+
+      var blockLabel = newLabel("block");
+      builder.AssignLastSome();
+      builder.GoToIfTrue(blockLabel);
+      builder.AssignLastSuccess();
+
+      builder.Label(blockLabel);
       block.Generate(builder);
       if (assignment)
       {

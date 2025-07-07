@@ -15,7 +15,20 @@ public class GetField(string fieldName) : Operation
       {
          machine.LastField = field;
          Module.Global.Value.RetrievedFields[field.Value.Id] = fieldName;
-         return field.Value.Just();
+
+         var value = field.Value;
+
+         switch (value)
+         {
+            case Objects.Some some:
+               machine.LastSome = (fieldName, some);
+               break;
+            case Objects.Success success:
+               machine.LastSuccess = (fieldName, success);
+               break;
+         }
+
+         return value.Just();
       }
       else if (_field.Exception is (true, var exception))
       {

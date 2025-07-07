@@ -1,0 +1,15 @@
+﻿open sys
+
+let obj = 153?
+if obj {
+	println(obj)
+	println(obj.class)
+}
+
+let obj2 = none
+if obj2 {
+	println(obj)
+}
+else {
+	println(obj2.class)
+}

@@ -550,5 +550,17 @@ public class OperationsBuilder
 
    public void IsMonad(MonadType type) => add(new IsMonad(type));
 
+   public void UnwrapMonad() => add(new UnwrapMonad());
+
+   public void FieldNameFromId() => add(new FieldNameFromId());
+
+   public void GetId() => add(new GetId());
+
+   public void PopNewField() => add(new PopNewField());
+
+   public void AssignLastSome() => add(new AssignLastSome());
+
+   public void AssignLastSuccess() => add(new AssignLastSuccess());
+
    public override string ToString() => "operations";
 }
