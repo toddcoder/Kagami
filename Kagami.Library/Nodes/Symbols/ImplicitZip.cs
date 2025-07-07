@@ -8,7 +8,9 @@ public class ImplicitZip : Symbol
    {
    }
 
-   public override Precedence Precedence => Precedence.PrefixOperator;
+   public override Precedence Precedence => Precedence.Value;
 
-   public override Arity Arity => Arity.Prefix;
+   public override Arity Arity => Arity.Nullary;
+
+   public override string ToString() => "z`";
 }

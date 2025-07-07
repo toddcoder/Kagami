@@ -8,9 +8,9 @@ public class ImplicitSymbol(string type) : Symbol
 
    public override void Generate(OperationsBuilder builder) => builder.NoOp();
 
-   public override Precedence Precedence => Precedence.PrefixOperator;
+   public override Precedence Precedence => Precedence.Value;
 
-   public override Arity Arity => Arity.Prefix;
+   public override Arity Arity => Arity.Nullary;
 
    public override string ToString() => $"{type}`";
 }

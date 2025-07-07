@@ -105,17 +105,9 @@ public class ExpressionBuilder(Bits32<ExpressionFlags> flags, bool acknowledgeIm
       if (_index is (true, var index))
       {
          var implicitType = ((ImplicitSymbol)symbols[index]).Type;
-         var sourceSymbol = symbols[index - 1];
-         symbols[index - 1] = new FieldSymbol("__$0");
+         var sourceSymbol = symbols[index + 1];
+         symbols[index + 1] = new FieldSymbol("__$0");
          symbols[index] = new NoOpSymbol();
-
-         for (var i = 0; i < symbols.Length; i++)
-         {
-            if (symbols[i] is SendMessageSymbol sendMessageSymbol)
-            {
-               symbols[i] = sendMessageSymbol.AsChainOperator();
-            }
-         }
 
          var bodyExpression = new Expression(symbols);
          var block = new Block(bodyExpression);
@@ -133,20 +125,12 @@ public class ExpressionBuilder(Bits32<ExpressionFlags> flags, bool acknowledgeIm
          var _zipIndex2 = symbols.Find(s => s is ImplicitZip, zipIndex1 + 1);
          if (_zipIndex2 is (true, var zipIndex2))
          {
-            var sourceSymbol1 = symbols[zipIndex1 - 1];
-            symbols[zipIndex1 - 1] = new FieldSymbol("__$0");
+            var sourceSymbol1 = symbols[zipIndex1 + 1];
+            symbols[zipIndex1 + 1] = new FieldSymbol("__$0");
             symbols[zipIndex1] = new NoOpSymbol();
-            var sourceSymbol2 = symbols[zipIndex2 - 1];
-            symbols[zipIndex2 - 1] = new FieldSymbol("__$1");
+            var sourceSymbol2 = symbols[zipIndex2 + 1];
+            symbols[zipIndex2 + 1] = new FieldSymbol("__$1");
             symbols[zipIndex2] = new NoOpSymbol();
-
-            for (var i = 0; i < symbols.Length; i++)
-            {
-               if (symbols[i] is SendMessageSymbol sendMessageSymbol)
-               {
-                  symbols[i] = sendMessageSymbol.AsChainOperator();
-               }
-            }
 
             var bodyExpression = new Expression(symbols);
             var block = new Block(bodyExpression);
@@ -168,21 +152,13 @@ public class ExpressionBuilder(Bits32<ExpressionFlags> flags, bool acknowledgeIm
          var _foldVariableIndex = symbols.Find(s => s is ImplicitFoldVariable);
          if (_foldVariableIndex is (true, var foldVariableIndex))
          {
-            var sourceSymbol1 = symbols[foldIndex - 1];
-            symbols[foldIndex - 1] = new FieldSymbol("__$0");
+            var sourceSymbol1 = symbols[foldIndex + 1];
+            symbols[foldIndex + 1] = new FieldSymbol("__$0");
             symbols[foldIndex] = new NoOpSymbol();
 
-            var sourceSymbol2 = symbols[foldVariableIndex - 1];
-            symbols[foldVariableIndex - 1] = sourceSymbol2;
+            var sourceSymbol2 = symbols[foldVariableIndex + 1];
+            symbols[foldVariableIndex + 1] = sourceSymbol2;
             symbols[foldVariableIndex] = new NoOpSymbol();
-
-            for (var i = 0; i < symbols.Length; i++)
-            {
-               if (symbols[i] is SendMessageSymbol sendMessageSymbol)
-               {
-                  symbols[i] = sendMessageSymbol.AsChainOperator();
-               }
-            }
 
             var bodyExpression = new Expression(symbols);
             var block = new Block(bodyExpression);
