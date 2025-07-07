@@ -303,7 +303,7 @@ public abstract class BaseClass
       [
          "collection".get(), "isLazy".get(), "next()", "peek()", "reset()", "reverse()",
          "join(_<String>)",
-         "sort(_<Lambda>,asc:_<Boolean>)", "sort(_<Lambda>)", "sort(_<Boolean>)", "sort()",
+         "sort(_<Lambda>,asc:_<Boolean>)", "sort(_<Lambda>)", "sort(asc:_<Boolean>)", "sort()", "sortDesc()",
          "foldl".Selector("_", "_<Lambda>"),
          "foldl(_)", "foldr".Selector("_", "_<Lambda>"), "foldr(_)", "reducel".Selector("_", "_<Lambda>"), "reducel(_)",
          "reducer".Selector("_", "_<Lambda>"), "reducer(_)", "count(of:_)", "count(_<Lambda>)", "map(_<Lambda>)",
@@ -350,8 +350,9 @@ public abstract class BaseClass
       registerMessage("sort(_<Lambda>,asc:_<Boolean>)",
          (obj, message) => iteratorFunc<Lambda, KBoolean>(obj, message, (i, l, b) => i.Sort(l, b.Value)));
       registerMessage("sort(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Sort(l, true)));
-      registerMessage("sort(ascending:_<Boolean>)", (obj, message) => iteratorFunc<KBoolean>(obj, message, (i, b) => i.Sort(b.Value)));
+      registerMessage("sort(asc:_<Boolean>)", (obj, message) => iteratorFunc<KBoolean>(obj, message, (i, b) => i.Sort(b.Value)));
       registerMessage("sort()", (obj, _) => iteratorFunc(obj, i => i.Sort(true)));
+      registerMessage("sortDesc()", (obj, _) => iteratorFunc(obj, i => i.Sort(false)));
       registerMessage("foldl".Selector("_", "_<Lambda>"),
          (obj, message) => iteratorFunc<IObject, Lambda>(obj, message, (i, o, l) => i.FoldLeft(o, l)));
       registerMessage("foldl(_)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.FoldLeft(l)));

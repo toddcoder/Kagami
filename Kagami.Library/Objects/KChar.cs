@@ -15,7 +15,10 @@ public readonly struct KChar : IObject, IComparable<KChar>, IEquatable<KChar>, I
 
    private readonly char value;
 
-   public KChar(char value) : this() => this.value = value;
+   public KChar(char value) : this()
+   {
+      this.value = value;
+   }
 
    public char Value => value;
 

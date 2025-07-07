@@ -119,15 +119,18 @@ public class Iterator : IObject, IIterator
       switch (lambda.Invokable.Parameters.Length)
       {
          case 1:
-            var result = ascending ? List().ToList().OrderBy(i => lambda.Invoke(i)).ToList()
+         {
+            var result = ascending ? List().ToList().OrderBy(i => lambda.Invoke(i), new ObjectComparer()).ToList()
                : List().ToList().OrderByDescending(i => lambda.Invoke(i)).ToList();
-
             return collectionClass.Revert(result);
+         }
          case 2:
+         {
             IObject[] array = [.. List()];
             Array.Sort(array, (i, j) => ((Int)lambda.Invoke(i, j)).Value);
 
             return collectionClass.Revert(array);
+         }
          default:
             return (IObject)collection;
       }
