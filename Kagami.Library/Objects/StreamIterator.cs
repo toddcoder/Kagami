@@ -144,6 +144,8 @@ public class StreamIterator : IObject, IIterator
 
    public IObject ReduceRight(Lambda lambda) => terminate().ReduceRight(lambda);
 
+   public Int Count() => terminate().Count();
+
    public Int Count(IObject item) => terminate().Count(item);
 
    public Int Count(Lambda predicate) => terminate().Count(predicate);

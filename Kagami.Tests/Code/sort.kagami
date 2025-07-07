@@ -1,0 +1,4 @@
+﻿open sys
+
+let numbers = a"one two three four"
+println(numbers sort .($0[-1]))

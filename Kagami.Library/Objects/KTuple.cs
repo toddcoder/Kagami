@@ -342,7 +342,35 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
 
    public IObject IndexOf(IObject value) => items.IndexOf(value).Map(i => Some.Object(Int.IntObject(i))) | (() => None.NoneValue);
 
-   public IObject ReverseIndexOf(IObject value) => items.LastIndexOf(value).Map(i => Some.Object(Int.IntObject(i))) | (() => None.NoneValue);
+   public IObject Index(Lambda predicate)
+   {
+      for (var i = 0; i < items.Length; i++)
+      {
+         var result = predicate.Invoke(items[i]);
+         if (result.IsTrue)
+         {
+            return Some.Object((Int)i);
+         }
+      }
+
+      return None.NoneValue;
+   }
+
+   public IObject LastIndex(Lambda predicate)
+   {
+      for (var i = items.Length - 1; i >= 0; i--)
+      {
+         var result = predicate.Invoke(items[i]);
+         if (result.IsTrue)
+         {
+            return Some.Object((Int)i);
+         }
+      }
+
+      return None.NoneValue;
+   }
+
+   public IObject LastIndexOf(IObject value) => items.LastIndexOf(value).Map(i => Some.Object(Int.IntObject(i))) | (() => None.NoneValue);
 
    public IObject FindAll(Lambda predicate)
    {

@@ -47,6 +47,8 @@ public interface IIterator : IEquivalentClass
 
    IObject ReduceRight(Lambda lambda);
 
+   Int Count();
+
    Int Count(IObject item);
 
    Int Count(Lambda predicate);

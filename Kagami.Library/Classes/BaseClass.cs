@@ -365,6 +365,7 @@ public abstract class BaseClass
       registerMessage("reducer".Selector("_", "_<Lambda>"),
          (obj, message) => iteratorFunc<IObject, Lambda>(obj, message, (i, o, l) => i.ReduceRight(o, l)));
       registerMessage("reducer(_)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.ReduceRight(l)));
+      registerMessage("count()", (obj, _) => iteratorFunc(obj, i => i.Count()));
       registerMessage("count".Selector("_<Lambda>"), (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Count(l)));
       registerMessage("count(of:_)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, o) => i.Count(o)));
       registerMessage("map(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Map(l)));
@@ -651,7 +652,9 @@ public abstract class BaseClass
    protected void findAndIndexMessages()
    {
       messages["index(of:_)"] = (obj, msg) => ((IFindIndex)obj).IndexOf(msg.Arguments[0]);
-      messages["reverseIndex(of:_)"] = (obj, msg) => ((IFindIndex)obj).ReverseIndexOf(msg.Arguments[0]);
+      messages["index(_<Lambda>)"] = (obj, msg) => ((IFindIndex)obj).Index((Lambda)msg.Arguments[0]);
+      messages["lastIndex(of:_)"] = (obj, msg) => ((IFindIndex)obj).LastIndexOf(msg.Arguments[0]);
+      messages["lastIndex(_<Lambda>)"] = (obj, msg) => ((IFindIndex)obj).LastIndex((Lambda)msg.Arguments[0]);
       messages["find(all:_<Lambda>)"] = (obj, msg) => ((IFindIndex)obj).FindAll((Lambda)msg.Arguments[0]);
       messages["first(_<Lambda>)"] = (obj, msg) => ((IFindIndex)obj).First((Lambda)msg.Arguments[0]);
       messages["last(_<Lambda>)"] = (obj, msg) => ((IFindIndex)obj).Last((Lambda)msg.Arguments[0]);

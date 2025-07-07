@@ -4,7 +4,11 @@ public interface IFindIndex
 {
    IObject IndexOf(IObject value);
 
-   IObject ReverseIndexOf(IObject value);
+   IObject Index(Lambda predicate);
+
+   IObject LastIndex(Lambda predicate);
+
+   IObject LastIndexOf(IObject value);
 
    IObject FindAll(Lambda predicate);
 

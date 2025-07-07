@@ -271,6 +271,8 @@ public class Iterator : IObject, IIterator
       return collectionClass.Revert(result);
    }
 
+   public Int Count() => List().Count();
+
    public Int Count(IObject item) => List().Count(i => i.IsEqualTo(item));
 
    public Int Count(Lambda predicate) => List().Count(value => predicate.Invoke(value).IsTrue);
