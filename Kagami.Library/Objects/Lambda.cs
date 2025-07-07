@@ -1,6 +1,7 @@
 ﻿using Kagami.Library.Invokables;
 using Kagami.Library.Runtime;
 using Core.Collections;
+using Kagami.Library.Packages;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
@@ -125,6 +126,18 @@ public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields
    {
       var frames = machine.PeekFrames(f => f.Fields.Length > 0);
       lambda.CopyFields(frames.AllFields);
+   }
+
+   public void Capture(Machine machine)
+   {
+      var frames = machine.PeekFrames(f => f.Fields.Length > 0);
+      foreach (var (fieldName, field) in frames.AllFields)
+      {
+         if (field.Value.Id != Id && field.Value is not Package)
+         {
+            fields.New(fieldName, field);
+         }
+      }
    }
 
    public Int ParameterCount => invokable1.Parameters.Length;

@@ -562,5 +562,7 @@ public class OperationsBuilder
 
    public void AssignLastSuccess() => add(new AssignLastSuccess());
 
+   public void LambdaFromSelector() => add(new LambdaFromSelector());
+
    public override string ToString() => "operations";
 }

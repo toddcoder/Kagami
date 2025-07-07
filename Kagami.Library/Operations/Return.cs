@@ -17,6 +17,10 @@ public class Return : Operation
          var _value = Machine.Current.Value.CurrentFrame.Pop().Optional();
          if (_value is (true, var value))
          {
+            if (value is Lambda lambda)
+            {
+               lambda.Capture(machine);
+            }
             returnValue = new ReturnValue.Value(value);
          }
          else

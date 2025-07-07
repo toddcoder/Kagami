@@ -148,7 +148,8 @@ public class Machine
 
    public Optional<IObject> Invoke(IInvokable invokable, Arguments arguments, Maybe<IInvokableObject> _invokableObject)
    {
-      var frame = new Frame(invokable.RequiresFunctionFrame ? Address : nil, arguments);
+      var fields = _invokableObject.Map(io => io is IProvidesFields { ProvidesFields: true } pf ? pf.Fields : new Fields()) | (() => new Fields());
+      var frame = new Frame(invokable.RequiresFunctionFrame ? Address : nil, arguments, fields);
 
       if (invokable is YieldingInvokable yfi)
       {
@@ -157,10 +158,10 @@ public class Machine
 
       PushFrame(frame);
       frame.SetFields(invokable.Parameters);
-      if (_invokableObject is (true, Lambda lambda))
+      /*if (_invokableObject is (true, Lambda lambda))
       {
          frame.CopyFields(lambda.Fields);
-      }
+      }*/
 
       return GoTo(invokable.Address) ? invoke() : badAddress(invokable.Address);
    }
