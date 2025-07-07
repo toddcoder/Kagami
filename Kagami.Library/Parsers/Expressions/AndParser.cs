@@ -16,7 +16,7 @@ public partial class AndParser : EndingInExpressionParser
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {
-      state.Colorize(tokens, Color.Whitespace, Color.Keyword);
+      state.Colorize(tokens, Color.Whitespace, Color.Operator);
       return unit;
    }
 
