@@ -472,6 +472,10 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       return None.NoneValue;
    }
 
+   public IObject BinarySearch(IObject item) => binarySearch(this, item);
+
+   public IObject BinarySearch(IObject item, Lambda lambda) => binarySearch(this, item, lambda);
+
    public IObject FindAll(IObject item)
    {
       List<IObject> result = [];

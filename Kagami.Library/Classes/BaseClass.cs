@@ -658,6 +658,8 @@ public abstract class BaseClass
       messages["find(all:_<Lambda>)"] = (obj, msg) => ((IFindIndex)obj).FindAll((Lambda)msg.Arguments[0]);
       messages["first(_<Lambda>)"] = (obj, msg) => ((IFindIndex)obj).First((Lambda)msg.Arguments[0]);
       messages["last(_<Lambda>)"] = (obj, msg) => ((IFindIndex)obj).Last((Lambda)msg.Arguments[0]);
+      messages["binarySearch(_)"] = (obj, msg) => ((IFindIndex)obj).BinarySearch(msg.Arguments[0]);
+      messages["binarySearch(_,_<Lambda>)"] = (obj, msg) => ((IFindIndex)obj).BinarySearch(msg.Arguments[0], (Lambda)msg.Arguments[1]);
    }
 
    public void RegisterInclusion(Inclusion inclusion) => inclusions[inclusion.Name] = inclusion;

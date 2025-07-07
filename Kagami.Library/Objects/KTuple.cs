@@ -415,6 +415,10 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
       return None.NoneValue;
    }
 
+   public IObject BinarySearch(IObject item) => binarySearch(this, item);
+
+   public IObject BinarySearch(IObject item, Lambda lambda) => binarySearch(this, item, lambda);
+
    public KTuple Append(IObject obj)
    {
       if (obj is NameValue nameValue)

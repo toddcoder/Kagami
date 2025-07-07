@@ -229,6 +229,7 @@ public static class NumericFunctions
                   Long l => l.CompareTo((Long)right),
                   Rational r => r.CompareTo((Rational)right),
                   Complex c => c.CompareTo((Complex)right),
+                  KDecimal d => d.CompareTo((KDecimal)right),
                   _ => throw incompatibleClasses(x is INumeric ? y : x, "Numeric")
                };
             case UserObject uo:

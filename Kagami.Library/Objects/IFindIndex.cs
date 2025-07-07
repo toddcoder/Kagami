@@ -15,4 +15,8 @@ public interface IFindIndex
    IObject First(Lambda predicate);
 
    IObject Last(Lambda predicate);
+
+   IObject BinarySearch(IObject item);
+
+   IObject BinarySearch(IObject item, Lambda lambda);
 }

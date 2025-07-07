@@ -161,4 +161,64 @@ public static class CollectionFunctions
       IIterator iterator => iterator.List().ToArray(),
       _ => [obj]
    };
+
+   public static IObject binarySearch(ICollection collection, IObject item)
+   {
+      IObject[] list = [..collection.GetIterator(false).List()];
+      IObjectCompare[] compareList = [..list.OfType<IObjectCompare>()];
+      if (list.Length != compareList.Length)
+      {
+         throw incompatibleClasses(item, "Object compare");
+      }
+
+      var left = 0;
+      var right = list.Length - 1;
+      while (left <= right)
+      {
+         var mid = left + (right - left) / 2;
+         var compare = compareList[mid].Compare(item);
+         switch (compare)
+         {
+            case 0:
+               return Some.Object((Int)mid);
+            case < 0:
+               left = mid + 1;
+               break;
+            default:
+               right = mid - 1;
+               break;
+         }
+      }
+
+      return None.NoneValue;
+   }
+
+   public static IObject binarySearch(ICollection collection, IObject item, Lambda lambda)
+   {
+      IObject[] list = [.. collection.GetIterator(false).List()];
+
+      var left = 0;
+      var right = list.Length - 1;
+      while (left <= right)
+      {
+         var mid = left + (right - left) / 2;
+         var compare = lambda.Invoke(list[mid], item);
+         if (compare is Int index)
+         {
+            switch (index.Value)
+            {
+               case 0:
+                  return Some.Object((Int)mid);
+               case < 0:
+                  left = mid + 1;
+                  break;
+               default:
+                  right = mid - 1;
+                  break;
+            }
+         }
+      }
+
+      return None.NoneValue;
+   }
 }
