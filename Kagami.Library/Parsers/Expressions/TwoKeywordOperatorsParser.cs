@@ -12,7 +12,7 @@ public partial class TwoKeywordOperatorsParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(skip|take|if)(\s+)(while|until|not)\b", RegexOptions.Compiled)]
+   [GeneratedRegex(@"^(\s*)(skip|take|if|not)(\s+)(while|until|not|same)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -22,7 +22,7 @@ public partial class TwoKeywordOperatorsParser : SymbolParser
       var word1 = tokens[2].Text;
       var word2 = tokens[4].Text;
       var message = "";
-      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Keyword);
+      state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Whitespace, Color.Operator);
 
       switch (word1)
       {
@@ -38,6 +38,9 @@ public partial class TwoKeywordOperatorsParser : SymbolParser
          case "if" when word2 == "not":
             message = "ifNot(_)";
             break;
+         case "not" when word2 == "same":
+            builder.Add(new SameSymbol(true));
+            return unit;
          default:
             state.RollBackTransaction();
             return nil;
