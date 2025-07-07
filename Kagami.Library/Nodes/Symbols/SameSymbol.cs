@@ -6,8 +6,10 @@ public class SameSymbol(bool not) : Symbol
 {
    public override void Generate(OperationsBuilder builder)
    {
+      builder.SendMessage("string".get());
       builder.SendMessage("lower()");
       builder.Swap();
+      builder.SendMessage("string".get());
       builder.SendMessage("lower()");
       builder.Swap();
       builder.Compare();
