@@ -2,7 +2,6 @@
 using Kagami.Library.Runtime;
 using Core.Monads;
 using static Kagami.Library.AllExceptions;
-using static Kagami.Library.Operations.OperationFunctions;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Operations;

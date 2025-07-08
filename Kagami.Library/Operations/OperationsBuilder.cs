@@ -564,5 +564,7 @@ public class OperationsBuilder
 
    public void LambdaFromSelector() => add(new LambdaFromSelector());
 
+   public void LambdaCapture() => add(new LambdaCapture());
+
    public override string ToString() => "operations";
 }

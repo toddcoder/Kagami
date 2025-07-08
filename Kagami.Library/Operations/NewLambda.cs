@@ -9,7 +9,10 @@ public class NewLambda : Operation
 {
    protected IInvokable invokable;
 
-   public NewLambda(IInvokable invokable) => this.invokable = invokable;
+   public NewLambda(IInvokable invokable)
+   {
+      this.invokable = invokable;
+   }
 
    public override Optional<IObject> Execute(Machine machine)
    {

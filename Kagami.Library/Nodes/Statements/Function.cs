@@ -101,6 +101,7 @@ public class Function : Statement
             }
 
             builder.PushObject(lambda.Value);
+            builder.LambdaCapture();
             builder.AssignField(lambdaName, overriding);
          }
          else
@@ -113,6 +114,7 @@ public class Function : Statement
             }
 
             builder.PushObject(lambda.Value);
+            builder.LambdaCapture();
             builder.AssignSelector(selector, overriding);
          }
       }

@@ -1,15 +1,16 @@
 ﻿using Core.Applications.Messaging;
-using Kagami.Library.Invokables;
-using Kagami.Library.Objects;
-using Kagami.Library.Operations;
-using Kagami.Library.Packages;
 using Core.Enumerables;
 using Core.Monads;
 using Core.Objects;
 using Core.Strings;
-using static Kagami.Library.AllExceptions;
+using Kagami.Library.Invokables;
+using Kagami.Library.Objects;
+using Kagami.Library.Operations;
+using Kagami.Library.Packages;
+using System.Reflection.PortableExecutable;
 using static Core.Monads.AttemptFunctions;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.AllExceptions;
 using Failure = Kagami.Library.Objects.Failure;
 using Some = Kagami.Library.Objects.Some;
 using Success = Kagami.Library.Objects.Success;
@@ -135,7 +136,8 @@ public class Machine
 
       PushFrame(frame);
       frame.SetFields(invokable.Parameters);
-      PushFrame(new Frame());
+      frame.SetFields(fields);
+      //PushFrame(new Frame());
       if (GoTo(invokable.Address))
       {
          return invoke();
@@ -148,8 +150,8 @@ public class Machine
 
    public Optional<IObject> Invoke(IInvokable invokable, Arguments arguments, Maybe<IInvokableObject> _invokableObject)
    {
-      var fields = _invokableObject.Map(io => io is IProvidesFields { ProvidesFields: true } pf ? pf.Fields : new Fields()) | (() => new Fields());
-      var frame = new Frame(invokable.RequiresFunctionFrame ? Address : nil, arguments, fields);
+      //var fields = _invokableObject.Map(io => io is IProvidesFields { ProvidesFields: true } pf ? pf.Fields : new Fields()) | (() => new Fields());
+      var frame = new Frame(invokable.RequiresFunctionFrame ? Address : nil, arguments);
 
       if (invokable is YieldingInvokable yfi)
       {
@@ -158,10 +160,10 @@ public class Machine
 
       PushFrame(frame);
       frame.SetFields(invokable.Parameters);
-      /*if (_invokableObject is (true, Lambda lambda))
+      if (_invokableObject is (true, Lambda lambda))
       {
          frame.CopyFields(lambda.Fields);
-      }*/
+      }
 
       return GoTo(invokable.Address) ? invoke() : badAddress(invokable.Address);
    }
