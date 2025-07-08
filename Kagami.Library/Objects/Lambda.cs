@@ -138,6 +138,11 @@ public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields
             fields.New(fieldName, field);
          }
       }
+
+      foreach (var (key, value) in fields.Buckets)
+      {
+         fields.Buckets[key] = value;
+      }
    }
 
    public Int ParameterCount => invokable1.Parameters.Length;

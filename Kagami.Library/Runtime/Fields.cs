@@ -390,4 +390,6 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
    }
 
    public string AsString => fields.Select(i => $"{i.Key}({i.Value.Value.ClassName})").ToString(", ");
+
+   public Memo<string, List<string>> Buckets => buckets;
 }
