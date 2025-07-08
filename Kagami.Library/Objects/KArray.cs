@@ -69,8 +69,69 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public bool IsEqualTo(IObject obj) => isEqualTo(this, obj);
 
-   public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand,
-      (a1, a2) => { return a1.Length.Value == a2.Length.Value && a1.list.Zip(a2.list, (i1, i2) => i1.Match(i2, bindings)).All(b => b); }, bindings);
+   public bool Match(IObject comparisand, Hash<string, IObject> bindings) =>
+      match(this, comparisand, (a1, a2) => equalifier(a1, a2, bindings), bindings);
+
+   protected static bool equalifier(KArray a1, KArray a2, Hash<string, IObject> bindings)
+   {
+      if (a1.Length.Value == a2.Length.Value)
+      {
+         if (a1.Length.Value == 0 && a2.Length.Value == 0)
+         {
+            return true;
+         }
+         else
+         {
+            return a1.list.Zip(a2.list, (i1, i2) => i1.Match(i2, bindings)).All(b => b);
+         }
+      }
+      else if (a2.Length.Value == 2)
+      {
+         var head = a1.Head;
+         if (head is None)
+         {
+            return false;
+         }
+
+         var tail = a1.Tail;
+
+         var match0 = a2[0];
+         var match1 = a2[1];
+
+         switch (match0)
+         {
+            case Placeholder placeholder0 when head is Some some:
+            {
+               bindings[placeholder0.Name] = some.Value;
+               break;
+            }
+            default:
+            {
+               if (head is Some some && !some.Value.IsEqualTo(match0))
+               {
+                  return false;
+               }
+
+               break;
+            }
+         }
+
+         switch (match1)
+         {
+            case Placeholder placeholder1:
+               bindings[placeholder1.Name] = tail;
+               break;
+            case KArray array1 when !array1.IsEqualTo(tail):
+               return false;
+         }
+
+         return true;
+      }
+      else
+      {
+         return false;
+      }
+   }
 
    public bool IsTrue => list.Count > 0;
 
@@ -520,4 +581,8 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
    }
 
    public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
+
+   public IObject Head => list.Count > 0 ? Some.Object(list[0]) : None.NoneValue;
+
+   public KArray Tail => list.Count > 0 ? new KArray([.. list.Skip(1)]) : new KArray([]);
 }

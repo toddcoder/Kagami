@@ -566,5 +566,7 @@ public class OperationsBuilder
 
    public void LambdaCapture() => add(new LambdaCapture());
 
+   public void RunTimeArguments() => add(new RunTimeArguments());
+
    public override string ToString() => "operations";
 }

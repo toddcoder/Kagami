@@ -5,19 +5,19 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
 
-public readonly struct UserObjectPlaceholder(string name, string[] parameters) : IObject, IEquatable<UserObjectPlaceholder>
+public struct UserObjectPlaceholder(string name) : IObject, IEquatable<UserObjectPlaceholder>, IRuntimeArguments
 {
    public string Name => name;
 
-   public string[] Parameters => parameters;
+   public IObject[] Arguments { get; set; } = [];
 
    public string ClassName => "UserObjectPlaceholder";
 
-   public string AsString => $"{name}({parameters.ToString(", ")})";
+   public string AsString => $"{name}({Arguments.ToString(", ")})";
 
    public string Image => AsString;
 
-   public int Hash => HashCode.Combine(name, parameters);
+   public int Hash => HashCode.Combine(name, Arguments);
 
    public bool IsEqualTo(IObject obj) => obj is UserObjectPlaceholder placeholder && Equals(placeholder);
 
@@ -27,7 +27,7 @@ public readonly struct UserObjectPlaceholder(string name, string[] parameters) :
 
    public Guid Id { get; init; } = Guid.NewGuid();
 
-   public bool Equals(UserObjectPlaceholder other) => name == other.Name && parameters.SequenceEqual(other.Parameters);
+   public bool Equals(UserObjectPlaceholder other) => name == other.Name && Arguments.SequenceEqual(other.Arguments);
 
    public bool Match(UserObject userObject, Hash<string, IObject> bindings)
    {
@@ -37,17 +37,25 @@ public readonly struct UserObjectPlaceholder(string name, string[] parameters) :
       {
          userObjectClassName = userObjectClassName.Drop(index + 1);
       }
-      if (name == userObjectClassName && parameters.Length == userObject.Parameters.Length)
+
+      if (name == userObjectClassName && Arguments.Length == userObject.Parameters.Length)
       {
          var fields = userObject.Fields;
-         for (var i = 0; i < parameters.Length; i++)
+         for (var i = 0; i < Arguments.Length; i++)
          {
-            var parameter = parameters[i];
+            var argument = Arguments[i];
             var parameterName = userObject.Parameters[i].Name;
             var _value = fields.GetFieldValue(parameterName);
             if (_value is (true, var value))
             {
-               bindings[$"-{parameter}"] = value;
+               if (argument is Placeholder placeholder)
+               {
+                  bindings[placeholder.Name] = value;
+               }
+               else if (!argument.Match(value, bindings))
+               {
+                  return false;
+               }
             }
             else
             {
@@ -61,5 +69,10 @@ public readonly struct UserObjectPlaceholder(string name, string[] parameters) :
       {
          return false;
       }
+   }
+
+   public void SetArguments(IObject[] arguments)
+   {
+      Arguments = arguments;
    }
 }

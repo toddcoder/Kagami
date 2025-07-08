@@ -1,0 +1,17 @@
+﻿enum Expr {
+	when Binary(s, e1, e2)
+	when Variable(s)
+	when Constant(i)
+}
+
+let v = Expr.Binary("+", Expr.Variable("x"), Expr.Constant(10))
+
+let variables = {x: 10, y: 42}
+
+func eval()
+	when Binary("+", e1, e2) return eval(e1) + eval(e2)
+	when Binary("-", e1, e2) return eval(e1) - eval(e2)
+	when Variable(v) return variables[v]&
+	when Constant(i) return i
+
+eval(v)

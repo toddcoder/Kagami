@@ -1,6 +1,5 @@
 ﻿using Core.Computers;
 using Core.DataStructures;
-using Core.Strings;
 using Kagami.Library;
 
 namespace Kagami.Tests;
@@ -32,6 +31,7 @@ public class Tests
       var testFolder = sourceFile.Folder;
       var testName = sourceFile.Name;
       var outputFile = testFolder + $"{testName}.txt";
+      outputFile.TryTo.Delete();
       var expectedFile = testFolder + $"{testName}.expected.txt";
 
       var context = new TestContext(outputFile);
@@ -72,7 +72,8 @@ public class Tests
          {
             if (outputLine != expectedLine)
             {
-               Console.WriteLine($"   N: {outputLine.Truncate(30)}!={expectedLine.Truncate(30)}");
+               Console.WriteLine($"   O:{outputLine}");
+               Console.WriteLine($"   E:{expectedLine}");
             }
          }
       }

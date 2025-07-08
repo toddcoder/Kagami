@@ -2,7 +2,7 @@
   "profiles": {
     "Kagami.Tests": {
       "commandName": "Project",
-      "commandLineArgs": "generate --folder C:\\Users\\TEBENNETT\\source\\repos\\Kagami\\Kagami.Tests\\Code"
+      "commandLineArgs": "run --folder C:\\Users\\tebennett\\source\\repos\\Kagami\\Kagami.Tests\\Code"
     }
   }
 }

@@ -61,6 +61,8 @@ public class ArrayClass : BaseClass, ICollectionClass
       messages["transpose()"] = (obj, _) => function<KArray>(obj, a => a.Transpose());
       messages["fromOpenRange(_<OpenRange>)"] = (obj, msg) =>
          function<KArray, OpenRange>(obj, msg, (a, r) => a.FromOpenRange(r));
+      messages["head".get()] = (obj, _) => function<KArray>(obj, a => a.Head);
+      messages["tail".get()] = (obj, _) => function<KArray>(obj, a => a.Tail);
    }
 
    protected static IObject getIndexed(KArray a, IObject i)

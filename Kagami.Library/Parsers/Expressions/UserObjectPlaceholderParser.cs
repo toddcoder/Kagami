@@ -22,17 +22,17 @@ public partial class UserObjectPlaceholderParser : SymbolParser
       var name = tokens[2].Text;
       state.Colorize(tokens, Color.Whitespace, Color.Class, Color.OpenParenthesis);
 
-      var _parameters = getParameters(state);
-      if (_parameters is (true, var parameters))
+      var _arguments = getArguments(state, builder.Flags);
+      if (_arguments is (true, var arguments))
       {
-         var userObjectSymbol = new UserObjectPlaceholder(name, [..parameters.Select(p => p.Name)]);
-         builder.Add(new PushObjectSymbol(userObjectSymbol));
+         var userObjectPlaceholder = new UserObjectPlaceholder(name);
+         builder.Add(new PushUserObjectPlaceholder(userObjectPlaceholder, arguments));
 
          return unit;
       }
       else
       {
-         return _parameters.Exception;
+         return _arguments.Exception;
       }
    }
 }

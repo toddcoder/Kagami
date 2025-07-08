@@ -132,19 +132,7 @@ public class UserClass : BaseClass
       registerMessage("send",
          (obj, msg) => function<IObject, KString>(obj, msg, (o, n) => sendMessage(o, n.Value, msg.Arguments.Pass(1))));
       registerMessage("with(_)", (obj, msg) => ((UserObject)obj).With(msg.Arguments[0]));
-   }
-
-   public Optional<Selector> MatchImplemented(IEnumerable<Selector> traitSignatures)
-   {
-      foreach (var signature in traitSignatures)
-      {
-         if (!signatures.Contains(signature))
-         {
-            return signature;
-         }
-      }
-
-      return nil;
+      registerMessage("clone()", (obj, _) => ((UserObject)obj).Clone());
    }
 
    public override bool ClassRespondsTo(Selector selector) =>

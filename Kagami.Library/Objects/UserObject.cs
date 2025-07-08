@@ -76,4 +76,10 @@ public class UserObject : IObject
          throw fail("Dictionary required as the argument for with");
       }
    }
+
+   public UserObject Clone()
+   {
+      var newFields = fields.Clone();
+      return new UserObject(className, newFields, parameters);
+   }
 }
