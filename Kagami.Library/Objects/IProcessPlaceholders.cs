@@ -1,11 +1,10 @@
 ﻿using Core.Collections;
 
-namespace Kagami.Library.Objects
-{
-   public interface IProcessPlaceholders
-   {
-      Hash<string, IObject> Passed { get; }
+namespace Kagami.Library.Objects;
 
-      Hash<string, IObject> Internals { get; }
-   }
+public interface IProcessPlaceholders
+{
+   Hash<string, IObject> Passed { get; }
+
+   Hash<string, IObject> Internals { get; }
 }
