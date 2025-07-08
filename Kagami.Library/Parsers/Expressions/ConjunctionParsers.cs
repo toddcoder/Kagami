@@ -9,6 +9,11 @@ public class ConjunctionParsers(ExpressionBuilder builder) : MultiParser
          yield return new IsParser(builder);
          yield return new MatchExpressionParser(builder);
 
+         /*if (!builder.Flags[ExpressionFlags.OmitMaybe])
+         {
+            yield return new MaybeParser(builder);
+         }*/
+
          if (!builder.Flags[ExpressionFlags.OmitComprehension])
          {
             yield return new ComprehensionParser(builder);

@@ -1,5 +1,4 @@
 ﻿using Kagami.Library.Operations;
-using Core.Monads;
 using static Kagami.Library.Nodes.NodeFunctions;
 
 namespace Kagami.Library.Nodes.Symbols;
@@ -8,13 +7,13 @@ public class AssertSymbol : Symbol
 {
    protected Expression condition;
    protected Expression value;
-   protected Maybe<Expression> _error;
+   protected Expression error;
 
-   public AssertSymbol(Expression condition, Expression value, Maybe<Expression> _error)
+   public AssertSymbol(Expression condition, Expression value, Expression error)
    {
       this.condition = condition;
       this.value = value;
-      this._error = _error;
+      this.error = error;
    }
 
    public override void Generate(OperationsBuilder builder)
@@ -25,28 +24,14 @@ public class AssertSymbol : Symbol
       condition.Generate(builder);
       builder.GoToIfTrue(trueLabel);
 
-      if (_error is (true, var error))
-      {
-         error.Generate(builder);
-         builder.Failure();
-      }
-      else
-      {
-         builder.PushNone();
-      }
+      error.Generate(builder);
+      builder.Failure();
 
       builder.GoTo(endLabel);
 
       builder.Label(trueLabel);
       value.Generate(builder);
-      if (_error)
-      {
-         builder.Success();
-      }
-      else
-      {
-         builder.Some();
-      }
+      builder.Success();
 
       builder.Label(endLabel);
       builder.NoOp();
@@ -58,6 +43,6 @@ public class AssertSymbol : Symbol
 
    public override string ToString()
    {
-      return $"assert{_error.Map(_ => "!")|(() => "?")} {condition} : {value}{_error.Map(e => $" : {e}") | (() => "")}";
+      return $"assert {condition} then {value} else {error}";
    }
 }

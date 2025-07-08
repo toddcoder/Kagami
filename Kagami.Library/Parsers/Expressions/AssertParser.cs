@@ -1,8 +1,8 @@
-﻿using System.Text.RegularExpressions;
+﻿using Core.Monads;
 using Kagami.Library.Nodes.Symbols;
-using Core.Monads;
-using static Kagami.Library.Parsers.ParserFunctions;
+using System.Text.RegularExpressions;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
@@ -10,46 +10,24 @@ public partial class AssertParser : SymbolParser
 {
    public AssertParser(ExpressionBuilder builder) : base(builder) { }
 
-   [GeneratedRegex(@"^(\s*)(assert|maybe)\b")]
+   [GeneratedRegex(@"^(\s*)(assert)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      var isSuccess = tokens[2].Text == "assert";
       state.Colorize(tokens, Color.Whitespace, Color.Keyword);
 
       var _result =
-         from conditionValue in getExpression(state, builder.Flags | ExpressionFlags.OmitColon)
-         from colon1 in state.Scan(@"^(\s*)(:)", Color.Whitespace, Color.Structure)
-         from valueValue in getExpression(state, builder.Flags | ExpressionFlags.OmitColon)
-         select (conditionValue, valueValue);
+         from conditionValue in getExpression(state, builder.Flags | ExpressionFlags.OmitMaybe)
+         from colon1 in state.Scan(@"^(\s*)(then)\b", Color.Whitespace, Color.Keyword)
+         from valueValue in getExpression(state, builder.Flags | ExpressionFlags.OmitMaybe)
+         from colon2 in state.Scan(@"^(\s*)(else)\b", Color.Whitespace, Color.Keyword)
+         from failureExpressionValue in getExpression(state, builder.Flags | ExpressionFlags.OmitMaybe)
+         select (conditionValue, valueValue, failureExpressionValue);
 
-      if (isSuccess)
+      if (_result is (true, var (condition, value, failureExpression)))
       {
-         if (_result is (true, var (condition, value)))
-         {
-            var _expression =
-               from colon2 in state.Scan(@"^(\s*)(:)", Color.Whitespace, Color.Structure)
-               from error in getExpression(state, builder.Flags | ExpressionFlags.OmitColon)
-               select error;
-            if (_expression is (true, var expression))
-            {
-               builder.Add(new AssertSymbol(condition, value, expression));
-               return unit;
-            }
-            else
-            {
-               return _expression.Exception;
-            }
-         }
-         else
-         {
-            return _result.Exception;
-         }
-      }
-      else if (_result is (true, var (condition, value)))
-      {
-         builder.Add(new AssertSymbol(condition, value, nil));
+         builder.Add(new AssertSymbol(condition, value, failureExpression));
          return unit;
       }
       else

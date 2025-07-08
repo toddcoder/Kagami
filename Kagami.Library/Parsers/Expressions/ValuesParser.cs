@@ -80,9 +80,16 @@ public class ValuesParser : MultiParser
          yield return new DollarFieldParser(builder);
          yield return new DoParser(builder);
          yield return new ThrowParser(builder);
+
          yield return new AssertParser(builder);
          yield return new ConversionParser(builder);
          yield return new SeqParser(builder);
+
+         if (!builder.Flags[ExpressionFlags.OmitMaybe])
+         {
+            yield return new MaybeParser(builder);
+         }
+
          yield return new FieldParser(builder);
       }
    }
