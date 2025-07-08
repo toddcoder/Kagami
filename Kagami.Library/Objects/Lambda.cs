@@ -2,7 +2,6 @@
 using Kagami.Library.Runtime;
 using Core.Collections;
 using Kagami.Library.Packages;
-using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
@@ -97,51 +96,12 @@ public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields
 
    public IObject Join(Lambda otherLambda) => new CompositeLambda(invokable1, otherLambda.Invokable);
 
-   public void Capture()
-   {
-      var parameters = invokable1.Parameters;
-      foreach (var parameter in parameters.GetCapturingParameters())
-      {
-         var fieldName = parameter.Name;
-         if (Machine.Current.Value.Find(fieldName, true) is (true, var field))
-         {
-            if (!fields.ContainsKey(fieldName))
-            {
-               fields.New(fieldName, parameter.Mutable);
-            }
-
-            var value = field.Value;
-            if (parameter.TypeConstraint is (true, var typeConstraint) && !typeConstraint.Matches(classOf(value)))
-            {
-               throw incompatibleClasses(value, typeConstraint.AsString);
-            }
-
-            fields.Assign(fieldName, value, true).Force();
-            providesFields = true;
-         }
-      }
-   }
-
-   public void Capture(Machine machine, Lambda lambda)
-   {
-      var frames = machine.PeekFrames(f => f.Fields.Length > 0);
-      lambda.CopyFields(frames.AllFields);
-   }
-
    public void Capture(Machine machine)
    {
-      var frames = machine.PeekFrames(f => f.Fields.Length > 0);
-      foreach (var (fieldName, field) in frames.AllFields)
+      var frames = machine.PeekFramesUntil(f => f.FrameType == FrameType.Function, true);
+      foreach (var field in frames.AllFields().Where(f => f.field.Value.Id != Id && f.field.Value is not Package))
       {
-         if (field.Value.Id != Id && field.Value is not Package)
-         {
-            fields.New(fieldName, field);
-         }
-      }
-
-      foreach (var (key, value) in fields.Buckets)
-      {
-         fields.Buckets[key] = value;
+         fields.AssignLocal(field.fieldName, field.field.Value, true).Force();
       }
    }
 

@@ -375,8 +375,13 @@ public class Machine
 
    public FrameGroup PopFrames() => PopFramesUntil(f => f.FrameType == FrameType.Function);
 
-   public FrameGroup PeekFrames(Predicate<Frame> predicate)
+   public FrameGroup PeekFramesUntil(Predicate<Frame> predicate, bool precheckPredicate = false)
    {
+      if (precheckPredicate && !stack.AtLeastOne(f => predicate(f)))
+      {
+         return new FrameGroup([]);
+      }
+
       List<Frame> frames = [];
       foreach (var frame in stack)
       {

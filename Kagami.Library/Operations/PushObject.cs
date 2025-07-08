@@ -10,15 +10,7 @@ public class PushObject : Operation
 
    public PushObject(IObject obj) => this.obj = obj;
 
-   public override Optional<IObject> Execute(Machine machine)
-   {
-      if (obj is Lambda lambda)
-      {
-         lambda.Capture(machine);
-      }
-
-      return obj.Just();
-   }
+   public override Optional<IObject> Execute(Machine machine) => obj.Just();
 
    public override string ToString() => $"push.object({obj.Image})";
 }

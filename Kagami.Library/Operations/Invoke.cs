@@ -20,8 +20,12 @@ public class Invoke : OneOperandOperation
       }
       else
       {
-         InvokeInvokable(machine, invokable, arguments,
-            invokableObject is IProvidesFields { ProvidesFields: true } pf ? pf.Fields : new Fields());
+         Maybe<Fields> _fields = nil;
+         if (invokableObject is IProvidesFields providesFields)
+         {
+            _fields = providesFields.Fields;
+         }
+         InvokeInvokable(machine, invokable, arguments, _fields);
       }
    }
 
@@ -32,24 +36,28 @@ public class Invoke : OneOperandOperation
       machine.Push((IObject)iterator);
    }
 
-   public static void InvokeInvokable(Machine machine, IInvokable invokable, Arguments arguments, Fields fields)
+   public static void InvokeInvokable(Machine machine, IInvokable invokable, Arguments arguments, Maybe<Fields> _fields)
    {
       if (invokable.Constructing)
       {
-         InvokeConstructor(machine, invokable, arguments, fields);
+         InvokeConstructor(machine, invokable, arguments);
       }
       else
       {
-         var frame = new Frame(invokable.RequiresFunctionFrame ? machine.Address : nil, arguments, fields);
+         var frame = new Frame(invokable.RequiresFunctionFrame ? machine.Address : nil, arguments);
          machine.PushFrame(frame);
          frame.SetFields(invokable.Parameters);
+         if (_fields is (true, var fields))
+         {
+            frame.SetFields(fields);
+         }
          machine.GoTo(invokable.Address);
       }
    }
 
-   public static void InvokeConstructor(Machine machine, IInvokable invokable, Arguments arguments, Fields fields)
+   public static void InvokeConstructor(Machine machine, IInvokable invokable, Arguments arguments)
    {
-      var frame = new Frame(invokable.RequiresFunctionFrame ? machine.Address : nil, arguments, fields);
+      var frame = new Frame(invokable.RequiresFunctionFrame ? machine.Address : nil, arguments);
       machine.PushFrame(frame);
       frame.SetFields(invokable.Parameters);
       machine.GoTo(invokable.Address);

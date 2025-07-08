@@ -1,4 +1,6 @@
-﻿func compose(f, g)(x) => f(g(x))
+﻿open sys
+
+func compose(f, g)(x) => f(g(x))
 
 let oddLength = compose(x -> x.isOdd, x -> x.length)
-oddLength("a")
+println(oddLength("a"))

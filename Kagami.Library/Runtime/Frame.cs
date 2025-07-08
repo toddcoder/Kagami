@@ -226,6 +226,14 @@ public class Frame
       }
    }
 
+   public void SetFields(Fields fields)
+   {
+      foreach (var (fieldName, field) in fields)
+      {
+         this.fields.AssignLocal(fieldName, field.Value, true).Force();
+      }
+   }
+
    public void Push(IObject value) => stack.Push(value);
 
    public bool IsEmpty => stack.Count == 0;

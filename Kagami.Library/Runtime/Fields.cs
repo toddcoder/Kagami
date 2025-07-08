@@ -191,6 +191,36 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       }
    }
 
+   public Result<Field> AssignLocal(string name, IObject value, bool overriden = false)
+   {
+      var _field = Find(name, false);
+      if (_field is (true, var field))
+      {
+         if (field.Mutable || field.Value is Unassigned || overriden)
+         {
+            field.Value = value;
+            fields[name] = field;
+
+            return field;
+         }
+         else
+         {
+            return immutableField(name);
+         }
+      }
+      else if (_field.Exception is (true, var exception))
+      {
+         return exception;
+      }
+      else
+      {
+         var newField = new Field { Value = value };
+         fields[name] = newField;
+
+         return newField;
+      }
+   }
+
    public Result<Field> AssignToExisting(string name, IObject value, bool overriden = false)
    {
       var _field = Machine.Current.Value.Find(name, false);

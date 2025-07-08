@@ -45,7 +45,7 @@ public class Return : Operation
          {
             ReturnValue.EmptyStack => emptyStack("return"),
             ReturnValue.NoValue => nil,
-            ReturnValue.Value value => copyFields(value.Object, frames).Just(),
+            ReturnValue.Value value => value.Object.Just(), //copyFields(value.Object, frames).Just(),
             _ => new ArgumentOutOfRangeException(nameof(returnValue))
          };
       }

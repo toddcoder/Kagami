@@ -79,20 +79,27 @@ public class FrameGroup : IEnumerable<Frame>
       }
    }
 
-   public Fields AllFields
+   public IEnumerable<(string fieldName, Field field)> AllFields()
    {
-      get
+      for (var i = frames.Length - 1; i >= 0; i--)
       {
-         var fields = new Fields();
-
-         for (var i = frames.Length - 1; i >= 0; i--)
+         foreach (var (fieldName, field) in frames[i].Fields)
          {
-            fields.CopyFrom(frames[i].Fields);
+            yield return (fieldName, field);
          }
-
-         return fields;
       }
    }
+
+   /*public (string bucketName, List<Field> bucket) AllBuckets()
+   {
+      for (var i = frames.Length - 1; i >= 0; i--)
+      {
+         foreach (var VARIABLE in frames[i].)
+         {
+            
+         }
+      }
+   }*/
 
    public string AsString => frames.Select(f => f.AsString).ToString(", ");
 }
