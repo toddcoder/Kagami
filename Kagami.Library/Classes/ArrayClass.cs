@@ -63,6 +63,7 @@ public class ArrayClass : BaseClass, ICollectionClass
          function<KArray, OpenRange>(obj, msg, (a, r) => a.FromOpenRange(r));
       messages["head".get()] = (obj, _) => function<KArray>(obj, a => a.Head);
       messages["tail".get()] = (obj, _) => function<KArray>(obj, a => a.Tail);
+      messages["headTail".get()] = (obj, _) => function<KArray>(obj, a => a.HeadTail);
    }
 
    protected static IObject getIndexed(KArray a, IObject i)

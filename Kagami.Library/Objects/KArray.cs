@@ -531,4 +531,6 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
    public IObject Head => list.Count > 0 ? Some.Object(list[0]) : None.NoneValue;
 
    public KArray Tail => list.Count > 0 ? new KArray([.. list.Skip(1)]) : new KArray([]);
+
+   public KTuple HeadTail => new(Head, Tail);
 }
