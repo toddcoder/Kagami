@@ -74,18 +74,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    protected static bool equalifier(KArray a1, KArray a2, Hash<string, IObject> bindings)
    {
-      if (a1.Length.Value == a2.Length.Value)
-      {
-         if (a1.Length.Value == 0 && a2.Length.Value == 0)
-         {
-            return true;
-         }
-         else
-         {
-            return a1.list.Zip(a2.list, (i1, i2) => i1.Match(i2, bindings)).All(b => b);
-         }
-      }
-      else if (a2.Length.Value == 2)
+      if (a2.Length.Value == 2)
       {
          var head = a1.Head;
          if (head is None)
@@ -126,6 +115,17 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
          }
 
          return true;
+      }
+      else if (a1.Length.Value == a2.Length.Value)
+      {
+         if (a1.Length.Value == 0 && a2.Length.Value == 0)
+         {
+            return true;
+         }
+         else
+         {
+            return a1.list.Zip(a2.list, (i1, i2) => i1.Match(i2, bindings)).All(b => b);
+         }
       }
       else
       {

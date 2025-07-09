@@ -31,9 +31,9 @@ public class Sys : Package
       module.RegisterClass(new RegexMatchClass());
       module.RegisterClass(new RegexGroupClass());
       module.RegisterClass(new RandomClass());
-      module.RegisterClass(new OutClass());
+      //module.RegisterClass(new OutClass());
 
-      fields.New("out", new Out());
+      //fields.New("out", new Out());
    }
 
    public KString Println(Arguments arguments)
