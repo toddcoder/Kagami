@@ -23,12 +23,17 @@ public class Sys : Package
 
    public IObject ID => fields["id"];
 
+   public IObject Out => fields["out"];
+
    public override void LoadTypes(Module module)
    {
       module.RegisterClass(new SysClass());
       module.RegisterClass(new RegexMatchClass());
       module.RegisterClass(new RegexGroupClass());
       module.RegisterClass(new RandomClass());
+      module.RegisterClass(new OutClass());
+
+      fields.New("out", new Out());
    }
 
    public KString Println(Arguments arguments)

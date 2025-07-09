@@ -1298,6 +1298,9 @@ public static class ParserFunctions
          case "//":
             _symbol = new RationalSymbol();
             break;
+         case "<|":
+            _symbol = new SendBinaryMessageSymbol("<|(_)", Precedence.Shift);
+            break;
       }
 
       return _symbol;
