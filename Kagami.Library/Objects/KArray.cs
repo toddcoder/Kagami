@@ -72,66 +72,12 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
    public bool Match(IObject comparisand, Hash<string, IObject> bindings) =>
       match(this, comparisand, (a1, a2) => equalifier(a1, a2, bindings), bindings);
 
-   protected static bool equalifier(KArray a1, KArray a2, Hash<string, IObject> bindings)
+   protected static bool equalifier(KArray a1, IObject a2, Hash<string, IObject> bindings) => a2 switch
    {
-      if (a2.Length.Value == 2)
-      {
-         var head = a1.Head;
-         if (head is None)
-         {
-            return false;
-         }
-
-         var tail = a1.Tail;
-
-         var match0 = a2[0];
-         var match1 = a2[1];
-
-         switch (match0)
-         {
-            case Placeholder placeholder0 when head is Some some:
-            {
-               bindings[placeholder0.Name] = some.Value;
-               break;
-            }
-            default:
-            {
-               if (head is Some some && !some.Value.IsEqualTo(match0))
-               {
-                  return false;
-               }
-
-               break;
-            }
-         }
-
-         switch (match1)
-         {
-            case Placeholder placeholder1:
-               bindings[placeholder1.Name] = tail;
-               break;
-            case KArray array1 when !array1.IsEqualTo(tail):
-               return false;
-         }
-
-         return true;
-      }
-      else if (a1.Length.Value == a2.Length.Value)
-      {
-         if (a1.Length.Value == 0 && a2.Length.Value == 0)
-         {
-            return true;
-         }
-         else
-         {
-            return a1.list.Zip(a2.list, (i1, i2) => i1.Match(i2, bindings)).All(b => b);
-         }
-      }
-      else
-      {
-         return false;
-      }
-   }
+      KArray array when a1.Length.Value == 0 && array.Length.Value == 0 => true,
+      KArray array when a1.Length.Value == array.Length.Value => a1.list.Zip(array.list, (i1, i2) => i1.Match(i2, bindings)).All(b => b),
+      _ => false
+   };
 
    public bool IsTrue => list.Count > 0;
 

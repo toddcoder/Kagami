@@ -72,9 +72,59 @@ public static class ObjectFunctions
             return processPlaceholdersMatch(source, comparisand, bindings);
          case TypeConstraint typeConstraint:
             return typeConstraint.Matches(classOf(source));
+         case KTuple tuple when source is KArray array:
+            return matchArrayToTuple(array, tuple, bindings);
          default:
             return classOf(source).MatchCompatible(classOf(comparisand)) && equalifier(source, (T)comparisand);
       }
+   }
+
+   private static bool matchArrayToTuple(KArray source, KTuple comparisand, Hash<string, IObject> bindings)
+   {
+      if (comparisand.Length.Value == 2)
+      {
+         var head = source.Head;
+         if (head is None)
+         {
+            return false;
+         }
+
+         var tail = source.Tail;
+
+         var match0 = comparisand[0];
+         var match1 = comparisand[1];
+
+         switch (match0)
+         {
+            case Placeholder placeholder0 when head is Some some:
+            {
+               bindings[placeholder0.Name] = some.Value;
+               break;
+            }
+            default:
+            {
+               if (head is Some some && !some.Value.IsEqualTo(match0))
+               {
+                  return false;
+               }
+
+               break;
+            }
+         }
+
+         switch (match1)
+         {
+            case Placeholder placeholder1:
+               bindings[placeholder1.Name] = tail;
+               break;
+            case KArray array1 when !array1.IsEqualTo(tail):
+               return false;
+         }
+
+         return true;
+      }
+
+      return false;
    }
 
    public static bool match<T>(T source, IObject comparisand, Hash<string, IObject> bindings)
@@ -86,18 +136,6 @@ public static class ObjectFunctions
    public static bool matchSingle<T>(T source, IObject comparisand, Func<T, IObject, bool> equalifier,
       Hash<string, IObject> bindings) where T : IObject
    {
-      /*switch (comparisand)
-      {
-         case Binding binding:
-            comparisand = binding.Value;
-            bindings[binding.Name] = source;
-            break;
-         case NameValue nameValue:
-            comparisand = nameValue.Value;
-            bindings[$"-{nameValue.Name}"] = source;
-            break;
-      }*/
-
       var _name = Module.Global.Value.Bindings.Maybe[comparisand.Id];
       if (_name is (true, var name))
       {
@@ -132,6 +170,8 @@ public static class ObjectFunctions
             return processPlaceholdersMatch(source, comparisand, bindings);
          case TypeConstraint typeConstraint:
             return typeConstraint.Matches(classOf(source));
+         case KTuple tuple when source is KArray array:
+            return matchArrayToTuple(array, tuple, bindings);
          default:
             return equalifier(source, comparisand);
       }
@@ -225,13 +265,16 @@ public static class ObjectFunctions
             {
                return false;
             }
+
             foreach (var parameter in obj.Parameters)
             {
-               if (!otherUserObject.Fields.ContainsKey(parameter.Name) || !obj.Fields[parameter.Name].IsEqualTo(otherUserObject.Fields[parameter.Name]))
+               if (!otherUserObject.Fields.ContainsKey(parameter.Name) ||
+                   !obj.Fields[parameter.Name].IsEqualTo(otherUserObject.Fields[parameter.Name]))
                {
                   return false;
                }
             }
+
             return true;
          }
          else
