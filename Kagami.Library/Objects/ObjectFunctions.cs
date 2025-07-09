@@ -62,8 +62,8 @@ public static class ObjectFunctions
                return false;
             }
 
-         case Sequence internalList:
-            return internalList.In(source);
+         case Sequence sequence:
+            return matchInSequence(source, sequence, bindings);
          case Regex regex:
             return regex.IsMatch(source.AsString).IsTrue;
          case Pattern pattern:
@@ -74,9 +74,42 @@ public static class ObjectFunctions
             return typeConstraint.Matches(classOf(source));
          case KTuple tuple when source is KArray array:
             return matchArrayToTuple(array, tuple, bindings);
+         case KTuple tuple when source is not KTuple:
+            return matchNonTuple(source, tuple, bindings);
+         case UserObjectPlaceholder userObjectPlaceholder when source is UserObject userObject:
+         {
+            return userObjectMatch(userObject, userObjectPlaceholder, bindings);
+         }
          default:
             return classOf(source).MatchCompatible(classOf(comparisand)) && equalifier(source, (T)comparisand);
       }
+   }
+
+   private static bool matchNonTuple(IObject source, KTuple tuple, Hash<string, IObject> bindings)
+   {
+      foreach (var (index, item) in tuple.List.Indexed())
+      {
+         var isMatch = match(source, item, bindings);
+         if (isMatch)
+         {
+            var _name = tuple.Rename(index);
+            if (_name is (true, var name))
+            {
+               bindings[$"-{name}"] = source;
+            }
+         }
+         else
+         {
+            return false;
+         }
+      }
+
+      return true;
+   }
+
+   private static bool matchInSequence(IObject source, Sequence sequence, Hash<string, IObject> bindings)
+   {
+      return sequence.List.Any(item => match(source, item, bindings));
    }
 
    private static bool matchArrayToTuple(KArray source, KTuple comparisand, Hash<string, IObject> bindings)

@@ -37,7 +37,8 @@ public class Sequence : IObject
 
    public bool Match(IObject comparisand, Hash<string, IObject> bindings)
    {
-      return matchSingle(this, comparisand, (container, o) => container.In(o), bindings);
+      //return matchSingle(this, comparisand, (container, o) => container.In(o), bindings);
+      return match(this, comparisand, bindings);
    }
 
    public bool IsTrue => list.Count > 0;
