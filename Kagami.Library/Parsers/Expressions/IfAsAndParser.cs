@@ -11,8 +11,6 @@ public partial class IfAsAndParser : EndingInExpressionParser
    {
    }
 
-   //public override string Pattern => "^ /(/s*) /'if' /(/s+)";
-
    [GeneratedRegex(@"^(\s*)(if)(\s+)")]
    public override partial Regex Regex();
 

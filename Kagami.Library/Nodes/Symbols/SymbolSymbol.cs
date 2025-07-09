@@ -15,5 +15,5 @@ public class SymbolSymbol : Symbol
 
    public override Arity Arity => Arity.Nullary;
 
-   public override string ToString() => $"`{name}";
+   public override string ToString() => $"#{name}";
 }

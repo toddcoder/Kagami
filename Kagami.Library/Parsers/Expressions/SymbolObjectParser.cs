@@ -21,15 +21,7 @@ public partial class SymbolObjectParser : SymbolParser
       var name = tokens[3].Text;
       state.Colorize(tokens, Color.Whitespace, Color.Symbol, Color.Symbol);
 
-      if (builder.Flags[ExpressionFlags.Comparisand])
-      {
-         builder.Add(new FieldSymbol(name));
-      }
-      else
-      {
-         builder.Add(new SymbolSymbol(name));
-      }
-
+      builder.Add(new SymbolSymbol(name));
       return unit;
    }
 }

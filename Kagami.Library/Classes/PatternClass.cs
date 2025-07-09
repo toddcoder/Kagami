@@ -1,7 +1,16 @@
-﻿namespace Kagami.Library.Classes
+﻿using Kagami.Library.Objects;
+using static Kagami.Library.Classes.ClassFunctions;
+
+namespace Kagami.Library.Classes;
+
+public class PatternClass : BaseClass
 {
-   public class PatternClass : BaseClass
+   public override string Name => "Pattern";
+
+   public override void RegisterMessages()
    {
-      public override string Name => "Pattern";
+      base.RegisterMessages();
+
+      messages["with(_<Dictionary>)"] = (obj, msg) => function<Pattern, Dictionary>(obj, msg, (p, d) => p.With(d));
    }
 }

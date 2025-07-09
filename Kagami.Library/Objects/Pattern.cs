@@ -48,23 +48,17 @@ public class Pattern : IObject
             return boolean.Value;
          case KBoolean boolean when parameterCount == 1:
          {
-            var isMatched = match(boolean, comparisand, bindings);
-            if (isMatched)
+            if (boolean.IsTrue)
             {
                bindings[$"-{parameters[0].Name}"] = comparisand;
             }
 
-            return isMatched;
+            return boolean.IsTrue;
          }
          case Some some when parameterCount == 1:
          {
-            var isMatched = match(some.Value, comparisand, bindings);
-            if (isMatched)
-            {
-               bindings[$"-{parameters[0].Name}"] = comparisand;
-            }
-
-            return isMatched;
+            bindings[$"-{parameters[0].Name}"] = some.Value;
+            return true;
          }
          default:
             if (result is Some { Value: KTuple tuple } && tuple.Length.Value == arguments.Length)
@@ -96,4 +90,17 @@ public class Pattern : IObject
    public Guid Id { get; init; } = Guid.NewGuid();
 
    public Pattern Copy() => new(name, lambda, parameters);
+
+   public Pattern With(Dictionary dictionary)
+   {
+      foreach (var (key, value) in dictionary.InternalHash)
+      {
+         if (key is KString keyString)
+         {
+            fields.New(keyString.Value, value);
+         }
+      }
+
+      return this;
+   }
 }
