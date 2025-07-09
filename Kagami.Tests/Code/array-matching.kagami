@@ -1,0 +1,9 @@
+﻿open sys
+
+let array = [1..5]
+
+func sum()
+	when [] return 0
+	when (h, t) return h + sum(t)
+
+println(sum(array))
