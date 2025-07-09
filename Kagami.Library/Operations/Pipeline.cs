@@ -21,10 +21,9 @@ public class Pipeline : TwoOperandOperation
          case Selector selector:
          {
             var _field = Machine.Current.Value.Find(selector);
-            if (_field is (true, var field))
+            if (_field is (true, { Value: Lambda lambda }))
             {
-               var _ = false;
-               return Invoke.InvokeObject(machine, field.Value, new Arguments(x), ref _).Just();
+               return lambda.Invoke(x).Just();
             }
             else if (_field.Exception is (true, var exception))
             {
