@@ -40,14 +40,32 @@ public class Pattern : IObject
    {
       lambda.CopyFields(fields);
       var result = lambda.Invoke(comparisand);
+      var parameterCount = lambda.ParameterCount.Value;
+
       switch (result)
       {
-         case KBoolean boolean when arguments.Length == 0:
+         case KBoolean boolean when parameterCount == 0:
             return boolean.Value;
-         case KBoolean boolean when arguments.Length == 1:
-            return match(boolean, arguments[0], bindings);
-         case Some some when arguments.Length == 1:
-            return match(some.Value, arguments[0], bindings);
+         case KBoolean boolean when parameterCount == 1:
+         {
+            var isMatched = match(boolean, comparisand, bindings);
+            if (isMatched)
+            {
+               bindings[$"-{parameters[0].Name}"] = comparisand;
+            }
+
+            return isMatched;
+         }
+         case Some some when parameterCount == 1:
+         {
+            var isMatched = match(some.Value, comparisand, bindings);
+            if (isMatched)
+            {
+               bindings[$"-{parameters[0].Name}"] = comparisand;
+            }
+
+            return isMatched;
+         }
          default:
             if (result is Some { Value: KTuple tuple } && tuple.Length.Value == arguments.Length)
             {

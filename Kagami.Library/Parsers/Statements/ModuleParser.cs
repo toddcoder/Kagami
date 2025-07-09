@@ -13,13 +13,13 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class ModuleParser : StatementParser
 {
-   [GeneratedRegex($@"^(module)(\s+)({REGEX_CLASS})({REGEX_EOL})")]
+   [GeneratedRegex($@"^(\s*)(module)(\s+)({REGEX_CLASS})\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      var className = tokens[3].Text;
-      state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Class, Color.Whitespace);
+      var className = tokens[4].Text;
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Class);
 
       var parameters = Parameters.Empty;
 

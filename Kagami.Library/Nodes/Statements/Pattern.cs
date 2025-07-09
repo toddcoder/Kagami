@@ -22,14 +22,12 @@ public class Pattern : Statement
 
    public override void Generate(OperationsBuilder builder)
    {
-      var skip1Parameters = new Parameters(parameters.GetParameters().Skip(1).ToArray());
-      var comparisandParameters = new Parameters(parameters.GetParameters().Take(1).ToArray());
-      var invokable = new FunctionInvokable(name, comparisandParameters, name);
+      var invokable = new FunctionInvokable(name, parameters, name);
       var _index = builder.RegisterInvokable(invokable, block, true);
       if (_index)
       {
          var lambda = new Lambda(invokable);
-         var pattern = new Objects.Pattern(name, lambda, skip1Parameters);
+         var pattern = new Objects.Pattern(name, lambda, parameters);
          builder.NewField(name, false, true);
          builder.PushObject(pattern);
          builder.AssignField(name, true);
