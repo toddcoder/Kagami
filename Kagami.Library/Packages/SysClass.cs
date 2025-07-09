@@ -34,7 +34,7 @@ public class SysClass : PackageClass
       registerPackageFunction("Group(_,_,_)", (obj, msg) => function<Sys>(obj, sys => sys.RegexGroup(msg.Arguments)));
       registerPackageFunction("Match(_,_,_,_)", (obj, msg) => function<Sys>(obj, sys => sys.RegexMatch(msg.Arguments)));
       registerPackageFunction("Random()", (obj, _) => function<Sys>(obj, sys => sys.Random()));
-      registerPackageFunction("Random(seed:<Int>)",
+      registerPackageFunction("Random(seed:_<Int>)",
          (obj, msg) => function<Sys, Int>(obj, msg, (sys, i) => sys.Random(i.Value)));
       registerPackageFunction("Complex(_,_)", (obj, msg) => function<Sys, IObject, IObject>(obj, msg, (s, o1, o2) => s.Complex(o1, o2)));
       registerPackageFunction("sel(_)", (obj, msg) => function<Sys, KString>(obj, msg, (sys, s) => sys.Selector(s.Value)));
