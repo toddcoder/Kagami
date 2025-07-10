@@ -1,1 +1,1 @@
-[3, 7] | Array
+Execute error: true is of class Boolean; expected Int

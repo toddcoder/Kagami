@@ -1,23 +1,132 @@
-﻿using Core.Computers;
+﻿using Core.Applications.Messaging;
+using Core.Computers;
 using Core.DataStructures;
 using Core.Monads;
+using Core.WinForms;
 using Core.WinForms.Components;
 using Kagami.Library;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.GuiTests;
 
-public class TestBackground(Either<FolderName, FileName> source) : Background
+public class TestBackground(Either<FolderName, FileName> source, ListView listView) : Background
 {
-   protected void testFolder(FolderName sourceFolder)
+   protected Either<FolderName, FileName> source = source;
+   protected Maybe<FolderName> _testFolder = nil;
+
+   public readonly MessageEvent<string> Progress = new();
+   public readonly MessageEvent FolderNotFound = new();
+   public new readonly MessageEvent<FolderName> Finalized = new();
+
+   public FolderName Folder
+   {
+      set => source = value;
+   }
+
+   public FileName File
+   {
+      set => source = value;
+   }
+
+   public override void DoWork()
+   {
+      switch (source.ToObject())
+      {
+         case FolderName folder:
+            _testFolder = folder;
+            OnFolder(folder);
+            break;
+         case FileName file:
+            _testFolder = file.Folder;
+            OnFile(file);
+            break;
+      }
+   }
+
+   public override void RunWorkerCompleted()
+   {
+      if (_testFolder is (true, var testFolder))
+      {
+      }
+      else
+      {
+         FolderNotFound.Invoke();
+         return;
+      }
+
+      LoadListView(testFolder, listView, Progress, Finalized);
+   }
+
+   public static void LoadListView(FolderName testFolder, ListView listView, MessageEvent<string> progress, MessageEvent<FolderName> finalized)
+   {
+      try
+      {
+         listView.BeginUpdate();
+         listView.Items.Clear();
+
+         foreach (var file in testFolder.Files.Where(file => file.Extension == ".kagami").OrderBy(file => file.Name))
+         {
+            var item = listView.Items.Add(file.Name);
+            item.UseItemStyleForSubItems = true;
+
+            var expectedFile = file.Folder + $"{file.Name}.expected.txt";
+            if (expectedFile)
+            {
+               var expectedSubItem = item.SubItems.Add("Expected");
+               expectedSubItem.ForeColor = Color.White;
+               expectedSubItem.BackColor = Color.Green;
+            }
+            else
+            {
+               var expectedSubItem = item.SubItems.Add("Not Expected");
+               expectedSubItem.ForeColor = Color.Black;
+               expectedSubItem.BackColor = Color.Gold;
+            }
+
+            var resultFile = file.Folder + $"{file.Name}.txt";
+            if (resultFile)
+            {
+               if (anyDifferentLines(resultFile, expectedFile))
+               {
+                  var resultSubItem = item.SubItems.Add("Failed");
+                  resultSubItem.ForeColor = Color.Black;
+                  resultSubItem.BackColor = Color.Gold;
+               }
+               else
+               {
+                  var resultSubItem = item.SubItems.Add("Passed");
+                  resultSubItem.ForeColor = Color.White;
+                  resultSubItem.BackColor = Color.Green;
+               }
+            }
+            else
+            {
+               var resultSubItem = item.SubItems.Add("No Result");
+               resultSubItem.ForeColor = Color.Black;
+               resultSubItem.BackColor = Color.Gold;
+            }
+
+            progress.Invoke($"{file.Name}...");
+         }
+      }
+      finally
+      {
+         listView.AutoSizeColumns();
+         listView.EndUpdate();
+         finalized.Invoke(testFolder);
+      }
+   }
+
+   public virtual void OnFolder(FolderName sourceFolder)
    {
       var testFiles = sourceFolder.Files.Where(file => file.Extension == ".kagami");
       foreach (var file in testFiles)
       {
-         testFile(file);
+         OnFile(file);
       }
    }
 
-   protected void testFile(FileName sourceFile)
+   public virtual void OnFile(FileName sourceFile)
    {
       var testFolder = sourceFile.Folder;
       var testName = sourceFile.Name;
@@ -25,7 +134,7 @@ public class TestBackground(Either<FolderName, FileName> source) : Background
       outputFile.TryTo.Delete();
       var expectedFile = testFolder + $"{testName}.expected.txt";
 
-      var context = new TestContext(outputFile);
+      using var context = new TestContext(outputFile);
       var compiler = new Compiler(sourceFile.Text, new CompilerConfiguration(), context);
       var _machine = compiler.Generate();
       if (_machine is (true, var machine))
@@ -34,7 +143,6 @@ public class TestBackground(Either<FolderName, FileName> source) : Background
          if (_result is (true, var result))
          {
             context.PrintLine($"{result.Image} | {result.ClassName}");
-            context.Dispose();
             compareFiles(outputFile, expectedFile);
          }
          else
@@ -71,6 +179,33 @@ public class TestBackground(Either<FolderName, FileName> source) : Background
       catch (Exception exception)
       {
          Console.WriteLine(exception.Message);
+      }
+   }
+
+   protected static bool anyDifferentLines(FileName outputFile, FileName expectedFile)
+   {
+      try
+      {
+         var outputLines = outputFile.Lines;
+         var expectedLines = expectedFile.Lines;
+         if (outputLines.Length != expectedLines.Length)
+         {
+            return true;
+         }
+
+         for (var i = 0; i < outputLines.Length; i++)
+         {
+            if (outputLines[i] != expectedLines[i])
+            {
+               return true;
+            }
+         }
+
+         return false;
+      }
+      catch
+      {
+         return true;
       }
    }
 }

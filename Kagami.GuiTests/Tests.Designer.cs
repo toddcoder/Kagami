@@ -48,7 +48,7 @@
          tableLayoutPanel.RowCount = 2;
          tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
          tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-         tableLayoutPanel.Size = new Size(800, 450);
+         tableLayoutPanel.Size = new Size(1495, 602);
          tableLayoutPanel.TabIndex = 0;
          // 
          // listViewTests
@@ -57,10 +57,11 @@
          listViewTests.Dock = DockStyle.Fill;
          listViewTests.Location = new Point(3, 3);
          listViewTests.Name = "listViewTests";
-         listViewTests.Size = new Size(394, 219);
+         listViewTests.Size = new Size(741, 295);
          listViewTests.TabIndex = 0;
          listViewTests.UseCompatibleStateImageBehavior = false;
          listViewTests.View = View.Details;
+         listViewTests.SelectedIndexChanged += listViewTests_SelectedIndexChanged;
          // 
          // columnHeaderTest
          // 
@@ -78,11 +79,12 @@
          // 
          AutoScaleDimensions = new SizeF(7F, 15F);
          AutoScaleMode = AutoScaleMode.Font;
-         ClientSize = new Size(800, 450);
+         ClientSize = new Size(1495, 602);
          Controls.Add(tableLayoutPanel);
          Name = "Tests";
          StartPosition = FormStartPosition.CenterScreen;
          Text = "Kagami Tests";
+         Load += Tests_Load;
          tableLayoutPanel.ResumeLayout(false);
          ResumeLayout(false);
       }
