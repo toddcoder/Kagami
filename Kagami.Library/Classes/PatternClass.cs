@@ -12,5 +12,6 @@ public class PatternClass : BaseClass
       base.RegisterMessages();
 
       messages["with(_<Dictionary>)"] = (obj, msg) => function<Pattern, Dictionary>(obj, msg, (p, d) => p.With(d));
+      messages["(_)"] = (obj, msg) => function<Pattern>(obj, p => p.Invoke(msg.Arguments));
    }
 }

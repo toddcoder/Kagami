@@ -1,4 +1,5 @@
 ﻿using Core.Collections;
+using Core.DataStructures;
 using Core.Enumerables;
 using Kagami.Library.Invokables;
 using Kagami.Library.Runtime;
@@ -13,12 +14,17 @@ public class Pattern : IObject
    protected Fields fields = new();
    protected Parameters parameters;
    protected IObject[] arguments = [];
+   protected string placeholder;
+   protected bool hasPlaceholder;
 
    public Pattern(string name, Lambda lambda, Parameters parameters)
    {
       this.name = name;
       this.lambda = lambda;
       this.parameters = parameters;
+
+      placeholder = parameters.FirstOrNone().Map(p => p.Name) | "$0";
+      hasPlaceholder = placeholder != "$0";
 
       foreach (var parameter in parameters)
       {
@@ -40,13 +46,10 @@ public class Pattern : IObject
    {
       lambda.CopyFields(fields);
       var result = lambda.Invoke(comparisand);
-      var parameterCount = lambda.ParameterCount.Value;
 
       switch (result)
       {
-         case KBoolean boolean when parameterCount == 0:
-            return boolean.Value;
-         case KBoolean boolean when parameterCount == 1:
+         case KBoolean boolean when hasPlaceholder:
          {
             if (boolean.IsTrue)
             {
@@ -55,9 +58,11 @@ public class Pattern : IObject
 
             return boolean.IsTrue;
          }
-         case Some some when parameterCount == 1:
+         case KBoolean boolean:
+            return boolean.Value;
+         case Some some when hasPlaceholder:
          {
-            bindings[$"-{parameters[0].Name}"] = some.Value;
+            bindings[$"-{placeholder}"] = some.Value;
             return true;
          }
          default:
@@ -98,6 +103,31 @@ public class Pattern : IObject
          if (key is KString keyString)
          {
             fields.New(keyString.Value, value);
+         }
+      }
+
+      return this;
+   }
+
+   public Pattern Invoke(Arguments arguments)
+   {
+      if (arguments.Length != parameters.Length)
+      {
+         throw new InvalidOperationException($"Pattern '{name}' expects {parameters.Length} arguments, but got {arguments.Length}.");
+      }
+
+      if (arguments.Length > 0)
+      {
+         IObject[] firstArgument = [.. arguments.Take(1)];
+         fields.New(placeholder, firstArgument[0]);
+
+         MaybeStack<IObject> remainingArguments = [.. arguments.Skip(1)];
+         foreach (var parameter in parameters.Skip(1))
+         {
+            if (remainingArguments.Pop() is (true, var value))
+            {
+               fields.New(parameter.Name, value);
+            }
          }
       }
 

@@ -80,6 +80,10 @@ public static class ObjectFunctions
          {
             return userObjectMatch(userObject, userObjectPlaceholder, bindings);
          }
+         case UserObjectPlaceholder userObjectPlaceholder when source is Pattern pattern:
+         {
+            return pattern.Match(userObjectPlaceholder, bindings);
+         }
          default:
             return classOf(source).MatchCompatible(classOf(comparisand)) && equalifier(source, (T)comparisand);
       }
