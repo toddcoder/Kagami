@@ -98,11 +98,15 @@ public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields
 
    public void Capture(Machine machine)
    {
-      var frames = machine.PeekFramesUntil(f => f.FrameType == FrameType.Function, true);
-      foreach (var field in frames.AllFields().Where(f => f.field.Value.Id != Id && f.field.Value is not Package))
+      var frames = machine.PeekFramesUntil(f => f.FrameType == FrameType.Function);
+      foreach (var field in frames.AllFields().Where(f => f.field.Value.Id != Id && noForbidden(f.field.Value)))
       {
          fields.AssignLocal(field.fieldName, field.field.Value, true).Force();
       }
+
+      return;
+
+      bool noForbidden(IObject value) => value is not Package && value is not PackageFunction && value is not PackageClass;
    }
 
    public Int ParameterCount => invokable1.Parameters.Length;
