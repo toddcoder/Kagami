@@ -33,7 +33,7 @@ public readonly struct Some : IObject, IOptional, IBoolean, IEquatable<Some>, IM
 
    public bool IsSome => true;
 
-   public bool IsNone => false;
+   public bool IsNil => false;
 
    public IObject Map(Lambda lambda)
    {

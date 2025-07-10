@@ -14,7 +14,7 @@ public class NilClass : BaseClass
       monadMessages();
 
       messages["isSome".get()] = (obj, _) => function<KNil>(obj, n => (KBoolean)n.IsSome);
-      messages["isNone".get()] = (obj, _) => function<KNil>(obj, n => (KBoolean)n.IsNone);
+      messages["isNil".get()] = (obj, _) => function<KNil>(obj, n => (KBoolean)n.IsNil);
       messages["map(_<Lambda>)"] = (obj, msg) => function<KNil, Lambda>(obj, msg, (n, l) => n.Map(l));
       messages["flatMap(_<Lambda>,_<Lambda>)"] = (obj, msg) => function<KNil, Lambda, Lambda>(obj, msg, (n, l1, l2) => n.FlatMap(l1, l2));
       messages["defaultTo(_)"] = (obj, msg) => function<KNil, IObject>(obj, msg, (_, o) => o);

@@ -28,7 +28,7 @@ public readonly struct KNil : IObject, IOptional, IBoolean, IEquatable<KNil>, IM
 
    public bool IsSome => false;
 
-   public bool IsNone => true;
+   public bool IsNil => true;
 
    public IObject Map(Lambda lambda) => this;
 

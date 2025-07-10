@@ -15,7 +15,7 @@ public class SomeClass : BaseClass
 
       messages["value".get()] = (obj, _) => function<Some>(obj, s => s.Value);
       messages["isSome".get()] = (obj, _) => function<Some>(obj, s => (KBoolean)s.IsSome);
-      messages["isNone".get()] = (obj, _) => function<Some>(obj, s => (KBoolean)s.IsNone);
+      messages["isNil".get()] = (obj, _) => function<Some>(obj, s => (KBoolean)s.IsNil);
       messages["map(_<Lambda>)"] = (obj, msg) => function<Some, Lambda>(obj, msg, (s, l) => s.Map(l));
       messages["flatMap(_<Lambda>,_<Lambda>)"] = (obj, msg) => function<Some, Lambda, Lambda>(obj, msg, (s, l1, l2) => s.FlatMap(l1, l2));
       messages["defaultTo(_)"] = (obj, msg) => function<Some, IObject>(obj, msg, (s, _) => s.Value);

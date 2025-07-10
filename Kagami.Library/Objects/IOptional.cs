@@ -6,7 +6,7 @@ public interface IOptional
 
    bool IsSome { get; }
 
-   bool IsNone { get; }
+   bool IsNil { get; }
 
    IObject Map(Lambda lambda);
 
