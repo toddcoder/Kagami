@@ -11,6 +11,7 @@ public class Not : OneOperandOperation
 
    public override Optional<IObject> Execute(Machine machine, IObject value) => value switch
    {
+      KBoolean b => KBoolean.BooleanObject(!b.Value).Just(),
       Int i => (Int)(~i.Value),
       _ => incompatibleClasses(value, "Boolean or Int")
    };

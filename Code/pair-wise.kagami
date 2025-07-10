@@ -1,0 +1,9 @@
+﻿open sys
+
+func pairWise(list, lambda) {
+	guard list.length >= 2 else return []
+	let next = lambda(list[0], list[1])
+	return [next] ~ pairWise(list{2}, lambda)
+}
+
+pairWise([1..5]) (+)

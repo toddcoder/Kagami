@@ -98,11 +98,43 @@ public partial class Tests : Form
       uiGenerate.KeyDownCaption = new KeyDownCapture.ControlKey("Overwrite Expected Texts");
       uiGenerate.Click += (_, _) =>
       {
-         var _folder = getFolder();
+         /*var _folder = getFolder();
          if (_folder is (true, var testFolder))
          {
             generateBackground.Folder = testFolder;
             generateBackground.Overwrite = uiGenerate.IsKeyDown;
+         }
+         else if (_folder.Exception is (true, var exception))
+         {
+            uiMessage.Exception(exception);
+         }
+         else
+         {
+            uiMessage.Failure("Folder not selected");
+         }*/
+         var _folder = getFolder();
+         if (_folder is (true, var testFolder))
+         {
+            if (uiGenerate.IsKeyDown)
+            {
+               if (listViewTests.SelectedItem() is (true, var item))
+               {
+                  var name = item.Text;
+                  generateBackground.Overwrite = true;
+                  generateBackground.File = testFolder + $"{name}.kagami";
+                  generateBackground.RunWorkerAsync();
+               }
+               else
+               {
+                  uiMessage.Failure("No test selected");
+               }
+            }
+            else
+            {
+               generateBackground.Overwrite = false;
+               generateBackground.Folder = testFolder;
+               generateBackground.RunWorkerAsync();
+            }
          }
          else if (_folder.Exception is (true, var exception))
          {
@@ -172,20 +204,17 @@ public partial class Tests : Form
       {
          if (getFolder() is (true, var testFolder) && listViewTests.SelectedItem() is (true, var item))
          {
-            var resultFile = testFolder + $"{item.Text}.text";
-            using var stream = resultFile.ReadingStream();
-            using var reader = new StreamReader(stream, Encoding.UTF8);
-            textSource.Text = reader.ReadToEnd();
-            /*var _text = resultFile.TryTo.GetText(Encoding.UTF8);
-         if (_text is (true, var text))
-         {
-            textSource.Text = text;
-         }
-         else
-         {
-            textSource.Text = "";
-            uiMessage.Exception(_text.Exception);
-         }*/
+            var resultFile = testFolder + $"{item.Text}.txt";
+            var _text = resultFile.TryTo.GetText(Encoding.UTF8);
+            if (_text is (true, var text))
+            {
+               textSource.Text = text;
+            }
+            else
+            {
+               textSource.Text = "";
+               uiMessage.Exception(_text.Exception);
+            }
          }
       }
       catch (Exception exception)

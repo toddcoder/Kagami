@@ -196,17 +196,10 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       var _field = Find(name, false);
       if (_field is (true, var field))
       {
-         if (field.Mutable || field.Value is Unassigned || overriden)
-         {
-            field.Value = value;
-            fields[name] = field;
+         field.Value = value;
+         fields[name] = new Field { Value = value, Mutable = true, Visible = true };
 
-            return field;
-         }
-         else
-         {
-            return immutableField(name);
-         }
+         return field;
       }
       else if (_field.Exception is (true, var exception))
       {
@@ -214,7 +207,7 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       }
       else
       {
-         var newField = new Field { Value = value };
+         var newField = new Field { Value = value, Mutable = true };
          fields[name] = newField;
 
          return newField;

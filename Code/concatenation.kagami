@@ -1,0 +1,13 @@
+﻿open sys
+
+var x = "Hello, "
+x ~= "World"
+println(x)
+
+var a = 10
+var b = 20
+println($"(a)+(b)=(a + b)")
+
+var array = [10..100+10]
+array ~= [200]
+println(array)

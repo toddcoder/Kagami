@@ -1,0 +1,28 @@
+term 0
+term 0
+true
+term 0
+false
+term 0
+term 0
+false
+
+term 0
+true
+term 0
+term 0
+false
+term 0
+term 0
+true
+
+term 0
+term 0
+false
+term 0
+term 0
+false
+term 0
+term 0
+true
+"true" | String

@@ -67,7 +67,7 @@ public class TestBackground(Either<FolderName, FileName> source, ListView listVi
          foreach (var file in testFolder.Files.Where(file => file.Extension == ".kagami").OrderBy(file => file.Name))
          {
             var item = listView.Items.Add(file.Name);
-            item.UseItemStyleForSubItems = true;
+            item.UseItemStyleForSubItems = false;
 
             var expectedFile = file.Folder + $"{file.Name}.expected.txt";
             if (expectedFile)

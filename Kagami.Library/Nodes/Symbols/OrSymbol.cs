@@ -24,7 +24,7 @@ public class OrSymbol : Symbol, IHasExpression
       builder.GoToIfTrue(label);
 
       builder.PushBoolean(false);
-      builder.Advance(2);
+      builder.GoTo(endLabel);
 
       builder.Label(label);
       builder.PushBoolean(true);

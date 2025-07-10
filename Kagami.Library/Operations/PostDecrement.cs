@@ -10,7 +10,7 @@ public class PostDecrement : Operation
 {
    public override Optional<IObject> Execute(Machine machine)
    {
-      if (machine.LastField is (true, var field))
+      if (machine is { LastField: (true, var field), LastFieldName: (true, var lastFieldName) })
       {
          if (field.Mutable)
          {
@@ -25,12 +25,12 @@ public class PostDecrement : Operation
             }
             else
             {
-               return fail("Value couldn't be decremented");
+               return fail($"{lastFieldName} couldn't be decremented");
             }
          }
          else
          {
-            return immutableField("field");
+            return immutableField(lastFieldName);
          }
       }
       else

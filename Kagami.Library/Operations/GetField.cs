@@ -14,6 +14,7 @@ public class GetField(string fieldName) : Operation
       if (_field is (true, var field))
       {
          machine.LastField = field;
+         machine.LastFieldName = fieldName;
          Module.Global.Value.RetrievedFields[field.Value.Id] = fieldName;
 
          var value = field.Value;
@@ -33,11 +34,13 @@ public class GetField(string fieldName) : Operation
       else if (_field.Exception is (true, var exception))
       {
          machine.LastField = nil;
+         machine.LastFieldName = nil;
          return exception;
       }
       else
       {
          machine.LastField = nil;
+         machine.LastFieldName= nil;
          return fieldNotFound(fieldName);
       }
    }

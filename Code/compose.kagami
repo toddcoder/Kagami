@@ -1,0 +1,10 @@
+﻿open sys
+
+func compose(f)(g)(x) => f(g(x))
+
+let isOdd = x -> x !% 2
+let length = s -> s.length
+
+let oddLength = compose(isOdd)(length)
+let strings = a"a ab abc"
+println(strings if s -> oddLength(s))

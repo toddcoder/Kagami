@@ -321,7 +321,8 @@ public partial class Playground : Form
                if (dumpOperations && compiler.Operations is (true, var operations))
                {
                   var text = operations.ToString();
-                  textWriter.WriteLine(text);
+                  //textWriter.WriteLine(text);
+                  textConsole.AppendText(text);
                   if (document.FileName is (true, var fileName))
                   {
                      FileName documentFile = fileName;
