@@ -92,7 +92,7 @@ public class Module
       _ => nil
    };
 
-   protected LazyMemo<string, BaseClass> classes = new(getBuiltinClass);
+   protected Hash<string, BaseClass> classes = [];
    protected StringHash<Inclusion> inclusions = [];
    protected Set<string> forwardReferences = [];
    protected Hash<string, string> dataReferences = [];
@@ -106,13 +106,22 @@ public class Module
       {
          return @class;
       }
-      else if (forwardsIncluded)
-      {
-         return new ForwardedClass(name);
-      }
       else
       {
-         return nil;
+         var _builtInClass = getBuiltinClass(name);
+         if (_builtInClass is (true, var builtInClass))
+         {
+            classes[name] = builtInClass;
+            return builtInClass;
+         }
+         else if (forwardsIncluded)
+         {
+            return new ForwardedClass(name);
+         }
+         else
+         {
+            return nil;
+         }
       }
    }
 
