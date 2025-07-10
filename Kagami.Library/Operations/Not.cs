@@ -1,10 +1,17 @@
 ﻿using Core.Monads;
+using Kagami.Library.Objects;
+using Kagami.Library.Runtime;
+using static Kagami.Library.AllExceptions;
 
 namespace Kagami.Library.Operations;
 
-public class Not : OneBooleanOperation
+public class Not : OneOperandOperation
 {
-   public override Optional<bool> Execute(bool boolean) => !boolean;
-
    public override string ToString() => "not";
+
+   public override Optional<IObject> Execute(Machine machine, IObject value) => value switch
+   {
+      Int i => (Int)(~i.Value),
+      _ => incompatibleClasses(value, "Boolean or Int")
+   };
 }

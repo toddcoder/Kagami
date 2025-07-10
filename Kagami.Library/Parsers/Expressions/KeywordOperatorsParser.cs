@@ -12,8 +12,8 @@ public partial class KeywordOperatorsParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s+)(if|map|join|sort|foldl|foldr|all|any|none|one|zip|skip|take|band|bor|bxor|bsl|bsr|while|until|min|max" +
-      @"|does|x|div|r|each|divmod|with|approx|same)(\s+)")]
+   [GeneratedRegex(@"^(\s+)(if|map|join|sort|foldl|foldr|all|any|none|one|zip|skip|take|while|until|min|max" +
+      @"|does|x|div|r|each|divmod|with|approx|same|xor)(\s+)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -58,21 +58,6 @@ public partial class KeywordOperatorsParser : SymbolParser
                case "take":
                   builder.Add(new SendBinaryMessageSymbol("take(_)", Precedence.ChainedOperator));
                   break;
-               case "band":
-                  builder.Add(new BAndSymbol());
-                  break;
-               case "bor":
-                  builder.Add(new BOrSymbol());
-                  break;
-               case "bxor":
-                  builder.Add(new BXorSymbol());
-                  break;
-               case "bsl":
-                  builder.Add(new BShiftLeft());
-                  break;
-               case "bsr":
-                  builder.Add(new BShiftRight());
-                  break;
                case "while":
                case "until":
                   builder.Add(new SendBinaryMessageSymbol($"take{keyword.ToTitleCase()}(_<Lambda>)", Precedence.ChainedOperator));
@@ -103,6 +88,9 @@ public partial class KeywordOperatorsParser : SymbolParser
                   break;
                case "same":
                   builder.Add(new SameSymbol(false));
+                  break;
+               case "xor":
+                  builder.Add(new XOrSymbol());
                   break;
                default:
                   return fail($"Keyword internal error for {keyword}");

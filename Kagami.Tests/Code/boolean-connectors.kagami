@@ -1,0 +1,23 @@
+﻿open sys
+
+var i = 0;
+func term(x) {
+	println($"term (i++)")
+	return x
+}
+
+println(term(true) and term(true))
+println(term(false) and term(false))
+println(term(true) and term(false))
+
+println()
+i = 0
+println(term(true) or term(true))
+println(term(false) or term(false))
+println(term(false) or term(true))
+
+println()
+i = 0
+println(term(true) xor term(true))
+println(term(false) xor term(false))
+println(term(false) xor term(true))

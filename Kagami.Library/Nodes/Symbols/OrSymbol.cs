@@ -12,6 +12,12 @@ public class OrSymbol : Symbol, IHasExpression
    public override void Generate(OperationsBuilder builder)
    {
       var label = newLabel("true");
+      var intLabel = newLabel("int");
+      var endLabel = newLabel("end");
+
+      builder.IsClass("Int", false);
+      builder.GoToIfTrue(intLabel);
+
       builder.GoToIfTrue(label);
 
       expression.Generate(builder);
@@ -22,7 +28,13 @@ public class OrSymbol : Symbol, IHasExpression
 
       builder.Label(label);
       builder.PushBoolean(true);
+      builder.GoTo(endLabel);
 
+      builder.Label(intLabel);
+      expression.Generate(builder);
+      builder.Or();
+
+      builder.Label(endLabel);
       builder.NoOp();
    }
 

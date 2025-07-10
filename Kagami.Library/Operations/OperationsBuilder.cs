@@ -261,6 +261,8 @@ public class OperationsBuilder
 
    public void Or() => add(new Or());
 
+   public void XOr() => add(new XOr());
+
    public void NoOp() => add(new NoOp());
 
    public void Advance(int increment) => add(new Advance(increment));
@@ -360,18 +362,6 @@ public class OperationsBuilder
    }
 
    public void Pipeline() => add(new Pipeline());
-
-   public void BAnd() => add(new BAnd());
-
-   public void BOr() => add(new BOr());
-
-   public void BXor() => add(new BXor());
-
-   public void BShiftLeft() => add(new BShiftLeft());
-
-   public void BShiftRight() => add(new BShiftRight());
-
-   public void BNot() => add(new BNot());
 
    public void NewOpenRange() => add(new NewOpenRange());
 
