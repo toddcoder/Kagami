@@ -14,25 +14,36 @@ public partial class UserObjectPlaceholderParser : SymbolParser
    {
    }
 
-   [GeneratedRegex($@"^(\s*)({REGEX_CLASS})(\()")]
+   [GeneratedRegex($@"^(\s*)({REGEX_CLASS})(\()?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
       var name = tokens[2].Text;
+      var hasArguments = tokens[3].Text == "(";
       state.Colorize(tokens, Color.Whitespace, Color.Class, Color.OpenParenthesis);
 
-      var _arguments = getArguments(state, builder.Flags);
-      if (_arguments is (true, var arguments))
+      if (hasArguments)
       {
-         var userObjectPlaceholder = new UserObjectPlaceholder(name);
-         builder.Add(new PushUserObjectPlaceholder(userObjectPlaceholder, arguments));
+         var _arguments = getArguments(state, builder.Flags);
+         if (_arguments is (true, var arguments))
+         {
+            var userObjectPlaceholder = new UserObjectPlaceholder(name);
+            builder.Add(new PushUserObjectPlaceholder(userObjectPlaceholder, arguments));
 
-         return unit;
+            return unit;
+         }
+         else
+         {
+            return _arguments.Exception;
+         }
       }
       else
       {
-         return _arguments.Exception;
+         var userObjectPlaceholder = new UserObjectPlaceholder(name);
+         builder.Add(new PushUserObjectPlaceholder(userObjectPlaceholder, []));
+
+         return unit;
       }
    }
 }

@@ -1,0 +1,21 @@
+﻿open sys
+
+enum Command {
+	when Open
+	when Closed
+	when Pending
+	when Approved
+	when Denied
+	func execute() {
+		match self {
+			when Open => println("open")
+			when Closed => println("closed")
+			when Pending => println("pending")
+			when Approved => println("approved")
+			when Denied => println("denied")
+		}
+	}
+}
+
+var command = Command.Open
+command.execute()

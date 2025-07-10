@@ -30,6 +30,8 @@ public class ArrayClass : BaseClass, ICollectionClass
       registerMessage("pop()", (obj, _) => function<KArray>(obj, a => a.Pop()));
       registerMessage("unshift(_)", (obj, msg) => function<KArray, IObject>(obj, msg, (a, v) => a.Unshift(v)));
       registerMessage("shift()", (obj, _) => function<KArray>(obj, a => a.Shift()));
+      registerMessage("dequeue()", (obj, _) => function<KArray>(obj, a => a.Shift()));
+      registerMessage("enqueue(_)", (obj, msg) => function<KArray, IObject>(obj, msg, (a, v) => a.Append(v)));
       messages["default".get()] = (obj, _) => function<KArray>(obj, array =>
       {
          if (array.DefaultValue is (true, var defaultValue))

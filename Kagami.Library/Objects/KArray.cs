@@ -334,6 +334,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
    {
       throwIfSelf(obj);
       assertType(obj);
+      index = wrapIndex(index, list.Count);
       list.Insert(index, obj);
 
       return this;

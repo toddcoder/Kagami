@@ -258,6 +258,7 @@ public partial class Playground : Form
             stopwatch.Start();
             _exceptionIndex = nil;
             _exceptionData = nil;
+            context.Reset();
 
             var kagamiConfiguration = new CompilerConfiguration { ShowOperations = dumpOperations, Tracing = tracing };
             var compiler = new Compiler(textEditor.Text, kagamiConfiguration, context);
