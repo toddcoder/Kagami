@@ -12,7 +12,7 @@ public class MacroParameters
    public void Assign(Parameters parameters, Expression[] arguments)
    {
       var length = Math.Min(arguments.Length, parameters.Length);
-      var lastValue = new Expression(new NoneSymbol());
+      var lastValue = new Expression(new NilSymbol());
       var variadic = false;
 
       for (var i = 0; i < length && !variadic; i++)

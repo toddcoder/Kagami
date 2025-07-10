@@ -98,7 +98,7 @@ public partial class ComprehensionParser : SymbolParser
 
          var statements = new List<Statement>
          {
-            forStatement, new Return(new Expression(new NoneSymbol()), state.GetReturnType())
+            forStatement, new Return(new Expression(new NilSymbol()), state.GetReturnType())
          };
 
          state.RemoveReturnType();

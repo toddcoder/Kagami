@@ -135,7 +135,7 @@ public class Dictionary : IObject, IMutableCollection
       }
       else
       {
-         return None.NoneValue;
+         return KNil.NilValue;
       }
    }
 
@@ -148,7 +148,7 @@ public class Dictionary : IObject, IMutableCollection
          {
             case Dictionary otherDictionary when objectID == otherDictionary.objectID:
                return;
-            case None:
+            case KNil:
                dictionary.Remove(key);
                break;
             default:
@@ -171,7 +171,7 @@ public class Dictionary : IObject, IMutableCollection
          {
             case Dictionary otherDictionary when objectID == otherDictionary.objectID:
                return;
-            case None:
+            case KNil:
             {
                foreach (var key in sequence.List)
                {
@@ -250,7 +250,7 @@ public class Dictionary : IObject, IMutableCollection
       }
       else
       {
-         return None.NoneValue;
+         return KNil.NilValue;
       }
    }
 
@@ -321,7 +321,7 @@ public class Dictionary : IObject, IMutableCollection
       }
       else
       {
-         return None.NoneValue;
+         return KNil.NilValue;
       }
    }
 
@@ -380,7 +380,7 @@ public class Dictionary : IObject, IMutableCollection
       else
       {
          dictionary[key] = value;
-         return None.NoneValue;
+         return KNil.NilValue;
       }
    }
 
@@ -410,14 +410,14 @@ public class Dictionary : IObject, IMutableCollection
       else
       {
          dictionary.Remove(obj);
-         return None.NoneValue;
+         return KNil.NilValue;
       }
    }
 
    public IObject RemoveAt(int index)
    {
       var keyArray = dictionary.KeyArray();
-      return index.Between(0).Until(keyArray.Length) ? Remove(keyArray[index]) : None.NoneValue;
+      return index.Between(0).Until(keyArray.Length) ? Remove(keyArray[index]) : KNil.NilValue;
    }
 
    public IObject RemoveAll(IObject obj) => Remove(obj);
@@ -425,7 +425,7 @@ public class Dictionary : IObject, IMutableCollection
    public IObject InsertAt(int index, IObject obj)
    {
       var keyArray = dictionary.KeyArray();
-      return index.Between(0).Until(keyArray.Length) ? Update(keyArray[index], obj) : None.NoneValue;
+      return index.Between(0).Until(keyArray.Length) ? Update(keyArray[index], obj) : KNil.NilValue;
    }
 
    public KBoolean IsEmpty => dictionary.Count == 0;

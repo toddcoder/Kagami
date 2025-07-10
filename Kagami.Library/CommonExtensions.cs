@@ -37,7 +37,7 @@ public static class CommonExtensions
 
    public static IObject AsOptional<T>(this Maybe<T> maybe) where T : IObject
    {
-      return maybe.Map(o => Some.Object(o)) | (() => None.NoneValue);
+      return maybe.Map(o => Some.Object(o)) | (() => KNil.NilValue);
    }
 
    public static Maybe<T> AsMaybe<T>(this IOptional optional) where T : IObject

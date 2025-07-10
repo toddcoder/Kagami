@@ -21,7 +21,7 @@ public class Yield : Operation
       }
       else if (_popped.ValueOf(topFrame.Pop()) is (true, var popped))
       {
-         if (popped is None)
+         if (popped is KNil)
          {
             _value = popped.Just();
          }

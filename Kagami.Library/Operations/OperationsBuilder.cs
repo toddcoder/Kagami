@@ -321,7 +321,7 @@ public class OperationsBuilder
 
    public void Success() => add(new Success());
 
-   public void PushNone() => add(new PushNone());
+   public void PushNil() => add(new PushNil());
 
    public void Failure() => add(new Failure());
 

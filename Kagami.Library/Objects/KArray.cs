@@ -148,7 +148,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
          throwIfSelf(value);
 
          var wrappedIndex = wrapIndex(index, list.Count);
-         if (value is None)
+         if (value is KNil)
          {
             list.RemoveAt(wrappedIndex);
          }
@@ -160,7 +160,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       }
    }
 
-   public IObject Get(int index) => index.Between(0).Until(list.Count) ? Some.Object(list[index]) : None.NoneValue;
+   public IObject Get(int index) => index.Between(0).Until(list.Count) ? Some.Object(list[index]) : KNil.NilValue;
 
    public IObject this[Sequence sequence]
    {
@@ -381,11 +381,11 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       return new KArray(newList);
    }
 
-   public IObject Pop() => list.Count > 0 ? Some.Object(RemoveAt(list.Count - 1)) : None.NoneValue;
+   public IObject Pop() => list.Count > 0 ? Some.Object(RemoveAt(list.Count - 1)) : KNil.NilValue;
 
    public IObject Unshift(IObject value) => InsertAt(0, value);
 
-   public IObject Shift() => list.Count > 0 ? Some.Object(RemoveAt(0)) : None.NoneValue;
+   public IObject Shift() => list.Count > 0 ? Some.Object(RemoveAt(0)) : KNil.NilValue;
 
    public IObject IndexOf(IObject item)
    {
@@ -396,7 +396,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       }
       else
       {
-         return None.NoneValue;
+         return KNil.NilValue;
       }
    }
 
@@ -411,7 +411,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
          }
       }
 
-      return None.NoneValue;
+      return KNil.NilValue;
    }
 
    public IObject LastIndex(Lambda predicate)
@@ -425,7 +425,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
          }
       }
 
-      return None.NoneValue;
+      return KNil.NilValue;
    }
 
    public IObject LastIndexOf(IObject item)
@@ -437,7 +437,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       }
       else
       {
-         return None.NoneValue;
+         return KNil.NilValue;
       }
    }
 
@@ -463,7 +463,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
          return Some.Object(item);
       }
 
-      return None.NoneValue;
+      return KNil.NilValue;
    }
 
    public IObject Last(Lambda lambda)
@@ -476,7 +476,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
          }
       }
 
-      return None.NoneValue;
+      return KNil.NilValue;
    }
 
    public IObject BinarySearch(IObject item) => binarySearch(this, item);
@@ -528,7 +528,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
 
-   public IObject Head => list.Count > 0 ? Some.Object(list[0]) : None.NoneValue;
+   public IObject Head => list.Count > 0 ? Some.Object(list[0]) : KNil.NilValue;
 
    public KArray Tail => list.Count > 0 ? new KArray([.. list.Skip(1)]) : new KArray([]);
 

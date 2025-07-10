@@ -324,7 +324,7 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
       {
          if (items.Length == 0)
          {
-            return None.NoneValue;
+            return KNil.NilValue;
          }
          else
          {
@@ -340,7 +340,7 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
 
    public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
 
-   public IObject IndexOf(IObject value) => items.IndexOf(value).Map(i => Some.Object(Int.IntObject(i))) | (() => None.NoneValue);
+   public IObject IndexOf(IObject value) => items.IndexOf(value).Map(i => Some.Object(Int.IntObject(i))) | (() => KNil.NilValue);
 
    public IObject Index(Lambda predicate)
    {
@@ -353,7 +353,7 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
          }
       }
 
-      return None.NoneValue;
+      return KNil.NilValue;
    }
 
    public IObject LastIndex(Lambda predicate)
@@ -367,10 +367,10 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
          }
       }
 
-      return None.NoneValue;
+      return KNil.NilValue;
    }
 
-   public IObject LastIndexOf(IObject value) => items.LastIndexOf(value).Map(i => Some.Object(Int.IntObject(i))) | (() => None.NoneValue);
+   public IObject LastIndexOf(IObject value) => items.LastIndexOf(value).Map(i => Some.Object(Int.IntObject(i))) | (() => KNil.NilValue);
 
    public IObject FindAll(Lambda predicate)
    {
@@ -398,7 +398,7 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
          }
       }
 
-      return None.NoneValue;
+      return KNil.NilValue;
    }
 
    IObject IFindIndex.Last(Lambda predicate)
@@ -412,7 +412,7 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
          }
       }
 
-      return None.NoneValue;
+      return KNil.NilValue;
    }
 
    public IObject BinarySearch(IObject item) => binarySearch(this, item);

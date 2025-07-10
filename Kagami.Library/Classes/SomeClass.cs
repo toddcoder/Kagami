@@ -23,5 +23,5 @@ public class SomeClass : BaseClass
       messages["result(_)"] = (obj, msg) => function<IObject, KString>(obj, msg, (s, l) => ((IOptional)s).Result(l));
    }
 
-   public override bool AssignCompatible(BaseClass otherClass) => otherClass is SomeClass or NoneClass;
+   public override bool AssignCompatible(BaseClass otherClass) => otherClass is SomeClass or NilClass;
 }

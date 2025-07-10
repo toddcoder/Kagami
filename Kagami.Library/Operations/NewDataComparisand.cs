@@ -9,7 +9,7 @@ public class NewDataComparisand : MultipleOperandOperation
    protected string className = "";
    protected string name = "";
    protected IObject[] comparisands = [];
-   protected IObject ordinal = None.NoneValue;
+   protected IObject ordinal = KNil.NilValue;
 
    public NewDataComparisand() : base(4)
    {

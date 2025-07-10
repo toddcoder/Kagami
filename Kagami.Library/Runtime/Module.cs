@@ -30,7 +30,7 @@ public class Module
       "Lambda" => new LambdaClass(),
       "Void" => new VoidClass(),
       "Some" => new SomeClass(),
-      "None" => new NoneClass(),
+      "None" => new NilClass(),
       "Array" => new ArrayClass(),
       "Iterator" => new IteratorClass(),
       "LazyIterator" => new LazyIteratorClass(),

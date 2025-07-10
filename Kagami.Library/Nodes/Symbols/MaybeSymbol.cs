@@ -17,7 +17,7 @@ public class MaybeSymbol(Expression booleanExpression, Expression expression) : 
       builder.GoTo(endLabel);
 
       builder.Label(noneLabel);
-      builder.PushNone();
+      builder.PushNil();
 
       builder.Label(endLabel);
       builder.NoOp();

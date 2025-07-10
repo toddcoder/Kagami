@@ -190,7 +190,7 @@ public static class CollectionFunctions
          }
       }
 
-      return None.NoneValue;
+      return KNil.NilValue;
    }
 
    public static IObject binarySearch(ICollection collection, IObject item, Lambda lambda)
@@ -219,6 +219,6 @@ public static class CollectionFunctions
          }
       }
 
-      return None.NoneValue;
+      return KNil.NilValue;
    }
 }

@@ -101,7 +101,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
       }
       else
       {
-         return None.NoneValue;
+         return KNil.NilValue;
       }
    }
 
@@ -114,7 +114,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
       }
       else
       {
-         return None.NoneValue;
+         return KNil.NilValue;
       }
    }
 
@@ -155,7 +155,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
       }
       else
       {
-         return None.NoneValue;
+         return KNil.NilValue;
       }
    }
 
@@ -215,12 +215,12 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
          }
          else
          {
-            return None.NoneValue;
+            return KNil.NilValue;
          }
       }
       else
       {
-         return None.NoneValue;
+         return KNil.NilValue;
       }
    }
 

@@ -117,7 +117,7 @@ public static class ObjectFunctions
       if (comparisand.Length.Value == 2)
       {
          var head = source.Head;
-         if (head is None)
+         if (head is KNil)
          {
             return false;
          }
@@ -510,7 +510,7 @@ public static class ObjectFunctions
 
    public static IEnumerable<IObject> list(ICollection collection) => collection.GetIterator(false).List();
 
-   public static IObject someOf(Maybe<IObject> maybe) => maybe.Map(Some.Object) | (() => None.NoneValue);
+   public static IObject someOf(Maybe<IObject> maybe) => maybe.Map(Some.Object) | (() => KNil.NilValue);
 
    public static bool compareEnumerables(IEnumerable<IObject> left, IEnumerable<IObject> right)
    {

@@ -9,7 +9,7 @@ public class FieldNameFromId : OneOperandOperation
    public override Optional<IObject> Execute(Machine machine, IObject value)
    {
       var id = value.Id;
-      var result = Module.Global.Value.RetrievedFields.Maybe[id].Map(f => Objects.Some.Object((KString)f)) | None.NoneValue;
+      var result = Module.Global.Value.RetrievedFields.Maybe[id].Map(f => Objects.Some.Object((KString)f)) | KNil.NilValue;
 
       return result.Just();
    }

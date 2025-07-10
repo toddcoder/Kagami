@@ -79,7 +79,7 @@ public class DataTypeClass : UserClass
          }
          else
          {
-            return None.NoneValue;
+            return KNil.NilValue;
          }
       }));
    }
@@ -96,7 +96,7 @@ public class DataTypeClass : UserClass
          }
          else
          {
-            return None.NoneValue;
+            return KNil.NilValue;
          }
       }));
 

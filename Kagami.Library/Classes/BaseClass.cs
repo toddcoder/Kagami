@@ -338,8 +338,8 @@ public abstract class BaseClass
    {
       registerMessage("collection".get(), (obj, _) => iteratorFunc(obj, i => (IObject)i.Collection));
       registerMessage("isLazy".get(), (obj, _) => iteratorFunc(obj, i => (KBoolean)i.IsLazy));
-      registerMessage("next()", (obj, _) => iteratorFunc(obj, i => i.Next().Map(Some.Object) | (() => None.NoneValue)));
-      registerMessage("peek()", (obj, _) => iteratorFunc(obj, i => i.Peek().Map(Some.Object) | (() => None.NoneValue)));
+      registerMessage("next()", (obj, _) => iteratorFunc(obj, i => i.Next().Map(Some.Object) | (() => KNil.NilValue)));
+      registerMessage("peek()", (obj, _) => iteratorFunc(obj, i => i.Peek().Map(Some.Object) | (() => KNil.NilValue)));
       registerMessage("reset()", (obj, _) => iteratorFunc(obj, i => i.Reset()));
       registerMessage("reverse()", (obj, _) => iteratorFunc(obj, i => i.Reverse()));
       registerMessage("join(_<String>)", (obj, message) => iteratorFunc<KString>(obj, message, (i, s) => i.Join(s.Value)));

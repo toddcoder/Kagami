@@ -357,13 +357,13 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
    public IObject Find(string input, int startIndex, bool reverse) => find(value, input, startIndex, reverse);
 
-   public IObject Int() => int.TryParse(value, out var result) ? new Some((Int)result) : None.NoneValue;
+   public IObject Int() => int.TryParse(value, out var result) ? new Some((Int)result) : KNil.NilValue;
 
-   public IObject Float() => double.TryParse(value, out var result) ? new Some((Float)result) : None.NoneValue;
+   public IObject Float() => double.TryParse(value, out var result) ? new Some((Float)result) : KNil.NilValue;
 
-   public IObject Byte() => byte.TryParse(value, out var result) ? new Some((KByte)result) : None.NoneValue;
+   public IObject Byte() => byte.TryParse(value, out var result) ? new Some((KByte)result) : KNil.NilValue;
 
-   public IObject Long() => BigInteger.TryParse(value, out var result) ? new Some((Long)result) : None.NoneValue;
+   public IObject Long() => BigInteger.TryParse(value, out var result) ? new Some((Long)result) : KNil.NilValue;
 
    public KTuple SplitRegex(Regex regex) => regex.Split(value);
 
@@ -424,7 +424,7 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
       }
       else
       {
-         return None.NoneValue;
+         return KNil.NilValue;
       }
    }
 

@@ -27,7 +27,7 @@ public class EnumClass : UserClass
          isEnumeration = false;
       }
 
-      constructors[constructorSelector] = _ordinal.Map(Some.Object) | None.NoneValue;
+      constructors[constructorSelector] = _ordinal.Map(Some.Object) | KNil.NilValue;
       RegisterClassMessage(messageSelector, (_, msg) => GetMember(constructorSelector, msg));
 
       var fieldName = constructorSelector.AsString.Substitute("^ /w+ '$' /(-['(']+) .* $", "`$1").ToLower1();
@@ -66,7 +66,7 @@ public class EnumClass : UserClass
          List<IObject> list = [];
          foreach (var (selector, value) in constructors)
          {
-            if (value is None)
+            if (value is KNil)
             {
                var message = new Message(selector, Arguments.Empty);
                var createdObject = createObject(selector, message);
@@ -102,7 +102,7 @@ public class EnumClass : UserClass
 
    public IObject FromOrdinal(IObject ordinal)
    {
-      return ordinalToSelector.Maybe[ordinal].Map(retrieveObject).Map(Some.Object) | None.NoneValue;
+      return ordinalToSelector.Maybe[ordinal].Map(retrieveObject).Map(Some.Object) | KNil.NilValue;
    }
 
    public void Open()

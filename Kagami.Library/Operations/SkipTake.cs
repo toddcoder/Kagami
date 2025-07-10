@@ -14,7 +14,7 @@ public class SkipTake : TwoOperandOperation
          return y switch
          {
             Int yInt => new Objects.SkipTake(xInt.Value, yInt.Value),
-            None => new Objects.SkipTake(xInt.Value, 0) { NoTake = true },
+            KNil => new Objects.SkipTake(xInt.Value, 0) { NoTake = true },
             _ => incompatibleClasses(y, "Int")
          };
       }

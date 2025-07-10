@@ -8,7 +8,7 @@ namespace Kagami.Library.Runtime;
 
 public class Field
 {
-   protected IObject value = None.NoneValue;
+   protected IObject value = KNil.NilValue;
 
    public IObject Value
    {

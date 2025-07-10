@@ -4,23 +4,23 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
 
-public readonly struct None : IObject, IOptional, IBoolean, IEquatable<None>, IMonad
+public readonly struct KNil : IObject, IOptional, IBoolean, IEquatable<KNil>, IMonad
 {
-   public None()
+   public KNil()
    {
    }
 
-   public static IObject NoneValue => new None();
+   public static IObject NilValue => new KNil();
 
-   public string ClassName => "None";
+   public string ClassName => "Nil";
 
-   public string AsString => "none";
+   public string AsString => "nil";
 
-   public string Image => "none";
+   public string Image => "nil";
 
    public int Hash => AsString.GetHashCode();
 
-   public bool IsEqualTo(IObject obj) => obj is None;
+   public bool IsEqualTo(IObject obj) => obj is KNil;
 
    public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
@@ -40,7 +40,7 @@ public readonly struct None : IObject, IOptional, IBoolean, IEquatable<None>, IM
 
    public Guid Id { get; init; } = Guid.NewGuid();
 
-   public bool Equals(None other) => true;
+   public bool Equals(KNil other) => true;
 
    public IObject Bind(Lambda map) => this;
 

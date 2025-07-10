@@ -108,7 +108,7 @@ public class Block : Statement, IEnumerable<Statement>
 
       if (Yielding)
       {
-         builder.PushNone();
+         builder.PushNil();
          builder.Return(true);
       }
       else if (_typeConstraint is (true, var typeConstraint))

@@ -6,7 +6,7 @@ public class SkipOperatorSymbol : Symbol
 {
    public override void Generate(OperationsBuilder builder)
    {
-      builder.PushNone();
+      builder.PushNil();
       builder.SkipTake();
    }
 

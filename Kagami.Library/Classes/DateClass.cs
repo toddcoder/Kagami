@@ -43,6 +43,6 @@ public class DateClass : BaseClass
 
    protected static IObject parse(string source)
    {
-      return DateTime.TryParse(source, out var dateTime) ? Some.Object((Date)dateTime) : None.NoneValue;
+      return DateTime.TryParse(source, out var dateTime) ? Some.Object((Date)dateTime) : KNil.NilValue;
    }
 }

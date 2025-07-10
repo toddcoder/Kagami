@@ -18,7 +18,7 @@ public static class TextFindingFunctions
          index = input.IndexOf(value, startIndex, StringComparison.Ordinal);
       }
 
-      return index == -1 ? None.NoneValue : Some.Object((Int)index);
+      return index == -1 ? KNil.NilValue : Some.Object((Int)index);
    }
 
    public static KTuple findAll(string value, string input) => new(input.FindAll(value).Select(Int.IntObject).ToArray());

@@ -69,7 +69,7 @@ public class YieldingInvokable : IInvokable, ICollection, IObject
       {
          switch (result)
          {
-            case None:
+            case KNil:
                //Machine.Current.Value.Operations.Advance(-1);
                return nil;
             case YieldReturn yieldReturn:
