@@ -1,0 +1,15 @@
+﻿open sys
+
+func makeIncrementer(forIncrement: amount) {
+	var runningTotal = 0
+	var incrementer = -> {
+		runningTotal += amount
+		return runningTotal
+	}
+	return incrementer
+}
+
+var incrementByTen = makeIncrementer(forIncrement: 10)
+println(incrementByTen())
+println(incrementByTen())
+println(incrementByTen())

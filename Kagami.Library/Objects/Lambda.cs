@@ -106,7 +106,10 @@ public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields
       var frames = machine.PeekFramesUntil(f => f.FrameType == FrameType.Function);
       foreach (var field in frames.AllFields().Where(f => f.field.Value.Id != Id && noForbidden(f.field.Value)))
       {
-         fields.AssignLocal(field.fieldName, field.field.Value, true).Force();
+         if (!fields.ContainsKey(field.fieldName))
+         {
+            fields.AssignLocal(field.fieldName, field.field.Value, true).Force();
+         }
       }
 
       return;
