@@ -32,7 +32,7 @@ public class MatchFunction : Statement
    public override void Generate(OperationsBuilder builder)
    {
       var invokable = getInvokable();
-      var lambda = new Lambda(invokable);
+      var lambda = new Lambda(invokable, true);
       var _index = builder.RegisterInvokable(invokable, block, overriding);
       if (_index)
       {

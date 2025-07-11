@@ -9,14 +9,14 @@ namespace Kagami.Library.Objects;
 public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields, IPristineCopy, IProvidesFields
 {
    protected IInvokable invokable1;
-   protected Fields fields;
+   protected Fields fields = new();
    protected bool providesFields;
+   protected bool captures;
 
-   public Lambda(IInvokable invokable1)
+   public Lambda(IInvokable invokable1, bool captures)
    {
       this.invokable1 = invokable1;
-      fields = new Fields();
-      providesFields = false;
+      this.captures = captures;
    }
 
    public string ClassName => "Lambda";
@@ -41,7 +41,7 @@ public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields
 
    public override int GetHashCode() => Hash;
 
-   public virtual IObject Copy() => new Lambda(invokable1);
+   public virtual IObject Copy() => new Lambda(invokable1, captures);
 
    public void CopyFields(Fields fields)
    {
@@ -92,12 +92,17 @@ public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields
 
    public Fields Fields => getFields();
 
-   public Lambda Clone() => new(invokable1);
+   public Lambda Clone() => new(invokable1, captures);
 
    public IObject Join(Lambda otherLambda) => new CompositeLambda(invokable1, otherLambda.Invokable);
 
    public void Capture(Machine machine)
    {
+      if (!captures)
+      {
+         return;
+      }
+
       var frames = machine.PeekFramesUntil(f => f.FrameType == FrameType.Function);
       foreach (var field in frames.AllFields().Where(f => f.field.Value.Id != Id && noForbidden(f.field.Value)))
       {

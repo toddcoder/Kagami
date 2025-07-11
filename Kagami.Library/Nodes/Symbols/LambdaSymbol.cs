@@ -33,7 +33,7 @@ public class LambdaSymbol : Symbol
       var _index = builder.RegisterInvokable(invokable, block, true);
       if (_index)
       {
-         builder.NewLambda(invokable);
+         builder.NewLambda(invokable, true);
       }
       else
       {

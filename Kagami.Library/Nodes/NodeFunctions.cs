@@ -28,7 +28,7 @@ public static class NodeFunctions
       return exBuilder.ToExpression().Map(expression =>
       {
          var invokable = new LambdaInvokable(new Parameters(2), $"$0 {operatorSymbol} $1");
-         return builder.RegisterInvokable(invokable, expression, true).Map(_ => new Lambda(invokable));
+         return builder.RegisterInvokable(invokable, expression, true).Map(_ => new Lambda(invokable, true));
       });
    }
 

@@ -68,6 +68,8 @@ public class TestBackground(Either<FolderName, FileName> source, ListView listVi
          {
             var item = listView.Items.Add(file.Name);
             item.UseItemStyleForSubItems = false;
+            item.ForeColor = Color.White;
+            item.BackColor = Color.Blue;
 
             var expectedFile = file.Folder + $"{file.Name}.expected.txt";
             if (expectedFile)

@@ -16,7 +16,8 @@ public partial class Tests : Form
    protected UiAction uiMessage = new();
    protected UiAction uiRun = new();
    protected UiAction uiGenerate = new();
-   protected ExRichTextBox textSource = new();
+   protected ExRichTextBox textExpected = new();
+   protected ExRichTextBox textResults = new();
    protected TestBackground testBackground;
    protected GenerateBackground generateBackground;
 
@@ -98,20 +99,6 @@ public partial class Tests : Form
       uiGenerate.KeyDownCaption = new KeyDownCapture.ControlKey("Overwrite Expected Texts");
       uiGenerate.Click += (_, _) =>
       {
-         /*var _folder = getFolder();
-         if (_folder is (true, var testFolder))
-         {
-            generateBackground.Folder = testFolder;
-            generateBackground.Overwrite = uiGenerate.IsKeyDown;
-         }
-         else if (_folder.Exception is (true, var exception))
-         {
-            uiMessage.Exception(exception);
-         }
-         else
-         {
-            uiMessage.Failure("Folder not selected");
-         }*/
          var _folder = getFolder();
          if (_folder is (true, var testFolder))
          {
@@ -147,13 +134,14 @@ public partial class Tests : Form
       };
 
       var builder = new TableLayoutBuilder(tableLayoutPanel);
-      _ = builder.Col + 100f + 300 + 300;
+      _ = builder.Col + 25f + 25f + 25f + 25f;
       _ = builder.Row + 50f + 50f + 50;
       builder.SetUp();
 
-      (builder + listViewTests).SpanCol(3).Row();
-      (builder + textSource).SpanCol(3).Row();
-      (builder + uiMessage).Next();
+      (builder + listViewTests).SpanCol(4).Row();
+      (builder + textExpected).SpanCol(2).Next();
+      (builder + textResults).SpanCol(2).Row();
+      (builder + uiMessage).SpanCol(2).Next();
       (builder + uiRun).Next();
       (builder + uiGenerate).Row();
    }
@@ -204,15 +192,27 @@ public partial class Tests : Form
       {
          if (getFolder() is (true, var testFolder) && listViewTests.SelectedItem() is (true, var item))
          {
+            var expectedFile = testFolder + $"{item.Text}.expected.txt";
             var resultFile = testFolder + $"{item.Text}.txt";
-            var _text = resultFile.TryTo.GetText(Encoding.UTF8);
-            if (_text is (true, var text))
+            var _text = expectedFile.TryTo.GetText(Encoding.UTF8);
+            if (_text is (true, var expectedText))
             {
-               textSource.Text = text;
+               textExpected.Text = expectedText;
             }
             else
             {
-               textSource.Text = "";
+               textExpected.Text = "";
+               uiMessage.Exception(_text.Exception);
+            }
+
+            _text = resultFile.TryTo.GetText(Encoding.UTF8);
+            if (_text is (true, var resultText))
+            {
+               textResults.Text = resultText;
+            }
+            else
+            {
+               textResults.Text = "";
                uiMessage.Exception(_text.Exception);
             }
          }

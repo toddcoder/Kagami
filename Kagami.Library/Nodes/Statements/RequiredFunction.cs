@@ -18,7 +18,7 @@ public class RequiredFunction(Selector selector, Inclusion inclusion) : Statemen
       var _index = builder.RegisterInvokable(invokable, block, false);
       if (_index)
       {
-         var lambda = new Lambda(invokable);
+         var lambda = new Lambda(invokable, false);
          builder.PushObject(lambda);
          builder.AssignSelector(selector, false);
       }

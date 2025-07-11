@@ -6,7 +6,7 @@ public class InternalLambda : Lambda
 {
    protected Func<IObject[], IObject> func;
 
-   public InternalLambda(Func<IObject[], IObject> func) : base(new FunctionInvokable("", Parameters.Empty, ""))
+   public InternalLambda(Func<IObject[], IObject> func) : base(new FunctionInvokable("", Parameters.Empty, ""), true)
    {
       this.func = func;
    }

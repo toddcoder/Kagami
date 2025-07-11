@@ -55,6 +55,8 @@
          // 
          listViewTests.Columns.AddRange(new ColumnHeader[] { columnHeaderTest, columnHeaderExpected, columnHeaderResults });
          listViewTests.Dock = DockStyle.Fill;
+         listViewTests.FullRowSelect = true;
+         listViewTests.GridLines = true;
          listViewTests.Location = new Point(3, 3);
          listViewTests.Name = "listViewTests";
          listViewTests.Size = new Size(741, 295);

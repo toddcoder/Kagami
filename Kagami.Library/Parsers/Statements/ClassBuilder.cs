@@ -106,7 +106,7 @@ public class ClassBuilder
                var function = Function.Getter(fieldName);
                statements.Add(function);
                var (functionName, _, block, _, invokable, _) = function;
-               if (!isPrivate(fieldName) && !userClass.RegisterMethod(functionName, new Lambda(invokable), true))
+               if (!isPrivate(fieldName) && !userClass.RegisterMethod(functionName, new Lambda(invokable, false), true))
                {
                   throw needsOverride(functionName);
                }
@@ -118,7 +118,7 @@ public class ClassBuilder
                   function = Function.Setter(fieldName);
                   statements.Add(function);
                   (functionName, _, block, _, invokable, _) = function;
-                  if (!isPrivate(fieldName) && !userClass.RegisterMethod(functionName, new Lambda(invokable), true))
+                  if (!isPrivate(fieldName) && !userClass.RegisterMethod(functionName, new Lambda(invokable, false), true))
                   {
                      throw needsOverride(functionName);
                   }
@@ -139,7 +139,7 @@ public class ClassBuilder
                   var function = Function.Getter(name);
                   statements.Add(function);
                   var (functionName, _, block, _, invokable, _) = function;
-                  if (!isPrivate(fieldName) && !userClass.RegisterMethod(functionName, new Lambda(invokable), true))
+                  if (!isPrivate(fieldName) && !userClass.RegisterMethod(functionName, new Lambda(invokable, false), true))
                   {
                      throw needsOverride(functionName);
                   }
@@ -151,7 +151,7 @@ public class ClassBuilder
                      function = Function.Setter(fieldName);
                      statements.Add(function);
                      (functionName, _, block, _, invokable, _) = function;
-                     if (!isPrivate(fieldName) && !userClass.RegisterMethod(functionName, new Lambda(invokable), true))
+                     if (!isPrivate(fieldName) && !userClass.RegisterMethod(functionName, new Lambda(invokable, false), true))
                      {
                         throw needsOverride(functionName);
                      }
@@ -169,7 +169,7 @@ public class ClassBuilder
                var (selector, _, block, _, invokable, overriding) = function;
                if (!isPrivate(selector))
                {
-                  if (userClass.RegisterMethod(selector, new Lambda(invokable), overriding))
+                  if (userClass.RegisterMethod(selector, new Lambda(invokable, false), overriding))
                   {
                      functions.Add((invokable, block, overriding));
                   }
@@ -192,7 +192,7 @@ public class ClassBuilder
                var (functionName, _, block, _, invokable, overriding) = matchFunction;
                if (!isPrivate(functionName))
                {
-                  if (userClass.RegisterMethod(functionName, new Lambda(invokable), overriding))
+                  if (userClass.RegisterMethod(functionName, new Lambda(invokable, false), overriding))
                   {
                      functions.Add((invokable, block, overriding));
                   }

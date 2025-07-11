@@ -277,7 +277,7 @@ public class OperationsBuilder
 
    public void NewList() => add(new NewList());
 
-   public void NewLambda(IInvokable invokable) => add(new NewLambda(invokable));
+   public void NewLambda(IInvokable invokable, bool captures) => add(new NewLambda(invokable, captures));
 
    public void NewSkipTake() => add(new NewSkipTake());
 

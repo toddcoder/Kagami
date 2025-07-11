@@ -43,7 +43,7 @@ public class Function : Statement
       lambda = new Lazy<Lambda>(() =>
       {
          var invokable = GetInvokable();
-         return new Lambda(invokable);
+         return new Lambda(invokable, false);
       });
    }
 

@@ -26,7 +26,7 @@ public class Pattern : Statement
       var _index = builder.RegisterInvokable(invokable, block, true);
       if (_index)
       {
-         var lambda = new Lambda(invokable);
+         var lambda = new Lambda(invokable, false);
          var pattern = new Objects.Pattern(name, lambda, parameters);
          builder.NewField(name, false, true);
          builder.PushObject(pattern);

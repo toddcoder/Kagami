@@ -17,7 +17,7 @@ public partial class WhateverParser : SymbolParser
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
       state.Colorize(tokens, Color.Whitespace, Color.Identifier);
-      if (builder.Flags[ExpressionFlags.InLambda])
+      if (builder.Flags[ExpressionFlags.InLambda] || builder.Flags[ExpressionFlags.InArgument])
       {
          builder.Add(new AnySymbol());
       }

@@ -7,10 +7,10 @@ public class CompositeLambda : Lambda
    protected Lambda lambda1;
    protected Lambda lambda2;
 
-   public CompositeLambda(IInvokable invokable1, IInvokable invokable2) : base(invokable1)
+   public CompositeLambda(IInvokable invokable1, IInvokable invokable2) : base(invokable1, true)
    {
-      lambda1 = new Lambda(invokable1);
-      lambda2 = new Lambda(invokable2);
+      lambda1 = new Lambda(invokable1, true);
+      lambda2 = new Lambda(invokable2, true);
    }
 
    public override IObject Invoke(params IObject[] arguments)

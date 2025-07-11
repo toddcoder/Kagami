@@ -45,7 +45,7 @@ public class DataType : Statement
             if (_index)
             {
                builder.NewField(key, false, true);
-               builder.PushObject(new Lambda(invokable));
+               builder.PushObject(new Lambda(invokable, true));
                builder.AssignField(key, true);
             }
             else

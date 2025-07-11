@@ -1,28 +1,28 @@
 term 0
-term 0
+term 1
 true
-term 0
+term 2
 false
-term 0
-term 0
+term 3
+term 4
 false
 
 term 0
 true
-term 0
-term 0
+term 1
+term 2
 false
-term 0
-term 0
+term 3
+term 4
 true
 
 term 0
-term 0
+term 1
 false
-term 0
-term 0
+term 2
+term 3
 false
-term 0
-term 0
+term 4
+term 5
 true
 "true" | String
