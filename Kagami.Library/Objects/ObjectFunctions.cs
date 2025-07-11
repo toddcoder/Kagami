@@ -65,7 +65,7 @@ public static class ObjectFunctions
          case Sequence sequence:
             return matchInSequence(source, sequence, bindings);
          case Regex regex:
-            return regex.IsMatch(source.AsString).IsTrue;
+            return matchRegex(source, regex, bindings); //regex.IsMatch(source.AsString).IsTrue;
          case Pattern pattern:
             return pattern.Match(source, bindings);
          case IProcessPlaceholders:
@@ -82,6 +82,25 @@ public static class ObjectFunctions
          }
          default:
             return classOf(source).MatchCompatible(classOf(comparisand)) && equalifier(source, (T)comparisand);
+      }
+   }
+
+   private static bool matchRegex(IObject source, Regex regex, Hash<string, IObject> bindings)
+   {
+      var _match = regex.MatchOne(source.AsString);
+      if (_match is (true, var match))
+      {
+         var _name = Module.Global.Value.Bindings.Maybe[regex.Id];
+         if (_name is (true, var name))
+         {
+            bindings[name] = (KString)match.Text;
+         }
+
+         return true;
+      }
+      else
+      {
+         return false;
       }
    }
 

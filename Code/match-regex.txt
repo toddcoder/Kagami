@@ -1,0 +1,2 @@
+Is it a spicy red pepper?
+"Is it a spicy red pepper?" | String

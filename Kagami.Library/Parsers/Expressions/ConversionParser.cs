@@ -13,9 +13,8 @@ public partial class ConversionParser : EndingInValueParser
    {
    }
 
-   //public override string Pattern => "^ /(/s*) /('int' | 'float' | 'byte' | 'long' | 'complex' | 'rational') /(/s+)";
 
-   [GeneratedRegex(@"^(\s*)(int|float|byte|long|complex|rational)(\s+)")]
+   [GeneratedRegex(@"^(\s*)(int|float|byte|long|complex|rational|decimal)(\s+)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
