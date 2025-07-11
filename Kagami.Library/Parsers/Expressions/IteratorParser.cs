@@ -11,13 +11,13 @@ public partial class IteratorParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(!{1,2}|\?)(?![\s\^\(>])")]
+   [GeneratedRegex(@"^(\s*)(!{1,3})(?![\s\^\(>])")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
       var lazy = tokens[2].Text == "!!";
-      var indexed = tokens[2].Text == "?";
+      var indexed = tokens[2].Text == "!!!";
       state.Colorize(tokens, Color.Whitespace, Color.Operator);
 
       builder.Add(new IteratorSymbol(lazy, indexed));

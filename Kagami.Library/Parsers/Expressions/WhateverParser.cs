@@ -11,13 +11,20 @@ public partial class WhateverParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(@)")]
+   [GeneratedRegex(@"^(\s*)(\?)(?!\()")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
       state.Colorize(tokens, Color.Whitespace, Color.Identifier);
-      builder.Add(new WhateverSymbol());
+      if (builder.Flags[ExpressionFlags.InLambda])
+      {
+         builder.Add(new AnySymbol());
+      }
+      else
+      {
+         builder.Add(new WhateverSymbol());
+      }
 
       return unit;
    }
