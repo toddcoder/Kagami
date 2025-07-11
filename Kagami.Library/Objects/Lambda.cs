@@ -23,7 +23,7 @@ public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields
 
    public virtual string AsString => invokable1.ToString() ?? "";
 
-   public virtual string Image => $"{invokable1.Image}[{fields}]";
+   public virtual string Image => $"{invokable1.Image}";
 
    public virtual int Hash => invokable1.GetHashCode();
 

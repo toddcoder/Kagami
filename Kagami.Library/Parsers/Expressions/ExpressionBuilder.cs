@@ -115,7 +115,12 @@ public class ExpressionBuilder(Bits32<ExpressionFlags> flags, bool acknowledgeIm
 
          var builder = new ExpressionBuilder(flags, false);
          builder.Add(sourceSymbol);
-         Selector selector = implicitType == "m" ? "map(_)" : "if(_)";
+         Selector selector = implicitType switch
+         {
+            "i" => "if(_)",
+            "e" => "each(_)",
+            _ => "map(_)"
+         };
          builder.Add(new SendMessageSymbol(selector, Precedence.ChainedOperator, false, lambda));
 
          return builder.ToExpression();
@@ -172,6 +177,7 @@ public class ExpressionBuilder(Bits32<ExpressionFlags> flags, bool acknowledgeIm
             {
                parameter2 = new Parameter(false, "", "__$1", nil, nil, false, false);
             }
+
             var parameters = new Parameters(parameter1, parameter2);
             var lambda = new LambdaSymbol(parameters, block);
 
