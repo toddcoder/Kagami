@@ -84,6 +84,7 @@ public partial class InternalKeywordOperatorsParser : SymbolParser
                   builder.Add(new DivModSymbol());
                   break;
                case "xor":
+                  state.PrefixCode = nil;
                   builder.Add(new XOrSymbol());
                   break;
                default:

@@ -22,6 +22,7 @@ public partial class OrParser : EndingInExpressionParser
 
    public override Optional<Unit> Suffix(ParseState state, Expression expression)
    {
+      state.PrefixCode = nil;
       builder.Add(new OrSymbol(expression));
       return unit;
    }

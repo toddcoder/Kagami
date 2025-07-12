@@ -90,6 +90,7 @@ public partial class KeywordOperatorsParser : SymbolParser
                   builder.Add(new SameSymbol(false));
                   break;
                case "xor":
+                  state.PrefixCode = nil;
                   builder.Add(new XOrSymbol());
                   break;
                default:

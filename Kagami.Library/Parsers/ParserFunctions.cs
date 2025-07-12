@@ -1192,15 +1192,19 @@ public static class ParserFunctions
             break;
          case "==":
             _symbol = new EqualSymbol();
+            state.PrefixCode = nil;
             break;
          case "!=":
             _symbol = new NotEqualSymbol();
+            state.PrefixCode = nil;
             break;
          case ">":
             _symbol = new GreaterThanSymbol();
+            state.PrefixCode = nil;
             break;
          case ">=":
             _symbol = new GreaterThanEqualSymbol();
+            state.PrefixCode = nil;
             break;
          case "<":
          {
