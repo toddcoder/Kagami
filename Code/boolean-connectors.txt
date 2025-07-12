@@ -2,18 +2,17 @@ term 0
 term 1
 true
 term 2
-false
 term 3
+true
 term 4
-false
+term 5
+true
 
 term 0
 true
 term 1
+true
 term 2
-false
-term 3
-term 4
 true
 
 term 0
@@ -24,5 +23,5 @@ term 3
 false
 term 4
 term 5
-true
-"true" | String
+false
+"false" | String

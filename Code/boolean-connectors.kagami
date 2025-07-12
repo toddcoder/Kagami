@@ -6,18 +6,18 @@ func term(x) {
 	return x
 }
 
-println(term(true) and term(true))
-println(term(false) and term(false))
-println(term(true) and term(false))
+println("T & T", term(true) and term(true))
+println("F & F", term(false) and term(false))
+println("T & F", term(true) and term(false))
 
 println()
 i = 0
-println(term(true) or term(true))
-println(term(false) or term(false))
-println(term(false) or term(true))
+println("T | T", term(true) or term(true))
+println("F | F", term(false) or term(false))
+println("F | T", term(false) or term(true))
 
 println()
 i = 0
-println(term(true) xor term(true))
-println(term(false) xor term(false))
-println(term(false) xor term(true))
+println("T ^ T", term(true) xor term(true))
+println("F ^ F", term(false) xor term(false))
+println("F ^ T", term(false) xor term(true))

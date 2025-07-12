@@ -3,7 +3,6 @@ using Kagami.Library.Runtime;
 using Core.Monads;
 using static Kagami.Library.AllExceptions;
 using static Core.Monads.MonadFunctions;
-using static Kagami.Library.Operations.OperationFunctions;
 
 namespace Kagami.Library.Operations;
 
@@ -21,6 +20,7 @@ public class Return : Operation
             {
                lambda.Capture(machine);
             }
+
             returnValue = new ReturnValue.Value(value);
          }
          else
@@ -40,6 +40,7 @@ public class Return : Operation
          {
             lambda.CopyFields(frame.Fields);
          }
+
          if (frame.Address is (true, var address))
          {
             machine.GoTo(address);
@@ -49,7 +50,7 @@ public class Return : Operation
          {
             ReturnValue.EmptyStack => emptyStack("return"),
             ReturnValue.NoValue => nil,
-            ReturnValue.Value value => copyFields(value.Object, frames).Just(),
+            ReturnValue.Value value => value.Object.Just(), //copyFields(value.Object, frames).Just(),
             _ => new ArgumentOutOfRangeException(nameof(returnValue))
          };
       }

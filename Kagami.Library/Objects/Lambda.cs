@@ -46,6 +46,13 @@ public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields
    public void CopyFields(Fields fields)
    {
       this.fields.CopyFrom(fields);
+      foreach (var parameter in invokable1.Parameters)
+      {
+         if (this.fields.ContainsKey(parameter.Name))
+         {
+            this.fields.Remove(parameter.Name);
+         }
+      }
       providesFields = true;
    }
 
