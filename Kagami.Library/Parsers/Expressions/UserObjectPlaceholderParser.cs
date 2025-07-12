@@ -2,6 +2,7 @@
 using Core.Monads;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
+using Kagami.Library.Operations;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 using Regex = System.Text.RegularExpressions.Regex;
@@ -22,6 +23,12 @@ public partial class UserObjectPlaceholderParser : SymbolParser
       var name = tokens[2].Text;
       var hasArguments = tokens[3].Text == "(";
       state.Colorize(tokens, Color.Whitespace, Color.Class, Color.OpenParenthesis);
+
+      if (state.IsPattern(name))
+      {
+         builder.Add(new FieldSymbol(name));
+         return unit;
+      }
 
       if (hasArguments)
       {

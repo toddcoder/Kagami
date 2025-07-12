@@ -1,27 +1,28 @@
 term 0
 term 1
-true
+T & T true
 term 2
+F & F false
 term 3
-true
 term 4
-term 5
-true
+T & F false
 
 term 0
-true
+T | T true
 term 1
-true
 term 2
-true
+F | F false
+term 3
+term 4
+F | T true
 
 term 0
 term 1
-false
+T ^ T false
 term 2
 term 3
-false
+F ^ F false
 term 4
 term 5
-false
-"false" | String
+F ^ T true
+"F ^ T true" | String

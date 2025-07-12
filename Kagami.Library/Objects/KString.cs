@@ -279,18 +279,28 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
             var builder = new StringBuilder();
             if (left < right)
             {
+               builder.Append(left);
+
                for (var i = left + 1; i < right; i++)
                {
                   builder.Append((char)i);
                }
+
+               builder.Append(right);
             }
             else
             {
+               builder.Append(right);
+
                for (var i = right - 1; i > left; i--)
                {
                   builder.Append((char)i);
                }
+
+               builder.Append(left);
             }
+
+            return builder.ToString();
          }
 
          return result.Text;

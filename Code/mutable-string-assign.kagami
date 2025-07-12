@@ -1,0 +1,5 @@
+﻿open sys
+
+var string = m"This is test."
+string{8} = "not a "
+println(string)

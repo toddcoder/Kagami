@@ -403,7 +403,7 @@ public class ParseState : IEnumerable<Statement>
 
    public void RegisterPattern(string patternName) => patterns.Add(patternName);
 
-   public bool ContainsPattern(string patternName) => patternName.Contains(patternName);
+   public bool IsPattern(string patternName) => patterns.Contains(patternName);
 
    public Optional<string> ScanFormat()
    {
