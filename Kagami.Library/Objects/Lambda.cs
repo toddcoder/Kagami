@@ -118,4 +118,21 @@ public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields
    }
 
    public Int ParameterCount => invokable1.Parameters.Length;
+
+   public KTuple FieldsInTuple
+   {
+      get
+      {
+         List<NameValue> list = [];
+         foreach (var (fieldName, @field) in fields)
+         {
+            if (@field.Value is not Unassigned)
+            {
+               list.Add(new NameValue(fieldName, @field.Value));
+            }
+         }
+
+         return new KTuple([.. list]);
+      }
+   }
 }

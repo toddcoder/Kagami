@@ -16,6 +16,7 @@ public class LambdaClass : BaseClass
       messages["invoke()"] = (obj, msg) => function<Lambda>(obj, l => invoke(l, msg.Arguments));
       messages[">>(_)"] = (obj, msg) => function<Lambda, Lambda>(obj, msg, (l1, l2) => l1.Join(l2));
       messages["parameterCount".get()] = (obj, _) => function<Lambda>(obj, l => l.ParameterCount);
+      messages["fields".get()] = (obj, _) => function<Lambda>(obj, l => l.FieldsInTuple);
    }
 
    protected static IObject invoke(Lambda lambda, Arguments arguments)
