@@ -337,4 +337,6 @@ public class Frame
          yield return fieldName;
       }
    }
+
+   public Maybe<Lambda> Lambda { get; set; } = nil;
 }

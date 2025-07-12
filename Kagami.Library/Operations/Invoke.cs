@@ -25,7 +25,7 @@ public class Invoke : OneOperandOperation
          {
             _fields = providesFields.Fields;
          }
-         InvokeInvokable(machine, invokable, arguments, _fields);
+         InvokeInvokable(machine, invokable, arguments, _fields, (invokableObject as Lambda).NotNull());
       }
    }
 
@@ -36,7 +36,7 @@ public class Invoke : OneOperandOperation
       machine.Push((IObject)iterator);
    }
 
-   public static void InvokeInvokable(Machine machine, IInvokable invokable, Arguments arguments, Maybe<Fields> _fields)
+   public static void InvokeInvokable(Machine machine, IInvokable invokable, Arguments arguments, Maybe<Fields> _fields, Maybe<Lambda> _lambda)
    {
       if (invokable.Constructing)
       {
@@ -51,6 +51,7 @@ public class Invoke : OneOperandOperation
          {
             frame.SetFields(fields);
          }
+         frame.Lambda = _lambda;
          machine.GoTo(invokable.Address);
       }
    }

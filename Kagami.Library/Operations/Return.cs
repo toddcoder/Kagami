@@ -36,6 +36,10 @@ public class Return : Operation
       var frames = machine.PopFrames();
       if (frames.FunctionFrame is (true, var frame))
       {
+         if (frame.Lambda is (true, var lambda))
+         {
+            lambda.CopyFields(frame.Fields);
+         }
          if (frame.Address is (true, var address))
          {
             machine.GoTo(address);
