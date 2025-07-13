@@ -11,7 +11,7 @@ public partial class KeywordValueParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(nil|true|false|unit|null)\b")]
+   [GeneratedRegex(@"^(\s*)(nil|true|false|unit|undef)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -33,8 +33,8 @@ public partial class KeywordValueParser : SymbolParser
          case "unit":
             builder.Add(new UnitSymbol());
             break;
-         case "null":
-            builder.Add(new EmptyListSymbol());
+         case "undef":
+            builder.Add(new UndefinedSymbol());
             break;
          default:
             return nil;

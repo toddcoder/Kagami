@@ -90,6 +90,7 @@ public class Module
       "Decimal" => new DecimalClass(),
       "PendingRegex" => new PendingRegexClass(),
       "UserObjectPlaceholder" => new UserObjectPlaceholderClass(),
+      "Undefined" => new UndefinedClass(),
       _ => nil
    };
 
