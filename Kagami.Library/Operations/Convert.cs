@@ -1,0 +1,51 @@
+﻿using Core.Monads;
+using Kagami.Library.Objects;
+using Kagami.Library.Runtime;
+using static Core.Monads.MonadFunctions;
+using static Kagami.Library.AllExceptions;
+using Arguments = Kagami.Library.Objects.Arguments;
+
+namespace Kagami.Library.Operations;
+
+public class Convert : Operation
+{
+   protected bool increment = true;
+
+   public override Optional<IObject> Execute(Machine machine)
+   {
+      var _arguments =
+         from toClassValue in machine.Pop()
+         from fromClassValue in machine.Pop()
+         from valueToConvert in machine.Pop()
+         select (valueToConvert, fromClassValue, toClassValue);
+      if (_arguments is (true, var (value, fromClass, toClass)))
+      {
+         var _selector = Module.Global.Value.GetConversion(fromClass.AsString, toClass.AsString);
+         if (_selector is (true, var selector))
+         {
+            var _field = machine.Find(selector);
+            if (_field is (true, var field))
+            {
+               var arguments = new Arguments(value);
+               return Invoke.InvokeObject(machine, field.Value, arguments, ref increment);
+            }
+            else
+            {
+               return fieldNotFound(selector);
+            }
+         }
+         else
+         {
+            return fail($"Conversion from {fromClass} to {toClass} not found");
+         }
+      }
+      else
+      {
+         return emptyStack("convert");
+      }
+   }
+
+   public override bool Increment => increment;
+
+   public override string ToString() => "convert";
+}

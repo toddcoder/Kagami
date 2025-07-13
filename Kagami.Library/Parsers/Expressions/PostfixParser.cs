@@ -20,6 +20,7 @@ public class PostfixParser(ExpressionBuilder builder) : MultiParser
          yield return new SliceParser(builder);
          yield return new WhereParser(builder);
          yield return new SkipOperatorParser(builder);
+         yield return new AsOperatorParser(builder);
 
          if (!builder.Flags[ExpressionFlags.OmitSendMessageAssign])
          {

@@ -22,4 +22,6 @@ public static class CommonFunctions
          return (BindingType.Existing, name);
       }
    }
+
+   public static string convertFunctionName(string fromClass, string toClass) => $"__$convert_from_{fromClass}_to_{toClass}";
 }

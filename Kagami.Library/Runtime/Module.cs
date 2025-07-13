@@ -5,6 +5,7 @@ using Core.Monads;
 using Core.Objects;
 using Kagami.Library.Inclusions;
 using Kagami.Library.Nodes.Symbols;
+using Kagami.Library.Objects;
 using Kagami.Library.Parsers;
 using static Kagami.Library.AllExceptions;
 using static Core.Monads.MonadFunctions;
@@ -99,6 +100,7 @@ public class Module
    protected StringHash<OperatorType> operators = [];
    protected Hash<Guid, string> bindings = [];
    protected Hash<Guid, string> retrievedFields = [];
+   protected Hash<(string from, string to), Selector> conversionFunctions = [];
 
    public Maybe<BaseClass> Class(string name, bool forwardsIncluded = false)
    {
@@ -201,4 +203,8 @@ public class Module
    public Hash<Guid, string> Bindings => bindings;
 
    public Hash<Guid, string> RetrievedFields => retrievedFields;
+
+   public void RegisterConversion(string fromClass, string toClass, Selector selector) => conversionFunctions[(fromClass, toClass)] = selector;
+
+   public Maybe<Selector> GetConversion(string fromClass, string toClass) => conversionFunctions.Maybe[(fromClass, toClass)];
 }

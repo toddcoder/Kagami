@@ -173,6 +173,11 @@ public class OperationsBuilder
       add(new Invoke(functionName));
    }
 
+   public void Invoke(int count)
+   {
+      ToArguments(count);
+   }
+
    public void PostfixInvoke() => add(new PostfixInvoke());
 
    public void Return(bool returnTopOfStack) => add(new Return(returnTopOfStack));
@@ -387,6 +392,8 @@ public class OperationsBuilder
 
    public void DivRem() => add(new DivRem());
 
+   public void Convert() => add(new Convert());
+
    public void ArgumentLabel(string label) => add(new ArgumentLabel(label));
 
    public Result<Operations> ToOperations(ParseState state)
@@ -557,6 +564,8 @@ public class OperationsBuilder
    public void LambdaCapture() => add(new LambdaCapture());
 
    public void RunTimeArguments() => add(new RunTimeArguments());
+
+   public void ClassName() => add(new ClassName());
 
    public override string ToString() => "operations";
 }
