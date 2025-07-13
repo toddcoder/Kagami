@@ -1,0 +1,25 @@
+﻿open sys
+
+convert Int(array Array){
+	var accum = 1
+	for i in array {
+		for c in i.string {
+			if '0' <= c <= '9' {
+				var value = c.ord - '0'.ord
+				accum = accum * 10 + value
+			}
+			else {
+				return f"Character not between 0 and 9"
+			}
+		}
+	}
+	return accum!
+}
+
+var `i = ["153", "123", "111"] as Int
+if `i is i! {
+	println($"Value is (i)")
+}
+else {
+	println(`i)
+}

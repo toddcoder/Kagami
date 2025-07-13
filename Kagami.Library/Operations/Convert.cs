@@ -36,7 +36,7 @@ public class Convert : Operation
          }
          else
          {
-            return fail($"Conversion from {fromClass} to {toClass} not found");
+            return fail($"Conversion from {fromClass.AsString} to {toClass.AsString} not found");
          }
       }
       else

@@ -12,13 +12,13 @@ public partial class AsOperatorParser : SymbolParser
    {
    }
 
-   [GeneratedRegex($@"^(\s+)(as)({REGEX_CLASS})\b")]
+   [GeneratedRegex($@"^(\s*)(as)(\s+)({REGEX_CLASS})\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      var className = tokens[3].Text;
-      state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Class);
+      var className = tokens[4].Text;
+      state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Whitespace, Color.Class);
       builder.Add(new AsSymbol(className));
 
       return unit;
