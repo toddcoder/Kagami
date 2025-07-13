@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Classes;
+﻿using System.Collections;
+using Kagami.Library.Classes;
 using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
@@ -17,6 +18,7 @@ public class Sys : Package
    public Sys()
    {
       fields.New("id", new RuntimeLambda(args => args[0], 1, "x -> x"));
+      fields.New("environment", Environment);
    }
 
    public override string ClassName => "Sys";
@@ -283,4 +285,18 @@ public class Sys : Package
    }
 
    public KString String(IObject obj) => new(obj.AsString);
+
+   public Dictionary Environment
+   {
+      get
+      {
+         Hash<IObject, IObject> hash = [];
+         foreach (DictionaryEntry entry in System.Environment.GetEnvironmentVariables())
+         {
+            hash[KString.StringObject(entry.Key.ToString() ?? "")] = KString.StringObject(entry.Value?.ToString() ?? "");
+         }
+
+         return new Dictionary(hash);
+      }
+   }
 }
