@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using Core.Objects;
 using Kagami.Library.Classes;
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
@@ -321,4 +322,22 @@ public class KMath : Package
          return a < 0 ? -a : a;
       }
    }
+
+   public Int IntFromString(KString kString) => kString.Value.Value().Int32();
+
+   public Float FloatFromString(KString kString) => kString.Value.Value().Double();
+
+   public KByte ByteFromString(KString kString) => kString.Value.Value().Byte();
+
+   public Long LongFromString(KString kString) => BigInteger.Parse(kString.Value);
+
+   public Complex ComplexFromString(KString kString) => System.Numerics.Complex.Parse(kString.Value, null);
+
+   public Rational RationalFromString(KString kString)
+   {
+      var split = kString.Value.Split(' ');
+      return new Rational(BigInteger.Parse(split[0]), BigInteger.Parse(split[1]));
+   }
+
+   public KDecimal DecimalFromString(KString kString) => kString.Value.Value().Decimal();
 }

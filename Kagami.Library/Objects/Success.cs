@@ -41,6 +41,8 @@ public readonly struct Success : IObject, IResult, IMonad, IBoolean
       var result = lambda.Invoke(Value);
       return result switch
       {
+         Some some => new Success(some.Value),
+         KNil => new Failure("Nil value"),
          Success success => success,
          Failure failure => failure,
          _ => new Success(result)

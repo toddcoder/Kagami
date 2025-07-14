@@ -418,7 +418,7 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
       {
          var index = -1;
          var length = 0;
-         var list = new List<string>();
+         List<string> list = [];
          for (var i = 0; i < result.MatchCount.MinOf(count); i++)
          {
             list.Add(result[i]);
@@ -438,7 +438,7 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
       }
    }
 
-   public KTuple Words() => new(value.Unjoin("/s+").Select(StringObject).ToArray());
+   public IObject Words() => new WordsIterator(this);
 
    public MutString Append(IObject obj)
    {

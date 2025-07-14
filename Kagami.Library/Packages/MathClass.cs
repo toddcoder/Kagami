@@ -56,5 +56,12 @@ public class MathClass : PackageClass
       registerPackageFunction("degrees(_)", (obj, msg) => function<KMath, Float>(obj, msg, (m, n) => m.Degrees(n.Value)));
       registerPackageFunction("radians(_)", (obj, msg) => function<KMath, Float>(obj, msg, (m, n) => m.Radians(n.Value)));
       registerPackageFunction("gcd(_,_)", (obj, msg) => function<KMath, IObject, IObject>(obj, msg, (m, a, b) => m.Gcd(a, b)));
+      registerPackageFunction("intFromString(_)", (obj, msg) => function<KMath, KString>(obj, msg, (m, s) => m.IntFromString(s)));
+      registerPackageFunction("floatFromString(_)", (obj, msg) => function<KMath, KString>(obj, msg, (m, s) => m.FloatFromString(s)));
+      registerPackageFunction("byteFromString(_)", (obj, msg) => function<KMath, KString>(obj, msg, (m, s) => m.ByteFromString(s)));
+      registerPackageFunction("complexFromString(_)", (obj, msg) => function<KMath, KString>(obj, msg, (m, s) => m.ComplexFromString(s)));
+      registerPackageFunction("rationalFromString(_)", (obj, msg) => function<KMath, KString>(obj, msg, (m, s) => m.RationalFromString(s)));
+      registerPackageFunction("decimalFromString(_)", (obj, msg) => function<KMath, KString>(obj, msg, (m, s) => m.DecimalFromString(s)));
+      registerPackageFunction("longFromString(_)", (obj, msg) => function<KMath, KString>(obj, msg, (m, s) => m.LongFromString(s)));
    }
 }

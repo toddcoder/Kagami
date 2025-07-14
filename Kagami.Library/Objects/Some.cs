@@ -41,7 +41,8 @@ public readonly struct Some : IObject, IOptional, IBoolean, IEquatable<Some>, IM
       return result switch
       {
          Some some => some,
-         KNil => KNil.NilValue,
+         KNil or Failure => KNil.NilValue,
+         Success success => new Some(success.Value),
          _ => new Some(result)
       };
    }
