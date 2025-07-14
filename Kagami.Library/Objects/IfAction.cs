@@ -1,44 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace Kagami.Library.Objects;
 
-namespace Kagami.Library.Objects
+public class IfAction(Lambda predicate) : IStreamAction
 {
-   public class IfAction : IStreamAction
+   public ILazyStatus Next(ILazyStatus status)
    {
-      protected Lambda predicate;
-
-      public IfAction(Lambda predicate) => this.predicate = predicate;
-
-      public ILazyStatus Next(ILazyStatus status)
+      try
       {
-         try
+         if (status.IsAccepted)
          {
-            if (status.IsAccepted)
-            {
-               return predicate.Invoke(status.Object).IsTrue ? status : new Skipped();
-            }
-            else
-            {
-	            return status;
-            }
+            return predicate.Invoke(status.Object).IsTrue ? status : new Skipped();
          }
-         catch (Exception exception)
+         else
          {
-            return new Failed(exception);
+            return status;
          }
       }
-
-      public IEnumerable<IObject> Execute(IIterator iterator)
+      catch (Exception exception)
       {
-         foreach (var value in iterator.List())
-         {
-	         if (predicate.Invoke(value).IsTrue)
-	         {
-		         yield return value;
-	         }
-         }
+         return new Failed(exception);
       }
-
-      public override string ToString() => $"if {predicate.Image}";
    }
+
+   public IEnumerable<IObject> Execute(IIterator iterator)
+   {
+      foreach (var value in iterator.List())
+      {
+         if (predicate.Invoke(value).IsTrue)
+         {
+            yield return value;
+         }
+      }
+   }
+
+   public override string ToString() => $"if {predicate.Image}";
 }

@@ -1,6 +1,6 @@
 ﻿namespace Kagami.Library.Objects;
 
-public class TakeWhileAction(Lambda predicate) : IStreamAction
+public class TakeUntilActionValue(IObject obj) : IStreamAction
 {
    protected bool taking = true;
 
@@ -8,7 +8,7 @@ public class TakeWhileAction(Lambda predicate) : IStreamAction
    {
       if (status.IsAccepted && taking)
       {
-         if (predicate.Invoke(status.Object).IsTrue)
+         if (!status.Object.IsEqualTo(obj))
          {
             return status;
          }
@@ -23,7 +23,7 @@ public class TakeWhileAction(Lambda predicate) : IStreamAction
    {
       foreach (var value in iterator.List())
       {
-         if (predicate.Invoke(value).IsTrue)
+         if (!value.IsEqualTo(obj))
          {
             yield return value;
          }
@@ -33,6 +33,4 @@ public class TakeWhileAction(Lambda predicate) : IStreamAction
          }
       }
    }
-
-   public override string ToString() => $"take while {predicate.Image}";
 }

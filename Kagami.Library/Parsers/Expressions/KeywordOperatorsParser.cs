@@ -1,7 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
-using Core.Strings;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
@@ -59,8 +58,10 @@ public partial class KeywordOperatorsParser : SymbolParser
                   builder.Add(new SendBinaryMessageSymbol("take(_)", Precedence.ChainedOperator));
                   break;
                case "while":
+                  builder.Add(new SendBinaryMessageSymbol("takeWhile(_<Lambda>)", Precedence.ChainedOperator));
+                  break;
                case "until":
-                  builder.Add(new SendBinaryMessageSymbol($"take{keyword.ToTitleCase()}(_<Lambda>)", Precedence.ChainedOperator));
+                  builder.Add(new SendBinaryMessageSymbol("takeUntil(_)", Precedence.ChainedOperator));
                   break;
                case "min":
                   builder.Add(new MinSymbol());

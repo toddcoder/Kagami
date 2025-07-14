@@ -346,9 +346,16 @@ public class Iterator : IObject, IIterator
       return collectionClass.Revert(List().ToList().TakeWhile(value => predicate.Invoke(value).IsTrue));
    }
 
-   public virtual IObject TakeUntil(Lambda predicate)
+   public virtual IObject TakeUntil(IObject obj)
    {
-      return collectionClass.Revert(List().ToList().TakeWhile(value => !predicate.Invoke(value).IsTrue));
+      if (obj is Lambda lambda)
+      {
+         return collectionClass.Revert(List().ToList().TakeWhile(value => !lambda.Invoke(value).IsTrue));
+      }
+      else
+      {
+         return collectionClass.Revert(List().ToList().TakeWhile(value => !value.IsEqualTo(obj)));
+      }
    }
 
    public IObject Index(Lambda predicate)
@@ -364,7 +371,7 @@ public class Iterator : IObject, IIterator
          i++;
       }
 
-      return Objects.KNil.NilValue;
+      return KNil.NilValue;
    }
 
    public IObject Indexes(Lambda predicate)
@@ -582,7 +589,7 @@ public class Iterator : IObject, IIterator
       return result;
    }
 
-   public IObject First() => List().ToList().FirstOrNone().Map(Some.Object) | (() => Objects.KNil.NilValue);
+   public IObject First() => List().ToList().FirstOrNone().Map(Some.Object) | (() => KNil.NilValue);
 
    public IObject First(Lambda predicate)
    {
@@ -591,14 +598,14 @@ public class Iterator : IObject, IIterator
          return new Some(value);
       }
 
-      return Objects.KNil.NilValue;
+      return KNil.NilValue;
    }
 
    public IObject Last()
    {
       var list = List().ToList();
       list.Reverse();
-      return list.FirstOrNone().Map(Some.Object) | (() => Objects.KNil.NilValue);
+      return list.FirstOrNone().Map(Some.Object) | (() => KNil.NilValue);
    }
 
    public IObject Last(Lambda predicate)
@@ -610,7 +617,7 @@ public class Iterator : IObject, IIterator
          return new Some(value);
       }
 
-      return Objects.KNil.NilValue;
+      return KNil.NilValue;
    }
 
    public IObject Split(Lambda predicate)

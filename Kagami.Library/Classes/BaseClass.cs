@@ -372,7 +372,7 @@ public abstract class BaseClass
       registerMessage("take(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Take(j.Value)));
       registerMessage("+(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Take(j.Value)));
       registerMessage("takeWhile(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.TakeWhile(l)));
-      registerMessage("takeUntil(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.TakeUntil(l)));
+      registerMessage("takeUntil(_)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, l) => i.TakeUntil(l)));
       registerMessage("index(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Index(l)));
       registerMessage("indexes(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Indexes(l)));
       registerMessage("zip(_<Collection>,_<Lambda>)",

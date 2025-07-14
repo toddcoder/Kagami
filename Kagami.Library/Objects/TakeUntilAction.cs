@@ -1,48 +1,38 @@
-﻿using System.Collections.Generic;
+﻿namespace Kagami.Library.Objects;
 
-namespace Kagami.Library.Objects
+public class TakeUntilAction(Lambda predicate) : IStreamAction
 {
-   public class TakeUntilAction : IStreamAction
+   protected bool taking = true;
+
+   public ILazyStatus Next(ILazyStatus status)
    {
-      protected Lambda predicate;
-      protected bool taking;
-
-      public TakeUntilAction(Lambda predicate)
+      if (status.IsAccepted && taking)
       {
-         this.predicate = predicate;
-         taking = true;
-      }
-
-      public ILazyStatus Next(ILazyStatus status)
-      {
-         if (status.IsAccepted && taking)
+         if (!predicate.Invoke(status.Object).IsTrue)
          {
-            if (!predicate.Invoke(status.Object).IsTrue)
-            {
-               return status;
-            }
-
-            taking = false;
+            return status;
          }
 
-         return new Ended();
+         taking = false;
       }
 
-      public IEnumerable<IObject> Execute(IIterator iterator)
-      {
-         foreach (var value in iterator.List())
-         {
-            if (!predicate.Invoke(value).IsTrue)
-            {
-               yield return value;
-            }
-            else
-            {
-               yield break;
-            }
-         }
-      }
-
-      public override string ToString() => $"take while {predicate.Image}";
+      return new Ended();
    }
+
+   public IEnumerable<IObject> Execute(IIterator iterator)
+   {
+      foreach (var value in iterator.List())
+      {
+         if (!predicate.Invoke(value).IsTrue)
+         {
+            yield return value;
+         }
+         else
+         {
+            yield break;
+         }
+      }
+   }
+
+   public override string ToString() => $"take while {predicate.Image}";
 }

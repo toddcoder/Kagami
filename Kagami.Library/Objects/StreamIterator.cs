@@ -219,7 +219,17 @@ public class StreamIterator : IObject, IIterator
 
    public IObject TakeWhile(Lambda predicate) => Copy(new TakeWhileAction(predicate));
 
-   public IObject TakeUntil(Lambda predicate) => Copy(new TakeUntilAction(predicate));
+   public IObject TakeUntil(IObject obj)
+   {
+      if (obj is Lambda predicate)
+      {
+         return Copy(new TakeUntilAction(predicate));
+      }
+      else
+      {
+         return Copy(new TakeUntilActionValue(obj));
+      }
+   }
 
    public IObject Index(Lambda predicate) => terminate().Index(predicate);
 

@@ -1,44 +1,40 @@
-﻿using System.Collections.Generic;
-using Core.Collections;
+﻿using Core.Collections;
 
-namespace Kagami.Library.Objects
+namespace Kagami.Library.Objects;
+
+public class DistinctAction : IStreamAction
 {
-   public class DistinctAction : IStreamAction
+   protected Set<IObject> existing = [];
+
+   public ILazyStatus Next(ILazyStatus status)
    {
-      protected Set<IObject> existing;
-
-      public DistinctAction() => existing = new Set<IObject>();
-
-      public ILazyStatus Next(ILazyStatus status)
+      if (status.IsAccepted)
       {
-         if (status.IsAccepted)
+         if (existing.Contains(status.Object))
          {
-            if (existing.Contains(status.Object))
-            {
-               return new Skipped();
-            }
-            else
-            {
-               existing.Add(status.Object);
-            }
+            return new Skipped();
          }
-
-         return status;
-      }
-
-      public IEnumerable<IObject> Execute(IIterator iterator)
-      {
-         existing.Clear();
-         foreach (var value in iterator.List())
+         else
          {
-            if (!existing.Contains(value))
-            {
-               existing.Add(value);
-               yield return value;
-            }
+            existing.Add(status.Object);
          }
       }
 
-      public override string ToString() => "distinct";
+      return status;
    }
+
+   public IEnumerable<IObject> Execute(IIterator iterator)
+   {
+      existing.Clear();
+      foreach (var value in iterator.List())
+      {
+         if (!existing.Contains(value))
+         {
+            existing.Add(value);
+            yield return value;
+         }
+      }
+   }
+
+   public override string ToString() => "distinct";
 }

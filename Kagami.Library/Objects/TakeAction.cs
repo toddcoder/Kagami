@@ -1,44 +1,34 @@
-﻿using System.Collections.Generic;
+﻿namespace Kagami.Library.Objects;
 
-namespace Kagami.Library.Objects
+public class TakeAction(int count) : IStreamAction
 {
-   public class TakeAction : IStreamAction
+   protected int index = -1;
+
+   public ILazyStatus Next(ILazyStatus status)
    {
-      protected int count;
-      protected int index;
-
-      public TakeAction(int count)
+      if (status.IsAccepted)
       {
-         this.count = count;
-         index = -1;
+         return ++index < count ? status : new Ended();
       }
-
-      public ILazyStatus Next(ILazyStatus status)
+      else
       {
-         if (status.IsAccepted)
-         {
-            return ++index < count ? status : new Ended();
-         }
-         else
-         {
-	         return status;
-         }
+         return status;
       }
-
-      public IEnumerable<IObject> Execute(IIterator iterator)
-      {
-         var i = -1;
-         foreach (var value in iterator.List())
-         {
-            if (++i < count)
-            {
-	            yield return value;
-            }
-
-            yield break;
-         }
-      }
-
-      public override string ToString() => $"take {count}";
    }
+
+   public IEnumerable<IObject> Execute(IIterator iterator)
+   {
+      var i = -1;
+      foreach (var value in iterator.List())
+      {
+         if (++i < count)
+         {
+            yield return value;
+         }
+
+         yield break;
+      }
+   }
+
+   public override string ToString() => $"take {count}";
 }

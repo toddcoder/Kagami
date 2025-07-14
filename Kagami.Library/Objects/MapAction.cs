@@ -1,44 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using static Kagami.Library.Objects.CollectionFunctions;
+﻿using static Kagami.Library.Objects.CollectionFunctions;
 
-namespace Kagami.Library.Objects
+namespace Kagami.Library.Objects;
+
+public class MapAction(Lambda lambda) : IStreamAction
 {
-   public class MapAction : IStreamAction
+   public ILazyStatus Next(ILazyStatus status)
    {
-      protected Lambda lambda;
-
-      public MapAction(Lambda lambda) => this.lambda = lambda;
-
-      public ILazyStatus Next(ILazyStatus status)
+      try
       {
-         try
+         if (status.IsAccepted)
          {
-            if (status.IsAccepted)
-            {
-               var value = spread(status.Object);
-	            return Accepted.New(lambda.Invoke(value));
-            }
-            else
-            {
-	            return status;
-            }
+            var value = spread(status.Object);
+            return Accepted.New(lambda.Invoke(value));
          }
-         catch (Exception exception)
+         else
          {
-            return new Failed(exception);
+            return status;
          }
       }
-
-      public IEnumerable<IObject> Execute(IIterator iterator)
+      catch (Exception exception)
       {
-         foreach (var value in iterator.List())
-         {
-            var wasSpread = spread(value);
-	         yield return lambda.Invoke(wasSpread);
-         }
+         return new Failed(exception);
       }
-
-      public override string ToString() => $"map {lambda.Image}";
    }
+
+   public IEnumerable<IObject> Execute(IIterator iterator)
+   {
+      foreach (var value in iterator.List())
+      {
+         var wasSpread = spread(value);
+         yield return lambda.Invoke(wasSpread);
+      }
+   }
+
+   public override string ToString() => $"map {lambda.Image}";
 }

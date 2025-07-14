@@ -1,15 +1,8 @@
 ﻿namespace Kagami.Library.Objects;
 
-public class SkipUntilAction : IStreamAction
+public class SkipUntilAction(Lambda predicate) : IStreamAction
 {
-   protected Lambda predicate;
-   protected bool skipping;
-
-   public SkipUntilAction(Lambda predicate)
-   {
-      this.predicate = predicate;
-      skipping = true;
-   }
+   protected bool skipping = true;
 
    public ILazyStatus Next(ILazyStatus status)
    {
