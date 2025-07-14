@@ -1,2 +1,13 @@
-﻿var i = 100
-i = 100.1
+﻿open sys
+
+pattern Odd(o) => maybe o !% 2 : o
+pattern Even(e) => maybe e %% 2 : e
+pattern Zero(z) => maybe z == 0 : z
+
+for i in [3, 2, 0] {
+	match i {
+		when Zero => println("Zero")
+		when Odd => println("Odd")
+		when Even => println("Even")
+	}
+}

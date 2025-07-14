@@ -16,6 +16,19 @@ public class Module
 {
    public static LateLazy<Module> Global { get; set; } = new(true);
 
+   protected static Hash<(string from, string to), Func<IObject, IObject>> autoConversions = [];
+
+   static Module()
+   {
+      autoConversions[("Int", "Float")] = i => Float.FloatObject(((Int)i).AsDouble());
+      autoConversions[("Byte", "Int")] = b => Int.IntObject(((KByte)b).AsInt32());
+      autoConversions[("Byte", "Float")] = b => Float.FloatObject(((KByte)b).AsDouble());
+      autoConversions[("String", "MutString")] = s => new MutString(s.AsString);
+      autoConversions[("MutString", "String")] = m => new KString(m.AsString);
+   }
+
+   public static Maybe<Func<IObject, IObject>> AutoConversion(string from, string to) => autoConversions.Maybe[(from, to)];
+
    protected static Maybe<BaseClass> getBuiltinClass(string name) => name switch
    {
       "Int" => new IntClass(),

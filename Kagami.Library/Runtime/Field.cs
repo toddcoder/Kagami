@@ -39,6 +39,15 @@ public class Field
             }
             else
             {
+               foreach (var baseClass in typeConstraint.Comparisands)
+               {
+                  var _func = Module.AutoConversion(value.ClassName, baseClass.Name);
+                  if (_func is (true, var func))
+                  {
+                     this.value = func(value);
+                     return;
+                  }
+               }
                throw incompatibleClasses(value, typeConstraint.AsString);
             }
          }

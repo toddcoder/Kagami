@@ -17,13 +17,14 @@ public partial class MaybeParser : SymbolParser
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      state.Colorize(tokens, Color.Whitespace, Color.Keyword);
+      state.Colorize(tokens, Color.Whitespace, Color.Operator);
 
       var flags = builder.Flags;
       flags[ExpressionFlags.OmitMaybe] = true;
+      flags[ExpressionFlags.OmitColon] = true;
       var _result =
          from booleanExpressionValue in getExpression(state, flags)
-         from then in state.Scan(@"^(\s*)(then)\b", Color.Whitespace, Color.Keyword)
+         from then in state.Scan(@"^(\s*)(:)", Color.Whitespace, Color.Operator)
          from expressionValue in getExpression(state, flags)
          select (booleanExpressionValue, expressionValue);
       if (_result is (true, var (booleanExpression, expression)))

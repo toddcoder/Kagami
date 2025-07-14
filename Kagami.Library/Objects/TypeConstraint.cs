@@ -149,4 +149,6 @@ public readonly struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
          return false;
       }
    }
+
+   public BaseClass[] Comparisands => comparisands;
 }

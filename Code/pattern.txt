@@ -1,2 +1,4 @@
-22 is two times 11
-"22 is two times 11" | String
+Odd
+Even
+Zero
+nil | Nil
