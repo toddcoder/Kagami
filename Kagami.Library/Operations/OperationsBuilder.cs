@@ -553,7 +553,9 @@ public class OperationsBuilder
 
    public void GetId() => add(new GetId());
 
-   public void PopNewField() => add(new PopNewField());
+   public void PopNewField(bool mutable, bool visible = true) => add(new PopNewField(mutable, visible));
+
+   public void PopGetField() => add(new PopGetField());
 
    public void AssignLastSome() => add(new AssignLastSome());
 
@@ -566,6 +568,8 @@ public class OperationsBuilder
    public void RunTimeArguments() => add(new RunTimeArguments());
 
    public void ClassName() => add(new ClassName());
+
+   public void UniqueString() => add(new UniqueString());
 
    public override string ToString() => "operations";
 }

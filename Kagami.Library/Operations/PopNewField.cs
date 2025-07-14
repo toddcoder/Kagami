@@ -4,12 +4,12 @@ using Kagami.Library.Runtime;
 
 namespace Kagami.Library.Operations;
 
-public class PopNewField : TwoOperandOperation
+public class PopNewField(bool mutable, bool visible) : TwoOperandOperation
 {
    public override Optional<IObject> Execute(Machine machine, IObject x, IObject y)
    {
       var fieldName = x.AsString;
-      var _field = machine.CurrentFrame.Fields.New(fieldName, y);
+      var _field = machine.CurrentFrame.Fields.New(fieldName, y, mutable, visible);
       if (_field)
       {
          return y.Just();

@@ -8,6 +8,8 @@ namespace Kagami.Library.Operations;
 
 public class GetField(string fieldName) : Operation
 {
+   protected string fieldName = fieldName;
+
    public override Optional<IObject> Execute(Machine machine)
    {
       var _field = machine.Find(fieldName, true);
@@ -40,7 +42,7 @@ public class GetField(string fieldName) : Operation
       else
       {
          machine.LastField = nil;
-         machine.LastFieldName= nil;
+         machine.LastFieldName = nil;
          return fieldNotFound(fieldName);
       }
    }
