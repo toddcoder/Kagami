@@ -107,6 +107,8 @@ public class Module
       _ => nil
    };
 
+   public static bool IsBuiltInClass(string name) => getBuiltinClass(name);
+
    protected Hash<string, BaseClass> classes = [];
    protected StringHash<Inclusion> inclusions = [];
    protected Set<string> forwardReferences = [];

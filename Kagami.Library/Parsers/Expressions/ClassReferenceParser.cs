@@ -36,7 +36,7 @@ public partial class ClassReferenceParser : SymbolParser
          builder.Add(new ClassSymbol(className));
          return unit;
       }
-      else if (state.IsPattern(className))
+      else if (Module.IsBuiltInClass(className))
       {
          builder.Add(new FieldSymbol(className));
          return unit;

@@ -33,6 +33,12 @@ public static class ObjectFunctions
    public static bool match<T>(T source, IObject comparisand, Func<T, T, bool> equalifier, Hash<string, IObject> bindings)
       where T : IObject
    {
+      if (comparisand is NameValue nameValue)
+      {
+         bindings["-" + nameValue.Key.AsString] = source;
+         comparisand = nameValue.Value;
+      }
+
       var _name = Module.Global.Value.Bindings.Maybe[comparisand.Id];
       if (_name is (true, var name))
       {
