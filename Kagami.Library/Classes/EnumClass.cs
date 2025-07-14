@@ -110,7 +110,7 @@ public class EnumClass : UserClass
       StringHash<IObject> objects = [];
       foreach (var (selector, _) in constructors)
       {
-         var name = $"{selector.Substitute("^ /w+ '$' /(-['(']+) .* $", "$1")}";
+         var name = $"{selector.Substitute("^ /w+ '$' /(-['(']+) .* $", "$1")}".ToLower();
          Selector constructorSelector = selector;
          objects[name] = retrieveObject(constructorSelector);
       }

@@ -21,6 +21,10 @@ public partial class ClassReferenceParser : SymbolParser
       var className = tokens[2].Text;
       state.Colorize(tokens, Color.Whitespace, Color.Class);
 
+      if (state.IsPattern(className))
+      {
+         builder.Add(new FieldSymbol(className));
+      }
       if (Module.Global.Value.Class(className) is (true, var cls))
       {
          builder.Add(new ClassSymbol(cls.Name));

@@ -6,7 +6,7 @@ if obj {
 	println(obj.class)
 }
 
-let obj2 = none
+let obj2 = nil
 if obj2 {
 	println(obj)
 }

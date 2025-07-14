@@ -24,7 +24,12 @@ public partial class UserObjectPlaceholderParser : SymbolParser
       var hasArguments = tokens[3].Text == "(";
       state.Colorize(tokens, Color.Whitespace, Color.Class, Color.OpenParenthesis);
 
-      if (Module.IsBuiltInClass(name))
+      if (state.IsPattern(name))
+      {
+         builder.Add(new FieldSymbol(name));
+         return unit;
+      }
+      else if (Module.IsBuiltInClass(name))
       {
          builder.Add(new ClassSymbol(name));
          return unit;
