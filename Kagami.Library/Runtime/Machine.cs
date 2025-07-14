@@ -124,7 +124,7 @@ public class Machine
       return lastValue.Success();
    }
 
-   public Optional<IObject> Invoke(IInvokable invokable, Arguments arguments, Fields fields)
+   public Optional<IObject> Invoke(IInvokable invokable, Arguments arguments, Fields fields, bool extraFrame = false)
    {
       var frame = new Frame(invokable.RequiresFunctionFrame ? Address : nil, arguments, fields);
 
@@ -136,7 +136,10 @@ public class Machine
       PushFrame(frame);
       frame.SetFields(invokable.Parameters);
       frame.SetFields(fields);
-      //PushFrame(new Frame());
+      if (extraFrame)
+      {
+         PushFrame(new Frame());
+      }
       if (GoTo(invokable.Address))
       {
          return invoke();

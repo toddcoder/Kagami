@@ -155,18 +155,10 @@ public abstract class BaseClass
          {
             return DynamicInvoke(obj, message);
          }
-         /*if (messages.Maybe[selector] is (true, var func))
-         {
-            return func(obj, message);
-         }
-         else
-         {
-            return DynamicInvoke(obj, message);
-         }*/
       }
       else
       {
-         return DynamicInvoke(obj, message); //throw messageNotFound(classOf(obj), selector);
+         return DynamicInvoke(obj, message);
       }
    }
 
