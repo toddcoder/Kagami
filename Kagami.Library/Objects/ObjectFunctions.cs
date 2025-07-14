@@ -71,7 +71,7 @@ public static class ObjectFunctions
          case Sequence sequence:
             return matchInSequence(source, sequence, bindings);
          case Regex regex:
-            return matchRegex(source, regex, bindings); //regex.IsMatch(source.AsString).IsTrue;
+            return matchRegex(source, regex, bindings);
          case Pattern pattern:
             return pattern.Match(source, bindings);
          case IProcessPlaceholders:
@@ -80,6 +80,8 @@ public static class ObjectFunctions
             return typeConstraint.Matches(classOf(source));
          case KTuple tuple when source is KArray array:
             return matchArrayToTuple(array, tuple, bindings);
+         case KTuple tuple when source is KString kString:
+            return matchStringToTuple(kString, tuple, bindings);
          case KTuple tuple when source is not KTuple:
             return matchNonTuple(source, tuple, bindings);
          case UserObjectPlaceholder userObjectPlaceholder when source is UserObject userObject:
@@ -176,6 +178,54 @@ public static class ObjectFunctions
                bindings[placeholder1.Name] = tail;
                break;
             case KArray array1 when !array1.IsEqualTo(tail):
+               return false;
+         }
+
+         return true;
+      }
+
+      return false;
+   }
+
+   private static bool matchStringToTuple(KString source, KTuple comparisand, Hash<string, IObject> bindings)
+   {
+      if (comparisand.Length.Value == 2)
+      {
+         var head = source.Head;
+         if (head.IsEmpty.Value)
+         {
+            return false;
+         }
+
+         var tail = source.Tail;
+
+         var match0 = comparisand[0];
+         var match1 = comparisand[1];
+
+         switch (match0)
+         {
+            case Placeholder placeholder0 when head.IsNotEmpty.Value:
+            {
+               bindings[placeholder0.Name] = head;
+               break;
+            }
+            default:
+            {
+               if (head.IsNotEmpty.Value && !head.IsEqualTo(match0))
+               {
+                  return false;
+               }
+
+               break;
+            }
+         }
+
+         switch (match1)
+         {
+            case Placeholder placeholder1:
+               bindings[placeholder1.Name] = tail;
+               break;
+            case KString kString when !kString.IsEqualTo(tail):
                return false;
          }
 

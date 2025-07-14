@@ -90,6 +90,8 @@ public class StringClass : BaseClass, ICollectionClass
       messages["pad(center:_<Int>)"] = (obj, msg) => function<KString, Int>(obj, msg, (s, w) => s.PadCenter(w.Value));
       messages["pad(center:_<Int>,padding:_<Char>)"] =
          (obj, msg) => function<KString, Int, KChar>(obj, msg, (s, w, c) => s.PadCenter(w.Value, c.Value));
+      messages["head".get()] = (obj, _) => function<KString>(obj, s => s.Head);
+      messages["tail".get()] = (obj, _) => function<KString>(obj, s => s.Tail);
    }
 
    protected static IObject getIndexed(KString s, IObject i)

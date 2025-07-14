@@ -479,4 +479,8 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
    public KString PadRight(int length, char paddingChar = ' ') => value.PadRight(length, paddingChar);
 
    public KString PadCenter(int length, char paddingChar = ' ') => value.PadCenter(length, paddingChar);
+
+   public KString Head => (KString)value.Keep(1);
+
+   public KString Tail => (KString)value.Drop(1);
 }
