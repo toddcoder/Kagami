@@ -1,8 +1,2 @@
-﻿open sys
-
-pattern Twice(x) => maybe x %% 2 then x div 2
-
-match 22 {
-	when Twice => println($"22 is two times (x)")
-	when _ => println("x is odd")
-}
+﻿var i = 100
+i = 100.1
