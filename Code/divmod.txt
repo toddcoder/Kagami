@@ -1,0 +1,6 @@
+The change is:
+3 Quarters
+0 Dimes
+0 Nickels
+3 Cents
+"3 Cents" | String
