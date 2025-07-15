@@ -25,6 +25,7 @@ public class Module
       autoConversions[("Byte", "Float")] = b => Float.FloatObject(((KByte)b).AsDouble());
       autoConversions[("String", "MutString")] = s => new MutString(s.AsString);
       autoConversions[("MutString", "String")] = m => new KString(m.AsString);
+      autoConversions[("Word", "String")] = w => (KString)((Word)w).Text;
    }
 
    public static Maybe<Func<IObject, IObject>> AutoConversion(string from, string to) => autoConversions.Maybe[(from, to)];
@@ -104,6 +105,8 @@ public class Module
       "PendingRegex" => new PendingRegexClass(),
       "UserObjectPlaceholder" => new UserObjectPlaceholderClass(),
       "Undefined" => new UndefinedClass(),
+      "Word" => new WordClass(),
+      "Words" => new WordsClass(),
       _ => nil
    };
 

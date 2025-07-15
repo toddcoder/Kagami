@@ -1,4 +1,6 @@
-﻿using Core.Objects;
+﻿using System.Globalization;
+using Core.Objects;
+using Core.Strings;
 using Kagami.Library.Objects;
 using static Kagami.Library.Classes.ClassFunctions;
 
@@ -54,6 +56,8 @@ public class IntClass : BaseClass, IParse, IEquivalentClass
       classMessages["min".get()] = (_, _) => Int.IntObject(int.MinValue);
       classMessages["max".get()] = (_, _) => Int.IntObject(int.MaxValue);
       classMessages["parse(_)"] = (_, msg) => parse(msg.Arguments[0].AsString);
+      classMessages["parse(hex:_)"] = (_, msg) => parseFromHex(msg.Arguments[0].AsString);
+      classMessages["parse(bin:_)"] = (_, msg) => parseFromBinary(msg.Arguments[0].AsString);
       classMessages["rand()"] = (_, _) => (Int)random.Value.Next();
    }
 
@@ -69,6 +73,23 @@ public class IntClass : BaseClass, IParse, IEquivalentClass
          return Failure.Object(exception.Message);
       }
    }
+
+   public static IObject parseFromNumberStyles(string value, NumberStyles numberStyles)
+   {
+      try
+      {
+         var number = int.Parse(value.Replace("_", ""), numberStyles);
+         return Success.Object(Int.IntObject(number));
+      }
+      catch (Exception exception)
+      {
+         return Failure.Object(exception.Message);
+      }
+   }
+
+   public static IObject parseFromHex(string value) => parseFromNumberStyles(value.Drop("^ '0x'"), NumberStyles.AllowHexSpecifier);
+
+   public static IObject parseFromBinary(string value) => parseFromNumberStyles(value.Drop("^ '0b'"), NumberStyles.AllowBinarySpecifier);
 
    public IObject Parse(string source) => Int.IntObject(source.Value().Int32());
 

@@ -23,11 +23,13 @@ public class MatchAssign : Statement
 
    public override void Generate(OperationsBuilder builder)
    {
+      /*
       builder.UniqueString();
       builder.Dup();
+      */
       expression.Generate(builder);
-      builder.PopNewField(false);
-      builder.PopGetField();
+      /*builder.PopNewField(false);
+      builder.PopGetField();*/
       comparisand.Generate(builder);
       builder.Match();
       if (not)

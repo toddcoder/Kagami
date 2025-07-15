@@ -141,7 +141,7 @@ public class OperationsBuilder
 
    public void GoToIfSome(string label) => add(new GoToIfSome(), label);
 
-   public void GoToIfNone(string label) => add(new GoToIfNone(), label);
+   public void GoToIfNil(string label) => add(new GoToIfNil(), label);
 
    public void GoToIfSuccess(string label) => add(new GoToIfSuccess(), label);
 
@@ -557,9 +557,9 @@ public class OperationsBuilder
 
    public void PopGetField() => add(new PopGetField());
 
-   public void AssignLastSome() => add(new AssignLastSome());
+   /*public void AssignLastSome() => add(new AssignLastSome());
 
-   public void AssignLastSuccess() => add(new AssignLastSuccess());
+   public void AssignLastSuccess() => add(new AssignLastSuccess());*/
 
    public void LambdaFromSelector() => add(new LambdaFromSelector());
 

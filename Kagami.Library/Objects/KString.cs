@@ -438,7 +438,7 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
       }
    }
 
-   public IObject Words() => new WordsIterator(this);
+   public IObject Words(Regex regex) => new Words(this, regex);
 
    public MutString Append(IObject obj)
    {
