@@ -746,6 +746,9 @@ public partial class Playground : Form
             e.Handled = true;
             break;
          }
+         case Keys.Enter:
+            update(true, false, true);
+            break;
       }
    }
 
