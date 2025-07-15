@@ -396,6 +396,8 @@ public class OperationsBuilder
 
    public void ArgumentLabel(string label) => add(new ArgumentLabel(label));
 
+   public void AssignFieldWithType(string fieldName, string className) => add(new AssignFieldWithType(fieldName, className));
+
    public Result<Operations> ToOperations(ParseState state)
    {
       operations.Add(new Stop());
