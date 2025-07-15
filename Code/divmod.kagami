@@ -1,0 +1,15 @@
+﻿open sys
+
+var totalPrice = 22
+var change = 100 - totalPrice
+
+when (quarters, use change) = change divmod 25
+when (dimes, use change) = change divmod 10
+when (nickels, use change) = change divmod 5
+var cents = change
+
+println("The change is:")
+println(quarters, "Quarters")
+println(dimes, "Dimes")
+println(nickels, "Nickels")
+println(cents, "Cents")

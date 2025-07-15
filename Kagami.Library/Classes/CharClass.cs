@@ -40,7 +40,19 @@ public class CharClass : BaseClass, IEquivalentClass
       classMessages["cr".get()] = (_, _) => (KChar)'\r';
       classMessages["lf".get()] = (_, _) => (KChar)'\n';
       classMessages["tab".get()] = (_, _) => (KChar)'\t';
-      classMessages["fromOrd(_)"] = (_, msg) => new KChar((char)((Int)msg.Arguments[0]).Value);
+      classMessages["fromOrd(_)"] = (_, msg) => classFunc<BaseClass, Int>(this, msg, (_, i) => fromOrd(i.Value));
+   }
+
+   protected static IObject fromOrd(int value)
+   {
+      try
+      {
+         return Success.Object(KChar.CharObject((char)value));
+      }
+      catch (Exception exception)
+      {
+         return new Failure(exception.Message);
+      }
    }
 
    public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("TextFinding");
