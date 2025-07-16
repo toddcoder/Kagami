@@ -57,6 +57,7 @@ public class EnumClass : UserClass
 
       registerClassMessage("values".get(), (_, _) => Values());
       registerClassMessage("fromOrdinal(_)", (_, msg) => FromOrdinal(msg.Arguments[0]));
+      registerClassMessage("length".get(), (_, _) => (Int)constructors.Count);
    }
 
    public KTuple Values()

@@ -315,7 +315,7 @@ public abstract class BaseClass
          "span".Selector("_<Int>"),
          "shuffle()", "array()", "list()", "tuple()", "dictionary".Selector("key:_<Lambda>", "value:_<Lambda>"), "dictionary()",
          "each(_<Lambda>)", "rotate(_<Int>)", "permutation(_<Int>)", "combination(_<Int>)", "flatten()",
-         "copy()", "revert()", "*(_)", "format(_)", "replace(_<Lambda>,_<Lambda>)", "set()", "shape(_<Int>,_<Int>)",
+         "copy()", "revert()", "*(_)", "format(_)", "replace(_<Lambda>,_<Lambda>)", "set()", "shape(_<Int>,_<Int>)", "shape(_<Int>)",
          "column(_<Int>)", "step(_<Int>)"
       ]);
 
@@ -431,7 +431,10 @@ public abstract class BaseClass
       registerMessage("set()", (obj, _) => iteratorFunc(obj, i => i.ToSet()));
       registerMessage("shape(_<Int>,_<Int>)",
          (obj, message) => iteratorFunc<Int, Int>(obj, message, (i, j, k) => i.Shape(j.Value, k.Value)));
+      registerMessage("%(_<Tuple>)",
+         (obj, msg) => iteratorFunc<KTuple>(obj, msg, (i, t) => i.Shape(((Int)t.Value[0]).Value, ((Int)t.Value[1]).Value)));
       registerMessage("shape(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Shape(0, j.Value)));
+      registerMessage("%(_<Int>)", (obj, msg) => iteratorFunc<Int>(obj, msg, (i, cols) => i.Shape(0, cols.Value)));
       registerMessage("column(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Column(c.Value)));
       registerMessage("partition(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Partition(l)));
       registerMessage("pick(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Pick(c.Value)));
