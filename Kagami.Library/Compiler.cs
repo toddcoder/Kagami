@@ -1,12 +1,13 @@
-﻿using Core.Matching;
-using Kagami.Library.Operations;
+﻿using Kagami.Library.Operations;
 using Kagami.Library.Parsers;
 using Kagami.Library.Parsers.Statements;
 using Kagami.Library.Runtime;
 using Core.Monads;
+using Kagami.Library.Nodes.Statements;
 using static Kagami.Library.Nodes.NodeFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Core.Monads.MonadFunctions;
+using Pattern = Core.Matching.Pattern;
 
 namespace Kagami.Library;
 
@@ -58,7 +59,7 @@ public class Compiler
 
       Tokens = state.Tokens;
 
-      var statements = state.Statements();
+      var statements = reorderStatements(state.Statements());
       var builder = new OperationsBuilder();
       foreach (var statement in statements)
       {
@@ -79,6 +80,44 @@ public class Compiler
       else
       {
          return _operations.Exception;
+      }
+   }
+
+   protected IEnumerable<Statement> reorderStatements(IEnumerable<Statement> statements)
+   {
+      List<Function> functions = [];
+      List<Class> classes = [];
+      List<Statement> others = [];
+
+      foreach (var statement in statements)
+      {
+         switch (statement)
+         {
+            case Function function:
+               functions.Add(function);
+               break;
+            case Class cls:
+               classes.Add(cls);
+               break;
+            default:
+               others.Add(statement);
+               break;
+         }
+      }
+
+      foreach (var function in functions)
+      {
+         yield return function;
+      }
+
+      foreach (var @class in classes)
+      {
+         yield return @class;
+      }
+
+      foreach (var statement in others)
+      {
+         yield return statement;
       }
    }
 

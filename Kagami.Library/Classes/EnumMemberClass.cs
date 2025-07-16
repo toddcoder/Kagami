@@ -38,6 +38,8 @@ public class EnumMemberClass : UserClass
       return $"{name}{parameters}";
    }
 
+   protected static string plainName(IObject obj) => plainName((UserObject)obj);
+
    protected static string plainName(UserObject userObject) => userObject.ClassName.Substitute(@"^.*\$(.+)$; u", "$1");
 
    public override void RegisterMessages()
@@ -45,7 +47,9 @@ public class EnumMemberClass : UserClass
       base.RegisterMessages();
 
       RegisterMessage("string".get(), (obj, _) => (KString)asString((UserObject)obj));
-      RegisterMessage("name".get(), (obj, _) => (KString)plainName((UserObject)obj));
+      RegisterMessage("name".get(), (obj, _) => (KString)plainName(obj));
+      RegisterMessage("hash".get(), (obj, _) => (Int)plainName(obj).GetHashCode());
+      RegisterMessage("equal(_)", (obj, msg) => (KBoolean)(plainName(obj) == plainName(msg.Arguments[0])));
    }
 
    public override bool AssignCompatible(BaseClass otherClass) =>

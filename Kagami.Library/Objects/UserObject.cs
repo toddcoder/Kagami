@@ -6,7 +6,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
 
-public class UserObject : IObject
+public class UserObject : IObject, IEquatable<UserObject>
 {
    private readonly string className;
    private readonly Fields fields;
@@ -49,7 +49,7 @@ public class UserObject : IObject
 
    public string Image => userObjectImage(this);
 
-   public int Hash => objectID;
+   public int Hash => HashCode.Combine(ClassName, parameters);
 
    public bool IsEqualTo(IObject obj) => isEqualTo(this, obj);
 
@@ -82,4 +82,14 @@ public class UserObject : IObject
       var newFields = fields.Clone();
       return new UserObject(className, newFields, parameters);
    }
+
+   public bool Equals(UserObject? other) => other is not null && isEqualTo(this, other);
+
+   public override bool Equals(object? obj) => obj is UserObject other && other.Equals(this);
+
+   public override int GetHashCode() => Hash;
+
+   public static bool operator ==(UserObject? left, UserObject? right) => Equals(left, right);
+
+   public static bool operator !=(UserObject? left, UserObject? right) => !Equals(left, right);
 }

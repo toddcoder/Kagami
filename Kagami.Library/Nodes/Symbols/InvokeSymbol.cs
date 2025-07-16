@@ -27,8 +27,8 @@ public class InvokeSymbol : Symbol, IHasExpressions
    {
       if (arguments.Any(a => a.Symbols[0] is AnySymbol) && !inComparisand)
       {
-         var argumentsList = new List<Expression>();
-         var parametersList = new List<Parameter>();
+         List<Expression> argumentsList = [];
+         List<Parameter> parametersList = [];
          foreach (var argument in arguments)
          {
             if (argument.Symbols[0] is AnySymbol)
