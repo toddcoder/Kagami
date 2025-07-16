@@ -861,26 +861,39 @@ public class Iterator : IObject, IIterator
 
    public IObject Shape(int rows, int columns)
    {
-      var continuing = true;
+      List<IObject> source = [.. flatten(this)];
       List<IObject> outerList = [];
-      for (var row = 0; row < rows && continuing; row++)
+      var i = 0;
+
+      if (rows > 0)
       {
-         List<IObject> innerList = [];
+         for (var row = 0; row < rows; row++)
+         {
+            List<IObject> innerList = [];
+            for (var column = 0; column < columns; column++)
+            {
+               if (i >= source.Count)
+               {
+                  i = 0;
+               }
+
+               innerList.Add(source[i++]);
+            }
+
+            var innerCollection = collectionClass.Revert(innerList);
+            outerList.Add(innerCollection);
+         }
+      }
+      else
+      {
          for (var column = 0; column < columns; column++)
          {
-            if (Next() is (true, var item))
+            if (i >= source.Count)
             {
-               innerList.Add(item);
+               i = 0;
             }
-            else
-            {
-               continuing = false;
-               break;
-            }
+            outerList.Add(source[i++]);
          }
-
-         var innerCollection = collectionClass.Revert(innerList);
-         outerList.Add(innerCollection);
       }
 
       return collectionClass.Revert(outerList);

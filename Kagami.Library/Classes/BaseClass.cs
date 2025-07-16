@@ -431,6 +431,7 @@ public abstract class BaseClass
       registerMessage("set()", (obj, _) => iteratorFunc(obj, i => i.ToSet()));
       registerMessage("shape(_<Int>,_<Int>)",
          (obj, message) => iteratorFunc<Int, Int>(obj, message, (i, j, k) => i.Shape(j.Value, k.Value)));
+      registerMessage("shape(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Shape(0, j.Value)));
       registerMessage("column(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Column(c.Value)));
       registerMessage("partition(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Partition(l)));
       registerMessage("pick(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Pick(c.Value)));
