@@ -34,6 +34,18 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
       indexToName = m => m.NameFromIndex;
    }
 
+   public Regex(Core.Matching.Pattern pattern, bool global, bool textOnly)
+   {
+      this.pattern = pattern;
+      ignoreCase = pattern.IgnoreCase;
+      multiline = pattern.Multiline;
+      this.global = global;
+      this.textOnly = textOnly;
+
+      nameToIndex = m => m.IndexFromName;
+      indexToName = m => m.NameFromIndex;
+   }
+
    public string ClassName => "Regex";
 
    public string AsString => pattern.Regex;
@@ -502,7 +514,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
 
    public Regex Concatenate(IObject obj) => obj switch
    {
-      Regex regex => new Regex(pattern.Regex + regex.pattern.Regex, ignoreCase, multiline, global, textOnly),
+      Regex regex => new Regex(pattern + regex.pattern, global, textOnly),
       KString str => new Regex(pattern.Regex + str.Value, ignoreCase, multiline, global, textOnly),
       _ => new Regex(pattern.Regex + obj.AsString, ignoreCase, multiline, global, textOnly)
    };

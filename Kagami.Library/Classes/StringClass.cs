@@ -26,6 +26,8 @@ public class StringClass : BaseClass, ICollectionClass
       messages["title()"] = (obj, _) => function<KString>(obj, s => s.Title());
       messages["upper1()"] = (obj, _) => function<KString>(obj, s => s.Upper1());
       messages["lower1()"] = (obj, _) => function<KString>(obj, s => s.Lower1());
+      messages["camel()"] = (obj, _) => function<KString>(obj, s => s.Camel());
+      messages["pascal()"] = (obj, _) => function<KString>(obj, s => s.Pascal());
       messages["startsWith(_)"] = (obj, msg) => function<KString, KString>(obj, msg, (s1, s2) => s1.IsPrefix(s2.Value));
       messages["endsWith(_)"] = (obj, msg) => function<KString, KString>(obj, msg, (s1, s2) => s1.IsSuffix(s2.Value));
       messages["in(_)"] = (obj, msg) => function<KString, IObject>(obj, msg, (s1, s2) => s1.In(s2));

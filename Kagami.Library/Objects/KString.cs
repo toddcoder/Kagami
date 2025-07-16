@@ -184,6 +184,10 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
    public KString Lower1() => value.ToLower1();
 
+   public KString Camel() => value.ToCamel();
+
+   public KString Pascal() => value.ToPascal();
+
    public KBoolean IsPrefix(string substring) => value.StartsWith(substring);
 
    public KBoolean IsSuffix(string substring) => value.EndsWith(substring);
