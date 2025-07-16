@@ -21,6 +21,9 @@ public class DateClass : BaseClass
       messages["minute".get()] = (obj, _) => function<Date>(obj, d => d.Minute);
       messages["second".get()] = (obj, _) => function<Date>(obj, d => d.Second);
       messages["millisecond".get()] = (obj, _) => function<Date>(obj, d => d.Millisecond);
+      messages["microsecond".get()] = (obj, _) => function<Date>(obj, d => d.Microsecond);
+      messages["nanosecond".get()] = (obj, _) => function<Date>(obj, d => d.Nanosecond);
+      messages["time".get()] = (obj, _) => function<Date>(obj, d => d.Time);
       messages["ticks".get()] = (obj, _) => function<Date>(obj, d => d.Ticks);
       messages["+(_)"] = (obj, msg) => function<Date, Interval>(obj, msg, (d, i) => d.Add(i));
       messages["-(_)"] = (obj, msg) => function<Date, IObject>(obj, msg, (d, i) => d.Subtract(i));

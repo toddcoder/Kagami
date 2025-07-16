@@ -105,6 +105,12 @@ public readonly struct Date : IObject, IRangeItem, IFormattable
 
    public Int Millisecond => value.Millisecond;
 
+   public Int Microsecond => value.Microsecond;
+
+   public Int Nanosecond => value.Nanosecond;
+
+   public Interval Time => value.TimeOfDay;
+
    public Long Ticks => new(value.Ticks);
 
    public IRangeItem Successor => new Date(value.AddDays(1));
