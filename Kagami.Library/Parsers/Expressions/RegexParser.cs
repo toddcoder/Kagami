@@ -148,7 +148,7 @@ public partial class RegexParser : SymbolParser
                   case ' ':
                      break;
                   case '"':
-                     state.AddToken(Color.Structure);
+                     state.AddToken(Color.Regex);
                      state.Move(1);
                      builder.Add(new RegexSymbol(pattern.ToString(), ignoreCase, multiline, global, textOnly));
                      return unit;
