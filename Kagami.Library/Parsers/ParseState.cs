@@ -422,4 +422,6 @@ public class ParseState : IEnumerable<Statement>
    }
 
    public bool NotKeyword() => Scan(@"^\b(not)\b", Color.Keyword).Map(n => n.IsNotEmpty()) | false;
+
+   public Maybe<Symbol> StartingValueSymbol { get; set; } = nil;
 }

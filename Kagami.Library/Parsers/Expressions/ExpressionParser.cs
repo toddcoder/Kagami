@@ -223,6 +223,14 @@ public class ExpressionParser : PatternlessParser
 
    protected Optional<Unit> getValue(ParseState state)
    {
+      if (state.StartingValueSymbol is (true, var symbol))
+      {
+         builder.Add(symbol);
+         state.StartingValueSymbol = nil;
+
+         return unit;
+      }
+
       var _scan = valuesParser.Scan(state);
       if (_scan)
       {

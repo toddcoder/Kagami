@@ -1,6 +1,5 @@
 ﻿using Kagami.Library.Objects;
 using Core.Monads;
-using Kagami.Library.Parsers.Expressions;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Statements;
@@ -58,6 +57,7 @@ public class StatementsParser : MultiParser
          yield return new UsePackageParser();
 
          //yield return new ReassignmentParser();
+         yield return new MutatorParser();
          yield return new AssignWithNewTypeParser();
          yield return new AssignToNewFieldTolerantParser();
          yield return new AssignToFieldParser();
