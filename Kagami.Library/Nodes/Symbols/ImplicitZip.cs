@@ -12,5 +12,5 @@ public class ImplicitZip : Symbol
 
    public override Arity Arity => Arity.Nullary;
 
-   public override string ToString() => "z`";
+   public override string ToString() => "z@";
 }

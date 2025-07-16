@@ -15,7 +15,7 @@ public partial class StringParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s*)([mb`])?([""])")]
+   [GeneratedRegex(@"^(\s*)([mb#])?([""])")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -23,7 +23,7 @@ public partial class StringParser : SymbolParser
       var prefix = tokens[2].Text;
       var mutable = prefix == "m";
       var binary = prefix == "b";
-      var symbol = prefix == "`";
+      var symbol = prefix == "#";
 
       state.Colorize(tokens, Color.Whitespace, Color.StringPart, Color.String);
 

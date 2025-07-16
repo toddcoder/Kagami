@@ -12,5 +12,5 @@ public class ImplicitSymbol(string type) : Symbol
 
    public override Arity Arity => Arity.Nullary;
 
-   public override string ToString() => $"{type}`";
+   public override string ToString() => $"{type}@";
 }

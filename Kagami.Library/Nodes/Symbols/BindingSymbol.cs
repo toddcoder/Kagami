@@ -13,5 +13,5 @@ public class BindingSymbol(string name) : Symbol
 
    public override Arity Arity => Arity.Binary;
 
-   public override string ToString() => $"{name}'";
+   public override string ToString() => $"{name}@";
 }

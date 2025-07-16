@@ -30,7 +30,7 @@ public class EnumClass : UserClass
       constructors[constructorSelector] = _ordinal.Map(Some.Object) | KNil.NilValue;
       RegisterClassMessage(messageSelector, (_, msg) => GetMember(constructorSelector, msg));
 
-      var fieldName = constructorSelector.AsString.Substitute("^ /w+ '$' /(-['(']+) .* $", "`$1").ToLower1();
+      var fieldName = constructorSelector.AsString.Substitute("^ /w+ '$' /(-['(']+) .* $", "$1").ToLower1();
       registerClassMessage(fieldName.get(), (_, msg) => GetMember(constructorSelector, msg));
 
       if (_ordinal is (true, var ordinal))
