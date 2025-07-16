@@ -64,19 +64,12 @@ public class EnumClass : UserClass
       if (isEnumeration)
       {
          List<IObject> list = [];
-         foreach (var (selector, value) in constructors)
+         foreach (var (selector, _) in constructors)
          {
-            if (value is KNil)
-            {
-               var message = new Message(selector, Arguments.Empty);
-               var createdObject = createObject(selector, message);
-               constructors[selector] = createdObject;
-               list.Add(createdObject);
-            }
-            else
-            {
-               list.Add(value);
-            }
+            var message = new Message(selector, Arguments.Empty);
+            var createdObject = createObject(selector, message);
+            constructors[selector] = createdObject;
+            list.Add(createdObject);
          }
 
          return new KTuple([.. list]);

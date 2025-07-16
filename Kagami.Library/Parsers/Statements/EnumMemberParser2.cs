@@ -11,7 +11,7 @@ using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public partial class EnumMemberParser2(string enumClassName) : StatementParser
+public partial class EnumMemberParser2(string enumClassName, Maybe<IObject> _previousOrdinal) : StatementParser
 {
    [GeneratedRegex($@"^(\s*)(when)(\s+)({REGEX_CLASS})(\()?")]
    public override partial Regex Regex();
@@ -48,26 +48,43 @@ public partial class EnumMemberParser2(string enumClassName) : StatementParser
       }
 
       Maybe<IObject> _ordinal = nil;
-      var _ordinalScan =
-         from equal in state.Scan(@"^(\s*)(=)", Color.Whitespace, Color.Structure)
-         from value in getExpression(state, ExpressionFlags.Standard)
-         select value;
-      if (_ordinalScan is (true, var expression))
+
+      if (_previousOrdinal is (true, var previousOrdinal))
       {
-         var firstSymbol = expression.Symbols[0];
-         if (firstSymbol is IConstant { Object: IRangeItem rangeItem })
+         if (previousOrdinal is IRangeItem rangeItem)
          {
-            _ordinal = ((IObject)rangeItem).Some();
+            _ordinal = ((IObject)rangeItem.Successor).Some();
          }
          else
          {
-            return fail("Supplied ordinal isn't a range item");
+            return fail($"{previousOrdinal.Image} must be a range item");
          }
       }
-      else if (_ordinalScan.Exception is (true, var exception))
+      else
       {
-         return exception;
+         var _ordinalScan =
+            from equal in state.Scan(@"^(\s*)(=)", Color.Whitespace, Color.Structure)
+            from value in getExpression(state, ExpressionFlags.Standard)
+            select value;
+         if (_ordinalScan is (true, var expression))
+         {
+            var firstSymbol = expression.Symbols[0];
+            if (firstSymbol is IConstant { Object: IRangeItem rangeItem })
+            {
+               _ordinal = ((IObject)rangeItem).Some();
+            }
+            else
+            {
+               return fail("Supplied ordinal isn't a range item");
+            }
+         }
+         else if (_ordinalScan.Exception is (true, var exception))
+         {
+            return exception;
+         }
       }
+
+      Ordinal = _ordinal;
 
       var _block = getBlock(state).Maybe();
 
@@ -79,4 +96,6 @@ public partial class EnumMemberParser2(string enumClassName) : StatementParser
    }
 
    public Maybe<EnumMemberData> EnumMemberData { get; set; } = nil;
+
+   public Maybe<IObject> Ordinal { get; set; } = nil;
 }

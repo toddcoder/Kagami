@@ -32,6 +32,7 @@ public partial class EnumParser2 : StatementParser
 
       List<EnumMemberData> enumMembers = [];
       Optional<Unit> _endBlock = nil;
+      Maybe<IObject> _ordinal = nil;
 
       while (state.More)
       {
@@ -45,7 +46,7 @@ public partial class EnumParser2 : StatementParser
             return exception;
          }
 
-         var enumMemberParser = new EnumMemberParser2(className);
+         var enumMemberParser = new EnumMemberParser2(className, _ordinal);
          var _enumMember = enumMemberParser.Scan(state);
          if (_enumMember)
          {
@@ -53,6 +54,8 @@ public partial class EnumParser2 : StatementParser
             {
                enumMembers.Add(enumMemberData);
             }
+
+            _ordinal = enumMemberParser.Ordinal;
          }
          else if (_enumMember.Exception is (true, var exception))
          {
@@ -106,13 +109,13 @@ public partial class EnumParser2 : StatementParser
             fullBlock = memberBlock;
          }
 
-         var (name, _, parameters, _ordinal, _) = enumMemberData;
+         var (name, _, parameters, _memberOrdinal, _) = enumMemberData;
 
          var truncatedName = name.Substitute("^ -['$']+ '$' /(.+)$", "$1");
          var selector = parameters.Length > 0 ? parameters.Selector(truncatedName) : (Selector)truncatedName.get();
          var constructorSelector = parameters.Selector(name);
 
-         userClass.RegisterMember(constructorSelector, selector, _ordinal);
+         userClass.RegisterMember(constructorSelector, selector, _memberOrdinal);
 
          var enumMemberClassBuilder = new EnumMemberClassBuilder(name, parameters, fullBlock)
          {
