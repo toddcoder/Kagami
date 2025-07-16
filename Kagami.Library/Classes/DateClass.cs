@@ -43,6 +43,13 @@ public class DateClass : BaseClass
 
    protected static IObject parse(string source)
    {
-      return DateTime.TryParse(source, out var dateTime) ? Some.Object((Date)dateTime) : KNil.NilValue;
+      try
+      {
+         return Success.Object((Date)DateTime.Parse(source));
+      }
+      catch (Exception exception)
+      {
+         return Failure.Object(exception.Message);
+      }
    }
 }

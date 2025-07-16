@@ -1,0 +1,19 @@
+﻿open sys
+
+var sudoku = "0000000750000800940005006000100002000009000570060" ~
+	"03040001000023080000006063240000"
+sudoku .= .translate({'0': ' '})
+
+let separator = "+---+---+---+"
+var index = 0
+
+var array = [i for i in sudoku].shape(9, 9)
+for (i, line) in array.indexed() {
+	if i %% 3 println(separator)
+	print("|")
+	for trio in line.by(3) {
+		print(trio.join("") ~ "|")
+	}
+	println()
+}
+println(separator)
