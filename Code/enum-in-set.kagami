@@ -1,0 +1,16 @@
+﻿open sys
+
+enum Color {
+	when Red
+	when Blue
+	when Yellow
+	when Green
+	when White
+	when Black
+	when Orange
+}
+
+var c = {Color.Red, Color.Blue, Color.Yellow, Color.White, Color.Black, Color.Orange}
+
+println("Red", Color.Red in c)
+println("Green", Color.Green in c)
