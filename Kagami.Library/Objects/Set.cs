@@ -174,4 +174,10 @@ public class Set : IObject, ICollection, IObjectCompare
    }
 
    public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
+
+   public IObject Concatenate(Set otherSet)
+   {
+      IObject[] result = [.. set, ..otherSet.set];
+      return new Set(result);
+   }
 }

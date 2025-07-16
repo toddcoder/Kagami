@@ -1,0 +1,21 @@
+﻿open sys
+
+inclusion Equal {
+	required isEqual(_)
+	func isNotEqual(x) => not isEqual(x)
+}
+
+class Point(var x, var y) {
+	include Equal
+	func isEqual(p) {
+		match p {
+			when other: Point return other.x == x and other.y == y
+			when _ return false
+		}
+	}
+}
+
+let p1 = Point(2, 3)
+let p2 = Point(2, 4)
+println(p1.isNotEqual(p2))
+println(p1.isNotEqual(2))

@@ -30,9 +30,9 @@ public readonly struct Arguments : IObject, IEnumerable<IObject>, IEquatable<Arg
 
    public string ClassName => "Arguments";
 
-   public string AsString => arguments.Select(i => i.AsString).ToString(", ");
+   public string AsString => $"...({arguments.Select(i => i.AsString).ToString(", ")})";
 
-   public string Image => arguments.Select(i => i.Image).ToString(", ");
+   public string Image => $"...({arguments.Select(i => i.Image).ToString(", ")})";
 
    public int Hash => arguments.GetHashCode();
 

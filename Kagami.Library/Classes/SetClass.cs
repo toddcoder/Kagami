@@ -25,6 +25,7 @@ public class SetClass : BaseClass, ICollectionClass
       messages["extend()"] = (obj, msg) => function<Set, IObject>(obj, msg, (s, _) => s.Extend());
       messages["clear()"] = (obj, _) => function<Set>(obj, s => s.Clear());
       messages["classify(_)"] = (obj, msg) => function<Set, Lambda>(obj, msg, (s, l) => s.Classify(l));
+      messages["~(_)"] = (obj, msg) => function<Set, Set>(obj, msg, (s, l) => s.Concatenate(l));
    }
 
    public IObject Revert(IEnumerable<IObject> list) => new Set(list.ToArray());

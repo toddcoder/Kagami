@@ -459,7 +459,7 @@ public class Dictionary : IObject, IMutableCollection
 
    public Dictionary Invert()
    {
-      var newDictionary = new Hash<IObject, IObject>();
+      Hash<IObject, IObject> newDictionary = [];
       foreach (var (key, value) in dictionary)
       {
          newDictionary[value] = key;
@@ -470,7 +470,7 @@ public class Dictionary : IObject, IMutableCollection
 
    public Dictionary Concatenate(ICollection collection)
    {
-      var newDictionary = new Hash<IObject, IObject>();
+      Hash<IObject, IObject> newDictionary = [];
       foreach (var (key, value) in dictionary)
       {
          newDictionary[key] = value;

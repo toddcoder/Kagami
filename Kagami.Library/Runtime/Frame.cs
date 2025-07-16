@@ -103,10 +103,12 @@ public class Frame
             var parameter = parameters[0];
             if (parameter.Singleton && arguments.Length == 1)
             {
-               if (!fields.ContainsKey(parameter.Name))
+               if (fields.ContainsKey(parameter.Name))
                {
-                  fields.New(parameter.Name, parameter.Mutable).Force();
+                  fields.Remove(parameter.Name);
                }
+
+               fields.New(parameter.Name, parameter.Mutable).Force();
 
                if (parameter.TypeConstraint is (true, var typeConstraint) && !typeConstraint.Matches(classOf(lastValue)))
                {
@@ -118,10 +120,13 @@ public class Frame
             else
             {
                var tuple = new KTuple([.. arguments]);
-               if (!fields.ContainsKey(parameter.Name))
+
+               if (fields.ContainsKey(parameter.Name))
                {
-                  fields.New(parameter.Name, parameter.Mutable).Force();
+                  fields.Remove(parameter.Name);
                }
+
+               fields.New(parameter.Name, parameter.Mutable).Force();
 
                if (parameter.TypeConstraint is (true, var typeConstraint) && !typeConstraint.Matches(classOf(lastValue)))
                {
@@ -138,10 +143,12 @@ public class Frame
          {
             var parameter = parameters[i];
             lastValue = arguments[i];
-            if (!fields.ContainsKey(parameter.Name))
+            if (fields.ContainsKey(parameter.Name))
             {
-               fields.New(parameter.Name, parameter.Mutable).Force();
+               fields.Remove(parameter.Name);
             }
+
+            fields.New(parameter.Name, parameter.Mutable).Force();
 
             if (parameter.TypeConstraint is (true, var typeConstraint) && !typeConstraint.Matches(classOf(lastValue)))
             {
@@ -170,10 +177,12 @@ public class Frame
             {
                var parameter = parameters[i];
                var _defaultValue = parameter.DefaultValue;
-               if (!fields.ContainsKey(parameter.Name))
+               if (fields.ContainsKey(parameter.Name))
                {
-                  fields.New(parameter.Name, parameter.Mutable).Force();
+                  fields.Remove(parameter.Name);
                }
+
+               fields.New(parameter.Name, parameter.Mutable).Force();
 
                IObject value;
                if (_defaultValue is (true, var invokable))
