@@ -140,4 +140,6 @@ public class Function : Statement
    {
       return $"{overriding.Extend("override ")}{yielding.Extend("co")}func {selector.Image} ...";
    }
+
+   public bool IsFixed { get; set; }
 }

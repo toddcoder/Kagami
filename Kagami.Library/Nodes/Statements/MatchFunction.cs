@@ -74,4 +74,6 @@ public class MatchFunction : Statement
       invokable = getInvokable();
       overriding = this.overriding;
    }
+   
+   public bool IsFixed { get; set; }
 }

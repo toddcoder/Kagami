@@ -101,6 +101,7 @@ public partial class FunctionParser : StatementParser
       var _parameters = GetAnyParameters(needsParameters, state);
       if (_parameters is (true, var parameters))
       {
+         var isFixed = state.Scan(@"^(\s+)(fixed)\b", Color.Whitespace, Color.Keyword);
          if (state.CurrentSource.IsMatch("^ /s* 'when' /b"))
          {
             var parameterName = "__$0";
@@ -110,13 +111,14 @@ public partial class FunctionParser : StatementParser
                Singleton = true
             };
             var newParameters = new Parameters(variadicParameter);
-            return getMatchFunction(state, functionName, newParameters, overriding, className);
+            return getMatchFunction(state, functionName, newParameters, overriding, className, isFixed);
          }
          else if (state.CurrentSource.StartsWith('('))
          {
             var _curriedFunction = getCurriedFunction(state, functionName, parameters, overriding, className);
             if (_curriedFunction is (true, var curriedFunction))
             {
+               curriedFunction.IsFixed = isFixed;
                _function = curriedFunction;
                if (isMacro)
                {
@@ -141,7 +143,7 @@ public partial class FunctionParser : StatementParser
             {
                var yielding = state.RemoveYieldFlag();
                state.RemoveReturnType();
-               var function = new Function(functionName, parameters, block, yielding, overriding, className);
+               var function = new Function(functionName, parameters, block, yielding, overriding, className) {IsFixed = isFixed};
                _function = function;
                if (isMacro)
                {
@@ -234,7 +236,7 @@ public partial class FunctionParser : StatementParser
    }
 
    protected static Optional<Unit> getMatchFunction(ParseState state, string functionName, Parameters parameters, bool overriding,
-      string className)
+      string className, bool isFixed)
    {
       List<If> list = [];
 
@@ -286,7 +288,7 @@ public partial class FunctionParser : StatementParser
 
          previousIf.Else = new Block(new FailedMatch());
 
-         state.AddStatement(new MatchFunction(functionName, parameters, previousIf, overriding, className));
+         state.AddStatement(new MatchFunction(functionName, parameters, previousIf, overriding, className) { IsFixed = isFixed });
          state.RemoveReturnType();
 
          return unit;

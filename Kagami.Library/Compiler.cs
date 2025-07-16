@@ -85,19 +85,22 @@ public class Compiler
 
    protected IEnumerable<Statement> reorderStatements(IEnumerable<Statement> statements)
    {
-      List<Function> functions = [];
-      List<Class> classes = [];
+
+      List<Statement> earlyStatements = [];
       List<Statement> others = [];
 
       foreach (var statement in statements)
       {
          switch (statement)
          {
-            case Function function:
-               functions.Add(function);
+            case Function { IsFixed: false } function:
+               earlyStatements.Add(function);
+               break;
+            case MatchFunction {IsFixed: false} matchFunction:
+               earlyStatements.Add(matchFunction);
                break;
             case Class cls:
-               classes.Add(cls);
+               earlyStatements.Add(cls);
                break;
             default:
                others.Add(statement);
@@ -105,14 +108,9 @@ public class Compiler
          }
       }
 
-      foreach (var function in functions)
+      foreach (var statement in earlyStatements)
       {
-         yield return function;
-      }
-
-      foreach (var @class in classes)
-      {
-         yield return @class;
+         yield return statement;
       }
 
       foreach (var statement in others)
