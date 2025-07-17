@@ -191,7 +191,7 @@ public static class ObjectFunctions
    {
       if (comparisand.Length.Value == 2)
       {
-         var head = (KString)source.Head;
+         var head = source.Head;
          if (head.IsEmpty.Value)
          {
             return false;

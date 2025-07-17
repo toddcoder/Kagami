@@ -21,7 +21,7 @@ public class AssignField : OneOperandOperation
       var _field = machine.Assign(name, value, false, overriding);
       if (_field)
       {
-         return KVoid.Value.Just();
+         return KUnit.Value.Just();
       }
       else
       {

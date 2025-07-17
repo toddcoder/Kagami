@@ -244,7 +244,7 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
       newMutable.Append(right);
 
       mutable = newMutable;
-      return KVoid.Value;
+      return this;
    }
 
    public MutString Fill(char ch, int count)
