@@ -19,9 +19,9 @@ public class AssignField : OneOperandOperation
    public override Optional<IObject> Execute(Machine machine, IObject value)
    {
       var _field = machine.Assign(name, value, false, overriding);
-      if (_field)
+      if (_field is (true, var field))
       {
-         return KUnit.Value.Just();
+         return field.Value.Just();
       }
       else
       {

@@ -11,8 +11,6 @@ public partial class CharParser : SymbolParser
 {
    public CharParser(ExpressionBuilder builder) : base(builder) { }
 
-   //public override string Pattern => "^ /(/s*) /(\"'\" ('\\' ['xu'] ['a-f0-9']1%6 | '\\'? .) \"'\")";
-
    [GeneratedRegex(@"^(\s*)('(?:\\[xu][a-f0-9]{1,6}|\\?.)')")]
    public override partial Regex Regex();
 

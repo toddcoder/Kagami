@@ -498,4 +498,6 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
    public KString Head => (KString)value.Keep(1);
 
    public KString Tail => (KString)value.Drop(1);
+
+   public KString Margin() => value.Substitute("[' ' /t]* '|'", "");
 }

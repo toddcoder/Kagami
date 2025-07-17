@@ -97,6 +97,7 @@ public class StringClass : BaseClass, ICollectionClass
       messages["head".get()] = (obj, _) => function<KString>(obj, s => s.Head);
       messages["tail".get()] = (obj, _) => function<KString>(obj, s => s.Tail);
       messages["split(_<Regex>)"] = (obj, msg) => function<KString, Regex>(obj, msg, (s, r) => s.SplitRegex(r));
+      messages["margin()"] = (obj, _) => function<KString>(obj, s => s.Margin());
    }
 
    protected static IObject getIndexed(KString s, IObject i)
