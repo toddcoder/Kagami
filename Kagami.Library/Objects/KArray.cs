@@ -352,7 +352,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       List<IObject> newList = [.. left, .. values, .. right];
 
       list = newList;
-      return this;
+      return KVoid.Value;
    }
 
    public IObject Concatenate(KArray kArray)

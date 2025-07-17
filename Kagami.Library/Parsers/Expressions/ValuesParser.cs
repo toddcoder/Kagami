@@ -85,6 +85,7 @@ public class ValuesParser : MultiParser
          yield return new AssertParser(builder);
          yield return new ConversionParser(builder);
          yield return new SeqParser(builder);
+         yield return new NameOfParser(builder);
 
          if (!builder.Flags[ExpressionFlags.OmitMaybe])
          {

@@ -33,7 +33,7 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
    public string AsString => value;
 
-   public string Image => $"\"{value.Replace("\"", @"\""").Replace("\t", @"\t")}\"";
+   public string Image => $"\"{value.Replace("\"", @"\""").Replace("\t", @"\t").Replace("\n", @"\n").Replace("\r", @"\r")}\"";
 
    public int Hash => value.GetHashCode();
 

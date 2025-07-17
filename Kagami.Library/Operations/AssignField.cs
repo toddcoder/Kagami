@@ -2,7 +2,6 @@
 using Kagami.Library.Runtime;
 using Core.Booleans;
 using Core.Monads;
-using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Operations;
 
@@ -22,7 +21,7 @@ public class AssignField : OneOperandOperation
       var _field = machine.Assign(name, value, false, overriding);
       if (_field)
       {
-         return nil;
+         return KVoid.Value.Just();
       }
       else
       {
