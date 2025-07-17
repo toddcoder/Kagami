@@ -298,7 +298,7 @@ public abstract class BaseClass
          "sort(_<Lambda>,asc:_<Boolean>)", "sort(_<Lambda>)", "sort(asc:_<Boolean>)", "sort()", "sortDesc()",
          "foldl".Selector("_", "_<Lambda>"),
          "foldl(_)", "foldr".Selector("_", "_<Lambda>"), "foldr(_)", "reducel".Selector("_", "_<Lambda>"), "reducel(_)",
-         "reducer".Selector("_", "_<Lambda>"), "reducer(_)", "count(of:_)", "count(_<Lambda>)", "map(_<Lambda>)",
+         "reducer".Selector("_", "_<Lambda>"), "reducer(_)", "count()", "count(of:_)", "count(_<Lambda>)", "map(_<Lambda>)",
          "flatMap(_<Lambda>)", "bind(_<Lambda>)",
          "if(_<Lambda>)",
          "ifNot(_<Lambda>)", "skip(_<Int>)", "-(_<Int>)", "skipWhile(_<Lambda>)",
@@ -358,7 +358,7 @@ public abstract class BaseClass
          (obj, message) => iteratorFunc<IObject, Lambda>(obj, message, (i, o, l) => i.ReduceRight(o, l)));
       registerMessage("reducer(_)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.ReduceRight(l)));
       registerMessage("count()", (obj, _) => iteratorFunc(obj, i => i.Count()));
-      registerMessage("count".Selector("_<Lambda>"), (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Count(l)));
+      registerMessage("count(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Count(l)));
       registerMessage("count(of:_)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, o) => i.Count(o)));
       registerMessage("map(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Map(l)));
       registerMessage("bind(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Map(l)));

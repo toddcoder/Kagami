@@ -11,8 +11,6 @@ public partial class PartialLambdaParser : SymbolParser
    {
    }
 
-   //public override string Pattern => "^ /(/s*) /'('";
-
    [GeneratedRegex(@"^([ \t]*)(\()")]
    public override partial Regex Regex();
 

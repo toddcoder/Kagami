@@ -1,5 +1,6 @@
 ﻿using Core.Monads;
 using Kagami.Library.Objects;
+using Kagami.Library.Packages;
 using Kagami.Library.Runtime;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
@@ -16,14 +17,12 @@ public class LambdaFromSelector : OneOperandOperation
          if (_field is (true, var field))
          {
             var fieldValue = field.Value;
-            if (fieldValue is Lambda lambda)
+            return fieldValue switch
             {
-               return lambda;
-            }
-            else
-            {
-               return incompatibleClasses(fieldValue, "Lambda");
-            }
+               Lambda lambda => lambda,
+               PackageFunction packageFunction => packageFunction.ToLambda(),
+               _ => incompatibleClasses(fieldValue, "Lambda")
+            };
          }
          else
          {

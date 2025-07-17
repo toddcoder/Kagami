@@ -26,7 +26,7 @@ public partial class WhateverLambdaParser : SymbolParser
       if (_expression is (true, var expression))
       {
          List<string> parameters = [];
-         getParameterNames(expression, parameters);
+         GetParameterNames(expression, parameters);
          StringSet parameterNames = [.. parameters];
          var block = new Block(expression);
          var lambdaSymbol = new LambdaSymbol(parameterNames.Count, block);
@@ -38,34 +38,34 @@ public partial class WhateverLambdaParser : SymbolParser
       }
 
       return unit;
+   }
 
-      void getParameterNames(Expression expression, List<string> parameters)
+   public static void GetParameterNames(Expression expression, List<string> parameters)
+   {
+      var symbols = expression.Symbols;
+      for (var i = 0; i < symbols.Length; i++)
       {
-         var symbols = expression.Symbols;
-         for (var i = 0; i < symbols.Length; i++)
+         var symbol = symbols[i];
+         switch (symbol)
          {
-            var symbol = symbols[i];
-            switch (symbol)
+            case AnySymbol or WhateverSymbol:
             {
-               case AnySymbol:
+               var fieldName = $"__${parameters.Count}";
+               symbols[i] = new FieldSymbol(fieldName);
+               parameters.Add(fieldName);
+               break;
+            }
+            case IHasExpression hasExpression:
+               GetParameterNames(hasExpression.Expression, parameters);
+               break;
+            case IHasExpressions hasExpressions:
+            {
+               foreach (var innerExpression in hasExpressions.Expressions)
                {
-                  var fieldName = $"__${parameters.Count}";
-                  symbols[i] = new FieldSymbol(fieldName);
-                  parameters.Add(fieldName);
-                  break;
+                  GetParameterNames(innerExpression, parameters);
                }
-               case IHasExpression hasExpression:
-                  getParameterNames(hasExpression.Expression, parameters);
-                  break;
-               case IHasExpressions hasExpressions:
-               {
-                  foreach (var innerExpression in hasExpressions.Expressions)
-                  {
-                     getParameterNames(innerExpression, parameters);
-                  }
 
-                  break;
-               }
+               break;
             }
          }
       }

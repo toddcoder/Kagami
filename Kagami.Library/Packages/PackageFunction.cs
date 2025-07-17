@@ -49,4 +49,6 @@ public class PackageFunction : IObject, IEquatable<PackageFunction>, IMayInvoke
    public override int GetHashCode() => HashCode.Combine(package, name, function);
 
    public IObject Invoke(IObject[] arguments) => Invoke(new Arguments(arguments));
+
+   public Lambda ToLambda() => new CsFuncLambda(package, name, function);
 }
