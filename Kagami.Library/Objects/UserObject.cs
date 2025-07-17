@@ -32,7 +32,7 @@ public class UserObject : IObject, IEquatable<UserObject>
          fields.Remove(fieldName);
       }
 
-      fields.New(fieldName, value);
+      fields.New(fieldName, FieldType.Assignment, value);
    }
 
    public Fields Fields => fields;

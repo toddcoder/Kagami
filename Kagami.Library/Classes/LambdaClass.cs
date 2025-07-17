@@ -21,6 +21,6 @@ public class LambdaClass : BaseClass
 
    protected static IObject invoke(Lambda lambda, Arguments arguments)
    {
-      return Machine.Current.Value.Invoke(lambda.Invokable, arguments, lambda.Fields).RequiredCast<IObject>(() => "Return value required");
+      return Machine.Current.Value.Invoke(lambda.Invokable, arguments, lambda.Fields, true).RequiredCast<IObject>(() => "Return value required");
    }
 }

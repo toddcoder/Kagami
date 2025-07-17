@@ -124,8 +124,12 @@ public class Machine
       return lastValue.Success();
    }
 
-   public Optional<IObject> Invoke(IInvokable invokable, Arguments arguments, Fields fields, bool extraFrame = false)
+   public Optional<IObject> Invoke(IInvokable invokable, Arguments arguments, Fields fields, bool bareLambda, bool extraFrame = false)
    {
+      if (bareLambda)
+      {
+         fields.Remove(t => t is not FieldType.Capture);
+      }
       var frame = new Frame(invokable.RequiresFunctionFrame ? Address : nil, arguments, fields);
 
       if (invokable is YieldingInvokable yfi)
@@ -152,7 +156,6 @@ public class Machine
 
    public Optional<IObject> Invoke(IInvokable invokable, Arguments arguments, Maybe<IInvokableObject> _invokableObject)
    {
-      //var fields = _invokableObject.Map(io => io is IProvidesFields { ProvidesFields: true } pf ? pf.Fields : new Fields()) | (() => new Fields());
       var frame = new Frame(invokable.RequiresFunctionFrame ? Address : nil, arguments);
 
       if (invokable is YieldingInvokable yfi)

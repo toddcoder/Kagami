@@ -22,7 +22,7 @@ public class Pattern : IObject
 
       foreach (var parameter in parameters)
       {
-         fields.New(parameter.Name, true);
+         fields.New(parameter.Name, FieldType.Parameter, true);
       }
    }
 
@@ -97,7 +97,7 @@ public class Pattern : IObject
       {
          if (key is KString keyString)
          {
-            fields.New(keyString.Value, value);
+            fields.New(keyString.Value, FieldType.Assignment, value);
          }
       }
 

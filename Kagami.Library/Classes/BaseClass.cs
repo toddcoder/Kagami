@@ -459,7 +459,7 @@ public abstract class BaseClass
       registerMessage("range()", (obj, _) => function<IObject>(obj, o => ((IRangeItem)o).Range()));
    }
 
-   public static IObject Invoke(IObject obj, Arguments arguments, Lambda lambda)
+   public static IObject Invoke(IObject obj, Arguments arguments, Lambda lambda, bool bareLambda)
    {
       Fields fields;
       if (obj is UserObject uo)
@@ -469,11 +469,11 @@ public abstract class BaseClass
       else
       {
          fields = new Fields();
-         fields.New("self");
+         fields.New("self", FieldType.Assignment);
          fields.Assign("self", obj);
       }
 
-      var _value = Machine.Current.Value.Invoke(lambda.Invokable, arguments, fields);
+      var _value = Machine.Current.Value.Invoke(lambda.Invokable, arguments, fields, bareLambda);
       if (_value is (true, var value))
       {
          return value;
@@ -488,9 +488,9 @@ public abstract class BaseClass
       }
    }
 
-   public static IObject Invoke(UserClass userClass, Arguments arguments, Lambda lambda)
+   public static IObject Invoke(UserClass userClass, Arguments arguments, Lambda lambda, bool bareLambda)
    {
-      return Machine.Current.Value.Invoke(lambda.Invokable, arguments, userClass.ClassFields)
+      return Machine.Current.Value.Invoke(lambda.Invokable, arguments, userClass.ClassFields, bareLambda)
          .RequiredCast<IObject>(() => "Return value required");
    }
 

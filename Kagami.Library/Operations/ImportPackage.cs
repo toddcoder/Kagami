@@ -50,7 +50,7 @@ public class ImportPackage : Operation
          package.LoadTypes(Module.Global);
          var globalFrame = machine.GlobalFrame;
          var fields = globalFrame.Fields;
-         fields.New(packageName, package);
+         fields.New(packageName, FieldType.Package, package);
 
          return nil;
       }

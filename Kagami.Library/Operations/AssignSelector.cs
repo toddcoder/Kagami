@@ -23,7 +23,7 @@ public class AssignSelector : OneOperandOperation
       {
          if (createNewField)
          {
-            var _fields = machine.CurrentFrame.Fields.New(subSelector, overriding);
+            var _fields = machine.CurrentFrame.Fields.NewSelector(subSelector, FieldType.Assignment, overriding);
             if (!_fields)
             {
                return _fields.Exception;

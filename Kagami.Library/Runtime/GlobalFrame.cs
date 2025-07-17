@@ -8,15 +8,15 @@ public class GlobalFrame : Frame
    {
       Sys = new Sys();
       Sys.LoadTypes(Module.Global);
-      fields.New("sys", Sys);
+      fields.New("sys", FieldType.Package, Sys);
 
       Math = new KMath();
       Sys.LoadTypes(Module.Global);
-      fields.New("math", Math);
+      fields.New("math", FieldType.Package, Math);
 
       IO = new IO();
       IO.LoadTypes(Module.Global);
-      fields.New("io", IO);
+      fields.New("io", FieldType.Package, IO);
    }
 
    public Sys Sys { get; }

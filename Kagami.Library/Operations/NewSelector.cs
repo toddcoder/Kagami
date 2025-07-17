@@ -20,7 +20,7 @@ public class NewSelector : Operation
 
    public override Optional<IObject> Execute(Machine machine)
    {
-      var _fields = machine.CurrentFrame.Fields.New(selector, mutable, visible);
+      var _fields = machine.CurrentFrame.Fields.NewSelector(selector, FieldType.Assignment, mutable, visible);
       if (_fields)
       {
          return nil;

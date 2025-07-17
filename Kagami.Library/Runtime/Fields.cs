@@ -60,7 +60,7 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
                Selector matchSelector = bucket;
                if (selector.IsEquivalentTo(matchSelector))
                {
-                  return fields.Maybe[bucket].Optional(); //fields.Maybe[matchSelector.Image].Optional();
+                  return fields.Maybe[bucket].Optional();
                }
             }
 
@@ -88,25 +88,25 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       }
    }
 
-   public Result<Field> New(string name, IObject value, bool mutable = false, bool visible = true)
+   public Result<Field> New(string name, FieldType type, IObject value, bool mutable = false, bool visible = true)
    {
-      return New(name, new Field { Value = value, Mutable = mutable, Visible = visible });
+      return New(name, new Field { Value = value, Mutable = mutable, Visible = visible, Type = type });
    }
 
-   public Result<Field> New(string name, bool mutable = false, bool visible = true)
+   public Result<Field> New(string name, FieldType type, bool mutable = false, bool visible = true)
    {
-      return New(name, Unassigned.Value, mutable, visible);
+      return New(name, type, Unassigned.Value, mutable, visible);
    }
 
-   public Result<Field> New(string name, Maybe<TypeConstraint> typeConstraint, bool mutable, bool visible)
+   public Result<Field> New(string name, FieldType type, Maybe<TypeConstraint> typeConstraint, bool mutable, bool visible)
    {
       return New(name, new Field
       {
-         Value = Unassigned.Value, Mutable = mutable, Visible = visible, TypeConstraint = typeConstraint
+         Value = Unassigned.Value, Mutable = mutable, Visible = visible, TypeConstraint = typeConstraint, Type = type
       });
    }
 
-   public Result<Field> New(Selector selector, bool mutable = false, bool visible = true)
+   public Result<Field> NewSelector(Selector selector, FieldType type, bool mutable = false, bool visible = true)
    {
       if (fields.Maybe[selector] is (true, var foundField))
       {
@@ -121,7 +121,7 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       }
       else
       {
-         var field = new Field { Value = Unassigned.Value, Mutable = mutable, Visible = visible };
+         var field = new Field { Value = Unassigned.Value, Mutable = mutable, Visible = visible, Type = type };
          fields[selector] = field;
          buckets[selector.LabelsOnly()].Add(selector);
 
@@ -129,7 +129,7 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       }
    }
 
-   public Result<Field> New(Selector selector, IObject value, bool mutable = false, bool visible = true)
+   public Result<Field> NewSelector(Selector selector, FieldType type, IObject value, bool mutable = false, bool visible = true)
    {
       if (fields.Maybe[selector] is (true, var foundField))
       {
@@ -145,7 +145,7 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       }
       else
       {
-         var field = new Field { Value = value, Mutable = mutable, Visible = visible };
+         var field = new Field { Value = value, Mutable = mutable, Visible = visible, Type = type };
          fields[selector] = field;
          buckets[selector.LabelsOnly()].Add(selector);
 
@@ -191,13 +191,13 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       }
    }
 
-   public Result<Field> AssignLocal(string name, IObject value, bool overriden = false)
+   public Result<Field> AssignLocal(string name, FieldType type, IObject value, bool overriden = false)
    {
       var _field = Find(name, false);
       if (_field is (true, var field))
       {
          field.Value = value;
-         fields[name] = new Field { Value = value, Mutable = true, Visible = true };
+         fields[name] = new Field { Value = value, Mutable = true, Visible = true, Type = type };
 
          return field;
       }
@@ -207,7 +207,7 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       }
       else
       {
-         var newField = new Field { Value = value, Mutable = true };
+         var newField = new Field { Value = value, Mutable = true, Type = type };
          fields[name] = newField;
 
          return newField;
@@ -287,24 +287,15 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
          LazyResult<Field> _assignedField = nil;
          if (key.IsMatch("^ ['+-']"))
          {
-            //var mutable = key.StartsWith("+");
             var fieldName = key.Drop(1);
             var _field = Find(fieldName, true);
             if (_field is (true, var field))
             {
                field.Value = value;
-               /*if (mutable)
-               {
-                  field.Value = value;
-               }
-               else
-               {
-                  throw immutableField(fieldName);
-               }*/
             }
             else
             {
-               _field = New(fieldName, value, true).Optional();
+               _field = New(fieldName, FieldType.Binding, value, true).Optional();
                if (!_field)
                {
                   throw _field.Exception;
@@ -415,4 +406,13 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
    public string AsString => fields.Select(i => $"{i.Key}({i.Value.Value.ClassName})").ToString(", ");
 
    public Memo<string, List<string>> Buckets => buckets;
+
+   public void Remove(Func<FieldType, bool> predicate)
+   {
+      var fieldsToDelete = fields.Where(i => predicate(i.Value.Type)).Select(i => i.Key);
+      foreach (var fieldName in fieldsToDelete)
+      {
+         Remove(fieldName);
+      }
+   }
 }

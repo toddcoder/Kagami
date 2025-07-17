@@ -127,7 +127,7 @@ public class Function : Statement
       {
          if (Module.Global.Value.Class(className) is (true, var cls))
          {
-            cls.RegisterMessage(selector, (obj, msg) => BaseClass.Invoke(obj, msg.Arguments, lambda.Value));
+            cls.RegisterMessage(selector, (obj, msg) => BaseClass.Invoke(obj, msg.Arguments, lambda.Value, false));
          }
          else
          {

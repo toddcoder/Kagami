@@ -83,7 +83,7 @@ public class Frame
          }
          else
          {
-            this.fields.New(fieldName, field.Mutable);
+            this.fields.New(fieldName, field.Type, field.Mutable);
             this.fields.Assign(fieldName, field.Value, true);
          }
       }
@@ -108,7 +108,7 @@ public class Frame
                   fields.Remove(parameter.Name);
                }
 
-               fields.New(parameter.Name, parameter.Mutable).Force();
+               fields.New(parameter.Name, FieldType.Parameter, parameter.Mutable).Force();
 
                if (parameter.TypeConstraint is (true, var typeConstraint) && !typeConstraint.Matches(classOf(lastValue)))
                {
@@ -126,7 +126,7 @@ public class Frame
                   fields.Remove(parameter.Name);
                }
 
-               fields.New(parameter.Name, parameter.Mutable).Force();
+               fields.New(parameter.Name, FieldType.Parameter, parameter.Mutable).Force();
 
                if (parameter.TypeConstraint is (true, var typeConstraint) && !typeConstraint.Matches(classOf(lastValue)))
                {
@@ -148,7 +148,7 @@ public class Frame
                fields.Remove(parameter.Name);
             }
 
-            fields.New(parameter.Name, parameter.Mutable).Force();
+            fields.New(parameter.Name, FieldType.Parameter, parameter.Mutable).Force();
 
             if (parameter.TypeConstraint is (true, var typeConstraint) && !typeConstraint.Matches(classOf(lastValue)))
             {
@@ -182,7 +182,7 @@ public class Frame
                   fields.Remove(parameter.Name);
                }
 
-               fields.New(parameter.Name, parameter.Mutable).Force();
+               fields.New(parameter.Name, FieldType.Parameter, parameter.Mutable).Force();
 
                IObject value;
                if (_defaultValue is (true, var invokable))
@@ -239,7 +239,7 @@ public class Frame
    {
       foreach (var (fieldName, field) in fields)
       {
-         this.fields.AssignLocal(fieldName, field.Value, true).Force();
+         this.fields.AssignLocal(fieldName, field.Type, field.Value, true).Force();
       }
    }
 

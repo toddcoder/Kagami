@@ -48,6 +48,7 @@ public class Field
                      return;
                   }
                }
+
                throw incompatibleClasses(value, typeConstraint.AsString);
             }
          }
@@ -79,13 +80,16 @@ public class Field
 
    public bool Tolerant { get; set; }
 
+   public required FieldType Type { get; set; }
+
    public Field Clone() => new()
    {
       Value = Value,
       Mutable = Mutable,
       Visible = Visible,
       TypeConstraint = TypeConstraint,
-      Tolerant = Tolerant
+      Tolerant = Tolerant,
+      Type = Type
    };
 
    public Fields Fields { get; set; } = [];

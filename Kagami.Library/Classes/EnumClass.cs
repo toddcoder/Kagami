@@ -112,7 +112,7 @@ public class EnumClass : UserClass
       var machine = Machine.Current.Value;
       foreach (var (name, obj) in objects)
       {
-         machine.CurrentFrame.Fields.New(name, obj);
+         machine.CurrentFrame.Fields.New(name, FieldType.Assignment, obj);
       }
    }
 }

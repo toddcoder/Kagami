@@ -22,7 +22,7 @@ public class NewField : Operation
 
    public override Optional<IObject> Execute(Machine machine)
    {
-      var _result = machine.CurrentFrame.Fields.New(name, _typeConstraint, mutable, visible);
+      var _result = machine.CurrentFrame.Fields.New(name, FieldType.Assignment, _typeConstraint, mutable, visible);
       if (_result)
       {
          return nil;

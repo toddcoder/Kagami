@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using Kagami.Library.Classes;
-using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Collections;
@@ -17,8 +16,8 @@ public class Sys : Package
 {
    public Sys()
    {
-      fields.New("id", new RuntimeLambda(args => args[0], 1, "x -> x"));
-      fields.New("environment", Environment);
+      fields.New("id", FieldType.Package, new RuntimeLambda(args => args[0], 1, "x -> x"));
+      fields.New("environment", FieldType.Package, Environment);
    }
 
    public override string ClassName => "Sys";
@@ -35,7 +34,7 @@ public class Sys : Package
       module.RegisterClass(new RandomClass());
       module.RegisterClass(new OutClass());
 
-      fields.New("out", new Out());
+      fields.New("out", FieldType.Package, new Out());
    }
 
    public KString Println(Arguments arguments)
@@ -137,27 +136,6 @@ public class Sys : Package
    }
 
    public Long Ticks() => new(DateTime.Now.Ticks);
-
-   public Result<IObject> NewParameterlessObject(string className, string fieldName)
-   {
-      try
-      {
-         var userObject = new UserObject(className, new Fields(), Parameters.Empty);
-         var _field = Machine.Current.Value.CurrentFrame.Fields.New(fieldName, userObject);
-         if (!_field)
-         {
-            return _field.Exception;
-         }
-         else
-         {
-            return userObject.Success<IObject>();
-         }
-      }
-      catch (Exception exception)
-      {
-         return exception;
-      }
-   }
 
    public IObject First(KTuple kTuple) => kTuple[0];
 

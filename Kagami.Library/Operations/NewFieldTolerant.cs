@@ -15,7 +15,7 @@ public class NewFieldTolerant(string name, bool mutable, bool visible, Maybe<Typ
          return nil;
       }
 
-      var _result = machine.CurrentFrame.Fields.New(name, _typeConstraint, mutable, visible);
+      var _result = machine.CurrentFrame.Fields.New(name, FieldType.Assignment, _typeConstraint, mutable, visible);
       if (_result)
       {
          return nil;

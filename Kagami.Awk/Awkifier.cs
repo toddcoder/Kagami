@@ -127,7 +127,7 @@ public class Awkifier : IObject, ICollection
          var currentFields = Machine.Fields;
          for (var i = 0; i < array.Length; i++)
          {
-            currentFields.New($"__${i}", array[i]);
+            currentFields.New($"__${i}", FieldType.Parameter, array[i]);
          }
 
          return new KTuple(array).Some<IObject>();

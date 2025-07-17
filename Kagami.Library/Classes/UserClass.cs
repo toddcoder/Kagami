@@ -57,7 +57,7 @@ public class UserClass : BaseClass
    public static IObject UserInvoke(UserObject userObject, Arguments arguments, Lambda lambda)
    {
       var machine = Machine.Current.Value;
-      var _value = machine.Invoke(lambda.Invokable, arguments, userObject.Fields, true);
+      var _value = machine.Invoke(lambda.Invokable, arguments, userObject.Fields, false);
       if (_value is (true, var value))
       {
          return value;

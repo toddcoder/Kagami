@@ -16,10 +16,10 @@ public class KMath : Package
 {
    public KMath()
    {
-      fields.New("pi", Float.FloatObject(Math.PI));
-      fields.New("e", Float.FloatObject(Math.E));
-      fields.New("i", Complex.ComplexObject((0, 1)));
-      fields.New("tau", Float.FloatObject(Math.Tau));
+      fields.New("pi", FieldType.Package, Float.FloatObject(Math.PI));
+      fields.New("e", FieldType.Package, Float.FloatObject(Math.E));
+      fields.New("i", FieldType.Package, Complex.ComplexObject((0, 1)));
+      fields.New("tau", FieldType.Package, Float.FloatObject(Math.Tau));
    }
 
    public override string ClassName => "Math";

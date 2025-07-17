@@ -29,7 +29,7 @@ public abstract class PackageClass : BaseClass
          Selector selector = functionName;
          if (!functionName.StartsWith("_") && !fields.ContainsKey(selector))
          {
-            fields.New(selector, new PackageFunction(package, functionName, func));
+            fields.NewSelector(selector, FieldType.Package, new PackageFunction(package, functionName, func));
          }
       }
 

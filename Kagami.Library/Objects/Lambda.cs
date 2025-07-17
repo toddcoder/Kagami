@@ -61,7 +61,7 @@ public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields
    public virtual IObject Invoke(params IObject[] arguments)
    {
       var machine = Machine.Current.Value;
-      var _value = machine.Invoke(invokable1, new Arguments(arguments), fields);
+      var _value = machine.Invoke(invokable1, new Arguments(arguments), fields, true);
       if (_value is (true, var value))
       {
          return value;
@@ -89,7 +89,8 @@ public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields
             Mutable = field.Mutable,
             Value = field.Value,
             TypeConstraint = field.TypeConstraint,
-            Tolerant = true
+            Tolerant = true,
+            Type = field.Type
          };
          newFields.New(fieldName, newField);
       }
@@ -115,7 +116,7 @@ public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields
       {
          if (!fields.ContainsKey(field.fieldName))
          {
-            fields.AssignLocal(field.fieldName, field.field.Value, true).Force();
+            fields.AssignLocal(field.fieldName, FieldType.Capture, field.field.Value, true).Force();
          }
       }
 

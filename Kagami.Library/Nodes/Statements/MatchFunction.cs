@@ -53,7 +53,7 @@ public class MatchFunction : Statement
       {
          if (Module.Global.Value.Class(className) is (true, var cls))
          {
-            cls.RegisterMessage(selector, (obj, msg) => BaseClass.Invoke(obj, msg.Arguments, lambda));
+            cls.RegisterMessage(selector, (obj, msg) => BaseClass.Invoke(obj, msg.Arguments, lambda, false));
          }
          else
          {
