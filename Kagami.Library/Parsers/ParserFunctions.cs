@@ -1077,6 +1077,32 @@ public static class ParserFunctions
       }
    }
 
+   public static Optional<PossibleIfExpression> getIfOrIfNo(ParseState state)
+   {
+      var _scanned = state.Scan(@"^(\s+)(if)\b", Color.Whitespace, Color.Keyword);
+      if (_scanned)
+      {
+         var not = state.NotKeyword();
+         var _expression = getExpression(state, ExpressionFlags.OmitIf | ExpressionFlags.OmitComprehension);
+         if (_expression is (true, var expression))
+         {
+            return not ? new PossibleIfExpression.IfNot(expression) : new PossibleIfExpression.If(expression);
+         }
+         else
+         {
+            return _expression.Exception;
+         }
+      }
+      else if (_scanned.Exception is (true, var exception))
+      {
+         return exception;
+      }
+      else
+      {
+         return new PossibleIfExpression.None();
+      }
+   }
+
    public static Optional<Maybe<Expression>> getAnd(ParseState state)
    {
       var builder = new ExpressionBuilder(ExpressionFlags.OmitIf);

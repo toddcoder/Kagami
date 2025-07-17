@@ -11,7 +11,7 @@ public abstract record PossibleExpression
       public override Maybe<Expression> Maybe => Expression;
    }
 
-   public sealed record None() : PossibleExpression
+   public sealed record None : PossibleExpression
    {
       public override Maybe<Expression> Maybe => nil;
    }

@@ -20,7 +20,7 @@ public class PrefixParser(ExpressionBuilder builder) : MultiParser
          yield return new ImageParser(builder);
          yield return new IteratorParser(builder);
 
-         if (!builder.Flags[ExpressionFlags.Comparisand])
+         if (!builder.Flags[ExpressionFlags.Comparisand] || !builder.Flags[ExpressionFlags.OmitNot])
          {
             yield return new NotParser(builder);
          }

@@ -29,7 +29,7 @@ public partial class YieldParser : EndingInExpressionParser
       {
          var placeholderName = newLabel("yieldIndex");
          var block = new Block(new Yield(new Expression(new FieldSymbol(placeholderName))));
-         var @for = new For(new PlaceholderSymbol("-" + placeholderName), expression, block);
+         var @for = new For(new PlaceholderSymbol("-" + placeholderName), expression, block, new PossibleIfExpression.None());
          state.AddStatement(@for);
       }
       else

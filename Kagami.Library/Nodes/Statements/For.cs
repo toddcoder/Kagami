@@ -1,5 +1,6 @@
 ﻿using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Operations;
+using Kagami.Library.Parsers;
 using static Kagami.Library.Nodes.NodeFunctions;
 
 namespace Kagami.Library.Nodes.Statements
@@ -9,12 +10,14 @@ namespace Kagami.Library.Nodes.Statements
       protected Symbol comparisand;
       protected Expression source;
       protected Block block;
+      protected PossibleIfExpression possibleIfExpression;
 
-      public For(Symbol comparisand, Expression source, Block block)
+      public For(Symbol comparisand, Expression source, Block block, PossibleIfExpression possibleIfExpression)
       {
          this.comparisand = comparisand;
          this.source = source;
          this.block = block;
+         this.possibleIfExpression = possibleIfExpression;
       }
 
       public override void Generate(OperationsBuilder builder)
@@ -24,6 +27,7 @@ namespace Kagami.Library.Nodes.Statements
          var exitLabel = newLabel("exit");
          var skipLabel = newLabel("skip");
          var backToTopLabel = newLabel("back.to.top");
+         var failedIfLabel = newLabel("failed-if");
 
          builder.PushExitFrame(exitLabel);
          var iteratorName = newLabel("iterator");
@@ -47,7 +51,27 @@ namespace Kagami.Library.Nodes.Statements
 
          builder.Label(backToTopLabel);
          builder.PushSkipFrame(skipLabel);
+
+         switch (possibleIfExpression)
+         {
+            case PossibleIfExpression.If @if:
+            {
+               @if.Expression.Generate(builder);
+               builder.GoToIfFalse(failedIfLabel);
+               break;
+            }
+            case PossibleIfExpression.IfNot ifNot:
+            {
+               ifNot.Expression.Generate(builder);
+               builder.GoToIfTrue(failedIfLabel);
+               break;
+            }
+         }
+
          block.Generate(builder);
+
+         builder.Label(failedIfLabel);
+
          builder.PopFrame();
          builder.Label(skipLabel);
          builder.PopFrame();

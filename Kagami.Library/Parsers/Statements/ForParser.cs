@@ -19,12 +19,13 @@ public partial class ForParser : StatementParser
       var _result =
          from comparisandValue in getExpression(state, ExpressionFlags.Comparisand | ExpressionFlags.OmitColon | ExpressionFlags.OmitIn)
          from scanned in state.Scan(@"^(\s+)(in)(\s+)", Color.Whitespace, Color.Keyword, Color.Whitespace)
-         from sourceValue in getExpression(state, ExpressionFlags.Standard)
+         from sourceValue in getExpression(state, ExpressionFlags.Standard | ExpressionFlags.OmitIf | ExpressionFlags.OmitNot)
+         from possibleIfExpressionValue in getIfOrIfNo(state)
          from blockValue in getBlock(state)
-         select (comparisandValue, sourceValue, blockValue);
-      if (_result is (true, var (comparisand, source, block)))
+         select (comparisandValue, sourceValue, blockValue, possibleIfExpressionValue);
+      if (_result is (true, var (comparisand, source, block, possibleIfExpression)))
       {
-         state.AddStatement(new For(comparisand, source, block));
+         state.AddStatement(new For(comparisand, source, block, possibleIfExpression));
          return unit;
       }
       else

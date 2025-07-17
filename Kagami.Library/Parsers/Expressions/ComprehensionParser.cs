@@ -72,7 +72,7 @@ public partial class ComprehensionParser : SymbolParser
                block = new Block(new If(boolean, block));
             }
 
-            forStatement = new For(symbol, source, block);
+            forStatement = new For(symbol, source, block, new PossibleIfExpression.None());
          }
          else
          {
@@ -89,7 +89,7 @@ public partial class ComprehensionParser : SymbolParser
                block = new Block(new If(boolean, block));
             }
 
-            forStatement = new For(symbol, source, block);
+            forStatement = new For(symbol, source, block, new PossibleIfExpression.None());
          }
 
          builder.Clear();
