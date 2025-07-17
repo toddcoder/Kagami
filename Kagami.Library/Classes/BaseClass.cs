@@ -526,7 +526,7 @@ public abstract class BaseClass
       registerMessage("ceil()", (obj, _) => msgNumberFunction(obj, mn => mn.Ceiling()));
       registerMessage("floor()", (obj, _) => msgNumberFunction(obj, mn => mn.Floor()));
       registerMessage("frac()", (obj, _) => msgNumberFunction(obj, mn => mn.Fraction()));
-      registerMessage("round(_,_<Int>)", (obj, message) => msgNumberFunction(obj, message, (x, y) => x.Round(y)));
+      registerMessage("round(_<Int>)", (obj, message) => msgNumberFunction(obj, message, (x, y) => x.Round(y)));
    }
 
    protected void sliceableMessages()

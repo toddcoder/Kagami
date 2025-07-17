@@ -10,23 +10,22 @@ public class DivRem : TwoNumericOperation
    {
       try
       {
-         if (x is IMessageNumber messageX)
+         switch (x)
          {
-            return messageX.DivRem(y).Just();
-         }
-         else if (x is Int intX)
-         {
-            var intY = y.AsInt32();
-            var div = new Int(intX.Value / intY);
-            var rem = new Int(intX.Value % intY);
-            var name1 = new NameValue("div", div);
-            var name2 = new NameValue("rem", rem);
+            case IMessageNumber messageX:
+               return messageX.DivRem(y).Just();
+            case Int intX:
+            {
+               var intY = y.AsInt32();
+               var div = new Int(intX.Value / intY);
+               var rem = new Int(intX.Value % intY);
+               var name1 = new NameValue("div", div);
+               var name2 = new NameValue("rem", rem);
 
-            return new KTuple(name1, name2);
-         }
-         else
-         {
-            return incompatibleClasses((IObject)x, "MessageNumber");
+               return new KTuple(name1, name2);
+            }
+            default:
+               return incompatibleClasses((IObject)x, "MessageNumber");
          }
       }
       catch (Exception exception)

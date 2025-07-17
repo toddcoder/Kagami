@@ -5,7 +5,7 @@ using static Kagami.Library.Operations.NumericFunctions;
 
 namespace Kagami.Library.Objects;
 
-public readonly struct Float : IObject, INumeric, IObjectCompare, IComparable<Float>, IEquatable<Float>, IFormattable, IComparable
+public readonly struct Float : IObject, INumeric, IObjectCompare, IComparable<Float>, IEquatable<Float>, IFormattable, IComparable, IMessageNumber
 {
    public static implicit operator Float(double value) => new(value);
 
@@ -104,9 +104,67 @@ public readonly struct Float : IObject, INumeric, IObjectCompare, IComparable<Fl
 
    public KString ZFill(int count) => zfill(AsString, count);
 
+   public IObject Negate() => (Float)(-value);
+
+   public IObject Sign() => (Float)Math.Sign(value);
+
    public IObject Raise(INumeric power) => raise(this, power);
 
+   public IObject Remainder(INumeric other) => (Float)(value % other.AsDouble());
+
+   public IObject Divide(INumeric other) => (Float)(value / other.AsDouble());
+
+   public IObject DivRem(INumeric other) => (Float)Math.IEEERemainder(value, other.AsDouble());
+
+   public IObject Add(INumeric other) => (Float)(value + other.AsDouble());
+
+   public IObject Subtract(INumeric other) => (Float)(value - other.AsDouble());
+
+   public IObject Multiply(INumeric other) => (Float)(value * other.AsDouble());
+
+   public IObject Sin() => (Float)Math.Sin(value);
+
+   public IObject Cos() => (Float)Math.Cos(value);
+
+   public IObject Tan() => (Float)Math.Tan(value);
+
+   public IObject Asin() => (Float)Math.Asin(value);
+
+   public IObject Acos() => (Float)Math.Cos(value);
+
+   public IObject Atan() => (Float)Math.Atan(value);
+
+   public IObject Atan2(INumeric other) => (Float)Math.Atan2(value, other.AsDouble());
+
+   public IObject Sinh() => (Float)Math.Sinh(value);
+
+   public IObject Cosh() => (Float)Math.Cosh(value);
+
+   public IObject Tanh() => (Float)Math.Tanh(value);
+
+   public IObject Asinh() => (Float)Math.Asinh(value);
+
+   public IObject Acosh() => (Float)Math.Acosh(value);
+
+   public IObject Atanh() => (Float)Math.Atanh(value);
+
+   public IObject Sqrt() => (Float)Math.Sqrt(value);
+
+   public IObject Log() => (Float)Math.Log10(value);
+
+   public IObject Ln() => (Float)Math.Log(value);
+
+   public IObject Exp() => (Float)Math.Exp(value);
+
    public IObject Abs() => (Float)Math.Abs(value);
+
+   public IObject Ceiling() => (Float)Math.Ceiling(value);
+
+   public IObject Floor() => (Float)Math.Floor(value);
+
+   public IObject Fraction() => (Float)(value - (int)value);
+
+   public IObject Round(INumeric other) => (Float)Math.Round(value, other.AsInt32());
 
    public string AsString => value.ToString();
 
