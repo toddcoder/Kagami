@@ -1,0 +1,21 @@
+﻿open sys
+
+class XRational(n Int, d Int) {
+	guard d != 0 else {
+		throw "0 denominator not allowed!"
+	}
+	func gcd(a Int, b Int) => b == 0 ? a : gcd(b, a % b)
+	let g = gcd(n.abs(), d.abs())
+	let numer = n div g
+	let denom = d div g
+	func string => $"(numer)/(denom)"
+	func +(that XRational) => XRational(numer * that.denom + that.numer * denom, denom * that.denom)
+	func *(that XRational) => XRational(numer * that.numer, denom * that.denom)
+	func *(that Int) => XRational(numer * that, denom)
+	func <>(that XRational) => (numer * that.denom - that.numer * denom).sign()
+}
+init(n Int) => XRational(n, 1)
+
+func Int.*(r XRational) => XRational(self) + r
+let x = XRational(2, 3)
+println(2 * x)

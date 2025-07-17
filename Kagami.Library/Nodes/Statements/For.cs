@@ -61,6 +61,6 @@ namespace Kagami.Library.Nodes.Statements
          builder.NoOp();
       }
 
-      public override string ToString() => $"for {comparisand} <- {source} {block}";
+      public override string ToString() => $"for {comparisand} in {source} {block}";
    }
 }

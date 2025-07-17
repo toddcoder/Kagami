@@ -26,6 +26,7 @@ public class Module
       autoConversions[("String", "MutString")] = s => new MutString(s.AsString);
       autoConversions[("MutString", "String")] = m => new KString(m.AsString);
       autoConversions[("Word", "String")] = w => (KString)((Word)w).Text;
+      autoConversions[("Int", "Long")] = i => Long.LongObject(((Int)i).AsBigInteger());
    }
 
    public static Maybe<Func<IObject, IObject>> AutoConversion(string from, string to) => autoConversions.Maybe[(from, to)];
