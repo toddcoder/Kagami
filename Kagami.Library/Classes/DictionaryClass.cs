@@ -1,5 +1,6 @@
 ﻿using Kagami.Library.Objects;
 using Core.Monads;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Classes;
@@ -29,7 +30,7 @@ public class DictionaryClass : BaseClass, ICollectionClass
          }
          else
          {
-            return Unassigned.Value;
+            throw fail("Default is not assigned");
          }
       });
       messages["default".set()] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, v) =>
@@ -38,8 +39,10 @@ public class DictionaryClass : BaseClass, ICollectionClass
          {
             d.DefaultLambda = lambda.Some();
          }
-
-         d.DefaultValue = v.Some();
+         else
+         {
+            d.DefaultValue = v.Some();
+         }
 
          return KVoid.Value;
       });
@@ -60,6 +63,7 @@ public class DictionaryClass : BaseClass, ICollectionClass
       messages["forEach(_<Lambda>)"] = (obj, msg) => function<Dictionary, Lambda>(obj, msg, (d, l) => d.ForEach(l));
       messages["invert()"] = (obj, _) => function<Dictionary>(obj, d => d.Invert());
       messages["~(_)"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, o) => d.Concatenate((ICollection)o));
+      messages["memo(_)"] = (obj, msg) => function<Dictionary, Lambda>(obj, msg, (d, l) => d.Memo(l));
    }
 
    protected static IObject getKeyed(Dictionary dictionary, IObject key) => key switch

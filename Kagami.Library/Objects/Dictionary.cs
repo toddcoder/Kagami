@@ -114,7 +114,7 @@ public class Dictionary : IObject, IMutableCollection
       }
       else if (_defaultLambda is (true, var lambda))
       {
-         switch (parameterCount)
+         switch (lambda.ParameterCount.Value)
          {
             case 1:
                value = lambda.Invoke(key);
@@ -391,13 +391,9 @@ public class Dictionary : IObject, IMutableCollection
          var key = t[0];
          var value = t[1];
          this[key] = value;
+      }
 
-         return this;
-      }
-      else
-      {
-         return this;
-      }
+      return this;
    }
 
    public IObject Remove(IObject obj)
@@ -503,5 +499,14 @@ public class Dictionary : IObject, IMutableCollection
 
          return new KTuple([.. items]);
       }
+   }
+
+   public Dictionary Memo(Lambda lambda)
+   {
+      _defaultLambda = lambda;
+      DefaultValue = nil;
+      Caching = true;
+
+      return this;
    }
 }
