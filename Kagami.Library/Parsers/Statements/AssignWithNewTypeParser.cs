@@ -15,7 +15,7 @@ public partial class AssignWithNewTypeParser : StatementParser
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      var fieldName = tokens[1].Text;
+      var fieldName = tokens[2].Text;
       var className = tokens[4].Text;
       state.Colorize(tokens, Color.Whitespace, Color.Identifier, Color.Whitespace, Color.Class, Color.Whitespace, Color.Structure);
 

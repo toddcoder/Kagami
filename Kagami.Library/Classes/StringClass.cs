@@ -82,6 +82,7 @@ public class StringClass : BaseClass, ICollectionClass
       messages["replace(_<Regex>,_<String>)"] = (obj, msg) => function<KString, Regex, KString>(obj, msg, (s, r, t) => r.Replace(s.Value, t.Value));
       messages["replace".Selector("<Regex>", "<Lambda>")] =
          (obj, msg) => function<KString, Regex, Lambda>(obj, msg, (s, r, l) => r.Replace(s.Value, l));
+      messages["replace(_<Dictionary>)"] = (obj, msg) => function<KString, Dictionary>(obj, msg, (s, d) => s.ReplaceAll(d));
       messages["squeeze()"] = (obj, _) => function<KString>(obj, s => s.Squeeze());
       messages["isMatch(_<Regex>)"] = (obj, msg) => function<KString, Regex>(obj, msg, (s, r) => r.IsMatch(s.Value));
       messages["-(_)"] = (obj, msg) => function<KString, KString>(obj, msg, (s1, s2) => s1.Subtract(s2.Value));

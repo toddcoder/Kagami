@@ -1,2 +1,2 @@
 open
- | Arguments
+...() | Arguments

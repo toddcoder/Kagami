@@ -29,7 +29,7 @@ public class AssignFieldWithType(string fieldName, string className) : OneOperan
       }
       else
       {
-         return _field.Exception;
+         return fieldNotFound(fieldName);
       }
    }
 

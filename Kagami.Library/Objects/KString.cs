@@ -217,6 +217,17 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
    public KString ReplaceAll(string input, Lambda lambda) => replaceAll(value, input, lambda);
 
+   public KString ReplaceAll(Dictionary dictionary)
+   {
+      var buffer = new StringBuilder(value);
+      foreach (var (find, replace) in dictionary.InternalHash)
+      {
+         buffer.Replace(find.AsString, replace.AsString);
+      }
+
+      return (KString)buffer.ToString();
+   }
+
    public KTuple Split(ITextFinding textFinding) => textFinding.Split(value);
 
    public KTuple Split(string input) => split(value, input);
