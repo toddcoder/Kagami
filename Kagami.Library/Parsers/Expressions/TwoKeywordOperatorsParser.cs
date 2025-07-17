@@ -35,7 +35,7 @@ public partial class TwoKeywordOperatorsParser : SymbolParser
             };
 
             break;
-         case "if" when word2 == "not":
+         case "if" when word2 == "not" && !builder.Flags[ExpressionFlags.OmitIf]:
             message = "ifNot(_)";
             break;
          case "not" when word2 == "same":
