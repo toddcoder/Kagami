@@ -1,3 +1,16 @@
 ﻿open sys
 
-42 max 43
+enum Expr {
+	when Var(name)
+	when Number(number)
+	when UnOp(op, args)
+	when BinOp(op, left, right)
+}
+
+func simplifyTop()
+	when Expr.UnOp("-", Expr.UnOp("-", e)) return e
+	when Expr.BinOp("+", e, Expr.Number(0)) return e
+	when Expr.BinOp("*", e, Expr.Number(1)) return e
+	when e return e
+
+simplifyTop(Expr.UnOp("-", Expr.UnOp("-", Expr.Number(42))))
