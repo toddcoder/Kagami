@@ -14,6 +14,23 @@ namespace Kagami.Library.Objects;
 
 public class Iterator : IObject, IIterator
 {
+   protected class IteratorEqualityComparer(Lambda lambda) : IEqualityComparer<IObject>
+   {
+      public bool Equals(IObject? x, IObject? y)
+      {
+         if (x is not null && y is not null)
+         {
+            return lambda.Invoke(x, y).IsTrue;
+         }
+         else
+         {
+            return false;
+         }
+      }
+
+      public int GetHashCode(IObject obj) => obj.Hash;
+   }
+
    protected ICollection collection;
    protected int index;
    protected ICollectionClass collectionClass;
@@ -902,6 +919,8 @@ public class Iterator : IObject, IIterator
    }
 
    public virtual IObject Unique() => collectionClass.Revert(List().ToList().Distinct());
+
+   public IObject Unique(Lambda lambda) => collectionClass.Revert(List().ToList().Distinct(new IteratorEqualityComparer(lambda)));
 
    public IObject Span(Lambda predicate)
    {

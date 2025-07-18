@@ -295,6 +295,8 @@ public class StreamIterator : IObject, IIterator
 
    public IObject Unique() => Copy(new DistinctAction());
 
+   public IObject Unique(Lambda lambda) => terminate().Unique(lambda);
+
    public IObject Span(Lambda predicate) => terminate().Span(predicate);
 
    public IObject Span(int count) => terminate().Span(count);

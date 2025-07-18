@@ -139,6 +139,8 @@ public interface IIterator : IEquivalentClass
 
    IObject Unique();
 
+   IObject Unique(Lambda lambda);
+
    IObject Span(Lambda predicate);
 
    IObject Span(int count);
