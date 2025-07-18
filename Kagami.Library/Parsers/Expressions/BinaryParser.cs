@@ -10,7 +10,7 @@ public partial class BinaryParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(0b)([01_`]+)([Lif])?\b")]
+   [GeneratedRegex(@"^(\s*)(0b)([01][01_`]*)([Lif])?\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)

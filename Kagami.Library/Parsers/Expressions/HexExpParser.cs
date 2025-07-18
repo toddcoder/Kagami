@@ -14,7 +14,7 @@ public partial class HexExpParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(0x)([\d_`a-f]+\.[\d_`a-f]+)(?:(p)([-\+]?\d+))?(i)?")]
+   [GeneratedRegex(@"^(\s*)(0x)(\d[\d_`a-f]*\.\d[\d_`a-f]*)(?:(p)([-\+]?\d+))?(i)?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)

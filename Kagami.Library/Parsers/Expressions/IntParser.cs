@@ -6,9 +6,11 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class IntParser : SymbolParser
 {
-   public IntParser(ExpressionBuilder builder) : base(builder) { }
+   public IntParser(ExpressionBuilder builder) : base(builder)
+   {
+   }
 
-   [GeneratedRegex(@"^(\s*)([\d_`]+)([Lifd])?\b")]
+   [GeneratedRegex(@"^(\s*)(\d[\d_`]*)([Lifd])?\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)

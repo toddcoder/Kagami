@@ -8,7 +8,9 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class ByteParser : SymbolParser
 {
-   public ByteParser(ExpressionBuilder builder) : base(builder) { }
+   public ByteParser(ExpressionBuilder builder) : base(builder)
+   {
+   }
 
    [GeneratedRegex(@"^(\s*)(\d{1,3})(b)")]
    public override partial Regex Regex();
