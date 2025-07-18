@@ -12,7 +12,10 @@ public class Folder : IObject, ICollection
 {
    protected FolderName folderName;
 
-   public Folder(string folderName) => this.folderName = folderName;
+   public Folder(string folderName)
+   {
+      this.folderName = folderName;
+   }
 
    public List<File> Files => folderName.Files.Select(f => new File(f.ToString())).ToList();
 
@@ -69,4 +72,6 @@ public class Folder : IObject, ICollection
    public IObject Flatten() => this;
 
    public IObject this[SkipTake skipTake] => Library.Objects.CollectionFunctions.skipTake(this, skipTake);
+
+   public File Combine(string fileExtension) => new(Path.Combine(folderName.FullPath, fileExtension));
 }

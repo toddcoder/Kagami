@@ -17,5 +17,6 @@ public class FolderClass : BaseClass
       messages["files".get()] = (obj, _) => function<Folder>(obj, f => new Iterator(new KArray(f.Files)));
       messages["folders".get()] = (obj, _) => function<Folder>(obj, f => new Iterator(new KArray(f.Folders)));
       messages["fullPath".get()] = (obj, _) => function<Folder>(obj, f => (KString)f.AsString);
+      messages["~(_)"] = (obj, msg) => function<Folder, KString>(obj, msg, (f, n) => f.Combine(n.Value));
    }
 }

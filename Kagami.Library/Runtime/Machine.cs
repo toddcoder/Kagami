@@ -104,6 +104,10 @@ public class Machine
                   return exception;
                }
             }
+            else
+            {
+               lastValue = stack.Peek().Peek() | lastValue;
+            }
 
             if (operation.Increment)
             {
@@ -132,6 +136,7 @@ public class Machine
       {
          fields.Remove(t => t is not FieldType.Capture);
       }
+
       var frame = new Frame(invokable.RequiresFunctionFrame ? Address : nil, arguments, fields);
 
       if (invokable is YieldingInvokable yfi)
@@ -146,6 +151,7 @@ public class Machine
       {
          PushFrame(new Frame());
       }
+
       if (GoTo(invokable.Address))
       {
          return invoke();
@@ -288,6 +294,10 @@ public class Machine
                      {
                         return exception;
                      }
+                  }
+                  else
+                  {
+                     lastValue = stack.Peek().Peek() | lastValue;
                   }
 
                   if (currentAddress == operations.Address)
@@ -555,6 +565,7 @@ public class Machine
          {
             return immutableField(fieldName);
          }
+
          if (field.Value is Reference r)
          {
             r.Field.Value = value;

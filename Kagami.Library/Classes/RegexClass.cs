@@ -22,5 +22,45 @@ public class RegexClass : BaseClass, IEquivalentClass
       messages["/(_<String>)"] = (obj, msg) => function<Regex, KString>(obj, msg, (r, s) => r.PendingRegex(s));
    }
 
+   public override void RegisterClassMessages()
+   {
+      base.RegisterClassMessages();
+
+      classMessages["parse(_<String>,global:_<Boolean>,textOnly:_<Boolean>)"] = (_, msg) => parseRegex(msg.Arguments);
+      classMessages["parse(_<String>)"] = (_, msg) => parseRegex(msg.Arguments);
+   }
+
+   protected static IObject parseRegex(Arguments arguments)
+   {
+      try
+      {
+         string pattern;
+         bool global;
+         bool textOnly;
+
+         switch (arguments.Length)
+         {
+            case 3:
+               pattern = ((KString)arguments[0]).Value;
+               global = ((KBoolean)arguments[1]).Value;
+               textOnly = ((KBoolean)arguments[2]).Value;
+               break;
+            case 1:
+               pattern = ((KString)arguments[0]).Value;
+               global = false;
+               textOnly = false;
+               break;
+            default:
+               return new Failure("Only 1 or 3 parameters allowed");
+         }
+
+         return Success.Object(new Regex(pattern, global, textOnly));
+      }
+      catch (Exception exception)
+      {
+         return new Failure(exception.Message);
+      }
+   }
+
    public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("TextFinding");
 }

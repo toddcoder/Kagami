@@ -1,7 +1,3 @@
 ﻿open sys
 
-var callbacks = []
-for i in 0..<2 {
-	callbacks << -> println(i)
-}
-callbacks each c -> c()
+42 max 43
