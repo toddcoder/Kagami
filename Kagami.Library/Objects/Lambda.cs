@@ -124,7 +124,10 @@ public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields
 
       return;
 
-      bool include(string fieldName, Field field) => field.Type is FieldType.Assignment && !capturing.Contains(fieldName);
+      bool include(string fieldName, Field field)
+      {
+         return field.Type is FieldType.Assignment or FieldType.Parameter or FieldType.Capture or FieldType.Binding && !capturing.Contains(fieldName);
+      }
    }
 
    public Int ParameterCount => invokable.Parameters.Length;
