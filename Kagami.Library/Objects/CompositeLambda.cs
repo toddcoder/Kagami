@@ -7,9 +7,9 @@ public class CompositeLambda : Lambda
    protected Lambda lambda1;
    protected Lambda lambda2;
 
-   public CompositeLambda(IInvokable invokable1, IInvokable invokable2) : base(invokable1, true)
+   public CompositeLambda(IInvokable invokable, IInvokable invokable2) : base(invokable, true)
    {
-      lambda1 = new Lambda(invokable1, true);
+      lambda1 = new Lambda(invokable, true);
       lambda2 = new Lambda(invokable2, true);
    }
 

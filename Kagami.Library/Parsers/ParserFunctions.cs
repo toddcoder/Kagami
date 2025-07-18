@@ -528,9 +528,9 @@ public static class ParserFunctions
          .Map(s => s.KeepUntil(":").Trim());
    }
 
-   private static Optional<bool> parseCapturing(ParseState state)
+   private static Optional<bool> parseNoCapturing(ParseState state)
    {
-      return state.Scan(@"^(\s*cap\s+)?", Color.Keyword).Map(s => s.IsNotEmpty());
+      return state.Scan(@"^(\s*nocap\s+)?", Color.Keyword).Map(s => s.IsNotEmpty());
    }
 
    private static Optional<string> parseParameterName(ParseState state)
@@ -640,12 +640,12 @@ public static class ParserFunctions
       from reference in parseReference(state)
       from mutable in parseMutable(state)
       from label in parseLabel(state)
-      from capturing in parseCapturing(state)
+      from noCapturing in parseNoCapturing(state)
       from name in parseParameterName(state)
       from typeConstraint in parseTypeConstraint(state)
       from variadic in parseVaraidic(state)
       from defaultValue in parseDefaultValue(state, defaultRequired)
-      select new Parameter(mutable, label, name, defaultValue, typeConstraint, reference, capturing) { Variadic = variadic };
+      select new Parameter(mutable, label, name, defaultValue, typeConstraint, reference, noCapturing) { Variadic = variadic };
 
    public static Optional<Block> getAnyBlock(ParseState state)
    {

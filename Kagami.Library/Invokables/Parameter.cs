@@ -20,10 +20,10 @@ public class Parameter : IEquatable<Parameter>
    protected Maybe<IInvokable> _defaultValue;
    protected Maybe<TypeConstraint> _typeConstraint;
    protected bool reference;
-   protected bool capturing;
+   protected bool noCapturing;
 
    public Parameter(bool mutable, string label, string name, Maybe<IInvokable> defaultValue, Maybe<TypeConstraint> typeConstraint,
-      bool reference, bool capturing)
+      bool reference, bool noCapturing)
    {
       this.mutable = mutable;
       this.label = label;
@@ -31,11 +31,11 @@ public class Parameter : IEquatable<Parameter>
       _defaultValue = defaultValue;
       _typeConstraint = typeConstraint;
       this.reference = reference;
-      this.capturing = capturing;
+      this.noCapturing = noCapturing;
    }
 
    public Parameter(bool mutable, string label, string name, PossibleInvokable defaultValue, PossibleTypeConstraint typeConstraint, bool reference,
-      bool capturing)
+      bool noCapturing)
    {
       this.mutable = mutable;
       this.label = label;
@@ -43,7 +43,7 @@ public class Parameter : IEquatable<Parameter>
       _defaultValue = defaultValue.Maybe;
       _typeConstraint = typeConstraint.Maybe;
       this.reference = reference;
-      this.capturing = capturing;
+      this.noCapturing = noCapturing;
    }
 
    public bool Mutable
@@ -64,7 +64,7 @@ public class Parameter : IEquatable<Parameter>
 
    public bool Variadic { get; set; }
 
-   public bool Capturing => capturing;
+   public bool NoCapturing => noCapturing;
 
    public bool Equals(Parameter? other)
    {
@@ -75,7 +75,7 @@ public class Parameter : IEquatable<Parameter>
 
    public override bool Equals(object? obj) => Equals((Parameter)obj!);
 
-   public override int GetHashCode() => HashCode.Combine(name, label, _defaultValue, _typeConstraint.Map(tc => tc.Hash) | 0, reference, capturing);
+   public override int GetHashCode() => HashCode.Combine(name, label, _defaultValue, _typeConstraint.Map(tc => tc.Hash) | 0, reference, noCapturing);
 
    public string NameForFunction
    {

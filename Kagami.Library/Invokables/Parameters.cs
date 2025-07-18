@@ -14,12 +14,12 @@ public class Parameters : IEquatable<Parameters>, IEnumerable<Parameter>
    public static Parameters Empty => new();
 
    protected Parameter[] parameters;
-   protected Parameter[] capturingParameters;
+   protected Parameter[] noCapturingParameters;
 
    public Parameters(params Parameter[] parameters)
    {
-      this.parameters = [.. parameters.Where(p => !p.Capturing)];
-      capturingParameters = [.. parameters.Where(p => p.Capturing)];
+      this.parameters = [.. parameters.Where(p => !p.NoCapturing)];
+      noCapturingParameters = [.. parameters.Where(p => p.NoCapturing)];
    }
 
    public Parameters() : this((string[]) [])
@@ -50,7 +50,7 @@ public class Parameters : IEquatable<Parameters>, IEnumerable<Parameter>
 
    public Parameter[] GetParameters() => parameters;
 
-   public Parameter[] GetCapturingParameters() => capturingParameters;
+   public Parameter[] GetNoCapturingParameters() => noCapturingParameters;
 
    public Parameter this[int index] => parameters[index];
 

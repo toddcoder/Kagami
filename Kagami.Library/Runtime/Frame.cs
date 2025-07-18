@@ -142,6 +142,11 @@ public class Frame
          for (var i = 0; i < length && !variadic; i++)
          {
             var parameter = parameters[i];
+            if (parameter.NoCapturing)
+            {
+               continue;
+            }
+
             lastValue = arguments[i];
             if (fields.ContainsKey(parameter.Name))
             {
@@ -176,6 +181,11 @@ public class Frame
             for (var i = length; i < parameters.Length; i++)
             {
                var parameter = parameters[i];
+               if (parameter.NoCapturing)
+               {
+                  continue;
+               }
+
                var _defaultValue = parameter.DefaultValue;
                if (fields.ContainsKey(parameter.Name))
                {
