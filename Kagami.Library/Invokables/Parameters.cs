@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using Kagami.Library.Objects;
 using Core.Enumerables;
-using Array = System.Array;
 
 namespace Kagami.Library.Invokables;
 
@@ -19,19 +18,19 @@ public class Parameters : IEquatable<Parameters>, IEnumerable<Parameter>
 
    public Parameters(params Parameter[] parameters)
    {
-      this.parameters = parameters.Where(p => !p.Capturing).ToArray();
-      capturingParameters = parameters.Where(p => p.Capturing).ToArray();
+      this.parameters = [.. parameters.Where(p => !p.Capturing)];
+      capturingParameters = [.. parameters.Where(p => p.Capturing)];
    }
 
-   public Parameters() : this(Array.Empty<Parameter>())
+   public Parameters() : this((string[]) [])
    {
    }
 
-   public Parameters(int count) : this(Enumerable.Range(0, count).Select(i => Parameter.New(false, $"__${i}")).ToArray())
+   public Parameters(int count) : this([.. Enumerable.Range(0, count).Select(i => Parameter.New(false, $"__${i}"))])
    {
    }
 
-   public Parameters(params string[] parameterNames) : this(parameterNames.Select(n => Parameter.New(false, n)).ToArray())
+   public Parameters(params string[] parameterNames) : this([.. parameterNames.Select(n => Parameter.New(false, n))])
    {
    }
 
@@ -65,5 +64,5 @@ public class Parameters : IEquatable<Parameters>, IEnumerable<Parameter>
 
    public override string ToString() => parameters.ToString(", ");
 
-   public Selector Selector(string name) => name.Selector(parameters.Select(p => p.NameForFunction).ToArray());
+   public Selector Selector(string name) => name.Selector([.. parameters.Select(p => p.NameForFunction)]);
 }
