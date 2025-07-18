@@ -8,14 +8,12 @@ public partial class IntParser : SymbolParser
 {
    public IntParser(ExpressionBuilder builder) : base(builder) { }
 
-   //public override string Pattern => "^ /(/s*) /([/d '_']+) /['Lif']? /b";
-
-   [GeneratedRegex(@"^(\s*)([\d_]+)([Lifd])?\b")]
+   [GeneratedRegex(@"^(\s*)([\d_`]+)([Lifd])?\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      var source = tokens[2].Text.Replace("_", "");
+      var source = tokens[2].Text.Replace("_", "").Replace("`", "");
       var type = tokens[3].Text;
       state.Colorize(tokens, Color.Whitespace, Color.Number, Color.NumberPart);
 

@@ -27,6 +27,8 @@ public interface IIterator : IEquivalentClass
 
    KString Join(string connector, int limit, string truncated);
 
+   IObject Join(Lambda lambda);
+
    IObject Sort(Lambda lambda, bool ascending);
 
    IObject Sort(bool ascending);

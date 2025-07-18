@@ -10,18 +10,16 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class HexExpParser : SymbolParser
 {
-   //public override string Pattern => "^ /(/s*) /'0x' /([/d '_a-f']+ '.' [/d '_a-f']+) (/'p' /(['-+']? /d+))? /'i'?";
-
    public HexExpParser(ExpressionBuilder builder) : base(builder)
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(0x)([\d_a-f]+\.[\d_a-f]+)(?:(p)([-\+]?\d+))?(i)?")]
+   [GeneratedRegex(@"^(\s*)(0x)([\d_`a-f]+\.[\d_`a-f]+)(?:(p)([-\+]?\d+))?(i)?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      var source = tokens[3].Text.Replace("_", "") + tokens[4].Text + tokens[5].Text;
+      var source = tokens[3].Text.Replace("_", "").Replace("`", "") + tokens[4].Text + tokens[5].Text;
       var type = tokens[6].Text;
       state.Colorize(tokens, Color.Whitespace, Color.NumberPart, Color.Number, Color.NumberPart, Color.Number, Color.NumberPart);
 

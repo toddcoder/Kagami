@@ -124,6 +124,8 @@ public class Machine
       return lastValue.Success();
    }
 
+   public IObject LastValue => lastValue;
+
    public Optional<IObject> Invoke(IInvokable invokable, Arguments arguments, Fields fields, bool bareLambda, bool extraFrame = false)
    {
       if (bareLambda)

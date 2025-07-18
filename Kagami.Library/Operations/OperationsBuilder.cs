@@ -398,6 +398,8 @@ public class OperationsBuilder
 
    public void AssignFieldWithType(string fieldName, string className) => add(new AssignFieldWithType(fieldName, className));
 
+   public void LastValue() => add(new LastValue());
+
    public Result<Operations> ToOperations(ParseState state)
    {
       operations.Add(new Stop());

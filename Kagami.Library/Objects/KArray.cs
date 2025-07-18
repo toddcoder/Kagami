@@ -162,6 +162,28 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public IObject Get(int index) => index.Between(0).Until(list.Count) ? Some.Object(list[index]) : KNil.NilValue;
 
+   public IObject this[NumericOpenRange openRange]
+   {
+      get
+      {
+         List<IObject> result = [];
+         var iterator = openRange.GetIterator(false);
+         while (iterator.Next() is (true, var obj))
+         {
+            if (obj is Int { Value: >= 0 } index && index.Value < list.Count)
+            {
+               result.Add(list[index.Value]);
+            }
+            else
+            {
+               break;
+            }
+         }
+
+         return new KArray(result);
+      }
+   }
+
    public IObject this[Sequence sequence]
    {
       get
@@ -534,4 +556,6 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
    public KArray Tail => list.Count > 0 ? new KArray([.. list.Skip(1)]) : new KArray([]);
 
    public KTuple HeadTail => new(Head, Tail);
+
+   public KRange Indexes => new((Int)0, (Int)list.Count, false);
 }

@@ -124,6 +124,8 @@ public class StreamIterator : IObject, IIterator
 
    public KString Join(string connector, int limit, string truncated) => terminate().Join(connector, limit, truncated);
 
+   public IObject Join(Lambda lambda) => FoldLeft(lambda);
+
    public IObject Sort(Lambda lambda, bool ascending) => terminate().Sort(lambda, ascending);
 
    public IObject Sort(bool ascending) => terminate().Sort(ascending);

@@ -206,4 +206,6 @@ public readonly struct KChar : IObject, IComparable<KChar>, IEquatable<KChar>, I
    public KChar Succ() => (KChar)(value + 1);
 
    public KChar Pred() => (KChar)(value - 1);
+
+   public KString UnicodeCat => char.GetUnicodeCategory(value).ToString().ToLower1();
 }

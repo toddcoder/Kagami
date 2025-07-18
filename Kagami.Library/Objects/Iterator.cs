@@ -114,6 +114,8 @@ public class Iterator : IObject, IIterator
       }
    }
 
+   public IObject Join(Lambda lambda) => FoldLeft(lambda);
+
    public IObject Sort(Lambda lambda, bool ascending)
    {
       switch (lambda.Invokable.Parameters.Length)

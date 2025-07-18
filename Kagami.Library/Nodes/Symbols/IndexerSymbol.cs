@@ -14,7 +14,7 @@ public class IndexerSymbol : Symbol, IHasExpressions
       var _symbol = GetIndex(builder, arguments);
       if (_symbol is (true, OpenRangeSymbol))
       {
-         Selector selector = "fromOpenRange(_)";
+         Selector selector = "[](_<OpenRange>)";
          builder.SendMessage(selector, 1);
       }
       else
@@ -57,7 +57,7 @@ public class IndexerSymbol : Symbol, IHasExpressions
       var isOpenRange = newSequenceSymbol.IsOpenRange;
       if (isOpenRange)
       {
-         Selector selector = "fromOpenRange(_)";
+         Selector selector = "[](_<OpenRange>)";
          builder.SendMessage(selector, 1);
       }
       else

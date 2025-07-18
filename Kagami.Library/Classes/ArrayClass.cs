@@ -23,6 +23,7 @@ public class ArrayClass : BaseClass, ICollectionClass
       findAndIndexMessages();
 
       messages["[](_)"] = (obj, msg) => function<KArray, IObject>(obj, msg, getIndexed);
+      messages["[](_<NumericOpenRange>)"] = (obj, msg) => function<KArray, NumericOpenRange>(obj, msg, (a, o) => a[o]);
       messages["get(_)"] = (obj, msg) => function<KArray, IObject>(obj, msg, (a, i) => someOf(a.Get(i)));
       messages["[]=(_,_)"] = (obj, msg) => function<KArray, IObject, IObject>(obj, msg, setIndexed);
       messages["~(_)"] = (obj, msg) => function<KArray, KArray>(obj, msg, (a1, a2) => a1.Concatenate(a2));
@@ -66,11 +67,19 @@ public class ArrayClass : BaseClass, ICollectionClass
       messages["head".get()] = (obj, _) => function<KArray>(obj, a => a.Head);
       messages["tail".get()] = (obj, _) => function<KArray>(obj, a => a.Tail);
       messages["headTail".get()] = (obj, _) => function<KArray>(obj, a => a.HeadTail);
+      messages["indexes".get()] = (obj, _) => function<KArray>(obj, a => a.Indexes);
    }
 
    protected static IObject getIndexed(KArray a, IObject i)
    {
-      return CollectionFunctions.getIndexed(a, i, (array, index) => ((KArray)array)[index], (array, list) => ((KArray)array)[list]);
+      if (i is NumericOpenRange openRange)
+      {
+         return a[openRange];
+      }
+      else
+      {
+         return CollectionFunctions.getIndexed(a, i, (array, index) => ((KArray)array)[index], (array, list) => ((KArray)array)[list]);
+      }
    }
 
    protected static IObject setIndexed(KArray a, IObject i, IObject v)

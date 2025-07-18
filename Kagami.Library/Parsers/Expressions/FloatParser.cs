@@ -12,12 +12,12 @@ public partial class FloatParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s*)([\d_]+\.[\d_]+)(?:(e)([-\+]?\d+))?(i|d|f)?")]
+   [GeneratedRegex(@"^(\s*)([\d_`]+\.[\d_`]+)(?:(e)([-\+]?\d+))?(i|d|f)?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      var source = tokens[2].Text.Replace("_", "") + tokens[3].Text + tokens[4].Text;
+      var source = tokens[2].Text.Replace("_", "").Replace("`", "") + tokens[3].Text + tokens[4].Text;
       var type = tokens[5].Text;
       state.Colorize(tokens, Color.Whitespace, Color.Number, Color.NumberPart, Color.Number, Color.NumberPart);
 

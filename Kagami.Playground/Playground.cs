@@ -754,12 +754,12 @@ public partial class Playground : Form
 
    protected Maybe<string> getWord()
    {
-      return textEditor.Text.Keep(textEditor.SelectionStart).Matches("/(/w+) $").Map(r => r.FirstGroup);
+      return textEditor.Text.Keep(textEditor.SelectionStart).Matches("/([/w '`']+) $").Map(r => r.FirstGroup);
    }
 
    protected Maybe<string> findWord(string begin)
    {
-      return textEditor.Text.Unjoin("-/w+").Distinct().Where(word => word.StartsWith(begin)).FirstOrNone();
+      return textEditor.Text.Unjoin("-[/w+ '`']").Distinct().Where(word => word.StartsWith(begin)).FirstOrNone();
    }
 
    protected void Playground_FormClosing(object sender, FormClosingEventArgs e)
