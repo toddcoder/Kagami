@@ -29,6 +29,7 @@ public class PrefixParser(ExpressionBuilder builder) : MultiParser
          yield return new TakeOperatorParser(builder);
          yield return new ImplicitOperatorParser(builder);
          yield return new LambdaFromSelectorParser(builder);
+         yield return new FlattenParser(builder);
          yield return new BindingParser(builder);
       }
    }

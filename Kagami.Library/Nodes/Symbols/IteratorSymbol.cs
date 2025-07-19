@@ -29,5 +29,5 @@ public class IteratorSymbol : Symbol
 
    public override Arity Arity => Arity.Prefix;
 
-   public override string ToString() => indexed ? "?" : lazy ? "!!" : "!";
+   public override string ToString() => indexed ? "iit" : lazy ? "lit" : "it";
 }

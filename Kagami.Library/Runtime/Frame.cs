@@ -247,7 +247,7 @@ public class Frame
 
    public void SetFields(Fields fields)
    {
-      foreach (var (fieldName, field) in fields)
+      foreach (var (fieldName, field) in fields.Where(f => f.field.Type is not FieldType.Parameter))
       {
          this.fields.AssignLocal(fieldName, field.Type, field.Value, true).Force();
       }

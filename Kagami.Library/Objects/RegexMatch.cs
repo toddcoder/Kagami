@@ -95,7 +95,14 @@ public readonly struct RegexMatch : IObject, IProcessPlaceholders, IEquatable<Re
 
    public Hash<string, IObject> Internals => internals;
 
-   public KString this[int index] => index.Between(0).Until(groups.Length) ? groups[index].Text : "";
+   public KString this[int index]
+   {
+      get
+      {
+         var captures = Captures;
+         return index.Between(0).Until(captures.Length.Value) ? captures[index].AsString : "";
+      }
+   }
 
    public KString this[string name]
    {

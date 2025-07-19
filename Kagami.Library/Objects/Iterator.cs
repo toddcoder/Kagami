@@ -137,17 +137,27 @@ public class Iterator : IObject, IIterator
    {
       switch (lambda.Invokable.Parameters.Length)
       {
-         case 1:
+         case 1 when ascending:
          {
-            var result = ascending ? List().ToList().OrderBy(i => lambda.Invoke(i), new ObjectComparer()).ToList()
-               : List().ToList().OrderByDescending(i => lambda.Invoke(i)).ToList();
+            var result = List().OrderBy(i => lambda.Invoke(i), new ObjectComparer());
             return collectionClass.Revert(result);
          }
-         case 2:
+         case 1:
+         {
+            var result = List().OrderByDescending(i => lambda.Invoke(i), new ObjectComparer());
+            return collectionClass.Revert(result);
+         }
+         case 2 when ascending:
          {
             IObject[] array = [.. List()];
             Array.Sort(array, (i, j) => ((Int)lambda.Invoke(i, j)).Value);
 
+            return collectionClass.Revert(array);
+         }
+         case 2:
+         {
+            IObject[] array = [.. List()];
+            Array.Sort(array, (i, j) => -((Int)lambda.Invoke(i, j)).Value);
             return collectionClass.Revert(array);
          }
          default:
@@ -911,6 +921,7 @@ public class Iterator : IObject, IIterator
             {
                i = 0;
             }
+
             outerList.Add(source[i++]);
          }
       }
@@ -918,9 +929,29 @@ public class Iterator : IObject, IIterator
       return collectionClass.Revert(outerList);
    }
 
-   public virtual IObject Unique() => collectionClass.Revert(List().ToList().Distinct());
+   public virtual IObject Unique() => collectionClass.Revert(List().Distinct());
 
-   public IObject Unique(Lambda lambda) => collectionClass.Revert(List().ToList().Distinct(new IteratorEqualityComparer(lambda)));
+   public IObject Unique(Lambda lambda)
+   {
+      return collectionClass.Revert(unique(List()));
+
+      IEnumerable<IObject> unique(IEnumerable<IObject> list)
+      {
+         List<IObject> result = [];
+         foreach (var obj in list)
+         {
+            if (!result.AtLeastOne(i => lambda.Invoke(i, obj).IsTrue))
+            {
+               result.Add(obj);
+            }
+         }
+
+         foreach (var obj in result)
+         {
+            yield return obj;
+         }
+      }
+   }
 
    public IObject Span(Lambda predicate)
    {

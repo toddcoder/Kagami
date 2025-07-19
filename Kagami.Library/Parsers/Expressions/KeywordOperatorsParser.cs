@@ -12,7 +12,7 @@ public partial class KeywordOperatorsParser : SymbolParser
    }
 
    [GeneratedRegex(@"^(\s+)(if|map|join|sort|foldl|foldr|all|any|none|one|zip|skip|take|while|until|min|max" +
-      @"|does|x|div|each|divmod|with|approx|same|xor)(\s+)")]
+      @"|does|X|div|each|divmod|with|approx|same|xor)(\s+)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -72,7 +72,7 @@ public partial class KeywordOperatorsParser : SymbolParser
                case "does":
                   builder.Add(new SendBinaryMessageSymbol("respondsTo(_)", Precedence.Boolean));
                   break;
-               case "x":
+               case "X":
                   builder.Add(new SendBinaryMessageSymbol("cross(_)", Precedence.Concatenate));
                   break;
                case "div":
