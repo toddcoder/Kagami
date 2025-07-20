@@ -53,6 +53,8 @@ public partial class Playground : Form
    protected UiAction uiRun = new();
    protected string[] fieldNames = [];
    protected bool autoColorize;
+   protected string fontName = "Consolas";
+   protected float fontSize = 12f;
 
    public Playground()
    {
@@ -75,8 +77,10 @@ public partial class Playground : Form
 
       packageFolder = playgroundConfiguration.PackageFolder;
 
-      outputConsole = new TextBoxConsole(this, textConsole, playgroundConfiguration.FontName, playgroundConfiguration.FontSize,
-         TextBoxConsole.ConsoleColorType.Quick);
+      fontName = playgroundConfiguration.FontName;
+      fontSize = playgroundConfiguration.FontSize;
+
+      outputConsole = new TextBoxConsole(this, textConsole, fontName, fontSize, TextBoxConsole.ConsoleColorType.Quick);
       textWriter = outputConsole.Writer();
       textReader = outputConsole.Reader();
       context = new PlaygroundContext(textWriter, textReader);
@@ -85,8 +89,7 @@ public partial class Playground : Form
       try
       {
          _exceptionData = nil;
-         document = new Document(this, textEditor, ".kagami", "Kagami", playgroundConfiguration.FontName, playgroundConfiguration.FontSize,
-            autoDirty: false);
+         document = new Document(this, textEditor, ".kagami", "Kagami", fontName, fontSize, autoDirty: false);
 
          var menus = document.Menus;
          menus.Menu("&File");
@@ -198,9 +201,9 @@ public partial class Playground : Form
          _ = builder.Row + 50f + 50f + 40 + 40;
          builder.SetUp();
 
-         (builder + textEditor).SpanCol(3).Row();
+         (builder + textEditor + fontName + fontSize).SpanCol(3).Row();
 
-         (builder + textConsole).SpanCol(3).Row();
+         (builder + textConsole + fontName + fontSize).SpanCol(3).Row();
 
          uiValue.ZeroOut();
          uiType.ZeroOut();

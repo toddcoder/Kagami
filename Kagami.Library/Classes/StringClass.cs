@@ -69,7 +69,7 @@ public class StringClass : BaseClass, ICollectionClass
       messages["get()"] = (obj, _) => function<KString>(obj, s => s.Get());
       messages["set()"] = (obj, _) => function<KString>(obj, s => s.Set());
       messages["swapCase()"] = (obj, _) => function<KString>(obj, s => s.SwapCase());
-      messages["fields".get()] = (obj, _) => function<KString>(obj, s => s.Fields);
+      messages["fields()"] = (obj, _) => function<KString>(obj, s => s.Fields);
       messages["words(at:_<Int>)"] = (obj, msg) => function<KString, Int>(obj, msg, (s, i) => s.Words(i.Value));
       messages["words()"] = (obj, _) => function<KString>(obj, s => s.Words(new Regex("/s+", false, false, false, false)));
       messages["words(regex:_)"] = (obj, msg) => function<KString, Regex>(obj, msg, (s, r) => s.Words(r));
