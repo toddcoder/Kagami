@@ -1,8 +1,8 @@
 ﻿open sys
 
 let numbers = a"one two three four five"
-println(m@numbers.length)
-println(i@numbers.length > 3)
-let lengths = m@numbers.length
-println(z@numbers ~ "=" ~ z@lengths)
-println(f@lengths + v@a)
+println(m!numbers.length)
+println(i!numbers.length > 3)
+let lengths = m!numbers.length
+println(z!numbers ~ "=" ~ z!lengths)
+println(f!lengths + v!a)

@@ -1,5 +1,5 @@
 ﻿open sys
 
 let thrill = a"Will fill until"
-let result = f@thrill ~ ", " ~ v@x
+let result = f!thrill ~ ", " ~ v!x
 println(result)

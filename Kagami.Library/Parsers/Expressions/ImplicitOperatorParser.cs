@@ -11,7 +11,7 @@ public partial class ImplicitOperatorParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(m|i|z|f|v|e)(!)")]
+   [GeneratedRegex(@"^(\s*)(m|i|z|f|v|e)(!)(?! )")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)

@@ -1,3 +1,1 @@
-0
-1
-!Iterator | Iterator
+object4 Expr$UnOp(op = "-", args = object3 Expr$UnOp(op = "-", args = object2 Expr$Number`(number = 42))) | Expr$UnOp
