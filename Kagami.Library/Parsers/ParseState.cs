@@ -18,6 +18,8 @@ public class ParseState : IEnumerable<Statement>
 {
    protected string source;
    protected int index;
+   protected int line;
+   protected int character;
    protected List<Statement> statements = [];
    protected Stack<List<Statement>> statementStack = new();
    protected List<Token> tokens = [];
@@ -106,6 +108,8 @@ public class ParseState : IEnumerable<Statement>
       {
          statements.Add(statement);
       }
+
+      character += statement.Length;
    }
 
    public void AddToken(int index, int length, Color color, string text = "")
@@ -259,7 +263,17 @@ public class ParseState : IEnumerable<Statement>
       }
    }
 
-   public Optional<string> SkipEndOfLine() => Scan("(^\r\n|^\r|^\n)", Color.Whitespace);
+   public Optional<string> SkipEndOfLine()
+   {
+      var _skipEndOfLine = Scan("(^\r\n|^\r|^\n)", Color.Whitespace);
+      if (_skipEndOfLine)
+      {
+         line++;
+         character = 0;
+      }
+
+      return _skipEndOfLine;
+   }
 
    public void Colorize(Token[] tokens, params Color[] colors)
    {
@@ -424,4 +438,8 @@ public class ParseState : IEnumerable<Statement>
    public bool NotKeyword() => Scan(@"^(\s*)(not)\b", Color.Whitespace, Color.Keyword).Map(n => n.IsNotEmpty()) | false;
 
    public Maybe<Symbol> StartingValueSymbol { get; set; } = nil;
+
+   public int Line => line;
+
+   public int Character => character;
 }

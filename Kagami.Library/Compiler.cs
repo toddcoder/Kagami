@@ -48,11 +48,15 @@ public class Compiler
          else if (_scan.Exception is (true, var exception))
          {
             ExceptionIndex = state.ExceptionIndex;
+            ErrorLocation = (state.Line, state.Character);
+
             return exception;
          }
          else
          {
             ExceptionIndex = state.CurrentSource.Length;
+            ErrorLocation = (state.Line, state.Character);
+
             return fail($"Didn't understand {state.CurrentSource}");
          }
       }
@@ -85,7 +89,6 @@ public class Compiler
 
    protected IEnumerable<Statement> reorderStatements(IEnumerable<Statement> statements)
    {
-
       List<Statement> earlyStatements = [];
       List<Statement> others = [];
 
@@ -96,7 +99,7 @@ public class Compiler
             case Function { IsFixed: false } function:
                earlyStatements.Add(function);
                break;
-            case MatchFunction {IsFixed: false} matchFunction:
+            case MatchFunction { IsFixed: false } matchFunction:
                earlyStatements.Add(matchFunction);
                break;
             case Class cls:
@@ -138,11 +141,15 @@ public class Compiler
          else if (_scan.Exception is (true, var exception))
          {
             ExceptionIndex = state.ExceptionIndex;
+            ErrorLocation = (state.Line, state.Character);
+
             return exception;
          }
          else
          {
             ExceptionIndex = state.CurrentSource.Length;
+            ErrorLocation = (state.Line, state.Character);
+
             return fail($"Didn't understand {state.CurrentSource}");
          }
       }
@@ -157,4 +164,6 @@ public class Compiler
    public Token[] Tokens { get; set; } = [];
 
    public Maybe<Operations.Operations> Operations { get; set; } = nil;
+
+   public Maybe<(int line, int character)> ErrorLocation { get; set; } = nil;
 }

@@ -14,13 +14,6 @@ public abstract class Parser
       return [.. match.AllGroups().Select(g => new Token(state.Index + g.Index, g.Length, g.Value))];
    }
 
-   [Obsolete("Use Regex method")]
-   public virtual string Pattern => "";
-
-   public virtual bool IgnoreCase => false;
-
-   public virtual bool Multiline => false;
-
    public abstract Optional<Unit> Parse(ParseState state, Token[] tokens);
 
    public abstract Optional<Unit> Scan(ParseState state);

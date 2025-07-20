@@ -55,6 +55,7 @@ public partial class Playground : Form
    protected bool autoColorize;
    protected string fontName = "Consolas";
    protected float fontSize = 12f;
+   protected Maybe<(int line, int character)> _errorLocation = nil;
 
    public Playground()
    {
@@ -261,6 +262,7 @@ public partial class Playground : Form
             stopwatch.Start();
             _exceptionIndex = nil;
             _exceptionData = nil;
+            _errorLocation = nil;
             context.Reset();
 
             var kagamiConfiguration = new CompilerConfiguration { ShowOperations = dumpOperations, Tracing = tracing };
@@ -358,6 +360,7 @@ public partial class Playground : Form
             else
             {
                _exceptionIndex = compiler.ExceptionIndex;
+               _errorLocation = compiler.ErrorLocation;
                if (!_exceptionIndex)
                {
                   _exceptionIndex = textEditor.SelectionStart;
@@ -372,7 +375,8 @@ public partial class Playground : Form
                   }
                }
 
-               status = (message: _machine.Exception.Message, type: UiActionType.Failure);
+               status = (message: _machine.Exception.Message + (_errorLocation.Map(t => $" ({t.line}:{t.character})") | ""),
+                  type: UiActionType.Failure);
             }
          }
          catch (Exception exception)
