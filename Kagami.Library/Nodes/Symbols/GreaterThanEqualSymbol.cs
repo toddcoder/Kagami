@@ -4,15 +4,7 @@ namespace Kagami.Library.Nodes.Symbols;
 
 public class GreaterThanEqualSymbol : Symbol
 {
-   public override void Generate(OperationsBuilder builder)
-   {
-      builder.Dup2();
-      builder.Compare();
-      builder.IsPositive();
-      builder.Rotate(3);
-      builder.Equal();
-      builder.Or();
-   }
+   public override void Generate(OperationsBuilder builder) => builder.GreaterThanEqual();
 
    public override Precedence Precedence => Precedence.Boolean;
 

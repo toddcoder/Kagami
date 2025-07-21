@@ -1233,41 +1233,11 @@ public static class ParserFunctions
             state.PrefixCode = nil;
             break;
          case "<":
-         {
-            var _prefixCode = state.PrefixCode;
-            if (_prefixCode is (true, var prefixCode))
-            {
-               prefixCode.Prefix();
-               _symbol = new SpecialLessThanSymbol();
-               state.PrefixCode = nil;
-            }
-            else
-            {
-               var lessThanSymbol = new LessThanSymbol();
-               _symbol = lessThanSymbol;
-               state.PrefixCode = lessThanSymbol;
-            }
-
+            _symbol = new LessThanSymbol();
             break;
-         }
          case "<=":
-         {
-            var _prefixCode = state.PrefixCode;
-            if (_prefixCode is (true, var prefixCode))
-            {
-               prefixCode.Prefix();
-               _symbol = new SpecialLessThanEqualSymbol();
-               state.PrefixCode = nil;
-            }
-            else
-            {
-               var lessThanEqualSymbol = new LessThanEqualSymbol();
-               _symbol = lessThanEqualSymbol;
-               state.PrefixCode = lessThanEqualSymbol;
-            }
-
+            _symbol = new LessThanEqualSymbol();
             break;
-         }
          case "::":
             _symbol = new ConsSymbol();
             break;

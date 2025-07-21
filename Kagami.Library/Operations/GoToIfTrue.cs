@@ -17,19 +17,17 @@ public class GoToIfTrue : AddressedOperation
       var _x = machine.Pop();
       if (_x is (true, var x))
       {
-         if (x is IBoolean bx)
+         switch (x)
          {
-            if (predicate(bx))
-            {
+            case IBoolean bx when predicate(bx):
                return machine.GoTo(address) ? nil : badAddress(address);
-            }
-
-            increment = true;
-            return nil;
-         }
-         else
-         {
-            return incompatibleClasses(x, "Boolean");
+            case IBoolean:
+               increment = true;
+               return nil;
+            case Before:
+               return machine.GoTo(address) ? nil : badAddress(address);
+            default:
+               return incompatibleClasses(x, "Boolean");
          }
       }
       else

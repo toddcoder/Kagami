@@ -1,11 +1,38 @@
-﻿namespace Kagami.Library.Operations;
+﻿using Core.Monads;
+using Kagami.Library.Objects;
+using Kagami.Library.Runtime;
+using static Core.Monads.MonadFunctions;
+using static Kagami.Library.AllExceptions;
 
-public class GoToIfFalse : GoToIfTrue
+namespace Kagami.Library.Operations;
+
+public class GoToIfFalse : AddressedOperation
 {
-   public GoToIfFalse()
-   {
-      predicate = b => !b.IsTrue;
-   }
+   protected Predicate<IBoolean> predicate = b => !b.IsTrue;
 
    public override string ToString() => $"goto.if.false({address})";
+
+   public override Optional<IObject> Execute(Machine machine)
+   {
+      increment = false;
+
+      var _x = machine.Pop();
+      if (_x is (true, var x))
+      {
+         switch (x)
+         {
+            case IBoolean bx when predicate(bx):
+               return machine.GoTo(address) ? nil : badAddress(address);
+            case IBoolean or Before:
+               increment = true;
+               return nil;
+            default:
+               return incompatibleClasses(x, "Boolean");
+         }
+      }
+      else
+      {
+         return _x.Exception;
+      }
+   }
 }

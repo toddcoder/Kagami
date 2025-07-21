@@ -244,6 +244,14 @@ public class OperationsBuilder
 
    public void Equal() => add(new Equal());
 
+   public void LessThan() => add(new LessThan());
+
+   public void LessThanEqual() => add(new LessThanEqual());
+
+   public void GreaterThan() => add(new GreaterThan());
+
+   public void GreaterThanEqual() => add(new GreaterThanEqual());
+
    public void Not() => add(new Not());
 
    public void Dup() => add(new Dup());

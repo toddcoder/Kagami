@@ -2,30 +2,13 @@
 
 namespace Kagami.Library.Nodes.Symbols;
 
-public class LessThanSymbol : Symbol, IPrefixCode
+public class LessThanSymbol : Symbol
 {
-   protected bool prefix;
-
-   public override void Generate(OperationsBuilder builder)
-   {
-      if (prefix)
-      {
-         builder.Dup();
-         builder.SwapAt(1);
-      }
-
-      builder.Compare();
-      builder.IsNegative();
-   }
+   public override void Generate(OperationsBuilder builder) => builder.LessThan();
 
    public override Precedence Precedence => Precedence.Boolean;
 
    public override Arity Arity => Arity.Binary;
 
    public override string ToString() => "<";
-
-   public void Prefix()
-   {
-      prefix = true;
-   }
 }

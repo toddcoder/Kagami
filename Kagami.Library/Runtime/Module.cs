@@ -108,6 +108,7 @@ public class Module
       "Undefined" => new UndefinedClass(),
       "Word" => new WordClass(),
       "Words" => new WordsClass(),
+      "Before" => new BeforeClass(),
       _ => nil
    };
 
