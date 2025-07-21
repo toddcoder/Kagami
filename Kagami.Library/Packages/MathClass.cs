@@ -56,6 +56,7 @@ public class MathClass : PackageClass
       registerPackageFunction("degrees(_)", (obj, msg) => function<KMath, Float>(obj, msg, (m, n) => m.Degrees(n.Value)));
       registerPackageFunction("radians(_)", (obj, msg) => function<KMath, Float>(obj, msg, (m, n) => m.Radians(n.Value)));
       registerPackageFunction("gcd(_,_)", (obj, msg) => function<KMath, IObject, IObject>(obj, msg, (m, a, b) => m.Gcd(a, b)));
+      registerPackageFunction("lcm(_,_)", (obj, msg) => function<KMath, IObject, IObject>(obj, msg, (m, a, b) => m.Lcm(a, b)));
       registerPackageFunction("intFromString(_)", (obj, msg) => function<KMath, KString>(obj, msg, (m, s) => m.IntFromString(s)));
       registerPackageFunction("floatFromString(_)", (obj, msg) => function<KMath, KString>(obj, msg, (m, s) => m.FloatFromString(s)));
       registerPackageFunction("byteFromString(_)", (obj, msg) => function<KMath, KString>(obj, msg, (m, s) => m.ByteFromString(s)));

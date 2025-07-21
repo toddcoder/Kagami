@@ -20,5 +20,5 @@ public class ApproximateSymbol : Symbol
 
    public override Arity Arity => Arity.Binary;
 
-   public override string ToString() => "=~";
+   public override string ToString() => "approx";
 }

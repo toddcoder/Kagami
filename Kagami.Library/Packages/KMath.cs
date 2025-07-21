@@ -347,6 +347,34 @@ public class KMath : Package
       }
    }
 
+   public IObject Lcm(IObject a, IObject b)
+   {
+      var g = Gcd(a, b);
+      switch (g)
+      {
+         case Int gI:
+         {
+            var aI = ((INumeric)a).AsInt32();
+            var bI = ((INumeric)b).AsInt32();
+            var cI = aI * bI;
+            var dI = cI / gI.Value;
+
+            return (Int)dI;
+         }
+         case Long gL:
+         {
+            var aL = ((INumeric)a).AsBigInteger();
+            var bL = ((INumeric)b).AsBigInteger();
+            var cL = aL * bL;
+            var dI = cL / gL.Value;
+
+            return (Long)dI;
+         }
+         default:
+            throw incompatibleClasses(g, "Int or Long");
+      }
+   }
+
    public Int IntFromString(KString kString) => kString.Value.Value().Int32();
 
    public Float FloatFromString(KString kString) => kString.Value.Value().Double();
