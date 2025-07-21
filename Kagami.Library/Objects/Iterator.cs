@@ -956,10 +956,10 @@ public class Iterator : IObject, IIterator
    public IObject Span(Lambda predicate)
    {
       var whileTrue = true;
-      var isTrue = new List<IObject>();
-      var isFalse = new List<IObject>();
+      List<IObject> isTrue = [];
+      List<IObject> isFalse = [];
 
-      foreach (var value in List().ToList())
+      foreach (var value in List())
       {
          switch (whileTrue)
          {
@@ -981,10 +981,10 @@ public class Iterator : IObject, IIterator
 
    public IObject Span(int count)
    {
-      var isTrue = new List<IObject>();
-      var isFalse = new List<IObject>();
+      List<IObject> isTrue = [];
+      List<IObject> isFalse = [];
 
-      foreach (var value in List().ToList())
+      foreach (var value in List())
       {
          if (isTrue.Count < count)
          {
