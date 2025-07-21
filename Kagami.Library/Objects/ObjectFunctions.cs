@@ -45,6 +45,11 @@ public static class ObjectFunctions
          bindings[name] = source;
       }
 
+      if (comparisand.ClassName == "Number" && source is INumeric)
+      {
+         return true;
+      }
+
       switch (comparisand)
       {
          case Any:
@@ -239,50 +244,6 @@ public static class ObjectFunctions
       where T : IObject
    {
       return match(source, comparisand, (x, y) => x.IsEqualTo(y), bindings);
-   }
-
-   public static bool matchSingle<T>(T source, IObject comparisand, Func<T, IObject, bool> equalifier,
-      Hash<string, IObject> bindings) where T : IObject
-   {
-      var _name = Module.Global.Value.Bindings.Maybe[comparisand.Id];
-      if (_name is (true, var name))
-      {
-         bindings[name] = source;
-      }
-
-      switch (comparisand)
-      {
-         case Any:
-         case Class:
-            return true;
-         case Placeholder ph:
-            bindings[ph.Name] = source;
-            return true;
-         case KRange range:
-            return range.In(source).IsTrue;
-         case Lambda lambda:
-            if (lambda.Invoke(source).IsTrue)
-            {
-               var bindingName = $"-{lambda.Invokable.Parameters[0].Name}";
-               bindings[bindingName] = source;
-               return true;
-            }
-            else
-            {
-               return false;
-            }
-
-         case Pattern pattern:
-            return pattern.Match(source, bindings);
-         case IProcessPlaceholders:
-            return processPlaceholdersMatch(source, comparisand, bindings);
-         case TypeConstraint typeConstraint:
-            return typeConstraint.Matches(classOf(source));
-         case KTuple tuple when source is KArray array:
-            return matchArrayToTuple(array, tuple, bindings);
-         default:
-            return equalifier(source, comparisand);
-      }
    }
 
    public static IObject sendMessage(IObject obj, Message message) => classOf(obj).SendMessage(obj, message);

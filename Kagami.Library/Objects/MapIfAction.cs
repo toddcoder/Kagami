@@ -28,4 +28,6 @@ public class MapIfAction(Lambda lambda, Lambda predicate) : IStreamAction
          }
       }
    }
+
+   public override string ToString() => $"map if {predicate.Image}";
 }

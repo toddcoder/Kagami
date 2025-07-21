@@ -34,5 +34,5 @@ public class TakeUntilAction(Lambda predicate) : IStreamAction
       }
    }
 
-   public override string ToString() => $"take while {predicate.Image}";
+   public override string ToString() => $"take until {predicate.Image}";
 }

@@ -17,7 +17,7 @@ public class ConversionSymbol : Symbol
    {
       builder.GetField("math");
       value.Generate(builder);
-      builder.SendMessage($"{message}FromString(_)", 1);
+      builder.SendMessage($"{message}(_)", 1);
    }
 
    public override Precedence Precedence => Precedence.Value;

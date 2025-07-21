@@ -11,7 +11,7 @@ public partial class OperatorsParser : SymbolParser
    {
    }
 
-   [GeneratedRegex($@"^(\s*)({REGEX_OPERATORS}{{1,2}})(?!{REGEX_OPERATORS})(\s*)")]
+   [GeneratedRegex($@"^(\s*)({REGEX_OPERATORS}{{1,3}})(?!{REGEX_OPERATORS})(\s*)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)

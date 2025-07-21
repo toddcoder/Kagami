@@ -1304,7 +1304,7 @@ public static class ParserFunctions
          case "|>":
             _symbol = new PipelineSymbol();
             break;
-         case "**":
+         case "...":
             _symbol = new OpenRangeSymbol();
             break;
          case "<>":
@@ -1554,5 +1554,25 @@ public static class ParserFunctions
       }
 
       return nil;
+   }
+
+   public static Optional<PossibleBlock> getElse(ParseState state)
+   {
+      var _block =
+         from scanned in state.Scan(@"^(\s*)(else)\b", Color.Whitespace, Color.Keyword)
+         from blockValue in getBlock(state)
+         select blockValue;
+      if (_block is (true, var block))
+      {
+         return new PossibleBlock.Some(block);
+      }
+      else if (_block.Exception is (true, var exception))
+      {
+         return exception;
+      }
+      else
+      {
+         return new PossibleBlock.None();
+      }
    }
 }

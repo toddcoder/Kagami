@@ -194,7 +194,31 @@ public class KMath : Package
 
    public Complex XComplex(IObject source) => XConvert<Complex>(source, n => n.AsComplex());
 
-   public Rational XRational(IObject source) => XConvert<Rational>(source, n => n.AsRational());
+   public Rational XRational(IObject source)
+   {
+      switch (source)
+      {
+         case INumeric numeric:
+         {
+            var (numerator, denominator) = numeric.AsRational();
+            return new Rational(numerator, denominator);
+         }
+         case KString kString:
+         {
+            var _rational = RationalClass.Parse(kString.Value);
+            if (_rational is (true, var rational))
+            {
+               return rational;
+            }
+            else
+            {
+               throw _rational.Exception;
+            }
+         }
+         default:
+            throw fail($"Can't convert {source.ClassName} to Rational");
+      }
+   }
 
    public KDecimal XDecimal(IObject source) => XConvert<KDecimal>(source, n => n.AsDecimal());
 

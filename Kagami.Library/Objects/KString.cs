@@ -500,4 +500,16 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
    public KString Tail => (KString)value.Drop(1);
 
    public KString Margin() => value.Substitute("[' ' /t]* '|'", "");
+
+   public IObject ParseBase(int @base)
+   {
+      try
+      {
+         return Success.Object((Int)Convert.ToInt32(value, @base));
+      }
+      catch (Exception exception)
+      {
+         return new Failure(exception.Message);
+      }
+   }
 }

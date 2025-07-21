@@ -31,4 +31,6 @@ public class IfNotAction(Lambda predicate) : IStreamAction
          }
       }
    }
+
+   public override string ToString() => $"if not {predicate.Image}";
 }

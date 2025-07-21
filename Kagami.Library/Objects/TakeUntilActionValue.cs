@@ -33,4 +33,6 @@ public class TakeUntilActionValue(IObject obj) : IStreamAction
          }
       }
    }
+
+   public override string ToString() => $"take until {obj.Image}";
 }

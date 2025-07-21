@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Objects;
+﻿using Core.Monads;
+using Kagami.Library.Objects;
 using Core.Strings;
 
 namespace Kagami.Library;
@@ -24,4 +25,16 @@ public static class CommonFunctions
    }
 
    public static string convertFunctionName(string fromClass, string toClass) => $"__$convert_from_{fromClass}_to_{toClass}";
+
+   public static IObject resultToSuccess<T>(Result<T> _result) where T : IObject
+   {
+      if (_result is (true, var value))
+      {
+         return Success.Object(value);
+      }
+      else
+      {
+         return Failure.Object(_result.Exception.Message);
+      }
+   }
 }

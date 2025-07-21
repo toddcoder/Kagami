@@ -259,4 +259,6 @@ public readonly struct Int : IObject, INumeric, IComparable<Int>, IEquatable<Int
    public Int Rand(Random random) => random.Next(value);
 
    public Int Rand(Random random, Int max) => random.Next(value, max.Value);
+
+   public KString Base(int @base) => Convert.ToString(value, @base);
 }

@@ -23,4 +23,6 @@ public class FlatMapAction(Lambda lambda) : IStreamAction
          yield return item;
       }
    }
+
+   public override string ToString() => $"flatmap {lambda.Image}";
 }

@@ -47,6 +47,7 @@ public class IntClass : BaseClass, IParse, IEquivalentClass
       messages["min(_<Int>)"] = (obj, msg) => function<Int, Int>(obj, msg, (i1, i2) => i1.Min(i2));
       messages["rand()"] = (obj, _) => function<Int>(obj, i => i.Rand(random.Value));
       messages["rand(_<Int>)"] = (obj, msg) => function<Int, Int>(obj, msg, (i1, i2) => i1.Rand(random.Value, i2));
+      messages["base(_<Int>)"] = (obj, msg) => function<Int, Int>(obj, msg, (i1, i2) => i1.Base(i2.Value));
    }
 
    public override void RegisterClassMessages()
