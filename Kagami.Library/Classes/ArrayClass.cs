@@ -68,6 +68,8 @@ public class ArrayClass : BaseClass, ICollectionClass
       messages["tail".get()] = (obj, _) => function<KArray>(obj, a => a.Tail);
       messages["headTail".get()] = (obj, _) => function<KArray>(obj, a => a.HeadTail);
       messages["indexes".get()] = (obj, _) => function<KArray>(obj, a => a.Indexes);
+      messages["init"] = (obj, _) => function<KArray>(obj, a => a.Init);
+      registerMessage("split(at:_<Int>)", (obj, msg) => function<KArray, Int>(obj, msg, (a, index) => a.Split(index.Value)));
    }
 
    protected static IObject getIndexed(KArray a, IObject i)

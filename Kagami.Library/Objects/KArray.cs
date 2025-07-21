@@ -558,4 +558,14 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
    public KTuple HeadTail => new(Head, Tail);
 
    public KRange Indexes => new((Int)0, (Int)list.Count, false);
+
+   public KArray Init => new(list.Take(list.Count - 1));
+
+   public KArray Split(int index)
+   {
+      var leftArray = new KArray(list.Take(index));
+      var rightArray = new KArray(list.Skip(index));
+
+      return new KArray([leftArray, rightArray]);
+   }
 }

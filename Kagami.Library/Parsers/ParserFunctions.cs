@@ -524,7 +524,7 @@ public static class ParserFunctions
 
    private static Optional<string> parseLabel(ParseState state)
    {
-      return state.Scan($@"^(?:(\s*)({REGEX_FIELD})(:))?", Color.Whitespace, Color.Label, Color.Structure)
+      return state.Scan($@"^(?:(\s*)({REGEX_FIELD})(:)(?!:))?", Color.Whitespace, Color.Label, Color.Structure)
          .Map(s => s.KeepUntil(":").Trim());
    }
 
