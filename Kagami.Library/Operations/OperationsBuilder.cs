@@ -575,5 +575,7 @@ public class OperationsBuilder
 
    public void UniqueString() => add(new UniqueString());
 
+   public void Cons() => add(new Cons());
+
    public override string ToString() => "operations";
 }

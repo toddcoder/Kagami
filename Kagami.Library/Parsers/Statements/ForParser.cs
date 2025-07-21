@@ -22,10 +22,11 @@ public partial class ForParser : StatementParser
          from sourceValue in getExpression(state, ExpressionFlags.Standard | ExpressionFlags.OmitIf | ExpressionFlags.OmitNot)
          from possibleIfExpressionValue in getIfOrIfNo(state)
          from blockValue in getBlock(state)
-         select (comparisandValue, sourceValue, blockValue, possibleIfExpressionValue);
-      if (_result is (true, var (comparisand, source, block, possibleIfExpression)))
+         from elseBlockValue in getElse(state)
+         select(comparisandValue, sourceValue, blockValue, possibleIfExpressionValue, elseBlockValue);
+      if (_result is (true, var (comparisand, source, block, possibleIfExpression, elseBlock)))
       {
-         state.AddStatement(new For(comparisand, source, block, possibleIfExpression));
+         state.AddStatement(new For(comparisand, source, block, possibleIfExpression, elseBlock.Maybe()));
          return unit;
       }
       else

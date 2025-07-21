@@ -1,6 +1,8 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using Core.Monads;
+using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Operations;
 using Kagami.Library.Parsers;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Nodes.NodeFunctions;
 
 namespace Kagami.Library.Nodes.Statements
@@ -11,13 +13,20 @@ namespace Kagami.Library.Nodes.Statements
       protected Expression source;
       protected Block block;
       protected PossibleIfExpression possibleIfExpression;
+      protected Maybe<Block> _elseBlock;
 
-      public For(Symbol comparisand, Expression source, Block block, PossibleIfExpression possibleIfExpression)
+      public For(Symbol comparisand, Expression source, Block block, PossibleIfExpression possibleIfExpression, Maybe<Block> _elseBlock)
       {
          this.comparisand = comparisand;
          this.source = source;
          this.block = block;
          this.possibleIfExpression = possibleIfExpression;
+         this._elseBlock = _elseBlock;
+      }
+
+      public For(Symbol comparisand, Expression source, Block block, PossibleIfExpression possibleIfExpression) : this(comparisand, source, block,
+         possibleIfExpression, nil)
+      {
       }
 
       public override void Generate(OperationsBuilder builder)
@@ -28,6 +37,7 @@ namespace Kagami.Library.Nodes.Statements
          var skipLabel = newLabel("skip");
          var backToTopLabel = newLabel("back.to.top");
          var failedIfLabel = newLabel("failed-if");
+         var skippedLabel = newLabel("skipped");
 
          builder.PushExitFrame(exitLabel);
          var iteratorName = newLabel("iterator");
@@ -42,9 +52,16 @@ namespace Kagami.Library.Nodes.Statements
          builder.GetField(iteratorName);
          builder.SendMessage("next()", 0);
          builder.GoToIfNil(endLabel);
+         builder.NewField("__$0", false, true);
+         builder.AssignField("__$0", false);
          builder.Swap();
          builder.Match();
          builder.GoToIfTrue(backToTopLabel);
+
+         if (_elseBlock is (true, var elseBlock))
+         {
+            elseBlock.Generate(builder);
+         }
 
          builder.PopFrame();
          builder.GoTo(topLabel);
@@ -70,8 +87,19 @@ namespace Kagami.Library.Nodes.Statements
 
          block.Generate(builder);
 
+         if (_elseBlock)
+         {
+            builder.GoTo(skippedLabel);
+         }
+
          builder.Label(failedIfLabel);
 
+         if (_elseBlock is (true, var elseBlock2))
+         {
+            elseBlock2.Generate(builder);
+         }
+
+         builder.Label(skippedLabel);
          builder.PopFrame();
          builder.Label(skipLabel);
          builder.PopFrame();

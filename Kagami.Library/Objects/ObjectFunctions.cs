@@ -184,6 +184,8 @@ public static class ObjectFunctions
                break;
             case KArray array1 when !array1.IsEqualTo(tail):
                return false;
+            case KTuple tuple:
+               return match(tail, tuple, bindings);
          }
 
          return true;
