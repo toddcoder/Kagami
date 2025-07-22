@@ -13,7 +13,7 @@ public struct Words() : IObject, ICollection, IEqualityComparer<Word>
 {
    private Word[] words = [];
 
-   private static IEnumerable<Word> fromString(KString kString)
+   private static List<Word> fromString(KString kString)
    {
       List<Word> words = [];
       var _result = kString.Value.Matches("/(-/w*)/(/w+)/(-/w*)");

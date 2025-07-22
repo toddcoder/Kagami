@@ -16,7 +16,8 @@ public class TestBackground(Either<FolderName, FileName> source, ListView listVi
 
    public readonly MessageEvent<string> Progress = new();
    public readonly MessageEvent FolderNotFound = new();
-   public new readonly MessageEvent<FolderName> Finalized = new();
+   //public new readonly MessageEvent<FolderName> Finalized = new();
+   public readonly MessageEvent<string[]> Results = new();
 
    public FolderName Folder
    {
@@ -54,11 +55,17 @@ public class TestBackground(Either<FolderName, FileName> source, ListView listVi
          return;
       }
 
-      LoadListView(testFolder, listView, Progress, Finalized);
+      LoadListView(testFolder, listView, Progress, Results);
    }
 
-   public static void LoadListView(FolderName testFolder, ListView listView, MessageEvent<string> progress, MessageEvent<FolderName> finalized)
+   public static void LoadListView(FolderName testFolder, ListView listView, MessageEvent<string> progress, MessageEvent<string[]> results)
    {
+      var expected = 0;
+      var noExpected = 0;
+      var passed = 0;
+      var failed = 0;
+      var noResult = 0;
+
       try
       {
          listView.BeginUpdate();
@@ -77,12 +84,14 @@ public class TestBackground(Either<FolderName, FileName> source, ListView listVi
                var expectedSubItem = item.SubItems.Add("Expected");
                expectedSubItem.ForeColor = Color.White;
                expectedSubItem.BackColor = Color.Green;
+               expected++;
             }
             else
             {
                var expectedSubItem = item.SubItems.Add("Not Expected");
                expectedSubItem.ForeColor = Color.Black;
                expectedSubItem.BackColor = Color.Gold;
+               noExpected++;
             }
 
             var resultFile = file.Folder + $"{file.Name}.txt";
@@ -93,12 +102,14 @@ public class TestBackground(Either<FolderName, FileName> source, ListView listVi
                   var resultSubItem = item.SubItems.Add("Failed");
                   resultSubItem.ForeColor = Color.Black;
                   resultSubItem.BackColor = Color.Gold;
+                  failed++;
                }
                else
                {
                   var resultSubItem = item.SubItems.Add("Passed");
                   resultSubItem.ForeColor = Color.White;
                   resultSubItem.BackColor = Color.Green;
+                  passed++;
                }
             }
             else
@@ -106,6 +117,7 @@ public class TestBackground(Either<FolderName, FileName> source, ListView listVi
                var resultSubItem = item.SubItems.Add("No Result");
                resultSubItem.ForeColor = Color.Black;
                resultSubItem.BackColor = Color.Gold;
+               noResult++;
             }
 
             progress.Invoke($"{file.Name}...");
@@ -115,7 +127,7 @@ public class TestBackground(Either<FolderName, FileName> source, ListView listVi
       {
          listView.AutoSizeColumns();
          listView.EndUpdate();
-         finalized.Invoke(testFolder);
+         results.Invoke([$"Expected {expected}", $"No expected {noExpected}", $"Passed {passed}", $"Failed {failed}", $"No result {noResult}"]);
       }
    }
 

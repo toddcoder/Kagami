@@ -1,2 +1,2 @@
-time good come their country.
-"time good come their country." | String
+time good come their country
+"time good come their country" | String

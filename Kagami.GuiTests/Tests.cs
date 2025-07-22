@@ -31,13 +31,13 @@ public partial class Tests : Form
          {
             Handler = () => uiMessage.Failure("Test folder not found")
          },
-         Finalized =
-         {
-            Handler = folder => uiMessage.Success($"Tests in {folder} completed")
-         },
          Progress =
          {
             Handler = text => uiMessage.Do(() => uiMessage.Busy(text))
+         },
+         Results =
+         {
+            Handler = showResults
          }
       };
       generateBackground = new GenerateBackground(nil, listViewTests)
@@ -46,13 +46,13 @@ public partial class Tests : Form
          {
             Handler = () => uiMessage.Failure("Test folder not found")
          },
-         Finalized =
-         {
-            Handler = folder => uiMessage.Success($"Expected texts in {folder} generated")
-         },
          Progress =
          {
             Handler = text => uiMessage.Do(() => uiMessage.Busy(text))
+         },
+         Results =
+         {
+            Handler = showResults
          }
       };
 
@@ -144,6 +144,18 @@ public partial class Tests : Form
       (builder + uiMessage).SpanCol(2).Next();
       (builder + uiRun).Next();
       (builder + uiGenerate).Row();
+
+      return;
+
+      void showResults(string[] results)
+      {
+         uiMessage.AlternateReadOnly(results);
+         uiMessage.SetColors(0, UiActionType.Success);
+         uiMessage.SetColors(1, UiActionType.Failure);
+         uiMessage.SetColors(2, UiActionType.Success);
+         uiMessage.SetColors(3, UiActionType.Failure);
+         uiMessage.SetColors(4, UiActionType.Failure);
+      }
    }
 
    protected Optional<FolderName> getFolder()
@@ -181,8 +193,8 @@ public partial class Tests : Form
       if (getFolder() is (true, var testFolder))
       {
          var progress = new MessageEvent<string>();
-         var finalized = new MessageEvent<FolderName>();
-         TestBackground.LoadListView(testFolder, listViewTests, progress, finalized);
+         var results = new MessageEvent<string[]>();
+         TestBackground.LoadListView(testFolder, listViewTests, progress, results);
       }
    }
 
