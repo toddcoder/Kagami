@@ -23,6 +23,8 @@ public interface IIterator : IEquivalentClass
 
    IObject Reverse();
 
+   KString Join();
+
    KString Join(string connector);
 
    KString Join(string connector, int limit, string truncated);

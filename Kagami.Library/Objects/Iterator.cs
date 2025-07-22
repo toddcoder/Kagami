@@ -114,7 +114,9 @@ public class Iterator : IObject, IIterator
       return collectionClass.Revert(list);
    }
 
-   public KString Join(string connector) => List().ToList().Select(i => i.AsString).ToString(connector);
+   public KString Join() => List().Select(i => i.AsString).ToString("");
+
+   public KString Join(string connector) => List().Select(i => i.AsString).ToString(connector);
 
    public KString Join(string connector, int limit, string truncated)
    {

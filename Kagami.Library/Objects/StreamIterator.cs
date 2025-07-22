@@ -120,6 +120,8 @@ public class StreamIterator : IObject, IIterator
 
    public IObject Reverse() => terminate().Reverse();
 
+   public KString Join() => terminate().Join();
+
    public KString Join(string connector) => terminate().Join(connector);
 
    public KString Join(string connector, int limit, string truncated) => terminate().Join(connector, limit, truncated);

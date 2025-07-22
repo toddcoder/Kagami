@@ -334,6 +334,7 @@ public abstract class BaseClass
       registerMessage("peek()", (obj, _) => iteratorFunc(obj, i => i.Peek().Map(Some.Object) | (() => KNil.NilValue)));
       registerMessage("reset()", (obj, _) => iteratorFunc(obj, i => i.Reset()));
       registerMessage("reverse()", (obj, _) => iteratorFunc(obj, i => i.Reverse()));
+      registerMessage("join()", (obj, _) => iteratorFunc(obj, i => i.Join()));
       registerMessage("join(_<String>)", (obj, message) => iteratorFunc<KString>(obj, message, (i, s) => i.Join(s.Value)));
       registerMessage("join(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Join(l)));
       registerMessage("join(_<String>,limit:_<Int>,truncated:_<String>)",

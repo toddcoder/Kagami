@@ -1307,7 +1307,7 @@ public static class ParserFunctions
          case "\\:":
             _symbol = new SendBinaryMessageSymbol("foldr(_)", Precedence.ChainedOperator);
             break;
-         case ":>":
+         case "!>":
             _symbol = new SendBinaryMessageSymbol("map(_)", Precedence.ChainedOperator);
             break;
          case "?>":

@@ -81,7 +81,7 @@ public partial class Playground : Form
       fontName = playgroundConfiguration.FontName;
       fontSize = playgroundConfiguration.FontSize;
 
-      outputConsole = new TextBoxConsole(this, textConsole, fontName, fontSize, TextBoxConsole.ConsoleColorType.Quick);
+      outputConsole = new TextBoxConsole(this, textConsole, fontName, fontSize, TextBoxConsole.ConsoleColorType.Windows);
       textWriter = outputConsole.Writer();
       textReader = outputConsole.Reader();
       context = new PlaygroundContext(textWriter, textReader);
