@@ -12,7 +12,7 @@ public partial class InlineIfParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s+)(\?)")]
+   [GeneratedRegex(@$"^(\s+)(\?)(?!{REGEX_OPERATORS})")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)

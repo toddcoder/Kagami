@@ -6,7 +6,7 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class ZeroParameterLambdaParser : LambdaParser
 {
-   [GeneratedRegex(@"^(?=(?:[ \t]*)(?:->|=>[\r\n]+))")]
+   [GeneratedRegex(@"^(?=(?:[ \t]*)(?:->))")]
    public override partial Regex Regex();
 
    public ZeroParameterLambdaParser(ExpressionBuilder builder) : base(builder)
