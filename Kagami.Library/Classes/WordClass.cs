@@ -12,6 +12,7 @@ public class WordClass : BaseClass
       base.RegisterMessages();
 
       registerMessage("text".get(), (obj, _) => function<Word>(obj, w => KString.StringObject(w.Text)));
-      registerMessage("index".get(), (obj, _) => function<Word>(obj, w => Int.IntObject(w.Index)));
+      registerMessage("prefix".get(), (obj, _) => function<Word>(obj, w => KString.StringObject(w.Prefix)));
+      registerMessage("suffix".get(), (obj, _) => function<Word>(obj, w => KString.StringObject(w.Suffix)));
    }
 }

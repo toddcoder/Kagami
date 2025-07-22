@@ -71,8 +71,7 @@ public class StringClass : BaseClass, ICollectionClass
       messages["swapCase()"] = (obj, _) => function<KString>(obj, s => s.SwapCase());
       messages["fields()"] = (obj, _) => function<KString>(obj, s => s.Fields);
       messages["words(at:_<Int>)"] = (obj, msg) => function<KString, Int>(obj, msg, (s, i) => s.Words(i.Value));
-      messages["words()"] = (obj, _) => function<KString>(obj, s => s.Words(new Regex("/s+", false, false, false, false)));
-      messages["words(regex:_)"] = (obj, msg) => function<KString, Regex>(obj, msg, (s, r) => s.Words(r));
+      messages["words()"] = (obj, _) => function<KString>(obj, s => s.Words());
       messages["<<(_}"] = (obj, msg) => function<KString, IObject>(obj, msg, (s, o) => s.Append(o));
       messages["mutable()"] = (obj, _) => function<KString>(obj, s => s.Mutable());
       messages["succ()"] = (obj, _) => function<KString>(obj, s => s.Succ());

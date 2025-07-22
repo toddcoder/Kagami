@@ -3,27 +3,29 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
 
-public readonly struct Word(string word, int index) : IObject, IEquatable<Word>
+public readonly struct Word(string prefix, string text, string suffix) : IObject, IEquatable<Word>
 {
-   public static Word Empty => new("", -1);
+   public static Word Empty => new("", "", "");
 
-   public string Text => word;
+   public string Prefix => prefix;
 
-   public int Index => index;
+   public string Text => text;
+
+   public string Suffix => suffix;
 
    public string ClassName => "Word";
 
-   public string AsString => word;
+   public string AsString => text;
 
-   public string Image => $"{word}@{index}";
+   public string Image => $"<{prefix}|{text}|{suffix}>";
 
-   public int Hash => HashCode.Combine(word, index);
+   public int Hash => HashCode.Combine(prefix, text, suffix);
 
-   public bool IsEqualTo(IObject obj) => obj is Word otherWord && word == otherWord.Text && index == otherWord.Index;
+   public bool IsEqualTo(IObject obj) => obj is Word otherWord && prefix == otherWord.Prefix && text == otherWord.Text && suffix == otherWord.Suffix;
 
    public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
-   public bool IsTrue => word.Length > 0;
+   public bool IsTrue => text.Length > 0;
 
    public Guid Id { get; init; } = Guid.NewGuid();
 

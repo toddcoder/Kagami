@@ -1,5 +1,6 @@
 ﻿using Core.Collections;
 using Core.Enumerables;
+using Core.Matching;
 using Core.Monads;
 using Core.Numbers;
 using static Core.Monads.MonadFunctions;
@@ -11,24 +12,25 @@ namespace Kagami.Library.Objects;
 public struct Words() : IObject, ICollection, IEqualityComparer<Word>
 {
    private Word[] words = [];
-   private Regex regex;
 
-   private static IEnumerable<Word> fromString(KString kString, Regex regex, IEqualityComparer<Word> equalityComparer)
+   private static IEnumerable<Word> fromString(KString kString)
    {
-      var set = new Set<Word>(equalityComparer);
-      var tuple = regex.Split(kString.Value);
-      foreach (KString wordText in tuple.List)
+      List<Word> words = [];
+      var _result = kString.Value.Matches("/(-/w*)/(/w+)/(-/w*)");
+      if (_result is (true, var result))
       {
-         set.Add(new Word(wordText.Value, set.Count));
+         foreach (var match in result)
+         {
+            words.Add(new Word(match.FirstGroup, match.SecondGroup, match.ThirdGroup));
+         }
       }
 
-      return set;
+      return words;
    }
 
-   public Words(KString kString, Regex regex) : this()
+   public Words(KString kString) : this()
    {
-      words = [.. fromString(kString, regex, this)];
-      this.regex = regex;
+      words = [.. fromString(kString)];
    }
 
    public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
@@ -53,7 +55,7 @@ public struct Words() : IObject, ICollection, IEqualityComparer<Word>
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
-   public IObject One() => words.Length == 1 ? words[0] : new Words(words[0].Text, regex);
+   public IObject One() => words.Length == 1 ? words[0] : new Words(words[0].Text);
 
    public bool Equals(Word x, Word y) => x.Text == y.Text;
 
