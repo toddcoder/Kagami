@@ -18,6 +18,12 @@ public class OrSymbol : Symbol, IHasExpression
       builder.IsClass("Int", false);
       builder.GoToIfTrue(intLabel);
 
+      builder.IsClass("Char", false);
+      builder.GoToIfTrue(intLabel);
+
+      builder.IsClass("String", false);
+      builder.GoToIfTrue(intLabel);
+
       builder.GoToIfTrue(label);
 
       expression.Generate(builder);

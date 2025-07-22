@@ -21,6 +21,12 @@ public class AndSymbol : Symbol, IHasExpression
       builder.IsClass("Int", false);
       builder.GoToIfTrue(intLabel);
 
+      builder.IsClass("Char", false);
+      builder.GoToIfTrue(intLabel);
+
+      builder.IsClass("String", false);
+      builder.GoToIfTrue(intLabel);
+
       builder.GoToIfFalse(falseLabel);
 
       expression.Generate(builder);
