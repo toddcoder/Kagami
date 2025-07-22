@@ -99,6 +99,7 @@ public class StringClass : BaseClass, ICollectionClass
       messages["split(_<Regex>)"] = (obj, msg) => function<KString, Regex>(obj, msg, (s, r) => s.SplitRegex(r));
       messages["margin()"] = (obj, _) => function<KString>(obj, s => s.Margin());
       messages["parse(base:_<Int>)"] = (obj, msg) => function<KString, Int>(obj, msg, (s, i) => s.ParseBase(i.Value));
+      messages["wordCase()"] = (obj, _) => function<KString>(obj, s => s.WordCase());
    }
 
    protected static IObject getIndexed(KString s, IObject i)

@@ -192,4 +192,8 @@ public interface IIterator : IEquivalentClass
    IObject Chunked(int count);
 
    IObject Windowed(int size, int step, bool partial);
+
+   /*IObject Splice(int keep, int drop);
+
+   IObject Splice(int keep);*/
 }

@@ -474,9 +474,33 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
       }
    }
 
-   public KString Succ() => value.Succ();
+   public KString Succ()
+   {
+      var _index = value.Find(".");
+      if (_index is (true, var index))
+      {
+         var left = value.Keep(index).Succ();
+         return left + value.Drop(index);
+      }
+      else
+      {
+         return value.Succ();
+      }
+   }
 
-   public KString Pred() => value.Pred();
+   public KString Pred()
+   {
+      var _index = value.Find(".");
+      if (_index is (true, var index))
+      {
+         var left = value.Keep(index).Pred();
+         return left + value.Drop(index);
+      }
+      else
+      {
+         return value.Pred();
+      }
+   }
 
    public KString Squeeze()
    {
@@ -510,6 +534,24 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
       catch (Exception exception)
       {
          return new Failure(exception.Message);
+      }
+   }
+
+   public KString WordCase()
+   {
+      var _result = value.Matches("/w+");
+      if (_result is (true, var result))
+      {
+         foreach (var match in result)
+         {
+            match.Text = match.Text.ToUpper1();
+         }
+
+         return result.Text;
+      }
+      else
+      {
+         return this;
       }
    }
 }
