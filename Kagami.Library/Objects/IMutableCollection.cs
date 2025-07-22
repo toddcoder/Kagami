@@ -17,4 +17,6 @@ public interface IMutableCollection : ICollection
    KBoolean IsNotEmpty { get; }
 
    IObject Assign(SkipTake skipTake, IEnumerable<IObject> values);
+
+   IObject Prepend(IObject obj);
 }

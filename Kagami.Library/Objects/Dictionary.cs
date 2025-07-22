@@ -430,6 +430,30 @@ public class Dictionary : IObject, IMutableCollection
 
    public IObject Assign(SkipTake skipTake, IEnumerable<IObject> values) => this;
 
+   public IObject Prepend(IObject obj)
+   {
+      switch (obj)
+      {
+         case KTuple t:
+         {
+            var key = t[0];
+            var value = t[1];
+            this[key] = value;
+            break;
+         }
+         case NameValue nameValue:
+         {
+            this[(KString)nameValue.Name] = nameValue.Value;
+            break;
+         }
+         case IKeyValue kv:
+            this[kv.Key] = kv.Value;
+            break;
+      }
+
+      return this;
+   }
+
    public IObject[] KeyArray => dictionary.KeyArray();
 
    public Dictionary Merge(Dictionary other)

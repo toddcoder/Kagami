@@ -247,6 +247,12 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
       return this;
    }
 
+   public IObject Prepend(IObject obj)
+   {
+      mutable.Insert(0, obj.AsString);
+      return this;
+   }
+
    public MutString Fill(char ch, int count)
    {
       mutable.Clear();

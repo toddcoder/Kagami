@@ -287,6 +287,8 @@ public abstract class BaseClass
       registerMessage("isEmpty".get(), (obj, _) => function<IObject>(obj, o => ((IMutableCollection)o).IsEmpty));
       registerMessage("isNotEmpty".get(), (obj, _) => function<IObject>(obj, o => ((IMutableCollection)o).IsNotEmpty));
       registerMessage("assign(_,_)", (obj, message) => function<IObject, IObject, IObject>(obj, message, assignToMutable));
+      registerMessage("|<<(_)", (obj, message) => function<IObject, IObject>(obj, message, (o, v) => ((IMutableCollection)o).Prepend(v)));
+      registerMessage("prepend(_)", (obj, message) => function<IObject, IObject>(obj, message, (o, v) => ((IMutableCollection)o).Prepend(v)));
    }
 
    protected void loadIteratorMessages()

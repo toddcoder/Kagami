@@ -1313,6 +1313,9 @@ public static class ParserFunctions
          case "?>":
             _symbol = new SendBinaryMessageSymbol("if(_)", Precedence.ChainedOperator);
             break;
+         case "|<<":
+            _symbol = new SendBinaryMessageSymbol("|<<(_)", Precedence.Shift);
+            break;
       }
 
       return _symbol;

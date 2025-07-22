@@ -568,4 +568,10 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
       return new KArray([leftArray, rightArray]);
    }
+
+   public IObject Prepend(IObject item)
+   {
+      list.Insert(0, item);
+      return this;
+   }
 }
