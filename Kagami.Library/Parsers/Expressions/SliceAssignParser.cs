@@ -22,7 +22,7 @@ public partial class SliceAssignParser : SymbolParser
 
       var _symbol =
          from skipTake in getSkipTake(state, builder.Flags | ExpressionFlags.OmitColon)
-         from scan in state.Scan(@"^(\s*)(=)", Color.Whitespace, Color.Structure)
+         from scan in state.Scan(@"^(\s*)(=)(?!=)", Color.Whitespace, Color.Structure)
          from expression in getExpression(state, builder.Flags | ExpressionFlags.OmitColon)
          select new SliceAssignSymbol(skipTake, expression);
       if (_symbol is (true, var symbol))
