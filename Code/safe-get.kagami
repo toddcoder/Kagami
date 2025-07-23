@@ -1,0 +1,14 @@
+﻿open sys
+
+func safe`get()
+	when (?contents, _) return contents
+	when (Nil, default) return default
+
+let x = safe`get(?16, 2)
+println(x)
+
+let y = safe`get(?true, false)
+println(y)
+
+let z = safe`get(?'c', 'a')
+println(z)
