@@ -11,7 +11,7 @@ public class AnySymbol : Symbol, IConstant
 
    public override Arity Arity => Arity.Nullary;
 
-   public override string ToString() => "_";
+   public override string ToString() => "@";
 
    public IObject Object => Any.Value;
 }

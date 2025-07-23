@@ -9,6 +9,7 @@ public class PrefixParser(ExpressionBuilder builder) : MultiParser
       get
       {
          yield return new UserOperatorParser(builder, Arity.Prefix);
+         yield return new SomeSuccessParser(builder);
 
          if (builder.Flags[ExpressionFlags.Comparisand])
          {

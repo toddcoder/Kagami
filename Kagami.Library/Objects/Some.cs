@@ -18,7 +18,7 @@ public readonly struct Some : IObject, IOptional, IBoolean, IEquatable<Some>, IM
 
    public string AsString => $"{value.AsString}?";
 
-   public string Image => $"{value.Image}?";
+   public string Image => $"?{value.Image}";
 
    public int Hash => value.Hash;
 

@@ -1,0 +1,8 @@
+﻿open sys
+
+func save`get()
+	when (?contents, _) return contents
+	when (Nil, default) return default
+
+println(save`get(?10, 42))
+println(save`get(nil, 42))

@@ -12,16 +12,16 @@ public partial class PlaceholderParser : SymbolParser
    {
    }
 
-   [GeneratedRegex($@"^(\s*)(use|var)(\s+)({REGEX_FIELD})\b")]
+   [GeneratedRegex($@"^(\s*)((?:use|var)\s*)?({REGEX_FIELD})\b(?!"")")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      var mutable = tokens[2].Text;
-      var placeholderName = tokens[4].Text;
+      var mutable = tokens[2].Text.Trim();
+      var placeholderName = tokens[3].Text;
       if (placeholderName.StartsWith('`'))
       {
-         state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Identifier);
+         state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Identifier);
          builder.Add(new FieldSymbol(placeholderName));
          return unit;
       }
@@ -32,7 +32,7 @@ public partial class PlaceholderParser : SymbolParser
          "var" => $"+{placeholderName}",
          _ => $"-{placeholderName}"
       };
-      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Identifier);
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Identifier);
       builder.Add(new PlaceholderSymbol(name));
 
       return unit;

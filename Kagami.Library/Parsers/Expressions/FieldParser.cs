@@ -12,7 +12,7 @@ public partial class FieldParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@$"^(\s*)({REGEX_FIELD})\b")]
+   [GeneratedRegex(@$"^(\s*)({REGEX_FIELD})\b(?!"")")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)

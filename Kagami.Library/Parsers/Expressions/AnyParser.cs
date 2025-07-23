@@ -7,11 +7,12 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class AnyParser : SymbolParser
 {
-   public AnyParser(ExpressionBuilder builder) : base(builder) { }
+   public AnyParser(ExpressionBuilder builder) : base(builder)
+   {
+   }
 
    [GeneratedRegex(@"^(\s*)(_)\b")]
    public override partial Regex Regex();
-
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {

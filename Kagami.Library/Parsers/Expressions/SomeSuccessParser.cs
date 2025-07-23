@@ -11,13 +11,13 @@ public partial class SomeSuccessParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(?<!\s)([\?!])(?=\s|$)")]
+   [GeneratedRegex(@"^(\s*)([\?!])(?![\?!])")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      var some = tokens[1].Text == "?";
-      state.Colorize(tokens, Color.Operator);
+      var some = tokens[2].Text == "?";
+      state.Colorize(tokens, Color.Whitespace, Color.Operator);
 
       if (some)
       {

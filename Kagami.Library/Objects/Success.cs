@@ -13,7 +13,7 @@ public readonly struct Success : IObject, IResult, IMonad, IBoolean
 
    public string AsString => $"{Value.AsString}!";
 
-   public string Image => $"{Value.Image}!";
+   public string Image => $"!{Value.Image}";
 
    public int Hash => Value.Hash;
 

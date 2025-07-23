@@ -13,11 +13,11 @@ convert Int(array Array) {
 			}
 		}
 	}
-	return accum!
+	return !accum
 }
 
 var `i = ["153", "123", "111"] as Int
-if `i is i! {
+if `i is !i {
 	println($"Value is (i)")
 }
 else {
