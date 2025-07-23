@@ -193,7 +193,5 @@ public interface IIterator : IEquivalentClass
 
    IObject Windowed(int size, int step, bool partial);
 
-   /*IObject Splice(int keep, int drop);
-
-   IObject Splice(int keep);*/
+   IObject Repeated();
 }

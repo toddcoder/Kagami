@@ -620,11 +620,11 @@ public class Iterator : IObject, IIterator
       return result;
    }
 
-   public IObject First() => List().ToList().FirstOrNone().Map(Some.Object) | (() => KNil.NilValue);
+   public IObject First() => List().FirstOrNone().Map(Some.Object) | (() => KNil.NilValue);
 
    public IObject First(Lambda predicate)
    {
-      foreach (var value in List().ToList().Where(value => predicate.Invoke(value).IsTrue))
+      foreach (var value in List().Where(value => predicate.Invoke(value).IsTrue))
       {
          return new Some(value);
       }
@@ -634,16 +634,14 @@ public class Iterator : IObject, IIterator
 
    public IObject Last()
    {
-      var list = List().ToList();
-      list.Reverse();
-      return list.FirstOrNone().Map(Some.Object) | (() => KNil.NilValue);
+      var reversed = List().Reverse();
+      return reversed.FirstOrNone().Map(Some.Object) | (() => KNil.NilValue);
    }
 
    public IObject Last(Lambda predicate)
    {
-      var list = List().ToList();
-      list.Reverse();
-      foreach (var value in list.Where(value => predicate.Invoke(value).IsTrue))
+      var reversed = List().Reverse();
+      foreach (var value in reversed.Where(value => predicate.Invoke(value).IsTrue))
       {
          return new Some(value);
       }
@@ -1321,6 +1319,26 @@ public class Iterator : IObject, IIterator
    public virtual IObject Chunked(int count) => new ChunkedIterator(collection, count);
 
    public virtual IObject Windowed(int size, int step, bool partial) => new WindowedIterator(collection, size, step, partial);
+
+   public IObject Repeated()
+   {
+      var memo = new Memo<IObject, int>.Function(_ => 0);
+      foreach (var item in List())
+      {
+         memo[item]++;
+      }
+
+      Set<IObject> set = [];
+      foreach (var (key, count) in memo)
+      {
+         if (count > 1)
+         {
+            set.Add(key);
+         }
+      }
+
+      return new Set(set);
+   }
 
    protected static IEnumerable<IObject> applyAgainst(List<Lambda> lambdas, List<IObject> enumerable)
    {
