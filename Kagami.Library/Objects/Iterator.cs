@@ -1001,32 +1001,32 @@ public class Iterator : IObject, IIterator
 
    public IObject Shuffle()
    {
-      var array = List().ToArray();
+      IObject[] array = [.. List()];
       return shuffle(array, array.Length);
    }
 
    public IObject Random()
    {
-      var array = List().ToArray();
+      IObject[] array = [.. List()];
       var random = new Random(NowServer.Now.Millisecond);
       var i = random.Next(array.Length);
 
       return array[i];
    }
 
-   public IObject Collect() => collectionClass.Revert(List().ToList());
+   public IObject Collect() => collectionClass.Revert(List());
 
-   public KArray ToArray() => new(List().ToList());
+   public KArray ToArray() => new(List());
 
-   public List ToList() => Objects.List.NewList(List().ToList());
+   public List ToList() => Objects.List.NewList(List());
 
-   public KTuple ToTuple() => new(List().ToArray());
+   public KTuple ToTuple() => new([.. List()]);
 
    public Dictionary ToDictionary(Lambda keyLambda, Lambda valueLambda)
    {
-      var hash = new Hash<IObject, IObject>();
+      Hash<IObject, IObject> hash = [];
 
-      foreach (var item in List().ToList())
+      foreach (var item in List())
       {
          var key = keyLambda.Invoke(item);
          var value = valueLambda.Invoke(item);
@@ -1036,9 +1036,9 @@ public class Iterator : IObject, IIterator
       return new Dictionary(hash);
    }
 
-   public IObject ToDictionary() => KArray.CreateObject(List().ToList());
+   public IObject ToDictionary() => new Dictionary(List());
 
-   public IObject ToSet() => new Set(List().ToArray());
+   public IObject ToSet() => new Set((IObject[]) [.. List()]);
 
    public IObject Each(Lambda action)
    {
