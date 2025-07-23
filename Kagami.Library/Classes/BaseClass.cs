@@ -452,6 +452,7 @@ public abstract class BaseClass
       registerMessage("windowed(size:_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, s) => i.Windowed(s.Value, 1, true)));
       registerMessage("windowed(size:_<Int>,step:_<Int>,partial:_<Boolean>)",
          (obj, message) => iteratorFunc<Int, Int, KBoolean>(obj, message, (i, s1, s2, p) => i.Windowed(s1.Value, s2.Value, p.Value)));
+      registerMessage("repeated()", (obj, _) => iteratorFunc(obj, i => i.Repeated()));
    }
 
    public virtual bool MatchCompatible(BaseClass otherClass) => Name == otherClass.Name;

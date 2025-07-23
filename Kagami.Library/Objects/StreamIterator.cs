@@ -255,9 +255,24 @@ public class StreamIterator : IObject, IIterator
 
    public IObject Max(Lambda lambda) => terminate().Max(lambda);
 
-   public IObject First() => terminate().First();
+   public IObject First()
+   {
+      var _result = Next();
+      return _result.Map(Some.Object) | KNil.NilValue;
+   }
 
-   public IObject First(Lambda predicate) => terminate().First(predicate);
+   public IObject First(Lambda predicate)
+   {
+      foreach (var item in list())
+      {
+         if (predicate.Invoke(item).IsTrue)
+         {
+            return item;
+         }
+      }
+
+      return KNil.NilValue;
+   }
 
    public IObject Last() => terminate().Last();
 
@@ -368,6 +383,8 @@ public class StreamIterator : IObject, IIterator
    public IObject Chunked(int count) => terminate().Chunked(count);
 
    public IObject Windowed(int size, int step, bool partial) => terminate().Windowed(size, step, partial);
+
+   public IObject Repeated() => terminate().Repeated();
 
    public BaseClass Equivalent() => new CollectionClass();
 
