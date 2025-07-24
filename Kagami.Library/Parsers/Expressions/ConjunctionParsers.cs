@@ -6,14 +6,11 @@ public class ConjunctionParsers(ExpressionBuilder builder) : MultiParser
    {
       get
       {
+         IsEndOfExpression = false;
+
          yield return new IsParser(builder);
          yield return new AsOperatorParser(builder);
          yield return new MatchExpressionParser(builder);
-
-         /*if (!builder.Flags[ExpressionFlags.OmitMaybe])
-         {
-            yield return new MaybeParser(builder);
-         }*/
 
          if (!builder.Flags[ExpressionFlags.OmitComprehension])
          {
@@ -29,6 +26,9 @@ public class ConjunctionParsers(ExpressionBuilder builder) : MultiParser
          yield return new InlineIfParser(builder);
          yield return new ImplicitCollectionExpressionParser(builder);
          yield return new DefaultToParser(builder);
+         yield return new EndOfExpressionParser(builder, this);
       }
    }
+
+   public bool IsEndOfExpression { get; set; }
 }

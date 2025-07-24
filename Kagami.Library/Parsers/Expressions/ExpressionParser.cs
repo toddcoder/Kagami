@@ -135,6 +135,10 @@ public class ExpressionParser : PatternlessParser
                   var lambda = new LambdaSymbol(whateverCount, block);
                   Expression = new Expression(lambda);
                }
+               else if (conjunctionParsers.IsEndOfExpression)
+               {
+                  Expression = new Expression(new SubexpressionSymbol(expression));
+               }
                else
                {
                   Expression = expression;

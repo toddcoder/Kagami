@@ -418,6 +418,40 @@ public class Dictionary : IObject, IMutableCollection
 
    public IObject RemoveAll(IObject obj) => Remove(obj);
 
+   public IObject RemoveKeys(IObject keys)
+   {
+      switch (keys)
+      {
+         case ICollection collection:
+         {
+            var iterator = collection.GetIterator(false);
+            return removeKeys(iterator);
+         }
+         case IIterator iterator:
+         {
+            return removeKeys(iterator);
+         }
+         default:
+            return Remove(keys);
+      }
+
+      IObject removeKeys(IIterator iterator)
+      {
+         Hash<IObject, IObject> removed = [];
+         foreach (var key in iterator.List())
+         {
+            var _value = dictionary.Maybe[key];
+            if (_value is (true, var value))
+            {
+               removed[key] = value;
+               dictionary.Remove(key);
+            }
+         }
+
+         return new Dictionary(removed);
+      }
+   }
+
    public IObject InsertAt(int index, IObject obj)
    {
       var keyArray = dictionary.KeyArray();
