@@ -1,26 +1,25 @@
 ﻿using System.Text.RegularExpressions;
 using Core.Monads;
-//using Kagami.Library.Nodes.Symbols;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
 public partial class EndOfExpressionParser : SymbolParser
 {
-   protected ConjunctionParsers conjunctionParsers;
+   protected ValuesParser valuesParser;
 
-   public EndOfExpressionParser(ExpressionBuilder builder, ConjunctionParsers conjunctionParsers) : base(builder)
+   public EndOfExpressionParser(ExpressionBuilder builder, ValuesParser valuesParser) : base(builder)
    {
-      this.conjunctionParsers = conjunctionParsers;
+      this.valuesParser = valuesParser;
    }
 
-   [GeneratedRegex(@"^(\s*)(\.)(?=\s|$)")]
+   [GeneratedRegex(@"^(\s*)(\.)(?![\w\d\.])")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
       state.Colorize(tokens, Color.Whitespace, Color.Operator);
-      conjunctionParsers.IsEndOfExpression = true;
+      valuesParser.IsEndOfExpression = true;
 
       return unit;
    }

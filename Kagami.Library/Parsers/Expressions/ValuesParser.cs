@@ -22,6 +22,7 @@ public class ValuesParser : MultiParser
          yield return new MultiParameterLambdaParser(builder);
          yield return new TypeConstraintParser(builder);
          yield return new SubexpressionParser(builder);
+         yield return new EndOfExpressionParser(builder, this);
          yield return new ArrayParser(builder);
          yield return new SelectorParser(builder);
          yield return new DictionaryOrSetParser(builder);
@@ -96,4 +97,6 @@ public class ValuesParser : MultiParser
          yield return new FieldParser(builder);
       }
    }
+
+   public bool IsEndOfExpression { get; set; }
 }

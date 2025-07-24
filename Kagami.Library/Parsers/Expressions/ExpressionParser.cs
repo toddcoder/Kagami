@@ -67,6 +67,15 @@ public class ExpressionParser : PatternlessParser
                   var _conjunction = conjunctionParsers.Scan(state);
                   if (_conjunction)
                   {
+                     /*if (conjunctionParsers.IsEndOfExpression)
+                     {
+                        builder = builder.Subexpression();
+                        conjunctionParsers.IsEndOfExpression = false;
+                     }
+                     else
+                     {
+                        break;
+                     }*/
                      break;
                   }
                   else if (_conjunction.Exception)
@@ -135,10 +144,10 @@ public class ExpressionParser : PatternlessParser
                   var lambda = new LambdaSymbol(whateverCount, block);
                   Expression = new Expression(lambda);
                }
-               else if (conjunctionParsers.IsEndOfExpression)
+               /*else if (conjunctionParsers.IsEndOfExpression)
                {
                   Expression = new Expression(new SubexpressionSymbol(expression));
-               }
+               }*/
                else
                {
                   Expression = expression;
@@ -238,6 +247,12 @@ public class ExpressionParser : PatternlessParser
       var _scan = valuesParser.Scan(state);
       if (_scan)
       {
+         if (valuesParser.IsEndOfExpression)
+         {
+            builder = builder.Subexpression();
+            valuesParser.IsEndOfExpression = false;
+         }
+
          if (builder.LastSymbol is (true, var lastSymbol))
          {
             ExpressionFunctions.evaluate(lastSymbol, s => s is WhateverSymbol, s => ((WhateverSymbol)s).Count = whateverCount++);

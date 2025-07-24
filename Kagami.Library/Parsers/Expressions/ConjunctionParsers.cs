@@ -26,7 +26,7 @@ public class ConjunctionParsers(ExpressionBuilder builder) : MultiParser
          yield return new InlineIfParser(builder);
          yield return new ImplicitCollectionExpressionParser(builder);
          yield return new DefaultToParser(builder);
-         yield return new EndOfExpressionParser(builder, this);
+         //yield return new EndOfExpressionParser(builder, this);
       }
    }
 

@@ -209,6 +209,17 @@ public class ExpressionBuilder(Bits32<ExpressionFlags> flags, bool acknowledgeIm
       return _expression;
    }
 
+   public ExpressionBuilder Subexpression()
+   {
+      var builder = new ExpressionBuilder(flags, acknowledgeImplicit);
+      if (ToExpression() is (true, var oldExpression))
+      {
+         builder.Add(new SubexpressionSymbol(oldExpression));
+      }
+
+      return builder;
+   }
+
    public Symbol[] Ordered
    {
       get => [.. ordered];

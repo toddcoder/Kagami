@@ -11,7 +11,7 @@ public readonly struct Date : IObject, IRangeItem, IFormattable
 
    public static IObject DateObject(DateTime dateTime) => new Date(dateTime);
 
-   public static KTuple Months
+   public static KArray Months
    {
       get
       {
@@ -22,11 +22,11 @@ public readonly struct Date : IObject, IRangeItem, IFormattable
          ];
          var names = months.Select(KString.StringObject).ToArray();
 
-         return new KTuple(names);
+         return new KArray(names);
       }
    }
 
-   public static KTuple DaysOfTheWeek
+   public static KArray DaysOfTheWeek
    {
       get
       {
@@ -36,7 +36,7 @@ public readonly struct Date : IObject, IRangeItem, IFormattable
          ];
          var names = days.Select(KString.StringObject).ToArray();
 
-         return new KTuple(names);
+         return new KArray(names);
       }
    }
 
