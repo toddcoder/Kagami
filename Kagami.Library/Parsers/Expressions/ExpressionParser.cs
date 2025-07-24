@@ -238,9 +238,9 @@ public class ExpressionParser : PatternlessParser
       var _scan = valuesParser.Scan(state);
       if (_scan)
       {
-         if (builder.LastSymbol is (true, WhateverSymbol whatever))
+         if (builder.LastSymbol is (true, var lastSymbol))
          {
-            whatever.Count = whateverCount++;
+            ExpressionFunctions.evaluate(lastSymbol, s => s is WhateverSymbol, s => ((WhateverSymbol)s).Count = whateverCount++);
          }
 
          return unit;

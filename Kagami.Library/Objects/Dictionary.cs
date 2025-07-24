@@ -327,7 +327,7 @@ public class Dictionary : IObject, IMutableCollection
 
    public IObject Keys => new Set(dictionary.KeyArray());
 
-   public IObject Values => new KTuple(dictionary.ValueArray());
+   public IObject Values => new KArray(dictionary.ValueArray());
 
    public KBoolean In(IObject key) => dictionary.ContainsKey(key);
 

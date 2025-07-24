@@ -2,7 +2,7 @@
 
 namespace Kagami.Library.Nodes.Symbols;
 
-public class ConversionSymbol : Symbol
+public class ConversionSymbol : Symbol, IHasSymbol
 {
    protected string message;
    protected Symbol value;
@@ -25,4 +25,6 @@ public class ConversionSymbol : Symbol
    public override Arity Arity => Arity.Nullary;
 
    public override string ToString() => $"{message} {value}";
+   
+   public Symbol Symbol => value;
 }

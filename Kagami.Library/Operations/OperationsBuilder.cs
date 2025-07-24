@@ -298,6 +298,8 @@ public class OperationsBuilder
 
    public void PushFrame() => add(new PushFrame());
 
+   public void PushFunctionFrame() => add(new PushFunctionFrame());
+
    public void PushFrameWithValue() => add(new PushFrameWithValue());
 
    public void PushFrameWithArguments() => add(new PushFrameWithArguments());
@@ -584,6 +586,8 @@ public class OperationsBuilder
    public void UniqueString() => add(new UniqueString());
 
    public void Cons() => add(new Cons());
+
+   public void NewFailure() => add(new NewFailure());
 
    public override string ToString() => "operations";
 }
