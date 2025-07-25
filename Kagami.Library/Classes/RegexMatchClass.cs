@@ -18,6 +18,7 @@ public class RegexMatchClass : BaseClass
       messages["prefix".get()]=(obj, _) => function<RegexMatch>(obj, m => m.Prefix);
       messages["suffix".get()] = (obj, _) => function<RegexMatch>(obj, m => m.Suffix);
       messages["captures".get()] = (obj, _) => function<RegexMatch>(obj, m => m.Captures);
+      messages["input".get()] = (obj, _) => function<RegexMatch>(obj, m => m.Input);
       messages["[](_<Int>)"] = (obj, msg) => function<RegexMatch, Int>(obj, msg, (m, i) => m[i.Value]);
       messages["[](_<String>)"] = (obj, msg) => function<RegexMatch, KString>(obj, msg, (m, s) => m[s.Value]);
    }

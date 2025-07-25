@@ -14,6 +14,8 @@ namespace Kagami.Library.Classes
          messages["text".get()] = (obj, _) => function<RegexGroup>(obj, g => g.Text);
          messages["index".get()] = (obj, _) => function<RegexGroup>(obj, g => g.Index);
          messages["length".get()] = (obj, _) => function<RegexGroup>(obj, g => g.Length);
+         messages["prefix".get()] = (obj, _) => function<RegexGroup>(obj, g => g.Prefix);
+         messages["suffix".get()] = (obj, _) => function<RegexGroup>(obj, g => g.Suffix);
       }
    }
 }

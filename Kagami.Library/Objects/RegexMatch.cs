@@ -1,5 +1,4 @@
 ﻿using Core.Collections;
-using Core.Enumerables;
 using Core.Monads;
 using Core.Numbers;
 using static Core.Monads.MonadFunctions;
@@ -19,14 +18,15 @@ public readonly struct RegexMatch : IObject, IProcessPlaceholders, IEquatable<Re
    private readonly Func<int, Maybe<string>> indexToName;
    private readonly Hash<string, IObject> passed;
    private readonly Hash<string, IObject> internals;
+   private readonly string input;
 
    public RegexMatch(Core.Matching.Match match, Func<string, Maybe<int>> nameToIndex, Func<int, Maybe<string>> indexToName, string prefix,
-      string suffix) : this()
+      string suffix, string input) : this()
    {
       text = match.Text;
       index = match.Index;
       length = match.Length;
-      groups = match.Groups.Select(g => new RegexGroup(g)).ToArray();
+      groups = [.. match.Groups.Select(g => new RegexGroup(g, input))];
       this.prefix = prefix;
       this.suffix = suffix;
       this.nameToIndex = nameToIndex;
@@ -38,10 +38,12 @@ public readonly struct RegexMatch : IObject, IProcessPlaceholders, IEquatable<Re
          ["text"] = (KString)text,
          ["index"] = (Int)index,
          ["length"] = (Int)length,
-         ["groups"] = new KTuple(groups.Select(g => (IObject)g).ToArray()),
+         ["groups"] = new KArray(groups.Select(g => (IObject)g)),
          ["prefix"] = (KString)prefix,
-         ["suffix"] = (KString)suffix
+         ["suffix"] = (KString)suffix,
+         ["input"] = (KString)input
       };
+      this.input = input;
    }
 
    public RegexMatch(Hash<string, IObject> passed) : this()
@@ -57,6 +59,7 @@ public readonly struct RegexMatch : IObject, IProcessPlaceholders, IEquatable<Re
 
       this.passed = passed;
       internals = [];
+      input = "";
    }
 
    public string ClassName => "Match";
@@ -85,7 +88,7 @@ public readonly struct RegexMatch : IObject, IProcessPlaceholders, IEquatable<Re
 
    public Int Length => length;
 
-   public KTuple Groups => new(groups.Select(g => (IObject)g).ToArray());
+   public KArray Groups => new(groups.Select(g => (IObject)g));
 
    public KString Prefix => prefix;
 
@@ -95,12 +98,21 @@ public readonly struct RegexMatch : IObject, IProcessPlaceholders, IEquatable<Re
 
    public Hash<string, IObject> Internals => internals;
 
+   public KString Input => input;
+
    public KString this[int index]
    {
       get
       {
          var captures = Captures;
-         return index.Between(0).Until(captures.Length.Value) ? captures[index].AsString : "";
+         if (index.Between(0).Until(((ICollection)captures).Length.Value))
+         {
+            return ((IIndexed)captures)[index].AsString;
+         }
+         else
+         {
+            return "";
+         }
       }
    }
 
@@ -113,10 +125,11 @@ public readonly struct RegexMatch : IObject, IProcessPlaceholders, IEquatable<Re
       }
    }
 
-   public KTuple Captures
+   public IObject Captures
    {
       get
       {
+         var anyNames = false;
          IObject[] items = [.. groups.Skip(1).Select(g => g.Text)];
          for (var i = 0; i < items.Length; i++)
          {
@@ -124,10 +137,11 @@ public readonly struct RegexMatch : IObject, IProcessPlaceholders, IEquatable<Re
             {
                var nameValue = new NameValue(name, items[i]);
                items[i] = nameValue;
+               anyNames = true;
             }
          }
 
-         return new KTuple(items);
+         return anyNames ? new KTuple(items) : new KArray(items);
       }
    }
 

@@ -150,7 +150,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
          {
             return new KTuple(result
                .Select(m => new RegexMatch(m, self.nameToIndex(result), self.indexToName(result), input.Keep(m.Index),
-                  input.Drop(m.Index + m.Length)))
+                  input.Drop(m.Index + m.Length), input))
                .Select(m => getMatchOrText(m, self.textOnly)).ToArray());
          }
          else
@@ -162,7 +162,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
       {
          var match = result2.GetMatch(0);
          var regexMatch = new RegexMatch(match, self.nameToIndex(result2), self.indexToName(result2), input.Keep(match.Index),
-            input.Drop(match.Index + match.Length));
+            input.Drop(match.Index + match.Length), input);
          return Some.Object(getMatchOrText(regexMatch, self.textOnly));
       }
       else
@@ -200,7 +200,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
          {
             builder.Append(input.AsSpan(lastIndex, match.Index - lastIndex));
             var regexMatch = new RegexMatch(match, nameToIndex(result), indexToName(result), input.Keep(match.Index),
-               input.Drop(match.Index + match.Length));
+               input.Drop(match.Index + match.Length), input);
             var replacement = lambda.Invoke(regexMatch);
             builder.Append(replacement.AsString);
             lastIndex = match.Index + match.Length;
