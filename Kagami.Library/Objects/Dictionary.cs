@@ -352,6 +352,16 @@ public class Dictionary : IObject, IMutableCollection
       }
    }
 
+   public IObject Copy()
+   {
+      Hash<IObject, IObject> hash = [];
+      foreach (var (key, value) in dictionary)
+      {
+         hash[key] = value;
+      }
+      return new Dictionary(hash);
+   }
+
    public IObject Swap(IObject key1, IObject key2)
    {
       var value1 = getValue(key1);

@@ -23,7 +23,8 @@ public partial class SendMessageParser : SymbolParser
    {
       var optional = tokens[2].Text == "#";
       var precedence = tokens[3].Text == "." ? Precedence.SendMessage : Precedence.ChainedOperator;
-      if (precedence == Precedence.ChainedOperator && builder.Flags[ExpressionFlags.InLambda])
+      if (precedence == Precedence.ChainedOperator && builder.Flags[ExpressionFlags.InLambda] ||
+          tokens[3].Text == ":" && builder.Flags[ExpressionFlags.OmitColon])
       {
          return nil;
       }

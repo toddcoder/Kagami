@@ -19,6 +19,7 @@ public class StringClass : BaseClass, ICollectionClass
       textFindingMessages();
 
       messages["~(_)"] = (obj, msg) => function<KString, IObject>(obj, msg, (s1, s2) => s1.Concatenate(s2.AsString));
+      messages["+(_)"] = (obj, msg) => function<KString, KString>(obj, msg, (s1, s2) => s1.Concatenate(s2.AsString));
       messages["[](_)"] = (obj, msg) => function<KString, IObject>(obj, msg, getIndexed);
       messages["length".get()] = (obj, _) => function<KString>(obj, s => s.Length);
       messages["upper()"] = (obj, _) => function<KString>(obj, s => s.Upper());

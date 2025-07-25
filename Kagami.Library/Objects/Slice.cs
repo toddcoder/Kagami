@@ -83,6 +83,8 @@ public class Slice : IObject, ICollection
 
    public IObject One() => sliceable.Length == 1 ? sliceable.Get(Int.Zero).Required("Length must be > 0") : this;
 
+   public IObject Copy() => new Slice(sliceable, indexes);
+
    public IObject Assign(IObject value)
    {
       if (value is ICollection collection)

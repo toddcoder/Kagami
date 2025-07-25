@@ -1398,13 +1398,11 @@ public static class ParserFunctions
       }
    }
 
-   public static Optional<Unit> anticipateBrackets(ParseState state) => state.CurrentSource.Matches("^ /s* ['{}']").Map(_ => unit).Optional();
-
    public static Optional<SkipTake> getSkipTake(ParseState state, ExpressionFlags flags)
    {
       var skipTake = new SkipTake();
 
-      var _noSkipMatch = state.Scan(@"^(\s*)(:)", Color.Whitespace, Color.Structure);
+      var _noSkipMatch = state.Scan(@"^(\s*)(:)", Color.Whitespace, Color.Operator);
       if (_noSkipMatch)
       {
       }
@@ -1476,7 +1474,7 @@ public static class ParserFunctions
       {
          1 => Color.Whitespace,
          2 when g.Value == "}" => Color.CloseParenthesis,
-         _ => Color.Structure
+         _ => Color.Operator
       };
    }
 

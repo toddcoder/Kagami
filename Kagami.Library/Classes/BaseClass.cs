@@ -267,6 +267,7 @@ public abstract class BaseClass
       registerMessage("[](_<SkipTake>)", (obj, message) => ((ISkipTakeable)obj)[(SkipTake)message.Arguments[0]]);
       registerMessage("range()", (obj, _) => collectionFunc(obj, c => new KRange(new Int(0), c.Length, false)));
       registerMessage("one()", (obj, _) => collectionFunc(obj, c => c.One()));
+      registerMessage("copy()", (obj, _) => collectionFunc(obj, c => c.Copy()));
 
       loadIteratorMessages();
    }

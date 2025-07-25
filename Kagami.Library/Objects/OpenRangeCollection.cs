@@ -44,6 +44,8 @@ namespace Kagami.Library.Objects
 
       public IObject One() => this;
 
+      public IObject Copy() => new OpenRangeCollection((OpenRange)openRange.Copy());
+
       public string ClassName => openRange.ClassName;
 
 		public string AsString => openRange.AsString;

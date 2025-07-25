@@ -25,4 +25,6 @@ public interface ICollection : ISkipTakeable
    IIterator GetIndexedIterator();
 
    IObject One();
+
+   IObject Copy();
 }

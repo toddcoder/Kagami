@@ -54,6 +54,8 @@ public readonly struct ByteArray : IObject, ICollection, IObjectCompare
 
    public IObject One() => bytes.Length == 1 ? (KByte)bytes[0] : this;
 
+   public IObject Copy() => new ByteArray(bytes);
+
    public int Compare(IObject obj) => compareCollections(this, obj);
 
    public IObject Object => this;

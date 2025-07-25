@@ -131,5 +131,7 @@ public class YieldingInvokable : IInvokable, ICollection, IObject
 
    public IObject One() => this;
 
+   public IObject Copy() => new YieldingInvokable(selector, Parameters, Image);
+
    public IObject this[SkipTake skipTake] => Objects.CollectionFunctions.skipTake(this, skipTake);
 }

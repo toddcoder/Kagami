@@ -57,6 +57,8 @@ public class File : IObject, ICollection
 
    public IObject One() => this;
 
+   public IObject Copy() => new File(fileName.FullPath);
+
    public IObject Flatten() => this;
 
    public KString Text => fileName.Text;

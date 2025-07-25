@@ -2,6 +2,7 @@
 using Core.Dates.Now;
 using Core.Enumerables;
 using Core.Monads;
+using Core.Strings;
 using Kagami.Library.Classes;
 using Kagami.Library.Runtime;
 using static Core.Monads.MonadFunctions;
@@ -14,23 +15,6 @@ namespace Kagami.Library.Objects;
 
 public class Iterator : IObject, IIterator
 {
-   protected class IteratorEqualityComparer(Lambda lambda) : IEqualityComparer<IObject>
-   {
-      public bool Equals(IObject? x, IObject? y)
-      {
-         if (x is not null && y is not null)
-         {
-            return lambda.Invoke(x, y).IsTrue;
-         }
-         else
-         {
-            return false;
-         }
-      }
-
-      public int GetHashCode(IObject obj) => obj.Hash;
-   }
-
    protected ICollection collection;
    protected int index;
    protected ICollectionClass collectionClass;
@@ -52,9 +36,9 @@ public class Iterator : IObject, IIterator
 
    public virtual string ClassName => "Iterator";
 
-   public virtual string AsString => "!Iterator";
+   public virtual string AsString => $"it {((IObject)collection).AsString.Truncate(20)}";
 
-   public virtual string Image => "!Iterator";
+   public virtual string Image => $"it {((IObject)collection).Image.Truncate(20)}";
 
    public int Hash => ((IObject)collection).Hash;
 

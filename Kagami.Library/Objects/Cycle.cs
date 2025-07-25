@@ -76,6 +76,8 @@ public class Cycle : IObject, ICollection
 
    public IObject One() => this;
 
+   public IObject Copy() => new Cycle(items);
+
    public KTuple Items => new(items);
 
    public IObject this[int index] => items[index];

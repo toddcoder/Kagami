@@ -8,10 +8,19 @@ public class SliceSymbol : Symbol
 {
    protected SkipTake[] skipTakes;
 
-   public SliceSymbol(SkipTake[] skipTakes) => this.skipTakes = skipTakes;
+   public SliceSymbol(SkipTake[] skipTakes)
+   {
+      this.skipTakes = skipTakes;
+   }
 
    public override void Generate(OperationsBuilder builder)
    {
+      if (skipTakes.Length == 1 && !skipTakes[0].Skip && !skipTakes[0].Take)
+      {
+         builder.SendMessage("copy()");
+         return;
+      }
+
       builder.PushFrameWithValue();
 
       var firstSkipTake = false;

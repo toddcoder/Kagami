@@ -170,6 +170,8 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
    public IObject One() => this;
 
+   public IObject Copy() => new KString(value);
+
    public KString Repeat(int count) => value.Repeat(count);
 
    public KChar GetChar(int index) => value[index];

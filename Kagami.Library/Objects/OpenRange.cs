@@ -59,5 +59,7 @@ public readonly struct OpenRange : IObject, ICollection
 
    public IObject One() => this;
 
+   public IObject Copy() => new OpenRange(seed, lambda);
+
    public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
 }

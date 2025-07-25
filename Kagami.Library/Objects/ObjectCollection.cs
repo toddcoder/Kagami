@@ -88,6 +88,8 @@ public class ObjectCollection : IObject, ICollection
 
    public IObject One() => this;
 
+   public IObject Copy() => new ObjectCollection(obj);
+
    public string ClassName => obj.ClassName;
 
    public string AsString => obj.AsString;

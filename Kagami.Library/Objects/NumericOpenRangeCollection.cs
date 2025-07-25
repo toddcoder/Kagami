@@ -52,4 +52,6 @@ public class NumericOpenRangeCollection(NumericOpenRange openRange) : IObject, I
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
    public IObject One() => this;
+
+   public IObject Copy() => new NumericOpenRangeCollection((NumericOpenRange)openRange.Copy());
 }

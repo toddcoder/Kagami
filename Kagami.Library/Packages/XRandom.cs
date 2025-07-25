@@ -8,9 +8,15 @@ namespace Kagami.Library.Packages;
 
 public class XRandom : IObject, ICollection
 {
+   protected int seed;
    protected Random random;
 
-   public XRandom(int seed) => random = new Random(seed);
+   public XRandom(int seed)
+   {
+      this.seed = seed;
+
+      random = new Random(seed);
+   }
 
    public XRandom() => random = new Random();
 
@@ -42,6 +48,8 @@ public class XRandom : IObject, ICollection
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
    public IObject One() => Next();
+
+   public IObject Copy() => new XRandom(seed);
 
    public Int Next(int max) => random.Next(max);
 

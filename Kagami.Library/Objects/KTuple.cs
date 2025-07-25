@@ -282,6 +282,12 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
 
    public IObject One() => items.Length == 1 ? items[0] : this;
 
+   public IObject Copy()
+   {
+      IObject[] newItems = [.. items];
+      return new KTuple(newItems);
+   }
+
    public int Compare(IObject obj)
    {
       if (obj is KTuple tuple)

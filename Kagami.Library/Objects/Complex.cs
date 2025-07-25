@@ -216,4 +216,14 @@ public readonly struct Complex : IObject, INumeric, IObjectCompare, IComparable<
       var complex = value + numeric.AsComplex();
       return ComplexObject((complex.Real, complex.Imaginary));
    }
+
+   public KTuple Tuple()
+   {
+      return new KTuple([new NameValue("real", new Float(value.Real)), new NameValue("imaginary", new Float(value.Imaginary))]);
+   }
+
+   public Float Magnitude()
+   {
+      return new Float(CComplex.Abs(value));
+   }
 }

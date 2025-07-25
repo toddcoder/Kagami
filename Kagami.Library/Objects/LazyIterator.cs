@@ -8,9 +8,9 @@ public class LazyIterator : Iterator
 
    public override string ClassName => "LazyIterator";
 
-   public override string AsString => "!!Iterator";
+   public override string AsString => $"l{base.AsString}";
 
-   public override string Image => "!!Iterator";
+   public override string Image => $"l{base.Image}";
 
    public override bool IsLazy => true;
 

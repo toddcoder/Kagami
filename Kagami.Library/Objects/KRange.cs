@@ -178,6 +178,8 @@ public readonly struct KRange : IObject, ICollection
 
    public IObject One() => this;
 
+   public IObject Copy() => new KRange(start, stop, inclusive, increment);
+
    public IObject Add(int increment) => new KRange(this, increment);
 
    public IObject Subtract(int increment) => new KRange(this, -increment);

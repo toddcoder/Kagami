@@ -109,6 +109,8 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
 
    public IObject One() => this;
 
+   public IObject Copy() => new MutString(mutable.ToString());
+
    public int CompareTo(object? obj) => AsString.CompareTo(obj!.ToString());
 
    public int Compare(IObject obj) => AsString.CompareTo(obj.AsString);

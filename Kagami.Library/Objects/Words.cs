@@ -11,6 +11,7 @@ namespace Kagami.Library.Objects;
 
 public struct Words() : IObject, ICollection, IEqualityComparer<Word>
 {
+   private KString kString;
    private Word[] words = [];
 
    private static List<Word> fromString(KString kString)
@@ -30,6 +31,8 @@ public struct Words() : IObject, ICollection, IEqualityComparer<Word>
 
    public Words(KString kString) : this()
    {
+      this.kString = kString;
+
       words = [.. fromString(kString)];
    }
 
@@ -56,6 +59,8 @@ public struct Words() : IObject, ICollection, IEqualityComparer<Word>
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
    public IObject One() => words.Length == 1 ? words[0] : new Words(words[0].Text);
+
+   public IObject Copy() => new Words(kString);
 
    public bool Equals(Word x, Word y) => x.Text == y.Text;
 

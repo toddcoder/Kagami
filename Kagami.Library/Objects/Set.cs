@@ -87,6 +87,12 @@ public class Set : IObject, ICollection, IObjectCompare
 
    public IObject One() => set.Count == 1 ? set.Take(1).First() : this;
 
+   public IObject Copy()
+   {
+      Set<IObject> newSet = [.. set];
+      return new Set(newSet);
+   }
+
    protected void assertNotThisSet(IObject other)
    {
       if (Id == other.Id)

@@ -89,5 +89,7 @@ public class CycleCollection : IObject, ICollection
 
    public IObject One() => this;
 
+   public IObject Copy() => new CycleCollection((Cycle)cycle.Copy());
+
    public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
 }

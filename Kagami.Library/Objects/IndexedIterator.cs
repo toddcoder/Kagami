@@ -8,6 +8,10 @@ public class IndexedIterator : Iterator
    {
    }
 
+   public override string AsString => $"i{base.AsString}";
+
+   public override string Image => $"i{base.Image}";
+
    public override Maybe<IObject> Next()
    {
       var _next = base.Next();

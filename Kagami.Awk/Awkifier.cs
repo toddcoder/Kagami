@@ -17,6 +17,7 @@ namespace Kagami.Awk;
 public class Awkifier : IObject, ICollection
 {
    protected string source;
+   protected bool asFile;
    protected Regex recordPattern = new("(/r /n | /r | /n)", false, false, false, false);
    protected Regex fieldPattern = new("/s+", false, false, false, false);
    protected string[] records = [];
@@ -28,6 +29,7 @@ public class Awkifier : IObject, ICollection
    public Awkifier(string source, bool asFile)
    {
       this.source = asFile ? ((FileName)source).Text : source;
+      this.asFile = asFile;
    }
 
    public Regex RecordPattern
@@ -167,6 +169,8 @@ public class Awkifier : IObject, ICollection
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
    public IObject One() => this;
+
+   public IObject Copy() => new Awkifier(source, asFile);
 
    public IIterator If(Regex regex)
    {

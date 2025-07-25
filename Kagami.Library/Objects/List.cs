@@ -184,6 +184,8 @@ public class List : IObject, ICollection
 
    public IObject One() => tail.IsEmpty ? Head.Required("Head not set") : this;
 
+   public IObject Copy() => new List(Head, tail);
+
    public IObject Concatenate(List other)
    {
       var left = GetIterator(false).List().ToList();

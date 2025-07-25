@@ -304,6 +304,12 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public IObject One() => list.Count == 1 ? list[0] : this;
 
+   public IObject Copy()
+   {
+      List<IObject> newList = [.. list];
+      return new KArray(newList);
+   }
+
    public void Add(IObject obj)
    {
       assertType(obj);
