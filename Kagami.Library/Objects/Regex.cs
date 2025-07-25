@@ -236,15 +236,15 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
       }
    }
 
-   public KTuple FindAll(string input)
+   public KArray FindAll(string input)
    {
       if (input.Matches(getFixedPattern()) is (true, var result))
       {
-         return new KTuple([..result.Matches.Select(m => Int.IntObject(m.Index))]);
+         return new KArray(result.Matches.Select(m => Int.IntObject(m.Index)));
       }
       else
       {
-         return KTuple.Empty;
+         return KArray.Empty;
       }
    }
 

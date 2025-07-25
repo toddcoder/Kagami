@@ -21,7 +21,7 @@ public static class TextFindingFunctions
       return index == -1 ? KNil.NilValue : Some.Object((Int)index);
    }
 
-   public static KTuple findAll(string value, string input) => new(input.FindAll(value).Select(Int.IntObject).ToArray());
+   public static KArray findAll(string value, string input) => new(input.FindAll(value).Select(Int.IntObject));
 
    public static KString replace(string value, string input, string replacement, bool reverse)
    {

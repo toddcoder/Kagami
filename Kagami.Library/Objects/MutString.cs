@@ -141,7 +141,7 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
 
    public IObject Find(string input, int startIndex, bool reverse) => find(AsString, input, startIndex, reverse);
 
-   public KTuple FindAll(string input) => findAll(AsString, input);
+   public KArray FindAll(string input) => findAll(AsString, input);
 
    public KString Replace(string input, string replacement, bool reverse)
    {

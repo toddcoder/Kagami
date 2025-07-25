@@ -112,7 +112,7 @@ public readonly struct KChar : IObject, IComparable<KChar>, IEquatable<KChar>, I
       return index > -1 ? Some.Object((Int)index) : KNil.NilValue;
    }
 
-   public KTuple FindAll(string input) => new(input.FindAll(value.ToString()).Select(Int.IntObject).ToArray());
+   public KArray FindAll(string input) => new(input.FindAll(value.ToString()).Select(Int.IntObject));
 
    public KString Replace(string input, string replacement, bool reverse)
    {

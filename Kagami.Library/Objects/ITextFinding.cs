@@ -4,7 +4,7 @@ public interface ITextFinding
 {
    IObject Find(string input, int startIndex, bool reverse);
 
-   KTuple FindAll(string input);
+   KArray FindAll(string input);
 
    KString Replace(string input, string replacement, bool reverse);
 

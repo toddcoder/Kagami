@@ -94,9 +94,9 @@ public class AwkRecord : IObject, ICollection, ITextFinding
 
    public IObject Find(ITextFinding textFinding, int startIndex, bool reverse) => textFinding.Find(fields[0], startIndex, reverse);
 
-   public KTuple FindAll(string input) => findAll(fields[0], input);
+   public KArray FindAll(string input) => findAll(fields[0], input);
 
-   public KTuple FindAll(ITextFinding textFinding, string input) => textFinding.FindAll(input);
+   public KArray FindAll(ITextFinding textFinding, string input) => textFinding.FindAll(input);
 
    public KString Replace(string input, string replacement, bool reverse) => replace(fields[0], input, replacement, reverse);
 

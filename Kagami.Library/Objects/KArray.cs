@@ -24,7 +24,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       }
    }
 
-   public static IObject Empty => new KArray([]);
+   public static KArray Empty => new([]);
 
    public static KArray Repeat(IObject value, int times)
    {

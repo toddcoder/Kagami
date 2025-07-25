@@ -194,9 +194,9 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
    public KString Replace(KString old, KString @new) => value.Replace(old.value, @new.value);
 
-   public KTuple FindAll(ITextFinding textFinding) => textFinding.FindAll(value);
+   public KArray FindAll(ITextFinding textFinding) => textFinding.FindAll(value);
 
-   public KTuple FindAll(string input) => findAll(value, input);
+   public KArray FindAll(string input) => findAll(value, input);
 
    public KString Replace(ITextFinding textFinding, string replacement, bool reverse)
    {
