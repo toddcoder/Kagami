@@ -26,6 +26,8 @@ public class MutStringClass : BaseClass, ICollectionClass
          (obj, msg) => function<MutString, KChar, Int>(obj, msg, (m, c, i) => m.Fill(c.Value, i.Value)));
       registerMessage("fill(count:_<Int>,char:_<Char>)",
          (obj, msg) => function<MutString, Int, KChar>(obj, msg, (m, i, c) => m.Fill(c.Value, i.Value)));
+      registerMessage("pop()", (obj, _) => function<MutString>(obj, m => m.Pop()));
+      registerMessage("dequeue()", (obj, _) => function<MutString>(obj, m => m.Dequeue()));
    }
 
    public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection", "TextFinding");

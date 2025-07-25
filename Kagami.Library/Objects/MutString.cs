@@ -266,4 +266,34 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
    IObject IMutableCollection.Append(IObject obj) => Append(obj);
 
    public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
+
+   public IObject Pop()
+   {
+      if (mutable.Length == 0)
+      {
+         return KNil.NilValue;
+      }
+      else
+      {
+         var ch = mutable[^1];
+         mutable.Remove(mutable.Length - 1, 1);
+
+         return Some.Object(KChar.CharObject(ch));
+      }
+   }
+
+   public IObject Dequeue()
+   {
+      if (mutable.Length == 0)
+      {
+         return KNil.NilValue;
+      }
+      else
+      {
+         var ch = mutable[0];
+         mutable.Remove(0, 1);
+
+         return Some.Object(KChar.CharObject(ch));
+      }
+   }
 }
