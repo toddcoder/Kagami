@@ -77,7 +77,7 @@ public class Machine
             {
                var address = operations.Address;
                stack.Peek().Push(result);
-               lastValue = result;
+               lastValue = result is Before ? KBoolean.True : result;
                if (operations.Address != address)
                {
                   operations.Goto(address);
@@ -107,6 +107,10 @@ public class Machine
             else
             {
                lastValue = stack.Peek().Peek() | lastValue;
+               if (lastValue is Before)
+               {
+                  lastValue = KBoolean.True;
+               }
             }
 
             if (operation.Increment)
@@ -298,6 +302,10 @@ public class Machine
                   else
                   {
                      lastValue = stack.Peek().Peek() | lastValue;
+                     if (lastValue is Before)
+                     {
+                        lastValue = KBoolean.True;
+                     }
                   }
 
                   if (currentAddress == operations.Address)

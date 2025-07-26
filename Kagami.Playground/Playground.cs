@@ -81,7 +81,7 @@ public partial class Playground : Form
       fontName = playgroundConfiguration.FontName;
       fontSize = playgroundConfiguration.FontSize;
 
-      outputConsole = new TextBoxConsole(this, textConsole, fontName, fontSize, TextBoxConsole.ConsoleColorType.Windows);
+      outputConsole = new TextBoxConsole(this, textConsole, fontName, fontSize);
       textWriter = outputConsole.Writer();
       textReader = outputConsole.Reader();
       context = new PlaygroundContext(textWriter, textReader);
@@ -753,9 +753,9 @@ public partial class Playground : Form
             e.Handled = true;
             break;
          }
-         case Keys.Enter:
+         /*case Keys.Enter:
             update(true, false, true);
-            break;
+            break;*/
       }
    }
 
