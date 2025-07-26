@@ -13,6 +13,8 @@ public class LessThan : TwoOperandOperation
       {
          case Before before:
             return KBoolean.BooleanObject(before.Compare(y) < 0).Just();
+         case KBoolean { Value: false }:
+            return KBoolean.False.Just();
          case IObjectCompare xCompare when y is IObjectCompare:
          {
             if (xCompare.Compare(y) < 0)

@@ -13,6 +13,8 @@ public class LessThanEqual : TwoOperandOperation
       {
          case Before before:
             return KBoolean.BooleanObject(before.Compare(y) <= 0).Just();
+         case KBoolean { Value: false }:
+            return KBoolean.False.Just();
          case IObjectCompare xCompare when y is IObjectCompare:
          {
             if (xCompare.Compare(y) <= 0)
@@ -30,4 +32,6 @@ public class LessThanEqual : TwoOperandOperation
             return fail($"{x.Image} must be comparable");
       }
    }
+
+   public override string ToString() => "less.than.equal";
 }
