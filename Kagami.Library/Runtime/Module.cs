@@ -109,6 +109,7 @@ public class Module
       "Word" => new WordClass(),
       "Words" => new WordsClass(),
       "Before" => new BeforeClass(),
+      "FloatRange" => new FloatRangeClass(),
       _ => nil
    };
 

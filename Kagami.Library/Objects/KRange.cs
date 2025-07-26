@@ -105,7 +105,7 @@ public readonly struct KRange : IObject, ICollection
 
    public string Image => $"{startImage(false)} ..{inclusiveImage()} {stopImage(false)} {incrementImage()}";
 
-   public int Hash => (startObj.Hash + stopObj.Hash + increment.GetHashCode()).GetHashCode();
+   public int Hash => HashCode.Combine(startObj, stopObj, increment);
 
    public bool IsEqualTo(IObject obj)
    {
@@ -119,7 +119,7 @@ public readonly struct KRange : IObject, ICollection
 
    public Guid Id { get; init; } = Guid.NewGuid();
 
-   public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(new KArray(list(this))) : new RangeIterator(this);
+   public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new RangeIterator(this);
 
    public Maybe<IObject> Next(int index) => index == 0 ? GetIterator(false).ToArray() : nil;
 
@@ -168,13 +168,7 @@ public readonly struct KRange : IObject, ICollection
 
    public KString MakeString(string connector) => makeString(this, connector);
 
-   public IIterator GetIndexedIterator()
-   {
-      var iterator = GetIterator(false);
-      var array = new KArray(iterator.List());
-
-      return new IndexedIterator(array);
-   }
+   public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
    public IObject One() => this;
 
