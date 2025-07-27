@@ -1,0 +1,10 @@
+﻿open sys
+
+func sum`square(f, m, n) {
+	var sum = 0.0
+	for k in m..n sum += f(k) ^ 2
+	return sum
+}
+
+println($" First computation: (sum`square(x -> 1 / x, 1, 10))")
+println($"Second computation: (sum`square(x -> math.sin(x), 2, 13))")
