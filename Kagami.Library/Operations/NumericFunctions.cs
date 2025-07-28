@@ -306,4 +306,148 @@ public static class NumericFunctions
          return Long.LongObject(accum);
       }
    }
+
+   public static INumeric zero<T>() where T : INumeric
+   {
+      if (typeof(T) == typeof(Int))
+      {
+         return (Int)0;
+      }
+      else if (typeof(T) == typeof(Float))
+      {
+         return (Float)0.0;
+      }
+      else if (typeof(T) == typeof(KByte))
+      {
+         return (KByte)0;
+      }
+      else if (typeof(T) == typeof(Long))
+      {
+         return new Long(0);
+      }
+      else if (typeof(T) == typeof(Rational))
+      {
+         return new Rational(0, 1);
+      }
+      else if (typeof(T) == typeof(Complex))
+      {
+         return new Complex(System.Numerics.Complex.Zero);
+      }
+      else if (typeof(T) == typeof(KDecimal))
+      {
+         return (KDecimal)0;
+      }
+      else
+      {
+         throw expectedType("Numeric");
+      }
+   }
+
+   public static INumeric zero(Type type)
+   {
+      if (type == typeof(Int))
+      {
+         return (Int)0;
+      }
+      else if (type == typeof(Float))
+      {
+         return (Float)0.0;
+      }
+      else if (type == typeof(KByte))
+      {
+         return (KByte)0;
+      }
+      else if (type == typeof(Long))
+      {
+         return new Long(0);
+      }
+      else if (type == typeof(Rational))
+      {
+         return new Rational(0, 1);
+      }
+      else if (type == typeof(Complex))
+      {
+         return new Complex(System.Numerics.Complex.Zero);
+      }
+      else if (type == typeof(KDecimal))
+      {
+         return (KDecimal)0;
+      }
+      else
+      {
+         throw expectedType("Numeric");
+      }
+   }
+
+   public static INumeric one<T>() where T : INumeric
+   {
+      if (typeof(T) == typeof(Int))
+      {
+         return (Int)1;
+      }
+      else if (typeof(T) == typeof(Float))
+      {
+         return (Float)1.0;
+      }
+      else if (typeof(T) == typeof(KByte))
+      {
+         return (KByte)1;
+      }
+      else if (typeof(T) == typeof(Long))
+      {
+         return new Long(1);
+      }
+      else if (typeof(T) == typeof(Rational))
+      {
+         return new Rational(1, 1);
+      }
+      else if (typeof(T) == typeof(Complex))
+      {
+         return new Complex(System.Numerics.Complex.One);
+      }
+      else if (typeof(T) == typeof(KDecimal))
+      {
+         return (KDecimal)1;
+      }
+      else
+      {
+         throw expectedType("Numeric");
+      }
+   }
+
+   public static INumeric one(Type type)
+   {
+      if (type == typeof(Int))
+      {
+         return (Int)1;
+      }
+      else if (type == typeof(Float))
+      {
+         return (Float)1.0;
+      }
+      else if (type == typeof(KByte))
+      {
+         return (KByte)1;
+      }
+      else if (type == typeof(Long))
+      {
+         return new Long(1);
+      }
+      else if (type == typeof(Rational))
+      {
+         return new Rational(1, 1);
+      }
+      else if (type == typeof(Complex))
+      {
+         return new Complex(System.Numerics.Complex.One);
+      }
+      else if (type == typeof(KDecimal))
+      {
+         return (KDecimal)1;
+      }
+      else
+      {
+         throw expectedType("Numeric");
+      }
+   }
 }

@@ -179,4 +179,8 @@ public static class AllExceptions
    public static string messageCannotAddSelf() => "Cannot add self to self";
 
    public static Exception cannotAddSelf() => fail(messageCannotAddSelf());
+
+   public static string messageExpectedType(string typeName) => $"Expected type {typeName}";
+
+   public static Exception expectedType(string typeName) => fail(messageExpectedType(typeName));
 }

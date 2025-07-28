@@ -740,20 +740,28 @@ public class Iterator : IObject, IIterator
 
    public INumeric Sum()
    {
-      var sum = (INumeric)Int.Zero;
-      foreach (var value in List().ToList())
+      var (_head, tail) = List().HeadAndTail();
+      if (_head is (true, var head and INumeric))
       {
-         if (value is INumeric numeric)
+         var sum = (INumeric)head;
+         foreach (var value in tail)
          {
-            sum = (INumeric)apply(sum, numeric, (x, y) => x + y, (x, y) => x + y, (x, y) => x + y, (x, y) => x.Add(y), "+");
+            if (value is INumeric numeric)
+            {
+               sum = (INumeric)apply(sum, numeric, (x, y) => x + y, (x, y) => x + y, (x, y) => x + y, (x, y) => x.Add(y), "+");
+            }
+            else
+            {
+               throw incompatibleClasses(value, "Numeric");
+            }
          }
-         else
-         {
-            throw incompatibleClasses(value, "Numeric");
-         }
-      }
 
-      return sum;
+         return sum;
+      }
+      else
+      {
+         return zero<Int>();
+      }
    }
 
    public INumeric Average()
@@ -766,17 +774,28 @@ public class Iterator : IObject, IIterator
 
    public INumeric Product()
    {
-      var product = (INumeric)Int.One;
-      foreach (var value in List().ToList())
+      var (_head, tail) = List().HeadAndTail();
+      if (_head is (true, var head and INumeric))
       {
-         if (value is INumeric numeric)
+         var product = (INumeric)head;
+         foreach (var value in tail)
          {
-            product = (INumeric)apply(product, numeric, (x, y) => x * y, (x, y) => x * y, (x, y) => x * y, (x, y) => x.Multiply(y),
-               "*");
+            if (value is INumeric numeric)
+            {
+               product = (INumeric)apply(product, numeric, (x, y) => x * y, (x, y) => x * y, (x, y) => x * y, (x, y) => x.Multiply(y), "*");
+            }
+            else
+            {
+               throw incompatibleClasses(value, "Numeric");
+            }
          }
-      }
 
-      return product;
+         return product;
+      }
+      else
+      {
+         return one<Int>();
+      }
    }
 
    public IObject Cross(ICollection collection)
