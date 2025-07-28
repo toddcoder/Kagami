@@ -247,7 +247,8 @@ public class Frame
 
    public void SetFields(Fields fields)
    {
-      foreach (var (fieldName, field) in fields.Where(f => f.field.Type != FieldType.Parameter && f.field.Type != FieldType.Binding))
+      foreach (var (fieldName, field) in fields.Where(f =>
+                  f.field.Type != FieldType.Parameter && f.field.Type != FieldType.Binding && f.field.Type != FieldType.Assignment))
       {
          this.fields.AssignLocal(fieldName, field.Type, field.Value, true).Force();
       }
