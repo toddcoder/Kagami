@@ -6,16 +6,17 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
 
-public readonly struct FloatRange : IObject, ICollection
+public struct FloatRange : IObject, ICollection
 {
-   private readonly Float start;
-   private readonly IObject startObj;
-   private readonly Float stop;
-   private readonly IObject stopObj;
-   private readonly bool inclusive;
-   private readonly double increment;
-   private readonly Func<Float, Float> next;
-   private readonly Func<Float, IObject, bool> compare;
+   private Float start;
+   private IObject startObj;
+   private Float stop;
+   private IObject stopObj;
+   private bool inclusive;
+   private double increment;
+   private Func<Float, Float> next;
+   private Func<Float, IObject, bool> compare;
+   private Maybe<IIterator> _currentIterator = nil;
 
    public FloatRange(Float start, Float stop, bool inclusive, double increment = 1)
    {
@@ -82,7 +83,28 @@ public readonly struct FloatRange : IObject, ICollection
 
    public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new FloatRangeIterator(this);
 
-   public Maybe<IObject> Next(int index) => index == 0 ? GetIterator(false).ToArray() : nil;
+   public Maybe<IObject> Next(int index)
+   {
+      if (index == 0)
+      {
+         _currentIterator = GetIterator(false).Some();
+      }
+
+      if (_currentIterator is (true, var currentIterator))
+      {
+         var _next = currentIterator.Next();
+         if (!_next)
+         {
+            _currentIterator = nil;
+         }
+
+         return _next;
+      }
+      else
+      {
+         return nil;
+      }
+   }
 
    public Maybe<IObject> Peek(int index) => nil;
 
