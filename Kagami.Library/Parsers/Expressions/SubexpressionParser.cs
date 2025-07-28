@@ -12,16 +12,33 @@ public partial class SubexpressionParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(\()(,)?")]
+   [GeneratedRegex(@"^(\s*)(\()")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
       state.BeginTransaction();
-      var monoTuple = tokens[3].Text == ",";
-      state.Colorize(tokens, Color.Whitespace, Color.OpenParenthesis, Color.Structure);
+      var monoTuple = false;
+      state.Colorize(tokens, Color.Whitespace, Color.OpenParenthesis);
 
-      var _expression = getExpression(state, @"^(\))", builder.Flags & ~ExpressionFlags.OmitComma, Color.CloseParenthesis);
+      var flags = builder.Flags;
+      flags[ExpressionFlags.OmitComma] = true;
+      var _expression = getExpression(state, @"^(,)?(\))", flags, (g, i) =>
+      {
+         switch (i)
+         {
+            case 1:
+               if (g.Length > 0)
+               {
+                  monoTuple = true;
+               }
+               return Color.Structure;
+            case 2:
+               return Color.CloseParenthesis;
+            default:
+               return Color.Whitespace;
+         }
+      });
       if (_expression is (true, var expression))
       {
          builder.Add(new SubexpressionSymbol(expression, monoTuple));

@@ -75,6 +75,11 @@ public static class ParserFunctions
       return getExpression(state, flags).Map(e => state.Scan(pattern, colors).Map(_ => e));
    }
 
+   public static Optional<Expression> getExpression(ParseState state, string pattern, Bits32<ExpressionFlags> flags, Func<Group, int, Color> func)
+   {
+      return getExpression(state, flags).Map(e => state.Scan(pattern, func).Map(_ => e));
+   }
+
    public static Optional<Expression> getCompoundComparisands(ParseState state, string fieldName, bool not)
    {
       var flags = ExpressionFlags.Comparisand | ExpressionFlags.OmitAnd | ExpressionFlags.OmitIf | ExpressionFlags.OmitAssign;
