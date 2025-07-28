@@ -580,4 +580,33 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       list.Insert(0, item);
       return this;
    }
+
+   public KArray PadLeft(int count, IObject value)
+   {
+      var copy = (KArray)Copy();
+      var remainder = count - list.Count;
+      if (remainder > 0)
+      {
+         for (var i = 0; i < remainder; i++)
+         {
+            copy.list.Insert(0, value);
+         }
+      }
+
+      return copy;
+   }
+
+   public KArray PadRight(int count, IObject value)
+   {
+      var copy = (KArray)Copy();
+      var remainder = count - list.Count;
+      if (remainder > 0)
+      {
+         for (var i = 0; i < remainder; i++)
+         {
+            copy.list.Add(value);
+         }
+      }
+      return copy;
+   }
 }
