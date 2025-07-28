@@ -36,9 +36,9 @@ public class Iterator : IObject, IIterator
 
    public virtual string ClassName => "Iterator";
 
-   public virtual string AsString => $"it {((IObject)collection).AsString.Truncate(20)}";
+   public virtual string AsString => $"it {((IObject)collection).AsString.Truncate(100)}";
 
-   public virtual string Image => $"it {((IObject)collection).Image.Truncate(20)}";
+   public virtual string Image => $"it {((IObject)collection).Image.Truncate(100)}";
 
    public int Hash => ((IObject)collection).Hash;
 
