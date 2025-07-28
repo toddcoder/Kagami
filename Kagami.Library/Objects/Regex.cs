@@ -148,14 +148,14 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
       {
          if (_result is (true, var result))
          {
-            return new KTuple(result
+            return new KArray(result
                .Select(m => new RegexMatch(m, self.nameToIndex(result), self.indexToName(result), input.Keep(m.Index),
                   input.Drop(m.Index + m.Length), input))
                .Select(m => getMatchOrText(m, self.textOnly)).ToArray());
          }
          else
          {
-            return KTuple.Empty;
+            return KArray.Empty;
          }
       }
       else if (isMatch(input) is (true, var result2))
