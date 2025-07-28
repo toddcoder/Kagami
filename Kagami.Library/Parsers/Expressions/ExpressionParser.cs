@@ -94,6 +94,11 @@ public class ExpressionParser : PatternlessParser
                   }
                   else if (_term1.Exception is (true, var exception))
                   {
+                     if (builder.LastSymbol is (true, CommaSymbol))
+                     {
+                        break;
+                     }
+
                      return exception;
                   }
                   else

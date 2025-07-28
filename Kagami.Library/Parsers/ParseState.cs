@@ -8,6 +8,7 @@ using Kagami.Library.Objects;
 using Kagami.Library.Parsers.Expressions;
 using System.Collections;
 using System.Text.RegularExpressions;
+using Core.Numbers;
 using static Core.Monads.AttemptFunctions;
 using static Core.Monads.MonadFunctions;
 using Group = System.Text.RegularExpressions.Group;
@@ -442,4 +443,31 @@ public class ParseState : IEnumerable<Statement>
    public int Line => line;
 
    public int Character => character;
+
+   public int LastTokenIndex => tokens.Count - 1;
+
+   public Maybe<Color> this[int index]
+   {
+      get
+      {
+         if (index.Between(0).Until(tokens.Count))
+         {
+            return tokens[index].Color;
+         }
+         else
+         {
+            return nil;
+         }
+      }
+      set
+      {
+         if (value is (true, var color))
+         {
+            if (index.Between(0).Until(tokens.Count))
+            {
+               tokens[index].Color = color;
+            }
+         }
+      }
+   }
 }

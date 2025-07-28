@@ -18,22 +18,17 @@ public partial class SubexpressionParser : SymbolParser
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
       state.BeginTransaction();
-      var monoTuple = false;
       state.Colorize(tokens, Color.Whitespace, Color.OpenParenthesis);
+      var openIndex = state.LastTokenIndex;
+      Maybe<int> _closeIndex = nil;
 
       var flags = builder.Flags;
-      //flags[ExpressionFlags.OmitComma] = true;
-      var _expression = getExpression(state, @"^(,)?(\))", flags, (g, i) =>
+      var _expression = getExpression(state, @"(\))", flags, (_, i) =>
       {
          switch (i)
          {
             case 1:
-               if (g.Length > 0)
-               {
-                  monoTuple = true;
-               }
-               return Color.Structure;
-            case 2:
+               _closeIndex = state.LastTokenIndex + 1;
                return Color.CloseParenthesis;
             default:
                return Color.Whitespace;
@@ -41,7 +36,13 @@ public partial class SubexpressionParser : SymbolParser
       });
       if (_expression is (true, var expression))
       {
-         builder.Add(new SubexpressionSymbol(expression, monoTuple));
+         if (expression.Symbols.Any(s => s is CommaSymbol) && _closeIndex is (true, var closeIndex))
+         {
+            state[openIndex] = Color.Collection;
+            state[closeIndex] = Color.Collection;
+         }
+
+         builder.Add(new SubexpressionSymbol(expression));
          state.CommitTransaction();
 
          return unit;

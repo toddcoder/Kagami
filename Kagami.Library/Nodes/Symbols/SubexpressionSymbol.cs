@@ -6,12 +6,10 @@ namespace Kagami.Library.Nodes.Symbols;
 public class SubexpressionSymbol : Symbol, IHasExpression
 {
    protected Expression expression;
-   protected bool monoTuple;
 
-   public SubexpressionSymbol(Expression expression, bool monoTuple = false)
+   public SubexpressionSymbol(Expression expression)
    {
       this.expression = expression;
-      this.monoTuple = monoTuple;
    }
 
    public override void Generate(OperationsBuilder builder)
@@ -23,11 +21,6 @@ public class SubexpressionSymbol : Symbol, IHasExpression
 
       builder.IsClass("Sequence", false);
       builder.GoToIfTrue(tupleLabel);
-
-      if (monoTuple)
-      {
-         builder.NewMonoTuple();
-      }
 
       builder.GoTo(endLabel);
 
