@@ -22,7 +22,7 @@ public partial class SubexpressionParser : SymbolParser
       state.Colorize(tokens, Color.Whitespace, Color.OpenParenthesis);
 
       var flags = builder.Flags;
-      flags[ExpressionFlags.OmitComma] = true;
+      //flags[ExpressionFlags.OmitComma] = true;
       var _expression = getExpression(state, @"^(,)?(\))", flags, (g, i) =>
       {
          switch (i)
