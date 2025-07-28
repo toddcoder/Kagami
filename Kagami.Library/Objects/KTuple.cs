@@ -156,14 +156,7 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
 
    public string ClassName => "Tuple";
 
-   public string AsString
-   {
-      get
-      {
-         var self = this;
-         return items.Select((_, i) => self.getItemString(i)).ToString(" ");
-      }
-   }
+   public string AsString => items.Select(i => i.AsString).ToString(" ");
 
    public string Image
    {
