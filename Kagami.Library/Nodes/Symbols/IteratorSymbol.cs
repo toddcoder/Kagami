@@ -25,7 +25,7 @@ public class IteratorSymbol : Symbol
       }
    }
 
-   public override Precedence Precedence => Precedence.PrefixOperator;
+   public override Precedence Precedence => Precedence.TightPrefixOperator;
 
    public override Arity Arity => Arity.Prefix;
 
