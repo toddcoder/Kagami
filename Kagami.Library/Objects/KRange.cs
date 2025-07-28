@@ -143,7 +143,6 @@ public struct KRange : IObject, ICollection
       {
          return nil;
       }
-      //return index == 0 ? GetIterator(false).ToArray() : nil;
    }
 
    public Maybe<IObject> Peek(int index) => nil;

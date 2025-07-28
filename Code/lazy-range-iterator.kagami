@@ -1,0 +1,4 @@
+﻿open sys
+
+func primes(m) => lit (1..<m) if x -> peek(x).isPrime
+[primes(100)]
