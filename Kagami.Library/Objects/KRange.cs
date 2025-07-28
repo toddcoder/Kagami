@@ -6,16 +6,17 @@ using static Kagami.Library.Objects.CollectionFunctions;
 
 namespace Kagami.Library.Objects;
 
-public readonly struct KRange : IObject, ICollection
+public struct KRange : IObject, ICollection
 {
-   private readonly IRangeItem start;
-   private readonly IObject startObj;
-   private readonly IObjectCompare stop;
-   private readonly IObject stopObj;
-   private readonly bool inclusive;
-   private readonly int increment;
-   private readonly Func<IRangeItem, IRangeItem> next;
-   private readonly Func<IRangeItem, IObject, bool> compare;
+   private IRangeItem start;
+   private IObject startObj;
+   private IObjectCompare stop;
+   private IObject stopObj;
+   private bool inclusive;
+   private int increment;
+   private Func<IRangeItem, IRangeItem> next;
+   private Func<IRangeItem, IObject, bool> compare;
+   private Maybe<IIterator> _currentIterator = nil;
 
    public KRange(IRangeItem start, IObjectCompare stop, bool inclusive, int increment = 1) : this()
    {
@@ -121,7 +122,29 @@ public readonly struct KRange : IObject, ICollection
 
    public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new RangeIterator(this);
 
-   public Maybe<IObject> Next(int index) => index == 0 ? GetIterator(false).ToArray() : nil;
+   public Maybe<IObject> Next(int index)
+   {
+      if (index == 0)
+      {
+         _currentIterator = GetIterator(false).Some();
+      }
+
+      if (_currentIterator is (true, var currentIterator))
+      {
+         var _next = currentIterator.Next();
+         if (!_next)
+         {
+            _currentIterator = nil;
+         }
+
+         return _next;
+      }
+      else
+      {
+         return nil;
+      }
+      //return index == 0 ? GetIterator(false).ToArray() : nil;
+   }
 
    public Maybe<IObject> Peek(int index) => nil;
 

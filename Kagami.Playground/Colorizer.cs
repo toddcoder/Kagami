@@ -68,8 +68,6 @@ public class Colorizer
 
    protected static Color getBackColor(Library.Parsers.Color color) => color switch
    {
-      Library.Parsers.Color.OpenParenthesis => SystemColors.Info,
-      Library.Parsers.Color.CloseParenthesis => SystemColors.Info,
       _ => Color.White
    };
 

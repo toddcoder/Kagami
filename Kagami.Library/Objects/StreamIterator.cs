@@ -72,6 +72,10 @@ public class StreamIterator : IObject, IIterator
                {
                   return nil;
                }
+               else if (status.IsFailed)
+               {
+                  throw status.Exception;
+               }
             }
 
             if (status.IsAccepted)
