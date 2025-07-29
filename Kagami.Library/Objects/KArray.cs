@@ -412,6 +412,8 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public IObject Pop() => list.Count > 0 ? Some.Object(RemoveAt(list.Count - 1)) : KNil.NilValue;
 
+   public IObject Pop(int index) => list.Count > 0 ? Some.Object(RemoveAt(wrapIndex(index, list.Count))) : KNil.NilValue;
+
    public IObject Unshift(IObject value) => InsertAt(0, value);
 
    public IObject Shift() => list.Count > 0 ? Some.Object(RemoveAt(0)) : KNil.NilValue;
@@ -607,6 +609,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
             copy.list.Add(value);
          }
       }
+
       return copy;
    }
 }

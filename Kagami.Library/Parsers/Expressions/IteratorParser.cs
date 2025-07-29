@@ -11,16 +11,17 @@ public partial class IteratorParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(it|lazy it|indexed it|lit|iit)\b")]
+   [GeneratedRegex(@"^(\s*)(it|lazy it|indexed it|lit|iit|rng|range)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
       var lazy = tokens[2].Text is "lazy it" or "lit";
       var indexed = tokens[2].Text is "indexed it" or "iit";
+      var range = tokens[2].Text is "rng" or "range";
       state.Colorize(tokens, Color.Whitespace, Color.Operator);
 
-      builder.Add(new IteratorSymbol(lazy, indexed));
+      builder.Add(new IteratorSymbol(lazy, indexed, range));
       return unit;
    }
 }

@@ -591,5 +591,7 @@ public class OperationsBuilder
 
    public void NewFailure() => add(new NewFailure());
 
+   public void IsTrue() => add(new IsTrue());
+
    public override string ToString() => "operations";
 }

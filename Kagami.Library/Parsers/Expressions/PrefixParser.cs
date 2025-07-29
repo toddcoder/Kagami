@@ -26,7 +26,8 @@ public class PrefixParser(ExpressionBuilder builder) : MultiParser
             yield return new NotParser(builder);
          }
 
-         yield return new RangePrefixParser(builder);
+         //yield return new RangePrefixParser(builder);
+         yield return new IsTrueParser(builder);
          yield return new TakeOperatorParser(builder);
          yield return new ImplicitOperatorParser(builder);
          yield return new LambdaFromSelectorParser(builder);
