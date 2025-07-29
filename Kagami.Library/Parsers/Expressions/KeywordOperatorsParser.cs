@@ -12,7 +12,7 @@ public partial class KeywordOperatorsParser : SymbolParser
    }
 
    [GeneratedRegex(@"^(\s+)(if|map|join|sort|foldl|foldr|all|any|none|one|zip|skip|take|while|until|min|max" +
-      @"|does|X|div|each|divmod|with|approx|same|xor)(\s+)")]
+      @"|does|X|div|each|divmod|with|approx|same|xor|union|intersect|diff|symdiff|subsetof|supersetof)(\s+)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -90,6 +90,24 @@ public partial class KeywordOperatorsParser : SymbolParser
                case "xor":
                   state.PrefixCode = nil;
                   builder.Add(new XOrSymbol());
+                  break;
+               case "union":
+                  builder.Add(new SendBinaryMessageSymbol("union(_)", Precedence.ChainedOperator));
+                  break;
+               case "diff":
+                  builder.Add(new SendBinaryMessageSymbol("difference(_)", Precedence.ChainedOperator));
+                  break;
+               case "intersect":
+                  builder.Add(new SendBinaryMessageSymbol("intersection(_)", Precedence.ChainedOperator));
+                  break;
+               case "symdiff":
+                  builder.Add(new SendBinaryMessageSymbol("symmetricDifference(_)", Precedence.ChainedOperator));
+                  break;
+               case "supersetof":
+                  builder.Add(new SendBinaryMessageSymbol("isSupersetOf(_)", Precedence.ChainedOperator));
+                  break;
+               case "subsetof":
+                  builder.Add(new SendBinaryMessageSymbol("isSubsetOf(_)", Precedence.ChainedOperator));
                   break;
                default:
                   return fail($"Keyword internal error for {keyword}");

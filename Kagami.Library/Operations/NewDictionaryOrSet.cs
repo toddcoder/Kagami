@@ -38,7 +38,7 @@ public class NewDictionaryOrSet : OneOperandOperation
       }
       else
       {
-         return fail($"Dictionary or Set can't be created with {value.AsString}");
+         return new Set(value);
       }
    }
 

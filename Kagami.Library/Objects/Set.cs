@@ -159,6 +159,14 @@ public class Set : IObject, ICollection, IObjectCompare
       };
    }
 
+   public KBoolean IsSubsetOf(Set otherSet) => new(set.IsSubsetOf(otherSet.set));
+
+   public KBoolean IsProperSubsetOf(Set otherSet) => new(set.IsProperSubsetOf(otherSet.set));
+
+   public KBoolean IsSupersetOf(Set otherSet) => new(set.IsSupersetOf(otherSet.set));
+
+   public KBoolean IsProperSupersetOf(Set otherSet) => new(set.IsProperSupersetOf(otherSet.set));
+
    public IObject Object => this;
 
    public KBoolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);

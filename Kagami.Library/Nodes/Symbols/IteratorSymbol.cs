@@ -27,7 +27,7 @@ public class IteratorSymbol : Symbol
       }
       else if (range)
       {
-         builder.SendMessage("range", 0);
+         builder.SendMessage("range()", 0);
       }
       else
       {

@@ -17,15 +17,23 @@ public class SetClass : BaseClass, ICollectionClass
       messages[">>(_)"] = (obj, msg) => function<Set, IObject>(obj, msg, (s, i) => s.Remove(i));
       messages["remove(_)"] = (obj, msg) => function<Set, IObject>(obj, msg, (s, i) => s.Remove(i));
       messages["+(_)"] = (obj, msg) => function<Set, Set>(obj, msg, (s1, s2) => s1.Union(s2));
+      messages["union(_)"] = (obj, msg) => function<Set, Set>(obj, msg, (s1, s2) => s1.Union(s2));
       messages["-(_)"] = (obj, msg) => function<Set, Set>(obj, msg, (s1, s2) => s1.Difference(s2));
+      messages["difference(_)"] = (obj, msg) => function<Set, Set>(obj, msg, (s1, s2) => s1.Difference(s2));
       messages["*(_)"] = (obj, msg) => function<Set, Set>(obj, msg, (s1, s2) => s1.Intersection(s2));
+      messages["intersection(_)"] = (obj, msg) => function<Set, Set>(obj, msg, (s1, s2) => s1.Intersection(s2));
       messages["/(_)"] = (obj, msg) => function<Set, Set>(obj, msg, (s1, s2) => s1.XOr(s2));
+      messages["symmetricDifference(_)"] = (obj, msg) => function<Set, Set>(obj, msg, (s1, s2) => s1.XOr(s2));
       messages["[](_)"] = (obj, msg) => function<Set, Int>(obj, msg, (s, i) => s[i.Value]);
       messages["length".get()] = (obj, _) => function<Set>(obj, s => s.Length);
       messages["extend()"] = (obj, msg) => function<Set, IObject>(obj, msg, (s, _) => s.Extend());
       messages["clear()"] = (obj, _) => function<Set>(obj, s => s.Clear());
       messages["classify(_)"] = (obj, msg) => function<Set, Lambda>(obj, msg, (s, l) => s.Classify(l));
       messages["~(_)"] = (obj, msg) => function<Set, Set>(obj, msg, (s, l) => s.Concatenate(l));
+      messages["isSubsetOf(_)"] = (obj, msg) => function<Set, Set>(obj, msg, (s1, s2) => s1.IsSubsetOf(s2));
+      messages["isProperSubsetOf(_)"] = (obj, msg) => function<Set, Set>(obj, msg, (s1, s2) => s1.IsProperSubsetOf(s2));
+      messages["isSupersetOf(_)"] = (obj, msg) => function<Set, Set>(obj, msg, (s1, s2) => s1.IsSupersetOf(s2));
+      messages["isProperSupersetOf(_)"] = (obj, msg) => function<Set, Set>(obj, msg, (s1, s2) => s1.IsProperSupersetOf(s2));
    }
 
    public override IObject DefaultValue => Set.Empty;
