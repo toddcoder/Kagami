@@ -14,8 +14,9 @@ public class ByteArrayClass : BaseClass, ICollectionClass
       collectionMessages();
       compareMessages();
 
-      messages["[]"] = (obj, msg) => function<ByteArray, Int>(obj, msg, (b, i) => b[i.Value]);
+      messages["[](_)"] = (obj, msg) => function<ByteArray, Int>(obj, msg, (b, i) => b[i.Value]);
       messages["~(_<ByteArray>)"] = (obj, msg) => function<ByteArray, ByteArray>(obj, msg, (b1, b2) => b1.Concatenate(b2));
+      messages["encode(_)"] = (obj, msg) => function<ByteArray, KString>(obj, msg, (b, e) => b.Encode(e.Value));
    }
 
    public override IObject DefaultValue => new ByteArray([]);

@@ -100,6 +100,7 @@ public class StringClass : BaseClass, ICollectionClass
       messages["margin()"] = (obj, _) => function<KString>(obj, s => s.Margin());
       messages["parse(base:_<Int>)"] = (obj, msg) => function<KString, Int>(obj, msg, (s, i) => s.ParseBase(i.Value));
       messages["wordCase()"] = (obj, _) => function<KString>(obj, s => s.WordCase());
+      messages["encode(_)"] = (obj, msg) => function<KString, KString>(obj, msg, (s, e) => s.Encode(e.Value));
    }
 
    protected static IObject getIndexed(KString s, IObject i)

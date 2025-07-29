@@ -1,4 +1,5 @@
-﻿using Core.Arrays;
+﻿using System.Text;
+using Core.Arrays;
 using Core.Collections;
 using Core.Enumerables;
 using Core.Monads;
@@ -69,4 +70,10 @@ public readonly struct ByteArray : IObject, ICollection, IObjectCompare
    public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
 
    public ByteArray Concatenate(ByteArray other) => new([.. bytes.Concat(other.bytes)]);
+
+   public KString Encode(string encodingName)
+   {
+      var encoding = Encoding.GetEncoding(encodingName);
+      return new KString(encoding.GetString(bytes));
+   }
 }

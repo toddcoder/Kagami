@@ -556,4 +556,10 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
          return this;
       }
    }
+
+   public ByteArray Encode(string encodingName)
+   {
+      var encoding = Encoding.GetEncoding(encodingName);
+      return new ByteArray(encoding.GetBytes(value));
+   }
 }
