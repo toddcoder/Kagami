@@ -410,6 +410,8 @@ public class OperationsBuilder
 
    public void LastValue() => add(new LastValue());
 
+   public void DefineNewField(bool mutable, string fieldName, string className) => add(new DefineNewField(mutable, fieldName, className));
+
    public Result<Operations> ToOperations(ParseState state)
    {
       operations.Add(new Stop());
