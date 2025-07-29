@@ -92,22 +92,22 @@ public partial class KeywordOperatorsParser : SymbolParser
                   builder.Add(new XOrSymbol());
                   break;
                case "union":
-                  builder.Add(new SendBinaryMessageSymbol("union(_)", Precedence.ChainedOperator));
+                  builder.Add(new SendBinaryMessageSymbol("union(_)", Precedence.AddSubtract));
                   break;
                case "diff":
-                  builder.Add(new SendBinaryMessageSymbol("difference(_)", Precedence.ChainedOperator));
+                  builder.Add(new SendBinaryMessageSymbol("difference(_)", Precedence.AddSubtract));
                   break;
                case "intersect":
-                  builder.Add(new SendBinaryMessageSymbol("intersection(_)", Precedence.ChainedOperator));
+                  builder.Add(new SendBinaryMessageSymbol("intersection(_)", Precedence.MultiplyDivide));
                   break;
                case "symdiff":
-                  builder.Add(new SendBinaryMessageSymbol("symmetricDifference(_)", Precedence.ChainedOperator));
+                  builder.Add(new SendBinaryMessageSymbol("symmetricDifference(_)", Precedence.MultiplyDivide));
                   break;
                case "supersetof":
-                  builder.Add(new SendBinaryMessageSymbol("isSupersetOf(_)", Precedence.ChainedOperator));
+                  builder.Add(new SendBinaryMessageSymbol("isSupersetOf(_)", Precedence.Boolean));
                   break;
                case "subsetof":
-                  builder.Add(new SendBinaryMessageSymbol("isSubsetOf(_)", Precedence.ChainedOperator));
+                  builder.Add(new SendBinaryMessageSymbol("isSubsetOf(_)", Precedence.Boolean));
                   break;
                default:
                   return fail($"Keyword internal error for {keyword}");
