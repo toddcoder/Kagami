@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Classes;
+﻿using Core.Computers;
+using Kagami.Library.Classes;
 using Kagami.Library.Objects;
 using static Kagami.Library.Classes.ClassFunctions;
 
@@ -19,4 +20,6 @@ public class FolderClass : BaseClass
       messages["fullPath".get()] = (obj, _) => function<Folder>(obj, f => (KString)f.AsString);
       messages["~(_)"] = (obj, msg) => function<Folder, KString>(obj, msg, (f, n) => f.Combine(n.Value));
    }
+
+   public override IObject DefaultValue => new Folder(FolderName.Temp.FullPath);
 }

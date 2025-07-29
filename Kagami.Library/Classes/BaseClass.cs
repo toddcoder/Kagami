@@ -669,4 +669,6 @@ public abstract class BaseClass
    public void RegisterInclusion(Inclusion inclusion) => inclusions[inclusion.Name] = inclusion;
 
    public bool Includes(string inclusionName) => inclusions.ContainsKey(inclusionName);
+
+   public abstract IObject DefaultValue { get; }
 }

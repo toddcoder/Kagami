@@ -105,6 +105,8 @@ public class DictionaryClass : BaseClass, ICollectionClass
       classMessages["empty".get()] = (cls, _) => classFunc<DictionaryClass>(cls, _ => Dictionary.Empty);
    }
 
+   public override IObject DefaultValue => Dictionary.Empty;
+
    public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
 
    public IObject Revert(IEnumerable<IObject> list) => new Dictionary(list);

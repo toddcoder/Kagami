@@ -28,6 +28,8 @@ public class SetClass : BaseClass, ICollectionClass
       messages["~(_)"] = (obj, msg) => function<Set, Set>(obj, msg, (s, l) => s.Concatenate(l));
    }
 
+   public override IObject DefaultValue => Set.Empty;
+
    public IObject Revert(IEnumerable<IObject> list) => new Set(list.ToArray());
 
    public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");

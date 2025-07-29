@@ -14,4 +14,6 @@ public class IndexClass : BaseClass
       registerMessage("skipCount".get(), (obj, _) => function<KIndex>(obj, i => i.SkipCount));
       registerMessage("takeCount".get(), (obj, _) => function<KIndex>(obj, i => i.TakeCount));
    }
+
+   public override IObject DefaultValue => new KIndex(0, 0);
 }

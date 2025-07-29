@@ -13,4 +13,6 @@ public class ErrorClass : BaseClass
 
       messages["message".get()] = (obj, _) => function<Error>(obj, e => e.Message);
    }
+
+   public override IObject DefaultValue => new Error("");
 }

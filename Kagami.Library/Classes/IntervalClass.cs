@@ -25,5 +25,7 @@ namespace Kagami.Library.Classes
          messages["days".get()] = (obj, _) => function<Interval>(obj, i => i.Days);
          messages["totalDays".get()] = (obj, _) => function<Interval>(obj, i => i.TotalDays);
       }
+
+      public override IObject DefaultValue => new Interval(TimeSpan.Zero);
    }
 }

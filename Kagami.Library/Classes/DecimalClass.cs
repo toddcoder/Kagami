@@ -20,5 +20,7 @@ public class DecimalClass : BaseClass, IParse, IEquivalentClass
 
    public override bool IsNumeric => true;
 
+   public override IObject DefaultValue => KDecimal.Zero;
+
    public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Number");
 }

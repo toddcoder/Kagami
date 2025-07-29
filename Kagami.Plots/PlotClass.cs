@@ -1,5 +1,6 @@
 ﻿using Kagami.Library.Classes;
 using Kagami.Library.Objects;
+using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Plots;
@@ -19,4 +20,6 @@ public class PlotClass : BaseClass
             (p, x1, y1, x2, y2) => p.Line(x1.Value, y1.Value, x2.Value, y2.Value));
       };
    }
+
+   public override IObject DefaultValue => throw noDefaultValue("Plot");
 }

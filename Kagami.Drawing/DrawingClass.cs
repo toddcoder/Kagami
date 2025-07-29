@@ -1,5 +1,7 @@
 ﻿using Kagami.Library;
+using Kagami.Library.Objects;
 using Kagami.Library.Packages;
+using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Drawing;
@@ -20,6 +22,7 @@ public class DrawingClass : PackageClass
          (obj, msg) => function<Drawing>(obj,
             d => d.Rectangle(msg.Arguments[0], msg.Arguments[1], msg.Arguments[2], msg.Arguments[3])));
       registerPackageFunction("Rectangle", (obj, msg) => function<Drawing, Point, Size>(obj, msg, (d, p, s) => d.Rectangle(p, s)));
-
    }
+
+   public override IObject DefaultValue => throw noDefaultValue("Drawing");
 }

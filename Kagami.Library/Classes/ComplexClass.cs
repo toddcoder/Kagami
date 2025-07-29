@@ -22,5 +22,7 @@ public class ComplexClass : BaseClass, IEquivalentClass
 
    public override bool IsNumeric => true;
 
+   public override IObject DefaultValue => new Complex(0, 0);
+
    public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Number");
 }

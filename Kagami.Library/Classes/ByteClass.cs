@@ -26,5 +26,7 @@ public class ByteClass : BaseClass, IParse, IEquivalentClass
 
    public override bool IsNumeric => true;
 
+   public override IObject DefaultValue => new KByte(0);
+
    public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Number");
 }

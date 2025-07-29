@@ -183,4 +183,8 @@ public static class AllExceptions
    public static string messageExpectedType(string typeName) => $"Expected type {typeName}";
 
    public static Exception expectedType(string typeName) => fail(messageExpectedType(typeName));
+
+   public static string messageNoDefaultValue(string typeName) => $"{typeName} has no default value";
+
+   public static Exception noDefaultValue(string typeName) => fail(messageNoDefaultValue(typeName));
 }

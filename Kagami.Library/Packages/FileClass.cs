@@ -22,4 +22,6 @@ public class FileClass : BaseClass
       messages["nameExtension".get()] = (obj, _) => function<File>(obj, f => f.NameExtension);
       messages["fullPath".get()] = (obj, _) => function<File>(obj, f => f.FullPath);
    }
+
+   public override IObject DefaultValue => new File("");
 }

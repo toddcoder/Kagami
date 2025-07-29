@@ -1,5 +1,6 @@
 ﻿using Kagami.Library;
 using Kagami.Library.Classes;
+using Kagami.Library.Objects;
 using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Drawing;
@@ -18,4 +19,6 @@ public class SizeClass : BaseClass
       messages["-"] = (obj, msg) => function<Size, Size>(obj, msg, (s1, s2) => s1.Subtract(s2));
       messages["isEmpty".get()] = (obj, _) => function<Size>(obj, s => s.IsEmpty);
    }
+
+   public override IObject DefaultValue => new Size(Int.Zero, Int.Zero);
 }

@@ -21,4 +21,6 @@ public class ResultClass : BaseClass
    }
 
    public override bool AssignCompatible(BaseClass otherClass) => otherClass.Name is "Success" or "Failure";
+
+   public override IObject DefaultValue => new Failure("No value");
 }

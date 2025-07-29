@@ -7,6 +7,7 @@ using Core.Strings;
 using static Kagami.Library.Classes.ClassFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.AllExceptions;
 
 namespace Kagami.Library.Classes;
 
@@ -169,6 +170,8 @@ public class UserClass : BaseClass
          return false;
       }
    }
+
+   public override IObject DefaultValue => throw noDefaultValue(Name);
 
    public override bool MatchCompatible(BaseClass otherClass)
    {

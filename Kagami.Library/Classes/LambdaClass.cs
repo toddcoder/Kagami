@@ -1,6 +1,7 @@
 ﻿using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Objects;
+using Kagami.Library.Packages;
 using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Classes;
@@ -18,6 +19,8 @@ public class LambdaClass : BaseClass
       messages["parameterCount".get()] = (obj, _) => function<Lambda>(obj, l => l.ParameterCount);
       messages["fields".get()] = (obj, _) => function<Lambda>(obj, l => l.FieldsInTuple);
    }
+
+   public override IObject DefaultValue => new Sys().ID;
 
    protected static IObject invoke(Lambda lambda, Arguments arguments)
    {

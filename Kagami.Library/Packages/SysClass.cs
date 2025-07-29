@@ -1,4 +1,5 @@
 ﻿using Kagami.Library.Objects;
+using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Packages;
@@ -44,4 +45,6 @@ public class SysClass : PackageClass
       registerPackageFunction("string(_)", (obj, msg) => function<Sys, IObject>(obj, msg, (sys, o) => sys.String(o)));
       registerPackageFunction("environment".get(), (obj, _) => function<Sys>(obj, sys => sys.Environment));
    }
+
+   public override IObject DefaultValue => throw noDefaultValue("Sys");
 }

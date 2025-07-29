@@ -1,14 +1,17 @@
-﻿namespace Kagami.Library.Classes
+﻿using Kagami.Library.Objects;
+
+namespace Kagami.Library.Classes;
+
+public class LazyIteratorClass : BaseClass
 {
-   public class LazyIteratorClass : BaseClass
+   public override string Name => "LazyIterator";
+
+   public override void RegisterMessages()
    {
-      public override string Name => "LazyIterator";
+      base.RegisterMessages();
 
-      public override void RegisterMessages()
-      {
-         base.RegisterMessages();
-
-         iteratorMessages();
-      }
+      iteratorMessages();
    }
+
+   public override IObject DefaultValue => new LazyIterator(KArray.Empty);
 }

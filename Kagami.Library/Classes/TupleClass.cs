@@ -34,6 +34,8 @@ public class TupleClass : BaseClass, ICollectionClass
       messages["headTail".get()] = (obj, _) => function<KTuple>(obj, t => t.HeadTail);
    }
 
+   public override IObject DefaultValue => KTuple.Empty;
+
    protected static IObject indexed(KTuple kTuple, IObject index) => index switch
    {
       Int i => kTuple[i.Value],

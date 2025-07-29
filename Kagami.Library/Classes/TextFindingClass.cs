@@ -1,4 +1,7 @@
-﻿namespace Kagami.Library.Classes;
+﻿using Kagami.Library.Objects;
+using static Kagami.Library.AllExceptions;
+
+namespace Kagami.Library.Classes;
 
 public class TextFindingClass : BaseClass
 {
@@ -10,4 +13,6 @@ public class TextFindingClass : BaseClass
    }
 
    public override bool AssignCompatible(BaseClass otherClass) => MatchCompatible(otherClass);
+
+   public override IObject DefaultValue => throw noDefaultValue("TextFinding");
 }

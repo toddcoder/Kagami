@@ -1,4 +1,6 @@
-﻿namespace Kagami.Library.Classes;
+﻿using Kagami.Library.Objects;
+
+namespace Kagami.Library.Classes;
 
 public class IteratorClass : BaseClass
 {
@@ -10,4 +12,6 @@ public class IteratorClass : BaseClass
 
       iteratorMessages();
    }
+
+   public override IObject DefaultValue => (IObject)KArray.Empty.GetIterator(false);
 }

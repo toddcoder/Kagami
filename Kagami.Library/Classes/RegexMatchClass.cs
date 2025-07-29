@@ -22,4 +22,6 @@ public class RegexMatchClass : BaseClass
       messages["[](_<Int>)"] = (obj, msg) => function<RegexMatch, Int>(obj, msg, (m, i) => m[i.Value]);
       messages["[](_<String>)"] = (obj, msg) => function<RegexMatch, KString>(obj, msg, (m, s) => m[s.Value]);
    }
+
+   public override IObject DefaultValue => new RegexMatch([]);
 }

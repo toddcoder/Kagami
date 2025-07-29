@@ -1,4 +1,5 @@
 ﻿using Kagami.Library.Objects;
+using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Packages;
@@ -65,4 +66,6 @@ public class MathClass : PackageClass
       registerPackageFunction("decimalFromString(_)", (obj, msg) => function<KMath, KString>(obj, msg, (m, s) => m.DecimalFromString(s)));
       registerPackageFunction("longFromString(_)", (obj, msg) => function<KMath, KString>(obj, msg, (m, s) => m.LongFromString(s)));
    }
+
+   public override IObject DefaultValue => throw noDefaultValue("Math");
 }

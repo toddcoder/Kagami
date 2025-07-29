@@ -1,7 +1,11 @@
-﻿namespace Kagami.Library.Classes
+﻿using Kagami.Library.Objects;
+using static Kagami.Library.AllExceptions;
+
+namespace Kagami.Library.Classes;
+
+public class YieldReturnClass : BaseClass
 {
-	public class YieldReturnClass : BaseClass
-	{
-		public override string Name => "YieldReturn";
-	}
+   public override string Name => "YieldReturn";
+
+   public override IObject DefaultValue => throw noDefaultValue("YieldReturn");
 }

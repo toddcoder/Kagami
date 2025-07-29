@@ -1,4 +1,6 @@
-﻿namespace Kagami.Library.Classes;
+﻿using Kagami.Library.Objects;
+
+namespace Kagami.Library.Classes;
 
 public class NumericOpenRangeClass : BaseClass
 {
@@ -9,4 +11,6 @@ public class NumericOpenRangeClass : BaseClass
       base.RegisterMessages();
       collectionMessages();
    }
+
+   public override IObject DefaultValue => new NumericOpenRange((INumeric)Int.Zero, (INumeric)Int.One);
 }

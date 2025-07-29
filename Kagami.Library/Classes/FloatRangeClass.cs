@@ -25,6 +25,8 @@ public class FloatRangeClass : BaseClass
       messages["max".get()] = (obj, _) => function<FloatRange>(obj, r => r.Max());
    }
 
+   public override IObject DefaultValue => new FloatRange(0, 0, true);
+
    public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
 
    public IObject Revert(IEnumerable<IObject> list) => new KArray(list.ToList());

@@ -30,6 +30,8 @@ public class RegexClass : BaseClass, IEquivalentClass
       classMessages["parse(_<String>)"] = (_, msg) => parseRegex(msg.Arguments);
    }
 
+   public override IObject DefaultValue => new Regex("", false, false);
+
    protected static IObject parseRegex(Arguments arguments)
    {
       try

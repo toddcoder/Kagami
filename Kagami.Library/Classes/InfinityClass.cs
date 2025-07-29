@@ -1,4 +1,6 @@
-﻿namespace Kagami.Library.Classes;
+﻿using Kagami.Library.Objects;
+
+namespace Kagami.Library.Classes;
 
 public class InfinityClass : BaseClass
 {
@@ -10,4 +12,6 @@ public class InfinityClass : BaseClass
 
       compareMessages();
    }
+
+   public override IObject DefaultValue => new Infinity(true);
 }

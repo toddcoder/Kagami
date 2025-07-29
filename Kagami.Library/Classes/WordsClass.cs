@@ -1,4 +1,6 @@
-﻿namespace Kagami.Library.Classes;
+﻿using Kagami.Library.Objects;
+
+namespace Kagami.Library.Classes;
 
 public class WordsClass : BaseClass
 {
@@ -10,4 +12,6 @@ public class WordsClass : BaseClass
 
       collectionMessages();
    }
+
+   public override IObject DefaultValue => new Words((KString)KString.Empty);
 }

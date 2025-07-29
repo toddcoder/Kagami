@@ -29,4 +29,6 @@ public class RectangleClass : BaseClass
       messages["notIn".Selector("<Point>")] = (obj, msg) => function<Rectangle, Point>(obj, msg, (r, p) => r.NotIn(p));
       messages["notIn".Selector("<Rectangle>")] = (obj, msg) => function<Rectangle, Rectangle>(obj, msg, (r1, r2) => r1.NotIn(r2));
    }
+
+   public override IObject DefaultValue => new Rectangle(Int.Zero, Int.Zero, Int.Zero, Int.Zero);
 }

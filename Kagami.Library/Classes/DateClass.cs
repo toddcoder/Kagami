@@ -44,6 +44,8 @@ public class DateClass : BaseClass
       classMessages["daysOfTheWeek".get()] = (_, _) => Date.DaysOfTheWeek;
    }
 
+   public override IObject DefaultValue => new Date(DateTime.MinValue);
+
    protected static IObject parse(string source)
    {
       try

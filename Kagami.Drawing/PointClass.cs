@@ -18,4 +18,6 @@ public class PointClass : BaseClass
       messages["offset"] = (obj, msg) => function<Point, IObject, IObject>(obj, msg, (p, x, y) => p.Offset(x, y));
       messages["isEmpty".get()] = (obj, _) => function<Point>(obj, p => p.IsEmpty);
    }
+
+   public override IObject DefaultValue => new Point(Int.Zero, Int.Zero);
 }

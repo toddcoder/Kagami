@@ -20,4 +20,6 @@ public class RandomClass : BaseClass
       messages["next(from:<Int>,until:<Int>)"] =
          (obj, msg) => function<XRandom, Int, Int>(obj, msg, (r, i1, i2) => r.Next(i1.Value, i2.Value));
    }
+
+   public override IObject DefaultValue => new XRandom();
 }

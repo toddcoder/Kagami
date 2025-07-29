@@ -1,15 +1,18 @@
-﻿namespace Kagami.Library.Classes
+﻿using Kagami.Library.Objects;
+using static Kagami.Library.AllExceptions;
+
+namespace Kagami.Library.Classes;
+
+public class YieldingInvokableClass : BaseClass
 {
-   public class YieldingInvokableClass : BaseClass
+   public override string Name => "YieldingInvokable";
+
+   public override void RegisterMessages()
    {
-      public override string Name => "YieldingInvokable";
+      base.RegisterMessages();
 
-      public override void RegisterMessages()
-      {
-         base.RegisterMessages();
-
-         //iteratorMessages();
-         collectionMessages();
-      }
+      collectionMessages();
    }
+
+   public override IObject DefaultValue => throw noDefaultValue("YieldingInvokable");
 }

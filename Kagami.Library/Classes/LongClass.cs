@@ -19,5 +19,7 @@ public class LongClass : BaseClass, IParse
       messages["factorial()"] = (obj, _) => function<Long>(obj, l => l.Factorial());
    }
 
+   public override IObject DefaultValue => Long.LongObject(0);
+
    public IObject Parse(string source) => Long.LongObject(BigInteger.Parse(source));
 }

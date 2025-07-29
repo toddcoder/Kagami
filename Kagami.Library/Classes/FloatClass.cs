@@ -1,6 +1,5 @@
 ﻿using Core.Objects;
 using Kagami.Library.Objects;
-using static Kagami.Library.Operations.NumericFunctions;
 
 namespace Kagami.Library.Classes;
 
@@ -55,6 +54,8 @@ public class FloatClass : BaseClass, IParse, IEquivalentClass
    public IObject Parse(string source) => Float.FloatObject(source.Value().Double());
 
    public override bool IsNumeric => true;
+
+   public override IObject DefaultValue => Float.Zero;
 
    public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Number");
 }

@@ -1,18 +1,19 @@
 ﻿using Kagami.Library.Objects;
 using static Kagami.Library.Classes.ClassFunctions;
 
-namespace Kagami.Library.Classes
+namespace Kagami.Library.Classes;
+
+public class NameValueClass : BaseClass
 {
-   public class NameValueClass : BaseClass
+   public override string Name => "NameValue";
+
+   public override void RegisterMessages()
    {
-      public override string Name => "NameValue";
+      base.RegisterMessages();
 
-      public override void RegisterMessages()
-      {
-         base.RegisterMessages();
-
-         messages["name".get()] = (obj, _) => function<NameValue>(obj, nv => nv.Key);
-         messages["value".get()] = (obj, _) => function<NameValue>(obj, nv => nv.Value);
-      }
+      messages["name".get()] = (obj, _) => function<NameValue>(obj, nv => nv.Key);
+      messages["value".get()] = (obj, _) => function<NameValue>(obj, nv => nv.Value);
    }
+
+   public override IObject DefaultValue => new NameValue("", KString.Empty);
 }

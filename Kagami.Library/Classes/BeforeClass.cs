@@ -13,4 +13,6 @@ public class BeforeClass : BaseClass
 
       registerMessage("value".get(), (obj, _) => function<Before>(obj, b => b.Value));
    }
+
+   public override IObject DefaultValue => new Before();
 }

@@ -103,6 +103,8 @@ public class ArrayClass : BaseClass, ICollectionClass
       classMessages["typed(_)"] = (_, msg) => getTypedArray(msg);
    }
 
+   public override IObject DefaultValue => KArray.Empty;
+
    protected static KArray getTypedArray(Message message)
    {
       if (message.Arguments[0] is TypeConstraint typeConstraint)

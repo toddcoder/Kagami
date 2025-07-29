@@ -22,4 +22,6 @@ public class OptionalClass : BaseClass
    public override bool MatchCompatible(BaseClass otherClass) => otherClass.Name is "Some" or "None";
 
    public override bool AssignCompatible(BaseClass otherClass) => MatchCompatible(otherClass);
+
+   public override IObject DefaultValue => KNil.NilValue;
 }

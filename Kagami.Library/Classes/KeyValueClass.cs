@@ -14,4 +14,6 @@ public class KeyValueClass : BaseClass
       messages["key".get()] = (obj, _) => function<KeyValue>(obj, kv => kv.Key);
       messages["value".get()] = (obj, _) => function<KeyValue>(obj, kv => kv.Value);
    }
+
+   public override IObject DefaultValue => new KeyValue(new KString(""), new KString(""));
 }

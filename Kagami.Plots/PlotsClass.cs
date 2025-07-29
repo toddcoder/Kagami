@@ -1,4 +1,6 @@
-﻿using Kagami.Library.Packages;
+﻿using Kagami.Library.Objects;
+using Kagami.Library.Packages;
+using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Plots;
@@ -14,4 +16,6 @@ public class PlotsClass : PackageClass
 
       registerPackageFunction("Plot()", (obj, _) => function<Plots>(obj, p => p.Plot()));
    }
+
+   public override IObject DefaultValue => throw noDefaultValue("Plots");
 }

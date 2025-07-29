@@ -127,4 +127,6 @@ public class StringClass : BaseClass, ICollectionClass
    {
       return base.AssignCompatible(otherClass) || otherClass.Name == "MutString";
    }
+
+   public override IObject DefaultValue => KString.Empty;
 }

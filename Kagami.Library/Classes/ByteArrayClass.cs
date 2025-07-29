@@ -18,6 +18,8 @@ public class ByteArrayClass : BaseClass, ICollectionClass
       messages["~(_<ByteArray>)"] = (obj, msg) => function<ByteArray, ByteArray>(obj, msg, (b1, b2) => b1.Concatenate(b2));
    }
 
+   public override IObject DefaultValue => new ByteArray([]);
+
    public IObject Revert(IEnumerable<IObject> list) => new ByteArray(list.Select(o => (KByte)o).Select(b => b.Value).ToArray());
 
    public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");

@@ -24,4 +24,6 @@ public class NilClass : BaseClass
    }
 
    public override bool AssignCompatible(BaseClass otherClass) => otherClass is SomeClass or NilClass;
+
+   public override IObject DefaultValue => KNil.NilValue;
 }

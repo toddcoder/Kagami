@@ -1,19 +1,21 @@
 ﻿using Kagami.Library.Objects;
+using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Classes.ClassFunctions;
 
-namespace Kagami.Library.Classes
+namespace Kagami.Library.Classes;
+
+public class SliceClass : BaseClass
 {
-   public class SliceClass : BaseClass
+   public override string Name => "Slice";
+
+   public override void RegisterMessages()
    {
-      public override string Name => "Slice";
+      base.RegisterMessages();
 
-      public override void RegisterMessages()
-      {
-         base.RegisterMessages();
+      collectionMessages();
 
-         collectionMessages();
-
-         messages["="] = (obj, msg) => function<Slice, IObject>(obj, msg, (s, o) => s.Assign(o));
-      }
+      messages["="] = (obj, msg) => function<Slice, IObject>(obj, msg, (s, o) => s.Assign(o));
    }
+
+   public override IObject DefaultValue => throw noDefaultValue("Slice");
 }

@@ -30,6 +30,8 @@ public class MutStringClass : BaseClass, ICollectionClass
       registerMessage("dequeue()", (obj, _) => function<MutString>(obj, m => m.Dequeue()));
    }
 
+   public override IObject DefaultValue => new MutString("");
+
    public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection", "TextFinding");
 
    public IObject Revert(IEnumerable<IObject> list) => (MutString)list.Select(i => i.AsString).ToString("");

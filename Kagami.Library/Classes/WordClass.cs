@@ -15,4 +15,6 @@ public class WordClass : BaseClass
       registerMessage("prefix".get(), (obj, _) => function<Word>(obj, w => KString.StringObject(w.Prefix)));
       registerMessage("suffix".get(), (obj, _) => function<Word>(obj, w => KString.StringObject(w.Suffix)));
    }
+
+   public override IObject DefaultValue => new Word("", "", "");
 }

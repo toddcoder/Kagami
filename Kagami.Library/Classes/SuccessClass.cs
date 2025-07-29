@@ -24,4 +24,6 @@ public class SuccessClass : BaseClass
    }
 
    public override bool AssignCompatible(BaseClass otherClass) => otherClass is SuccessClass or FailureClass;
+
+   public override IObject DefaultValue => new Failure("No value");
 }

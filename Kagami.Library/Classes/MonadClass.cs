@@ -1,4 +1,7 @@
-﻿namespace Kagami.Library.Classes;
+﻿using Kagami.Library.Objects;
+using static Kagami.Library.AllExceptions;
+
+namespace Kagami.Library.Classes;
 
 public class MonadClass : BaseClass
 {
@@ -9,6 +12,8 @@ public class MonadClass : BaseClass
       return base.AssignCompatible(otherClass) || otherClass.Name == "Some" || otherClass.Name == "None" ||
          otherClass.Name == "Success" || otherClass.Name == "Failure";
    }
+
+   public override IObject DefaultValue => throw noDefaultValue("Monad");
 
    public override bool MatchCompatible(BaseClass otherClass) => base.MatchCompatible(otherClass) || AssignCompatible(otherClass);
 }

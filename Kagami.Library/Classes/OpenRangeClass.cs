@@ -1,4 +1,7 @@
-﻿namespace Kagami.Library.Classes;
+﻿using Kagami.Library.Objects;
+using static Kagami.Library.AllExceptions;
+
+namespace Kagami.Library.Classes;
 
 public class OpenRangeClass : BaseClass
 {
@@ -10,4 +13,6 @@ public class OpenRangeClass : BaseClass
 
       collectionMessages();
    }
+
+   public override IObject DefaultValue => throw noDefaultValue("OpenRange");
 }

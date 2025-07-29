@@ -44,6 +44,8 @@ public class CharClass : BaseClass, IEquivalentClass
       classMessages["fromOrd(_)"] = (_, msg) => classFunc<BaseClass, Int>(this, msg, (_, i) => fromOrd(i.Value));
    }
 
+   public override IObject DefaultValue => new KChar((char)0);
+
    protected static IObject fromOrd(int value)
    {
       try

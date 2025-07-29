@@ -13,6 +13,8 @@ namespace Kagami.Library.Classes
          classMessages["parse(_)"] = (_, msg) => parse(msg.Arguments[0].AsString);
       }
 
+      public override IObject DefaultValue => KBoolean.False;
+
       protected static IObject parse(string source) => source switch
       {
          "false" => Success.Object(KBoolean.False),

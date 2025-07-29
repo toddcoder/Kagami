@@ -96,5 +96,7 @@ public class IntClass : BaseClass, IParse, IEquivalentClass
 
    public override bool IsNumeric => true;
 
+   public override IObject DefaultValue => Int.Zero;
+
    public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Number");
 }

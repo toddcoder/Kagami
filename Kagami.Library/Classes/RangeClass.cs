@@ -25,6 +25,8 @@ public class RangeClass : BaseClass, ICollectionClass
       messages["max".get()] = (obj, _) => function<KRange>(obj, r => r.Max());
    }
 
+   public override IObject DefaultValue => new KRange((IRangeItem)Int.Zero, (IObjectCompare)Int.Zero, true);
+
    public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
 
    public IObject Revert(IEnumerable<IObject> list) => new KArray(list.ToList());

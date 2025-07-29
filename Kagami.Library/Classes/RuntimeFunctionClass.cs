@@ -1,4 +1,5 @@
 ﻿using Kagami.Library.Objects;
+using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Classes;
@@ -14,4 +15,6 @@ public class RuntimeFunctionClass : BaseClass
       messages["invoke(_...)"] = (obj, msg) => function<RuntimeLambda>(obj, rf => rf.Invoke(msg.Arguments.Value));
       messages[">>(_)"] = (obj, msg) => function<RuntimeLambda, Lambda>(obj, msg, (rf, l) => rf.Join(l));
    }
+
+   public override IObject DefaultValue => throw noDefaultValue("RuntimeFunction");
 }

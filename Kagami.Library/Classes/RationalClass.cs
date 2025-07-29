@@ -65,5 +65,7 @@ public class RationalClass : BaseClass, IEquivalentClass
 
    public override bool IsNumeric => true;
 
+   public override IObject DefaultValue => new Rational(0, 1);
+
    public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Number");
 }

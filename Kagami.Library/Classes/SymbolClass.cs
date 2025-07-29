@@ -13,4 +13,6 @@ public class SymbolClass : BaseClass
 
       registerMessage("name".get(), (obj, _) => function<SymbolObject>(obj, s => (KString)s.AsString));
    }
+
+   public override IObject DefaultValue => new SymbolObject("");
 }
