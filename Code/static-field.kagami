@@ -1,0 +1,11 @@
+﻿open sys
+
+class Foobar {
+	Foobar.population += 1
+}
+static {
+	var population = 0
+}
+
+var f = Foobar()
+println(Foobar.population)

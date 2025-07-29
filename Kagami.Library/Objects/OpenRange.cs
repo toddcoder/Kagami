@@ -23,9 +23,9 @@ public readonly struct OpenRange : IObject, ICollection
 
    public string ClassName => "OpenRange";
 
-   public string AsString => $"{seed.AsString} ** {lambda.AsString}";
+   public string AsString => $"{seed.AsString} ... {lambda.AsString}";
 
-   public string Image => $"{seed.Image} ** {lambda.Image}";
+   public string Image => $"{seed.Image} ... {lambda.Image}";
 
    public int Hash => (seed.Hash + lambda.Hash).GetHashCode();
 

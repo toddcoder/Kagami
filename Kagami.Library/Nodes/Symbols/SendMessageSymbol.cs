@@ -78,7 +78,7 @@ public class SendMessageSymbol : Symbol, IHasExpressions
       if (_operation)
       {
          builder.Dup();
-         var getter = selector.NewName(selector.Name.Drop(-1));
+         var getter = selector.Name.Drop(-1).get();
          builder.SendMessage(getter, 0);
       }
 
