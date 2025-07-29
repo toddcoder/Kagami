@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 using Kagami.Library.Operations;
 using Core.Collections;
 using static Kagami.Library.Objects.ObjectFunctions;
@@ -179,6 +180,10 @@ public readonly struct Long : IObject, INumeric, IComparable<Long>, IEquatable<L
    public IObject Round(INumeric other) => (Float)Math.Round(AsDouble(), other.AsInt32());
 
    public int CompareTo(object? obj) => CompareTo((Long)obj!);
+
+   public override bool Equals([NotNullWhen(true)] object? obj) => obj is Long other && value == other.value;
+
+   public override int GetHashCode() => Hash;
 
    public Long Factorial()
    {
