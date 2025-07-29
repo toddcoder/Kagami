@@ -167,7 +167,7 @@ public readonly struct KChar : IObject, IComparable<KChar>, IEquatable<KChar>, I
       return builder.ToString();
    }
 
-   public KTuple Split(string input) => new(input.Split(value).Select(KString.StringObject).ToArray());
+   public KArray Split(string input) => new(input.Split(value).Select(KString.StringObject));
 
    public KTuple Partition(string input, bool reverse)
    {

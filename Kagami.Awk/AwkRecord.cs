@@ -119,9 +119,9 @@ public class AwkRecord : IObject, ICollection, ITextFinding
 
    public KString ReplaceAll(ITextFinding textFinding, Lambda lambda) => textFinding.ReplaceAll(fields[0], lambda);
 
-   public KTuple Split(string input) => split(fields[0], input);
+   public KArray Split(string input) => split(fields[0], input);
 
-   public KTuple Split(ITextFinding textFinding) => textFinding.Split(fields[0]);
+   public KArray Split(ITextFinding textFinding) => textFinding.Split(fields[0]);
 
    public KTuple Partition(string input, bool reverse) => partition(fields[0], input, reverse);
 

@@ -76,9 +76,9 @@ public static class TextFindingFunctions
       return builder.ToString();
    }
 
-   public static KTuple split(string value, string input)
+   public static KArray split(string value, string input)
    {
-      return new(input.Split([value], StringSplitOptions.None).Select(KString.StringObject).ToArray());
+      return new(input.Split([value], StringSplitOptions.None).Select(KString.StringObject));
    }
 
    public static KTuple partition(string value, string input, bool reverse)

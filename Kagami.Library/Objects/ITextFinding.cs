@@ -14,7 +14,7 @@ public interface ITextFinding
 
    KString ReplaceAll(string input, Lambda lambda);
 
-   KTuple Split(string input);
+   KArray Split(string input);
 
    KTuple Partition(string input, bool reverse);
 

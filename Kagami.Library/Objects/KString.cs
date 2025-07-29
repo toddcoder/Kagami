@@ -230,9 +230,9 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
       return (KString)buffer.ToString();
    }
 
-   public KTuple Split(ITextFinding textFinding) => textFinding.Split(value);
+   public KArray Split(ITextFinding textFinding) => textFinding.Split(value);
 
-   public KTuple Split(string input) => split(value, input);
+   public KArray Split(string input) => split(value, input);
 
    public KTuple Partition(ITextFinding textFinding, bool reverse) => textFinding.Partition(value, reverse);
 
@@ -392,9 +392,9 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
    public IObject Long() => BigInteger.TryParse(value, out var result) ? new Some((Long)result) : KNil.NilValue;
 
-   public KTuple SplitRegex(Regex regex) => regex.Split(value);
+   public KArray SplitRegex(Regex regex) => regex.Split(value);
 
-   public KTuple SplitOn(string on) => new(value.Split([on], StringSplitOptions.None).Select(StringObject).ToArray());
+   public KArray SplitOn(string on) => new(value.Split([on], StringSplitOptions.None).Select(StringObject));
 
    public KString Subtract(string substring) => value.Replace(substring, "");
 

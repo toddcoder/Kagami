@@ -9,7 +9,7 @@ public class TextFindingClass : BaseClass
 
    public override bool MatchCompatible(BaseClass otherClass)
    {
-      return otherClass is StringClass || otherClass is CharClass || otherClass is RegexClass;
+      return otherClass is StringClass or CharClass or RegexClass;
    }
 
    public override bool AssignCompatible(BaseClass otherClass) => MatchCompatible(otherClass);

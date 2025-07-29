@@ -177,7 +177,7 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
       return result;
    }
 
-   public KTuple Split(string input) => split(AsString, input);
+   public KArray Split(string input) => split(AsString, input);
 
    public KTuple Partition(string input, bool reverse) => partition(AsString, input, reverse);
 

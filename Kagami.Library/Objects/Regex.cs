@@ -415,7 +415,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
       }
    }
 
-   public KTuple Split(string input) => new(input.Unjoin(getFixedPattern()).Select(KString.StringObject).ToArray());
+   public KArray Split(string input) => new(input.Unjoin(getFixedPattern()).Select(KString.StringObject));
 
    public KTuple Partition(string input, bool reverse)
    {
