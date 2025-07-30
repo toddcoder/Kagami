@@ -394,7 +394,9 @@ public class StreamIterator : IObject, IIterator
 
    public IObject Repeated() => terminate().Repeated();
 
-   public BaseClass Equivalent() => new CollectionClass();
+   public IObject Accumulate(Lambda lambda) => terminate().Accumulate(lambda);
+
+   public IObject Accumulate(IObject initialValue, Lambda lambda) => terminate().Accumulate(initialValue, lambda);
 
    public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
 }

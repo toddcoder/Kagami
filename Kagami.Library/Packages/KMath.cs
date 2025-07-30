@@ -392,4 +392,58 @@ public class KMath : Package
    }
 
    public KDecimal DecimalFromString(KString kString) => kString.Value.Value().Decimal();
+
+   public KArray Sieve(int n)
+   {
+      var isPrime = new bool[n];
+      for (var i = 2; i < n; i++)
+      {
+         isPrime[i] = true;
+      }
+
+      for (var i = 2; i * i < n; i++)
+      {
+         if (isPrime[i])
+         {
+            for (var j = i * i; j < n; j += i)
+            {
+               isPrime[j] = false;
+            }
+         }
+      }
+
+      var primes = isPrime.Select((b, i) => b ? i : -1).Where(i => i != -1).Select(Int.IntObject);
+      return new KArray(primes);
+   }
+
+   public KArray Factors(int number)
+   {
+      return new KArray(generateFactors(number).Select(Int.IntObject));
+
+      IEnumerable<int> generateFactors(int number)
+      {
+         if (number <= 0)
+         {
+            throw fail("Number must be greater than 0");
+         }
+
+         var limit = (int)Math.Sqrt(number);
+         var kArray = Sieve(limit);
+         int[] primes = [.. kArray.List.Select(i => ((Int)i).Value)];
+         foreach (var prime in primes)
+         {
+            while (number % prime == 0)
+            {
+               yield return prime;
+
+               number /= prime;
+            }
+         }
+
+         if (number > 1)
+         {
+            yield return number;
+         }
+      }
+   }
 }

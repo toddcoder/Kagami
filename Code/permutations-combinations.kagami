@@ -1,0 +1,7 @@
+﻿open sys
+
+println(~[it "ABCD"].permutations(2))
+println(~(rng 3).permutations())
+
+println(~[it "ABCD"].combinations(2))
+println(~(rng 3).combinations())

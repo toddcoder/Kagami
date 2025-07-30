@@ -65,6 +65,8 @@ public class MathClass : PackageClass
       registerPackageFunction("rationalFromString(_)", (obj, msg) => function<KMath, KString>(obj, msg, (m, s) => m.RationalFromString(s)));
       registerPackageFunction("decimalFromString(_)", (obj, msg) => function<KMath, KString>(obj, msg, (m, s) => m.DecimalFromString(s)));
       registerPackageFunction("longFromString(_)", (obj, msg) => function<KMath, KString>(obj, msg, (m, s) => m.LongFromString(s)));
+      registerPackageFunction("sieve(_<Int>)", (obj, msg) => function<KMath, Int>(obj, msg, (m, n) => m.Sieve(n.Value)));
+      registerPackageFunction("factors(_<Int>)", (obj, msg) => function<KMath, Int>(obj, msg, (m, n) => m.Factors(n.Value)));
    }
 
    public override IObject DefaultValue => throw noDefaultValue("Math");

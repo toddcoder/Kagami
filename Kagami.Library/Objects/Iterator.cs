@@ -162,14 +162,14 @@ public class Iterator : IObject, IIterator
 
    public IObject FoldLeft(IObject initialValue, Lambda lambda)
    {
-      return List().ToList().Aggregate(initialValue, (current, value) => lambda.Invoke(current, value));
+      return List().Aggregate(initialValue, (current, value) => lambda.Invoke(current, value));
    }
 
    public IObject FoldLeft(Lambda lambda)
    {
       var firstObtained = false;
       var current = Unassigned.Value;
-      foreach (var value in List().ToList())
+      foreach (var value in List())
       {
          if (firstObtained)
          {
@@ -1337,6 +1337,56 @@ public class Iterator : IObject, IIterator
       }
 
       return new Set(set);
+   }
+
+   public IObject Accumulate(Lambda lambda)
+   {
+      var length = collection.Length.Value;
+      return length switch
+      {
+         0 or 1 => (IObject)collection,
+         _ => collectionClass.Revert(accumulate(lambda))
+      };
+
+      IEnumerable<IObject> accumulate(Lambda lambda)
+      {
+         List<IObject> list = [.. List()];
+         var accum = list[0];
+         yield return accum;
+
+         foreach (var item in list.Skip(1))
+         {
+            var invoked = lambda.Invoke(accum, item);
+            yield return invoked;
+
+            accum = invoked;
+         }
+      }
+   }
+
+   public IObject Accumulate(IObject initialValue, Lambda lambda)
+   {
+      var length = collection.Length.Value;
+      return length switch
+      {
+         0 or 1 => (IObject)collection,
+         _ => collectionClass.Revert(accumulate(lambda))
+      };
+
+      IEnumerable<IObject> accumulate(Lambda lambda)
+      {
+         List<IObject> list = [.. List()];
+         var accum = initialValue;
+         yield return accum;
+
+         foreach (var item in list)
+         {
+            var invoked = lambda.Invoke(accum, item);
+            yield return invoked;
+
+            accum = invoked;
+         }
+      }
    }
 
    protected static IEnumerable<IObject> applyAgainst(List<Lambda> lambdas, List<IObject> enumerable)

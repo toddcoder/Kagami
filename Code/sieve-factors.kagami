@@ -1,0 +1,4 @@
+﻿open sys
+
+println(math.sieve(30))
+println(math.factors(99))

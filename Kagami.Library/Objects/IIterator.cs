@@ -170,11 +170,11 @@ public interface IIterator : IEquivalentClass
    IObject Rotate(int count);
 
    IObject Permutations(int count);
-   
+
    IObject Permutations();
 
    IObject Combinations(int count);
-   
+
    IObject Combinations();
 
    IObject Flatten();
@@ -198,4 +198,8 @@ public interface IIterator : IEquivalentClass
    IObject Windowed(int size, int step, bool partial);
 
    IObject Repeated();
+
+   IObject Accumulate(Lambda lambda);
+
+   IObject Accumulate(IObject initialValue, Lambda lambda);
 }
