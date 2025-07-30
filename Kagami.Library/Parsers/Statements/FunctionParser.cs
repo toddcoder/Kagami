@@ -17,14 +17,14 @@ public partial class FunctionParser : StatementParser
 {
    protected Maybe<Function> _function = nil;
 
-   [GeneratedRegex($@"^(\s*)(override\s+)?(func|infix\s+\w+|prefix|postfix|macro)(\s+)(?:({REGEX_CLASS_GETTING})(\.))?({REGEX_FUNCTION_NAME})(\()?")]
+   [GeneratedRegex($@"^(\s*)(override\s+)?(func|(?:infix\(\w+\))|prefix|postfix|macro)(\s+)(?:({REGEX_CLASS_GETTING})(\.))?({REGEX_FUNCTION_NAME})(\()?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
       var overriding = tokens[2].Text.StartsWith("override");
       var operatorText = tokens[3].Text;
-      var isOperator = operatorText.StartsWith("infix") || operatorText is "infix" or "prefix" or "postfix";
+      var isOperator = operatorText.StartsWith("infix") || operatorText is "prefix" or "postfix";
       var isMacro = tokens[3].Text == "macro";
 
       var className = tokens[5].Text;
@@ -42,7 +42,7 @@ public partial class FunctionParser : StatementParser
          {
             "prefix" => Precedence.PrefixOperator,
             "postfix" => Precedence.PostfixOperator,
-            _ => operatorText.Drop(5).Trim() switch
+            _ => operatorText.Drop(6).Drop(-1).Trim() switch
             {
                "raise" => Precedence.Raise,
                "multiply" => Precedence.MultiplyDivide,
