@@ -1083,68 +1083,64 @@ public class Iterator : IObject, IIterator
       list.Insert(0, temp);
    }
 
-   protected static IEnumerable<List<IObject>> permutate(List<IObject> list, int count)
+   public IObject Permutations(int count)
    {
-      if (count == 1)
-      {
-         yield return list;
-      }
-      else
-      {
-         for (var i = 0; i < count; i++)
-         {
-            foreach (var perm in permutate(list, count - 1))
-            {
-               yield return perm;
+      return collectionClass.Revert(permutations(List(), count).Select(l => collectionClass.Revert(l)));
 
-               rotateRight(list, count);
+      IEnumerable<List<IObject>> permutations(IEnumerable<IObject> items, int length)
+      {
+         if (length == 1)
+         {
+            foreach (var item in items)
+            {
+               yield return [item];
+            }
+         }
+         else
+         {
+            List<IObject> list = [.. items];
+            foreach (var item in list)
+            {
+               List<IObject> remainingItems = [..list];
+               remainingItems.Remove(item);
+               foreach (var permutation in permutations(remainingItems, length - 1))
+               {
+                  yield return [item, ..permutation];
+               }
             }
          }
       }
    }
 
-   public IObject Permutation(int count)
-   {
-      var list = List().ToList();
-      var enumerable = permutate(list, count).Select(l => collectionClass.Revert(l));
+   public IObject Permutations() => Permutations(collection.Length.Value);
 
-      return collectionClass.Revert(enumerable);
-   }
-
-   protected static void rotateLeft(List<IObject> list, int start, int count)
+   public IObject Combinations(int count)
    {
-      var temp = list[start];
-      list.RemoveAt(start);
-      list.Insert(start + count - 1, temp);
-   }
+      return collectionClass.Revert(combinations(List(), count).Select(l => collectionClass.Revert(l)));
 
-   protected static IEnumerable<List<IObject>> combinations(List<IObject> list, int start, int count, int choose)
-   {
-      if (choose == 0)
+      IEnumerable<List<IObject>> combinations(IEnumerable<IObject> items, int length)
       {
-         yield return list;
-      }
-      else
-      {
-         for (var i = 0; i < count; i++)
+         if (length == 0)
          {
-            foreach (var combo in combinations(list, start + 1, count - 1 - i, choose - 1))
+            yield return [];
+         }
+         else
+         {
+            var itemList = items.ToList();
+            for (var i = 0; i < itemList.Count; i++)
             {
-               yield return combo;
+               var currentItem = itemList[i];
+               var remainingItems = itemList.Skip(i + 1);
+               foreach (var combination in combinations(remainingItems, length - 1))
+               {
+                  yield return [currentItem, ..combination];
+               }
             }
-
-            rotateLeft(list, start, count);
          }
       }
    }
 
-   public IObject Combination(int count)
-   {
-      var list = List().ToList();
-      var result = combinations(list, 0, list.Count, count);
-
-      return collectionClass.Revert(result.Select(l => collectionClass.Revert(l)));
-   }
+   public IObject Combinations() => Combinations(collection.Length.Value);
 
    protected static IEnumerable<IObject> flatten(IIterator iterator)
    {

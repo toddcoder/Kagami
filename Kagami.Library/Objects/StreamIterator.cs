@@ -364,9 +364,13 @@ public class StreamIterator : IObject, IIterator
 
    public IObject Rotate(int count) => terminate().Rotate(count);
 
-   public IObject Permutation(int count) => terminate().Permutation(count);
+   public IObject Permutations(int count) => terminate().Permutations(count);
 
-   public IObject Combination(int count) => terminate().Combination(count);
+   public IObject Permutations() => Permutations(1);
+
+   public IObject Combinations(int count) => terminate().Combinations(count);
+
+   public IObject Combinations() => Combinations(0);
 
    public IObject Flatten() => terminate().Flatten();
 

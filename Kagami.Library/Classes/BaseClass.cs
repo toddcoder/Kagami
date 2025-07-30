@@ -426,8 +426,10 @@ public abstract class BaseClass
       registerMessage("dictionary()", (obj, _) => iteratorFunc(obj, i => i.ToDictionary()));
       registerMessage("each(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Each(l)));
       registerMessage("rotate(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Rotate(c.Value)));
-      registerMessage("permutation(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Permutation(c.Value)));
-      registerMessage("combination(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Combination(c.Value)));
+      registerMessage("permutations(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Permutations(c.Value)));
+      registerMessage("permutations()", (obj, _) => iteratorFunc(obj, i => i.Permutations()));
+      registerMessage("combinations(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Combinations(c.Value)));
+      registerMessage("combinations()", (obj, _) => iteratorFunc(obj, i => i.Combinations()));
       registerMessage("flatten()", (obj, _) => iteratorFunc(obj, i => i.Flatten()));
       registerMessage("copy()", (obj, _) => iteratorFunc(obj, i => i.Copy()));
       registerMessage("collect()", (obj, _) => iteratorFunc(obj, i => i.Collect()));
