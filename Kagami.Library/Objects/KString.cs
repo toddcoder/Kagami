@@ -562,4 +562,6 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
       var encoding = Encoding.GetEncoding(encodingName);
       return new ByteArray(encoding.GetBytes(value));
    }
+
+   public PendingRegex PendingRegex(Regex regex) => new(regex, this);
 }
