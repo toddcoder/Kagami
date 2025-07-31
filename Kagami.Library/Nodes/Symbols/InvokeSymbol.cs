@@ -43,8 +43,8 @@ public class InvokeSymbol : Symbol, IHasExpressions
             }
          }
 
-         var newInvokeSymbol = new InvokeSymbol(functionName, argumentsList.ToArray(), _lambda, false);
-         var parameters = new Parameters(parametersList.ToArray());
+         var newInvokeSymbol = new InvokeSymbol(functionName, [.. argumentsList], _lambda, false);
+         var parameters = new Parameters([.. parametersList]);
          var returnStatement = new Return(new Expression(newInvokeSymbol), nil);
          var block = new Block(returnStatement);
          var newLambda = new LambdaSymbol(parameters, block);
