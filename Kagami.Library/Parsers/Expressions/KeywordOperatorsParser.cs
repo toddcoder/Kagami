@@ -11,7 +11,7 @@ public partial class KeywordOperatorsParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s+)(if|map|join|sort|foldl|foldr|all|any|none|one|zip|skip|take|while|until|min|max" +
+   [GeneratedRegex(@"^(\s+)(if|map|join|sort|foldl|foldr|fold|all|any|none|one|zip|skip|take|while|until|min|max" +
       @"|does|X|div|each|divmod|with|approx|same|xor|union|intersect|diff|symdiff|subsetof|supersetof|accum)(\s+)")]
    public override partial Regex Regex();
 
@@ -46,6 +46,7 @@ public partial class KeywordOperatorsParser : SymbolParser
                   builder.Add(new SendBinaryMessageSymbol("sort(_<Lambda>)", Precedence.ChainedOperator));
                   break;
                case "foldl":
+               case "fold":
                   builder.Add(new SendBinaryMessageSymbol("foldl(_)", Precedence.ChainedOperator));
                   break;
                case "foldr":

@@ -1,0 +1,6 @@
+﻿open sys
+
+var list1 = [1, 2, 3]
+var list2 = a"A B"
+println(~list1.zipl(list2, 0, "X"))
+println(~list1.zipl(list2, 0, "X") (~))

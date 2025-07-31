@@ -247,6 +247,16 @@ public class StreamIterator : IObject, IIterator
 
    public IObject Zip(ICollection collection, Lambda lambda) => terminate().Zip(collection, lambda);
 
+   public IObject ZipL(ICollection collection, IObject leftDefaultValue, IObject rightDefaultValue)
+   {
+      return terminate().ZipL(collection, leftDefaultValue, rightDefaultValue);
+   }
+
+   public IObject ZipL(ICollection collection, IObject leftDefaultValue, IObject rightDefaultValue, Lambda lambda)
+   {
+      return terminate().ZipL(collection, leftDefaultValue, rightDefaultValue, lambda);
+   }
+
    public IObject Unzip() => terminate().Unzip();
 
    public IObject Unzip(Lambda lambda) => terminate().Unzip(lambda);

@@ -3,6 +3,8 @@ using Kagami.Library.Operations;
 using Core.Enumerables;
 using Core.Monads;
 using Core.Strings;
+using Kagami.Library.Invokables;
+using Kagami.Library.Nodes.Statements;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Nodes.NodeFunctions;
 
@@ -65,6 +67,34 @@ public class SendMessageSymbol : Symbol, IHasExpressions
 
    public override void Generate(OperationsBuilder builder)
    {
+      if (arguments.Any(a => a.Symbols[0] is AnySymbol))
+      {
+         List<Expression> argumentsList = [];
+         List<Parameter> parametersList = [];
+         foreach (var argument in arguments)
+         {
+            if (argument.Symbols[0] is AnySymbol)
+            {
+               var parameterName = $"__${parametersList.Count}";
+               parametersList.Add(Parameter.New(false, parameterName));
+               argumentsList.Add(new Expression(new FieldSymbol(parameterName)));
+            }
+            else
+            {
+               argumentsList.Add(argument);
+            }
+         }
+
+         var newSendMessageSymbol = new SendMessageSymbol(selector, precedence, optional, _lambda, _operation, [.. argumentsList]);
+         var parameters = new Parameters([.. parametersList]);
+         var returnStatement = new Statements.Return(new Expression(newSendMessageSymbol), nil);
+         var block = new Block(returnStatement);
+         var newLambda = new LambdaSymbol(parameters, block);
+         newLambda.Generate(builder);
+
+         return;
+      }
+
       var endLabel = newLabel("end");
 
       if (optional)

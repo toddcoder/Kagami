@@ -50,6 +50,12 @@ public abstract class BaseClass
       }
    }
 
+   protected void registerIterMessage(Selector selector, Func<IObject, Message, IObject> function)
+   {
+      alternateMessages.Add(selector);
+      registerMessage(selector, function);
+   }
+
    protected void registerClassMessage(Selector selector, Func<BaseClass, Message, IObject> function)
    {
       if (!classMessages.ContainsKey(selector))
@@ -294,7 +300,7 @@ public abstract class BaseClass
 
    protected void loadIteratorMessages()
    {
-      alternateMessages.AddRange((Selector[])
+      /*alternateMessages.AddRange((Selector[])
       [
          "collection".get(), "isLazy".get(), "next()", "peek()", "reset()", "reverse()",
          "join(_<String>)",
@@ -320,7 +326,7 @@ public abstract class BaseClass
          "each(_<Lambda>)", "rotate(_<Int>)", "permutation(_<Int>)", "combination(_<Int>)", "flatten()",
          "copy()", "revert()", "*(_)", "format(_)", "replace(_<Lambda>,_<Lambda>)", "set()", "shape(_<Int>,_<Int>)", "shape(_<Int>)",
          "column(_<Int>)", "step(_<Int>)"
-      ]);
+      ]);*/
 
       dynamicInvoke = (obj, message) =>
       {
@@ -331,133 +337,140 @@ public abstract class BaseClass
 
    protected void iteratorMessages()
    {
-      registerMessage("collection".get(), (obj, _) => iteratorFunc(obj, i => (IObject)i.Collection));
-      registerMessage("isLazy".get(), (obj, _) => iteratorFunc(obj, i => (KBoolean)i.IsLazy));
-      registerMessage("next()", (obj, _) => iteratorFunc(obj, i => i.Next().Map(Some.Object) | (() => KNil.NilValue)));
-      registerMessage("peek()", (obj, _) => iteratorFunc(obj, i => i.Peek().Map(Some.Object) | (() => KNil.NilValue)));
-      registerMessage("reset()", (obj, _) => iteratorFunc(obj, i => i.Reset()));
-      registerMessage("reverse()", (obj, _) => iteratorFunc(obj, i => i.Reverse()));
-      registerMessage("join()", (obj, _) => iteratorFunc(obj, i => i.Join()));
-      registerMessage("join(_<String>)", (obj, message) => iteratorFunc<KString>(obj, message, (i, s) => i.Join(s.Value)));
-      registerMessage("join(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Join(l)));
-      registerMessage("join(_<String>,limit:_<Int>,truncated:_<String>)",
+      alternateMessages.Clear();
+
+      registerIterMessage("collection".get(), (obj, _) => iteratorFunc(obj, i => (IObject)i.Collection));
+      registerIterMessage("isLazy".get(), (obj, _) => iteratorFunc(obj, i => (KBoolean)i.IsLazy));
+      registerIterMessage("next()", (obj, _) => iteratorFunc(obj, i => i.Next().Map(Some.Object) | (() => KNil.NilValue)));
+      registerIterMessage("peek()", (obj, _) => iteratorFunc(obj, i => i.Peek().Map(Some.Object) | (() => KNil.NilValue)));
+      registerIterMessage("reset()", (obj, _) => iteratorFunc(obj, i => i.Reset()));
+      registerIterMessage("reverse()", (obj, _) => iteratorFunc(obj, i => i.Reverse()));
+      registerIterMessage("join()", (obj, _) => iteratorFunc(obj, i => i.Join()));
+      registerIterMessage("join(_<String>)", (obj, message) => iteratorFunc<KString>(obj, message, (i, s) => i.Join(s.Value)));
+      registerIterMessage("join(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Join(l)));
+      registerIterMessage("join(_<String>,limit:_<Int>,truncated:_<String>)",
          (obj, msg) => iteratorFunc<KString, Int, KString>(obj, msg, (i, c, l, t) => i.Join(c.Value, l.Value, t.Value)));
-      registerMessage("join(_<String>,limit:_<Int>)",
+      registerIterMessage("join(_<String>,limit:_<Int>)",
          (obj, msg) => iteratorFunc<KString, Int>(obj, msg, (i, c, l) => i.Join(c.Value, l.Value, "...")));
-      registerMessage("sort(_<Lambda>,asc:_<Boolean>)",
+      registerIterMessage("sort(_<Lambda>,asc:_<Boolean>)",
          (obj, message) => iteratorFunc<Lambda, KBoolean>(obj, message, (i, l, b) => i.Sort(l, b.Value)));
-      registerMessage("sort(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Sort(l, true)));
-      registerMessage("sortDesc(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Sort(l, false)));
-      registerMessage("sort(asc:_<Boolean>)", (obj, message) => iteratorFunc<KBoolean>(obj, message, (i, b) => i.Sort(b.Value)));
-      registerMessage("sort()", (obj, _) => iteratorFunc(obj, i => i.Sort(true)));
-      registerMessage("sortDesc()", (obj, _) => iteratorFunc(obj, i => i.Sort(false)));
-      registerMessage("foldl".Selector("_", "_<Lambda>"),
+      registerIterMessage("sort(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Sort(l, true)));
+      registerIterMessage("sortDesc(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Sort(l, false)));
+      registerIterMessage("sort(asc:_<Boolean>)", (obj, message) => iteratorFunc<KBoolean>(obj, message, (i, b) => i.Sort(b.Value)));
+      registerIterMessage("sort()", (obj, _) => iteratorFunc(obj, i => i.Sort(true)));
+      registerIterMessage("sortDesc()", (obj, _) => iteratorFunc(obj, i => i.Sort(false)));
+      registerIterMessage("foldl".Selector("_", "_<Lambda>"),
          (obj, message) => iteratorFunc<IObject, Lambda>(obj, message, (i, o, l) => i.FoldLeft(o, l)));
-      registerMessage("foldl(_)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.FoldLeft(l)));
-      registerMessage("foldr".Selector("_", "_<Lambda>"),
+      registerIterMessage("foldl(_)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.FoldLeft(l)));
+      registerIterMessage("foldr".Selector("_", "_<Lambda>"),
          (obj, message) => iteratorFunc<IObject, Lambda>(obj, message, (i, o, l) => i.FoldRight(o, l)));
-      registerMessage("foldr(_)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.FoldRight(l)));
-      registerMessage("reducel".Selector("_", "_<Lambda>"),
+      registerIterMessage("foldr(_)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.FoldRight(l)));
+      registerIterMessage("reducel".Selector("_", "_<Lambda>"),
          (obj, message) => iteratorFunc<IObject, Lambda>(obj, message, (i, o, l) => i.ReduceLeft(o, l)));
-      registerMessage("reducel(_)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.ReduceLeft(l)));
-      registerMessage("reducer".Selector("_", "_<Lambda>"),
+      registerIterMessage("reducel(_)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.ReduceLeft(l)));
+      registerIterMessage("reducer".Selector("_", "_<Lambda>"),
          (obj, message) => iteratorFunc<IObject, Lambda>(obj, message, (i, o, l) => i.ReduceRight(o, l)));
-      registerMessage("reducer(_)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.ReduceRight(l)));
-      registerMessage("count()", (obj, _) => iteratorFunc(obj, i => i.Count()));
-      registerMessage("count(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Count(l)));
-      registerMessage("count(of:_)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, o) => i.Count(o)));
-      registerMessage("map(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Map(l)));
-      registerMessage("bind(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Map(l)));
-      registerMessage("flatMap(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.FlatMap(l)));
-      registerMessage("if(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.If(l)));
-      registerMessage("ifNot(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.IfNot(l)));
-      registerMessage("skip(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Skip(j.Value)));
-      registerMessage("-(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Skip(j.Value)));
-      registerMessage("skipWhile(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.SkipWhile(l)));
-      registerMessage("skipUntil(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.SkipUntil(l)));
-      registerMessage("take(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Take(j.Value)));
-      registerMessage("+(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Take(j.Value)));
-      registerMessage("takeWhile(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.TakeWhile(l)));
-      registerMessage("takeUntil(_)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, l) => i.TakeUntil(l)));
-      registerMessage("index(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Index(l)));
-      registerMessage("indexes(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Indexes(l)));
-      registerMessage("zip(_<Collection>,_<Lambda>)",
+      registerIterMessage("reducer(_)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.ReduceRight(l)));
+      registerIterMessage("count()", (obj, _) => iteratorFunc(obj, i => i.Count()));
+      registerIterMessage("count(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Count(l)));
+      registerIterMessage("count(of:_)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, o) => i.Count(o)));
+      registerIterMessage("map(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Map(l)));
+      registerIterMessage("bind(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Map(l)));
+      registerIterMessage("flatMap(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.FlatMap(l)));
+      registerIterMessage("if(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.If(l)));
+      registerIterMessage("ifNot(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.IfNot(l)));
+      registerIterMessage("skip(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Skip(j.Value)));
+      registerIterMessage("-(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Skip(j.Value)));
+      registerIterMessage("skipWhile(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.SkipWhile(l)));
+      registerIterMessage("skipUntil(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.SkipUntil(l)));
+      registerIterMessage("take(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Take(j.Value)));
+      registerIterMessage("+(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Take(j.Value)));
+      registerIterMessage("takeWhile(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.TakeWhile(l)));
+      registerIterMessage("takeUntil(_)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, l) => i.TakeUntil(l)));
+      registerIterMessage("index(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Index(l)));
+      registerIterMessage("indexes(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Indexes(l)));
+      registerIterMessage("zip(_<Collection>,_<Lambda>)",
          (obj, message) => iteratorFunc<IObject, Lambda>(obj, message, (i, c, l) => i.Zip((ICollection)c, l)));
-      registerMessage("zip(_)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, c) => i.Zip((ICollection)c)));
-      registerMessage("unzip()", (obj, _) => iteratorFunc(obj, i => i.Unzip()));
-      registerMessage("unzip(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Unzip(l)));
-      registerMessage("min".get(), (obj, _) => iteratorFunc(obj, i => i.Min()));
-      registerMessage("min(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Min(l)));
-      registerMessage("max".get(), (obj, _) => iteratorFunc(obj, i => i.Max()));
-      registerMessage("max(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Max(l)));
-      registerMessage("first()", (obj, _) => iteratorFunc(obj, i => i.First()));
-      registerMessage("first".Selector("_<Lambda>"), (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.First(l)));
-      registerMessage("last()", (obj, _) => iteratorFunc(obj, i => i.Last()));
-      registerMessage("last".Selector("_<Lambda>"), (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Last(l)));
-      registerMessage("split(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Split(l)));
-      registerMessage("split(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Split(j.Value)));
-      registerMessage("random()", (obj, _) => iteratorFunc(obj, i => i.Random()));
-      registerMessage("groupBy(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.GroupBy(l)));
-      registerMessage("groupBy(key:_<Lambda>,value:_<Lambda>)",
+      registerIterMessage("zip(_<Collection>)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, c) => i.Zip((ICollection)c)));
+      registerIterMessage("zipl(_<Collection>,_,_,_<Lambda>)",
+         (obj, message) =>
+            iteratorFunc<IObject, IObject, IObject, Lambda>(obj, message, (i, c, lv, rv, l) => i.ZipL((ICollection)c, lv, rv, l)));
+      registerIterMessage("zipl(_<Collection>,_,_)",
+         (obj, message) => iteratorFunc<IObject, IObject, IObject>(obj, message, (i, c, lv, rv) => i.ZipL((ICollection)c, lv, rv)));
+      registerIterMessage("unzip()", (obj, _) => iteratorFunc(obj, i => i.Unzip()));
+      registerIterMessage("unzip(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Unzip(l)));
+      registerIterMessage("min".get(), (obj, _) => iteratorFunc(obj, i => i.Min()));
+      registerIterMessage("min(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Min(l)));
+      registerIterMessage("max".get(), (obj, _) => iteratorFunc(obj, i => i.Max()));
+      registerIterMessage("max(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Max(l)));
+      registerIterMessage("first()", (obj, _) => iteratorFunc(obj, i => i.First()));
+      registerIterMessage("first".Selector("_<Lambda>"), (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.First(l)));
+      registerIterMessage("last()", (obj, _) => iteratorFunc(obj, i => i.Last()));
+      registerIterMessage("last".Selector("_<Lambda>"), (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Last(l)));
+      registerIterMessage("split(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Split(l)));
+      registerIterMessage("split(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Split(j.Value)));
+      registerIterMessage("random()", (obj, _) => iteratorFunc(obj, i => i.Random()));
+      registerIterMessage("groupBy(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.GroupBy(l)));
+      registerIterMessage("groupBy(key:_<Lambda>,value:_<Lambda>)",
          (obj, message) => iteratorFunc<Lambda, Lambda>(obj, message, (i, k, v) => i.GroupBy(k, v)));
-      registerMessage("one(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.One(l)));
-      registerMessage("none(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.None(l)));
-      registerMessage("any(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Any(l)));
-      registerMessage("all(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.All(l)));
-      registerMessage("sum()", (obj, _) => iteratorFunc(obj, i => (IObject)i.Sum()));
-      registerMessage("average()", (obj, _) => iteratorFunc(obj, i => (IObject)i.Average()));
-      registerMessage("product()", (obj, _) => iteratorFunc(obj, i => (IObject)i.Product()));
-      registerMessage("cross(_)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, c) => i.Cross((ICollection)c)));
-      registerMessage("cross(_,_)", (obj, message) => iteratorFunc<IObject, Lambda>(obj, message, (i, c, l) => i.Cross((ICollection)c, l)));
-      registerMessage("by(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.By(j.Value)));
-      registerMessage("/(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.By(j.Value)));
-      registerMessage("window(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Window(j.Value)));
-      registerMessage("//(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Window(j.Value)));
-      registerMessage("unique()", (obj, _) => iteratorFunc(obj, i => i.Unique()));
-      registerMessage("unique(_<Lambda>)", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Unique(l)));
-      registerMessage("span".Selector("_<Lambda>"), (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Span(l)));
-      registerMessage("span".Selector("_<Int>"), (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Span(j.Value)));
-      registerMessage("shuffle()", (obj, _) => iteratorFunc(obj, i => i.Shuffle()));
-      registerMessage("array()", (obj, _) => iteratorFunc(obj, i => i.ToArray()));
-      registerMessage("list()", (obj, _) => iteratorFunc(obj, i => i.ToList()));
-      registerMessage("tuple()", (obj, _) => iteratorFunc(obj, i => i.ToTuple()));
-      registerMessage("dictionary".Selector("key:_<Lambda>", "value:_<Lambda>"),
+      registerIterMessage("one(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.One(l)));
+      registerIterMessage("none(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.None(l)));
+      registerIterMessage("any(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Any(l)));
+      registerIterMessage("all(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.All(l)));
+      registerIterMessage("sum()", (obj, _) => iteratorFunc(obj, i => (IObject)i.Sum()));
+      registerIterMessage("average()", (obj, _) => iteratorFunc(obj, i => (IObject)i.Average()));
+      registerIterMessage("product()", (obj, _) => iteratorFunc(obj, i => (IObject)i.Product()));
+      registerIterMessage("cross(_)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, c) => i.Cross((ICollection)c)));
+      registerIterMessage("cross(_,_)", (obj, message) => iteratorFunc<IObject, Lambda>(obj, message, (i, c, l) => i.Cross((ICollection)c, l)));
+      registerIterMessage("by(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.By(j.Value)));
+      registerIterMessage("/(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.By(j.Value)));
+      registerIterMessage("window(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Window(j.Value)));
+      registerIterMessage("//(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Window(j.Value)));
+      registerIterMessage("unique()", (obj, _) => iteratorFunc(obj, i => i.Unique()));
+      registerIterMessage("unique(_<Lambda>)", (obj, msg) => iteratorFunc<Lambda>(obj, msg, (i, l) => i.Unique(l)));
+      registerIterMessage("span".Selector("_<Lambda>"), (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Span(l)));
+      registerIterMessage("span".Selector("_<Int>"), (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Span(j.Value)));
+      registerIterMessage("shuffle()", (obj, _) => iteratorFunc(obj, i => i.Shuffle()));
+      registerIterMessage("array()", (obj, _) => iteratorFunc(obj, i => i.ToArray()));
+      registerIterMessage("list()", (obj, _) => iteratorFunc(obj, i => i.ToList()));
+      registerIterMessage("tuple()", (obj, _) => iteratorFunc(obj, i => i.ToTuple()));
+      registerIterMessage("dictionary".Selector("key:_<Lambda>", "value:_<Lambda>"),
          (obj, message) => iteratorFunc<Lambda, Lambda>(obj, message, (i, l1, l2) => i.ToDictionary(l1, l2)));
-      registerMessage("dictionary()", (obj, _) => iteratorFunc(obj, i => i.ToDictionary()));
-      registerMessage("each(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Each(l)));
-      registerMessage("rotate(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Rotate(c.Value)));
-      registerMessage("permutations(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Permutations(c.Value)));
-      registerMessage("permutations()", (obj, _) => iteratorFunc(obj, i => i.Permutations()));
-      registerMessage("combinations(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Combinations(c.Value)));
-      registerMessage("combinations()", (obj, _) => iteratorFunc(obj, i => i.Combinations()));
-      registerMessage("flatten()", (obj, _) => iteratorFunc(obj, i => i.Flatten()));
-      registerMessage("copy()", (obj, _) => iteratorFunc(obj, i => i.Copy()));
-      registerMessage("collect()", (obj, _) => iteratorFunc(obj, i => i.Collect()));
-      registerMessage("*(_)", (obj, message) => iteratorFunc<IObject>(obj, message, (i1, i2) => i1.Apply((ICollection)i2)));
-      registerMessage("format(_)", (obj, message) => iteratorFunc<KIndex>(obj, message, (i, index) => index.IndexOf(i.Collection)));
-      registerMessage("replace(_<Lambda>,_<Lambda>)",
+      registerIterMessage("dictionary()", (obj, _) => iteratorFunc(obj, i => i.ToDictionary()));
+      registerIterMessage("each(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Each(l)));
+      registerIterMessage("rotate(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Rotate(c.Value)));
+      registerIterMessage("permutations(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Permutations(c.Value)));
+      registerIterMessage("permutations()", (obj, _) => iteratorFunc(obj, i => i.Permutations()));
+      registerIterMessage("combinations(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Combinations(c.Value)));
+      registerIterMessage("combinations()", (obj, _) => iteratorFunc(obj, i => i.Combinations()));
+      registerIterMessage("flatten()", (obj, _) => iteratorFunc(obj, i => i.Flatten()));
+      registerIterMessage("copy()", (obj, _) => iteratorFunc(obj, i => i.Copy()));
+      registerIterMessage("collect()", (obj, _) => iteratorFunc(obj, i => i.Collect()));
+      registerIterMessage("*(_)", (obj, message) => iteratorFunc<IObject>(obj, message, (i1, i2) => i1.Apply((ICollection)i2)));
+      registerIterMessage("format(_)", (obj, message) => iteratorFunc<KIndex>(obj, message, (i, index) => index.IndexOf(i.Collection)));
+      registerIterMessage("replace(_<Lambda>,_<Lambda>)",
          (obj, message) => iteratorFunc<Lambda, Lambda>(obj, message, (i, l1, l2) => i.Replace(l1, l2)));
-      registerMessage("set()", (obj, _) => iteratorFunc(obj, i => i.ToSet()));
-      registerMessage("shape(_<Int>,_<Int>)",
+      registerIterMessage("set()", (obj, _) => iteratorFunc(obj, i => i.ToSet()));
+      registerIterMessage("shape(_<Int>,_<Int>)",
          (obj, message) => iteratorFunc<Int, Int>(obj, message, (i, j, k) => i.Shape(j.Value, k.Value)));
-      registerMessage("%(_<Tuple>)",
+      registerIterMessage("%(_<Tuple>)",
          (obj, msg) => iteratorFunc<KTuple>(obj, msg, (i, t) => i.Shape(((Int)t.Value[0]).Value, ((Int)t.Value[1]).Value)));
-      registerMessage("shape(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Shape(0, j.Value)));
-      registerMessage("%(_<Int>)", (obj, msg) => iteratorFunc<Int>(obj, msg, (i, cols) => i.Shape(0, cols.Value)));
-      registerMessage("column(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Column(c.Value)));
-      registerMessage("partition(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Partition(l)));
-      registerMessage("pick(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Pick(c.Value)));
-      registerMessage("roll(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Roll(c.Value)));
-      registerMessage("splat(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Splat(c.Value)));
-      registerMessage("chunked(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Chunked(c.Value)));
-      registerMessage("windowed(size:_<Int>,step:_<Int>)",
+      registerIterMessage("shape(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Shape(0, j.Value)));
+      registerIterMessage("%(_<Int>)", (obj, msg) => iteratorFunc<Int>(obj, msg, (i, cols) => i.Shape(0, cols.Value)));
+      registerIterMessage("column(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Column(c.Value)));
+      registerIterMessage("partition(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Partition(l)));
+      registerIterMessage("pick(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Pick(c.Value)));
+      registerIterMessage("roll(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Roll(c.Value)));
+      registerIterMessage("splat(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Splat(c.Value)));
+      registerIterMessage("chunked(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Chunked(c.Value)));
+      registerIterMessage("windowed(size:_<Int>,step:_<Int>)",
          (obj, message) => iteratorFunc<Int, Int>(obj, message, (i, s1, s2) => i.Windowed(s1.Value, s2.Value, true)));
-      registerMessage("windowed(size:_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, s) => i.Windowed(s.Value, 1, true)));
-      registerMessage("windowed(size:_<Int>,step:_<Int>,partial:_<Boolean>)",
+      registerIterMessage("windowed(size:_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, s) => i.Windowed(s.Value, 1, true)));
+      registerIterMessage("windowed(size:_<Int>,step:_<Int>,partial:_<Boolean>)",
          (obj, message) => iteratorFunc<Int, Int, KBoolean>(obj, message, (i, s1, s2, p) => i.Windowed(s1.Value, s2.Value, p.Value)));
-      registerMessage("repeated()", (obj, _) => iteratorFunc(obj, i => i.Repeated()));
-      registerMessage("accumulate(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Accumulate(l)));
-      registerMessage("accumulate(init:_,_<Lambda>)", (obj, message) => iteratorFunc<IObject, Lambda>(obj, message, (i, v, l) => i.Accumulate(v, l)));
+      registerIterMessage("repeated()", (obj, _) => iteratorFunc(obj, i => i.Repeated()));
+      registerIterMessage("accumulate(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Accumulate(l)));
+      registerIterMessage("accumulate(init:_,_<Lambda>)", (obj, message) => iteratorFunc<IObject, Lambda>(obj, message, (i, v, l) => i.Accumulate(v, l)));
    }
 
    public virtual bool MatchCompatible(BaseClass otherClass) => Name == otherClass.Name;

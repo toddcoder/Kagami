@@ -408,14 +408,67 @@ public class Iterator : IObject, IIterator
 
    public IObject Zip(ICollection collection)
    {
-      var rightList = collection.GetIterator(false).List().ToList();
-      return collectionClass.Revert(List().ToList().Zip(rightList, (x, y) => collectionClass.Revert(new List<IObject> { x, y })));
+      var rightList = collection.GetIterator(false).List();
+      return collectionClass.Revert(List().Zip(rightList, (x, y) => collectionClass.Revert(new List<IObject> { x, y })));
    }
 
    public IObject Zip(ICollection collection, Lambda lambda)
    {
-      var rightList = collection.GetIterator(false).List().ToList();
-      return collectionClass.Revert(List().ToList().Zip(rightList, (x, y) => lambda.Invoke(x, y)));
+      var rightList = collection.GetIterator(false).List();
+      return collectionClass.Revert(List().Zip(rightList, (x, y) => lambda.Invoke(x, y)));
+   }
+
+   public IObject ZipL(ICollection collection, IObject leftDefaultValue, IObject rightDefaultValue)
+   {
+      return collectionClass.Revert(zipUnequal(List(), collection.GetIterator(false).List())
+         .Select(t => collectionClass.Revert(new List<IObject> { t.left, t.right })));
+
+      IEnumerable<(IObject left, IObject right)> zipUnequal(IEnumerable<IObject> left, IEnumerable<IObject> right)
+      {
+         using var leftEnumerator = left.GetEnumerator();
+         using var rightEnumerator = right.GetEnumerator();
+         while (true)
+         {
+            var leftMoveNext = leftEnumerator.MoveNext();
+            var rightMoveNext = rightEnumerator.MoveNext();
+            if (leftMoveNext | rightMoveNext)
+            {
+               var leftValue = leftMoveNext ? leftEnumerator.Current : leftDefaultValue;
+               var rightValue = rightMoveNext ? rightEnumerator.Current : rightDefaultValue;
+               yield return (leftValue, rightValue);
+            }
+            else
+            {
+               break;
+            }
+         }
+      }
+   }
+
+   public IObject ZipL(ICollection collection, IObject leftDefaultValue, IObject rightDefaultValue, Lambda lambda)
+   {
+      return collectionClass.Revert(zipUnequal(List(), collection.GetIterator(false).List()));
+
+      IEnumerable<IObject> zipUnequal(IEnumerable<IObject> left, IEnumerable<IObject> right)
+      {
+         using var leftEnumerator = left.GetEnumerator();
+         using var rightEnumerator = right.GetEnumerator();
+         while (true)
+         {
+            var leftMoveNext = leftEnumerator.MoveNext();
+            var rightMoveNext = rightEnumerator.MoveNext();
+            if (leftMoveNext | rightMoveNext)
+            {
+               var leftValue = leftMoveNext ? leftEnumerator.Current : leftDefaultValue;
+               var rightValue = rightMoveNext ? rightEnumerator.Current : rightDefaultValue;
+               yield return lambda.Invoke(leftValue, rightValue);
+            }
+            else
+            {
+               break;
+            }
+         }
+      }
    }
 
    public IObject Unzip()

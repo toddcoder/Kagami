@@ -66,7 +66,7 @@ public class StringClass : BaseClass, ICollectionClass
       messages["float()"] = (obj, _) => function<KString>(obj, s => s.Float());
       messages["byte()"] = (obj, _) => function<KString>(obj, s => s.Byte());
       messages["long()"] = (obj, _) => function<KString>(obj, s => s.Long());
-      messages["-"] = (obj, msg) => function<KString, KString>(obj, msg, (s1, s2) => s1.Subtract(s2.Value));
+      messages["-(_)"] = (obj, msg) => function<KString, KString>(obj, msg, (s1, s2) => s1.Subtract(s2.Value));
       messages["get()"] = (obj, _) => function<KString>(obj, s => s.Get());
       messages["set()"] = (obj, _) => function<KString>(obj, s => s.Set());
       messages["swapCase()"] = (obj, _) => function<KString>(obj, s => s.SwapCase());
