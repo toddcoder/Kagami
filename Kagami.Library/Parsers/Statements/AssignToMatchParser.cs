@@ -12,8 +12,6 @@ public partial class AssignToMatchParser : EndingInExpressionParser
 {
    protected Symbol comparisand = new EmptySymbol();
 
-   //public override string Pattern => "^ /'set' /(/s+)";
-
    [GeneratedRegex(@"^(set)(\s+)")]
    public override partial Regex Regex();
 

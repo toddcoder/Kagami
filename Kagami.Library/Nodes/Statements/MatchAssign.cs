@@ -23,13 +23,7 @@ public class MatchAssign : Statement
 
    public override void Generate(OperationsBuilder builder)
    {
-      /*
-      builder.UniqueString();
-      builder.Dup();
-      */
       expression.Generate(builder);
-      /*builder.PopNewField(false);
-      builder.PopGetField();*/
       comparisand.Generate(builder);
       builder.Match();
       if (not)
@@ -78,5 +72,5 @@ public class MatchAssign : Statement
       }
    }
 
-   public override string ToString() => $"when {comparisand} = {expression}" + (_block.Map(b => $" else {{{b}}}") | "");
+   public override string ToString() => $"set {comparisand} = {expression}" + (_block.Map(b => $" else {{{b}}}") | "");
 }

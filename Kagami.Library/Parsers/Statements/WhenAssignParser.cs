@@ -9,7 +9,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class WhenAssignParser : StatementParser
 {
-   [GeneratedRegex(@"^(\s*)(when)\b")]
+   [GeneratedRegex(@"^(\s*)(set)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
