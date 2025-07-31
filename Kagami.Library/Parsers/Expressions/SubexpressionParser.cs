@@ -23,6 +23,7 @@ public partial class SubexpressionParser : SymbolParser
       Maybe<int> _closeIndex = nil;
 
       var flags = builder.Flags;
+      builder.Flags[ExpressionFlags.OmitComma] = false;
       var _expression = getExpression(state, @"(\))", flags, (_, i) =>
       {
          switch (i)
@@ -44,6 +45,8 @@ public partial class SubexpressionParser : SymbolParser
 
          builder.Add(new SubexpressionSymbol(expression));
          state.CommitTransaction();
+
+         builder.Flags = flags;
 
          return unit;
       }

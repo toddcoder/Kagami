@@ -1,0 +1,8 @@
+﻿open sys
+
+func fullNameToString(x) {
+	set (first, second) = x
+	return first + " " + second
+}
+
+fullNameToString(("Todd", "Bennett"))
