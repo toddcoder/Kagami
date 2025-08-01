@@ -1,8 +1,8 @@
 ﻿using Core.Monads;
 using Kagami.Library.Nodes.Symbols;
 using System.Text.RegularExpressions;
-using Kagami.Library.Nodes;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.Nodes.NodeFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
@@ -37,7 +37,7 @@ public partial class PendingInvokeParser : SymbolParser
                var _result = state.BeginBlock();
                if (_result)
                {
-                  var tempObjectField = NodeFunctions.newLabel("object");
+                  var tempObjectField = newLabel("object");
                   var outerBuilder = new ExpressionBuilder(ExpressionFlags.Standard);
                   var setPropertyParser = new SetPropertyParser(builder, tempObjectField, outerBuilder);
                   while (state.More)
