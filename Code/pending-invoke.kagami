@@ -1,0 +1,5 @@
+﻿open sys
+
+func square(x, y) => x * x + y
+
+println(100 |> ^square(500))

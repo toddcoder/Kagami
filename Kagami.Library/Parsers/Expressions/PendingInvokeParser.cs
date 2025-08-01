@@ -30,6 +30,7 @@ public partial class PendingInvokeParser : SymbolParser
          var _argumentsPlusLambda = getArgumentsPlusLambda(state, builder.Flags);
          if (_argumentsPlusLambda is (true, var (arguments, possibleLambda)))
          {
+            arguments = [new Expression(new FieldSymbol("__$0")), .. arguments];
             if (state.BlockFollows())
             {
                state.Scan("^(:)", Color.Structure);
