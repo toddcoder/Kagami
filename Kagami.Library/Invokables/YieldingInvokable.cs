@@ -20,6 +20,8 @@ public class YieldingInvokable : IInvokable, ICollection, IObject
       Image = image;
    }
 
+   public bool Lazy { get; set; }
+
    public Selector Selector => selector;
 
    public int Index { get; set; } = -1;
@@ -70,7 +72,6 @@ public class YieldingInvokable : IInvokable, ICollection, IObject
          switch (result)
          {
             case KNil:
-               //Machine.Current.Value.Operations.Advance(-1);
                return nil;
             case YieldReturn yieldReturn:
                Address = yieldReturn.Address;

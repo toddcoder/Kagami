@@ -32,7 +32,7 @@ public class Invoke : OneOperandOperation
    protected static void InvokeYieldingInvokable(Machine machine, YieldingInvokable invokable, Arguments arguments)
    {
       invokable.Arguments = arguments;
-      var iterator = invokable.GetIterator(false);
+      var iterator = invokable.GetIterator(true);
       machine.Push((IObject)iterator);
    }
 
