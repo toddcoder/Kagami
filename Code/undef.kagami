@@ -1,0 +1,12 @@
+﻿open sys
+
+func say(from String, msg String, device String = undef) String {
+	var result = $"(from) says (msg)"
+	if device != undef {
+		result = $"(result) with a (device)"
+	}
+	return result
+}
+
+println(say("Bob", "Howdy"))
+println(say("Bob", "Howdy", "smoke signal"))

@@ -168,7 +168,7 @@ public static class ObjectFunctions
             }
             default:
             {
-               if (head is Some some && !some.Value.IsEqualTo(match0))
+               if (head is Some some && !some.Value.Match(match0, bindings))
                {
                   return false;
                }
@@ -218,7 +218,7 @@ public static class ObjectFunctions
             }
             default:
             {
-               if (head.IsNotEmpty.Value && !head.IsEqualTo(match0))
+               if (head.IsNotEmpty.Value && !head.Match(match0, bindings))
                {
                   return false;
                }

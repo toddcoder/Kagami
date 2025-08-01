@@ -14,6 +14,7 @@ using Core.Strings;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.CommonFunctions;
 using static Core.Monads.MonadFunctions;
+using DefineNewField = Kagami.Library.Nodes.Statements.DefineNewField;
 
 namespace Kagami.Library.Parsers.Statements;
 
@@ -162,6 +163,35 @@ public class ClassBuilder
                   statements.Add(statement);
                }
 
+               break;
+            }
+            case DefineNewField defineNewField:
+            {
+               var (mutable, fieldName) = defineNewField;
+               var function = Function.Getter(fieldName);
+               statements.Add(function);
+               var (functionName, _, block, _, invokable, _) = function;
+               if (!isPrivate(fieldName) && !userClass.RegisterMethod(functionName, new Lambda(invokable, false), true))
+               {
+                  throw needsOverride(functionName);
+               }
+
+               functions.Add((invokable, block, true));
+
+               if (mutable)
+               {
+                  function = Function.Setter(fieldName);
+                  statements.Add(function);
+                  (functionName, _, block, _, invokable, _) = function;
+                  if (!isPrivate(fieldName) && !userClass.RegisterMethod(functionName, new Lambda(invokable, false), true))
+                  {
+                     throw needsOverride(functionName);
+                  }
+
+                  functions.Add((invokable, block, true));
+               }
+
+               statements.Add(statement);
                break;
             }
             case Function function when standard:

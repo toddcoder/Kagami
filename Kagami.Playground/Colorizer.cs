@@ -102,7 +102,7 @@ public class Colorizer
       Library.Parsers.Color.Whitespace => Color.Black,
       Library.Parsers.Color.Comment => Color.FromArgb(128, 128, 128),
       Library.Parsers.Color.Message => Color.Teal,
-      Library.Parsers.Color.Format => Color.Violet,
+      Library.Parsers.Color.Format => Color.Magenta,
       Library.Parsers.Color.Date => Color.Olive,
       Library.Parsers.Color.Collection => Color.Purple,
       Library.Parsers.Color.CollectionPart => Color.Purple,

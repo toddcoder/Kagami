@@ -296,6 +296,7 @@ public abstract class BaseClass
       registerMessage("assign(_,_)", (obj, message) => function<IObject, IObject, IObject>(obj, message, assignToMutable));
       registerMessage("|<<(_)", (obj, message) => function<IObject, IObject>(obj, message, (o, v) => ((IMutableCollection)o).Prepend(v)));
       registerMessage("prepend(_)", (obj, message) => function<IObject, IObject>(obj, message, (o, v) => ((IMutableCollection)o).Prepend(v)));
+      registerMessage("clear()", (obj, _) => function<IObject>(obj, o => ((IMutableCollection)o).Clear()));
    }
 
    protected void loadIteratorMessages()
@@ -470,12 +471,13 @@ public abstract class BaseClass
          (obj, message) => iteratorFunc<Int, Int, KBoolean>(obj, message, (i, s1, s2, p) => i.Windowed(s1.Value, s2.Value, p.Value)));
       registerIterMessage("repeated()", (obj, _) => iteratorFunc(obj, i => i.Repeated()));
       registerIterMessage("accumulate(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Accumulate(l)));
-      registerIterMessage("accumulate(init:_,_<Lambda>)", (obj, message) => iteratorFunc<IObject, Lambda>(obj, message, (i, v, l) => i.Accumulate(v, l)));
+      registerIterMessage("accumulate(init:_,_<Lambda>)",
+         (obj, message) => iteratorFunc<IObject, Lambda>(obj, message, (i, v, l) => i.Accumulate(v, l)));
    }
 
    public virtual bool MatchCompatible(BaseClass otherClass) => Name == otherClass.Name;
 
-   public virtual bool AssignCompatible(BaseClass otherClass) => otherClass.Name == "Placeholder" || MatchCompatible(otherClass);
+   public virtual bool AssignCompatible(BaseClass otherClass) => otherClass.Name is "Placeholder" or "Undefined" || MatchCompatible(otherClass);
 
    protected void rangeMessages()
    {

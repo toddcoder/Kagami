@@ -583,6 +583,12 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       return this;
    }
 
+   public IObject Clear()
+   {
+      list.Clear();
+      return this;
+   }
+
    public KArray PadLeft(int count, IObject value)
    {
       var copy = (KArray)Copy();

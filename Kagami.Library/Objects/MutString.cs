@@ -255,6 +255,12 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
       return this;
    }
 
+   public IObject Clear()
+   {
+      mutable.Clear();
+      return this;
+   }
+
    public MutString Fill(char ch, int count)
    {
       mutable.Clear();

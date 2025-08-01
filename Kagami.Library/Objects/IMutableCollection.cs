@@ -19,4 +19,6 @@ public interface IMutableCollection : ICollection
    IObject Assign(SkipTake skipTake, IEnumerable<IObject> values);
 
    IObject Prepend(IObject obj);
+
+   IObject Clear();
 }
