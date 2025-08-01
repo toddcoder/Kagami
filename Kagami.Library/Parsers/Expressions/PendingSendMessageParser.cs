@@ -16,7 +16,7 @@ public partial class PendingSendMessageParser : SymbolParser
    {
    }
 
-   [GeneratedRegex($@"^(\s*)(_)(\.)({REGEX_FUNCTION_NAME})(\()?")]
+   [GeneratedRegex($@"^(\s*)(\^)(\.)({REGEX_FUNCTION_NAME})(\()?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -43,11 +43,11 @@ public partial class PendingSendMessageParser : SymbolParser
 
       if (parseArguments)
       {
-         state.Colorize(tokens, Color.Whitespace, Color.Message, Color.Message, Color.Message, Color.OpenParenthesis);
+         state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Message, Color.Message, Color.OpenParenthesis);
       }
       else
       {
-         state.Colorize(tokens, Color.Whitespace, Color.Message, Color.Message, Color.Message);
+         state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Message, Color.Message);
       }
 
       LazyOptional<(Expression[], Maybe<LambdaSymbol>)> _argumentsPlusLambda = nil;

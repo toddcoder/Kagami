@@ -28,6 +28,7 @@ public class ValuesParser : MultiParser
          yield return new DictionaryOrSetParser(builder);
          yield return new CycleParser(builder);
          yield return new ListParser(builder);
+         yield return new PendingInvokeParser(builder);
          yield return new PendingSendMessageParser(builder);
          yield return new AnyParser(builder);
          yield return new FloatParser(builder);
