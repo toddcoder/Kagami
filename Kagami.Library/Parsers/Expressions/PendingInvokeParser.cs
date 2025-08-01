@@ -13,12 +13,13 @@ public partial class PendingInvokeParser : SymbolParser
    {
    }
 
-   [GeneratedRegex($@"^(\s*)(\^)({REGEX_FUNCTION_NAME})(\()")]
+   [GeneratedRegex($@"^(\s*)(\^)({REGEX_FUNCTION_NAME})(\()?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
       var functionName = tokens[3].Text;
+      var hasParameter = tokens[4].Text == "(";
       if (functionName == @"\/")
       {
          return nil;
@@ -28,73 +29,65 @@ public partial class PendingInvokeParser : SymbolParser
          state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Invokable, Color.OpenParenthesis);
 
          var _argumentsPlusLambda = getArgumentsPlusLambda(state, builder.Flags);
-         if (_argumentsPlusLambda is (true, var (arguments, possibleLambda)))
+         var (arguments, possibleLambda) = _argumentsPlusLambda.DefaultTo(_ => ([], nil));
+         if (hasParameter)
          {
             arguments = [new Expression(new FieldSymbol("__$0")), .. arguments];
-            if (state.BlockFollows())
+         }
+         if (state.BlockFollows())
+         {
+            state.Scan("^(:)", Color.Structure);
+            var _result = state.BeginBlock();
+            if (_result)
             {
-               state.Scan("^(:)", Color.Structure);
-               var _result = state.BeginBlock();
-               if (_result)
+               var tempObjectField = newLabel("object");
+               var outerBuilder = new ExpressionBuilder(ExpressionFlags.Standard);
+               var setPropertyParser = new SetPropertyParser(builder, tempObjectField, outerBuilder);
+               while (state.More)
                {
-                  var tempObjectField = newLabel("object");
-                  var outerBuilder = new ExpressionBuilder(ExpressionFlags.Standard);
-                  var setPropertyParser = new SetPropertyParser(builder, tempObjectField, outerBuilder);
-                  while (state.More)
+                  var _property = setPropertyParser.Scan(state);
+                  if (_property)
                   {
-                     var _property = setPropertyParser.Scan(state);
-                     if (_property)
-                     {
-                     }
-                     else if (_property.Exception is (true, var exception))
-                     {
-                        return exception;
-                     }
-                     else
-                     {
-                        break;
-                     }
                   }
-
-                  _result = state.EndBlock();
-                  if (!_result)
+                  else if (_property.Exception is (true, var exception))
                   {
-                     return _result.Exception;
-                  }
-
-                  var _outerExpression = outerBuilder.ToExpression();
-                  if (_outerExpression is (true, var outerExpression))
-                  {
-                     var invokeSymbol = new NewObjectSymbol(tempObjectField, functionName, outerExpression);
-                     builder.Add(new PendingInvokeSymbol(invokeSymbol));
+                     return exception;
                   }
                   else
                   {
-                     return _outerExpression.Exception;
+                     break;
                   }
                }
-               else
+
+               _result = state.EndBlock();
+               if (!_result)
                {
                   return _result.Exception;
                }
-            }
-            else if (state.Macro(functionName) is (true, var function))
-            {
-               var invokeSymbol = new MacroInvokeSymbol(function, arguments);
-               builder.Add(new PendingInvokeSymbol(invokeSymbol));
+
+               var _outerExpression = outerBuilder.ToExpression();
+               if (_outerExpression is (true, var outerExpression))
+               {
+                  var invokeSymbol = new NewObjectSymbol(tempObjectField, functionName, outerExpression);
+                  builder.Add(new PendingInvokeSymbol(invokeSymbol, hasParameter));
+               }
+               else
+               {
+                  return _outerExpression.Exception;
+               }
             }
             else
             {
-               var invokeSymbol = new InvokeSymbol(functionName, arguments, possibleLambda, builder.Flags[ExpressionFlags.Comparisand]);
-               builder.Add(new PendingInvokeSymbol(invokeSymbol));
+               return _result.Exception;
             }
-
-            return unit;
          }
          else
          {
-            return _argumentsPlusLambda.Exception;
+            var invokeSymbol = new InvokeSymbol(functionName, arguments, possibleLambda, builder.Flags[ExpressionFlags.Comparisand]);
+            builder.Add(new PendingInvokeSymbol(invokeSymbol, hasParameter));
          }
+
+         return unit;
       }
    }
 }
