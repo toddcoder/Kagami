@@ -15,7 +15,7 @@ public partial class WhateverLambdaParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(\?\()")]
+   [GeneratedRegex(@"^(\s*)(\^\()")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
