@@ -47,23 +47,16 @@ public class TupleClass : BaseClass, ICollectionClass
 
    public override IObject DynamicInvoke(IObject obj, Message message)
    {
-      iteratorMessages();
-      if (base.DynamicRespondsTo(message.Selector))
+      var tuple = (KTuple)obj;
+      var name = message.Selector.Name.unget();
+      if (tuple.ContainsName(name))
       {
-         return dynamicInvoke(obj, message);
+         return tuple[name];
       }
       else
       {
-         var tuple = (KTuple)obj;
-         var name = message.Selector.Name.unget();
-         if (tuple.ContainsName(name))
-         {
-            return tuple[name];
-         }
-         else
-         {
-            throw messageNotFound(this, name);
-         }
+         loadIteratorMessages();
+         return base.DynamicInvoke(obj, message);
       }
    }
 

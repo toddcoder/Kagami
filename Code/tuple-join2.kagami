@@ -1,0 +1,4 @@
+﻿open sys
+
+println(('a', 'b', 'c').join(", "))
+println(('a', 'b', 'c').join(", "))

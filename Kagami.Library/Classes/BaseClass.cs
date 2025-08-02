@@ -147,7 +147,7 @@ public abstract class BaseClass
 
    protected IObject invokeMessage(IObject obj, Message message)
    {
-      var selector = message.Selector;
+     var selector = message.Selector;
 
       if (RespondsTo(selector))
       {
