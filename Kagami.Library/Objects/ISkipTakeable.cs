@@ -1,7 +1,6 @@
-﻿namespace Kagami.Library.Objects
+﻿namespace Kagami.Library.Objects;
+
+public interface ISkipTakeable
 {
-   public interface ISkipTakeable
-   {
-      IObject this[SkipTake skipTake] { get; }
-   }
+   IObject this[SkipTake skipTake] { get; }
 }

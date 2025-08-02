@@ -18,7 +18,7 @@ public abstract class MultiParser : PatternlessParser
          }
          else if (_matched.Exception is (true, var exception))
          {
-            return exception;
+            return fail($"{parser.GetType().Name}: {exception.Message}");
          }
       }
 

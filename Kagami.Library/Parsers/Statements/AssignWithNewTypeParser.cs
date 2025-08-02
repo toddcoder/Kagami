@@ -10,7 +10,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class AssignWithNewTypeParser : StatementParser
 {
-   [GeneratedRegex($@"^(\s*)({REGEX_FIELD})(\s*)({REGEX_CLASS_GETTING})(\s*)(=)")]
+   [GeneratedRegex($@"^(\s*)({REGEX_FIELD})(\s*)({REGEX_CLASS_GETTING})(\s*)(=)(?![=>])")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)

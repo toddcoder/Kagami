@@ -65,6 +65,8 @@ public class DictionaryClass : BaseClass, ICollectionClass
       messages["invert()"] = (obj, _) => function<Dictionary>(obj, d => d.Invert());
       messages["~(_)"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, o) => d.Concatenate((ICollection)o));
       messages["memo(_)"] = (obj, msg) => function<Dictionary, Lambda>(obj, msg, (d, l) => d.Memo(l));
+      messages["updateIfNil(key:_,value:_)"] =
+         (obj, msg) => function<Dictionary, IObject, IObject>(obj, msg, (d, k, v) => d.UpdateIfNil(k, v));
    }
 
    protected static IObject getKeyed(Dictionary dictionary, IObject key) => key switch

@@ -359,6 +359,7 @@ public class Dictionary : IObject, IMutableCollection
       {
          hash[key] = value;
       }
+
       return new Dictionary(hash);
    }
 
@@ -574,6 +575,16 @@ public class Dictionary : IObject, IMutableCollection
       _defaultLambda = lambda;
       DefaultValue = nil;
       Caching = true;
+
+      return this;
+   }
+
+   public Dictionary UpdateIfNil(IObject key, IObject value)
+   {
+      if (!dictionary.ContainsKey(key))
+      {
+         dictionary[key] = value;
+      }
 
       return this;
    }
