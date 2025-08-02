@@ -47,9 +47,10 @@ public class TupleClass : BaseClass, ICollectionClass
 
    public override IObject DynamicInvoke(IObject obj, Message message)
    {
+      iteratorMessages();
       if (base.DynamicRespondsTo(message.Selector))
       {
-         return base.DynamicInvoke(obj, message);
+         return dynamicInvoke(obj, message);
       }
       else
       {
