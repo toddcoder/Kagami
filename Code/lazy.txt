@@ -1,0 +1,4 @@
+Created AsNeeded
+Creating Heavy with 10
+Creating Heavy with 1000
+object4 Heavy(size = 1000) | Heavy
