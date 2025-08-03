@@ -1,0 +1,15 @@
+﻿open sys
+
+class Heavy(var size = 10) {
+	println($"Creating Heavy with (size)")
+}
+
+class AsNeeded(var value Int) {
+	var heavy1 = lazy Heavy()
+	var heavy2 = lazy Heavy(value)
+	println("Created AsNeeded")
+}
+
+var asNeeded = AsNeeded(1000)
+asNeeded.heavy1
+asNeeded.heavy2
