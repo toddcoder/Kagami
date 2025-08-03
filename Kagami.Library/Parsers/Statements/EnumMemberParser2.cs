@@ -49,6 +49,27 @@ public partial class EnumMemberParser2(string enumClassName, Maybe<IObject> _pre
 
       Maybe<IObject> _ordinal = nil;
 
+      var _ordinalScan =
+         from equal in state.Scan(@"^(\s*)(=)", Color.Whitespace, Color.Structure)
+         from value in getExpression(state, ExpressionFlags.Standard)
+         select value;
+      if (_ordinalScan is (true, var expression))
+      {
+         var firstSymbol = expression.Symbols[0];
+         if (firstSymbol is IConstant { Object: IRangeItem rangeItem })
+         {
+            _ordinal = ((IObject)rangeItem).Some();
+         }
+         else
+         {
+            return fail("Supplied ordinal isn't a range item");
+         }
+      }
+      else if (_ordinalScan.Exception is (true, var exception))
+      {
+         return exception;
+      }
+
       if (_previousOrdinal is (true, var previousOrdinal))
       {
          if (previousOrdinal is IRangeItem rangeItem)
@@ -58,29 +79,6 @@ public partial class EnumMemberParser2(string enumClassName, Maybe<IObject> _pre
          else
          {
             return fail($"{previousOrdinal.Image} must be a range item");
-         }
-      }
-      else
-      {
-         var _ordinalScan =
-            from equal in state.Scan(@"^(\s*)(=)", Color.Whitespace, Color.Structure)
-            from value in getExpression(state, ExpressionFlags.Standard)
-            select value;
-         if (_ordinalScan is (true, var expression))
-         {
-            var firstSymbol = expression.Symbols[0];
-            if (firstSymbol is IConstant { Object: IRangeItem rangeItem })
-            {
-               _ordinal = ((IObject)rangeItem).Some();
-            }
-            else
-            {
-               return fail("Supplied ordinal isn't a range item");
-            }
-         }
-         else if (_ordinalScan.Exception is (true, var exception))
-         {
-            return exception;
          }
       }
 
