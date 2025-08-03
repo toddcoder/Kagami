@@ -119,7 +119,7 @@ public class Frame
             }
             else
             {
-               var tuple = new KTuple([.. arguments]);
+               var array = new KArray([.. arguments]);
 
                if (fields.ContainsKey(parameter.Name))
                {
@@ -133,7 +133,7 @@ public class Frame
                   throw incompatibleClasses(lastValue, typeConstraint.AsString);
                }
 
-               fields.Assign(parameter.Name, tuple, true).Force();
+               fields.Assign(parameter.Name, array, true).Force();
             }
 
             return;
@@ -167,14 +167,14 @@ public class Frame
 
          if (variadic)
          {
-            List<IObject> tupleList = [lastValue];
+            List<IObject> list = [.. getValueAsEnumerable(lastValue)];
             for (var i = length; i < arguments.Length; i++)
             {
-               tupleList.Add(arguments[i]);
+               list.AddRange(getValueAsEnumerable(arguments[i]));
             }
 
-            var tuple = new KTuple([.. tupleList]);
-            fields.Assign(lastName, tuple, true).Force();
+            var array = new KArray([.. list]);
+            fields.Assign(lastName, array, true).Force();
          }
          else if (length < parameters.Length)
          {
@@ -213,7 +213,7 @@ public class Frame
                }
                else if (parameter.Variadic)
                {
-                  value = KTuple.Empty;
+                  value = KArray.Empty;
                   fields.Assign(parameter.Name, value, true);
                }
                else
@@ -231,17 +231,35 @@ public class Frame
          }
          else if (length < arguments.Length)
          {
-            var tupleList = new List<IObject> { lastValue };
+            List<IObject> list = [.. getValueAsEnumerable(lastValue)];
             for (var i = length; i < arguments.Length; i++)
             {
-               tupleList.Add(arguments[i]);
+               list.AddRange(getValueAsEnumerable(arguments[i]));
             }
 
-            var tuple = new KTuple(tupleList.ToArray());
-            fields.Assign(lastName, tuple, true).Force();
+            var array = new KArray(list);
+            fields.Assign(lastName, array, true).Force();
          }
 
          parametersSet = true;
+      }
+
+      return;
+
+      IEnumerable<IObject> getValueAsEnumerable(IObject value)
+      {
+         if (value is ICollection collection)
+         {
+            var iterator = collection.GetIterator(false);
+            foreach (var item in iterator.List())
+            {
+               yield return item;
+            }
+         }
+         else
+         {
+            yield return value;
+         }
       }
    }
 

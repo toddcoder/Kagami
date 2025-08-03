@@ -1,0 +1,14 @@
+﻿open sys
+
+enum Methodologies {
+	when Evo = 5
+	when Xp = 21
+	when Scrum = 30
+	func iterationDetails() {
+		println($"(self) recommends (self.ordinal)")
+	}
+}
+
+for value in Methodologies.values {
+	value.iterationDetails()
+}
