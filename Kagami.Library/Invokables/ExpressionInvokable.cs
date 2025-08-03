@@ -19,5 +19,5 @@ public class ExpressionInvokable : IInvokable
 
    public bool Constructing => false;
 
-   public bool RequiresFunctionFrame => false;
+   public bool RequiresFunctionFrame => true;
 }

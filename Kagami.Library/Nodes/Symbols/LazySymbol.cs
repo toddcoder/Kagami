@@ -12,11 +12,12 @@ public class LazySymbol : Symbol, IHasExpression
 
    public override void Generate(OperationsBuilder builder)
    {
-      var invokable = new ExpressionInvokable(expression.ToString());
+      var image = expression.ToString();
+      var invokable = new ExpressionInvokable(image);
       var _index = builder.RegisterInvokable(invokable, expression, false);
       if (_index)
       {
-         builder.PushObject(new Lazy(invokable));
+         builder.PushObject(new Lazy(invokable, image));
       }
       else
       {

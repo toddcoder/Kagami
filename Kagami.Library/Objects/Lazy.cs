@@ -1,8 +1,6 @@
 ﻿using Kagami.Library.Invokables;
 using Kagami.Library.Runtime;
 using Core.Collections;
-using Core.Monads;
-using Core.Monads.Lazy;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Objects;
@@ -10,47 +8,25 @@ namespace Kagami.Library.Objects;
 public class Lazy : IObject
 {
    protected IInvokable invokable;
-   protected Maybe<IObject> _value;
+   protected string image;
 
-   public Lazy(IInvokable invokable)
+   public Lazy(IInvokable invokable, string image)
    {
       this.invokable = invokable;
-      _value = nil;
+      this.image = image;
    }
 
-   protected IObject getValue()
-   {
-      LazyOptional<IObject> _result = nil;
-      if (_value is (true, var value))
-      {
-         return value;
-      }
-      else if (_result.ValueOf(Machine.Current.Value.Invoke(invokable, Arguments.Empty, nil)) is (true, var result))
-      {
-         _value = result.Some();
-         return result;
-      }
-      else if (_result.Exception is (true, var exception))
-      {
-         throw exception;
-      }
-      else
-      {
-         throw fail("Value could not be resolved");
-      }
-   }
+   public IObject Value => Machine.Current.Value.Invoke(invokable, Arguments.Empty, nil).Force();
 
-   public IObject Value => getValue();
+   public string ClassName => "Lazy";
 
-   public string ClassName => getValue().ClassName;
+   public string AsString => image;
 
-   public string AsString => getValue().AsString;
+   public string Image => image;
 
-   public string Image => getValue().Image;
+   public int Hash => image.GetHashCode();
 
-   public int Hash => getValue().Hash;
-
-   public bool IsEqualTo(IObject obj) => getValue().IsEqualTo(obj);
+   public bool IsEqualTo(IObject obj) => image == obj.Image;
 
    public bool Match(IObject comparisand, Hash<string, IObject> bindings)
    {
@@ -61,11 +37,11 @@ public class Lazy : IObject
       }
       else
       {
-         return getValue().Match(comparisand, bindings);
+         return false;
       }
    }
 
-   public bool IsTrue => getValue().IsTrue;
+   public bool IsTrue => false;
 
    public Guid Id { get; init; } = Guid.NewGuid();
 }
