@@ -192,4 +192,6 @@ public class UserClass : BaseClass
          return false;
       }
    }
+
+   public Set<Selector> Signatures => signatures;
 }

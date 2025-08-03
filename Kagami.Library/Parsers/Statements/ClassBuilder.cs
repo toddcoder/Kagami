@@ -30,6 +30,7 @@ public class ClassBuilder
    protected List<(IInvokable, Block, bool)> functions = [];
    protected UserClass userClass = new("", "");
    protected Set<Selector> requiredFunctions = [];
+   protected StringHash<Expression> delegateConstructors = [];
 
    public ClassBuilder(string className, Parameters parameters, string parentClassName, Expression[] parentArguments,
       bool initialize, Block constructorBlock)
@@ -63,6 +64,18 @@ public class ClassBuilder
    public UserClass UserClass => userClass;
 
    public Statement[] Statements { get; set; } = [];
+
+   public void RegisterDelegate(string deleteName, Expression delegateConstructor)
+   {
+      if (delegateConstructors.ContainsKey(deleteName))
+      {
+         throw fail($"Delegate {deleteName} already exists");
+      }
+      else
+      {
+         delegateConstructors[deleteName] = delegateConstructor;
+      }
+   }
 
    protected static bool isPrivate(string identifier) => identifier.IsMatch("^ '_' -(> '_$')");
 
@@ -300,6 +313,14 @@ public class ClassBuilder
          {
             throw _index.Exception;
          }
+      }
+
+      foreach (var (delegateName, constructor) in delegateConstructors)
+      {
+         var fieldName = $"__${delegateName}";
+         builder.NewField(fieldName, false, false);
+         constructor.Generate(builder);
+         builder.AssignField(fieldName, false);
       }
    }
 
