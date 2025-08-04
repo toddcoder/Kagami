@@ -1,6 +1,7 @@
 ﻿using Kagami.Library.Invokables;
 using Kagami.Library.Runtime;
 using Core.Collections;
+using Core.Enumerables;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
@@ -131,6 +132,34 @@ public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields
    }
 
    public Int ParameterCount => invokable.Parameters.Length;
+
+   public KTuple GetParameters()
+   {
+      List<NameValue> list = [];
+      foreach (var parameter in invokable.Parameters)
+      {
+         var mutable = (KBoolean)parameter.Mutable;
+         var noCapturing = (KBoolean)parameter.NoCapturing;
+         var _type = parameter.TypeConstraint.Map(t => t.Comparisands.Select(c => c.Name).ToString("|"));
+         var _defaultValue = parameter.DefaultValue.Map(dv => dv.Image);
+         var variadic = (KBoolean)parameter.Variadic;
+
+         List<NameValue> innerList = [new("mutable", mutable), new("nocap", noCapturing)];
+         if (_type is (true, var type))
+         {
+            innerList.Add(new NameValue("type", (KString)type));
+         }
+         if (_defaultValue is (true, var defaultValue))
+         {
+            innerList.Add(new NameValue("default", (KString)defaultValue));
+         }
+
+         innerList.Add(new NameValue("variadic", variadic));
+         var innerTuple = new KTuple([.. innerList]);
+         list.Add(new NameValue(parameter.Name, innerTuple));
+      }
+      return new KTuple([.. list]);
+   }
 
    public KTuple FieldsInTuple
    {
