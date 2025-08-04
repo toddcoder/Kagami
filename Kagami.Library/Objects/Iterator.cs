@@ -873,7 +873,7 @@ public class Iterator : IObject, IIterator
       return collectionClass.Revert(result);
    }
 
-   public IObject By(int count)
+   public virtual IObject By(int count)
    {
       switch (count)
       {
@@ -1440,6 +1440,45 @@ public class Iterator : IObject, IIterator
             accum = invoked;
          }
       }
+   }
+
+   public KBoolean AllTrue(IObject argument)
+   {
+      foreach (var predicate in List())
+      {
+         if (!pipeline(argument, predicate).IsTrue)
+         {
+            return false;
+         }
+      }
+
+      return true;
+   }
+
+   public KBoolean AnyTrue(IObject argument)
+   {
+      foreach (var predicate in List())
+      {
+         if (pipeline(argument, predicate).IsTrue)
+         {
+            return true;
+         }
+      }
+
+      return false;
+   }
+
+   public KBoolean NoneTrue(IObject argument)
+   {
+      foreach (var predicate in List())
+      {
+         if (pipeline(argument, predicate).IsTrue)
+         {
+            return false;
+         }
+      }
+
+      return true;
    }
 
    protected static IEnumerable<IObject> applyAgainst(List<Lambda> lambdas, List<IObject> enumerable)

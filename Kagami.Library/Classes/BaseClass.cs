@@ -473,6 +473,9 @@ public abstract class BaseClass
       registerIterMessage("accumulate(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Accumulate(l)));
       registerIterMessage("accumulate(init:_,_<Lambda>)",
          (obj, message) => iteratorFunc<IObject, Lambda>(obj, message, (i, v, l) => i.Accumulate(v, l)));
+      registerIterMessage("allTrue(_)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, c) => i.AllTrue(c)));
+      registerIterMessage("anyTrue(_)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, c) => i.AnyTrue(c)));
+      registerIterMessage("noneTrue(_)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, c) => i.NoneTrue(c)));
    }
 
    public virtual bool MatchCompatible(BaseClass otherClass) => Name == otherClass.Name;

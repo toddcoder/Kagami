@@ -206,4 +206,10 @@ public interface IIterator : IEquivalentClass
    IObject Accumulate(Lambda lambda);
 
    IObject Accumulate(IObject initialValue, Lambda lambda);
+
+   KBoolean AllTrue(IObject argument);
+
+   KBoolean AnyTrue(IObject argument);
+
+   KBoolean NoneTrue(IObject argument);
 }

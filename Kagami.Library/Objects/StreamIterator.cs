@@ -318,7 +318,7 @@ public class StreamIterator : IObject, IIterator
 
    public IObject Cross(ICollection collection, Lambda lambda) => terminate().Cross(collection, lambda);
 
-   public IObject By(int count) => terminate().By(count);
+   public IObject By(int count) => Copy(new ByAction(count, CollectionClass));
 
    public IObject Window(int count) => terminate().Window(count);
 
@@ -407,6 +407,12 @@ public class StreamIterator : IObject, IIterator
    public IObject Accumulate(Lambda lambda) => terminate().Accumulate(lambda);
 
    public IObject Accumulate(IObject initialValue, Lambda lambda) => terminate().Accumulate(initialValue, lambda);
+
+   public KBoolean AllTrue(IObject argument) => terminate().AllTrue(argument);
+
+   public KBoolean AnyTrue(IObject argument) => terminate().AnyTrue(argument);
+
+   public KBoolean NoneTrue(IObject argument) => terminate().NoneTrue(argument);
 
    public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
 }

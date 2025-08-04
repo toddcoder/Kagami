@@ -864,4 +864,35 @@ public static class ObjectFunctions
          throw fail($"Constructor {selector} not found");
       }
    }
+
+   public static IObject pipeline(IObject argument, IObject action)
+   {
+      switch (action)
+      {
+         case Lambda lambda:
+            return lambda.Invoke(argument);
+         case IMayInvoke mayInvoke:
+            return mayInvoke.Invoke(argument);
+         case Message message:
+            return classOf(argument).SendMessage(argument, message);
+         case Selector selector:
+         {
+            var _field = Machine.Current.Value.Find(selector);
+            if (_field is (true, { Value: Lambda lambda }))
+            {
+               return lambda.Invoke(argument);
+            }
+            else if (_field.Exception is (true, var exception))
+            {
+               throw exception;
+            }
+            else
+            {
+               throw fieldNotFound(selector);
+            }
+         }
+         default:
+            throw incompatibleClasses(action, "Lambda or Message");
+      }
+   }
 }

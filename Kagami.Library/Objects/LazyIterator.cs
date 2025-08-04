@@ -33,4 +33,6 @@ public class LazyIterator : Iterator
    public override IObject TakeUntil(IObject obj) => new StreamIterator(this).TakeUntil(obj);
 
    public override IObject Unique() => new StreamIterator(this).Unique();
+
+   public override IObject By(int count) => new StreamIterator(this).By(count);
 }

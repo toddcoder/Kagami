@@ -1,0 +1,8 @@
+﻿open sys
+
+var is_lt100 = (<= 100)
+var is_gt10 = (>= 10)
+var is_prime = ^.isPrime
+var tests = [is_lt100, is_gt10, is_prime]
+println(tests.allTrue(71))
+println(tests.allTrue(107))
