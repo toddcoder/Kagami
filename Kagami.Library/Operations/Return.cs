@@ -16,9 +16,14 @@ public class Return : Operation
          var _value = Machine.Current.Value.CurrentFrame.Pop().Optional();
          if (_value is (true, var value))
          {
-            if (value is Lambda lambda)
+            switch (value)
             {
-               lambda.Capture(machine);
+               case Lambda lambda:
+                  lambda.Capture(machine);
+                  break;
+               case Before:
+                  value = KBoolean.True;
+                  break;
             }
 
             returnValue = new ReturnValue.Value(value);
