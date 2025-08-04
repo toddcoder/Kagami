@@ -299,6 +299,12 @@ public class ParseState : IEnumerable<Statement>
       tokens.Add(token);
    }
 
+   public void Colorize(int startIndex, char @char, Color color)
+   {
+      var text = @char.ToString();
+      Colorize(startIndex, text, color);
+   }
+
    public void AddSymbol(Symbol symbol) => postGenerationSymbols.Add(symbol);
 
    public List<Symbol> PostGenerationSymbols => postGenerationSymbols;

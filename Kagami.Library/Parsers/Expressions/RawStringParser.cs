@@ -8,24 +8,17 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public partial class AlternateStringParser : SymbolParser
+public partial class RawStringParser : SymbolParser
 {
-   public AlternateStringParser(ExpressionBuilder builder) : base(builder)
+   public RawStringParser(ExpressionBuilder builder) : base(builder)
    {
    }
 
-   [GeneratedRegex(@"^(\s*)([rl])("")")]
+   [GeneratedRegex(@"^(\s*)(r)("")")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      var type = tokens[2].Text switch
-      {
-         "r" => AlternateStringType.Raw,
-         "l" => AlternateStringType.List,
-         _ => AlternateStringType.Standard
-      };
-
       state.Colorize(tokens, Color.Whitespace, Color.StringPart, Color.String);
 
       var stringBuilder = new StringBuilder();
@@ -52,14 +45,7 @@ public partial class AlternateStringParser : SymbolParser
                {
                   state.Move(1);
                   state.AddToken(start, length + 1, Color.String);
-                  if (type == AlternateStringType.List)
-                  {
-                     builder.Add(new StringListSymbol(stringBuilder.ToString()));
-                  }
-                  else
-                  {
-                     builder.Add(new StringSymbol(stringBuilder.ToString()));
-                  }
+                  builder.Add(new StringSymbol(stringBuilder.ToString()));
 
                   return unit;
                }

@@ -1,0 +1,12 @@
+﻿open sys
+
+var x = 153
+var y = "Foo"
+println(l"x: $x, y: $y")
+
+var m = m"foobar"
+var lazyStr = l"This is ($m)"
+println(lazyStr)
+
+m{4:2} = "az"
+println(lazyStr)

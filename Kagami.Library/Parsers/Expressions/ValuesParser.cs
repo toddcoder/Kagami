@@ -39,8 +39,9 @@ public class ValuesParser : MultiParser
          yield return new ByteParser(builder);
          yield return new IntParser(builder);
          yield return new BooleanParser(builder);
-         yield return new AlternateStringParser(builder);
+         yield return new RawStringParser(builder);
          yield return new InterpolatedStringParser(builder);
+         yield return new LazyStringParser(builder);
          yield return new StringArrayParser(builder);
          yield return new DateParser(builder);
          yield return new MultilineStringParser(builder);

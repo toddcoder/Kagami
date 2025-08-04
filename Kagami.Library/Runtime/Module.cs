@@ -110,6 +110,7 @@ public class Module
       "Words" => new WordsClass(),
       "Before" => new BeforeClass(),
       "FloatRange" => new FloatRangeClass(),
+      "LazyString" => new LazyStringClass(),
       _ => nil
    };
 
