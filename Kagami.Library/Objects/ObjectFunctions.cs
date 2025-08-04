@@ -89,6 +89,8 @@ public static class ObjectFunctions
             return matchStringToTuple(kString, tuple, bindings);
          case KTuple tuple when source is not KTuple:
             return matchNonTuple(source, tuple, bindings);
+         case SpecialComparisand specialComparisand:
+            return specialComparisand.Match(source, bindings);
          case UserObjectPlaceholder userObjectPlaceholder when source is UserObject userObject:
          {
             return userObjectMatch(userObject, userObjectPlaceholder, bindings);

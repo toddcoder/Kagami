@@ -595,5 +595,7 @@ public class OperationsBuilder
 
    public void NewDelegate(string className, string delegateClassName) => add(new NewDelegate(className, delegateClassName));
 
+   public void NewSpecialComparisand(SpecialComparisandDirection direction) => add(new NewSpecialComparisand(direction));
+
    public override string ToString() => "operations";
 }

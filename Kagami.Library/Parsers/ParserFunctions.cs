@@ -1563,4 +1563,10 @@ public static class ParserFunctions
          return new PossibleBlock.None();
       }
    }
+
+   public static Exception upToEndOfLine(ParseState state)
+   {
+      var _scanned = state.Scan(@"^(\s*)(\S+)");
+      return fail($"Didn't understand: \"{_scanned | (() => state.CurrentSource)}\"");
+   }
 }

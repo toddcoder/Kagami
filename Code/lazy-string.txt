@@ -1,0 +1,4 @@
+x: 153, y: Foo
+This is (foobar)
+This is (foobaz)
+"This is (foobaz)" | String

@@ -1,0 +1,10 @@
+﻿open sys
+
+func sign()
+	when [< 0, y: true] return println($"x is negative; y is (y)")
+	when [0, y: true] return println($"x is zero; y is (y)")
+	when [> 0, y: true] return println($"x is positive; y is (y)")
+
+sign(-1, true)
+sign(0, true)
+sign(1, true)

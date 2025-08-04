@@ -1,7 +1,9 @@
 ﻿using System.Text.RegularExpressions;
 using Core.Monads;
 using Kagami.Library.Nodes.Symbols;
+using Kagami.Library.Objects;
 using static Core.Monads.MonadFunctions;
+using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Expressions;
 
@@ -20,22 +22,22 @@ public partial class ComparisandBooleanParser : SymbolParser
       switch (tokens[2].Text)
       {
          case "==":
-            builder.Add(new ComparisandEqualSymbol());
+            builder.Add(new SpecialComparisandSymbol(SpecialComparisandDirection.Equal));
             break;
          case "!=":
-            builder.Add(new ComparisandNotEqualSymbol());
+            builder.Add(new SpecialComparisandSymbol(SpecialComparisandDirection.Equal | SpecialComparisandDirection.Not));
             break;
          case "<=":
-            builder.Add(new ComparisandLessThanEqualSymbol());
+            builder.Add(new SpecialComparisandSymbol(SpecialComparisandDirection.Greater | SpecialComparisandDirection.Equal));
             break;
          case ">=":
-            builder.Add(new ComparisandGreaterThanEqualSymbol());
+            builder.Add(new SpecialComparisandSymbol(SpecialComparisandDirection.Less | SpecialComparisandDirection.Equal));
             break;
          case "<":
-            builder.Add(new ComparisandLessThanSymbol());
+            builder.Add(new SpecialComparisandSymbol(SpecialComparisandDirection.Less));
             break;
          case ">":
-            builder.Add(new ComparisandGreaterThanSymbol());
+            builder.Add(new SpecialComparisandSymbol(SpecialComparisandDirection.Greater));
             break;
          default:
             return nil;
