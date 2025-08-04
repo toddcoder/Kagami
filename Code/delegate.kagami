@@ -1,0 +1,17 @@
+﻿open sys
+
+class Worker1(name String) {
+	func identify()=> $"(name) is a worker"
+}
+
+class Worker2(workerId Int) {
+	func getId() => $"the id = (workerId)"
+}
+
+class Worker(name String, workerId Int) {}
+delegate Worker1 = Worker1(name)
+delegate Worker2 = Worker2(workerId)
+
+var worker = Worker("Zoe", 16)
+println(worker.identify())
+println(worker.getId())

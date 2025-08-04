@@ -593,5 +593,7 @@ public class OperationsBuilder
 
    public void IsTrue() => add(new IsTrue());
 
+   public void NewDelegate(string className, string delegateClassName) => add(new NewDelegate(className, delegateClassName));
+
    public override string ToString() => "operations";
 }

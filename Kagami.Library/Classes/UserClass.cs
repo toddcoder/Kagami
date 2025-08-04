@@ -18,6 +18,7 @@ public class UserClass : BaseClass
    protected Maybe<UserClass> _parentClass;
    protected Set<Selector> signatures = [];
    protected Maybe<UserObject> _metaObject = nil;
+   protected StringHash<IObject> delegates = [];
 
    public UserClass(string className, string parentClassName)
    {
@@ -191,5 +192,21 @@ public class UserClass : BaseClass
       {
          return false;
       }
+   }
+
+   public void RegisterDelegate(string className, IObject obj) => delegates[className] = obj;
+
+   public override IObject DynamicInvoke(IObject obj, Message message)
+   {
+      foreach (var (_, @delegate) in delegates)
+      {
+         var delegateClass = classOf(@delegate);
+         if (delegateClass.RespondsTo(message.Selector))
+         {
+            return delegateClass.SendMessage(@delegate, message);
+         }
+      }
+
+      return base.DynamicInvoke(obj, message);
    }
 }

@@ -4,7 +4,10 @@ public class ClassItemsParser : MultiParser
 {
    protected ClassBuilder builder;
 
-   public ClassItemsParser(ClassBuilder builder) => this.builder = builder;
+   public ClassItemsParser(ClassBuilder builder)
+   {
+      this.builder = builder;
+   }
 
    public override IEnumerable<Parser> Parsers
    {
@@ -13,6 +16,7 @@ public class ClassItemsParser : MultiParser
          yield return new ConstructorParser(builder);
          yield return new NamedStaticParser();
          yield return new StaticParser(builder);
+         yield return new DelegateParser(builder);
       }
    }
 }

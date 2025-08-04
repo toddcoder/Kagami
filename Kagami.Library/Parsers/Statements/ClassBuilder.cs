@@ -30,6 +30,7 @@ public class ClassBuilder
    protected List<(IInvokable, Block, bool)> functions = [];
    protected UserClass userClass = new("", "");
    protected Set<Selector> requiredFunctions = [];
+   protected StringHash<Expression> delegates = [];
 
    public ClassBuilder(string className, Parameters parameters, string parentClassName, Expression[] parentArguments,
       bool initialize, Block constructorBlock)
@@ -41,6 +42,8 @@ public class ClassBuilder
       this.initialize = initialize;
       this.constructorBlock = constructorBlock;
    }
+
+   public string ClassName => className;
 
    public virtual UserClass CreateUserClass() => new(className, parentClassName);
 
@@ -253,6 +256,11 @@ public class ClassBuilder
          throw fail(requiredFunctions.Count.Plural($"Required function(s) {functionList} not implemented"));
       }
 
+      foreach (var (delegateClass, delegateConstructor) in delegates)
+      {
+         statements.Add(new NewDelegateStatement(className, delegateClass, delegateConstructor));
+      }
+
       statements.Add(new ReturnNewObject(className, parameters));
 
       Statements = [.. statements];
@@ -302,6 +310,8 @@ public class ClassBuilder
          }
       }
    }
+
+   public void RegisterDelegate(string className, Expression constructor) => delegates[className] = constructor;
 
    public override string ToString()
    {

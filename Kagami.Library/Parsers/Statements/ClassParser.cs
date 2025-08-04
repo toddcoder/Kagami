@@ -65,28 +65,29 @@ public partial class ClassParser : StatementParser
       if (_block is (true, var block))
       {
          var builder = new ClassBuilder(className, parameters, parentClassName, arguments, initialize, block);
+
+         var classItemsParser = new ClassItemsParser(builder);
+         while (state.More)
+         {
+            var _scan3 = classItemsParser.Scan(state);
+            if (_scan3)
+            {
+            }
+            else if (_scan3.Exception is (true, var exception))
+            {
+               return exception;
+            }
+            else
+            {
+               break;
+            }
+         }
+
          var _register = builder.Register();
          if (_register)
          {
             var cls = new Class(builder);
             state.AddStatement(cls);
-
-            var classItemsParser = new ClassItemsParser(builder);
-            while (state.More)
-            {
-               var _scan3 = classItemsParser.Scan(state);
-               if (_scan3)
-               {
-               }
-               else if (_scan3.Exception is (true, var exception))
-               {
-                  return exception;
-               }
-               else
-               {
-                  break;
-               }
-            }
 
             return unit;
          }

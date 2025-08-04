@@ -26,7 +26,7 @@ public partial class StaticParser : StatementParser
       var _block = getBlock(state);
       if (_block is (true, var block))
       {
-         var className = classBuilder.UserClass.Name;
+         var className = classBuilder.ClassName;
          var metaClassName = $"__$meta{className}";
          var metaClassBuilder = new ClassBuilder(metaClassName, Parameters.Empty, "", [], false, block);
          var _register = metaClassBuilder.Register();
