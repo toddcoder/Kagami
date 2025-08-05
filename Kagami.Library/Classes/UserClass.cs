@@ -131,8 +131,10 @@ public class UserClass : BaseClass
    {
       registerMessage("className".get(), (obj, _) => KString.StringObject(obj.ClassName));
       registerMessage("class".get(), (obj, _) => new Class(obj.ClassName));
-      registerMessage("send",
-         (obj, msg) => function<IObject, KString>(obj, msg, (o, n) => sendMessage(o, n.Value, msg.Arguments.Pass(1))));
+      registerMessage("send(_<String>,_...)",
+         (obj, message) => function<IObject, KString>(obj, message, (o, n) => sendMessage(o, n.Value, message.Arguments.Pass(1))));
+      registerMessage("send(_<String>)",
+         (obj, message) => function<IObject, KString>(obj, message, (o, n) => sendMessage(o, n.Value, Arguments.Empty)));
       registerMessage("with(_)", (obj, msg) => ((UserObject)obj).With(msg.Arguments[0]));
       registerMessage("clone()", (obj, _) => ((UserObject)obj).Clone());
    }

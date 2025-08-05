@@ -252,12 +252,12 @@ public static class ObjectFunctions
 
    public static IObject sendMessage(IObject obj, Message message) => classOf(obj).SendMessage(obj, message);
 
-   public static IObject sendMessage(IObject obj, Selector selector, Arguments arguments)
+   public static IObject sendMessage(IObject obj, string selector, Arguments arguments)
    {
       return classOf(obj).SendMessage(obj, selector, arguments);
    }
 
-   public static IObject sendMessage(IObject obj, Selector selector, params IObject[] arguments)
+   public static IObject sendMessage(IObject obj, string selector, params IObject[] arguments)
    {
       return sendMessage(obj, selector, new Arguments(arguments));
    }
@@ -293,7 +293,7 @@ public static class ObjectFunctions
       return sendMessage(obj, selector, defaultFunc, new Arguments(arguments));
    }
 
-   public static IObject sendMessage(IObject obj, Selector selector, IObject argument)
+   public static IObject sendMessage(IObject obj, string selector, IObject argument)
    {
       return sendMessage(obj, selector, new Arguments(argument));
    }
