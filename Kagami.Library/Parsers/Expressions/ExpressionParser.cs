@@ -7,6 +7,7 @@ using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.AllExceptions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
@@ -67,20 +68,11 @@ public class ExpressionParser : PatternlessParser
                   var _conjunction = conjunctionParsers.Scan(state);
                   if (_conjunction)
                   {
-                     /*if (conjunctionParsers.IsEndOfExpression)
-                     {
-                        builder = builder.Subexpression();
-                        conjunctionParsers.IsEndOfExpression = false;
-                     }
-                     else
-                     {
-                        break;
-                     }*/
                      break;
                   }
                   else if (_conjunction.Exception)
                   {
-                     return _conjunction.Exception;
+                     return state.SetException(messageImproperConjunction(), _conjunction.Exception);
                   }
                }
 
@@ -99,7 +91,7 @@ public class ExpressionParser : PatternlessParser
                         break;
                      }
 
-                     return exception;
+                     return state.SetException(messageBadRightHandTerm(), exception);
                   }
                   else
                   {
@@ -108,7 +100,7 @@ public class ExpressionParser : PatternlessParser
                }
                else if (_infix.Exception is (true, var exception))
                {
-                  return exception;
+                  return state.SetException(messageBadInfix(), exception);
                }
                else
                {
@@ -131,7 +123,7 @@ public class ExpressionParser : PatternlessParser
                   }
                   else
                   {
-                     return _messageWithLambda.Exception;
+                     return state.SetException(messageBadTrailingLambda(), _messageWithLambda.Exception);
                   }
                }
                else if (state.ImplicitState is (true, { Two: (true, var symbol) } implicitState2))
@@ -149,10 +141,6 @@ public class ExpressionParser : PatternlessParser
                   var lambda = new LambdaSymbol(whateverCount, block);
                   Expression = new Expression(lambda);
                }
-               /*else if (conjunctionParsers.IsEndOfExpression)
-               {
-                  Expression = new Expression(new SubexpressionSymbol(expression));
-               }*/
                else
                {
                   Expression = expression;
@@ -162,16 +150,16 @@ public class ExpressionParser : PatternlessParser
             }
             else
             {
-               return _expression.Exception;
+               return state.SetException(messageExpressionCouldNotBeBuilt(), _expression.Exception);
             }
          }
          else if (_term0.Exception is (true, var exception))
          {
-            return exception;
+            return state.SetException(messageBadLeftHandTerm(), exception);
          }
          else
          {
-            return fail("Invalid expression syntax");
+            return fail("No recognizable expression entities");
          }
       }
       finally

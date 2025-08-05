@@ -121,6 +121,8 @@ public partial class Playground : Form
          menus.Menu("&Edit");
          menus.Menu("Duplicate", (_, _) => duplicate(), "^D");
          menus.Menu("Create Block", (_, _) => createBlock(), "^B");
+         menus.Menu("Copy Console", (_, _) => Clipboard.SetText(textConsole.Text));
+
          menus.Menu("&Build");
          menus.Menu("Run", (_, _) => run(), "F5");
          menus.Menu("Manual", (s, _) =>

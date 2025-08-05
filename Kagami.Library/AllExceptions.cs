@@ -211,4 +211,36 @@ public static class AllExceptions
    public static string messageImproperWhen() => "Improper when expression";
 
    public static Exception improperWhen() => fail(messageImproperWhen());
+
+   public static string messageImproperConjunction() => "Improper conjunction expression";
+
+   public static Exception improperConjunction() => fail(messageImproperConjunction());
+
+   public static string messageBadLeftHandTerm() => "Bad left-hand term in expression";
+
+   public static Exception badLeftHandTerm() => fail(messageBadLeftHandTerm());
+
+   public static string messageBadRightHandTerm() => "Bad right-hand term in expression";
+
+   public static Exception badRightHandTerm() => fail(messageBadRightHandTerm());
+
+   public static string messageBadInfix() => "Bad infix operator";
+
+   public static Exception badInfix() => fail(messageBadInfix());
+
+   public static string messageBadPrefix() => "Bad prefix operator";
+
+   public static Exception badPrefix() => fail(messageBadPrefix());
+
+   public static string messageBadPostfix() => "Bad postfix operator";
+
+   public static Exception badPostfix() => fail(messageBadPostfix());
+
+   public static string messageBadTrailingLambda() => "Bad trailing lambda expression";
+
+   public static Exception badTrailingLambda() => fail(messageBadTrailingLambda());
+
+   public static string messageExpressionCouldNotBeBuilt() => "Expression could not be built";
+
+   public static Exception expressionCouldNotBeBuilt() => fail(messageExpressionCouldNotBeBuilt());
 }

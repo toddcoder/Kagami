@@ -271,7 +271,14 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
 
    IObject IMutableCollection.Append(IObject obj) => Append(obj);
 
-   public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
+   public IObject this[SkipTake skipTake]
+   {
+      get
+      {
+         var (skip, take) = skipTake;
+         return new MutString(mutable.ToString(skip, take));
+      }
+   }
 
    public IObject Pop()
    {
