@@ -187,4 +187,28 @@ public static class AllExceptions
    public static string messageNoDefaultValue(string typeName) => $"{typeName} has no default value";
 
    public static Exception noDefaultValue(string typeName) => fail(messageNoDefaultValue(typeName));
+
+   public static string messageBadArgumentsFor(string entity) => $"Arguments were anticipated for {entity}, but they couldn't be determined";
+
+   public static Exception badArgumentsFor(string entity) => fail(messageBadArgumentsFor(entity));
+
+   public static string messageNoBeginBlock(string entity) => $"No begin block for {entity}";
+
+   public static Exception noBeginBlock(string entity) => fail(messageNoBeginBlock(entity));
+
+   public static string messageNoWhen(string entity) => $"No when for {entity}";
+
+   public static Exception noWhen(string entity) => fail(messageNoWhen(entity));
+
+   public static string messageMatchValue() => "No proper match value provided";
+
+   public static Exception matchValue() => fail(messageMatchValue());
+
+   public static string messageImproperException(string entity) => $"Improper expression for {entity}";
+
+   public static Exception improperException(string entity) => fail(messageImproperException(entity));
+
+   public static string messageImproperWhen() => "Improper when expression";
+
+   public static Exception improperWhen() => fail(messageImproperWhen());
 }

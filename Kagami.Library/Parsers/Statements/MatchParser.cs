@@ -3,6 +3,7 @@ using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Parsers.Expressions;
 using Core.Monads;
 using Core.Strings;
+using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Nodes.NodeFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
@@ -31,14 +32,14 @@ public partial class MatchParser : StatementParser
          var _result = state.BeginBlock();
          if (!_result)
          {
-            return _result.Exception;
+            return state.SetException(messageNoBeginBlock("match"), _result.Exception);
          }
 
-         var caseParser = new WhenParser(fieldName, mutable, assignment, matchField, true, CaseType.Statement);
-         var _scan = caseParser.Scan(state);
+         var whenParser = new WhenParser(fieldName, mutable, assignment, matchField, true, CaseType.Statement);
+         var _scan = whenParser.Scan(state);
          if (_scan)
          {
-            var ifStatement = caseParser.If;
+            var ifStatement = whenParser.If;
             addMatchElse(ifStatement);
             state.AddStatement(ifStatement);
 
@@ -46,12 +47,12 @@ public partial class MatchParser : StatementParser
          }
          else
          {
-            return _scan.Exception;
+            return state.SetException(messageNoWhen("match"), _scan.Exception);
          }
       }
       else
       {
-         return _expression.Exception;
+         return state.SetException(messageMatchValue(), _expression.Exception);
       }
    }
 }

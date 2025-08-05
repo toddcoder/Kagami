@@ -4,6 +4,7 @@ using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Parsers.ParserFunctions;
 using Regex = System.Text.RegularExpressions.Regex;
 
@@ -47,7 +48,7 @@ public partial class UserObjectPlaceholderParser : SymbolParser
          }
          else
          {
-            return _arguments.Exception;
+            return state.SetException(messageBadArgumentsFor($"UserObjectPlaceholder {name}"), _arguments.Exception);
          }
       }
       else

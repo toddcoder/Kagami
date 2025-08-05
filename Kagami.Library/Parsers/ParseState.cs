@@ -36,6 +36,7 @@ public class ParseState : IEnumerable<Statement>
    protected Stack<Maybe<ImplicitState>> implicitStates = new();
    protected Stack<ImplicitExpressionState> implicitExpressionStates = new();
    protected StringSet patterns = [];
+   protected Maybe<Exception> _exception = nil;
 
    public ParseState(string source)
    {
@@ -476,4 +477,26 @@ public class ParseState : IEnumerable<Statement>
          }
       }
    }
+
+   public Exception SetException(string message, Exception caughtException)
+   {
+      if (!_exception)
+      {
+         _exception = new Exception(message, caughtException);
+      }
+
+      return caughtException;
+   }
+
+   public Maybe<Exception> SetException(string message, Maybe<Exception> _caughtException)
+   {
+      if (_caughtException is (true, var caughtException))
+      {
+         SetException(message, caughtException);
+      }
+
+      return _caughtException;
+   }
+
+   public Maybe<Exception> Exception => _exception;
 }

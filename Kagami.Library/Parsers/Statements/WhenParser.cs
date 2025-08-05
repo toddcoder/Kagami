@@ -82,7 +82,7 @@ public partial class WhenParser : StatementParser
             }
             else if (_scan.Exception is (true, var exception))
             {
-               return exception;
+               return state.SetException(messageNoWhen("match"), exception);
             }
 
             If = new If(expression, block, _ifStatement, nil, assignmentField, mutable, assignment, top, true);
@@ -90,12 +90,12 @@ public partial class WhenParser : StatementParser
          }
          else
          {
-            return _expression.Exception;
+            return state.SetException(messageImproperException("when"), _expression.Exception);
          }
       }
       else
       {
-         return _result.Exception | expectedValue;
+         return state.SetException(messageImproperWhen(), _result.Exception);
       }
    }
 

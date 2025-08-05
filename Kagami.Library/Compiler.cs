@@ -50,14 +50,14 @@ public class Compiler
             ExceptionIndex = state.ExceptionIndex;
             ErrorLocation = (state.Line, state.Character);
 
-            return exception;
+            return state.Exception | exception;
          }
          else
          {
             ExceptionIndex = state.CurrentSource.Length;
             ErrorLocation = (state.Line, state.Character);
 
-            return fail($"Didn't understand {state.CurrentSource}");
+            return state.Exception | (() => fail($"Didn't understand {state.CurrentSource}"));
          }
       }
 
