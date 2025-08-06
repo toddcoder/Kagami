@@ -19,6 +19,12 @@ public class RandomClass : BaseClass
       messages["next(max:<Int>)"] = (obj, msg) => function<XRandom, Int>(obj, msg, (r, i) => r.Next(i.Value));
       messages["next(from:<Int>,until:<Int>)"] =
          (obj, msg) => function<XRandom, Int, Int>(obj, msg, (r, i1, i2) => r.Next(i1.Value, i2.Value));
+      messages["iterateFloats".get()] = (obj, _) => function<XRandom>(obj, r => r.IterateFloats);
+      messages["iterateFloats".set()] = (obj,msg)=>function<XRandom, KBoolean>(obj, msg, (r, b) =>
+      {
+         r.IterateFloats = b;
+         return b;
+      });
    }
 
    public override IObject DefaultValue => new XRandom();

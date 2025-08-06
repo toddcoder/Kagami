@@ -26,9 +26,15 @@ public class XRandom : IObject, ICollection
 
    public IIterator GetIterator(bool lazy) => lazy ? new Iterator(this) : new LazyIterator(this);
 
-   Maybe<IObject> ICollection.Next(int index) => Int.IntObject(random.Next()).Some();
+   Maybe<IObject> ICollection.Next(int index)
+   {
+      return IterateFloats.Value ? Float.FloatObject(random.NextDouble()).Some() : Int.IntObject(random.Next()).Some();
+   }
 
-   public Maybe<IObject> Peek(int index) => Int.IntObject(random.Next()).Some();
+   public Maybe<IObject> Peek(int index)
+   {
+      return IterateFloats.Value ? Float.FloatObject(random.NextDouble()).Some() : Int.IntObject(random.Next()).Some();
+   }
 
    public Int Length => -1;
 
@@ -72,4 +78,6 @@ public class XRandom : IObject, ICollection
    public Guid Id { get; init; } = Guid.NewGuid();
 
    public IObject this[SkipTake skipTake] => Objects.CollectionFunctions.skipTake(this, skipTake);
+
+   public KBoolean IterateFloats { get; set; }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using Core.Matching;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Runtime;
@@ -35,6 +36,11 @@ public partial class RecordParser : StatementParser
          else if (_scan.Exception is (true, var exception))
          {
             return exception;
+         }
+
+         if (state.CurrentSource.IsMatch("^ /s* '{'"))
+         {
+            return fail("Records don't have blocks");
          }
 
          Module.Global.Value.ForwardReference(className);
