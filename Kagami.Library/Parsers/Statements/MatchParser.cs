@@ -47,7 +47,7 @@ public partial class MatchParser : StatementParser
          }
          else
          {
-            return state.SetException(messageNoWhen("match"), _scan.Exception);
+            return state.SetException(messageNoWhen("match"));
          }
       }
       else

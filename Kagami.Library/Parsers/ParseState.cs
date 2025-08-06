@@ -200,6 +200,30 @@ public class ParseState : IEnumerable<Statement>
       }
    }
 
+   public bool LookAhead(string pattern, RegexOptions options)
+   {
+      var regex = new System.Text.RegularExpressions.Regex(pattern, options);
+      return regex.IsMatch(CurrentSource);
+   }
+
+   public bool LookAhead(string pattern) => LookAhead(pattern, RegexOptions.None);
+
+   public Maybe<string> LookAhead(string pattern, RegexOptions options, int groupIndex)
+   {
+      var regex = new System.Text.RegularExpressions.Regex(pattern, options);
+      var match = regex.Match(CurrentSource);
+      if (match.Success)
+      {
+         return match.Groups[groupIndex].Value;
+      }
+      else
+      {
+         return nil;
+      }
+   }
+
+   public Maybe<string> LookAhead(string pattern, int groupIndex) => LookAhead(pattern, RegexOptions.None, groupIndex);
+
    public Optional<OptionalScanResult> OptionalScan(string pattern, params Color[] colors) => OptionalScan(pattern, RegexOptions.None, colors);
 
    public Optional<OptionalScanResult> OptionalScan(string pattern, RegexOptions options, params Color[] colors)
@@ -468,12 +492,9 @@ public class ParseState : IEnumerable<Statement>
       }
       set
       {
-         if (value is (true, var color))
+         if (value is (true, var color) && index.Between(0).Until(tokens.Count))
          {
-            if (index.Between(0).Until(tokens.Count))
-            {
-               tokens[index].Color = color;
-            }
+            tokens[index].Color = color;
          }
       }
    }
@@ -494,8 +515,22 @@ public class ParseState : IEnumerable<Statement>
       {
          SetException(message, caughtException);
       }
+      else
+      {
+         SetException(message);
+      }
 
       return _caughtException;
+   }
+
+   public Maybe<Exception> SetException(string message)
+   {
+      if (!_exception)
+      {
+         _exception = new Exception(message);
+      }
+
+      return _exception;
    }
 
    public Maybe<Exception> Exception => _exception;

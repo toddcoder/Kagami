@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using Core.Collections;
 using Core.Monads;
 using Kagami.Library.Nodes.Symbols;
 using static Core.Monads.MonadFunctions;
@@ -9,6 +10,10 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class IsParser : SymbolParser
 {
+   protected const string REGEX_FIELD_NAME = $@"^(\s+)({REGEX_FIELD})\b";
+
+   protected static StringSet keywords = ["else"];
+
    public IsParser(ExpressionBuilder builder) : base(builder)
    {
    }
@@ -26,20 +31,23 @@ public partial class IsParser : SymbolParser
       var _result = getExpression(state, builder.Flags | ExpressionFlags.Comparisand);
       if (_result is (true, var comparisand))
       {
-         var _fieldResult = state.Scan($@"^(\s+)({REGEX_FIELD})\b", Color.Whitespace, Color.Identifier);
-         if (_fieldResult is (true, var fieldName))
+         if (state.LookAhead(REGEX_FIELD_NAME, 2) is (true, var word) && !keywords.Contains(word))
          {
-            var innerBuilder = new ExpressionBuilder(ExpressionFlags.Comparisand);
-            innerBuilder.Add(new NameValueSymbol(fieldName.Trim(), comparisand));
-            var _innerExpression = innerBuilder.ToExpression();
-            if (_innerExpression is (true, var expression))
+            var _fieldResult = state.Scan(REGEX_FIELD_NAME, Color.Whitespace, Color.Identifier);
+            if (_fieldResult is (true, var fieldName))
             {
-               comparisand = expression;
-            }
-            else
-            {
-               state.RollBackTransaction();
-               return _innerExpression.Exception;
+               var innerBuilder = new ExpressionBuilder(ExpressionFlags.Comparisand);
+               innerBuilder.Add(new NameValueSymbol(fieldName.Trim(), comparisand));
+               var _innerExpression = innerBuilder.ToExpression();
+               if (_innerExpression is (true, var expression))
+               {
+                  comparisand = expression;
+               }
+               else
+               {
+                  state.RollBackTransaction();
+                  return _innerExpression.Exception;
+               }
             }
          }
 

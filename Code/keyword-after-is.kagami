@@ -1,0 +1,10 @@
+﻿open sys
+
+func greet(person) {
+	guard person["name"] is ?name else {
+		return
+	}
+	println(name)
+}
+
+greet({name: "Todd"})
