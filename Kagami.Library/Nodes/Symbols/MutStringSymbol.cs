@@ -5,15 +5,18 @@ namespace Kagami.Library.Nodes.Symbols;
 
 public class MutStringSymbol : Symbol
 {
-   protected MutString mutString;
+   protected string mutString;
 
-   public MutStringSymbol(MutString mutString) => this.mutString = mutString;
+   public MutStringSymbol(string mutString)
+   {
+      this.mutString = mutString;
+   }
 
-   public override void Generate(OperationsBuilder builder) => builder.PushObject(mutString);
+   public override void Generate(OperationsBuilder builder) => builder.NewMutString(mutString);
 
    public override Precedence Precedence => Precedence.Value;
 
    public override Arity Arity => Arity.Nullary;
 
-   public override string ToString() => mutString.Image;
+   public override string ToString() => new MutString(mutString).Image;
 }

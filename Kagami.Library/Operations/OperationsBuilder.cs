@@ -597,5 +597,7 @@ public class OperationsBuilder
 
    public void NewSpecialComparisand(SpecialComparisandDirection direction) => add(new NewSpecialComparisand(direction));
 
+   public void NewMutString(string text) => add(new NewMutString(text));
+
    public override string ToString() => "operations";
 }
