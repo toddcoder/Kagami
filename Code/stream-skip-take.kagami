@@ -1,0 +1,7 @@
+﻿open sys
+
+var numbers = [1..20]
+var iter = lit numbers skip 2 take 5
+println(~[iter])
+iter = lit numbers skip until (i -> i %% 5) take while i -> i < 15
+println(~[iter])

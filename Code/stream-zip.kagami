@@ -1,0 +1,9 @@
+﻿open sys
+
+var numbers = [1..10]
+var letters = ['a'..'j']
+var iter = lit numbers zip letters
+println(~[iter])
+
+iter = lit numbers.zip(letters) (l, r) -> $"(l)(r)"
+println(~[iter])

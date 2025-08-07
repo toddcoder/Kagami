@@ -295,10 +295,8 @@ public class Iterator : IObject, IIterator
 
    public virtual IObject FlatMap(Lambda lambda)
    {
-      var enumerable = List().Select(value => lambda.Invoke(value));
-      var flattened = flatten(enumerable);
-
-      return collectionClass.Revert(flattened);
+      var newCollection = collectionClass.Revert(List());
+      return new FlatMapIterator((ICollection)newCollection).FlatMap(lambda);
    }
 
    public IObject Replace(Lambda predicate, Lambda lambda)
@@ -383,7 +381,7 @@ public class Iterator : IObject, IIterator
    public IObject Indexes(Lambda predicate)
    {
       var i = 0;
-      var result = new List<IObject>();
+      List<IObject> result = [];
       foreach (var value in List())
       {
          if (predicate.Invoke(value).IsTrue)
@@ -904,11 +902,11 @@ public class Iterator : IObject, IIterator
          if (list.Count >= count)
          {
             var lastIndex = list.Count - 1;
-            var outerList = new List<IObject>();
+            List<IObject> outerList = [];
             var escape = false;
             for (var i = 0; i < list.Count && !escape; i++)
             {
-               var innerList = new List<IObject>();
+               List<IObject> innerList = [];
                for (var j = i; j < i + count; j++)
                {
                   innerList.Add(list[j]);

@@ -1,0 +1,5 @@
+﻿open sys
+
+var numbers = [1..20]
+var iter = lit numbers.by(5)
+println(~[iter])

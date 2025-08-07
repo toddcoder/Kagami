@@ -139,7 +139,7 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
 
    public KString Join() => terminate().Join();
 
-   public KString Join(string connector) => terminate().Join();
+   public KString Join(string connector) => terminate().Join(connector);
 
    public KString Join(string connector, int limit, string truncated) => terminate().Join(connector, limit, truncated);
 
@@ -253,7 +253,7 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
 
    public IObject Cross(ICollection collection, Lambda lambda) => terminate().Cross(collection, lambda);
 
-   public IObject By(int count) => terminate().By(count);
+   public IObject By(int count) => copy(new StreamingBy(count));
 
    public IObject Window(int count) => terminate().Window(count);
 
@@ -285,7 +285,7 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
 
    public IObject ToSet() => terminate().ToSet();
 
-   public IObject Each(Lambda action) => copy(new StreamingEach(action));
+   public IObject Each(Lambda action) => terminate().Each(action);
 
    public IObject Rotate(int count) => terminate().Rotate(count);
 
