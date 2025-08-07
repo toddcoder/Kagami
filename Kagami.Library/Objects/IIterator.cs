@@ -77,7 +77,7 @@ public interface IIterator : IEquivalentClass
 
    IObject TakeWhile(Lambda predicate);
 
-   IObject TakeUntil(IObject obj);
+   IObject TakeUntil(Lambda predicate);
 
    IObject Index(Lambda predicate);
 

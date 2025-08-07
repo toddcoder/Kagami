@@ -3,6 +3,8 @@ using Core.Enumerables;
 using Core.Monads;
 using Kagami.Library.Classes;
 using Kagami.Library.Objects;
+using Kagami.Library.Runtime;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Iterators;
@@ -15,9 +17,9 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
 
    public string ClassName => "StreamingIterator";
 
-   public string AsString => actions.ToString(" ");
+   public string AsString => $"{collectionAsObject.AsString}.{actions.ToString(".")}";
 
-   public string Image => AsString;
+   public string Image => $"{collectionAsObject.Image}.{actions.ToString(".")}";
 
    public int Hash => actions.GetHashCode();
 
@@ -29,7 +31,7 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
 
    public Guid Id { get; init; } = Guid.NewGuid();
 
-   public TypeConstraint TypeConstraint() => TODO_IMPLEMENT_ME;
+   public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
 
    public ICollection Collection => iterator.Collection;
 
@@ -37,205 +39,293 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
 
    public bool IsLazy => true;
 
-   public Maybe<IObject> Next() => TODO_IMPLEMENT_ME;
+   public Maybe<IObject> Next()
+   {
+      if (Machine.Current.Value.Context.Cancelled())
+      {
+         return nil;
+      }
+
+      var _next = iterator.Next();
+      if (_next is (true, var next))
+      {
+         bool isSkipping;
+         do
+         {
+            isSkipping = false;
+            var state = new StreamingState(next, iterator.Collection, iterator.CollectionClass);
+            foreach (var action in actions)
+            {
+               var condition = action.Execute(state);
+               switch (condition)
+               {
+                  case StreamingCondition.Failed failed:
+                     throw fail(failed.Message);
+                  case StreamingCondition.Finished:
+                     return nil;
+                  case StreamingCondition.Continuing iterating:
+                     state.Next = iterating.Item;
+                     break;
+                  case StreamingCondition.Skipping:
+                     isSkipping = true;
+                     break;
+               }
+
+               if (isSkipping)
+               {
+                  break;
+               }
+            }
+
+            if (Machine.Current.Value.Context.Cancelled())
+            {
+               return nil;
+            }
 
-   public Maybe<IObject> Peek() => TODO_IMPLEMENT_ME;
+            if (isSkipping)
+            {
+               _next = iterator.Next();
+               if (_next is (true, var nextItem))
+               {
+                  next = nextItem;
+               }
+               else
+               {
+                  return nil;
+               }
+            }
+            else
+            {
+               return state.Next.Some();
+            }
+         } while (isSkipping);
+      }
 
-   public IObject Reset() => TODO_IMPLEMENT_ME;
+      return nil;
+   }
 
-   public IEnumerable<IObject> List() => TODO_IMPLEMENT_ME;
+   public Maybe<IObject> Peek() => iterator.Peek();
 
-   public IIterator Clone() => TODO_IMPLEMENT_ME;
+   public IObject Reset() => iterator.Reset();
 
-   public IObject Reverse() => TODO_IMPLEMENT_ME;
+   public IEnumerable<IObject> List()
+   {
+      while (Next() is (true, var item))
+      {
+         yield return item;
+      }
+   }
 
-   public KString Join() => TODO_IMPLEMENT_ME;
+   public IIterator Clone()
+   {
+      var streamingIterator = new StreamingIterator(iterator.Clone());
+      streamingIterator.actions.AddRange(actions);
 
-   public KString Join(string connector) => TODO_IMPLEMENT_ME;
+      return streamingIterator;
+   }
 
-   public KString Join(string connector, int limit, string truncated) => TODO_IMPLEMENT_ME;
+   protected IObject copy(StreamingAction action)
+   {
+      var streamingIterator = new StreamingIterator(iterator);
+      streamingIterator.actions.AddRange(actions);
+      streamingIterator.actions.Add(action);
 
-   public IObject Join(Lambda lambda) => TODO_IMPLEMENT_ME;
+      return streamingIterator;
+   }
 
-   public IObject Sort(Lambda lambda, bool ascending) => TODO_IMPLEMENT_ME;
+   protected IIterator terminate() => new KArray(List()).GetIterator(false);
 
-   public IObject Sort(bool ascending) => TODO_IMPLEMENT_ME;
+   public IObject Reverse() => terminate().Reverse();
 
-   public IObject FoldLeft(IObject initialValue, Lambda lambda) => TODO_IMPLEMENT_ME;
+   public KString Join() => terminate().Join();
 
-   public IObject FoldLeft(Lambda lambda) => TODO_IMPLEMENT_ME;
+   public KString Join(string connector) => terminate().Join();
 
-   public IObject FoldRight(IObject initialValue, Lambda lambda) => TODO_IMPLEMENT_ME;
+   public KString Join(string connector, int limit, string truncated) => terminate().Join(connector, limit, truncated);
 
-   public IObject FoldRight(Lambda lambda) => TODO_IMPLEMENT_ME;
+   public IObject Join(Lambda lambda) => terminate().Join(lambda);
 
-   public IObject ReduceLeft(IObject initialValue, Lambda lambda) => TODO_IMPLEMENT_ME;
+   public IObject Sort(Lambda lambda, bool ascending) => terminate().Sort(lambda, ascending);
 
-   public IObject ReduceLeft(Lambda lambda) => TODO_IMPLEMENT_ME;
+   public IObject Sort(bool ascending) => terminate().Sort(ascending);
 
-   public IObject ReduceRight(IObject initialValue, Lambda lambda) => TODO_IMPLEMENT_ME;
+   public IObject FoldLeft(IObject initialValue, Lambda lambda) => terminate().FoldLeft(initialValue, lambda);
 
-   public IObject ReduceRight(Lambda lambda) => TODO_IMPLEMENT_ME;
+   public IObject FoldLeft(Lambda lambda) => terminate().FoldLeft(lambda);
 
-   public Int Count() => TODO_IMPLEMENT_ME;
+   public IObject FoldRight(IObject initialValue, Lambda lambda) => terminate().FoldRight(initialValue, lambda);
 
-   public Int Count(IObject item) => TODO_IMPLEMENT_ME;
+   public IObject FoldRight(Lambda lambda) => terminate().FoldRight(lambda);
 
-   public Int Count(Lambda predicate) => TODO_IMPLEMENT_ME;
+   public IObject ReduceLeft(IObject initialValue, Lambda lambda) => terminate().ReduceLeft(initialValue, lambda);
 
-   public IObject Map(Lambda lambda) => TODO_IMPLEMENT_ME;
+   public IObject ReduceLeft(Lambda lambda) => terminate().ReduceLeft(lambda);
 
-   public IObject FlatMap(Lambda lambda) => TODO_IMPLEMENT_ME;
+   public IObject ReduceRight(IObject initialValue, Lambda lambda) => terminate().ReduceRight(initialValue, lambda);
 
-   public IObject Replace(Lambda predicate, Lambda lambda) => TODO_IMPLEMENT_ME;
+   public IObject ReduceRight(Lambda lambda) => terminate().ReduceRight(lambda);
 
-   public IObject If(Lambda predicate) => TODO_IMPLEMENT_ME;
+   public Int Count() => terminate().Count();
 
-   public IObject IfNot(Lambda predicate) => TODO_IMPLEMENT_ME;
+   public Int Count(IObject item) => terminate().Count(item);
 
-   public IObject Skip(int count) => TODO_IMPLEMENT_ME;
+   public Int Count(Lambda predicate) => terminate().Count(predicate);
 
-   public IObject SkipWhile(Lambda predicate) => TODO_IMPLEMENT_ME;
+   public IObject Map(Lambda lambda) => copy(new StreamingMap(lambda));
 
-   public IObject SkipUntil(Lambda predicate) => TODO_IMPLEMENT_ME;
+   public IObject FlatMap(Lambda lambda) => terminate().Map(lambda);
 
-   public IObject Take(int count) => TODO_IMPLEMENT_ME;
+   public IObject Replace(Lambda predicate, Lambda lambda) => terminate().Replace(predicate, lambda);
 
-   public IObject TakeWhile(Lambda predicate) => TODO_IMPLEMENT_ME;
+   public IObject If(Lambda predicate) => copy(new StreamingIf(predicate));
 
-   public IObject TakeUntil(IObject obj) => TODO_IMPLEMENT_ME;
+   public IObject IfNot(Lambda predicate) => copy(new StreamingIfNot(predicate));
 
-   public IObject Index(Lambda predicate) => TODO_IMPLEMENT_ME;
+   public IObject Skip(int count) => copy(new StreamingSkip(count));
 
-   public IObject Indexes(Lambda predicate) => TODO_IMPLEMENT_ME;
+   public IObject SkipWhile(Lambda predicate) => copy(new StreamingSkipWhile(predicate));
 
-   public IObject Zip(ICollection collection) => TODO_IMPLEMENT_ME;
+   public IObject SkipUntil(Lambda predicate) => copy(new StreamingSkipUntil(predicate));
 
-   public IObject Zip(ICollection collection, Lambda lambda) => TODO_IMPLEMENT_ME;
+   public IObject Take(int count) => copy(new StreamingTake(count));
 
-   public IObject ZipL(ICollection collection, IObject leftDefaultValue, IObject rightDefaultValue) => TODO_IMPLEMENT_ME;
+   public IObject TakeWhile(Lambda predicate) => copy(new StreamingTakeWhile(predicate));
 
-   public IObject ZipL(ICollection collection, IObject leftDefaultValue, IObject rightDefaultValue, Lambda lambda) => TODO_IMPLEMENT_ME;
+   public IObject TakeUntil(Lambda predicate) => copy(new StreamingTakeUntil(predicate));
 
-   public IObject Unzip() => TODO_IMPLEMENT_ME;
+   public IObject Index(Lambda predicate) => terminate().Index(predicate);
 
-   public IObject Unzip(Lambda lambda) => TODO_IMPLEMENT_ME;
+   public IObject Indexes(Lambda predicate) => terminate().Indexes(predicate);
 
-   public IObject Min() => TODO_IMPLEMENT_ME;
+   public IObject Zip(ICollection collection) => copy(new StreamingZip(collection));
 
-   public IObject Min(Lambda lambda) => TODO_IMPLEMENT_ME;
+   public IObject Zip(ICollection collection, Lambda lambda) => copy(new StreamingZipLambda(collection, lambda));
 
-   public IObject Max() => TODO_IMPLEMENT_ME;
+   public IObject ZipL(ICollection collection, IObject leftDefaultValue, IObject rightDefaultValue) =>
+      terminate().ZipL(collection, leftDefaultValue, rightDefaultValue);
 
-   public IObject Max(Lambda lambda) => TODO_IMPLEMENT_ME;
+   public IObject ZipL(ICollection collection, IObject leftDefaultValue, IObject rightDefaultValue, Lambda lambda) =>
+      terminate().ZipL(collection, leftDefaultValue, lambda);
 
-   public IObject First() => TODO_IMPLEMENT_ME;
+   public IObject Unzip() => terminate().Unzip();
 
-   public IObject First(Lambda predicate) => TODO_IMPLEMENT_ME;
+   public IObject Unzip(Lambda lambda) => terminate().Unzip(lambda);
 
-   public IObject Last() => TODO_IMPLEMENT_ME;
+   public IObject Min() => terminate().Min();
 
-   public IObject Last(Lambda predicate) => TODO_IMPLEMENT_ME;
+   public IObject Min(Lambda lambda) => terminate().Min(lambda);
 
-   public IObject Split(Lambda predicate) => TODO_IMPLEMENT_ME;
+   public IObject Max() => terminate().Max();
 
-   public IObject Split(int count) => TODO_IMPLEMENT_ME;
+   public IObject Max(Lambda lambda) => terminate().Max(lambda);
 
-   public IObject GroupBy(Lambda lambda) => TODO_IMPLEMENT_ME;
+   public IObject First() => terminate().First();
 
-   public IObject GroupBy(Lambda keyLambda, Lambda valueLambda) => TODO_IMPLEMENT_ME;
+   public IObject First(Lambda predicate) => terminate().First(predicate);
 
-   public KBoolean One(Lambda predicate) => TODO_IMPLEMENT_ME;
+   public IObject Last() => terminate().Last();
 
-   public KBoolean None(Lambda predicate) => TODO_IMPLEMENT_ME;
+   public IObject Last(Lambda predicate) => terminate().Last(predicate);
 
-   public KBoolean Any(Lambda predicate) => TODO_IMPLEMENT_ME;
+   public IObject Split(Lambda predicate) => terminate().Split(predicate);
 
-   public KBoolean All(Lambda predicate) => TODO_IMPLEMENT_ME;
+   public IObject Split(int count) => terminate().Split(count);
 
-   public INumeric Sum() => TODO_IMPLEMENT_ME;
+   public IObject GroupBy(Lambda lambda) => terminate().GroupBy(lambda);
 
-   public INumeric Average() => TODO_IMPLEMENT_ME;
+   public IObject GroupBy(Lambda keyLambda, Lambda valueLambda) => terminate().GroupBy(keyLambda, valueLambda);
 
-   public INumeric Product() => TODO_IMPLEMENT_ME;
+   public KBoolean One(Lambda predicate) => terminate().One(predicate);
 
-   public IObject Cross(ICollection collection) => TODO_IMPLEMENT_ME;
+   public KBoolean None(Lambda predicate) => terminate().None(predicate);
 
-   public IObject Cross(ICollection collection, Lambda lambda) => TODO_IMPLEMENT_ME;
+   public KBoolean Any(Lambda predicate) => terminate().Any(predicate);
 
-   public IObject By(int count) => TODO_IMPLEMENT_ME;
+   public KBoolean All(Lambda predicate) => terminate().All(predicate);
 
-   public IObject Window(int count) => TODO_IMPLEMENT_ME;
+   public INumeric Sum() => terminate().Sum();
 
-   public IObject Shape(int rows, int columns) => TODO_IMPLEMENT_ME;
+   public INumeric Average() => terminate().Average();
 
-   public IObject Unique() => TODO_IMPLEMENT_ME;
+   public INumeric Product() => terminate().Product();
 
-   public IObject Unique(Lambda lambda) => TODO_IMPLEMENT_ME;
+   public IObject Cross(ICollection collection) => terminate().Cross(collection);
 
-   public IObject Span(Lambda predicate) => TODO_IMPLEMENT_ME;
+   public IObject Cross(ICollection collection, Lambda lambda) => terminate().Cross(collection, lambda);
 
-   public IObject Span(int count) => TODO_IMPLEMENT_ME;
+   public IObject By(int count) => terminate().By(count);
 
-   public IObject Shuffle() => TODO_IMPLEMENT_ME;
+   public IObject Window(int count) => terminate().Window(count);
 
-   public IObject Random() => TODO_IMPLEMENT_ME;
+   public IObject Shape(int rows, int columns) => terminate().Shape(rows, columns);
 
-   public IObject Collect() => TODO_IMPLEMENT_ME;
+   public IObject Unique() => copy(new StreamingUnique());
 
-   public KArray ToArray() => TODO_IMPLEMENT_ME;
+   public IObject Unique(Lambda lambda) => copy(new StreamingUniqueLambda(lambda));
 
-   public List ToList() => TODO_IMPLEMENT_ME;
+   public IObject Span(Lambda predicate) => terminate().Split(predicate);
 
-   public KTuple ToTuple() => TODO_IMPLEMENT_ME;
+   public IObject Span(int count) => terminate().Span(count);
 
-   public Dictionary ToDictionary(Lambda keyLambda, Lambda valueLambda) => TODO_IMPLEMENT_ME;
+   public IObject Shuffle() => terminate().Shuffle();
 
-   public IObject ToDictionary() => TODO_IMPLEMENT_ME;
+   public IObject Random() => terminate().Random();
 
-   public IObject ToSet() => TODO_IMPLEMENT_ME;
+   public IObject Collect() => terminate().Collect();
 
-   public IObject Each(Lambda action) => TODO_IMPLEMENT_ME;
+   public KArray ToArray() => terminate().ToArray();
 
-   public IObject Rotate(int count) => TODO_IMPLEMENT_ME;
+   public List ToList() => terminate().ToList();
 
-   public IObject Permutations(int count) => TODO_IMPLEMENT_ME;
+   public KTuple ToTuple() => terminate().ToTuple();
 
-   public IObject Permutations() => TODO_IMPLEMENT_ME;
+   public Dictionary ToDictionary(Lambda keyLambda, Lambda valueLambda) => terminate().ToDictionary(keyLambda, valueLambda);
 
-   public IObject Combinations(int count) => TODO_IMPLEMENT_ME;
+   public IObject ToDictionary() => terminate().ToDictionary();
 
-   public IObject Combinations() => TODO_IMPLEMENT_ME;
+   public IObject ToSet() => terminate().ToSet();
 
-   public IObject Flatten() => TODO_IMPLEMENT_ME;
+   public IObject Each(Lambda action) => copy(new StreamingEach(action));
 
-   public IObject Copy() => TODO_IMPLEMENT_ME;
+   public IObject Rotate(int count) => terminate().Rotate(count);
 
-   public IObject Apply(ICollection collection) => TODO_IMPLEMENT_ME;
+   public IObject Permutations(int count) => terminate().Permutations(count);
 
-   public IObject Column(int column) => TODO_IMPLEMENT_ME;
+   public IObject Permutations() => terminate().Permutations();
 
-   public IObject Partition(Lambda lambda) => TODO_IMPLEMENT_ME;
+   public IObject Combinations(int count) => terminate().Combinations(count);
 
-   public IObject Pick(int count) => TODO_IMPLEMENT_ME;
+   public IObject Combinations() => terminate().Combinations();
 
-   public IObject Roll(int count) => TODO_IMPLEMENT_ME;
+   public IObject Flatten() => terminate().Flatten();
 
-   public IObject Splat(int count) => TODO_IMPLEMENT_ME;
+   public IObject Copy() => terminate().Copy();
 
-   public IObject Chunked(int count) => TODO_IMPLEMENT_ME;
+   public IObject Apply(ICollection collection) => terminate().Apply(collection);
 
-   public IObject Windowed(int size, int step, bool partial) => TODO_IMPLEMENT_ME;
+   public IObject Column(int column) => terminate().Column(column);
 
-   public IObject Repeated() => TODO_IMPLEMENT_ME;
+   public IObject Partition(Lambda lambda) => terminate().Partition(lambda);
 
-   public IObject Accumulate(Lambda lambda) => TODO_IMPLEMENT_ME;
+   public IObject Pick(int count) => terminate().Pick(count);
 
-   public IObject Accumulate(IObject initialValue, Lambda lambda) => TODO_IMPLEMENT_ME;
+   public IObject Roll(int count) => terminate().Roll(count);
 
-   public KBoolean AllTrue(IObject argument) => TODO_IMPLEMENT_ME;
+   public IObject Splat(int count) => terminate().Splat(count);
 
-   public KBoolean AnyTrue(IObject argument) => TODO_IMPLEMENT_ME;
+   public IObject Chunked(int count) => terminate().Chunked(count);
 
-   public KBoolean NoneTrue(IObject argument) => TODO_IMPLEMENT_ME;
+   public IObject Windowed(int size, int step, bool partial) => terminate().Windowed(size, step, partial);
+
+   public IObject Repeated() => terminate().Repeated();
+
+   public IObject Accumulate(Lambda lambda) => terminate().Last(lambda);
+
+   public IObject Accumulate(IObject initialValue, Lambda lambda) => terminate().Accumulate(initialValue, lambda);
+
+   public KBoolean AllTrue(IObject argument) => terminate().AllTrue(argument);
+
+   public KBoolean AnyTrue(IObject argument) => terminate().AnyTrue(argument);
+
+   public KBoolean NoneTrue(IObject argument) => terminate().NoneTrue(argument);
 }

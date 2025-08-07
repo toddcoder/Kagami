@@ -186,7 +186,7 @@ public class Iterator : IObject, IIterator
 
    public IObject FoldRight(IObject initialValue, Lambda lambda)
    {
-      return List().ToList().Aggregate(initialValue, (current, value) => lambda.Invoke(value, current));
+      return List().Aggregate(initialValue, (current, value) => lambda.Invoke(value, current));
    }
 
    public IObject FoldRight(Lambda lambda)
@@ -215,7 +215,7 @@ public class Iterator : IObject, IIterator
    {
       var current = initialValue;
       var result = new List<IObject> { current };
-      foreach (var value in List().ToList())
+      foreach (var value in List())
       {
          current = lambda.Invoke(current, value);
          result.Add(current);
@@ -229,7 +229,7 @@ public class Iterator : IObject, IIterator
       var firstObtained = false;
       var current = Unassigned.Value;
       var result = new List<IObject>();
-      foreach (var value in List().ToList())
+      foreach (var value in List())
       {
          if (firstObtained)
          {
@@ -267,7 +267,7 @@ public class Iterator : IObject, IIterator
       var firstObtained = false;
       var current = Unassigned.Value;
       var result = new List<IObject>();
-      foreach (var value in List().ToList())
+      foreach (var value in List())
       {
          if (firstObtained)
          {
@@ -291,7 +291,7 @@ public class Iterator : IObject, IIterator
 
    public Int Count(Lambda predicate) => List().Count(value => predicate.Invoke(value).IsTrue);
 
-   public virtual IObject Map(Lambda lambda) => collectionClass.Revert(List().ToList().Select(value => lambda.Invoke(value)));
+   public virtual IObject Map(Lambda lambda) => collectionClass.Revert(List().Select(value => lambda.Invoke(value)));
 
    public virtual IObject FlatMap(Lambda lambda)
    {
@@ -304,7 +304,7 @@ public class Iterator : IObject, IIterator
    public IObject Replace(Lambda predicate, Lambda lambda)
    {
       var list = new List<IObject>();
-      foreach (var item in List().ToList())
+      foreach (var item in List())
       {
          list.Add(predicate.Invoke(item).IsTrue ? lambda.Invoke(item) : item);
       }
@@ -313,16 +313,16 @@ public class Iterator : IObject, IIterator
    }
 
    public virtual IObject If(Lambda predicate) =>
-      collectionClass.Revert(List().ToList().Where(value => predicate.Invoke(value).IsTrue));
+      collectionClass.Revert(List().Where(value => predicate.Invoke(value).IsTrue));
 
    public virtual IObject IfNot(Lambda predicate) =>
-      collectionClass.Revert(List().ToList().Where(value => !predicate.Invoke(value).IsTrue));
+      collectionClass.Revert(List().Where(value => !predicate.Invoke(value).IsTrue));
 
    public virtual IObject Skip(int count)
    {
       if (count > -1)
       {
-         return collectionClass.Revert(List().ToList().Skip(count));
+         return collectionClass.Revert(List().Skip(count));
       }
       else
       {
@@ -333,19 +333,19 @@ public class Iterator : IObject, IIterator
 
    public virtual IObject SkipWhile(Lambda predicate)
    {
-      return collectionClass.Revert(List().ToList().SkipWhile(value => predicate.Invoke(value).IsTrue));
+      return collectionClass.Revert(List().SkipWhile(value => predicate.Invoke(value).IsTrue));
    }
 
    public virtual IObject SkipUntil(Lambda predicate)
    {
-      return collectionClass.Revert(List().ToList().SkipWhile(value => !predicate.Invoke(value).IsTrue));
+      return collectionClass.Revert(List().SkipWhile(value => !predicate.Invoke(value).IsTrue));
    }
 
    public virtual IObject Take(int count)
    {
       if (count > -1)
       {
-         return collectionClass.Revert(List().ToList().Take(count));
+         return collectionClass.Revert(List().Take(count));
       }
       else
       {
@@ -356,25 +356,18 @@ public class Iterator : IObject, IIterator
 
    public virtual IObject TakeWhile(Lambda predicate)
    {
-      return collectionClass.Revert(List().ToList().TakeWhile(value => predicate.Invoke(value).IsTrue));
+      return collectionClass.Revert(List().TakeWhile(value => predicate.Invoke(value).IsTrue));
    }
 
-   public virtual IObject TakeUntil(IObject obj)
+   public virtual IObject TakeUntil(Lambda predicate)
    {
-      if (obj is Lambda lambda)
-      {
-         return collectionClass.Revert(List().ToList().TakeWhile(value => !lambda.Invoke(value).IsTrue));
-      }
-      else
-      {
-         return collectionClass.Revert(List().ToList().TakeWhile(value => !value.IsEqualTo(obj)));
-      }
+      return collectionClass.Revert(List().TakeWhile(value => !predicate.Invoke(value).IsTrue));
    }
 
    public IObject Index(Lambda predicate)
    {
       var i = 0;
-      foreach (var value in List().ToList())
+      foreach (var value in List())
       {
          if (predicate.Invoke(value).IsTrue)
          {
@@ -391,7 +384,7 @@ public class Iterator : IObject, IIterator
    {
       var i = 0;
       var result = new List<IObject>();
-      foreach (var value in List().ToList())
+      foreach (var value in List())
       {
          if (predicate.Invoke(value).IsTrue)
          {
@@ -404,19 +397,19 @@ public class Iterator : IObject, IIterator
       return collectionClass.Revert(result);
    }
 
-   public IObject Zip(ICollection collection)
+   public virtual IObject Zip(ICollection collection)
    {
       var rightList = collection.GetIterator(false).List();
       return collectionClass.Revert(List().Zip(rightList, (x, y) => collectionClass.Revert(new List<IObject> { x, y })));
    }
 
-   public IObject Zip(ICollection collection, Lambda lambda)
+   public virtual IObject Zip(ICollection collection, Lambda lambda)
    {
       var rightList = collection.GetIterator(false).List();
       return collectionClass.Revert(List().Zip(rightList, (x, y) => lambda.Invoke(x, y)));
    }
 
-   public IObject ZipL(ICollection collection, IObject leftDefaultValue, IObject rightDefaultValue)
+   public virtual IObject ZipL(ICollection collection, IObject leftDefaultValue, IObject rightDefaultValue)
    {
       return collectionClass.Revert(zipUnequal(List(), collection.GetIterator(false).List())
          .Select(t => collectionClass.Revert(new List<IObject> { t.left, t.right })));
@@ -443,7 +436,7 @@ public class Iterator : IObject, IIterator
       }
    }
 
-   public IObject ZipL(ICollection collection, IObject leftDefaultValue, IObject rightDefaultValue, Lambda lambda)
+   public virtual IObject ZipL(ICollection collection, IObject leftDefaultValue, IObject rightDefaultValue, Lambda lambda)
    {
       return collectionClass.Revert(zipUnequal(List(), collection.GetIterator(false).List()));
 
@@ -471,7 +464,7 @@ public class Iterator : IObject, IIterator
 
    public IObject Unzip()
    {
-      var list = collection.GetIterator(false).List().ToList();
+      var list = collection.GetIterator(false).List();
       List<IObject> leftList = [];
       List<IObject> rightList = [];
 
@@ -479,7 +472,7 @@ public class Iterator : IObject, IIterator
       {
          if (obj is ICollection innerCollection)
          {
-            var innerList = innerCollection.GetIterator(false).List().ToList();
+            var innerList = innerCollection.GetIterator(false).List();
             IObject[] twoList = [.. innerList.Take(2)];
             if (twoList.Length >= 2)
             {
@@ -498,7 +491,7 @@ public class Iterator : IObject, IIterator
 
    public IObject Unzip(Lambda lambda)
    {
-      var list = collection.GetIterator(false).List().ToList();
+      var list = collection.GetIterator(false).List();
       List<IObject> leftList = [];
       List<IObject> rightList = [];
 
@@ -530,7 +523,7 @@ public class Iterator : IObject, IIterator
    public IObject Min()
    {
       var result = Unassigned.Value;
-      foreach (var value in List().ToList())
+      foreach (var value in List())
       {
          if (result is Unassigned)
          {
@@ -557,7 +550,7 @@ public class Iterator : IObject, IIterator
       var result = Unassigned.Value;
       if (lambda.Invokable.Parameters.Length == 2)
       {
-         foreach (var value in List().ToList())
+         foreach (var value in List())
          {
             if (result is Unassigned || ((Int)lambda.Invoke(value, result)).Value < 0)
             {
@@ -594,7 +587,7 @@ public class Iterator : IObject, IIterator
    public IObject Max()
    {
       var result = Unassigned.Value;
-      foreach (var value in List().ToList())
+      foreach (var value in List())
       {
          if (result is Unassigned)
          {
@@ -621,7 +614,7 @@ public class Iterator : IObject, IIterator
       var result = Unassigned.Value;
       if (lambda.Invokable.Parameters.Length == 2)
       {
-         foreach (var value in List().ToList())
+         foreach (var value in List())
          {
             if (result is Unassigned || ((Int)lambda.Invoke(value, result)).Value < 0)
             {
@@ -686,9 +679,9 @@ public class Iterator : IObject, IIterator
 
    public IObject Split(Lambda predicate)
    {
-      var ifTrue = new List<IObject>();
-      var ifFalse = new List<IObject>();
-      foreach (var value in List().ToList())
+      List<IObject> ifTrue = [];
+      List<IObject> ifFalse = [];
+      foreach (var value in List())
       {
          if (predicate.Invoke(value).IsTrue)
          {
@@ -705,10 +698,10 @@ public class Iterator : IObject, IIterator
 
    public IObject Split(int count)
    {
-      var ifTrue = new List<IObject>();
-      var ifFalse = new List<IObject>();
+      List<IObject> ifTrue = [];
+      List<IObject> ifFalse = [];
       var i = 0;
-      foreach (var value in List().ToList())
+      foreach (var value in List())
       {
          if (i++ < count)
          {
@@ -726,7 +719,7 @@ public class Iterator : IObject, IIterator
    public virtual IObject GroupBy(Lambda lambda)
    {
       var memo = new Memo<IObject, List<IObject>>.Function(_ => []);
-      foreach (var item in List().ToList())
+      foreach (var item in List())
       {
          var key = lambda.Invoke(item);
          memo[key].Add(item);
@@ -745,7 +738,7 @@ public class Iterator : IObject, IIterator
    public IObject GroupBy(Lambda keyLambda, Lambda valueLambda)
    {
       var memo = new Memo<IObject, List<IObject>>.Function(_ => []);
-      foreach (var item in List().ToList())
+      foreach (var item in List())
       {
          var key = keyLambda.Invoke(item);
          var value = valueLambda.Invoke(item);
@@ -765,7 +758,7 @@ public class Iterator : IObject, IIterator
    public KBoolean One(Lambda predicate)
    {
       var one = false;
-      foreach (var _ in List().ToList().Where(value => predicate.Invoke(value).IsTrue))
+      foreach (var _ in List().Where(value => predicate.Invoke(value).IsTrue))
       {
          if (one)
          {
@@ -782,12 +775,12 @@ public class Iterator : IObject, IIterator
 
    public KBoolean None(Lambda predicate)
    {
-      return List().ToList().All(value => !predicate.Invoke(value).IsTrue);
+      return List().All(value => !predicate.Invoke(value).IsTrue);
    }
 
-   public KBoolean Any(Lambda predicate) => List().ToList().Any(value => predicate.Invoke(value).IsTrue);
+   public KBoolean Any(Lambda predicate) => List().Any(value => predicate.Invoke(value).IsTrue);
 
-   public KBoolean All(Lambda predicate) => List().ToList().All(value => predicate.Invoke(value).IsTrue);
+   public KBoolean All(Lambda predicate) => List().All(value => predicate.Invoke(value).IsTrue);
 
    public INumeric Sum()
    {
@@ -851,10 +844,10 @@ public class Iterator : IObject, IIterator
 
    public IObject Cross(ICollection collection)
    {
-      var result = new List<List<IObject>>();
-      foreach (var left in List().ToList())
+      List<List<IObject>> result = [];
+      foreach (var left in List())
       {
-         result.AddRange(collection.GetIterator(false).List().ToList().Select(right => new List<IObject> { left, right }));
+         result.AddRange(collection.GetIterator(false).List().Select(right => new List<IObject> { left, right }));
       }
 
       return collectionClass.Revert(result.Select(l => collectionClass.Revert(l)));
@@ -863,9 +856,9 @@ public class Iterator : IObject, IIterator
    public IObject Cross(ICollection collection, Lambda lambda)
    {
       var result = new List<IObject>();
-      foreach (var left in List().ToList())
+      foreach (var left in List())
       {
-         result.AddRange(collection.GetIterator(false).List().ToList().Select(right => lambda.Invoke(left, right)));
+         result.AddRange(collection.GetIterator(false).List().Select(right => lambda.Invoke(left, right)));
       }
 
       return collectionClass.Revert(result);
@@ -881,7 +874,7 @@ public class Iterator : IObject, IIterator
          {
             List<IObject> outer = [];
             List<IObject> inner = [];
-            foreach (var value in List().ToList())
+            foreach (var value in List())
             {
                inner.Add(value);
                if (inner.Count == count)
@@ -899,7 +892,7 @@ public class Iterator : IObject, IIterator
             return collectionClass.Revert(outer);
          }
          default:
-            return collectionClass.Revert(List().ToList());
+            return collectionClass.Revert(List());
       }
    }
 
@@ -938,7 +931,7 @@ public class Iterator : IObject, IIterator
       }
       else
       {
-         return collectionClass.Revert(List().ToList());
+         return collectionClass.Revert(List());
       }
    }
 
@@ -985,7 +978,7 @@ public class Iterator : IObject, IIterator
 
    public virtual IObject Unique() => collectionClass.Revert(List().Distinct());
 
-   public IObject Unique(Lambda lambda)
+   public virtual IObject Unique(Lambda lambda)
    {
       return collectionClass.Revert(unique(List()));
 
@@ -1094,9 +1087,9 @@ public class Iterator : IObject, IIterator
 
    public IObject ToSet() => new Set((IObject[]) [.. List()]);
 
-   public IObject Each(Lambda action)
+   public virtual IObject Each(Lambda action)
    {
-      foreach (var item in List().ToList())
+      foreach (var item in List())
       {
          action.Invoke(item);
       }
@@ -1110,7 +1103,7 @@ public class Iterator : IObject, IIterator
 
       if (count > 0)
       {
-         var rotatedList = list.Take(count).ToList();
+         var rotatedList = list.Take(count);
          var retainedList = list.Skip(count).ToList();
          retainedList.AddRange(rotatedList);
          list = retainedList;
@@ -1119,7 +1112,7 @@ public class Iterator : IObject, IIterator
       {
          var length = list.Count;
          var rotatedList = list.Skip(length + count).ToList();
-         var retainedList = list.Take(length + count).ToList();
+         var retainedList = list.Take(length + count);
          rotatedList.AddRange(retainedList);
          list = rotatedList;
       }
@@ -1233,16 +1226,16 @@ public class Iterator : IObject, IIterator
       }
    }
 
-   public IObject Flatten() => collectionClass.Revert(flatten(this).ToList());
+   public IObject Flatten() => collectionClass.Revert(flatten(this));
 
-   public IObject Copy() => collectionClass.Revert(List().ToList());
+   public IObject Copy() => collectionClass.Revert(List());
 
    public IObject Apply(ICollection collection)
    {
-      var lambdas = List().ToList().Select(l => (Lambda)l).ToList();
+      var lambdas = List().Select(l => (Lambda)l).ToList();
       var list = collection.GetIterator(false).List().ToList();
 
-      var result = applyAgainst(lambdas, list).ToList();
+      var result = applyAgainst(lambdas, list);
       return collectionClass.Revert(result);
    }
 

@@ -56,7 +56,7 @@ public class InterpolatedStringSymbol : Symbol, IHasExpressions
 
    public override string ToString()
    {
-      return (StringStream)"$\"" / prefix / expressions.Zip(suffixes, (e, s) => $"({e}){s}").ToString("");
+      return (StringStream)"$\"" / prefix / expressions.Zip(suffixes, (e, s) => $"({e}){s}").ToString("") / "\"";
    }
 
    public Expression[] Expressions => expressions;

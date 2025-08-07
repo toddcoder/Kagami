@@ -4,6 +4,7 @@ using Core.Collections;
 using Core.Monads;
 using Core.Objects;
 using Kagami.Library.Inclusions;
+using Kagami.Library.Iterators;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
 using Kagami.Library.Parsers;
@@ -111,6 +112,7 @@ public class Module
       "Before" => new BeforeClass(),
       "FloatRange" => new FloatRangeClass(),
       "LazyString" => new LazyStringClass(),
+      "StreamingIterator" => new StreamingIteratorClass(),
       _ => nil
    };
 
