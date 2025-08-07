@@ -1,0 +1,8 @@
+﻿open sys
+
+var portNumber = 1337
+var r = -> println(portNumber)
+var s = (nocap portNumber) -> println(portNumber)
+portNumber = 31337
+r()
+s()

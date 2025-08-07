@@ -1,19 +1,16 @@
-﻿using System;
+﻿namespace Kagami.Library.Objects;
 
-namespace Kagami.Library.Objects
+public interface ILazyStatus
 {
-   public interface ILazyStatus
-   {
-      IObject Object { get; }
+   IObject Object { get; }
 
-      bool IsAccepted { get; }
+   bool IsAccepted { get; }
 
-      bool IsSkipped { get; }
+   bool IsSkipped { get; }
 
-      bool IsEnded { get; }
+   bool IsEnded { get; }
 
-      bool IsFailed { get; }
+   bool IsFailed { get; }
 
-      Exception Exception { get; }
-   }
+   Exception Exception { get; }
 }

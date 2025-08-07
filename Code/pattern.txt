@@ -1,4 +1,4 @@
 Odd
 Even
 Zero
-it [3, 2, 0] | Iterator
+it collection | Iterator

@@ -2,7 +2,6 @@
 using Core.Dates.Now;
 using Core.Enumerables;
 using Core.Monads;
-using Core.Strings;
 using Kagami.Library.Classes;
 using Kagami.Library.Runtime;
 using static Core.Monads.MonadFunctions;
@@ -36,9 +35,9 @@ public class Iterator : IObject, IIterator
 
    public virtual string ClassName => "Iterator";
 
-   public virtual string AsString => $"it {((IObject)collection).AsString.Truncate(100)}";
+   public virtual string AsString => "it collection";
 
-   public virtual string Image => $"it {((IObject)collection).Image.Truncate(100)}";
+   public virtual string Image => "it collection";
 
    public int Hash => ((IObject)collection).Hash;
 
@@ -296,9 +295,8 @@ public class Iterator : IObject, IIterator
 
    public virtual IObject FlatMap(Lambda lambda)
    {
-      var className = ((BaseClass)collectionClass).Name;
-      var enumerable = List().ToList().Select(value => lambda.Invoke(value));
-      var flattened = flatten(enumerable, className);
+      var enumerable = List().Select(value => lambda.Invoke(value));
+      var flattened = flatten(enumerable);
 
       return collectionClass.Revert(flattened);
    }
@@ -1216,14 +1214,14 @@ public class Iterator : IObject, IIterator
       }
    }
 
-   protected static IEnumerable<IObject> flatten(IEnumerable<IObject> enumerable, string className)
+   protected static IEnumerable<IObject> flatten(IEnumerable<IObject> enumerable)
    {
       foreach (var item in enumerable)
       {
-         if (item.ClassName == className)
+         if (item is ICollection collection)
          {
-            var innerIterator = ((ICollection)item).GetIterator(false);
-            foreach (var inner in flatten(innerIterator))
+            var innerIterator = collection.GetIterator(false);
+            foreach (var inner in flatten(innerIterator.List()))
             {
                yield return inner;
             }

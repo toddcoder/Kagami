@@ -1,4 +1,4 @@
 Ronaldo da Costa          (M) BRA 1970-06-07
 Paula Radcliffe           (M) GBR 1973-12-17
 Sammy Korir               (M) KEN 1971-12-12
-it [object5 Athlete(firstName = "Ronaldo", lastName = "da Costa", dateOfBirth = d"06/07/1970 00:00:00.… | Iterator
+it collection | Iterator

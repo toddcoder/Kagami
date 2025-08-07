@@ -5,4 +5,4 @@ IV
 V
 VI
 VII
-it ["ONE 1 I", "TWO 2 I", "#START", "THREE:3:III", "FOUR:4:IV", "FIVE:5:V", "#STOP", "SIX 6 VI", "SEVE… | Iterator
+it collection | Iterator

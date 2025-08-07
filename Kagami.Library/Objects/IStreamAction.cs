@@ -1,11 +1,8 @@
-﻿using System.Collections.Generic;
+﻿namespace Kagami.Library.Objects;
 
-namespace Kagami.Library.Objects
+public interface IStreamAction
 {
-   public interface IStreamAction
-   {
-      ILazyStatus Next(ILazyStatus status);
+   ILazyStatus Next(ILazyStatus status);
 
-      IEnumerable<IObject> Execute(IIterator iterator);
-   }
+   IEnumerable<IObject> Execute(IIterator iterator);
 }
