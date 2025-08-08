@@ -28,10 +28,10 @@ public partial class ComparisandBooleanParser : SymbolParser
             builder.Add(new SpecialComparisandSymbol(SpecialComparisandDirection.Equal | SpecialComparisandDirection.Not));
             break;
          case "<=":
-            builder.Add(new SpecialComparisandSymbol(SpecialComparisandDirection.Greater | SpecialComparisandDirection.Equal));
+            builder.Add(new SpecialComparisandSymbol(SpecialComparisandDirection.Less | SpecialComparisandDirection.Equal));
             break;
          case ">=":
-            builder.Add(new SpecialComparisandSymbol(SpecialComparisandDirection.Less | SpecialComparisandDirection.Equal));
+            builder.Add(new SpecialComparisandSymbol(SpecialComparisandDirection.Greater | SpecialComparisandDirection.Equal));
             break;
          case "<":
             builder.Add(new SpecialComparisandSymbol(SpecialComparisandDirection.Less));

@@ -46,14 +46,9 @@ public partial class AssignToNewFieldParser : EndingInExpressionParser
          state.CommitTransaction();
          return unit;
       }
-      else if (_scan.Exception is (true, var exception))
-      {
-         return exception;
-      }
       else
       {
-         state.RollBackTransaction();
-         return nil;
+         return state.SetException("Missing equal sign");
       }
    }
 
