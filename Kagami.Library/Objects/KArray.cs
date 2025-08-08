@@ -14,14 +14,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
    public static IObject CreateObject(IEnumerable<IObject> items)
    {
       var list = items.ToList();
-      if (list.All(i => i is IKeyValue) && list.Count > 0)
-      {
-         return new Dictionary(list);
-      }
-      else
-      {
-         return new KArray(list);
-      }
+      return new KArray(list);
    }
 
    public static KArray Empty => new([]);

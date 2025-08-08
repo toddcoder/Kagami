@@ -89,6 +89,8 @@ public static class ObjectFunctions
             return matchStringToTuple(kString, tuple, bindings);
          case KTuple tuple when source is not KTuple:
             return matchNonTuple(source, tuple, bindings);
+         case KTuple tuple1 when source is KTuple tuple2:
+            return matchTupleToTuple(tuple2, tuple1, bindings);
          case SpecialComparisand specialComparisand:
             return specialComparisand.Match(source, bindings);
          case UserObjectPlaceholder userObjectPlaceholder when source is UserObject userObject:
@@ -133,6 +135,29 @@ public static class ObjectFunctions
             }
          }
          else
+         {
+            return false;
+         }
+      }
+
+      return true;
+   }
+
+   private static bool matchTupleToTuple(KTuple source, KTuple comparisand, Hash<string, IObject> bindings)
+   {
+      var length = source.Length.Value;
+      if (length != comparisand.Length.Value)
+      {
+         return false;
+      }
+
+      for (var i = 0; i < length; i++)
+      {
+         var item1 = source[i];
+         var item2 = comparisand[i];
+
+         var matched = item1.Match(item2, bindings);
+         if (!matched)
          {
             return false;
          }

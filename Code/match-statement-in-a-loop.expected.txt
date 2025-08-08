@@ -1,0 +1,8 @@
+zero as an Int
+zero as a Float
+an integer value of 1
+positive float of 1
+some other float
+a string value of foobar
+an (x, y) point at 10, 42
+it collection | Iterator

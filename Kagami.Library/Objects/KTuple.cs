@@ -175,33 +175,7 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
          items.Zip(t.items, (t1, t2) => (x: t1, y: t2)).All(tu => tu.x.IsEqualTo(tu.y));
    }
 
-   public bool Match(IObject comparisand, Hash<string, IObject> bindings)
-   {
-      return match(this, comparisand, compareTuples, bindings);
-
-      bool compareTuples(KTuple t1, KTuple t2)
-      {
-         var length = t1.Length.Value;
-         if (length != t2.Length.Value)
-         {
-            return false;
-         }
-
-         for (var i = 0; i < length; i++)
-         {
-            var item1 = t1.items[i];
-            var item2 = t2.items[i];
-
-            var matched = item1.Match(item2, bindings);
-            if (!matched)
-            {
-               return false;
-            }
-         }
-
-         return true;
-      }
-   }
+   public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
    public bool IsTrue => items.Length > 0;
 

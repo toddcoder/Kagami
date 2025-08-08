@@ -9,9 +9,12 @@ public class NewDictionaryOrSet : OneOperandOperation
 {
    public override Optional<IObject> Execute(Machine machine, IObject value)
    {
-      if (value is KeyValue)
+      switch (value)
       {
-         return Dictionary.New([value]).Just();
+         case KeyValue:
+            return Dictionary.New([value]).Just();
+         case KArray:
+            return value.Just();
       }
 
       var _list = value switch

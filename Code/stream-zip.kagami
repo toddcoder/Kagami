@@ -2,8 +2,8 @@
 
 var numbers = [1..10]
 var letters = ['a'..'j']
-var iter = lit numbers zip letters
-println(~[iter])
+var i = lit numbers zip letters
+println(~[i])
 
-iter = lit numbers.zip(letters) (l, r) -> $"(l)(r)"
-println(~[iter])
+i = lit numbers.zip(letters) (l, r) -> $"(l)(r)"
+println(~[i])
