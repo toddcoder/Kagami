@@ -400,9 +400,9 @@ public abstract class BaseClass
          (obj, message) => iteratorFunc<IObject, IObject, IObject>(obj, message, (i, c, lv, rv) => i.ZipL((ICollection)c, lv, rv)));
       registerIterMessage("unzip()", (obj, _) => iteratorFunc(obj, i => i.Unzip()));
       registerIterMessage("unzip(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Unzip(l)));
-      registerIterMessage("min".get(), (obj, _) => iteratorFunc(obj, i => i.Min()));
+      registerIterMessage("min()", (obj, _) => iteratorFunc(obj, i => i.Min()));
       registerIterMessage("min(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Min(l)));
-      registerIterMessage("max".get(), (obj, _) => iteratorFunc(obj, i => i.Max()));
+      registerIterMessage("max()", (obj, _) => iteratorFunc(obj, i => i.Max()));
       registerIterMessage("max(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Max(l)));
       registerIterMessage("first()", (obj, _) => iteratorFunc(obj, i => i.First()));
       registerIterMessage("first".Selector("_<Lambda>"), (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.First(l)));
