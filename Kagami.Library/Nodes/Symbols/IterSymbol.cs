@@ -6,17 +6,17 @@ using static Kagami.Library.Nodes.NodeFunctions;
 
 namespace Kagami.Library.Nodes.Symbols;
 
-public class SeqSymbol : Symbol
+public class IterSymbol : Symbol
 {
    protected Block block;
    protected Function function;
    protected InvokeSymbol invoke;
 
-   public SeqSymbol(Block block)
+   public IterSymbol(Block block)
    {
       this.block = block;
 
-      var functionName = newLabel("gather");
+      var functionName = newLabel("iter");
       function = new Function(functionName, Parameters.Empty, block, true, false, "");
       invoke = new InvokeSymbol(functionName, [], nil, false);
    }
@@ -31,5 +31,5 @@ public class SeqSymbol : Symbol
 
    public override Arity Arity => Arity.Nullary;
 
-   public override string ToString() => $"seq {block}";
+   public override string ToString() => $"iter {block}";
 }

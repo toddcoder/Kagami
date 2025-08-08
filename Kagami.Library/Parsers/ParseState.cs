@@ -40,7 +40,7 @@ public class ParseState : IEnumerable<Statement>
 
    public ParseState(string source)
    {
-      this.source = source;
+      this.source = source.TrimEnd();
       tokenTransaction = new TokenTransaction(tokens);
    }
 

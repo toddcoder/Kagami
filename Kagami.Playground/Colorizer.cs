@@ -91,13 +91,13 @@ public class Colorizer
 
    protected static Color getForeColor(Library.Parsers.Color color, ref int parenthesesCount) => color switch
    {
-      Library.Parsers.Color.String => Color.Teal,
-      Library.Parsers.Color.StringPart => Color.Teal,
-      Library.Parsers.Color.Char => Color.Teal,
+      Library.Parsers.Color.String => Color.Red,
+      Library.Parsers.Color.StringPart => Color.Red,
+      Library.Parsers.Color.Char => Color.Red,
       Library.Parsers.Color.Number => Color.Green,
       Library.Parsers.Color.NumberPart => Color.Green,
       Library.Parsers.Color.Operator => Color.BlueViolet,
-      Library.Parsers.Color.Identifier => Color.Blue,
+      Library.Parsers.Color.Identifier => Color.Indigo,
       Library.Parsers.Color.Structure => Color.DarkSlateBlue,
       Library.Parsers.Color.Whitespace => Color.Black,
       Library.Parsers.Color.Comment => Color.FromArgb(128, 128, 128),
@@ -108,7 +108,7 @@ public class Colorizer
       Library.Parsers.Color.CollectionPart => Color.Purple,
       Library.Parsers.Color.Symbol => Color.CornflowerBlue,
       Library.Parsers.Color.Boolean => Color.Coral,
-      Library.Parsers.Color.Keyword => Color.Red,
+      Library.Parsers.Color.Keyword => Color.Blue,
       Library.Parsers.Color.Invokable => Color.DarkMagenta,
       Library.Parsers.Color.Class => Color.DarkGreen,
       Library.Parsers.Color.Label => Color.DimGray,

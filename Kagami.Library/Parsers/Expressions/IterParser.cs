@@ -6,13 +6,13 @@ using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public partial class SeqParser : SymbolParser
+public partial class IterParser : SymbolParser
 {
-   public SeqParser(ExpressionBuilder builder) : base(builder)
+   public IterParser(ExpressionBuilder builder) : base(builder)
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(seq)\b")]
+   [GeneratedRegex(@"^(\s*)(iter)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -27,7 +27,7 @@ public partial class SeqParser : SymbolParser
       {
          state.RemoveYieldFlag();
          state.RemoveReturnType();
-         builder.Add(new SeqSymbol(block));
+         builder.Add(new IterSymbol(block));
          return unit;
       }
       else if (_block.Exception is (true, var exception))

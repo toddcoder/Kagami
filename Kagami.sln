@@ -20,8 +20,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kagami.Tests", "Kagami.Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kagami.GuiTests", "Kagami.GuiTests\Kagami.GuiTests.csproj", "{78807DC2-AEC8-4DF2-BD0F-CE8363EDBF33}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kagami.Matching", "Kagami.Matching\Kagami.Matching.csproj", "{EF2C40A7-C453-4983-822E-945E13119841}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -64,10 +62,6 @@ Global
 		{78807DC2-AEC8-4DF2-BD0F-CE8363EDBF33}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78807DC2-AEC8-4DF2-BD0F-CE8363EDBF33}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78807DC2-AEC8-4DF2-BD0F-CE8363EDBF33}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EF2C40A7-C453-4983-822E-945E13119841}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EF2C40A7-C453-4983-822E-945E13119841}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EF2C40A7-C453-4983-822E-945E13119841}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EF2C40A7-C453-4983-822E-945E13119841}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
