@@ -1470,6 +1470,19 @@ public class Iterator : IObject, IIterator
       return true;
    }
 
+   public KTuple HeadTail()
+   {
+      var _next = Next();
+      if (_next is (true, var next))
+      {
+         return new KTuple(new NameValue("head", Some.Object(next)), new NameValue("tail", this));
+      }
+      else
+      {
+         return new KTuple(new NameValue("head", KNil.NilValue), new NameValue("tail", this));
+      }
+   }
+
    protected static IEnumerable<IObject> applyAgainst(List<Lambda> lambdas, List<IObject> enumerable)
    {
       return lambdas.SelectMany(_ => enumerable, (lambda, item) => lambda.Invoke(item));

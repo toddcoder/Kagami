@@ -328,4 +328,6 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
    public KBoolean AnyTrue(IObject argument) => terminate().AnyTrue(argument);
 
    public KBoolean NoneTrue(IObject argument) => terminate().NoneTrue(argument);
+
+   public KTuple HeadTail() => terminate().HeadTail();
 }

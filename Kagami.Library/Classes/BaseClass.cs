@@ -476,6 +476,7 @@ public abstract class BaseClass
       registerIterMessage("allTrue(_)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, c) => i.AllTrue(c)));
       registerIterMessage("anyTrue(_)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, c) => i.AnyTrue(c)));
       registerIterMessage("noneTrue(_)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, c) => i.NoneTrue(c)));
+      registerIterMessage("headTail()", (obj, _) => iteratorFunc(obj, i => i.HeadTail()));
    }
 
    public virtual bool MatchCompatible(BaseClass otherClass) => Name == otherClass.Name;

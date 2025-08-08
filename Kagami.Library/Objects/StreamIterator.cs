@@ -404,5 +404,7 @@ public class StreamIterator : IObject, IIterator
 
    public KBoolean NoneTrue(IObject argument) => terminate().NoneTrue(argument);
 
+   public KTuple HeadTail() => terminate().HeadTail();
+
    public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
 }

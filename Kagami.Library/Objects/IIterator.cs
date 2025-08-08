@@ -212,4 +212,6 @@ public interface IIterator : IEquivalentClass
    KBoolean AnyTrue(IObject argument);
 
    KBoolean NoneTrue(IObject argument);
+
+   public KTuple HeadTail();
 }
