@@ -87,8 +87,8 @@ public static class ObjectFunctions
             return matchArrayToTuple(array, tuple, bindings);
          case KTuple tuple when source is KString kString:
             return matchStringToTuple(kString, tuple, bindings);
-         case KTuple tuple when source is not KTuple:
-            return matchNonTuple(source, tuple, bindings);
+         /*case KTuple tuple when source is not KTuple:
+            return matchNonTuple(source, tuple, bindings);*/
          case KTuple tuple1 when source is KTuple tuple2:
             return matchTupleToTuple(tuple2, tuple1, bindings);
          case SpecialComparisand specialComparisand:

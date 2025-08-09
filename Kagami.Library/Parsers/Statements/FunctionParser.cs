@@ -102,6 +102,10 @@ public partial class FunctionParser : StatementParser
       if (_parameters is (true, var parameters))
       {
          var isFixed = state.Scan(@"^(\s+)(fixed)\b", Color.Whitespace, Color.Keyword);
+         if (state.CurrentSource.IsMatch("^ /s* '{' /s* 'when' /b"))
+         {
+            return state.SetException("Match function must omit {");
+         }
          if (state.CurrentSource.IsMatch("^ /s* 'when' /b"))
          {
             var parameterName = "__$0";
