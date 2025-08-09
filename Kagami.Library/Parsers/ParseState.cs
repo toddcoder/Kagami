@@ -52,7 +52,22 @@ public class ParseState : IEnumerable<Statement>
 
    public void SetExceptionIndex() => _exceptionIndex = index.Some();
 
-   public Statement[] Statements() => statements.ToArray();
+   public Statement[] Statements() => [.. statements];
+
+   public Maybe<Statement> PopStatement()
+   {
+      if (statements.Count > 0)
+      {
+         var lastStatement = statements[^1];
+         statements.RemoveAt(statements.Count - 1);
+
+         return lastStatement;
+      }
+      else
+      {
+         return nil;
+      }
+   }
 
    public void BeginTransaction()
    {

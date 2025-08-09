@@ -55,4 +55,6 @@ public class While : Statement
    }
 
    public override string ToString() => $"{(isWhile ? "while" : "until")} {expression} {block}";
+
+   public void AddIncrementerToBlock(Statement statement) => block.Add(statement);
 }

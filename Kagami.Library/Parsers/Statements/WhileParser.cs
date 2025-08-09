@@ -9,6 +9,8 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class WhileParser : StatementParser
 {
+   protected Maybe<Statement> _statement = nil;
+
    [GeneratedRegex(@"^(\s*)(while|until)(?![>\^])\b")]
    public override partial Regex Regex();
 
@@ -19,16 +21,38 @@ public partial class WhileParser : StatementParser
 
       var _result =
          from expression in getExpression(state, ExpressionFlags.Standard)
+         from _ in getIncrement(state)
          from block in getBlock(state)
          select new While(expression, block, isWhile);
       if (_result is (true, var statement))
       {
          state.AddStatement(statement);
+         if (_statement is (true, var lastStatement))
+         {
+            statement.AddIncrementerToBlock(lastStatement);
+         }
+
          return unit;
       }
       else
       {
          return _result.Exception;
       }
+   }
+
+   protected Optional<Unit> getIncrement(ParseState state)
+   {
+      var _scan = state.Scan(@"^(\s*)(;)", Color.Whitespace, Color.Structure);
+      if (_scan)
+      {
+         var statementsParser = new StatementsParser();
+         var _result = statementsParser.Scan(state);
+         if (_result)
+         {
+            _statement = state.PopStatement();
+         }
+      }
+
+      return unit;
    }
 }

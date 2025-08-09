@@ -137,6 +137,10 @@ public static class AllExceptions
 
    public static Exception needsOverride(string name) => fail(messageNeedsOverride(name));
 
+   public static string messageNeedsImplementation(string name) => $"Field {name} needs to be implemented";
+
+   public static Exception needsImplementation(string name) => fail(messageNeedsImplementation(name));
+
    public static string messageConstantRequired(Expression expression) => $"Constant required, found {expression}";
 
    public static Exception constantRequired(Expression expression) => fail(messageConstantRequired(expression));

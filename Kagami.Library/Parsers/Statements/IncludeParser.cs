@@ -34,6 +34,11 @@ public partial class IncludeParser : StatementParser
          {
             state.AddStatement(function);
          }
+
+         foreach (var requiredField in inclusion.RequiredFields())
+         {
+            state.AddStatement(requiredField);
+         }
       }
       else
       {

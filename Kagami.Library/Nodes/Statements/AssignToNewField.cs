@@ -55,10 +55,10 @@ public class AssignToNewField : Statement
 
    public override string ToString() => stream() / (mutable ? "var" : "let") / " " / fieldName / " = " / expression;
 
-   public void Deconstruct(out bool mutable, out string fieldName, out Expression expression)
+   public void Deconstruct(out bool mutable, out string fieldName, out Maybe<TypeConstraint> _typeConstraint)
    {
       mutable = this.mutable;
       fieldName = this.fieldName;
-      expression = this.expression;
+      _typeConstraint = this._typeConstraint;
    }
 }

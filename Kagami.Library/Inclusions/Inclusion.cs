@@ -12,6 +12,7 @@ public class Inclusion(string name)
    protected Hash<Selector, OptionalFunction> optionalFunctions = [];
    protected Hash<Selector, Function> functions = [];
    protected StringHash<Inclusion> inheritedInclusions = [];
+   protected StringHash<RequiredField> requiredFields = [];
 
    public string Name => name;
 
@@ -54,6 +55,19 @@ public class Inclusion(string name)
       }
    }
 
+   public Result<Unit> Register(RequiredField requiredField)
+   {
+      if (requiredFields.ContainsKey(requiredField.FieldName))
+      {
+         return fail($"Required field {requiredField.FieldName} already exists");
+      }
+      else
+      {
+         requiredFields[requiredField.FieldName] = requiredField;
+         return unit;
+      }
+   }
+
    public Result<Unit> Register(Inclusion inclusion)
    {
       if (inheritedInclusions.ContainsKey(inclusion.Name))
@@ -74,6 +88,8 @@ public class Inclusion(string name)
    public Maybe<Function> Function(Selector selector) => functions.Maybe[selector];
 
    public Maybe<Inclusion> InheritedInclusion(string inclusionName) => inheritedInclusions.Maybe[inclusionName];
+
+   public Maybe<RequiredField> RequiredField(string fieldName) => requiredFields.Maybe[fieldName];
 
    public IEnumerable<RequiredFunction> RequiredFunctions()
    {
@@ -110,6 +126,14 @@ public class Inclusion(string name)
       foreach (var function in inheritedInclusions.Values.SelectMany(inheritedInclusion => inheritedInclusion.Functions()))
       {
          yield return function;
+      }
+   }
+
+   public IEnumerable<RequiredField> RequiredFields()
+   {
+      foreach (var (_, requiredField) in requiredFields)
+      {
+         yield return requiredField;
       }
    }
 }

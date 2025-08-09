@@ -31,6 +31,7 @@ public class ClassBuilder
    protected UserClass userClass = new("", "");
    protected Set<Selector> requiredFunctions = [];
    protected StringHash<Expression> delegates = [];
+   protected StringHash<RequiredField> requiredFields = [];
 
    public ClassBuilder(string className, Parameters parameters, string parentClassName, Expression[] parentArguments,
       bool initialize, Block constructorBlock)
@@ -106,7 +107,30 @@ public class ClassBuilder
          {
             case AssignToNewField assignToNewField:
             {
-               var (mutable, fieldName, _) = assignToNewField;
+               var (mutable, fieldName, _typeConstraint) = assignToNewField;
+               if (requiredFields.Maybe[fieldName] is (true, var requiredField))
+               {
+                  if (mutable != requiredField.Mutable)
+                  {
+                     throw needsImplementation(fieldName);
+                  }
+                  else if (_typeConstraint is (true, var typeConstraint))
+                  {
+                     if (requiredField.TypeConstraint is (true, var requiredTypeConstraint) && !typeConstraint.IsEqualTo(requiredTypeConstraint))
+                     {
+                        throw needsImplementation(fieldName);
+                     }
+                  }
+                  else if (!_typeConstraint && requiredField.TypeConstraint)
+                  {
+                     throw needsImplementation(fieldName);
+                  }
+                  else
+                  {
+                     requiredFields.Maybe[fieldName] = nil;
+                  }
+               }
+
                var function = Function.Getter(fieldName);
                statements.Add(function);
                var (functionName, _, block, _, invokable, _) = function;
@@ -244,6 +268,9 @@ public class ClassBuilder
                userClass.RegisterInclusion(requiredFunction.Inclusion);
                break;
             }
+            case RequiredField requiredField:
+               requiredFields[requiredField.FieldName] = requiredField;
+               break;
             default:
                statements.Add(statement);
                break;
@@ -254,6 +281,12 @@ public class ClassBuilder
       {
          var functionList = requiredFunctions.ToString(", ");
          throw fail(requiredFunctions.Count.Plural($"Required function(s) {functionList} not implemented"));
+      }
+
+      if (requiredFields.Count > 0)
+      {
+         var fieldList = requiredFields.Select(rf => rf.Value.FieldName).ToString(", ");
+         throw fail(requiredFields.Count.Plural($"Required field(s) {fieldList} not implemented"));
       }
 
       foreach (var (delegateClass, delegateConstructor) in delegates)
