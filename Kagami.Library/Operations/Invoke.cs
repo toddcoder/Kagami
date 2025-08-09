@@ -68,6 +68,9 @@ public class Invoke : OneOperandOperation
    {
       switch (value)
       {
+         case CompositeLambda compositeLambda:
+            increment = true;
+            return compositeLambda.Invoke(arguments.Value).Just();
          case IInvokableObject invokableObject:
             InvokeInvokableObject(machine, invokableObject, arguments);
             increment = invokableObject.Invokable is YieldingInvokable;
