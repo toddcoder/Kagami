@@ -96,7 +96,7 @@ public class Colorizer
       Library.Parsers.Color.Char => Color.Red,
       Library.Parsers.Color.Number => Color.Green,
       Library.Parsers.Color.NumberPart => Color.Green,
-      Library.Parsers.Color.Operator => Color.BlueViolet,
+      Library.Parsers.Color.Operator => Color.Crimson,
       Library.Parsers.Color.Identifier => Color.Indigo,
       Library.Parsers.Color.Structure => Color.DarkSlateBlue,
       Library.Parsers.Color.Whitespace => Color.Black,
