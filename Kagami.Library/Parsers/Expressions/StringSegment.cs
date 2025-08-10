@@ -1,6 +1,6 @@
 ﻿namespace Kagami.Library.Parsers.Expressions;
 
-public enum LazyStringSegment
+public enum StringSegment
 {
    String,
    Escaped,

@@ -22,9 +22,9 @@ public partial class LazyStringParser : SymbolParser
    {
       state.Colorize(tokens, Color.Whitespace, Color.StringPart, Color.String);
 
-      List<LazyStringPart> list = [];
+      List<StringPart> list = [];
       var text = new StringBuilder();
-      var type = LazyStringSegment.String;
+      var type = StringSegment.String;
       var startIndex = state.Index;
       var sourceIndex = 0;
 
@@ -33,16 +33,16 @@ public partial class LazyStringParser : SymbolParser
          var ch = state.CurrentSource[sourceIndex++];
          switch (ch)
          {
-            case '"' when type is LazyStringSegment.Escaped:
+            case '"' when type is StringSegment.Escaped:
                text.Append(ch);
-               type = LazyStringSegment.String;
+               type = StringSegment.String;
                break;
-            case '"' when type is LazyStringSegment.Hex:
+            case '"' when type is StringSegment.Hex:
             {
                var _matchedChar = fromHex(text.ToString());
                if (_matchedChar is (true, var matchedChar))
                {
-                  list.Add(new LazyStringPart.Hex(matchedChar.ToString()));
+                  list.Add(new StringPart.Hex(matchedChar.ToString()));
                }
                else if (_matchedChar.Exception is (true, var exception))
                {
@@ -59,83 +59,83 @@ public partial class LazyStringParser : SymbolParser
             }
             case '"':
                return getLazyString();
-            case '\\' when type is LazyStringSegment.Escaped:
+            case '\\' when type is StringSegment.Escaped:
                text.Append(ch);
-               type = LazyStringSegment.String;
+               type = StringSegment.String;
                break;
             case '\\':
-               type = LazyStringSegment.Escaped;
+               type = StringSegment.Escaped;
                break;
-            case 'n' when type is LazyStringSegment.Escaped:
+            case 'n' when type is StringSegment.Escaped:
                text.Append('\n');
-               type = LazyStringSegment.String;
+               type = StringSegment.String;
                break;
             case 'n':
                text.Append(ch);
                break;
-            case 'r' when type is LazyStringSegment.Escaped:
+            case 'r' when type is StringSegment.Escaped:
                text.Append('\r');
-               type = LazyStringSegment.String;
+               type = StringSegment.String;
                break;
             case 'r':
                text.Append(ch);
                break;
-            case 't' when type is LazyStringSegment.Escaped:
+            case 't' when type is StringSegment.Escaped:
                text.Append('\t');
-               type = LazyStringSegment.String;
+               type = StringSegment.String;
                break;
             case 't':
                text.Append(ch);
                break;
-            case 'u' when type is LazyStringSegment.Escaped:
-               list.Add(new LazyStringPart.String(text.ToString()));
-               type = LazyStringSegment.Hex;
+            case 'u' when type is StringSegment.Escaped:
+               list.Add(new StringPart.String(text.ToString()));
+               type = StringSegment.Hex;
                text.Clear();
                text.Append(ch);
                break;
             case 'u':
                text.Append(ch);
                break;
-            case '{' when type is LazyStringSegment.Escaped:
-               list.Add(new LazyStringPart.String(text.ToString()));
-               type = LazyStringSegment.Hex;
+            case '{' when type is StringSegment.Escaped:
+               list.Add(new StringPart.String(text.ToString()));
+               type = StringSegment.Hex;
                text.Clear();
                text.Append(ch);
                break;
             case '{':
                text.Append(ch);
                break;
-            case '$' when type is LazyStringSegment.Escaped:
+            case '$' when type is StringSegment.Escaped:
                text.Append(ch);
-               type = LazyStringSegment.String;
+               type = StringSegment.String;
                break;
             case '$':
-               list.Add(new LazyStringPart.String(text.ToString()));
+               list.Add(new StringPart.String(text.ToString()));
                text.Clear();
                text.Append(ch);
-               type = LazyStringSegment.Field;
+               type = StringSegment.Field;
                break;
-            case >= 'A' and <= 'Z' or >= 'a' and <= 'z' or '`' or '_' or >= '0' and <= '9' when type is LazyStringSegment.Field:
+            case >= 'A' and <= 'Z' or >= 'a' and <= 'z' or '`' or '_' or >= '0' and <= '9' when type is StringSegment.Field:
                text.Append(ch);
                break;
-            case '[' when type is LazyStringSegment.Field:
-               list.Add(new LazyStringPart.Field(text.ToString()));
+            case '[' when type is StringSegment.Field:
+               list.Add(new StringPart.Field(text.ToString()));
                text.Clear();
-               type = LazyStringSegment.Format;
+               type = StringSegment.Format;
                break;
-            case ']' when type is LazyStringSegment.Format:
-               list.Add(new LazyStringPart.Format(text.ToString()));
+            case ']' when type is StringSegment.Format:
+               list.Add(new StringPart.Format(text.ToString()));
                text.Clear();
-               type = LazyStringSegment.String;
+               type = StringSegment.String;
                break;
             default:
                switch (type)
                {
-                  case LazyStringSegment.Field:
-                     list.Add(new LazyStringPart.Field(text.ToString()));
+                  case StringSegment.Field:
+                     list.Add(new StringPart.Field(text.ToString()));
                      text.Clear();
                      text.Append(ch);
-                     type = LazyStringSegment.String;
+                     type = StringSegment.String;
                      break;
                   default:
                      text.Append(ch);
@@ -154,18 +154,18 @@ public partial class LazyStringParser : SymbolParser
          {
             switch (type)
             {
-               case LazyStringSegment.String:
-                  list.Add(new LazyStringPart.String(text.ToString()));
+               case StringSegment.String:
+                  list.Add(new StringPart.String(text.ToString()));
                   break;
-               case LazyStringSegment.Escaped:
+               case StringSegment.Escaped:
                   return fail("Can't have a pending escape");
-               case LazyStringSegment.Field:
-                  list.Add(new LazyStringPart.Field(text.ToString()));
+               case StringSegment.Field:
+                  list.Add(new StringPart.Field(text.ToString()));
                   break;
-               case LazyStringSegment.Format:
+               case StringSegment.Format:
                   return fail("Can't have a pending format");
-               case LazyStringSegment.Hex:
-                  list.Add(new LazyStringPart.Hex(text.ToString()));
+               case StringSegment.Hex:
+                  list.Add(new StringPart.Hex(text.ToString()));
                   break;
             }
          }
@@ -176,25 +176,25 @@ public partial class LazyStringParser : SymbolParser
          {
             switch (part)
             {
-               case LazyStringPart.Field field:
+               case StringPart.Field field:
                   state.Colorize(index, field.Text, Color.Identifier);
                   index += field.Text.Length;
                   state.Move(field.Text.Length);
                   lazyString.Append(field.Text);
                   break;
-               case LazyStringPart.Format format:
+               case StringPart.Format format:
                   state.Colorize(index, format.Text, Color.Format);
                   index += format.Text.Length;
                   state.Move(format.Text.Length);
                   lazyString.Append(format.Text);
                   break;
-               case LazyStringPart.Hex hex:
+               case StringPart.Hex hex:
                   state.Colorize(index, hex.Text, Color.String);
                   index += hex.Text.Length;
                   state.Move(hex.Text.Length);
                   lazyString.Append(hex.Text);
                   break;
-               case LazyStringPart.String @string:
+               case StringPart.String @string:
                   state.Colorize(index, @string.Text, Color.String);
                   index += @string.Text.Length;
                   state.Move(@string.Text.Length);

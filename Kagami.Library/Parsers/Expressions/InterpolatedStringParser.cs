@@ -28,41 +28,45 @@ public partial class InterpolatedStringParser : SymbolParser
       List<string> formats = [];
       List<string> suffixes = [];
       var text = new StringBuilder();
-      var escaped = false;
+      var hexText = new StringBuilder();
+      var fieldText = new StringBuilder();
+      var type = StringSegment.String;
       var index = state.Index;
       var length = 0;
-      var hex = false;
-      var hexText = new StringBuilder();
 
       while (state.More)
       {
          var ch = state.CurrentSource[0];
          switch (ch)
          {
+            case '"' when type is StringSegment.Escaped:
+               text.Append(ch);
+               break;
             case '"':
             {
-               if (escaped)
+               switch (type)
                {
-                  text.Append('"');
-                  escaped = false;
-                  break;
-               }
+                  case StringSegment.Hex:
+                  {
+                     var _fromHex1 = fromHex(hexText.ToString());
+                     if (_fromHex1 is (true, var fromHex1))
+                     {
+                        text.Append(fromHex1);
+                     }
+                     else if (_fromHex1.Exception is (true, var exception))
+                     {
+                        return exception;
+                     }
+                     else
+                     {
+                        return badHex(hexText.ToString());
+                     }
 
-               if (hex)
-               {
-                  var _fromHex1 = fromHex(hexText.ToString());
-                  if (_fromHex1 is (true, var fromHex1))
-                  {
-                     text.Append(fromHex1);
+                     break;
                   }
-                  else if (_fromHex1.Exception is (true, var exception))
-                  {
-                     return exception;
-                  }
-                  else
-                  {
-                     return badHex(hexText.ToString());
-                  }
+                  case StringSegment.Field:
+                     text.Append(ch);
+                     break;
                }
 
                state.Move(1);
@@ -81,15 +85,12 @@ public partial class InterpolatedStringParser : SymbolParser
 
                return unit;
             }
+            case '(' when type is StringSegment.Escaped:
+               text.Append(ch);
+               type = StringSegment.String;
+               break;
             case '(':
             {
-               if (escaped)
-               {
-                  text.Append('(');
-                  escaped = false;
-                  break;
-               }
-
                state.Move(1);
                state.AddToken(index, length, Color.String);
                state.AddToken(index + length, 1, Color.OpenParenthesis);
@@ -135,72 +136,88 @@ public partial class InterpolatedStringParser : SymbolParser
                   return expectedExpression();
                }
             }
+            case '\\' when type is StringSegment.Escaped:
+               text.Append(ch);
+               type = StringSegment.String;
+               break;
             case '\\':
-               if (escaped)
-               {
-                  text.Append('\\');
-                  escaped = false;
-                  break;
-               }
-
-               escaped = true;
+               type = StringSegment.Escaped;
+               break;
+            case >= 'A' and <= 'Z' or >= 'a' and <= 'z' or '`' or '_' or >= '0' and <= '9' when type is StringSegment.Field:
+               fieldText.Append(ch);
+               break;
+            case 'n' when type is StringSegment.Escaped:
+               text.Append(ch);
+               type = StringSegment.String;
                break;
             case 'n':
-               if (escaped)
-               {
-                  text.Append('\n');
-                  escaped = false;
-                  break;
-               }
-
                text.Append('n');
                break;
+            case 'r' when type is StringSegment.Escaped:
+               text.Append(ch);
+               type = StringSegment.String;
+               break;
             case 'r':
-               if (escaped)
-               {
-                  text.Append('\r');
-                  escaped = false;
-                  break;
-               }
-
                text.Append('r');
                break;
+            case 't' when type is StringSegment.Escaped:
+               text.Append(ch);
+               type = StringSegment.String;
+               break;
             case 't':
-               if (escaped)
-               {
-                  text.Append('\t');
-                  escaped = false;
-                  break;
-               }
-
                text.Append('t');
                break;
+            case 'u' when type is StringSegment.Escaped:
+               text.Append(ch);
+               type = StringSegment.Escaped;
+               break;
             case 'u':
-               if (escaped)
-               {
-                  hex = true;
-                  hexText.Clear();
-                  escaped = false;
-                  break;
-               }
-
                text.Append('u');
+               break;
+            case '$' when type is StringSegment.Escaped:
+               text.Append(ch);
+               type = StringSegment.String;
+               break;
+            case '$':
+               type = StringSegment.Field;
                break;
             default:
             {
-               if (escaped)
+               switch (type)
                {
-                  if (ch.Between('0').And('9') || ch.Between('a').And('f') && hexText.Length < 6)
+                  case StringSegment.Field:
                   {
-                     hexText.Append(ch);
+                     var fieldSymbol = new FieldSymbol(fieldText.ToString());
+                     var expression = new Expression(fieldSymbol);
+                     expressions.Add(expression);
+                     var _format = state.ScanFormat();
+                     if (_format is (true, var format))
+                     {
+                        formats.Add(format);
+                        index = state.Index;
+                        length = 0;
+                     }
+                     else
+                     {
+                        formats.Add("");
+                        text.Append(ch);
+                     }
+
+                     type = StringSegment.String;
+                     break;
                   }
-                  else
+                  case StringSegment.Escaped when ch.Between('0').And('9') || ch.Between('a').And('f') && hexText.Length < 6:
+                     type = StringSegment.Hex;
+                     hexText.Append(ch);
+                     break;
+                  case StringSegment.Escaped:
                   {
                      var _fromHex2 = fromHex(hexText.ToString());
                      if (_fromHex2 is (true, var fromHex2))
                      {
                         hexText.Append(fromHex2);
                         hexText.Append(ch);
+                        type = StringSegment.Hex;
                      }
                      else if (_fromHex2.Exception is (true, var exception))
                      {
@@ -210,14 +227,13 @@ public partial class InterpolatedStringParser : SymbolParser
                      {
                         return badHex(hexText.ToString());
                      }
-                  }
-               }
-               else
-               {
-                  text.Append(ch);
-               }
 
-               escaped = false;
+                     break;
+                  }
+                  default:
+                     text.Append(ch);
+                     break;
+               }
             }
                break;
          }
