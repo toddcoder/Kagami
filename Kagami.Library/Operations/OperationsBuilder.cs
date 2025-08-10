@@ -412,6 +412,10 @@ public class OperationsBuilder
 
    public void DefineNewField(bool mutable, string fieldName, string className) => add(new DefineNewField(mutable, fieldName, className));
 
+   public void Increment() => add(new Increment());
+
+   public void Decrement() => add(new Decrement());
+
    public Result<Operations> ToOperations(ParseState state)
    {
       operations.Add(new Stop());

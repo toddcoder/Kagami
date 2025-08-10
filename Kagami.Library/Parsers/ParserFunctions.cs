@@ -1321,6 +1321,12 @@ public static class ParserFunctions
          case "|<<":
             _symbol = new SendBinaryMessageSymbol("|<<(_)", Precedence.Shift);
             break;
+         case "+++":
+            _symbol = new IncrementSymbol();
+            break;
+         case "---":
+            _symbol = new DecrementSymbol();
+            break;
       }
 
       return _symbol;
