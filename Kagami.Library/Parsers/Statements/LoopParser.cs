@@ -15,7 +15,15 @@ public partial class LoopParser : StatementParser
    protected static Optional<(bool, Expression)> getUntil(ParseState state)
    {
       var untilParser = new LoopControlParser();
-      return untilParser.Scan(state).Map(_ => (untilParser.IsUntil, untilParser.Expression));
+      var _result = untilParser.Scan(state);
+      if (_result)
+      {
+         return (untilParser.IsUntil, untilParser.Expression);
+      }
+      else
+      {
+         return state.SetException("while or until clause needed");
+      }
    }
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
