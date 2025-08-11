@@ -1,0 +1,15 @@
+﻿open sys
+
+func duplicate(ref a Int, ref b Int, ref c Int) {
+	a *= 2
+	b *= 2
+	c *= 2
+}
+
+var x = 1
+var y = 3
+var z = 7
+
+println("Before", x, y, z)
+duplicate(x, y, z)
+println("After", x, y, z)

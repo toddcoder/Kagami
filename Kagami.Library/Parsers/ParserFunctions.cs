@@ -650,7 +650,7 @@ public static class ParserFunctions
       from typeConstraint in parseTypeConstraint(state)
       from variadic in parseVaraidic(state)
       from defaultValue in parseDefaultValue(state, defaultRequired)
-      select new Parameter(mutable, label, name, defaultValue, typeConstraint, reference, noCapturing) { Variadic = variadic };
+      select new Parameter(mutable || reference, label, name, defaultValue, typeConstraint, reference, noCapturing) { Variadic = variadic };
 
    public static Optional<Block> getAnyBlock(ParseState state)
    {

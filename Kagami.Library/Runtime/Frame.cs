@@ -115,7 +115,7 @@ public class Frame
                   throw incompatibleClasses(lastValue, typeConstraint.AsString);
                }
 
-               fields.Assign(parameter.Name, arguments[0], true).Force();
+               fields.Assign(parameter.Name, arguments[0], true, parameter.Reference).Force();
             }
             else
             {
@@ -133,7 +133,7 @@ public class Frame
                   throw incompatibleClasses(lastValue, typeConstraint.AsString);
                }
 
-               fields.Assign(parameter.Name, array, true).Force();
+               fields.Assign(parameter.Name, array, true, parameter.Reference).Force();
             }
 
             return;
@@ -160,7 +160,7 @@ public class Frame
                throw incompatibleClasses(lastValue, typeConstraint.AsString);
             }
 
-            fields.Assign(parameter.Name, lastValue, true).Force();
+            fields.Assign(parameter.Name, lastValue, true, parameter.Reference).Force();
             lastName = parameter.Name;
             variadic = parameter.Variadic;
          }
@@ -192,7 +192,7 @@ public class Frame
                   fields.Remove(parameter.Name);
                }
 
-               fields.New(parameter.Name, FieldType.Parameter, parameter.Mutable).Force();
+               fields.New(parameter.Name, FieldType.Parameter, parameter.Mutable, parameter.Reference).Force();
 
                IObject value;
                if (_defaultValue is (true, var invokable))
@@ -214,7 +214,7 @@ public class Frame
                else if (parameter.Variadic)
                {
                   value = KArray.Empty;
-                  fields.Assign(parameter.Name, value, true);
+                  fields.Assign(parameter.Name, value, true, parameter.Reference);
                }
                else
                {
@@ -226,7 +226,7 @@ public class Frame
                   throw incompatibleClasses(value, typeConstraint.AsString);
                }
 
-               fields.Assign(parameter.Name, value, true).Force();
+               fields.Assign(parameter.Name, value, true, parameter.Reference).Force();
             }
          }
          else if (length < arguments.Length)

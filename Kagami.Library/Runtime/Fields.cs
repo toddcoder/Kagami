@@ -166,11 +166,26 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       }
    }
 
-   public Result<Field> Assign(string name, IObject value, bool overriden = false)
+   public Result<Field> Assign(string name, IObject value, bool overriden = false, bool isReference = false)
    {
       var _field = Find(name, false);
       if (_field is (true, var field))
       {
+         if (isReference)
+         {
+            if (Module.Global.Value.RetrievedFields.Maybe[value.Id] is (true, var fieldName) && Machine.Current.Value.Find(fieldName, true) is (true,
+                   { Mutable: true } originalField))
+            {
+               var reference = new Reference(originalField);
+               field.Value = reference;
+               return field;
+            }
+            else
+            {
+               return mustUseVariable();
+            }
+         }
+
          if (field.Mutable || field.Value is Unassigned || overriden)
          {
             field.Value = value;
