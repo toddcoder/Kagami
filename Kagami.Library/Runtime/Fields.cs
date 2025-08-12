@@ -229,6 +229,7 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
             if (Machine.Current.Value.Find(fieldName, true) is (true,
                 { Mutable: true } originalField))
             {
+               Remove(parameter.Name);
                var _field = New(parameter.Name, FieldType.Parameter, parameter.TypeConstraint, parameter.Mutable, true);
                if (_field is (true, var field))
                {
@@ -254,6 +255,7 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       }
       else
       {
+         Remove(parameter.Name);
          var _field = New(parameter.Name, FieldType.Parameter, parameter.TypeConstraint, parameter.Mutable, true);
          if (_field is (true, var field))
          {
