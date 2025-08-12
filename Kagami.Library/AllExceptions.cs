@@ -248,7 +248,7 @@ public static class AllExceptions
 
    public static Exception expressionCouldNotBeBuilt() => fail(messageExpressionCouldNotBeBuilt());
 
-   public static string messageMustUseVariable() => "References require variable fields";
+   public static string messageMustUseVariable() => "References require a field";
 
    public static Exception mustUseVariable() => fail(messageMustUseVariable());
 }

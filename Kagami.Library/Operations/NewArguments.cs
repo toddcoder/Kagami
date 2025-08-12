@@ -10,7 +10,7 @@ public class NewArguments : OneNumericOperation
    public override Optional<IObject> Execute(Machine machine, INumeric x)
    {
       var count = x.AsInt32();
-      var stack = new Stack<IObject>();
+      Stack<IObject> stack = [];
       for (var i = 0; i < count; i++)
       {
          var _obj = machine.Pop();
@@ -24,7 +24,7 @@ public class NewArguments : OneNumericOperation
          }
       }
 
-      var array = stack.ToArray();
+      IObject[] array = [.. stack];
       var arguments = new Arguments(array);
 
       return arguments;

@@ -5,8 +5,6 @@ using Core.Strings;
 using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using static Core.Monads.MonadFunctions;
-using static Kagami.Library.AllExceptions;
-using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Runtime;
 
@@ -103,7 +101,7 @@ public class Frame
             var parameter = parameters[0];
             if (parameter.Singleton && arguments.Length == 1)
             {
-               if (fields.ContainsKey(parameter.Name))
+               /*if (fields.ContainsKey(parameter.Name))
                {
                   fields.Remove(parameter.Name);
                }
@@ -115,13 +113,14 @@ public class Frame
                   throw incompatibleClasses(lastValue, typeConstraint.AsString);
                }
 
-               fields.Assign(parameter.Name, arguments[0], true, parameter.Reference).Force();
+               fields.Assign(parameter.Name, arguments[0], true, parameter.Reference).Force();*/
+               fields.AssignParameter(parameter, lastValue).Force();
             }
             else
             {
                var array = new KArray([.. arguments]);
 
-               if (fields.ContainsKey(parameter.Name))
+               /*if (fields.ContainsKey(parameter.Name))
                {
                   fields.Remove(parameter.Name);
                }
@@ -133,7 +132,8 @@ public class Frame
                   throw incompatibleClasses(lastValue, typeConstraint.AsString);
                }
 
-               fields.Assign(parameter.Name, array, true, parameter.Reference).Force();
+               fields.Assign(parameter.Name, array, true, parameter.Reference).Force();*/
+               fields.AssignParameter(parameter,array).Force();
             }
 
             return;
@@ -148,7 +148,7 @@ public class Frame
             }
 
             lastValue = arguments[i];
-            if (fields.ContainsKey(parameter.Name))
+            /*if (fields.ContainsKey(parameter.Name))
             {
                fields.Remove(parameter.Name);
             }
@@ -160,7 +160,8 @@ public class Frame
                throw incompatibleClasses(lastValue, typeConstraint.AsString);
             }
 
-            fields.Assign(parameter.Name, lastValue, true, parameter.Reference).Force();
+            fields.Assign(parameter.Name, lastValue, true, parameter.Reference).Force();*/
+            fields.AssignParameter(parameter, lastValue);
             lastName = parameter.Name;
             variadic = parameter.Variadic;
          }
@@ -221,12 +222,13 @@ public class Frame
                   value = Unassigned.Value;
                }
 
-               if (parameter.TypeConstraint is (true, var typeConstraint) && !typeConstraint.Matches(classOf(value)))
+               /*if (parameter.TypeConstraint is (true, var typeConstraint) && !typeConstraint.Matches(classOf(value)))
                {
                   throw incompatibleClasses(value, typeConstraint.AsString);
                }
 
-               fields.Assign(parameter.Name, value, true, parameter.Reference).Force();
+               fields.Assign(parameter.Name, value, true, parameter.Reference).Force();*/
+               fields.AssignParameter(parameter, value);
             }
          }
          else if (length < arguments.Length)

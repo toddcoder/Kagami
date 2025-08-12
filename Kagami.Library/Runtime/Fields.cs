@@ -1,13 +1,15 @@
-﻿using System.Collections;
-using Kagami.Library.Objects;
-using Core.Collections;
+﻿using Core.Collections;
 using Core.Enumerables;
 using Core.Matching;
 using Core.Monads;
 using Core.Monads.Lazy;
 using Core.Strings;
-using static Kagami.Library.AllExceptions;
+using Kagami.Library.Invokables;
+using Kagami.Library.Objects;
+using System.Collections;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.AllExceptions;
+using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Runtime;
 
@@ -173,12 +175,19 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       {
          if (isReference)
          {
-            if (Module.Global.Value.RetrievedFields.Maybe[value.Id] is (true, var fieldName) && Machine.Current.Value.Find(fieldName, true) is (true,
-                   { Mutable: true } originalField))
+            if (Module.Global.Value.RetrievedFields.Maybe[value.Id] is (true, var fieldName))
             {
-               var reference = new Reference(originalField);
-               field.Value = reference;
-               return field;
+               if (Machine.Current.Value.Find(fieldName, true) is (true,
+                   { Mutable: true } originalField))
+               {
+                  var reference = new Reference(originalField);
+                  field.Value = reference;
+                  return field;
+               }
+               else
+               {
+                  return immutableField(fieldName);
+               }
             }
             else
             {
@@ -203,6 +212,58 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       else
       {
          return fieldNotFound(name);
+      }
+   }
+
+   public Result<Field> AssignParameter(Parameter parameter, IObject value)
+   {
+      if (parameter.TypeConstraint is (true, var typeConstraint) && !typeConstraint.Matches(classOf(value)))
+      {
+         return incompatibleClasses(value, typeConstraint.AsString);
+      }
+
+      if (parameter.Reference)
+      {
+         if (Module.Global.Value.RetrievedFields.Maybe[value.Id] is (true, var fieldName))
+         {
+            if (Machine.Current.Value.Find(fieldName, true) is (true,
+                { Mutable: true } originalField))
+            {
+               var _field = New(parameter.Name, FieldType.Parameter, parameter.TypeConstraint, parameter.Mutable, true);
+               if (_field is (true, var field))
+               {
+                  var reference = new Reference(originalField);
+                  field.Value = reference;
+
+                  return field;
+               }
+               else
+               {
+                  return _field;
+               }
+            }
+            else
+            {
+               return immutableField(fieldName);
+            }
+         }
+         else
+         {
+            return mustUseVariable();
+         }
+      }
+      else
+      {
+         var _field = New(parameter.Name, FieldType.Parameter, parameter.TypeConstraint, parameter.Mutable, true);
+         if (_field is (true, var field))
+         {
+            field.Value = value;
+            return field;
+         }
+         else
+         {
+            return _field;
+         }
       }
    }
 
