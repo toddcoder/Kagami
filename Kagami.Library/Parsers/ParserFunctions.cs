@@ -543,8 +543,41 @@ public static class ParserFunctions
       return state.Scan(@$"^(\s*{REGEX_FIELD})\b", Color.Identifier).Map(s => s.Trim());
    }
 
+   private static Optional<PossibleTypeConstraint> parseAliasedTypeConstraint(ParseState state)
+   {
+      var _alias = state.Scan(@"^(\s*)([a-z0-9]+)\b", Color.Whitespace, Color.Keyword);
+      return
+         from alias in _alias
+         from className in getClassName(alias)
+         from baseClass in Module.Global.Value.Class(className)
+         select (PossibleTypeConstraint)new PossibleTypeConstraint.Some(new TypeConstraint([baseClass]));
+
+      Optional<string> getClassName(string alias) => alias switch
+      {
+         "int" => "Int",
+         "float" => "Float",
+         "string" => "String",
+         "char" => "Char",
+         "byte" => "Byte",
+         "bytes" => "ByteArray",
+         "complex" => "Complex",
+         "rational" => "Rational",
+         "long" => "Long",
+         "date" => "Date",
+         "num" => "Number",
+         "mstring" => "MutString",
+         _ => nil
+      };
+   }
+
    public static Optional<PossibleTypeConstraint> parseTypeConstraint(ParseState state)
    {
+      var _possibleTypeConstraint = parseAliasedTypeConstraint(state);
+      if (_possibleTypeConstraint is (true, var possibleTypeConstraint))
+      {
+         return possibleTypeConstraint;
+      }
+
       var _className = state.Scan($@"^(\s*)({REGEX_CLASS})(?!\()\b", Color.Whitespace, Color.Class)
          .Map(cn => cn.TrimStart());
       if (_className is (true, var className))

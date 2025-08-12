@@ -187,6 +187,16 @@ public class ParseState : IEnumerable<Statement>
 
    public Optional<string> Scan(string pattern, RegexOptions options, params Color[] colors)
    {
+      return Scan(pattern, 0, options, colors);
+   }
+
+   public Optional<string> Scan(string pattern, int groupIndex, params Color[] colors)
+   {
+      return Scan(pattern, groupIndex, RegexOptions.Compiled, colors);
+   }
+
+   public Optional<string> Scan(string pattern, int groupIndex, RegexOptions options, params Color[] colors)
+   {
       try
       {
          var regex = new System.Text.RegularExpressions.Regex(pattern, options);
@@ -202,7 +212,7 @@ public class ParseState : IEnumerable<Statement>
                Move(length);
             }
 
-            return match.Value;
+            return match.Groups[groupIndex].Value;
          }
          else
          {
