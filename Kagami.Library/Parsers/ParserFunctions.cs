@@ -545,7 +545,7 @@ public static class ParserFunctions
 
    private static Optional<PossibleTypeConstraint> parseAliasedTypeConstraint(ParseState state)
    {
-      var _alias = state.Scan(@"^(\s*)([a-z0-9]+)\b", Color.Whitespace, Color.Keyword);
+      var _alias = state.Scan(@"^(\s*)([a-z0-9]+)\b", 2, Color.Whitespace, Color.Keyword);
       return
          from alias in _alias
          from className in getClassName(alias)
@@ -566,18 +566,22 @@ public static class ParserFunctions
          "date" => "Date",
          "num" => "Number",
          "mstring" => "MutString",
+         "lambda" => "Lambda",
          _ => nil
       };
    }
 
    public static Optional<PossibleTypeConstraint> parseTypeConstraint(ParseState state)
    {
+      state.BeginTransaction();
       var _possibleTypeConstraint = parseAliasedTypeConstraint(state);
       if (_possibleTypeConstraint is (true, var possibleTypeConstraint))
       {
+         state.CommitTransaction();
          return possibleTypeConstraint;
       }
 
+      state.RollBackTransaction();
       var _className = state.Scan($@"^(\s*)({REGEX_CLASS})(?!\()\b", Color.Whitespace, Color.Class)
          .Map(cn => cn.TrimStart());
       if (_className is (true, var className))

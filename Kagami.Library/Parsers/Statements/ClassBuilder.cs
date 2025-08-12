@@ -29,7 +29,7 @@ public class ClassBuilder
    protected Hash<string, (ConstructorInvokable, Block)> constructorInvokables = [];
    protected List<(IInvokable, Block, bool)> functions = [];
    protected UserClass userClass = new("", "");
-   protected Set<Selector> requiredFunctions = [];
+   protected Set<RequireFunctionMatch> requiredFunctions = [];
    protected StringHash<Expression> delegates = [];
    protected StringHash<RequiredField> requiredFields = [];
 
@@ -224,6 +224,7 @@ public class ClassBuilder
             case Function function when standard:
             {
                var (selector, _, block, _, invokable, overriding) = function;
+               var _typeConstraint = block.TypeConstraint;
                if (!isPrivate(selector))
                {
                   if (userClass.RegisterMethod(selector, new Lambda(invokable, false), overriding))
@@ -236,9 +237,9 @@ public class ClassBuilder
                   }
                }
 
-               if (requiredFunctions.Contains(selector))
+               if (requiredFunctions.FirstOrNone(f => f.Matches(selector, _typeConstraint)) is (true, var requireFunctionMatch))
                {
-                  requiredFunctions.Remove(selector);
+                  requiredFunctions.Remove(requireFunctionMatch);
                }
 
                statements.Add(statement);
@@ -264,7 +265,7 @@ public class ClassBuilder
             }
             case RequiredFunction requiredFunction:
             {
-               requiredFunctions.Add(requiredFunction.Selector);
+               requiredFunctions.Add(new RequireFunctionMatch(requiredFunction.Selector, requiredFunction.TypeConstraint));
                userClass.RegisterInclusion(requiredFunction.Inclusion);
                break;
             }
@@ -274,6 +275,14 @@ public class ClassBuilder
             default:
                statements.Add(statement);
                break;
+         }
+      }
+
+      foreach (var parameter in parameters)
+      {
+         if (requiredFields.Maybe[parameter.Name] is (true, var requiredField) && requiredField.Matches(parameter))
+         {
+            requiredFields.Maybe[parameter.Name] = nil;
          }
       }
 

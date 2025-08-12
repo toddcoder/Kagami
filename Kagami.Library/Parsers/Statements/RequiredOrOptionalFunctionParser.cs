@@ -11,7 +11,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class RequiredOrOptionalFunctionParser(Inclusion inclusion) : StatementParser
 {
-   [GeneratedRegex($@"^(\s*)(required|optional)(\s+)({REGEX_SELECTOR}){REGEX_ANTICIPATE_END}")]
+   [GeneratedRegex($@"^(\s*)(required|optional)(\s+)({REGEX_SELECTOR})")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
@@ -21,12 +21,20 @@ public partial class RequiredOrOptionalFunctionParser(Inclusion inclusion) : Sta
          var type = tokens[2].Text;
          Selector selector = tokens[4].Text;
 
+         if (selector.AsString == "__$func()")
+         {
+            return state.SetException("func keyword is not required here");
+         }
+
          state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Selector);
+
+         var _possibleTypeConstraint = parseTypeConstraint(state);
+         Maybe<TypeConstraint> _typeConstraint = _possibleTypeConstraint.Map(ptc => ptc.Maybe);
 
          Result<Unit> _result;
          if (type == "required")
          {
-            _result = inclusion.Register(new RequiredFunction(selector, inclusion));
+            _result = inclusion.Register(new RequiredFunction(selector, _typeConstraint, inclusion));
          }
          else
          {

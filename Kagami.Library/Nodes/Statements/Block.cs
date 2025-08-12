@@ -99,6 +99,8 @@ public class Block : Statement, IEnumerable<Statement>
 
    public bool Yielding { get; set; }
 
+   public Maybe<TypeConstraint> TypeConstraint => _typeConstraint;
+
    public override void Generate(OperationsBuilder builder)
    {
       foreach (var statement in statements)

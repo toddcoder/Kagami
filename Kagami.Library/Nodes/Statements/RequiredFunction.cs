@@ -1,13 +1,16 @@
-﻿using Kagami.Library.Inclusions;
+﻿using Core.Monads;
+using Kagami.Library.Inclusions;
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using RequireFunction = Kagami.Library.Invokables.RequireFunction;
 
 namespace Kagami.Library.Nodes.Statements;
 
-public class RequiredFunction(Selector selector, Inclusion inclusion) : Statement
+public class RequiredFunction(Selector selector, Maybe<TypeConstraint> _typeConstraint, Inclusion inclusion) : Statement
 {
    public Selector Selector => selector;
+
+   public Maybe<TypeConstraint> TypeConstraint => _typeConstraint;
 
    public Inclusion Inclusion => inclusion;
 

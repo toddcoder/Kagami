@@ -101,7 +101,7 @@ public partial class Playground : Form
          });
          menus.Menu("&Open", (_, _) =>
          {
-            textEditor.ClearModificationGlyphs();
+            textEditor.SetToSavedGlyphs();
             document.Open();
          }, "^O");
          menus.Menu("&Save", (_, _) =>

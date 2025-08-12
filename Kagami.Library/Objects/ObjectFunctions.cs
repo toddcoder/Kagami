@@ -920,4 +920,24 @@ public static class ObjectFunctions
             throw incompatibleClasses(action, "Lambda or Message");
       }
    }
+
+   public static bool matchingTypeConstraints(Maybe<TypeConstraint> _left, Maybe<TypeConstraint> _right)
+   {
+      if (_left is (true, var left))
+      {
+         if (_right is (true, var right))
+         {
+            return left.IsEqualTo(right);
+         }
+      }
+      else
+      {
+         if (!_right)
+         {
+            return true;
+         }
+      }
+
+      return false;
+   }
 }

@@ -114,7 +114,7 @@ public class Frame
                }
 
                fields.Assign(parameter.Name, arguments[0], true, parameter.Reference).Force();*/
-               fields.AssignParameter(parameter, lastValue).Force();
+               fields.AssignParameter(parameter, arguments[0]).Force();
             }
             else
             {
