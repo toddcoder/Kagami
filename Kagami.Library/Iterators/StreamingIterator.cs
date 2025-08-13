@@ -53,7 +53,7 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
          do
          {
             isSkipping = false;
-            var state = new StreamingState(next, iterator.Collection, iterator.CollectionClass);
+            var state = new StreamingState(next, iterator.CollectionClass);
             foreach (var action in actions)
             {
                var condition = action.Execute(state);
@@ -173,7 +173,7 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
 
    public IObject Map(Lambda lambda) => copy(new StreamingMap(lambda));
 
-   public IObject FlatMap(Lambda lambda) => terminate().Map(lambda);
+   public IObject FlatMap(Lambda lambda) => terminate().FlatMap(lambda);
 
    public IObject Replace(Lambda predicate, Lambda lambda) => terminate().Replace(predicate, lambda);
 
