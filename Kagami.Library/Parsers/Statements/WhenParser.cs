@@ -41,13 +41,21 @@ public partial class WhenParser : StatementParser
    [GeneratedRegex(@"^(\s*)(when)(\s+)")]
    public override partial Regex Regex();
 
-   protected static Optional<Block> getCaseBlock(CaseType caseType, ParseState state) => caseType switch
+   protected static Optional<Block> getCaseBlock(CaseType caseType, ParseState state)
    {
-      CaseType.Statement => getCaseStatementBlock(state),
-      CaseType.Function => getCaseReturnBlock(state),
-      CaseType.Lambda => getBlock(state),
-      _ => fail($"Didn't understand case type {caseType}")
-   };
+      if (caseType == CaseType.Function && !state.LookAhead(@"^(\s*)(return)"))
+      {
+         return state.SetException("Expected return keyword");
+      }
+
+      return caseType switch
+      {
+         CaseType.Statement => getCaseStatementBlock(state),
+         CaseType.Function => getCaseReturnBlock(state),
+         CaseType.Lambda => getBlock(state),
+         _ => fail($"Didn't understand case type {caseType}")
+      };
+   }
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {

@@ -550,11 +550,7 @@ public class ParseState : IEnumerable<Statement>
 
    public Maybe<Exception> SetException(string message)
    {
-      if (!_exception)
-      {
-         _exception = new Exception(message);
-      }
-
+      _exception = new Exception(message);
       return _exception;
    }
 
