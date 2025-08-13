@@ -89,7 +89,7 @@ public class Slice : IObject, ICollection
    {
       if (value is ICollection collection)
       {
-         var target = List.ToArray();
+         IObject[] target = [.. List];
          var source = collection.GetIterator(false).List();
          target = setObjects(target, source, _ => Unassigned.Value);
 

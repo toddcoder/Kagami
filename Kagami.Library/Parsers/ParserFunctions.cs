@@ -1364,6 +1364,9 @@ public static class ParserFunctions
          case "---":
             _symbol = new DecrementSymbol();
             break;
+         case "$":
+            _symbol = new SendBinaryMessageSymbol("slice(_)", Precedence.PostfixOperator);
+            break;
       }
 
       return _symbol;

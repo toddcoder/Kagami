@@ -562,7 +562,7 @@ public abstract class BaseClass
 
    protected void sliceableMessages()
    {
-      registerMessage("$",
+      registerMessage("slice(_)",
          (obj, message) => function<IObject, IObject>(obj, message, (o1, o2) =>
          {
             var sliceable = (ISliceable)o1;
