@@ -233,8 +233,8 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
                var _field = New(parameter.Name, FieldType.Parameter, parameter.TypeConstraint, parameter.Mutable, true);
                if (_field is (true, var field))
                {
-                  var reference = new Reference(originalField);
-                  field.Value = reference;
+                  field.Value = value;
+                  field.OriginalField = originalField;
 
                   return field;
                }

@@ -21,6 +21,7 @@ public class Field
 
             Value = value;
          }
+
          return value;
       }
       set
@@ -30,17 +31,10 @@ public class Field
          {
             if (typeConstraint.Matches(valueClass))
             {
-               if (this.value is Reference reference)
+               this.value = value;
+               if (OriginalField is (true, var originalField))
                {
-                  reference.Field.Value = value;
-               }
-               else if (value is Placeholder)
-               {
-                  this.value = value;
-               }
-               else
-               {
-                  this.value = value;
+                  originalField.value = value;
                }
             }
             else if (value is Placeholder)
@@ -64,11 +58,12 @@ public class Field
          }
          else
          {
-            if (this.value is Reference reference)
+            if (OriginalField is (true, var originalField))
             {
-               reference.Field.Value = value;
+               originalField.value = value;
             }
-            else if (value is Placeholder placeholder)
+
+            if (value is Placeholder placeholder)
             {
                this.value = placeholder;
             }
@@ -103,4 +98,6 @@ public class Field
    };
 
    public Fields Fields { get; set; } = [];
+
+   public Maybe<Field> OriginalField { get; set; } = nil;
 }
