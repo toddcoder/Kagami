@@ -1,4 +1,6 @@
-﻿namespace Kagami.Library.Objects;
+﻿using static Kagami.Library.Objects.CollectionFunctions;
+
+namespace Kagami.Library.Objects;
 
 public class FlatMapIterator : Iterator
 {
@@ -33,7 +35,7 @@ public class FlatMapIterator : Iterator
       foreach (var item in List())
       {
          var result = lambda.Invoke(item);
-         innerList.Add(result);
+         innerList.AddRange(getEnumerable(result));
       }
 
       return collectionClass.Revert(innerList);

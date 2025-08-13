@@ -3,7 +3,7 @@ using Kagami.Library.Objects;
 
 namespace Kagami.Library.Iterators;
 
-public class StreamingState(IObject next, ICollection collection, ICollectionClass collectionClass)
+public class StreamingState(IObject next, ICollectionClass collectionClass)
 {
    protected IObject next = next;
 
@@ -12,8 +12,6 @@ public class StreamingState(IObject next, ICollection collection, ICollectionCla
       get => next;
       set => next = value;
    }
-
-   public ICollection Collection => collection;
 
    public ICollectionClass CollectionClass => collectionClass;
 }

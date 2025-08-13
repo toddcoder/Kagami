@@ -221,4 +221,11 @@ public static class CollectionFunctions
 
       return KNil.NilValue;
    }
+
+   public static IEnumerable<IObject> getEnumerable(IObject value) => value switch
+   {
+      ICollection collection => getEnumerable((IObject)collection.GetIterator(true)),
+      IIterator iterator => iterator.List(),
+      _ => new List<IObject>([value])
+   };
 }

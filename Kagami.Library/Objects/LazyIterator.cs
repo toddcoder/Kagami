@@ -18,7 +18,7 @@ public class LazyIterator : Iterator
 
    public override IObject Map(Lambda lambda) => new StreamingIterator(this).Map(lambda);
 
-   public override IObject FlatMap(Lambda lambda) => new StreamIterator(this).FlatMap(lambda);
+   public override IObject FlatMap(Lambda lambda) => new StreamingIterator(this).FlatMap(lambda);
 
    public override IObject If(Lambda predicate) => new StreamingIterator(this).If(predicate);
 

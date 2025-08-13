@@ -51,7 +51,6 @@ public class Module
       "Array" => new ArrayClass(),
       "Iterator" => new IteratorClass(),
       "LazyIterator" => new LazyIteratorClass(),
-      "StreamIterator" => new StreamIteratorClass(),
       "Any" => new AnyClass(),
       "Placeholder" => new PlaceholderClass(),
       "Range" => new RangeClass(),
