@@ -93,7 +93,6 @@ public class Frame
       {
          var length = Math.Min(arguments.Length, parameters.Length);
          var lastValue = Unassigned.Value;
-         var lastName = "";
          var variadic = parameters.Length > 0 && parameters[0].Variadic;
 
          if (variadic)
@@ -162,7 +161,6 @@ public class Frame
 
             fields.Assign(parameter.Name, lastValue, true, parameter.Reference).Force();*/
             fields.AssignParameter(parameter, lastValue);
-            lastName = parameter.Name;
             variadic = parameter.Variadic;
          }
 
@@ -175,7 +173,9 @@ public class Frame
             }
 
             var array = new KArray([.. list]);
-            fields.Assign(lastName, array, true).Force();
+            fields.AssignParameter(parameters[^1], array).Force();
+            /*fields.Remove(lastName);
+            fields.Assign(lastName, array, true).Force();*/
          }
          else if (length < parameters.Length)
          {
@@ -188,12 +188,13 @@ public class Frame
                }
 
                var _defaultValue = parameter.DefaultValue;
-               if (fields.ContainsKey(parameter.Name))
+               /*if (fields.ContainsKey(parameter.Name))
                {
                   fields.Remove(parameter.Name);
                }
 
-               fields.New(parameter.Name, FieldType.Parameter, parameter.Mutable, parameter.Reference).Force();
+               fields.New(parameter.Name, FieldType.Parameter, parameter.Mutable, parameter.Reference).Force();*/
+               //fields.AssignParameter(parameter.Name)
 
                IObject value;
                if (_defaultValue is (true, var invokable))
@@ -215,7 +216,8 @@ public class Frame
                else if (parameter.Variadic)
                {
                   value = KArray.Empty;
-                  fields.Assign(parameter.Name, value, true, parameter.Reference);
+                  //fields.Assign(parameter.Name, value, true, parameter.Reference);
+                  fields.AssignParameter(parameter, value).Force();
                }
                else
                {
@@ -240,7 +242,9 @@ public class Frame
             }
 
             var array = new KArray(list);
-            fields.Assign(lastName, array, true).Force();
+            /*fields.Remove(lastName);
+            fields.Assign(lastName, array, true).Force();*/
+            fields.AssignParameter(parameters[^1], array).Force();
          }
 
          parametersSet = true;
