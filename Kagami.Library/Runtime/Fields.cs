@@ -108,6 +108,14 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       });
    }
 
+   public Result<Field> NewRefField(Field originalField, string name, FieldType type, Maybe<TypeConstraint> typeConstraint, bool mutable,
+      bool visible)
+   {
+      var refField = new RefField(originalField)
+         { Type = type, Value = originalField.Value, Mutable = mutable, TypeConstraint = typeConstraint, Visible = visible };
+      return New(name, refField);
+   }
+
    public Result<Field> NewSelector(Selector selector, FieldType type, bool mutable = false, bool visible = true)
    {
       if (fields.Maybe[selector] is (true, var foundField))
@@ -230,12 +238,9 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
                 { Mutable: true } originalField))
             {
                Remove(parameter.Name);
-               var _field = New(parameter.Name, FieldType.Parameter, parameter.TypeConstraint, parameter.Mutable, true);
+               var _field = NewRefField(originalField, parameter.Name, FieldType.Parameter, parameter.TypeConstraint, parameter.Mutable, true);
                if (_field is (true, var field))
                {
-                  field.Value = value;
-                  field.OriginalField = originalField;
-
                   return field;
                }
                else

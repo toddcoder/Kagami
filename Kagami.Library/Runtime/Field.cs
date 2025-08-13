@@ -10,7 +10,7 @@ public class Field
 {
    protected IObject value = KNil.NilValue;
 
-   public IObject Value
+   public virtual IObject Value
    {
       get
       {
@@ -29,15 +29,7 @@ public class Field
          var valueClass = classOf(value);
          if (TypeConstraint is (true, var typeConstraint))
          {
-            if (typeConstraint.Matches(valueClass))
-            {
-               this.value = value;
-               if (OriginalField is (true, var originalField))
-               {
-                  originalField.value = value;
-               }
-            }
-            else if (value is Placeholder)
+            if (typeConstraint.Matches(valueClass) || value is Placeholder)
             {
                this.value = value;
             }
@@ -58,11 +50,6 @@ public class Field
          }
          else
          {
-            if (OriginalField is (true, var originalField))
-            {
-               originalField.value = value;
-            }
-
             if (value is Placeholder placeholder)
             {
                this.value = placeholder;
@@ -98,6 +85,4 @@ public class Field
    };
 
    public Fields Fields { get; set; } = [];
-
-   public Maybe<Field> OriginalField { get; set; } = nil;
 }

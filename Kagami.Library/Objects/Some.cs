@@ -16,7 +16,7 @@ public readonly struct Some : IObject, IOptional, IBoolean, IEquatable<Some>, IM
 
    public string ClassName => "Some";
 
-   public string AsString => $"{value.AsString}?";
+   public string AsString => $"?{value.AsString}";
 
    public string Image => $"?{value.Image}";
 
