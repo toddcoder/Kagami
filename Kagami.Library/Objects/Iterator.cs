@@ -59,7 +59,7 @@ public class Iterator : IObject, IIterator
 
    public virtual Maybe<IObject> Peek() => collection.Peek(index);
 
-   public IObject Reset()
+   public virtual IObject Reset()
    {
       index = 0;
       return this;

@@ -64,6 +64,8 @@ public class YieldingInvokable : IInvokable, ICollection, IObject
       return lazy ? new LazyIterator(clone) : new Iterator(clone);
    }
 
+   public YieldingInvokable Reset() => new(selector, Parameters, Image) { Address = Address, Arguments = Arguments, Index = Index };
+
    public Maybe<IObject> Next(int index)
    {
       var _result = Machine.Current.Value.Invoke(this);
