@@ -8,7 +8,11 @@
     <LangVersion>preview</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <ApplicationIcon>8556451_cabinet_decoration_standing_mirror_sink_icon.ico</ApplicationIcon>
   </PropertyGroup>
+  <ItemGroup>
+    <Content Include="8556451_cabinet_decoration_standing_mirror_sink_icon.ico" />
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="Core">
       <HintPath>..\References\Core.dll</HintPath>

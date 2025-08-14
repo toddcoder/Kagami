@@ -111,6 +111,7 @@
          AutoScaleMode = AutoScaleMode.Font;
          ClientSize = new Size(999, 741);
          Controls.Add(table);
+         Icon = (Icon)resources.GetObject("$this.Icon");
          KeyPreview = true;
          Margin = new Padding(4, 3, 4, 3);
          Name = "Playground";
