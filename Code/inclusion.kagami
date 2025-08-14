@@ -2,7 +2,7 @@
 
 inclusion Equal {
 	required isEqual(_)
-	func isNotEqual(x) => not isEqual(x)
+	func isNotEqual(x) := not isEqual(x)
 }
 
 class Point(var x, var y) {

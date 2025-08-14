@@ -4,17 +4,17 @@ inclusion Polygon {
 	required var width int
 	required var height int
 	required area() int
-	func printArea() => println(self.class.name, area())
+	func printArea() := println(self.class.name, area())
 }
 
 class Rectangle(var width int, var height int) {
 	include Polygon
-	func area() int => width * height
+	func area() int := width * height
 }
 
 class Triangle(var width int, var height int) {
 	include Polygon
-	func area() int => width * height / 2
+	func area() int := width * height / 2
 }
 
 var rectangle = Rectangle(4, 5)

@@ -1,6 +1,6 @@
 ﻿open sys
 
-func compose(f)(g)(x) => f(g(x))
+func compose(f)(g)(x) := f(g(x))
 
 let isOdd = x -> x !% 2
 let length = s -> s.length

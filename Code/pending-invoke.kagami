@@ -1,5 +1,5 @@
 ﻿open sys
 
-func square(x, y) => x * x + y
+func square(x, y) := x * x + y
 
 println(100 |> square(_, 500))

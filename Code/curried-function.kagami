@@ -1,6 +1,6 @@
 ﻿open sys
 
-func makeIncreaser(more)(x) => x + more
+func makeIncreaser(more)(x) := x + more
 
 let inc1 = makeIncreaser(1)
 let inc9999 = makeIncreaser(9999)
