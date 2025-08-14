@@ -285,7 +285,7 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
 
    public IObject ToSet() => terminate().ToSet();
 
-   public IObject Each(Lambda action) => copy(new StreamingEach(action));
+   public IObject Each(Lambda action) => terminate().Each(action);
 
    public IObject Rotate(int count) => terminate().Rotate(count);
 

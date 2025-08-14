@@ -18,10 +18,4 @@ public class CompositeLambda : Lambda
       var result = lambda1.Invoke(arguments);
       return lambda2.Invoke(result);
    }
-
-   public override IObject Join(Lambda otherLambda)
-   {
-      var runtimeLambda = new RuntimeLambda(Invoke, 1, "");
-      return runtimeLambda.Join(otherLambda);
-   }
 }
