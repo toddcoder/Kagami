@@ -4,6 +4,7 @@ using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using Kagami.Library.Runtime;
 using Core.Booleans;
+using Core.Monads;
 using Core.Strings;
 using static Kagami.Library.AllExceptions;
 
@@ -17,12 +18,11 @@ public class MatchFunction : Statement
    protected bool overriding;
    protected string className;
 
-   public MatchFunction(string functionName, Parameters parameters, If ifStatement, bool overriding, string className)
+   public MatchFunction(string functionName, Parameters parameters, If ifStatement, Maybe<TypeConstraint> _typeConstraint, bool overriding, string className)
    {
       selector = parameters.Selector(functionName);
       this.parameters = parameters;
-      block = new Block(ifStatement) { new ReturnNothing() };
-      block.AddReturnIf();
+      block = new Block(ifStatement, _typeConstraint) { new ReturnNothing() };
       this.overriding = overriding;
       this.className = className;
    }
@@ -74,6 +74,6 @@ public class MatchFunction : Statement
       invokable = getInvokable();
       overriding = this.overriding;
    }
-   
+
    public bool IsFixed { get; set; }
 }

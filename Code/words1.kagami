@@ -2,5 +2,5 @@
 
 var text = "Now is the time for all good men to come to the aid of their country."
 var words = text.words()
-var array = words if (@.text.length > 3)
+var array = i>words.text.length > 3
 println(array)

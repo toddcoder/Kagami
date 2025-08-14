@@ -6,6 +6,7 @@ using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Runtime;
 using System.Text.RegularExpressions;
+using Kagami.Library.Objects;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Parsers.ParserFunctions;
@@ -244,6 +245,8 @@ public partial class FunctionParser : StatementParser
    {
       List<If> list = [];
 
+      Maybe<TypeConstraint> _typeConstraint = parseTypeConstraint(state).Map(ptc => ptc.Maybe);
+
       state.CreateReturnType();
       while (state.More)
       {
@@ -292,7 +295,7 @@ public partial class FunctionParser : StatementParser
 
          previousIf.Else = new Block(new FailedMatch());
 
-         state.AddStatement(new MatchFunction(functionName, parameters, previousIf, overriding, className) { IsFixed = isFixed });
+         state.AddStatement(new MatchFunction(functionName, parameters, previousIf, _typeConstraint, overriding, className) { IsFixed = isFixed });
          state.RemoveReturnType();
 
          return unit;

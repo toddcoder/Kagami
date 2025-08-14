@@ -12,5 +12,5 @@ public class ImplicitFoldVariable : Symbol
 
    public override Arity Arity => Arity.Nullary;
 
-   public override string ToString() => "v@";
+   public override string ToString() => "v^";
 }

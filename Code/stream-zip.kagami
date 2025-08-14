@@ -2,8 +2,8 @@
 
 var numbers = [1..10]
 var letters = ['a'..'j']
-var i = lit numbers zip letters
+var i = ?^numbers zip letters
 println(~[i])
 
-i = lit numbers.zip(letters) (l, r) -> $"(l)(r)"
+i = ?^numbers.zip(letters) (l, r) -> $"(l)(r)"
 println(~[i])

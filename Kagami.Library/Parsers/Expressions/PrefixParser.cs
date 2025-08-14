@@ -9,7 +9,6 @@ public class PrefixParser(ExpressionBuilder builder) : MultiParser
       get
       {
          yield return new UserOperatorParser(builder, Arity.Prefix);
-         yield return new SomeSuccessParser(builder);
 
          if (builder.Flags[ExpressionFlags.Comparisand])
          {
@@ -21,12 +20,13 @@ public class PrefixParser(ExpressionBuilder builder) : MultiParser
          yield return new ImageParser(builder);
          yield return new IteratorParser(builder);
 
+         yield return new SomeSuccessParser(builder);
+
          if (!builder.Flags[ExpressionFlags.Comparisand] || !builder.Flags[ExpressionFlags.OmitNot])
          {
             yield return new NotParser(builder);
          }
 
-         //yield return new RangePrefixParser(builder);
          yield return new IsTrueParser(builder);
          yield return new TakeOperatorParser(builder);
          yield return new ImplicitOperatorParser(builder);

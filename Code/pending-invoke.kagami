@@ -2,4 +2,4 @@
 
 func square(x, y) => x * x + y
 
-println(100 |> ^square(500))
+println(100 |> square(_, 500))

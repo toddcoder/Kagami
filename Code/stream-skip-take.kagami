@@ -1,7 +1,7 @@
 ﻿open sys
 
 var numbers = [1..20]
-var i = lit numbers skip 2 take 5
+var i = ?^numbers skip 2 take 5
 println(~[i])
-i = lit numbers skip until (i -> i %% 5) take while i -> i < 15
+i = ?^numbers skip until (i -> i %% 5) take while i -> i < 15
 println(~[i])
