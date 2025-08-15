@@ -112,7 +112,7 @@ public partial class FindReplace : Form
       var offset = startIndex + startLength;
       if (useRegex)
       {
-         var searchText = playground.Editor.Text.Drop(offset);
+         var searchText = replacementSource.Text.Drop(offset);
 
          Pattern pattern = ltFind.Text;
          if (ignoreCase)
@@ -132,7 +132,7 @@ public partial class FindReplace : Form
       }
       else
       {
-         var _index = playground.Editor.Text.Find(ltFind.Text, offset, ignoreCase);
+         var _index = replacementSource.Text.Find(ltFind.Text, offset, ignoreCase);
          return _index.Map(i => (i, ltFind.Text.Length));
       }
    }

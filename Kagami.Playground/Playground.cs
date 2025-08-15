@@ -239,8 +239,6 @@ public partial class Playground : Form
       }
    }
 
-   public ExRichTextBox Editor => textEditor;
-
    protected void run() => update(true, true, true);
 
    protected void update(bool execute, bool fromMenu, bool ignoreDirtyFlag)
