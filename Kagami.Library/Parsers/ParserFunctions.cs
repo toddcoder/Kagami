@@ -701,7 +701,7 @@ public static class ParserFunctions
             _ => nil
          };
          state.SetReturnType(_typeConstraint);
-         var _scanned = state.Scan(@"^(\s*)(=>)(\s*)", Color.Whitespace, Color.Structure, Color.Whitespace);
+         var _scanned = state.Scan(@"^(\s*)(:=)(\s*)", Color.Whitespace, Color.Structure, Color.Whitespace);
          if (_scanned)
          {
             return getSingleLine(state, _typeConstraint);

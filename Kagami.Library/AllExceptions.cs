@@ -220,9 +220,9 @@ public static class AllExceptions
 
    public static Exception improperConjunction() => fail(messageImproperConjunction());
 
-   public static string messageBadLeftHandTerm() => "Bad left-hand term in expression";
+   //public static string messageBadLeftHandTerm() => "Bad left-hand term in expression";
 
-   public static Exception badLeftHandTerm() => fail(messageBadLeftHandTerm());
+   //public static Exception badLeftHandTerm() => fail(messageBadLeftHandTerm());
 
    public static string messageBadRightHandTerm() => "Bad right-hand term in expression";
 

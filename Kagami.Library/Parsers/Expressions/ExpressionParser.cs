@@ -155,7 +155,7 @@ public class ExpressionParser : PatternlessParser
          }
          else if (_term0.Exception is (true, var exception))
          {
-            return state.SetException(messageBadLeftHandTerm(), exception);
+            return exception;
          }
          else
          {
