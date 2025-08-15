@@ -62,6 +62,7 @@ public class ValuesParser : MultiParser
 
          yield return new NameValueParser(builder);
          yield return new FormatParser(builder);
+         yield return new WhitespaceParser(builder);
 
          if (builder.Flags[ExpressionFlags.Comparisand])
          {
