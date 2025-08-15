@@ -18,6 +18,7 @@ using Kagami.Library.Runtime;
 using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.Text;
+using Core.WinForms.Forms;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Playground;
@@ -56,6 +57,7 @@ public partial class Playground : Form
    protected string fontName = "Consolas";
    protected float fontSize = 12f;
    protected Maybe<(int line, int character)> _errorLocation = nil;
+   protected SingletonForm<FindReplace> findReplace = new(() => new FindReplace());
 
    public Playground()
    {
@@ -122,6 +124,11 @@ public partial class Playground : Form
          menus.Menu("Duplicate", (_, _) => duplicate(), "^D");
          menus.Menu("Create Block", (_, _) => createBlock(), "^B");
          menus.Menu("Copy Console", (_, _) => Clipboard.SetText(textConsole.Text));
+         menus.Separator();
+         menus.Menu("Find/Replace", (_, _) =>
+         {
+            findReplace.Show();
+         }, "^F");
 
          menus.Menu("&Build");
          menus.Menu("Run", (_, _) => run(), "F5");
@@ -231,6 +238,8 @@ public partial class Playground : Form
          locked = false;
       }
    }
+
+   public ExRichTextBox Editor => textEditor;
 
    protected void run() => update(true, true, true);
 
