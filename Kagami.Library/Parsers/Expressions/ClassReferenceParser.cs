@@ -9,18 +9,8 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class ClassReferenceParser : SymbolParser
 {
-   public ClassReferenceParser(ExpressionBuilder builder) : base(builder)
+   public static Optional<Unit> AddClassReference(ParseState state, ExpressionBuilder builder, string className)
    {
-   }
-
-   [GeneratedRegex(@$"^(\s*)({REGEX_CLASS_GETTING})\b")]
-   public override partial Regex Regex();
-
-   public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
-   {
-      var className = tokens[2].Text;
-      state.Colorize(tokens, Color.Whitespace, Color.Class);
-
       if (state.IsPattern(className))
       {
          builder.Add(new FieldSymbol(className));
@@ -49,5 +39,19 @@ public partial class ClassReferenceParser : SymbolParser
       {
          return nil;
       }
+   }
+   public ClassReferenceParser(ExpressionBuilder builder) : base(builder)
+   {
+   }
+
+   [GeneratedRegex(@$"^(\s*)({REGEX_CLASS_GETTING})\b")]
+   public override partial Regex Regex();
+
+   public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+   {
+      var className = tokens[2].Text;
+      state.Colorize(tokens, Color.Whitespace, Color.Class);
+
+      return AddClassReference(state, builder, className);
    }
 }

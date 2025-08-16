@@ -548,29 +548,29 @@ public static class ParserFunctions
       var _alias = state.Scan(@"^(\s*)([a-z0-9]+)\b", 2, Color.Whitespace, Color.Keyword);
       return
          from alias in _alias
-         from className in getClassName(alias)
+         from className in getClassNameFromAlias(alias)
          from baseClass in Module.Global.Value.Class(className)
          select (PossibleTypeConstraint)new PossibleTypeConstraint.Some(new TypeConstraint([baseClass]));
-
-      Optional<string> getClassName(string alias) => alias switch
-      {
-         "int" => "Int",
-         "float" => "Float",
-         "string" => "String",
-         "char" => "Char",
-         "byte" => "Byte",
-         "bytes" => "ByteArray",
-         "complex" => "Complex",
-         "rational" => "Rational",
-         "long" => "Long",
-         "date" => "Date",
-         "num" => "Number",
-         "mstring" => "MutString",
-         "lambda" => "Lambda",
-         "bool" => "Boolean",
-         _ => nil
-      };
    }
+
+   public static Optional<string> getClassNameFromAlias(string alias) => alias switch
+   {
+      "int" => "Int",
+      "float" => "Float",
+      "string" => "String",
+      "char" => "Char",
+      "byte" => "Byte",
+      "bytes" => "ByteArray",
+      "complex" => "Complex",
+      "rational" => "Rational",
+      "long" => "Long",
+      "date" => "Date",
+      "num" => "Number",
+      "mstring" => "MutString",
+      "lambda" => "Lambda",
+      "bool" => "Boolean",
+      _ => nil
+   };
 
    public static Optional<PossibleTypeConstraint> parseTypeConstraint(ParseState state)
    {
