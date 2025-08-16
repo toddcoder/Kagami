@@ -210,7 +210,7 @@ public readonly struct Float : IObject, INumeric, IObjectCompare, IComparable<Fl
 
    public int CompareTo(object? obj) => CompareTo((Float)obj!);
 
-   public KString Format(string format) => value.FormatUsing<double>(format, d => d.ToString(format.Replace("@", "e")));
+   public KString Format(string format) => value.FormatUsing(format, d => d.ToString(format.Replace("@", "e")));
 
    public IObject Increment(int amount = 1) => new Float(value + amount);
 

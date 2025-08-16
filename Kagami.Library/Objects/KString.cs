@@ -80,7 +80,7 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
       }
       else
       {
-         return value.FormatAs(format);
+         return (KString)value.FormatUsing(format, obj => obj);
       }
    }
 

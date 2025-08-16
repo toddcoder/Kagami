@@ -178,7 +178,7 @@ public readonly struct KDecimal : IObject, INumeric, IObjectCompare, IComparable
 
    public bool Equals(KDecimal other) => value.Equals(other.value);
 
-   public KString Format(string format) => value.FormatUsing<decimal>(format, d => d.ToString(format.Replace("@", "d")));
+   public KString Format(string format) => value.FormatUsing(format, d => d.ToString(format.Replace("@", "d")));
 
    public int CompareTo(object? obj) => CompareTo((KDecimal)obj!);
 

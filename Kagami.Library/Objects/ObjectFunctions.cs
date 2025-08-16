@@ -770,7 +770,7 @@ public static class ObjectFunctions
       }
       else
       {
-         return intValue.FormatUsing<int>(format, i => i.ToString(format).Replace("@", "e"));
+         return intValue.FormatUsing(format, i => i.ToString(format).Replace("@", "e"));
       }
    }
 

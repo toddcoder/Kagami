@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Core.Objects;
 using Core.Strings;
 using Kagami.Library.Parsers;
 
@@ -6,7 +7,7 @@ namespace Kagami.Library.Objects;
 
 public static class FormatExtensions
 {
-   public static string FormatUsing<T>(this object obj, string format, Func<T, string> func)
+   public static string FormatUsing<T>(this T obj, string format, Func<T, string> func) where T : notnull
    {
       if (obj is DateTime dateTime)
       {
@@ -37,9 +38,21 @@ public static class FormatExtensions
          builder.Append("}");
          return string.Format(builder.ToString(), obj);
       }
+      else if (format.MatchOf(@"([<=>])(\d+)") is (true, var matches2))
+      {
+         var match = matches2[0];
+         var size = match.Groups[2].Value.Value().Int32();
+         return match.Groups[1].Value switch
+         {
+            "<" => obj.ToString()?.LeftJustify(size) ?? "",
+            "=" => obj.ToString()?.Center(size) ?? "",
+            ">" => obj.ToString()?.RightJustify(size) ?? "",
+            _ => obj.ToString() ?? ""
+         };
+      }
       else
       {
-         return func((T)obj);
+         return func(obj);
       }
    }
 }

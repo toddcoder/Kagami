@@ -139,8 +139,8 @@ public readonly struct Complex : IObject, INumeric, IObjectCompare, IComparable<
 
    public KString Format(string format)
    {
-      return $"{value.Real.FormatUsing<double>(format, d => d.ToString(format))}" +
-         $"{(value.Imaginary >= 0.0).Extend(" + ")}{value.Imaginary.FormatUsing<double>(format, d => d.ToString(format))}i";
+      return $"{value.Real.FormatUsing(format, d => d.ToString(format))}" +
+         $"{(value.Imaginary >= 0.0).Extend(" + ")}{value.Imaginary.FormatUsing(format, d => d.ToString(format))}i";
    }
 
    public IObject Negate() => (Complex)CComplex.Negate(value);
