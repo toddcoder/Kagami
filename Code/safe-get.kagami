@@ -1,14 +1,14 @@
 ﻿open sys
 
-func safe`get()
+func safe_get()
 	when (?contents, _) return contents
 	when (Nil, default) return default
 
-let x = safe`get(?16, 2)
+let x = safe_get(?16, 2)
 println(x)
 
-let y = safe`get(?true, false)
+let y = safe_get(?true, false)
 println(y)
 
-let z = safe`get(?'c', 'a')
+let z = safe_get(?'c', 'a')
 println(z)

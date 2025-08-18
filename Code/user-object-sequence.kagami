@@ -2,7 +2,7 @@
 
 record DateTime(i1, i2, i3)
 
-let date = DateTime(2000, 12, 31)
-match date {
+let `date = DateTime(2000, 12, 31)
+match `date {
 	when DateTime(year, 1, 1), DateTime(year, 12, 31) => ?year
 }

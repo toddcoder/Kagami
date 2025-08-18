@@ -5,7 +5,7 @@ class Car {
 	func string := $"Car\((odometer))"
 }
 
-let car1 = Car(): {odometer = 10000}
+let car1 = Car().{odometer = 10000}
 println(car1)
 let car2 = car1
 println(car2)

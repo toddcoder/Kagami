@@ -5,6 +5,6 @@ class Car {
 	var fuelLevel Int
 }
 
-var car = Car(): { fuelLevel = 80 miles = 25 }
+var car = Car().{fuelLevel = 80 miles = 25}
 println(car.fuelLevel)
 println(car.miles)
