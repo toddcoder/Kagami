@@ -378,6 +378,8 @@ public class OperationsBuilder
 
    public void Pipeline() => add(new Pipeline());
 
+   public void BackPipeline() => add(new BackPipeline());
+
    public void NewOpenRange() => add(new NewOpenRange());
 
    public void SetFields(Parameters parameters) => add(new SetFields(parameters));

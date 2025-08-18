@@ -382,7 +382,7 @@ public static class ParserFunctions
       var _scanned = state.Scan(@"^([\)\]\}])", Color.CloseParenthesis);
       if (_scanned)
       {
-         return (Expression[]) [];
+         return (Expression[])[];
       }
       else if (_scanned.Exception is (true, var exception))
       {
@@ -403,7 +403,7 @@ public static class ParserFunctions
             {
                if (next.EndsWith(")") || next.EndsWith("]") || next.EndsWith("}"))
                {
-                  return (Expression[]) [.. arguments];
+                  return (Expression[])[.. arguments];
                }
             }
             else
@@ -1317,6 +1317,9 @@ public static class ParserFunctions
          case "|>":
             _symbol = new PipelineSymbol();
             break;
+         case "<|":
+            _symbol = new BackPipelineSymbol();
+            break;
          case "...":
             _symbol = new OpenRangeSymbol();
             break;
@@ -1341,9 +1344,9 @@ public static class ParserFunctions
          case "//":
             _symbol = new RationalSymbol();
             break;
-         case "<|":
+         /*case "<|":
             _symbol = new SendBinaryMessageSymbol("<|(_)", Precedence.Shift);
-            break;
+            break;*/
          case "/:":
             _symbol = new SendBinaryMessageSymbol("foldl(_)", Precedence.ChainedOperator);
             break;
