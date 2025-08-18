@@ -33,4 +33,6 @@ public class DivRem : TwoNumericOperation
          return exception;
       }
    }
+
+   public override string ToString() => "div.rem";
 }

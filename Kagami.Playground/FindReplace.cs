@@ -64,6 +64,8 @@ public partial class FindReplace : Form
       (builder + uiReplaceAll).Row();
       (builder + uiMessage).SpanCol(5).Row();
 
+      this.Tuck(uiMessage);
+
       subscriber["success"] = p => uiMessage.Do(() => uiMessage.Success(p.Payload));
       subscriber["message"] = p => uiMessage.Do(() => uiMessage.Message(p.Payload));
       subscriber["failure"] = p => uiMessage.Do(() => uiMessage.Failure(p.Payload));
