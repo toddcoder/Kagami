@@ -17,7 +17,9 @@ using Kagami.Library;
 using Kagami.Library.Runtime;
 using System.Diagnostics;
 using System.Drawing.Drawing2D;
+using System.Globalization;
 using System.Text;
+using Core.Applications.Messaging;
 using Core.WinForms.Forms;
 using static Core.Monads.MonadFunctions;
 
@@ -58,6 +60,7 @@ public partial class Playground : Form
    protected float fontSize = 12f;
    protected Maybe<(int line, int character)> _errorLocation = nil;
    protected SingletonForm<FindReplace> findReplace = new(() => new FindReplace());
+   protected Subscriber<Finding> findingSubscriber = new("finding");
 
    public Playground()
    {
@@ -125,10 +128,7 @@ public partial class Playground : Form
          menus.Menu("Create Block", (_, _) => createBlock(), "^B");
          menus.Menu("Copy Console", (_, _) => Clipboard.SetText(textConsole.Text));
          menus.Separator();
-         menus.Menu("Find/Replace", (_, _) =>
-         {
-            findReplace.Show();
-         }, "^F");
+         menus.Menu("Find/Replace", (_, _) => { findReplace.Show(); }, "^F");
 
          menus.Menu("&Build");
          menus.Menu("Run", (_, _) => run(), "F5");
@@ -228,6 +228,71 @@ public partial class Playground : Form
          (builder + uiRun).Row();
 
          document.Open(playgroundConfiguration.LastFile);
+
+         findingSubscriber["find"] = p =>
+         {
+            try
+            {
+               if (p.Payload is Finding.Find find)
+               {
+                  if (find.IsRegex)
+                  {
+                     textEditor.Do(() => findRegex(find.Text, find.IgnoreCase));
+                  }
+                  else
+                  {
+                     textEditor.Do(() => findText(find.Text, find.IgnoreCase));
+                  }
+               }
+            }
+            catch (Exception exception)
+            {
+               Publisher<string>.Publish("find-replace", "failure", exception.Message);
+            }
+         };
+         findingSubscriber["replace"] = p =>
+         {
+            try
+            {
+               if (p.Payload is Finding.Replace replace)
+               {
+                  if (replace.IsRegex)
+                  {
+                     textEditor.Do(() => replaceRegex(replace.Text, replace.IgnoreCase, replace.Replacement));
+                  }
+                  else
+                  {
+                     textEditor.Do(() => replaceText(replace.Text, replace.IgnoreCase, replace.Replacement));
+                  }
+               }
+            }
+            catch (Exception exception)
+            {
+               Publisher<string>.Publish("find-replace", "failure", exception.Message);
+            }
+         };
+         findingSubscriber["replace-all"] = p =>
+         {
+            try
+            {
+               if (p.Payload is Finding.ReplaceAll replaceAll)
+               {
+                  if (replaceAll.IsRegex)
+                  {
+                     textEditor.Do(() => replaceAllRegex(replaceAll.Text, replaceAll.IgnoreCase, replaceAll.Replacement));
+                  }
+                  else
+                  {
+                     textEditor.Do(() => replaceAllText(replaceAll.Text, replaceAll.IgnoreCase, replaceAll.Replacement));
+                  }
+               }
+            }
+            catch (Exception exception)
+            {
+               Publisher<string>.Publish("find-replace", "failure", exception.Message);
+            }
+         };
+         findingSubscriber.UnsubscribeOnClose(this);
       }
       catch (Exception exception)
       {
@@ -236,6 +301,114 @@ public partial class Playground : Form
       finally
       {
          locked = false;
+      }
+   }
+
+   protected void findRegex(Pattern pattern, bool ignoreCase)
+   {
+      pattern = pattern.WithIgnoreCase(ignoreCase);
+      var selection = textEditor.Selection;
+      var startIndex = selection.length <= 0 ? selection.start : selection.start + selection.length;
+      var _result = textEditor.Text.Drop(startIndex).Matches(pattern);
+      if (_result is (true, var result))
+      {
+         textEditor.Select(result.Index + startIndex, result.Length);
+         Publisher<string>.Publish("find-replace", "success", "Found");
+      }
+      else
+      {
+         Publisher<string>.Publish("find-replace", "message", "Not found");
+      }
+   }
+
+   protected void findText(string text, bool ignoreCase)
+   {
+      var selection = textEditor.Selection;
+      var startIndex = selection.length <= 0 ? selection.start : selection.start + selection.length;
+      var _index = textEditor.Text.Find(text, startIndex, ignoreCase);
+      if (_index is (true, var index))
+      {
+         textEditor.Select(index, text.Length);
+         Publisher<string>.Publish("find-replace", "success", "Found");
+      }
+      else
+      {
+         Publisher<string>.Publish("find-replace", "message", "Not found");
+      }
+   }
+
+   protected void replaceRegex(Pattern pattern, bool ignoreCase, string replacement)
+   {
+      pattern = pattern.WithIgnoreCase(ignoreCase);
+      var selection = textEditor.Selection;
+      var startIndex = selection.length <= 0 ? selection.start : selection.start + selection.length;
+      var _result = textEditor.Text.Drop(startIndex).Matches(pattern);
+      if (_result is (true, var result))
+      {
+         textEditor.Select(result.Index + startIndex, result.Length);
+         textEditor.SelectedText = replacement;
+         Publisher<string>.Publish("find-replace", "success", "Replaced");
+      }
+      else
+      {
+         Publisher<string>.Publish("find-replace", "message", "Not replaced");
+      }
+   }
+
+   protected void replaceText(string text, bool ignoreCase, string replacement)
+   {
+      var selection = textEditor.Selection;
+      var startIndex = selection.length <= 0 ? selection.start : selection.start + selection.length;
+      var _index = textEditor.Text.Find(text, startIndex, ignoreCase);
+      if (_index is (true, var index))
+      {
+         textEditor.Select(index, text.Length);
+         textEditor.SelectedText = replacement;
+         Publisher<string>.Publish("find-replace", "success", "Replaced");
+      }
+      else
+      {
+         Publisher<string>.Publish("find-replace", "message", "Not replaced");
+      }
+   }
+
+   protected void replaceAllRegex(Pattern pattern, bool ignoreCase, string replacement)
+   {
+      pattern = pattern.WithIgnoreCase(ignoreCase);
+      var selection = textEditor.Selection;
+
+      var text = textEditor.Text;
+      var _result = text.Matches(pattern);
+      if (_result is (true, var result))
+      {
+         Slicer slicer = text;
+         foreach (var match in result)
+         {
+            slicer[match.Index, match.Length] = replacement;
+         }
+
+         textEditor.Text = slicer.ToString();
+         textEditor.Selection = selection;
+         Publisher<string>.Publish("find-replace", "success", "Replaced all");
+      }
+      else
+      {
+         Publisher<string>.Publish("find-replace", "message", "Not replaced");
+      }
+   }
+
+   protected void replaceAllText(string text, bool ignoreCase, string replacement)
+   {
+      var oldText = textEditor.Text;
+      var result = oldText.Replace(text, replacement, ignoreCase, CultureInfo.CurrentCulture);
+      if (result != oldText)
+      {
+         textEditor.Text = result;
+         Publisher<string>.Publish("find-replace", "success", "Replaced all");
+      }
+      else
+      {
+         Publisher<string>.Publish("find-replace", "message", "Not replaced");
       }
    }
 
