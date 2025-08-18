@@ -1,0 +1,35 @@
+﻿using System.Text.RegularExpressions;
+using Core.Monads;
+using Kagami.Library.Nodes.Symbols;
+using static Core.Monads.MonadFunctions;
+
+namespace Kagami.Library.Parsers.Expressions;
+
+public partial class WithParser : SymbolParser
+{
+   public WithParser(ExpressionBuilder builder) : base(builder)
+   {
+   }
+
+   [GeneratedRegex(@"^(\s*)(with)\b")]
+   public override partial Regex Regex();
+
+   public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
+   {
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword);
+
+      var initializerParser = new InitializerParser(builder, false);
+      var _result = initializerParser.Scan(state);
+      if (_result)
+      {
+         var properties = initializerParser.Properties;
+         builder.Add(new WithSymbol(properties));
+
+         return unit;
+      }
+      else
+      {
+         return _result.Exception;
+      }
+   }
+}

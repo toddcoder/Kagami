@@ -9,6 +9,7 @@ public class PostfixParser(ExpressionBuilder builder) : MultiParser
       get
       {
          yield return new UserOperatorParser(builder, Arity.Postfix);
+         yield return new WithParser(builder);
          yield return new InitializerParser(builder);
          yield return new PostfixIncrementParser(builder);
          yield return new InfiniteRangeParser(builder);

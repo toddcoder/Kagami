@@ -8,8 +8,11 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class InitializerParser : SymbolParser
 {
-   public InitializerParser(ExpressionBuilder builder) : base(builder)
+   protected bool standAlone;
+
+   public InitializerParser(ExpressionBuilder builder, bool standAlone = true) : base(builder)
    {
+      this.standAlone = standAlone;
    }
 
    [GeneratedRegex(@"^(\s*)(\.{)")]
@@ -56,8 +59,17 @@ public partial class InitializerParser : SymbolParser
          }
       }
 
-      builder.Add(new InitializerSymbol(properties));
+      if (standAlone)
+      {
+         builder.Add(new InitializerSymbol(properties));
+      }
+      else
+      {
+         Properties = properties;
+      }
 
       return unit;
    }
+
+   public List<(string, Expression)> Properties { get; set; } = [];
 }
