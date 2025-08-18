@@ -63,4 +63,6 @@ public interface IMessageNumber
    IObject Fraction();
 
    IObject Round(INumeric other);
+
+   IObject Trunc();
 }

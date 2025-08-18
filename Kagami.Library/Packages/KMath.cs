@@ -154,6 +154,13 @@ public class KMath : Package
       _ => throw notNumeric(obj)
    };
 
+   public IObject Trunc(IObject obj) => obj switch
+   {
+      IMessageNumber mn => mn.Trunc(),
+      INumeric n => Float.FloatObject(Math.Truncate(n.AsDouble())),
+      _ => throw notNumeric(obj)
+   };
+
    public T XConvert<T>(IObject obj, Func<INumeric, T> func) where T : IObject
    {
       var className = typeof(T).Name;

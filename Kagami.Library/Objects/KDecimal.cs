@@ -166,6 +166,8 @@ public readonly struct KDecimal : IObject, INumeric, IObjectCompare, IComparable
 
    public IObject Round(INumeric other) => new KDecimal(Math.Round(AsDecimal(), other.AsInt32()));
 
+   public IObject Trunc() => (KDecimal)Math.Truncate(value);
+
    public int Compare(IObject obj) => compatibleCompare(this, obj);
 
    public IObject Object => this;

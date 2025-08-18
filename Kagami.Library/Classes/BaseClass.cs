@@ -237,6 +237,8 @@ public abstract class BaseClass
          (obj, _) => function(obj, x => Math.Abs(x), x => Math.Abs(x), x => x, x => (Int)x.Abs(), "abs()"));
       registerMessage("ceil()",
          (obj, _) => function(obj, x => x, x => Math.Ceiling(x), x => x, x => (Float)x.Ceiling(), "ceil()"));
+      registerMessage("trunc()",
+         (obj, _) => function(obj, x => x, x => Math.Truncate(x), x => x, x => (Float)x.Trunc(), "trunc()"));
       registerMessage("floor()", (obj, _) => function(obj, x => x, x => Math.Floor(x), x => x, x => (Float)x.Floor(), "floor()"));
       registerMessage("frac()", (obj, _) => function(obj, _ => 0, x => x - (int)x, _ => 0, x => (Float)x.Fraction(), "frac()"));
       messages["isNumber".get()] = (_, _) => KBoolean.True;

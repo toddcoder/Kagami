@@ -205,6 +205,8 @@ public readonly struct Complex : IObject, INumeric, IObjectCompare, IComparable<
 
    public IObject Round(INumeric other) => (Float)Math.Round(AsDouble(), other.AsInt32());
 
+   public IObject Trunc() => (Float)Math.Truncate(AsDouble());
+
    public int CompareTo(object? obj) => CompareTo((Complex)obj!);
 
    public IObject Increment(int amount = 1) => new Complex(value.Real + amount, value.Imaginary);

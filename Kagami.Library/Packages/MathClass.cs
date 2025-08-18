@@ -37,6 +37,7 @@ public class MathClass : PackageClass
       registerPackageFunction("ceil(_)", (obj, msg) => function<KMath, IObject>(obj, msg, (m, n) => m.Ceiling(n)));
       registerPackageFunction("round(_<Number>,_<Int>)",
          (obj, msg) => function<KMath, IObject, Int>(obj, msg, (m, n, i) => m.Round(n, i.Value)));
+      registerPackageFunction("trunc(_)", (obj, msg) => function<KMath, IObject>(obj, msg, (m, n) => m.Trunc(n)));
       registerPackageFunction("int(_)", (obj, msg) => function<KMath, IObject>(obj, msg, (m, n) => m.XInt(n)));
       registerPackageFunction("float(_)", (obj, msg) => function<KMath, IObject>(obj, msg, (m, n) => m.XFloat(n)));
       registerPackageFunction("byte(_)", (obj, msg) => function<KMath, IObject>(obj, msg, (m, n) => m.XByte(n)));

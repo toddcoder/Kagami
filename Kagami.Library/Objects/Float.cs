@@ -166,6 +166,8 @@ public readonly struct Float : IObject, INumeric, IObjectCompare, IComparable<Fl
 
    public IObject Round(INumeric other) => (Float)Math.Round(value, other.AsInt32());
 
+   public IObject Trunc() => (Float)Math.Truncate(value);
+
    public string AsString => value.ToString();
 
    public string Image => floatImage(value);

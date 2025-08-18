@@ -114,9 +114,13 @@ public class StringClass : BaseClass, ICollectionClass
       base.RegisterClassMessages();
 
       classMessages["clrf".get()] = (_, _) => (KString)"\r\n";
-      classMessages["lcase".get()] = (_, _) => (KString)"abcdefghijklmnopqrstuvwxyz";
-      classMessages["ucase".get()] = (_, _) => (KString)"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      classMessages["lalpha".get()] = (_, _) => (KString)"abcdefghijklmnopqrstuvwxyz";
+      classMessages["ualpha".get()] = (_, _) => (KString)"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
       classMessages["alpha".get()] = (_, _) => (KString)"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+      classMessages["lvowels".get()] = (_, _) => (KString)"aeiou";
+      classMessages["uvowels".get()] = (_, _) => (KString)"AEIOU";
+      classMessages["lconsonants".get()] = (_, _) => (KString)"bcdfghjklmnpqrstvwxyz";
+      classMessages["uconsonants".get()] = (_, _) => (KString)"BCDFGHJKLMNPQRSTVWXYZ";
       classMessages["digits".get()] = (_, _) => (KString)"0123456789";
       classMessages["punctuation".get()] = (_, _) => (KString)"!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
    }

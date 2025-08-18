@@ -179,6 +179,8 @@ public readonly struct Long : IObject, INumeric, IComparable<Long>, IEquatable<L
 
    public IObject Round(INumeric other) => (Float)Math.Round(AsDouble(), other.AsInt32());
 
+   public IObject Trunc() => (Long)value;
+
    public int CompareTo(object? obj) => CompareTo((Long)obj!);
 
    public override bool Equals([NotNullWhen(true)] object? obj) => obj is Long other && value == other.value;

@@ -210,13 +210,15 @@ public struct Rational : IObject, INumeric, IRangeItem, IComparable<Rational>, I
 
    public IObject Abs() => (Rational)(BigInteger.Abs(numerator), BigInteger.Abs(denominator));
 
-   public IObject Ceiling() => (Float)Math.Ceiling((double)numerator / (double)numerator);
+   public IObject Ceiling() => (Float)Math.Ceiling((double)numerator / (double)denominator);
 
-   public IObject Floor() => (Float)Math.Floor((double)numerator / (double)numerator);
+   public IObject Floor() => (Float)Math.Floor((double)numerator / (double)denominator);
 
    public IObject Fraction() => (Float)(1f / (double)numerator);
 
    public IObject Round(INumeric other) => (Float)Math.Round(AsDouble(), other.AsInt32());
+
+   public IObject Trunc() => (Float)Math.Truncate((double)numerator / (double)denominator);
 
    public int CompareTo(object? obj) => CompareTo((Rational)obj!);
 
