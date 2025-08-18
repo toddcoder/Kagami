@@ -32,7 +32,7 @@ public partial class InvokeParser : SymbolParser
          {
             if (state.BlockFollows())
             {
-               state.Scan(@"^(\s*)(\.)", Color.Whitespace, Color.Block);
+               state.Scan(@"^(\s*)(:)", Color.Whitespace, Color.Block);
                var _result = state.BeginBlock();
                if (_result)
                {

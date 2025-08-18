@@ -430,7 +430,7 @@ public class ParseState : IEnumerable<Statement>
 
    public Maybe<Function> Macro(string fullFunctionName) => macros.Maybe[fullFunctionName];
 
-   public bool BlockFollows() => CurrentSource.IsMatch("^ /s* '.{'; m");
+   public bool BlockFollows() => CurrentSource.IsMatch("^ /s* ':{'; m");
 
    public Maybe<(string, Expression)> ForExpression { get; set; } = nil;
 
