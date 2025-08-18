@@ -96,6 +96,8 @@ public abstract class Matcher : IObject
       return matcher;
    }
 
+   public virtual bool AutoOptional => false;
+
    public abstract string ClassName { get; }
 
    public abstract string AsString { get; }
