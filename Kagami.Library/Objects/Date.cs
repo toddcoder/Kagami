@@ -130,5 +130,7 @@ public readonly struct Date : IObject, IRangeItem, IFormattable
 
    public KString Format(string format) => value.ToString(format);
 
+   public KString Format(string[] formats) => format(this, formats);
+
    public KString DayOfWeek => value.DayOfWeek.ToString();
 }

@@ -3,4 +3,6 @@
 public interface IFormattable
 {
    KString Format(string format);
+
+   KString Format(string[] formats);
 }

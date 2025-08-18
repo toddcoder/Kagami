@@ -214,6 +214,8 @@ public readonly struct Float : IObject, INumeric, IObjectCompare, IComparable<Fl
 
    public KString Format(string format) => value.FormatUsing(format, d => d.ToString(format.Replace("@", "e")));
 
+   public KString Format(string[] formats) => format(this, formats);
+
    public IObject Increment(int amount = 1) => new Float(value + amount);
 
    public IObject Decrement(int amount = 1) => new Float(value - amount);

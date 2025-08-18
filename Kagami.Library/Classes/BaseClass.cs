@@ -8,6 +8,7 @@ using static Kagami.Library.Classes.ClassFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Operations.NumericFunctions;
 using IFormattable = Kagami.Library.Objects.IFormattable;
+using ObjectFunctions = Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Classes;
 
@@ -80,20 +81,50 @@ public abstract class BaseClass
          (obj, message) => function<IObject, KString>(obj, message, (o, n) => sendMessage(o, n.Value, Arguments.Empty)));
       registerMessage("receives(_)", (obj, message) => (KBoolean)classOf(obj).RespondsTo((Selector)message.Arguments[0]));
       registerMessage("seq(_)", (obj, message) => new OpenRange(obj, (Lambda)message.Arguments[0]));
-      registerMessage("format(_)", (obj, message) => format(obj, message.Arguments[0].AsString));
+      registerMessage("format(_<String>)", (obj, message) => format(obj, message.Arguments[0].AsString));
+      registerMessage("format(_<Array>)", (obj, message) => formatArray(obj, message.Arguments[0]));
       registerMessage("id".get(), (obj, _) => KString.StringObject(obj.Id.ToString()));
       registerMessage("isTrue".get(), (obj, _) => KBoolean.BooleanObject(obj.IsTrue));
    }
 
    protected static KString format(IObject obj, string formattingString)
    {
-      if (formattingString == "i")
+      if (formattingString.Contains(' '))
+      {
+         return formatArray(obj, formattingString.Split(' '));
+      }
+      else if (formattingString == "i")
       {
          return obj.Image;
       }
       else if (obj is IFormattable formattable)
       {
          return formattable.Format(formattingString);
+      }
+      else
+      {
+         return obj.AsString;
+      }
+   }
+
+   protected static string formatArray(IObject obj, string[] formats)
+   {
+      if (obj is IFormattable formattable)
+      {
+         return ObjectFunctions.format(formattable, formats).Value;
+      }
+      else
+      {
+         return obj.AsString;
+      }
+   }
+
+   protected static KString formatArray(IObject obj, IObject arrayAsObject)
+   {
+      if (obj is IFormattable formattable && arrayAsObject is KArray kArray)
+      {
+         string[] array = [.. kArray.List.Select(o => o.AsString)];
+         return ObjectFunctions.format(formattable, array);
       }
       else
       {

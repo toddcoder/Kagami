@@ -9,7 +9,7 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class FormatParser : SymbolParser
 {
-   [GeneratedRegex(@"^(\s*)(\$[cdefgnprxsboi<=>](?:-?\d+)?(?:\.\d+)?)")]
+   [GeneratedRegex(@"^(\s*)(\$[cdefgnprxsboi<=>\$&\^](?:-?\d+)?(?:\.\d+)?)")]
    public override partial Regex Regex();
 
    public FormatParser(ExpressionBuilder builder) : base(builder)

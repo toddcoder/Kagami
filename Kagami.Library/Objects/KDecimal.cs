@@ -182,6 +182,8 @@ public readonly struct KDecimal : IObject, INumeric, IObjectCompare, IComparable
 
    public KString Format(string format) => value.FormatUsing(format, d => d.ToString(format.Replace("@", "d")));
 
+   public KString Format(string[] formats) => format(this, formats);
+
    public int CompareTo(object? obj) => CompareTo((KDecimal)obj!);
 
    public IObject Increment(int amount = 1) => (KDecimal)(value + amount);

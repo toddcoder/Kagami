@@ -143,6 +143,8 @@ public readonly struct Complex : IObject, INumeric, IObjectCompare, IComparable<
          $"{(value.Imaginary >= 0.0).Extend(" + ")}{value.Imaginary.FormatUsing(format, d => d.ToString(format))}i";
    }
 
+   public KString Format(string[] formats) => format(this, formats);
+
    public IObject Negate() => (Complex)CComplex.Negate(value);
 
    public IObject Sign() => new Complex(Math.Sign(value.Real), Math.Sign(value.Imaginary));

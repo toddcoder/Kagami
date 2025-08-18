@@ -50,6 +50,17 @@ public static class FormatExtensions
             _ => obj.ToString() ?? ""
          };
       }
+      else if (format.MatchOf(@"([\$\^&])") is (true, var matches3))
+      {
+         var match = matches3[0];
+         return match.Groups[1].Value switch
+         {
+            "$" => obj.ToString()?.ToUpper() ?? "",
+            "^" => obj.ToString()?.ToTitleCase() ?? "",
+            "&" => obj.ToString()?.ToLower() ?? "",
+            _ => obj.ToString() ?? ""
+         };
+      }
       else
       {
          return func(obj);

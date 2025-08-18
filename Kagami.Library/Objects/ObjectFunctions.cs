@@ -774,6 +774,27 @@ public static class ObjectFunctions
       }
    }
 
+   public static string formatNumber(int intValue, string[] formats)
+   {
+      switch (formats.Length)
+      {
+         case 0:
+            return intValue.ToString();
+         case 1:
+            return formatNumber(intValue, formats[0]);
+         default:
+         {
+            var result = formatNumber(intValue, formats[0]);
+            foreach (var format in formats.Skip(1))
+            {
+               result = result.FormatUsing(format, r => r);
+            }
+
+            return result;
+         }
+      }
+   }
+
    public static string format(int value, int toBase, int size, char padding)
    {
       var result = Convert.ToString(value, toBase);
@@ -817,6 +838,27 @@ public static class ObjectFunctions
             default:
                var result = obj.ToString() ?? "";
                return length > 0 ? result.RightJustify(length, padding) : result.LeftJustify(-length, padding);
+         }
+      }
+   }
+
+   public static KString format(IFormattable formattable, string[] formats)
+   {
+      switch (formats.Length)
+      {
+         case 0:
+            return formattable.ToString() ?? "";
+         case 1:
+            return formattable.Format(formats[0]);
+         default:
+         {
+            var result = formattable.Format(formats[0]);
+            foreach (var format in formats.Skip(1))
+            {
+               result = result.Value.FormatUsing(format, s => s);
+            }
+
+            return result;
          }
       }
    }

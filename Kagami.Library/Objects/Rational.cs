@@ -126,6 +126,8 @@ public struct Rational : IObject, INumeric, IRangeItem, IComparable<Rational>, I
 
    public KString Format(string format) => $"{numerator.ToString(format)} // {denominator.ToString(format)}";
 
+   public KString Format(string[] formats) => format(this, formats);
+
    public IObject Negate() => (Rational)(-numerator, denominator);
 
    public IObject Sign() => (Rational)(numerator.Sign, denominator.Sign);
