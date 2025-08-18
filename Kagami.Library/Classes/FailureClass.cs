@@ -24,7 +24,7 @@ public class FailureClass : BaseClass
       messages["optional()"] = (obj, _) => function<IObject>(obj, s => ((IResult)s).Optional());
    }
 
-   public override bool AssignCompatible(BaseClass otherClass) => otherClass is SuccessClass or FailureClass;
+   public override bool AssignCompatible(BaseClass otherClass) => otherClass is SuccessClass or FailureClass or ResultClass;
 
    public override IObject DefaultValue => new Failure("");
 }

@@ -19,7 +19,7 @@ public class OptionalClass : BaseClass
       messages["result(_)"] = (obj, msg) => function<IObject, KString>(obj, msg, (s, l) => ((IOptional)s).Result(l));
    }
 
-   public override bool MatchCompatible(BaseClass otherClass) => otherClass.Name is "Some" or "None";
+   public override bool MatchCompatible(BaseClass otherClass) => otherClass.Name is "Some" or "Nil";
 
    public override bool AssignCompatible(BaseClass otherClass) => MatchCompatible(otherClass);
 

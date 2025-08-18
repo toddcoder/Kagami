@@ -15,7 +15,10 @@ public readonly struct Long : IObject, INumeric, IComparable<Long>, IEquatable<L
 
    private readonly BigInteger value;
 
-   public Long(BigInteger value) : this() => this.value = value;
+   public Long(BigInteger value) : this()
+   {
+      this.value = value;
+   }
 
    public (INumeric, INumeric) Compatible(INumeric obj) => obj.ClassName switch
    {

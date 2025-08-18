@@ -18,6 +18,7 @@ public class NewRange : TwoOperandOperation
       Float start when y is Float stop => new FloatRange(start, stop, inclusive),
       IRangeItem start when y is Any => new KRange(start, new Infinity(true), inclusive),
       IRangeItem start when y is IObjectCompare stop => new KRange(start, stop, inclusive),
+      IRangeItem start when y is IRangeItem stop => new KRange(start, stop, inclusive),
       KRange range when y is Int increment => new KRange(range, increment),
       FloatRange range when y is Float increment => new FloatRange(range, increment.Value),
       UserObject userObject when y is UserObject stop => new KRange(new UserRangeItem(userObject), new UserCompare(stop), inclusive),
