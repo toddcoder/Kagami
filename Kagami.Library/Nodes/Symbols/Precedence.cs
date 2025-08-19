@@ -19,5 +19,6 @@ public enum Precedence
    Concatenate = 14,
    ChainedOperator = 15,
    KeyValue = 16,
-   Comma = 17
+   Comma = 17,
+   Pipeline = 18
 }

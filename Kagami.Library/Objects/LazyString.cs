@@ -75,7 +75,7 @@ public readonly struct LazyString(string value) : IObject, IComparable<KString>,
 
    public bool Equals(KString other) => getString() == other.Value;
 
-   public KString Format(string format) => new(string.Format(format, getString()));
+   public KString Format(string format) => getKString().Format(format);
 
    public KString Format(string[] formats) => format(this, formats);
 

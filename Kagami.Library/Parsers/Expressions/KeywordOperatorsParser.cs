@@ -17,7 +17,7 @@ public partial class KeywordOperatorsParser : SymbolParser
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      if (builder.Flags[ExpressionFlags.OmitRange])
+      if (builder.Flags[ExpressionFlags.OmitRange] || builder.Flags[ExpressionFlags.InLambda])
       {
          return nil;
       }

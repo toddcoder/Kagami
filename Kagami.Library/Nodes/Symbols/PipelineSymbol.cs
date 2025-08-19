@@ -6,7 +6,7 @@ public class PipelineSymbol : Symbol
 {
    public override void Generate(OperationsBuilder builder) => builder.Pipeline();
 
-   public override Precedence Precedence => Precedence.ChainedOperator;
+   public override Precedence Precedence => Precedence.Pipeline;
 
    public override Arity Arity => Arity.Binary;
 

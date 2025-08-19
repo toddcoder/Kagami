@@ -14,7 +14,7 @@ public class OutClass : BaseClass
       base.RegisterMessages();
 
       registerMessage("<<(_)", (obj, msg) => function<Out, IObject>(obj, msg, (o, a) => o.Append(a)));
-      registerMessage("<|(_)", (obj, msg) => function<Out, IObject>(obj, msg, (o, a) => o.AppendLine(a)));
+      registerMessage("|<<(_)", (obj, msg) => function<Out, IObject>(obj, msg, (o, a) => o.AppendLine(a)));
    }
 
    public override IObject DefaultValue => throw noDefaultValue("Out");

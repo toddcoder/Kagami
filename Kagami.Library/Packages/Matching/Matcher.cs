@@ -13,17 +13,17 @@ public abstract class Matcher : IObject
    protected Maybe<Matcher> _alternate = nil;
    protected Maybe<Matcher> _lastNext = nil;
    protected Maybe<Matcher> _lastAlternate = nil;
-   protected Maybe<Replacement> _replacement = nil;
+   //protected Maybe<Replacement> _replacement = nil;
 
    public int Index => index;
 
    public int Length => length;
 
-   public virtual Maybe<Replacement> Replacement
+   /*public virtual Maybe<Replacement> Replacement
    {
       get => _replacement;
       set => _replacement = value;
-   }
+   }*/
 
    public virtual Maybe<Matcher> Next
    {
@@ -73,7 +73,7 @@ public abstract class Matcher : IObject
 
    protected Maybe<Matcher> cloneAlternate() => _alternate.Map(m => m.Clone());
 
-   protected Maybe<Replacement> cloneReplacement() => _replacement.Map(m => m.Clone());
+   //protected Maybe<Replacement> cloneReplacement() => _replacement.Map(m => m.Clone());
 
    public virtual void Initialize()
    {
@@ -91,7 +91,7 @@ public abstract class Matcher : IObject
    {
       matcher.Next = cloneNext();
       matcher.Alternate = cloneAlternate();
-      matcher.Replacement = cloneReplacement();
+      //matcher.Replacement = cloneReplacement();
 
       return matcher;
    }

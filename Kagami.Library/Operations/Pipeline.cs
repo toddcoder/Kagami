@@ -1,6 +1,7 @@
 ﻿using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Monads;
+using Kagami.Library.Nodes.Symbols;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
@@ -34,7 +35,6 @@ public class Pipeline : TwoOperandOperation
                return fieldNotFound(selector);
             }
          }
-
          default:
             return incompatibleClasses(y, "Lambda");
       }
