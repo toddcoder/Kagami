@@ -4,7 +4,7 @@
 	when Constant(i)
 }
 
-let v = Expr.Binary("+", Expr.Variable("x"), Expr.Constant(10))
+let v = Binary("+", Variable("x"), Constant(10))
 
 let variables = {x: 10, y: 42}
 

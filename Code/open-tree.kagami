@@ -5,10 +5,9 @@ enum Tree {
 	when Node(n, t1, t2)
 }
 
-open Tree
-let t1 = node(7, node(3, nilt, nilt), node(4, nilt, nilt))
+let t1 = Node(7, Node(3, Nilt, Nilt), Node(4, Nilt, Nilt))
 
 func mirror()
-	when Nilt return nilt
-	when Node(a, x, y) return node(a, mirror(y), mirror(x))
+	when Nilt return Nilt
+	when Node(a, x, y) return Node(a, mirror(y), mirror(x))
 println(mirror(t1))

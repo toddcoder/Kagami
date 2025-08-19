@@ -1,1 +1,3 @@
-Execute error: Color doesn't respond to message __$Red()
+Red false
+Green false
+"Green false" | String

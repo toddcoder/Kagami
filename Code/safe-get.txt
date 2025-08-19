@@ -1,1 +1,4 @@
-Generate error: Expected return keyword
+16
+true
+c
+"c" | String

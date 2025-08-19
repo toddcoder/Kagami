@@ -10,7 +10,7 @@ enum Color {
 	when Orange
 }
 
-var c = {Color.Red, Color.Blue, Color.Yellow, Color.White, Color.Black, Color.Orange}
+var c = {Red, Blue, Yellow, White, Black, Orange}
 
-println("Red", Color.Red in c)
-println("Green", Color.Green in c)
+println("Red", Red in c)
+println("Green", Green in c)

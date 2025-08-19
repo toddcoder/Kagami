@@ -1,8 +1,8 @@
 ﻿open sys
 
-record DateTime(i1, i2, i3)
+record DateTime(i1 int, i2 int, i3 int)
 
-let `date = DateTime(2000, 12, 31)
-match `date {
+let _date = DateTime(2000, 12, 31)
+match _date {
 	when DateTime(year, 1, 1), DateTime(year, 12, 31) => ?year
 }

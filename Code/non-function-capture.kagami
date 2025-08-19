@@ -13,4 +13,4 @@ func simplifyTop()
 	when BinOp("*", e, Numberx(1)) return e
 	when e return e
 
-simplifyTop(Expr.UnOp("-", Expr.UnOp("-", Expr.Numberx(42))))
+simplifyTop(UnOp("-", UnOp("-", Numberx(42))))

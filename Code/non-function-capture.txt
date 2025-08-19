@@ -1,1 +1,1 @@
-Execute error: Expr doesn't respond to message Numberx(_<Int>)
+object4 Numberx(number = 42) | Numberx
