@@ -7,7 +7,10 @@ public class ClassSymbol : Symbol, IConstant
 {
    protected string className;
 
-   public ClassSymbol(string className) => this.className = className;
+   public ClassSymbol(string className)
+   {
+      this.className = className;
+   }
 
    public override void Generate(OperationsBuilder builder) => builder.PushObject(new Class(className));
 

@@ -139,6 +139,13 @@ public class UserClass : BaseClass
       registerMessage("clone()", (obj, _) => ((UserObject)obj).Clone());
    }
 
+   public override void RegisterClassMessages()
+   {
+      base.RegisterClassMessages();
+
+      registerClassMessage("class()", (bc, _) => new Class(bc.Name));
+   }
+
    public override bool ClassRespondsTo(Selector selector) =>
       _metaObject.Map(uo => classOf(uo).RespondsTo(selector)) | (() => base.ClassRespondsTo(selector));
 

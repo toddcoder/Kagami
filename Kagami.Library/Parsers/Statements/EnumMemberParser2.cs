@@ -18,8 +18,7 @@ public partial class EnumMemberParser2(string enumClassName, Maybe<IObject> _pre
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      var shortName = tokens[4].Text;
-      var className = $"{enumClassName}${shortName}";
+      var className = tokens[4].Text;
       var hasParameters = tokens[5].Text == "(";
       state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Class, Color.OpenParenthesis);
 
@@ -86,8 +85,7 @@ public partial class EnumMemberParser2(string enumClassName, Maybe<IObject> _pre
 
       var _block = getBlock(state).Maybe();
 
-      Module.Global.Value.ForwardReference(enumClassName);
-      Module.Global.Value.ForwardReference(shortName);
+      Module.Global.Value.ForwardReference(className);
       EnumMemberData = new EnumMemberData(className, enumClassName, parameters, _ordinal, _block);
 
       return unit;

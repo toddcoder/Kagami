@@ -3,11 +3,8 @@ using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using System.Text.RegularExpressions;
-using Core.Matching;
-using Kagami.Library.Classes;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
-using Class = Kagami.Library.Nodes.Statements.Class;
 using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Statements;
@@ -77,7 +74,18 @@ public partial class EnumParser2 : StatementParser
          _block = getPartialBlock(state).Maybe();
       }
 
-      var enumClassBuilder = new EnumClassBuilder(className);
+      var commonBlock = _block | (() => new Block());
+
+      var enumCreator = new EnumCreator(className, [.. enumMembers], commonBlock);
+      var _result = enumCreator.Create();
+      if (_result)
+      {
+         state.AddStatement(enumCreator);
+      }
+
+      return _result;
+
+      /*var enumClassBuilder = new EnumClassBuilder(className);
       var _enumRegistered = enumClassBuilder.Register();
       if (!_enumRegistered)
       {
@@ -132,8 +140,8 @@ public partial class EnumParser2 : StatementParser
          {
             return _registered.Exception;
          }
-      }
+      }*/
 
-      return unit;
+      //return unit;
    }
 }

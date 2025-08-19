@@ -1,2 +1,1 @@
-open
-...() | Arguments
+Generate error: No when for match

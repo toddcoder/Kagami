@@ -331,8 +331,8 @@ public static class ObjectFunctions
       }
       else
       {
-         var parametersAndFields = obj.Parameters.Select(p => $"{p.Name} = {obj.Fields[p.Name].Image}").ToString(", ");
-         return $"object{obj.ObjectID} {obj.ClassName}({parametersAndFields})";
+         var parametersAndFields = obj.Parameters.Select(p => $"{p.Name} = {obj.Fields[p.Name].AsString}").ToString(", ");
+         return $"{obj.ClassName}({parametersAndFields})";
       }
    }
 

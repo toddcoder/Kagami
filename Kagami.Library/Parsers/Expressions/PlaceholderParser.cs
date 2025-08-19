@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using Core.Matching;
 using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
@@ -29,6 +30,30 @@ public partial class PlaceholderParser : SymbolParser
          state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Identifier);
          builder.Add(new FieldSymbol(placeholderName));
          return unit;
+      }
+
+      if (placeholderName.IsMatch("^ ['A-Z']"))
+      {
+         state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Invokable);
+         if (state.LookAhead(@"^\("))
+         {
+            state.Scan(@"^(\()", Color.OpenParenthesis);
+            var _arguments = getArguments(state, builder.Flags);
+            if (_arguments is (true, var arguments))
+            {
+               builder.Add(new InvokeSymbol(placeholderName, arguments, nil, true));
+               return unit;
+            }
+            else
+            {
+               return _arguments.Exception;
+            }
+         }
+         else
+         {
+            builder.Add(new ClassSymbol(placeholderName));
+            return unit;
+         }
       }
 
       var name = mutable switch

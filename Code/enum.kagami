@@ -7,15 +7,15 @@ enum Command {
 	when Approved
 	when Denied
 	func execute() {
-		match self {
-			when Open => println("open")
-			when Closed => println("closed")
-			when Pending => println("pending")
-			when Approved => println("approved")
-			when Denied => println("denied")
+		match class() {
+			when Open return println("open")
+			when Closed return println("closed")
+			when Pending return println("pending")
+			when Approved return println("approved")
+			when Denied return println("denied")
 		}
 	}
 }
 
-var command = Command.Open
+var command = Open
 command.execute()

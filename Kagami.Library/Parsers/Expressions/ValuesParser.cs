@@ -67,7 +67,7 @@ public class ValuesParser : MultiParser
          if (builder.Flags[ExpressionFlags.Comparisand])
          {
             yield return new InternalListParser(builder);
-            yield return new UserObjectPlaceholderParser(builder);
+            //yield return new UserObjectPlaceholderParser(builder);
             yield return new PlaceholderParser(builder);
          }
          else

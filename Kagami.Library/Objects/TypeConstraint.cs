@@ -80,7 +80,28 @@ public readonly struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
 
    public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
-   public bool Matches(BaseClass baseClass) => comparisands.Any(c => c.AssignCompatible(baseClass));
+   public bool Matches(BaseClass baseClass)
+   {
+      if (baseClass is UserClass userClass)
+      {
+         //return Matches(userClass);
+         foreach (var comparisand in comparisands)
+         {
+            if (userClass.AssignCompatible(comparisand))
+            {
+               return true;
+            }
+         }
+
+         return false;
+      }
+      else
+      {
+         return comparisands.Any(c => c.AssignCompatible(baseClass));
+      }
+   }
+
+   public bool Matches(UserClass userClass) => comparisands.Any(c => c.AssignCompatible(userClass));
 
    public bool Matches(TypeConstraint typeConstraint)
    {
@@ -128,9 +149,26 @@ public readonly struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
    public bool IsEquivalentTo(TypeConstraint typeConstraint)
    {
       var baseClass = comparisands[0];
-      if (typeConstraint.comparisands.Contains(baseClass))
+      if (baseClass.Name == "Placeholder")
       {
          return true;
+      }
+      else if (typeConstraint.comparisands.Contains(baseClass))
+      {
+         return true;
+      }
+      else if (baseClass is UserClass userClass)
+      {
+         var _parentClass = userClass.ParentClass;
+         if (_parentClass is (true, var parentClass))
+         {
+            var parentTypeConstraint = new TypeConstraint([parentClass]);
+            return parentTypeConstraint.IsEquivalentTo(typeConstraint);
+         }
+         else
+         {
+            return false;
+         }
       }
       else if (baseClass is IEquivalentClass equivalentClass)
       {
