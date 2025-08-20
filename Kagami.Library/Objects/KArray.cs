@@ -611,4 +611,6 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
       return copy;
    }
+
+   public IObject Fetch(int index) => someOf(maybe<IObject>() & index.Between(0).Until(list.Count) & (() => this[index]));
 }
