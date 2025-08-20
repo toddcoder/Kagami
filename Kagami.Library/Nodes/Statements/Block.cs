@@ -91,6 +91,10 @@ public class Block : Statement, IEnumerable<Statement>
    {
    }
 
+   public Block(Symbol symbol) : this(new Return(new Expression(symbol), nil))
+   {
+   }
+
    public Block()
    {
       statements = [];
@@ -155,5 +159,16 @@ public class Block : Statement, IEnumerable<Statement>
       {
          return nil;
       }
+   }
+
+   public Block Clone()
+   {
+      var block = new Block();
+      foreach (var statement in statements)
+      {
+         block.Add(statement);
+      }
+
+      return block;
    }
 }

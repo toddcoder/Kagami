@@ -1,4 +1,4 @@
-Evo recommends 5
-Xp recommends 6
-Scrum recommends 7
+Evo
+Xp
+Scrum
 it collection | Iterator

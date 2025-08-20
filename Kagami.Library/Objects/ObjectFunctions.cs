@@ -93,9 +93,9 @@ public static class ObjectFunctions
             return matchTupleToTuple(tuple2, tuple1, bindings);
          case SpecialComparisand specialComparisand:
             return specialComparisand.Match(source, bindings);
-         case UserObjectPlaceholder userObjectPlaceholder when source is UserObject userObject:
+         case UserObject userObjectSource when source is UserObject userObject:
          {
-            return userObjectMatch(userObject, userObjectPlaceholder, bindings);
+            return userObjectMatch(userObjectSource, userObject, bindings);
          }
          default:
             return classOf(source).MatchCompatible(classOf(comparisand)) && equalifier(source, (T)comparisand);
@@ -349,6 +349,30 @@ public static class ObjectFunctions
       }
    }
 
+   private static bool userObjectMatches(UserObject source, UserObject comparisand, Hash<string, IObject> bindings)
+   {
+      if (source.ClassName == comparisand.ClassName)
+      {
+         if (source.Parameters.Length != comparisand.Parameters.Length)
+         {
+            return false;
+         }
+
+         foreach (var parameter in source.Parameters)
+         {
+            if (!comparisand.Fields.ContainsKey(parameter.Name) ||
+                !source.Fields[parameter.Name].Match(comparisand.Fields[parameter.Name], bindings))
+            {
+               return false;
+            }
+         }
+
+         return true;
+      }
+
+      return false;
+   }
+
    public static bool isEqualTo(UserObject obj, IObject other)
    {
       if (classOf(obj).RespondsTo("isEqualTo(_)"))
@@ -411,51 +435,36 @@ public static class ObjectFunctions
       {
          return userObjectPlaceholder.Match(obj, bindings);
       }
-      else
+      else if (comparisand is UserObject uoComparisand)
       {
-         return match(obj, comparisand, (uo1, uo2) =>
+         if (obj.ClassName != uoComparisand.ClassName)
          {
-            if (uo1.ClassName != uo2.ClassName)
-            {
-               return false;
-            }
+            return false;
+         }
 
-            if (obj.Parameters.Length > 0)
+         if (obj.Parameters.Length > 0)
+         {
+            foreach (var parameter in obj.Parameters)
             {
-               foreach (var parameter in obj.Parameters)
+               var name = parameter.Name;
+               if (obj.Fields.ContainsKey(name) && uoComparisand.Fields.ContainsKey(name))
                {
-                  var name = parameter.Name;
-                  if (uo1.Fields.ContainsKey(name) && uo2.Fields.ContainsKey(name))
-                  {
-                     var value1 = uo1.Fields[name];
-                     var value2 = uo2.Fields[name];
-                     if (!value1.Match(value2, bindings))
-                     {
-                        return false;
-                     }
-                  }
-                  else
-                  {
-                     return false;
-                  }
-               }
-            }
-            /*else
-            {
-               foreach (var (fieldName, field) in uo1.Fields.Where(f => includeFieldName(f.fieldName)))
-               {
-                  var value1 = field.Value;
-                  var value2 = uo2.Fields[fieldName];
+                  var value1 = obj.Fields[name];
+                  var value2 = uoComparisand.Fields[name];
                   if (!value1.Match(value2, bindings))
                   {
                      return false;
                   }
                }
-            }*/
-
-            return true;
-         }, bindings);
+               else
+               {
+                  return false;
+               }
+            }
+         }
       }
+
+      return true;
    }
 
    public static bool processPlaceholdersMatch(IObject obj, IObject comparisand, Hash<string, IObject> bindings)

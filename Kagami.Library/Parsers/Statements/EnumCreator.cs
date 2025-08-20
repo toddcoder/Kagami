@@ -1,10 +1,14 @@
-﻿using Core.Monads;
+﻿using Core.Collections;
+using Core.Monads;
 using Core.Strings;
 using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
+using Kagami.Library.Objects;
 using Kagami.Library.Operations;
+using Kagami.Library.Parsers.Expressions;
 using static Core.Monads.MonadFunctions;
+using Class = Kagami.Library.Nodes.Statements.Class;
 using Return = Kagami.Library.Nodes.Statements.Return;
 
 namespace Kagami.Library.Parsers.Statements;
@@ -30,24 +34,57 @@ public class EnumCreator(string enumName, EnumMemberData[] enumMemberData, Block
       List<Statement> statements = [];
       List<ClassBuilder> builders = [];
       List<(string, ClassBuilder)> metaBuilders = [];
+      List<string> valuesList = [];
+      Hash<IObject, IObject> ordinals = [];
+
       foreach (var data in enumMemberData)
       {
          statements.Add(getMemberFunction(data));
-         var _classBuilder = getMemberClassBuilder(data, enumName, commonBlock);
+         var _classBuilder = getMemberClassBuilder(data, enumName, commonBlock, ordinals);
          if (_classBuilder is (true, var classBuilder))
          {
             builders.Add(classBuilder);
          }
          else
          {
-            var (forClass, forMetaClass) = getMemberMetaClassBuilder(data, enumName, commonBlock);
+            var (forClass, forMetaClass) = getMemberMetaClassBuilder(data, enumName, commonBlock, ordinals);
             builders.Add(forClass);
             metaBuilders.Add((data.Name, forMetaClass));
+            valuesList.Add(forClass.ClassName);
+         }
+      }
+
+      if (valuesList.Count > 0)
+      {
+         var expressionBuilder = new ExpressionBuilder(ExpressionFlags.Standard);
+         var firstValue = valuesList[0];
+         expressionBuilder.Add(new ClassSymbol(firstValue));
+         foreach (var className in valuesList.Skip(1))
+         {
+            expressionBuilder.Add(new CommaSymbol());
+            expressionBuilder.Add(new ClassSymbol(className));
+         }
+
+         var _expression = expressionBuilder.ToExpression();
+         if (_expression is (true, var expression))
+         {
+            var arraySymbol = new ArraySymbol(expression);
+            var returnBlock = new Block(new Return(new Expression(arraySymbol), nil));
+            var function = new Function("__$values", Parameters.Empty, returnBlock, false, false, "");
+            statements.Add(function);
+         }
+
+         if (ordinals.Count > 0)
+         {
+            var dictionary = new Dictionary(ordinals);
+            var pushObjectSymbol = new PushObjectSymbol(dictionary);
+            var returnBlock = new Block(new Return(new Expression(pushObjectSymbol), nil));
+            var function = new Function("__$ordinals", Parameters.Empty, returnBlock, false, false, "");
+            statements.Add(function);
          }
       }
 
       var staticBlock = new Block(statements);
-
       var metaClassName = $"__$meta{enumName}";
       var metaClassBuilder = new ClassBuilder(metaClassName, Parameters.Empty, "", [], false, staticBlock);
       _registered = metaClassBuilder.Register();
@@ -78,6 +115,7 @@ public class EnumCreator(string enumName, EnumMemberData[] enumMemberData, Block
          {
             return _registered.Exception;
          }
+
          metaClasses.Add(new MetaClass(className, classBuilder));
       }
 
@@ -97,11 +135,30 @@ public class EnumCreator(string enumName, EnumMemberData[] enumMemberData, Block
       return new Function(functionName, data.Parameters, block, false, false, "");
    }
 
-   protected static Maybe<ClassBuilder> getMemberClassBuilder(EnumMemberData data, string enumClassName, Block commonBlock)
+   protected static AssignToNewField getOrdinalFunction(IObject ordinal)
    {
+      return new AssignToNewField(false, "ordinal", false, new Expression(new PushObjectSymbol(ordinal)));
+   }
+
+   protected static Function getClassFunction(string className)
+   {
+      var block = new Block(new ClassSymbol(className));
+      return new Function("class()", Parameters.Empty, block, false, false, "");
+   }
+
+   protected static Maybe<ClassBuilder> getMemberClassBuilder(EnumMemberData data, string enumClassName, Block commonBlock,
+      Hash<IObject, IObject> ordinals)
+   {
+      var localCommonBlock = commonBlock.Clone();
       if (data.Parameters.Length > 0)
       {
-         return new ClassBuilder(data.Name, data.Parameters, enumClassName, [], false, commonBlock);
+         if (data.Ordinal is (true, var ordinal))
+         {
+            ordinals[ordinal] = new Objects.Class(data.Name);
+            localCommonBlock.Add(getOrdinalFunction(ordinal));
+         }
+
+         return new ClassBuilder(data.Name, data.Parameters, enumClassName, [], false, localCommonBlock);
       }
       else
       {
@@ -109,10 +166,23 @@ public class EnumCreator(string enumName, EnumMemberData[] enumMemberData, Block
       }
    }
 
-   protected static (ClassBuilder, ClassBuilder) getMemberMetaClassBuilder(EnumMemberData data, string enumClassName, Block commonBlock)
+   protected static (ClassBuilder, ClassBuilder) getMemberMetaClassBuilder(EnumMemberData data, string enumClassName, Block commonBlock,
+      Hash<IObject, IObject> ordinals)
    {
+      var localCommonBlock = commonBlock.Clone();
       var classBuilder = new ClassBuilder(data.Name, Parameters.Empty, enumClassName, [], false, new Block());
-      var metaClassBuilder = new ClassBuilder($"__meta{data.Name}", Parameters.Empty, "", [], false, commonBlock);
+      if (data.Parameters.Length == 0)
+      {
+         if (data.Ordinal is (true, var ordinal))
+         {
+            ordinals[ordinal] = new Objects.Class(data.Name);
+            localCommonBlock.Add(getOrdinalFunction(ordinal));
+         }
+      }
+
+      localCommonBlock.Add(getClassFunction(data.Name));
+
+      var metaClassBuilder = new ClassBuilder($"__meta{data.Name}", Parameters.Empty, "", [], false, localCommonBlock);
       return (classBuilder, metaClassBuilder);
    }
 

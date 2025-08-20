@@ -6,16 +6,15 @@ enum Command {
 	when Pending
 	when Approved
 	when Denied
-	func execute() {
-		match class() {
-			when Open return println("open")
-			when Closed return println("closed")
-			when Pending return println("pending")
-			when Approved return println("approved")
-			when Denied return println("denied")
-		}
-	}
 }
 
-var command = Open
-command.execute()
+execute(Open)
+func execute(command Command) {
+	match command {
+		when Open return println("open")
+		when Closed return println("closed")
+		when Pending return println("pending")
+		when Approved return println("approved")
+		when Denied return println("denied")
+	}
+}

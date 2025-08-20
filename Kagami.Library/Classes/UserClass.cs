@@ -131,6 +131,7 @@ public class UserClass : BaseClass
    {
       registerMessage("className".get(), (obj, _) => KString.StringObject(obj.ClassName));
       registerMessage("class".get(), (obj, _) => new Class(obj.ClassName));
+      registerMessage("class()", (obj, _) => new Class(obj.ClassName));
       registerMessage("send(_<String>,_...)",
          (obj, message) => function<IObject, KString>(obj, message, (o, n) => sendMessage(o, n.Value, message.Arguments.Pass(1))));
       registerMessage("send(_<String>)",
