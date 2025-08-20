@@ -140,12 +140,6 @@ public class EnumCreator(string enumName, EnumMemberData[] enumMemberData, Block
       return new AssignToNewField(false, "ordinal", false, new Expression(new PushObjectSymbol(ordinal)));
    }
 
-   protected static Function getClassFunction(string className)
-   {
-      var block = new Block(new ClassSymbol(className));
-      return new Function("class", Parameters.Empty, block, false, false, "");
-   }
-
    protected static AssignToNewField getClassField(string className)
    {
       return new AssignToNewField(false, "class", false, new Expression(new ClassSymbol(className)));
@@ -185,7 +179,6 @@ public class EnumCreator(string enumName, EnumMemberData[] enumMemberData, Block
          }
       }
 
-      //localCommonBlock.Add(getClassFunction(data.Name));
       localCommonBlock.Add(getClassField(data.Name));
 
       var metaClassBuilder = new ClassBuilder($"__meta{data.Name}", Parameters.Empty, "", [], false, localCommonBlock);

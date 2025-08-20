@@ -1,0 +1,28 @@
+﻿open sys
+
+enum Rank {
+	when Ace = 1
+	when Two
+	when Three
+	when Four
+	when Five
+	when Six
+	when Seven
+	when Eight
+	when Nine
+	when Ten
+	when Jack
+	when Queen
+	when King
+	func description() string {
+		match class {
+			when Ace return "ace"
+			when Jack return "jack"
+			when Queen return "queen"
+			when King return "king"
+			when _ return class.ordinal
+		}
+	}
+}
+println(Ace.description())
+println(Seven.description())
