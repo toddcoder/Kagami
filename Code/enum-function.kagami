@@ -1,0 +1,19 @@
+﻿open sys
+
+enum Expr {
+	when Number(i int)
+	when Addition(exp1 Expr, exp2 Expr)
+	when Multiplication(expr1 Expr, expr2 Expr)
+	func evaluate() {
+		match self {
+			when Number(value) return value
+			when Addition(left, right) return left.evaluate() + right.evaluate()
+			when Multiplication(left, right) return left.evaluate() * right.evaluate()
+		}
+	}
+}
+
+let five = Expr.number(5)
+let four = Expr.number(4)
+let sum = Expr.addition(five, four)
+let product = sum.evaluate()

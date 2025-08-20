@@ -143,7 +143,7 @@ public class EnumCreator(string enumName, EnumMemberData[] enumMemberData, Block
    protected static Function getClassFunction(string className)
    {
       var block = new Block(new ClassSymbol(className));
-      return new Function("class()", Parameters.Empty, block, false, false, "");
+      return new Function("class", Parameters.Empty, block, false, false, "");
    }
 
    protected static Maybe<ClassBuilder> getMemberClassBuilder(EnumMemberData data, string enumClassName, Block commonBlock,

@@ -1,0 +1,23 @@
+﻿open sys
+
+enum Planet {
+	when Mercury = 1
+	when Venus
+	when Earth
+	when Mars
+	when Jupiter
+	when Saturn
+	when Uranus
+	when Neptune
+}
+
+let positionToFind = 11
+if Planet.ordinals[positionToFind] is ?somePlanet {
+	match somePlanet {
+		when Earth => println("Mostly harmless")
+		when _ => println("Not a safe place for humsn")
+	}
+}
+else {
+	println($"There isn't a planet at position (positionToFind)")
+}
