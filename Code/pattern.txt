@@ -1,1 +1,4 @@
-Execute error: Class Zero not found
+Odd=3
+Even=2
+Zero=0
+it collection | Iterator

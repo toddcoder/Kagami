@@ -1,4 +1,4 @@
-Odd
-Even
-Zero
+Odd=3
+Even=2
+Zero=0
 it collection | Iterator
