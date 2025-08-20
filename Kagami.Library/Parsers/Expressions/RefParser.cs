@@ -12,8 +12,6 @@ public partial class RefParser : SymbolParser
    {
    }
 
-   //public override string Pattern => $"^ /(/s*) /'ref' /(/s+) /({REGEX_FIELD}) /b";
-
    [GeneratedRegex($@"^(\s*)(ref)(\s+)({REGEX_FIELD})\b")]
    public override partial Regex Regex();
 

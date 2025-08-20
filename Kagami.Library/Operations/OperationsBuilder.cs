@@ -210,6 +210,11 @@ public class OperationsBuilder
 
    public void AssignSelector(Selector selector, bool overriding) => add(new AssignSelector(selector, overriding));
 
+   public void AssignFieldReference(string sourceFieldName, string targetFieldName)
+   {
+      add(new AssignFieldReference(sourceFieldName, targetFieldName));
+   }
+
    public void SendMessage(Selector selector, params Expression[] arguments)
    {
       foreach (var argument in arguments)

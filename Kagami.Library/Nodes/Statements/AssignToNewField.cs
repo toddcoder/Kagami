@@ -9,11 +9,11 @@ namespace Kagami.Library.Nodes.Statements;
 
 public class AssignToNewField : Statement
 {
-   protected bool mutable;
-   protected string fieldName;
-   protected bool tolerant;
-   protected Expression expression;
-   protected Maybe<TypeConstraint> _typeConstraint;
+   protected readonly bool mutable;
+   protected readonly string fieldName;
+   protected readonly bool tolerant;
+   protected readonly Expression expression;
+   protected readonly Maybe<TypeConstraint> _typeConstraint;
 
    public AssignToNewField(bool mutable, string fieldName, bool tolerant, Expression expression, Maybe<TypeConstraint> _typeConstraint)
    {

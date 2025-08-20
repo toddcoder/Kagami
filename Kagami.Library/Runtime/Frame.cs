@@ -100,38 +100,11 @@ public class Frame
             var parameter = parameters[0];
             if (parameter.Singleton && arguments.Length == 1)
             {
-               /*if (fields.ContainsKey(parameter.Name))
-               {
-                  fields.Remove(parameter.Name);
-               }
-
-               fields.New(parameter.Name, FieldType.Parameter, parameter.Mutable).Force();
-
-               if (parameter.TypeConstraint is (true, var typeConstraint) && !typeConstraint.Matches(classOf(lastValue)))
-               {
-                  throw incompatibleClasses(lastValue, typeConstraint.AsString);
-               }
-
-               fields.Assign(parameter.Name, arguments[0], true, parameter.Reference).Force();*/
                fields.AssignParameter(parameter, arguments[0]).Force();
             }
             else
             {
                var array = new KArray([.. arguments]);
-
-               /*if (fields.ContainsKey(parameter.Name))
-               {
-                  fields.Remove(parameter.Name);
-               }
-
-               fields.New(parameter.Name, FieldType.Parameter, parameter.Mutable).Force();
-
-               if (parameter.TypeConstraint is (true, var typeConstraint) && !typeConstraint.Matches(classOf(lastValue)))
-               {
-                  throw incompatibleClasses(lastValue, typeConstraint.AsString);
-               }
-
-               fields.Assign(parameter.Name, array, true, parameter.Reference).Force();*/
                fields.AssignParameter(parameter,array).Force();
             }
 
@@ -147,19 +120,6 @@ public class Frame
             }
 
             lastValue = arguments[i];
-            /*if (fields.ContainsKey(parameter.Name))
-            {
-               fields.Remove(parameter.Name);
-            }
-
-            fields.New(parameter.Name, FieldType.Parameter, parameter.Mutable).Force();
-
-            if (parameter.TypeConstraint is (true, var typeConstraint) && !typeConstraint.Matches(classOf(lastValue)))
-            {
-               throw incompatibleClasses(lastValue, typeConstraint.AsString);
-            }
-
-            fields.Assign(parameter.Name, lastValue, true, parameter.Reference).Force();*/
             fields.AssignParameter(parameter, lastValue);
             variadic = parameter.Variadic;
          }
@@ -174,8 +134,6 @@ public class Frame
 
             var array = new KArray([.. list]);
             fields.AssignParameter(parameters[^1], array).Force();
-            /*fields.Remove(lastName);
-            fields.Assign(lastName, array, true).Force();*/
          }
          else if (length < parameters.Length)
          {
@@ -188,14 +146,6 @@ public class Frame
                }
 
                var _defaultValue = parameter.DefaultValue;
-               /*if (fields.ContainsKey(parameter.Name))
-               {
-                  fields.Remove(parameter.Name);
-               }
-
-               fields.New(parameter.Name, FieldType.Parameter, parameter.Mutable, parameter.Reference).Force();*/
-               //fields.AssignParameter(parameter.Name)
-
                IObject value;
                if (_defaultValue is (true, var invokable))
                {
@@ -216,7 +166,6 @@ public class Frame
                else if (parameter.Variadic)
                {
                   value = KArray.Empty;
-                  //fields.Assign(parameter.Name, value, true, parameter.Reference);
                   fields.AssignParameter(parameter, value).Force();
                }
                else
@@ -224,12 +173,6 @@ public class Frame
                   value = Unassigned.Value;
                }
 
-               /*if (parameter.TypeConstraint is (true, var typeConstraint) && !typeConstraint.Matches(classOf(value)))
-               {
-                  throw incompatibleClasses(value, typeConstraint.AsString);
-               }
-
-               fields.Assign(parameter.Name, value, true, parameter.Reference).Force();*/
                fields.AssignParameter(parameter, value);
             }
          }
@@ -242,8 +185,6 @@ public class Frame
             }
 
             var array = new KArray(list);
-            /*fields.Remove(lastName);
-            fields.Assign(lastName, array, true).Force();*/
             fields.AssignParameter(parameters[^1], array).Force();
          }
 
@@ -254,7 +195,7 @@ public class Frame
 
       IEnumerable<IObject> getValueAsEnumerable(IObject value)
       {
-         if (value is ICollection collection)
+         if (value is ICollection { ExpandForArray: true } collection)
          {
             var iterator = collection.GetIterator(false);
             foreach (var item in iterator.List())

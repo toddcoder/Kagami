@@ -584,14 +584,6 @@ public class Machine
          }
 
          return field;
-         /*if (field.Mutable || field.Value is Unassigned || overriden)
-         {
-
-         }
-         else if (!field.Mutable)
-         {
-            return immutableField(fieldName);
-         }*/
       }
       else if (_field.Exception is (true, var exception))
       {
