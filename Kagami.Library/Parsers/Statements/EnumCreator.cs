@@ -146,6 +146,11 @@ public class EnumCreator(string enumName, EnumMemberData[] enumMemberData, Block
       return new Function("class", Parameters.Empty, block, false, false, "");
    }
 
+   protected static AssignToNewField getClassField(string className)
+   {
+      return new AssignToNewField(false, "class", false, new Expression(new ClassSymbol(className)));
+   }
+
    protected static Maybe<ClassBuilder> getMemberClassBuilder(EnumMemberData data, string enumClassName, Block commonBlock,
       Hash<IObject, IObject> ordinals)
    {
@@ -180,7 +185,8 @@ public class EnumCreator(string enumName, EnumMemberData[] enumMemberData, Block
          }
       }
 
-      localCommonBlock.Add(getClassFunction(data.Name));
+      //localCommonBlock.Add(getClassFunction(data.Name));
+      localCommonBlock.Add(getClassField(data.Name));
 
       var metaClassBuilder = new ClassBuilder($"__meta{data.Name}", Parameters.Empty, "", [], false, localCommonBlock);
       return (classBuilder, metaClassBuilder);
