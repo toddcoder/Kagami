@@ -114,6 +114,7 @@ public class Module
       "LazyString" => new LazyStringClass(),
       "StreamingIterator" => new StreamingIteratorClass(),
       "SpecialComparisand" => new SpecialComparisandClass(),
+      "Formatter" => new FormatterClass(),
       _ => nil
    };
 

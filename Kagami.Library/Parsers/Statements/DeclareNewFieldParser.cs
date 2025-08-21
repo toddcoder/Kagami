@@ -14,6 +14,7 @@ public partial class DeclareNewFieldParser : StatementParser
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
       state.BeginTransaction();
+
       var mutable = tokens[2].Text == "var";
       var fieldName = tokens[4].Text;
       state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Identifier, Color.Whitespace);

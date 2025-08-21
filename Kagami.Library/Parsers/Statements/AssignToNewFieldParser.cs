@@ -1,16 +1,17 @@
 ﻿using System.Text.RegularExpressions;
 using Kagami.Library.Nodes.Statements;
-using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
 using Core.Monads;
+using Kagami.Library.Parsers.Expressions;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
 using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public partial class AssignToNewFieldParser : EndingInExpressionParser
+public partial class AssignToNewFieldParser : StatementParser
 {
+   protected const string REGEX_EQUAL = @"^(\s*)(=)(?![=>])";
    protected bool mutable;
    protected string fieldName = "";
    protected Maybe<TypeConstraint> _typeConstraint = nil;
@@ -18,7 +19,7 @@ public partial class AssignToNewFieldParser : EndingInExpressionParser
    [GeneratedRegex($@"^(\s*)(let|var)(\s+)({REGEX_FIELD})\b")]
    public override partial Regex Regex();
 
-   public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
+   public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
       state.BeginTransaction();
 
@@ -40,21 +41,36 @@ public partial class AssignToNewFieldParser : EndingInExpressionParser
          _typeConstraint = nil;
       }
 
-      var _scan = state.Scan(@"^(\s*)(=)(?![=>])", Color.Whitespace, Color.Structure);
-      if (_scan)
+      if (state.LookAhead(REGEX_EQUAL))
       {
+         var _expression =
+            from scanned in state.Scan(REGEX_EQUAL, Color.Whitespace, Color.Structure)
+            from expressionValue in getExpression(state, ExpressionFlags.Standard)
+            select expressionValue;
+         if (_expression is (true, var expression))
+         {
+            state.AddStatement(new AssignToNewField(mutable, fieldName, false, expression, _typeConstraint));
+            state.CommitTransaction();
+
+            return unit;
+         }
+         else
+         {
+            return state.SetException("Missing equal sign");
+         }
+      }
+      else if (_typeConstraint is (true, var typeConstraint))
+      {
+         var className = typeConstraint.Comparisands[0].Name;
+         state.AddStatement(new DefineNewField(mutable, fieldName, className));
+
          state.CommitTransaction();
          return unit;
       }
       else
       {
-         return state.SetException("Missing equal sign");
+         state.RollBackTransaction();
+         return nil;
       }
-   }
-
-   public override Optional<Unit> Suffix(ParseState state, Expression expression)
-   {
-      state.AddStatement(new AssignToNewField(mutable, fieldName, false, expression, _typeConstraint));
-      return unit;
    }
 }

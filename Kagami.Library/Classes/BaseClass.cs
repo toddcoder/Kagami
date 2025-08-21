@@ -119,16 +119,32 @@ public abstract class BaseClass
       }
    }
 
-   protected static KString formatArray(IObject obj, IObject arrayAsObject)
+   protected static IObject formatArray(IObject obj, IObject arrayAsObject)
    {
-      if (obj is IFormattable formattable && arrayAsObject is KArray kArray)
+      if (arrayAsObject is KArray kArray)
       {
-         string[] array = [.. kArray.List.Select(o => o.AsString)];
-         return ObjectFunctions.format(formattable, array);
+         switch (obj)
+         {
+            case LazyString lazyString:
+            {
+               return new Formatter(lazyString, kArray);
+            }
+            case Formatter formatter:
+            {
+               return formatter.Clone(kArray);
+            }
+            case IFormattable formattable:
+            {
+               string[] array = [.. kArray.List.Select(o => o.AsString)];
+               return ObjectFunctions.format(formattable, array);
+            }
+            default:
+               return KString.StringObject(obj.AsString);
+         }
       }
       else
       {
-         return obj.AsString;
+         return KString.StringObject(obj.AsString);
       }
    }
 

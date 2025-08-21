@@ -1,5 +1,4 @@
-﻿using Core.Matching;
-using Core.Monads;
+﻿using Core.Monads;
 using Core.Strings;
 using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
@@ -47,11 +46,9 @@ public partial class FunctionParser : StatementParser
             _ => operatorText.Drop(6).Drop(-1).Trim() switch
             {
                "raise" => Precedence.Raise,
-               "multiply" => Precedence.MultiplyDivide,
-               "divide" => Precedence.MultiplyDivide,
+               "multiply" or "divide" => Precedence.MultiplyDivide,
                "range" => Precedence.Range,
-               "add" => Precedence.AddSubtract,
-               "subtract" => Precedence.AddSubtract,
+               "add" or "subtract" => Precedence.AddSubtract,
                "shift" => Precedence.Shift,
                "boolean" => Precedence.Boolean,
                "and" => Precedence.And,
