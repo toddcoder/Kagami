@@ -140,14 +140,6 @@ public class Frame
                var variadicArray = new KArray([.. list]);
                fields.AssignParameter(parameters[^1], variadicArray).Force();
             }
-            /*List<IObject> list = [.. getValueAsEnumerable(lastValue)];
-            for (var i = length; i < arguments.Length; i++)
-            {
-               list.AddRange(getValueAsEnumerable(arguments[i]));
-            }
-
-            var array = new KArray([.. list]);
-            fields.AssignParameter(parameters[^1], array).Force();*/
          }
          else if (length < parameters.Length)
          {
@@ -192,35 +184,23 @@ public class Frame
          }
          else if (length < arguments.Length)
          {
-            List<IObject> list = [.. getValueAsEnumerable(lastValue)];
-            for (var i = length; i < arguments.Length; i++)
+            if (lastValue is KArray array)
             {
-               list.AddRange(getValueAsEnumerable(arguments[i]));
+               fields.AssignParameter(parameters[^1], array).Force();
             }
-
-            var array = new KArray(list);
-            fields.AssignParameter(parameters[^1], array).Force();
+            else
+            {
+               List<IObject> list = [lastValue];
+               for (var i = length; i < arguments.Length; i++)
+               {
+                  list.Add(arguments[i]);
+               }
+               var variadicArray = new KArray([.. list]);
+               fields.AssignParameter(parameters[^1], variadicArray).Force();
+            }
          }
 
          parametersSet = true;
-      }
-
-      return;
-
-      IEnumerable<IObject> getValueAsEnumerable(IObject value)
-      {
-         if (value is ICollection { ExpandForArray: true } collection)
-         {
-            var iterator = collection.GetIterator(false);
-            foreach (var item in iterator.List())
-            {
-               yield return item;
-            }
-         }
-         else
-         {
-            yield return value;
-         }
       }
    }
 
