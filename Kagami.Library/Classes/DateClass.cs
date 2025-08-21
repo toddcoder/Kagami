@@ -28,6 +28,9 @@ public class DateClass : BaseClass
       messages["+(_)"] = (obj, msg) => function<Date, Interval>(obj, msg, (d, i) => d.Add(i));
       messages["-(_)"] = (obj, msg) => function<Date, IObject>(obj, msg, (d, i) => d.Subtract(i));
       messages["dayOfWeek".get()] = (obj, _) => function<Date>(obj, d => d.DayOfWeek);
+      messages["dayOfYear".get()] = (obj, _) => function<Date>(obj, d => d.DayOfYear);
+      messages["julian".get()] = (obj, _) => function<Date>(obj, d => d.Julian);
+      messages["mjulian".get()] = (obj, _) => function<Date>(obj, d => d.MJulian);
    }
 
    public override void RegisterClassMessages()

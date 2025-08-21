@@ -133,4 +133,10 @@ public readonly struct Date : IObject, IRangeItem, IFormattable
    public KString Format(string[] formats) => format(this, formats);
 
    public KString DayOfWeek => value.DayOfWeek.ToString();
+
+   public Int DayOfYear => value.DayOfYear;
+
+   public Float Julian => value.ToOADate() + 2415018.5;
+
+   public Float MJulian => Julian.Value - 2400000.5;
 }
