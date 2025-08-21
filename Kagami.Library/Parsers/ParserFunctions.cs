@@ -569,6 +569,8 @@ public static class ParserFunctions
       "mstring" => "MutString",
       "lambda" => "Lambda",
       "bool" => "Boolean",
+      "decimal" => "Decimal",
+      "tuple" => "Tuple",
       _ => nil
    };
 

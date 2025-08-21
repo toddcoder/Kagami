@@ -2,7 +2,7 @@
 
 enum Expr {
 	when Number(i int)
-	when Addition(exp1 Expr, exp2 Expr)
+	when Addition(expr1 Expr, expr2 Expr)
 	when Multiplication(expr1 Expr, expr2 Expr)
 	func evaluate() {
 		match self {
