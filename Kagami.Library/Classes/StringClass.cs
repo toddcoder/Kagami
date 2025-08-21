@@ -108,6 +108,7 @@ public class StringClass : BaseClass, ICollectionClass
       messages["f".get()] = (obj, _) => function<KString>(obj, s => (Float)s.Value.Value().Double());
       messages["l".get()] = (obj, _) => function<KString>(obj, s => (Long)BigInteger.Parse(s.Value));
       messages["d".get()] = (obj, _) => function<KString>(obj, s => (KDecimal)s.Value.Value().Decimal());
+      messages["scan(_<Regex>)"] = (obj, msg) => function<KString, Regex>(obj, msg, (s, r) => r.Scan(s.Value));
    }
 
    protected static IObject getIndexed(KString s, IObject i)

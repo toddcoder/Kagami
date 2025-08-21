@@ -541,4 +541,32 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
    public static bool operator ==(Regex left, Regex right) => left.Equals(right);
 
    public static bool operator !=(Regex left, Regex right) => !left.Equals(right);
+
+   public KArray Scan(string input)
+   {
+      List<IObject> list = [];
+      if (global)
+      {
+         foreach (var match in input.AllMatches(pattern))
+         {
+            List<IObject> innerList = [];
+            foreach (var group in match.Groups.Skip(1))
+            {
+               innerList.Add(KString.StringObject(group.Text));
+            }
+
+            var kArray = new KArray(innerList);
+            list.Add(kArray);
+         }
+      }
+      else if (input.Matches(pattern) is (true, var result))
+      {
+         foreach (var group in result.Groups(0).Skip(1))
+         {
+            list.Add(KString.StringObject(group));
+         }
+      }
+
+      return new KArray(list);
+   }
 }

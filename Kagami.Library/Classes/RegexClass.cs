@@ -20,6 +20,7 @@ public class RegexClass : BaseClass, IEquivalentClass
       messages["split(_)"] = (obj, msg) => function<Regex, KString>(obj, msg, (r, s) => r.Split(s.Value));
       messages["~(_)"] = (obj, msg) => function<Regex, IObject>(obj, msg, (r1, r2) => r1.Concatenate(r2));
       messages["/(_<String>)"] = (obj, msg) => function<Regex, KString>(obj, msg, (r, s) => r.PendingRegex(s));
+      messages["scan(_<String>)"] = (obj, msg) => function<Regex, KString>(obj, msg, (r, s) => r.Scan(s.Value));
    }
 
    public override void RegisterClassMessages()
