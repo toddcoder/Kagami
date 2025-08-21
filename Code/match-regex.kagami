@@ -2,8 +2,8 @@
 
 let vegetable = "red pepper"
 match vegetable {
-	when "celebrity" => println("raisins")
-	when "cucumber", "watercress" => println("sandwich")
-	when x: x"^ .+ 'pepper' $" => println($"Is it a spicy (x)?")
-	when _ => println("soup")
+	when "celebrity" := println("raisins")
+	when "cucumber", "watercress" := println("sandwich")
+	when x: x"^ .+ 'pepper' $" := println($"Is it a spicy (x)?")
+	when _ := println("soup")
 }

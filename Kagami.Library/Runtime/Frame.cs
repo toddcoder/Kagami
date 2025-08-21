@@ -126,14 +126,28 @@ public class Frame
 
          if (variadic)
          {
-            List<IObject> list = [.. getValueAsEnumerable(lastValue)];
+            if (lastValue is KArray array)
+            {
+               fields.AssignParameter(parameters[^1], array).Force();
+            }
+            else
+            {
+               List<IObject> list = [lastValue];
+               for (var i = length; i < arguments.Length; i++)
+               {
+                  list.Add(arguments[i]);
+               }
+               var variadicArray = new KArray([.. list]);
+               fields.AssignParameter(parameters[^1], variadicArray).Force();
+            }
+            /*List<IObject> list = [.. getValueAsEnumerable(lastValue)];
             for (var i = length; i < arguments.Length; i++)
             {
                list.AddRange(getValueAsEnumerable(arguments[i]));
             }
 
             var array = new KArray([.. list]);
-            fields.AssignParameter(parameters[^1], array).Force();
+            fields.AssignParameter(parameters[^1], array).Force();*/
          }
          else if (length < parameters.Length)
          {

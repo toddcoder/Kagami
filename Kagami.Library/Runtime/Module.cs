@@ -113,6 +113,7 @@ public class Module
       "FloatRange" => new FloatRangeClass(),
       "LazyString" => new LazyStringClass(),
       "StreamingIterator" => new StreamingIteratorClass(),
+      "SpecialComparisand" => new SpecialComparisandClass(),
       _ => nil
    };
 
