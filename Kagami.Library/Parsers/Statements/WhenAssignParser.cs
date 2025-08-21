@@ -9,13 +9,13 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class WhenAssignParser : StatementParser
 {
-   [GeneratedRegex(@"^(\s*)(set)\b")]
+   [GeneratedRegex(@"^(\s*)(\|)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
       state.BeginTransaction();
-      state.Colorize(tokens, Color.Whitespace, Color.Keyword);
+      state.Colorize(tokens, Color.Whitespace, Color.Operator);
 
       var not = state.NotKeyword();
 

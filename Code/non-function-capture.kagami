@@ -1,16 +1,16 @@
 ﻿open sys
 
 enum Expr {
-	when Var(name)
-	when Numberx(number)
-	when UnOp(op, args)
-	when BinOp(op, left, right)
+	| Var(name)
+	| Numeric(number)
+	| UnOp(op, args)
+	| BinOp(op, left, right)
 }
 
 func simplifyTop()
-	when UnOp("-", UnOp("-", e)) return e
-	when BinOp("+", e, Numberx(0)) return e
-	when BinOp("*", e, Numberx(1)) return e
-	when e return e
+	| UnOp("-", UnOp("-", e)) return e
+	| BinOp("+", e, Numeric(0)) return e
+	| BinOp("*", e, Numeric(1)) return e
+	| e return e
 
-simplifyTop(UnOp("-", UnOp("-", Numberx(42))))
+simplifyTop(UnOp("-", UnOp("-", Numeric(42))))

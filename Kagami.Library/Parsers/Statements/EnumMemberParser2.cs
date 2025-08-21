@@ -13,14 +13,14 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class EnumMemberParser2(string enumClassName, Maybe<IObject> _previousOrdinal) : StatementParser
 {
-   [GeneratedRegex($@"^(\s*)(when)(\s+)({REGEX_CLASS})(\()?")]
+   [GeneratedRegex($@"^(\s*)(\|)(\s*)({REGEX_CLASS})(\()?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
       var className = tokens[4].Text;
       var hasParameters = tokens[5].Text == "(";
-      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Class, Color.OpenParenthesis);
+      state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Whitespace, Color.Class, Color.OpenParenthesis);
 
       Module.Global.Value.ForwardReference(className);
 

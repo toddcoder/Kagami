@@ -1,13 +1,13 @@
 ﻿open sys
 
 enum Tree {
-	when Nilt
-	when Node(n, t1, t2)
+	| Nilt
+	| Node(n, t1, t2)
 }
 
 let t1 = Node(7, Node(3, Nilt, Nilt), Node(4, Nilt, Nilt))
 
 func mirror()
-	when Nilt return Nilt
-	when Node(a, x, y) return Node(a, mirror(y), mirror(x))
+	| Nilt return Nilt
+	| Node(a, x, y) return Node(a, mirror(y), mirror(x))
 println(mirror(t1))

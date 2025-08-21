@@ -1,20 +1,20 @@
 ﻿open sys
 
 enum Command {
-	when Open
-	when Closed
-	when Pending
-	when Approved
-	when Denied
+	| Open
+	| Closed
+	| Pending
+	| Approved
+	| Denied
 }
 
 execute(Open)
 func execute(command Command) {
 	match command {
-		when Open return println("open")
-		when Closed return println("closed")
-		when Pending return println("pending")
-		when Approved return println("approved")
-		when Denied return println("denied")
+		| Open return println("open")
+		| Closed return println("closed")
+		| Pending return println("pending")
+		| Approved return println("approved")
+		| Denied return println("denied")
 	}
 }

@@ -38,7 +38,7 @@ public partial class WhenParser : StatementParser
       caseType = CaseType.Function;
    }
 
-   [GeneratedRegex(@"^(\s*)(when)(\s+)")]
+   [GeneratedRegex(@"^(\s*)(\|)(\s*)")]
    public override partial Regex Regex();
 
    protected static Optional<Block> getCaseBlock(CaseType caseType, ParseState state)
@@ -59,7 +59,7 @@ public partial class WhenParser : StatementParser
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace);
+      state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Whitespace);
 
       var not = state.NotKeyword();
 

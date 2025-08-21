@@ -8,9 +8,9 @@ let couples = [
 ]
 
 func findDavid()
-	when (Couple(x, "Posh"), tail) return !x
-	when (_, tail) return findDavid(tail)
-	when [] return f"Couldn't find David"
+	| (Couple(x, "Posh"), tail) return !x
+	| (_, tail) return findDavid(tail)
+	| [] return f"Couldn't find David"
 
 let `david = findDavid(couples)
 if `david is !david {

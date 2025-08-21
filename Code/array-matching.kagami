@@ -3,7 +3,7 @@
 let array = [1..5]
 
 func sum()
-	when [] return 0
-	when (h, t) return h + sum(t)
+	| [] return 0
+	| (h, t) return h + sum(t)
 
 println(sum(array))

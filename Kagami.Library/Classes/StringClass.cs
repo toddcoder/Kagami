@@ -1,5 +1,7 @@
-﻿using Kagami.Library.Objects;
+﻿using System.Numerics;
+using Kagami.Library.Objects;
 using Core.Enumerables;
+using Core.Objects;
 using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Classes;
@@ -102,6 +104,10 @@ public class StringClass : BaseClass, ICollectionClass
       messages["wordCase()"] = (obj, _) => function<KString>(obj, s => s.WordCase());
       messages["encode(_)"] = (obj, msg) => function<KString, KString>(obj, msg, (s, e) => s.Encode(e.Value));
       messages["/(_<Regex>)"] = (obj, msg) => function<KString, Regex>(obj, msg, (s, r) => r.PendingRegex(s));
+      messages["i".get()] = (obj, _) => function<KString>(obj, s => (Int)s.Value.Value().Int32());
+      messages["f".get()] = (obj, _) => function<KString>(obj, s => (Float)s.Value.Value().Double());
+      messages["l".get()] = (obj, _) => function<KString>(obj, s => (Long)BigInteger.Parse(s.Value));
+      messages["d".get()] = (obj, _) => function<KString>(obj, s => (KDecimal)s.Value.Value().Decimal());
    }
 
    protected static IObject getIndexed(KString s, IObject i)

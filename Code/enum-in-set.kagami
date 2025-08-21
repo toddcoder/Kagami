@@ -1,13 +1,13 @@
 ﻿open sys
 
 enum Color {
-	when Red
-	when Blue
-	when Yellow
-	when Green
-	when White
-	when Black
-	when Orange
+	| Red
+	| Blue
+	| Yellow
+	| Green
+	| White
+	| Black
+	| Orange
 }
 
 var c = {Red, Blue, Yellow, White, Black, Orange}

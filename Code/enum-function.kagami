@@ -1,14 +1,14 @@
 ﻿open sys
 
 enum Expr {
-	when Number(i int)
-	when Addition(expr1 Expr, expr2 Expr)
-	when Multiplication(expr1 Expr, expr2 Expr)
+	| Number(i int)
+	| Addition(expr1 Expr, expr2 Expr)
+	| Multiplication(expr1 Expr, expr2 Expr)
 	func evaluate() {
 		match self {
-			when Number(value) return value
-			when Addition(left, right) return left.evaluate() + right.evaluate()
-			when Multiplication(left, right) return left.evaluate() * right.evaluate()
+			| Number(value) return value
+			| Addition(left, right) return left.evaluate() + right.evaluate()
+			| Multiplication(left, right) return left.evaluate() * right.evaluate()
 		}
 	}
 }

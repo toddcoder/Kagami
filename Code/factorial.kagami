@@ -1,8 +1,8 @@
 ﻿open sys
 
 func fact()
-	when 0 return 1
-	when n return n * fact(n - 1)
+	| 0 return 1
+	| n return n * fact(n - 1)
 
 println(fact(4))
 

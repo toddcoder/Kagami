@@ -1,21 +1,21 @@
 ﻿open sys
 
 enum Planet {
-	when Mercury = 1
-	when Venus
-	when Earth
-	when Mars
-	when Jupiter
-	when Saturn
-	when Uranus
-	when Neptune
+	| Mercury = 1
+	| Venus
+	| Earth
+	| Mars
+	| Jupiter
+	| Saturn
+	| Uranus
+	| Neptune
 }
 
 let positionToFind = 11
 if Planet.ordinals[positionToFind] is ?somePlanet {
 	match somePlanet {
-		when Earth => println("Mostly harmless")
-		when _ => println("Not a safe place for humsn")
+		| Earth := println("Mostly harmless")
+		| _ := println("Not a safe place for humsn")
 	}
 }
 else {

@@ -72,5 +72,5 @@ public class MatchAssign : Statement
       }
    }
 
-   public override string ToString() => $"set {comparisand} = {expression}" + (_block.Map(b => $" else {{{b}}}") | "");
+   public override string ToString() => $"|{comparisand} = {expression}" + (_block.Map(b => $" else {{{b}}}") | "");
 }
