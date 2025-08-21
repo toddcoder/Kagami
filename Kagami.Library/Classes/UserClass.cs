@@ -174,7 +174,18 @@ public class UserClass : BaseClass
       }
       else if (_parentClass is (true, var parentClass))
       {
-         return parentClass.AssignCompatible(otherClass);
+         if (parentClass.AssignCompatible(otherClass))
+         {
+            return true;
+         }
+         else if (otherClass is UserClass { ParentClass: (true, var otherParentClass) })
+         {
+            return parentClass.AssignCompatible(otherParentClass);
+         }
+         else
+         {
+            return false;
+         }
       }
       else
       {
