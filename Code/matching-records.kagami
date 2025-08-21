@@ -7,7 +7,7 @@ let couples = [
 	Couple("Chris", "Gwyneth"), Couple("Michael", "Catherine")
 ]
 
-func findDavid()
+match findDavid()
 	| (Couple(x, "Posh"), tail) return !x
 	| (_, tail) return findDavid(tail)
 	| [] return f"Couldn't find David"

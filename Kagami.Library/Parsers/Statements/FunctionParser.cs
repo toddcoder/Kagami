@@ -18,7 +18,7 @@ public partial class FunctionParser : StatementParser
 {
    protected Maybe<Function> _function = nil;
 
-   [GeneratedRegex($@"^(\s*)(override\s+)?(func|(?:infix\(\w+\))|prefix|postfix|macro)(\s+)(?:({REGEX_CLASS_GETTING})(\.))?({REGEX_FUNCTION_NAME})(\()?")]
+   [GeneratedRegex($@"^(\s*)(override\s+)?(func|(?:infix\(\w+\))|prefix|postfix|macro|match)(\s+)(?:({REGEX_CLASS_GETTING})(\.))?({REGEX_FUNCTION_NAME})(\()?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
@@ -27,6 +27,7 @@ public partial class FunctionParser : StatementParser
       var operatorText = tokens[3].Text;
       var isOperator = operatorText.StartsWith("infix") || operatorText is "prefix" or "postfix";
       var isMacro = tokens[3].Text == "macro";
+      var isMatch = tokens[3].Text == "match";
 
       var className = tokens[5].Text;
       if (className.IsEmpty() && TraitName.IsNotEmpty())
@@ -103,11 +104,7 @@ public partial class FunctionParser : StatementParser
       if (_parameters is (true, var parameters))
       {
          var isFixed = state.Scan(@"^(\s+)(fixed)\b", Color.Whitespace, Color.Keyword);
-         if (state.CurrentSource.IsMatch("^ /s* '{' /s* '|'"))
-         {
-            return state.SetException("Match function must omit {");
-         }
-         if (state.CurrentSource.IsMatch("^ /s* '|'"))
+         if (isMatch)
          {
             var parameterName = "__$0";
             var variadicParameter = new Parameter(false, "", parameterName, nil, nil, false, false)

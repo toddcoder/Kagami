@@ -1,6 +1,6 @@
 ﻿open sys
 
-func save_get()
+match save_get()
 	| [?contents, _] return contents
 	| [Nil, default] return default
 

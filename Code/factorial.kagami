@@ -1,6 +1,6 @@
 ﻿open sys
 
-func fact()
+match fact()
 	| 0 return 1
 	| n return n * fact(n - 1)
 

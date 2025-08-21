@@ -1,6 +1,6 @@
 ﻿open sys
 
-func sign()
+match sign()
 	| [< 0, y: true] return println($"x is negative; y is (y)")
 	| [0, y: true] return println($"x is zero; y is (y)")
 	| [> 0, y: true] return println($"x is positive; y is (y)")

@@ -2,7 +2,7 @@
 
 let array = [1..5]
 
-func sum()
+match sum()
 	| [] return 0
 	| (h, t) return h + sum(t)
 

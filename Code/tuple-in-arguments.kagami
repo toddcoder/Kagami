@@ -1,7 +1,7 @@
 ﻿open sys
 
 func fullNameToString(x) {
-	set (first, second) = x
+	| (first, second) = x
 	return first + " " + second
 }
 

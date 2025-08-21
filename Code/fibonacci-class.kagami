@@ -6,7 +6,7 @@ class Fib(max) {
 	func next(i) {
 		var fib = a
 		if fib > max return nil
-		set (use a, use b) = (b, a + b)
+		| (use a, use b) = (b, a + b)
 		return ?fib
 	}
 }

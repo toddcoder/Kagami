@@ -34,6 +34,7 @@ public class StatementsParser : MultiParser
          yield return new TryHandlerParser();
 
          yield return new EnumParser2();
+         yield return new FunctionParser();
          yield return new MatchParser();
          yield return new YieldParser();
          yield return new ReturnParser();
@@ -63,8 +64,6 @@ public class StatementsParser : MultiParser
          yield return new AssignWithNewTypeParser();
          yield return new AssignToNewFieldTolerantParser();
          yield return new AssignToFieldParser();
-
-         yield return new FunctionParser();
 
          yield return new ExpressionStatementParser(ReturnExpression, TypeConstraint);
       }

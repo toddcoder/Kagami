@@ -1,6 +1,6 @@
 ﻿open sys
 
-func safe_get()
+match safe_get()
 	| (?contents, _) return contents
 	| (Nil, default) return default
 
