@@ -89,6 +89,11 @@ public class Frame
 
    public void SetFields(Parameters parameters)
    {
+      if (parameters.Length == 0)
+      {
+         return;
+      }
+
       if (!parametersSet)
       {
          var length = Math.Min(arguments.Length, parameters.Length);
@@ -105,7 +110,7 @@ public class Frame
             else
             {
                var array = new KArray([.. arguments]);
-               fields.AssignParameter(parameter,array).Force();
+               fields.AssignParameter(parameter, array).Force();
             }
 
             return;
@@ -137,6 +142,7 @@ public class Frame
                {
                   list.Add(arguments[i]);
                }
+
                var variadicArray = new KArray([.. list]);
                fields.AssignParameter(parameters[^1], variadicArray).Force();
             }
@@ -195,6 +201,7 @@ public class Frame
                {
                   list.Add(arguments[i]);
                }
+
                var variadicArray = new KArray([.. list]);
                fields.AssignParameter(parameters[^1], variadicArray).Force();
             }

@@ -17,13 +17,14 @@ public partial class KeywordOperatorsParser : SymbolParser
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      if (builder.Flags[ExpressionFlags.OmitRange] || builder.Flags[ExpressionFlags.InLambda])
+      var keyword = tokens[2].Text;
+      if ((builder.Flags[ExpressionFlags.OmitRange] || builder.Flags[ExpressionFlags.InLambda]) && keyword != "div" && keyword != "divmod" &&
+          keyword != "min" && keyword != "max")
       {
          return nil;
       }
       else
       {
-         var keyword = tokens[2].Text;
          if (keyword != "if" || !builder.Flags[ExpressionFlags.OmitIf])
          {
             state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Whitespace);
