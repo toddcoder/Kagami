@@ -161,7 +161,13 @@ public class Iterator : IObject, IIterator
 
    public IObject FoldLeft(IObject initialValue, Lambda lambda)
    {
-      return List().Aggregate(initialValue, (current, value) => lambda.Invoke(current, value));
+      var accum = initialValue;
+      foreach (var item in List())
+      {
+         accum = lambda.Invoke(accum, item);
+      }
+
+      return accum;
    }
 
    public IObject FoldLeft(Lambda lambda)
@@ -186,7 +192,13 @@ public class Iterator : IObject, IIterator
 
    public IObject FoldRight(IObject initialValue, Lambda lambda)
    {
-      return List().Aggregate(initialValue, (current, value) => lambda.Invoke(value, current));
+      var accum = initialValue;
+      foreach (var item in List())
+      {
+         accum = lambda.Invoke(item, accum);
+      }
+
+      return accum;
    }
 
    public IObject FoldRight(Lambda lambda)
@@ -1083,7 +1095,7 @@ public class Iterator : IObject, IIterator
 
    public IObject ToDictionary() => new Dictionary(List());
 
-   public IObject ToSet() => new Set((IObject[]) [.. List()]);
+   public IObject ToSet() => new Set((IObject[])[.. List()]);
 
    public virtual IObject Each(Lambda action)
    {

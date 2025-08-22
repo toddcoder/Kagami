@@ -1,0 +1,19 @@
+﻿open sys
+
+let romeoAndJuliet = [
+"Act 1 Scene 1: Verona, A public place",
+"Act 1 Scene 2: Capulet's mansion",
+"Act 1 Scene 3: A room in Capulet's mansion",
+"Act 1 Scene 4: A street outside Capulet's mansion",
+"Act 1 Scene 5: The Great Hall in Capulet's mansion",
+"Act 2 Scene 1: Outside Capulet's mansion",
+"Act 2 Scene 2: Capulet's orchard",
+"Act 2 Scene 3: Outside Friar Lawrence's cell",
+"Act 2 Scene 4: A street in Verona",
+"Act 2 Scene 5: Capulet's mansion",
+"Act 2 Scene 6: Friar Lawrence's cell"
+]
+
+var mapped = romeoAndJuliet map scene -> [(scene.endsWith("Capulet's mansion") ? 1 : 0), (scene.endsWith("Friar Lawrence's cell") ? 1 : 0)]
+| [mansionCount, cellCount] = mapped.foldl([0, 0]) (accum, t) -> [accum[0] + t[0], accum[1] + t[1]]
+println($"(mansionCount) mansion scenes; (cellCount) cell scenes")

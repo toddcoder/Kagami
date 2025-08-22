@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using Core.Matching;
 using Core.Monads;
 using Core.Numbers;
+using Core.Strings;
 using Kagami.Library.Nodes.Symbols;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Parsers.ParserFunctions;
@@ -16,7 +17,6 @@ public partial class MultilineStringParser : SymbolParser
    {
    }
 
-   //public override string Pattern => "^ /(/s*) /([dquote]3) /(/r /n | /r | /n)";
 
    [GeneratedRegex(@"^(\s*)([""]{3})(\r\n|\r|\n)")]
    public override partial Regex Regex();
@@ -159,7 +159,7 @@ public partial class MultilineStringParser : SymbolParser
 
          state.Move(1);
          state.AddToken(index, length + 1, Color.String);
-         builder.Add(new StringSymbol(text.ToString()));
+         builder.Add(new StringSymbol(stripWhitespace(text.ToString())));
 
          return unit;
       }
@@ -170,6 +170,33 @@ public partial class MultilineStringParser : SymbolParser
       else
       {
          return openString();
+      }
+   }
+
+   protected static string stripWhitespace(string source)
+   {
+      var _leadingWhitespace = source.Matches("^ /(/s+)").Map(r => r.FirstGroup);
+      if (_leadingWhitespace is (true, var leadingWhitespace))
+      {
+         var dropCount = leadingWhitespace.Length;
+         using var writer = new StringWriter();
+         foreach (var line in source.Lines())
+         {
+            if (line.StartsWith(leadingWhitespace))
+            {
+               writer.WriteLine(line.Drop(dropCount));
+            }
+            else
+            {
+               writer.WriteLine(line);
+            }
+         }
+
+         return writer.ToString().TrimEnd();
+      }
+      else
+      {
+         return source.TrimEnd();
       }
    }
 }
