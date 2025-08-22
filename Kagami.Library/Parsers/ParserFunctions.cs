@@ -28,7 +28,9 @@ public static class ParserFunctions
    public const string REGEX_INVOKABLE = "`?[A-Za-z_][A-Za-z_0-9]*";
    public const string REGEX_INVOKABLE2 = @"`?[A-Za-z_][A-Za-z_0-9\$]*";
    public const string REGEX_CLASS = "[A-Z][A-Za-z_0-9]*";
+   public const string REGEX_CLASS_OR_ALIAS = "[A-Za-z][A-Za-z_0-9]*";
    public const string REGEX_CLASS_GETTING = $@"{REGEX_CLASS}(?:\. {REGEX_CLASS})?";
+   public const string REGEX_CLASS_GETTING_OR_ALIAS = $@"{REGEX_CLASS_OR_ALIAS}(?:\. {REGEX_CLASS_OR_ALIAS})?";
    public const string REGEX_ASSIGN_OPS = @"\+|-|\*|/|/|\^|~|%|div|:\b";
    public const string REGEX_FUNCTION_NAME = $@"(?:(?:{REGEX_INVOKABLE})|(?:[~`!@\#\$%\^\*\+=\|\\;<>/\?&-]+)|\[\])=?(?![=>])";
    public const string REGEX_FUNCTION_NAME2 = $@"(?:(?:{REGEX_INVOKABLE2})|(?:[~`!@\#\$%\^\*\+=\|\\;<>/\?&-]+)|\[\])=?(?![=>])";
@@ -553,6 +555,18 @@ public static class ParserFunctions
          select (PossibleTypeConstraint)new PossibleTypeConstraint.Some(new TypeConstraint([baseClass]));
    }
 
+   public static (string className, Color color) getClassNameWithColor(string source)
+   {
+      if (getClassNameFromAlias(source) is (true, var className))
+      {
+         return (className, Color.Keyword);
+      }
+      else
+      {
+         return (source, Color.Class);
+      }
+   }
+
    public static Optional<string> getClassNameFromAlias(string alias) => alias switch
    {
       "int" => "Int",
@@ -571,6 +585,9 @@ public static class ParserFunctions
       "bool" => "Boolean",
       "decimal" => "Decimal",
       "tuple" => "Tuple",
+      "array" => "Array",
+      "set" => "Set",
+      "dictionary" => "Dictionary",
       _ => nil
    };
 

@@ -17,7 +17,7 @@ public partial class FunctionParser : StatementParser
 {
    protected Maybe<Function> _function = nil;
 
-   [GeneratedRegex($@"^(\s*)(override\s+)?(func|(?:infix\(\w+\))|prefix|postfix|macro|match)(\s+)(?:({REGEX_CLASS_GETTING})(\.))?({REGEX_FUNCTION_NAME})(\()?")]
+   [GeneratedRegex($@"^(\s*)(override\s+)?(func|(?:infix\(\w+\))|prefix|postfix|macro|match)(\s+)(?:({REGEX_CLASS_GETTING_OR_ALIAS})(\.))?({REGEX_FUNCTION_NAME})(\()?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
@@ -29,10 +29,7 @@ public partial class FunctionParser : StatementParser
       var isMatch = tokens[3].Text == "match";
 
       var className = tokens[5].Text;
-      if (className.IsEmpty() && TraitName.IsNotEmpty())
-      {
-         className = TraitName;
-      }
+      (className, var color) = getClassNameWithColor(className);
 
       var functionName = tokens[7].Text;
       var type = tokens[8].Text;
@@ -85,12 +82,12 @@ public partial class FunctionParser : StatementParser
       var needsParameters = type == "(";
       if (needsParameters)
       {
-         state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Keyword, Color.Whitespace, Color.Class, Color.Structure, Color.Invokable,
+         state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Keyword, Color.Whitespace, color, Color.Structure, Color.Invokable,
             Color.OpenParenthesis);
       }
       else
       {
-         state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Keyword, Color.Whitespace, Color.Class, Color.Structure, Color.Invokable);
+         state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Keyword, Color.Whitespace, color, Color.Structure, Color.Invokable);
          functionName = $"__${functionName}";
       }
 
