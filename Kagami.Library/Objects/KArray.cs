@@ -339,10 +339,17 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
    public IObject RemoveAt(int index)
    {
       index = wrapIndex(index, list.Count);
-      var obj = this[index];
-      list.RemoveAt(index);
+      if (index.Between(0).Until(list.Count))
+      {
+         var obj = this[index];
+         list.RemoveAt(index);
 
-      return obj;
+         return Some.Object(obj);
+      }
+      else
+      {
+         return KNil.NilValue;
+      }
    }
 
    public IObject RemoveAll(IObject obj)
