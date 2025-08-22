@@ -110,25 +110,8 @@ public class ClassBuilder
                var (mutable, fieldName, _typeConstraint) = assignToNewField;
                if (requiredFields.Maybe[fieldName] is (true, var requiredField))
                {
-                  if (mutable != requiredField.Mutable)
-                  {
-                     throw needsImplementation(fieldName);
-                  }
-                  else if (_typeConstraint is (true, var typeConstraint))
-                  {
-                     if (requiredField.TypeConstraint is (true, var requiredTypeConstraint) && !typeConstraint.IsEqualTo(requiredTypeConstraint))
-                     {
-                        throw needsImplementation(fieldName);
-                     }
-                  }
-                  else if (!_typeConstraint && requiredField.TypeConstraint)
-                  {
-                     throw needsImplementation(fieldName);
-                  }
-                  else
-                  {
-                     requiredFields.Maybe[fieldName] = nil;
-                  }
+                  var _result = requiredField.Require(fieldName, _typeConstraint, mutable);
+                  requiredFields.Maybe[fieldName] = _result ? nil : throw _result.Exception;
                }
 
                var function = Function.Getter(fieldName);
@@ -194,7 +177,14 @@ public class ClassBuilder
             }
             case DefineNewField defineNewField:
             {
-               var (mutable, fieldName) = defineNewField;
+               var (mutable, fieldName, typeName) = defineNewField;
+
+               if (requiredFields.Maybe[fieldName] is (true, var requiredField))
+               {
+                  var _result = requiredField.Require(fieldName, typeName, mutable);
+                  requiredFields.Maybe[fieldName] = _result ? nil : throw _result.Exception;
+               }
+
                var function = Function.Getter(fieldName);
                statements.Add(function);
                var (functionName, _, block, _, invokable, _) = function;
@@ -280,9 +270,10 @@ public class ClassBuilder
 
       foreach (var parameter in parameters)
       {
-         if (requiredFields.Maybe[parameter.Name] is (true, var requiredField) && requiredField.Matches(parameter))
+         if (requiredFields.Maybe[parameter.Name] is (true, var requiredField))
          {
-            requiredFields.Maybe[parameter.Name] = nil;
+            var _result = requiredField.Require(parameter.Name, parameter.TypeConstraint, parameter.Mutable);
+            requiredFields.Maybe[parameter.Name] = _result ? nil : throw _result.Exception;
          }
       }
 

@@ -27,8 +27,10 @@ public static class ObjectFunctions
    public static BaseClass classOf(IObject value)
    {
       var className = value.ClassName;
-      return Module.Global.Value.Class(className).Required(messageClassNotFound(className));
+      return classOf(className);
    }
+
+   public static BaseClass classOf(string className) => Module.Global.Value.Class(className).Required(messageClassNotFound(className));
 
    public static bool match<T>(T source, IObject comparisand, Func<T, T, bool> equalifier, Hash<string, IObject> bindings)
       where T : IObject

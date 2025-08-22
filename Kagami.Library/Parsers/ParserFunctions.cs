@@ -588,6 +588,9 @@ public static class ParserFunctions
       "array" => "Array",
       "set" => "Set",
       "dictionary" => "Dictionary",
+      "optional" => "Optional",
+      "monad" => "Monad",
+      "result" => "Result",
       _ => nil
    };
 

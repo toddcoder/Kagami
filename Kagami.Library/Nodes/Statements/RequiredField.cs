@@ -3,6 +3,8 @@ using Core.Monads;
 using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
+using static Core.Monads.MonadFunctions;
+using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Nodes.Statements;
@@ -16,6 +18,31 @@ public class RequiredField(string fieldName, bool mutable, Maybe<TypeConstraint>
    public Maybe<TypeConstraint> TypeConstraint => _typeConstraint;
 
    public bool Matches(Parameter parameter) => matchingTypeConstraints(parameter.TypeConstraint, _typeConstraint) && parameter.Mutable == mutable;
+
+   public bool Matches(Maybe<TypeConstraint> _newTypeConstraint, bool newMutable) =>
+      matchingTypeConstraints(_newTypeConstraint, _typeConstraint) && newMutable == mutable;
+
+   public Result<Unit> Require(string name, Maybe<TypeConstraint> _newTypeConstraint, bool newMutable)
+   {
+      if (newMutable != mutable)
+      {
+         return mutable ? mustBeMutable(name) : mustBeImmutable(name);
+      }
+
+      if (_typeConstraint is (true, var typeConstraint) && _newTypeConstraint is (true, var newTypeConstraint) &&
+          !typeConstraint.IsEquivalentTo(newTypeConstraint))
+      {
+         return typeConstraintRequired(name, typeConstraint.AsString);
+      }
+
+      return unit;
+   }
+
+   public Result<Unit> Require(string name, string className, bool newMutable)
+   {
+      var newTypeConstraint = new TypeConstraint([classOf(className)]);
+      return Require(name, newTypeConstraint, newMutable);
+   }
 
    public override void Generate(OperationsBuilder builder)
    {

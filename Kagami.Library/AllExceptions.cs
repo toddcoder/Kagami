@@ -251,4 +251,20 @@ public static class AllExceptions
    public static string messageMustUseVariable() => "References require a field";
 
    public static Exception mustUseVariable() => fail(messageMustUseVariable());
+
+   public static string messageMustBeMutable(string fieldName) => $"Field {fieldName} must be mutable";
+
+   public static Exception mustBeMutable(string fieldName) => fail(messageMustBeMutable(fieldName));
+
+   public static string messageMustBeImmutable(string fieldName) => $"Field {fieldName} must be immutable";
+
+   public static Exception mustBeImmutable(string fieldName) => fail(messageMustBeImmutable(fieldName));
+
+   public static string messageTypeConstraintRequired(string fieldName, string type) => $"Field {fieldName} requires a type constraint of {type}";
+
+   public static Exception typeConstraintRequired(string fieldName, string type) => fail(messageTypeConstraintRequired(fieldName, type));
+
+   public static string messageTypeConstraintRequired(string fieldName) => $"Field {fieldName} requires a type constraint";
+
+   public static Exception typeConstraintRequired(string fieldName) => fail(messageTypeConstraintRequired(fieldName));
 }
