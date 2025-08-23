@@ -9,7 +9,7 @@ using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public partial class EnumParser2 : StatementParser
+public partial class EnumParser : StatementParser
 {
    [GeneratedRegex(@$"^(\s*)(enum)(\s+)({REGEX_CLASS})\b")]
    public override partial Regex Regex();
@@ -43,7 +43,7 @@ public partial class EnumParser2 : StatementParser
             return exception;
          }
 
-         var enumMemberParser = new EnumMemberParser2(className, _ordinal);
+         var enumMemberParser = new EnumMemberParser(className, _ordinal);
          var _enumMember = enumMemberParser.Scan(state);
          if (_enumMember)
          {
@@ -84,64 +84,5 @@ public partial class EnumParser2 : StatementParser
       }
 
       return _result;
-
-      /*var enumClassBuilder = new EnumClassBuilder(className);
-      var _enumRegistered = enumClassBuilder.Register();
-      if (!_enumRegistered)
-      {
-         if (_enumRegistered.Exception is (true, var exception))
-         {
-            return exception;
-         }
-         else
-         {
-            return fail("Failed to register enum class");
-         }
-      }
-
-      var userClass = (EnumClass)enumClassBuilder.UserClass;
-
-      foreach (var enumMemberData in enumMembers)
-      {
-         var fullBlock = new Block();
-         if (_block is (true, var block))
-         {
-            fullBlock = block;
-            if (enumMemberData.Block is (true, var memberBlock))
-            {
-               fullBlock = Block.Merge(fullBlock, memberBlock);
-            }
-         }
-         else if (enumMemberData.Block is (true, var memberBlock))
-         {
-            fullBlock = memberBlock;
-         }
-
-         var (name, _, parameters, _memberOrdinal, _) = enumMemberData;
-
-         var truncatedName = name.Substitute("^ -['$']+ '$' /(.+)$", "$1");
-         var selector = parameters.Length > 0 ? parameters.Selector(truncatedName) : (Selector)truncatedName.get();
-         var constructorSelector = parameters.Selector(name);
-
-         userClass.RegisterMember(constructorSelector, selector, _memberOrdinal);
-
-         var enumMemberClassBuilder = new EnumMemberClassBuilder(name, parameters, fullBlock)
-         {
-            Selector = enumMemberData.Parameters.Selector(enumMemberData.Name),
-            Ordinal = enumMemberData.Ordinal
-         };
-         var _registered = enumMemberClassBuilder.Register();
-         if (_registered)
-         {
-            var cls = new Class(enumMemberClassBuilder);
-            state.AddStatement(cls);
-         }
-         else
-         {
-            return _registered.Exception;
-         }
-      }*/
-
-      //return unit;
    }
 }

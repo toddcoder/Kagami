@@ -11,7 +11,7 @@ using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public partial class EnumMemberParser2(string enumClassName, Maybe<IObject> _previousOrdinal) : StatementParser
+public partial class EnumMemberParser(string enumClassName, Maybe<IObject> _previousOrdinal) : StatementParser
 {
    [GeneratedRegex($@"^(\s*)(\|)(\s*)({REGEX_CLASS})(\()?")]
    public override partial Regex Regex();
@@ -69,7 +69,7 @@ public partial class EnumMemberParser2(string enumClassName, Maybe<IObject> _pre
          return exception;
       }
 
-      if (_previousOrdinal is (true, var previousOrdinal))
+      if (!_ordinal && _previousOrdinal is (true, var previousOrdinal))
       {
          if (previousOrdinal is IRangeItem rangeItem)
          {

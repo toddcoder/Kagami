@@ -34,7 +34,7 @@ public class StatementsParser : MultiParser
          yield return new ExitContinueParser();
          yield return new TryHandlerParser();
 
-         yield return new EnumParser2();
+         yield return new EnumParser();
          yield return new FunctionParser();
          yield return new MatchParser();
          yield return new YieldParser();
