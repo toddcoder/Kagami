@@ -13,13 +13,12 @@ public partial class IndexerParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\[)(\+)?")]
+   [GeneratedRegex(@"^(\[)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      var insert = tokens[2].Text == "+";
-      state.Colorize(tokens, Color.OpenParenthesis, Color.Structure);
+      state.Colorize(tokens, Color.OpenParenthesis);
 
       var _expressions = getArguments(state, builder.Flags);
       if (_expressions is (true, var expressions))
@@ -32,19 +31,7 @@ public partial class IndexerParser : SymbolParser
             {
                opSource = opSource.DropWhile(" ").Keep(1);
                var operation = matchOperator(opSource) | nil;
-               if (!operation && insert)
-               {
-                  List<Expression> list =
-                  [
-                     .. expressions,
-                     expression
-                  ];
-                  builder.Add(new SendMessageSymbol("insert(at:_<Int>,value:_)", false, nil, nil, [.. list]));
-               }
-               else
-               {
-                  builder.Add(new IndexSetterSymbol(expressions, expression, operation.Maybe()));
-               }
+               builder.Add(new IndexSetterSymbol(expressions, expression, operation.Maybe()));
 
                return unit;
             }

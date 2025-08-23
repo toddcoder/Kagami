@@ -9,7 +9,7 @@ public class Add : TwoOperandOperation
 {
    public override Optional<IObject> Execute(Machine machine, IObject x, IObject y)
    {
-      return apply(x, y, (a, b) => a + b, (a, b) => a + b, (a, b) => a + b, (a, b) => a.Add(b), "+(_)").Just();
+      return apply(x, y, (a, b) => a + b, (a, b) => a + b, (a, b) => a + b, (a, b) => a.Add(b), "+(_)", (k, i) => k.Shift(i)).Just();
    }
 
    public override string ToString() => "add";

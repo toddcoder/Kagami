@@ -15,7 +15,7 @@ using Core.Numbers;
 namespace Kagami.Library.Objects;
 
 public readonly struct KString : IObject, IComparable<KString>, IEquatable<KString>, IFormattable, ICollection, IComparable, ISliceable, IRangeItem,
-   ITextFinding
+   ITextFinding, IIndexed
 {
    public static implicit operator KString(string value) => new(value);
 
@@ -25,7 +25,10 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
    private readonly string value;
 
-   public KString(string value) : this() => this.value = value;
+   public KString(string value) : this()
+   {
+      this.value = value;
+   }
 
    public string Value => value;
 
@@ -99,6 +102,28 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
       var self = this;
       return maybe<IObject>() & index < value.Length & (() => KChar.CharObject(self.value[index]));
    }
+
+   IObject IIndexed.this[int index]
+   {
+      get => this[index];
+      set => throw fail("String is immutable");
+   }
+
+   public IObject this[KIndex index]
+   {
+      get => index.GetFromCollection(this);
+      set => throw fail("String is immutable");
+   }
+
+   public int LastIndex => value.Length - 1;
+
+   int IIndexed.Length => value.Length;
+
+   public KIndex Start => KIndex.StartIndex(this);
+
+   public KIndex End => KIndex.EndIndex(this);
+
+   public KIndex Full => KIndex.FullIndex(this);
 
    public Int Length => value.Length;
 

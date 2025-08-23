@@ -16,6 +16,10 @@ public class FloatDivide : TwoOperandOperation
 
          return Float.FloatObject(dx / dy).Just();
       }
+      else if (x is KIndex index && y is Int i)
+      {
+         return index.Contract(i.Value);
+      }
       else
       {
          return sendMessage(x, "/(_)", y).Just();

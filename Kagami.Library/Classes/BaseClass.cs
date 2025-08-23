@@ -194,7 +194,7 @@ public abstract class BaseClass
 
    protected IObject invokeMessage(IObject obj, Message message)
    {
-     var selector = message.Selector;
+      var selector = message.Selector;
 
       if (RespondsTo(selector))
       {
@@ -497,7 +497,7 @@ public abstract class BaseClass
       registerIterMessage("copy()", (obj, _) => iteratorFunc(obj, i => i.Copy()));
       registerIterMessage("collect()", (obj, _) => iteratorFunc(obj, i => i.Collect()));
       registerIterMessage("*(_)", (obj, message) => iteratorFunc<IObject>(obj, message, (i1, i2) => i1.Apply((ICollection)i2)));
-      registerIterMessage("format(_)", (obj, message) => iteratorFunc<KIndex>(obj, message, (i, index) => index.IndexOf(i.Collection)));
+      registerIterMessage("format(_)", (obj, message) => iteratorFunc<KIndex>(obj, message, (i, index) => index.GetFromCollection(i.Collection)));
       registerIterMessage("replace(_<Lambda>,_<Lambda>)",
          (obj, message) => iteratorFunc<Lambda, Lambda>(obj, message, (i, l1, l2) => i.Replace(l1, l2)));
       registerIterMessage("set()", (obj, _) => iteratorFunc(obj, i => i.ToSet()));
@@ -537,6 +537,15 @@ public abstract class BaseClass
       registerMessage("succ".get(), (obj, _) => function<IObject>(obj, o => (IObject)((IRangeItem)o).Successor));
       registerMessage("pred".get(), (obj, _) => function<IObject>(obj, o => (IObject)((IRangeItem)o).Predecessor));
       registerMessage("range()", (obj, _) => function<IObject>(obj, o => ((IRangeItem)o).Range()));
+   }
+
+   protected void indexedMessages()
+   {
+      registerMessage("start".get(), (obj, _) => function<IObject>(obj, i => ((IIndexed)i).Start));
+      registerMessage("end".get(), (obj, _) => function<IObject>(obj, i => ((IIndexed)i).End));
+      registerMessage("full".get(), (obj, _) => function<IObject>(obj, i => ((IIndexed)i).Full));
+      registerMessage("[](_<Index>)", (obj, msg) => function<IObject, KIndex>(obj, msg, (o, i) => ((IIndexed)o)[i]));
+      registerMessage("[]=(_<Index>,_)", (obj, msg) => function<IObject, KIndex, IObject>(obj, msg, (o, i, v) => ((IIndexed)o)[i] = v));
    }
 
    public static IObject Invoke(IObject obj, Arguments arguments, Lambda lambda, bool bareLambda)

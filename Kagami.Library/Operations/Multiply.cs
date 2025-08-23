@@ -9,7 +9,7 @@ public class Multiply : TwoOperandOperation
 {
    public override Optional<IObject> Execute(Machine machine, IObject x, IObject y)
    {
-      return apply(x, y, (a, b) => a * b, (a, b) => a * b, (a, b) => a * b, (a, b) => a.Multiply(b), "*(_)").Just();
+      return apply(x, y, (a, b) => a * b, (a, b) => a * b, (a, b) => a * b, (a, b) => a.Multiply(b), "*(_)", (k, i) => k.Expand(i)).Just();
    }
 
    public override string ToString() => "multiply";

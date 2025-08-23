@@ -21,6 +21,7 @@ public class ArrayClass : BaseClass, ICollectionClass
       mutableCollectionMessages();
       sliceableMessages();
       findAndIndexMessages();
+      indexedMessages();
 
       messages["[](_)"] = (obj, msg) => function<KArray, IObject>(obj, msg, getIndexed);
       messages["[](_<NumericOpenRange>)"] = (obj, msg) => function<KArray, NumericOpenRange>(obj, msg, (a, o) => a[o]);

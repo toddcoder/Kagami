@@ -299,8 +299,6 @@ public class OperationsBuilder
 
    public void NewSkipTake() => add(new NewSkipTake());
 
-   public void NewIndex() => add(new NewIndex());
-
    public void PushFrame() => add(new PushFrame());
 
    public void PushFunctionFrame() => add(new PushFunctionFrame());

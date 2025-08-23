@@ -10,6 +10,12 @@ public class PreDecrement : Operation
 {
    public override Optional<IObject> Execute(Machine machine)
    {
+      if (machine.Peek() is (true, KIndex index))
+      {
+         machine.Pop();
+         return index.StartPred();
+      }
+
       if (machine is { LastField: (true, var field), LastFieldName: (true, var lastFieldName) })
       {
          if (field.Mutable)

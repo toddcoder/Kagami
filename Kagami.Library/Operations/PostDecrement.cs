@@ -10,6 +10,12 @@ public class PostDecrement : Operation
 {
    public override Optional<IObject> Execute(Machine machine)
    {
+      if (machine.Peek() is (true, KIndex index))
+      {
+         machine.Pop();
+         return index.EndPred();
+      }
+
       if (machine is { LastField: (true, var field), LastFieldName: (true, var lastFieldName) })
       {
          if (field.Mutable)
