@@ -7,7 +7,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
 
-public readonly struct KChar : IObject, IComparable<KChar>, IEquatable<KChar>, IRangeItem, ITextFinding
+public readonly struct KChar : IObject, IComparable<KChar>, IEquatable<KChar>, IRangeItem, ITextFinding, IIncrementDecrement
 {
    public static implicit operator KChar(char value) => new(value);
 
@@ -208,4 +208,10 @@ public readonly struct KChar : IObject, IComparable<KChar>, IEquatable<KChar>, I
    public KChar Pred() => (KChar)(value - 1);
 
    public KString UnicodeCat => char.GetUnicodeCategory(value).ToString().ToLower1();
+
+   public IObject Increment(int amount = 1) => (KChar)(value + amount);
+
+   public IObject Decrement(int amount = 1) => (KChar)(value - amount);
+
+   public IObject Increment(INumeric numeric) => Increment(numeric.AsInt32());
 }
