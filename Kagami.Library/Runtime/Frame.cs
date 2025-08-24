@@ -125,7 +125,7 @@ public class Frame
             }
 
             lastValue = arguments[i];
-            fields.AssignParameter(parameter, lastValue);
+            fields.AssignParameter(parameter, lastValue).Force();
             variadic = parameter.Variadic;
          }
 
@@ -185,7 +185,7 @@ public class Frame
                   value = Unassigned.Value;
                }
 
-               fields.AssignParameter(parameter, value);
+               fields.AssignParameter(parameter, value).Force();
             }
          }
          else if (length < arguments.Length)

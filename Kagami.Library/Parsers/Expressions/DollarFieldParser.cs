@@ -1,15 +1,16 @@
 ﻿using System.Text.RegularExpressions;
 using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
+using Core.Objects;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
 public partial class DollarFieldParser : SymbolParser
 {
-   public DollarFieldParser(ExpressionBuilder builder) : base(builder) { }
-
-   //public override string Pattern => "^ /(/s*) /'$' /(/d+) /b";
+   public DollarFieldParser(ExpressionBuilder builder) : base(builder)
+   {
+   }
 
    [GeneratedRegex(@"^(\s*)(\$)(\d+)\b")]
    public override partial Regex Regex();
@@ -19,7 +20,7 @@ public partial class DollarFieldParser : SymbolParser
       var index = tokens[3].Text;
       state.Colorize(tokens, Color.Whitespace, Color.Identifier, Color.Identifier);
 
-      builder.Add(new FieldSymbol($"__${index}"));
+      builder.Add(new WhateverSymbol() { Count = index.Value().Int32() });
       return unit;
    }
 }
