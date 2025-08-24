@@ -1,4 +1,5 @@
 ﻿using Core.Matching;
+using Core.Strings;
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 
@@ -8,7 +9,10 @@ public class StringArraySymbol : Symbol
 {
    protected KArray kArray;
 
-   public StringArraySymbol(string source) => kArray = new KArray(source.Trim().Unjoin("/s+").Select(KString.StringObject));
+   public StringArraySymbol(string source)
+   {
+      kArray = source.IsEmpty() ? KArray.Empty : new KArray(source.Trim().Unjoin("/s+").Select(KString.StringObject));
+   }
 
    public override void Generate(OperationsBuilder builder) => builder.PushObject(kArray);
 
