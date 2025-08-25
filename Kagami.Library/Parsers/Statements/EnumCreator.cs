@@ -70,7 +70,7 @@ public class EnumCreator(string enumName, EnumMemberData[] enumMemberData, Block
          {
             var arraySymbol = new ArraySymbol(expression);
             var returnBlock = new Block(new Return(new Expression(arraySymbol), nil));
-            var function = new Function("__$values", Parameters.Empty, returnBlock, false, false, "");
+            var function = new Function("__$members", Parameters.Empty, returnBlock, false, false, "");
             statements.Add(function);
          }
 
@@ -79,7 +79,7 @@ public class EnumCreator(string enumName, EnumMemberData[] enumMemberData, Block
             var dictionary = new Dictionary(ordinals);
             var pushObjectSymbol = new PushObjectSymbol(dictionary);
             var returnBlock = new Block(new Return(new Expression(pushObjectSymbol), nil));
-            var function = new Function("__$ordinals", Parameters.Empty, returnBlock, false, false, "");
+            var function = new Function("__$values", Parameters.Empty, returnBlock, false, false, "");
             statements.Add(function);
          }
       }
@@ -137,7 +137,7 @@ public class EnumCreator(string enumName, EnumMemberData[] enumMemberData, Block
 
    protected static AssignToNewField getOrdinalFunction(IObject ordinal)
    {
-      return new AssignToNewField(false, "ordinal", false, new Expression(new PushObjectSymbol(ordinal)));
+      return new AssignToNewField(false, "value", false, new Expression(new PushObjectSymbol(ordinal)));
    }
 
    protected static AssignToNewField getClassField(string className)
