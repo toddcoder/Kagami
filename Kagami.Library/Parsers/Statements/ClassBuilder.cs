@@ -36,7 +36,7 @@ public class ClassBuilder
    protected Set<AbstractFunction> abstractFunctions = [];
 
    public ClassBuilder(string className, Parameters parameters, string parentClassName, Expression[] parentArguments,
-      bool initialize, Block constructorBlock, bool isAbstract = false)
+      bool initialize, Block constructorBlock, IEnumerable<AbstractFunction> abstractFunctions)
    {
       this.className = className;
       this.parameters = parameters;
@@ -44,12 +44,16 @@ public class ClassBuilder
       this.parentArguments = parentArguments;
       this.initialize = initialize;
       this.constructorBlock = constructorBlock;
-      this.isAbstract = isAbstract;
+      this.abstractFunctions = [.. abstractFunctions];
+      isAbstract = this.abstractFunctions.Count > 0;
    }
 
    public string ClassName => className;
 
-   public virtual UserClass CreateUserClass() => new(className, parentClassName);
+   public virtual UserClass CreateUserClass()
+   {
+      return isAbstract ? new AbstractUserClass(className, parentClassName, abstractFunctions) : new UserClass(className, parentClassName);
+   }
 
    public Optional<Unit> Register()
    {
