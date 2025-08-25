@@ -17,12 +17,14 @@ public partial class FunctionParser : StatementParser
 {
    protected Maybe<Function> _function = nil;
 
-   [GeneratedRegex($@"^(\s*)(override\s+)?(func|(?:infix\(\w+\))|prefix|postfix|macro|match)(\s+)(?:({REGEX_CLASS_GETTING_OR_ALIAS})(\.))?({REGEX_FUNCTION_NAME})(\()?")]
+   [GeneratedRegex(
+      $@"^(\s*)((?:override|abstract)\s+)?(func|(?:infix\(\w+\))|prefix|postfix|macro|match)(\s+)(?:({REGEX_CLASS_GETTING_OR_ALIAS})(\.))?({REGEX_FUNCTION_NAME})(\()?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
       var overriding = tokens[2].Text.StartsWith("override");
+      var isAbstract = tokens[2].Text.StartsWith("abstract");
       var operatorText = tokens[3].Text;
       var isOperator = operatorText.StartsWith("infix") || operatorText is "prefix" or "postfix";
       var isMacro = tokens[3].Text == "macro";
@@ -94,9 +96,16 @@ public partial class FunctionParser : StatementParser
       state.CreateYieldFlag();
       state.CreateReturnType();
 
+      Maybe<TypeConstraint> _typeConstraint = nil;
+
       var _parameters = GetAnyParameters(needsParameters, state);
       if (_parameters is (true, var parameters))
       {
+         if (isAbstract)
+         {
+            _typeConstraint = parseTypeConstraint(state).Map(ptc => ptc.Maybe);
+         }
+
          var isFixed = state.Scan(@"^(\s+)(fixed)\b", Color.Whitespace, Color.Keyword);
          if (isMatch)
          {
@@ -107,11 +116,11 @@ public partial class FunctionParser : StatementParser
                Singleton = true
             };
             var newParameters = new Parameters(variadicParameter);
-            return getMatchFunction(state, functionName, newParameters, overriding, className, isFixed);
+            return getMatchFunction(state, functionName, newParameters, overriding, isAbstract, className, isFixed);
          }
          else if (state.CurrentSource.StartsWith('('))
          {
-            var _curriedFunction = getCurriedFunction(state, functionName, parameters, overriding, className);
+            var _curriedFunction = getCurriedFunction(state, functionName, parameters, overriding, isAbstract, className);
             if (_curriedFunction is (true, var curriedFunction))
             {
                curriedFunction.IsFixed = isFixed;
@@ -134,12 +143,20 @@ public partial class FunctionParser : StatementParser
          }
          else
          {
+            if (isAbstract)
+            {
+               var abstractFunction = new AbstractFunction(functionName, parameters, _typeConstraint);
+               state.AddStatement(abstractFunction);
+
+               return unit;
+            }
+
             var _block = getAnyBlock(state);
             if (_block is (true, var block))
             {
                var yielding = state.RemoveYieldFlag();
                state.RemoveReturnType();
-               var function = new Function(functionName, parameters, block, yielding, overriding, className) {IsFixed = isFixed};
+               var function = new Function(functionName, parameters, block, yielding, overriding, className) { IsFixed = isFixed };
                _function = function;
                if (isMacro)
                {
@@ -172,7 +189,7 @@ public partial class FunctionParser : StatementParser
    }
 
    protected static Optional<Function> getCurriedFunction(ParseState state, string functionName, Parameters firstParameters,
-      bool overriding, string className)
+      bool overriding, bool isAbstract, string className)
    {
       var parametersStack = new Stack<Parameters>();
       while (state.More)
@@ -196,6 +213,11 @@ public partial class FunctionParser : StatementParser
          {
             break;
          }
+      }
+
+      if (isAbstract)
+      {
+         return new AbstractFunction(functionName, firstParameters, nil);
       }
 
       var _block = getAnyBlock(state);
@@ -232,11 +254,17 @@ public partial class FunctionParser : StatementParser
    }
 
    protected static Optional<Unit> getMatchFunction(ParseState state, string functionName, Parameters parameters, bool overriding,
-      string className, bool isFixed)
+      bool isAbstract, string className, bool isFixed)
    {
       List<If> list = [];
 
       Maybe<TypeConstraint> _typeConstraint = parseTypeConstraint(state).Map(ptc => ptc.Maybe);
+
+      if (isAbstract)
+      {
+         state.AddStatement(new AbstractFunction(functionName, parameters, _typeConstraint));
+         return unit;
+      }
 
       state.CreateReturnType();
       while (state.More)

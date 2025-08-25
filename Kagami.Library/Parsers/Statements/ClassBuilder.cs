@@ -26,15 +26,17 @@ public class ClassBuilder
    protected Expression[] parentArguments;
    protected bool initialize;
    protected Block constructorBlock;
+   protected bool isAbstract;
    protected Hash<string, (ConstructorInvokable, Block)> constructorInvokables = [];
    protected List<(IInvokable, Block, bool)> functions = [];
    protected UserClass userClass = new("", "");
    protected Set<RequireFunctionMatch> requiredFunctions = [];
    protected StringHash<Expression> delegates = [];
    protected StringHash<RequiredField> requiredFields = [];
+   protected Set<AbstractFunction> abstractFunctions = [];
 
    public ClassBuilder(string className, Parameters parameters, string parentClassName, Expression[] parentArguments,
-      bool initialize, Block constructorBlock)
+      bool initialize, Block constructorBlock, bool isAbstract = false)
    {
       this.className = className;
       this.parameters = parameters;
@@ -42,6 +44,7 @@ public class ClassBuilder
       this.parentArguments = parentArguments;
       this.initialize = initialize;
       this.constructorBlock = constructorBlock;
+      this.isAbstract = isAbstract;
    }
 
    public string ClassName => className;
@@ -115,6 +118,7 @@ public class ClassBuilder
                }
 
                var function = Function.Getter(fieldName);
+               removeAbstractFunction(function);
                statements.Add(function);
                var (functionName, _, block, _, invokable, _) = function;
                if (!isPrivate(fieldName) && !userClass.RegisterMethod(functionName, new Lambda(invokable, false), true))
@@ -127,6 +131,7 @@ public class ClassBuilder
                if (mutable)
                {
                   function = Function.Setter(fieldName);
+                  removeAbstractFunction(function);
                   statements.Add(function);
                   (functionName, _, block, _, invokable, _) = function;
                   if (!isPrivate(fieldName) && !userClass.RegisterMethod(functionName, new Lambda(invokable, false), true))
@@ -148,6 +153,7 @@ public class ClassBuilder
                   var fieldName = placeholder.Name;
                   var (bindingType, name) = fromBindingName(fieldName);
                   var function = Function.Getter(name);
+                  removeAbstractFunction(function);
                   statements.Add(function);
                   var (functionName, _, block, _, invokable, _) = function;
                   if (!isPrivate(fieldName) && !userClass.RegisterMethod(functionName, new Lambda(invokable, false), true))
@@ -160,6 +166,7 @@ public class ClassBuilder
                   if (bindingType == BindingType.Mutable)
                   {
                      function = Function.Setter(fieldName);
+                     removeAbstractFunction(function);
                      statements.Add(function);
                      (functionName, _, block, _, invokable, _) = function;
                      if (!isPrivate(fieldName) && !userClass.RegisterMethod(functionName, new Lambda(invokable, false), true))
@@ -186,6 +193,7 @@ public class ClassBuilder
                }
 
                var function = Function.Getter(fieldName);
+               removeAbstractFunction(function);
                statements.Add(function);
                var (functionName, _, block, _, invokable, _) = function;
                if (!isPrivate(fieldName) && !userClass.RegisterMethod(functionName, new Lambda(invokable, false), true))
@@ -198,6 +206,7 @@ public class ClassBuilder
                if (mutable)
                {
                   function = Function.Setter(fieldName);
+                  removeAbstractFunction(function);
                   statements.Add(function);
                   (functionName, _, block, _, invokable, _) = function;
                   if (!isPrivate(fieldName) && !userClass.RegisterMethod(functionName, new Lambda(invokable, false), true))
@@ -211,8 +220,14 @@ public class ClassBuilder
                statements.Add(statement);
                break;
             }
+            case AbstractFunction abstractFunction when !isAbstract:
+            {
+               abstractFunctions.Add(abstractFunction);
+               break;
+            }
             case Function function when standard:
             {
+               removeAbstractFunction(function);
                var (selector, _, block, _, invokable, overriding) = function;
                var _typeConstraint = block.TypeConstraint;
                if (!isPrivate(selector))
@@ -289,6 +304,12 @@ public class ClassBuilder
          throw fail(requiredFields.Count.Plural($"Required field(s) {fieldList} not implemented"));
       }
 
+      if (!isAbstract && abstractFunctions.Count > 0)
+      {
+         var functionNames = abstractFunctions.Select(f => f.Selector.AsString).ToString(", ");
+         throw fail(abstractFunctions.Count.Plural($"Abstract function(s) {functionNames} not implemented"));
+      }
+
       foreach (var (delegateClass, delegateConstructor) in delegates)
       {
          statements.Add(new NewDelegateStatement(className, delegateClass, delegateConstructor));
@@ -299,6 +320,15 @@ public class ClassBuilder
       Statements = [.. statements];
 
       return new Block(statements);
+
+      void removeAbstractFunction(Function function)
+      {
+         var _first = abstractFunctions.FirstOrNone(af => af.Matches(function));
+         if (_first is (true, var first))
+         {
+            abstractFunctions.Remove(first);
+         }
+      }
    }
 
    public Optional<Unit> Constructor(Parameters parameters, Block block, bool standard)

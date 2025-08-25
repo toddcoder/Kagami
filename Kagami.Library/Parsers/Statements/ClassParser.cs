@@ -12,14 +12,15 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class ClassParser : StatementParser
 {
-   [GeneratedRegex($@"^(class)(\s+)({REGEX_CLASS})(\()?")]
+   [GeneratedRegex($@"^(\s*)(class|abstract\s*class)(\s+)({REGEX_CLASS})(\()?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      var className = tokens[3].Text;
-      var hasParameters = tokens[4].Text == "(";
-      state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Class, Color.OpenParenthesis);
+      var isAbstract = tokens[2].Text.StartsWith("abstract");
+      var className = tokens[4].Text;
+      var hasParameters = tokens[5].Text == "(";
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Class, Color.OpenParenthesis);
 
       Parameters parameters;
 
@@ -64,7 +65,7 @@ public partial class ClassParser : StatementParser
       var _block = getBlock(state);
       if (_block is (true, var block))
       {
-         var builder = new ClassBuilder(className, parameters, parentClassName, arguments, initialize, block);
+         var builder = new ClassBuilder(className, parameters, parentClassName, arguments, initialize, block, isAbstract);
 
          var classItemsParser = new ClassItemsParser(builder);
          while (state.More)
