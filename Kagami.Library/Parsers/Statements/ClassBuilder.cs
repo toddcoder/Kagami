@@ -103,6 +103,7 @@ public class ClassBuilder
 
       foreach (var statement in originalBlock)
       {
+         preHandleStatement(statement);
          switch (statement)
          {
             case AssignToNewField assignToNewField:
@@ -263,7 +264,7 @@ public class ClassBuilder
                requiredFields[requiredField.FieldName] = requiredField;
                break;
             default:
-               statements.Add(statement);
+               handleDefault(statements, statement);
                break;
          }
       }
@@ -299,6 +300,15 @@ public class ClassBuilder
       Statements = [.. statements];
 
       return new Block(statements);
+   }
+
+   protected virtual void preHandleStatement(Statement statement)
+   {
+   }
+
+   protected virtual void handleDefault(List<Statement> statements, Statement statement)
+   {
+      statements.Add(statement);
    }
 
    public Optional<Unit> Constructor(Parameters parameters, Block block, bool standard)
