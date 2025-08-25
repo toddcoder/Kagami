@@ -15,7 +15,7 @@ public class SetClass : BaseClass, ICollectionClass
 
       messages["<<(_)"] = (obj, msg) => function<Set, IObject>(obj, msg, (s, i) => s.Append(i));
       messages[">>(_)"] = (obj, msg) => function<Set, IObject>(obj, msg, (s, i) => s.Remove(i));
-      messages["remove(_)"] = (obj, msg) => function<Set, IObject>(obj, msg, (s, i) => s.Remove(i));
+      messages["remove(_)"] = (obj, msg) => function<Set, IObject>(obj, msg, (s, i) => s.RemoveAndReturn(i));
       messages["+(_)"] = (obj, msg) => function<Set, Set>(obj, msg, (s1, s2) => s1.Union(s2));
       messages["union(_)"] = (obj, msg) => function<Set, Set>(obj, msg, (s1, s2) => s1.Union(s2));
       messages["-(_)"] = (obj, msg) => function<Set, Set>(obj, msg, (s1, s2) => s1.Difference(s2));
@@ -34,6 +34,8 @@ public class SetClass : BaseClass, ICollectionClass
       messages["isProperSubsetOf(_)"] = (obj, msg) => function<Set, Set>(obj, msg, (s1, s2) => s1.IsProperSubsetOf(s2));
       messages["isSupersetOf(_)"] = (obj, msg) => function<Set, Set>(obj, msg, (s1, s2) => s1.IsSupersetOf(s2));
       messages["isProperSupersetOf(_)"] = (obj, msg) => function<Set, Set>(obj, msg, (s1, s2) => s1.IsProperSupersetOf(s2));
+      messages["overlaps(_)"] = (obj, msg) => function<Set, Set>(obj, msg, (s1, s2) => s1.Overlaps(s2));
+      messages["isDisjointWith(_)"] = (obj, msg) => function<Set, Set>(obj, msg, (s1, s2) => s1.IsDisjointWith(s2));
    }
 
    public override IObject DefaultValue => Set.Empty;

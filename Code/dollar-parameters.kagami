@@ -1,0 +1,5 @@
+﻿open sys
+
+let names = ["Chris", "Alex", "Ewa", "Barry", "Daniella"]
+
+var reversedNames = names sort ($1 <> $0)

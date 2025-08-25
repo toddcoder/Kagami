@@ -114,6 +114,12 @@ public class Set : IObject, ICollection, IObjectCompare
       return this;
    }
 
+   public IObject RemoveAndReturn(IObject item)
+   {
+      set.Remove(item);
+      return set.Contains(item) ? KNil.NilValue : Some.Object(item);
+   }
+
    public Set Union(Set other) => new(set.Union(other.set));
 
    public Set Difference(Set other) => new(set.Except(other.set).ToArray());
@@ -166,6 +172,10 @@ public class Set : IObject, ICollection, IObjectCompare
    public KBoolean IsSupersetOf(Set otherSet) => new(set.IsSupersetOf(otherSet.set));
 
    public KBoolean IsProperSupersetOf(Set otherSet) => new(set.IsProperSupersetOf(otherSet.set));
+
+   public KBoolean Overlaps(Set otherSet) => new(set.Overlaps(otherSet.set));
+
+   public KBoolean IsDisjointWith(Set otherSet) => new(set.IsDisjointWith(otherSet.set));
 
    public IObject Object => this;
 

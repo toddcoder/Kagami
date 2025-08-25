@@ -12,7 +12,7 @@ public partial class KeywordOperatorsParser : SymbolParser
    }
 
    [GeneratedRegex(@"^(\s+)(if|map|join|sort|foldl|foldr|fold|all|any|none|one|zip|skip|take|while|until|min|max" +
-      @"|does|X|div|each|divmod|approx|same|xor|union|intersect|diff|symdiff|subsetof|supersetof|accum)(\s+)")]
+      @"|does|X|div|each|divmod|approx|same|xor|union|intersect|diff|symdiff|subsetof|supersetof|accum|overlaps)(\s+)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -112,6 +112,9 @@ public partial class KeywordOperatorsParser : SymbolParser
                   break;
                case "accum":
                   builder.Add(new SendBinaryMessageSymbol("accumulate(_)", Precedence.ChainedOperator));
+                  break;
+               case "overlaps":
+                  builder.Add(new SendBinaryMessageSymbol("overlaps(_)", Precedence.Boolean));
                   break;
                default:
                   return fail($"Keyword internal error for {keyword}");
