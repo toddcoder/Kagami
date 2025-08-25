@@ -37,4 +37,6 @@ public static class CommonFunctions
          return Failure.Object(_result.Exception.Message);
       }
    }
+
+   public static string shortenedId(Guid id) => id.ToString().KeepUntil("-");
 }
