@@ -52,8 +52,8 @@ namespace Kagami.Library.Nodes.Statements
          builder.GetField(iteratorName);
          builder.SendMessage("next()", 0);
          builder.GoToIfNil(endLabel);
-         builder.NewField("__$0", false, true);
-         builder.AssignField("__$0", false);
+         builder.NewField("`i", false, true);
+         builder.AssignField("`i", false);
          builder.Swap();
          builder.Match();
          builder.GoToIfTrue(backToTopLabel);

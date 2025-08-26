@@ -5,10 +5,10 @@ let numbers = [16, 58, 510]
 let strings = numbers map (number) -> {
 	var n = number
 	var output = m""
-	println(output)
 	loop {
 		output.insert(at: 0, value: digitNames[n % 10]&)
-		n div= 10
+		n = n div 10
 	} while n > 0
 	return output.string
 }
+println(strings)

@@ -1,4 +1,2 @@
-
-
-
-["OneSix", "FiveEight", "FiveOneZero"] | Array
+OneSix FiveEight FiveOneZero
+"OneSix FiveEight FiveOneZero" | String

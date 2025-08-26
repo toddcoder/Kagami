@@ -2,6 +2,7 @@
 
 class Heavy(var size = 10) {
 	println($"Creating Heavy with (size)")
+	func string := $"Heavy\(size=(size))"
 }
 
 class AsNeeded(var value Int) {
@@ -11,5 +12,5 @@ class AsNeeded(var value Int) {
 }
 
 var asNeeded = AsNeeded(1000)
-asNeeded.heavy1
-asNeeded.heavy2
+println(asNeeded.heavy1)
+println(asNeeded.heavy2)

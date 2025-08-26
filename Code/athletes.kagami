@@ -14,8 +14,8 @@ let athletes = [
 
 func asDate(date) := date \ "yyyy-MM-dd"
 
-let bornSince70 = .($0.dateOfBirth > d"1970-1-1")
-let excludingKh = .($0.lastName <= "Kg" or $0.lastName >= "Ki")
+let bornSince70 = x -> x.dateOfBirth > d"1970-1-1"
+let excludingKh = x -> x.lastName <= "Kg" or x.lastName >= "Ki"
 let byGenderDescThenByCountry = (a, b) -> a.gender == b.gender ?
 	a.country <> b.country : b.gender <> a.gender
 let someYoungsters = athletes if bornSince70 if excludingKh sort byGenderDescThenByCountry

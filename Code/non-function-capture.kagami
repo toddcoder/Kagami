@@ -13,4 +13,4 @@ match simplifyTop()
 	| BinOp("*", e, Numeric(1)) return e
 	| e return e
 
-simplifyTop(UnOp("-", UnOp("-", Numeric(42))))
+println(simplifyTop(UnOp("-", UnOp("-", Numeric(42)))))

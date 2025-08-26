@@ -6,6 +6,6 @@ enum Methodologies {
 	| Scrum = 30
 }
 
-for value in Methodologies.values {
-	println(value, value.ordinal)
+for value in Methodologies.members {
+	println(value, value.value)
 }

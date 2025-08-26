@@ -1,2 +1,0 @@
-OneSix FiveEight FiveOneZero
-"OneSix FiveEight FiveOneZero" | String

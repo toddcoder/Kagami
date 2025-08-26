@@ -20,7 +20,7 @@ enum Rank {
 			| Jack return "jack"
 			| Queen return "queen"
 			| King return "king"
-			| _ return class.ordinal
+			| _ return class.value
 		}
 	}
 }

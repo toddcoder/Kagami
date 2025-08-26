@@ -26,8 +26,10 @@ public class PlaygroundConfiguration
                var configuration = new PlaygroundConfiguration
                {
                   DefaultFolder = setting.Maybe.FolderName("defaultFolder") | DEFAULT_FOLDER,
-                  FontName = setting.Maybe.String("fontName") | "Consolas",
-                  FontSize = setting.Maybe.Single("fontSize") | 12f,
+                  EditorFontName = setting.Maybe.String("editorFontName") | "Consolas",
+                  EditorFontSize = setting.Maybe.Single("editorFontSize") | 12f,
+                  ConsoleFontName = setting.Maybe.String("consoleFontName") | "Consolas",
+                  ConsoleFontSize = setting.Maybe.Single("consoleFontSize") | 12f,
                   PackageFolder = setting.Maybe.FolderName("packageFolder") | CONFIGURATION_FOLDER
                };
                configuration.LastFile = setting.Maybe.FileName("lastFile") | (() => configuration.DefaultFolder + "test.kagami");
@@ -57,8 +59,10 @@ public class PlaygroundConfiguration
          var setting = new Setting();
          setting.Set("lastFile").FileName = LastFile;
          setting.Set("defaultFolder").FolderName = DefaultFolder;
-         setting.Set("fontName").String = FontName;
-         setting.Set("fontSize").Single = FontSize;
+         setting.Set("editorFontName").String = EditorFontName;
+         setting.Set("editorFontSize").Single = EditorFontSize;
+         setting.Set("consoleFontName").String = ConsoleFontName;
+         setting.Set("consoleFontSize").Single = ConsoleFontSize;
          setting.Set("packageFolder").FolderName = PackageFolder;
          FolderName configurationFolder = CONFIGURATION_FOLDER;
          var file = configurationFolder.Guarantee() + "playground.json";
@@ -75,9 +79,13 @@ public class PlaygroundConfiguration
 
    public FolderName DefaultFolder { get; set; } = DEFAULT_FOLDER;
 
-   public string FontName { get; set; } = "Consolas";
+   public string EditorFontName { get; set; } = "Consolas";
 
-   public float FontSize { get; set; } = 12;
+   public float EditorFontSize { get; set; } = 12;
+
+   public string ConsoleFontName { get; set; } = "Consolas";
+
+   public float ConsoleFontSize { get; set; } = 12;
 
    public FolderName PackageFolder { get; set; } = CONFIGURATION_FOLDER;
 }
