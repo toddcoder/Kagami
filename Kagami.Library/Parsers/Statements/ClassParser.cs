@@ -12,14 +12,14 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class ClassParser : StatementParser
 {
-   [GeneratedRegex($@"^(class)(\s+)({REGEX_CLASS})(\()?")]
+   [GeneratedRegex($@"^(\s*)(class)(\s+)({REGEX_CLASS})(\()?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      var className = tokens[3].Text;
-      var hasParameters = tokens[4].Text == "(";
-      state.Colorize(tokens, Color.Keyword, Color.Whitespace, Color.Class, Color.OpenParenthesis);
+      var className = tokens[4].Text;
+      var hasParameters = tokens[5].Text == "(";
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Class, Color.OpenParenthesis);
 
       Parameters parameters;
 
