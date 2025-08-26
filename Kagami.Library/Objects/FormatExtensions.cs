@@ -38,15 +38,22 @@ public static class FormatExtensions
          builder.Append("}");
          return string.Format(builder.ToString(), obj);
       }
-      else if (format.MatchOf(@"([<=>])(\d+)") is (true, var matches2))
+      else if (format.MatchOf(@"([<=>])(\d+)(\D)") is (true, var matches2))
       {
          var match = matches2[0];
          var size = match.Groups[2].Value.Value().Int32();
+         var filler = match.Groups[3].Value;
+         if (filler.IsEmpty())
+         {
+            filler = " ";
+         }
+
+         var fillChar = filler[0];
          return match.Groups[1].Value switch
          {
-            "<" => obj.ToString()?.LeftJustify(size) ?? "",
-            "=" => obj.ToString()?.Center(size) ?? "",
-            ">" => obj.ToString()?.RightJustify(size) ?? "",
+            "<" => obj.ToString()?.LeftJustify(size, fillChar) ?? "",
+            "=" => obj.ToString()?.Center(size, fillChar) ?? "",
+            ">" => obj.ToString()?.RightJustify(size, fillChar) ?? "",
             _ => obj.ToString() ?? ""
          };
       }

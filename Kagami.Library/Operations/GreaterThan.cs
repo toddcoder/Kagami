@@ -1,7 +1,7 @@
 ﻿using Core.Monads;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
-using static Core.Monads.MonadFunctions;
+using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Operations;
 
@@ -17,12 +17,12 @@ public class GreaterThan : TwoOperandOperation
          }
          else
          {
-            return fail($"{y.Image} must be comparable");
+            return greaterThan(x, y);
          }
       }
       else
       {
-         return fail($"{x.Image} must be comparable");
+         return greaterThan(x, y);
       }
    }
 

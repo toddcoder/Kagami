@@ -20,7 +20,7 @@ public partial class DollarFieldParser : SymbolParser
       var index = tokens[3].Text;
       state.Colorize(tokens, Color.Whitespace, Color.Identifier, Color.Identifier);
 
-      builder.Add(new WhateverSymbol() { Count = index.Value().Int32() });
+      builder.Add(new WhateverSymbol(index.Value().Int32()));
       return unit;
    }
 }

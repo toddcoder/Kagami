@@ -994,4 +994,47 @@ public static class ObjectFunctions
 
       return false;
    }
+
+   public static Optional<int> compareByMessage(IObject left, IObject right)
+   {
+      var result = sendMessage(left, new Message("<>(_)", right));
+      if (result is INumeric numeric)
+      {
+         return numeric.AsInt32();
+      }
+      else
+      {
+         return incompatibleClasses(result, "Int");
+      }
+   }
+
+   public static Optional<IObject> lessThan(IObject left, IObject right)
+   {
+      return compareByMessage(left, right).Map(i => KBoolean.BooleanObject(i < 0));
+   }
+
+   public static Optional<IObject> lessThanEqual(IObject left, IObject right)
+   {
+      return compareByMessage(left, right).Map(i => KBoolean.BooleanObject(i <= 0));
+   }
+
+   public static Optional<IObject> greaterThan(IObject left, IObject right)
+   {
+      return compareByMessage(left, right).Map(i => KBoolean.BooleanObject(i > 0));
+   }
+
+   public static Optional<IObject> greaterThanEqual(IObject left, IObject right)
+   {
+      return compareByMessage(left, right).Map(i => KBoolean.BooleanObject(i >= 0));
+   }
+
+   public static Optional<IObject> equal(IObject left, IObject right)
+   {
+      return compareByMessage(left, right).Map(i => KBoolean.BooleanObject(i == 0));
+   }
+
+   public static Optional<IObject> notEqual(IObject left, IObject right)
+   {
+      return compareByMessage(left, right).Map(i => KBoolean.BooleanObject(i != 0));
+   }
 }

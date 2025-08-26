@@ -829,7 +829,7 @@ public partial class Playground : Form
             moveSelectionRelative();
             e.Handled = true;
             break;
-         case '\'' when ModifierKeys != Keys.Control:
+         /*case '\'' when ModifierKeys != Keys.Control:
             if (textAtInsert(1) == "'")
             {
                moveSelectionRelative();
@@ -842,7 +842,7 @@ public partial class Playground : Form
             break;
          case '\'':
             e.Handled = false;
-            break;
+            break;*/
          case ',':
             if (textAtInsert(1) != ",")
             {
@@ -895,7 +895,7 @@ public partial class Playground : Form
       switch (e.KeyCode)
       {
          case Keys.Escape:
-            if (textAtInsert(1) == "'" && textAtInsert(1, -1) == "'" || textAtInsert(1) == "\"" && textAtInsert(1, -1) == "\"" ||
+            if (/*textAtInsert(1) == "'" && textAtInsert(1, -1) == "'" || */textAtInsert(1) == "\"" && textAtInsert(1, -1) == "\"" ||
                 textAtInsert(1) == ")" && textAtInsert(1, -1) == "(" || textAtInsert(1) == "]" && textAtInsert(1, -1) == "[")
             {
                e.Handled = true;
