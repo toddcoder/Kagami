@@ -591,6 +591,7 @@ public static class ParserFunctions
       "optional" => "Optional",
       "monad" => "Monad",
       "result" => "Result",
+      "lazy" => "Lazy",
       _ => nil
    };
 

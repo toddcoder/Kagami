@@ -30,8 +30,9 @@ public partial class EnumParser : StatementParser
       List<EnumMemberData> enumMembers = [];
       Optional<Unit> _endBlock = nil;
       Maybe<IObject> _ordinal = nil;
+      var scanning = true;
 
-      while (state.More)
+      while (state.More && scanning)
       {
          _endBlock = state.EndBlock();
          if (_endBlock)
@@ -60,7 +61,28 @@ public partial class EnumParser : StatementParser
          }
          else
          {
-            break;
+            while (state.More && scanning)
+            {
+               var enumNextMemberParser = new EnumNextMemberParser(className, _ordinal);
+               _enumMember = enumNextMemberParser.Scan(state);
+               if (_enumMember)
+               {
+                  if (enumNextMemberParser.EnumMemberData is (true, var enumMemberData))
+                  {
+                     enumMembers.Add(enumMemberData);
+                  }
+
+                  _ordinal = enumNextMemberParser.Ordinal;
+               }
+               else if (_enumMember.Exception is (true, var exception2))
+               {
+                  return exception2;
+               }
+               else
+               {
+                  scanning = false;
+               }
+            }
          }
       }
 

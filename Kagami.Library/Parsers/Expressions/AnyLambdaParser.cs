@@ -16,6 +16,7 @@ public class AnyLambdaParser : MultiParser
          yield return new MatchLambdaParser(builder);
          yield return new MultiParameterLambdaParser(builder);
          yield return new PartialLambdaParser(builder);
+         yield return new DollarLambdaParser(builder);
       }
    }
 }

@@ -13,15 +13,9 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class EnumMemberParser(string enumClassName, Maybe<IObject> _previousOrdinal) : StatementParser
 {
-   [GeneratedRegex($@"^(\s*)(\|)(\s*)({REGEX_CLASS})(\()?")]
-   public override partial Regex Regex();
-
-   public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
+   public static Optional<(EnumMemberData, Maybe<IObject>)> ParseEnumMember(ParseState state, string className, bool hasParameters,
+      string enumClassName, Maybe<IObject> _previousOrdinal)
    {
-      var className = tokens[4].Text;
-      var hasParameters = tokens[5].Text == "(";
-      state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Whitespace, Color.Class, Color.OpenParenthesis);
-
       Module.Global.Value.ForwardReference(className);
 
       Parameters parameters;
@@ -50,7 +44,7 @@ public partial class EnumMemberParser(string enumClassName, Maybe<IObject> _prev
 
       var _ordinalScan =
          from equal in state.Scan(@"^(\s*)(=)", Color.Whitespace, Color.Structure)
-         from value in getExpression(state, ExpressionFlags.Standard)
+         from value in getExpression(state, ExpressionFlags.Standard | ExpressionFlags.OmitComma)
          select value;
       if (_ordinalScan is (true, var expression))
       {
@@ -81,14 +75,35 @@ public partial class EnumMemberParser(string enumClassName, Maybe<IObject> _prev
          }
       }
 
-      Ordinal = _ordinal;
-
       var _block = getBlock(state).Maybe();
 
       Module.Global.Value.ForwardReference(className);
-      EnumMemberData = new EnumMemberData(className, enumClassName, parameters, _ordinal, _block);
+      var enumMemberData = new EnumMemberData(className, enumClassName, parameters, _ordinal, _block);
 
-      return unit;
+      return (enumMemberData, _ordinal);
+   }
+
+   [GeneratedRegex($@"^(\s*)(\|)(\s*)({REGEX_CLASS})(\()?")]
+   public override partial Regex Regex();
+
+   public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
+   {
+      var className = tokens[4].Text;
+      var hasParameters = tokens[5].Text == "(";
+      state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Whitespace, Color.Class, Color.OpenParenthesis);
+
+      var _enumMember = ParseEnumMember(state, className, hasParameters, enumClassName, _previousOrdinal);
+      if (_enumMember is (true, var (enumMemberData, _ordinal)))
+      {
+         EnumMemberData = enumMemberData;
+         Ordinal = _ordinal;
+
+         return unit;
+      }
+      else
+      {
+         return _enumMember.Exception;
+      }
    }
 
    public Maybe<EnumMemberData> EnumMemberData { get; set; } = nil;

@@ -156,6 +156,12 @@ public class EnumCreator(string enumName, EnumMemberData[] enumMemberData, Block
             ordinals[ordinal] = new Objects.Class(data.Name);
             localCommonBlock.Add(getOrdinalFunction(ordinal));
          }
+         else
+         {
+            var value = KString.StringObject(data.Name.ToLower1());
+            ordinals[value] = new Objects.Class(data.Name);
+            localCommonBlock.Add(getOrdinalFunction(value));
+         }
 
          return new ClassBuilder(data.Name, data.Parameters, enumClassName, [], false, localCommonBlock);
       }
@@ -176,6 +182,11 @@ public class EnumCreator(string enumName, EnumMemberData[] enumMemberData, Block
          {
             ordinals[ordinal] = new Objects.Class(data.Name);
             localCommonBlock.Add(getOrdinalFunction(ordinal));
+         }
+         else
+         {
+            var value = KString.StringObject(data.Name.ToLower1());
+            localCommonBlock.Add(getOrdinalFunction(value));
          }
       }
 
