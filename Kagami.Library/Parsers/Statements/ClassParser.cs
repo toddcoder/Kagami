@@ -61,7 +61,7 @@ public partial class ClassParser : StatementParser
 
       Module.Global.Value.ForwardReference(className);
 
-      var _block = getBlock(state);
+      var _block = getBlock(state, true);
       if (_block is (true, var block))
       {
          var builder = new ClassBuilder(className, parameters, parentClassName, arguments, initialize, block);

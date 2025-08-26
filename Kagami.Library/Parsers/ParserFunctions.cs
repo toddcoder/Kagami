@@ -202,8 +202,17 @@ public static class ParserFunctions
       _ => fail($"Didn't recognize operator {source}")
    };
 
-   public static Optional<Block> getBlock(ParseState state, Maybe<TypeConstraint> _typeConstraint)
+   public static Optional<Block> getBlock(ParseState state, Maybe<TypeConstraint> _typeConstraint, bool checkForSemicolon = false)
    {
+      if (checkForSemicolon)
+      {
+         var _semicolon = state.Scan(@"^(\s*)(;)", Color.Whitespace, Color.Structure);
+         if (_semicolon)
+         {
+            return new Block();
+         }
+      }
+
       var _block = getRestOfLineBlock(state);
       if (_block)
       {
@@ -262,7 +271,7 @@ public static class ParserFunctions
       }
    }
 
-   public static Optional<Block> getBlock(ParseState state) => getBlock(state, nil);
+   public static Optional<Block> getBlock(ParseState state, bool semicolon = false) => getBlock(state, nil, semicolon);
 
    public static Optional<Block> getSingleLine(ParseState state, Maybe<TypeConstraint> _typeConstraint,
       bool returnExpression = true)
