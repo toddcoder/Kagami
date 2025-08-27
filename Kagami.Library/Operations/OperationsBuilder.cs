@@ -333,6 +333,8 @@ public class OperationsBuilder
 
    public void IsClass(string className, bool pop) => add(new IsClass(className, pop));
 
+   public void IsUserClass() => add(new IsUserClass());
+
    public void Match() => add(new Match());
 
    public void Drop() => add(new Drop());

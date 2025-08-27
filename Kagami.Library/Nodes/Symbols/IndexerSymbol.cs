@@ -4,6 +4,8 @@ using Core.Enumerables;
 using Core.Monads;
 using Kagami.Library.Objects;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.CommonFunctions;
+using static Kagami.Library.Nodes.NodeFunctions;
 
 namespace Kagami.Library.Nodes.Symbols;
 
@@ -52,19 +54,28 @@ public class IndexerSymbol : Symbol, IHasExpressions
 
    public override void Generate(OperationsBuilder builder)
    {
+      var userClassLabel = newLabel("user-class");
+      var endLabel = newLabel("end");
+
+      builder.Dup();
+      builder.IsUserClass();
+      builder.GoToIfTrue(userClassLabel);
+
       var newSequenceSymbol = new NewSequenceSymbol(arguments);
       newSequenceSymbol.Generate(builder);
       var isOpenRange = newSequenceSymbol.IsOpenRange;
-      if (isOpenRange)
-      {
-         Selector selector = "[](_<OpenRange>)";
-         builder.SendMessage(selector, 1);
-      }
-      else
-      {
-         Selector selector = "[](_)";
-         builder.SendMessage(selector, 1);
-      }
+      Selector selector = isOpenRange ? "[](_<OpenRange>)" : "[](_)";
+
+      builder.SendMessage(selector, 1);
+
+      builder.GoTo(endLabel);
+
+      builder.Label(userClassLabel);
+      selector = $"[]({placeholderList(arguments.Length)})";
+      builder.SendMessage(selector, arguments);
+
+      builder.Label(endLabel);
+      builder.NoOp();
    }
 
    public override string ToString() => $"[{arguments.ToString(", ")}]";

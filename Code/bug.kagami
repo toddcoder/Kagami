@@ -1,9 +1,0 @@
-﻿open sys
-
-|(c1, c2, c3) = ('A', 'B', 'C')
-let i = 3
-let x = 55.0
-let y = 77.7
-
-println($"Here is the data that you typed in:")
-$s3

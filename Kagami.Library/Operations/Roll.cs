@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Kagami.Library.Objects;
+﻿using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
@@ -14,7 +13,7 @@ public class Roll : Operation
 
    public override Optional<IObject> Execute(Machine machine)
    {
-      var stack = new Stack<IObject>();
+      Stack<IObject> stack = [];
       for (var i = 0; i < count; i++)
       {
          var _value = machine.Pop();

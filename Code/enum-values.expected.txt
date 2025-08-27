@@ -1,1 +1,3 @@
-Generate error: ExpressionStatementParser: Invalid expression syntax
+3
+west
+"west" | String

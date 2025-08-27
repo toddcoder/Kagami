@@ -1,6 +1,8 @@
-﻿using Core.Monads;
+﻿using Core.Enumerables;
+using Core.Monads;
 using Kagami.Library.Objects;
 using Core.Strings;
+using Kagami.Library.Invokables;
 
 namespace Kagami.Library;
 
@@ -39,4 +41,8 @@ public static class CommonFunctions
    }
 
    public static string shortenedId(Guid id) => id.ToString().KeepUntil("-");
+
+   public static string placeholderList(Parameters parameters) => placeholderList(parameters.Length);
+
+   public static string placeholderList(int count) => "_".Repeat(count).ToString(",");
 }
