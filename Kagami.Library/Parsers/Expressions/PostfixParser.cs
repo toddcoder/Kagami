@@ -28,7 +28,7 @@ public class PostfixParser(ExpressionBuilder builder) : MultiParser
          if (!builder.Flags[ExpressionFlags.OmitSendMessageAssign])
          {
             yield return new SendMessageAssignParser(builder);
-            yield return new SendBindingMessageParser(builder);
+            //yield return new SendBindingMessageParser(builder);
          }
 
          yield return new FoldOperatorParser(builder);
