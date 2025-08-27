@@ -3,6 +3,7 @@ using Kagami.Library.Runtime;
 using Core.Booleans;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Operations;
 
@@ -27,7 +28,15 @@ public class AssignField : OneOperandOperation
       }
       else
       {
-         return _field.Exception;
+         var _self = machine.Find("self", true);
+         if (_self is (true, var self))
+         {
+            return sendMessage(self.Value, name.set(), [value]).Just();
+         }
+         else
+         {
+            return _field.Exception;
+         }
       }
    }
 

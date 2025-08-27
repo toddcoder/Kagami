@@ -3,6 +3,7 @@ using Kagami.Library.Runtime;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
+using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Operations;
 
@@ -41,6 +42,12 @@ public class GetField(string fieldName) : Operation
       }
       else
       {
+         _field = machine.Find("self", true);
+         if (_field is (true, var self))
+         {
+            return sendMessage(self.Value, fieldName.get(), Arguments.Empty).Just();
+         }
+
          machine.LastField = nil;
          machine.LastFieldName = nil;
          return fieldNotFound(fieldName);

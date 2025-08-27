@@ -10,6 +10,7 @@ using Kagami.Library.Packages;
 using static Core.Monads.AttemptFunctions;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
+using static Kagami.Library.Objects.ObjectFunctions;
 using Failure = Kagami.Library.Objects.Failure;
 using Some = Kagami.Library.Objects.Some;
 using Success = Kagami.Library.Objects.Success;

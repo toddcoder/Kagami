@@ -1,0 +1,14 @@
+﻿open sys
+
+class Foo {
+	var _description = "Foo"
+	func description string := _description
+	func description=(value string) := _description = value
+	func string string := $"This is (description)"
+	func updateDescription(newDescription string) := description = newDescription
+}
+
+let foo = Foo()
+println(foo)
+foo.updateDescription("foobar")
+println(foo)
