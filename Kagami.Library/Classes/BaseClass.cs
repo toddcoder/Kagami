@@ -12,7 +12,7 @@ using ObjectFunctions = Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Classes;
 
-public abstract class BaseClass
+public abstract class BaseClass : IEquatable<BaseClass>
 {
    protected SelectorHash<Func<IObject, Message, IObject>> messages = new();
    protected SelectorHash<Func<BaseClass, Message, IObject>> classMessages = new();
@@ -31,6 +31,8 @@ public abstract class BaseClass
    }
 
    public abstract string Name { get; }
+
+   public Guid Id { get; set; } = Guid.NewGuid();
 
    public Fields ClassFields => classFields;
 
@@ -152,6 +154,7 @@ public abstract class BaseClass
    {
       registerClassMessage("name".get(), (_, _) => KString.StringObject(Name));
       registerClassMessage("includes(_<String>)", (_, message) => (KBoolean)inclusions.ContainsKey(message.Arguments[0].AsString));
+      registerClassMessage("equals(_)", (bc, msg) => classFunc<BaseClass, KBoolean>(bc, msg, (b1, b2) => (KBoolean)b1.Equals(b2)));
    }
 
    public virtual void RegisterMessage(Selector selector, Func<IObject, Message, IObject> func) => messages[selector] = func;
@@ -752,4 +755,14 @@ public abstract class BaseClass
    public bool Includes(string inclusionName) => inclusions.ContainsKey(inclusionName);
 
    public abstract IObject DefaultValue { get; }
+
+   public bool Equals(BaseClass? other) => other is not null && Name == other.Name;
+
+   public override bool Equals(object? obj) => obj is BaseClass baseClass && Equals(baseClass);
+
+   public override int GetHashCode() => Name.GetHashCode();
+
+   public static bool operator ==(BaseClass? left, BaseClass? right) => Equals(left, right);
+
+   public static bool operator !=(BaseClass? left, BaseClass? right) => !Equals(left, right);
 }

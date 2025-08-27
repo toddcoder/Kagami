@@ -11,7 +11,7 @@ using static Kagami.Library.AllExceptions;
 
 namespace Kagami.Library.Classes;
 
-public class UserClass : BaseClass
+public class UserClass : BaseClass, IEquatable<UserClass>
 {
    protected string className;
    protected string parentClassName;
@@ -230,4 +230,14 @@ public class UserClass : BaseClass
 
       return base.DynamicInvoke(obj, message);
    }
+
+   public bool Equals(UserClass? other) => base.Equals(other) && className == other.className;
+
+   public override bool Equals(object? obj) => obj is UserClass otherUserClass && Equals(otherUserClass);
+
+   public override int GetHashCode() => className.GetHashCode();
+
+   public static bool operator ==(UserClass? left, UserClass? right) => Equals(left, right);
+
+   public static bool operator !=(UserClass? left, UserClass? right) => !Equals(left, right);
 }

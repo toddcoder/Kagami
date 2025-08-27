@@ -3,7 +3,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
 
-public readonly struct Class : IObject
+public readonly struct Class : IObject, IEquatable<Class>
 {
    private readonly string className;
 
@@ -24,4 +24,14 @@ public readonly struct Class : IObject
    public bool IsTrue => true;
 
    public Guid Id { get; init; } = Guid.NewGuid();
+
+   public bool Equals(Class other) => className == other.className;
+
+   public override bool Equals(object? obj) => obj is Class other && Equals(other);
+
+   public override int GetHashCode() => className.GetHashCode();
+
+   public static bool operator ==(Class left, Class right) => left.Equals(right);
+
+   public static bool operator !=(Class left, Class right) => !left.Equals(right);
 }
