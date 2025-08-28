@@ -24,6 +24,8 @@ public class Numberize : OneOperandOperation
                return Int.IntObject(kString.Value.Value().Int32()).Just();
             }
          }
+         case KChar kChar:
+            return Int.IntObject(kChar.Value).Just();
          case INumeric:
             return value.Just();
          default:
