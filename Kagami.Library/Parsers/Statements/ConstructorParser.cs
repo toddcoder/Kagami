@@ -1,5 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using Core.Monads;
+using Kagami.Library.Nodes.Statements;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Statements;
@@ -17,10 +19,21 @@ public partial class ConstructorParser : ClassItemParser
    {
       state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.OpenParenthesis);
       state.CreateReturnType();
-      return
-         from parameters in getParameters(state)
-         from block in getAnyBlock(state)
-         from constructor in builder.Constructor(parameters, block, false)
-         select constructor;
+      var _parametersBlock =
+         from parametersValue in getParameters(state)
+         from blockValue in getAnyBlock(state)
+         select (parametersValue, blockValue);
+      if (_parametersBlock is (true, var (parameters, block)))
+      {
+         state.RemoveReturnType();
+         var function = new Function(builder.ClassName, parameters, block, false, false, "");
+         state.AddStatement(function);
+
+         return unit;
+      }
+      else
+      {
+         return _parametersBlock.Exception;
+      }
    }
 }
