@@ -38,6 +38,7 @@ public class StatementsParser : MultiParser
          yield return new FunctionParser();
          yield return new MatchParser();
          yield return new YieldParser();
+         yield return new CalculatedReturnParser();
          yield return new ReturnParser();
          yield return new ReturnNothingParser();
          yield return new StopParser();

@@ -1651,4 +1651,40 @@ public static class ParserFunctions
       var _scanned = state.Scan(@"^(\s*)(\S+)");
       return fail($"Didn't understand: \"{_scanned | (() => state.CurrentSource)}\"");
    }
+
+   public static Optional<TaggedExpression[]> getTaggedExpressions(ParseState state)
+   {
+      List<TaggedExpression> taggedExpressions = [];
+      while (state.More)
+      {
+         var _end = state.Scan(@"^(\))", Color.CloseParenthesis);
+         if (_end)
+         {
+            break;
+         }
+
+         var _tag = state.Scan($@"^(\s*)({REGEX_FIELD})(\s*)(=)", 2, Color.Whitespace, Color.Identifier, Color.Whitespace, Color.Structure);
+         if (_tag is (true, var tag))
+         {
+            var _expression = getExpression(state, ExpressionFlags.Standard | ExpressionFlags.OmitComma);
+            if (_expression is (true, var expression))
+            {
+               taggedExpressions.Add(new TaggedExpression(tag, expression));
+            }
+            else
+            {
+               return _expression.Exception;
+            }
+         }
+         else
+         {
+            return _tag.Exception;
+         }
+
+         state.Scan(@"^(\s*)(,)", Color.Whitespace, Color.Structure);
+      }
+
+      TaggedExpression[] result = [.. taggedExpressions];
+      return result;
+   }
 }
