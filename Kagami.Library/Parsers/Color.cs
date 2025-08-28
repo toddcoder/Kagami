@@ -17,6 +17,7 @@ public enum Color
    Collection,
    CollectionPart,
    Symbol,
+   SymbolPart,
    Boolean,
    Keyword,
    Invokable,

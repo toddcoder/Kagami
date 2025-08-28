@@ -19,7 +19,7 @@ public partial class SymbolObjectParser : SymbolParser
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
       var name = tokens[3].Text;
-      state.Colorize(tokens, Color.Whitespace, Color.Symbol, Color.Symbol);
+      state.Colorize(tokens, Color.Whitespace, Color.SymbolPart, Color.Symbol);
 
       builder.Add(new SymbolSymbol(name));
       return unit;
