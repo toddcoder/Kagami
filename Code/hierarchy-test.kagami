@@ -1,0 +1,28 @@
+﻿open sys
+
+class Food(var name: _ string);
+init() := Food(name: "[Unnamed]")
+
+class RecipeIngredient(var name: _ string, var quantity: _ int) : Food(name: name);
+init(var name: _ string) := RecipeIngredient(name: name, quantity: 1)
+init() := RecipeIngredient(name: "[Unnamed]", quantity: 1)
+
+class ShoppingListItem(var name: _ string, var quantity: _ int) : RecipeIngredient(name: name, quantity: quantity) {
+	var purchased = false
+	func description string := $"(quantity) x (name) (purchased ? "✔" : "✘")"
+}
+init(var name: _ string) := ShoppingListItem(name: name, quantity: 1)
+init() := ShoppingListItem(name: "[Unnamed]", quantity: 1)
+
+var breakfastList = [
+	ShoppingListItem(),
+	ShoppingListItem(name: "Bacon"),
+	ShoppingListItem(name: "Eggs", quantity: 6)
+]
+
+breakfastList[0].name = "Orange Juice"
+breakfastList[0].purchased = true
+
+for item in breakfastList {
+	println(item.description)
+}

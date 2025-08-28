@@ -453,8 +453,6 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
       return builder.ToString();
    }
 
-   public KTuple Fields => new(value.Unjoin("/s+").Select(StringObject).ToArray());
-
    public IObject Words(int count)
    {
       var _result = value.Matches("/w+");
@@ -483,6 +481,8 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
    }
 
    public IObject Words() => new Words(this);
+
+   public IObject Word(int index) => ((Words)Words()).GetIterator(false).ToArray()[index];
 
    public MutString Append(IObject obj)
    {
@@ -591,4 +591,8 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
    }
 
    public PendingRegex PendingRegex(Regex regex) => new(regex, this);
+
+   public IObject Fields() => new FieldsIterator(this);
+
+   public IObject Field(int index) => ((IIterator)Fields()).ToArray()[index];
 }

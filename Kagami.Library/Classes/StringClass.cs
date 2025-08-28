@@ -73,9 +73,11 @@ public class StringClass : BaseClass, ICollectionClass
       messages["get()"] = (obj, _) => function<KString>(obj, s => s.Get());
       messages["set()"] = (obj, _) => function<KString>(obj, s => s.Set());
       messages["swapCase()"] = (obj, _) => function<KString>(obj, s => s.SwapCase());
-      messages["fields()"] = (obj, _) => function<KString>(obj, s => s.Fields);
+      messages["fields()"] = (obj, _) => function<KString>(obj, s => s.Fields());
+      messages["field(at:_<Int>)"] = (obj, msg) => function<KString, Int>(obj, msg, (s, i) => s.Field(i.Value));
       messages["words(at:_<Int>)"] = (obj, msg) => function<KString, Int>(obj, msg, (s, i) => s.Words(i.Value));
       messages["words()"] = (obj, _) => function<KString>(obj, s => s.Words());
+      messages["word(at:_<Int>)"] = (obj, msg) => function<KString, Int>(obj, msg, (s, i) => s.Word(i.Value));
       messages["<<(_)"] = (obj, msg) => function<KString, IObject>(obj, msg, (s, o) => s.Append(o));
       messages["mutable()"] = (obj, _) => function<KString>(obj, s => s.Mutable());
       messages["succ()"] = (obj, _) => function<KString>(obj, s => s.Succ());
