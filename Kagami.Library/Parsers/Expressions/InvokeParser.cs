@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using Core.Matching;
 using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Kagami.Library.Nodes.NodeFunctions;
@@ -30,14 +31,13 @@ public partial class InvokeParser : SymbolParser
          var _argumentsPlusLambda = getArgumentsPlusLambda(state, builder.Flags);
          if (_argumentsPlusLambda is (true, var (arguments, possibleLambda)))
          {
-            if (state.BlockFollows())
+            if (functionName.IsMatch("^ ['A-Z']") && state.BlockFollows())
             {
-               state.Scan(@"^(\s*)(:)", Color.Whitespace, Color.Block);
                var _result = state.BeginBlock();
                if (_result)
                {
                   var tempObjectField = newLabel("object");
-                  var outerBuilder = new ExpressionBuilder(ExpressionFlags.Standard);
+                  var outerBuilder = new ExpressionBuilder(ExpressionFlags.Standard | ExpressionFlags.OmitComma);
                   var setPropertyParser = new SetPropertyParser(builder, tempObjectField, outerBuilder);
                   while (state.More)
                   {

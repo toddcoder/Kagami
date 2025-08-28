@@ -18,13 +18,14 @@ public class NameValueSymbol : Symbol, IHasExpression
    {
       builder.PushString(name);
       value.Generate(builder);
-      builder.ToArguments(2);
+      builder.NewNameValue();
+      /*builder.ToArguments(2);
       builder.NewValue("NameValue", t =>
       {
          var s = ((KString)t[0]).Value;
          var o = t[1];
          return new NameValue(s, o);
-      });
+      });*/
    }
 
    public override Precedence Precedence => Precedence.KeyValue;

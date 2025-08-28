@@ -21,7 +21,7 @@ public class NewObjectSymbol : Symbol, IHasExpression
       builder.Invoke(className, 0);
       builder.AssignField(tempObjectField, false);
       expression.Generate(builder);
-      builder.GetField(tempObjectField);
+      //builder.GetField(tempObjectField);
    }
 
    public override Precedence Precedence => Precedence.Value;

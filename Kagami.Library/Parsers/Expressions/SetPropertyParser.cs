@@ -12,6 +12,7 @@ public partial class SetPropertyParser(ExpressionBuilder builder, string tempObj
    protected string tempObjectField = tempObjectField;
    protected ExpressionBuilder outerBuilder = outerBuilder;
    protected string propertyName = "";
+   protected ExpressionFlags savedFlags = ExpressionFlags.Standard;
 
 
    [GeneratedRegex($@"^(\s*)({REGEX_FIELD})(\s*)(=)")]
@@ -19,15 +20,18 @@ public partial class SetPropertyParser(ExpressionBuilder builder, string tempObj
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
    {
+      savedFlags = builder.Flags;
+      builder.Flags[ExpressionFlags.OmitComma] = true;
       propertyName = tokens[2].Text;
       state.Colorize(tokens, Color.Whitespace, Color.Message, Color.Whitespace, Color.Structure);
-      state.SkipEndOfLine();
 
       return unit;
    }
 
    public override Optional<Unit> Suffix(ParseState state, Expression expression)
    {
+      builder.Flags = savedFlags;
+      state.Scan(@"^(\s*)(,)", Color.Whitespace, Color.Structure);
       outerBuilder.Add(new FieldSymbol(tempObjectField));
       Maybe<LambdaSymbol> _lambdaSymbol = nil;
       outerBuilder.Add(new SendMessageSymbol(propertyName.set(), _lambdaSymbol, expression));
