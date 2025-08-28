@@ -9,7 +9,7 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class FormatParser : SymbolParser
 {
-   [GeneratedRegex(@"^(\s*)(\$[cdefgnprxsboi<=>\$&\^](?:-?\d+)?(?:\.\d+)?\D?)")]
+   [GeneratedRegex(@"^(\s*)(\$[cdefgnprxsboi<=>\$&\^](?:-?\d+)?(?:\.\d+)?)")]
    public override partial Regex Regex();
 
    public FormatParser(ExpressionBuilder builder) : base(builder)
@@ -32,6 +32,15 @@ public partial class FormatParser : SymbolParser
       }
 
       state.Colorize(tokens, Color.Whitespace, Color.Format);
+
+      if (input.IsMatch("^ ['<=>']"))
+      {
+         var _result = state.Scan("^(:)(.)", 2, Color.Format, Color.Format);
+         if (_result is (true, var result))
+         {
+            input += ":" + result;
+         }
+      }
 
       builder.Add(new StringSymbol(input));
 

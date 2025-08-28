@@ -38,11 +38,11 @@ public static class FormatExtensions
          builder.Append("}");
          return string.Format(builder.ToString(), obj);
       }
-      else if (format.MatchOf(@"([<=>])(\d+)(\D)") is (true, var matches2))
+      else if (format.MatchOf(@"([<=>])(\d+)(?:(:)(.))?") is (true, var matches2))
       {
          var match = matches2[0];
          var size = match.Groups[2].Value.Value().Int32();
-         var filler = match.Groups[3].Value;
+         var filler = match.Groups[4].Value;
          if (filler.IsEmpty())
          {
             filler = " ";
