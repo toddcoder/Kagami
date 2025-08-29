@@ -2,13 +2,20 @@
 
 namespace Kagami.Library.Nodes.Symbols;
 
-public class IsTrueSymbol : Symbol
+public class IsTrueSymbol(bool isTrue) : Symbol
 {
-   public override void Generate(OperationsBuilder builder) => builder.IsTrue();
+   public override void Generate(OperationsBuilder builder)
+   {
+      builder.IsTrue();
+      if (!isTrue)
+      {
+         builder.Not();
+      }
+   }
 
    public override Precedence Precedence => Precedence.PrefixOperator;
 
    public override Arity Arity => Arity.Prefix;
 
-   public override string ToString() => "istrue";
+   public override string ToString() => isTrue ? "istrue" : "isfalse";
 }

@@ -11,13 +11,14 @@ public partial class IsTrueParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(istrue)\b")]
+   [GeneratedRegex(@"^(\s*)(istrue|isfalse)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
+      var isTrue = tokens[2].Text == "istrue";
       state.Colorize(tokens, Color.Whitespace, Color.Operator);
-      builder.Add(new IsTrueSymbol());
+      builder.Add(new IsTrueSymbol(isTrue));
 
       return unit;
    }
