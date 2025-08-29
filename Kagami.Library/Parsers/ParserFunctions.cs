@@ -733,7 +733,7 @@ public static class ParserFunctions
             _ => nil
          };
          state.SetReturnType(_typeConstraint);
-         var _scanned = state.Scan(@"^(\s*)(<-)(\s*)", Color.Whitespace, Color.Structure, Color.Whitespace);
+         var _scanned = state.Scan(@"^(\s*)(<-)(\s*)", Color.Whitespace, Color.Block, Color.Whitespace);
          if (_scanned)
          {
             return getSingleLine(state, _typeConstraint);
@@ -764,7 +764,7 @@ public static class ParserFunctions
             _ => nil
          };
          state.SetReturnType(_typeConstraint);
-         var _scanned = state.Scan(@"^(\s*)(<-)(\s*)", Color.Whitespace, Color.Structure, Color.Whitespace);
+         var _scanned = state.Scan(@"^(\s*)(<-)(\s*)", Color.Whitespace, Color.Block, Color.Whitespace);
          if (_scanned)
          {
             return getSingleLine(state, _typeConstraint);
@@ -1247,7 +1247,7 @@ public static class ParserFunctions
 
    public static Optional<Block> getCaseStatementBlock(ParseState state)
    {
-      if (state.Scan(@"^(\s*)(<-)(?!=)", Color.Whitespace, Color.Structure))
+      if (state.Scan(@"^(\s*)(<-)(?!=)", Color.Whitespace, Color.Block))
       {
          return getSingleLine(state, false);
       }

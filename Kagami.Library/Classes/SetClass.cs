@@ -43,4 +43,24 @@ public class SetClass : BaseClass, ICollectionClass
    public IObject Revert(IEnumerable<IObject> list) => new Set(list.ToArray());
 
    public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
+
+   public override void RegisterClassMessages()
+   {
+      base.RegisterClassMessages();
+
+      classMessages["clrf".get()] = (_, _) => getSet("\r\n");
+      classMessages["lalpha".get()] = (_, _) => getSet("abcdefghijklmnopqrstuvwxyz");
+      classMessages["ualpha".get()] = (_, _) => getSet("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+      classMessages["alpha".get()] = (_, _) => getSet("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
+      classMessages["lvowels".get()] = (_, _) => getSet("aeiou");
+      classMessages["uvowels".get()] = (_, _) => getSet("AEIOU");
+      classMessages["lconsonants".get()] = (_, _) => getSet("bcdfghjklmnpqrstvwxyz");
+      classMessages["uconsonants".get()] = (_, _) => getSet("BCDFGHJKLMNPQRSTVWXYZ");
+      classMessages["digits".get()] = (_, _) => getSet("0123456789");
+      classMessages["punctuation".get()] = (_, _) => getSet("!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~");
+
+      return;
+
+      static Set getSet(string @string) => new((IObject[])[.. @string.ToCharArray().Select(KChar.CharObject)]);
+   }
 }
