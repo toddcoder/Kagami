@@ -1,12 +1,6 @@
 ﻿open sys
 
-enum Command {
-	| Open
-	| Closed
-	| Pending
-	| Approved
-	| Denied
-}
+type Command {| Open, Closed, Pending, Approved, Denied}
 
 execute(Open)
 func execute(command Command) {

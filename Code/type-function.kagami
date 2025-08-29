@@ -1,6 +1,6 @@
 ﻿open sys
 
-enum Expr {
+type Expr {
 	| Number(i int)
 	| Addition(expr1 Expr, expr2 Expr)
 	| Multiplication(expr1 Expr, expr2 Expr)

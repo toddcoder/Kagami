@@ -1,0 +1,10 @@
+﻿open sys
+
+type CompassPoint {| North, South, East, West}
+
+type Planet {| Mercury = 1, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune}
+
+let earthsOrder = Earth.value
+println(earthsOrder)
+let sunsetDirection = West.value
+println(sunsetDirection)

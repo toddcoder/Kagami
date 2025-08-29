@@ -1,19 +1,7 @@
 ﻿open sys
 
-enum Rank {
-	| Ace = 1
-	| Two
-	| Three
-	| Four
-	| Five
-	| Six
-	| Seven
-	| Eight
-	| Nine
-	| Ten
-	| Jack
-	| Queen
-	| King
+type Rank {
+	| Ace = 1, Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King
 	func description() string {
 		match class {
 			| Ace return "ace"

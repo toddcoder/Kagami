@@ -1,8 +1,8 @@
 ﻿open sys
 
-class Logger(var name String) {
-	var mute Boolean
-	func log(msg String) {
+class Logger(var name string) {
+	var mute bool
+	func log(msg string) {
 		if not mute {
 			println(msg)
 		}
@@ -10,7 +10,7 @@ class Logger(var name String) {
 }
 static {
 	var cache = {:}.memo() name -> Logger(name)
-	func [](name) := cache[name]
+	func [](name) <- cache[name]
 }
 var logger = Logger["UI"]
 logger.log("Button clicked")

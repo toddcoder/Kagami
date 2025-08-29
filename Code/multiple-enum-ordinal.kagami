@@ -1,10 +1,6 @@
 ﻿open sys
 
-enum Methodologies {
-	| Evo = 5
-	| Xp = 21
-	| Scrum = 30
-}
+type Methodologies {| Evo = 5, Xp = 21, Scrum = 30}
 
 for value in Methodologies.members {
 	println(value, value.value)

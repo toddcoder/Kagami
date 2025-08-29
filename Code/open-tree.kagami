@@ -1,6 +1,6 @@
 ﻿open sys
 
-enum Tree {
+type Tree {
 	| Nilt
 	| Node(n, t1, t2)
 }

@@ -1,6 +1,6 @@
 ﻿open sys
 
-enum Expr {
+type Expr {
 	| Var(name)
 	| Numeric(number)
 	| UnOp(op, args)

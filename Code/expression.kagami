@@ -1,4 +1,4 @@
-﻿enum Expr {
+﻿type Expr {
 	| Binary(s, e1, e2)
 	| Variable(s)
 	| Constant(i)

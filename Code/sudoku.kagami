@@ -7,9 +7,9 @@ sudoku .= .translate({'0': ' '})
 let separator = "+---+---+---+"
 var index = 0
 
-var array = [i for i in sudoku].shape(9, 9)
-for (i, line) in array.indexed() {
-	if i %% 3 println(separator)
+var array = [i for i in sudoku] %(9, 9)
+for (i, line) in #^array {
+	if i %% 3 do println(separator)
 	print("|")
 	for trio in line.by(3) {
 		print(trio.join("") ~ "|")

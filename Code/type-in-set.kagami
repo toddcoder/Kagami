@@ -1,6 +1,6 @@
 ﻿open sys
 
-enum Color {| Red, Blue, Yellow, Green, White, Black, Orange}
+type Color {| Red, Blue, Yellow, Green, White, Black, Orange}
 
 var c = {Red, Blue, Yellow, White, Black, Orange}
 

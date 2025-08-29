@@ -2,10 +2,10 @@
 
 class Heavy(var size = 10) {
 	println($"Creating Heavy with (size)")
-	func string := $"Heavy\(size=(size))"
+	func string <- $"Heavy\(size=(size))"
 }
 
-class AsNeeded(var value Int) {
+class AsNeeded(var value int) {
 	var heavy1 = lazy Heavy()
 	var heavy2 = lazy Heavy(value)
 	println("Created AsNeeded")

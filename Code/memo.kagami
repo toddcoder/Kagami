@@ -3,18 +3,18 @@
 class ChecksumAccumulator {
 	var sum = 0
 
-	func add(b Byte) := sum += b
+	func add(b Byte) <- sum += b
 
-	func checksum() := not (sum and 0xff) + 1
+	func checksum() <- not (sum and 0xff) + 1
 }
 static {
 	let cache = {:}.memo() s -> {
 		var acc = ChecksumAccumulator()
-		for c in s acc.add(math.byte(c.ord))
+		for c in s do acc.add(math.byte(c.ord))
 		return acc.checksum()
 	}
 
-	func calculate(s) := cache[s]
+	func calculate(s) <- cache[s]
 }
 
 var checksum = ChecksumAccumulator.calculate("Every value is an object.")

@@ -5,10 +5,10 @@ class Fib(max) {
 	var b = 1
 	func next(i) {
 		var fib = a
-		if fib > max return nil
+		if fib > max do return nil
 		| (use a, use b) = (b, a + b)
 		return ?fib
 	}
 }
 
-for n in Fib(1000) put(n)
+for n in Fib(1000) do put(n)
