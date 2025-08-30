@@ -24,5 +24,5 @@ public class PendingSendMessage(SendMessageSymbol sendMessageSymbol) : Symbol
 
    public override Arity Arity => Arity.Nullary;
 
-   public override string ToString() => $"^{sendMessageSymbol}";
+   public override string ToString() => $":{sendMessageSymbol}";
 }
