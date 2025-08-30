@@ -1671,9 +1671,13 @@ public static class ParserFunctions
             {
                taggedExpressions.Add(new TaggedExpression(tag, expression));
             }
+            else if (_expression.Exception is (true, var exception))
+            {
+               return exception;
+            }
             else
             {
-               return _expression.Exception;
+               break;
             }
          }
          else

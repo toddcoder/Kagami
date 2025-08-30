@@ -198,12 +198,22 @@ public class ExpressionBuilder(Bits32<ExpressionFlags> flags, bool acknowledgeIm
       }
    }
 
-   public Result<Expression> ToExpression()
+   public Result<Expression> ToExpression(bool clear = false)
    {
       var _expression = EndOfExpression().Map(_ => new Expression([.. symbols]) { SpecialComparisandIndex = SpecialComparisandIndex });
       if (containsImplicitOperator && _expression is (true, var expression))
       {
+         if (clear)
+         {
+            Clear();
+         }
+
          return generateMap(expression, flags);
+      }
+
+      if (clear)
+      {
+         Clear();
       }
 
       return _expression;

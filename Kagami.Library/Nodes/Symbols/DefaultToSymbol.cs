@@ -42,5 +42,5 @@ public class DefaultToSymbol(Expression expression) : Symbol, IHasExpression
 
    public Expression Expression => expression;
 
-   public override string ToString() => $"| {expression}";
+   public override string ToString() => $"?: {expression}";
 }

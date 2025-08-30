@@ -1,45 +1,29 @@
-﻿using Kagami.Library.Operations;
-using static Kagami.Library.Nodes.NodeFunctions;
+﻿using Core.Enumerables;
+using Kagami.Library.Operations;
 
 namespace Kagami.Library.Nodes.Symbols;
 
-public class WhereSymbol : Symbol
+public class WhereSymbol(Expression expression, TaggedExpression[] taggedExpressions) : Symbol
 {
-   protected (string propertyName, Expression comparisand)[] items;
-
-   public WhereSymbol((string, Expression)[] items) => this.items = items;
-
    public override void Generate(OperationsBuilder builder)
    {
-      var labelFalse = newLabel("false");
-      var labelEnd = newLabel("end");
-      var fieldName = newLabel("subject");
+      builder.PushFrame();
 
-      builder.NewField(fieldName, false, true);
-      builder.AssignField(fieldName, true);
-
-      foreach (var (propertyName, comparisand) in items)
+      foreach (var (tag, exp) in taggedExpressions)
       {
-         var getter = propertyName.get();
-         builder.GetField(fieldName);
-         builder.SendMessage(getter, 0);
-         comparisand.Generate(builder);
-         builder.Match();
-         builder.GoToIfFalse(labelFalse);
+         builder.NewField(tag, false, true);
+         exp.Generate(builder);
+         builder.AssignField(tag, false);
       }
 
-      builder.PushBoolean(true);
-      builder.GoTo(labelEnd);
+      expression.Generate(builder);
 
-      builder.Label(labelFalse);
-      builder.PushBoolean(false);
-
-      builder.Label(labelEnd);
+      builder.PopFrameWithValue();
    }
 
    public override Precedence Precedence => Precedence.SendMessage;
 
    public override Arity Arity => Arity.Postfix;
 
-   public override string ToString() => $".{{{items.Select(i => $"{i.propertyName}: {i.comparisand}")}}}";
+   public override string ToString() => $"{expression} where ({taggedExpressions.Select(t => $"{t.Tag}={t.Expression}").ToString(", ")})";
 }
