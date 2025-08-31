@@ -420,7 +420,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public IObject Unshift(IObject value) => InsertAt(0, value);
 
-   public IObject Shift() => list.Count > 0 ? Some.Object(RemoveAt(0)) : KNil.NilValue;
+   public IObject Shift() => list.Count > 0 ? RemoveAt(0) : KNil.NilValue;
 
    public IObject IndexOf(IObject item)
    {
