@@ -3,7 +3,7 @@ using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Classes;
 
-public class NilClass : BaseClass
+public class NilClass : BaseClass, IEquivalentClass
 {
    public override string Name => "Nil";
 
@@ -26,4 +26,6 @@ public class NilClass : BaseClass
    public override bool AssignCompatible(BaseClass otherClass) => otherClass is SomeClass or NilClass or OptionalClass;
 
    public override IObject DefaultValue => KNil.NilValue;
+
+   public TypeConstraint TypeConstraint() => OptionalClass.EquivalentTypeConstraint;
 }

@@ -12,7 +12,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class NamedStaticParser : StatementParser
 {
-   [GeneratedRegex(@$"^(\s*)(static)(\s+)({REGEX_CLASS})")]
+   [GeneratedRegex(@$"^(\s*)(object)(\s+)({REGEX_CLASS})")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)

@@ -3,8 +3,10 @@ using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Classes;
 
-public class OptionalClass : BaseClass
+public class OptionalClass : BaseClass, IEquivalentClass
 {
+   public static TypeConstraint EquivalentTypeConstraint => new([new OptionalClass(), new SomeClass(), new NilClass()]);
+
    public override string Name => "Optional";
 
    public override void RegisterMessages()
@@ -24,4 +26,5 @@ public class OptionalClass : BaseClass
    public override bool AssignCompatible(BaseClass otherClass) => MatchCompatible(otherClass);
 
    public override IObject DefaultValue => KNil.NilValue;
+   public TypeConstraint TypeConstraint() => EquivalentTypeConstraint;
 }

@@ -84,7 +84,6 @@ public readonly struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
    {
       if (baseClass is UserClass userClass)
       {
-         //return Matches(userClass);
          foreach (var comparisand in comparisands)
          {
             if (userClass.AssignCompatible(comparisand))

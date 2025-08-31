@@ -9,4 +9,6 @@ public class FailedMatch : Statement
       builder.PushString("Match failed");
       builder.Throw();
    }
+
+   public override string ToString() => "throw \"Match failed\"";
 }

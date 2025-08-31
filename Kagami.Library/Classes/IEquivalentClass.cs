@@ -1,9 +1,8 @@
 ﻿using Kagami.Library.Objects;
 
-namespace Kagami.Library.Classes
+namespace Kagami.Library.Classes;
+
+public interface IEquivalentClass
 {
-   public interface IEquivalentClass
-   {
-      TypeConstraint TypeConstraint();
-   }
+   TypeConstraint TypeConstraint();
 }

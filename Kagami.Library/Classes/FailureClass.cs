@@ -3,7 +3,7 @@ using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Classes;
 
-public class FailureClass : BaseClass
+public class FailureClass : BaseClass, IEquivalentClass
 {
    public override string Name => "Failure";
 
@@ -27,4 +27,6 @@ public class FailureClass : BaseClass
    public override bool AssignCompatible(BaseClass otherClass) => otherClass is SuccessClass or FailureClass or ResultClass;
 
    public override IObject DefaultValue => new Failure("");
+
+   public TypeConstraint TypeConstraint() => ResultClass.EquivalentTypeConstraint;
 }
