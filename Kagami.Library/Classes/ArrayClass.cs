@@ -75,6 +75,7 @@ public class ArrayClass : BaseClass, ICollectionClass
       registerMessage("pad(left:_<Int>,value:_)", (obj, msg) => function<KArray, Int, IObject>(obj, msg, (a, i, v) => a.PadLeft(i.Value, v)));
       registerMessage("pad(right:_<Int>,value:_)", (obj, msg) => function<KArray, Int, IObject>(obj, msg, (a, i, v) => a.PadRight(i.Value, v)));
       registerMessage("fetch(at:_<Int>)", (obj, msg) => function<KArray, Int>(obj, msg, (a, i) => a.Fetch(i.Value)));
+      messages["read()"] = (obj, _) => function<KArray>(obj, a => a.Read());
    }
 
    protected static IObject getIndexed(KArray a, IObject i)

@@ -5,7 +5,12 @@ namespace Kagami.Library.Objects;
 
 public readonly struct Some : IObject, IOptional, IBoolean, IEquatable<Some>, IMonad
 {
-   public static IObject Object(IObject value) => value is KNil ? value : new Some(value);
+   public static IObject Object(IObject value) => value switch
+   {
+      Some some => some,
+      KNil kNil => kNil,
+      _ => new Some(value)
+   };
 
    private readonly IObject value;
 

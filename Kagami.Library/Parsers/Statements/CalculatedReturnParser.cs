@@ -19,7 +19,7 @@ public partial class CalculatedReturnParser : StatementParser
       state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.OpenParenthesis);
 
       var _result =
-         from taggedExpressionValue in getTaggedExpressions(state)
+         from taggedExpressionValue in getTaggedExpressions(state, REGEX_EXP_END)
          from expressionValue in getExpression(state, ExpressionFlags.Standard)
          select (taggedExpressionValue, expressionValue);
       if (_result is (true, var (taggedExpressions, expression)))

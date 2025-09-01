@@ -87,6 +87,7 @@ public class ValuesParser : MultiParser
          yield return new DollarFieldParser(builder);
          yield return new DoParser(builder);
          yield return new ThrowParser(builder);
+         yield return new StructParser(builder);
 
          yield return new AssertParser(builder);
          yield return new ConversionParser(builder);

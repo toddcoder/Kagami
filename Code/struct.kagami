@@ -1,0 +1,7 @@
+﻿open sys
+
+let p1 = struct{name = "test1", value = 10}
+println(p1.name, p1.value)
+let p2 = p1 with{name = "test2"}
+println(p1.name, p1.value)
+println(p2.name, p2.value)

@@ -2,10 +2,11 @@
 using Core.Enumerables;
 using Core.Monads;
 using Core.Numbers;
+using System;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.CollectionFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
-using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Objects;
 
@@ -624,4 +625,19 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
    }
 
    public IObject Fetch(int index) => someOf(maybe<IObject>() & index.Between(0).Until(list.Count) & (() => this[index]));
+
+   public IObject Read()
+   {
+      if (list.Count > 0)
+      {
+         var obj = this[0];
+         list.RemoveAt(0);
+
+         return obj;
+      }
+      else
+      {
+         throw fail("Array is empty");
+      }
+   }
 }

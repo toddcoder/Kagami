@@ -43,6 +43,8 @@ public static class ParserFunctions
       @"skipUntil|!|\?|\*|@|\$";
    public const string REGEX_LIST_LEFT = @"\[:";
    public const string REGEX_LIST_RIGHT = @":\]";
+   public const string REGEX_BLOCK_END = @"^(\s*)(\})";
+   public const string REGEX_EXP_END = @"^(\s*)(\))";
 
    public static Optional<char> fromHex(string text)
    {
@@ -1652,12 +1654,12 @@ public static class ParserFunctions
       return fail($"Didn't understand: \"{_scanned | (() => state.CurrentSource)}\"");
    }
 
-   public static Optional<TaggedExpression[]> getTaggedExpressions(ParseState state)
+   public static Optional<TaggedExpression[]> getTaggedExpressions(ParseState state, string ending)
    {
       List<TaggedExpression> taggedExpressions = [];
       while (state.More)
       {
-         var _end = state.Scan(@"^(\))", Color.CloseParenthesis);
+         var _end = state.Scan(ending, Color.Whitespace, Color.CloseParenthesis);
          if (_end)
          {
             break;

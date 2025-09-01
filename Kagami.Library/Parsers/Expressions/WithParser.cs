@@ -2,6 +2,7 @@
 using Core.Monads;
 using Kagami.Library.Nodes.Symbols;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
@@ -11,25 +12,22 @@ public partial class WithParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(with)\b")]
+   [GeneratedRegex(@"^(\s*)(with)(\{)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      state.Colorize(tokens, Color.Whitespace, Color.Keyword);
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.OpenParenthesis);
 
-      var initializerParser = new InitializerParser(builder, false);
-      var _result = initializerParser.Scan(state);
-      if (_result)
+      var _taggedExpressions = getTaggedExpressions(state, REGEX_BLOCK_END);
+      if (_taggedExpressions is (true, var taggedExpressions))
       {
-         var properties = initializerParser.Properties;
-         builder.Add(new WithSymbol(properties));
-
+         builder.Add(new WithSymbol(taggedExpressions));
          return unit;
       }
       else
       {
-         return _result.Exception;
+         return _taggedExpressions.Exception;
       }
    }
 }

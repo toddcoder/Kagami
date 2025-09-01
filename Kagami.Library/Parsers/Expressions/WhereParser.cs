@@ -22,7 +22,7 @@ public partial class WhereParser : SymbolParser
       var _result =
          from expressionValue in builder.ToExpression(true).Optional()
          from scanned in state.Scan(@"^(\s*)(\()", Color.Whitespace, Color.OpenParenthesis)
-         from taggedExpressionsValue in getTaggedExpressions(state)
+         from taggedExpressionsValue in getTaggedExpressions(state, REGEX_EXP_END)
          select (expressionValue, taggedExpressionsValue);
       if (_result is (true, var (expression, taggedExpressions)))
       {

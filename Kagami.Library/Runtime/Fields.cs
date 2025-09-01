@@ -468,9 +468,9 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
    public Fields Clone()
    {
       Hash<string, Field> newFields = [];
-      foreach (var field in fields)
+      foreach (var (fieldName, field) in fields)
       {
-         newFields[field.Key] = field.Value;
+         newFields[fieldName] = field.Clone();
       }
 
       Memo<string, List<string>> newBuckets = new Memo<string, List<string>>.Function(_ => []);
