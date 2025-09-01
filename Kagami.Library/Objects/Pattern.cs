@@ -1,5 +1,6 @@
 ﻿using Core.Collections;
 using Core.Enumerables;
+using Core.Numbers;
 using Kagami.Library.Invokables;
 using Kagami.Library.Runtime;
 using static Kagami.Library.Objects.ObjectFunctions;
@@ -36,28 +37,57 @@ public class Pattern : IObject
 
    public bool IsEqualTo(IObject obj) => obj is Pattern pattern && name == pattern.name && lambda.IsEqualTo(pattern.lambda);
 
+   protected string getPlaceholder(int index) => arguments[index].AsString;
+
    public bool Match(IObject comparisand, Hash<string, IObject> bindings)
    {
       lambda.CopyFields(fields);
       var result = lambda.Invoke(comparisand);
-      var parameterCount = lambda.ParameterCount.Value;
 
       switch (result)
       {
-         case KBoolean boolean when parameterCount == 0:
+         case KBoolean boolean when arguments.Length == 0:
             return boolean.Value;
-         case KBoolean boolean when parameterCount == 1:
+         case KBoolean boolean when arguments.Length == 1:
          {
             if (boolean.IsTrue)
             {
-               bindings[$"-{parameters[0].Name}"] = comparisand;
+               bindings[getPlaceholder(0)] = comparisand;
+               return true;
+            }
+            else
+            {
+               return false;
+            }
+         }
+         case Some { Value: KTuple kTuple }:
+         {
+            var length = kTuple.Length.Value.MinOf(arguments.Length);
+            for (var i = 0; i < length; i++)
+            {
+               bindings[getPlaceholder(i)] = kTuple[i];
             }
 
-            return boolean.IsTrue;
+            return true;
          }
-         case Some some when parameterCount == 1:
+         case Some some:
          {
-            bindings[$"-{parameters[0].Name}"] = some.Value;
+            bindings[getPlaceholder(0)] = some.Value;
+            return true;
+         }
+         case Success { Value: KTuple kTuple }:
+         {
+            var length = kTuple.Length.Value.MinOf(arguments.Length);
+            for (var i = 0; i < length; i++)
+            {
+               bindings[getPlaceholder(i)] = kTuple[i];
+            }
+
+            return true;
+         }
+         case Success success:
+         {
+            bindings[getPlaceholder(0)] = success.Value;
             return true;
          }
          default:
@@ -74,15 +104,15 @@ public class Pattern : IObject
 
    public void RegisterArguments(Arguments arguments)
    {
-      var fieldValues = arguments.Take(fields.Length).ToArray();
+      /*var fieldValues = arguments.Take(fields.Length).ToArray();
       var parameterNames = parameters.Select(p => p.Name).ToArray();
       var index = 0;
       foreach (var parameterName in parameterNames)
       {
          fields.Assign(parameterName, fieldValues[index++]);
-      }
+      }*/
 
-      this.arguments = arguments.Skip(fields.Length).ToArray();
+      this.arguments = arguments.Value; //.Skip(fields.Length).ToArray();
    }
 
    public bool IsTrue => true;

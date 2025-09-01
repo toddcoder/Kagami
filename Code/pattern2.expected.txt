@@ -1,0 +1,19 @@
+42 84 1764
+even
+4 = 4
+1.10: Floating point
+0: Integer
+0.00: Floating point
+10: Integer
+Something else: Not matched.
+1 is a cube and a square
+8 is a cube
+27 is a cube
+64 is a cube and a square
+125 is a cube
+216 is a cube
+343 is a cube
+512 is a cube
+729 is a cube and a square
+1000 is a cube
+it collection | Iterator

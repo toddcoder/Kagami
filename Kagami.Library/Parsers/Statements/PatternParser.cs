@@ -25,7 +25,7 @@ public partial class PatternParser : StatementParser
       {
          state.RemoveReturnType();
          state.RegisterPattern(name);
-         state.AddStatement(new Pattern(name, parameters, block));
+         state.AddStatement(new PatternStatement(name, parameters, block));
 
          return unit;
       }

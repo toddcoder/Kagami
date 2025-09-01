@@ -5,14 +5,14 @@ using Kagami.Library.Operations;
 
 namespace Kagami.Library.Nodes.Statements;
 
-public class Pattern : Statement
+public class PatternStatement : Statement
 {
    protected string name;
    protected Parameters parameters;
    protected Block block;
    protected string image;
 
-   public Pattern(string name, Parameters parameters, Block block)
+   public PatternStatement(string name, Parameters parameters, Block block)
    {
       this.name = name;
       this.parameters = parameters;
@@ -27,7 +27,7 @@ public class Pattern : Statement
       if (_index)
       {
          var lambda = new Lambda(invokable, false);
-         var pattern = new Objects.Pattern(name, lambda, parameters);
+         var pattern = new Pattern(name, lambda, parameters);
          builder.NewField(name, false, true);
          builder.PushObject(pattern);
          builder.AssignField(name, true);
