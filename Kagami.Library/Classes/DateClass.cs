@@ -31,6 +31,7 @@ public class DateClass : BaseClass
       messages["dayOfYear".get()] = (obj, _) => function<Date>(obj, d => d.DayOfYear);
       messages["julian".get()] = (obj, _) => function<Date>(obj, d => d.Julian);
       messages["mjulian".get()] = (obj, _) => function<Date>(obj, d => d.MJulian);
+      messages["utc()"] = (obj, _) => function<Date>(obj, d => d.Utc());
    }
 
    public override void RegisterClassMessages()

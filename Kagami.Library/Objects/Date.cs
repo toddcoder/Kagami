@@ -139,4 +139,6 @@ public readonly struct Date : IObject, IRangeItem, IFormattable
    public Float Julian => value.ToOADate() + 2415018.5;
 
    public Float MJulian => Julian.Value - 2400000.5;
+
+   public Date Utc() => value.ToUniversalTime();
 }

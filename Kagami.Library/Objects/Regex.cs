@@ -569,4 +569,23 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
 
       return new KArray(list);
    }
+
+   public KString SplitMapJoin(string input, Lambda onMatch, Lambda onNonMatch)
+   {
+      var _result = input.Matches(pattern);
+      if (_result is (true, var result))
+      {
+         var prefix = input.Keep(result.Index);
+         var suffix = input.Drop(result.Index + result.Length);
+         var mapped = onMatch.Invoke((KString)result.FirstMatch).AsString;
+         prefix = onMatch.Invoke((KString)prefix).AsString;
+         suffix = onNonMatch.Invoke((KString)suffix).AsString;
+
+         return prefix + mapped + suffix;
+      }
+      else
+      {
+         return input;
+      }
+   }
 }

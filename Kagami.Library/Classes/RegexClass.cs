@@ -21,6 +21,8 @@ public class RegexClass : BaseClass, IEquivalentClass
       messages["~(_)"] = (obj, msg) => function<Regex, IObject>(obj, msg, (r1, r2) => r1.Concatenate(r2));
       messages["/(_<String>)"] = (obj, msg) => function<Regex, KString>(obj, msg, (r, s) => r.PendingRegex(s));
       messages["scan(_<String>)"] = (obj, msg) => function<Regex, KString>(obj, msg, (r, s) => r.Scan(s.Value));
+      messages["splitMapJoin(_<String>,onMatch:_<Lambda>,onNonMatch:_<Lambda>)"] = (obj, msg) =>
+         function<Regex, KString, Lambda, Lambda>(obj, msg, (r, s, lm, lnm) => r.SplitMapJoin(s.Value, lm, lnm));
    }
 
    public override void RegisterClassMessages()

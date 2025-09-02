@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using Core.Collections;
 using Core.Matching;
 using Kagami.Library.Classes;
 using Kagami.Library.Invokables;
@@ -45,6 +46,10 @@ public static class ParserFunctions
    public const string REGEX_LIST_RIGHT = @":\]";
    public const string REGEX_BLOCK_END = @"^(\s*)(\})";
    public const string REGEX_EXP_END = @"^(\s*)(\))";
+
+   public static StringSet keywords = ["do", "else"];
+
+   public static bool isAKeyword(string word) => keywords.Contains(word);
 
    public static Optional<char> fromHex(string text)
    {
