@@ -28,7 +28,7 @@ public partial class StructParser : SymbolParser
       var _taggedExpressions = getTaggedExpressions(state, REGEX_BLOCK_END);
       if (_taggedExpressions is (true, var taggedExpressions))
       {
-         var className = taggedExpressions.Select(te => te.Tag).ToString("_").ToUpper1();
+         var className = taggedExpressions.Select(te => te.Tag.ToUpper1()).ToString("$");
          Module.Global.Value.ForwardReference(className);
          List<Statement> statements = [];
          foreach (var (tag, expression) in taggedExpressions)

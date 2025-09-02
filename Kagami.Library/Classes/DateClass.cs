@@ -45,6 +45,7 @@ public class DateClass : BaseClass
       classMessages["parse(_)"] = (_, msg) => parse(msg.Arguments[0].AsString);
       classMessages["months".get()] = (_, _) => Date.Months;
       classMessages["daysOfTheWeek".get()] = (_, _) => Date.DaysOfTheWeek;
+      classMessages["daysInMonth(year:_<Int>,month:_<Int>)"] = (bc, msg) => classFunc<DateClass, Int, Int>(bc, msg, (_, y, m) => daysInMonth(y.Value, m.Value));
    }
 
    public override IObject DefaultValue => new Date(DateTime.MinValue);
@@ -60,4 +61,6 @@ public class DateClass : BaseClass
          return Failure.Object(exception.Message);
       }
    }
+
+   protected static Int daysInMonth(int year, int month) => DateTime.DaysInMonth(month, month);
 }

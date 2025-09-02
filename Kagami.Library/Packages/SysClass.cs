@@ -20,6 +20,7 @@ public class SysClass : PackageClass
       registerPackageFunction("print(_...)", (obj, msg) => function<Sys>(obj, sys => sys.Print(msg.Arguments)));
       registerPackageFunction("put(_)", (obj, msg) => function<Sys>(obj, sys => sys.Put(msg.Arguments)));
       registerPackageFunction("put(_,_)", (obj, msg) => function<Sys>(obj, sys => sys.Put(msg.Arguments)));
+      registerPackageFunction("column(_,_)", (obj, msg) => function<Sys, IObject, Int>(obj, msg, (sys, o, i) => sys.Column(o, i.Value)));
       registerPackageFunction("readln()", (obj, _) => function<Sys>(obj, sys => sys.Readln()));
       registerPackageFunction("readInt()", (obj, _) => function<Sys>(obj, sys => sys.ReadInt()));
       registerPackageFunction("readFloat()", (obj, _) => function<Sys>(obj, sys => sys.ReadFloat()));

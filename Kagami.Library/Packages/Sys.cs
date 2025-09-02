@@ -14,6 +14,8 @@ namespace Kagami.Library.Packages;
 
 public class Sys : Package
 {
+   protected int writeCount;
+
    public Sys()
    {
       fields.New("id", FieldType.Package, new RuntimeLambda(args => args[0], 1, "x -> x"));
@@ -84,6 +86,23 @@ public class Sys : Package
             return value;
          }
       }
+   }
+
+   public IObject Column(IObject obj, int count)
+   {
+      var value = obj.AsString;
+      Machine.Current.Value.Context.Put(value);
+      if (writeCount == count - 1)
+      {
+         Machine.Current.Value.Context.PrintLine("");
+      }
+
+      if (count > 0)
+      {
+         writeCount = (writeCount + 1) % count;
+      }
+
+      return KString.StringObject(value);
    }
 
    public IObject Readln()

@@ -15,7 +15,11 @@ public class Numberize : OneOperandOperation
       {
          case KString kString:
          {
-            if (kString.Value.IsMatch("['.e']"))
+            if (kString.Value.IsDate())
+            {
+               return Date.DateObject(kString.Value.Value().DateTime()).Just();
+            }
+            else if (kString.Value.IsMatch("['.e']"))
             {
                return Float.FloatObject(kString.Value.Value().Double()).Just();
             }

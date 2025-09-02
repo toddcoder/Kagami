@@ -12,12 +12,12 @@ public partial class WithParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(with)(\{)")]
+   [GeneratedRegex(@"^(\s*)(with)(\s*)(\{)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.OpenParenthesis);
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.OpenParenthesis);
 
       var _taggedExpressions = getTaggedExpressions(state, REGEX_BLOCK_END);
       if (_taggedExpressions is (true, var taggedExpressions))
