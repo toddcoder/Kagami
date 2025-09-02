@@ -41,7 +41,7 @@ public class CharClass : BaseClass, IEquivalentClass
       classMessages["cr".get()] = (_, _) => (KChar)'\r';
       classMessages["lf".get()] = (_, _) => (KChar)'\n';
       classMessages["tab".get()] = (_, _) => (KChar)'\t';
-      classMessages["fromOrd(_)"] = (_, msg) => classFunc<BaseClass, Int>(this, msg, (_, i) => fromOrd(i.Value));
+      classMessages["from(ord:_<Int>)"] = (_, msg) => classFunc<BaseClass, Int>(this, msg, (_, i) => fromOrd(i.Value));
    }
 
    public override IObject DefaultValue => new KChar((char)0);
