@@ -578,7 +578,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
          var prefix = input.Keep(result.Index);
          var suffix = input.Drop(result.Index + result.Length);
          var mapped = onMatch.Invoke((KString)result.FirstMatch).AsString;
-         prefix = onMatch.Invoke((KString)prefix).AsString;
+         prefix = onNonMatch.Invoke((KString)prefix).AsString;
          suffix = onNonMatch.Invoke((KString)suffix).AsString;
 
          return prefix + mapped + suffix;
