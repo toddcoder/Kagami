@@ -15,6 +15,8 @@ public class NewDictionaryOrSet : OneOperandOperation
             return Dictionary.New([value]).Just();
          case KArray:
             return value.Just();
+         case Junction junction:
+            return new Set(junction.Items);
       }
 
       var _list = value switch

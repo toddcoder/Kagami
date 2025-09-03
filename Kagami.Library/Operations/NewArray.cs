@@ -13,6 +13,7 @@ public class NewArray : OneOperandOperation
       IKeyValue => KArray.CreateObject([value]).Just(),
       ICollection { ExpandForArray: true } collection => KArray.CreateObject(collection.GetIterator(false).List().ToArray()).Just(),
       IIterator iterator => KArray.CreateObject(iterator.List().ToArray()).Just(),
+      Junction junction => KArray.CreateObject(junction.Items).Just(),
       _ => new KArray(value)
    };
 

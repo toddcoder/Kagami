@@ -136,6 +136,7 @@ public partial class Playground : Form
 
          menus.Menu("&Build");
          menus.Menu("Run", (_, _) => run(), "F5");
+         menus.Menu("Run Selected", (_, _) => runSelectedText(), "%F5");
          menus.Menu("Manual", (s, _) =>
          {
             manual = !manual;
@@ -198,7 +199,7 @@ public partial class Playground : Form
                _exceptionData = nil;
                if (!manual)
                {
-                  textEditor.Do(() => update(!manual, false, false));
+                  textEditor.Do(() => update(!manual, false, false, false));
                }
             }
             catch
@@ -416,9 +417,11 @@ public partial class Playground : Form
       }
    }
 
-   protected void run() => update(true, true, true);
+   protected void run() => update(true, true, true, false);
 
-   protected void update(bool execute, bool fromMenu, bool ignoreDirtyFlag)
+   protected void runSelectedText() => update(true, true, true, true);
+
+   protected void update(bool execute, bool fromMenu, bool ignoreDirtyFlag, bool selectedText)
    {
       if (!isDirty && !ignoreDirtyFlag)
       {
@@ -452,7 +455,8 @@ public partial class Playground : Form
             context.Reset();
 
             var kagamiConfiguration = new CompilerConfiguration { ShowOperations = dumpOperations, Tracing = tracing };
-            var compiler = new Compiler(textEditor.Text, kagamiConfiguration, context);
+            var source = selectedText ? textEditor.SelectedText : textEditor.Text;
+            var compiler = new Compiler(source, kagamiConfiguration, context);
             var _machine = compiler.Generate();
             if (_machine is (true, var machine))
             {

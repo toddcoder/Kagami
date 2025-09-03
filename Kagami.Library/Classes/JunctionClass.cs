@@ -21,7 +21,7 @@ public class JunctionClass : BaseClass
    {
       if (obj is Junction junction)
       {
-         if (message.Arguments[0] is Junction junction2)
+         if (message.Arguments.Length > 0 && message.Arguments[0] is Junction junction2)
          {
             List<IObject> result = [];
             foreach (var item1 in junction.Items)
