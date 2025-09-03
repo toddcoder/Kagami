@@ -5,7 +5,8 @@ using static Kagami.Library.Operations.NumericFunctions;
 
 namespace Kagami.Library.Objects;
 
-public readonly struct Float : IObject, INumeric, IObjectCompare, IComparable<Float>, IEquatable<Float>, IFormattable, IComparable, IMessageNumber
+public readonly struct Float : IObject, INumeric, IComparable<Float>, IEquatable<Float>, IFormattable, IComparable, IMessageNumber,
+   IRangeItem
 {
    public static implicit operator Float(double value) => new(value);
 
@@ -225,4 +226,10 @@ public readonly struct Float : IObject, INumeric, IObjectCompare, IComparable<Fl
    public Float Rand(Random random) => random.NextDouble() * value;
 
    public Float Rand(Random random, Float max) => random.NextDouble() * (max.value - value) + value;
+
+   public IRangeItem Successor => (Float)(value + 1);
+
+   public IRangeItem Predecessor => (Float)(value - 1);
+
+   public KRange Range() => new((Int)0, this, false);
 }

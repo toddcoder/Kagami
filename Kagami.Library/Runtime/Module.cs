@@ -115,6 +115,7 @@ public class Module
       "StreamingIterator" => new StreamingIteratorClass(),
       "SpecialComparisand" => new SpecialComparisandClass(),
       "Formatter" => new FormatterClass(),
+      "LongRange" => new LongRangeClass(),
       _ => nil
    };
 

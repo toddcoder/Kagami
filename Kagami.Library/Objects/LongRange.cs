@@ -1,4 +1,5 @@
-﻿using Core.Collections;
+﻿using System.Numerics;
+using Core.Collections;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.CollectionFunctions;
@@ -6,19 +7,19 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
 
-public struct FloatRange : IObject, ICollection
+public struct LongRange : IObject, ICollection
 {
-   private Float start;
+   private Long start;
    private IObject startObj;
-   private Float stop;
+   private Long stop;
    private IObject stopObj;
    private bool inclusive;
-   private double increment;
-   private Func<Float, Float> next;
-   private Func<Float, IObject, bool> compare;
+   private BigInteger increment;
+   private Func<Long, Long> next;
+   private Func<Long, IObject, bool> compare;
    private Maybe<IIterator> _currentIterator = nil;
 
-   public FloatRange(Float start, Float stop, bool inclusive, double increment = 1)
+   public LongRange(Long start, Long stop, bool inclusive, BigInteger increment) : this()
    {
       this.start = start;
       this.stop = stop;
@@ -35,7 +36,7 @@ public struct FloatRange : IObject, ICollection
             var current = i;
             for (var j = 0; j < increment; j++)
             {
-               current = (Float)current.Successor;
+               current = (Long)current.Successor;
             }
 
             return current;
@@ -56,7 +57,7 @@ public struct FloatRange : IObject, ICollection
             var current = i;
             for (var j = 0; j < -increment; j++)
             {
-               current = (Float)current.Predecessor;
+               current = (Long)current.Predecessor;
             }
 
             return current;
@@ -72,27 +73,27 @@ public struct FloatRange : IObject, ICollection
       }
    }
 
-   public FloatRange(FloatRange range, double increment) : this(range.start, range.stop, range.inclusive, increment)
+   public LongRange(LongRange kRange, Long increment) : this(kRange.start, kRange.stop, kRange.inclusive, increment.Value)
    {
    }
 
-   public Float Start => start;
+   public Long Start => start;
 
    public IObject StartObj => startObj;
 
-   public Float Stop => stop;
+   public Long Stop => stop;
 
    public IObject StopObj => stopObj;
 
    public bool Inclusive => inclusive;
 
-   public double Increment => increment;
+   public BigInteger Increment => increment;
 
-   public Func<Float, IObject, bool> Compare => compare;
+   public Func<Long, IObject, bool> Compare => compare;
 
-   public Func<Float, Float> NextValue => next;
+   public Func<Long, Long> NextValue => next;
 
-   public string ClassName => "FloatRange";
+   public string ClassName => "LongRange";
 
    private static string str(IObject obj, bool asString) => asString ? obj.AsString : obj.Image;
 
@@ -102,7 +103,7 @@ public struct FloatRange : IObject, ICollection
 
    private string inclusiveImage() => inclusive ? "" : "<";
 
-   private string incrementImage() => $"{(increment >= 0 ? "+" : "-")} {Math.Abs(increment)}";
+   private string incrementImage() => $"{(increment >= 0 ? "+" : "-")} {BigInteger.Abs(increment)}";
 
    public string AsString => $"{startImage(true)} ..{inclusiveImage()} {stopImage(true)} {incrementImage()}";
 
@@ -110,10 +111,13 @@ public struct FloatRange : IObject, ICollection
 
    public int Hash => HashCode.Combine(startObj, stopObj, increment);
 
-   public bool IsEqualTo(IObject obj) => obj is FloatRange r && startObj.IsEqualTo(r.startObj) && stopObj.IsEqualTo(r.stopObj) &&
-      increment == r.increment && inclusive == r.inclusive;
+   public bool IsEqualTo(IObject obj)
+   {
+      return obj is LongRange r && startObj.IsEqualTo(r.startObj) && stopObj.IsEqualTo(r.stopObj) && increment == r.increment &&
+         inclusive == r.inclusive;
+   }
 
-   public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
+   public bool Match(IObject comparisand, Hash<string, IObject> bindings) => false;
 
    public bool IsTrue => list(this).Any();
 
@@ -121,7 +125,7 @@ public struct FloatRange : IObject, ICollection
 
    public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
 
-   public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new FloatRangeIterator(this);
+   public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new LongRangeIterator(this);
 
    public Maybe<IObject> Next(int index)
    {
@@ -179,7 +183,7 @@ public struct FloatRange : IObject, ICollection
 
    public IObject Times(int count)
    {
-      return new FloatRange(new Float(start.Value * count), new Float(stop.Value * count), inclusive, increment * count);
+      return new LongRange(new Long(start.Value * count), new Long(stop.Value * count), inclusive, increment * count);
    }
 
    public KString MakeString(string connector) => makeString(this, connector);
@@ -188,15 +192,15 @@ public struct FloatRange : IObject, ICollection
 
    public IObject One() => this;
 
-   public IObject Copy() => new FloatRange(start, stop, inclusive, increment);
+   public IObject Copy() => new LongRange(start, stop, inclusive, increment);
 
-   public IObject Add(double increment) => new FloatRange(this, increment);
+   public IObject Add(BigInteger increment) => new LongRange(this, increment);
 
-   public IObject Subtract(double increment) => new FloatRange(this, -increment);
+   public IObject Subtract(BigInteger increment) => new LongRange(this, -increment);
 
-   public FloatRange Reverse() => new(stop, start, true, -increment);
+   public LongRange Reverse() => new(stop, start, true, -increment);
 
-   public IObject Concatenate(FloatRange otherRange)
+   public IObject Concatenate(LongRange otherRange)
    {
       var iterator = GetIterator(false);
       var list = iterator.List();
@@ -212,5 +216,5 @@ public struct FloatRange : IObject, ICollection
       return sequence;
    }
 
-   public IObject Max() => stopObj is Infinity ? stopObj : new FloatRangeIterator(this).Max();
+   public IObject Max() => stopObj is Infinity ? stopObj : new LongRangeIterator(this).Max();
 }

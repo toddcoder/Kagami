@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Objects;
+﻿using System.Numerics;
+using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Booleans;
 using Core.Monads;
@@ -16,6 +17,7 @@ public class NewRange : TwoOperandOperation
    public override Optional<IObject> Execute(Machine machine, IObject x, IObject y) => x switch
    {
       Float start when y is Float stop => new FloatRange(start, stop, inclusive),
+      Long start when y is Long stop => new LongRange(start, stop, inclusive, BigInteger.One),
       IRangeItem start when y is Any => new KRange(start, new Infinity(true), inclusive),
       IRangeItem start when y is IObjectCompare stop => new KRange(start, stop, inclusive),
       IRangeItem start when y is IRangeItem stop => new KRange(start, stop, inclusive),

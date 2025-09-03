@@ -1,8 +1,10 @@
 ﻿using System.Text.RegularExpressions;
 using Core.Monads;
 using Kagami.Library.Nodes.Statements;
+using Kagami.Library.Nodes.Symbols;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
+using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Statements;
 
@@ -13,7 +15,7 @@ public partial class LetFunctionParser : StatementParser
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      var functionName = tokens[4].Text;
+      var fieldName = tokens[4].Text;
       state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Invokable, Color.OpenParenthesis);
       var _result =
          from parametersValue in getParameters(state)
@@ -23,7 +25,8 @@ public partial class LetFunctionParser : StatementParser
          select (parametersValue, blockValue);
       if (_result is (true, var (parameters, block)))
       {
-         var function = new Function(functionName, parameters, block, false, false, "");
+         var lambdaSymbol = new LambdaSymbol(parameters, block);
+         var function = new AssignLambda(fieldName, lambdaSymbol);
          state.AddStatement(function);
 
          return unit;
