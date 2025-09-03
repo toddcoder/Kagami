@@ -214,4 +214,6 @@ public readonly struct KChar : IObject, IComparable<KChar>, IEquatable<KChar>, I
    public IObject Decrement(int amount = 1) => (KChar)(value - amount);
 
    public IObject Increment(INumeric numeric) => Increment(numeric.AsInt32());
+
+   public IObject Numberize() => Int.IntObject(value);
 }

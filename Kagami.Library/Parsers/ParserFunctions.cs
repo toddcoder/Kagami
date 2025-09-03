@@ -1698,4 +1698,33 @@ public static class ParserFunctions
       TaggedExpression[] result = [.. taggedExpressions];
       return result;
    }
+
+   public static Optional<Expression[]> getExpressions(ParseState state, string ending)
+   {
+      List<Expression> expressions = [];
+
+      while (state.More)
+      {
+         var _end = state.Scan(ending, Color.Whitespace, Color.CloseParenthesis);
+         if (_end)
+         {
+            break;
+         }
+
+         var _expression = getExpression(state, ExpressionFlags.OmitComma);
+         if (_expression is (true, var expression))
+         {
+            expressions.Add(expression);
+         }
+         else
+         {
+            return _expression.Exception;
+         }
+
+         state.Scan(@"^(\s*)(,)", Color.Whitespace, Color.Structure);
+      }
+
+      Expression[] result = [.. expressions];
+      return result;
+   }
 }

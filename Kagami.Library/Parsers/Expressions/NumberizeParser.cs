@@ -17,7 +17,7 @@ public partial class NumberizeParser : SymbolParser
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
       state.Colorize(tokens, Color.Whitespace, Color.Operator);
-      builder.Add(new NumberizeSymbol());
+      builder.Add(new SendMessageSymbol("numberize()", Precedence.PrefixOperator, false, nil, nil));
 
       return unit;
    }

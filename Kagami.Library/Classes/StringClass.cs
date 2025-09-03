@@ -114,6 +114,7 @@ public class StringClass : BaseClass, ICollectionClass
       messages["scan(_<Regex>)"] = (obj, msg) => function<KString, Regex>(obj, msg, (s, r) => r.Scan(s.Value));
       messages["splitMapJoin(_<Regex>,onMatch:_<Lambda>,onNonMatch:_<Lambda>)"] = (obj, msg) =>
          function<KString, Regex, Lambda, Lambda>(obj, msg, (s, r, lm, lnm) => r.SplitMapJoin(s.Value, lm, lnm));
+      messages["numberize()"] = (obj, _) => function<KString>(obj, s => s.Numberize());
    }
 
    protected static IObject getIndexed(KString s, IObject i)

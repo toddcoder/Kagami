@@ -610,7 +610,7 @@ public class OperationsBuilder
 
    public void NewMutString(string text) => add(new NewMutString(text));
 
-   public void Numberize() => add(new Numberize());
+   public void NewJunction(string junctionType) => add(new NewJunction(junctionType));
 
    public override string ToString() => "operations";
 }

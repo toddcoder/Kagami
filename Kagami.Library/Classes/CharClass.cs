@@ -32,6 +32,7 @@ public class CharClass : BaseClass, IEquivalentClass
       messages["succ".get()] = (obj, _) => function<KChar>(obj, c => c.Succ());
       messages["pred".get()] = (obj, _) => function<KChar>(obj, c => c.Pred());
       messages["unicodeCat".get()] = (obj, _) => function<KChar>(obj, c => c.UnicodeCat);
+      messages["numberize()"] = (obj, _) => function<KChar>(obj, c => c.Numberize());
    }
 
    public override void RegisterClassMessages()

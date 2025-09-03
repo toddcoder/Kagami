@@ -116,6 +116,7 @@ public class Module
       "SpecialComparisand" => new SpecialComparisandClass(),
       "Formatter" => new FormatterClass(),
       "LongRange" => new LongRangeClass(),
+      "Junction" => new JunctionClass(),
       _ => nil
    };
 

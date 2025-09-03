@@ -595,4 +595,20 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
    public IObject Fields() => new FieldsIterator(this);
 
    public IObject Field(int index) => ((IIterator)Fields()).ToArray()[index];
+
+   public IObject Numberize()
+   {
+      if (value.IsMatch("['.e']"))
+      {
+         return Objects.Float.FloatObject(value.Value().Double());
+      }
+      else if (value.IsDate())
+      {
+         return Date.DateObject(value.Value().DateTime());
+      }
+      else
+      {
+         return Objects.Int.IntObject(value.Value().Int32());
+      }
+   }
 }

@@ -87,6 +87,7 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerMessage("format(_<Array>)", (obj, message) => formatArray(obj, message.Arguments[0]));
       registerMessage("id".get(), (obj, _) => KString.StringObject(obj.Id.ToString()));
       registerMessage("isTrue".get(), (obj, _) => KBoolean.BooleanObject(obj.IsTrue));
+      registerMessage("numberize()", (obj, _) => obj);
    }
 
    protected static KString format(IObject obj, string formattingString)
@@ -353,34 +354,6 @@ public abstract class BaseClass : IEquatable<BaseClass>
 
    protected void loadIteratorMessages()
    {
-      /*alternateMessages.AddRange((Selector[])
-      [
-         "collection".get(), "isLazy".get(), "next()", "peek()", "reset()", "reverse()",
-         "join(_<String>)",
-         "sort(_<Lambda>,asc:_<Boolean>)", "sort(_<Lambda>)", "sort(asc:_<Boolean>)", "sort()", "sortDesc()",
-         "foldl".Selector("_", "_<Lambda>"),
-         "foldl(_)", "foldr".Selector("_", "_<Lambda>"), "foldr(_)", "reducel".Selector("_", "_<Lambda>"), "reducel(_)",
-         "reducer".Selector("_", "_<Lambda>"), "reducer(_)", "count()", "count(of:_)", "count(_<Lambda>)", "map(_<Lambda>)",
-         "flatMap(_<Lambda>)", "bind(_<Lambda>)",
-         "if(_<Lambda>)",
-         "ifNot(_<Lambda>)", "skip(_<Int>)", "-(_<Int>)", "skipWhile(_<Lambda>)",
-         "skipUntil(_<Lambda>)", "take(_<Int>)", "+(_<Int>)", "takeWhile(_<Lambda>)",
-         "takeUntil(_<Lambda>)",
-         "index(_<Lambda>)", "indexes(_<Lambda>)",
-         "zip(_<Collection>,_<Lambda>)", "zip(_)", "min".get(), "min(_<Lambda>)", "max".get(), "max(_<Lambda>)",
-         "first()", "first".Selector("_<Lambda>"), "last()", "last".Selector("_<Lambda>"),
-         "split(_<Lambda>)", "split".Selector("_<Int>"), "random()", "groupBy(_<Lambda>)", "one(_<Lambda>)",
-         "none(_<Lambda>)",
-         "any(_<Lambda>)", "all(_<Lambda>)", "sum()", "average()",
-         "product()", "cross(_)", "cross(_,_)", "by(_<Int>)", "/(_<Int>)", "window(_<Int>)", "//(_<Int>)", "distinct()",
-         "span".Selector("_<Lambda>"),
-         "span".Selector("_<Int>"),
-         "shuffle()", "array()", "list()", "tuple()", "dictionary".Selector("key:_<Lambda>", "value:_<Lambda>"), "dictionary()",
-         "each(_<Lambda>)", "rotate(_<Int>)", "permutation(_<Int>)", "combination(_<Int>)", "flatten()",
-         "copy()", "revert()", "*(_)", "format(_)", "replace(_<Lambda>,_<Lambda>)", "set()", "shape(_<Int>,_<Int>)", "shape(_<Int>)",
-         "column(_<Int>)", "step(_<Int>)"
-      ]);*/
-
       dynamicInvoke = (obj, message) =>
       {
          var iterator = (IObject)((ICollection)obj).GetIterator(false);

@@ -48,6 +48,7 @@ public class ValuesParser : MultiParser
          yield return new StringParser(builder);
          yield return new CharParser(builder);
          yield return new ForExpressionParser(builder);
+         yield return new JunctionParser(builder);
          yield return new MessageParser(builder);
 
          if (!builder.Flags[ExpressionFlags.Subset])
