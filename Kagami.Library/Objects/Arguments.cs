@@ -98,4 +98,23 @@ public readonly struct Arguments : IObject, IEnumerable<IObject>, IEquatable<Arg
    public static bool operator ==(Arguments left, Arguments right) => left.Equals(right);
 
    public static bool operator !=(Arguments left, Arguments right) => !left.Equals(right);
+
+   public bool HasAnyJunctions => arguments.AtLeastOne(a => a is Junction);
+
+   public IEnumerable<Arguments> WithJunctions()
+   {
+      for (var i = 0; i < arguments.Length; i++)
+      {
+         var argument = arguments[i];
+         if (argument is Junction junction)
+         {
+            List<IObject> leftList = [.. arguments.Take(i)];
+            List<IObject> rightList = [.. arguments.Skip(i + 1)];
+            foreach (var junctionItem in junction.Items)
+            {
+               yield return new Arguments([.. leftList, junctionItem, ..rightList]);
+            }
+         }
+      }
+   }
 }

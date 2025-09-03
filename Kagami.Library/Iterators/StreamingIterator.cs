@@ -330,4 +330,12 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
    public KBoolean NoneTrue(IObject argument) => terminate().NoneTrue(argument);
 
    public KTuple HeadTail() => terminate().HeadTail();
+
+   public Junction JunctionAll() => terminate().JunctionAll();
+
+   public Junction JunctionAny() => terminate().JunctionAny();
+
+   public Junction JunctionNone() => terminate().JunctionNone();
+
+   public Junction JunctionOne() => terminate().JunctionOne();
 }

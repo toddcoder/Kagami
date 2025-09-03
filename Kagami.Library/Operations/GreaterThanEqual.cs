@@ -7,24 +7,14 @@ namespace Kagami.Library.Operations;
 
 public class GreaterThanEqual : TwoOperandOperation
 {
-   public override Optional<IObject> Execute(Machine machine, IObject x, IObject y)
+   public override Optional<IObject> Execute(Machine machine, IObject x, IObject y) => x switch
    {
-      if (x is IObjectCompare xCompare)
-      {
-         if (y is IObjectCompare)
-         {
-            return KBoolean.BooleanObject(xCompare.Compare(y) >= 0).Just();
-         }
-         else
-         {
-            return greaterThanEqual(x, y);
-         }
-      }
-      else
-      {
-         return greaterThan(x, y);
-      }
-   }
+      IObjectCompare xCompare when y is IObjectCompare => KBoolean.BooleanObject(xCompare.Compare(y) >= 0).Just(),
+      IObjectCompare => greaterThanEqual(x, y),
+      Junction junction when y is Junction otherJunction => KBoolean.BooleanObject(junction.Apply(otherJunction, (x, y) => KBoolean.BooleanObject(compareObjects(x, y) >= 0)).IsTrue).Just(),
+      Junction junction => KBoolean.BooleanObject(junction.Apply(i => KBoolean.BooleanObject(compareObjects(i, y) >= 0)).IsTrue).Just(),
+      _ => greaterThan(x, y)
+   };
 
    public override string ToString() => "greater.than.Equal";
 }

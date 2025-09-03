@@ -26,6 +26,10 @@ public class GoToIfTrue : AddressedOperation
                return nil;
             case Before:
                return machine.GoTo(address) ? nil : badAddress(address);
+            case Junction junction:
+            {
+               return KBoolean.BooleanObject(junction.IsTrue).Just();
+            }
             default:
                return incompatibleClasses(x, "Boolean");
          }

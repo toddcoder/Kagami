@@ -21,21 +21,14 @@ public class Concatenate : TwoOperandOperation
             return (KString)(xc.AsString + yc.AsString);
          default:
          {
-            if (x is KString || y is KString)
+            var _class = Module.Global.Value.Class(x.ClassName);
+            if (_class is (true, var @class))
             {
-               return (KString)(x.AsString + y.AsString);
+               return @class.SendMessage(x, "~(_)", new Arguments(y)).Just();
             }
             else
             {
-               var _class = Module.Global.Value.Class(x.ClassName);
-               if (_class is (true, var @class))
-               {
-                  return @class.SendMessage(x, "~(_)", new Arguments(y)).Just();
-               }
-               else
-               {
-                  return classNotFound(x.ClassName);
-               }
+               return classNotFound(x.ClassName);
             }
          }
       }

@@ -213,5 +213,13 @@ public interface IIterator : IEquivalentClass
 
    KBoolean NoneTrue(IObject argument);
 
-   public KTuple HeadTail();
+   KTuple HeadTail();
+
+   Junction JunctionAll();
+
+   Junction JunctionAny();
+
+   Junction JunctionNone();
+
+   Junction JunctionOne();
 }

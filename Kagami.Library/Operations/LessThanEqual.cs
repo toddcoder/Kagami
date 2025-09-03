@@ -29,6 +29,17 @@ public class LessThanEqual : TwoOperandOperation
          }
          case IObjectCompare:
             return fail($"{y.Image} must be comparable");
+         case Junction junction:
+         {
+            if (y is Junction otherJunction)
+            {
+               return KBoolean.BooleanObject(junction.Apply(otherJunction, (x, y) => KBoolean.BooleanObject(compareObjects(x, y) <= 0)).IsTrue).Just();
+            }
+            else
+            {
+               return KBoolean.BooleanObject(junction.Apply(i => KBoolean.BooleanObject(compareObjects(i, y) <= 0)).IsTrue).Just();
+            }
+         }
          default:
             return lessThanEqual(x, y);
       }

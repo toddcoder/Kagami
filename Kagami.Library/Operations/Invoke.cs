@@ -25,6 +25,7 @@ public class Invoke : OneOperandOperation
          {
             _fields = providesFields.Fields;
          }
+
          InvokeInvokable(machine, invokable, arguments, _fields, (invokableObject as Lambda).NotNull());
       }
    }
@@ -51,6 +52,7 @@ public class Invoke : OneOperandOperation
          {
             frame.SetFields(fields);
          }
+
          frame.Lambda = _lambda;
          machine.GoTo(invokable.Address);
       }
@@ -66,6 +68,11 @@ public class Invoke : OneOperandOperation
 
    public static Optional<IObject> InvokeObject(Machine machine, IObject value, Arguments arguments, ref bool increment)
    {
+      if (arguments.HasAnyJunctions)
+      {
+         return InvokeObjectWithJunction(machine, value, arguments, ref increment);
+      }
+
       switch (value)
       {
          case CompositeLambda compositeLambda:
@@ -74,12 +81,10 @@ public class Invoke : OneOperandOperation
          case IInvokableObject invokableObject:
             InvokeInvokableObject(machine, invokableObject, arguments);
             increment = invokableObject.Invokable is YieldingInvokable;
-
             return nil;
          case PackageFunction packageFunction:
             increment = true;
             var result = packageFunction.Invoke(arguments);
-
             return result.Just();
          case IMayInvoke mayInvoke:
             increment = true;
@@ -95,6 +100,25 @@ public class Invoke : OneOperandOperation
          default:
             return incompatibleClasses(value, "Invokable object");
       }
+   }
+
+   protected static Optional<IObject> InvokeObjectWithJunction(Machine machine, IObject value, Arguments arguments, ref bool increment)
+   {
+      List<IObject> results = [];
+      foreach (var newArguments in arguments.WithJunctions())
+      {
+         var _result = InvokeObject(machine, value, newArguments, ref increment);
+         if (_result is (true, var result))
+         {
+            results.Add(result);
+         }
+         else if (_result.Exception is (true, var exception))
+         {
+            return exception;
+         }
+      }
+
+      return new Junction(JunctionType.Any, results);
    }
 
    protected string fieldName;

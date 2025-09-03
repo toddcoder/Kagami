@@ -9,6 +9,7 @@ using Core.Monads;
 using Core.Objects;
 using Core.Strings;
 using static Kagami.Library.AllExceptions;
+using ICollection = Kagami.Library.Objects.ICollection;
 
 namespace Kagami.Library.Packages;
 
@@ -296,4 +297,12 @@ public class Sys : Package
          return new Dictionary(hash);
       }
    }
+
+   public Junction All(ICollection collection) => collection.GetIterator(false).JunctionAll();
+
+   public Junction Any(ICollection collection) => collection.GetIterator(false).JunctionAny();
+
+   public Junction One(ICollection collection) => collection.GetIterator(false).JunctionOne();
+
+   public Junction None(ICollection collection) => collection.GetIterator(false).JunctionNone();
 }

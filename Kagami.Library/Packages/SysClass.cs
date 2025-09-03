@@ -45,6 +45,10 @@ public class SysClass : PackageClass
       registerPackageFunction("Regex(_<String>)", (obj, msg) => function<Sys, KString>(obj, msg, (sys, s) => sys.Regex(s.Value)));
       registerPackageFunction("string(_)", (obj, msg) => function<Sys, IObject>(obj, msg, (sys, o) => sys.String(o)));
       registerPackageFunction("environment".get(), (obj, _) => function<Sys>(obj, sys => sys.Environment));
+      registerPackageFunction("all(_)", (obj, msg) => function<Sys, IObject>(obj, msg, (sys, c) => sys.All((ICollection)c)));
+      registerPackageFunction("any(_)", (obj, msg) => function<Sys, IObject>(obj, msg, (sys, c) => sys.Any((ICollection)c)));
+      registerPackageFunction("one(_)", (obj, msg) => function<Sys, IObject>(obj, msg, (sys, c) => sys.One((ICollection)c)));
+      registerPackageFunction("none(_)", (obj, msg) => function<Sys, IObject>(obj, msg, (sys, c) => sys.None((ICollection)c)));
    }
 
    public override IObject DefaultValue => throw noDefaultValue("Sys");

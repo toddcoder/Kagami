@@ -651,6 +651,18 @@ public static class ObjectFunctions
       }
    }
 
+   public static int compareObjects(IObject x, IObject y)
+   {
+      if (x is IObjectCompare objectCompare)
+      {
+         return objectCompare.Compare(y);
+      }
+      else
+      {
+         throw incompatibleClasses(x, "ObjectCompare");
+      }
+   }
+
    public static bool between(IObjectCompare obj, IObject min, IObject max, bool inclusive)
    {
       if (inclusive)

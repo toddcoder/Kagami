@@ -1410,6 +1410,9 @@ public static class ParserFunctions
          case "$":
             _symbol = new SendBinaryMessageSymbol("slice(_)", Precedence.PostfixOperator);
             break;
+         case "**":
+            _symbol = new RepeatAsArraySymbol();
+            break;
       }
 
       return _symbol;

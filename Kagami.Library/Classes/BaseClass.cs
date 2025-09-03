@@ -198,6 +198,11 @@ public abstract class BaseClass : IEquatable<BaseClass>
 
    protected IObject invokeMessage(IObject obj, Message message)
    {
+      if (message.Arguments.Length > 0 && message.Arguments[0] is Junction junction)
+      {
+         return invokeOnJunction(obj, junction, message);
+      }
+
       var selector = message.Selector;
 
       if (RespondsTo(selector))
@@ -217,6 +222,20 @@ public abstract class BaseClass : IEquatable<BaseClass>
       {
          return DynamicInvoke(obj, message);
       }
+   }
+
+   protected IObject invokeOnJunction(IObject obj, Junction junction, Message message)
+   {
+      List<IObject> newItems = [];
+      foreach (var junctionItem in junction.Items)
+      {
+         Selector newSelector = message.Selector.ToString().Replace("<Junction>", "");
+         var newMessage = new Message(newSelector, [junctionItem, .. message.Arguments.Value.Skip(1)]);
+         var result = SendMessage(obj, newMessage);
+         newItems.Add(result);
+      }
+
+      return junction.NewJunction(newItems);
    }
 
    protected IObject invokeDirectly(IObject obj, Message message)
@@ -502,6 +521,10 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerIterMessage("anyTrue(_)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, c) => i.AnyTrue(c)));
       registerIterMessage("noneTrue(_)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, c) => i.NoneTrue(c)));
       registerIterMessage("headTail()", (obj, _) => iteratorFunc(obj, i => i.HeadTail()));
+      registerIterMessage("junctionAll()", (obj, _) => iteratorFunc(obj, i => i.JunctionAll()));
+      registerIterMessage("junctionAny()", (obj, _) => iteratorFunc(obj, i => i.JunctionAny()));
+      registerIterMessage("junctionNone()", (obj, _) => iteratorFunc(obj, i => i.JunctionNone()));
+      registerIterMessage("junctionOne()", (obj, _) => iteratorFunc(obj, i => i.JunctionOne()));
    }
 
    public virtual bool MatchCompatible(BaseClass otherClass) => Name == otherClass.Name;

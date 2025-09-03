@@ -1495,6 +1495,14 @@ public class Iterator : IObject, IIterator
       }
    }
 
+   public Junction JunctionAll() => new(JunctionType.All, List());
+
+   public Junction JunctionAny() => new(JunctionType.Any, List());
+
+   public Junction JunctionNone() => new(JunctionType.None, List());
+
+   public Junction JunctionOne() => new(JunctionType.One, List());
+
    protected static IEnumerable<IObject> applyAgainst(List<Lambda> lambdas, List<IObject> enumerable)
    {
       return lambdas.SelectMany(_ => enumerable, (lambda, item) => lambda.Invoke(item));

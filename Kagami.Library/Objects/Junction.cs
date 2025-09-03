@@ -80,5 +80,32 @@ public struct Junction : IObject
       return new Junction(junctionType, mappedObjects);
    }
 
+   public Junction Apply(Func<IObject, IObject> application)
+   {
+      List<IObject> mappedObjects = [];
+      foreach (var item in items)
+      {
+         var result = application(item);
+         mappedObjects.Add(result);
+      }
+
+      return new Junction(junctionType, mappedObjects);
+   }
+
+   public Junction Apply(Junction otherJunction, Func<IObject, IObject, IObject> application)
+   {
+      List<IObject> mappedObjects = [];
+      foreach (var item1 in items)
+      {
+         foreach (var item2 in otherJunction.Items)
+         {
+            var result = application(item1, item2);
+            mappedObjects.Add(result);
+         }
+      }
+
+      return NewJunction(mappedObjects);
+   }
+
    public IObject[] Items => items;
 }

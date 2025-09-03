@@ -26,6 +26,10 @@ public class GoToIfFalse : AddressedOperation
             case IBoolean or Before:
                increment = true;
                return nil;
+            case Junction junction:
+            {
+               return KBoolean.BooleanObject(!junction.IsTrue).Just();
+            }
             default:
                return incompatibleClasses(x, "Boolean");
          }
