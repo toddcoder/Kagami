@@ -12,13 +12,13 @@ using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public partial class StructParser : SymbolParser
+public partial class RecordParser : SymbolParser
 {
-   public StructParser(ExpressionBuilder builder) : base(builder)
+   public RecordParser(ExpressionBuilder builder) : base(builder)
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(struct)(\{)")]
+   [GeneratedRegex(@"^(\s*)(record)(\{)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -30,21 +30,27 @@ public partial class StructParser : SymbolParser
       {
          var className = taggedExpressions.Select(te => te.Tag.ToUpper1()).ToString("$");
          Module.Global.Value.ForwardReference(className);
-         List<Statement> statements = [];
+         //List<Statement> statements = [];
+         List<Parameter> parameterList = [];
+         List<Expression> argumentList = [];
          foreach (var (tag, expression) in taggedExpressions)
          {
-            var assignToNewField = new AssignToNewField(true, tag, false, expression);
-            statements.Add(assignToNewField);
+            /*var assignToNewField = new AssignToNewField(true, tag, false, expression);
+            statements.Add(assignToNewField);*/
+            parameterList.Add(new Parameter(true, "", tag, nil, nil, false, false));
+            argumentList.Add(expression);
          }
 
-         var block = new Block(statements);
-         var classBuilder = new ClassBuilder(className, Parameters.Empty, "", [], false, block);
+         var parameters = new Parameters([.. parameterList]);
+
+         var block = new Block();
+         var classBuilder = new ClassBuilder(className, parameters, "", [], false, block);
          var _registered = classBuilder.Register();
          if (_registered)
          {
             var cls = new Class(classBuilder);
             state.AddStatement(cls);
-            builder.Add(new InvokeSymbol(className, [], nil, false));
+            builder.Add(new InvokeSymbol(className, [.. argumentList], nil, false));
             return unit;
          }
          else

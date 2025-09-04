@@ -1,5 +1,6 @@
 ﻿using Kagami.Library.Objects;
 using Core.Monads;
+using Kagami.Library.Runtime;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Classes.ClassFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
@@ -105,6 +106,7 @@ public class ArrayClass : BaseClass, ICollectionClass
          classFunc<ArrayClass, IObject, Int>(bc, msg, (_, v, t) => KArray.Repeat(v, t.Value));
       classMessages["empty".get()] = (bc, _) => classFunc<ArrayClass>(bc, _ => KArray.Empty);
       classMessages["typed(_)"] = (_, msg) => getTypedArray(msg);
+      classMessages["unfold(_<Lambda>)"] = (bc, msg) => classFunc<ArrayClass, Lambda>(bc, msg, (c, l) => c.unfold(l));
    }
 
    public override IObject DefaultValue => KArray.Empty;
@@ -119,6 +121,33 @@ public class ArrayClass : BaseClass, ICollectionClass
       {
          throw fail("Type constraint for array required");
       }
+   }
+
+   protected KArray unfold(Lambda lambda)
+   {
+      List<IObject> list = [];
+      var index = 0;
+      var last = KNil.NilValue;
+      var running = true;
+      while (running && !Machine.Current.Value.Context.Cancelled())
+      {
+         var result = lambda.Invoke((Int)index, last);
+         switch (result)
+         {
+            case Some some:
+               list.Add(some.Value);
+               last = some.Value;
+               break;
+            case Nil:
+               running = false;
+               break;
+            default:
+               throw fail("Unfold lambda must return an optional value");
+         }
+         index++;
+      }
+
+      return new KArray(list);
    }
 
    public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");

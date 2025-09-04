@@ -20,7 +20,6 @@ public class StatementsParser : MultiParser
          yield return new InclusionParser();
          yield return new IncludeParser();
          yield return new ModuleParser();
-         yield return new RecordParser();
          yield return new PatternParser();
          yield return new ConvertParser();
          yield return new ConditionalAssignParser();

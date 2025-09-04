@@ -474,7 +474,7 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       }
 
       Memo<string, List<string>> newBuckets = new Memo<string, List<string>>.Function(_ => []);
-      foreach (var (key, value) in newBuckets)
+      foreach (var (key, value) in buckets)
       {
          newBuckets[key] = value;
       }

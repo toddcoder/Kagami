@@ -7,12 +7,12 @@ public class WithSymbol(TaggedExpression[] taggedExpressions) : Symbol
    public override void Generate(OperationsBuilder builder)
    {
       builder.SendMessage("clone()", 0);
-      builder.Dup();
       foreach (var (tag, expression) in taggedExpressions)
       {
          builder.Dup();
          expression.Generate(builder);
          builder.SendMessage(tag.set(), 1);
+         builder.Drop();
       }
    }
 

@@ -269,6 +269,6 @@ public static class AllExceptions
    public static Exception typeConstraintRequired(string fieldName) => fail(messageTypeConstraintRequired(fieldName));
 
    public static string messageCannotBeAKeyword(string keyword) => $"In this context, an identifier as keyword {keyword} cannot be used";
-   
+
    public static Exception cannotBeAKeyword(string keyword) => fail(messageCannotBeAKeyword(keyword));
 }
