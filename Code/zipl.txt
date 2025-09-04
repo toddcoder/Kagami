@@ -1,3 +1,2 @@
 [[1, "A"], [2, "B"], [3, "X"]]
-["1A", "2B", "3X"]
-"[\"1A\", \"2B\", \"3X\"]" | String
+Execute error: Int doesn't respond to message ~(_<String>)

@@ -11,12 +11,12 @@ public partial class IsTrueParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(istrue|isfalse)\b")]
+   [GeneratedRegex(@"^(\s*)(so|but)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      var isTrue = tokens[2].Text == "istrue";
+      var isTrue = tokens[2].Text == "so";
       state.Colorize(tokens, Color.Whitespace, Color.Operator);
       builder.Add(new IsTrueSymbol(isTrue));
 

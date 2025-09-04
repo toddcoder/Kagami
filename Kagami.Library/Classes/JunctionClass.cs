@@ -1,5 +1,6 @@
 ﻿using Kagami.Library.Objects;
 using static Kagami.Library.AllExceptions;
+using static Kagami.Library.Classes.ClassFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Classes;
@@ -15,6 +16,7 @@ public class JunctionClass : BaseClass
       base.RegisterMessages();
 
       messages.Remove("numberize()");
+      registerMessage("flatten()", (obj, _) => function<Junction>(obj, j => j.Flatten()));
    }
 
    public override IObject DynamicInvoke(IObject obj, Message message)
@@ -35,11 +37,11 @@ public class JunctionClass : BaseClass
                }
             }
 
-            return junction.NewJunction(result);
+            return junction.NewJunction(result).Flatten();
          }
          else
          {
-            return junction.Apply(message);
+            return junction.Apply(message).Flatten();
          }
       }
       else

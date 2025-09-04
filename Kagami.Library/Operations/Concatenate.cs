@@ -19,6 +19,10 @@ public class Concatenate : TwoOperandOperation
             return xt.Concatenate(yt);
          case (KChar xc, KChar yc):
             return (KString)(xc.AsString + yc.AsString);
+         case (INumeric xn, KString ys):
+            return (KString)(((IObject)xn).AsString + ys.Value);
+         case (KString xs, INumeric yn):
+            return (KString)(xs.Value + ((IObject)yn).AsString);
          default:
          {
             var _class = Module.Global.Value.Class(x.ClassName);

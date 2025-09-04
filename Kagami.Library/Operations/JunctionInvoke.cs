@@ -1,5 +1,6 @@
 ﻿using Core.Monads;
 using Kagami.Library.Objects;
+using Kagami.Library.Packages;
 using Kagami.Library.Runtime;
 using static Kagami.Library.AllExceptions;
 
@@ -15,18 +16,37 @@ public class JunctionInvoke(string functionName) : OneOperandOperation
          var _field = machine.Find(selector);
          if (_field is (true, var field))
          {
-            var lambda = (Lambda)field.Value;
-            lambda.Capture(machine);
-
-            List<IObject> results = [];
-            foreach (var junctionArguments in arguments.ExpandJunctions())
+            switch (field.Value)
             {
-               var result = lambda.Invoke(junctionArguments.Value);
-               results.Add(result);
-            }
+               case Lambda lambda:
+               {
+                  lambda.Capture(machine);
 
-            var junction = new Junction(JunctionType.Any, results);
-            return junction;
+                  List<IObject> results = [];
+                  foreach (var junctionArguments in arguments.ExpandJunctions())
+                  {
+                     var result = lambda.Invoke(junctionArguments.Value);
+                     results.Add(result);
+                  }
+
+                  var junction = new Junction(JunctionType.Any, results);
+                  return junction.Flatten();
+               }
+               case PackageFunction packageFunction:
+               {
+                  List<IObject> results = [];
+                  foreach (var junctionArguments in arguments.ExpandJunctions())
+                  {
+                     var result = packageFunction.Invoke(junctionArguments.Value);
+                     results.Add(result);
+                  }
+
+                  var junction = new Junction(JunctionType.Any, results);
+                  return junction.Flatten();
+               }
+               default:
+                  return incompatibleClasses(field.Value, "Lambda or PackageFunction");
+            }
          }
          else
          {

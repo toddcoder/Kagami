@@ -77,7 +77,7 @@ public struct Junction : IObject
          mappedObjects.Add(result);
       }
 
-      return new Junction(junctionType, mappedObjects);
+      return new Junction(junctionType, mappedObjects).Flatten();
    }
 
    public Junction Apply(Func<IObject, IObject> application)
@@ -89,7 +89,7 @@ public struct Junction : IObject
          mappedObjects.Add(result);
       }
 
-      return new Junction(junctionType, mappedObjects);
+      return new Junction(junctionType, mappedObjects).Flatten();
    }
 
    public Junction Apply(Junction otherJunction, Func<IObject, IObject, IObject> application)
@@ -104,8 +104,26 @@ public struct Junction : IObject
          }
       }
 
-      return NewJunction(mappedObjects);
+      return NewJunction(mappedObjects).Flatten();
    }
 
    public IObject[] Items => items;
+
+   public Junction Flatten()
+   {
+      List<IObject> flattenedItems = [];
+      foreach (var item in items)
+      {
+         if (item is Junction junction)
+         {
+            flattenedItems.AddRange(junction.Flatten().Items);
+         }
+         else
+         {
+            flattenedItems.Add(item);
+         }
+      }
+
+      return new Junction(junctionType, flattenedItems);
+   }
 }

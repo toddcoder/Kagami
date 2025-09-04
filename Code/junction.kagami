@@ -25,3 +25,6 @@ if merged == 11 {
 
 let array = [merged]
 println(~array)
+
+func greet(greeting, name) <- $"(greeting), (name)"
+println(any["Hello", "Bye"], any["Todd", "Debra"])

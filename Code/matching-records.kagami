@@ -1,6 +1,6 @@
 ﻿open sys
 
-record Couple(him String, her String)
+class Couple(him String, her String);
 
 let couples = [
 	Couple("Brad", "Angela"), Couple("Becks", "Posh"),

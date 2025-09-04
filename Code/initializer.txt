@@ -1,3 +1,2 @@
 10 20
-10 42
-"10 42" | String
+Execute error: Empty stack

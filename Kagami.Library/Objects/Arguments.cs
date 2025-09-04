@@ -103,31 +103,34 @@ public readonly struct Arguments : IObject, IEnumerable<IObject>, IEquatable<Arg
 
    public IEnumerable<Arguments> ExpandJunctions()
    {
-      /*for (var i = 0; i < arguments.Length; i++)
+      if (!HasAnyJunctions)
       {
-         var argument = arguments[i];
-         if (argument is Junction junction)
+         yield return this;
+      }
+      else
+      {
+         IObject[][] allExpansions = [.. arguments.Select(arg => arg is Junction junction ? junction.Items : [arg])];
+         var combinations = cartesianProduct(allExpansions);
+
+         foreach (var combination in combinations)
          {
-            List<IObject> leftList = [.. arguments.Take(i)];
-            List<IObject> rightList = [.. arguments.Skip(i + 1)];
-            foreach (var junctionItem in junction.Items)
-            {
-               var expandJunctions = new Arguments([.. leftList, junctionItem, ..rightList]);
-               foreach (var expandJunction in expandJunctions.ExpandJunctions())
-               {
-                  yield return expandJunction;
-               }
-            }
+            yield return new Arguments([.. combination]);
          }
       }
 
-      yield return this;*/
+      yield break;
 
-      IEnumerable<IObject> expandAt(int index, IObject[] arguments)
+      static IEnumerable<IEnumerable<IObject>> cartesianProduct(IObject[][] sequences)
       {
-         if (index < arguments.Length)
+         IEnumerable<IEnumerable<IObject>> result = [[]];
+         foreach (var sequence in sequences)
          {
-            var argument = arguments[index];
+            result = from seq in result
+               from item in sequence
+               select seq.Append(item);
          }
+
+         return result;
       }
    }
+}
