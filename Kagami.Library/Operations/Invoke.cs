@@ -68,10 +68,10 @@ public class Invoke : OneOperandOperation
 
    public static Optional<IObject> InvokeObject(Machine machine, IObject value, Arguments arguments, ref bool increment)
    {
-      if (arguments.HasAnyJunctions)
+      /*if (arguments.HasAnyJunctions)
       {
          return InvokeObjectWithJunction(machine, value, arguments, ref increment);
-      }
+      }*/
 
       switch (value)
       {
@@ -102,7 +102,7 @@ public class Invoke : OneOperandOperation
       }
    }
 
-   protected static Optional<IObject> InvokeObjectWithJunction(Machine machine, IObject value, Arguments arguments, ref bool increment)
+   /*protected static Optional<IObject> InvokeObjectWithJunction(Machine machine, IObject value, Arguments arguments, ref bool increment)
    {
       List<IObject> results = [];
       foreach (var newArguments in arguments.WithJunctions())
@@ -119,7 +119,7 @@ public class Invoke : OneOperandOperation
       }
 
       return new Junction(JunctionType.Any, results);
-   }
+   }*/
 
    protected string fieldName;
    protected bool increment;

@@ -101,9 +101,9 @@ public readonly struct Arguments : IObject, IEnumerable<IObject>, IEquatable<Arg
 
    public bool HasAnyJunctions => arguments.AtLeastOne(a => a is Junction);
 
-   public IEnumerable<Arguments> WithJunctions()
+   public IEnumerable<Arguments> ExpandJunctions()
    {
-      for (var i = 0; i < arguments.Length; i++)
+      /*for (var i = 0; i < arguments.Length; i++)
       {
          var argument = arguments[i];
          if (argument is Junction junction)
@@ -112,9 +112,22 @@ public readonly struct Arguments : IObject, IEnumerable<IObject>, IEquatable<Arg
             List<IObject> rightList = [.. arguments.Skip(i + 1)];
             foreach (var junctionItem in junction.Items)
             {
-               yield return new Arguments([.. leftList, junctionItem, ..rightList]);
+               var expandJunctions = new Arguments([.. leftList, junctionItem, ..rightList]);
+               foreach (var expandJunction in expandJunctions.ExpandJunctions())
+               {
+                  yield return expandJunction;
+               }
             }
          }
       }
+
+      yield return this;*/
+
+      IEnumerable<IObject> expandAt(int index, IObject[] arguments)
+      {
+         if (index < arguments.Length)
+         {
+            var argument = arguments[index];
+         }
+      }
    }
-}

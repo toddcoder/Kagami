@@ -173,10 +173,7 @@ public class OperationsBuilder
       add(new Invoke(functionName));
    }
 
-   public void Invoke(int count)
-   {
-      ToArguments(count);
-   }
+   public void InvokeWithoutArguments(string functionName) => add(new Invoke(functionName));
 
    public void PostfixInvoke() => add(new PostfixInvoke());
 
@@ -611,6 +608,10 @@ public class OperationsBuilder
    public void NewMutString(string text) => add(new NewMutString(text));
 
    public void NewJunction(string junctionType) => add(new NewJunction(junctionType));
+
+   public void HasAnyJunctions() => add(new HasAnyJunctions());
+
+   public void JunctionInvoke(string functionName) => add(new JunctionInvoke(functionName));
 
    public override string ToString() => "operations";
 }

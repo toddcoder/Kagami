@@ -4,6 +4,7 @@ using Kagami.Library.Operations;
 using Core.Enumerables;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.Nodes.NodeFunctions;
 using Return = Kagami.Library.Nodes.Statements.Return;
 
 namespace Kagami.Library.Nodes.Symbols;
@@ -25,6 +26,9 @@ public class InvokeSymbol : Symbol, IHasExpressions
 
    public override void Generate(OperationsBuilder builder)
    {
+      var noJunctionsLabel = newLabel("no-junctions");
+      var endLabel = newLabel("end");
+
       if (arguments.Any(a => a.Symbols[0] is AnySymbol) && !inComparisand)
       {
          List<Expression> argumentsList = [];
@@ -68,7 +72,20 @@ public class InvokeSymbol : Symbol, IHasExpressions
             count = arguments.Length;
          }
 
-         builder.Invoke(functionName, count);
+         builder.ToArguments(count);
+
+         builder.Dup();
+         builder.HasAnyJunctions();
+         builder.GoToIfFalse(noJunctionsLabel);
+
+         builder.JunctionInvoke(functionName);
+         builder.GoTo(endLabel);
+
+         builder.Label(noJunctionsLabel);
+         builder.InvokeWithoutArguments(functionName);
+
+         builder.Label(endLabel);
+         builder.NoOp();
       }
    }
 
