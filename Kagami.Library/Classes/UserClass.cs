@@ -8,6 +8,7 @@ using static Kagami.Library.Classes.ClassFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
+using Class = Kagami.Library.Objects.Class;
 
 namespace Kagami.Library.Classes;
 
@@ -121,7 +122,11 @@ public class UserClass : BaseClass, IEquatable<UserClass>
          if (parameter.Mutable)
          {
             Selector setter = name.set();
-            messages[setter] = (obj, msg) => ((UserObject)obj).Fields[name] = msg.Arguments[0];
+            messages[setter] = (obj, msg) =>
+            {
+               ((UserObject)obj).Fields[name] = msg.Arguments[0];
+               return KVoid.Value;
+            };
             signatures.Add(setter);
          }
       }

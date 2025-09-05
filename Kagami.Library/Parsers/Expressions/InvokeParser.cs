@@ -37,7 +37,16 @@ public partial class InvokeParser : SymbolParser
                if (_result)
                {
                   var tempObjectField = newLabel("object");
-                  var outerBuilder = new ExpressionBuilder(ExpressionFlags.Standard | ExpressionFlags.OmitComma);
+                  var _taggedExpressions = getTaggedExpressions(state, REGEX_BLOCK_END);
+                  if (_taggedExpressions is (true, var taggedExpressions))
+                  {
+                     builder.Add(new NewObjectSymbol(tempObjectField, functionName, taggedExpressions));
+                  }
+                  else
+                  {
+                     return _taggedExpressions.Exception;
+                  }
+                  /*var outerBuilder = new ExpressionBuilder(ExpressionFlags.Standard | ExpressionFlags.OmitComma);
                   var setPropertyParser = new SetPropertyParser(builder, tempObjectField, outerBuilder);
                   while (state.More)
                   {
@@ -69,7 +78,7 @@ public partial class InvokeParser : SymbolParser
                   else
                   {
                      return _outerExpression.Exception;
-                  }
+                  }*/
                }
                else
                {

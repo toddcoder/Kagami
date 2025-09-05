@@ -1,4 +1,5 @@
-﻿using Core.Monads;
+﻿using Core.Matching;
+using Core.Monads;
 using Kagami.Library.Nodes.Symbols;
 using System.Text.RegularExpressions;
 using static Core.Monads.MonadFunctions;
@@ -33,58 +34,31 @@ public partial class PendingInvokeParser : SymbolParser
          if (hasParameter)
          {
             arguments = [new Expression(new FieldSymbol("__$0")), .. arguments];
+            var invokeSymbol = new InvokeSymbol(functionName, arguments, possibleLambda, builder.Flags[ExpressionFlags.Comparisand]);
+            builder.Add(new PendingInvokeSymbol(invokeSymbol, hasParameter));
+            return unit;
          }
-         if (state.BlockFollows())
+
+         if (functionName.IsMatch("^ ['A-Z']") && state.BlockFollows())
          {
-            state.Scan("^(:)", Color.Structure);
             var _result = state.BeginBlock();
             if (_result)
             {
                var tempObjectField = newLabel("object");
-               var outerBuilder = new ExpressionBuilder(ExpressionFlags.Standard);
-               var setPropertyParser = new SetPropertyParser(builder, tempObjectField, outerBuilder);
-               while (state.More)
+               var _taggedExpressions = getTaggedExpressions(state, REGEX_BLOCK_END);
+               if (_taggedExpressions is (true, var taggedExpressions))
                {
-                  var _property = setPropertyParser.Scan(state);
-                  if (_property)
-                  {
-                  }
-                  else if (_property.Exception is (true, var exception))
-                  {
-                     return exception;
-                  }
-                  else
-                  {
-                     break;
-                  }
-               }
-
-               _result = state.EndBlock();
-               if (!_result)
-               {
-                  return _result.Exception;
-               }
-
-               var _outerExpression = outerBuilder.ToExpression();
-               if (_outerExpression is (true, var outerExpression))
-               {
-                  var invokeSymbol = new NewObjectSymbol(tempObjectField, functionName, outerExpression);
-                  builder.Add(new PendingInvokeSymbol(invokeSymbol, hasParameter));
+                  builder.Add(new NewObjectSymbol(tempObjectField, functionName, taggedExpressions));
                }
                else
                {
-                  return _outerExpression.Exception;
+                  return _taggedExpressions.Exception;
                }
             }
             else
             {
                return _result.Exception;
             }
-         }
-         else
-         {
-            var invokeSymbol = new InvokeSymbol(functionName, arguments, possibleLambda, builder.Flags[ExpressionFlags.Comparisand]);
-            builder.Add(new PendingInvokeSymbol(invokeSymbol, hasParameter));
          }
 
          return unit;
