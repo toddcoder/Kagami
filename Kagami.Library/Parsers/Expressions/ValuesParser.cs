@@ -13,6 +13,7 @@ public class ValuesParser : MultiParser
    {
       get
       {
+         yield return new EmptyMemoParser(builder);
          yield return new EmptyValueParser(builder);
          yield return new WhateverLambdaParser(builder);
          yield return new SimpleLambdaParser(builder);

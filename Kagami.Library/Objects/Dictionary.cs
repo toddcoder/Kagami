@@ -275,7 +275,11 @@ public class Dictionary : IObject, IMutableCollection
 
    public string Image
    {
-      get => dictionary.Count == 0 ? "{:}" : $"{{{dictionary.Select(i => $"{i.Key.Image} : {i.Value.Image}").ToString(", ")}}}";
+      get
+      {
+         var image = dictionary.Count == 0 ? "{:}" : $"{{{dictionary.Select(i => $"{i.Key.Image} : {i.Value.Image}").ToString(", ")}}}";
+         return image + (_defaultLambda.Map(l => l.Image) | "");
+      }
    }
 
    public int Hash => dictionary.GetHashCode();

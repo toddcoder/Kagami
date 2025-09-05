@@ -205,6 +205,9 @@ public class OperationsBuilder
 
    public void AssignField(string name, bool overriding) => add(new AssignField(name, overriding));
 
+   public void StoreField(string name, bool mutable, bool visible, Maybe<TypeConstraint> _typeConstraint) =>
+      add(new StoreField(name, mutable, visible, _typeConstraint));
+
    public void AssignSelector(Selector selector, bool overriding) => add(new AssignSelector(selector, overriding));
 
    public void AssignFieldReference(string sourceFieldName, string targetFieldName)

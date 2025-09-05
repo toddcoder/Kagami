@@ -2,6 +2,7 @@
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using Core.Monads;
+using Kagami.Library.Runtime;
 using static Core.Monads.MonadFunctions;
 using static Core.Strings.StringStreamFunctions;
 
@@ -40,17 +41,9 @@ public class AssignToNewField : Statement
 
    public override void Generate(OperationsBuilder builder)
    {
-      if (tolerant)
-      {
-         builder.NewFieldTolerant(fieldName, mutable, true, _typeConstraint);
-      }
-      else
-      {
-         builder.NewField(fieldName, mutable, true, _typeConstraint);
-      }
-
       expression.Generate(builder);
-      builder.AssignField(fieldName, false);
+      Module.Global.Value.ForwardReference(fieldName);
+      builder.StoreField(fieldName, mutable, true, _typeConstraint);
    }
 
    public override string ToString() => stream() / (mutable ? "var" : "let") / " " / fieldName / " = " / expression;

@@ -23,6 +23,8 @@ public class Concatenate : TwoOperandOperation
             return (KString)(((IObject)xn).AsString + ys.Value);
          case (KString xs, INumeric yn):
             return (KString)(xs.Value + ((IObject)yn).AsString);
+         case (INumeric xn, INumeric yn):
+            return (KString)(((IObject)xn).AsString + ((IObject)yn).AsString);
          default:
          {
             var _class = Module.Global.Value.Class(x.ClassName);
