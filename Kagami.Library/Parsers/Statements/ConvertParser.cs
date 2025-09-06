@@ -18,9 +18,9 @@ public partial class ConvertParser : StatementParser
    {
       var toClass = tokens[4].Text;
       var parameterName = tokens[6].Text;
-      var fromClass = tokens[8].Text;
+      var (fromClass, color) = getClassNameWithColor(tokens[8].Text);
       state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Class, Color.OpenParenthesis, Color.Identifier,
-         Color.Whitespace, Color.Class, Color.CloseParenthesis);
+         Color.Whitespace, color, Color.CloseParenthesis);
 
       state.CreateYieldFlag();
       state.CreateReturnType();

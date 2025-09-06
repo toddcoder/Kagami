@@ -39,6 +39,10 @@ public class Pattern : IObject
 
    protected string getPlaceholder(int index) => arguments[index].AsString;
 
+   protected bool isPlaceholder(int index) => arguments[index] is Placeholder;
+
+   protected IObject getValue(int index) => arguments[index];
+
    public bool Match(IObject comparisand, Hash<string, IObject> bindings)
    {
       lambda.CopyFields(fields);
@@ -52,7 +56,15 @@ public class Pattern : IObject
          {
             if (boolean.IsTrue)
             {
-               bindings[getPlaceholder(0)] = comparisand;
+               if (isPlaceholder(0))
+               {
+                  bindings[getPlaceholder(0)] = comparisand;
+               }
+               else if (!getValue(0).Match(comparisand, bindings))
+               {
+                  return false;
+               }
+
                return true;
             }
             else
@@ -65,14 +77,29 @@ public class Pattern : IObject
             var length = kTuple.Length.Value.MinOf(arguments.Length);
             for (var i = 0; i < length; i++)
             {
-               bindings[getPlaceholder(i)] = kTuple[i];
+               if (isPlaceholder(i))
+               {
+                  bindings[getPlaceholder(i)] = kTuple[i];
+               }
+               else if (!getValue(i).Match(kTuple[i], bindings))
+               {
+                  return false;
+               }
             }
 
             return true;
          }
          case Some some:
          {
-            bindings[getPlaceholder(0)] = some.Value;
+            if (isPlaceholder(0))
+            {
+               bindings[getPlaceholder(0)] = some.Value;
+            }
+            else if (!getValue(0).Match(some.Value, bindings))
+            {
+               return false;
+            }
+
             return true;
          }
          case Success { Value: KTuple kTuple }:
@@ -80,14 +107,29 @@ public class Pattern : IObject
             var length = kTuple.Length.Value.MinOf(arguments.Length);
             for (var i = 0; i < length; i++)
             {
-               bindings[getPlaceholder(i)] = kTuple[i];
+               if (isPlaceholder(i))
+               {
+                  bindings[getPlaceholder(i)] = kTuple[i];
+               }
+               else if (!getValue(i).Match(kTuple[i], bindings))
+               {
+                  return false;
+               }
             }
 
             return true;
          }
          case Success success:
          {
-            bindings[getPlaceholder(0)] = success.Value;
+            if (isPlaceholder(0))
+            {
+               bindings[getPlaceholder(0)] = success.Value;
+            }
+            else if (!getValue(0).Match(success.Value, bindings))
+            {
+               return false;
+            }
+
             return true;
          }
          default:
