@@ -50,14 +50,12 @@ public class Field
          }
          else
          {
-            if (value is Placeholder placeholder)
+            this.value = value switch
             {
-               this.value = placeholder;
-            }
-            else
-            {
-               this.value = value;
-            }
+               Placeholder placeholder => placeholder,
+               Any => Any.Value,
+               _ => value
+            };
 
             TypeConstraint = Objects.TypeConstraint.SingleType(valueClass);
          }

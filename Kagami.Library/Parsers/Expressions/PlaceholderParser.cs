@@ -3,6 +3,7 @@ using Core.Matching;
 using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.Nodes.NodeFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
@@ -42,6 +43,28 @@ public partial class PlaceholderParser : SymbolParser
             if (_arguments is (true, var arguments))
             {
                builder.Add(new InvokeSymbol(placeholderName, arguments, nil, true));
+
+               if (placeholderName.IsMatch("^ ['A-Z']") && state.BlockFollows())
+               {
+                  var _result = state.BeginBlock();
+                  if (_result)
+                  {
+                     var tempObjectField = newLabel("object");
+                     var _taggedExpressions = getTaggedExpressions(state, REGEX_BLOCK_END);
+                     if (_taggedExpressions is (true, var taggedExpressions))
+                     {
+                        builder.Add(new NewObjectSymbol(tempObjectField, placeholderName, taggedExpressions));
+                     }
+                     else
+                     {
+                        return _taggedExpressions.Exception;
+                     }
+                  }
+                  else
+                  {
+                     return _result.Exception;
+                  }
+               }
                return unit;
             }
             else

@@ -64,4 +64,6 @@ public interface INumeric : IIncrementDecrement
    IObject Raise(INumeric power);
 
    IObject Abs();
+
+   IObject Negate();
 }

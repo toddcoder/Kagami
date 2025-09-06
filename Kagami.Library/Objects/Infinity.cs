@@ -71,6 +71,8 @@ public readonly struct Infinity : IObject, IObjectCompare, INumeric
 
    public IObject Abs() => positive ? this : new Infinity(true);
 
+   public IObject Negate() => new Infinity(!positive);
+
    public string AsString => "_";
 
    public string Image => "_";

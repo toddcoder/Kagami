@@ -318,6 +318,7 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerMessage("isPrimitive".get(), (obj, _) => function(obj, numeric => (KBoolean)numeric.IsPrimitive));
       registerMessage("zfill(_<Int>)",
          (obj, message) => function<IObject, Int>(obj, message, (numeric, i) => ((INumeric)numeric).ZFill(i.Value)));
+      registerMessage("negate()", (obj, _) => function(obj, x => -x, x => -x, x => x, x => x.Negate(), "negate()"));
    }
 
    protected void numericConversionMessages()
@@ -529,7 +530,7 @@ public abstract class BaseClass : IEquatable<BaseClass>
 
    public virtual bool MatchCompatible(BaseClass otherClass) => Name == otherClass.Name;
 
-   public virtual bool AssignCompatible(BaseClass otherClass) => otherClass.Name is "Placeholder" or "Undefined" || MatchCompatible(otherClass);
+   public virtual bool AssignCompatible(BaseClass otherClass) => otherClass.Name is "Placeholder" or "Undefined" or "Any" || MatchCompatible(otherClass);
 
    protected void rangeMessages()
    {

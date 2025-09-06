@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using Core.Collections;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Operations.NumericFunctions;
 
@@ -81,6 +82,8 @@ public readonly struct KByte : IObject, INumeric, IObjectCompare, IComparable<KB
    public IObject Raise(INumeric power) => raise(this, power);
 
    public IObject Abs() => this;
+
+   public IObject Negate() => throw fail("Bytes cannot be negative");
 
    public string AsString => ((char)value).ToString();
 

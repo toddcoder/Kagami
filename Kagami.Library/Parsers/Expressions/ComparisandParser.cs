@@ -7,9 +7,9 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class ComparisandParser : SymbolParser
 {
-   public ComparisandParser(ExpressionBuilder builder) : base(builder) { }
-
-   //public override string Pattern => "^ /(/s*) /'|'";
+   public ComparisandParser(ExpressionBuilder builder) : base(builder)
+   {
+   }
 
    [GeneratedRegex(@"^(\s*)(\|)")]
    public override partial Regex Regex();

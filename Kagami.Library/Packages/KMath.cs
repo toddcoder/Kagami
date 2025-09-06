@@ -2,7 +2,6 @@
 using Core.Objects;
 using Kagami.Library.Classes;
 using Kagami.Library.Objects;
-using Kagami.Library.Operations;
 using Kagami.Library.Runtime;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
@@ -109,19 +108,7 @@ public class KMath : Package
          case INumeric n:
             if (n.IsNegative)
             {
-               var _value = Negate.Evaluate(n);
-               if (_value is (true, var value))
-               {
-                  return value;
-               }
-               else if (_value.Exception is (true, var exception))
-               {
-                  throw exception;
-               }
-               else
-               {
-                  throw notNumeric(obj);
-               }
+               return n.Negate();
             }
             else
             {

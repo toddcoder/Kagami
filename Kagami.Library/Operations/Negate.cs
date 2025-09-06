@@ -1,23 +1,21 @@
 ﻿using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Monads;
-using static Kagami.Library.AllExceptions;
+using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Operations;
 
-public class Negate : OneNumericOperation
+public class Negate : OneOperandOperation
 {
-   public override Optional<IObject> Execute(Machine machine, INumeric x) => Evaluate(x);
+   public override string ToString() => "negate";
 
-   public static Optional<IObject> Evaluate(INumeric x) => x switch
+   public override Optional<IObject> Execute(Machine machine, IObject value) => value switch
    {
       Int i => Int.IntObject(-i.Value).Just(),
       Float f => Float.FloatObject(-f.Value).Just(),
       Long l => Long.LongObject(-l.Value).Just(),
       Complex c => c.Negate().Just(),
       Rational r => r.Negate().Just(),
-      _ => notNumeric((IObject)x)
+      _ => classOf(value).SendMessage(value, "negate()", []).Just()
    };
-
-   public override string ToString() => "negate";
 }

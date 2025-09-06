@@ -68,11 +68,6 @@ public class Invoke : OneOperandOperation
 
    public static Optional<IObject> InvokeObject(Machine machine, IObject value, Arguments arguments, ref bool increment)
    {
-      /*if (arguments.HasAnyJunctions)
-      {
-         return InvokeObjectWithJunction(machine, value, arguments, ref increment);
-      }*/
-
       switch (value)
       {
          case CompositeLambda compositeLambda:

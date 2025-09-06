@@ -148,7 +148,7 @@ public readonly struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
    public bool IsEquivalentTo(TypeConstraint typeConstraint)
    {
       var baseClass = comparisands[0];
-      if (baseClass.Name == "Placeholder")
+      if (baseClass.Name is "Placeholder" or "Any")
       {
          return true;
       }

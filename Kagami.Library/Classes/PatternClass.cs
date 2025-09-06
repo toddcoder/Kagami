@@ -12,7 +12,7 @@ public class PatternClass : BaseClass
    {
       base.RegisterMessages();
 
-      messages["with(_<Dictionary>)"] = (obj, msg) => function<Pattern, Dictionary>(obj, msg, (p, d) => p.With(d));
+      messages["using(_<Dictionary>)"] = (obj, msg) => function<Pattern, Dictionary>(obj, msg, (p, d) => p.With(d));
    }
 
    public override IObject DefaultValue => throw noDefaultValue("Pattern");

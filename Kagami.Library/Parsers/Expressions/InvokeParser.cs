@@ -46,39 +46,6 @@ public partial class InvokeParser : SymbolParser
                   {
                      return _taggedExpressions.Exception;
                   }
-                  /*var outerBuilder = new ExpressionBuilder(ExpressionFlags.Standard | ExpressionFlags.OmitComma);
-                  var setPropertyParser = new SetPropertyParser(builder, tempObjectField, outerBuilder);
-                  while (state.More)
-                  {
-                     var _property = setPropertyParser.Scan(state);
-                     if (_property)
-                     {
-                     }
-                     else if (_property.Exception is (true, var exception))
-                     {
-                        return exception;
-                     }
-                     else
-                     {
-                        break;
-                     }
-                  }
-
-                  _result = state.EndBlock();
-                  if (!_result)
-                  {
-                     return _result.Exception;
-                  }
-
-                  var _outerExpression = outerBuilder.ToExpression();
-                  if (_outerExpression is (true, var outerExpression))
-                  {
-                     builder.Add(new NewObjectSymbol(tempObjectField, functionName, outerExpression));
-                  }
-                  else
-                  {
-                     return _outerExpression.Exception;
-                  }*/
                }
                else
                {
