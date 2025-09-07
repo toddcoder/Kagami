@@ -15,11 +15,13 @@ namespace Kagami.Library.Packages;
 
 public class Sys : Package
 {
+   public static Lambda IdLambda => new RuntimeLambda(args => args[0], 1, "x -> x");
+
    protected int writeCount;
 
    public Sys()
    {
-      fields.New("id", FieldType.Package, new RuntimeLambda(args => args[0], 1, "x -> x"));
+      fields.New("id", FieldType.Package, IdLambda);
       fields.New("environment", FieldType.Package, Environment);
    }
 

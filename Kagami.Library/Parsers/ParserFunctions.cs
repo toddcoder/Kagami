@@ -608,6 +608,7 @@ public static class ParserFunctions
       "monad" => "Monad",
       "result" => "Result",
       "lazy" => "Lazy",
+      "event" => "Event",
       _ => nil
    };
 

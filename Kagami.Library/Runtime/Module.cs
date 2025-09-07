@@ -117,6 +117,7 @@ public class Module
       "Formatter" => new FormatterClass(),
       "LongRange" => new LongRangeClass(),
       "Junction" => new JunctionClass(),
+      "Event" => new EventClass(),
       _ => nil
    };
 
