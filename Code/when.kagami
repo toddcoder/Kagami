@@ -1,0 +1,10 @@
+﻿open sys
+
+let x = 10
+let y = when {
+	x == 3 <- "three"
+	x == 5 <- "five"
+	x == 10 <- "ten"
+	true <- "?"
+}
+println(y)
