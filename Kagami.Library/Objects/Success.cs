@@ -11,7 +11,7 @@ public readonly struct Success : IObject, IResult, IMonad, IBoolean
 
    public string ClassName => "Success";
 
-   public string AsString => $"{Value.AsString}!";
+   public string AsString => $"!{Value.AsString}";
 
    public string Image => $"!{Value.Image}";
 

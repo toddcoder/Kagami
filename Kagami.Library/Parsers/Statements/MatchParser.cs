@@ -26,14 +26,15 @@ public partial class MatchParser : StatementParser
       var _expression = getExpression(state, ExpressionFlags.Standard);
       if (_expression is (true, var expression))
       {
-         var matchField = newLabel("match");
-         state.AddStatement(new AssignToNewField(true, matchField, true, expression));
-
          var _result = state.BeginBlock();
          if (!_result)
          {
             return state.SetException(messageNoBeginBlock("match"), _result.Exception);
          }
+
+         state.AddStatement(new PushFrameStatement());
+         var matchField = newLabel("match");
+         state.AddStatement(new AssignToNewField(true, matchField, true, expression));
 
          var whenParser = new WhenParser(fieldName, mutable, assignment, matchField, true, CaseType.Statement);
          var _scan = whenParser.Scan(state);
@@ -43,6 +44,7 @@ public partial class MatchParser : StatementParser
             addMatchElse(ifStatement);
             state.AddStatement(ifStatement);
 
+            state.AddStatement(new PopFrameStatement());
             return state.EndBlock();
          }
          else
