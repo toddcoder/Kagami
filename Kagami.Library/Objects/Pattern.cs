@@ -14,6 +14,7 @@ public class Pattern : IObject
    protected Fields fields = new();
    protected Parameters parameters;
    protected IObject[] arguments = [];
+   protected IObject[] argumentsToUse = [];
 
    public Pattern(string name, Lambda lambda, Parameters parameters)
    {
@@ -46,7 +47,7 @@ public class Pattern : IObject
    public bool Match(IObject comparisand, Hash<string, IObject> bindings)
    {
       lambda.CopyFields(fields);
-      var result = lambda.Invoke(comparisand);
+      var result = lambda.Invoke([comparisand, ..argumentsToUse]);
 
       switch (result)
       {
@@ -146,15 +147,15 @@ public class Pattern : IObject
 
    public void RegisterArguments(Arguments arguments)
    {
-      /*var fieldValues = arguments.Take(fields.Length).ToArray();
-      var parameterNames = parameters.Select(p => p.Name).ToArray();
-      var index = 0;
-      foreach (var parameterName in parameterNames)
-      {
-         fields.Assign(parameterName, fieldValues[index++]);
-      }*/
+      this.arguments = arguments.Value;
+      Parameter[] parametersToUse = [.. parameters.Skip(1)];
+      argumentsToUse = [.. arguments.Take(parametersToUse.Length)];
+      this.arguments = [.. arguments.Value.Skip(argumentsToUse.Length)];
 
-      this.arguments = arguments.Value; //.Skip(fields.Length).ToArray();
+      foreach (var (parameter, argument) in parametersToUse.Zip(argumentsToUse))
+      {
+         fields.Assign(parameter.Name, argument);
+      }
    }
 
    public bool IsTrue => true;
