@@ -133,9 +133,9 @@ public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields
 
    public Int ParameterCount => invokable.Parameters.Length;
 
-   public KTuple GetParameters()
+   public Dictionary GetParameters()
    {
-      List<NameValue> list = [];
+      var dictionary = new Dictionary();
       foreach (var parameter in invokable.Parameters)
       {
          var mutable = (KBoolean)parameter.Mutable;
@@ -143,22 +143,29 @@ public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields
          var _type = parameter.TypeConstraint.Map(t => t.Comparisands.Select(c => c.Name).ToString("|"));
          var _defaultValue = parameter.DefaultValue.Map(dv => dv.Image);
          var variadic = (KBoolean)parameter.Variadic;
+         var label = (KString)parameter.Label;
+         var nameForFunction = (KString)parameter.NameForFunction;
 
-         List<NameValue> innerList = [new("mutable", mutable), new("nocap", noCapturing)];
+         var innerDictionary = new Dictionary
+         {
+            [(KString)"mutable"] = mutable,
+            [(KString)"nocap"] = noCapturing
+         };
          if (_type is (true, var type))
          {
-            innerList.Add(new NameValue("type", (KString)type));
+            innerDictionary[(KString)"type"] = (KString)type;
          }
          if (_defaultValue is (true, var defaultValue))
          {
-            innerList.Add(new NameValue("default", (KString)defaultValue));
+            innerDictionary[(KString)"default"] = (KString)defaultValue;
          }
 
-         innerList.Add(new NameValue("variadic", variadic));
-         var innerTuple = new KTuple([.. innerList]);
-         list.Add(new NameValue(parameter.Name, innerTuple));
+         innerDictionary[(KString)"variadic"] = variadic;
+         innerDictionary[(KString)"label"] = label;
+         innerDictionary[(KString)"nameForFunction"] = nameForFunction;
+         dictionary[(KString)parameter.Name] = innerDictionary;
       }
-      return new KTuple([.. list]);
+      return dictionary;
    }
 
    public KTuple FieldsInTuple

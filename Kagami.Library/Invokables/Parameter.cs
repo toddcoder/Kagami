@@ -15,12 +15,12 @@ public class Parameter : IEquatable<Parameter>
    }
 
    protected bool mutable;
-   protected string label;
-   protected string name;
-   protected Maybe<IInvokable> _defaultValue;
-   protected Maybe<TypeConstraint> _typeConstraint;
-   protected bool reference;
-   protected bool noCapturing;
+   protected readonly string label;
+   protected readonly string name;
+   protected readonly Maybe<IInvokable> _defaultValue;
+   protected readonly Maybe<TypeConstraint> _typeConstraint;
+   protected readonly bool reference;
+   protected readonly bool noCapturing;
 
    public Parameter(bool mutable, string label, string name, Maybe<IInvokable> defaultValue, Maybe<TypeConstraint> typeConstraint,
       bool reference, bool noCapturing)
@@ -87,7 +87,7 @@ public class Parameter : IEquatable<Parameter>
             builder.Append($"{label}:");
          }
 
-         builder.Append("_");
+         builder.Append('_');
          if (_typeConstraint is (true, var typeConstraint))
          {
             builder.Append(typeConstraint.Image);
@@ -99,7 +99,7 @@ public class Parameter : IEquatable<Parameter>
          }
          else if (_defaultValue)
          {
-            builder.Append("=");
+            builder.Append('=');
          }
 
          return builder.ToString();
