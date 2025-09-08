@@ -16,7 +16,7 @@ public class Sequence : IObject
 
    public Sequence(IEnumerable<IObject> objects)
    {
-      list = [..objects];
+      list = [.. objects];
       ExpandInTuple = true;
    }
 
@@ -35,11 +35,7 @@ public class Sequence : IObject
       return obj is Sequence container && list.Count == container.list.Count && list.All(i => list.Contains(i));
    }
 
-   public bool Match(IObject comparisand, Hash<string, IObject> bindings)
-   {
-      //return matchSingle(this, comparisand, (container, o) => container.In(o), bindings);
-      return match(this, comparisand, bindings);
-   }
+   public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
    public bool IsTrue => list.Count > 0;
 

@@ -620,5 +620,7 @@ public class OperationsBuilder
 
    public void JunctionInvoke(string functionName) => add(new JunctionInvoke(functionName));
 
+   public void NewSlip() => add(new NewSlip());
+
    public override string ToString() => "operations";
 }

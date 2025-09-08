@@ -15,6 +15,7 @@ public class PrefixParser(ExpressionBuilder builder) : MultiParser
             yield return new ComparisandBooleanParser(builder);
          }
 
+         yield return new SlipParser(builder);
          yield return new PrefixIncrementParser(builder);
          yield return new NumberizeParser(builder);
          yield return new NegateParser(builder);

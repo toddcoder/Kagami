@@ -22,11 +22,39 @@ public class NewSequence : Operation
          {
             if (x is Sequence sequence)
             {
+               if (y is Slip slip)
+               {
+                  foreach (var obj in slip.GetIterator().List())
+                  {
+                     sequence.Add(obj);
+                  }
+
+                  return sequence;
+               }
+
                sequence.Add(y);
                return sequence;
             }
             else
             {
+               if (y is Slip slip)
+               {
+                  List<IObject> list = [.. slip.GetIterator().List()];
+                  if (list.Count > 1)
+                  {
+                     var newSequence = new Sequence(x, list[0]);
+                     foreach (var obj in list.Skip(1))
+                     {
+                        newSequence.Add(obj);
+                     }
+
+                     return newSequence;
+                  }
+                  else
+                  {
+                     return new Sequence(x, list[0]);
+                  }
+               }
                return new Sequence(x, y);
             }
          }
