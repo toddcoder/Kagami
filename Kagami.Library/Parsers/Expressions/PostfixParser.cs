@@ -15,6 +15,7 @@ public class PostfixParser(ExpressionBuilder builder) : MultiParser
          yield return new InfiniteRangeParser(builder);
          yield return new ToEndParser(builder);
          yield return new PostfixOperatorsParser(builder);
+         yield return new ImplicitMapOperatorParser(builder);
          yield return new PostfixInvokeParser(builder);
          yield return new IndexOptionalParser(builder);
          yield return new IndexerParser(builder);

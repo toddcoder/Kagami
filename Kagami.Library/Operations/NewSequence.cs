@@ -24,7 +24,8 @@ public class NewSequence : Operation
             {
                if (y is Slip slip)
                {
-                  foreach (var obj in slip.GetIterator().List())
+                  var collection = (ICollection)slip.GetIterator().Flatten();
+                  foreach (var obj in collection.GetIterator(false).List())
                   {
                      sequence.Add(obj);
                   }
@@ -39,7 +40,8 @@ public class NewSequence : Operation
             {
                if (y is Slip slip)
                {
-                  List<IObject> list = [.. slip.GetIterator().List()];
+                  var collection = (ICollection)slip.GetIterator().Flatten();
+                  List<IObject> list = [.. collection.GetIterator(false).List()];
                   if (list.Count > 1)
                   {
                      var newSequence = new Sequence(x, list[0]);

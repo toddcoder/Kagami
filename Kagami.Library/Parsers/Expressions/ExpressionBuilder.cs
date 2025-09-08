@@ -33,7 +33,7 @@ public class ExpressionBuilder(Bits32<ExpressionFlags> flags, bool acknowledgeIm
 
    public void Add(Symbol symbol)
    {
-      if (acknowledgeImplicit && symbol is ImplicitSymbol or ImplicitZip or ImplicitFold)
+      if (acknowledgeImplicit && symbol is ImplicitSymbol or ImplicitZip or ImplicitFold or ImplicitMapSymbol)
       {
          containsImplicitOperator = true;
       }
@@ -99,6 +99,7 @@ public class ExpressionBuilder(Bits32<ExpressionFlags> flags, bool acknowledgeIm
    protected static Result<Expression> generateMap(Expression originalExpression, ExpressionFlags flags)
    {
       var symbols = originalExpression.Symbols;
+      LazyMaybe<int> _implicitMapIndex = nil;
       LazyMaybe<int> _zipIndex1 = nil;
       LazyMaybe<int> _foldIndex = nil;
       var _index = symbols.Find(s => s is ImplicitSymbol);
@@ -122,6 +123,22 @@ public class ExpressionBuilder(Bits32<ExpressionFlags> flags, bool acknowledgeIm
             _ => "map(_)"
          };
          builder.Add(new SendMessageSymbol(selector, Precedence.ChainedOperator, false, lambda));
+
+         return builder.ToExpression();
+      }
+      else if (_implicitMapIndex.ValueOf(symbols.Find(s => s is ImplicitMapSymbol)) is (true, var implicitMapIndex))
+      {
+         var sourceSymbol = symbols[implicitMapIndex - 1];
+         symbols[implicitMapIndex - 1] = new FieldSymbol("__$0");
+         symbols[implicitMapIndex] = new NoOpSymbol();
+
+         var bodyExpression = new Expression(symbols);
+         var block = new Block(bodyExpression);
+         var lambda = new LambdaSymbol(1, block);
+
+         var builder = new ExpressionBuilder(flags, false);
+         builder.Add(sourceSymbol);
+         builder.Add(new SendMessageSymbol("map(_)", Precedence.ChainedOperator, false, lambda));
 
          return builder.ToExpression();
       }
