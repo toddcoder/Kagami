@@ -1321,6 +1321,9 @@ public static class ParserFunctions
          case "<=":
             _symbol = new LessThanEqualSymbol();
             break;
+         case "::" when flags[ExpressionFlags.Comparisand]:
+            _symbol = new ConsObjectSymbol();
+            break;
          case "::":
             _symbol = new ConsSymbol();
             break;

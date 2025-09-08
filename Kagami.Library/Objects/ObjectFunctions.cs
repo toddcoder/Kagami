@@ -86,6 +86,8 @@ public static class ObjectFunctions
             return processPlaceholdersMatch(source, comparisand, bindings);
          case TypeConstraint typeConstraint:
             return typeConstraint.Matches(classOf(source));
+         case Cons cons when source is KArray array:
+            return matchArrayToCons(array, cons, bindings);
          case KTuple tuple when source is KArray array:
             return matchArrayToTuple(array, tuple, bindings);
          case KTuple tuple when source is KString kString:
@@ -172,6 +174,49 @@ public static class ObjectFunctions
    private static bool matchInSequence(IObject source, Sequence sequence, Hash<string, IObject> bindings)
    {
       return sequence.List.Any(item => match(source, item, bindings));
+   }
+
+   private static bool matchArrayToCons(KArray source, Cons cons, Hash<string, IObject> bindings)
+   {
+      var head = source.Head;
+      if (head is KNil)
+      {
+         return false;
+      }
+
+      var tail = source.Tail;
+
+      var match0 = cons.Head;
+      var match1 = cons.Tail;
+
+      switch (match0)
+      {
+         case Placeholder placeholder0 when head is Some some:
+         {
+            bindings[placeholder0.Name] = some.Value;
+            break;
+         }
+         default:
+         {
+            if (head is Some some && !some.Value.Match(match0, bindings))
+            {
+               return false;
+            }
+
+            break;
+         }
+      }
+
+      switch (match1)
+      {
+         case Placeholder placeholder1:
+            bindings[placeholder1.Name] = tail;
+            return true;
+         case KArray array:
+            return tail.Match(array, bindings);
+      }
+
+      return false;
    }
 
    private static bool matchArrayToTuple(KArray source, KTuple comparisand, Hash<string, IObject> bindings)
@@ -1049,4 +1094,6 @@ public static class ObjectFunctions
    {
       return compareByMessage(left, right).Map(i => KBoolean.BooleanObject(i != 0));
    }
+
+   public static Maybe<IObject> maybe(IObject obj) => obj is Some some ? some.Value.Some() : nil;
 }

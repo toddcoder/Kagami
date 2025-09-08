@@ -118,6 +118,7 @@ public class Module
       "LongRange" => new LongRangeClass(),
       "Junction" => new JunctionClass(),
       "Event" => new EventClass(),
+      "Cons" => new ConsClass(),
       _ => nil
    };
 

@@ -423,6 +423,8 @@ public class OperationsBuilder
 
    public void Decrement() => add(new Decrement());
 
+   public void NewCons() => add(new NewCons());
+
    public Result<Operations> ToOperations(ParseState state)
    {
       operations.Add(new Stop());
