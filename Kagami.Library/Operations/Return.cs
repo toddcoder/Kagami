@@ -41,6 +41,11 @@ public class Return : Operation
       var frames = machine.PopFrames();
       if (frames.FunctionFrame is (true, var frame))
       {
+         foreach (var deferredLambda in frame.DeferredLambdas)
+         {
+            deferredLambda.Invoke();
+         }
+
          if (frame.Lambda is (true, var lambda))
          {
             lambda.CopyFields(frame.Fields);

@@ -425,6 +425,8 @@ public class OperationsBuilder
 
    public void NewCons() => add(new NewCons());
 
+   public void Defer() => add(new Defer());
+
    public Result<Operations> ToOperations(ParseState state)
    {
       operations.Add(new Stop());

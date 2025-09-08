@@ -19,6 +19,7 @@ public class Frame
    protected Arguments arguments;
    protected FrameType frameType = FrameType.Function;
    protected bool parametersSet;
+   protected MaybeStack<Lambda> deferredLambdas = [];
 
    public Frame(Maybe<int> _address, Arguments arguments)
    {
@@ -325,4 +326,8 @@ public class Frame
    }
 
    public Maybe<Lambda> Lambda { get; set; } = nil;
+
+   public void Defer(Lambda lambda) => deferredLambdas.Push(lambda);
+
+   public IEnumerable<Lambda> DeferredLambdas => deferredLambdas;
 }

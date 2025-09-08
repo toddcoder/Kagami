@@ -13,7 +13,7 @@ public class DefineNewField(bool mutable, string fieldName, string className) : 
       {
          try
          {
-            var defaultValue = baseClass.DefaultValue;
+            var defaultValue = mutable ? baseClass.DefaultValue : Unassigned.Value;
             var _field = machine.CurrentFrame.Fields.New(fieldName, FieldType.Assignment, defaultValue, mutable);
             if (_field)
             {
