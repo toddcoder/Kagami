@@ -19,8 +19,8 @@ public partial class LetFunctionParser : StatementParser
       state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Invokable, Color.OpenParenthesis);
       var _result =
          from parametersValue in getParameters(state)
-         from equal in state.Scan(@"^(\s*)(=)", Color.Whitespace, Color.Structure)
          from possibleTypConstraintValue in parseTypeConstraint(state)
+         from equal in state.Scan(@"^(\s*)(=)", Color.Whitespace, Color.Structure)
          from blockValue in getSingleLine(state, possibleTypConstraintValue.Maybe)
          select (parametersValue, blockValue);
       if (_result is (true, var (parameters, block)))

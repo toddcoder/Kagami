@@ -134,10 +134,8 @@ public struct Rational : IObject, INumeric, IRangeItem, IComparable<Rational>, I
 
    public IObject Raise(INumeric other)
    {
-      var rhs = other.AsRational();
-      var (n, d) = rhs;
-
-      return (Rational)(BigInteger.Pow(numerator, (int)n), BigInteger.Pow(denominator, (int)d));
+      var power = other.AsInt32();
+      return (Rational)(BigInteger.Pow(numerator, power), BigInteger.Pow(denominator, power));
    }
 
    public IObject Remainder(INumeric other) => ((Rational)(1, 0)).Subtract((INumeric)Divide(other));
