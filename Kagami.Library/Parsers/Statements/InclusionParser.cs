@@ -18,6 +18,8 @@ public partial class InclusionParser : StatementParser
       var inclusion = new Inclusion(inclusionName);
       state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Class);
 
+      Module.Global.Value.ForwardReference(inclusionName);
+
       var inheritedInclusionsParser = new InheritedInclusionsParser(inclusion);
       Optional<Unit> _result;
       while (state.More)
