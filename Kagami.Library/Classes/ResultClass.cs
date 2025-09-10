@@ -5,7 +5,7 @@ namespace Kagami.Library.Classes;
 
 public class ResultClass : BaseClass, IEquivalentClass
 {
-   public static TypeConstraint EquivalentTypeConstraint => new([new ResultClass(), new SuccessClass(), new FailureClass()]);
+   public static TypeConstraint ResultTypeConstraint => new([new ResultClass(), new SuccessClass(), new FailureClass()]);
 
    public override string Name => "Result";
 
@@ -27,5 +27,5 @@ public class ResultClass : BaseClass, IEquivalentClass
 
    public override IObject DefaultValue => new Failure("No value");
 
-   public TypeConstraint TypeConstraint() => EquivalentTypeConstraint;
+   public TypeConstraint EquivalentTypeConstraint() => ResultTypeConstraint;
 }

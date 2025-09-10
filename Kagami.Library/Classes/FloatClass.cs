@@ -57,5 +57,5 @@ public class FloatClass : BaseClass, IParse, IEquivalentClass
 
    public override IObject DefaultValue => Float.Zero;
 
-   public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Number");
+   public TypeConstraint EquivalentTypeConstraint() => TypeConstraint.FromList("Number");
 }

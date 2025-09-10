@@ -438,6 +438,7 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerIterMessage("zip(_<Collection>,_<Lambda>)",
          (obj, message) => iteratorFunc<IObject, Lambda>(obj, message, (i, c, l) => i.Zip((ICollection)c, l)));
       registerIterMessage("zip(_<Collection>)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, c) => i.Zip((ICollection)c)));
+      registerIterMessage("zip(_<Iterator>)", (obj, message) => iteratorFunc<IObject>(obj, message, (i1, i2) => i1.Zip((Iterator)i2)));
       registerIterMessage("zipl(_<Collection>,_,_,_<Lambda>)",
          (obj, message) =>
             iteratorFunc<IObject, IObject, IObject, Lambda>(obj, message, (i, c, lv, rv, l) => i.ZipL((ICollection)c, lv, rv, l)));
@@ -526,6 +527,10 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerIterMessage("junctionAny()", (obj, _) => iteratorFunc(obj, i => i.JunctionAny()));
       registerIterMessage("junctionNone()", (obj, _) => iteratorFunc(obj, i => i.JunctionNone()));
       registerIterMessage("junctionOne()", (obj, _) => iteratorFunc(obj, i => i.JunctionOne()));
+      
+      /*return;
+      
+      IObject getIterator(IIterator )*/
    }
 
    public virtual bool MatchCompatible(BaseClass otherClass) => Name == otherClass.Name;

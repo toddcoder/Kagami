@@ -28,5 +28,5 @@ public class FailureClass : BaseClass, IEquivalentClass
 
    public override IObject DefaultValue => new Failure("");
 
-   public TypeConstraint TypeConstraint() => ResultClass.EquivalentTypeConstraint;
+   public TypeConstraint EquivalentTypeConstraint() => ResultClass.ResultTypeConstraint;
 }

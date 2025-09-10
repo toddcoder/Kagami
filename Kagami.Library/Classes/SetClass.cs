@@ -42,7 +42,7 @@ public class SetClass : BaseClass, ICollectionClass
 
    public IObject Revert(IEnumerable<IObject> list) => new Set(list.ToArray());
 
-   public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
+   public TypeConstraint EquivalentTypeConstraint() => TypeConstraint.FromList("Collection");
 
    public override void RegisterClassMessages()
    {

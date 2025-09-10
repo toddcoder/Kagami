@@ -4,5 +4,5 @@ namespace Kagami.Library.Classes;
 
 public interface IEquivalentClass
 {
-   TypeConstraint TypeConstraint();
+   TypeConstraint EquivalentTypeConstraint();
 }

@@ -27,5 +27,5 @@ public class SomeClass : BaseClass, IEquivalentClass
 
    public override IObject DefaultValue => KNil.NilValue;
 
-   public TypeConstraint TypeConstraint() => OptionalClass.EquivalentTypeConstraint;
+   public TypeConstraint EquivalentTypeConstraint() => OptionalClass.OptionalTypeConstraint;
 }

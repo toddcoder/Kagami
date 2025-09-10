@@ -23,5 +23,5 @@ public class ByteArrayClass : BaseClass, ICollectionClass
 
    public IObject Revert(IEnumerable<IObject> list) => new ByteArray(list.Select(o => (KByte)o).Select(b => b.Value).ToArray());
 
-   public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
+   public TypeConstraint EquivalentTypeConstraint() => TypeConstraint.FromList("Collection");
 }

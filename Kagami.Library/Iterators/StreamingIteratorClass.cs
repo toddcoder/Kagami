@@ -9,8 +9,6 @@ public class StreamingIteratorClass : BaseClass, ICollectionClass
 
    public override IObject DefaultValue => new StreamingIterator(new Iterator(KArray.Empty));
 
-   public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
-
    public IObject Revert(IEnumerable<IObject> list) => new KArray(list);
 
    public override void RegisterMessages()
@@ -18,4 +16,6 @@ public class StreamingIteratorClass : BaseClass, ICollectionClass
       base.RegisterMessages();
       iteratorMessages();
    }
+
+   public TypeConstraint EquivalentTypeConstraint() => TypeConstraint.FromList("Iterator");
 }

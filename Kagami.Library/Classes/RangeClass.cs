@@ -27,7 +27,7 @@ public class RangeClass : BaseClass, ICollectionClass
 
    public override IObject DefaultValue => new KRange((IRangeItem)Int.Zero, (IObjectCompare)Int.Zero, true);
 
-   public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
+   public TypeConstraint EquivalentTypeConstraint() => TypeConstraint.FromList("Collection");
 
    public IObject Revert(IEnumerable<IObject> list) => new KArray(list.ToList());
 }

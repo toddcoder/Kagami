@@ -67,5 +67,5 @@ public class RegexClass : BaseClass, IEquivalentClass
       }
    }
 
-   public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("TextFinding");
+   public TypeConstraint EquivalentTypeConstraint() => TypeConstraint.FromList("TextFinding");
 }

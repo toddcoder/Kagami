@@ -338,4 +338,6 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
    public Junction JunctionNone() => terminate().JunctionNone();
 
    public Junction JunctionOne() => terminate().JunctionOne();
+
+   public TypeConstraint EquivalentTypeConstraint() => Objects.TypeConstraint.FromList("Iterator");
 }

@@ -28,5 +28,5 @@ public class ByteClass : BaseClass, IParse, IEquivalentClass
 
    public override IObject DefaultValue => new KByte(0);
 
-   public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Number");
+   public TypeConstraint EquivalentTypeConstraint() => TypeConstraint.FromList("Number");
 }

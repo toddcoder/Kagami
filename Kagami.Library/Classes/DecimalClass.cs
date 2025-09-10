@@ -22,5 +22,5 @@ public class DecimalClass : BaseClass, IParse, IEquivalentClass
 
    public override IObject DefaultValue => KDecimal.Zero;
 
-   public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Number");
+   public TypeConstraint EquivalentTypeConstraint() => TypeConstraint.FromList("Number");
 }

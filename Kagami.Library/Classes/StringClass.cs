@@ -140,7 +140,7 @@ public class StringClass : BaseClass, ICollectionClass
 
    public IObject Revert(IEnumerable<IObject> list) => KString.StringObject(list.Select(i => i.AsString).ToString(""));
 
-   public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection", "TextFinding");
+   public TypeConstraint EquivalentTypeConstraint() => TypeConstraint.FromList("Collection", "TextFinding");
 
    public override bool AssignCompatible(BaseClass otherClass)
    {

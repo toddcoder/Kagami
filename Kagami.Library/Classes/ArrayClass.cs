@@ -150,5 +150,5 @@ public class ArrayClass : BaseClass, ICollectionClass
       return new KArray(list);
    }
 
-   public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
+   public TypeConstraint EquivalentTypeConstraint() => TypeConstraint.FromList("Collection");
 }

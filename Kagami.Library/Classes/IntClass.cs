@@ -98,5 +98,5 @@ public class IntClass : BaseClass, IParse, IEquivalentClass
 
    public override IObject DefaultValue => Int.Zero;
 
-   public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Number");
+   public TypeConstraint EquivalentTypeConstraint() => TypeConstraint.FromList("Number");
 }

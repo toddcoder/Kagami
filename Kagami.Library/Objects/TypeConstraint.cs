@@ -128,7 +128,7 @@ public readonly struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
       {
          if (comparisand is IEquivalentClass equivalent)
          {
-            result = result.Merge(equivalent.TypeConstraint());
+            result = result.Merge(equivalent.EquivalentTypeConstraint());
          }
       }
 
@@ -171,7 +171,7 @@ public readonly struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
       }
       else if (baseClass is IEquivalentClass equivalentClass)
       {
-         foreach (var comparisand in equivalentClass.TypeConstraint().comparisands)
+         foreach (var comparisand in equivalentClass.EquivalentTypeConstraint().comparisands)
          {
             if (typeConstraint.comparisands.Contains(comparisand))
             {

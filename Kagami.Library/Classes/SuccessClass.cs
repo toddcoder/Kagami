@@ -27,5 +27,5 @@ public class SuccessClass : BaseClass, IEquivalentClass
 
    public override IObject DefaultValue => new Failure("No value");
 
-   public TypeConstraint TypeConstraint() => ResultClass.EquivalentTypeConstraint;
+   public TypeConstraint EquivalentTypeConstraint() => ResultClass.ResultTypeConstraint;
 }

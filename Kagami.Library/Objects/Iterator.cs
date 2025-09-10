@@ -1526,5 +1526,5 @@ public class Iterator : IObject, IIterator
       return collectionClass.Revert(result.ValueArray());
    }
 
-   public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
+   public TypeConstraint EquivalentTypeConstraint() => TypeConstraint.FromList("Collection");
 }

@@ -24,5 +24,5 @@ public class ComplexClass : BaseClass, IEquivalentClass
 
    public override IObject DefaultValue => new Complex(0, 0);
 
-   public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Number");
+   public TypeConstraint EquivalentTypeConstraint() => TypeConstraint.FromList("Number");
 }

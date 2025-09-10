@@ -109,7 +109,7 @@ public class DictionaryClass : BaseClass, ICollectionClass
 
    public override IObject DefaultValue => Dictionary.Empty;
 
-   public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
+   public TypeConstraint EquivalentTypeConstraint() => TypeConstraint.FromList("Collection");
 
    public IObject Revert(IEnumerable<IObject> list) => new Dictionary(list);
 }

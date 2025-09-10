@@ -28,7 +28,7 @@ public class LongRangeClass : BaseClass, ICollectionClass
 
    public override IObject DefaultValue => new LongRange(BigInteger.Zero, BigInteger.Zero, true, BigInteger.One);
 
-   public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
+   public TypeConstraint EquivalentTypeConstraint() => TypeConstraint.FromList("Collection");
 
    public IObject Revert(IEnumerable<IObject> list) => new KArray(list.ToList());
 }

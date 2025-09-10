@@ -28,5 +28,5 @@ public class ListClass : BaseClass, ICollectionClass
 
    public override IObject DefaultValue => List.Empty;
 
-   public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
+   public TypeConstraint EquivalentTypeConstraint() => TypeConstraint.FromList("Collection");
 }

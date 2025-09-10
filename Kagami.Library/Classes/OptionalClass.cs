@@ -5,7 +5,7 @@ namespace Kagami.Library.Classes;
 
 public class OptionalClass : BaseClass, IEquivalentClass
 {
-   public static TypeConstraint EquivalentTypeConstraint => new([new OptionalClass(), new SomeClass(), new NilClass()]);
+   public static TypeConstraint OptionalTypeConstraint => new([new OptionalClass(), new SomeClass(), new NilClass()]);
 
    public override string Name => "Optional";
 
@@ -26,5 +26,6 @@ public class OptionalClass : BaseClass, IEquivalentClass
    public override bool AssignCompatible(BaseClass otherClass) => MatchCompatible(otherClass);
 
    public override IObject DefaultValue => KNil.NilValue;
-   public TypeConstraint TypeConstraint() => EquivalentTypeConstraint;
+   
+   public TypeConstraint EquivalentTypeConstraint() => OptionalTypeConstraint;
 }

@@ -18,7 +18,7 @@ public class CycleClass : BaseClass, ICollectionClass
 
    public override IObject DefaultValue => new Cycle();
 
-   public TypeConstraint TypeConstraint() => Objects.TypeConstraint.FromList("Collection");
+   public TypeConstraint EquivalentTypeConstraint() => TypeConstraint.FromList("Collection");
 
    public IObject Revert(IEnumerable<IObject> list) => new KTuple([.. list]);
 }
