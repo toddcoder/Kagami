@@ -23,8 +23,12 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
    public static implicit operator KString(MutString source) => source.AsString;
 
    protected StringBuilder mutable;
+   protected Putter putter = new();
 
-   public MutString(string mutable) => this.mutable = new StringBuilder(mutable);
+   public MutString(string mutable)
+   {
+      this.mutable = new StringBuilder(mutable);
+   }
 
    public string ClassName => "MutString";
 
@@ -312,5 +316,33 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
 
          return Some.Object(KChar.CharObject(ch));
       }
+   }
+
+   public MutString Print(string value)
+   {
+      putter.Reset();
+      mutable.Append(value);
+
+      return this;
+   }
+
+   public MutString PrintLine(string value)
+   {
+      putter.Reset();
+      mutable.AppendLine(value);
+
+      return this;
+   }
+
+   public MutString Put(string value)
+   {
+      mutable.Append(putter.Put(value));
+      return this;
+   }
+
+   public MutString Put(string value, string separator)
+   {
+      mutable.Append(putter.Put(value, separator));
+      return this;
    }
 }

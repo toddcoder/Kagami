@@ -28,6 +28,11 @@ public class MutStringClass : BaseClass, ICollectionClass
          (obj, msg) => function<MutString, Int, KChar>(obj, msg, (m, i, c) => m.Fill(c.Value, i.Value)));
       registerMessage("pop()", (obj, _) => function<MutString>(obj, m => m.Pop()));
       registerMessage("dequeue()", (obj, _) => function<MutString>(obj, m => m.Dequeue()));
+      registerMessage("print(_<String>)", (obj, msg) => function<MutString, KString>(obj, msg, (m, s) => m.Print(s.Value)));
+      registerMessage("println(_<String>)", (obj, msg) => function<MutString, KString>(obj, msg, (m, s) => m.PrintLine(s.Value)));
+      registerMessage("put(_<String>)", (obj, msg) => function<MutString, KString>(obj, msg, (m, s) => m.Put(s.Value)));
+      registerMessage("put(_<String>,_<String>)",
+         (obj, msg) => function<MutString, KString, KString>(obj, msg, (m, s1, s2) => m.Put(s1.Value, s2.Value)));
    }
 
    public override IObject DefaultValue => new MutString("");
