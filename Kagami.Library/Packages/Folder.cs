@@ -71,6 +71,8 @@ public class Folder : IObject, ICollection
 
    public IObject Copy() => new Folder(folderName.FullPath);
 
+   public IIterator Following(IObject following) => new MultiIterator(this, following);
+
    public IObject Flatten() => this;
 
    public IObject this[SkipTake skipTake] => Library.Objects.CollectionFunctions.skipTake(this, skipTake);

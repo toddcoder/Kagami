@@ -85,7 +85,11 @@ public interface IIterator : IEquivalentClass
 
    IObject Zip(ICollection collection);
 
+   IObject Zip(IIterator iterator);
+
    IObject Zip(ICollection collection, Lambda lambda);
+
+   IObject Zip(IIterator iterator, Lambda lambda);
 
    IObject ZipL(ICollection collection, IObject leftDefaultValue, IObject rightDefaultValue);
 

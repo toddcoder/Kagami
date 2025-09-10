@@ -27,4 +27,6 @@ public interface ICollection : ISkipTakeable
    IObject One();
 
    IObject Copy();
+
+   IIterator Following(IObject following);
 }

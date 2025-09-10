@@ -78,6 +78,8 @@ public class Cycle : IObject, ICollection
 
    public IObject Copy() => new Cycle(items);
 
+   public IIterator Following(IObject following) => new MultiIterator(this, following);
+
    public KTuple Items => new(items);
 
    public IObject this[int index] => items[index];

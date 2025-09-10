@@ -186,6 +186,8 @@ public class List : IObject, ICollection
 
    public IObject Copy() => new List(Head, tail);
 
+   public IIterator Following(IObject following) => new MultiIterator(this, following);
+
    public IObject Concatenate(List other)
    {
       var left = GetIterator(false).List().ToList();

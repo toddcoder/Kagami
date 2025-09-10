@@ -2,25 +2,7 @@
 
 namespace Kagami.Library.Iterators;
 
-public class StreamingZip(ICollection collection) : StreamingAction
+public class StreamingZip(ICollection collection) : StreamingZipIterator(collection.GetIterator(false))
 {
-   protected IIterator iterator = collection.GetIterator(false);
-
-   public override StreamingCondition Execute(StreamingState state)
-   {
-      var _next = iterator.Next();
-      if (_next is (true, var next))
-      {
-         List<IObject> result = [state.Next, next];
-         var reverted = state.CollectionClass.Revert(result);
-
-         return new StreamingCondition.Continuing(reverted);
-      }
-      else
-      {
-         return new StreamingCondition.Finished();
-      }
-   }
-
    public override string ToString() => $"zip({((IObject)collection).ClassName})";
 }

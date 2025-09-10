@@ -90,6 +90,8 @@ public class ObjectCollection : IObject, ICollection
 
    public IObject Copy() => new ObjectCollection(obj);
 
+   public IIterator Following(IObject following) => new MultiIterator(this, following);
+
    public string ClassName => obj.ClassName;
 
    public string AsString => obj.AsString;

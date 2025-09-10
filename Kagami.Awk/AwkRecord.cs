@@ -92,6 +92,8 @@ public class AwkRecord : IObject, ICollection, ITextFinding
 
    public IObject Copy() => new AwkRecord(fields, fieldPattern, fieldSeparator);
 
+   public IIterator Following(IObject following) => new MultiIterator(this, following);
+
    public IObject Find(string input, int startIndex, bool reverse) => find(fields[0], input, startIndex, reverse);
 
    public IObject Find(ITextFinding textFinding, int startIndex, bool reverse) => textFinding.Find(fields[0], startIndex, reverse);

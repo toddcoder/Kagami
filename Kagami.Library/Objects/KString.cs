@@ -199,6 +199,8 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
    public IObject Copy() => new KString(value);
 
+   public IIterator Following(IObject following) => new MultiIterator(this, following);
+
    public KString Repeat(int count) => value.Repeat(count);
 
    public KChar GetChar(int index) => value[index];

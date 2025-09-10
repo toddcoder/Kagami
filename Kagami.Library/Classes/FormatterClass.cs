@@ -2,7 +2,7 @@
 
 namespace Kagami.Library.Classes;
 
-public class FormatterClass : BaseClass
+public class FormatterClass : BaseClass, IEquivalentClass
 {
    public override string Name => "Formatter";
 
@@ -26,4 +26,6 @@ public class FormatterClass : BaseClass
 
       return @class.SendMessage(@string, message);
    }
+
+   public TypeConstraint EquivalentTypeConstraint() => TypeConstraint.FromList("Iterator");
 }

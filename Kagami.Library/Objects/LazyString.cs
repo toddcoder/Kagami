@@ -113,6 +113,8 @@ public readonly struct LazyString(string value) : IObject, IComparable<KString>,
 
    public IObject Copy() => getKString().Copy();
 
+   public IIterator Following(IObject following) => new MultiIterator(this, following);
+
    public int CompareTo(object? obj) => getKString().CompareTo(obj);
 
    public int Compare(IObject obj) => getKString().Compare(obj);

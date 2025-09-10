@@ -347,6 +347,7 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerMessage("range()", (obj, _) => collectionFunc(obj, c => new KRange(new Int(0), c.Length, false)));
       registerMessage("one()", (obj, _) => collectionFunc(obj, c => c.One()));
       registerMessage("copy()", (obj, _) => collectionFunc(obj, c => c.Copy()));
+      registerMessage("following(_)", (obj, msg) => collectionFunc<IObject>(obj, msg, (c, o) => (IObject)c.Following(o)));
 
       loadIteratorMessages();
    }
@@ -437,8 +438,10 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerIterMessage("indexes(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Indexes(l)));
       registerIterMessage("zip(_<Collection>,_<Lambda>)",
          (obj, message) => iteratorFunc<IObject, Lambda>(obj, message, (i, c, l) => i.Zip((ICollection)c, l)));
+      registerIterMessage("zip(_<Iterator>,_<Lambda>)",
+         (obj, message) => iteratorFunc<IObject, Lambda>(obj, message, (i, c, l) => i.Zip((IIterator)c, l)));
       registerIterMessage("zip(_<Collection>)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, c) => i.Zip((ICollection)c)));
-      registerIterMessage("zip(_<Iterator>)", (obj, message) => iteratorFunc<IObject>(obj, message, (i1, i2) => i1.Zip((Iterator)i2)));
+      registerIterMessage("zip(_<Iterator>)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, c) => i.Zip((IIterator)c)));
       registerIterMessage("zipl(_<Collection>,_,_,_<Lambda>)",
          (obj, message) =>
             iteratorFunc<IObject, IObject, IObject, Lambda>(obj, message, (i, c, lv, rv, l) => i.ZipL((ICollection)c, lv, rv, l)));

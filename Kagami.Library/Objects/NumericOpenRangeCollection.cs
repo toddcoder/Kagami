@@ -54,4 +54,6 @@ public class NumericOpenRangeCollection(NumericOpenRange openRange) : IObject, I
    public IObject One() => this;
 
    public IObject Copy() => new NumericOpenRangeCollection((NumericOpenRange)openRange.Copy());
+
+   public IIterator Following(IObject following) => new MultiIterator(this, following);
 }

@@ -117,6 +117,8 @@ public readonly struct KIndex : IObject, ICollection
 
    public IObject Copy() => new KIndex(start, end, length);
 
+   IIterator ICollection.Following(IObject following) => new MultiIterator(this, following);
+
    public IObject this[SkipTake skipTake] => Range()[skipTake];
 
    public KIndex StartSucc() => count == 1 ? Shift(1) : new KIndex(start + 1, end, length).Normalize();

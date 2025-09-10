@@ -320,6 +320,8 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       return new KArray(newList);
    }
 
+   IIterator ICollection.Following(IObject following) => new MultiIterator(this, following);
+
    public void Add(IObject obj)
    {
       assertType(obj);

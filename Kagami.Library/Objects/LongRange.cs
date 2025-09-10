@@ -194,6 +194,8 @@ public struct LongRange : IObject, ICollection
 
    public IObject Copy() => new LongRange(start, stop, inclusive, increment);
 
+   public IIterator Following(IObject following) => new MultiIterator(this, following);
+
    public IObject Add(BigInteger increment) => new LongRange(this, increment);
 
    public IObject Subtract(BigInteger increment) => new LongRange(this, -increment);

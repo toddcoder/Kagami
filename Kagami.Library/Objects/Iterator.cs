@@ -413,10 +413,44 @@ public class Iterator : IObject, IIterator
       return collectionClass.Revert(List().Zip(rightList, (x, y) => collectionClass.Revert(new List<IObject> { x, y })));
    }
 
+   public IObject Zip(IIterator iterator)
+   {
+      List<IObject> result = [];
+      var leftIterator = collection.GetIterator(false);
+      while (leftIterator.Next() is (true, var next))
+      {
+         var _rightNext = iterator.Next();
+         if (_rightNext is (true, var rightNext))
+         {
+            var resultItem = collectionClass.Revert([next, rightNext]);
+            result.Add(resultItem);
+         }
+      }
+
+      return collectionClass.Revert(result);
+   }
+
    public virtual IObject Zip(ICollection collection, Lambda lambda)
    {
       var rightList = collection.GetIterator(false).List();
       return collectionClass.Revert(List().Zip(rightList, (x, y) => lambda.Invoke(x, y)));
+   }
+
+   public IObject Zip(IIterator iterator, Lambda lambda)
+   {
+      List<IObject> result = [];
+      var leftIterator = collection.GetIterator(false);
+      while (leftIterator.Next() is (true, var next))
+      {
+         var _rightNext = iterator.Next();
+         if (_rightNext is (true, var rightNext))
+         {
+            var resultItem = lambda.Invoke([next, rightNext]);
+            result.Add(resultItem);
+         }
+      }
+
+      return collectionClass.Revert(result);
    }
 
    public virtual IObject ZipL(ICollection collection, IObject leftDefaultValue, IObject rightDefaultValue)

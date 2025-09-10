@@ -57,6 +57,8 @@ public class XRandom : IObject, ICollection
 
    public IObject Copy() => new XRandom(seed);
 
+   public IIterator Following(IObject following) => new MultiIterator(this, following);
+
    public Int Next(int max) => random.Next(max);
 
    public Int Next(int min, int max) => random.Next(min, max);

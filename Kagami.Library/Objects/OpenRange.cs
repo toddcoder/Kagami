@@ -61,5 +61,7 @@ public readonly struct OpenRange : IObject, ICollection
 
    public IObject Copy() => new OpenRange(seed, lambda);
 
+   public IIterator Following(IObject following) => new MultiIterator(this, following);
+
    public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
 }

@@ -85,6 +85,8 @@ public class Slice : IObject, ICollection
 
    public IObject Copy() => new Slice(sliceable, indexes);
 
+   public IIterator Following(IObject following) => new MultiIterator(this, following);
+
    public IObject Assign(IObject value)
    {
       if (value is ICollection collection)

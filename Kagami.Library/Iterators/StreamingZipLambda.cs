@@ -2,9 +2,9 @@
 
 namespace Kagami.Library.Iterators;
 
-public class StreamingZipLambda(ICollection collection, Lambda lambda) : StreamingAction
+public class StreamingZipLambda(ICollection collection, Lambda lambda) : StreamingZipLambdaIterator(collection.GetIterator(false), lambda)
 {
-   protected IIterator iterator = collection.GetIterator(false);
+   protected Lambda lambda = lambda;
 
    public override StreamingCondition Execute(StreamingState state)
    {

@@ -199,7 +199,11 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
 
    public IObject Zip(ICollection collection) => copy(new StreamingZip(collection));
 
+   public IObject Zip(IIterator zipIterator) => copy(new StreamingZipIterator(zipIterator));
+
    public IObject Zip(ICollection collection, Lambda lambda) => copy(new StreamingZipLambda(collection, lambda));
+
+   public IObject Zip(IIterator zipIterator, Lambda lambda) => copy(new StreamingZipLambdaIterator(zipIterator, lambda));
 
    public IObject ZipL(ICollection collection, IObject leftDefaultValue, IObject rightDefaultValue) =>
       terminate().ZipL(collection, leftDefaultValue, rightDefaultValue);

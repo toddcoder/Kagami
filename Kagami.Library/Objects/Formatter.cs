@@ -99,6 +99,8 @@ public readonly struct Formatter(LazyString lazyString, KArray array) : IObject,
 
    public IObject Copy() => getKString().Copy();
 
+   public IIterator Following(IObject following) => new MultiIterator(this, following);
+
    public int CompareTo(object? obj) => getKString().CompareTo(obj);
 
    public int Compare(IObject obj) => getKString().CompareTo(obj);

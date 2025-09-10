@@ -2,7 +2,7 @@
 
 namespace Kagami.Library.Classes;
 
-public class IteratorClass : BaseClass
+public class IteratorClass : BaseClass, IEquivalentClass
 {
    public override string Name => "Iterator";
 
@@ -14,4 +14,6 @@ public class IteratorClass : BaseClass
    }
 
    public override IObject DefaultValue => (IObject)KArray.Empty.GetIterator(false);
+
+   public TypeConstraint EquivalentTypeConstraint() => TypeConstraint.FromList("Iterator");
 }

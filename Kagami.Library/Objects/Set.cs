@@ -93,6 +93,8 @@ public class Set : IObject, ICollection, IObjectCompare
       return new Set(newSet);
    }
 
+   public IIterator Following(IObject following) => new MultiIterator(this, following);
+
    protected void assertNotThisSet(IObject other)
    {
       if (Id == other.Id)

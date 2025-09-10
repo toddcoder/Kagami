@@ -58,4 +58,6 @@ public readonly struct NumericOpenRange(INumeric seed, INumeric increment) : IOb
    public IObject One() => this;
 
    public IObject Copy() => new NumericOpenRange(seed, increment);
+
+   public IIterator Following(IObject following) => new MultiIterator(this, following);
 }

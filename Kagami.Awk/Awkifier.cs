@@ -172,6 +172,8 @@ public class Awkifier : IObject, ICollection
 
    public IObject Copy() => new Awkifier(source, asFile);
 
+   public IIterator Following(IObject following) => new MultiIterator(this, following);
+
    public IIterator If(Regex regex)
    {
       return (IIterator)new LazyIterator(this).If(new InternalLambda(args =>

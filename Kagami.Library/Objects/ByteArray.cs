@@ -57,6 +57,8 @@ public readonly struct ByteArray : IObject, ICollection, IObjectCompare
 
    public IObject Copy() => new ByteArray(bytes);
 
+   public IIterator Following(IObject following) => new MultiIterator(this, following);
+
    public int Compare(IObject obj) => compareCollections(this, obj);
 
    public IObject Object => this;

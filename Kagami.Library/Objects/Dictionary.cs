@@ -367,6 +367,8 @@ public class Dictionary : IObject, IMutableCollection
       return new Dictionary(hash);
    }
 
+   public IIterator Following(IObject following) => new MultiIterator(this, following);
+
    public IObject Swap(IObject key1, IObject key2)
    {
       var value1 = getValue(key1);

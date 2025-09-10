@@ -190,6 +190,8 @@ public struct FloatRange : IObject, ICollection
 
    public IObject Copy() => new FloatRange(start, stop, inclusive, increment);
 
+   public IIterator Following(IObject following) => new MultiIterator(this, following);
+
    public IObject Add(double increment) => new FloatRange(this, increment);
 
    public IObject Subtract(double increment) => new FloatRange(this, -increment);
