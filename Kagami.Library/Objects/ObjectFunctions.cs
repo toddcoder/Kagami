@@ -634,6 +634,18 @@ public static class ObjectFunctions
 
    public static IObject someOf(Maybe<IObject> maybe) => maybe.Map(Some.Object) | (() => KNil.NilValue);
 
+   public static IObject successOf(Result<IObject> result)
+   {
+      if (result is (true, var success))
+      {
+         return Success.Object(success);
+      }
+      else
+      {
+         return new Failure(result.Exception.Message);
+      }
+   }
+
    public static bool compareEnumerables(IEnumerable<IObject> left, IEnumerable<IObject> right)
    {
       var lArray = left.ToArray();

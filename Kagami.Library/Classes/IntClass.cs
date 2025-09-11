@@ -1,8 +1,11 @@
 ﻿using System.Globalization;
+using Core.Monads;
 using Core.Objects;
 using Core.Strings;
 using Kagami.Library.Objects;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Classes.ClassFunctions;
+using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Classes;
 
@@ -59,6 +62,8 @@ public class IntClass : BaseClass, IParse, IEquivalentClass
       classMessages["parse(_)"] = (_, msg) => parse(msg.Arguments[0].AsString);
       classMessages["parse(hex:_)"] = (_, msg) => parseFromHex(msg.Arguments[0].AsString);
       classMessages["parse(bin:_)"] = (_, msg) => parseFromBinary(msg.Arguments[0].AsString);
+      classMessages["parse(_<String>,radix:_<Int>)"] = (_, msg) =>
+         classFunc<IntClass, KString, Int>(this, msg, (_, s, r) => successOf(parseInt(s.Value, r.Value).Map(Int.IntObject)));
       classMessages["rand()"] = (_, _) => (Int)random.Value.Next();
    }
 
@@ -99,4 +104,37 @@ public class IntClass : BaseClass, IParse, IEquivalentClass
    public override IObject DefaultValue => Int.Zero;
 
    public TypeConstraint EquivalentTypeConstraint() => TypeConstraint.FromList("Number");
+
+   protected static Result<int> parseInt(string source, int radix)
+   {
+      var x = 0;
+
+      foreach (var _digit in source.Select(charToDigit))
+      {
+         if (_digit is (true, var digit))
+         {
+            if (digit >= radix)
+            {
+               return fail("Invalid char");
+            }
+
+            x *= radix;
+            x += digit;
+         }
+         else
+         {
+            return fail("Char out of range");
+         }
+      }
+
+      return x;
+
+      static Maybe<int> charToDigit(char c) => c switch
+      {
+         >= '0' and <= '9' => c - '0',
+         >= 'A' and <= 'Z' => c - 'A' + 10,
+         >= 'a' and <= 'z' => c - 'a' + 10,
+         _ => nil
+      };
+   }
 }
