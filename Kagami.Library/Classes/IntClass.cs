@@ -11,7 +11,7 @@ namespace Kagami.Library.Classes;
 
 public class IntClass : BaseClass, IParse, IEquivalentClass
 {
-   protected Lazy<Random> random = new(() => new Random(DateTime.Now.Microsecond));
+   protected readonly Lazy<Random> random = new(() => new Random(DateTime.Now.Microsecond));
 
    public override string Name => "Int";
 
@@ -71,7 +71,7 @@ public class IntClass : BaseClass, IParse, IEquivalentClass
    {
       try
       {
-         var number = int.Parse(value.Replace("_", ""));
+         var number = int.Parse(value.Replace("_", "").Replace("`", ""));
          return Success.Object(Int.IntObject(number));
       }
       catch (Exception exception)
@@ -84,7 +84,7 @@ public class IntClass : BaseClass, IParse, IEquivalentClass
    {
       try
       {
-         var number = int.Parse(value.Replace("_", ""), numberStyles);
+         var number = int.Parse(value.Replace("_", "").Replace("`", ""), numberStyles);
          return Success.Object(Int.IntObject(number));
       }
       catch (Exception exception)
