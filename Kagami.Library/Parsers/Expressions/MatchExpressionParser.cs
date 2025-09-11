@@ -10,7 +10,7 @@ public partial class MatchExpressionParser : SymbolParser
 {
    protected static Optional<(Expression, Expression)> getMatchItem(ParseState state)
    {
-      if (state.Scan(@"^(\s*)(\))", Color.Whitespace, Color.Structure))
+      if (state.Scan(@"^(\s*)(\})", Color.Whitespace, Color.CloseParenthesis))
       {
          return nil;
       }
@@ -18,12 +18,12 @@ public partial class MatchExpressionParser : SymbolParser
       {
          var _matchItem =
             from key in getExpression(state, ExpressionFlags.Comparisand | ExpressionFlags.OmitNameValue)
-            from _ in state.Scan(@"^(\s*)(=>)(\s*)", Color.Whitespace, Color.Operator, Color.Whitespace)
-            from expression in getExpression(state, ExpressionFlags.OmitComma)
+            from _ in state.Scan(@"^(\s*)(<-)", Color.Whitespace, Color.Operator)
+            from expression in getExpression(state, ExpressionFlags.Standard)
             select (key, expression);
          if (_matchItem)
          {
-            state.Scan(@"^(\s*)(,)(\s*)", Color.Whitespace, Color.Structure, Color.Whitespace);
+            state.Scan(@"^(\s*)(;)", Color.Whitespace, Color.Structure);
          }
 
          return _matchItem;
@@ -34,12 +34,12 @@ public partial class MatchExpressionParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(\|\|)(\s*)(\()(\s*)")]
+   [GeneratedRegex(@"^(\s*)(match)(\s*)(\{)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      state.Colorize(tokens, Color.Whitespace, Color.Structure, Color.Whitespace, Color.Structure, Color.Whitespace);
+      state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Whitespace, Color.OpenParenthesis);
 
       List<(Expression, Expression)> matchItems = [];
 
@@ -60,7 +60,7 @@ public partial class MatchExpressionParser : SymbolParser
          }
       }
 
-      builder.Add(new MatchExpressionSymbol(matchItems.ToArray()));
+      builder.Add(new MatchExpressionSymbol([.. matchItems]));
       return unit;
    }
 }
