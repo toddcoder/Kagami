@@ -12,7 +12,7 @@ public class WithSymbol(TaggedExpression[] taggedExpressions) : Symbol
          builder.Dup();
          expression.Generate(builder);
          builder.SendMessage(tag.set(), 1);
-         //builder.Drop();
+         builder.Drop();
       }
    }
 

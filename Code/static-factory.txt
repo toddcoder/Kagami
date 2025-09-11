@@ -1,2 +1,2 @@
 Button clicked
-...("Button clicked") | Arguments
+"Button clicked" | String

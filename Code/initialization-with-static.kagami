@@ -1,0 +1,19 @@
+﻿open sys
+
+class Timestamp {
+	var seconds = 0
+	var nanos = 0
+}
+static {
+	func unixEpoch() Timestamp {
+		return	 Timestamp(){seconds = 1, nanos = 2}
+	}
+}
+
+let timestamp1 = Timestamp.unixEpoch()
+println(timestamp1.seconds)
+println(timestamp1.nanos)
+
+let timestamp2 = Timestamp(){seconds = 1, nanos = 2}
+println(timestamp2.seconds)
+println(timestamp2.nanos)

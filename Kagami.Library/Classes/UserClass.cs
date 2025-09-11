@@ -71,7 +71,9 @@ public class UserClass : BaseClass, IEquatable<UserClass>
       }
       else
       {
-         return KVoid.Value;
+         //return KVoid.Value;
+         //throw fail($"No value was returned by {lambda.Image}");
+         return arguments[0];
       }
    }
 
@@ -125,7 +127,7 @@ public class UserClass : BaseClass, IEquatable<UserClass>
             messages[setter] = (obj, msg) =>
             {
                ((UserObject)obj).Fields[name] = msg.Arguments[0];
-               return KVoid.Value;
+               return msg.Arguments[0];
             };
             signatures.Add(setter);
          }

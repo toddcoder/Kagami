@@ -31,7 +31,8 @@ public class AssignField : OneOperandOperation
          var _self = machine.Find("self", true);
          if (_self is (true, var self))
          {
-            return sendMessage(self.Value, name.set(), [value]).Just();
+            sendMessage(self.Value, name.set(), [value]);
+            return value.Just();
          }
          else
          {

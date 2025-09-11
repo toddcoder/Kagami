@@ -34,7 +34,9 @@ public class Block : Statement, IEnumerable<Statement>
       if (_expression is (true, var expression))
       {
          var assignToField = new AssignToField(fieldName, nil, expression);
-         return new Block(assignToField);
+         var setter = new Block(assignToField);
+         setter.AddReturnIf(new FieldSymbol(fieldName));
+         return setter;
       }
       else
       {
