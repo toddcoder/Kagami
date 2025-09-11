@@ -2,7 +2,6 @@
 using Core.Enumerables;
 using Core.Monads;
 using Core.Numbers;
-using System;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.CollectionFunctions;
@@ -27,7 +26,6 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
    }
 
    protected List<IObject> list;
-   protected int arrayID = uniqueObjectID();
    protected Maybe<TypeConstraint> _typeConstraint = nil;
    protected Maybe<Lambda> _defaultLambda = nil;
    protected Maybe<IObject> _defaultValue = nil;
@@ -200,7 +198,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       {
          switch (value)
          {
-            case KArray array when array.arrayID == arrayID:
+            case KArray array when array.Id == Id:
                return;
             case ICollection collection and not KString:
             {
@@ -250,7 +248,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    protected void throwIfSelf(IObject value)
    {
-      if (value is KArray array && array.arrayID == arrayID)
+      if (value is KArray array && array.Id == Id)
       {
          throw fail("Can't assign an array item to itself");
       }
