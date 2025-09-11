@@ -14,7 +14,7 @@ public partial class HexExpParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(0x)([\d_`a-f]+\.[\d_`a-f]*)(?:(p)([-\+]?\d+))?(i)?")]
+   [GeneratedRegex(@"^(\s*)(0x)([\d_`a-fA-F]+\.[\d_`a-fA-F]*)(?:([pP])([-\+]?\d+))?(i)?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -26,7 +26,7 @@ public partial class HexExpParser : SymbolParser
       var prefix = source.Contains("p") ? source.KeepUntil("p") : source;
       var suffix = source.Contains("p") ? source.DropUntil("p").Drop(1) : "";
 
-      var left = convertFloat(prefix, 16, "0123456789abcdef");
+      var left = convertFloat(prefix.ToLower(), 16, "0123456789abcdef");
 
       if (suffix.IsEmpty())
       {

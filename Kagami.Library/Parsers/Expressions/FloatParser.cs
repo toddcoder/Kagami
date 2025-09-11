@@ -12,7 +12,7 @@ public partial class FloatParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(\d[\d_`]*\.\d[\d_`]*)(?:(e)([-\+]?\d+))?(i|d|f)?")]
+   [GeneratedRegex(@"^(\s*)(\d[\d_`]*\.\d[\d_`]*)(?:([eE])([-\+]?\d+))?(i|d|f)?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)

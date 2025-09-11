@@ -10,7 +10,7 @@ public partial class HexadecimalParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(0x)([0-9a-f][0-9a-f_`]*)([Li])?\b")]
+   [GeneratedRegex(@"^(\s*)(0x)([0-9a-fA-F][0-9a-fA-F_`]*)([Li])?\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -19,7 +19,7 @@ public partial class HexadecimalParser : SymbolParser
       var type = tokens[4].Text;
       state.Colorize(tokens, Color.Whitespace, Color.NumberPart, Color.Number, Color.NumberPart);
 
-      var number = convert(source.Replace("_", "").Replace("`", ""), 16, "0123456789abcdef");
+      var number = convert(source.ToLower().Replace("_", "").Replace("`", ""), 16, "0123456789abcdef");
       return getNumber(builder, type, number);
    }
 }
