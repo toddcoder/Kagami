@@ -56,7 +56,7 @@ public partial class AssignToNewFieldParser : StatementParser
          }
          else
          {
-            return state.SetException("Missing equal sign");
+            return _expression.Exception;
          }
       }
       else if (_typeConstraint is (true, var typeConstraint))

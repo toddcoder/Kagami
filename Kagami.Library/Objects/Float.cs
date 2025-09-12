@@ -232,4 +232,59 @@ public readonly struct Float : IObject, INumeric, IComparable<Float>, IEquatable
    public IRangeItem Predecessor => (Float)(value - 1);
 
    public KRange Range() => new((Int)0, this, false);
+
+   public Float Next()
+   {
+      switch (value)
+      {
+         case double.NaN:
+         case double.PositiveInfinity:
+            return value;
+         case 0.0:
+            return double.Epsilon;
+      }
+
+      var bits = BitConverter.DoubleToInt64Bits(value);
+      if (value > 0)
+      {
+         bits++;
+      }
+      else
+      {
+         bits--;
+      }
+      return BitConverter.Int64BitsToDouble(bits);
+   }
+
+   public Float Previous()
+   {
+      switch (value)
+      {
+         case double.NaN:
+         case double.NegativeInfinity:
+            return value;
+         case 0.0:
+            return -double.Epsilon;
+      }
+
+      var bits = BitConverter.DoubleToInt64Bits(value);
+      if (value > 0)
+      {
+         bits--;
+      }
+      else
+      {
+         bits++;
+      }
+      return BitConverter.Int64BitsToDouble(bits);
+   }
+
+   public KString Bits
+   {
+      get
+      {
+         var bits = BitConverter.DoubleToInt64Bits(value);
+         return Convert.ToString(bits, 2).PadLeft(64, '0');
+      }
+   }
 }

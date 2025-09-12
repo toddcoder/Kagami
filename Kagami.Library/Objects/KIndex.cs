@@ -7,11 +7,11 @@ namespace Kagami.Library.Objects;
 
 public readonly struct KIndex : IObject, ICollection
 {
-   public static KIndex StartIndex(IIndexed indexed) => new KIndex(0, 0, indexed.Length);
+   public static KIndex StartIndex(IIndexed indexed) => new(0, 0, indexed.Length);
 
-   public static KIndex EndIndex(IIndexed indexed) => new KIndex(indexed.LastIndex, indexed.LastIndex, indexed.Length);
+   public static KIndex EndIndex(IIndexed indexed) => new(indexed.LastIndex, indexed.LastIndex, indexed.Length);
 
-   public static KIndex FullIndex(IIndexed indexed) => new KIndex(0, indexed.LastIndex, indexed.Length);
+   public static KIndex FullIndex(IIndexed indexed) => new(0, indexed.LastIndex, indexed.Length);
 
    private readonly int start;
    private readonly int end;

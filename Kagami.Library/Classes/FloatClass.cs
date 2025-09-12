@@ -1,5 +1,6 @@
 ﻿using Core.Objects;
 using Kagami.Library.Objects;
+using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Classes;
 
@@ -21,6 +22,9 @@ public class FloatClass : BaseClass, IParse, IEquivalentClass
       messages["rand()"] = (obj, _) => ((Float)obj).Rand(random.Value);
       messages["rand(_<Float>)"] = (obj, msg) => ((Float)obj).Rand(random.Value, (Float)msg.Arguments[0]);
       messages["isNan".get()] = (obj, _) => KBoolean.BooleanObject(double.IsNaN(((Float)obj).Value));
+      messages["next()"] = (obj, _) => function<Float>(obj, f => f.Next());
+      messages["prev()"] = (obj, _) => function<Float>(obj, f => f.Previous());
+      messages["bits".get()] = (obj, _) => function<Float>(obj, f => f.Bits);
 
       messageNumberMessages();
    }

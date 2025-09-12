@@ -28,7 +28,7 @@ public partial class DateParser : SymbolParser
       }
       else
       {
-         return _dateTime.Exception;
+         return state.SetException("Invalid date", _dateTime.Exception);
       }
    }
 }
