@@ -1,4 +1,5 @@
-﻿using Core.Monads;
+﻿using System.ComponentModel.DataAnnotations;
+using Core.Monads;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using static Core.Monads.MonadFunctions;
@@ -21,6 +22,52 @@ public class GoToIfFalse : AddressedOperation
       {
          switch (x)
          {
+            case Objects.Some some:
+            {
+               if (some.IsTrue)
+               {
+                  var _result =
+                     from fieldName in Module.Global.Value.RetrievedFields.Maybe[some.Id]
+                     from fieldValue in machine.Find(fieldName, true)
+                     from classValue in Module.Global.Value.Class(some.Value.ClassName)
+                     select (classValue, fieldValue);
+                  if (_result is (true, var (baseClass, field)))
+                  {
+                     field.TypeConstraint = new TypeConstraint([baseClass]);
+                     field.Value = some.Value;
+                  }
+
+                  increment = true;
+                  return nil;
+               }
+               else
+               {
+                  return machine.GoTo(address) ? nil : badAddress(address);
+               }
+            }
+            case Objects.Success success:
+            {
+               if (success.IsTrue)
+               {
+                  var _result =
+                     from fieldName in Module.Global.Value.RetrievedFields.Maybe[success.Id]
+                     from fieldValue in machine.Find(fieldName, true)
+                     from classValue in Module.Global.Value.Class(success.Value.ClassName)
+                     select (classValue, fieldValue);
+                  if (_result is (true, var (baseClass, field)))
+                  {
+                     field.TypeConstraint = new TypeConstraint([baseClass]);
+                     field.Value = success.Value;
+                  }
+
+                  increment = true;
+                  return nil;
+               }
+               else
+               {
+                  return machine.GoTo(address) ? nil : badAddress(address);
+               }
+            }
             case IBoolean bx when predicate(bx):
                return machine.GoTo(address) ? nil : badAddress(address);
             case IBoolean or Before:
