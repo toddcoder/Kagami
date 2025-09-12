@@ -36,7 +36,9 @@ public class StatementsParser : MultiParser
 
          yield return new EnumParser();
          yield return new AbstractFunctionParser();
+         yield return new AbstractPropertyParser();
          yield return new FunctionParser();
+         yield return new PropertyParser();
          yield return new MatchParser();
          yield return new YieldParser();
          yield return new CalculatedReturnParser();

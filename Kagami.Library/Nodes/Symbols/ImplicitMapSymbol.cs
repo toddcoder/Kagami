@@ -10,5 +10,5 @@ public class ImplicitMapSymbol : Symbol
 
    public override Arity Arity => Arity.Postfix;
 
-   public override string ToString() => ".>";
+   public override string ToString() => "[]";
 }

@@ -97,25 +97,6 @@ public class Invoke : OneOperandOperation
       }
    }
 
-   /*protected static Optional<IObject> InvokeObjectWithJunction(Machine machine, IObject value, Arguments arguments, ref bool increment)
-   {
-      List<IObject> results = [];
-      foreach (var newArguments in arguments.WithJunctions())
-      {
-         var _result = InvokeObject(machine, value, newArguments, ref increment);
-         if (_result is (true, var result))
-         {
-            results.Add(result);
-         }
-         else if (_result.Exception is (true, var exception))
-         {
-            return exception;
-         }
-      }
-
-      return new Junction(JunctionType.Any, results);
-   }*/
-
    protected string fieldName;
    protected bool increment;
 

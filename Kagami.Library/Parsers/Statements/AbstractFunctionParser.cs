@@ -3,6 +3,7 @@ using Core.Monads;
 using Kagami.Library.Nodes.Statements;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
+using static Kagami.Library.Parsers.Statements.FunctionParser;
 
 namespace Kagami.Library.Parsers.Statements;
 
@@ -26,7 +27,7 @@ public partial class AbstractFunctionParser : StatementParser
          functionName = $"__${functionName}";
       }
 
-      var _parameters = FunctionParser.GetAnyParameters(needsParameters, state);
+      var _parameters = GetAnyParameters(needsParameters, state);
       if (_parameters is (true, var parameters))
       {
          var _response = parseTypeConstraint(state);
