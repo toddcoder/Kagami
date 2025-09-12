@@ -130,7 +130,13 @@ public partial class Playground : Form
          menus.Menu("&Edit");
          menus.Menu("Duplicate", (_, _) => duplicate(), "^D");
          menus.Menu("Create Block", (_, _) => createBlock(), "^B");
-         menus.Menu("Copy Console", (_, _) => Clipboard.SetText(textConsole.Text));
+         menus.Menu("Copy Console", (_, _) =>
+         {
+            if (textConsole.Text.IsNotEmpty())
+            {
+               Clipboard.SetText(textConsole.Text);
+            }
+         });
          menus.Separator();
          menus.Menu("Find/Replace", (_, _) => { findReplace.Show(); }, "^F");
 
@@ -903,7 +909,7 @@ public partial class Playground : Form
       switch (e.KeyCode)
       {
          case Keys.Escape:
-            if (/*textAtInsert(1) == "'" && textAtInsert(1, -1) == "'" || */textAtInsert(1) == "\"" && textAtInsert(1, -1) == "\"" ||
+            if ( /*textAtInsert(1) == "'" && textAtInsert(1, -1) == "'" || */textAtInsert(1) == "\"" && textAtInsert(1, -1) == "\"" ||
                 textAtInsert(1) == ")" && textAtInsert(1, -1) == "(" || textAtInsert(1) == "]" && textAtInsert(1, -1) == "[")
             {
                e.Handled = true;

@@ -18,7 +18,7 @@ public partial class MatchExpressionParser : SymbolParser
       {
          var _matchItem =
             from key in getExpression(state, ExpressionFlags.Comparisand | ExpressionFlags.OmitNameValue)
-            from _ in state.Scan(@"^(\s*)(<-)", Color.Whitespace, Color.Operator)
+            from _ in state.Scan($@"^(\s*){REGEX_SINGLE_BLOCK}", Color.Whitespace, Color.Operator)
             from expression in getExpression(state, ExpressionFlags.Standard)
             select (key, expression);
          if (_matchItem)

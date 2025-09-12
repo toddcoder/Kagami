@@ -1,6 +1,6 @@
 ﻿open sys
 
-func receiveVarArgs(a, b...) <- println($"(a) and (~b)")
+func receiveVarArgs(a, b...) -> println($"(a) and (~b)")
 
 receiveVarArgs(1, 2, 3, 4, 5)
 receiveVarArgs(1, [2, 3, 4, 5])

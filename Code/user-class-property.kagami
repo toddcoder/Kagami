@@ -2,7 +2,7 @@
 
 class Car {
 	var odometer int
-	func string <- $"Car\((odometer))"
+	get string -> $"Car\((odometer))"
 }
 
 let car1 = Car(){odometer = 10000}

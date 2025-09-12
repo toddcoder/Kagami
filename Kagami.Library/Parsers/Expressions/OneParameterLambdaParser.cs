@@ -8,7 +8,7 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class OneParameterLambdaParser : LambdaParser
 {
-   [GeneratedRegex($@"^([ \t]*)({REGEX_FIELD})\b(?=\s*(?:->))")]
+   [GeneratedRegex($@"^([ \t]*)({REGEX_PARAMETER})\b(?=\s*(?:->))")]
    public override partial Regex Regex();
 
    public OneParameterLambdaParser(ExpressionBuilder builder) : base(builder)
@@ -18,6 +18,11 @@ public partial class OneParameterLambdaParser : LambdaParser
    public override Optional<Parameters> ParseParameters(ParseState state, Token[] tokens)
    {
       var name = tokens[2].Text;
+      if (builder.Flags[ExpressionFlags.Comparisand] && name == "_" || isAKeyword(name))
+      {
+         return nil;
+      }
+
       state.Colorize(tokens, Color.Whitespace, Color.Identifier);
 
       return new Parameters(new Parameter(false, "", name, nil, nil, false, false));

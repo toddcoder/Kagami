@@ -26,6 +26,7 @@ namespace Kagami.Library.Parsers;
 public static class ParserFunctions
 {
    public const string REGEX_FIELD = "`?[A-Za-z_][A-Za-z_0-9]*";
+   public const string REGEX_PARAMETER = "`?[a-z_][A-Za-z_0-9]*";
    public const string REGEX_INVOKABLE = "`?[A-Za-z_][A-Za-z_0-9]*";
    public const string REGEX_INVOKABLE2 = @"`?[A-Za-z_][A-Za-z_0-9\$]*";
    public const string REGEX_CLASS = "[A-Z][A-Za-z_0-9]*";
@@ -46,8 +47,9 @@ public static class ParserFunctions
    public const string REGEX_LIST_RIGHT = @":\]";
    public const string REGEX_BLOCK_END = @"^(\s*)(\})";
    public const string REGEX_EXP_END = @"^(\s*)(\))";
+   public const string REGEX_SINGLE_BLOCK = @"(->)(?=[\w\s])";
 
-   public static StringSet keywords = ["do", "else"];
+   public static StringSet keywords = ["do", "else", "true", "false"];
 
    public static bool isAKeyword(string word) => keywords.Contains(word);
 
@@ -558,7 +560,7 @@ public static class ParserFunctions
 
    private static Optional<string> parseParameterName(ParseState state)
    {
-      return state.Scan(@$"^(\s*{REGEX_FIELD})\b", Color.Identifier).Map(s => s.Trim());
+      return state.Scan(@$"^(\s*{REGEX_PARAMETER})\b", Color.Identifier).Map(s => s.Trim());
    }
 
    private static Optional<PossibleTypeConstraint> parseAliasedTypeConstraint(ParseState state)
@@ -741,7 +743,7 @@ public static class ParserFunctions
             _ => nil
          };
          state.SetReturnType(_typeConstraint);
-         var _scanned = state.Scan(@"^(\s*)(<-)(\s*)", Color.Whitespace, Color.Block, Color.Whitespace);
+         var _scanned = state.Scan($@"^(\s*){REGEX_SINGLE_BLOCK}", Color.Whitespace, Color.Block, Color.Whitespace);
          if (_scanned)
          {
             return getSingleLine(state, _typeConstraint);
@@ -772,7 +774,7 @@ public static class ParserFunctions
             _ => nil
          };
          state.SetReturnType(_typeConstraint);
-         var _scanned = state.Scan(@"^(\s*)(<-)(\s*)", Color.Whitespace, Color.Block, Color.Whitespace);
+         var _scanned = state.Scan(@"^(\s*)" + REGEX_SINGLE_BLOCK, Color.Whitespace, Color.Block, Color.Whitespace);
          if (_scanned)
          {
             return getSingleLine(state, _typeConstraint);
@@ -1255,7 +1257,7 @@ public static class ParserFunctions
 
    public static Optional<Block> getCaseStatementBlock(ParseState state)
    {
-      if (state.Scan(@"^(\s*)(<-)(?!=)", Color.Whitespace, Color.Block))
+      if (state.Scan(@"^(\s*)" + REGEX_SINGLE_BLOCK, Color.Whitespace, Color.Block))
       {
          return getSingleLine(state, false);
       }

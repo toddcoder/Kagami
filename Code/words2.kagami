@@ -4,8 +4,8 @@ var lines = ["ONE 1 I", "TWO 2 I", "#START", "THREE:3:III", "FOUR:4:IV", "FIVE:5
 var regex = x"' '"
 for line in lines {
 	match line {
-		| "#START" <- regex = x"':'"
-		| "#STOP" <- regex = x"' '"
-		| _ <- println(line.split(regex){2:1}.one())
+		| "#START" -> regex = x"':'"
+		| "#STOP" -> regex = x"' '"
+		| _ -> println(line.split(regex){2:1}.one())
 	}
 }

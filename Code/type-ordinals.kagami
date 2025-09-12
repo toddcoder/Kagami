@@ -5,8 +5,8 @@ type Planet {| Mercury = 1, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune
 let positionToFind = 11
 if Planet.values[positionToFind] is ?somePlanet {
 	match somePlanet {
-		| Earth <- println("Mostly harmless")
-		| _ <- println("Not a safe place for humans")
+		| Earth -> println("Mostly harmless")
+		| _ -> println("Not a safe place for humans")
 	}
 }
 else {

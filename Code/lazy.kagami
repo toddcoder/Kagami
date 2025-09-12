@@ -2,7 +2,7 @@
 
 class Heavy(var size = 10) {
 	println($"Creating Heavy with (size)")
-	func string <- $"Heavy\(size=(size))"
+	get string -> $"Heavy\(size=(size))"
 }
 
 class AsNeeded(var value int) {

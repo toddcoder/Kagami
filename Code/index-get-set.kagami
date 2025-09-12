@@ -2,9 +2,9 @@
 
 class Matrix {
 	var matrix = {:}
-	func [](x int) <- matrix[x]&
-	func []=(x int, value string) <- matrix[x] = value
-	func string <- ~matrix
+	func [](x int) -> matrix[x]&
+	func []=(x int, value string) -> matrix[x] = value
+	get string -> ~matrix
 }
 
 var matrix = Matrix()

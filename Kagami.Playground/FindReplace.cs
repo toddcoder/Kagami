@@ -47,6 +47,7 @@ public partial class FindReplace : Form
          var payload = new Finding.ReplaceAll(ltFind.Text, uiRegex.BoxChecked, uiIgnoreCase.BoxChecked, ltReplace.Text);
          Publisher<Finding>.Publish("finding", "replace-all", payload);
       };
+      uiReplaceAll.ClickText = "Replace all found text in editor";
 
       uiMessage.Message("");
 

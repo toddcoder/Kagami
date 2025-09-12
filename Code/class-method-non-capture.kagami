@@ -3,7 +3,7 @@
 class Boogeyman(var name, var location) {
 	println("Yes, master?")
 
-	func get_info() <- println($"I am (name) in (location)")
+	func get_info() -> println($"I am (name) in (location)")
 
 	func change_location(newlocation) {
 		location = newlocation

@@ -16,7 +16,6 @@ public class TestBackground(Either<FolderName, FileName> source, ListView listVi
 
    public readonly MessageEvent<string> Progress = new();
    public readonly MessageEvent FolderNotFound = new();
-   //public new readonly MessageEvent<FolderName> Finalized = new();
    public readonly MessageEvent<string[]> Results = new();
 
    public FolderName Folder
@@ -168,6 +167,8 @@ public class TestBackground(Either<FolderName, FileName> source, ListView listVi
       {
          context.PrintLine($"Generate error: {_machine.Exception.Message}");
       }
+
+      Progress.Invoke(sourceFile.Name);
    }
 
    protected void compareFiles(FileName outputFile, FileName expectedFile)
