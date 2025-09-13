@@ -1,1 +1,1 @@
-9 | Int
+Generate error: No when for match

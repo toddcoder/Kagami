@@ -1,3 +1,1 @@
-10
-42
-"42" | String
+Generate error: Improper when expression

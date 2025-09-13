@@ -1,2 +1,1 @@
-Node(n = 7, t1 = Node(n = 4, t1 = Nilt, t2 = Nilt), t2 = Node(n = 3, t1 = Nilt, t2 = Nilt))
-"Node(n = 7, t1 = Node(n = 4, t1 = Nilt, t2 = Nilt), t2 = Node(n = 3, t1 = Nilt, t2 = Nilt))" | String
+Generate error: Improper when expression

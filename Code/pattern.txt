@@ -1,4 +1,1 @@
-Odd=3
-Even=2
-Zero=0
-it collection | Iterator
+Generate error: No when for match

@@ -17,7 +17,8 @@ public partial class FunctionParser : StatementParser
 {
    protected Maybe<Function> _function = nil;
 
-   [GeneratedRegex($@"^(\s*)(override\s+)?(func|(?:infix\(\w+\))|prefix|postfix|macro|match)(\s+)(?:({REGEX_CLASS_GETTING_OR_ALIAS})(\.))?({REGEX_FUNCTION_NAME})(\()?")]
+   [GeneratedRegex(
+      $@"^(\s*)(override\s+)?(func|(?:infix\(\w+\))|prefix|postfix|macro|match)(\s+)(?:({REGEX_CLASS_GETTING_OR_ALIAS})(\.))?({REGEX_FUNCTION_NAME})(\()?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
@@ -28,11 +29,16 @@ public partial class FunctionParser : StatementParser
       var isMacro = tokens[3].Text == "macro";
       var isMatch = tokens[3].Text == "match";
 
+      var type = tokens[8].Text;
+      if (isMatch && type != "(")
+      {
+         return nil;
+      }
+
       var className = tokens[5].Text;
       (className, var color) = getClassNameWithColor(className);
 
       var functionName = tokens[7].Text;
-      var type = tokens[8].Text;
 
       if (isOperator)
       {
@@ -139,7 +145,7 @@ public partial class FunctionParser : StatementParser
             {
                var yielding = state.RemoveYieldFlag();
                state.RemoveReturnType();
-               var function = new Function(functionName, parameters, block, yielding, overriding, className) {IsFixed = isFixed};
+               var function = new Function(functionName, parameters, block, yielding, overriding, className) { IsFixed = isFixed };
                _function = function;
                if (isMacro)
                {

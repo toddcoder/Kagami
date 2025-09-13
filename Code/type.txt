@@ -1,2 +1,1 @@
-open
-"open" | String
+Generate error: No when for match

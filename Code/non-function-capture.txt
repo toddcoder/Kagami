@@ -1,2 +1,1 @@
-Numeric(number = 42)
-"Numeric(number = 42)" | String
+Generate error: Improper when expression
