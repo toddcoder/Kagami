@@ -15,7 +15,7 @@ using Core.Numbers;
 namespace Kagami.Library.Objects;
 
 public readonly struct KString : IObject, IComparable<KString>, IEquatable<KString>, IFormattable, ICollection, IComparable, ISliceable, IRangeItem,
-   ITextFinding, IIndexed
+   ITextFinding, IIndexed, IAccepting
 {
    public static implicit operator KString(string value) => new(value);
 
@@ -66,6 +66,15 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
    public override bool Equals(object? obj) => obj is KString s && Equals(s);
 
    public override int GetHashCode() => Hash;
+
+   public IObject Accept(IObject obj) => obj switch
+   {
+      Int i => KBoolean.BooleanObject(value.Length == i.Value),
+      KChar c => KBoolean.BooleanObject(value.Contains(c.Value)),
+      KString s => KBoolean.BooleanObject(value.Contains(s.value)),
+      Regex r => r.Matches(value),
+      _ => throw cannotAccept(obj)
+   };
 
    public int CompareTo(object? obj) => CompareTo((KString)obj!);
 

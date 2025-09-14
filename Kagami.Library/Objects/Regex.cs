@@ -8,7 +8,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
 
-public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
+public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccepting
 {
    private static IObject getMatchOrText(RegexMatch match, bool textOnly) => textOnly ? match.Text : match;
 
@@ -537,6 +537,12 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>
    public override bool Equals(object? obj) => obj is Regex other && Equals(other);
 
    public override int GetHashCode() => HashCode.Combine(pattern, ignoreCase, multiline, global, textOnly, nameToIndex);
+
+   public IObject Accept(IObject obj) => obj switch
+   {
+      KString s => Matches(s.Value),
+      _ => Matches(obj.AsString)
+   };
 
    public static bool operator ==(Regex left, Regex right) => left.Equals(right);
 

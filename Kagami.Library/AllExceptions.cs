@@ -271,4 +271,8 @@ public static class AllExceptions
    public static string messageCannotBeAKeyword(string keyword) => $"In this context, an identifier as keyword {keyword} cannot be used";
 
    public static Exception cannotBeAKeyword(string keyword) => fail(messageCannotBeAKeyword(keyword));
+
+   public static string messageCannotAccept(IObject obj) => $"Cannot accept {obj.Image}";
+
+   public static Exception cannotAccept(IObject obj) => fail(messageCannotAccept(obj));
 }

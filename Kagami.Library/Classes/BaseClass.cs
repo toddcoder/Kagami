@@ -530,15 +530,12 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerIterMessage("junctionAny()", (obj, _) => iteratorFunc(obj, i => i.JunctionAny()));
       registerIterMessage("junctionNone()", (obj, _) => iteratorFunc(obj, i => i.JunctionNone()));
       registerIterMessage("junctionOne()", (obj, _) => iteratorFunc(obj, i => i.JunctionOne()));
-      
-      /*return;
-      
-      IObject getIterator(IIterator )*/
    }
 
    public virtual bool MatchCompatible(BaseClass otherClass) => Name == otherClass.Name;
 
-   public virtual bool AssignCompatible(BaseClass otherClass) => otherClass.Name is "Placeholder" or "Undefined" or "Any" || MatchCompatible(otherClass);
+   public virtual bool AssignCompatible(BaseClass otherClass) =>
+      otherClass.Name is "Placeholder" or "Undefined" or "Any" || MatchCompatible(otherClass);
 
    protected void rangeMessages()
    {
@@ -753,6 +750,11 @@ public abstract class BaseClass : IEquatable<BaseClass>
       messages["last(_<Lambda>)"] = (obj, msg) => ((IFindIndex)obj).Last((Lambda)msg.Arguments[0]);
       messages["binarySearch(_)"] = (obj, msg) => ((IFindIndex)obj).BinarySearch(msg.Arguments[0]);
       messages["binarySearch(_,_<Lambda>)"] = (obj, msg) => ((IFindIndex)obj).BinarySearch(msg.Arguments[0], (Lambda)msg.Arguments[1]);
+   }
+
+   protected void acceptingMessages()
+   {
+      RegisterMessage("accept(_)", (obj, msg) => ((IAccepting)obj).Accept(msg.Arguments[0]));
    }
 
    public void RegisterInclusion(Inclusion inclusion) => inclusions[inclusion.Name] = inclusion;

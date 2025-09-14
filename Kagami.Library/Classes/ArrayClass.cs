@@ -23,6 +23,7 @@ public class ArrayClass : BaseClass, ICollectionClass
       sliceableMessages();
       findAndIndexMessages();
       indexedMessages();
+      acceptingMessages();
 
       messages["[](_)"] = (obj, msg) => function<KArray, IObject>(obj, msg, getIndexed);
       messages["[](_<NumericOpenRange>)"] = (obj, msg) => function<KArray, NumericOpenRange>(obj, msg, (a, o) => a[o]);

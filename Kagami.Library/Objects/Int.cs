@@ -7,7 +7,7 @@ using static Kagami.Library.Operations.NumericFunctions;
 
 namespace Kagami.Library.Objects;
 
-public readonly struct Int : IObject, INumeric, IComparable<Int>, IEquatable<Int>, IFormattable, IRangeItem, IComparable
+public readonly struct Int : IObject, INumeric, IComparable<Int>, IEquatable<Int>, IFormattable, IRangeItem, IComparable, IAccepting
 {
    public static implicit operator Int(int value) => new(value);
 
@@ -124,6 +124,13 @@ public readonly struct Int : IObject, INumeric, IComparable<Int>, IEquatable<Int
    public override bool Equals(object? obj) => obj is Int i && Equals(i);
 
    public override int GetHashCode() => Hash;
+
+   public IObject Accept(IObject obj) => obj switch
+   {
+      Int i => KBoolean.BooleanObject(value == i.value),
+      KRange r => r.In(this),
+      _ => throw cannotAccept(obj)
+   };
 
    public int CompareTo(object? obj) => CompareTo((Int)obj!);
 

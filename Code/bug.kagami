@@ -1,0 +1,14 @@
+﻿open sys
+
+let comments = {
+	perl6: a"Amazing Revolutionary",
+	perl5: a"Essentail Amazing",
+	perl4: a"Classic",
+	perl1: a"Classic"
+}
+let inverted = {:_ -> {}}
+for (key, value) in comments {
+	for item in value {
+		inverted[item] << key
+	}
+}

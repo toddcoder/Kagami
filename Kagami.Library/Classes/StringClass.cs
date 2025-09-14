@@ -20,6 +20,7 @@ public class StringClass : BaseClass, ICollectionClass
       rangeMessages();
       textFindingMessages();
       indexedMessages();
+      acceptingMessages();
 
       messages["~(_)"] = (obj, msg) => function<KString, IObject>(obj, msg, (s1, s2) => s1.Concatenate(s2.AsString));
       messages["+(_)"] = (obj, msg) => function<KString, KString>(obj, msg, (s1, s2) => s1.Concatenate(s2.AsString));

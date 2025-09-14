@@ -23,6 +23,7 @@ public class IntClass : BaseClass, IParse, IEquivalentClass
       numericConversionMessages();
       rangeMessages();
       compareMessages();
+      acceptingMessages();
 
       messages["isEven".get()] = (obj, _) => function<Int>(obj, i => i.IsEven);
       messages["isOdd".get()] = (obj, _) => function<Int>(obj, i => i.IsOdd);

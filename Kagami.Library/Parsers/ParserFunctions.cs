@@ -1419,6 +1419,9 @@ public static class ParserFunctions
          case "**":
             _symbol = new RepeatAsArraySymbol();
             break;
+         case "===":
+            _symbol = new SendBinaryMessageSymbol("accept(_)", Precedence.Boolean);
+            break;
       }
 
       return _symbol;

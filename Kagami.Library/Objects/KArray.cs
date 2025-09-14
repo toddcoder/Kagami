@@ -9,7 +9,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
 
-public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<KArray>, IMutableCollection, ISliceable, IIndexed, IFindIndex
+public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<KArray>, IMutableCollection, ISliceable, IIndexed, IFindIndex, IAccepting
 {
    public static IObject CreateObject(IEnumerable<IObject> items)
    {
@@ -640,4 +640,10 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
          throw fail("Array is empty");
       }
    }
+
+   public IObject Accept(IObject obj) => obj switch
+   {
+      Int i => KBoolean.BooleanObject(list.Count == i.Value),
+      _ => In(obj)
+   };
 }
