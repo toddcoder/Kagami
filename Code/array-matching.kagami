@@ -2,8 +2,9 @@
 
 let array = [1..5]
 
-match sum()
+match sum() {
 	[] return 0
-	(h, t) return h + sum(t)
+	h :: t return h + sum(t)
+}
 
 println(sum(array))

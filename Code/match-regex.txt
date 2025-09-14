@@ -1,1 +1,2 @@
-Generate error: No when for match
+Is it a spicy red pepper?
+"Is it a spicy red pepper?" | String

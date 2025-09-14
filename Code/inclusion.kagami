@@ -9,8 +9,8 @@ class Point(var x, var y) {
 	include Equal
 	func isEqual(p) {
 		match p {
-			| other: Point return other.x == x and other.y == y
-			| _ return false
+			other: Point return other.x == x and other.y == y
+			_ return false
 		}
 	}
 }

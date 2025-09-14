@@ -240,13 +240,29 @@ public partial class FunctionParser : StatementParser
    protected static Optional<Unit> getMatchFunction(ParseState state, string functionName, Parameters parameters, bool overriding,
       string className, bool isFixed)
    {
-      List<If> list = [];
-
       Maybe<TypeConstraint> _typeConstraint = parseTypeConstraint(state).Map(ptc => ptc.Maybe);
+
+      var _beginBlock = state.BeginBlock();
+      if (!_beginBlock)
+      {
+         return _beginBlock.Exception;
+      }
+
+      List<If> list = [];
 
       state.CreateReturnType();
       while (state.More)
       {
+         var _endBlock = state.EndBlock();
+         if (_endBlock)
+         {
+            break;
+         }
+         else if (_endBlock.Exception is (true, var exception))
+         {
+            return exception;
+         }
+
          var caseParser = new WhenParser(parameters[0].Name);
          state.SkipEndOfLine();
          var _scan = caseParser.Scan(state);

@@ -7,10 +7,11 @@ type Expr {
 	| BinOp(op, left, right)
 }
 
-match simplifyTop()
-	| UnOp("-", UnOp("-", e)) return e
-	| BinOp("+", e, Numeric(0)) return e
-	| BinOp("*", e, Numeric(1)) return e
-	| e return e
+match simplifyTop() {
+	UnOp("-", UnOp("-", e)) return e
+	BinOp("+", e, Numeric(0)) return e
+	BinOp("*", e, Numeric(1)) return e
+	e return e
+}
 
 println(simplifyTop(UnOp("-", UnOp("-", Numeric(42)))))

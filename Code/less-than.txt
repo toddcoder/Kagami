@@ -1,1 +1,5 @@
-Generate error: No when for match
+1 less than 5
+1 less than equal to 5
+1 < 10 < 20
+<= 10
+"<= 10" | String

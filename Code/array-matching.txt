@@ -1,1 +1,2 @@
-Generate error: Improper when expression
+15
+"15" | String

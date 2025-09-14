@@ -116,7 +116,7 @@ public static class ParserFunctions
             builder.Add(comparisand);
          }
 
-         var _scanned = state.Scan(@"^(\s*)(&)", Color.Whitespace, Color.OpenParenthesis);
+         var _scanned = state.Scan(@"^(\s*)(&)", Color.Whitespace, Color.Operator);
          if (_scanned)
          {
             return getCompoundComparisands(state, fieldName, false).Map(nextExpression =>
@@ -1120,7 +1120,7 @@ public static class ParserFunctions
 
    public static Optional<LambdaSymbol> getPossibleLambda(ParseState state, Bits32<ExpressionFlags> flags)
    {
-      if (state.CurrentSource.StartsWith('('))
+      if (state.CurrentSource.StartsWith('(') || flags[ExpressionFlags.Comparisand])
       {
          return nil;
       }

@@ -3,13 +3,13 @@
 pattern Regex3(input string, regex Regex) {
 	if input ~~ regex is ?match {
 		match match.captures {
-			| [first, second, third] return ?(first, second, third)
-			| _ return nil
+			[first, second, third] return ?(first, second, third)
+			_ return nil
 		}
 	}
 	return nil
 }
 
 match "06/29/1964" {
-	| Regex3(x"/(/d2) '//' /(/d2) '//' /(/d4)", first, second, third) -> println(first, second, third)
+	Regex3(x"/(/d2) '//' /(/d2) '//' /(/d4)", first, second, third) -> println(first, second, third)
 }

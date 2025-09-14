@@ -7,10 +7,11 @@ let couples = [
 	Couple("Chris", "Gwyneth"), Couple("Michael", "Catherine")
 ]
 
-match findDavid()
-	| (Couple(x, "Posh"), tail) return !x
-	| (_, tail) return findDavid(tail)
-	| [] return f"Couldn't find David"
+match findDavid() {
+	Couple(x, "Posh") :: tail return !x
+	_ :: tail return findDavid(tail)
+	[] return f"Couldn't find David"
+}
 
 let `david = findDavid(couples)
 if `david is !david {

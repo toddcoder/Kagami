@@ -1,1 +1,3 @@
-Generate error: No when for match
+true
+true
+"true" | String

@@ -1,8 +1,9 @@
 ﻿open sys
 
-match save_get()
-	| [?contents, _] return contents
-	| [Nil, default] return default
+match save_get() {
+	[?contents, _] return contents
+	[Nil, default] return default
+}
 
 println(save_get(?10, 42))
 println(save_get(nil, 42))

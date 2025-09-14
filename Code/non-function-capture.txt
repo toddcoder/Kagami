@@ -1,1 +1,2 @@
-Generate error: Improper when expression
+Numeric(number = 42)
+"Numeric(number = 42)" | String

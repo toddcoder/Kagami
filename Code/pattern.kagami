@@ -6,8 +6,8 @@ pattern Zero(z) -> maybe z == 0 : z
 
 for i in [3, 2, 0] {
 	match i {
-		| Zero(z) -> println($"Zero=(z)")
-		| Odd(o) -> println($"Odd=(o)")
-		| Even(e) -> println($"Even=(e)")
+		Zero(z) -> println($"Zero=(z)")
+		Odd(o) -> println($"Odd=(o)")
+		Even(e) -> println($"Even=(e)")
 	}
 }
