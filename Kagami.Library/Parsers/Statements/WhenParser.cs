@@ -27,7 +27,7 @@ public partial class WhenParser : StatementParser
       this.caseType = caseType;
    }
 
-   public WhenParser(string fieldName)
+   public WhenParser(string fieldName, CaseType caseType = CaseType.Function)
    {
       assignmentField = "";
       mutable = false;
@@ -35,7 +35,7 @@ public partial class WhenParser : StatementParser
       this.fieldName = fieldName;
       top = false;
 
-      caseType = CaseType.Function;
+      this.caseType = caseType;
    }
 
    [GeneratedRegex(@"^(\s*)(\|)(\s*)")]
