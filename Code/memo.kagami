@@ -3,9 +3,9 @@
 class ChecksumAccumulator {
 	var sum = 0
 
-	func add(b Byte) -> sum += b
+	func add(b Byte) => sum += b
 
-	func checksum() -> not (sum and 0xff) + 1
+	func checksum() => not (sum and 0xff) + 1
 }
 static {
 	let cache = {:}.memo() s -> {
@@ -14,7 +14,7 @@ static {
 		return acc.checksum()
 	}
 
-	func calculate(s) -> cache[s]
+	func calculate(s) => cache[s]
 }
 
 var checksum = ChecksumAccumulator.calculate("Every value is an object.")

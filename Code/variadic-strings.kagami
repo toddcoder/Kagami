@@ -1,4 +1,4 @@
 ﻿open sys
 
-func print_relation(relation, names...) -> println($"My (relation) include: (names.join(", "))")
+func print_relation(relation, names...) => println($"My (relation) include: (names.join(", "))")
 print_relation("cousins", "Morgan", "Miles", "Lindsey")

@@ -3,13 +3,13 @@
 let things = [0, 0.0, 1, 1.0, -2.0, "foobar", [10.0, 42.0]]
 for thing in things {
 	match thing {
-		| 0 -> println("zero as an Int")
-		| 0.0 -> println("zero as a Float")
-		| someInt: Int -> println($"an integer value of (someInt)")
-		| someFloat: Float if someFloat > 0 -> println($"positive float of (someFloat)")
-		| Float -> println("some other float")
-		| someString: String -> println($"a string value of (someString)")
-		| [x: Float, y: Float] -> println($"an \(x, y) point at (x), (y)")
-		| _ -> println($"something else: (~thing)")
+		| 0 => println("zero as an Int")
+		| 0.0 => println("zero as a Float")
+		| someInt: Int => println($"an integer value of (someInt)")
+		| someFloat: Float if someFloat > 0 => println($"positive float of (someFloat)")
+		| Float => println("some other float")
+		| someString: String => println($"a string value of (someString)")
+		| [x: Float, y: Float] => println($"an \(x, y) point at (x), (y)")
+		| _ => println($"something else: (~thing)")
 	}
 }

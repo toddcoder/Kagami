@@ -4,5 +4,5 @@ class DateTime(i1 int, i2 int, i3 int);
 
 let _date = DateTime(2000, 12, 31)
 match _date {
-	| DateTime(year, 1, 1), DateTime(year, 12, 31) -> ?year
+	| DateTime(year, 1, 1), DateTime(year, 12, 31) => ?year
 }

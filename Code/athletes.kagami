@@ -1,7 +1,7 @@
 ﻿open sys
 
 class Athlete(firstName, lastName, dateOfBirth, gender, country) {
-	get string -> $"(firstName ~ " " ~ lastName)[s-25] \((gender)) (country) (dateOfBirth)[yyyy-MM-dd]"
+	get string => $"(firstName ~ " " ~ lastName)[s-25] \((gender)) (country) (dateOfBirth)[yyyy-MM-dd]"
 }
 
 let athletes = [
@@ -12,7 +12,7 @@ let athletes = [
 	Athlete("Paula", "Radcliffe", d"1973-12-17", 'M', "GBR")
 ]
 
-func asDate(date) -> date \ "yyyy-MM-dd"
+func asDate(date) => date \ "yyyy-MM-dd"
 
 let bornSince70 = x -> x.dateOfBirth > d"1970-1-1"
 let excludingKh = x -> x.lastName <= "Kg" or x.lastName >= "Ki"

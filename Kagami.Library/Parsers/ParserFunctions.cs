@@ -47,7 +47,7 @@ public static class ParserFunctions
    public const string REGEX_LIST_RIGHT = @":\]";
    public const string REGEX_BLOCK_END = @"^(\s*)(\})";
    public const string REGEX_EXP_END = @"^(\s*)(\))";
-   public const string REGEX_SINGLE_BLOCK = @"(->)(?=[\w\s])";
+   public const string REGEX_SINGLE_BLOCK = @"(=>)(?=[\w\s])";
 
    public static StringSet keywords = ["do", "else", "true", "false"];
 
@@ -1230,7 +1230,7 @@ public static class ParserFunctions
 
    public static Optional<PossibleAndSymbol> andExpression(ParseState state)
    {
-      var builder = new ExpressionBuilder(ExpressionFlags.Standard);
+      var builder = new ExpressionBuilder(ExpressionFlags.Standard | ExpressionFlags.OmitLambda);
       var andParser = new IfAsAndParser(builder);
       var _scanned = andParser.Scan(state);
       if (_scanned)
@@ -1398,12 +1398,12 @@ public static class ParserFunctions
          case "\\:":
             _symbol = new SendBinaryMessageSymbol("foldr(_)", Precedence.ChainedOperator);
             break;
-         case "=>":
+         /*case "=>":
             _symbol = new SendBinaryMessageSymbol("map(_)", Precedence.ChainedOperator);
             break;
          case "??":
             _symbol = new SendBinaryMessageSymbol("if(_)", Precedence.ChainedOperator);
-            break;
+            break;*/
          case "|<<":
             _symbol = new SendBinaryMessageSymbol("|<<(_)", Precedence.Shift);
             break;

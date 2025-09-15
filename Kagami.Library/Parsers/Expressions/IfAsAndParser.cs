@@ -7,7 +7,7 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class IfAsAndParser : EndingInExpressionParser
 {
-   public IfAsAndParser(ExpressionBuilder builder) : base(builder, ExpressionFlags.OmitSendMessageAssign)
+   public IfAsAndParser(ExpressionBuilder builder) : base(builder, ExpressionFlags.OmitSendMessageAssign | ExpressionFlags.OmitLambda)
    {
    }
 

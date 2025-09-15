@@ -12,3 +12,10 @@ for (key, value) in comments {
 		inverted[item] << key
 	}
 }
+
+for (key, a) in inverted {
+	println(key)
+	for i in a {
+		println($"\t(i)")
+	}
+}

@@ -10,7 +10,7 @@ class Logger(var name string) {
 }
 static {
 	var cache = {:}.memo() name -> Logger(name)
-	func [](name) -> cache[name]
+	func [](name) => cache[name]
 }
 var logger = Logger["UI"]
 logger.log("Button clicked")

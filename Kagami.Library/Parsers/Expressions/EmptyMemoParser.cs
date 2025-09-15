@@ -2,6 +2,7 @@
 using Core.Monads;
 using Kagami.Library.Nodes.Symbols;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
@@ -18,7 +19,7 @@ public partial class EmptyMemoParser : SymbolParser
    {
       state.Colorize(tokens, Color.Whitespace, Color.Collection);
 
-      var _lambda = ParserFunctions.getAnyLambda(state, builder.Flags);
+      var _lambda = getAnyLambda(state, builder.Flags);
       if (_lambda is (true, var lambdaSymbol))
       {
          builder.Add(new EmptyMemoSymbol(lambdaSymbol));

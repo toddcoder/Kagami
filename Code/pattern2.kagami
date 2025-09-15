@@ -1,29 +1,29 @@
 ﻿open sys
 
-pattern X(x int) -> ?(x, x * 2, x ^ 2)
+pattern X(x int) => ?(x, x * 2, x ^ 2)
 match 42 {
-	| X(a, b, c) -> println(a, b, c)
+	| X(a, b, c) => println(a, b, c)
 }
 
-pattern Even(n int) -> n %% 2
-pattern Odd(n int) -> n !% 2
+pattern Even(n int) => n %% 2
+pattern Odd(n int) => n !% 2
 match 42 {
-	| Even() -> println("even")
-	| Odd() -> println("odd")
+	| Even() => println("even")
+	| Odd() => println("odd")
 }
 
-pattern TwiceIsSquared(n int) -> maybe n * 2 == n ^ 2 : (n * 2, n ^ 2)
+pattern TwiceIsSquared(n int) => maybe n * 2 == n ^ 2 : (n * 2, n ^ 2)
 match 2 {
-	| TwiceIsSquared(twice, squared) -> println($"(twice) = (squared)")
+	| TwiceIsSquared(twice, squared) => println($"(twice) = (squared)")
 }
 
-pattern Integer(str string) -> int.parse(str)
-pattern Floating(str string) -> float.parse(str)
+pattern Integer(str string) => int.parse(str)
+pattern Floating(str string) => float.parse(str)
 func parseNumeric(str string) {
 	match str {
-		| Integer(i) -> println($"(i)[d]: Integer")
-		| Floating(f) -> println($"(f)[f]: Floating point")
-		| _ -> println($"(str): Not matched.")
+		| Integer(i) => println($"(i)[d]: Integer")
+		| Floating(f) => println($"(f)[f]: Floating point")
+		| _ => println($"(str): Not matched.")
 	}
 }
 
@@ -34,13 +34,13 @@ parseNumeric("10")
 parseNumeric("Something else")
 
 let err = 1.0e-10
-func isNearlyIntegral(x float) bool -> math.abs(x - math.round(x, 0)) < err
-pattern Square(x int) -> isNearlyIntegral(math.sqrt(x))
-pattern Cube(x int) -> isNearlyIntegral(x ^ (1 / 3))
+func isNearlyIntegral(x float) bool => math.abs(x - math.round(x, 0)) < err
+pattern Square(x int) => isNearlyIntegral(math.sqrt(x))
+pattern Cube(x int) => isNearlyIntegral(x ^ (1 / 3))
 func findSquareCubes(x int) {
 	match x {
-		| Cube() & Square() -> println($"(x) is a cube and a square")
-		| Cube() -> println($"(x) is a cube")
+		| Cube() & Square() => println($"(x) is a cube and a square")
+		| Cube() => println($"(x) is a cube")
 		| _ {}
 	}
 }

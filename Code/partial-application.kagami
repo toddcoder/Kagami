@@ -1,6 +1,6 @@
 ﻿open sys
 
-func sum(a, b, c) -> a + b + c
+func sum(a, b, c) => a + b + c
 
 var partial = sum(1, 2, _)
 println(partial(3))

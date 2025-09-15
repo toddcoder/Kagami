@@ -4,12 +4,20 @@ public class AnyLambdaParser : MultiParser
 {
    protected ExpressionBuilder builder;
 
-   public AnyLambdaParser(ExpressionBuilder builder) => this.builder = builder;
+   public AnyLambdaParser(ExpressionBuilder builder)
+   {
+      this.builder = builder;
+   }
 
    public override IEnumerable<Parser> Parsers
    {
       get
       {
+         if (builder.Flags[ExpressionFlags.OmitLambda])
+         {
+            yield break;
+         }
+
          yield return new WhateverLambdaParser(builder);
          yield return new ZeroParameterLambdaParser(builder);
          yield return new OneParameterLambdaParser(builder);
