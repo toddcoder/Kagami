@@ -1739,4 +1739,12 @@ public static class ParserFunctions
       Expression[] result = [.. expressions];
       return result;
    }
+
+   public static Optional<Block> getReturnExpression(ParseState state)
+   {
+      return
+         from arrow in state.Scan($@"^(\s*){REGEX_SINGLE_BLOCK}", Color.Whitespace, Color.Block)
+         from expression in getExpression(state, ExpressionFlags.Standard)
+         select new Block(expression);
+   }
 }

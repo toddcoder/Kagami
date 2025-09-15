@@ -29,7 +29,7 @@ public partial class OnParser : StatementParser
       state.CreateReturnType();
       while (state.More)
       {
-         var caseParser = new WhenParser("__$0", CaseType.Statement);
+         var caseParser = new WhenParser("__$0", CaseType.Arrow);
          state.SkipEndOfLine();
          var _scan = caseParser.Scan(state);
          if (_scan)

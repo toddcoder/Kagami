@@ -10,7 +10,7 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class MatchLambdaParser : SymbolParser
 {
-   [GeneratedRegex(@"^([ \t]*)(\|\()")]
+   [GeneratedRegex(@"^([ \t]*)(\|)(\()")]
    public override partial Regex Regex();
 
    public MatchLambdaParser(ExpressionBuilder builder) : base(builder)
@@ -19,11 +19,11 @@ public partial class MatchLambdaParser : SymbolParser
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      state.Colorize(tokens, Color.Whitespace, Color.Structure);
+      state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.OpenParenthesis);
 
       var _result =
          from c in getExpression(state, builder.Flags | ExpressionFlags.Comparisand)
-         from scanned in state.Scan(@"^(\))(\s*)(->)", Color.Structure, Color.Whitespace, Color.Structure)
+         from scanned in state.Scan(@"^(\))(\s*)(->)", Color.CloseParenthesis, Color.Whitespace, Color.Lambda)
          from typeConstraint in parseTypeConstraint(state)
          from b in getLambdaBlock(!state.CurrentSource.IsMatch("^ /s* '{'"), scanned.EndsWith("=>"), state, builder.Flags, typeConstraint.Maybe)
          select (c, b);

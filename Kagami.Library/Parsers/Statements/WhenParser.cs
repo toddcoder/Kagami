@@ -53,6 +53,7 @@ public partial class WhenParser : StatementParser
          CaseType.Statement => getCaseStatementBlock(state),
          CaseType.Function => getCaseReturnBlock(state),
          CaseType.Lambda => getBlock(state),
+         CaseType.Arrow => getReturnExpression(state),
          _ => fail($"Didn't understand case type {caseType}")
       };
    }

@@ -191,6 +191,8 @@ public static class ObjectFunctions
 
       switch (match0)
       {
+         case Any:
+            return true;
          case Placeholder placeholder0 when head is Some some:
          {
             bindings[placeholder0.Name] = some.Value;
@@ -209,6 +211,8 @@ public static class ObjectFunctions
 
       switch (match1)
       {
+         case Any:
+            return true;
          case Placeholder placeholder1:
             bindings[placeholder1.Name] = tail;
             return true;

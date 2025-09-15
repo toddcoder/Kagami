@@ -4,5 +4,6 @@ public enum CaseType
 {
    Statement,
    Function,
-   Lambda
+   Lambda,
+   Arrow
 }
