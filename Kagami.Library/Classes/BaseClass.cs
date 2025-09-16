@@ -548,7 +548,7 @@ public abstract class BaseClass : IEquatable<BaseClass>
    {
       registerMessage("start".get(), (obj, _) => function<IObject>(obj, i => ((IIndexed)i).Start));
       registerMessage("end".get(), (obj, _) => function<IObject>(obj, i => ((IIndexed)i).End));
-      registerMessage("full".get(), (obj, _) => function<IObject>(obj, i => ((IIndexed)i).Full));
+      registerMessage("indexes".get(), (obj, _) => function<IObject>(obj, i => ((IIndexed)i).Indexes));
       registerMessage("[](_<Index>)", (obj, msg) => function<IObject, KIndex>(obj, msg, (o, i) => ((IIndexed)o)[i]));
       registerMessage("[]=(_<Index>,_)", (obj, msg) => function<IObject, KIndex, IObject>(obj, msg, (o, i, v) => ((IIndexed)o)[i] = v));
    }

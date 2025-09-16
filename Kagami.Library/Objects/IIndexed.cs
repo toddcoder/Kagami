@@ -14,5 +14,5 @@ public interface IIndexed
 
    KIndex End { get; }
 
-   KIndex Full { get; }
+   KIndex Indexes { get; }
 }

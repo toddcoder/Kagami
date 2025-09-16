@@ -132,7 +132,7 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
    public KIndex End => KIndex.EndIndex(this);
 
-   public KIndex Full => KIndex.FullIndex(this);
+   public KIndex Indexes => KIndex.FullIndex(this);
 
    public Int Length => value.Length;
 

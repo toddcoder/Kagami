@@ -71,7 +71,7 @@ public class ArrayClass : BaseClass, ICollectionClass
       messages["head".get()] = (obj, _) => function<KArray>(obj, a => a.Head);
       messages["tail".get()] = (obj, _) => function<KArray>(obj, a => a.Tail);
       messages["headTail".get()] = (obj, _) => function<KArray>(obj, a => a.HeadTail);
-      messages["indexes".get()] = (obj, _) => function<KArray>(obj, a => a.Indexes);
+      //messages["indexes".get()] = (obj, _) => function<KArray>(obj, a => a.Indexes);
       messages["init"] = (obj, _) => function<KArray>(obj, a => a.Init);
       registerMessage("split(at:_<Int>)", (obj, msg) => function<KArray, Int>(obj, msg, (a, index) => a.Split(index.Value)));
       registerMessage("pad(left:_<Int>,value:_)", (obj, msg) => function<KArray, Int, IObject>(obj, msg, (a, i, v) => a.PadLeft(i.Value, v)));

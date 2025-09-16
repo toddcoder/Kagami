@@ -68,6 +68,10 @@ public class MathClass : PackageClass
       registerPackageFunction("longFromString(_)", (obj, msg) => function<KMath, KString>(obj, msg, (m, s) => m.LongFromString(s)));
       registerPackageFunction("sieve(_<Int>)", (obj, msg) => function<KMath, Int>(obj, msg, (m, n) => m.Sieve(n.Value)));
       registerPackageFunction("factors(_<Int>)", (obj, msg) => function<KMath, Int>(obj, msg, (m, n) => m.Factors(n.Value)));
+      registerPackageFunction("toPolar(x:_<Float>,y:_<Float>)",
+         (obj, msg) => function<KMath, Float, Float>(obj, msg, (m, x, y) => m.CartesianToPolar(x, y)));
+      registerPackageFunction("toCartesian(r:_<Float>,theta:_<Float>)",
+         (obj, msg) => function<KMath, Float, Float>(obj, msg, (m, r, theta) => m.PolarToCartesian(r, theta)));
    }
 
    public override IObject DefaultValue => throw noDefaultValue("Math");

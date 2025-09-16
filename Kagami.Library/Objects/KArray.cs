@@ -268,7 +268,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public KIndex End => KIndex.EndIndex(this);
 
-   public KIndex Full => KIndex.FullIndex(this);
+   public KIndex Indexes => KIndex.FullIndex(this);
 
    public Int Length => list.Count;
 
@@ -570,7 +570,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public KTuple HeadTail => new(Head, Tail);
 
-   public KRange Indexes => new((Int)0, (Int)list.Count, false);
+   //public KRange Indexes => new((Int)0, (Int)list.Count, false);
 
    public KArray Init => new(list.Take(list.Count - 1));
 

@@ -440,4 +440,38 @@ public class KMath : Package
          }
       }
    }
+
+   public KTuple CartesianToPolar(IObject x, IObject y)
+   {
+      switch (x)
+      {
+         case INumeric xNum when y is INumeric yNum:
+            var xDouble = xNum.AsDouble();
+            var yDouble = yNum.AsDouble();
+
+            var r = Math.Sqrt(xDouble * xDouble + yDouble * yDouble);
+            var theta = Math.Atan2(yDouble, xDouble);
+
+            return new KTuple(new NameValue("r", Float.FloatObject(r)), new NameValue("theta", Float.FloatObject(theta)));
+         default:
+            throw incompatibleClasses(x, "Number");
+      }
+   }
+
+   public KTuple PolarToCartesian(IObject r, IObject theta)
+   {
+      switch (r)
+      {
+         case INumeric rNum when theta is INumeric thetaNum:
+            var rDouble = rNum.AsDouble();
+            var thetaDouble = thetaNum.AsDouble();
+
+            var x = rDouble * Math.Cos(thetaDouble);
+            var y = rDouble * Math.Sin(thetaDouble);
+
+            return new KTuple(new NameValue("x", Float.FloatObject(x)), new NameValue("y", Float.FloatObject(y)));
+         default:
+            throw incompatibleClasses(r, "Number");
+      }
+   }
 }
