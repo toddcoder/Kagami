@@ -105,7 +105,11 @@ public class Block : Statement, IEnumerable<Statement>
 
    public bool Yielding { get; set; }
 
-   public Maybe<TypeConstraint> TypeConstraint => _typeConstraint;
+   public Maybe<TypeConstraint> TypeConstraint
+   {
+      get => _typeConstraint;
+      set => _typeConstraint = value;
+   }
 
    public override void Generate(OperationsBuilder builder)
    {

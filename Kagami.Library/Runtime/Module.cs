@@ -33,6 +33,13 @@ public class Module
 
    public static Maybe<Func<IObject, IObject>> AutoConversion(string from, string to) => autoConversions.Maybe[(from, to)];
 
+   public static Result<Unit> RegisterAutoConversion(string from, string to, Lambda lambda)
+   {
+      var key = (from, to);
+      autoConversions[key] = from => lambda.Invoke(from);
+      return unit;
+   }
+
    protected static Maybe<BaseClass> getBuiltinClass(string name) => name switch
    {
       "Int" => new IntClass(),

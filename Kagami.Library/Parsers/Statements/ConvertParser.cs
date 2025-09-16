@@ -6,16 +6,18 @@ using Kagami.Library.Runtime;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.CommonFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
+using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Statements;
 
 public partial class ConvertParser : StatementParser
 {
-   [GeneratedRegex(@$"^(\s*)(convert)(\s+)({REGEX_CLASS})(\()({REGEX_FIELD})(\s+)({REGEX_CLASS})(\))")]
+   [GeneratedRegex(@$"^(\s*)(convert|auto)(\s+)({REGEX_CLASS})(\()({REGEX_FIELD})(\s+)({REGEX_CLASS})(\))")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
+      var type = tokens[1].Text;
       var toClass = tokens[4].Text;
       var parameterName = tokens[6].Text;
       var (fromClass, color) = getClassNameWithColor(tokens[8].Text);
@@ -31,12 +33,20 @@ public partial class ConvertParser : StatementParser
          state.RemoveYieldFlag();
          state.RemoveReturnType();
 
-         var functionName = convertFunctionName(fromClass, toClass);
-         var parameter = new Parameter(false, "", parameterName, nil, nil, false, false);
-         var parameters = new Parameters(parameter);
-         var function = new Function(functionName, parameters, block, false, false, "");
-         state.AddStatement(function);
-         Module.Global.Value.RegisterConversion(fromClass, toClass, $"{functionName}(_)");
+
+         if (type == "convert")
+         {
+            var functionName = convertFunctionName(fromClass, toClass);
+            var parameter = new Parameter(false, "", parameterName, nil, nil, false, false);
+            var parameters = new Parameters(parameter);
+            var function = new Function(functionName, parameters, block, false, false, "");
+            state.AddStatement(function);
+            Module.Global.Value.RegisterConversion(fromClass, toClass, $"{functionName}(_)");
+         }
+         else
+         {
+            state.AddStatement(new AutoConversion(parameterName, fromClass, toClass, block));
+         }
       }
 
       return unit;
