@@ -186,6 +186,60 @@ public partial class InterpolatedStringParser : SymbolParser
 
                text.Append('u');
                break;
+            case '$':
+            {
+               if (escaped)
+               {
+                  text.Append(ch);
+                  escaped = false;
+                  break;
+               }
+
+               state.Move(1);
+               state.AddToken(index, length, Color.String);
+               state.AddToken(index + length, 1, Color.Identifier);
+
+               if (_firstString)
+               {
+                  suffixes.Add(text.ToString());
+               }
+               else
+               {
+                  _firstString = text.ToString();
+               }
+
+               text.Clear();
+
+               var _field = state.Scan($"^({REGEX_FIELD})", Color.Identifier);
+               if (_field is (true, var fieldName))
+               {
+                  expressions.Add(new Expression(new FieldSymbol(fieldName)));
+                  index = state.Index;
+                  length = 0;
+                  var _format = state.ScanFormat();
+                  if (_format is (true, var format))
+                  {
+                     formats.Add(format);
+                     index = state.Index;
+                     length = 0;
+                  }
+                  else
+                  {
+                     formats.Add("");
+                  }
+
+                  continue;
+               }
+               else if (_field.Exception is (true, var exception))
+               {
+                  return exception;
+               }
+               else
+               {
+                  return expectedExpression();
+               }
+            }
+
             default:
             {
                if (escaped)
