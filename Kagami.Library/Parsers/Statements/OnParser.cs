@@ -12,7 +12,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class OnParser : StatementParser
 {
-   [GeneratedRegex(@$"^(\s*)(on)(\s+)({REGEX_FUNCTION_NAME})")]
+   [GeneratedRegex(@$"^(\s*)(fn)(\s+)({REGEX_FUNCTION_NAME})")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
@@ -20,7 +20,7 @@ public partial class OnParser : StatementParser
       var functionName = tokens[4].Text;
       state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Invokable);
 
-      var pattern = @$"^(\s*)(on)(\s+)({functionName.Escape()})";
+      var pattern = @$"^(\s*)(fn)(\s+)({functionName.Escape()})";
 
       List<If> list = [];
 

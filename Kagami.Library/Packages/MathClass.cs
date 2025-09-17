@@ -72,6 +72,7 @@ public class MathClass : PackageClass
          (obj, msg) => function<KMath, Float, Float>(obj, msg, (m, x, y) => m.CartesianToPolar(x, y)));
       registerPackageFunction("toCartesian(r:_<Float>,theta:_<Float>)",
          (obj, msg) => function<KMath, Float, Float>(obj, msg, (m, r, theta) => m.PolarToCartesian(r, theta)));
+      registerPackageFunction("factorial(_)", (obj, msg) => function<KMath, IObject>(obj, msg, (m, s) => m.Factorial(s)));
    }
 
    public override IObject DefaultValue => throw noDefaultValue("Math");

@@ -474,4 +474,23 @@ public class KMath : Package
             throw incompatibleClasses(r, "Number");
       }
    }
+
+   public Long Factorial(IObject obj)
+   {
+      if (obj is INumeric numeric)
+      {
+         var n = numeric.AsBigInteger();
+         var product = BigInteger.One;
+         for (BigInteger i = 0; i < n; i++)
+         {
+            product *= i;
+         }
+
+         return product;
+      }
+      else
+      {
+         throw notNumeric(obj);
+      }
+   }
 }
