@@ -1,0 +1,2 @@
+Point(x = 10, y = 42)
+"Point(x = 10, y = 42)" | String

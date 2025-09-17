@@ -1,6 +1,6 @@
 ﻿open sys
 
-convert Int(array Array) {
+auto Int(array Array) {
 	var accum = 1
 	for i in array {
 		for c in i.string {
@@ -13,13 +13,8 @@ convert Int(array Array) {
 			}
 		}
 	}
-	return !accum
+	return accum
 }
 
-var `i = ["153", "123", "111"] as Int
-if `i is !i {
-	println($"Value is (i)")
-}
-else {
-	println(`i)
-}
+var i int = ["153", "123", "111"]
+println($"Value is (i)")
