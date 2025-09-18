@@ -9,7 +9,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
 
-public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjectCompare, IComparable<KTuple>, IComparable, IFindIndex
+public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjectCompare, IComparable<KTuple>, IComparable, IFindIndex, IFormattable
 {
    public static IObject NewTuple(IObject x, IObject y)
    {
@@ -434,4 +434,20 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
    }
 
    public Maybe<string> Rename(int index) => indexes.Maybe[index].Map(name => name);
+
+   public KString Format(string format)
+   {
+      return items.Select(i => i is IFormattable formattable ? formattable.Format(format) : i.AsString).Select(i => i.Value).ToString(", ");
+   }
+
+   public KString Format(string[] formats)
+   {
+      var formatted = Format(formats[0]);
+      foreach (var format in formats.Skip(1))
+      {
+         formatted = formatted.Format(format);
+      }
+
+      return formatted;
+   }
 }
