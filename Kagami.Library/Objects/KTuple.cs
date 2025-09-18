@@ -2,10 +2,10 @@
 using Core.Enumerables;
 using Core.Monads;
 using Kagami.Library.Runtime;
-using static Kagami.Library.AllExceptions;
-using static Kagami.Library.Objects.ObjectFunctions;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.CollectionFunctions;
+using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
 
@@ -28,7 +28,7 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
       return new KTuple([new KeyValue(nameX, x), new KeyValue(nameY, y)]);
    }
 
-   public static KTuple Empty => new([]);
+   public static KTuple Empty => new();
 
    public static KTuple Tuple3(string left, string middle, string right)
    {
@@ -65,6 +65,15 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
    public KTuple(IObject x, IObject y)
    {
       items = [x, y];
+      names = [];
+      indexes = [];
+
+      denameify();
+   }
+
+   public KTuple(params (string name, IObject obj)[] input)
+   {
+      items = [.. input.Select(i => new NameValue(i.name, i.obj))];
       names = [];
       indexes = [];
 

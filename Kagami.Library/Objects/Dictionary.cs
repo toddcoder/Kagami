@@ -568,11 +568,11 @@ public class Dictionary : IObject, IMutableCollection
          List<IObject> items = [];
          foreach (var (key, value) in dictionary)
          {
-            var tuple = new KTuple(key, value);
+            var tuple = new KTuple(("key", key), ("value", value));
             items.Add(tuple);
          }
 
-         return new KTuple([.. items]);
+         return new KArray([.. items]);
       }
    }
 
