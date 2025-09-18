@@ -62,7 +62,8 @@ public class DictionaryClass : BaseClass, ICollectionClass
       messages["remove(key:_)"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, k) => d.Remove(k));
       messages["remove(keys:_)"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, k) => d.RemoveKeys(k));
       messages["forEach(_<Lambda>)"] = (obj, msg) => function<Dictionary, Lambda>(obj, msg, (d, l) => d.ForEach(l));
-      messages["invert()"] = (obj, _) => function<Dictionary>(obj, d => d.Invert());
+      messages["invert(alwaysArray:_<Boolean>)"] = (obj, msg) => function<Dictionary, KBoolean>(obj, msg, (d, a) => d.Invert(a.Value));
+      messages["invert()"] = (obj, _) => function<Dictionary>(obj, d => d.Invert(true));
       messages["~(_)"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, o) => d.Concatenate((ICollection)o));
       messages["memo(_)"] = (obj, msg) => function<Dictionary, Lambda>(obj, msg, (d, l) => d.Memo(l));
       messages["updateIfNil(key:_,value:_)"] =

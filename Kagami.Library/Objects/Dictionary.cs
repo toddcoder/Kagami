@@ -528,15 +528,35 @@ public class Dictionary : IObject, IMutableCollection
       return this;
    }
 
-   public Dictionary Invert()
+   public Dictionary Invert(bool alwaysArray)
    {
-      Hash<IObject, IObject> newDictionary = [];
+      var memo = new Memo<IObject, List<IObject>>.Function(_ => []);
       foreach (var (key, value) in dictionary)
       {
-         newDictionary[value] = key;
+         memo[value].Add(key);
       }
 
-      return new Dictionary(newDictionary);
+      Hash<IObject, IObject> newHash = [];
+      if (alwaysArray)
+      {
+         newHash = memo.ToHash(k => k.Key, IObject (v) => new KArray(v.Value));
+      }
+      else
+      {
+         foreach (var (key, list) in memo)
+         {
+            if (list.Count == 1)
+            {
+               newHash[key] = list[0];
+            }
+            else
+            {
+               newHash[key] = new KArray(list);
+            }
+         }
+      }
+
+      return new Dictionary(newHash);
    }
 
    public Dictionary Concatenate(ICollection collection)
