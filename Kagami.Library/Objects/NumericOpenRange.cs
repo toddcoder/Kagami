@@ -18,9 +18,9 @@ public readonly struct NumericOpenRange(INumeric seed, INumeric increment) : IOb
 
    public string ClassName => "NumericOpenRange";
 
-   public string AsString => $"{seedAsObject.AsString} ** {incrementAsObject.AsString}";
+   public string AsString => $"{seedAsObject.AsString} ... {incrementAsObject.AsString}";
 
-   public string Image => $"{seedAsObject.AsString} ** {incrementAsObject.AsString}";
+   public string Image => $"{seedAsObject.AsString} ... {incrementAsObject.AsString}";
 
    public int Hash => HashCode.Combine(seedAsObject.Hash, incrementAsObject.Hash);
 

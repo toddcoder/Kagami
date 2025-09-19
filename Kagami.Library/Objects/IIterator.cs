@@ -197,6 +197,8 @@ public interface IIterator : IEquivalentClass
 
    IObject Pick(int count);
 
+   IObject Pick();
+
    IObject Roll(int count);
 
    IObject Splat(int count);
@@ -226,4 +228,6 @@ public interface IIterator : IEquivalentClass
    Junction JunctionNone();
 
    Junction JunctionOne();
+
+   IObject Step(int step);
 }

@@ -6,7 +6,10 @@ public class FieldSymbol : Symbol
 {
    protected string fieldName;
 
-   public FieldSymbol(string fieldName) => this.fieldName = fieldName;
+   public FieldSymbol(string fieldName)
+   {
+      this.fieldName = fieldName;
+   }
 
    public override void Generate(OperationsBuilder builder) => builder.Field(this);
 

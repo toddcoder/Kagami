@@ -18,6 +18,7 @@ public class AnyLambdaParser : MultiParser
             yield break;
          }
 
+         yield return new ImplicitParameterLambdaParser(builder);
          yield return new WhateverLambdaParser(builder);
          yield return new ZeroParameterLambdaParser(builder);
          yield return new OneParameterLambdaParser(builder);

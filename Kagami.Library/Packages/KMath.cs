@@ -493,4 +493,19 @@ public class KMath : Package
          throw notNumeric(obj);
       }
    }
+
+   public KArray Fibonacci(int limit)
+   {
+      var fn2 = 1;
+      var fn1 = 1;
+      List<IObject> results = [];
+
+      while (fn2 <= limit)
+      {
+         (fn1, fn2, var oldFn2) = (fn1 + fn2, fn1, fn2);
+         results.Add(Int.IntObject(oldFn2));
+      }
+
+      return new KArray(results);
+   }
 }

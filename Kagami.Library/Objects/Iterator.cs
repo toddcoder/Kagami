@@ -409,8 +409,9 @@ public class Iterator : IObject, IIterator
 
    public virtual IObject Zip(ICollection collection)
    {
-      var rightList = collection.GetIterator(false).List();
-      return collectionClass.Revert(List().Zip(rightList, (x, y) => collectionClass.Revert(new List<IObject> { x, y })));
+      /*var rightList = collection.GetIterator(false).List();
+      return collectionClass.Revert(List().Zip(rightList, (x, y) => collectionClass.Revert(new List<IObject> { x, y })));*/
+      return Zip(collection.GetIterator(false));
    }
 
    public IObject Zip(IIterator iterator)
@@ -422,8 +423,16 @@ public class Iterator : IObject, IIterator
          var _rightNext = iterator.Next();
          if (_rightNext is (true, var rightNext))
          {
-            var resultItem = collectionClass.Revert([next, rightNext]);
-            result.Add(resultItem);
+            if (next is IMutableCollection mutableCollection)
+            {
+               mutableCollection.Append(rightNext);
+               result.Add(next);
+            }
+            else
+            {
+               var resultItem = collectionClass.Revert([next, rightNext]);
+               result.Add(resultItem);
+            }
          }
       }
 
@@ -432,8 +441,9 @@ public class Iterator : IObject, IIterator
 
    public virtual IObject Zip(ICollection collection, Lambda lambda)
    {
-      var rightList = collection.GetIterator(false).List();
-      return collectionClass.Revert(List().Zip(rightList, (x, y) => lambda.Invoke(x, y)));
+      /*var rightList = collection.GetIterator(false).List();
+      return collectionClass.Revert(List().Zip(rightList, (x, y) => lambda.Invoke(x, y)));*/
+      return Zip(collection.GetIterator(false), lambda);
    }
 
    public IObject Zip(IIterator iterator, Lambda lambda)
@@ -1358,6 +1368,14 @@ public class Iterator : IObject, IIterator
       return collectionClass.Revert(result);
    }
 
+   public IObject Pick()
+   {
+      var random = new Random(NowServer.Now.Millisecond);
+      var list = collection.GetIterator(false).List().ToList();
+
+      return list[random.Next(list.Count)];
+   }
+
    public IObject Roll(int count)
    {
       var random = new Random(NowServer.Now.Millisecond);
@@ -1536,6 +1554,26 @@ public class Iterator : IObject, IIterator
    public Junction JunctionNone() => new(JunctionType.None, List());
 
    public Junction JunctionOne() => new(JunctionType.One, List());
+
+   public IObject Step(int step)
+   {
+      if (step <= 1)
+      {
+         return collectionClass.Revert(List());
+      }
+
+      var list = List().ToList();
+      List<IObject> result = [];
+      for (var i = 0; i < list.Count; i++)
+      {
+         if (i % step == 0)
+         {
+            result.Add(list[i]);
+         }
+      }
+
+      return collectionClass.Revert(result);
+   }
 
    protected static IEnumerable<IObject> applyAgainst(List<Lambda> lambdas, List<IObject> enumerable)
    {

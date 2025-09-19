@@ -8,6 +8,7 @@ using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
+using static Kagami.Library.Parsers.Expressions.ExpressionFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
@@ -248,7 +249,7 @@ public class ExpressionParser : PatternlessParser
 
          if (builder.LastSymbol is (true, var lastSymbol))
          {
-            ExpressionFunctions.evaluate(lastSymbol, s => s is WhateverSymbol, s => ((WhateverSymbol)s).Count = whateverCount++);
+            evaluate(lastSymbol, s => s is WhateverSymbol, s => ((WhateverSymbol)s).Count = whateverCount++);
          }
 
          return unit;

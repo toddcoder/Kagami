@@ -21,7 +21,7 @@ public class FloatRangeIterator : Iterator
       if (range.Compare(current, (Float)stop))
       {
          var result = current;
-         current = range.NextValue(current).Value;
+         current += range.Increment;
 
          return Float.FloatObject(result).Some();
       }
@@ -39,7 +39,7 @@ public class FloatRangeIterator : Iterator
       {
          yield return Float.FloatObject(current);
 
-         current = range.NextValue(current).Value;
+         current += range.Increment;
       }
    }
 }

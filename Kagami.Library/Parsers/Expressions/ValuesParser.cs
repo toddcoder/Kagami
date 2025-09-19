@@ -22,6 +22,7 @@ public class ValuesParser : MultiParser
          yield return new MatchLambdaParser(builder);
          yield return new MultiParameterLambdaParser(builder);
          yield return new TypeConstraintParser(builder);
+         yield return new ImplicitParameterLambdaParser(builder);
          yield return new SubexpressionParser(builder);
          yield return new EndOfExpressionParser(builder, this);
          yield return new ArrayParser(builder);
@@ -86,6 +87,7 @@ public class ValuesParser : MultiParser
          yield return new WhateverParser(builder);
          yield return new RegexParser(builder);
          yield return new RefParser(builder);
+         yield return new ImplicitParameterParser(builder);
          yield return new DollarFieldParser(builder);
          yield return new DoParser(builder);
          yield return new ThrowParser(builder);

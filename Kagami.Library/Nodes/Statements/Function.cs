@@ -30,7 +30,7 @@ public class Function : Statement
    protected string className;
    protected Lazy<Lambda> lambda;
 
-   public Function(string functionName, Parameters parameters, Block block, bool yielding, bool overriding, string className)
+   public Function(string functionName, Parameters parameters, Block block, bool yielding, bool overriding, string className, bool captures = false)
    {
       selector = parameters.Selector(functionName);
       this.parameters = parameters;
@@ -43,7 +43,7 @@ public class Function : Statement
       lambda = new Lazy<Lambda>(() =>
       {
          var invokable = GetInvokable();
-         return new Lambda(invokable, false);
+         return new Lambda(invokable, captures);
       });
    }
 

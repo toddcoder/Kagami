@@ -11,15 +11,15 @@ public partial class IteratorParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s*)((?:[!\?#\^])?\^)")]
+   [GeneratedRegex(@"^(\s*)(\?|#|\^|!)(\^)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      var lazy = tokens[2].Text == "?^";
-      var indexed = tokens[2].Text == "#^";
-      var range = tokens[2].Text == "^^";
-      state.Colorize(tokens, Color.Whitespace, Color.Operator);
+      var lazy = tokens[2].Text == "?";
+      var indexed = tokens[2].Text == "#";
+      var range = tokens[2].Text == "^";
+      state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Operator);
 
       builder.Add(new IteratorSymbol(lazy, indexed, range));
       return unit;

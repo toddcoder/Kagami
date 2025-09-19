@@ -313,6 +313,8 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
 
    public IObject Pick(int count) => terminate().Pick(count);
 
+   public IObject Pick() => terminate().Pick();
+
    public IObject Roll(int count) => terminate().Roll(count);
 
    public IObject Splat(int count) => terminate().Splat(count);
@@ -342,6 +344,8 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
    public Junction JunctionNone() => terminate().JunctionNone();
 
    public Junction JunctionOne() => terminate().JunctionOne();
+
+   public IObject Step(int step) => terminate().Step(step);
 
    public TypeConstraint EquivalentTypeConstraint() => Objects.TypeConstraint.FromList("Iterator");
 }

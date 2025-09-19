@@ -510,6 +510,7 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerIterMessage("column(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Column(c.Value)));
       registerIterMessage("partition(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Partition(l)));
       registerIterMessage("pick(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Pick(c.Value)));
+      registerIterMessage("pick()", (obj, _) => iteratorFunc(obj, i => i.Pick()));
       registerIterMessage("roll(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Roll(c.Value)));
       registerIterMessage("splat(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Splat(c.Value)));
       registerIterMessage("chunked(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Chunked(c.Value)));
@@ -530,6 +531,7 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerIterMessage("junctionAny()", (obj, _) => iteratorFunc(obj, i => i.JunctionAny()));
       registerIterMessage("junctionNone()", (obj, _) => iteratorFunc(obj, i => i.JunctionNone()));
       registerIterMessage("junctionOne()", (obj, _) => iteratorFunc(obj, i => i.JunctionOne()));
+      registerIterMessage("step(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Step(c.Value)));
    }
 
    public virtual bool MatchCompatible(BaseClass otherClass) => Name == otherClass.Name;

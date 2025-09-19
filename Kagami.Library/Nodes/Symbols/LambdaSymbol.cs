@@ -15,6 +15,12 @@ public class LambdaSymbol : Symbol
       this.block = block;
    }
 
+   public LambdaSymbol(Parameters parameters, Expression expression)
+   {
+      this.parameters = parameters;
+      block = (Block)expression;
+   }
+
    public LambdaSymbol(int unknownFieldCount, Expression expression)
    {
       parameters = new Parameters(unknownFieldCount);
