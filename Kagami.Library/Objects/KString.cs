@@ -622,4 +622,6 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
          return Objects.Int.IntObject(value.Value().Int32());
       }
    }
+
+   public IObject Lines() => new LinesIterator(this);
 }
