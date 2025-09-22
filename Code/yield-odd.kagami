@@ -1,0 +1,11 @@
+﻿open sys
+
+func gy() {
+	let x = 2
+	let y = 3
+	yield (x, y, x + y)
+	let z = 12
+	yield z div x
+	yield z div y
+}
+for item in gy() do println(~item)
