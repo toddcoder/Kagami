@@ -1,2 +1,2 @@
 Button clicked
-"Button clicked" | String
+unit | Unit
