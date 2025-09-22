@@ -19,7 +19,7 @@ public class LinesIterator : Iterator
       if (_currentPosition is (true, var currentPosition))
       {
          var result = input.Keep(currentPosition);
-         input = input.Drop(currentPosition);
+         input = input.Drop(currentPosition).TrimStart('\r', '\n');
 
          return KString.StringObject(result).Some();
       }
