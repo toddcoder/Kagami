@@ -23,6 +23,7 @@ public class Sys : Package
    {
       fields.New("id", FieldType.Package, IdLambda);
       fields.New("environment", FieldType.Package, Environment);
+      fields.New("eol", FieldType.Package, (KString)System.Environment.NewLine);
    }
 
    public override string ClassName => "Sys";
@@ -30,6 +31,8 @@ public class Sys : Package
    public IObject ID => fields["id"];
 
    public IObject Out => fields["out"];
+
+   public IObject Eol => fields["eol"];
 
    public override void LoadTypes(Module module)
    {

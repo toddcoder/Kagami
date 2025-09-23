@@ -31,6 +31,7 @@ public class SysClass : PackageClass
       registerPackageFunction("snd(_)", (obj, msg) => function<Sys, KTuple>(obj, msg, (sys, t) => sys.Second(t)));
       registerPackageFunction("id".get(), (obj, _) => function<Sys>(obj, sys => sys.ID));
       registerPackageFunction("out".get(), (obj, _) => function<Sys>(obj, sys => sys.Out));
+      registerPackageFunction("eol".get(), (obj, _) => function<Sys>(obj, sys => sys.Eol));
       registerPackageFunction("Tuple(_)", (obj, msg) => function<Sys>(obj, sys => sys.Tuple(msg.Arguments[0])));
       registerPackageFunction("Tuple(_,_)", (obj, msg) => function<Sys>(obj, sys => sys.Tuple(msg.Arguments[0], msg.Arguments[1])));
       registerPackageFunction("Group(_,_,_)", (obj, msg) => function<Sys>(obj, sys => sys.RegexGroup(msg.Arguments)));
