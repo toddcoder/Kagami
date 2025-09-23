@@ -347,5 +347,28 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
 
    public IObject Step(int step) => terminate().Step(step);
 
+   public IObject this[int index]
+   {
+      get
+      {
+         if (index > -1)
+         {
+            Maybe<IObject> _next = nil;
+            for (var i = 0; i < index; i++)
+            {
+               _next = Next();
+            }
+
+            return _next.Required("Iterator index out of bounds");
+         }
+         else
+         {
+            var list = List().ToList();
+            index = wrapIndex(index, list.Count);
+            return list[index];
+         }
+      }
+   }
+
    public TypeConstraint EquivalentTypeConstraint() => Objects.TypeConstraint.FromList("Iterator");
 }

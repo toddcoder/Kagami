@@ -1575,6 +1575,29 @@ public class Iterator : IObject, IIterator
       return collectionClass.Revert(result);
    }
 
+   public virtual IObject this[int index]
+   {
+      get
+      {
+         if (index > -1)
+         {
+            Maybe<IObject> _next = nil;
+            for (var i = 0; i < index; i++)
+            {
+               _next = Next();
+            }
+
+            return _next.Required("Iterator index out of bounds");
+         }
+         else
+         {
+            var list = List().ToList();
+            index = wrapIndex(index, list.Count);
+            return list[index];
+         }
+      }
+   }
+
    protected static IEnumerable<IObject> applyAgainst(List<Lambda> lambdas, List<IObject> enumerable)
    {
       return lambdas.SelectMany(_ => enumerable, (lambda, item) => lambda.Invoke(item));

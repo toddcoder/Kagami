@@ -230,4 +230,6 @@ public interface IIterator : IEquivalentClass
    Junction JunctionOne();
 
    IObject Step(int step);
+
+   IObject this[int index] { get; }
 }

@@ -532,6 +532,7 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerIterMessage("junctionNone()", (obj, _) => iteratorFunc(obj, i => i.JunctionNone()));
       registerIterMessage("junctionOne()", (obj, _) => iteratorFunc(obj, i => i.JunctionOne()));
       registerIterMessage("step(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Step(c.Value)));
+      registerIterMessage("[](_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i[c.Value]));
    }
 
    public virtual bool MatchCompatible(BaseClass otherClass) => Name == otherClass.Name;

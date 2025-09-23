@@ -605,6 +605,8 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
    public IObject Fields() => new FieldsIterator(this);
 
+   public IObject Fields(Regex regex) => new FieldsIterator(this, regex);
+
    public IObject Field(int index) => ((IIterator)Fields()).ToArray()[index];
 
    public IObject Numberize()
