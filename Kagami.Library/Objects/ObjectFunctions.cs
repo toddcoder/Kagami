@@ -1112,4 +1112,16 @@ public static class ObjectFunctions
    }
 
    public static Maybe<IObject> maybe(IObject obj) => obj is Some some ? some.Value.Some() : nil;
+
+   public static IEnumerable<string> splitOn(Core.Matching.Pattern pattern, string input)
+   {
+      var _result = input.Matches(pattern);
+      while (_result is (true, var result))
+      {
+         yield return result.Text.Keep(result.Index);
+
+         input = input.Drop(result.Index + result.Length);
+         _result = input.Matches(pattern);
+      }
+   }
 }

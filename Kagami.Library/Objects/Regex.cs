@@ -102,6 +102,8 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
 
    public Guid Id { get; init; } = Guid.NewGuid();
 
+   public Core.Matching.Pattern CorePattern => pattern;
+
    private Maybe<MatchResult> isMatch(string input) => input.Matches(pattern);
 
    public IObject MatchesIndex(string input)

@@ -1,5 +1,4 @@
-﻿using Core.Matching;
-using Core.Monads;
+﻿using Core.Monads;
 using Core.Numbers;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
@@ -10,39 +9,32 @@ public class FieldsIterator : Iterator
 {
    protected string input;
    protected Core.Matching.Pattern pattern;
-   protected bool matched;
-   protected MatchResult matchResult = MatchResult.Empty;
-   protected int matchIndex;
+   protected IEnumerator<string> enumerator;
 
    public FieldsIterator(KString kString) : base(kString)
    {
       input = kString.Value;
       pattern = "-/s+";
+      enumerator = splitOn(pattern, input).GetEnumerator();
    }
 
    public FieldsIterator(KString kString, Regex regex) : base(kString)
    {
       input = kString.Value;
-      pattern = regex.Pattern;
+      pattern = regex.CorePattern;
+      enumerator = splitOn(pattern, input).GetEnumerator();
    }
 
    public override Maybe<IObject> Next()
    {
-      if (!matched)
+      if (enumerator.MoveNext())
       {
-         matched = true;
-         var _result = input.Matches(pattern);
-         if (_result is (true, var result))
-         {
-            matchResult = result;
-         }
-         else
-         {
-            return nil;
-         }
+         return KString.StringObject(enumerator.Current).Some();
       }
-
-      return matchIndex < matchResult.MatchCount ? KString.StringObject(matchResult[matchIndex++]).Some() : nil;
+      else
+      {
+         return nil;
+      }
    }
 
    public override IObject this[int index]
