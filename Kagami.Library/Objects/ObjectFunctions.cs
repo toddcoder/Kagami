@@ -1118,7 +1118,7 @@ public static class ObjectFunctions
       var _result = input.Matches(pattern);
       while (_result is (true, var result))
       {
-         yield return result.Text.Keep(result.Index);
+         yield return input.Keep(result.Index);
 
          input = input.Drop(result.Index + result.Length);
          _result = input.Matches(pattern);

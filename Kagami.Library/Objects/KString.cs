@@ -434,6 +434,25 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
    public KArray SplitOn(string on) => new(value.Split([on], StringSplitOptions.None).Select(StringObject));
 
+   public KArray SplitOn(ICollection collection, bool keepRest)
+   {
+      List<IObject> result = [];
+      var iterator = collection.GetIterator(false);
+      var input = value;
+      while (iterator.Next() is (true, Int i))
+      {
+         result.Add(StringObject(input.Keep(i.Value)));
+         input = input.Drop(i.Value);
+      }
+
+      if (input.IsNotEmpty() && keepRest)
+      {
+         result.Add(StringObject(input));
+      }
+
+      return new KArray(result);
+   }
+
    public KString Subtract(string substring) => value.Replace(substring, "");
 
    public IRangeItem Successor => (KString)value.Succ();

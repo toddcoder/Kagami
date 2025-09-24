@@ -1,5 +1,5 @@
-﻿using Core.Monads;
-using Core.Numbers;
+﻿using Core.Matching;
+using Core.Monads;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
@@ -9,55 +9,30 @@ public class FieldsIterator : Iterator
 {
    protected string input;
    protected Core.Matching.Pattern pattern;
-   protected IEnumerator<string> enumerator;
+   protected string[] parts;
 
    public FieldsIterator(KString kString) : base(kString)
    {
       input = kString.Value;
-      pattern = "-/s+";
-      enumerator = splitOn(pattern, input).GetEnumerator();
+      pattern = "/s+";
+      parts = input.Unjoin(pattern);
    }
 
    public FieldsIterator(KString kString, Regex regex) : base(kString)
    {
       input = kString.Value;
       pattern = regex.CorePattern;
-      enumerator = splitOn(pattern, input).GetEnumerator();
+      parts = input.Unjoin(pattern);
    }
 
-   public override Maybe<IObject> Next()
-   {
-      if (enumerator.MoveNext())
-      {
-         return KString.StringObject(enumerator.Current).Some();
-      }
-      else
-      {
-         return nil;
-      }
-   }
+   public override Maybe<IObject> Next() => index < parts.Length ? KString.StringObject(parts[index++]).Some() : nil;
 
    public override IObject this[int index]
    {
       get
       {
-         if (index > -1)
-         {
-            Maybe<IObject> _next = nil;
-            for (var i = 0; i < index; i++)
-            {
-               _next = Next();
-            }
-
-            return _next | (() => KString.Empty);
-         }
-         else
-         {
-            var list = List().ToList();
-            index = wrapIndex(index, list.Count);
-
-            return index.Between(0).Until(list.Count) ? list[index] : KString.Empty;
-         }
+         index = wrapIndex(index, parts.Length);
+         return index < parts.Length ? KString.StringObject(parts[index]) : KString.Empty;
       }
    }
 }

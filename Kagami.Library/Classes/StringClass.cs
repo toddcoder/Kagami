@@ -118,6 +118,9 @@ public class StringClass : BaseClass, ICollectionClass
          function<KString, Regex, Lambda, Lambda>(obj, msg, (s, r, lm, lnm) => r.SplitMapJoin(s.Value, lm, lnm));
       messages["numberize()"] = (obj, _) => function<KString>(obj, s => s.Numberize());
       messages["lines".get()] = (obj, _) => function<KString>(obj, s => s.Lines());
+      messages["split(by:_<Collection>,keepRest:_<Boolean>)"] = (obj, msg) =>
+         function<KString, IObject, KBoolean>(obj, msg, (s, c, b) => s.SplitOn((ICollection)c, b.Value));
+      messages["split(by:_<Collection>)"] = (obj, msg) => function<KString, IObject>(obj, msg, (s, c) => s.SplitOn((ICollection)c, false));
    }
 
    protected static IObject getIndexed(KString s, IObject i)
