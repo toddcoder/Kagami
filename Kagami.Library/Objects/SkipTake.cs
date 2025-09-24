@@ -1,4 +1,5 @@
-﻿using Core.Collections;
+﻿using System.Diagnostics.Contracts;
+using Core.Collections;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
@@ -22,6 +23,7 @@ public struct SkipTake : IObject, IEquatable<SkipTake>
 
    public int Hash => (skip.GetHashCode() + take.GetHashCode()).GetHashCode();
 
+   [Pure]
    public bool IsEqualTo(IObject obj) => obj is SkipTake skipTake && Equals(skipTake);
 
    public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);

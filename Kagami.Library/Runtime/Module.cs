@@ -129,6 +129,18 @@ public class Module
       _ => nil
    };
 
+   public static ICollectionClass CollectionClass(ICollection collection)
+   {
+      if (Global.Value.Class(((IObject)collection).ClassName) is (true, var baseClass))
+      {
+         return baseClass as ICollectionClass ?? new ArrayClass();
+      }
+      else
+      {
+         return new ArrayClass();
+      }
+   }
+
    public static bool IsBuiltInClass(string name) => getBuiltinClass(name);
 
    protected Hash<string, BaseClass> classes = [];

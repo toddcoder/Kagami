@@ -2,6 +2,7 @@
 using Kagami.Library.Objects;
 using Core.Enumerables;
 using Core.Objects;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Classes;
@@ -121,6 +122,26 @@ public class StringClass : BaseClass, ICollectionClass
       messages["split(by:_<Collection>,keepRest:_<Boolean>)"] = (obj, msg) =>
          function<KString, IObject, KBoolean>(obj, msg, (s, c, b) => s.SplitOn((ICollection)c, b.Value));
       messages["split(by:_<Collection>)"] = (obj, msg) => function<KString, IObject>(obj, msg, (s, c) => s.SplitOn((ICollection)c, false));
+      registerMessage("assign(_,_)", (obj, message) => function<KString, IObject, IObject>(obj, message, replaceString));
+   }
+
+   protected static IObject replaceString(KString kString, IObject possibleSkipTake, IObject source)
+   {
+      if (possibleSkipTake is SkipTake skipTake)
+      {
+         if (source is KString stringSource)
+         {
+            return kString.Assign(skipTake, stringSource);
+         }
+         else
+         {
+            throw fail("Source must be a string");
+         }
+      }
+      else
+      {
+         throw fail("Index must be a skip and take");
+      }
    }
 
    protected static IObject getIndexed(KString s, IObject i)

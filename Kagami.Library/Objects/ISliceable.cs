@@ -1,17 +1,16 @@
 ﻿using Core.Monads;
 
-namespace Kagami.Library.Objects
+namespace Kagami.Library.Objects;
+
+public interface ISliceable
 {
-   public interface ISliceable
-   {
-      Slice Slice(ICollection collection);
+   Slice Slice(ICollection collection);
 
-      Maybe<IObject> Get(IObject index);
+   Maybe<IObject> Get(IObject index);
 
-      IObject Set(IObject index, IObject value);
+   IObject Set(IObject index, IObject value);
 
-      bool ExpandForArray { get; }
+   bool ExpandForArray { get; }
 
-      int Length { get; }
-   }
+   int Length { get; }
 }

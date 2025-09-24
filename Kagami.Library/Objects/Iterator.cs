@@ -21,15 +21,7 @@ public class Iterator : IObject, IIterator
    public Iterator(ICollection collection)
    {
       this.collection = collection;
-      if (Module.Global.Value.Class(((IObject)this.collection).ClassName) is (true, var baseClass))
-      {
-         collectionClass = baseClass as ICollectionClass ?? new ArrayClass();
-      }
-      else
-      {
-         collectionClass = new ArrayClass();
-      }
-
+      collectionClass = Module.CollectionClass(collection);
       index = 0;
    }
 

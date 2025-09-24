@@ -645,4 +645,19 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
    }
 
    public IObject Lines() => new LinesIterator(this);
+
+   public IObject Assign(SkipTake skipTake, KString source)
+   {
+      var array = value.ToCharArray();
+      char[] left = [.. array.Take(skipTake.Skip)];
+      char[] middle = [.. source.GetIterator(false).List().Select(c => (KChar)c).Select(kc => kc.Value)];
+      char[] right = [.. array.Skip(skipTake.Skip + skipTake.Take)];
+
+      var result = new StringBuilder();
+      result.Append(left);
+      result.Append(middle);
+      result.Append(right);
+
+      return StringObject(result.ToString());
+   }
 }
