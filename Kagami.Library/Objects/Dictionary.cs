@@ -615,7 +615,7 @@ public class Dictionary : IObject, IMutableCollection
       return this;
    }
 
-   public IObject Skip(IObject key)
+   public IObject GetValue(IObject key)
    {
       var obj = getValue(key);
       return obj switch
