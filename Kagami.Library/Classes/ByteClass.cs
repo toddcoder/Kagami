@@ -1,5 +1,6 @@
 ﻿using Core.Objects;
 using Kagami.Library.Objects;
+using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Classes;
 
@@ -12,6 +13,9 @@ public class ByteClass : BaseClass, IParse, IEquivalentClass
       base.RegisterMessages();
 
       compareMessages();
+
+      messages["char()"] = (obj, _) => function<KByte>(obj, b => new KChar((char)b.Value));
+      messages["numberize()"] = (obj, _) => function<KByte>(obj, b => new KChar((char)b.Value));
    }
 
    public override void RegisterClassMessages()

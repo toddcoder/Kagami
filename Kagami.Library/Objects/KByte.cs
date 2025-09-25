@@ -126,4 +126,6 @@ public readonly struct KByte : IObject, INumeric, IObjectCompare, IComparable<KB
    public IObject Decrement(int amount = 1) => (KByte)(value - amount);
 
    public IObject Increment(INumeric numeric) => ByteObject((byte)(value + numeric.AsByte()));
+
+   public KChar Char => new((char)value);
 }

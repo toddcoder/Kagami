@@ -30,6 +30,8 @@ public class Numberize : OneOperandOperation
          }
          case KChar kChar:
             return Int.IntObject(kChar.Value).Just();
+         case KByte kByte:
+            return kByte.Char;
          case INumeric:
             return value.Just();
          default:

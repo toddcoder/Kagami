@@ -138,7 +138,8 @@ public partial class Playground : Form
             }
          });
          menus.Separator();
-         menus.Menu("Find/Replace", (_, _) => { findReplace.Show(); }, "^F");
+         menus.Menu("Find/Replace", (_, _) => findReplace.Show(), "^F");
+         menus.Menu("Reset Editor", (_, _) => resetEditor(), "^R");
 
          menus.Menu("&Build");
          menus.Menu("Run", (_, _) => run(), "F5");
@@ -313,6 +314,12 @@ public partial class Playground : Form
       {
          locked = false;
       }
+   }
+
+   protected void resetEditor()
+   {
+      textEditor.Text = "open sys\n\n";
+      textEditor.SelectionStart = textEditor.Text.Length;
    }
 
    protected void findRegex(Pattern pattern, bool ignoreCase)
