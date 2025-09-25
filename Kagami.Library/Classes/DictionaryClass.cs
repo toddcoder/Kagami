@@ -68,6 +68,7 @@ public class DictionaryClass : BaseClass, ICollectionClass
       messages["memo(_)"] = (obj, msg) => function<Dictionary, Lambda>(obj, msg, (d, l) => d.Memo(l));
       messages["updateIfNil(key:_,value:_)"] =
          (obj, msg) => function<Dictionary, IObject, IObject>(obj, msg, (d, k, v) => d.UpdateIfNil(k, v));
+      messages["skip(_)"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, l) => d.Skip(l));
    }
 
    protected static IObject getKeyed(Dictionary dictionary, IObject key) => key switch

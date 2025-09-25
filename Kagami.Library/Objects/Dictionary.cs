@@ -614,4 +614,15 @@ public class Dictionary : IObject, IMutableCollection
 
       return this;
    }
+
+   public IObject Skip(IObject key)
+   {
+      var obj = getValue(key);
+      return obj switch
+      {
+         KNil => throw fail($"Key {key} not found"),
+         Some some => some.Value,
+         _ => obj
+      };
+   }
 }
