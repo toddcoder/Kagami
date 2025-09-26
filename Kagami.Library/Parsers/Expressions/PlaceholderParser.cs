@@ -44,7 +44,7 @@ public partial class PlaceholderParser : SymbolParser
             {
                builder.Add(new InvokeSymbol(placeholderName, arguments, nil, true));
 
-               if (placeholderName.IsMatch("^ ['A-Z']") && state.BlockFollows())
+               /*if (placeholderName.IsMatch("^ ['A-Z']") && state.BlockFollows())
                {
                   var _result = state.BeginBlock();
                   if (_result)
@@ -64,7 +64,7 @@ public partial class PlaceholderParser : SymbolParser
                   {
                      return _result.Exception;
                   }
-               }
+               }*/
                return unit;
             }
             else

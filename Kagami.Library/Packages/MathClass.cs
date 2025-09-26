@@ -74,6 +74,7 @@ public class MathClass : PackageClass
          (obj, msg) => function<KMath, Float, Float>(obj, msg, (m, r, theta) => m.PolarToCartesian(r, theta)));
       registerPackageFunction("factorial(_)", (obj, msg) => function<KMath, IObject>(obj, msg, (m, s) => m.Factorial(s)));
       registerPackageFunction("fibonacci(_)", (obj, msg) => function<KMath, Int>(obj, msg, (m, i) => m.Fibonacci(i.Value)));
+      registerPackageFunction("isNumber(_<String>)", (obj, msg) => function<KMath, KString>(obj, msg, (m, s) => m.IsNumber(s.Value)));
    }
 
    public override IObject DefaultValue => throw noDefaultValue("Math");

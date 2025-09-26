@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using Core.Numbers;
 using Core.Objects;
 using Kagami.Library.Classes;
 using Kagami.Library.Objects;
@@ -508,4 +509,6 @@ public class KMath : Package
 
       return new KArray(results);
    }
+
+   public KBoolean IsNumber(string value) => value.IsNumeric();
 }
