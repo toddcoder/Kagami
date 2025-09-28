@@ -1590,6 +1590,8 @@ public class Iterator : IObject, IIterator
       }
    }
 
+   public Sequence Seq() => new(List());
+
    protected static IEnumerable<IObject> applyAgainst(List<Lambda> lambdas, List<IObject> enumerable)
    {
       return lambdas.SelectMany(_ => enumerable, (lambda, item) => lambda.Invoke(item));

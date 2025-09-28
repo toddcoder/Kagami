@@ -232,4 +232,6 @@ public interface IIterator : IEquivalentClass
    IObject Step(int step);
 
    IObject this[int index] { get; }
+
+   Sequence Seq();
 }

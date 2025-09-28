@@ -370,5 +370,7 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
       }
    }
 
+   public Sequence Seq() => terminate().Seq();
+
    public TypeConstraint EquivalentTypeConstraint() => Objects.TypeConstraint.FromList("Iterator");
 }
