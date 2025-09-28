@@ -35,8 +35,6 @@ public class Dictionary : IObject, IMutableCollection
    protected int objectID = uniqueObjectID();
    protected Hash<IObject, IObject> dictionary = [];
    protected IObject[] keys = [];
-   protected Maybe<Lambda> _defaultLambda = nil;
-   protected int parameterCount;
 
    public Dictionary(IEnumerable<IObject> items)
    {
@@ -49,7 +47,7 @@ public class Dictionary : IObject, IMutableCollection
                switch (kv.Value)
                {
                   case Lambda lambda:
-                     _defaultLambda = lambda;
+                     DefaultLambda = lambda;
                      break;
                   default:
                      DefaultValue = kv.Value.Some();
@@ -78,15 +76,7 @@ public class Dictionary : IObject, IMutableCollection
 
    public Maybe<IObject> DefaultValue { get; set; } = nil;
 
-   public Maybe<Lambda> DefaultLambda
-   {
-      get => _defaultLambda;
-      set
-      {
-         _defaultLambda = value;
-         parameterCount = _defaultLambda.Map(l => l.Invokable.Parameters.Length) | (() => 0);
-      }
-   }
+   public Maybe<Lambda> DefaultLambda { get; set; } = nil;
 
    public KBoolean Caching { get; set; }
 
@@ -94,7 +84,7 @@ public class Dictionary : IObject, IMutableCollection
    {
       if (dictionary.Maybe[key] is (true, var value))
       {
-         if (DefaultValue || _defaultLambda)
+         if (DefaultValue || DefaultLambda)
          {
             return value;
          }
@@ -112,7 +102,7 @@ public class Dictionary : IObject, IMutableCollection
 
          return defaultValue;
       }
-      else if (_defaultLambda is (true, var lambda))
+      else if (DefaultLambda is (true, var lambda))
       {
          switch (lambda.ParameterCount.Value)
          {
@@ -237,7 +227,7 @@ public class Dictionary : IObject, IMutableCollection
             return new Some(value);
          }
       }
-      else if (_defaultLambda is (true, var lambda))
+      else if (DefaultLambda is (true, var lambda))
       {
          var result = lambda.Invoke(key);
          if (Caching.IsTrue)
@@ -286,7 +276,7 @@ public class Dictionary : IObject, IMutableCollection
       get
       {
          var image = dictionary.Count == 0 ? "{:}" : $"{{{dictionary.Select(i => $"{i.Key.Image} : {i.Value.Image}").ToString(", ")}}}";
-         return image + (_defaultLambda.Map(l => l.Image) | "");
+         return image + (DefaultLambda.Map(l => l.Image) | "");
       }
    }
 
@@ -606,7 +596,7 @@ public class Dictionary : IObject, IMutableCollection
 
    public Dictionary Memo(Lambda lambda)
    {
-      _defaultLambda = lambda;
+      DefaultLambda = lambda;
       DefaultValue = nil;
       Caching = true;
 
