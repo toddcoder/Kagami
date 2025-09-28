@@ -162,8 +162,16 @@ public class Dictionary : IObject, IMutableCollection
    {
       get
       {
-         var list = sequence.List.Where(key => dictionary.ContainsKey(key)).Select(key => this[key]).ToList();
-         return new KArray(list);
+         Hash<IObject, IObject> hash = [];
+         foreach (var key in sequence.List)
+         {
+            if (dictionary.Maybe[key] is (true, var value))
+            {
+               hash[key] = value;
+            }
+         }
+
+         return new Dictionary(hash);
       }
       set
       {

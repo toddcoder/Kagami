@@ -61,6 +61,8 @@ public interface IIterator : IEquivalentClass
 
    IObject FlatMap(Lambda lambda);
 
+   IObject MapAll(Lambda lambda);
+
    IObject Replace(Lambda predicate, Lambda lambda);
 
    IObject If(Lambda predicate);
@@ -234,4 +236,6 @@ public interface IIterator : IEquivalentClass
    IObject this[int index] { get; }
 
    Sequence Seq();
+
+   IObject Transpose();
 }

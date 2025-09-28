@@ -425,6 +425,7 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerIterMessage("bind(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Map(l)));
       registerIterMessage("flatMap(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.FlatMap(l)));
       registerIterMessage("if(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.If(l)));
+      registerIterMessage("mapAll(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.MapAll(l)));
       registerIterMessage("ifNot(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.IfNot(l)));
       registerIterMessage("skip(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Skip(j.Value)));
       registerIterMessage("-(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Skip(j.Value)));
@@ -534,6 +535,7 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerIterMessage("step(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Step(c.Value)));
       registerIterMessage("[](_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i[c.Value]));
       registerIterMessage("seq()", (obj, _) => iteratorFunc(obj, i => i.Seq()));
+      registerIterMessage("transpose()", (obj, _) => iteratorFunc(obj, i => i.Transpose()));
    }
 
    public virtual bool MatchCompatible(BaseClass otherClass) => Name == otherClass.Name;

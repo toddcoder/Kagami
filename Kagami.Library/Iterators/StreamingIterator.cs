@@ -175,6 +175,28 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
 
    public IObject FlatMap(Lambda lambda) => terminate().FlatMap(lambda);
 
+   public IObject MapAll(Lambda lambda)
+   {
+      List<IObject> list = [];
+      foreach (var item in List())
+      {
+         if (item is ICollection innerCollection)
+         {
+            var innerCollectionClass = (ICollectionClass)classOf((IObject)innerCollection);
+            var innerIterator = innerCollection.GetIterator(true);
+            var mappedItem = innerIterator.List().Select(i => lambda.Invoke(i));
+            var newCollection = innerCollectionClass.Revert(mappedItem);
+            list.Add(newCollection);
+         }
+         else
+         {
+            list.Add(item);
+         }
+      }
+
+      return collectionClass.Revert(list);
+   }
+
    public IObject Replace(Lambda predicate, Lambda lambda) => terminate().Replace(predicate, lambda);
 
    public IObject If(Lambda predicate) => copy(new StreamingIf(predicate));
@@ -371,6 +393,8 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
    }
 
    public Sequence Seq() => terminate().Seq();
+
+   public IObject Transpose() => terminate().Transpose();
 
    public TypeConstraint EquivalentTypeConstraint() => Objects.TypeConstraint.FromList("Iterator");
 }

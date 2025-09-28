@@ -303,6 +303,28 @@ public class Iterator : IObject, IIterator
       return new FlatMapIterator((ICollection)newCollection).FlatMap(lambda);
    }
 
+   public IObject MapAll(Lambda lambda)
+   {
+      List<IObject> list = [];
+      foreach (var item in List())
+      {
+         if (item is ICollection innerCollection)
+         {
+            var innerCollectionClass = (ICollectionClass)classOf((IObject)innerCollection);
+            var iterator = innerCollection.GetIterator(false);
+            var mappedItem = iterator.List().Select(i => lambda.Invoke(i));
+            var newCollection = innerCollectionClass.Revert(mappedItem);
+            list.Add(newCollection);
+         }
+         else
+         {
+            list.Add(item);
+         }
+      }
+
+      return collectionClass.Revert(list);
+   }
+
    public IObject Replace(Lambda predicate, Lambda lambda)
    {
       var list = new List<IObject>();
@@ -1591,6 +1613,39 @@ public class Iterator : IObject, IIterator
    }
 
    public Sequence Seq() => new(List());
+
+   public IObject Transpose()
+   {
+      var list = List().ToList();
+      if (list.Count == 0 || list[0] is not ICollection)
+      {
+         return (IObject)collection;
+      }
+
+      List<List<IObject>> transposed = [];
+      foreach (var item in list)
+      {
+         if (item is ICollection innerCollection)
+         {
+            List<IObject> innerList = [.. innerCollection.GetIterator(false).List()];
+            for (var i = 0; i < innerList.Count; i++)
+            {
+               if (transposed.Count <= i)
+               {
+                  transposed.Add([]);
+               }
+
+               transposed[i].Add(innerList[i]);
+            }
+         }
+         else
+         {
+            return (IObject)collection;
+         }
+      }
+
+      return collectionClass.Revert(transposed.Select(inner => collectionClass.Revert(inner)));
+   }
 
    protected static IEnumerable<IObject> applyAgainst(List<Lambda> lambdas, List<IObject> enumerable)
    {
