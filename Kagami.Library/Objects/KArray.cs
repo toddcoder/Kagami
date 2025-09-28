@@ -9,7 +9,8 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
 
-public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<KArray>, IMutableCollection, ISliceable, IIndexed, IFindIndex, IAccepting
+public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<KArray>, IMutableCollection, ISliceable, IIndexed, IFindIndex,
+   IAccepting
 {
    public static IObject CreateObject(IEnumerable<IObject> items)
    {
@@ -196,23 +197,54 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       }
       set
       {
+         List<int> il = [.. indexList(sequence, list.Count)];
          switch (value)
          {
             case KArray array when array.Id == Id:
                return;
+            /*case ICollection collection when collection.Length.Value > il.Count:
+            {
+               List<IObject> source = [.. collection.GetIterator(false).List()];
+               for (var i = 0; i < collection.Length.Value; i++)
+               {
+                  list[i] = source[il[i]];
+               }
+
+               break;
+            }*/
+            case ICollection { Length.Value: 0 }:
+               foreach (var index in il.OrderByDescending(i => i))
+               {
+                  list.RemoveAt(index);
+               }
+
+               break;
             case ICollection collection and not KString:
             {
                var valueIterator = collection.GetIterator(false);
-               foreach (var index in indexList(sequence, list.Count))
+               List<IObject> values = [.. valueIterator.List()];
+               var valueIndex = 0;
+               var lastIndex = -1;
+               foreach (var index in il)
                {
-                  var _item = valueIterator.Next();
-                  if (_item is (true, var item))
+                  lastIndex = index;
+                  if (valueIndex < values.Count)
                   {
-                     list[index] = item;
+                     list[index] = values[valueIndex];
+                     valueIndex++;
                   }
                   else
                   {
                      break;
+                  }
+               }
+
+               if (lastIndex > -1)
+               {
+                  for (var i = valueIndex; i < values.Count; i++)
+                  {
+                     list.Insert(lastIndex + 1, values[i]);
+                     lastIndex++;
                   }
                }
 
@@ -221,7 +253,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
             default:
             {
-               foreach (var index in indexList(sequence, list.Count))
+               foreach (var index in il)
                {
                   list[index] = value;
                }

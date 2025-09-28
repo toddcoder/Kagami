@@ -1124,4 +1124,19 @@ public static class ObjectFunctions
          _result = input.Matches(pattern);
       }
    }
+
+   public static IObject assign(SkipTake skipTake, ICollection source, ICollection target)
+   {
+      var list = target.GetIterator(false).List().ToList();
+      IObject[] left = [.. list.Take(skipTake.Skip)];
+      IObject[] middle = [.. source.GetIterator(false).List()];
+      IObject[] right = [.. list.Skip(skipTake.Skip + skipTake.Take)];
+
+      List<IObject> result = [];
+      result.AddRange(left);
+      result.AddRange(middle);
+      result.AddRange(right);
+
+      return classOf((IObject)target) is ICollectionClass collectionClass?collectionClass.Revert(result):new KArray(result);
+   }
 }
