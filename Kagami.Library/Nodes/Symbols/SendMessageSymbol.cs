@@ -65,6 +65,10 @@ public class SendMessageSymbol : Symbol, IHasExpressions
    {
    }
 
+   public SendMessageSymbol(Selector selector, Precedence precedence, Expression[] arguments) : this(selector, precedence, false, nil, nil, arguments)
+   {
+   }
+
    public override void Generate(OperationsBuilder builder)
    {
       if (arguments.Any(a => a.Symbols[0] is AnySymbol))
