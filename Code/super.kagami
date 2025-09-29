@@ -1,0 +1,63 @@
+﻿open sys
+
+class Stats {
+	var numlist = []
+	var xsum = 0.0
+	var x2sum = 0.0
+
+	func addValue(`num float) {
+		numlist << `num
+		xsum += `num
+		x2sum += `num ^ 2
+	}
+
+	get total => xsum
+
+	get mean {
+		guard so numlist else {
+			return 0.0
+		}
+		return total / numlist.length
+	}
+
+	get variance {
+		let n = numlist.length
+		return (n * x2sum - xsum ^ 2) / n ^ 2
+	}
+
+	get stdDev => math.sqrt(variance)
+
+	get values => numlist
+}
+
+class Stats2 : Stats {
+	var min = float.max
+	var max = float.min
+
+	override func addValue(`num float) {
+		min = `num min min
+		max = `num max max
+		super.addValue(`num)
+	}
+
+	get minimum => min
+
+	get maximum => max
+}
+
+let stats = Stats2()
+
+func getResults() {
+	println("Results===")
+	println($"Number of values: (stats.values.length)")
+	println($"Minimum: (stats.minimum)")
+	println($"Maximum: (stats.maximum)")
+	println($"Total: (stats.total)")
+	println($"Mean: (stats.mean)")
+	println($"Standard Deviation: (stats.stdDev)")
+	println($"Variance: (stats.variance)")
+}
+
+stats.addValue(13.0)
+stats.addValue(26.0)
+getResults()
