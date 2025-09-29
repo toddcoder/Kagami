@@ -24,7 +24,7 @@ public class Super : Operation
          }
          else
          {
-            var superObject = new UserObject(parentClassName, self.Fields, self.Parameters);
+            var superObject = new UserObject(parentClassName, self.Fields, self.Parameters, false);
             return superObject;
          }
       }

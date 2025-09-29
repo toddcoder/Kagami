@@ -13,7 +13,7 @@ public class UserObject : IObject, IEquatable<UserObject>
    private readonly Parameters parameters;
    private readonly int objectID;
 
-   public UserObject(string className, Fields fields, Parameters parameters)
+   public UserObject(string className, Fields fields, Parameters parameters, bool setSelf = true)
    {
       this.fields = fields;
       this.className = className;
@@ -21,7 +21,11 @@ public class UserObject : IObject, IEquatable<UserObject>
 
       objectID = uniqueObjectID();
 
-      setField("self", this);
+      if (setSelf)
+      {
+         setField("self", this);
+      }
+
       setField("id", (Int)objectID);
    }
 
@@ -53,7 +57,8 @@ public class UserObject : IObject, IEquatable<UserObject>
 
    public bool IsEqualTo(IObject obj) => isEqualTo(this, obj);
 
-   public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);//userObjectMatch(this, comparisand, bindings);
+   public bool Match(IObject comparisand, Hash<string, IObject> bindings) =>
+      match(this, comparisand, bindings); //userObjectMatch(this, comparisand, bindings);
 
    public bool IsTrue => KBoolean.BooleanObject(fields.Length > 0).IsTrue;
 
