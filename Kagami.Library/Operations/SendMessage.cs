@@ -10,7 +10,10 @@ public class SendMessage : TwoOperandOperation
 {
    protected Selector selector;
 
-   public SendMessage(Selector selector) => this.selector = selector;
+   public SendMessage(Selector selector)
+   {
+      this.selector = selector;
+   }
 
    public override string ToString() => $"send.message({selector.Image})";
 

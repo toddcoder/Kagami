@@ -1,0 +1,6 @@
+﻿open sys
+
+var a = 100
+var b = ref a
+b = 90
+println(a)
