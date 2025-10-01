@@ -1,8 +1,6 @@
 ﻿using Core.Monads;
 using Core.Strings;
 using Kagami.Library.Nodes.Statements;
-using Kagami.Library.Nodes.Symbols;
-using Kagami.Library.Objects;
 using Kagami.Library.Parsers.Expressions;
 using System.Text.RegularExpressions;
 using Kagami.Library.Invokables;
@@ -14,27 +12,6 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class AutoPropertyParser : StatementParser
 {
-   protected static Function getter(string getterName, string fieldName, Maybe<TypeConstraint> _typeConstraint)
-   {
-      List<Statement> statements = [];
-      var assign = new AssignReferenceToNewField(fieldName, "field");
-      statements.Add(assign);
-      var expressionBuilder = new ExpressionBuilder(ExpressionFlags.Standard);
-      expressionBuilder.Add(new FieldSymbol(fieldName));
-      var _expression = expressionBuilder.ToExpression();
-      if (_expression is (true, var expression))
-      {
-         statements.Add(new Return(expression, _typeConstraint));
-         var block = new Block(statements, _typeConstraint);
-
-         return new Function(getterName, Parameters.Empty, block, false, false, "");
-      }
-      else
-      {
-         throw _expression.Exception;
-      }
-   }
-
    [GeneratedRegex(@$"^(\s*)(?:(let|var)\s+)?(property)(\s+)({REGEX_FIELD})")]
    public override partial Regex Regex();
 

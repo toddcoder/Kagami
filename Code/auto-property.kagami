@@ -1,0 +1,18 @@
+﻿open sys
+
+class A(_name) {
+	property name = _name
+	get {
+		println("getting")
+		return field
+	}
+	set {
+		println("setting")
+		field = value
+	}
+}
+
+let a = A("Todd")
+println(a.name)
+a.name = "Zoe"
+println(a.name)
