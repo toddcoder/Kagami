@@ -11,14 +11,14 @@ namespace Kagami.Library.Nodes.Statements;
 
 public class Block : Statement, IEnumerable<Statement>
 {
-   public static Block Getter(string fieldName)
+   public static Block Getter(string fieldName, Maybe<TypeConstraint> _typeConstraint)
    {
       var expressionBuilder = new ExpressionBuilder(ExpressionFlags.Standard);
       expressionBuilder.Add(new FieldSymbol(fieldName));
       var _expression = expressionBuilder.ToExpression();
       if (_expression is (true, var expression))
       {
-         return new Block(new Return(expression, nil));
+         return new Block(new Return(expression, _typeConstraint));
       }
       else
       {
@@ -26,7 +26,9 @@ public class Block : Statement, IEnumerable<Statement>
       }
    }
 
-   public static Block Setter(string fieldName, string parameterName)
+   public static Block Getter(string fieldName) => Getter(fieldName, nil);
+
+   public static Block Setter(string fieldName, string parameterName, Maybe<TypeConstraint> _typeConstraint)
    {
       var expressionBuilder = new ExpressionBuilder(ExpressionFlags.Standard);
       expressionBuilder.Add(new FieldSymbol(parameterName));
@@ -34,7 +36,10 @@ public class Block : Statement, IEnumerable<Statement>
       if (_expression is (true, var expression))
       {
          var assignToField = new AssignToField(fieldName, nil, expression);
-         var setter = new Block(assignToField);
+         var setter = new Block(assignToField)
+         {
+            TypeConstraint = _typeConstraint
+         };
          setter.AddReturnIf(new FieldSymbol(fieldName));
          return setter;
       }
@@ -43,6 +48,8 @@ public class Block : Statement, IEnumerable<Statement>
          throw _expression.Exception;
       }
    }
+
+   public static Block Setter(string fieldName, string parameterName) => Setter(fieldName, parameterName, nil);
 
    public static Block Merge(Block leftBlock, Block rightBlock)
    {
@@ -110,6 +117,8 @@ public class Block : Statement, IEnumerable<Statement>
       get => _typeConstraint;
       set => _typeConstraint = value;
    }
+
+   public void Unshift(Statement statement) => statements.Insert(0, statement);
 
    public override void Generate(OperationsBuilder builder)
    {

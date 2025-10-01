@@ -105,7 +105,7 @@ public class ClassBuilder
       {
          switch (statement)
          {
-            case AssignToNewField assignToNewField:
+            case AssignToNewField { Ignore: false } assignToNewField:
             {
                var (mutable, fieldName, _typeConstraint) = assignToNewField;
                if (requiredFields.Maybe[fieldName] is (true, var requiredField))

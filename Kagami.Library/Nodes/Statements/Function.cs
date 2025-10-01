@@ -4,23 +4,44 @@ using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using Kagami.Library.Runtime;
 using Core.Booleans;
+using Core.Monads;
 using Core.Strings;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
 
 namespace Kagami.Library.Nodes.Statements;
 
 public class Function : Statement
 {
-   public static Function Getter(string fieldName)
+   public static Function Getter(string fieldName, Maybe<TypeConstraint> _typeConstraint)
    {
-      return new($"__${fieldName}", new Parameters(0), Block.Getter(fieldName), false, false, "");
+      return new($"__${fieldName}", new Parameters(0), Block.Getter(fieldName, _typeConstraint), false, false, "");
    }
 
-   public static Function Setter(string fieldName)
+   public static Function Getter(string fieldName) => Getter(fieldName, nil);
+
+   public static Function Getter(string getterName, string fieldName, Maybe<TypeConstraint> _typeConstraint)
+   {
+      return new(getterName, new Parameters(0), Block.Getter(fieldName, _typeConstraint), false, false, "");
+   }
+
+   public static Function Getter(string getterName, string fieldName) => Getter(getterName, fieldName, nil);
+
+   public static Function Setter(string fieldName, Maybe<TypeConstraint> _typeConstraint)
    {
       var parameters = new Parameters(1);
-      return new Function($"{fieldName}=", parameters, Block.Setter(fieldName, parameters[0].Name), false, false, "");
+      return new Function($"{fieldName}=", parameters, Block.Setter(fieldName, parameters[0].Name, _typeConstraint), false, false, "");
    }
+
+   public static Function Setter(string fieldName) => Setter(fieldName, nil);
+
+   public static Function Setter(string setterName, string fieldName, Maybe<TypeConstraint> _typeConstraint)
+   {
+      var parameters = new Parameters(1);
+      return new Function(setterName, parameters, Block.Setter(fieldName, parameters[0].Name, _typeConstraint), false, false, "");
+   }
+
+   public static Function Setter(string setterName, string fieldName) => Setter(setterName, fieldName, nil);
 
    protected Selector selector;
    protected Parameters parameters;

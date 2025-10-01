@@ -54,4 +54,6 @@ public class AssignToNewField : Statement
       fieldName = this.fieldName;
       _typeConstraint = this._typeConstraint;
    }
+
+   public bool Ignore { get; set; }
 }
