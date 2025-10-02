@@ -1,6 +1,6 @@
 ﻿open sys
 
-auto Int(array Array) {
+implicit Int(array Array) {
 	var accum = 1
 	for i in array {
 		for c in i.string {

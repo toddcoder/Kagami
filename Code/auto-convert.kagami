@@ -1,7 +1,7 @@
 ﻿open sys
 
 class Point(x float, y float);
-auto Point(t Tuple) => Point(t[0], t[1])
+implicit Point(t Tuple) => Point(t[0], t[1])
 
 let p Point = (10.0, 42.0)
 println(p)

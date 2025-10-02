@@ -4,8 +4,8 @@ class Point(x int, y int) {
 	get string => $"Point\($x, $y)"
 }
 
-auto Point(a Array) => Point(a[0], a[1])
-auto Point(d Dictionary) => Point(d{"x"}, d{"y"})
+implicit Point(a Array) => Point(a[0], a[1])
+implicit Point(d Dictionary) => Point(d{"x"}, d{"y"})
 
 let topLeft = Point(0, 0)
 let botRight Point = [100, 100]

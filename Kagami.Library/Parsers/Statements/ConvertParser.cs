@@ -12,7 +12,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class ConvertParser : StatementParser
 {
-   [GeneratedRegex(@$"^(\s*)(convert|auto)(\s+)({REGEX_CLASS})(\()({REGEX_FIELD})(\s+)({REGEX_CLASS})(\))")]
+   [GeneratedRegex(@$"^(\s*)(convert|implicit)(\s+)({REGEX_CLASS})(\()({REGEX_FIELD})(\s+)({REGEX_CLASS})(\))")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)

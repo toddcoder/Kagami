@@ -1,7 +1,7 @@
 ﻿open sys
 
 class A(_name) {
-	property name = _name
+	auto name = _name
 	get {
 		println("getting")
 		return field

@@ -12,7 +12,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class AutoPropertyParser : StatementParser
 {
-   [GeneratedRegex(@$"^(\s*)(?:(let|var)\s+)?(property)(\s+)({REGEX_FIELD})")]
+   [GeneratedRegex(@$"^(\s*)(?:(let|var)\s+)?(auto)(\s+)({REGEX_FIELD})")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
