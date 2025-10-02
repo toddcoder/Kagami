@@ -678,4 +678,18 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       Int i => KBoolean.BooleanObject(list.Count == i.Value),
       _ => In(obj)
    };
+
+   public KArray Extend(IObject obj)
+   {
+      if (obj is ICollection collection)
+      {
+         list.AddRange(collection.GetIterator(false).List());
+      }
+      else
+      {
+         list.Add(obj);
+      }
+
+      return this;
+   }
 }
