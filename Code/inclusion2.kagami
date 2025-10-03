@@ -14,7 +14,7 @@ class Rectangle(var width int, var height int) {
 
 class Triangle(var width int, var height int) {
 	include Polygon
-	func area() int => width * height / 2
+	func area() int => width * height / 2f
 }
 
 var rectangle = Rectangle(4, 5)

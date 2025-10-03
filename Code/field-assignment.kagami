@@ -6,5 +6,5 @@ func sum_square(f, m, n) {
 	return sum
 }
 
-println($" First computation: (sum_square(x -> 1 / x, 1, 10))")
+println($" First computation: (sum_square(x -> 1f / x, 1, 10))")
 println($"Second computation: (sum_square(x -> math.sin(x), 2, 13))")
