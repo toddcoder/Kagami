@@ -74,7 +74,7 @@ public partial class InternalKeywordOperatorsParser : SymbolParser
                case "x":
                   builder.Add(new SendBinaryMessageSymbol("cross(_)", Precedence.Concatenate));
                   break;
-               case "div":
+               case "div" or "//":
                   builder.Add(new IntDivideSymbol());
                   break;
                case "r":

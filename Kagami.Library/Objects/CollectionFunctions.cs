@@ -114,12 +114,29 @@ public static class CollectionFunctions
       Func<IObject, Sequence, IObject> listGetter) => index switch
    {
       Int i => intGetter(obj, i.Value),
+      KRange range => listGetter(obj, fromRange(range, obj)),
       Regex r => r.MatchesIndex(obj, intGetter),
       Sequence container => listGetter(obj, conditionContainer(container)),
       ICollection collection and not KString => listGetter(obj, new Sequence(collection.GetIterator(false).List())),
       IIterator iterator => listGetter(obj, new Sequence(iterator.List())),
       _ => throw invalidIndex(index)
    };
+
+   private static Sequence fromRange(KRange range, IObject obj)
+   {
+      if (obj is ICollection collection)
+      {
+         var length = collection.Length.Value;
+         var start = wrapIndex(((Int)range.Start).Value, length);
+         var stop = wrapIndex(((Int)range.Stop).Value, length);
+
+         return new KRange((Int)start, (Int)stop, range.Inclusive, range.Increment).GetIterator(false).Seq();
+      }
+      else
+      {
+         throw incompatibleClasses(obj, "Collection");
+      }
+   }
 
    public static void setIndexed(IObject obj, IObject index, IObject value, Action<IObject, int, IObject> intSetter,
       Action<IObject, Sequence, IObject> listSetter)

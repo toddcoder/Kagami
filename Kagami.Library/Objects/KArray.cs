@@ -202,16 +202,6 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
          {
             case KArray array when array.Id == Id:
                return;
-            /*case ICollection collection when collection.Length.Value > il.Count:
-            {
-               List<IObject> source = [.. collection.GetIterator(false).List()];
-               for (var i = 0; i < collection.Length.Value; i++)
-               {
-                  list[i] = source[il[i]];
-               }
-
-               break;
-            }*/
             case ICollection { Length.Value: 0 }:
                foreach (var index in il.OrderByDescending(i => i))
                {
