@@ -8,6 +8,7 @@ using Kagami.Library.Objects;
 using Kagami.Library.Parsers.Expressions;
 using System.Collections;
 using System.Text.RegularExpressions;
+using Core.DataStructures;
 using Core.Numbers;
 using static Core.Monads.AttemptFunctions;
 using static Core.Monads.MonadFunctions;
@@ -37,6 +38,7 @@ public class ParseState : IEnumerable<Statement>
    protected Stack<ImplicitExpressionState> implicitExpressionStates = new();
    protected StringSet patterns = [];
    protected Maybe<Exception> _exception = nil;
+   protected MaybeStack<Selector> decorators = [];
 
    public ParseState(string source)
    {
@@ -555,4 +557,8 @@ public class ParseState : IEnumerable<Statement>
    }
 
    public Maybe<Exception> Exception => _exception;
+
+   public void PushDecorator(Selector selector) => decorators.Push(selector);
+   
+   public IEnumerable<Selector>
 }
