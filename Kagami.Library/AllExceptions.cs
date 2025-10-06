@@ -275,4 +275,8 @@ public static class AllExceptions
    public static string messageCannotAccept(IObject obj) => $"Cannot accept {obj.Image}";
 
    public static Exception cannotAccept(IObject obj) => fail(messageCannotAccept(obj));
+
+   public static string messageDictionaryKeyMustBeImmutable() => "Dictionary key must be an immutable object";
+
+   public static Exception dictionaryKeyMustBeImmutable() => fail(messageDictionaryKeyMustBeImmutable());
 }

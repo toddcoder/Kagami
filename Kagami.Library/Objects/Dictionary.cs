@@ -4,12 +4,13 @@ using Core.Monads;
 using Core.Numbers;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.CollectionFunctions;
 using static Kagami.Library.Operations.OperationFunctions;
 
 namespace Kagami.Library.Objects;
 
-public class Dictionary : IObject, IMutableCollection
+public class Dictionary : IObject, IMutableCollection, IMutable
 {
    public static IObject New(IObject defaultValue, KBoolean caching)
    {
@@ -56,6 +57,11 @@ public class Dictionary : IObject, IMutableCollection
 
                break;
             case IKeyValue kv:
+               if (kv.Key is not IMutable)
+               {
+                  throw dictionaryKeyMustBeImmutable();
+               }
+
                dictionary[kv.Key] = kv.Value;
                break;
             case KTuple tuple:
@@ -142,6 +148,11 @@ public class Dictionary : IObject, IMutableCollection
                dictionary.Remove(key);
                break;
             default:
+               if (key is IMutable)
+               {
+                  throw dictionaryKeyMustBeImmutable();
+               }
+
                dictionary[key] = value;
                break;
          }
@@ -387,6 +398,11 @@ public class Dictionary : IObject, IMutableCollection
 
    public IObject Update(IObject key, IObject value)
    {
+      if (key is IMutable)
+      {
+         throw dictionaryKeyMustBeImmutable();
+      }
+
       if (dictionary.Maybe[key] is (true, var oldValue))
       {
          dictionary[key] = value;
@@ -520,6 +536,11 @@ public class Dictionary : IObject, IMutableCollection
       var keyArray = KeyArray;
       foreach (var key in keyArray)
       {
+         if (key is IMutable)
+         {
+            throw dictionaryKeyMustBeImmutable();
+         }
+
          dictionary[key] = lambda.Invoke(key, dictionary[key]);
       }
 
@@ -531,6 +552,11 @@ public class Dictionary : IObject, IMutableCollection
       var memo = new Memo<IObject, List<IObject>>.Function(_ => []);
       foreach (var (key, value) in dictionary)
       {
+         if (value is IMutable)
+         {
+            throw dictionaryKeyMustBeImmutable();
+         }
+
          memo[value].Add(key);
       }
 
@@ -543,6 +569,11 @@ public class Dictionary : IObject, IMutableCollection
       {
          foreach (var (key, list) in memo)
          {
+            if (key is IMutable)
+            {
+               throw dictionaryKeyMustBeImmutable();
+            }
+
             if (list.Count == 1)
             {
                newHash[key] = list[0];
@@ -562,6 +593,11 @@ public class Dictionary : IObject, IMutableCollection
       Hash<IObject, IObject> newDictionary = [];
       foreach (var (key, value) in dictionary)
       {
+         if (key is IMutable)
+         {
+            throw dictionaryKeyMustBeImmutable();
+         }
+
          newDictionary[key] = value;
       }
 
@@ -570,6 +606,11 @@ public class Dictionary : IObject, IMutableCollection
       {
          if (item is KTuple { Length.Value: 2 } tuple)
          {
+            if (tuple[0] is IMutable)
+            {
+               throw dictionaryKeyMustBeImmutable();
+            }
+
             newDictionary[tuple[0]] = tuple[1];
          }
       }
@@ -607,6 +648,11 @@ public class Dictionary : IObject, IMutableCollection
    {
       if (!dictionary.ContainsKey(key))
       {
+         if (key is IMutable)
+         {
+            throw dictionaryKeyMustBeImmutable();
+         }
+
          dictionary[key] = value;
       }
 

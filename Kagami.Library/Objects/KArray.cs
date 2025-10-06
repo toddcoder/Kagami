@@ -10,7 +10,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 namespace Kagami.Library.Objects;
 
 public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<KArray>, IMutableCollection, ISliceable, IIndexed, IFindIndex,
-   IAccepting
+   IAccepting, IMutable
 {
    public static IObject CreateObject(IEnumerable<IObject> items)
    {

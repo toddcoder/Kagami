@@ -26,7 +26,6 @@ public class SetClass : BaseClass, ICollectionClass
       messages["symmetricDifference(_)"] = (obj, msg) => function<Set, Set>(obj, msg, (s1, s2) => s1.XOr(s2));
       messages["[](_)"] = (obj, msg) => function<Set, Int>(obj, msg, (s, i) => s[i.Value]);
       messages["length".get()] = (obj, _) => function<Set>(obj, s => s.Length);
-      messages["extend()"] = (obj, msg) => function<Set, IObject>(obj, msg, (s, _) => s.Extend());
       messages["clear()"] = (obj, _) => function<Set>(obj, s => s.Clear());
       messages["classify(_)"] = (obj, msg) => function<Set, Lambda>(obj, msg, (s, l) => s.Classify(l));
       messages["~(_)"] = (obj, msg) => function<Set, Set>(obj, msg, (s, l) => s.Concatenate(l));
@@ -36,6 +35,7 @@ public class SetClass : BaseClass, ICollectionClass
       messages["isProperSupersetOf(_)"] = (obj, msg) => function<Set, Set>(obj, msg, (s1, s2) => s1.IsProperSupersetOf(s2));
       messages["overlaps(_)"] = (obj, msg) => function<Set, Set>(obj, msg, (s1, s2) => s1.Overlaps(s2));
       messages["isDisjointWith(_)"] = (obj, msg) => function<Set, Set>(obj, msg, (s1, s2) => s1.IsDisjointWith(s2));
+      messages["extend(_)"] = (obj, msg) => function<Set, IObject>(obj, msg, (s, o) => s.Extend(o));
    }
 
    public override IObject DefaultValue => Set.Empty;

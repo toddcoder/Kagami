@@ -8,7 +8,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
 
-public class Set : IObject, ICollection, IObjectCompare
+public class Set : IObject, ICollection, IObjectCompare, IMutable
 {
    public static IObject Empty => new Set();
 
@@ -137,19 +137,6 @@ public class Set : IObject, ICollection, IObjectCompare
       }
    }
 
-   public IObject Extend()
-   {
-      var iterator = GetIterator(false);
-      var _next = iterator.Next();
-      while (_next is (true, var next))
-      {
-         Append(next);
-         _next = iterator.Next();
-      }
-
-      return this;
-   }
-
    public IObject Clear()
    {
       set.Clear();
@@ -205,5 +192,22 @@ public class Set : IObject, ICollection, IObjectCompare
    {
       IObject[] result = [.. set, ..otherSet.set];
       return new Set(result);
+   }
+
+   public Set Extend(IObject obj)
+   {
+      if (obj is ICollection collection)
+      {
+         foreach (var item in collection.GetIterator(false).List())
+         {
+            Append(item);
+         }
+      }
+      else
+      {
+         Append(obj);
+      }
+
+      return this;
    }
 }
