@@ -57,7 +57,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable
 
                break;
             case IKeyValue kv:
-               if (kv.Key is not IMutable)
+               if (kv.Key is IMutable)
                {
                   throw dictionaryKeyMustBeImmutable();
                }
