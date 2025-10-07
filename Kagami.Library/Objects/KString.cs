@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Globalization;
+using System.Numerics;
 using System.Text;
 using Core.Collections;
 using Core.Monads;
@@ -232,7 +233,7 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
    public KBoolean IsSuffix(string substring) => value.EndsWith(substring);
 
-   public KString Replace(KString old, KString @new) => value.Replace(old.value, @new.value);
+   public KString Replace(KString old, KString @new, bool ignoreCase) => value.Replace(old.value, @new.value, ignoreCase, CultureInfo.CurrentCulture);
 
    public KArray FindAll(ITextFinding textFinding) => textFinding.FindAll(value);
 
