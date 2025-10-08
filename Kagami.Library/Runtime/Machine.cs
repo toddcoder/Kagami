@@ -1,4 +1,5 @@
 ﻿using Core.Applications.Messaging;
+using Core.Collections;
 using Core.Enumerables;
 using Core.Monads;
 using Core.Objects;
@@ -57,6 +58,8 @@ public class Machine
 
    public GlobalFrame GlobalFrame => globalFrame;
 
+   public Hash<string, IObject> Assignments = [];
+
    public Result<IObject> Execute()
    {
       stack.Clear();
@@ -64,6 +67,14 @@ public class Machine
       stack.Push(globalFrame);
       operations.Goto(0);
       running = true;
+
+      if (Assignments.Count > 0)
+      {
+         foreach (var (fieldName, value) in Assignments)
+         {
+            globalFrame.Fields.AssignLocal(fieldName, FieldType.Assignment, value).Force();
+         }
+      }
 
       while (!context.Cancelled() && operations.More && running)
       {
@@ -734,6 +745,15 @@ public class Machine
          {
             yield return fieldName;
          }
+      }
+   }
+
+   public void CaptureFrom(Machine otherMachine)
+   {
+      var otherGlobalFrame = otherMachine.CurrentFrame;
+      foreach (var (fieldName, field) in otherGlobalFrame.Fields)
+      {
+         globalFrame.Fields.AssignLocal(fieldName, FieldType.Assignment, field.Value,true).Force();
       }
    }
 }

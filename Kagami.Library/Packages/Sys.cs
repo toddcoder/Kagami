@@ -318,4 +318,25 @@ public class Sys : Package
 
       return machine.Execute().ForceValue();
    }
+
+   public IObject Eval(string source, Dictionary dictionary)
+   {
+      var compiler = new Compiler(source, CompilerConfiguration.Empty, Machine.Current.Value.Context);
+      var machine = compiler.Generate().ForceValue();
+      if (dictionary.Length.Value > 0)
+      {
+         Hash<string, IObject> hash = [];
+         foreach (var (key, value) in dictionary.InternalHash)
+         {
+            if (key is KString fieldName)
+            {
+               hash[fieldName.Value] = value;
+            }
+         }
+
+         machine.Assignments = hash;
+      }
+
+      return machine.Execute().ForceValue();
+   }
 }

@@ -51,6 +51,8 @@ public class SysClass : PackageClass
       registerPackageFunction("one(_)", (obj, msg) => function<Sys, IObject>(obj, msg, (sys, c) => sys.One((ICollection)c)));
       registerPackageFunction("none(_)", (obj, msg) => function<Sys, IObject>(obj, msg, (sys, c) => sys.None((ICollection)c)));
       registerPackageFunction("eval(_<String>)", (obj, msg) => function<Sys, KString>(obj, msg, (sys, s) => sys.Eval(s.Value)));
+      registerPackageFunction("eval(_<String>,values:_<Dictionary>)",
+         (obj, msg) => function<Sys, KString, Dictionary>(obj, msg, (sys, s, d) => sys.Eval(s.Value, d)));
    }
 
    public override IObject DefaultValue => throw noDefaultValue("Sys");
