@@ -310,4 +310,12 @@ public class Sys : Package
    public Junction One(ICollection collection) => collection.GetIterator(false).JunctionOne();
 
    public Junction None(ICollection collection) => collection.GetIterator(false).JunctionNone();
+
+   public IObject Eval(string source)
+   {
+      var compiler = new Compiler(source, CompilerConfiguration.Empty, Machine.Current.Value.Context);
+      var machine = compiler.Generate().ForceValue();
+
+      return machine.Execute().ForceValue();
+   }
 }

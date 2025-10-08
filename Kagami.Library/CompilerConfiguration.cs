@@ -1,9 +1,10 @@
-﻿namespace Kagami.Library
-{
-   public class CompilerConfiguration
-   {
-      public bool ShowOperations { get; set; }
+﻿namespace Kagami.Library;
 
-      public bool Tracing { get; set; }
-   }
+public class CompilerConfiguration
+{
+   public static CompilerConfiguration Empty => new();
+
+   public bool ShowOperations { get; set; }
+
+   public bool Tracing { get; set; }
 }
