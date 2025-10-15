@@ -1754,4 +1754,24 @@ public static class ParserFunctions
          from expression in getExpression(state, ExpressionFlags.Standard)
          select new Block(expression);
    }
+
+   public static Optional<PossibleBlock> getExitBlock(ParseState state)
+   {
+      var _block =
+         from keyword in state.Scan(@"^(\s*)(exit)\b", Color.Whitespace, Color.Keyword)
+         from blockValue in getBlock(state)
+         select blockValue;
+      if (_block is (true, var block))
+      {
+         return new PossibleBlock.Some(block);
+      }
+      else if (_block.Exception is (true, var exception))
+      {
+         return exception;
+      }
+      else
+      {
+         return new PossibleBlock.None();
+      }
+   }
 }

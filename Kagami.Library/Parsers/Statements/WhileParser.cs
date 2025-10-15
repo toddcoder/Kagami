@@ -23,7 +23,8 @@ public partial class WhileParser : StatementParser
          from expression in getExpression(state, ExpressionFlags.Standard)
          from _ in getIncrement(state)
          from block in getBlock(state)
-         select new While(expression, block, isWhile);
+         from exitedBlock in getExitBlock(state)
+         select new While(expression, block, isWhile, exitedBlock.Maybe());
       if (_result is (true, var statement))
       {
          state.AddStatement(statement);

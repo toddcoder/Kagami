@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using Core.Monads;
+using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Operations;
 using static Kagami.Library.Nodes.NodeFunctions;
 
@@ -9,12 +10,14 @@ public class Loop : Statement
    protected Block block;
    protected Expression expression;
    protected bool isUntil;
+   protected Maybe<Block> _exitBlock;
 
-   public Loop(Block block, Expression expression, bool isUntil)
+   public Loop(Block block, Expression expression, bool isUntil, Maybe<Block> _exitBlock)
    {
       this.block = block;
       this.expression = expression;
       this.isUntil = isUntil;
+      this._exitBlock = _exitBlock;
    }
 
    public override void Generate(OperationsBuilder builder)
@@ -50,6 +53,11 @@ public class Loop : Statement
       builder.PopFrame();
 
       builder.Label(exitLabel);
+      if (_exitBlock is (true, var exitBlock))
+      {
+         exitBlock.Generate(builder);
+      }
+
       builder.GoTo(endLabel);
 
       builder.Label(controlLabel);

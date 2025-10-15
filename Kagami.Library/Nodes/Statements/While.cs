@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using Core.Monads;
+using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Operations;
 using static Kagami.Library.Nodes.NodeFunctions;
 
@@ -9,12 +10,14 @@ public class While : Statement
    protected Expression expression;
    protected Block block;
    protected bool isWhile;
+   protected Maybe<Block> _exitBlock;
 
-   public While(Expression expression, Block block, bool isWhile)
+   public While(Expression expression, Block block, bool isWhile, Maybe<Block> _exitBlock)
    {
       this.expression = expression;
       this.block = block;
       this.isWhile = isWhile;
+      this._exitBlock = _exitBlock;
    }
 
    public override void Generate(OperationsBuilder builder)
@@ -51,6 +54,11 @@ public class While : Statement
       builder.PopFrame();
 
       builder.Label(exitLabel);
+      if (_exitBlock is (true, var exitBlock))
+      {
+         exitBlock.Generate(builder);
+      }
+
       builder.NoOp();
    }
 

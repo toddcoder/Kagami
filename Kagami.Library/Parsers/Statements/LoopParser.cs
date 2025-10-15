@@ -9,7 +9,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class LoopParser : StatementParser
 {
-   [GeneratedRegex($@"^(\s*)(loop)\b")]
+   [GeneratedRegex(@"^(\s*)(loop)\b")]
    public override partial Regex Regex();
 
    protected static Optional<(bool, Expression)> getUntil(ParseState state)
@@ -35,11 +35,12 @@ public partial class LoopParser : StatementParser
       var _result =
          from b in getBlock(state)
          from e in getUntil(state)
-         select (b, e);
+         from eb in getExitBlock(state)
+         select (b, e, eb);
 
-      if (_result is (true, var (block, (isUntil, expression))))
+      if (_result is (true, var (block, (isUntil, expression), exitedBlock)))
       {
-         state.AddStatement(new Loop(block, expression, isUntil));
+         state.AddStatement(new Loop(block, expression, isUntil, exitedBlock.Maybe()));
          state.CommitTransaction();
 
          return unit;

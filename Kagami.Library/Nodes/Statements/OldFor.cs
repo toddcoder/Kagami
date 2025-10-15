@@ -1,10 +1,12 @@
-﻿using Kagami.Library.Operations;
+﻿using Core.Monads;
+using Kagami.Library.Operations;
 using static Kagami.Library.Nodes.NodeFunctions;
 using Expression = Kagami.Library.Nodes.Symbols.Expression;
 
 namespace Kagami.Library.Nodes.Statements;
 
-public class OldFor(string identifier, Expression initializer, Expression condition, Block block, Statement increment) : Statement
+public class OldFor(string identifier, Expression initializer, Expression condition, Block block, Statement increment, Maybe<Block> _exitBlock)
+   : Statement
 {
    public override void Generate(OperationsBuilder builder)
    {
@@ -40,6 +42,11 @@ public class OldFor(string identifier, Expression initializer, Expression condit
       builder.PopFrame();
 
       builder.Label(exitLabel);
+      if (_exitBlock is (true, var exitBlock))
+      {
+         exitBlock.Generate(builder);
+      }
+
       builder.PopFrame();
    }
 }

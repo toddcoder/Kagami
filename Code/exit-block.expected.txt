@@ -1,0 +1,26 @@
+0
+1
+2
+3
+4
+5
+6
+7
+exited while
+1
+2
+3
+4
+exited for
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+exited loop
+"exited loop" | String

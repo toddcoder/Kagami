@@ -30,8 +30,16 @@ public partial class OldForParser : StatementParser
          var _block = getBlock(state);
          if (_block is (true, var block))
          {
-            state.AddStatement(new OldFor(fieldName, initializer, condition, block, increment));
-            state.CommitTransaction();
+            var _exitBlock = getExitBlock(state);
+            if (_exitBlock is (true, var exitBlock))
+            {
+               state.AddStatement(new OldFor(fieldName, initializer, condition, block, increment, exitBlock.Maybe()));
+               state.CommitTransaction();
+            }
+            else
+            {
+               return _exitBlock.Exception;
+            }
 
             return unit;
          }

@@ -1,0 +1,28 @@
+﻿open sys
+
+var i = 0
+while i < 10; i++ {
+	println(i)
+	if i == 7 do exit
+}
+exit {
+	println("exited while")
+}
+
+for i in 1 .. 100 {
+	if i %% 5 do exit
+	println(i)
+}
+exit {
+	println("exited for")
+}
+
+i = 1
+loop {
+	println(i)
+	if i %% 10 do exit
+	i++
+} until i > 100
+exit {
+	println("exited loop")
+}

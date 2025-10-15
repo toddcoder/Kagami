@@ -14,18 +14,21 @@ namespace Kagami.Library.Nodes.Statements
       protected Block block;
       protected PossibleIfExpression possibleIfExpression;
       protected Maybe<Block> _elseBlock;
+      protected Maybe<Block> _exitBlock;
 
-      public For(Symbol comparisand, Expression source, Block block, PossibleIfExpression possibleIfExpression, Maybe<Block> _elseBlock)
+      public For(Symbol comparisand, Expression source, Block block, PossibleIfExpression possibleIfExpression, Maybe<Block> _elseBlock,
+         Maybe<Block> _exitBlock)
       {
          this.comparisand = comparisand;
          this.source = source;
          this.block = block;
          this.possibleIfExpression = possibleIfExpression;
          this._elseBlock = _elseBlock;
+         this._exitBlock = _exitBlock;
       }
 
       public For(Symbol comparisand, Expression source, Block block, PossibleIfExpression possibleIfExpression) : this(comparisand, source, block,
-         possibleIfExpression, nil)
+         possibleIfExpression, nil, nil)
       {
       }
 
@@ -110,6 +113,11 @@ namespace Kagami.Library.Nodes.Statements
          builder.PopFrame();
 
          builder.Label(exitLabel);
+         if (_exitBlock is (true, var exitedBlock))
+         {
+            exitedBlock.Generate(builder);
+         }
+
          builder.NoOp();
       }
 
