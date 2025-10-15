@@ -44,6 +44,8 @@ public class ParseState : IEnumerable<Statement>
       tokenTransaction = new TokenTransaction(tokens);
    }
 
+   public bool AllowPrintStatement { get; set; }
+
    public Maybe<int> ExceptionIndex
    {
       get => _exceptionIndex;

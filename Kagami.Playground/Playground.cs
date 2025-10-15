@@ -467,7 +467,7 @@ public partial class Playground : Form
             _errorLocation = nil;
             context.Reset();
 
-            var kagamiConfiguration = new CompilerConfiguration { ShowOperations = dumpOperations, Tracing = tracing };
+            var kagamiConfiguration = new CompilerConfiguration { ShowOperations = dumpOperations, Tracing = tracing, AllowPrintStatement = true };
             var source = selectedText ? textEditor.SelectedText : textEditor.Text;
             var compiler = new Compiler(source, kagamiConfiguration, context);
             var _machine = compiler.Generate();

@@ -33,7 +33,10 @@ public class Compiler
    {
       Module.Global.ActivateWith(() => new Module());
 
-      var state = new ParseState(source);
+      var state = new ParseState(source)
+      {
+         AllowPrintStatement = configuration.AllowPrintStatement
+      };
       var statementsParser = new StatementsParser();
 
       ResetFieldUniqueID();
@@ -126,7 +129,7 @@ public class Compiler
    {
       Module.Global.ActivateWith(() => new Module());
 
-      var state = new ParseState(source);
+      var state = new ParseState(source) { AllowPrintStatement = configuration.AllowPrintStatement };
       var statementsParser = new StatementsParser();
 
       ResetFieldUniqueID();

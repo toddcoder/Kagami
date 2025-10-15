@@ -7,4 +7,6 @@ public class CompilerConfiguration
    public bool ShowOperations { get; set; }
 
    public bool Tracing { get; set; }
+
+   public bool AllowPrintStatement { get; set; }
 }
