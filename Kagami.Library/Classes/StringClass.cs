@@ -124,6 +124,8 @@ public class StringClass : BaseClass, ICollectionClass
          function<KString, IObject, KBoolean>(obj, msg, (s, c, b) => s.SplitOn((ICollection)c, b.Value));
       messages["split(by:_<Collection>)"] = (obj, msg) => function<KString, IObject>(obj, msg, (s, c) => s.SplitOn((ICollection)c, false));
       registerMessage("assign(_,_)", (obj, message) => function<KString, IObject, IObject>(obj, message, replaceString));
+      messages["expandTabs()"] = (obj, _) => function<KString>(obj, s => s.ExpandTabs());
+      messages["expandTabs(_<Int>)"] = (obj, msg) => function<KString, Int>(obj, msg, (s, i) => s.ExpandTabs(i.Value));
    }
 
    protected static IObject replaceString(KString kString, IObject possibleSkipTake, IObject source)

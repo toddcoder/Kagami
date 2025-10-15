@@ -661,4 +661,10 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
       return StringObject(result.ToString());
    }
+
+   public KString ExpandTabs(int size = 8)
+   {
+      var expanded = " ".Repeat(size);
+      return value.Replace("\t", expanded);
+   }
 }
