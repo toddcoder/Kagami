@@ -9,7 +9,7 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class IsParser : SymbolParser
 {
-   protected const string REGEX_FIELD_NAME = $@"^(\s+)({REGEX_FIELD})\b";
+   protected const string REGEX_FIELD_NAME = $@"^( +)({REGEX_FIELD})\b";
 
    public IsParser(ExpressionBuilder builder) : base(builder)
    {

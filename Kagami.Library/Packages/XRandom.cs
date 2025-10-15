@@ -1,6 +1,7 @@
 ﻿using Kagami.Library.Objects;
 using Core.Collections;
 using Core.Monads;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.CollectionFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
@@ -62,6 +63,19 @@ public class XRandom : IObject, ICollection
    public Int Next(int max) => random.Next(max);
 
    public Int Next(int min, int max) => random.Next(min, max);
+
+   public Int Next(int min, int max, int increment)
+   {
+      if (increment <= 0)
+      {
+         throw fail("Increment must be > 0");
+      }
+
+      var possibleSteps = (max - min) / increment;
+      var randomStep = random.Next(0, possibleSteps + 1);
+
+      return min + randomStep * increment;
+   }
 
    public string ClassName => "Random";
 
