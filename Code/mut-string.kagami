@@ -7,7 +7,7 @@ let strings = numbers map (number) -> {
 	var output = m""
 	loop {
 		output.insert(at: 0, value: digitNames[n % 10]&)
-		n = n div 10
+		n = n // 10
 	} while n > 0
 	return output.string
 }

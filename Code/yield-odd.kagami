@@ -5,7 +5,7 @@ func gy() {
 	let y = 3
 	yield (x, y, x + y)
 	let z = 12
-	yield z div x
-	yield z div y
+	yield z // x
+	yield z // y
 }
 for item in gy() do println(~item)

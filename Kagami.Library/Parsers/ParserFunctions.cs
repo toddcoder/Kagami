@@ -33,7 +33,7 @@ public static class ParserFunctions
    public const string REGEX_CLASS_OR_ALIAS = "[A-Za-z][A-Za-z_0-9]*";
    public const string REGEX_CLASS_GETTING = $@"{REGEX_CLASS}(?:\. {REGEX_CLASS})?";
    public const string REGEX_CLASS_GETTING_OR_ALIAS = $@"{REGEX_CLASS_OR_ALIAS}(?:\. {REGEX_CLASS_OR_ALIAS})?";
-   public const string REGEX_ASSIGN_OPS = @"\+|-|\*|/|/|\^|~|%|div|:\b";
+   public const string REGEX_ASSIGN_OPS = @"\+|-|\*|//|/%|/|/|\^|~|%|:\b";
    public const string REGEX_FUNCTION_NAME = $@"(?:(?:{REGEX_INVOKABLE})|(?:[~`!@\#\$%\^\*\+=\|\\;<>/\?&-]+)|\[\])=?(?![=>])";
    public const string REGEX_FUNCTION_NAME2 = $@"(?:(?:{REGEX_INVOKABLE2})|(?:[~`!@\#\$%\^\*\+=\|\\;<>/\?&-]+)|\[\])=?(?![=>])";
    public const string REGEX_SELECTOR = @$"(?:__\$)?{REGEX_FUNCTION_NAME}(?:\(.*\))?=?(?![=>])";
@@ -203,7 +203,8 @@ public static class ParserFunctions
       "-" => new Subtract(),
       "*" => new Multiply(),
       "/" => new FloatDivide(),
-      "div" => new IntDivide(),
+      "//" => new IntDivide(),
+      "/%" => new DivRem(),
       "^" => new Raise(),
       "~" => new Concatenate(),
       "%" => new Remainder(),
@@ -1421,6 +1422,12 @@ public static class ParserFunctions
             break;
          case "===":
             _symbol = new SendBinaryMessageSymbol("accept(_)", Precedence.Boolean);
+            break;
+         case "//":
+            _symbol = new IntDivideSymbol();
+            break;
+         case "/%":
+            _symbol = new DivModSymbol();
             break;
       }
 

@@ -9,8 +9,6 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class AssignFromBlockParser : StatementParser
 {
-   //public override string Pattern => $"^ (/('var' | 'let') /(/s+))? /({REGEX_FIELD}) /b";
-
    [GeneratedRegex($@"^(?:(var|let)(\s+))?({REGEX_FIELD})\b")]
    public override partial Regex Regex();
 

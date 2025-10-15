@@ -16,8 +16,6 @@ public partial class AssignFromLoopParser : StatementParser
       return returnFromLoopParser.Scan(state).Map(_ => (returnFromLoopParser.Condition, returnFromLoopParser.Expression));
    }
 
-   //public override string Pattern => $"^ (/('var' | 'let') /(/s+))? /({REGEX_FIELD}) /b";
-
    [GeneratedRegex($@"^(?:(var|let)(\s+))?({REGEX_FIELD})\b")]
    public override partial Regex Regex();
 

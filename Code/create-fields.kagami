@@ -1,0 +1,4 @@
+﻿open sys
+
+var x, y, z int
+println(x, y, z)

@@ -6,8 +6,8 @@ class XRational(n int, d int) {
 	}
 	func gcd(a int, b int) => b == 0 ? a : gcd(b, a % b)
 	let g = gcd(n.abs(), d.abs())
-	let numer = n div g
-	let denom = d div g
+	let numer = n // g
+	let denom = d // g
 	get string => $"(numer)/(denom)"
 	func +(that XRational) => XRational(numer * that.denom + that.numer * denom, denom * that.denom)
 	func *(that XRational) => XRational(numer * that.numer, denom * that.denom)

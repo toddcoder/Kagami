@@ -3,9 +3,9 @@
 var totalPrice = 22
 var change = 100 - totalPrice
 
-| (quarters, use change) = change divmod 25
-| (dimes, use change) = change divmod 10
-| (nickels, use change) = change divmod 5
+| (quarters, use change) = change /% 25
+| (dimes, use change) = change /% 10
+| (nickels, use change) = change /% 5
 var cents = change
 
 println("The change is:")

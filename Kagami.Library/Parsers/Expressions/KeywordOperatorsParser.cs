@@ -12,7 +12,7 @@ public partial class KeywordOperatorsParser : SymbolParser
    }
 
    [GeneratedRegex(@"^(\s+)(if|map|join|sort|foldl|foldr|fold|all|any|none|one|zip|skip|take|while|until|min|max" +
-      @"|does|X|div|each|divmod|approx|same|xor|union|intersect|diff|symdiff|subsetof|supersetof|accum|overlaps)(\s+)")]
+      @"|does|X|each|approx|same|xor|union|intersect|diff|symdiff|subsetof|supersetof|accum|overlaps)(\s+)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -75,12 +75,6 @@ public partial class KeywordOperatorsParser : SymbolParser
                   break;
                case "X":
                   builder.Add(new SendBinaryMessageSymbol("cross(_)", Precedence.Concatenate));
-                  break;
-               case "div":
-                  builder.Add(new IntDivideSymbol());
-                  break;
-               case "divmod":
-                  builder.Add(new DivModSymbol());
                   break;
                case "approx":
                   builder.Add(new ApproximateSymbol());
