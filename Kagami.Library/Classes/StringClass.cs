@@ -1,9 +1,11 @@
 ﻿using System.Numerics;
+using Core.Collections;
 using Kagami.Library.Objects;
 using Core.Enumerables;
 using Core.Objects;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Classes.ClassFunctions;
+using CollectionFunctions = Kagami.Library.Objects.CollectionFunctions;
 
 namespace Kagami.Library.Classes;
 
@@ -86,8 +88,10 @@ public class StringClass : BaseClass, ICollectionClass
       messages["succ()"] = (obj, _) => function<KString>(obj, s => s.Succ());
       messages["pred()"] = (obj, _) => function<KString>(obj, s => s.Pred());
       messages["range()"] = (obj, _) => function<KString>(obj, s => s.Range());
-      messages["replace(_<String>,_<String>)"] = (obj, msg) => function<KString, KString, KString>(obj, msg, (s1, s2, s3) => s1.Replace(s2, s3, false));
-      messages["replace(_<String>,_<String>,ignoreCase:_<Boolean>)"] = (obj, msg) => function<KString, KString, KString, KBoolean>(obj, msg, (s1, s2, s3, b) => s1.Replace(s2, s3, b.Value));
+      messages["replace(_<String>,_<String>)"] =
+         (obj, msg) => function<KString, KString, KString>(obj, msg, (s1, s2, s3) => s1.Replace(s2, s3, false));
+      messages["replace(_<String>,_<String>,ignoreCase:_<Boolean>)"] = (obj, msg) =>
+         function<KString, KString, KString, KBoolean>(obj, msg, (s1, s2, s3, b) => s1.Replace(s2, s3, b.Value));
       messages["replace(_<Regex>,_<String>)"] = (obj, msg) => function<KString, Regex, KString>(obj, msg, (s, r, t) => r.Replace(s.Value, t.Value));
       messages["replace".Selector("<Regex>", "<Lambda>")] =
          (obj, msg) => function<KString, Regex, Lambda>(obj, msg, (s, r, l) => r.Replace(s.Value, l));
@@ -166,6 +170,24 @@ public class StringClass : BaseClass, ICollectionClass
       classMessages["uconsonants".get()] = (_, _) => (KString)"BCDFGHJKLMNPQRSTVWXYZ";
       classMessages["digits".get()] = (_, _) => (KString)"0123456789";
       classMessages["punctuation".get()] = (_, _) => (KString)"!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
+      registerClassMessage("translate(from:_<String>,to:_<String>)",
+         (bc, msg) => classFunc<StringClass, KString, KString>(bc, msg, (_, s1, s2) => translation(s1.Value, s2.Value)));
+   }
+
+   public static Dictionary translation(string from, string to)
+   {
+      Hash<char, char> hash = [];
+      var length = Math.Min(from.Length, to.Length);
+      for (var i = 0; i < length; i++)
+      {
+         if (!hash.ContainsKey(from[i]))
+         {
+            hash[from[i]] = to[i];
+         }
+      }
+
+      var objectHash = hash.ToHash(i => KChar.CharObject(i.Key), i => KChar.CharObject(i.Value));
+      return new Dictionary(objectHash);
    }
 
    public IObject Revert(IEnumerable<IObject> list) => KString.StringObject(list.Select(i => i.AsString).ToString(""));
