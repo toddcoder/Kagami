@@ -92,8 +92,6 @@ public static class ObjectFunctions
             return matchArrayToTuple(array, tuple, bindings);
          case KTuple tuple when source is KString kString:
             return matchStringToTuple(kString, tuple, bindings);
-         /*case KTuple tuple when source is not KTuple:
-            return matchNonTuple(source, tuple, bindings);*/
          case KTuple tuple1 when source is KTuple tuple2:
             return matchTupleToTuple(tuple2, tuple1, bindings);
          case SpecialComparisand specialComparisand:
@@ -112,10 +110,9 @@ public static class ObjectFunctions
       var _match = regex.MatchOne(source.AsString);
       if (_match is (true, var match))
       {
-         var _name = Module.Global.Value.Bindings.Maybe[regex.Id];
-         if (_name is (true, var name))
+         for (var i = 0; i < match.Groups.Length; i++)
          {
-            bindings[name] = (KString)match.Text;
+            bindings[$"-`{i}"] = (KString)match.Groups[i].Text;
          }
 
          return true;
@@ -124,28 +121,6 @@ public static class ObjectFunctions
       {
          return false;
       }
-   }
-
-   private static bool matchNonTuple(IObject source, KTuple tuple, Hash<string, IObject> bindings)
-   {
-      foreach (var (index, item) in tuple.List.Indexed())
-      {
-         var isMatch = match(source, item, bindings);
-         if (isMatch)
-         {
-            var _name = tuple.Rename(index);
-            if (_name is (true, var name))
-            {
-               bindings[$"-{name}"] = source;
-            }
-         }
-         else
-         {
-            return false;
-         }
-      }
-
-      return true;
    }
 
    private static bool matchTupleToTuple(KTuple source, KTuple comparisand, Hash<string, IObject> bindings)
@@ -1137,6 +1112,6 @@ public static class ObjectFunctions
       result.AddRange(middle);
       result.AddRange(right);
 
-      return classOf((IObject)target) is ICollectionClass collectionClass?collectionClass.Revert(result):new KArray(result);
+      return classOf((IObject)target) is ICollectionClass collectionClass ? collectionClass.Revert(result) : new KArray(result);
    }
 }
