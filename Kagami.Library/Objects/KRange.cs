@@ -222,5 +222,7 @@ public struct KRange : IObject, ICollection
       return sequence;
    }
 
-   public IObject Max() => stopObj is Infinity ? stopObj : new RangeIterator(this).Max();
+   public IObject Max() => stopObj;
+
+   public IObject Min() => startObj;
 }
