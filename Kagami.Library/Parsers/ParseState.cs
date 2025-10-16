@@ -143,12 +143,12 @@ public class ParseState : IEnumerable<Statement>
 
    public Optional<Unit> BeginBlock()
    {
-      return Scan(@"^(\s*)(\{)", Color.Whitespace, Color.Block).Map(_ => unit);
+      return Scan(@"^(\s*)(\{)(?!\|)", Color.Whitespace, Color.Block).Map(_ => unit);
    }
 
-   public Optional<Unit> EndBlock()
+   public Optional<Unit> EndBlock(Color endBlockColor = Color.Block)
    {
-      return Scan(@"^(\s*)(\})", Color.Whitespace, Color.Block).Map(_ => unit);
+      return Scan(@"^(\s*)(\})", Color.Whitespace, endBlockColor).Map(_ => unit);
    }
 
    public bool PeekEndBlock() => CurrentSource.IsMatch(@"^\s*\}");

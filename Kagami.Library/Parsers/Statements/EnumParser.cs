@@ -21,7 +21,7 @@ public partial class EnumParser : StatementParser
 
       Module.Global.Value.ForwardReference(className);
 
-      var _beginBlock = state.BeginBlock();
+      var _beginBlock = state.Scan(@"^(\s*)(\{)", Color.Whitespace, Color.Block);
       if (!_beginBlock)
       {
          return _beginBlock.Exception;

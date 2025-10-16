@@ -398,6 +398,71 @@ public static class ParserFunctions
       return openParameters();
    }
 
+   public static Optional<Parameters> getBlockParameters(ParseState state)
+   {
+      var _scanned = state.Scan(@"^(\|)", Color.Lambda);
+      if (_scanned)
+      {
+         return new Parameters();
+      }
+      else if (_scanned.Exception is (true, var exception))
+      {
+         return exception;
+      }
+
+      List<Parameter> parameters = [];
+      var defaultRequired = false;
+      var continuing = true;
+
+      while (state.More && continuing)
+      {
+         var _parameter = getParameter(state, defaultRequired);
+         if (_parameter is (true, var parameter))
+         {
+            if (parameter.DefaultValue)
+            {
+               defaultRequired = true;
+            }
+
+            parameters.Add(parameter);
+            if (parameter.Variadic)
+            {
+               continuing = false;
+            }
+         }
+         else
+         {
+            return _parameter.Exception;
+         }
+
+         var _next = state.Scan(@"^(\s*)([,\|])", (g, i) => i switch
+         {
+            1 => Color.Whitespace,
+            2 when g.Value.Contains(',') => Color.Structure,
+            2 => Color.Lambda,
+            _ => Color.Whitespace
+         });
+         if (_next is (true, var next))
+         {
+            if (next.EndsWith('|'))
+            {
+               return new Parameters([.. parameters]);
+            }
+         }
+         else
+         {
+            return _next.Exception;
+         }
+
+         if (!continuing)
+         {
+            return fail("There can be no parameters after a variadic parameter");
+         }
+      }
+
+      return openParameters();
+   }
+
    public static Optional<Expression[]> getArguments(ParseState state, Bits32<ExpressionFlags> flags)
    {
       var _scanned = state.Scan(@"^([\)\]\}])", Color.CloseParenthesis);
@@ -1591,16 +1656,16 @@ public static class ParserFunctions
       };
    }
 
-   public static Optional<Block> getPartialBlock(ParseState state) => getPartialBlock(state, nil);
+   public static Optional<Block> getPartialBlock(ParseState state, Color endBlockColor = Color.Block) => getPartialBlock(state, nil, endBlockColor);
 
-   public static Optional<Block> getPartialBlock(ParseState state, Maybe<TypeConstraint> _typeConstraint)
+   public static Optional<Block> getPartialBlock(ParseState state, Maybe<TypeConstraint> _typeConstraint, Color endBlockColor = Color.Block)
    {
       var statementsParser = new StatementsParser();
       state.PushStatements();
 
       while (state.More)
       {
-         var _endBlock = state.EndBlock();
+         var _endBlock = state.EndBlock(endBlockColor);
          if (_endBlock)
          {
             break;
