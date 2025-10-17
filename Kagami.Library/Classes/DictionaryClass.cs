@@ -58,7 +58,8 @@ public class DictionaryClass : BaseClass, ICollectionClass
       messages["clear()"] = (obj, _) => function<Dictionary>(obj, d => d.Clear());
       messages["update(key:_,value:_)"] =
          (obj, msg) => function<Dictionary, IObject, IObject>(obj, msg, (d, k, v) => d.Update(k, v));
-      messages["merge(_)"] = (obj, msg) => function<Dictionary, Dictionary>(obj, msg, (d1, d2) => d1.Merge(d2));
+      messages["merge(_<Dictionary>)"] = (obj, msg) => function<Dictionary, Dictionary>(obj, msg, (d1, d2) => d1.Merge(d2));
+      messages["merge(_<Dictionary>,_<Lambda>)"] = (obj, msg) => function<Dictionary, Dictionary, Lambda>(obj, msg, (d1, d2, l) => d1.Merge(d2, l));
       messages["remove(key:_)"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, k) => d.Remove(k));
       messages["remove(keys:_)"] = (obj, msg) => function<Dictionary, IObject>(obj, msg, (d, k) => d.RemoveKeys(k));
       messages["forEach(_<Lambda>)"] = (obj, msg) => function<Dictionary, Lambda>(obj, msg, (d, l) => d.ForEach(l));

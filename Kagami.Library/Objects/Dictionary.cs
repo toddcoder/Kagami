@@ -523,12 +523,41 @@ public class Dictionary : IObject, IMutableCollection, IMutable
 
    public Dictionary Merge(Dictionary other)
    {
-      foreach (var (key, value) in other.InternalHash)
+      Hash<IObject, IObject> hash = [];
+      foreach (var (key, value) in dictionary)
       {
-         this[key] = value;
+         hash[key] = value;
       }
 
-      return this;
+      foreach (var (key, value) in other.InternalHash)
+      {
+         hash[key] = value;
+      }
+
+      return new Dictionary(hash);
+   }
+
+   public Dictionary Merge(Dictionary other, Lambda lambda)
+   {
+      Hash<IObject, IObject> hash = [];
+      foreach (var (key, value) in dictionary)
+      {
+         hash[key] = value;
+      }
+
+      foreach (var (key, value) in other.InternalHash)
+      {
+         if (hash.Maybe[key] is (true, var existingValue))
+         {
+            hash[key] = lambda.Invoke(key, existingValue, value);
+         }
+         else
+         {
+            hash[key] = value;
+         }
+      }
+
+      return new Dictionary(hash);
    }
 
    public Dictionary ForEach(Lambda lambda)
