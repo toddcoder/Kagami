@@ -1,0 +1,14 @@
+﻿open sys
+
+class ExampleDate() {
+	var `string = lazy {
+		println "Initializing string..."
+		return "...string"
+	}
+
+	get as_string => `string
+}
+
+let x = ExampleDate()
+println x.as_string
+println x.as_string

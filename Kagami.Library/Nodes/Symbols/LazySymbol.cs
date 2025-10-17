@@ -8,7 +8,10 @@ public class LazySymbol : Symbol, IHasExpression
 {
    protected Expression expression;
 
-   public LazySymbol(Expression expression) => this.expression = expression;
+   public LazySymbol(Expression expression)
+   {
+      this.expression = expression;
+   }
 
    public override void Generate(OperationsBuilder builder)
    {

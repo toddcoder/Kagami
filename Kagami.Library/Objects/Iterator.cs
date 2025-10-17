@@ -1647,6 +1647,23 @@ public class Iterator : IObject, IIterator
       return collectionClass.Revert(transposed.Select(inner => collectionClass.Revert(inner)));
    }
 
+   public IObject Assoc(IObject target)
+   {
+      foreach (var item in List())
+      {
+         if (item is ICollection innerCollection)
+         {
+            var first = innerCollection.GetIterator(false).First();
+            if (first is Some some && some.Value.IsEqualTo(target))
+            {
+               return Some.Object(item);
+            }
+         }
+      }
+
+      return KNil.NilValue;
+   }
+
    protected static IEnumerable<IObject> applyAgainst(List<Lambda> lambdas, List<IObject> enumerable)
    {
       return lambdas.SelectMany(_ => enumerable, (lambda, item) => lambda.Invoke(item));

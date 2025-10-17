@@ -14,6 +14,7 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
    protected IObject collectionAsObject = (IObject)iterator.Collection;
    protected ICollectionClass collectionClass = iterator.CollectionClass;
    protected List<StreamingAction> actions = [];
+   protected bool isTerminated;
 
    public string ClassName => "StreamingIterator";
 
@@ -41,7 +42,7 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
 
    public Maybe<IObject> Next()
    {
-      if (Machine.Current.Value.Context.Cancelled())
+      if (Machine.Current.Value.Context.Cancelled() || isTerminated)
       {
          return nil;
       }
@@ -69,6 +70,9 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
                   case StreamingCondition.Skipping:
                      isSkipping = true;
                      break;
+                  case StreamingCondition.Terminated terminated:
+                     isTerminated = true;
+                     return terminated.Item.Some();
                }
 
                if (isSkipping)
@@ -395,6 +399,8 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
    public Sequence Seq() => terminate().Seq();
 
    public IObject Transpose() => terminate().Transpose();
+
+   public IObject Assoc(IObject target) => copy(new StreamingAssoc(target));
 
    public TypeConstraint EquivalentTypeConstraint() => Objects.TypeConstraint.FromList("Iterator");
 }

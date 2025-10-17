@@ -17,6 +17,7 @@ public class LongClass : BaseClass, IParse
       rangeMessages();
 
       messages["factorial()"] = (obj, _) => function<Long>(obj, l => l.Factorial());
+      messages["[](_<Int>)"] = (obj, msg) => function<Long, Int>(obj, msg, (l, index) => l.GetBit(index.Value));
    }
 
    public override IObject DefaultValue => Long.LongObject(0);

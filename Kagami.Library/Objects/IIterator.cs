@@ -238,4 +238,6 @@ public interface IIterator : IEquivalentClass
    Sequence Seq();
 
    IObject Transpose();
+
+   IObject Assoc(IObject target);
 }

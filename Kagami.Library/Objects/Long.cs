@@ -2,6 +2,7 @@
 using System.Numerics;
 using Kagami.Library.Operations;
 using Core.Collections;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Operations.NumericFunctions;
 
@@ -22,9 +23,7 @@ public readonly struct Long : IObject, INumeric, IComparable<Long>, IEquatable<L
 
    public (INumeric, INumeric) Compatible(INumeric obj) => obj.ClassName switch
    {
-      "Int" => (this, obj.ToLong()),
-      "Float" => (this, obj.ToLong()),
-      "Byte" => (this, obj.ToLong()),
+      "Int" or "Float" or "Byte" => (this, obj.ToLong()),
       "Complex" => (ToComplex(), obj.ToComplex()),
       "Long" => (this, obj.ToLong()),
       "Rational" => (ToRational(), obj.ToRational()),
@@ -213,4 +212,17 @@ public readonly struct Long : IObject, INumeric, IComparable<Long>, IEquatable<L
    public IObject Decrement(int amount = 1) => (Long)(value - amount);
 
    public IObject Increment(INumeric numeric) => LongObject(value + numeric.AsBigInteger());
+
+   public IObject GetBit(int bitPosition)
+   {
+      if (bitPosition < 0)
+      {
+         throw fail("Bit position must be >= 0");
+      }
+
+      var mask = BigInteger.One << bitPosition;
+      var result = (value & mask) != BigInteger.Zero ? 1 : 0;
+
+      return new Long(result);
+   }
 }

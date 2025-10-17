@@ -11,4 +11,6 @@ public abstract record StreamingCondition
    public sealed record Failed(string Message) : StreamingCondition;
 
    public sealed record Skipping : StreamingCondition;
+
+   public sealed record Terminated(IObject Item) : StreamingCondition;
 }

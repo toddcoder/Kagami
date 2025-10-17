@@ -95,6 +95,8 @@ public class Function : Statement
 
    public bool Overriding => overriding;
 
+   public IInvokable Invokable => lambda.Value.Invokable;
+
    public IInvokable GetInvokable()
    {
       if (yielding)
