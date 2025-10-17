@@ -1159,7 +1159,14 @@ public class Iterator : IObject, IIterator
    {
       foreach (var item in List())
       {
-         action.Invoke(item);
+         if (item is KTuple tuple)
+         {
+            action.Invoke(tuple.Value);
+         }
+         else
+         {
+            action.Invoke(item);
+         }
       }
 
       return this;
