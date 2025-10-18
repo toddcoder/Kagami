@@ -1,0 +1,19 @@
+﻿open sys
+
+var success = true
+let n = 7
+for i in ^^6 {
+	if i == n {
+		println "exit1"
+		exit
+	}
+	put i
+}
+exit {
+	println "\nexit2"
+	success = false
+}
+if success {
+	println ""
+	println "All iterations successful"
+}

@@ -41,6 +41,7 @@ namespace Kagami.Library.Nodes.Statements
          var backToTopLabel = newLabel("back.to.top");
          var failedIfLabel = newLabel("failed-if");
          var skippedLabel = newLabel("skipped");
+         var finalExitLabel = newLabel("final.exit");
 
          builder.PushExitFrame(exitLabel);
          var iteratorName = newLabel("iterator");
@@ -111,6 +112,7 @@ namespace Kagami.Library.Nodes.Statements
          builder.Label(endLabel);
          builder.PopFrame();
          builder.PopFrame();
+         builder.GoTo(finalExitLabel);
 
          builder.Label(exitLabel);
          if (_exitBlock is (true, var exitedBlock))
@@ -118,6 +120,7 @@ namespace Kagami.Library.Nodes.Statements
             exitedBlock.Generate(builder);
          }
 
+         builder.Label(finalExitLabel);
          builder.NoOp();
       }
 
