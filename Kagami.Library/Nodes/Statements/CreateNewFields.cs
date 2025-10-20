@@ -14,4 +14,8 @@ public class CreateNewFields(string[] fields, string className) : Statement
    }
 
    public override string ToString() => $"var {fields.ToString(", ")} {className}";
+
+   public string[] Fields => fields;
+
+   public string ClassName => className;
 }

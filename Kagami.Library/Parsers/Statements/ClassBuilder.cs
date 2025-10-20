@@ -108,7 +108,8 @@ public class ClassBuilder
             case AssignToNewField { Ignore: false } assignToNewField:
             {
                var (mutable, fieldName, _typeConstraint) = assignToNewField;
-               if (requiredFields.Maybe[fieldName] is (true, var requiredField))
+               processField(fieldName, _typeConstraint, mutable, statement);
+               /*if (requiredFields.Maybe[fieldName] is (true, var requiredField))
                {
                   var _result = requiredField.Require(fieldName, _typeConstraint, mutable);
                   requiredFields.Maybe[fieldName] = _result ? nil : throw _result.Exception;
@@ -137,7 +138,7 @@ public class ClassBuilder
                   functions.Add((invokable, block, true));
                }
 
-               statements.Add(statement);
+               statements.Add(statement);*/
                break;
             }
             case AssignToNewField2 assignToNewField2:
@@ -178,8 +179,10 @@ public class ClassBuilder
             case DefineNewField defineNewField:
             {
                var (mutable, fieldName, typeName) = defineNewField;
+               var typeConstraint = TypeConstraint.FromList(typeName);
+               processField(fieldName, typeConstraint, mutable, statement);
 
-               if (requiredFields.Maybe[fieldName] is (true, var requiredField))
+               /*if (requiredFields.Maybe[fieldName] is (true, var requiredField))
                {
                   var _result = requiredField.Require(fieldName, typeName, mutable);
                   requiredFields.Maybe[fieldName] = _result ? nil : throw _result.Exception;
@@ -208,7 +211,17 @@ public class ClassBuilder
                   functions.Add((invokable, block, true));
                }
 
-               statements.Add(statement);
+               statements.Add(statement);*/
+               break;
+            }
+            case CreateNewFields createNewFields:
+            {
+               var typeConstraint = TypeConstraint.FromList(createNewFields.ClassName);
+               foreach (var fieldName in createNewFields.Fields)
+               {
+                  processField(fieldName, typeConstraint, true, statement);
+               }
+
                break;
             }
             case Function function when standard:
@@ -299,6 +312,40 @@ public class ClassBuilder
       Statements = [.. statements];
 
       return new Block(statements);
+
+      void processField(string fieldName, Maybe<TypeConstraint> _typeConstraint, bool mutable, Statement statement)
+      {
+         if (requiredFields.Maybe[fieldName] is (true, var requiredField))
+         {
+            var _result = requiredField.Require(fieldName, _typeConstraint, mutable);
+            requiredFields.Maybe[fieldName] = _result ? nil : throw _result.Exception;
+         }
+
+         var function = Function.Getter(fieldName);
+         statements.Add(function);
+         var (functionName, _, block, _, invokable, _) = function;
+         if (!isPrivate(fieldName) && !userClass.RegisterMethod(functionName, new Lambda(invokable, false), true))
+         {
+            throw needsOverride(functionName);
+         }
+
+         functions.Add((invokable, block, true));
+
+         if (mutable)
+         {
+            function = Function.Setter(fieldName);
+            statements.Add(function);
+            (functionName, _, block, _, invokable, _) = function;
+            if (!isPrivate(fieldName) && !userClass.RegisterMethod(functionName, new Lambda(invokable, false), true))
+            {
+               throw needsOverride(functionName);
+            }
+
+            functions.Add((invokable, block, true));
+         }
+
+         statements.Add(statement);
+      }
    }
 
    public Optional<Unit> Constructor(Parameters parameters, Block block, bool standard)

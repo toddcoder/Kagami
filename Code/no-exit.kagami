@@ -4,16 +4,16 @@ var success = true
 let n = 7
 for i in ^^6 {
 	if i == n {
-		println "exit1"
+		println("exit1")
 		exit
 	}
-	put i
+	put(i)
 }
 exit {
-	println "\nexit2"
+	println("\nexit2")
 	success = false
 }
 if success {
-	println ""
-	println "All iterations successful"
+	println()
+	println("All iterations successful")
 }
