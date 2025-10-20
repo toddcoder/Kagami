@@ -412,6 +412,8 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerIterMessage("foldr".Selector("_", "_<Lambda>"),
          (obj, message) => iteratorFunc<IObject, Lambda>(obj, message, (i, o, l) => i.FoldRight(o, l)));
       registerIterMessage("foldr(_)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.FoldRight(l)));
+      registerIterMessage("fold".Selector("_", "_<Lambda>"),
+         (obj, message) => iteratorFunc<IObject, Lambda>(obj, message, (i, o, l) => i.FoldLeft(o, l)));
       registerIterMessage("reducel".Selector("_", "_<Lambda>"),
          (obj, message) => iteratorFunc<IObject, Lambda>(obj, message, (i, o, l) => i.ReduceLeft(o, l)));
       registerIterMessage("reducel(_)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.ReduceLeft(l)));
