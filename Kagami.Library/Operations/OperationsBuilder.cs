@@ -622,6 +622,8 @@ public class OperationsBuilder
 
    public void NewSlip() => add(new NewSlip());
 
+   public void NameOf(string name) => add(new NameOf(name));
+
    public void RegisterAutoConversion(string fromClass, string toClass) => add(new RegisterAutoConversion(fromClass, toClass));
 
    public override string ToString() => "operations";
