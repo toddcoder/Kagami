@@ -5,16 +5,20 @@ using static Kagami.Library.AllExceptions;
 
 namespace Kagami.Library.Operations;
 
-public class NameOf(string name) : Operation
+public class NameOf(string name, bool isClass) : Operation
 {
    public override Optional<IObject> Execute(Machine machine)
    {
-      if (char.IsUpper(name[0]))
+      if (isClass)
       {
          var _class = Module.Global.Value.Class(name);
          if (_class)
          {
             return KString.StringObject(name).Just();
+         }
+         else
+         {
+            return classNotFound(name);
          }
       }
 

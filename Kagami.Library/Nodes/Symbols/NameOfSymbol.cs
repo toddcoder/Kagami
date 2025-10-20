@@ -2,9 +2,9 @@
 
 namespace Kagami.Library.Nodes.Symbols;
 
-public class NameOfSymbol(string name) : Symbol
+public class NameOfSymbol(string name, bool isClass) : Symbol
 {
-   public override void Generate(OperationsBuilder builder) => builder.NameOf(name);
+   public override void Generate(OperationsBuilder builder) => builder.NameOf(name, isClass);
 
    public override Precedence Precedence => Precedence.Value;
 

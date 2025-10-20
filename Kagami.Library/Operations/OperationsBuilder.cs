@@ -622,7 +622,9 @@ public class OperationsBuilder
 
    public void NewSlip() => add(new NewSlip());
 
-   public void NameOf(string name) => add(new NameOf(name));
+   public void NameOf(string name, bool isClass) => add(new NameOf(name, isClass));
+
+   public void Defined(string name, bool isClass) => add(new Defined(name, isClass));
 
    public void RegisterAutoConversion(string fromClass, string toClass) => add(new RegisterAutoConversion(fromClass, toClass));
 
