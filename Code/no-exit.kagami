@@ -1,4 +1,5 @@
-﻿open sys
+﻿#pragma ALLOW_PRINT_STATEMENT false
+open sys
 
 var success = true
 let n = 7
