@@ -6,8 +6,6 @@ public class NameOfSymbol(string name) : Symbol
 {
    public override void Generate(OperationsBuilder builder)
    {
-      builder.GetField(name);
-      builder.Drop();
       builder.PushString(name);
    }
 
