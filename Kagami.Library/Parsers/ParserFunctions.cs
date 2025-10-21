@@ -17,6 +17,7 @@ using static System.Int32;
 using static Kagami.Library.AllExceptions;
 using static Core.Monads.MonadFunctions;
 using Array = System.Array;
+using Complex = Kagami.Library.Objects.Complex;
 using Group = System.Text.RegularExpressions.Group;
 using Return = Kagami.Library.Nodes.Statements.Return;
 using SkipTake = Kagami.Library.Parsers.Expressions.SkipTake;
@@ -1154,6 +1155,51 @@ public static class ParserFunctions
             return unit;
          default:
             return unableToConvert(number.ToString(), "Int");
+      }
+   }
+
+   public static Optional<IObject> getNumber(string type, BigInteger number)
+   {
+      switch (type)
+      {
+         case "":
+            if (number > MaxValue || number < MinValue)
+            {
+               return Long.LongObject(number).Just();
+            }
+            else
+            {
+               return Int.IntObject((int)number).Just();
+            }
+         case "L":
+            return Long.LongObject(number).Just();
+         case "i":
+            return new Complex((double)number);
+         case "f":
+         {
+            try
+            {
+               return Float.FloatObject((double)number).Just();
+            }
+            catch
+            {
+               return fail("Can't convert to Float");
+            }
+         }
+         case "d":
+         {
+            try
+            {
+               return KDecimal.KDecimalObject((decimal)number).Just();
+            }
+            catch
+            {
+               return fail("Can't convert to Decimal");
+            }
+         }
+
+         default:
+            return fail("Unable to convert");
       }
    }
 

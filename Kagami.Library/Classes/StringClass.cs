@@ -1,11 +1,17 @@
-﻿using System.Numerics;
+﻿using System.Globalization;
+using System.Numerics;
 using Core.Collections;
 using Kagami.Library.Objects;
 using Core.Enumerables;
+using Core.Matching;
+using Core.Monads;
 using Core.Objects;
+using Core.Strings;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Classes.ClassFunctions;
+using static Kagami.Library.Parsers.ParserFunctions;
 using CollectionFunctions = Kagami.Library.Objects.CollectionFunctions;
+using Complex = Kagami.Library.Objects.Complex;
 
 namespace Kagami.Library.Classes;
 
@@ -130,6 +136,7 @@ public class StringClass : BaseClass, ICollectionClass
       registerMessage("assign(_,_)", (obj, message) => function<KString, IObject, IObject>(obj, message, replaceString));
       messages["expandTabs()"] = (obj, _) => function<KString>(obj, s => s.ExpandTabs());
       messages["expandTabs(_<Int>)"] = (obj, msg) => function<KString, Int>(obj, msg, (s, i) => s.ExpandTabs(i.Value));
+      messages["read(_<String>)"] = (obj, msg) => function<KString, KString>(obj, msg, (s, f) => read(f.Value, s.Value));
    }
 
    protected static IObject replaceString(KString kString, IObject possibleSkipTake, IObject source)
@@ -200,4 +207,274 @@ public class StringClass : BaseClass, ICollectionClass
    }
 
    public override IObject DefaultValue => KString.Empty;
+
+   protected KArray read(string format, string source)
+   {
+      List<IObject> result = [];
+
+      var i = 0;
+      while (i < format.Length && source.IsNotEmpty())
+      {
+         switch (format[i])
+         {
+            case 'f' when getFloat() is (true, var floatValue):
+               result.Add(floatValue);
+               break;
+            case 'd' when getDecimal() is (true, var decimalValue):
+               result.Add(decimalValue);
+               break;
+            case 'c' when getComplex() is (true, var complexValue):
+               result.Add(complexValue);
+               break;
+            case 'i' when getInt() is (true, var intValue):
+               result.Add(intValue);
+               break;
+            case 'l' when getLong() is (true, var longValue):
+               result.Add(longValue);
+               break;
+            case 'x' when getHex() is (true, var hexValue):
+               result.Add(hexValue);
+               break;
+            case 'o' when getOctal() is (true, var octalValue):
+               result.Add(octalValue);
+               break;
+            case 'b' when getBinary() is (true, var binaryValue):
+               result.Add(binaryValue);
+               break;
+            case '.' when getCharacter() is (true, var characterValue):
+               result.Add(characterValue);
+               break;
+            case 's' when getString() is (true, var stringValue):
+               result.Add(stringValue);
+               break;
+            case 'w' when source.Matches(@"^(\s+); u") is (true, var wsResult):
+            {
+               source = source.Drop(wsResult.Length);
+               i++;
+               break;
+            }
+            default:
+               return new KArray(result);
+         }
+      }
+
+      return new KArray(result);
+
+      Maybe<Float> getFloat()
+      {
+         if (source.Matches(@"^(\s*)(\d[\d_`]*\.\d[\d_`]*)(?:([eE])([-\+]?\d+))?(f)?; u") is (true, var result))
+         {
+            var floatSource = result.SecondGroup.Replace("_", "").Replace("`", "") + result.ThirdGroup + result.FourthGroup;
+            var _float = floatSource.Maybe().Double().Map(d => (Float)d);
+            if (_float)
+            {
+               source = source.Drop(result.Length);
+               i++;
+            }
+
+            return _float;
+         }
+         else
+         {
+            return nil;
+         }
+      }
+
+      Maybe<KDecimal> getDecimal()
+      {
+         if (source.Matches(@"^(\s*)(\d[\d_`]*\.\d[\d_`]*)(?:([eE])([-\+]?\d+))?(d); u") is (true, var result))
+         {
+            var decimalSource = result.SecondGroup.Replace("_", "").Replace("`", "") + result.ThirdGroup + result.FourthGroup;
+            var _decimal = decimalSource.Maybe().Decimal().Map(d => (KDecimal)d);
+            if (_decimal)
+            {
+               source = source.Drop(result.Length);
+               i++;
+            }
+
+            return _decimal;
+         }
+         else
+         {
+            return nil;
+         }
+      }
+
+      Maybe<Complex> getComplex()
+      {
+         if (source.Matches(@"^(\s*)(\d[\d_`]*\.\d[\d_`]*)(?:([eE])([-\+]?\d+))?(i); u") is (true, var result))
+         {
+            var complexSource = result.SecondGroup.Replace("_", "").Replace("`", "") + result.ThirdGroup + result.FourthGroup;
+            if (System.Numerics.Complex.TryParse(complexSource, CultureInfo.InvariantCulture, out var complex))
+            {
+               source = source.Drop(result.Length);
+               i++;
+
+               return (Complex)complex;
+            }
+            else
+            {
+               return nil;
+            }
+         }
+         else
+         {
+            return nil;
+         }
+      }
+
+      Maybe<Int> getInt()
+      {
+         if (source.Matches(@"^(\s*)(\d[\d_`]*)(i)?\b; u") is (true, var result))
+         {
+            var intSource = result.SecondGroup.Replace("_", "").Replace("`", "");
+            var _int = intSource.Maybe().Int32().Map(i => (Int)i);
+            if (_int)
+            {
+               source = source.Drop(result.Length);
+               i++;
+            }
+
+            return _int;
+         }
+         else
+         {
+            return nil;
+         }
+      }
+
+      Maybe<Long> getLong()
+      {
+         if (source.Matches(@"^(\s*)(\d[\d_`]*)(L); u") is (true, var result))
+         {
+            var longSource = result.SecondGroup.Replace("_", "").Replace("`", "");
+            if (BigInteger.TryParse(longSource, out var bigInteger))
+            {
+               source = source.Drop(result.Length);
+               i++;
+
+               return (Long)bigInteger;
+            }
+            else
+            {
+               return nil;
+            }
+         }
+         else
+         {
+            return nil;
+         }
+      }
+
+      Maybe<IObject> getHex()
+      {
+         if (source.Matches(@"^(\s*)(0x)([0-9a-fA-F][0-9a-fA-F_`]*)([Li])?\b; u") is (true, var result))
+         {
+            var hexSource = result.ThirdGroup;
+            var type = result.FourthGroup;
+            var number = convert(hexSource.ToLower().Replace("_", "").Replace("`", ""), 16, "0123456789abcdef");
+            var _number = getNumber(type, number);
+            if (_number)
+            {
+               source = source.Drop(result.Length);
+               i++;
+
+               return _number.Maybe();
+            }
+            else
+            {
+               return nil;
+            }
+         }
+         else
+         {
+            return nil;
+         }
+      }
+
+      Maybe<IObject> getOctal()
+      {
+         if (source.Matches(@"^(\s*)(0o)([0-7][0-7_`]*)([Li])?\b; u") is (true, var result))
+         {
+            var octalSource = result.ThirdGroup;
+            var type = result.FourthGroup;
+            var number = convert(octalSource.ToLower().Replace("_", "").Replace("`", ""), 8, "01234567");
+            var _number = getNumber(type, number);
+            if (_number)
+            {
+               source = source.Drop(result.Length);
+               i++;
+
+               return _number.Maybe();
+            }
+            else
+            {
+               return nil;
+            }
+         }
+         else
+         {
+            return nil;
+         }
+      }
+
+      Maybe<IObject> getBinary()
+      {
+         if (source.Matches(@"^(\s*)(0b)([01][01_`]*)([Li])?\b; u") is (true, var result))
+         {
+            var binarySource = result.ThirdGroup;
+            var type = result.FourthGroup;
+            var number = convert(binarySource.ToLower().Replace("_", "").Replace("`", ""), 2, "01");
+            var _number = getNumber(type, number);
+            if (_number)
+            {
+               source = source.Drop(result.Length);
+               i++;
+
+               return _number.Maybe();
+            }
+            else
+            {
+               return nil;
+            }
+         }
+         else
+         {
+            return nil;
+         }
+      }
+
+      Maybe<IObject> getCharacter()
+      {
+         var ch = KChar.CharObject(source[0]);
+         source = source.Drop(1);
+         i++;
+
+         return ch.Some();
+      }
+
+      Maybe<KString> getString()
+      {
+         if (format.Drop(++i).Matches(@"\d+; u") is (true, var result))
+         {
+            var _count = result.Text.Maybe().Int32();
+            if (_count is (true, var count))
+            {
+               var @string = source.Keep(count);
+               source = source.Drop(count);
+               i += result.Length;
+
+               return (KString)@string;
+            }
+            else
+            {
+               return nil;
+            }
+         }
+         else
+         {
+            return nil;
+         }
+      }
+   }
 }
