@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Numerics;
+using System.Text;
 using Core.Collections;
 using Kagami.Library.Objects;
 using Core.Enumerables;
@@ -9,6 +10,7 @@ using Core.Objects;
 using Core.Strings;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Classes.ClassFunctions;
+using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 using CollectionFunctions = Kagami.Library.Objects.CollectionFunctions;
 using Complex = Kagami.Library.Objects.Complex;
@@ -136,7 +138,7 @@ public class StringClass : BaseClass, ICollectionClass
       registerMessage("assign(_,_)", (obj, message) => function<KString, IObject, IObject>(obj, message, replaceString));
       messages["expandTabs()"] = (obj, _) => function<KString>(obj, s => s.ExpandTabs());
       messages["expandTabs(_<Int>)"] = (obj, msg) => function<KString, Int>(obj, msg, (s, i) => s.ExpandTabs(i.Value));
-      messages["read(_<String>)"] = (obj, msg) => function<KString, KString>(obj, msg, (s, f) => read(f.Value, s.Value));
+      messages["read(_<String>)"] = (obj, msg) => function<KString, KString>(obj, msg, (s, f) => Read(f.Value, s.Value));
    }
 
    protected static IObject replaceString(KString kString, IObject possibleSkipTake, IObject source)
@@ -208,7 +210,7 @@ public class StringClass : BaseClass, ICollectionClass
 
    public override IObject DefaultValue => KString.Empty;
 
-   protected KArray read(string format, string source)
+   public static IObject Read(string format, string source)
    {
       List<IObject> result = [];
 
@@ -218,47 +220,84 @@ public class StringClass : BaseClass, ICollectionClass
          switch (format[i])
          {
             case 'f' when getFloat() is (true, var floatValue):
+            {
                result.Add(floatValue);
                break;
+            }
             case 'd' when getDecimal() is (true, var decimalValue):
+            {
                result.Add(decimalValue);
                break;
+            }
             case 'c' when getComplex() is (true, var complexValue):
+            {
                result.Add(complexValue);
                break;
+            }
             case 'i' when getInt() is (true, var intValue):
+            {
                result.Add(intValue);
                break;
+            }
             case 'l' when getLong() is (true, var longValue):
+            {
                result.Add(longValue);
                break;
+            }
             case 'x' when getHex() is (true, var hexValue):
+            {
                result.Add(hexValue);
                break;
+            }
             case 'o' when getOctal() is (true, var octalValue):
+            {
                result.Add(octalValue);
                break;
+            }
             case 'b' when getBinary() is (true, var binaryValue):
+            {
                result.Add(binaryValue);
                break;
+            }
             case '.' when getCharacter() is (true, var characterValue):
+            {
                result.Add(characterValue);
                break;
+            }
             case 's' when getString() is (true, var stringValue):
+            {
                result.Add(stringValue);
                break;
+            }
             case 'w' when source.Matches(@"^(\s+); u") is (true, var wsResult):
             {
+               result.Add((KString)wsResult.FirstGroup);
                source = source.Drop(wsResult.Length);
                i++;
                break;
             }
+            case '/':
+            {
+               source = source.Drop(1);
+               i++;
+               break;
+            }
+            case 'z' when getLetters() is (true, var lettersValue):
+            {
+               result.Add(lettersValue);
+               break;
+            }
+            case '9' when getDigits() is (true, var digitsValue):
+            {
+               result.Add(digitsValue);
+               break;
+            }
             default:
-               return new KArray(result);
+               return result.Count == 1 ? result[0] : new KArray(result);
          }
       }
 
-      return new KArray(result);
+      return result.Count == 1 ? result[0] : new KArray(result);
 
       Maybe<Float> getFloat()
       {
@@ -388,7 +427,13 @@ public class StringClass : BaseClass, ICollectionClass
          }
          else
          {
-            return nil;
+            var ch = source[0];
+            var intValue = (int)ch;
+            var hex = intValue.FormatAs("x");
+            source = source.Drop(1);
+            i++;
+
+            return (KString)hex;
          }
       }
 
@@ -414,7 +459,13 @@ public class StringClass : BaseClass, ICollectionClass
          }
          else
          {
-            return nil;
+            var ch = source[0];
+            var intValue = (int)ch;
+            var octal = formatNumber(intValue, "o");
+            source = source.Drop(1);
+            i++;
+
+            return (KString)octal;
          }
       }
 
@@ -440,7 +491,13 @@ public class StringClass : BaseClass, ICollectionClass
          }
          else
          {
-            return nil;
+            var ch = source[0];
+            var intValue = (int)ch;
+            var binary = formatNumber(intValue, "b");
+            source = source.Drop(1);
+            i++;
+
+            return (KString)binary;
          }
       }
 
@@ -455,9 +512,9 @@ public class StringClass : BaseClass, ICollectionClass
 
       Maybe<KString> getString()
       {
-         if (format.Drop(++i).Matches(@"\d+; u") is (true, var result))
+         if (format.Drop(++i).Matches(@"(\d+); u") is (true, var result))
          {
-            var _count = result.Text.Maybe().Int32();
+            var _count = result.FirstGroup.Maybe().Int32();
             if (_count is (true, var count))
             {
                var @string = source.Keep(count);
@@ -475,6 +532,52 @@ public class StringClass : BaseClass, ICollectionClass
          {
             return nil;
          }
+      }
+
+      Maybe<KString> getLetters()
+      {
+         var builder = new StringBuilder();
+         var j = 0;
+         while (j < source.Length)
+         {
+            if (char.IsLetter(source[j]))
+            {
+               builder.Append(source[j]);
+               j++;
+            }
+            else
+            {
+               break;
+            }
+         }
+
+         i++;
+         source = source.Drop(j);
+
+         return (KString)builder.ToString();
+      }
+
+      Maybe<KString> getDigits()
+      {
+         var builder = new StringBuilder();
+         var j = 0;
+         while (j < source.Length)
+         {
+            if (char.IsDigit(source[j]))
+            {
+               builder.Append(source[j]);
+               j++;
+            }
+            else
+            {
+               break;
+            }
+         }
+
+         i++;
+         source = source.Drop(j);
+
+         return (KString)builder.ToString();
       }
    }
 }
