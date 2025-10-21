@@ -1494,6 +1494,9 @@ public static class ParserFunctions
          case "/%":
             _symbol = new DivModSymbol();
             break;
+         case @"\\":
+            _symbol = new ForcedFloatDivide();
+            break;
       }
 
       return _symbol;

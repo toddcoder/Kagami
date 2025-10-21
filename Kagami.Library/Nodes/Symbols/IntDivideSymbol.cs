@@ -10,5 +10,5 @@ public class IntDivideSymbol : Symbol
 
    public override Arity Arity => Arity.Binary;
 
-   public override string ToString() => "div";
+   public override string ToString() => "//";
 }
