@@ -44,17 +44,10 @@ public partial class CreateNewFieldsParser : StatementParser
       var _className = state.Scan($@"^(\s+)({REGEX_CLASS_OR_ALIAS})\b", 2, Color.Whitespace, Color.Class);
       if (_className is (true, var className))
       {
-         var _classFromAlias = getClassNameFromAlias(className);
-         if (_classFromAlias is (true, var classFromAlias))
-         {
-            className = classFromAlias;
-         }
-         else if (_classFromAlias.Exception is (true, var exception))
-         {
-            return exception;
-         }
-
+         (className, var color) = getClassNameWithColor(className);
+         state.Tokens[^1].Color = color;
          state.AddStatement(new CreateNewFields([.. fields], className));
+
          return unit;
       }
       else
