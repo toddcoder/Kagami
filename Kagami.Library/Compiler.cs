@@ -40,7 +40,6 @@ public class Compiler
       var statementsParser = new StatementsParser();
 
       ResetFieldUniqueID();
-      ResetObjectUniqueID();
 
       while (state.More)
       {
@@ -133,7 +132,6 @@ public class Compiler
       var statementsParser = new StatementsParser();
 
       ResetFieldUniqueID();
-      ResetObjectUniqueID();
 
       while (state.More)
       {

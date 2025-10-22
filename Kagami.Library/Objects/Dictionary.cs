@@ -33,7 +33,6 @@ public class Dictionary : IObject, IMutableCollection, IMutable
 
    public static IObject New(IEnumerable<IObject> objects) => new Dictionary(objects);
 
-   protected int objectID = uniqueObjectID();
    protected Hash<IObject, IObject> dictionary = [];
    protected IObject[] keys = [];
 
@@ -142,7 +141,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable
       {
          switch (value)
          {
-            case Dictionary otherDictionary when objectID == otherDictionary.objectID:
+            case Dictionary otherDictionary when Id == otherDictionary.Id:
                return;
             case KNil:
                dictionary.Remove(key);
@@ -178,7 +177,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable
       {
          switch (value)
          {
-            case Dictionary otherDictionary when objectID == otherDictionary.objectID:
+            case Dictionary otherDictionary when Id == otherDictionary.Id:
                return;
             case KNil:
             {

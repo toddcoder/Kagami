@@ -19,12 +19,6 @@ public static class ObjectFunctions
 {
    private const int BREAK_EARLY = 10;
 
-   private static int uniqueID;
-
-   public static void ResetObjectUniqueID() => uniqueID = 0;
-
-   public static int uniqueObjectID() => uniqueID++;
-
    public static BaseClass classOf(IObject value)
    {
       var className = value.ClassName;

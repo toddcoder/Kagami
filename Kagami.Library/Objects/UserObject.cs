@@ -11,7 +11,6 @@ public class UserObject : IObject, IEquatable<UserObject>
    private readonly string className;
    private readonly Fields fields;
    private readonly Parameters parameters;
-   private readonly int objectID;
 
    public UserObject(string className, Fields fields, Parameters parameters, bool setSelf = true)
    {
@@ -19,14 +18,12 @@ public class UserObject : IObject, IEquatable<UserObject>
       this.className = className;
       this.parameters = parameters;
 
-      objectID = uniqueObjectID();
-
       if (setSelf)
       {
          setField("self", this);
       }
 
-      setField("id", (Int)objectID);
+      setField("id", (KString)Id.ToString());
    }
 
    protected void setField(string fieldName, IObject value)
@@ -44,8 +41,6 @@ public class UserObject : IObject, IEquatable<UserObject>
    public Parameters Parameters => parameters;
 
    public IEnumerable<IObject> ParameterValues => parameters.Select(p => fields.ContainsKey(p.Name) ? fields[p.Name] : Unassigned.Value);
-
-   public int ObjectID => objectID;
 
    public string ClassName => className;
 
