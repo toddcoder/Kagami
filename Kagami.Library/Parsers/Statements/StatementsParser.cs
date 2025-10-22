@@ -50,6 +50,7 @@ public class StatementsParser : MultiParser
          yield return new StopParser();
          yield return new DeferParser();
          yield return new CreateNewFieldsParser();
+         yield return new MutatorParser();
          yield return new AssignFromBlockParser();
          yield return new AssignFromLoopParser();
          yield return new WhenAssignParser();
@@ -71,7 +72,7 @@ public class StatementsParser : MultiParser
          yield return new UsePackageParser();
 
          //yield return new ReassignmentParser();
-         yield return new MutatorParser();
+
          yield return new AssignWithNewTypeParser();
          yield return new AssignToNewFieldTolerantParser();
          yield return new AssignToFieldParser();

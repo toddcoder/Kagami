@@ -25,9 +25,13 @@ public partial class MutatorParser : StatementParser
          state.AddStatement(new AssignToField(fieldName, nil, expression));
          return unit;
       }
+      else if (_expression.Exception is (true, var exception))
+      {
+         return exception;
+      }
       else
       {
-         return _expression.Exception;
+         return fail("Expression required");
       }
    }
 }
