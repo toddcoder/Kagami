@@ -29,6 +29,8 @@ public class Module
       autoConversions[("Word", "String")] = w => (KString)((Word)w).Text;
       autoConversions[("Int", "Long")] = i => Long.LongObject(((Int)i).AsBigInteger());
       autoConversions[("Before", "Boolean")] = _ => KBoolean.True;
+      autoConversions[("Int", "Char")] = i => KChar.CharObject((char)((Int)i).AsInt32());
+      autoConversions[("Char", "Int")] = c => Int.IntObject(((KChar)c).Value);
    }
 
    public static Maybe<Func<IObject, IObject>> AutoConversion(string from, string to) => autoConversions.Maybe[(from, to)];
