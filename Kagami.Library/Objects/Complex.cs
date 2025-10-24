@@ -18,18 +18,29 @@ public readonly struct Complex : IObject, INumeric, IObjectCompare, IComparable<
 
    public static IObject ComplexObject((double real, double imaginary) values) => new Complex(values.real, values.imaginary);
 
+   public static IObject AsImaginary(INumeric numeric) => new Complex(0.0, numeric.AsDouble());
+
    private readonly CComplex value;
 
-   public Complex(CComplex value) : this() => this.value = value;
+   public Complex(CComplex value) : this()
+   {
+      this.value = value;
+   }
 
    public Complex(double real, double imaginary, bool isPolar = false) : this()
    {
       value = isPolar ? CComplex.FromPolarCoordinates(real, imaginary) : new CComplex(real, imaginary);
    }
 
-   public Complex(Float number) : this() => value = new CComplex(number.Value, 0.0);
+   public Complex(Float number) : this()
+   {
+      value = new CComplex(number.Value, 0.0);
+   }
 
-   public Complex(double number) : this() => value = new CComplex(0.0, number);
+   public Complex(double number) : this()
+   {
+      value = new CComplex(0.0, number);
+   }
 
    public CComplex Value => value;
 

@@ -330,6 +330,7 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerMessage("b".get(),
          (obj, _) => function(obj, i => (byte)i, d => (byte)d, b => b, m => (KByte)((INumeric)m).ToByte(), "b".get()));
       registerMessage("d".get(), (obj, _) => function(obj, i => i, d => (decimal)d, b => b, m => (KDecimal)((INumeric)m).ToDecimal(), "d".get()));
+      registerMessage("im".get(), (obj, _) => Complex.AsImaginary((INumeric)obj));
    }
 
    protected void collectionMessages()
