@@ -1,0 +1,6 @@
+﻿open sys
+
+let tsource = [[35, 23], [18, 28], [26, 39]]
+let fsource = tsource.mapAll() i -> -i
+let mask = [[true, false], [false, true], [false, false]]
+let result = tsource zip fsource zip mask
