@@ -36,7 +36,28 @@ public static class FormatExtensions
          }
 
          builder.Append("}");
-         return string.Format(builder.ToString(), obj);
+         var formatted = string.Format(builder.ToString(), obj);
+         if (width.StartsWith('-'))
+         {
+            width = width.Drop(1);
+         }
+
+         var _intWidth = width.Maybe().Int32();
+         if (_intWidth is (true, var intWidth))
+         {
+            if (formatted.Length <= intWidth)
+            {
+               return formatted;
+            }
+            else
+            {
+               return "*".Repeat(intWidth);
+            }
+         }
+         else
+         {
+            return formatted;
+         }
       }
       else if (format.MatchOf(@"([<=>])(\d+)(?:(:)(.))?") is (true, var matches2))
       {
