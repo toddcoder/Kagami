@@ -434,7 +434,12 @@ public class Iterator : IObject, IIterator
          {
             if (next is IMutableCollection mutableCollection)
             {
-               mutableCollection.Append(rightNext);
+               var rightIterator = alwaysAnIterator(rightNext, false);
+               foreach (var rightItem in rightIterator.List())
+               {
+                  mutableCollection.Append(rightItem);
+               }
+
                result.Add(next);
             }
             else
@@ -459,7 +464,7 @@ public class Iterator : IObject, IIterator
          var _rightNext = iterator.Next();
          if (_rightNext is (true, var rightNext))
          {
-            var resultItem = lambda.Invoke([next, rightNext]);
+            var resultItem = lambda.Invoke(next, rightNext);
             result.Add(resultItem);
          }
       }

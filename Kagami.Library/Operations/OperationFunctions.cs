@@ -13,17 +13,27 @@ public static class OperationFunctions
       switch (value)
       {
          case ICollection collection:
+         {
             return collection.GetIterator(lazy).Success();
+         }
          case IIterator iterator:
+         {
             return iterator.Success();
+         }
          case Int i:
+         {
             return new KRange((Int)0, i, false).GetIterator(lazy).Success();
+         }
          case UserObject uo:
+         {
             var objectCollection = new ObjectCollection(uo);
             return objectCollection.GetIterator(lazy).Success();
+         }
          case Sequence internalList:
+         {
             var array = new KArray(internalList.List);
             return array.GetIterator(lazy).Success();
+         }
          default:
             return fail($"{value.Image} isn't an iterator nor can it return one");
       }

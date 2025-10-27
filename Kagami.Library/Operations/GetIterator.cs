@@ -10,7 +10,10 @@ public class GetIterator : OneOperandOperation
 {
    protected bool lazy;
 
-   public GetIterator(bool lazy) => this.lazy = lazy;
+   public GetIterator(bool lazy)
+   {
+      this.lazy = lazy;
+   }
 
    public override Optional<IObject> Execute(Machine machine, IObject value)
    {

@@ -739,7 +739,6 @@ public static class ObjectFunctions
 
          if (!name.StartsWith("__$") && rest.IsEmpty())
          {
-            //rest = name.EndsWith('=') ? "(_)" : "()";
             name = $"__${name}";
          }
 
@@ -1107,5 +1106,35 @@ public static class ObjectFunctions
       result.AddRange(right);
 
       return classOf((IObject)target) is ICollectionClass collectionClass ? collectionClass.Revert(result) : new KArray(result);
+   }
+
+   public static IIterator alwaysAnIterator(IObject obj, bool lazy)
+   {
+      switch (obj)
+      {
+         case ICollection collection:
+         {
+            return collection.GetIterator(lazy);
+         }
+         case IIterator iterator:
+         {
+            return iterator;
+         }
+         case UserObject uo:
+         {
+            var objectCollection = new ObjectCollection(uo);
+            return objectCollection.GetIterator(lazy);
+         }
+         case Sequence internalList:
+         {
+            var array = new KArray(internalList.List);
+            return array.GetIterator(lazy);
+         }
+         default:
+         {
+            var array = new KArray(obj);
+            return array.GetIterator(lazy);
+         }
+      }
    }
 }
