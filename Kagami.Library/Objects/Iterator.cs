@@ -1169,21 +1169,85 @@ public class Iterator : IObject, IIterator
 
    public IObject Rotate(int count)
    {
-      var list = List().ToList();
+      List<IObject> list = [.. List()];
 
       if (count > 0)
       {
          var rotatedList = list.Take(count);
-         var retainedList = list.Skip(count).ToList();
+         List<IObject> retainedList = [..list.Skip(count)];
          retainedList.AddRange(rotatedList);
          list = retainedList;
       }
       else
       {
          var length = list.Count;
-         var rotatedList = list.Skip(length + count).ToList();
+         List<IObject> rotatedList = [.. list.Skip(length + count)];
          var retainedList = list.Take(length + count);
          rotatedList.AddRange(retainedList);
+         list = rotatedList;
+      }
+
+      return collectionClass.Revert(list);
+   }
+
+   public IObject Shift(int count)
+   {
+      List<IObject> list = [.. List()];
+      if (count == 0)
+      {
+         return collectionClass.Revert(list);
+      }
+
+      var defaultValue = classOf(list[0]).DefaultValue;
+
+      if (count > 0)
+      {
+         List<IObject> retainedList = [.. list.Skip(count)];
+         for (var i = 0; i < count; i++)
+         {
+            retainedList.Add(defaultValue);
+         }
+
+         list = retainedList;
+      }
+      else
+      {
+         var length = list.Count;
+         List<IObject> rotatedList = [.. list.Skip(length + count)];
+         for (var i = 0; i < length + count; i++)
+         {
+            rotatedList.Add(defaultValue);
+         }
+
+         list = rotatedList;
+      }
+
+      return collectionClass.Revert(list);
+   }
+
+   public IObject Shift(int count, IObject defaultValue)
+   {
+      List<IObject> list = [.. List()];
+
+      if (count > 0)
+      {
+         List<IObject> retainedList = [..list.Skip(count)];
+         for (var i = 0; i < count; i++)
+         {
+            retainedList.Add(defaultValue);
+         }
+
+         list = retainedList;
+      }
+      else
+      {
+         var length = list.Count;
+         List<IObject> rotatedList = [.. list.Skip(length + count)];
+         for (var i = 0; i < length + count; i++)
+         {
+            rotatedList.Add(defaultValue);
+         }
+
          list = rotatedList;
       }
 

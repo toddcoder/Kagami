@@ -319,6 +319,10 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
 
    public IObject Rotate(int count) => terminate().Rotate(count);
 
+   public IObject Shift(int count) => terminate().Shift(count);
+
+   public IObject Shift(int count, IObject defaultValue) => terminate().Shift(count, defaultValue);
+
    public IObject Permutations(int count) => terminate().Permutations(count);
 
    public IObject Permutations() => terminate().Permutations();

@@ -493,6 +493,8 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerIterMessage("dictionary()", (obj, _) => iteratorFunc(obj, i => i.ToDictionary()));
       registerIterMessage("each(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Each(l)));
       registerIterMessage("rotate(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Rotate(c.Value)));
+      registerIterMessage("shift(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Shift(c.Value)));
+      registerIterMessage("shift(_<Int>,default:_)", (obj, message) => iteratorFunc<Int, IObject>(obj, message, (i, c, d) => i.Shift(c.Value, d)));
       registerIterMessage("permutations(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Permutations(c.Value)));
       registerIterMessage("permutations()", (obj, _) => iteratorFunc(obj, i => i.Permutations()));
       registerIterMessage("combinations(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Combinations(c.Value)));

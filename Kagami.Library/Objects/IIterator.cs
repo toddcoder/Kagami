@@ -179,6 +179,10 @@ public interface IIterator : IEquivalentClass
 
    IObject Rotate(int count);
 
+   IObject Shift(int count);
+
+   IObject Shift(int count, IObject defaultValue);
+
    IObject Permutations(int count);
 
    IObject Permutations();
