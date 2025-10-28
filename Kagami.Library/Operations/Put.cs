@@ -2,7 +2,6 @@
 using Kagami.Library.Runtime;
 using Core.Monads;
 using static Kagami.Library.Objects.ObjectFunctions;
-using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Operations;
 
@@ -10,8 +9,10 @@ public class Put : OneOperandOperation
 {
    public override Optional<IObject> Execute(Machine machine, IObject value)
    {
-      machine.Context.Put(stringOf(value));
-      return nil;
+      var text = stringOf(value);
+      machine.Context.Put(text);
+
+      return KString.StringObject(text).Just();
    }
 
    public override string ToString() => "put";
