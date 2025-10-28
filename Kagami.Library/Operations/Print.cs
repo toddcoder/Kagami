@@ -9,10 +9,8 @@ public class Print : OneOperandOperation
 {
    public override Optional<IObject> Execute(Machine machine, IObject value)
    {
-      var text = stringOf(value);
-      machine.Context.Print(text);
-
-      return KString.StringObject(text).Just();
+      machine.Context.Print(stringOf(value));
+      return value.Just();
    }
 
    public override string ToString() => "print";

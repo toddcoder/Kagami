@@ -9,10 +9,8 @@ public class Put : OneOperandOperation
 {
    public override Optional<IObject> Execute(Machine machine, IObject value)
    {
-      var text = stringOf(value);
-      machine.Context.Put(text);
-
-      return KString.StringObject(text).Just();
+      machine.Context.Put(stringOf(value));
+      return value.Just();
    }
 
    public override string ToString() => "put";
