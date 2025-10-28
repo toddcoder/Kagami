@@ -161,7 +161,7 @@ public readonly struct Selector : IObject, IEquatable<Selector>
 
       for (var i = length - 1; i > -1 && continuing; i--)
       {
-         var items = selectorItems.Take(take--).ToArray();
+         SelectorItem[] items = [.. selectorItems.Take(take--)];
          var newImage = selectorImage(name, items);
          switch (selectorItems[i].SelectorItemType)
          {

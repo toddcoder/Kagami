@@ -2,6 +2,7 @@
 using Core.Monads;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
+using Kagami.Library.Operations;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 using Regex = System.Text.RegularExpressions.Regex;
@@ -21,7 +22,29 @@ public partial class SelectorParser : SymbolParser
    {
       Selector selector = tokens[3].Text + tokens[4].Text;
       state.Colorize(tokens, Color.Whitespace, Color.Selector, Color.Selector, Color.Selector);
-      builder.Add(new SelectorSymbol(selector));
+
+      if (state.Scan(@"^(\()", Color.OpenParenthesis))
+      {
+         var _arguments = getArgumentsPlusLambda(state, builder.Flags);
+         if (_arguments is (true, var (arguments, _lambdaSymbol)))
+         {
+         }
+         else if (_arguments.Exception is (true, var exception))
+         {
+            return exception;
+         }
+         else
+         {
+            arguments = [];
+            _lambdaSymbol = nil;
+         }
+
+         builder.Add(new InvokeSymbol(selector.Name, arguments, _lambdaSymbol, false));
+      }
+      else
+      {
+         builder.Add(new SelectorSymbol(selector));
+      }
 
       return unit;
    }

@@ -1,0 +1,5 @@
+﻿open sys
+
+func foo(i int, b string) => (i, b)
+
+println &foo(_,_)(10, "baz")
