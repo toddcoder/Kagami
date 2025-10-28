@@ -427,6 +427,8 @@ public class OperationsBuilder
 
    public void Defer() => add(new Defer());
 
+   public void Column() => add(new Column());
+
    public Result<Operations> ToOperations(ParseState state)
    {
       operations.Add(new Stop());
@@ -495,12 +497,9 @@ public class OperationsBuilder
 
    public void Field(Symbol symbol)
    {
-      foreach (var macroParameter in macroParameters)
+      if (macroParameters.Any(macroParameter => macroParameter.Replace(symbol, this)))
       {
-         if (macroParameter.Replace(symbol, this))
-         {
-            return;
-         }
+         return;
       }
 
       if (symbol is FieldSymbol fieldSymbol)

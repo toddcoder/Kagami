@@ -22,7 +22,7 @@ public partial class BlockLambdaParser : SymbolParser
       var _result =
          from parameters in getBlockParameters(state)
          from block in getPartialBlock(state, Color.Lambda)
-         select new LambdaSymbol(parameters, block);
+         select new LambdaSymbol(parameters, block, true);
       if (_result is (true, var lambdaSymbol))
       {
          builder.Add(lambdaSymbol);

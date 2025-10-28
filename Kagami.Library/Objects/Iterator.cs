@@ -1366,8 +1366,8 @@ public class Iterator : IObject, IIterator
 
    public IObject Apply(ICollection collection)
    {
-      var lambdas = List().Select(l => (Lambda)l).ToList();
-      var list = collection.GetIterator(false).List().ToList();
+      List<Lambda> lambdas = [..List().Select(l => (Lambda)l)];
+      List<IObject> list = [.. collection.GetIterator(false).List()];
 
       var result = applyAgainst(lambdas, list);
       return collectionClass.Revert(result);
@@ -1375,7 +1375,7 @@ public class Iterator : IObject, IIterator
 
    public IObject Column(int column)
    {
-      var result = new List<IObject>();
+      List<IObject> result = [];
       var columnIndex = Int.IntObject(column);
       while (true)
       {

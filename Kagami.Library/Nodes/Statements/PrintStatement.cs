@@ -25,6 +25,12 @@ public class PrintStatement(PrintStatementType type, Expression expression) : St
             builder.Put();
             break;
          }
+         case PrintStatementType.Column:
+         {
+            expression.Generate(builder);
+            builder.Column();
+            break;
+         }
       }
    }
 

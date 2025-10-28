@@ -21,12 +21,14 @@ public class PlaygroundContext : IContext
    public void Print(string value)
    {
       putter.Reset();
+      WriteCount = 0;
       writer.Write(value);
    }
 
    public void PrintLine(string value)
    {
       putter.Reset();
+      WriteCount = 0;
       writer.WriteLine(value);
    }
 
@@ -37,6 +39,7 @@ public class PlaygroundContext : IContext
    public Result<string> ReadLine()
    {
       putter.Reset();
+      WriteCount = 0;
       var line = reader.ReadLine();
 
       return line ?? throw new NullReferenceException();
@@ -48,11 +51,14 @@ public class PlaygroundContext : IContext
       return cancelled;
    }
 
+   public int WriteCount { get; set; }
+
    public void Cancel() => cancelled = true;
 
    public void Reset()
    {
       cancelled = false;
       putter.Reset();
+      WriteCount = 0;
    }
 }

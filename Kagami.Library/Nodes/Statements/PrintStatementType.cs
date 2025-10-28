@@ -4,5 +4,6 @@ public enum PrintStatementType
 {
    Print,
    Println,
-   Put
+   Put,
+   Column
 }

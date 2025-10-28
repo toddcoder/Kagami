@@ -21,12 +21,14 @@ public class TestContext : IContext, IDisposable, IAsyncDisposable
    public void Print(string value)
    {
       putter.Reset();
+      WriteCount = 0;
       writer.Write(value);
    }
 
    public void PrintLine(string value)
    {
       putter.Reset();
+      WriteCount = 0;
       writer.WriteLine(value);
    }
 
@@ -37,6 +39,8 @@ public class TestContext : IContext, IDisposable, IAsyncDisposable
    public Result<string> ReadLine() => nil;
 
    public bool Cancelled() => false;
+
+   public int WriteCount { get; set; }
 
    public void Dispose()
    {

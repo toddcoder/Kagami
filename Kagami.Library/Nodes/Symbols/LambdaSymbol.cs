@@ -9,10 +9,14 @@ public class LambdaSymbol : Symbol
    protected Parameters parameters;
    protected Block block;
 
-   public LambdaSymbol(Parameters parameters, Block block)
+   public LambdaSymbol(Parameters parameters, Block block, bool addReturnUnit = false)
    {
       this.parameters = parameters;
       this.block = block;
+      if (addReturnUnit)
+      {
+         this.block.AddReturnUnitIf();
+      }
    }
 
    public LambdaSymbol(Parameters parameters, Expression expression)

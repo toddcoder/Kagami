@@ -17,8 +17,6 @@ public class Sys : Package
 {
    public static Lambda IdLambda => new RuntimeLambda(args => args[0], 1, "x -> x");
 
-   protected int writeCount;
-
    public Sys()
    {
       fields.New("id", FieldType.Package, IdLambda);
@@ -97,15 +95,16 @@ public class Sys : Package
    public IObject Column(IObject obj, int count)
    {
       var value = obj.AsString;
-      Machine.Current.Value.Context.Put(value);
-      if (writeCount == count - 1)
+      var context = Machine.Current.Value.Context;
+      context.Put(value);
+      if (context.WriteCount == count - 1)
       {
-         Machine.Current.Value.Context.PrintLine("");
+         context.PrintLine("");
       }
 
       if (count > 0)
       {
-         writeCount = (writeCount + 1) % count;
+         context.WriteCount = (context.WriteCount + 1) % count;
       }
 
       return KString.StringObject(value);

@@ -163,6 +163,8 @@ public class Block : Statement, IEnumerable<Statement>
       }
    }
 
+   public void AddReturnUnitIf() => AddReturnIf(new PushObjectSymbol(KUnit.Value));
+
    public Maybe<Expression> ExpressionStatement(bool returns)
    {
       if (statements.Count > 0 && statements[0] is ExpressionStatement expressionStatement &&

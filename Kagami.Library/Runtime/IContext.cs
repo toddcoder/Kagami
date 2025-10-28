@@ -15,4 +15,6 @@ public interface IContext
    Result<string> ReadLine();
 
    bool Cancelled();
+
+   int WriteCount { get; set; }
 }
