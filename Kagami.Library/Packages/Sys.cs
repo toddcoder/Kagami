@@ -19,14 +19,14 @@ public class Sys : Package
 
    public Sys()
    {
-      fields.New("id", FieldType.Package, IdLambda);
+      fields.New("identity", FieldType.Package, IdLambda);
       fields.New("environment", FieldType.Package, Environment);
       fields.New("eol", FieldType.Package, (KString)System.Environment.NewLine);
    }
 
    public override string ClassName => "Sys";
 
-   public IObject ID => fields["id"];
+   public IObject Identity => fields["identity"];
 
    public IObject Out => fields["out"];
 

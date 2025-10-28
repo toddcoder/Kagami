@@ -29,7 +29,7 @@ public class SysClass : PackageClass
       registerPackageFunction("ticks()", (obj, _) => function<Sys>(obj, sys => sys.Ticks()));
       registerPackageFunction("fst(_)", (obj, msg) => function<Sys, KTuple>(obj, msg, (sys, t) => sys.First(t)));
       registerPackageFunction("snd(_)", (obj, msg) => function<Sys, KTuple>(obj, msg, (sys, t) => sys.Second(t)));
-      registerPackageFunction("id".get(), (obj, _) => function<Sys>(obj, sys => sys.ID));
+      registerPackageFunction("identity".get(), (obj, _) => function<Sys>(obj, sys => sys.Identity));
       registerPackageFunction("out".get(), (obj, _) => function<Sys>(obj, sys => sys.Out));
       registerPackageFunction("eol".get(), (obj, _) => function<Sys>(obj, sys => sys.Eol));
       registerPackageFunction("Tuple(_)", (obj, msg) => function<Sys>(obj, sys => sys.Tuple(msg.Arguments[0])));

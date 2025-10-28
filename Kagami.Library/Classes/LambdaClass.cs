@@ -21,7 +21,7 @@ public class LambdaClass : BaseClass
       messages["parameters".get()] = (obj, _) => function<Lambda>(obj, l => l.GetParameters());
    }
 
-   public override IObject DefaultValue => new Sys().ID;
+   public override IObject DefaultValue => new Sys().Identity;
 
    protected static IObject invoke(Lambda lambda, Arguments arguments)
    {
