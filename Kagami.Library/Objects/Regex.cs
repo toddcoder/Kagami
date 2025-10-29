@@ -533,6 +533,8 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
 
    public bool Multiline => multiline;
 
+   public bool Global => global;
+
    public bool Equals(Regex other) => pattern.Equals(other.pattern) && ignoreCase == other.ignoreCase && multiline == other.multiline &&
       global == other.global && textOnly == other.textOnly && nameToIndex.Equals(other.nameToIndex);
 
@@ -596,4 +598,10 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
          return input;
       }
    }
+
+   public Regex WithIgnoreCase(bool ignoreCase) => new(pattern.WithIgnoreCase(ignoreCase), global, textOnly);
+
+   public Regex WithMultiline(bool multiline) => new(pattern.WithMultiline(multiline), global, textOnly);
+
+   public Regex WithGlobal(bool global) => new(pattern, global, textOnly);
 }

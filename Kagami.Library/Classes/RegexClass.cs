@@ -23,6 +23,12 @@ public class RegexClass : BaseClass, IEquivalentClass
       messages["scan(_<String>)"] = (obj, msg) => function<Regex, KString>(obj, msg, (r, s) => r.Scan(s.Value));
       messages["splitMapJoin(_<String>,onMatch:_<Lambda>,onNonMatch:_<Lambda>)"] = (obj, msg) =>
          function<Regex, KString, Lambda, Lambda>(obj, msg, (r, s, lm, lnm) => r.SplitMapJoin(s.Value, lm, lnm));
+      messages["with(ignoreCase:_<Boolean>)"] = (obj, msg) => function<Regex, KBoolean>(obj, msg, (r, b) => r.WithIgnoreCase(b.Value));
+      messages["with(multiline:_<Boolean>)"] = (obj, msg) => function<Regex, KBoolean>(obj, msg, (r, b) => r.WithMultiline(b.Value));
+      messages["with(global:_<Boolean>)"] = (obj, msg) => function<Regex, KBoolean>(obj, msg, (r, b) => r.WithGlobal(b.Value));
+      messages["ignoreCase".get()] = (obj, _) => function<Regex>(obj, r => (KBoolean)r.IgnoreCase);
+      messages["multiline".get()] = (obj, _) => function<Regex>(obj, r => (KBoolean)r.Multiline);
+      messages["global".get()] = (obj, _) => function<Regex>(obj, r => (KBoolean)r.Global);
    }
 
    public override void RegisterClassMessages()
