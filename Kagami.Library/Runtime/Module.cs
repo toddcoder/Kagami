@@ -31,6 +31,7 @@ public class Module
       autoConversions[("Before", "Boolean")] = _ => KBoolean.True;
       autoConversions[("Int", "Char")] = i => KChar.CharObject((char)((Int)i).AsInt32());
       autoConversions[("Char", "Int")] = c => Int.IntObject(((KChar)c).Value);
+      autoConversions[("Junction", "Boolean")] = j => (KBoolean)j.IsTrue;
    }
 
    public static Maybe<Func<IObject, IObject>> AutoConversion(string from, string to) => autoConversions.Maybe[(from, to)];

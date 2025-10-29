@@ -1,10 +1,11 @@
-﻿using System.Text;
-using Core.Collections;
+﻿using Core.Collections;
 using Core.Matching;
 using Core.Monads;
 using Core.Numbers;
 using Core.Strings;
+using System.Text;
 using static Kagami.Library.Objects.ObjectFunctions;
+using static Kagami.Library.Parsers.OperatorType;
 
 namespace Kagami.Library.Objects;
 
@@ -585,13 +586,33 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
       var _result = input.Matches(pattern);
       if (_result is (true, var result))
       {
-         var prefix = input.Keep(result.Index);
+         var builder = new StringBuilder();
+         var index = 0;
+         foreach (var match in result.Matches)
+         {
+            var prefix = input.Keep(result.Index);
+            var newPrefix = onNonMatch.Invoke((KString)prefix).AsString;
+            builder.Append(newPrefix);
+            index += prefix.Length;
+
+            var matchText = (KString)match.Text;
+            var mapped = onMatch.Invoke(matchText).AsString;
+            builder.Append(mapped);
+            index += matchText.Value.Length;
+         }
+
+         var suffix = input.Drop(index);
+         var newSuffix = onNonMatch.Invoke((KString)suffix).AsString;
+         builder.Append(newSuffix);
+
+         return builder.ToString();
+         /*var prefix = input.Keep(result.Index);
          var suffix = input.Drop(result.Index + result.Length);
          var mapped = onMatch.Invoke((KString)result.FirstMatch).AsString;
          prefix = onNonMatch.Invoke((KString)prefix).AsString;
          suffix = onNonMatch.Invoke((KString)suffix).AsString;
 
-         return prefix + mapped + suffix;
+         return prefix + mapped + suffix;*/
       }
       else
       {

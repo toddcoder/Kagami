@@ -128,7 +128,7 @@ public class StringClass : BaseClass, ICollectionClass
       messages["l".get()] = (obj, _) => function<KString>(obj, s => (Long)BigInteger.Parse(s.Value));
       messages["d".get()] = (obj, _) => function<KString>(obj, s => (KDecimal)s.Value.Value().Decimal());
       messages["scan(_<Regex>)"] = (obj, msg) => function<KString, Regex>(obj, msg, (s, r) => r.Scan(s.Value));
-      messages["splitMapJoin(_<Regex>,onMatch:_<Lambda>,onNonMatch:_<Lambda>)"] = (obj, msg) =>
+      messages["splitMapJoin(_<Regex>,onMatch:_<Lambda>,noMatch:_<Lambda>)"] = (obj, msg) =>
          function<KString, Regex, Lambda, Lambda>(obj, msg, (s, r, lm, lnm) => r.SplitMapJoin(s.Value, lm, lnm));
       messages["numberize()"] = (obj, _) => function<KString>(obj, s => s.Numberize());
       messages["lines".get()] = (obj, _) => function<KString>(obj, s => s.Lines());

@@ -21,7 +21,7 @@ public class RegexClass : BaseClass, IEquivalentClass
       messages["~(_)"] = (obj, msg) => function<Regex, IObject>(obj, msg, (r1, r2) => r1.Concatenate(r2));
       messages["/(_<String>)"] = (obj, msg) => function<Regex, KString>(obj, msg, (r, s) => r.PendingRegex(s));
       messages["scan(_<String>)"] = (obj, msg) => function<Regex, KString>(obj, msg, (r, s) => r.Scan(s.Value));
-      messages["splitMapJoin(_<String>,onMatch:_<Lambda>,onNonMatch:_<Lambda>)"] = (obj, msg) =>
+      messages["splitMapJoin(_<String>,onMatch:_<Lambda>,noMatch:_<Lambda>)"] = (obj, msg) =>
          function<Regex, KString, Lambda, Lambda>(obj, msg, (r, s, lm, lnm) => r.SplitMapJoin(s.Value, lm, lnm));
       messages["with(ignoreCase:_<Boolean>)"] = (obj, msg) => function<Regex, KBoolean>(obj, msg, (r, b) => r.WithIgnoreCase(b.Value));
       messages["with(multiline:_<Boolean>)"] = (obj, msg) => function<Regex, KBoolean>(obj, msg, (r, b) => r.WithMultiline(b.Value));

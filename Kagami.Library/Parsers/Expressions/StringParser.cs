@@ -149,13 +149,36 @@ public partial class StringParser : SymbolParser
             default:
                if (hex)
                {
-                  if (ch.Between('0').And('9') || ch.Between('a').And('f') && hexText.Length < 6)
+                  if (ch.Between('0').And('9') || ch.Between('a').And('f') && hexText.Length < 4)
                   {
                      hexText.Append(ch);
+                     if (hexText.Length == 4)
+                     {
+                        /*hex = false;
+                        var _matchedChar = fromHex(hexText.ToString());
+                        if (_matchedChar is (true, var matchedChar))
+                        {
+                           text.Append(matchedChar);
+                        }
+                        else if (_matchedChar.Exception is (true, var exception))
+                        {
+                           return exception;
+                        }
+
+                        if (ch == 96)
+                        {
+                           text.Append(ch);
+                        }*/
+                        var _result = stopHex(ch);
+                        if (!_result)
+                        {
+                           return _result.Exception;
+                        }
+                     }
                   }
                   else
                   {
-                     hex = false;
+                     /*hex = false;
                      var _matchedChar = fromHex(hexText.ToString());
                      if (_matchedChar is (true, var matchedChar))
                      {
@@ -169,6 +192,11 @@ public partial class StringParser : SymbolParser
                      if (ch == 96)
                      {
                         text.Append(ch);
+                     }*/
+                     var _result = stopHex(ch);
+                     if (!_result)
+                     {
+                        return _result.Exception;
                      }
                   }
                }
@@ -186,5 +214,26 @@ public partial class StringParser : SymbolParser
       }
 
       return openString();
+
+      Result<Unit> stopHex(char ch)
+      {
+         hex = false;
+         var _matchedChar = fromHex(hexText.ToString());
+         if (_matchedChar is (true, var matchedChar))
+         {
+            text.Append(matchedChar);
+         }
+         else if (_matchedChar.Exception is (true, var exception))
+         {
+            return exception;
+         }
+
+         if (ch == 96)
+         {
+            text.Append(ch);
+         }
+
+         return unit;
+      }
    }
 }
