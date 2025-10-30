@@ -13,7 +13,7 @@ public readonly struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
 {
    public static TypeConstraint FromList(params string[] classNames)
    {
-      return new(classNames.Select(cn => Module.Global.Value.Class(cn).Required(messageClassNotFound(cn))).ToArray());
+      return new([.. classNames.Select(cn => Module.Global.Value.Class(cn).Required(messageClassNotFound(cn)))]);
    }
 
    public static TypeConstraint SingleType(BaseClass baseClass) => new([baseClass]);

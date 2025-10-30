@@ -1,7 +1,6 @@
 ﻿using System.Numerics;
 using Core.Collections;
 using Core.Matching;
-using Kagami.Library.Classes;
 using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
@@ -683,7 +682,61 @@ public static class ParserFunctions
 
    public static Optional<PossibleTypeConstraint> parseTypeConstraint(ParseState state)
    {
-      state.BeginTransaction();
+      List<string> classNames = [];
+      while (state.More)
+      {
+         var _scanned = state.Scan(@$"^(\s*)({REGEX_CLASS_OR_ALIAS})", (g, i) => i switch
+         {
+            1 => Color.Whitespace,
+            2 when g.Value.IsMatch("^ ['A-Z']") => Color.Class,
+            2 => Color.Keyword,
+            _ => Color.Whitespace
+         });
+         if (_scanned is (true, var name))
+         {
+            name = name.Trim();
+            if (getClassNameFromAlias(name) is (true, var className))
+            {
+               classNames.Add(className);
+            }
+            else
+            {
+               classNames.Add(name);
+            }
+         }
+         else if (_scanned.Exception is (true, var exception))
+         {
+            return exception;
+         }
+         else
+         {
+            break;
+         }
+
+         var _pipe = state.Scan(@"^(\s*)(\|)", Color.Whitespace, Color.Structure);
+         if (_pipe)
+         {
+         }
+         else if (_pipe.Exception is (true, var exception))
+         {
+            return exception;
+         }
+         else
+         {
+            break;
+         }
+      }
+
+      if (classNames.Count > 0)
+      {
+         var typeConstraint = TypeConstraint.FromList([..classNames]);
+         return new PossibleTypeConstraint.Some(typeConstraint);
+      }
+      else
+      {
+         return new PossibleTypeConstraint.None();
+      }
+      /*state.BeginTransaction();
       var _possibleTypeConstraint = parseAliasedTypeConstraint(state);
       if (_possibleTypeConstraint is (true, var possibleTypeConstraint))
       {
@@ -732,7 +785,7 @@ public static class ParserFunctions
          {
             return new PossibleTypeConstraint.None();
          }
-      }
+      }*/
    }
 
    private static Optional<bool> parseVaraidic(ParseState state)
