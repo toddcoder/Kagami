@@ -1,0 +1,16 @@
+﻿open sys
+
+func foo(a <int string>) <string int> {
+	if a is Int {
+		return "int"
+	}
+	else if a is String {
+		return 153
+	}
+	else {
+		return "dunno"
+	}
+}
+
+println foo(10)
+println foo("bar")

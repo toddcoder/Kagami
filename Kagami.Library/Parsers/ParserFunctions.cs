@@ -714,19 +714,6 @@ public static class ParserFunctions
          {
             break;
          }
-
-         /*var _pipe = state.Scan(@"^(\s*)(\|)", Color.Whitespace, Color.Structure);
-         if (_pipe)
-         {
-         }
-         else if (_pipe.Exception is (true, var exception))
-         {
-            return exception;
-         }
-         else
-         {
-            break;
-         }*/
       }
 
       if (classNames.Count == 0)
