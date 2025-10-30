@@ -632,7 +632,7 @@ public static class ParserFunctions
 
    private static Optional<PossibleTypeConstraint> parseAliasedTypeConstraint(ParseState state)
    {
-      var _alias = state.Scan(@"^(\s*)([a-z0-9]+)\b(?!\.)", 2, Color.Whitespace, Color.Keyword);
+      var _alias = state.Scan(@"^( *)([a-z0-9]+)\b(?!\.)", 2, Color.Whitespace, Color.Keyword);
       return
          from alias in _alias
          from className in getClassNameFromAlias(alias)
@@ -730,9 +730,9 @@ public static class ParserFunctions
    public static Optional<PossibleTypeConstraint> parseUnionTypeConstraint(ParseState state)
    {
       return
-         from begin in state.Scan(@"^(\s*)(<)", Color.Whitespace, Color.OpenParenthesis)
+         from begin in state.Scan("^( *)(<)", Color.Whitespace, Color.Class)
          from inner in getListOfClassNames(state)
-         from end in state.Scan(@"^(\s*)(>)", Color.Whitespace, Color.CloseParenthesis)
+         from end in state.Scan(@"^(\s*)(>)", Color.Whitespace, Color.Class)
          select (PossibleTypeConstraint)new PossibleTypeConstraint.Some(TypeConstraint.FromList(inner));
    }
 
@@ -757,7 +757,7 @@ public static class ParserFunctions
       }
 
       state.RollBackTransaction();
-      var _className = state.Scan($@"^(\s*)({REGEX_CLASS})\b(?![\(\.])", Color.Whitespace, Color.Class)
+      var _className = state.Scan($@"^( *)({REGEX_CLASS})\b(?![\(\.])", Color.Whitespace, Color.Class)
          .Map(cn => cn.TrimStart());
       if (_className is (true, var className))
       {

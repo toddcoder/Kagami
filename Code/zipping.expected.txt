@@ -1,1 +1,2 @@
-Execute error: Field println not found
+[[35, 23, -35, -23, true, false], [18, 28, -18, -28, false, true], [26, 39, -26, -39, false, false]]
+"[[35, 23, -35, -23, true, false], [18, 28, -18, -28, false, true], [26, 39, -26, -39, false, false]]" | String

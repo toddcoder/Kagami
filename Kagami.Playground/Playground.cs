@@ -140,6 +140,7 @@ public partial class Playground : Form
          menus.Separator();
          menus.Menu("Find/Replace", (_, _) => findReplace.Show(), "^F");
          menus.Menu("Reset Editor", (_, _) => resetEditor(), "^R");
+         menus.Menu("Insert Pragma", (_, _) => insertText("#pragma ALLOW_PRINT_STATEMENT true", 0, 0));
 
          menus.Menu("&Build");
          menus.Menu("Run", (_, _) => run(), "F5");

@@ -1,1 +1,2 @@
-Execute error: Field println not found
+10 baz
+(i: 10, b: "baz") | Tuple

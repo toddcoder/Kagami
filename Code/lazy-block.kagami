@@ -1,4 +1,6 @@
-﻿open sys
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+open sys
 
 class ExampleDate() {
 	var `string = lazy {

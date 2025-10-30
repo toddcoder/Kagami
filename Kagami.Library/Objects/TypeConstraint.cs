@@ -18,9 +18,12 @@ public readonly struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
 
    public static TypeConstraint SingleType(BaseClass baseClass) => new([baseClass]);
 
-   private readonly BaseClass[] comparisands;
+   private readonly BaseClass[] comparisands = [];
 
-   public TypeConstraint(BaseClass[] comparisands) : this() => this.comparisands = comparisands;
+   public TypeConstraint(BaseClass[] comparisands) : this()
+   {
+      this.comparisands = comparisands;
+   }
 
    public void RefreshClasses()
    {

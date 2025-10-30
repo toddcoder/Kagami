@@ -1,1 +1,4 @@
-Generate error: ClassParser: ConstructorParser: Bad block
+1 x Orange Juice ✔
+1 x Bacon ✘
+6 x Eggs ✘
+it collection | Iterator

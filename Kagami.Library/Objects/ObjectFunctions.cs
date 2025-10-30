@@ -1137,4 +1137,12 @@ public static class ObjectFunctions
          }
       }
    }
+
+   public static void assertMatchesType(TypeConstraint typeConstraint, IObject value)
+   {
+      if (!typeConstraint.Matches(classOf(value)))
+      {
+         throw fail($"{value.AsString} doesn't match {typeConstraint.AsString}");
+      }
+   }
 }

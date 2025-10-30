@@ -14,7 +14,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 {
    public static IObject CreateObject(IEnumerable<IObject> items)
    {
-      var list = items.ToList();
+      List<IObject> list = [.. items];
       return new KArray(list);
    }
 
@@ -22,7 +22,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public static KArray Repeat(IObject value, int times)
    {
-      var init = Enumerable.Repeat(value, times).ToList();
+      List<IObject> init = [.. Enumerable.Repeat(value, times)];
       return new KArray(init);
    }
 
@@ -114,7 +114,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       }
    }
 
-   public IObject this[int index]
+   public virtual IObject this[int index]
    {
       get
       {
@@ -183,7 +183,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       }
    }
 
-   public IObject this[Sequence sequence]
+   public virtual IObject this[Sequence sequence]
    {
       get
       {
@@ -300,7 +300,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public Maybe<IObject> Get(IObject index) => Next(((Int)index).Value);
 
-   public IObject Set(IObject index, IObject value)
+   public virtual IObject Set(IObject index, IObject value)
    {
       var intIndex = wrapIndex(((Int)index).Value, list.Count);
       assertType(value);
@@ -313,9 +313,9 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    int ISliceable.Length => list.Count;
 
-   public KBoolean In(IObject item) => list.Contains(item);
+   public virtual KBoolean In(IObject item) => list.Contains(item);
 
-   public KBoolean NotIn(IObject item) => !list.Contains(item);
+   public virtual KBoolean NotIn(IObject item) => !list.Contains(item);
 
    public IObject Times(int count)
    {
@@ -348,7 +348,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       list.Add(obj);
    }
 
-   public IObject Append(IObject obj)
+   public virtual IObject Append(IObject obj)
    {
       throwIfSelf(obj);
       assertType(obj);
@@ -357,7 +357,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       return this;
    }
 
-   public IObject Remove(IObject obj)
+   public virtual IObject Remove(IObject obj)
    {
       list.Remove(obj);
       return this;
@@ -385,7 +385,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       return this;
    }
 
-   public IObject InsertAt(int index, IObject obj)
+   public virtual IObject InsertAt(int index, IObject obj)
    {
       throwIfSelf(obj);
       assertType(obj);
@@ -399,7 +399,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public KBoolean IsNotEmpty => list.Count > 0;
 
-   public IObject Assign(SkipTake skipTake, IEnumerable<IObject> values)
+   public virtual IObject Assign(SkipTake skipTake, IEnumerable<IObject> values)
    {
       var left = list.Take(skipTake.Skip);
       var right = list.Skip(skipTake.Skip + skipTake.Take);
@@ -410,7 +410,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       return this;
    }
 
-   public IObject Concatenate(KArray kArray)
+   public virtual IObject Concatenate(KArray kArray)
    {
       if (_typeConstraint is (true, var typeConstraint))
       {
@@ -445,7 +445,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public IObject Shift() => list.Count > 0 ? RemoveAt(0) : KNil.NilValue;
 
-   public IObject IndexOf(IObject item)
+   public virtual IObject IndexOf(IObject item)
    {
       var index = list.IndexOf(item);
       if (index > -1)
@@ -486,7 +486,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       return KNil.NilValue;
    }
 
-   public IObject LastIndexOf(IObject item)
+   public virtual IObject LastIndexOf(IObject item)
    {
       var index = list.LastIndexOf(item);
       if (index > -1)
@@ -537,9 +537,9 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       return KNil.NilValue;
    }
 
-   public IObject BinarySearch(IObject item) => binarySearch(this, item);
+   public virtual IObject BinarySearch(IObject item) => binarySearch(this, item);
 
-   public IObject BinarySearch(IObject item, Lambda lambda) => binarySearch(this, item, lambda);
+   public virtual IObject BinarySearch(IObject item, Lambda lambda) => binarySearch(this, item, lambda);
 
    public IObject FindAll(IObject item)
    {
@@ -604,7 +604,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       return new KArray([leftArray, rightArray]);
    }
 
-   public IObject Prepend(IObject item)
+   public virtual IObject Prepend(IObject item)
    {
       list.Insert(0, item);
       return this;
@@ -616,7 +616,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       return this;
    }
 
-   public KArray PadLeft(int count, IObject value)
+   public virtual KArray PadLeft(int count, IObject value)
    {
       var copy = (KArray)Copy();
       var remainder = count - list.Count;
@@ -631,7 +631,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       return copy;
    }
 
-   public KArray PadRight(int count, IObject value)
+   public virtual KArray PadRight(int count, IObject value)
    {
       var copy = (KArray)Copy();
       var remainder = count - list.Count;
@@ -663,7 +663,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       }
    }
 
-   public IObject Accept(IObject obj) => obj switch
+   public virtual IObject Accept(IObject obj) => obj switch
    {
       Int i => KBoolean.BooleanObject(list.Count == i.Value),
       _ => In(obj)

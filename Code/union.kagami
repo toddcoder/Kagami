@@ -1,4 +1,5 @@
-﻿open sys
+﻿#pragma ALLOW_PRINT_STATEMENT true
+open sys
 
 func foo(a <int string>) <string int> {
 	if a is Int {

@@ -323,6 +323,8 @@ public class OperationsBuilder
 
    public void NewArray() => add(new NewArray());
 
+   public void NewTypedArray(TypeConstraint typeConstraint) => add(new NewTypedArray(typeConstraint));
+
    public void NewDictionaryOrSet() => add(new NewDictionaryOrSet());
 
    public void NewCycle() => add(new NewCycle());
