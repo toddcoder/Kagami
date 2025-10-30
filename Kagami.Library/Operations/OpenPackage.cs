@@ -12,7 +12,10 @@ public class OpenPackage : Operation
 {
    protected string packageName;
 
-   public OpenPackage(string packageName) => this.packageName = packageName;
+   public OpenPackage(string packageName)
+   {
+      this.packageName = packageName;
+   }
 
    public override Optional<IObject> Execute(Machine machine)
    {
