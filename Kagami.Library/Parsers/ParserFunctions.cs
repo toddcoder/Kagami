@@ -12,6 +12,7 @@ using Kagami.Library.Runtime;
 using Core.Monads;
 using Core.Numbers;
 using Core.Strings;
+using Kagami.Library.Classes;
 using static System.Int32;
 using static Kagami.Library.AllExceptions;
 using static Core.Monads.MonadFunctions;
@@ -680,9 +681,10 @@ public static class ParserFunctions
       _ => nil
    };
 
-   public static Optional<PossibleTypeConstraint> parseTypeConstraint(ParseState state)
+   public static Optional<string[]> getListOfClassNames(ParseState state)
    {
       List<string> classNames = [];
+
       while (state.More)
       {
          var _scanned = state.Scan(@$"^(\s*)({REGEX_CLASS_OR_ALIAS})", (g, i) => i switch
@@ -713,7 +715,7 @@ public static class ParserFunctions
             break;
          }
 
-         var _pipe = state.Scan(@"^(\s*)(\|)", Color.Whitespace, Color.Structure);
+         /*var _pipe = state.Scan(@"^(\s*)(\|)", Color.Whitespace, Color.Structure);
          if (_pipe)
          {
          }
@@ -724,19 +726,42 @@ public static class ParserFunctions
          else
          {
             break;
-         }
+         }*/
       }
 
-      if (classNames.Count > 0)
+      if (classNames.Count == 0)
       {
-         var typeConstraint = TypeConstraint.FromList([..classNames]);
-         return new PossibleTypeConstraint.Some(typeConstraint);
+         return nil;
       }
       else
       {
-         return new PossibleTypeConstraint.None();
+         string[] result = [.. classNames];
+         return result;
       }
-      /*state.BeginTransaction();
+   }
+
+   public static Optional<PossibleTypeConstraint> parseUnionTypeConstraint(ParseState state)
+   {
+      return
+         from begin in state.Scan(@"^(\s*)(<)", Color.Whitespace, Color.OpenParenthesis)
+         from inner in getListOfClassNames(state)
+         from end in state.Scan(@"^(\s*)(>)", Color.Whitespace, Color.CloseParenthesis)
+         select (PossibleTypeConstraint)new PossibleTypeConstraint.Some(TypeConstraint.FromList(inner));
+   }
+
+   public static Optional<PossibleTypeConstraint> parseTypeConstraint(ParseState state)
+   {
+      var _result = parseUnionTypeConstraint(state);
+      if (_result)
+      {
+         return _result;
+      }
+      else if (_result.Exception is (true, var exception))
+      {
+         return exception;
+      }
+
+      state.BeginTransaction();
       var _possibleTypeConstraint = parseAliasedTypeConstraint(state);
       if (_possibleTypeConstraint is (true, var possibleTypeConstraint))
       {
@@ -785,7 +810,7 @@ public static class ParserFunctions
          {
             return new PossibleTypeConstraint.None();
          }
-      }*/
+      }
    }
 
    private static Optional<bool> parseVaraidic(ParseState state)
