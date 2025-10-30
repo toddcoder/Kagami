@@ -189,7 +189,7 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
             var innerCollectionClass = (ICollectionClass)classOf((IObject)innerCollection);
             var innerIterator = innerCollection.GetIterator(true);
             var mappedItem = innerIterator.List().Select(i => lambda.Invoke(i));
-            var newCollection = innerCollectionClass.Revert(mappedItem);
+            var newCollection = innerCollectionClass.Revert(mappedItem, nil);
             list.Add(newCollection);
          }
          else
@@ -198,7 +198,7 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
          }
       }
 
-      return collectionClass.Revert(list);
+      return collectionClass.Revert(list, nil);
    }
 
    public IObject Replace(Lambda predicate, Lambda lambda) => terminate().Replace(predicate, lambda);

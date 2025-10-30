@@ -1,12 +1,14 @@
-﻿using Kagami.Library.Operations;
+﻿using Core.Monads;
+using Kagami.Library.Objects;
+using Kagami.Library.Operations;
 
 namespace Kagami.Library.Nodes.Symbols;
 
-public class EmptyMemoSymbol(LambdaSymbol lambdaSymbol) : Symbol
+public class EmptyMemoSymbol(LambdaSymbol lambdaSymbol, Maybe<TypeConstraint> _typeConstraint) : Symbol
 {
    public override void Generate(OperationsBuilder builder)
    {
-      var emptyDictionarySymbol = new EmptyDictionarySymbol();
+      var emptyDictionarySymbol = new EmptyDictionarySymbol(_typeConstraint);
       emptyDictionarySymbol.Generate(builder);
       lambdaSymbol.Generate(builder);
       builder.SendMessage("memo(_)", 1);

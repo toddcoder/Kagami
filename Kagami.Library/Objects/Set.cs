@@ -10,10 +10,48 @@ namespace Kagami.Library.Objects;
 
 public class Set : IObject, ICollection, IObjectCompare, IMutable
 {
-   public static IObject Empty => new Set();
+   public static Set Empty => new();
 
    protected Set<IObject> set;
    protected List<IObject> list;
+
+   protected void assertIncomingValueIsEquivalent(IObject value)
+   {
+      if (TypeConstraint is (true, var typeConstraint))
+      {
+         if (!typeConstraint.Matches(classOf(value)))
+         {
+            throw fail($"{value.AsString} is incompatible with {typeConstraint.AsString}");
+         }
+      }
+   }
+
+   protected void assertIncomingValuesAreEquivalent(IEnumerable<IObject> values)
+   {
+      foreach (var value in values)
+      {
+         assertIncomingValueIsEquivalent(value);
+      }
+   }
+
+   protected void assertValuesAreEquivalent()
+   {
+      foreach (var value in list)
+      {
+         assertIncomingValueIsEquivalent(value);
+      }
+   }
+
+   protected void assertTypeConstraintIsEquivalent(TypeConstraint otherTypeConstraint)
+   {
+      if (TypeConstraint is (true, var typeConstraint))
+      {
+         if (!typeConstraint.IsEquivalentTo(otherTypeConstraint))
+         {
+            throw fail($"{typeConstraint.AsString} is incompatible with {otherTypeConstraint.AsString}");
+         }
+      }
+   }
 
    public Set(IObject[] items)
    {
@@ -75,9 +113,17 @@ public class Set : IObject, ICollection, IObjectCompare, IMutable
 
    public bool ExpandForArray => true;
 
-   public KBoolean In(IObject item) => set.Contains(item);
+   public KBoolean In(IObject item)
+   {
+      assertIncomingValueIsEquivalent(item);
+      return set.Contains(item);
+   }
 
-   public KBoolean NotIn(IObject item) => !set.Contains(item);
+   public KBoolean NotIn(IObject item)
+   {
+      assertIncomingValueIsEquivalent(item);
+      return !set.Contains(item);
+   }
 
    public IObject Times(int count) => this;
 
@@ -90,10 +136,20 @@ public class Set : IObject, ICollection, IObjectCompare, IMutable
    public IObject Copy()
    {
       Set<IObject> newSet = [.. set];
-      return new Set(newSet);
+      return new Set(newSet) { TypeConstraint = TypeConstraint };
    }
 
    public IIterator Following(IObject following) => new MultiIterator(this, following);
+
+   public Maybe<TypeConstraint> TypeConstraint
+   {
+      get;
+      set
+      {
+         assertValuesAreEquivalent();
+         field = value;
+      }
+   } = nil;
 
    protected void assertNotThisSet(IObject other)
    {
@@ -105,28 +161,34 @@ public class Set : IObject, ICollection, IObjectCompare, IMutable
 
    public Set Append(IObject item)
    {
+      assertIncomingValueIsEquivalent(item);
       assertNotThisSet(item);
       set.Add(item);
+
       return this;
    }
 
    public Set Remove(IObject item)
    {
+      assertIncomingValueIsEquivalent(item);
       set.Remove(item);
+
       return this;
    }
 
    public IObject RemoveAndReturn(IObject item)
    {
+      assertIncomingValueIsEquivalent(item);
       set.Remove(item);
+
       return set.Contains(item) ? KNil.NilValue : Some.Object(item);
    }
 
-   public Set Union(Set other) => new(set.Union(other.set));
+   public Set Union(Set other) => new(set.Union(other.set)) { TypeConstraint = TypeConstraint };
 
-   public Set Difference(Set other) => new(set.Except(other.set).ToArray());
+   public Set Difference(Set other) => new((IObject[])[..set.Except(other.set)]) { TypeConstraint = TypeConstraint };
 
-   public Set Intersection(Set other) => new(set.Intersection(other.set));
+   public Set Intersection(Set other) => new(set.Intersection(other.set)) { TypeConstraint = TypeConstraint };
 
    public IObject this[int index]
    {
@@ -168,9 +230,21 @@ public class Set : IObject, ICollection, IObjectCompare, IMutable
 
    public IObject Object => this;
 
-   public KBoolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
+   public KBoolean Between(IObject min, IObject max, bool inclusive)
+   {
+      assertIncomingValueIsEquivalent(min);
+      assertIncomingValueIsEquivalent(max);
 
-   public KBoolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
+      return between(this, min, max, inclusive);
+   }
+
+   public KBoolean After(IObject min, IObject max, bool inclusive)
+   {
+      assertIncomingValueIsEquivalent(min);
+      assertIncomingValueIsEquivalent(max);
+
+      return after(this, min, max, inclusive);
+   }
 
    public Set XOr(Set other) => Union(other).Difference(Intersection(other));
 
@@ -183,7 +257,7 @@ public class Set : IObject, ICollection, IObjectCompare, IMutable
          classified[key].Append(item);
       }
 
-      return new Set(classified.GetHash().ValueArray().Select(s => (IObject)s).ToArray());
+      return new Set((IObject[])[.. classified.GetHash().ValueArray().Select(IObject (s) => s)]);
    }
 
    public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
@@ -191,7 +265,7 @@ public class Set : IObject, ICollection, IObjectCompare, IMutable
    public IObject Concatenate(Set otherSet)
    {
       IObject[] result = [.. set, ..otherSet.set];
-      return new Set(result);
+      return new Set(result) { TypeConstraint = TypeConstraint };
    }
 
    public Set Extend(IObject obj)
@@ -200,6 +274,7 @@ public class Set : IObject, ICollection, IObjectCompare, IMutable
       {
          foreach (var item in collection.GetIterator(false).List())
          {
+            assertIncomingValueIsEquivalent(item);
             Append(item);
          }
       }

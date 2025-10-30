@@ -92,6 +92,8 @@ public class ObjectCollection : IObject, ICollection
 
    public IIterator Following(IObject following) => new MultiIterator(this, following);
 
+   public Maybe<TypeConstraint> TypeConstraint => nil;
+
    public string ClassName => obj.ClassName;
 
    public string AsString => obj.AsString;

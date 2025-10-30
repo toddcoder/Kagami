@@ -1,4 +1,5 @@
 ﻿using Kagami.Library.Objects;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Iterators;
 
@@ -10,7 +11,7 @@ public class StreamingZipIterator(IIterator iterator) : StreamingAction
       if (_next is (true, var next))
       {
          List<IObject> result = [state.Next, next];
-         var reverted = state.CollectionClass.Revert(result);
+         var reverted = state.CollectionClass.Revert(result, nil);
 
          return new StreamingCondition.Continuing(reverted);
       }

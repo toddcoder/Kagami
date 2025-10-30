@@ -1,4 +1,5 @@
 ﻿using Core.Enumerables;
+using Core.Monads;
 using Kagami.Library.Objects;
 using static Kagami.Library.Classes.ClassFunctions;
 
@@ -39,5 +40,5 @@ public class MutStringClass : BaseClass, ICollectionClass
 
    public TypeConstraint EquivalentTypeConstraint() => TypeConstraint.FromList("Collection", "TextFinding");
 
-   public IObject Revert(IEnumerable<IObject> list) => (MutString)list.Select(i => i.AsString).ToString("");
+   public IObject Revert(IEnumerable<IObject> list, Maybe<TypeConstraint> _typeConstraint) => (MutString)list.Select(i => i.AsString).ToString("");
 }

@@ -27,6 +27,10 @@ public class TypedArray : KArray
       }
    }
 
+   public override string AsString => $"{base.AsString} {typeConstraint.AsString}";
+
+   public override string Image => $"[{base.Image}] {typeConstraint.AsString}";
+
    public override IObject this[int index]
    {
       get => base[index];

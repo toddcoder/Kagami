@@ -119,6 +119,8 @@ public readonly struct KIndex : IObject, ICollection
 
    IIterator ICollection.Following(IObject following) => new MultiIterator(this, following);
 
+   public Maybe<TypeConstraint> TypeConstraint => nil;
+
    public IObject this[SkipTake skipTake] => Range()[skipTake];
 
    public KIndex StartSucc() => count == 1 ? Shift(1) : new KIndex(start + 1, end, length).Normalize();

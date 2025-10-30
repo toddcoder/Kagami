@@ -5,14 +5,16 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Operations;
 
-public class NewDictionaryOrSet : OneOperandOperation
+public class NewDictionaryOrSet(Maybe<TypeConstraint> _typeConstraint) : OneOperandOperation
 {
    public override Optional<IObject> Execute(Machine machine, IObject value)
    {
       switch (value)
       {
          case KeyValue:
-            return Dictionary.New([value]).Just();
+         {
+            return Dictionary.New([value], _typeConstraint).Just();
+         }
          case KArray:
             return value.Just();
          case Junction junction:
@@ -34,16 +36,16 @@ public class NewDictionaryOrSet : OneOperandOperation
          IObject[] objects = [.. list];
          if (objects.All(o => o is KeyValue or NameValue))
          {
-            return new Dictionary(objects);
+            return new Dictionary(objects) { TypeConstraint = _typeConstraint };
          }
          else
          {
-            return new Set(objects);
+            return new Set(objects) { TypeConstraint = _typeConstraint };
          }
       }
       else
       {
-         return new Set(value);
+         return new Set(value) { TypeConstraint = _typeConstraint };
       }
    }
 

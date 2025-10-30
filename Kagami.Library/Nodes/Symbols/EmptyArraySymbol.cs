@@ -1,11 +1,17 @@
-﻿using Kagami.Library.Objects;
+﻿using Core.Monads;
+using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 
 namespace Kagami.Library.Nodes.Symbols;
 
-public class EmptyArraySymbol : Symbol
+public class EmptyArraySymbol(Maybe<TypeConstraint> _typeConstraint) : Symbol
 {
-   public override void Generate(OperationsBuilder builder) => builder.PushObject(KArray.Empty);
+   public override void Generate(OperationsBuilder builder)
+   {
+      var array = KArray.Empty;
+      array.TypeConstraint = _typeConstraint;
+      builder.PushObject(array);
+   }
 
    public override Precedence Precedence => Precedence.Value;
 

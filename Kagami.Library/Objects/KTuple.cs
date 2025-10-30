@@ -266,6 +266,8 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
 
    public IIterator Following(IObject following) => new MultiIterator(this, following);
 
+   public Maybe<TypeConstraint> TypeConstraint => nil;
+
    public int Compare(IObject obj)
    {
       if (obj is KTuple tuple)

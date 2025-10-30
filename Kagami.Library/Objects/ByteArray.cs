@@ -59,6 +59,8 @@ public readonly struct ByteArray : IObject, ICollection, IObjectCompare
 
    public IIterator Following(IObject following) => new MultiIterator(this, following);
 
+   public Maybe<TypeConstraint> TypeConstraint => nil;
+
    public int Compare(IObject obj) => compareCollections(this, obj);
 
    public IObject Object => this;

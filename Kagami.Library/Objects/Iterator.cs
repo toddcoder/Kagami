@@ -15,12 +15,14 @@ namespace Kagami.Library.Objects;
 public class Iterator : IObject, IIterator
 {
    protected ICollection collection;
+   protected Maybe<TypeConstraint> _typeConstraint = nil;
    protected int index;
    protected ICollectionClass collectionClass;
 
    public Iterator(ICollection collection)
    {
       this.collection = collection;
+      _typeConstraint = this.collection.TypeConstraint;
       collectionClass = Module.CollectionClass(collection);
       index = 0;
    }
@@ -86,7 +88,7 @@ public class Iterator : IObject, IIterator
       var list = List().ToList();
       list.Reverse();
 
-      return collectionClass.Revert(list);
+      return collectionClass.Revert(list, _typeConstraint);
    }
 
    public KString Join() => List().Select(i => i.AsString).ToString("");
@@ -117,25 +119,25 @@ public class Iterator : IObject, IIterator
          case 1 when ascending:
          {
             var result = List().OrderBy(i => lambda.Invoke(i), new ObjectComparer());
-            return collectionClass.Revert(result);
+            return collectionClass.Revert(result, _typeConstraint);
          }
          case 1:
          {
             var result = List().OrderByDescending(i => lambda.Invoke(i), new ObjectComparer());
-            return collectionClass.Revert(result);
+            return collectionClass.Revert(result, _typeConstraint);
          }
          case 2 when ascending:
          {
             IObject[] array = [.. List()];
             Array.Sort(array, (i, j) => ((Int)lambda.Invoke(i, j)).Value);
 
-            return collectionClass.Revert(array);
+            return collectionClass.Revert(array, _typeConstraint);
          }
          case 2:
          {
             IObject[] array = [.. List()];
             Array.Sort(array, (i, j) => -((Int)lambda.Invoke(i, j)).Value);
-            return collectionClass.Revert(array);
+            return collectionClass.Revert(array, _typeConstraint);
          }
          default:
             return (IObject)collection;
@@ -148,7 +150,7 @@ public class Iterator : IObject, IIterator
       var comparer = new Comparer(ascending);
       Array.Sort(array, comparer);
 
-      return collectionClass.Revert(array);
+      return collectionClass.Revert(array, _typeConstraint);
    }
 
    public IObject FoldLeft(IObject initialValue, Lambda lambda)
@@ -225,7 +227,7 @@ public class Iterator : IObject, IIterator
          result.Add(current);
       }
 
-      return collectionClass.Revert(result);
+      return collectionClass.Revert(result, _typeConstraint);
    }
 
    public IObject ReduceLeft(Lambda lambda)
@@ -248,7 +250,7 @@ public class Iterator : IObject, IIterator
          }
       }
 
-      return collectionClass.Revert(result);
+      return collectionClass.Revert(result, _typeConstraint);
    }
 
    public IObject ReduceRight(IObject initialValue, Lambda lambda)
@@ -263,7 +265,7 @@ public class Iterator : IObject, IIterator
          result.Add(current);
       }
 
-      return collectionClass.Revert(result);
+      return collectionClass.Revert(result, _typeConstraint);
    }
 
    public IObject ReduceRight(Lambda lambda)
@@ -286,7 +288,7 @@ public class Iterator : IObject, IIterator
          }
       }
 
-      return collectionClass.Revert(result);
+      return collectionClass.Revert(result, _typeConstraint);
    }
 
    public Int Count() => List().Count();
@@ -295,11 +297,11 @@ public class Iterator : IObject, IIterator
 
    public Int Count(Lambda predicate) => List().Count(value => predicate.Invoke(value).IsTrue);
 
-   public virtual IObject Map(Lambda lambda) => collectionClass.Revert(List().Select(value => lambda.Invoke(value)));
+   public virtual IObject Map(Lambda lambda) => collectionClass.Revert(List().Select(value => lambda.Invoke(value)), _typeConstraint);
 
    public virtual IObject FlatMap(Lambda lambda)
    {
-      var newCollection = collectionClass.Revert(List());
+      var newCollection = collectionClass.Revert(List(), _typeConstraint);
       return new FlatMapIterator((ICollection)newCollection).FlatMap(lambda);
    }
 
@@ -313,7 +315,7 @@ public class Iterator : IObject, IIterator
             var innerCollectionClass = (ICollectionClass)classOf((IObject)innerCollection);
             var iterator = innerCollection.GetIterator(false);
             var mappedItem = iterator.List().Select(i => lambda.Invoke(i));
-            var newCollection = innerCollectionClass.Revert(mappedItem);
+            var newCollection = innerCollectionClass.Revert(mappedItem, _typeConstraint);
             list.Add(newCollection);
          }
          else
@@ -322,7 +324,7 @@ public class Iterator : IObject, IIterator
          }
       }
 
-      return collectionClass.Revert(list);
+      return collectionClass.Revert(list, _typeConstraint);
    }
 
    public IObject Replace(Lambda predicate, Lambda lambda)
@@ -333,59 +335,59 @@ public class Iterator : IObject, IIterator
          list.Add(predicate.Invoke(item).IsTrue ? lambda.Invoke(item) : item);
       }
 
-      return collectionClass.Revert(list);
+      return collectionClass.Revert(list, _typeConstraint);
    }
 
    public virtual IObject If(Lambda predicate) =>
-      collectionClass.Revert(List().Where(value => predicate.Invoke(value).IsTrue));
+      collectionClass.Revert(List().Where(value => predicate.Invoke(value).IsTrue), _typeConstraint);
 
    public virtual IObject IfNot(Lambda predicate) =>
-      collectionClass.Revert(List().Where(value => !predicate.Invoke(value).IsTrue));
+      collectionClass.Revert(List().Where(value => !predicate.Invoke(value).IsTrue), _typeConstraint);
 
    public virtual IObject Skip(int count)
    {
       if (count > -1)
       {
-         return collectionClass.Revert(List().Skip(count));
+         return collectionClass.Revert(List().Skip(count), _typeConstraint);
       }
       else
       {
          var list = List().ToList();
-         return collectionClass.Revert(list.Take(list.Count + count));
+         return collectionClass.Revert(list.Take(list.Count + count), _typeConstraint);
       }
    }
 
    public virtual IObject SkipWhile(Lambda predicate)
    {
-      return collectionClass.Revert(List().SkipWhile(value => predicate.Invoke(value).IsTrue));
+      return collectionClass.Revert(List().SkipWhile(value => predicate.Invoke(value).IsTrue), _typeConstraint);
    }
 
    public virtual IObject SkipUntil(Lambda predicate)
    {
-      return collectionClass.Revert(List().SkipWhile(value => !predicate.Invoke(value).IsTrue));
+      return collectionClass.Revert(List().SkipWhile(value => !predicate.Invoke(value).IsTrue), _typeConstraint);
    }
 
    public virtual IObject Take(int count)
    {
       if (count > -1)
       {
-         return collectionClass.Revert(List().Take(count));
+         return collectionClass.Revert(List().Take(count), _typeConstraint);
       }
       else
       {
          var list = List().ToList();
-         return collectionClass.Revert(list.Skip(list.Count + count));
+         return collectionClass.Revert(list.Skip(list.Count + count), _typeConstraint);
       }
    }
 
    public virtual IObject TakeWhile(Lambda predicate)
    {
-      return collectionClass.Revert(List().TakeWhile(value => predicate.Invoke(value).IsTrue));
+      return collectionClass.Revert(List().TakeWhile(value => predicate.Invoke(value).IsTrue), _typeConstraint);
    }
 
    public virtual IObject TakeUntil(Lambda predicate)
    {
-      return collectionClass.Revert(List().TakeWhile(value => !predicate.Invoke(value).IsTrue));
+      return collectionClass.Revert(List().TakeWhile(value => !predicate.Invoke(value).IsTrue), _typeConstraint);
    }
 
    public IObject Index(Lambda predicate)
@@ -418,7 +420,7 @@ public class Iterator : IObject, IIterator
          i++;
       }
 
-      return collectionClass.Revert(result);
+      return collectionClass.Revert(result, _typeConstraint);
    }
 
    public virtual IObject Zip(ICollection collection) => Zip(collection.GetIterator(false));
@@ -444,13 +446,13 @@ public class Iterator : IObject, IIterator
             }
             else
             {
-               var resultItem = collectionClass.Revert([next, rightNext]);
+               var resultItem = collectionClass.Revert([next, rightNext], _typeConstraint);
                result.Add(resultItem);
             }
          }
       }
 
-      return collectionClass.Revert(result);
+      return collectionClass.Revert(result, _typeConstraint);
    }
 
    public virtual IObject Zip(ICollection collection, Lambda lambda) => Zip(collection.GetIterator(false), lambda);
@@ -469,13 +471,13 @@ public class Iterator : IObject, IIterator
          }
       }
 
-      return collectionClass.Revert(result);
+      return collectionClass.Revert(result, _typeConstraint);
    }
 
    public virtual IObject ZipL(ICollection collection, IObject leftDefaultValue, IObject rightDefaultValue)
    {
       return collectionClass.Revert(zipUnequal(List(), collection.GetIterator(false).List())
-         .Select(t => collectionClass.Revert(new List<IObject> { t.left, t.right })));
+         .Select(t => collectionClass.Revert(new List<IObject> { t.left, t.right }, _typeConstraint)), _typeConstraint);
 
       IEnumerable<(IObject left, IObject right)> zipUnequal(IEnumerable<IObject> left, IEnumerable<IObject> right)
       {
@@ -501,7 +503,7 @@ public class Iterator : IObject, IIterator
 
    public virtual IObject ZipL(ICollection collection, IObject leftDefaultValue, IObject rightDefaultValue, Lambda lambda)
    {
-      return collectionClass.Revert(zipUnequal(List(), collection.GetIterator(false).List()));
+      return collectionClass.Revert(zipUnequal(List(), collection.GetIterator(false).List()), _typeConstraint);
 
       IEnumerable<IObject> zipUnequal(IEnumerable<IObject> left, IEnumerable<IObject> right)
       {
@@ -545,11 +547,11 @@ public class Iterator : IObject, IIterator
          }
       }
 
-      var leftCollection = collectionClass.Revert(leftList);
-      var rightCollection = collectionClass.Revert(rightList);
+      var leftCollection = collectionClass.Revert(leftList, _typeConstraint);
+      var rightCollection = collectionClass.Revert(rightList, _typeConstraint);
       List<IObject> newCollection = [leftCollection, rightCollection];
 
-      return collectionClass.Revert(newCollection);
+      return collectionClass.Revert(newCollection, _typeConstraint);
    }
 
    public IObject Unzip(Lambda lambda)
@@ -576,11 +578,11 @@ public class Iterator : IObject, IIterator
          }
       }
 
-      var leftCollection = collectionClass.Revert(leftList);
-      var rightCollection = collectionClass.Revert(rightList);
+      var leftCollection = collectionClass.Revert(leftList, _typeConstraint);
+      var rightCollection = collectionClass.Revert(rightList, _typeConstraint);
       List<IObject> newCollection = [leftCollection, rightCollection];
 
-      return collectionClass.Revert(newCollection);
+      return collectionClass.Revert(newCollection, _typeConstraint);
    }
 
    public IObject Min()
@@ -756,7 +758,7 @@ public class Iterator : IObject, IIterator
          }
       }
 
-      return collectionClass.Revert(new List<IObject> { collectionClass.Revert(ifTrue), collectionClass.Revert(ifFalse) });
+      return collectionClass.Revert(new List<IObject> { collectionClass.Revert(ifTrue, _typeConstraint), collectionClass.Revert(ifFalse, _typeConstraint) }, _typeConstraint);
    }
 
    public IObject Split(int count)
@@ -776,7 +778,7 @@ public class Iterator : IObject, IIterator
          }
       }
 
-      return collectionClass.Revert(new List<IObject> { collectionClass.Revert(ifTrue), collectionClass.Revert(ifFalse) });
+      return collectionClass.Revert(new List<IObject> { collectionClass.Revert(ifTrue, _typeConstraint), collectionClass.Revert(ifFalse, _typeConstraint) }, _typeConstraint);
    }
 
    public virtual IObject GroupBy(Lambda lambda)
@@ -792,7 +794,7 @@ public class Iterator : IObject, IIterator
 
       foreach (var key in memo.GetHash().KeyArray())
       {
-         result[key] = collectionClass.Revert(memo[key]);
+         result[key] = collectionClass.Revert(memo[key], _typeConstraint);
       }
 
       return new Dictionary(result);
@@ -812,7 +814,7 @@ public class Iterator : IObject, IIterator
 
       foreach (var key in memo.GetHash().KeyArray())
       {
-         result[key] = collectionClass.Revert(memo[key]);
+         result[key] = collectionClass.Revert(memo[key], _typeConstraint);
       }
 
       return new Dictionary(result);
@@ -913,7 +915,7 @@ public class Iterator : IObject, IIterator
          result.AddRange(collection.GetIterator(false).List().Select(right => new List<IObject> { left, right }));
       }
 
-      return collectionClass.Revert(result.Select(l => collectionClass.Revert(l)));
+      return collectionClass.Revert(result.Select(l => collectionClass.Revert(l, _typeConstraint)), _typeConstraint);
    }
 
    public IObject Cross(ICollection collection, Lambda lambda)
@@ -924,7 +926,7 @@ public class Iterator : IObject, IIterator
          result.AddRange(collection.GetIterator(false).List().Select(right => lambda.Invoke(left, right)));
       }
 
-      return collectionClass.Revert(result);
+      return collectionClass.Revert(result, _typeConstraint);
    }
 
    public virtual IObject By(int count)
@@ -942,20 +944,20 @@ public class Iterator : IObject, IIterator
                inner.Add(value);
                if (inner.Count == count)
                {
-                  outer.Add(collectionClass.Revert(inner));
+                  outer.Add(collectionClass.Revert(inner, _typeConstraint));
                   inner.Clear();
                }
             }
 
             if (inner.Count > 0)
             {
-               outer.Add(collectionClass.Revert(inner));
+               outer.Add(collectionClass.Revert(inner, _typeConstraint));
             }
 
-            return collectionClass.Revert(outer);
+            return collectionClass.Revert(outer, _typeConstraint);
          }
          default:
-            return collectionClass.Revert(List());
+            return collectionClass.Revert(List(), _typeConstraint);
       }
    }
 
@@ -981,20 +983,20 @@ public class Iterator : IObject, IIterator
                   }
                }
 
-               var result = collectionClass.Revert(innerList);
+               var result = collectionClass.Revert(innerList, _typeConstraint);
                outerList.Add(result);
             }
 
-            return collectionClass.Revert(outerList);
+            return collectionClass.Revert(outerList, _typeConstraint);
          }
          else
          {
-            return collectionClass.Revert(list);
+            return collectionClass.Revert(list, _typeConstraint);
          }
       }
       else
       {
-         return collectionClass.Revert(List());
+         return collectionClass.Revert(List(), _typeConstraint);
       }
    }
 
@@ -1019,7 +1021,7 @@ public class Iterator : IObject, IIterator
                innerList.Add(source[i++]);
             }
 
-            var innerCollection = collectionClass.Revert(innerList);
+            var innerCollection = collectionClass.Revert(innerList, _typeConstraint);
             outerList.Add(innerCollection);
          }
       }
@@ -1036,14 +1038,14 @@ public class Iterator : IObject, IIterator
          }
       }
 
-      return collectionClass.Revert(outerList);
+      return collectionClass.Revert(outerList, _typeConstraint);
    }
 
-   public virtual IObject Unique() => collectionClass.Revert(List().Distinct());
+   public virtual IObject Unique() => collectionClass.Revert(List().Distinct(), _typeConstraint);
 
    public virtual IObject Unique(Lambda lambda)
    {
-      return collectionClass.Revert(unique(List()));
+      return collectionClass.Revert(unique(List()), _typeConstraint);
 
       IEnumerable<IObject> unique(IEnumerable<IObject> list)
       {
@@ -1086,7 +1088,7 @@ public class Iterator : IObject, IIterator
          }
       }
 
-      return collectionClass.Revert(new List<IObject> { collectionClass.Revert(isTrue), collectionClass.Revert(isFalse) });
+      return collectionClass.Revert(new List<IObject> { collectionClass.Revert(isTrue, _typeConstraint), collectionClass.Revert(isFalse, _typeConstraint) }, _typeConstraint);
    }
 
    public IObject Span(int count)
@@ -1106,7 +1108,7 @@ public class Iterator : IObject, IIterator
          }
       }
 
-      return collectionClass.Revert(new List<IObject> { collectionClass.Revert(isTrue), collectionClass.Revert(isFalse) });
+      return collectionClass.Revert(new List<IObject> { collectionClass.Revert(isTrue, _typeConstraint), collectionClass.Revert(isFalse, _typeConstraint) }, _typeConstraint);
    }
 
    public IObject Shuffle()
@@ -1124,7 +1126,7 @@ public class Iterator : IObject, IIterator
       return array[i];
    }
 
-   public IObject Collect() => collectionClass.Revert(List());
+   public IObject Collect() => collectionClass.Revert(List(), _typeConstraint);
 
    public KArray ToArray() => new(List());
 
@@ -1187,7 +1189,7 @@ public class Iterator : IObject, IIterator
          list = rotatedList;
       }
 
-      return collectionClass.Revert(list);
+      return collectionClass.Revert(list, _typeConstraint);
    }
 
    public IObject Shift(int count)
@@ -1195,7 +1197,7 @@ public class Iterator : IObject, IIterator
       List<IObject> list = [.. List()];
       if (count == 0)
       {
-         return collectionClass.Revert(list);
+         return collectionClass.Revert(list, _typeConstraint);
       }
 
       var defaultValue = classOf(list[0]).DefaultValue;
@@ -1222,7 +1224,7 @@ public class Iterator : IObject, IIterator
          list = rotatedList;
       }
 
-      return collectionClass.Revert(list);
+      return collectionClass.Revert(list, _typeConstraint);
    }
 
    public IObject Shift(int count, IObject defaultValue)
@@ -1251,7 +1253,7 @@ public class Iterator : IObject, IIterator
          list = rotatedList;
       }
 
-      return collectionClass.Revert(list);
+      return collectionClass.Revert(list, _typeConstraint);
    }
 
    protected static void rotateRight(List<IObject> list, int count)
@@ -1263,7 +1265,7 @@ public class Iterator : IObject, IIterator
 
    public IObject Permutations(int count)
    {
-      return collectionClass.Revert(permutations(List(), count).Select(l => collectionClass.Revert(l)));
+      return collectionClass.Revert(permutations(List(), count).Select(l => collectionClass.Revert(l, _typeConstraint)), _typeConstraint);
 
       IEnumerable<List<IObject>> permutations(IEnumerable<IObject> items, int length)
       {
@@ -1294,7 +1296,7 @@ public class Iterator : IObject, IIterator
 
    public IObject Combinations(int count)
    {
-      return collectionClass.Revert(combinations(List(), count).Select(l => collectionClass.Revert(l)));
+      return collectionClass.Revert(combinations(List(), count).Select(l => collectionClass.Revert(l, _typeConstraint)), _typeConstraint);
 
       IEnumerable<List<IObject>> combinations(IEnumerable<IObject> items, int length)
       {
@@ -1360,9 +1362,9 @@ public class Iterator : IObject, IIterator
       }
    }
 
-   public IObject Flatten() => collectionClass.Revert(flatten(this));
+   public IObject Flatten() => collectionClass.Revert(flatten(this), _typeConstraint);
 
-   public IObject Copy() => collectionClass.Revert(List());
+   public IObject Copy() => collectionClass.Revert(List(), _typeConstraint);
 
    public IObject Apply(ICollection collection)
    {
@@ -1370,7 +1372,7 @@ public class Iterator : IObject, IIterator
       List<IObject> list = [.. collection.GetIterator(false).List()];
 
       var result = applyAgainst(lambdas, list);
-      return collectionClass.Revert(result);
+      return collectionClass.Revert(result, _typeConstraint);
    }
 
    public IObject Column(int column)
@@ -1397,7 +1399,7 @@ public class Iterator : IObject, IIterator
          }
       }
 
-      return collectionClass.Revert(result);
+      return collectionClass.Revert(result, _typeConstraint);
    }
 
    public IObject Partition(Lambda lambda)
@@ -1418,7 +1420,7 @@ public class Iterator : IObject, IIterator
          }
       }
 
-      return collectionClass.Revert([collectionClass.Revert(matched), collectionClass.Revert(notMatched)]);
+      return collectionClass.Revert([collectionClass.Revert(matched, _typeConstraint), collectionClass.Revert(notMatched, _typeConstraint)], _typeConstraint);
    }
 
    public IObject Pick(int count)
@@ -1445,7 +1447,7 @@ public class Iterator : IObject, IIterator
          }
       }
 
-      return collectionClass.Revert(result);
+      return collectionClass.Revert(result, _typeConstraint);
    }
 
    public IObject Pick()
@@ -1467,7 +1469,7 @@ public class Iterator : IObject, IIterator
          result.Add(array[randomIndex]);
       }
 
-      return collectionClass.Revert(result);
+      return collectionClass.Revert(result, _typeConstraint);
    }
 
    public IObject Splat(int count)
@@ -1490,10 +1492,10 @@ public class Iterator : IObject, IIterator
 
          if (remainder.Count > 0)
          {
-            result.Add(collectionClass.Revert(remainder));
+            result.Add(collectionClass.Revert(remainder, _typeConstraint));
          }
 
-         return collectionClass.Revert(result);
+         return collectionClass.Revert(result, _typeConstraint);
       }
       else
       {
@@ -1531,7 +1533,7 @@ public class Iterator : IObject, IIterator
       return length switch
       {
          0 or 1 => (IObject)collection,
-         _ => collectionClass.Revert(accumulate(lambda))
+         _ => collectionClass.Revert(accumulate(lambda), _typeConstraint)
       };
 
       IEnumerable<IObject> accumulate(Lambda lambda)
@@ -1556,7 +1558,7 @@ public class Iterator : IObject, IIterator
       return length switch
       {
          0 or 1 => (IObject)collection,
-         _ => collectionClass.Revert(accumulate(lambda))
+         _ => collectionClass.Revert(accumulate(lambda), _typeConstraint)
       };
 
       IEnumerable<IObject> accumulate(Lambda lambda)
@@ -1639,7 +1641,7 @@ public class Iterator : IObject, IIterator
    {
       if (step <= 1)
       {
-         return collectionClass.Revert(List());
+         return collectionClass.Revert(List(), _typeConstraint);
       }
 
       var list = List().ToList();
@@ -1652,7 +1654,7 @@ public class Iterator : IObject, IIterator
          }
       }
 
-      return collectionClass.Revert(result);
+      return collectionClass.Revert(result, _typeConstraint);
    }
 
    public virtual IObject this[int index]
@@ -1710,7 +1712,7 @@ public class Iterator : IObject, IIterator
          }
       }
 
-      return collectionClass.Revert(transposed.Select(inner => collectionClass.Revert(inner)));
+      return collectionClass.Revert(transposed.Select(inner => collectionClass.Revert(inner, _typeConstraint)), _typeConstraint);
    }
 
    public IObject Assoc(IObject target)
@@ -1750,7 +1752,7 @@ public class Iterator : IObject, IIterator
          result[key] = array[key];
       }
 
-      return collectionClass.Revert(result.ValueArray());
+      return collectionClass.Revert(result.ValueArray(), _typeConstraint);
    }
 
    public TypeConstraint EquivalentTypeConstraint() => TypeConstraint.FromList("Collection");

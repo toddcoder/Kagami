@@ -4,6 +4,7 @@ using Core.Monads;
 using Core.Numbers;
 using Core.Objects;
 using Core.Strings;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
@@ -100,6 +101,8 @@ public readonly struct Formatter(LazyString lazyString, KArray array) : IObject,
    public IObject Copy() => getKString().Copy();
 
    public IIterator Following(IObject following) => new MultiIterator(this, following);
+
+   public Maybe<TypeConstraint> TypeConstraint => nil;
 
    public int CompareTo(object? obj) => getKString().CompareTo(obj);
 

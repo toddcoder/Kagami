@@ -104,9 +104,9 @@ public class DictionaryClass : BaseClass, ICollectionClass
       base.RegisterClassMessages();
 
       classMessages["new(default:_,caching:_<Boolean>)"] = (cls, msg) =>
-         classFunc<DictionaryClass, IObject, KBoolean>(cls, msg, (_, d, c) => Dictionary.New(d, c));
+         classFunc<DictionaryClass, IObject, KBoolean>(cls, msg, (_, d, c) => Dictionary.New(d, c, nil));
       classMessages["new(default:_)"] =
-         (cls, msg) => classFunc<DictionaryClass, IObject>(cls, msg, (_, d) => Dictionary.New(d, false));
+         (cls, msg) => classFunc<DictionaryClass, IObject>(cls, msg, (_, d) => Dictionary.New(d, false, nil));
       classMessages["empty".get()] = (cls, _) => classFunc<DictionaryClass>(cls, _ => Dictionary.Empty);
    }
 
@@ -114,5 +114,5 @@ public class DictionaryClass : BaseClass, ICollectionClass
 
    public TypeConstraint EquivalentTypeConstraint() => TypeConstraint.FromList("Collection");
 
-   public IObject Revert(IEnumerable<IObject> list) => new Dictionary(list);
+   public IObject Revert(IEnumerable<IObject> list, Maybe<TypeConstraint> _typeConstraint) => new Dictionary(list);
 }

@@ -3,7 +3,6 @@ using Core.Monads;
 using Kagami.Library.Runtime;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Classes.ClassFunctions;
-using static Kagami.Library.Objects.CollectionFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Classes;
@@ -12,7 +11,7 @@ public class ArrayClass : BaseClass, ICollectionClass
 {
    public override string Name => "Array";
 
-   public IObject Revert(IEnumerable<IObject> list) => KArray.CreateObject(list);
+   public IObject Revert(IEnumerable<IObject> list, Maybe<TypeConstraint> _typeConstraint) => KArray.CreateObject(list, _typeConstraint);
 
    public override void RegisterMessages()
    {

@@ -12,10 +12,10 @@ namespace Kagami.Library.Objects;
 public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<KArray>, IMutableCollection, ISliceable, IIndexed, IFindIndex,
    IAccepting, IMutable
 {
-   public static IObject CreateObject(IEnumerable<IObject> items)
+   public static IObject CreateObject(IEnumerable<IObject> items, Maybe<TypeConstraint> _typeConstraint)
    {
       List<IObject> list = [.. items];
-      return new KArray(list);
+      return new KArray(list) { TypeConstraint = _typeConstraint };
    }
 
    public static KArray Empty => new([]);
@@ -30,6 +30,44 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
    protected Maybe<TypeConstraint> _typeConstraint = nil;
    protected Maybe<Lambda> _defaultLambda = nil;
    protected Maybe<IObject> _defaultValue = nil;
+
+   protected void assertIncomingValueIsEquivalent(IObject value)
+   {
+      if (_typeConstraint is (true, var typeConstraint))
+      {
+         if (!typeConstraint.Matches(classOf(value)))
+         {
+            throw fail($"{value.AsString} is incompatible with {typeConstraint.AsString}");
+         }
+      }
+   }
+
+   protected void assertIncomingValuesAreEquivalent(IEnumerable<IObject> values)
+   {
+      foreach (var value in values)
+      {
+         assertIncomingValueIsEquivalent(value);
+      }
+   }
+
+   protected void assertValuesAreEquivalent()
+   {
+      foreach (var value in list)
+      {
+         assertIncomingValueIsEquivalent(value);
+      }
+   }
+
+   protected void assertTypeConstraintIsEquivalent(TypeConstraint otherTypeConstraint)
+   {
+      if (_typeConstraint is (true, var typeConstraint))
+      {
+         if (!typeConstraint.IsEquivalentTo(otherTypeConstraint))
+         {
+            throw fail($"{typeConstraint.AsString} is incompatible with {otherTypeConstraint.AsString}");
+         }
+      }
+   }
 
    public KArray(IEnumerable<IObject> objects)
    {
@@ -54,9 +92,9 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public string ClassName => "Array";
 
-   public string AsString => list.Select(i => i.AsString).ToString(" ");
+   public virtual string AsString => list.Select(i => i.AsString).ToString(" ");
 
-   public string Image => $"[{list.Select(i => i.Image).ToString(", ")}]";
+   public virtual string Image => $"[{list.Select(i => i.Image).ToString(", ")}]";
 
    public int Hash => list.GetHashCode();
 
@@ -80,9 +118,20 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public IObject Object => this;
 
-   public KBoolean Between(IObject min, IObject max, bool inclusive) => between(this, min, max, inclusive);
+   public KBoolean Between(IObject min, IObject max, bool inclusive)
+   {
+      assertIncomingValueIsEquivalent(min);
+      assertIncomingValueIsEquivalent(max);
 
-   public KBoolean After(IObject min, IObject max, bool inclusive) => after(this, min, max, inclusive);
+      return between(this, min, max, inclusive);
+   }
+
+   public KBoolean After(IObject min, IObject max, bool inclusive)
+   {
+      assertIncomingValueIsEquivalent(min);
+      assertIncomingValueIsEquivalent(max);
+      return after(this, min, max, inclusive);
+   }
 
    public int CompareTo(KArray? other) => compareCollections(this, other!);
 
@@ -91,7 +140,11 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
    public Maybe<TypeConstraint> TypeConstraint
    {
       get => _typeConstraint;
-      set => _typeConstraint = value;
+      set
+      {
+         _typeConstraint = value;
+         assertValuesAreEquivalent();
+      }
    }
 
    public Maybe<Lambda> DefaultLambda
@@ -104,14 +157,6 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
    {
       get => _defaultValue;
       set => _defaultValue = value;
-   }
-
-   protected void assertType(IObject value)
-   {
-      if (_typeConstraint is (true, var typeConstraint) && !typeConstraint.Matches(classOf(value)))
-      {
-         throw incompatibleClasses(value, typeConstraint.AsString);
-      }
    }
 
    public virtual IObject this[int index]
@@ -147,7 +192,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
          }
          else
          {
-            assertType(value);
+            assertIncomingValueIsEquivalent(value);
             list[wrappedIndex] = value;
          }
       }
@@ -179,7 +224,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
             }
          }
 
-         return new KArray(result);
+         return new KArray(result) { TypeConstraint = _typeConstraint };
       }
    }
 
@@ -193,7 +238,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
             result.Add(list[index]);
          }
 
-         return new KArray(result);
+         return new KArray(result) { TypeConstraint = _typeConstraint };
       }
       set
       {
@@ -220,6 +265,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
                   lastIndex = index;
                   if (valueIndex < values.Count)
                   {
+                     assertIncomingValueIsEquivalent(values[valueIndex]);
                      list[index] = values[valueIndex];
                      valueIndex++;
                   }
@@ -233,6 +279,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
                {
                   for (var i = valueIndex; i < values.Count; i++)
                   {
+                     assertIncomingValueIsEquivalent(values[i]);
                      list.Insert(lastIndex + 1, values[i]);
                      lastIndex++;
                   }
@@ -243,6 +290,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
             default:
             {
+               assertIncomingValueIsEquivalent(value);
                foreach (var index in il)
                {
                   list[index] = value;
@@ -265,7 +313,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
          _item = iterator.Next();
       }
 
-      return new KArray(result);
+      return new KArray(result) { TypeConstraint = _typeConstraint };
    }
 
    protected void throwIfSelf(IObject value)
@@ -303,7 +351,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
    public virtual IObject Set(IObject index, IObject value)
    {
       var intIndex = wrapIndex(((Int)index).Value, list.Count);
-      assertType(value);
+      assertIncomingValueIsEquivalent(value);
       list[intIndex] = value;
 
       return this;
@@ -313,19 +361,27 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    int ISliceable.Length => list.Count;
 
-   public virtual KBoolean In(IObject item) => list.Contains(item);
+   public virtual KBoolean In(IObject item)
+   {
+      assertIncomingValueIsEquivalent(item);
+      return list.Contains(item);
+   }
 
-   public virtual KBoolean NotIn(IObject item) => !list.Contains(item);
+   public virtual KBoolean NotIn(IObject item)
+   {
+      assertIncomingValueIsEquivalent(item);
+      return !list.Contains(item);
+   }
 
    public IObject Times(int count)
    {
-      var result = new List<IObject>();
+      List<IObject> result = [];
       for (var i = 0; i < count; i++)
       {
          result.AddRange(list);
       }
 
-      return new KArray(result);
+      return new KArray(result) { TypeConstraint = _typeConstraint };
    }
 
    public KString MakeString(string connector) => makeString(this, connector);
@@ -337,21 +393,15 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
    public IObject Copy()
    {
       List<IObject> newList = [.. list];
-      return new KArray(newList);
+      return new KArray(newList) { TypeConstraint = _typeConstraint };
    }
 
    IIterator ICollection.Following(IObject following) => new MultiIterator(this, following);
 
-   public void Add(IObject obj)
-   {
-      assertType(obj);
-      list.Add(obj);
-   }
-
    public virtual IObject Append(IObject obj)
    {
       throwIfSelf(obj);
-      assertType(obj);
+      assertIncomingValueIsEquivalent(obj);
       list.Add(obj);
 
       return this;
@@ -359,6 +409,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public virtual IObject Remove(IObject obj)
    {
+      assertIncomingValueIsEquivalent(obj);
       list.Remove(obj);
       return this;
    }
@@ -381,6 +432,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public IObject RemoveAll(IObject obj)
    {
+      assertIncomingValueIsEquivalent(obj);
       list.RemoveAll(o => o.IsEqualTo(obj));
       return this;
    }
@@ -388,7 +440,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
    public virtual IObject InsertAt(int index, IObject obj)
    {
       throwIfSelf(obj);
-      assertType(obj);
+      assertIncomingValueIsEquivalent(obj);
       index = wrapIndex(index, list.Count);
       list.Insert(index, obj);
 
@@ -407,6 +459,8 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       List<IObject> newList = [.. left, .. values, .. right];
 
       list = newList;
+      assertValuesAreEquivalent();
+
       return this;
    }
 
@@ -431,10 +485,10 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
          throw fail("RHS array has a type constraint");
       }
 
-      var newList = new List<IObject>(list);
+      List<IObject> newList = [.. list];
       newList.AddRange(kArray.list);
 
-      return new KArray(newList);
+      return new KArray(newList) { TypeConstraint = _typeConstraint };
    }
 
    public IObject Pop() => list.Count > 0 ? Some.Object(RemoveAt(list.Count - 1)) : KNil.NilValue;
@@ -447,6 +501,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public virtual IObject IndexOf(IObject item)
    {
+      assertIncomingValueIsEquivalent(item);
       var index = list.IndexOf(item);
       if (index > -1)
       {
@@ -488,6 +543,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public virtual IObject LastIndexOf(IObject item)
    {
+      assertIncomingValueIsEquivalent(item);
       var index = list.LastIndexOf(item);
       if (index > -1)
       {
@@ -511,7 +567,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
          }
       }
 
-      return new KArray(found);
+      return new KArray(found) { TypeConstraint = _typeConstraint };
    }
 
    public IObject First(Lambda lambda)
@@ -537,25 +593,16 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       return KNil.NilValue;
    }
 
-   public virtual IObject BinarySearch(IObject item) => binarySearch(this, item);
-
-   public virtual IObject BinarySearch(IObject item, Lambda lambda) => binarySearch(this, item, lambda);
-
-   public IObject FindAll(IObject item)
+   public virtual IObject BinarySearch(IObject item)
    {
-      List<IObject> result = [];
-      var index = 0;
-      while (index > -1)
-      {
-         index = list.IndexOf(item, index);
-         if (index > -1)
-         {
-            result.Add((Int)index);
-            index++;
-         }
-      }
+      assertIncomingValueIsEquivalent(item);
+      return binarySearch(this, item);
+   }
 
-      return new KTuple([.. result]);
+   public virtual IObject BinarySearch(IObject item, Lambda lambda)
+   {
+      assertIncomingValueIsEquivalent(item);
+      return binarySearch(this, item, lambda);
    }
 
    public KArray Transpose()
@@ -564,19 +611,19 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       {
          var listOfLists = list.Select(i => ((KArray)i).list.ToArray()).ToArray();
          var minLength = listOfLists.Min(a => a.Length);
-         var outerList = new List<IObject>();
+         List<IObject> outerList = [];
          for (var i = 0; i < minLength; i++)
          {
-            var innerList = new List<IObject>();
+            List<IObject> innerList = [];
             foreach (var listOf in listOfLists)
             {
                innerList.Add(listOf[i]);
             }
 
-            outerList.Add(new KArray(innerList));
+            outerList.Add(new KArray(innerList) { TypeConstraint = _typeConstraint });
          }
 
-         return new KArray(outerList);
+         return new KArray(outerList) { TypeConstraint = _typeConstraint };
       }
       else
       {
@@ -588,25 +635,26 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public IObject Head => list.Count > 0 ? Some.Object(list[0]) : KNil.NilValue;
 
-   public KArray Tail => list.Count > 0 ? new KArray([.. list.Skip(1)]) : new KArray([]);
+   public KArray Tail => list.Count > 0 ? new KArray([.. list.Skip(1)]) { TypeConstraint = _typeConstraint }
+      : new KArray([]) { TypeConstraint = _typeConstraint };
 
    public KTuple HeadTail => new(Head, Tail);
 
-   //public KRange Indexes => new((Int)0, (Int)list.Count, false);
-
-   public KArray Init => new(list.Take(list.Count - 1));
+   public KArray Init => new(list.Take(list.Count - 1)) { TypeConstraint = _typeConstraint };
 
    public KArray Split(int index)
    {
-      var leftArray = new KArray(list.Take(index));
-      var rightArray = new KArray(list.Skip(index));
+      var leftArray = new KArray(list.Take(index)) { TypeConstraint = _typeConstraint };
+      var rightArray = new KArray(list.Skip(index)) { TypeConstraint = _typeConstraint };
 
-      return new KArray([leftArray, rightArray]);
+      return new KArray([leftArray, rightArray]) { TypeConstraint = _typeConstraint };
    }
 
    public virtual IObject Prepend(IObject item)
    {
+      assertIncomingValueIsEquivalent(item);
       list.Insert(0, item);
+
       return this;
    }
 
@@ -618,6 +666,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public virtual KArray PadLeft(int count, IObject value)
    {
+      assertIncomingValueIsEquivalent(value);
       var copy = (KArray)Copy();
       var remainder = count - list.Count;
       if (remainder > 0)
@@ -633,6 +682,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public virtual KArray PadRight(int count, IObject value)
    {
+      assertIncomingValueIsEquivalent(value);
       var copy = (KArray)Copy();
       var remainder = count - list.Count;
       if (remainder > 0)

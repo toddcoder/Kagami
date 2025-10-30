@@ -199,7 +199,7 @@ public class StringClass : BaseClass, ICollectionClass
       return new Dictionary(objectHash);
    }
 
-   public IObject Revert(IEnumerable<IObject> list) => KString.StringObject(list.Select(i => i.AsString).ToString(""));
+   public IObject Revert(IEnumerable<IObject> list, Maybe<TypeConstraint> _typeConstraint) => KString.StringObject(list.Select(i => i.AsString).ToString(""));
 
    public TypeConstraint EquivalentTypeConstraint() => TypeConstraint.FromList("Collection", "TextFinding");
 

@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Objects;
+﻿using Core.Monads;
+using Kagami.Library.Objects;
 using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Classes;
@@ -40,7 +41,7 @@ public class SetClass : BaseClass, ICollectionClass
 
    public override IObject DefaultValue => Set.Empty;
 
-   public IObject Revert(IEnumerable<IObject> list) => new Set(list.ToArray());
+   public IObject Revert(IEnumerable<IObject> list, Maybe<TypeConstraint> _typeConstraint) => new Set((IObject[])[.. list]);
 
    public TypeConstraint EquivalentTypeConstraint() => TypeConstraint.FromList("Collection");
 

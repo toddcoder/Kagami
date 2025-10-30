@@ -63,5 +63,7 @@ public readonly struct OpenRange : IObject, ICollection
 
    public IIterator Following(IObject following) => new MultiIterator(this, following);
 
+   public Maybe<TypeConstraint> TypeConstraint => nil;
+
    public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
 }

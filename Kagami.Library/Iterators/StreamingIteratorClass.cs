@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Classes;
+﻿using Core.Monads;
+using Kagami.Library.Classes;
 using Kagami.Library.Objects;
 
 namespace Kagami.Library.Iterators;
@@ -9,7 +10,7 @@ public class StreamingIteratorClass : BaseClass, ICollectionClass
 
    public override IObject DefaultValue => new StreamingIterator(new Iterator(KArray.Empty));
 
-   public IObject Revert(IEnumerable<IObject> list) => new KArray(list);
+   public IObject Revert(IEnumerable<IObject> list, Maybe<TypeConstraint> _typeConstraint) => new KArray(list) { TypeConstraint = _typeConstraint };
 
    public override void RegisterMessages()
    {

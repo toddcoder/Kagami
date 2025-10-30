@@ -1,4 +1,5 @@
-﻿using static Kagami.Library.Objects.CollectionFunctions;
+﻿using static Core.Monads.MonadFunctions;
+using static Kagami.Library.Objects.CollectionFunctions;
 
 namespace Kagami.Library.Objects;
 
@@ -38,6 +39,6 @@ public class FlatMapIterator : Iterator
          innerList.AddRange(getEnumerable(result));
       }
 
-      return collectionClass.Revert(innerList);
+      return collectionClass.Revert(innerList, nil);
    }
 }

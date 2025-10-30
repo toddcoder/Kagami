@@ -1,5 +1,6 @@
-﻿using System.Numerics;
+﻿using Core.Monads;
 using Kagami.Library.Objects;
+using System.Numerics;
 using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Classes;
@@ -30,5 +31,8 @@ public class LongRangeClass : BaseClass, ICollectionClass
 
    public TypeConstraint EquivalentTypeConstraint() => TypeConstraint.FromList("Collection");
 
-   public IObject Revert(IEnumerable<IObject> list) => new KArray(list.ToList());
+   public IObject Revert(IEnumerable<IObject> list, Maybe<TypeConstraint> _typeConstraint)
+   {
+      return new KArray(list.ToList()) { TypeConstraint = _typeConstraint };
+   }
 }

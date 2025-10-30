@@ -61,6 +61,8 @@ public class File : IObject, ICollection
 
    public IIterator Following(IObject following) => new MultiIterator(this, following);
 
+   public Maybe<TypeConstraint> TypeConstraint => nil;
+
    public IObject Flatten() => this;
 
    public KString Text => fileName.Text;

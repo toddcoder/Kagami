@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Objects;
+﻿using Core.Monads;
+using Kagami.Library.Objects;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Classes.ClassFunctions;
 
@@ -59,7 +60,7 @@ public class TupleClass : BaseClass, ICollectionClass
       }
    }
 
-   public IObject Revert(IEnumerable<IObject> list) => new KTuple(list.ToArray());
+   public IObject Revert(IEnumerable<IObject> list, Maybe<TypeConstraint> _typeConstraint) => new KTuple(list.ToArray());
 
    public TypeConstraint EquivalentTypeConstraint() => TypeConstraint.FromList("Collection");
 }

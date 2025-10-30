@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Objects;
+﻿using Core.Monads;
+using Kagami.Library.Objects;
 using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Classes;
@@ -21,7 +22,7 @@ public class ByteArrayClass : BaseClass, ICollectionClass
 
    public override IObject DefaultValue => new ByteArray([]);
 
-   public IObject Revert(IEnumerable<IObject> list) => new ByteArray(list.Select(o => (KByte)o).Select(b => b.Value).ToArray());
+   public IObject Revert(IEnumerable<IObject> list, Maybe<TypeConstraint> _typeConstraint) => new ByteArray([.. list.Select(o => (KByte)o).Select(b => b.Value)]);
 
    public TypeConstraint EquivalentTypeConstraint() => TypeConstraint.FromList("Collection");
 }

@@ -198,6 +198,8 @@ public struct KRange : IObject, ICollection
 
    IIterator ICollection.Following(IObject following) => new MultiIterator(this, following);
 
+   public Maybe<TypeConstraint> TypeConstraint => nil;
+
    public IObject Add(int increment) => new KRange(this, increment);
 
    public IObject Subtract(int increment) => new KRange(this, -increment);

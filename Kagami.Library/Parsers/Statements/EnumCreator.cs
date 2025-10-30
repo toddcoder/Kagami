@@ -68,7 +68,7 @@ public class EnumCreator(string enumName, EnumMemberData[] enumMemberData, Block
          var _expression = expressionBuilder.ToExpression();
          if (_expression is (true, var expression))
          {
-            var setSymbol = new DictionaryOrSetSymbol(expression);
+            var setSymbol = new DictionaryOrSetSymbol(expression, nil);
             var returnBlock = new Block(new Return(new Expression(setSymbol), nil));
             var function = new Function("__$members", Parameters.Empty, returnBlock, false, false, "");
             statements.Add(function);

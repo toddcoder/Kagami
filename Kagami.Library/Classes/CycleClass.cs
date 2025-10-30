@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Objects;
+﻿using Core.Monads;
+using Kagami.Library.Objects;
 using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Classes;
@@ -20,5 +21,5 @@ public class CycleClass : BaseClass, ICollectionClass
 
    public TypeConstraint EquivalentTypeConstraint() => TypeConstraint.FromList("Collection");
 
-   public IObject Revert(IEnumerable<IObject> list) => new KTuple([.. list]);
+   public IObject Revert(IEnumerable<IObject> list, Maybe<TypeConstraint> _typeConstraint) => new KTuple([.. list]);
 }

@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Objects;
+﻿using Core.Monads;
+using Kagami.Library.Objects;
 using static Kagami.Library.Classes.ClassFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
@@ -8,7 +9,7 @@ public class ListClass : BaseClass, ICollectionClass
 {
    public override string Name => "List";
 
-   public IObject Revert(IEnumerable<IObject> list) => List.NewList(list);
+   public IObject Revert(IEnumerable<IObject> list, Maybe<TypeConstraint> _typeConstraint) => List.NewList(list);
 
    public override void RegisterMessages()
    {

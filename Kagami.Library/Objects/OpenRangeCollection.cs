@@ -1,5 +1,6 @@
 ﻿using Core.Collections;
 using Core.Monads;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Objects
 {
@@ -47,6 +48,8 @@ namespace Kagami.Library.Objects
       public IObject Copy() => new OpenRangeCollection((OpenRange)openRange.Copy());
 
       public IIterator Following(IObject following) => new MultiIterator(this, following);
+
+      public Maybe<TypeConstraint> TypeConstraint => nil;
 
       public string ClassName => openRange.ClassName;
 

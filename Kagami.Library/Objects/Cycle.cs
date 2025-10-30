@@ -80,6 +80,8 @@ public class Cycle : IObject, ICollection
 
    public IIterator Following(IObject following) => new MultiIterator(this, following);
 
+   public Maybe<TypeConstraint> TypeConstraint => nil;
+
    public KTuple Items => new(items);
 
    public IObject this[int index] => items[index];

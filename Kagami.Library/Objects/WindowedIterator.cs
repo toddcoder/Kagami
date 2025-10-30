@@ -30,7 +30,7 @@ public class WindowedIterator : Iterator
          }
 
          index += step;
-         return windowed.Count == size || partial ? collectionClass.Revert(windowed).Some() : nil;
+         return windowed.Count == size || partial ? collectionClass.Revert(windowed, nil).Some() : nil;
       }
       else
       {

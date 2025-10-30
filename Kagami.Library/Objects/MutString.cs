@@ -119,6 +119,8 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
 
    public IIterator Following(IObject following) => new MultiIterator(this, following);
 
+   public Maybe<TypeConstraint> TypeConstraint => nil;
+
    public int CompareTo(object? obj) => AsString.CompareTo(obj!.ToString());
 
    public int Compare(IObject obj) => AsString.CompareTo(obj.AsString);

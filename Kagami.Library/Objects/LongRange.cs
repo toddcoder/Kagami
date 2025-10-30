@@ -196,6 +196,8 @@ public struct LongRange : IObject, ICollection
 
    public IIterator Following(IObject following) => new MultiIterator(this, following);
 
+   public Maybe<TypeConstraint> TypeConstraint => nil;
+
    public IObject Add(BigInteger increment) => new LongRange(this, increment);
 
    public IObject Subtract(BigInteger increment) => new LongRange(this, -increment);

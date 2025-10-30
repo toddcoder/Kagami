@@ -26,8 +26,16 @@ public partial class DictionaryOrSetParser : SymbolParser
       var _expression = getExpression(state, @"^(\s*)(\})", flags, Color.Whitespace, Color.Collection);
       if (_expression is (true, var expression))
       {
-         builder.Add(new DictionaryOrSetSymbol(expression));
-         return unit;
+         var _parsedTypeConstraint = parseTypeConstraint(state);
+         if (_parsedTypeConstraint is (true, var possibleTypeConstraint))
+         {
+            builder.Add(new DictionaryOrSetSymbol(expression, possibleTypeConstraint.Maybe));
+            return unit;
+         }
+         else
+         {
+            return _parsedTypeConstraint.Exception;
+         }
       }
       else
       {

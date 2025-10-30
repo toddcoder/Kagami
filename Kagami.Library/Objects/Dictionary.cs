@@ -12,9 +12,9 @@ namespace Kagami.Library.Objects;
 
 public class Dictionary : IObject, IMutableCollection, IMutable
 {
-   public static IObject New(IObject defaultValue, KBoolean caching)
+   public static IObject New(IObject defaultValue, KBoolean caching, Maybe<TypeConstraint> _typeConstraint)
    {
-      var dictionary = new Dictionary();
+      var dictionary = new Dictionary() { TypeConstraint = _typeConstraint };
       if (defaultValue is Lambda lambda)
       {
          dictionary.DefaultLambda = lambda.Some();
@@ -29,12 +29,39 @@ public class Dictionary : IObject, IMutableCollection, IMutable
       return dictionary;
    }
 
-   public static IObject Empty => new Dictionary(Enumerable.Empty<IObject>());
+   public static Dictionary Empty => new Dictionary(Enumerable.Empty<IObject>());
 
-   public static IObject New(IEnumerable<IObject> objects) => new Dictionary(objects);
+   public static IObject New(IEnumerable<IObject> objects, Maybe<TypeConstraint> _typeConstraint)
+   {
+      return new Dictionary(objects) { TypeConstraint = _typeConstraint };
+   }
 
    protected Hash<IObject, IObject> dictionary = [];
    protected IObject[] keys = [];
+   protected Maybe<TypeConstraint> _keyTypeConstraint = nil;
+   protected Maybe<TypeConstraint> _valueTypeConstraint = nil;
+
+   protected void assertIncomingKeyIsEquivalent(IObject key)
+   {
+      if (_keyTypeConstraint is (true, var keyTypeConstraint))
+      {
+         if (!keyTypeConstraint.Matches(classOf(key)))
+         {
+            throw fail($"Key {key.AsString} is incompatible with {keyTypeConstraint.AsString}");
+         }
+      }
+   }
+
+   protected void assertIncomingValueIsEquivalent(IObject value)
+   {
+      if (_valueTypeConstraint is (true, var valueTypeConstraint))
+      {
+         if (!valueTypeConstraint.Matches(classOf(value)))
+         {
+            throw fail($"Value {value.AsString} is incompatible with {valueTypeConstraint.AsString}");
+         }
+      }
+   }
 
    public Dictionary(IEnumerable<IObject> items)
    {
@@ -136,9 +163,15 @@ public class Dictionary : IObject, IMutableCollection, IMutable
 
    public IObject this[IObject key]
    {
-      get => getValue(key);
+      get
+      {
+         assertIncomingKeyIsEquivalent(key);
+         return getValue(key);
+      }
       set
       {
+         assertIncomingKeyIsEquivalent(key);
+         assertIncomingValueIsEquivalent(value);
          switch (value)
          {
             case Dictionary otherDictionary when Id == otherDictionary.Id:
@@ -175,6 +208,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable
       }
       set
       {
+         assertIncomingValueIsEquivalent(value);
          switch (value)
          {
             case Dictionary otherDictionary when Id == otherDictionary.Id:
@@ -183,6 +217,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable
             {
                foreach (var key in sequence.List)
                {
+                  assertIncomingKeyIsEquivalent(key);
                   dictionary.Remove(key);
                }
             }
@@ -195,6 +230,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable
                {
                   foreach (var key in sequence.List)
                   {
+                     assertIncomingKeyIsEquivalent(key);
                      var _item = iterator.Next();
                      if (_item is (true, var item))
                      {
@@ -216,49 +252,12 @@ public class Dictionary : IObject, IMutableCollection, IMutable
             {
                foreach (var key in sequence.List)
                {
+                  assertIncomingKeyIsEquivalent(key);
                   this[key] = value;
                }
             }
                break;
          }
-      }
-   }
-
-   public IObject Get(IObject key)
-   {
-      if (dictionary.Maybe[key] is (true, var value))
-      {
-         if (DefaultValue || DefaultLambda)
-         {
-            return value;
-         }
-         else
-         {
-            return new Some(value);
-         }
-      }
-      else if (DefaultLambda is (true, var lambda))
-      {
-         var result = lambda.Invoke(key);
-         if (Caching.IsTrue)
-         {
-            dictionary[key] = result;
-         }
-
-         return result;
-      }
-      else if (DefaultValue is (true, var defaultValue))
-      {
-         if (Caching.IsTrue)
-         {
-            dictionary[key] = defaultValue;
-         }
-
-         return defaultValue;
-      }
-      else
-      {
-         return KNil.NilValue;
       }
    }
 
@@ -326,6 +325,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable
 
    public IObject Delete(IObject key)
    {
+      assertIncomingKeyIsEquivalent(key);
       if (dictionary.Maybe[key] is (true, var value))
       {
          dictionary.Remove(key);
@@ -337,13 +337,21 @@ public class Dictionary : IObject, IMutableCollection, IMutable
       }
    }
 
-   public IObject Keys => new Set(dictionary.KeyArray());
+   public IObject Keys => new Set(dictionary.KeyArray()) { TypeConstraint = _keyTypeConstraint };
 
-   public IObject Values => new KArray(dictionary.ValueArray());
+   public IObject Values => new KArray(dictionary.ValueArray()) { TypeConstraint = _keyTypeConstraint };
 
-   public KBoolean In(IObject key) => dictionary.ContainsKey(key);
+   public KBoolean In(IObject key)
+   {
+      assertIncomingKeyIsEquivalent(key);
+      return dictionary.ContainsKey(key);
+   }
 
-   public KBoolean NotIn(IObject key) => !dictionary.ContainsKey(key);
+   public KBoolean NotIn(IObject key)
+   {
+      assertIncomingKeyIsEquivalent(key);
+      return !dictionary.ContainsKey(key);
+   }
 
    public IObject Times(int count) => this;
 
@@ -372,13 +380,49 @@ public class Dictionary : IObject, IMutableCollection, IMutable
          hash[key] = value;
       }
 
-      return new Dictionary(hash);
+      return new Dictionary(hash) { TypeConstraint = TypeConstraint };
    }
 
    public IIterator Following(IObject following) => new MultiIterator(this, following);
 
+   public Maybe<TypeConstraint> TypeConstraint
+   {
+      get;
+      set
+      {
+         if (value is (true, var typeConstraint))
+         {
+            var comparisands = typeConstraint.Comparisands;
+            var count = comparisands.Length;
+            switch (count)
+            {
+               case 1:
+                  _keyTypeConstraint = new TypeConstraint([comparisands[0]]);
+                  _valueTypeConstraint = new TypeConstraint([comparisands[0]]);
+                  break;
+               case 2:
+                  _keyTypeConstraint = new TypeConstraint([comparisands[0]]);
+                  _valueTypeConstraint = new TypeConstraint([comparisands[1]]);
+                  break;
+               default:
+                  throw fail("One or two comparisands allowed");
+            }
+
+            foreach (var (key, dictionaryValue) in dictionary)
+            {
+               assertIncomingKeyIsEquivalent(key);
+               assertIncomingValueIsEquivalent(dictionaryValue);
+            }
+         }
+
+         field = value;
+      }
+   } = nil;
+
    public IObject Swap(IObject key1, IObject key2)
    {
+      assertIncomingKeyIsEquivalent(key1);
+      assertIncomingKeyIsEquivalent(key2);
       var value1 = getValue(key1);
       var value2 = getValue(key2);
       this[key1] = value2;
@@ -397,6 +441,9 @@ public class Dictionary : IObject, IMutableCollection, IMutable
 
    public IObject Update(IObject key, IObject value)
    {
+      assertIncomingKeyIsEquivalent(key);
+      assertIncomingValueIsEquivalent(value);
+
       if (key is IMutable)
       {
          throw dictionaryKeyMustBeImmutable();
@@ -419,7 +466,9 @@ public class Dictionary : IObject, IMutableCollection, IMutable
       if (obj is KTuple t)
       {
          var key = t[0];
+         assertIncomingKeyIsEquivalent(key);
          var value = t[1];
+         assertIncomingValueIsEquivalent(value);
          this[key] = value;
       }
 
@@ -428,6 +477,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable
 
    public IObject Remove(IObject obj)
    {
+      assertIncomingKeyIsEquivalent(obj);
       if (dictionary.Maybe[obj] is (true, var oldValue))
       {
          dictionary.Remove(obj);
@@ -470,6 +520,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable
          Hash<IObject, IObject> removed = [];
          foreach (var key in iterator.List())
          {
+            assertIncomingKeyIsEquivalent(key);
             var _value = dictionary.Maybe[key];
             if (_value is (true, var value))
             {
@@ -484,6 +535,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable
 
    public IObject InsertAt(int index, IObject obj)
    {
+      assertIncomingValueIsEquivalent(obj);
       var keyArray = dictionary.KeyArray();
       return index.Between(0).Until(keyArray.Length) ? Update(keyArray[index], obj) : KNil.NilValue;
    }
@@ -501,16 +553,24 @@ public class Dictionary : IObject, IMutableCollection, IMutable
          case KTuple t:
          {
             var key = t[0];
+            assertIncomingKeyIsEquivalent(key);
             var value = t[1];
+            assertIncomingValueIsEquivalent(value);
             this[key] = value;
             break;
          }
          case NameValue nameValue:
          {
-            this[(KString)nameValue.Name] = nameValue.Value;
+            var key = (KString)nameValue.Name;
+            assertIncomingKeyIsEquivalent(key);
+            var value = nameValue.Value;
+            assertIncomingValueIsEquivalent(value);
+            this[key] = value;
             break;
          }
          case IKeyValue kv:
+            assertIncomingKeyIsEquivalent(kv.Key);
+            assertIncomingValueIsEquivalent(kv.Value);
             this[kv.Key] = kv.Value;
             break;
       }
@@ -530,6 +590,8 @@ public class Dictionary : IObject, IMutableCollection, IMutable
 
       foreach (var (key, value) in other.InternalHash)
       {
+         assertIncomingKeyIsEquivalent(key);
+         assertIncomingValueIsEquivalent(value);
          hash[key] = value;
       }
 
@@ -546,6 +608,8 @@ public class Dictionary : IObject, IMutableCollection, IMutable
 
       foreach (var (key, value) in other.InternalHash)
       {
+         assertIncomingKeyIsEquivalent(key);
+         assertIncomingValueIsEquivalent(value);
          if (hash.Maybe[key] is (true, var existingValue))
          {
             hash[key] = lambda.Invoke(key, existingValue, value);
@@ -569,7 +633,9 @@ public class Dictionary : IObject, IMutableCollection, IMutable
             throw dictionaryKeyMustBeImmutable();
          }
 
-         dictionary[key] = lambda.Invoke(key, dictionary[key]);
+         var result = lambda.Invoke(key, dictionary[key]);
+         assertIncomingValueIsEquivalent(result);
+         dictionary[key] = result;
       }
 
       return this;
@@ -639,6 +705,8 @@ public class Dictionary : IObject, IMutableCollection, IMutable
                throw dictionaryKeyMustBeImmutable();
             }
 
+            assertIncomingKeyIsEquivalent(tuple[0]);
+            assertIncomingValueIsEquivalent(tuple[1]);
             newDictionary[tuple[0]] = tuple[1];
          }
       }
@@ -674,6 +742,8 @@ public class Dictionary : IObject, IMutableCollection, IMutable
 
    public Dictionary UpdateIfNil(IObject key, IObject value)
    {
+      assertIncomingKeyIsEquivalent(key);
+      assertIncomingValueIsEquivalent(value);
       if (!dictionary.ContainsKey(key))
       {
          if (key is IMutable)

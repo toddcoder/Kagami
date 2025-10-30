@@ -321,11 +321,11 @@ public class OperationsBuilder
 
    public void PopTryFrame() => add(new PopTryFrame());
 
-   public void NewArray() => add(new NewArray());
+   public void NewArray(Maybe<TypeConstraint> _typeConstraint) => add(new NewArray(_typeConstraint));
 
    public void NewTypedArray(TypeConstraint typeConstraint) => add(new NewTypedArray(typeConstraint));
 
-   public void NewDictionaryOrSet() => add(new NewDictionaryOrSet());
+   public void NewDictionaryOrSet(Maybe<TypeConstraint> _typeConstraint) => add(new NewDictionaryOrSet(_typeConstraint));
 
    public void NewCycle() => add(new NewCycle());
 

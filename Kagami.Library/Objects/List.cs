@@ -188,6 +188,8 @@ public class List : IObject, ICollection
 
    public IIterator Following(IObject following) => new MultiIterator(this, following);
 
+   public Maybe<TypeConstraint> TypeConstraint => nil;
+
    public IObject Concatenate(List other)
    {
       var left = GetIterator(false).List().ToList();

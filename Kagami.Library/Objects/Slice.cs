@@ -23,11 +23,11 @@ public class Slice : IObject, ICollection
 
    public string ClassName => "Slice";
 
-   public IObject Reverted() => collectionClass.Revert(List);
+   public IObject Reverted() => collectionClass.Revert(List, nil);
 
-   public string AsString => collectionClass.Revert(List.Select(i => (IObject)(KString)i.AsString)).AsString;
+   public string AsString => collectionClass.Revert(List.Select(i => (IObject)(KString)i.AsString), nil).AsString;
 
-   public string Image => collectionClass.Revert(List.Select(i => (IObject)(KString)i.Image)).AsString;
+   public string Image => collectionClass.Revert(List.Select(i => (IObject)(KString)i.Image), nil).AsString;
 
    public int Hash => List.GetHashCode();
 
@@ -86,6 +86,8 @@ public class Slice : IObject, ICollection
    public IObject Copy() => new Slice(sliceable, indexes);
 
    public IIterator Following(IObject following) => new MultiIterator(this, following);
+
+   public Maybe<TypeConstraint> TypeConstraint => nil;
 
    public IObject Assign(IObject value)
    {

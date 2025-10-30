@@ -11,7 +11,8 @@ public class StringArraySymbol : Symbol
 
    public StringArraySymbol(string source)
    {
-      kArray = source.IsEmpty() ? KArray.Empty : new KArray(source.Trim().Unjoin("/s+").Select(KString.StringObject));
+      kArray = source.IsEmpty() ? KArray.Empty : new KArray(source.Trim().Unjoin("/s+").Select(KString.StringObject))
+         { TypeConstraint = TypeConstraint.FromList("String") };
    }
 
    public override void Generate(OperationsBuilder builder) => builder.PushObject(kArray);

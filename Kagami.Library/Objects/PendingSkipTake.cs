@@ -1,5 +1,6 @@
 ﻿using Core.Collections;
 using Kagami.Library.Runtime;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
@@ -42,6 +43,6 @@ public readonly struct PendingSkipTake(ISkipTakeable skipTakeable, SkipTake skip
       result.AddRange(middle);
       result.AddRange(right);
 
-      return Module.CollectionClass((ICollection)skipTakeable).Revert(result);
+      return Module.CollectionClass((ICollection)skipTakeable).Revert(result, nil);
    }
 }

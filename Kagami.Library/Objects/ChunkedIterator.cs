@@ -25,7 +25,7 @@ public class ChunkedIterator : Iterator
          }
 
          index += count;
-         return collectionClass.Revert(chunk).Some();
+         return collectionClass.Revert(chunk, nil).Some();
       }
       else
       {

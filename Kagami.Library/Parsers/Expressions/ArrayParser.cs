@@ -23,18 +23,15 @@ public partial class ArrayParser : SymbolParser
       if (_expression is (true, var expression))
       {
          var _parsedTypeConstraint = parseTypeConstraint(state);
-         if (_parsedTypeConstraint is (true, { Maybe: (true, var typeConstraint) }))
+         if (_parsedTypeConstraint is (true, var possibleTypeConstraint))
          {
-            builder.Add(new TypedArraySymbol(expression, typeConstraint));
+            builder.Add(new ArraySymbol(expression, possibleTypeConstraint.Maybe));
             return unit;
          }
-         else if (_parsedTypeConstraint.Exception is (true, var exception))
+         else
          {
-            return exception;
+            return _parsedTypeConstraint.Exception;
          }
-
-         builder.Add(new ArraySymbol(expression));
-         return unit;
       }
       else
       {

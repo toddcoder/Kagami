@@ -64,6 +64,8 @@ public struct Words() : IObject, ICollection, IEqualityComparer<Word>
 
    public IIterator Following(IObject following) => new MultiIterator(this, following);
 
+   public Maybe<TypeConstraint> TypeConstraint => nil;
+
    public bool Equals(Word x, Word y) => x.Text == y.Text;
 
    public int GetHashCode(Word obj) => obj.Text.GetHashCode();

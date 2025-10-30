@@ -192,6 +192,8 @@ public struct FloatRange : IObject, ICollection
 
    public IIterator Following(IObject following) => new MultiIterator(this, following);
 
+   public Maybe<TypeConstraint> TypeConstraint => nil;
+
    public IObject Add(double increment) => new FloatRange(this, increment);
 
    public IObject Subtract(double increment) => new FloatRange(this, -increment);

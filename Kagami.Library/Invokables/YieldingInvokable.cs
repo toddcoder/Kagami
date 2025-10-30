@@ -138,5 +138,7 @@ public class YieldingInvokable : IInvokable, ICollection, IObject
 
    public IIterator Following(IObject following) => new MultiIterator(this, following);
 
+   public Maybe<TypeConstraint> TypeConstraint => nil;
+
    public IObject this[SkipTake skipTake] => Objects.CollectionFunctions.skipTake(this, skipTake);
 }

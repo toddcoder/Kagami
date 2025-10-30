@@ -19,17 +19,25 @@ public partial class EmptyMemoParser : SymbolParser
    {
       state.Colorize(tokens, Color.Whitespace, Color.Collection);
 
-      var _lambda = getAnyLambda(state, builder.Flags);
-      if (_lambda is (true, var lambdaSymbol))
+      var _parsedTypeConstraint = parseTypeConstraint(state);
+      if (_parsedTypeConstraint is (true, var possibleTypeConstraint))
       {
-         builder.Add(new EmptyMemoSymbol(lambdaSymbol));
-         state.Scan(@"^(\s*)(\})", Color.Whitespace, Color.Collection);
+         var _lambda = getAnyLambda(state, builder.Flags);
+         if (_lambda is (true, var lambdaSymbol))
+         {
+            builder.Add(new EmptyMemoSymbol(lambdaSymbol, possibleTypeConstraint.Maybe));
+            state.Scan(@"^(\s*)(\})", Color.Whitespace, Color.Collection);
 
-         return unit;
+            return unit;
+         }
+         else
+         {
+            return _lambda.Exception;
+         }
       }
       else
       {
-         return _lambda.Exception;
+         return _parsedTypeConstraint.Exception;
       }
    }
 }

@@ -29,4 +29,6 @@ public interface ICollection : ISkipTakeable
    IObject Copy();
 
    IIterator Following(IObject following);
+
+   Maybe<TypeConstraint> TypeConstraint { get; }
 }
