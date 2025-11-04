@@ -35,9 +35,9 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
       return new([KString.StringObject(left), KString.StringObject(middle), KString.StringObject(right)]);
    }
 
-   private readonly IObject[] items;
-   private readonly Hash<string, int> names;
-   private readonly Hash<int, string> indexes;
+   private readonly IObject[] items = [];
+   private readonly Hash<string, int> names = [];
+   private readonly Hash<int, string> indexes = [];
 
    public KTuple(IObject[] items) : this()
    {

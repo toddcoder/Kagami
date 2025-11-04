@@ -30,13 +30,10 @@ public partial class RecordParser : SymbolParser
       {
          var className = taggedExpressions.Select(te => te.Tag.ToUpper1()).ToString("$");
          Module.Global.Value.ForwardReference(className);
-         //List<Statement> statements = [];
          List<Parameter> parameterList = [];
          List<Expression> argumentList = [];
          foreach (var (tag, expression) in taggedExpressions)
          {
-            /*var assignToNewField = new AssignToNewField(true, tag, false, expression);
-            statements.Add(assignToNewField);*/
             parameterList.Add(new Parameter(true, "", tag, nil, nil, false, false));
             argumentList.Add(expression);
          }

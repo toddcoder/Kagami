@@ -22,8 +22,8 @@ if merged == 11 {
 	println("found 11")
 }
 
-let array = [merged]
-println(~array)
+let ary = [merged]
+println(~ary)
 
 func greet(greeting, name) => $"(greeting), (name)"
 println(any["Hello", "Bye"], any["Todd", "Debra"])

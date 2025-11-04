@@ -297,11 +297,11 @@ public class Iterator : IObject, IIterator
 
    public Int Count(Lambda predicate) => List().Count(value => predicate.Invoke(value).IsTrue);
 
-   public virtual IObject Map(Lambda lambda) => collectionClass.Revert(List().Select(value => lambda.Invoke(value)), _typeConstraint);
+   public virtual IObject Map(Lambda lambda) => collectionClass.Revert(List().Select(value => lambda.Invoke(value)), nil);
 
    public virtual IObject FlatMap(Lambda lambda)
    {
-      var newCollection = collectionClass.Revert(List(), _typeConstraint);
+      var newCollection = collectionClass.Revert(List(), nil);
       return new FlatMapIterator((ICollection)newCollection).FlatMap(lambda);
    }
 
@@ -315,7 +315,7 @@ public class Iterator : IObject, IIterator
             var innerCollectionClass = (ICollectionClass)classOf((IObject)innerCollection);
             var iterator = innerCollection.GetIterator(false);
             var mappedItem = iterator.List().Select(i => lambda.Invoke(i));
-            var newCollection = innerCollectionClass.Revert(mappedItem, _typeConstraint);
+            var newCollection = innerCollectionClass.Revert(mappedItem, nil);
             list.Add(newCollection);
          }
          else
@@ -324,7 +324,7 @@ public class Iterator : IObject, IIterator
          }
       }
 
-      return collectionClass.Revert(list, _typeConstraint);
+      return collectionClass.Revert(list, nil);
    }
 
    public IObject Replace(Lambda predicate, Lambda lambda)

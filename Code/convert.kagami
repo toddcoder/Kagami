@@ -1,8 +1,8 @@
 ﻿open sys
 
-implicit Int(array Array) {
+implicit Int(ary Array) {
 	var accum = 1
-	for i in array {
+	for i in ary {
 		for c in i.string {
 			if '0' <= c <= '9' {
 				var value = c.ord - '0'.ord

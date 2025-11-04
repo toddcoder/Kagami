@@ -1,6 +1,7 @@
 ﻿open sys
 
 let numbers = a"one two three four five"
+m>numbers.length
 println(m>numbers.length)
 println(i>numbers.length > 3)
 let lengths = m>numbers.length
