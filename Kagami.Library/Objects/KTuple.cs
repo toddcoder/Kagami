@@ -43,7 +43,7 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
    {
       if (items is [Sequence { ExpandInTuple: true } il])
       {
-         this.items = il.List.ToArray();
+         this.items = [..il.List];
       }
       else
       {
@@ -148,7 +148,7 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
       get
       {
          var self = this;
-         return maybe<IObject[]>() & items.Length > 0 & (() => self.items.Take(self.items.Length - 1).ToArray());
+         return maybe<IObject[]>() & items.Length > 0 & (() => [..self.items.Take(self.items.Length - 1)]);
       }
    }
 
@@ -249,7 +249,7 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
          result.AddRange(items);
       }
 
-      return new KTuple(result.ToArray());
+      return new KTuple([..result]);
    }
 
    public KString MakeString(string connector) => makeString(this, connector);
@@ -320,7 +320,7 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
       }
    }
 
-   public IObject Tail => items.Length == 0 ? Empty : new KTuple(items.Skip(1).ToArray());
+   public IObject Tail => items.Length == 0 ? Empty : new KTuple([..items.Skip(1)]);
 
    public IObject HeadTail => new KTuple(Head, Tail);
 

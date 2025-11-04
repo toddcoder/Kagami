@@ -344,7 +344,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public IEnumerable<IObject> List => list;
 
-   public Slice Slice(ICollection collection) => new(this, collection.GetIterator(false).List().ToArray());
+   public Slice Slice(ICollection collection) => new(this, [.. collection.GetIterator(false).List()]);
 
    public Maybe<IObject> Get(IObject index) => Next(((Int)index).Value);
 
@@ -609,7 +609,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
    {
       if (list.All(i => i is KArray) && list.Count > 0)
       {
-         var listOfLists = list.Select(i => ((KArray)i).list.ToArray()).ToArray();
+         IObject[][] listOfLists = [..list.Select(i => (IObject[])[.. ((KArray)i).list])];
          var minLength = listOfLists.Min(a => a.Length);
          List<IObject> outerList = [];
          for (var i = 0; i < minLength; i++)
