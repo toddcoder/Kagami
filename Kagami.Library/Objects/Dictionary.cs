@@ -271,11 +271,11 @@ public class Dictionary : IObject, IMutableCollection, IMutable
       {
          if (dictionary.Count == 0)
          {
-            return "{:}";
+            return "";
          }
          else
          {
-            return $"{{{dictionary.Select(i => $"{i.Key.AsString} : {i.Value.AsString}").ToString(" ")}}}";
+            return $"{dictionary.Select(i => $"{i.Key.AsString} : {i.Value.AsString}").ToString(" ")}";
          }
       }
    }
