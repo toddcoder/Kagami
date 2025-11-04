@@ -12,8 +12,8 @@ public class Set : IObject, ICollection, IObjectCompare, IMutable
 {
    public static Set Empty => new();
 
-   protected Set<IObject> set;
-   protected List<IObject> list;
+   protected Set<IObject> set = [];
+   protected List<IObject> list = [];
 
    protected void assertIncomingValueIsEquivalent(IObject value)
    {

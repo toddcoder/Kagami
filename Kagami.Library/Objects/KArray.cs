@@ -26,7 +26,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       return new KArray(init);
    }
 
-   protected List<IObject> list;
+   protected List<IObject> list = [];
    protected Maybe<TypeConstraint> _typeConstraint = nil;
    protected Maybe<Lambda> _defaultLambda = nil;
    protected Maybe<IObject> _defaultValue = nil;
