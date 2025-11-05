@@ -10,7 +10,9 @@ public class Put : OneOperandOperation
    public override Optional<IObject> Execute(Machine machine, IObject value)
    {
       machine.Context.Put(stringOf(value));
-      return value.Just();
+      var image = (KString)value.Image;
+
+      return image;
    }
 
    public override string ToString() => "put";

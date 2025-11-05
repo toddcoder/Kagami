@@ -218,6 +218,9 @@ public partial class Playground : Form
          uiRun.Click += (_, _) => run();
          uiRun.ClickText = "Run code";
 
+         uiValue.Click += (_, _) => insertText(uiValue.NonNullText, 0, 0);
+         uiValue.ClickText = "Insert value into editor";
+
          var builder = new TableLayoutBuilder(table);
          _ = builder.Col + 200 + 100f + 200;
          _ = builder.Row + 50f + 50f + 40 + 40;
