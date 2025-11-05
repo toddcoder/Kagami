@@ -22,7 +22,7 @@ public partial class SubexpressionParser : SymbolParser
       var openIndex = state.LastTokenIndex;
       Maybe<int> _closeIndex = nil;
 
-      var flags = builder.Flags;
+      var flags = builder.Flags.Clone();
       builder.Flags[ExpressionFlags.OmitComma] = false;
       var _expression = getExpression(state, @"(\))", flags, (_, i) =>
       {

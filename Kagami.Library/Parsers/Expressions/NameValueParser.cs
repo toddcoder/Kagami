@@ -6,28 +6,31 @@ using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public partial class NameValueParser : EndingInExpressionParser
+public partial class NameValueParser : SymbolParser
 {
    protected string name = "";
 
-   public NameValueParser(ExpressionBuilder builder) : base(builder, ExpressionFlags.OmitColon | ExpressionFlags.OmitComma)
+   public NameValueParser(ExpressionBuilder builder) : base(builder)
    {
    }
 
    [GeneratedRegex($@"^(\s*)({REGEX_FIELD})(:)(\s+)")]
    public override partial Regex Regex();
 
-   public override Optional<Unit> Prefix(ParseState state, Token[] tokens)
+   public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
       name = tokens[2].Text;
       state.Colorize(tokens, Color.Whitespace, Color.Label, Color.Operator, Color.Whitespace);
 
-      return unit;
-   }
-
-   public override Optional<Unit> Suffix(ParseState state, Expression expression)
-   {
-      builder.Add(new NameValueSymbol(name, expression));
-      return unit;
+      var _expression = getExpression(state, ExpressionFlags.OmitColon | ExpressionFlags.OmitComma);
+      if (_expression is (true, var expression))
+      {
+         builder.Add(new NameValueSymbol(name, expression));
+         return unit;
+      }
+      else
+      {
+         return _expression.Exception;
+      }
    }
 }

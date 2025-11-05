@@ -10,7 +10,7 @@ public class PrintLine : OneOperandOperation
    public override Optional<IObject> Execute(Machine machine, IObject value)
    {
       machine.Context.PrintLine(stringOf(value));
-      var image = (KString)value.Image;
+      var image = (KString)value.AsString;
 
       return image;
    }
