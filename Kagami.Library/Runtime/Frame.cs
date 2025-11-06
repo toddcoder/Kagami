@@ -227,7 +227,7 @@ public class Frame
 
    public Maybe<IObject> Peek() => stack.Peek();
 
-   public Result<IObject> Pop() => stack.Pop().Result("Empty stack");
+   public Result<IObject> Pop() => stack.Pop().Result("Expected another item on the frame stack");
 
    public void SetReturnValue(IObject value) => returnValue = value.Some();
 

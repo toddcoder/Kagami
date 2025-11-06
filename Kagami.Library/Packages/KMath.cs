@@ -482,7 +482,7 @@ public class KMath : Package
       {
          var n = numeric.AsBigInteger();
          var product = BigInteger.One;
-         for (BigInteger i = 0; i < n; i++)
+         for (BigInteger i = 1; i <= n; i++)
          {
             product *= i;
          }
