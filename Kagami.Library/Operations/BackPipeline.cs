@@ -2,6 +2,7 @@
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using static Kagami.Library.AllExceptions;
+using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Operations;
 
@@ -11,10 +12,26 @@ public class BackPipeline : TwoOperandOperation
    {
       switch (x)
       {
+         case Lambda lambda when y is KTuple tuple:
+         {
+            return lambda.Invoke(tupleToArray(tuple)).Just();
+         }
          case Lambda lambda:
+         {
             return lambda.Invoke(y).Just();
+         }
+         case IMayInvoke mayInvoke when y is KTuple tuple:
+         {
+            return mayInvoke.Invoke(tupleToArray(tuple)).Just();
+         }
          case IMayInvoke mayInvoke:
+         {
             return mayInvoke.Invoke(y).Just();
+         }
+         case Message message:
+         {
+            return classOf(y).SendMessage(y, message).Just();
+         }
          case Selector selector:
          {
             var _field = Machine.Current.Value.Find(selector);

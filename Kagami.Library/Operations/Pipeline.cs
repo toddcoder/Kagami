@@ -12,12 +12,26 @@ public class Pipeline : TwoOperandOperation
    {
       switch (y)
       {
+         case Lambda lambda when x is KTuple tuple:
+         {
+            return lambda.Invoke(tupleToArray(tuple)).Just();
+         }
          case Lambda lambda:
+         {
             return lambda.Invoke(x).Just();
+         }
+         case IMayInvoke mi when x is KTuple tuple:
+         {
+            return mi.Invoke(tupleToArray(tuple)).Just();
+         }
          case IMayInvoke mi:
+         {
             return mi.Invoke(x).Just();
+         }
          case Message message:
+         {
             return classOf(x).SendMessage(x, message).Just();
+         }
          case Selector selector:
          {
             var _field = Machine.Current.Value.Find(selector);

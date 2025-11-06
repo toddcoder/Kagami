@@ -1130,4 +1130,6 @@ public static class ObjectFunctions
          throw fail($"{value.AsString} doesn't match {typeConstraint.AsString}");
       }
    }
+
+   public static IObject[] tupleToArray(KTuple tuple) => [..tuple.List];
 }
