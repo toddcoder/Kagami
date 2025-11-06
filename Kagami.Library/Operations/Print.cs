@@ -10,9 +10,7 @@ public class Print : OneOperandOperation
    public override Optional<IObject> Execute(Machine machine, IObject value)
    {
       machine.Context.Print(stringOf(value));
-      var image = (KString)value.AsString;
-
-      return image;
+      return value.Just();
    }
 
    public override string ToString() => "print";

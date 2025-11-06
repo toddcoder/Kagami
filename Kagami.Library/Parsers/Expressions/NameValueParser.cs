@@ -22,7 +22,7 @@ public partial class NameValueParser : SymbolParser
       name = tokens[2].Text;
       state.Colorize(tokens, Color.Whitespace, Color.Label, Color.Operator, Color.Whitespace);
 
-      var _expression = getExpression(state, ExpressionFlags.OmitColon | ExpressionFlags.OmitComma);
+      var _expression = getExpression(state, builder.Flags | ExpressionFlags.OmitColon | ExpressionFlags.OmitComma);
       if (_expression is (true, var expression))
       {
          builder.Add(new NameValueSymbol(name, expression));

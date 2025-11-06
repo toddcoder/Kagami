@@ -481,7 +481,9 @@ public static class ParserFunctions
 
       while (state.More && scanning)
       {
-         var _expression = getExpression(state, flags | ExpressionFlags.OmitComma | ExpressionFlags.InArgument);
+         Bits32<ExpressionFlags> newFlags = flags | ExpressionFlags.InArgument;
+         newFlags[ExpressionFlags.OmitComma] = !flags[ExpressionFlags.InSubExpression];
+         var _expression = getExpression(state, newFlags);
          if (_expression is (true, var expression))
          {
             arguments.Add(expression);
@@ -514,7 +516,7 @@ public static class ParserFunctions
    public static Optional<(Expression[], Maybe<LambdaSymbol>)> getArgumentsPlusLambda(ParseState state,
       Bits32<ExpressionFlags> flags)
    {
-      var _arguments = getArguments(state, flags | ExpressionFlags.OmitColon);
+      var _arguments = getArguments(state, flags);// | ExpressionFlags.OmitColon);
       if (_arguments is (true, var arguments))
       {
          var _lambda = getPossibleLambda(state, flags);

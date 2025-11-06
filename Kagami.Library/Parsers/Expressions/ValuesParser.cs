@@ -76,7 +76,6 @@ public class ValuesParser : MultiParser
          {
             yield return new InternalListParser(builder);
 
-            //yield return new UserObjectPlaceholderParser(builder);
             yield return new PlaceholderParser(builder);
          }
          else

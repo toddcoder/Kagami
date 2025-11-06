@@ -24,7 +24,8 @@ public partial class SubexpressionParser : SymbolParser
 
       var flags = builder.Flags.Clone();
       builder.Flags[ExpressionFlags.OmitComma] = false;
-      var _expression = getExpression(state, @"(\))", flags, (_, i) =>
+      builder.Flags[ExpressionFlags.InSubExpression] = true;
+      var _expression = getExpression(state, @"(\))", builder.Flags, (_, i) =>
       {
          switch (i)
          {

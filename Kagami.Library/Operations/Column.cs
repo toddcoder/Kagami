@@ -32,8 +32,7 @@ public class Column : OneOperandOperation
                   machine.Context.WriteCount = (machine.Context.WriteCount + 1) % columnIndex;
                }
 
-               var image = (KString)value.AsString;
-               return image;
+               return value.Just();
             }
             else
             {
