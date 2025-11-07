@@ -455,6 +455,32 @@ public class Iterator : IObject, IIterator
       return collectionClass.Revert(result, _typeConstraint);
    }
 
+   public IObject Zip(OpenRange openRange)
+   {
+      List<IObject> result = [];
+      var leftIterator = collection.GetIterator(false);
+      var rightIterator = openRange.GetIterator(true);
+      while (leftIterator.Next() is (true, var left) && rightIterator.Next() is (true, var right))
+      {
+         result.Add(collectionClass.Revert([left, right], nil));
+      }
+
+      return collectionClass.Revert(result, nil);
+   }
+
+   public IObject Zip(NumericOpenRange openRange)
+   {
+      List<IObject> result = [];
+      var leftIterator = collection.GetIterator(false);
+      var rightIterator = openRange.GetIterator(true);
+      while (leftIterator.Next() is (true, var left) && rightIterator.Next() is (true, var right))
+      {
+         result.Add(collectionClass.Revert([left, right], nil));
+      }
+
+      return collectionClass.Revert(result, nil);
+   }
+
    public virtual IObject Zip(ICollection collection, Lambda lambda) => Zip(collection.GetIterator(false), lambda);
 
    public IObject Zip(IIterator iterator, Lambda lambda)
@@ -472,6 +498,32 @@ public class Iterator : IObject, IIterator
       }
 
       return collectionClass.Revert(result, _typeConstraint);
+   }
+
+   public IObject Zip(OpenRange openRange, Lambda lambda)
+   {
+      List<IObject> result = [];
+      var leftIterator = collection.GetIterator(false);
+      var rightIterator = openRange.GetIterator(true);
+      while (leftIterator.Next() is (true, var left) && rightIterator.Next() is (true, var right))
+      {
+         result.Add(lambda.Invoke(left, right));
+      }
+
+      return collectionClass.Revert(result, nil);
+   }
+
+   public IObject Zip(NumericOpenRange openRange, Lambda lambda)
+   {
+      List<IObject> result = [];
+      var leftIterator = collection.GetIterator(false);
+      var rightIterator = openRange.GetIterator(true);
+      while (leftIterator.Next() is (true, var left) && rightIterator.Next() is (true, var right))
+      {
+         result.Add(lambda.Invoke(left, right));
+      }
+
+      return collectionClass.Revert(result, nil);
    }
 
    public virtual IObject ZipL(ICollection collection, IObject leftDefaultValue, IObject rightDefaultValue)
@@ -758,7 +810,8 @@ public class Iterator : IObject, IIterator
          }
       }
 
-      return collectionClass.Revert(new List<IObject> { collectionClass.Revert(ifTrue, _typeConstraint), collectionClass.Revert(ifFalse, _typeConstraint) }, _typeConstraint);
+      return collectionClass.Revert(
+         new List<IObject> { collectionClass.Revert(ifTrue, _typeConstraint), collectionClass.Revert(ifFalse, _typeConstraint) }, _typeConstraint);
    }
 
    public IObject Split(int count)
@@ -778,7 +831,8 @@ public class Iterator : IObject, IIterator
          }
       }
 
-      return collectionClass.Revert(new List<IObject> { collectionClass.Revert(ifTrue, _typeConstraint), collectionClass.Revert(ifFalse, _typeConstraint) }, _typeConstraint);
+      return collectionClass.Revert(
+         new List<IObject> { collectionClass.Revert(ifTrue, _typeConstraint), collectionClass.Revert(ifFalse, _typeConstraint) }, _typeConstraint);
    }
 
    public virtual IObject GroupBy(Lambda lambda)
@@ -1088,7 +1142,8 @@ public class Iterator : IObject, IIterator
          }
       }
 
-      return collectionClass.Revert(new List<IObject> { collectionClass.Revert(isTrue, _typeConstraint), collectionClass.Revert(isFalse, _typeConstraint) }, _typeConstraint);
+      return collectionClass.Revert(
+         new List<IObject> { collectionClass.Revert(isTrue, _typeConstraint), collectionClass.Revert(isFalse, _typeConstraint) }, _typeConstraint);
    }
 
    public IObject Span(int count)
@@ -1108,7 +1163,8 @@ public class Iterator : IObject, IIterator
          }
       }
 
-      return collectionClass.Revert(new List<IObject> { collectionClass.Revert(isTrue, _typeConstraint), collectionClass.Revert(isFalse, _typeConstraint) }, _typeConstraint);
+      return collectionClass.Revert(
+         new List<IObject> { collectionClass.Revert(isTrue, _typeConstraint), collectionClass.Revert(isFalse, _typeConstraint) }, _typeConstraint);
    }
 
    public IObject Shuffle()
@@ -1420,7 +1476,8 @@ public class Iterator : IObject, IIterator
          }
       }
 
-      return collectionClass.Revert([collectionClass.Revert(matched, _typeConstraint), collectionClass.Revert(notMatched, _typeConstraint)], _typeConstraint);
+      return collectionClass.Revert([collectionClass.Revert(matched, _typeConstraint), collectionClass.Revert(notMatched, _typeConstraint)],
+         _typeConstraint);
    }
 
    public IObject Pick(int count)

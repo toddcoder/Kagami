@@ -227,9 +227,17 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
 
    public IObject Zip(IIterator zipIterator) => copy(new StreamingZipIterator(zipIterator));
 
+   public IObject Zip(OpenRange openRange) => copy(new StreamingZipIterator(openRange.GetIterator(true)));
+
+   public IObject Zip(NumericOpenRange openRange) => copy(new StreamingZipIterator(openRange.GetIterator(true)));
+
    public IObject Zip(ICollection collection, Lambda lambda) => copy(new StreamingZipLambda(collection, lambda));
 
    public IObject Zip(IIterator zipIterator, Lambda lambda) => copy(new StreamingZipLambdaIterator(zipIterator, lambda));
+
+   public IObject Zip(OpenRange openRange, Lambda lambda) => copy(new StreamingZipLambdaIterator(openRange.GetIterator(true), lambda));
+
+   public IObject Zip(NumericOpenRange openRange, Lambda lambda) => copy(new StreamingZipLambdaIterator(openRange.GetIterator(true), lambda));
 
    public IObject ZipL(ICollection collection, IObject leftDefaultValue, IObject rightDefaultValue) =>
       terminate().ZipL(collection, leftDefaultValue, rightDefaultValue);

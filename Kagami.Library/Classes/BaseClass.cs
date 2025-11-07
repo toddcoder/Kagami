@@ -444,8 +444,14 @@ public abstract class BaseClass : IEquatable<BaseClass>
          (obj, message) => iteratorFunc<IObject, Lambda>(obj, message, (i, c, l) => i.Zip((ICollection)c, l)));
       registerIterMessage("zip(_<Iterator>,_<Lambda>)",
          (obj, message) => iteratorFunc<IObject, Lambda>(obj, message, (i, c, l) => i.Zip((IIterator)c, l)));
+      registerIterMessage("zip(_<OpenRange>,_<Lambda>)",
+         (obj, message) => iteratorFunc<IObject, Lambda>(obj, message, (i, c, l) => i.Zip((OpenRange)c, l)));
+      registerIterMessage("zip(_<NumericOpenRange>,_<Lambda>)",
+         (obj, message) => iteratorFunc<IObject, Lambda>(obj, message, (i, c, l) => i.Zip((NumericOpenRange)c, l)));
       registerIterMessage("zip(_<Collection>)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, c) => i.Zip((ICollection)c)));
       registerIterMessage("zip(_<Iterator>)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, c) => i.Zip((IIterator)c)));
+      registerIterMessage("zip(_<OpenRange>)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, c) => i.Zip((OpenRange)c)));
+      registerIterMessage("zip(_<NumericOpenRange>)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, c) => i.Zip((NumericOpenRange)c)));
       registerIterMessage("zipl(_<Collection>,_,_,_<Lambda>)",
          (obj, message) =>
             iteratorFunc<IObject, IObject, IObject, Lambda>(obj, message, (i, c, lv, rv, l) => i.ZipL((ICollection)c, lv, rv, l)));
