@@ -129,6 +129,7 @@ public class Module
       "Junction" => new JunctionClass(),
       "Event" => new EventClass(),
       "Cons" => new ConsClass(),
+      "Singleton" => new SingletonClass(),
       _ => nil
    };
 

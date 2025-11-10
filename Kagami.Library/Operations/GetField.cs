@@ -25,11 +25,25 @@ public class GetField(string fieldName) : Operation
          switch (value)
          {
             case Objects.Some some:
+            {
                machine.LastSome = (fieldName, some);
                break;
+            }
             case Objects.Success success:
+            {
                machine.LastSuccess = (fieldName, success);
                break;
+            }
+            /*case Singleton singleton:
+            {
+               Selector selector = singleton.FunctionName;
+               var _func = machine.Find(selector);
+               if (_func is (true, var func))
+               {
+                  var result = Invoke.InvokeObject(machine, func.Value, [])
+               }
+               break;
+            }*/
          }
 
          return value.Just();
