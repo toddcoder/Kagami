@@ -81,7 +81,7 @@ public class EnumClass : UserClass
       }
    }
 
-   protected IObject retrieveObject(Selector constructorSelector)
+   protected static IObject retrieveObject(Selector constructorSelector)
    {
       if (constructorSelector.SelectorItems.Length > 0)
       {

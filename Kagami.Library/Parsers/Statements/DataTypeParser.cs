@@ -13,7 +13,6 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class DataTypeParser : StatementParser
 {
-
    [GeneratedRegex($@"^(\s*)(data)(\s+)({REGEX_CLASS})")]
    public override partial Regex Regex();
 

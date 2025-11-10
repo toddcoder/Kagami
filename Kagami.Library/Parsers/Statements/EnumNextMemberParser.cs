@@ -32,7 +32,7 @@ public partial class EnumNextMemberParser(string enumClassName, Maybe<IObject> _
       }
    }
 
-   public Maybe<EnumMemberData> EnumMemberData { get; set; } = nil;
+   public Maybe<TypeMemberData> EnumMemberData { get; set; } = nil;
 
    public Maybe<IObject> Ordinal { get; set; } = nil;
 }

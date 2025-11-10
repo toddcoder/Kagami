@@ -13,23 +13,23 @@ using Return = Kagami.Library.Nodes.Statements.Return;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public class EnumCreator(string enumName, EnumMemberData[] enumMemberData, Block commonBlock) : Statement
+public class TypeCreator(string typeName, TypeMemberData[] typeMemberData, Block commonBlock) : Statement
 {
-   protected Class enumClass = null!;
+   protected Class typeClass = null!;
    protected MetaClass metaClass = null!;
-   protected Class[] enumMemberClasses = [];
-   protected MetaClass[] enumMetaClasses = [];
+   protected Class[] typeMemberClasses = [];
+   protected MetaClass[] typeMetaClasses = [];
 
    public Optional<Unit> Create()
    {
-      var builder = new ClassBuilder(enumName, Parameters.Empty, "", [], false, new Block());
+      var builder = new ClassBuilder(typeName, Parameters.Empty, "", [], false, new Block());
       var _registered = builder.Register();
       if (!_registered)
       {
          return _registered.Exception;
       }
 
-      enumClass = new Class(builder);
+      typeClass = new Class(builder);
 
       List<Statement> statements = [];
       List<ClassBuilder> builders = [];
@@ -37,17 +37,17 @@ public class EnumCreator(string enumName, EnumMemberData[] enumMemberData, Block
       List<string> valuesList = [];
       Hash<IObject, IObject> ordinals = [];
 
-      foreach (var data in enumMemberData)
+      foreach (var data in typeMemberData)
       {
          statements.Add(getMemberFunction(data));
-         var _classBuilder = getMemberClassBuilder(data, enumName, commonBlock, ordinals);
+         var _classBuilder = getMemberClassBuilder(data, typeName, commonBlock, ordinals);
          if (_classBuilder is (true, var classBuilder))
          {
             builders.Add(classBuilder);
          }
          else
          {
-            var (forClass, forMetaClass) = getMemberMetaClassBuilder(data, enumName, commonBlock, ordinals);
+            var (forClass, forMetaClass) = getMemberMetaClassBuilder(data, typeName, commonBlock, ordinals);
             builders.Add(forClass);
             metaBuilders.Add((data.Name, forMetaClass));
             valuesList.Add(forClass.ClassName);
@@ -85,7 +85,7 @@ public class EnumCreator(string enumName, EnumMemberData[] enumMemberData, Block
       }
 
       var staticBlock = new Block(statements);
-      var metaClassName = $"__$meta{enumName}";
+      var metaClassName = $"__$meta{typeName}";
       var metaClassBuilder = new ClassBuilder(metaClassName, Parameters.Empty, "", [], false, staticBlock);
       _registered = metaClassBuilder.Register();
       if (!_registered)
@@ -93,7 +93,7 @@ public class EnumCreator(string enumName, EnumMemberData[] enumMemberData, Block
          return _registered.Exception;
       }
 
-      metaClass = new MetaClass(enumName, metaClassBuilder);
+      metaClass = new MetaClass(typeName, metaClassBuilder);
 
       List<Class> classes = [];
       List<MetaClass> metaClasses = [];
@@ -119,13 +119,13 @@ public class EnumCreator(string enumName, EnumMemberData[] enumMemberData, Block
          metaClasses.Add(new MetaClass(className, classBuilder));
       }
 
-      enumMemberClasses = [.. classes];
-      enumMetaClasses = [.. metaClasses];
+      typeMemberClasses = [.. classes];
+      typeMetaClasses = [.. metaClasses];
 
       return unit;
    }
 
-   protected static Function getMemberFunction(EnumMemberData data)
+   protected static Function getMemberFunction(TypeMemberData data)
    {
       Expression[] arguments = [.. data.Parameters.Select(p => new Expression(new FieldSymbol(p.Name)))];
       var invokeSymbol = new InvokeSymbol(data.Name, arguments, nil, true);
@@ -145,7 +145,7 @@ public class EnumCreator(string enumName, EnumMemberData[] enumMemberData, Block
       return new AssignToNewField(false, "class", false, new Expression(new ClassSymbol(className)));
    }
 
-   protected static Maybe<ClassBuilder> getMemberClassBuilder(EnumMemberData data, string enumClassName, Block commonBlock,
+   protected static Maybe<ClassBuilder> getMemberClassBuilder(TypeMemberData data, string enumClassName, Block commonBlock,
       Hash<IObject, IObject> ordinals)
    {
       var localCommonBlock = commonBlock.Clone();
@@ -171,7 +171,7 @@ public class EnumCreator(string enumName, EnumMemberData[] enumMemberData, Block
       }
    }
 
-   protected static (ClassBuilder, ClassBuilder) getMemberMetaClassBuilder(EnumMemberData data, string enumClassName, Block commonBlock,
+   protected static (ClassBuilder, ClassBuilder) getMemberMetaClassBuilder(TypeMemberData data, string enumClassName, Block commonBlock,
       Hash<IObject, IObject> ordinals)
    {
       var localCommonBlock = commonBlock.Clone();
@@ -198,14 +198,14 @@ public class EnumCreator(string enumName, EnumMemberData[] enumMemberData, Block
 
    public override void Generate(OperationsBuilder builder)
    {
-      enumClass.Generate(builder);
+      typeClass.Generate(builder);
       metaClass.Generate(builder);
-      foreach (var enumMemberClass in enumMemberClasses)
+      foreach (var enumMemberClass in typeMemberClasses)
       {
          enumMemberClass.Generate(builder);
       }
 
-      foreach (var enumMetaClass in enumMetaClasses)
+      foreach (var enumMetaClass in typeMetaClasses)
       {
          enumMetaClass.Generate(builder);
       }

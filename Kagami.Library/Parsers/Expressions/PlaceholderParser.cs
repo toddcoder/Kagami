@@ -3,7 +3,6 @@ using Core.Matching;
 using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
-using static Kagami.Library.Nodes.NodeFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
@@ -42,29 +41,25 @@ public partial class PlaceholderParser : SymbolParser
             var _arguments = getArguments(state, builder.Flags);
             if (_arguments is (true, var arguments))
             {
-               builder.Add(new InvokeSymbol(placeholderName, arguments, nil, true));
-
-               /*if (placeholderName.IsMatch("^ ['A-Z']") && state.BlockFollows())
+               if (state.LookAhead(IsParser.REGEX_FIELD_NAME, 2) is (true, var word) && !isAKeyword(word))
                {
-                  var _result = state.BeginBlock();
-                  if (_result)
+                  var _fieldResult = state.Scan(IsParser.REGEX_FIELD_NAME, Color.Whitespace, Color.Identifier);
+                  if (_fieldResult is (true, var fieldName))
                   {
-                     var tempObjectField = newLabel("object");
-                     var _taggedExpressions = getTaggedExpressions(state, REGEX_BLOCK_END);
-                     if (_taggedExpressions is (true, var taggedExpressions))
-                     {
-                        builder.Add(new NewObjectSymbol(tempObjectField, placeholderName, taggedExpressions));
-                     }
-                     else
-                     {
-                        return _taggedExpressions.Exception;
-                     }
+                     var expression =
+                        new Expression(new NameValueSymbol(fieldName.Trim(), new Expression(new InvokeSymbol(placeholderName, arguments, nil, true))));
+                     builder.Add(expression);
                   }
                   else
                   {
-                     return _result.Exception;
+                     return _fieldResult.Exception;
                   }
-               }*/
+               }
+               else
+               {
+                  builder.Add(new InvokeSymbol(placeholderName, arguments, nil, true));
+               }
+
                return unit;
             }
             else
@@ -74,7 +69,25 @@ public partial class PlaceholderParser : SymbolParser
          }
          else
          {
-            builder.Add(new ClassSymbol(placeholderName));
+            if (state.LookAhead(IsParser.REGEX_FIELD_NAME, 2) is (true, var word) && !isAKeyword(word))
+            {
+               var _fieldResult = state.Scan(IsParser.REGEX_FIELD_NAME, Color.Whitespace, Color.Identifier);
+               if (_fieldResult is (true, var fieldName))
+               {
+                  var expression =
+                     new Expression(new NameValueSymbol(fieldName.Trim(), new Expression(new ClassSymbol(placeholderName))));
+                  builder.Add(expression);
+               }
+               else
+               {
+                  return _fieldResult.Exception;
+               }
+            }
+            else
+            {
+               builder.Add(new ClassSymbol(placeholderName));
+            }
+
             return unit;
          }
       }

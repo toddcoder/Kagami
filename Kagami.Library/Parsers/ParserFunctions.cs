@@ -50,7 +50,7 @@ public static class ParserFunctions
    public const string REGEX_EXP_END = @"^(\s*)(\))";
    public const string REGEX_SINGLE_BLOCK = @"(=>)(?=[\w\s])";
 
-   public static StringSet keywords = ["do", "else", "true", "false"];
+   public static StringSet keywords = ["do", "else", "true", "false", "return", "if"];
 
    public static bool isAKeyword(string word) => keywords.Contains(word);
 
@@ -516,7 +516,7 @@ public static class ParserFunctions
    public static Optional<(Expression[], Maybe<LambdaSymbol>)> getArgumentsPlusLambda(ParseState state,
       Bits32<ExpressionFlags> flags)
    {
-      var _arguments = getArguments(state, flags);// | ExpressionFlags.OmitColon);
+      var _arguments = getArguments(state, flags); // | ExpressionFlags.OmitColon);
       if (_arguments is (true, var arguments))
       {
          var _lambda = getPossibleLambda(state, flags);
@@ -1128,6 +1128,11 @@ public static class ParserFunctions
             if (TryParse(source, out var integer))
             {
                builder.Add(new IntSymbol(integer));
+               return unit;
+            }
+            else if (BigInteger.TryParse(source, out var bigInteger))
+            {
+               builder.Add(new LongSymbol(bigInteger));
                return unit;
             }
             else

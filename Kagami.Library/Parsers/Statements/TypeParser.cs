@@ -9,7 +9,7 @@ using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public partial class EnumParser : StatementParser
+public partial class TypeParser : StatementParser
 {
    [GeneratedRegex(@$"^(\s*)(type)(\s+)({REGEX_CLASS})\b")]
    public override partial Regex Regex();
@@ -27,7 +27,7 @@ public partial class EnumParser : StatementParser
          return _beginBlock.Exception;
       }
 
-      List<EnumMemberData> enumMembers = [];
+      List<TypeMemberData> enumMembers = [];
       Optional<Unit> _endBlock = nil;
       Maybe<IObject> _ordinal = nil;
       var scanning = true;
@@ -98,7 +98,7 @@ public partial class EnumParser : StatementParser
 
       var commonBlock = _block | (() => new Block());
 
-      var enumCreator = new EnumCreator(className, [.. enumMembers], commonBlock);
+      var enumCreator = new TypeCreator(className, [.. enumMembers], commonBlock);
       var _result = enumCreator.Create();
       if (_result)
       {

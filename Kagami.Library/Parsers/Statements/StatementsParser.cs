@@ -36,7 +36,7 @@ public class StatementsParser : MultiParser
          yield return new ExitContinueParser();
          yield return new TryHandlerParser();
 
-         yield return new EnumParser();
+         yield return new TypeParser();
          yield return new AbstractFunctionParser();
          yield return new AbstractPropertyParser();
          yield return new SingletonParser();

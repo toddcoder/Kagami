@@ -13,7 +13,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class EnumMemberParser(string enumClassName, Maybe<IObject> _previousOrdinal) : StatementParser
 {
-   public static Optional<(EnumMemberData, Maybe<IObject>)> ParseEnumMember(ParseState state, string className, bool hasParameters,
+   public static Optional<(TypeMemberData, Maybe<IObject>)> ParseEnumMember(ParseState state, string className, bool hasParameters,
       string enumClassName, Maybe<IObject> _previousOrdinal)
    {
       Module.Global.Value.ForwardReference(className);
@@ -78,7 +78,7 @@ public partial class EnumMemberParser(string enumClassName, Maybe<IObject> _prev
       var _block = getBlock(state).Maybe();
 
       Module.Global.Value.ForwardReference(className);
-      var enumMemberData = new EnumMemberData(className, enumClassName, parameters, _ordinal, _block);
+      var enumMemberData = new TypeMemberData(className, parameters, _ordinal, _block);
 
       return (enumMemberData, _ordinal);
    }
@@ -106,7 +106,7 @@ public partial class EnumMemberParser(string enumClassName, Maybe<IObject> _prev
       }
    }
 
-   public Maybe<EnumMemberData> EnumMemberData { get; set; } = nil;
+   public Maybe<TypeMemberData> EnumMemberData { get; set; } = nil;
 
    public Maybe<IObject> Ordinal { get; set; } = nil;
 }
