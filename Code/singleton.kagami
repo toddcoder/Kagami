@@ -1,0 +1,11 @@
+﻿open sys
+
+class Point(x float, y float);
+
+singleton origin Point {
+	println "Creating singleton"
+	return Point(0.0, 0.0)
+}
+
+println origin
+println origin
