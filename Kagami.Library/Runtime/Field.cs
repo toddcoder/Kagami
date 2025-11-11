@@ -12,18 +12,7 @@ public class Field
 
    public virtual IObject Value
    {
-      get
-      {
-         if (value is Lazy lazy)
-         {
-            value = lazy.Value;
-            TypeConstraint = Objects.TypeConstraint.SingleType(classOf(value));
-
-            Value = value;
-         }
-
-         return value;
-      }
+      get => value;
       set
       {
          var valueClass = classOf(value);

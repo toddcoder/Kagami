@@ -84,7 +84,6 @@ public class ValuesParser : MultiParser
             yield return new SuperParser(builder);
          }
 
-         yield return new LazyParser(builder);
          yield return new KeywordValueParser(builder);
          yield return new AliasedClassReferenceParser(builder);
          yield return new ClassReferenceParser(builder);

@@ -6,8 +6,8 @@ class Heavy(var size = 10) {
 }
 
 class AsNeeded(var value int) {
-	var heavy1 = lazy Heavy()
-	var heavy2 = lazy Heavy(value)
+	lazy heavy1 = Heavy()
+	lazy heavy2 = Heavy(value)
 	println("Created AsNeeded")
 }
 

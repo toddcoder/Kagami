@@ -3,6 +3,7 @@ using Kagami.Library.Runtime;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
+using static Kagami.Library.Nodes.NodeFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Operations;
@@ -34,16 +35,39 @@ public class GetField(string fieldName) : Operation
                machine.LastSuccess = (fieldName, success);
                break;
             }
-            /*case Singleton singleton:
+            case Singleton:
             {
-               Selector selector = singleton.FunctionName;
-               var _func = machine.Find(selector);
-               if (_func is (true, var func))
+               var lazyFieldName = lazyName(fieldName);
+               if (machine.Find(lazyFieldName, true) is (true, { Value: Lambda lambda }))
                {
-                  var result = Invoke.InvokeObject(machine, func.Value, [])
+                  var result = lambda.Invoke();
+                  if (Module.Global.Value.Class(result.ClassName) is (true, var cls))
+                  {
+                     var typeConstraint = new TypeConstraint([cls]);
+                     if (machine.Find(fieldName, true) is (true, var singletonField))
+                     {
+                        singletonField.TypeConstraint = typeConstraint;
+                        singletonField.Value = result;
+
+                        return result.Just();
+                     }
+                     else
+                     {
+                        return fieldNotFound(fieldName);
+                     }
+                  }
+                  else
+                  {
+                     return classNotFound(result.ClassName);
+                  }
                }
+               else
+               {
+                  return fieldNotFound(lazyFieldName);
+               }
+
                break;
-            }*/
+            }
          }
 
          return value.Just();

@@ -2,6 +2,7 @@
 using Kagami.Library.Runtime;
 using Core.Booleans;
 using Core.Monads;
+using Core.Monads.Lazy;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
@@ -20,24 +21,20 @@ public class AssignField : OneOperandOperation
 
    public override Optional<IObject> Execute(Machine machine, IObject value)
    {
-      var isLazy = value is Lazy;
+      LazyOptional<Field> _self = nil;
       var _field = machine.Assign(name, value, false, overriding);
       if (_field is (true, var field))
       {
-         return isLazy ? nil : field.Value.Just();
+         return field.Value.Just();
+      }
+      else if (_self.ValueOf(machine.Find("self", true)) is (true, var self))
+      {
+         sendMessage(self.Value, name.set(), [value]);
+         return value.Just();
       }
       else
       {
-         var _self = machine.Find("self", true);
-         if (_self is (true, var self))
-         {
-            sendMessage(self.Value, name.set(), [value]);
-            return value.Just();
-         }
-         else
-         {
-            return _field.Exception;
-         }
+         return _self.Exception;
       }
    }
 

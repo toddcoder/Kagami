@@ -54,8 +54,11 @@ public static class NodeFunctions
                {
                   yield return innerPlaceholder;
                }
+
                break;
          }
       }
    }
+
+   public static string lazyName(string fieldName) => $"__$lazy_{fieldName}__";
 }

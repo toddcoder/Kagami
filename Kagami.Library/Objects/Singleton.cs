@@ -2,26 +2,23 @@
 
 namespace Kagami.Library.Objects;
 
-public record Singleton(string Name, TypeConstraint TypeConstraint) : IObject
+public record Singleton : IObject
 {
+   public static Singleton Create() => new();
+
    public string ClassName => "Singleton";
 
-   public string AsString => $"{Name} {TypeConstraint.AsString}";
+   public string AsString => "singleton";
 
-   public string Image => $"{Name} {TypeConstraint.Image}";
+   public string Image => "singleton";
 
-   public int Hash => HashCode.Combine(Name, TypeConstraint);
+   public int Hash => "singleton".GetHashCode();
 
-   public bool IsEqualTo(IObject obj)
-   {
-      return obj is Singleton otherSingleton && Name == otherSingleton.Name && TypeConstraint.IsEqualTo(otherSingleton.TypeConstraint);
-   }
+   public bool IsEqualTo(IObject obj) => obj is Singleton;
 
    public bool Match(IObject comparisand, Hash<string, IObject> bindings) => IsEqualTo(comparisand);
 
    public bool IsTrue => true;
 
    public Guid Id { get; init; } = Guid.NewGuid();
-
-   public string FunctionName => $"__${Name}_{TypeConstraint.AsString}";
 }

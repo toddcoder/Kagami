@@ -71,7 +71,6 @@ public class Module
       "Complex" => new ComplexClass(),
       "Rational" => new RationalClass(),
       "Long" => new LongClass(),
-      "Lazy" => new LazyClass(),
       "YieldingInvokable" => new YieldingInvokableClass(),
       "Slice" => new SliceClass(),
       "End" => new EndClass(),

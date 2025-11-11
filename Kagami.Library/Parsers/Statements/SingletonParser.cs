@@ -23,16 +23,9 @@ public partial class SingletonParser : StatementParser
       if (_block is (true, var block))
       {
          state.RemoveYieldFlag();
-         var _typeConstraint = state.GetReturnType();
-         if (_typeConstraint is (true, var typeConstraint))
-         {
-            state.AddStatement(new Singleton(singletonName, block, typeConstraint));
-            return unit;
-         }
-         else
-         {
-            return fail("Type constraint required");
-         }
+         state.AddStatement(new LazyAssign(singletonName, block));
+
+         return unit;
       }
       else
       {
