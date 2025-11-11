@@ -65,8 +65,6 @@ public class GetField(string fieldName) : Operation
                {
                   return fieldNotFound(lazyFieldName);
                }
-
-               break;
             }
          }
 
