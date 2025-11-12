@@ -1,0 +1,9 @@
+﻿open sys
+
+func asserted(assertion lambda, message string) {
+	if assertion() {
+		println(message)
+	}
+}
+
+asserted(^15 != 20, "failed")

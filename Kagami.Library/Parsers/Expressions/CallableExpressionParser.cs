@@ -19,7 +19,7 @@ public partial class CallableExpressionParser : SymbolParser
    {
       state.Colorize(tokens, Color.Whitespace, Color.Lambda);
 
-      var _expression = getExpression(state, ExpressionFlags.InLambda);
+      var _expression = getExpression(state, ExpressionFlags.InLambda | ExpressionFlags.OmitComma);
       if (_expression is (true, var expression))
       {
          builder.Add(new LambdaSymbol(0, expression));
