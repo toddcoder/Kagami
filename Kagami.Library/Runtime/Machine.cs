@@ -683,58 +683,6 @@ public class Machine
       }
    }
 
-   public void BeginDebugging()
-   {
-      debugState = DebugState.Active;
-      stack.Clear();
-      stack.Push(new Frame());
-      operations.Goto(0);
-   }
-
-   /*public void Step()
-   {
-      if (debugState == DebugState.Starting)
-      {
-         BeginDebugging();
-      }
-
-      while (!context.Cancelled() && operations.More && debugState == DebugState.Active)
-      {
-         if (operations.Current is (true, var operation))
-         {
-            var currentAddress = operations.Address;
-            switch (operation)
-            {
-               case Reset:
-                  return;
-               default:
-               {
-                  var _result = operation.Execute(this);
-                  if (_result is (true, var result) && running && result.ClassName != "Void")
-                  {
-                     stack.Peek().Push(result);
-                  }
-                  else if (_result)
-                  {
-                     return;
-                  }
-
-                  break;
-               }
-            }
-
-            if (operation.Increment && currentAddress == operations.Address)
-            {
-               operations.Advance(1);
-            }
-         }
-         else
-         {
-            return;
-         }
-      }
-   }*/
-
    public string PackageFolder { get; set; } = "";
 
    public Result<Unit> SetErrorHandler(int address)

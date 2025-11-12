@@ -42,6 +42,10 @@ public class TestContext : IContext, IDisposable, IAsyncDisposable
 
    public int WriteCount { get; set; }
 
+   public void Reset()
+   {
+   }
+
    public void Dispose()
    {
       stream.Dispose();

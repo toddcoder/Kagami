@@ -50,4 +50,8 @@ public class ConsoleContext : IContext
    public bool Cancelled() => cancelled;
 
    public int WriteCount { get; set; }
+
+   public void Reset()
+   {
+   }
 }

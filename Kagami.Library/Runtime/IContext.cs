@@ -17,4 +17,6 @@ public interface IContext
    bool Cancelled();
 
    int WriteCount { get; set; }
+
+   public void Reset();
 }
