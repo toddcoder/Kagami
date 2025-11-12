@@ -14,14 +14,17 @@ public class MatchFunction : Statement
 {
    protected Selector selector;
    protected Parameters parameters;
+   protected bool isHidden;
    protected Block block;
    protected bool overriding;
    protected string className;
 
-   public MatchFunction(string functionName, Parameters parameters, If ifStatement, Maybe<TypeConstraint> _typeConstraint, bool overriding, string className)
+   public MatchFunction(string functionName, Parameters parameters, bool isHidden, If ifStatement, Maybe<TypeConstraint> _typeConstraint,
+      bool overriding, string className)
    {
       selector = parameters.Selector(functionName);
       this.parameters = parameters;
+      this.isHidden = isHidden;
       block = new Block(ifStatement, _typeConstraint) { new ReturnNothing() };
       this.overriding = overriding;
       this.className = className;
@@ -65,7 +68,7 @@ public class MatchFunction : Statement
    public override string ToString() => $"{overriding.Extend("override ")}match {selector.Image}() ...";
 
    public void Deconstruct(out Selector selector, out Parameters parameters, out Block block, out bool yielding, out IInvokable invokable,
-      out bool overriding)
+      out bool overriding, out bool isHidden)
    {
       selector = this.selector;
       parameters = this.parameters;
@@ -73,6 +76,7 @@ public class MatchFunction : Statement
       yielding = false;
       invokable = getInvokable();
       overriding = this.overriding;
+      isHidden = this.isHidden;
    }
 
    public bool IsFixed { get; set; }

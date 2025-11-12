@@ -3,7 +3,7 @@ using Kagami.Library.Operations;
 
 namespace Kagami.Library.Nodes.Statements;
 
-public class CreateNewFields(string[] fields, string className) : Statement
+public class CreateNewFields(string[] fields, string className, bool isHidden) : Statement
 {
    public override void Generate(OperationsBuilder builder)
    {
@@ -18,4 +18,6 @@ public class CreateNewFields(string[] fields, string className) : Statement
    public string[] Fields => fields;
 
    public string ClassName => className;
+   
+   public bool IsHidden => isHidden;
 }

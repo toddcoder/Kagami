@@ -34,7 +34,7 @@ public partial class MatchParser : StatementParser
 
          state.AddStatement(new PushFrameStatement());
          var matchField = newLabel("match");
-         state.AddStatement(new AssignToNewField(true, matchField, true, expression));
+         state.AddStatement(new AssignToNewField(true, matchField, expression, false));
 
          var whenParser = new WhenParser(fieldName, mutable, assignment, matchField, true, CaseType.Statement);
          var _scan = whenParser.Scan(state);

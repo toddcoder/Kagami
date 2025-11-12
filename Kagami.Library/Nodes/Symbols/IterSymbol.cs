@@ -17,7 +17,7 @@ public class IterSymbol : Symbol
       this.block = block;
 
       var functionName = newLabel("iter");
-      function = new Function(functionName, Parameters.Empty, block, true, false, "", true);
+      function = new Function(functionName, Parameters.Empty, false, block, true, false, "", true);
       invoke = new InvokeSymbol(functionName, [], nil, false);
    }
 

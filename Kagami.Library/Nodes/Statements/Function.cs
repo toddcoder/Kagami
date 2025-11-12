@@ -15,14 +15,14 @@ public class Function : Statement
 {
    public static Function Getter(string fieldName, Maybe<TypeConstraint> _typeConstraint)
    {
-      return new($"__${fieldName}", new Parameters(0), Block.Getter(fieldName, _typeConstraint), false, false, "");
+      return new($"__${fieldName}", new Parameters(0), false, Block.Getter(fieldName, _typeConstraint), false, false, "");
    }
 
    public static Function Getter(string fieldName) => Getter(fieldName, nil);
 
    public static Function Getter(string getterName, string fieldName, Maybe<TypeConstraint> _typeConstraint)
    {
-      return new(getterName, new Parameters(0), Block.Getter(fieldName, _typeConstraint), false, false, "");
+      return new(getterName, new Parameters(0), false, Block.Getter(fieldName, _typeConstraint), false, false, "");
    }
 
    public static Function Getter(string getterName, string fieldName) => Getter(getterName, fieldName, nil);
@@ -30,7 +30,7 @@ public class Function : Statement
    public static Function Setter(string fieldName, Maybe<TypeConstraint> _typeConstraint)
    {
       var parameters = new Parameters(1);
-      return new Function($"{fieldName}=", parameters, Block.Setter(fieldName, parameters[0].Name, _typeConstraint), false, false, "");
+      return new Function($"{fieldName}=", parameters, false, Block.Setter(fieldName, parameters[0].Name, _typeConstraint), false, false, "");
    }
 
    public static Function Setter(string fieldName) => Setter(fieldName, nil);
@@ -38,23 +38,26 @@ public class Function : Statement
    public static Function Setter(string setterName, string fieldName, Maybe<TypeConstraint> _typeConstraint)
    {
       var parameters = new Parameters(1);
-      return new Function(setterName, parameters, Block.Setter(fieldName, parameters[0].Name, _typeConstraint), false, false, "");
+      return new Function(setterName, parameters, false, Block.Setter(fieldName, parameters[0].Name, _typeConstraint), false, false, "");
    }
 
    public static Function Setter(string setterName, string fieldName) => Setter(setterName, fieldName, nil);
 
    protected Selector selector;
    protected Parameters parameters;
+   protected bool isHidden;
    protected Block block;
    protected bool yielding;
    protected bool overriding;
    protected string className;
    protected Lazy<Lambda> lambda;
 
-   public Function(string functionName, Parameters parameters, Block block, bool yielding, bool overriding, string className, bool captures = false)
+   public Function(string functionName, Parameters parameters, bool isHidden, Block block, bool yielding, bool overriding, string className,
+      bool captures = false)
    {
       selector = parameters.Selector(functionName);
       this.parameters = parameters;
+      this.isHidden = isHidden;
       this.block = block;
       this.yielding = yielding;
       block.Yielding = this.yielding;
@@ -69,7 +72,7 @@ public class Function : Statement
    }
 
    public void Deconstruct(out Selector selector, out Parameters parameters, out Block block, out bool yielding,
-      out IInvokable invokable, out bool overriding)
+      out IInvokable invokable, out bool overriding, out bool isHidden)
    {
       selector = this.selector;
       parameters = this.parameters;
@@ -77,6 +80,7 @@ public class Function : Statement
       yielding = this.yielding;
       invokable = GetInvokable();
       overriding = this.overriding;
+      isHidden = this.isHidden;
    }
 
    public Selector Selector => selector;

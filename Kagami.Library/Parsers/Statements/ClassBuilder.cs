@@ -7,7 +7,6 @@ using Kagami.Library.Operations;
 using Kagami.Library.Runtime;
 using Core.Collections;
 using Core.Enumerables;
-using Core.Matching;
 using Core.Monads;
 using Core.Numbers;
 using Core.Strings;
@@ -68,8 +67,6 @@ public class ClassBuilder
 
    public Statement[] Statements { get; set; } = [];
 
-   protected static bool isPrivate(string identifier) => identifier.IsMatch("^ '_' -(> '_$')");
-
    protected (string, Expression)[] getInitializeArguments()
    {
       return parentArguments.Select(e => e.Symbols[0]).Cast<NameValueSymbol>().Select(nv => nv.Tuple()).ToArray();
@@ -107,8 +104,12 @@ public class ClassBuilder
          {
             case AssignToNewField { Ignore: false } assignToNewField:
             {
-               var (mutable, fieldName, _typeConstraint) = assignToNewField;
-               processField(fieldName, _typeConstraint, mutable, statement);
+               var (mutable, fieldName, _typeConstraint, isHidden) = assignToNewField;
+               if (!isHidden)
+               {
+                  processField(fieldName, _typeConstraint, mutable, statement);
+               }
+
                break;
             }
             case AssignToNewField2 assignToNewField2:
@@ -120,8 +121,8 @@ public class ClassBuilder
                   var (bindingType, name) = fromBindingName(fieldName);
                   var function = Function.Getter(name);
                   statements.Add(function);
-                  var (functionName, _, block, _, invokable, _) = function;
-                  if (!isPrivate(fieldName) && !userClass.RegisterMethod(functionName, new Lambda(invokable, false), true))
+                  var (functionName, _, block, _, invokable, _, isHidden) = function;
+                  if (!isHidden && !userClass.RegisterMethod(functionName, new Lambda(invokable, false), true))
                   {
                      throw needsOverride(functionName);
                   }
@@ -132,8 +133,8 @@ public class ClassBuilder
                   {
                      function = Function.Setter(fieldName);
                      statements.Add(function);
-                     (functionName, _, block, _, invokable, _) = function;
-                     if (!isPrivate(fieldName) && !userClass.RegisterMethod(functionName, new Lambda(invokable, false), true))
+                     (functionName, _, block, _, invokable, _, isHidden) = function;
+                     if (!isHidden && !userClass.RegisterMethod(functionName, new Lambda(invokable, false), true))
                      {
                         throw needsOverride(functionName);
                      }
@@ -148,31 +149,42 @@ public class ClassBuilder
             }
             case DefineNewField defineNewField:
             {
-               var (mutable, fieldName, typeName) = defineNewField;
+               var (mutable, fieldName, typeName, isHidden) = defineNewField;
                var typeConstraint = TypeConstraint.FromList(typeName);
-               processField(fieldName, typeConstraint, mutable, statement);
+               if (!isHidden)
+               {
+                  processField(fieldName, typeConstraint, mutable, statement);
+               }
+
                break;
             }
             case CreateNewFields createNewFields:
             {
-               var typeConstraint = TypeConstraint.FromList(createNewFields.ClassName);
-               foreach (var fieldName in createNewFields.Fields)
+               if (!createNewFields.IsHidden)
                {
-                  processField(fieldName, typeConstraint, true, statement);
+                  var typeConstraint = TypeConstraint.FromList(createNewFields.ClassName);
+                  foreach (var fieldName in createNewFields.Fields)
+                  {
+                     processField(fieldName, typeConstraint, true, statement);
+                  }
                }
 
                break;
             }
             case LazyAssign lazyAssign:
             {
-               processField(lazyAssign.FieldName, nil, false, statement);
+               if (!lazyAssign.IsHidden)
+               {
+                  processField(lazyAssign.FieldName, nil, false, statement);
+               }
+
                break;
             }
             case Function function when standard:
             {
-               var (selector, _, block, _, invokable, overriding) = function;
+               var (selector, _, block, _, invokable, overriding, isHidden) = function;
                var _typeConstraint = block.TypeConstraint;
-               if (!isPrivate(selector))
+               if (!isHidden)
                {
                   if (userClass.RegisterMethod(selector, new Lambda(invokable, false), overriding))
                   {
@@ -194,8 +206,8 @@ public class ClassBuilder
             }
             case MatchFunction matchFunction when standard:
             {
-               var (functionName, _, block, _, invokable, overriding) = matchFunction;
-               if (!isPrivate(functionName))
+               var (functionName, _, block, _, invokable, overriding, isHidden) = matchFunction;
+               if (!isHidden)
                {
                   if (userClass.RegisterMethod(functionName, new Lambda(invokable, false), overriding))
                   {
@@ -267,8 +279,8 @@ public class ClassBuilder
 
          var function = Function.Getter(fieldName);
          statements.Add(function);
-         var (functionName, _, block, _, invokable, _) = function;
-         if (!isPrivate(fieldName) && !userClass.RegisterMethod(functionName, new Lambda(invokable, false), true))
+         var (functionName, _, block, _, invokable, _, isHidden) = function;
+         if (!isHidden && !userClass.RegisterMethod(functionName, new Lambda(invokable, false), false))
          {
             throw needsOverride(functionName);
          }
@@ -279,8 +291,8 @@ public class ClassBuilder
          {
             function = Function.Setter(fieldName);
             statements.Add(function);
-            (functionName, _, block, _, invokable, _) = function;
-            if (!isPrivate(fieldName) && !userClass.RegisterMethod(functionName, new Lambda(invokable, false), true))
+            (functionName, _, block, _, invokable, _, isHidden) = function;
+            if (!isHidden && !userClass.RegisterMethod(functionName, new Lambda(invokable, false), false))
             {
                throw needsOverride(functionName);
             }

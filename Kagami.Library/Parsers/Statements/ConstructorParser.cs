@@ -26,7 +26,7 @@ public partial class ConstructorParser : ClassItemParser
       if (_parametersBlock is (true, var (parameters, block)))
       {
          state.RemoveReturnType();
-         var function = new Function(builder.ClassName, parameters, block, false, false, "");
+         var function = new Function(builder.ClassName, parameters, false, block, false, false, "");
          state.AddStatement(function);
 
          return unit;

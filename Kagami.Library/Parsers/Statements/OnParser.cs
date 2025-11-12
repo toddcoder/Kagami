@@ -4,6 +4,7 @@ using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Objects;
 using System.Text.RegularExpressions;
+using Core.Strings;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 using Regex = System.Text.RegularExpressions.Regex;
@@ -12,13 +13,14 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class OnParser : StatementParser
 {
-   [GeneratedRegex(@$"^(\s*)(fn)(\s+)({REGEX_FUNCTION_NAME})")]
+   [GeneratedRegex(@$"^(\s*){REGEX_HIDDEN}(fn)(\s+)({REGEX_FUNCTION_NAME})")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      var functionName = tokens[4].Text;
-      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Invokable);
+      var isHidden = tokens[1].Text.IsNotEmpty();
+      var functionName = tokens[5].Text;
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Keyword, Color.Whitespace, Color.Invokable);
 
       var pattern = @$"^(\s*)(fn)(\s+)({functionName.Escape()})";
 
@@ -93,7 +95,7 @@ public partial class OnParser : StatementParser
             Singleton = true
          };
          var parameters = new Parameters(variadicParameter);
-         state.AddStatement(new MatchFunction(functionName, parameters, previousIf, _typeConstraint, false, ""));
+         state.AddStatement(new MatchFunction(functionName, parameters, isHidden, previousIf, _typeConstraint, false, ""));
          state.RemoveReturnType();
 
          return unit;

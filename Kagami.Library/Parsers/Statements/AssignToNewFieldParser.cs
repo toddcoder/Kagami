@@ -2,6 +2,7 @@
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Objects;
 using Core.Monads;
+using Core.Strings;
 using Kagami.Library.Parsers.Expressions;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
@@ -12,20 +13,22 @@ namespace Kagami.Library.Parsers.Statements;
 public partial class AssignToNewFieldParser : StatementParser
 {
    protected const string REGEX_EQUAL = @"^(\s*)(=)(?![=>])";
+   protected bool isHidden;
    protected bool mutable;
    protected string fieldName = "";
    protected Maybe<TypeConstraint> _typeConstraint = nil;
 
-   [GeneratedRegex($@"^(\s*)(let|var)(\s+)({REGEX_FIELD})\b")]
+   [GeneratedRegex($@"^(\s*){REGEX_HIDDEN}(let|var)(\s+)({REGEX_FIELD})\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
       state.BeginTransaction();
 
-      mutable = tokens[2].Text == "var";
-      fieldName = tokens[4].Text;
-      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Identifier);
+      isHidden = tokens[2].Text.IsNotEmpty();
+      mutable = tokens[3].Text == "var";
+      fieldName = tokens[5].Text;
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Keyword, Color.Whitespace, Color.Identifier);
 
       var _parsedTypeConstraint = parseTypeConstraint(state);
       if (_parsedTypeConstraint is (true, var parsedTypeConstraint))
@@ -49,7 +52,7 @@ public partial class AssignToNewFieldParser : StatementParser
             select expressionValue;
          if (_expression is (true, var expression))
          {
-            state.AddStatement(new AssignToNewField(mutable, fieldName, false, expression, _typeConstraint));
+            state.AddStatement(new AssignToNewField(mutable, fieldName, expression, _typeConstraint, isHidden));
             state.CommitTransaction();
 
             return unit;
@@ -62,7 +65,7 @@ public partial class AssignToNewFieldParser : StatementParser
       else if (_typeConstraint is (true, var typeConstraint))
       {
          var className = typeConstraint.Comparisands[0].Name;
-         state.AddStatement(new DefineNewField(mutable, fieldName, className));
+         state.AddStatement(new DefineNewField(mutable, fieldName, className, isHidden));
 
          state.CommitTransaction();
          return unit;

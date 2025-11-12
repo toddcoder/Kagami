@@ -32,7 +32,7 @@ public partial class AutoPropertyParser : StatementParser
 
       if (_result is (true, var (_typeConstraint, expression)))
       {
-         var assignToNewField = new AssignToNewField(isReadWrite || type == "var", fieldName, false, expression, _typeConstraint) { Ignore = true };
+         var assignToNewField = new AssignToNewField(isReadWrite || type == "var", fieldName, expression, _typeConstraint, false) { Ignore = true };
          state.AddStatement(assignToNewField);
 
          if (isReadWrite || type == "let")
@@ -49,7 +49,7 @@ public partial class AutoPropertyParser : StatementParser
                state.RemoveReturnType();
                var assign = new AssignReferenceToNewField(fieldName, "field");
                getter.Unshift(assign);
-               state.AddStatement(new Function($"__${name}", Parameters.Empty, getter, false, false, ""));
+               state.AddStatement(new Function($"__${name}", Parameters.Empty, false, getter, false, false, ""));
             }
             else
             {
@@ -71,7 +71,7 @@ public partial class AutoPropertyParser : StatementParser
                state.RemoveReturnType();
                var assign = new AssignReferenceToNewField(fieldName, "field");
                setter.Unshift(assign);
-               state.AddStatement(new Function($"{name}=", new Parameters("value"), setter, false, false, ""));
+               state.AddStatement(new Function($"{name}=", new Parameters("value"), false, setter, false, false, ""));
             }
             else
             {

@@ -5,11 +5,13 @@ using static Kagami.Library.Nodes.NodeFunctions;
 
 namespace Kagami.Library.Nodes.Statements;
 
-public class LazyAssign(string fieldName, Block block) : Statement
+public class LazyAssign(string fieldName, Block block, bool isHidden) : Statement
 {
    protected string lazyName = lazyName(fieldName);
 
    public string FieldName => fieldName;
+   
+   public bool IsHidden => isHidden;
 
    public override void Generate(OperationsBuilder builder)
    {

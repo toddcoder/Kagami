@@ -1,5 +1,5 @@
 ﻿open sys
 
 let dictionary = {"a": 10, "b": 11, "c": 12}
-dictionary each {|(key, value) println $"$key : $value"}
-dictionary each {(i) println ~i}
+dictionary each {|(key, value) println($"$key : $value")}
+dictionary each {(i) println(~i)}

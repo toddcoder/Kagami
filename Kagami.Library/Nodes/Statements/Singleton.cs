@@ -11,7 +11,7 @@ public class Singleton(string identifier, Block block, TypeConstraint typeConstr
 
    public override void Generate(OperationsBuilder builder)
    {
-      var function = new Function(functionName, Parameters.Empty, block, false, false, "", true);
+      var function = new Function(functionName, Parameters.Empty, false, block, false, false, "", true);
       function.Generate(builder);
 
       var fieldExistsLabel = newLabel("field-exists");

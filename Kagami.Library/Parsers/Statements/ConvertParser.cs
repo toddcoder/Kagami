@@ -39,7 +39,7 @@ public partial class ConvertParser : StatementParser
             var functionName = convertFunctionName(fromClass, toClass);
             var parameter = new Parameter(false, "", parameterName, nil, nil, false, false);
             var parameters = new Parameters(parameter);
-            var function = new Function(functionName, parameters, block, false, false, "");
+            var function = new Function(functionName, parameters, false, block, false, false, "");
             state.AddStatement(function);
             Module.Global.Value.RegisterConversion(fromClass, toClass, $"{functionName}(_)");
          }

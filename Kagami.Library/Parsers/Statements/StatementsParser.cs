@@ -76,7 +76,7 @@ public class StatementsParser : MultiParser
          //yield return new ReassignmentParser();
 
          yield return new AssignWithNewTypeParser();
-         yield return new AssignToNewFieldTolerantParser();
+         //yield return new AssignToNewFieldTolerantParser();
          yield return new AssignToFieldParser();
 
          yield return new ExpressionStatementParser(ReturnExpression, TypeConstraint);

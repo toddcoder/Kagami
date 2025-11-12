@@ -70,7 +70,7 @@ public class TypeCreator(string typeName, TypeMemberData[] typeMemberData, Block
          {
             var setSymbol = new DictionaryOrSetSymbol(expression, nil);
             var returnBlock = new Block(new Return(new Expression(setSymbol), nil));
-            var function = new Function("__$members", Parameters.Empty, returnBlock, false, false, "");
+            var function = new Function("__$members", Parameters.Empty, false, returnBlock, false, false, "");
             statements.Add(function);
          }
 
@@ -79,7 +79,7 @@ public class TypeCreator(string typeName, TypeMemberData[] typeMemberData, Block
             var dictionary = new Dictionary(ordinals);
             var pushObjectSymbol = new PushObjectSymbol(dictionary);
             var returnBlock = new Block(new Return(new Expression(pushObjectSymbol), nil));
-            var function = new Function("__$values", Parameters.Empty, returnBlock, false, false, "");
+            var function = new Function("__$values", Parameters.Empty, false, returnBlock, false, false, "");
             statements.Add(function);
          }
       }
@@ -132,17 +132,17 @@ public class TypeCreator(string typeName, TypeMemberData[] typeMemberData, Block
       var block = new Block(new Return(new Expression(invokeSymbol), nil));
 
       var functionName = arguments.Length > 0 ? data.Name.ToLower1() : data.Name.ToLower1().get();
-      return new Function(functionName, data.Parameters, block, false, false, "");
+      return new Function(functionName, data.Parameters, false, block, false, false, "");
    }
 
    protected static AssignToNewField getOrdinalFunction(IObject ordinal)
    {
-      return new AssignToNewField(false, "value", false, new Expression(new PushObjectSymbol(ordinal)));
+      return new AssignToNewField(false, "value", new Expression(new PushObjectSymbol(ordinal)), false);
    }
 
    protected static AssignToNewField getClassField(string className)
    {
-      return new AssignToNewField(false, "class", false, new Expression(new ClassSymbol(className)));
+      return new AssignToNewField(false, "class", new Expression(new ClassSymbol(className)), false);
    }
 
    protected static Maybe<ClassBuilder> getMemberClassBuilder(TypeMemberData data, string enumClassName, Block commonBlock,

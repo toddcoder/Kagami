@@ -17,22 +17,23 @@ public partial class FunctionParser : StatementParser
 {
    protected Maybe<Function> _function = nil;
 
-   [GeneratedRegex($@"^(\s*)(override\s+)?(func|(?:infix\(\w+\))|prefix|postfix|macro|match)(\s+)(?:({REGEX_CLASS_GETTING_OR_ALIAS})(\.))?({REGEX_FUNCTION_NAME})(\()?")]
+   [GeneratedRegex($@"^(\s*){REGEX_HIDDEN}(override\s+)?(func|(?:infix\(\w+\))|prefix|postfix|macro|match)(\s+)(?:({REGEX_CLASS_GETTING_OR_ALIAS})(\.))?({REGEX_FUNCTION_NAME})(\()?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      var overriding = tokens[2].Text.StartsWith("override");
-      var operatorText = tokens[3].Text;
+      var isHidden = tokens[2].Text.IsNotEmpty();
+      var overriding = tokens[3].Text.StartsWith("override");
+      var operatorText = tokens[4].Text;
       var isOperator = operatorText.StartsWith("infix") || operatorText is "prefix" or "postfix";
-      var isMacro = tokens[3].Text == "macro";
-      var isMatch = tokens[3].Text == "match";
+      var isMacro = tokens[4].Text == "macro";
+      var isMatch = tokens[4].Text == "match";
 
-      var className = tokens[5].Text;
+      var className = tokens[6].Text;
       (className, var color) = getClassNameWithColor(className);
 
-      var functionName = tokens[7].Text;
-      var type = tokens[8].Text;
+      var functionName = tokens[8].Text;
+      var type = tokens[9].Text;
 
       if (isOperator)
       {
@@ -82,12 +83,12 @@ public partial class FunctionParser : StatementParser
       var needsParameters = type == "(";
       if (needsParameters)
       {
-         state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Keyword, Color.Whitespace, color, Color.Structure, Color.Invokable,
+         state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Keyword, Color.Keyword, Color.Whitespace, color, Color.Structure, Color.Invokable,
             Color.OpenParenthesis);
       }
       else
       {
-         state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Keyword, Color.Whitespace, color, Color.Structure, Color.Invokable);
+         state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Keyword, Color.Keyword, Color.Whitespace, color, Color.Structure, Color.Invokable);
          functionName = $"__${functionName}";
       }
 
@@ -107,11 +108,11 @@ public partial class FunctionParser : StatementParser
                Singleton = true
             };
             var newParameters = new Parameters(variadicParameter);
-            return getMatchFunction(state, functionName, newParameters, overriding, className, isFixed);
+            return getMatchFunction(state, functionName, newParameters, overriding, className, isFixed, isHidden);
          }
          else if (state.CurrentSource.StartsWith('('))
          {
-            var _curriedFunction = getCurriedFunction(state, functionName, parameters, overriding, className);
+            var _curriedFunction = getCurriedFunction(state, functionName, parameters, overriding, className, isHidden);
             if (_curriedFunction is (true, var curriedFunction))
             {
                curriedFunction.IsFixed = isFixed;
@@ -139,7 +140,7 @@ public partial class FunctionParser : StatementParser
             {
                var yielding = state.RemoveYieldFlag();
                state.RemoveReturnType();
-               var function = new Function(functionName, parameters, block, yielding, overriding, className) {IsFixed = isFixed};
+               var function = new Function(functionName, parameters, isHidden, block, yielding, overriding, className) {IsFixed = isFixed};
                _function = function;
                if (isMacro)
                {
@@ -172,7 +173,7 @@ public partial class FunctionParser : StatementParser
    }
 
    protected static Optional<Function> getCurriedFunction(ParseState state, string functionName, Parameters firstParameters,
-      bool overriding, string className)
+      bool overriding, string className, bool isHidden)
    {
       var parametersStack = new Stack<Parameters>();
       while (state.More)
@@ -212,7 +213,7 @@ public partial class FunctionParser : StatementParser
 
          if (_lambdaSymbol is (true, var lambdaSymbol))
          {
-            return new Function(functionName, firstParameters, new Block(new Return(new Expression(lambdaSymbol), nil)), yielding, overriding,
+            return new Function(functionName, firstParameters, isHidden, new Block(new Return(new Expression(lambdaSymbol), nil)), yielding, overriding,
                className);
          }
          else
@@ -232,7 +233,7 @@ public partial class FunctionParser : StatementParser
    }
 
    protected static Optional<Unit> getMatchFunction(ParseState state, string functionName, Parameters parameters, bool overriding,
-      string className, bool isFixed)
+      string className, bool isFixed, bool isHidden)
    {
       List<If> list = [];
 
@@ -286,7 +287,7 @@ public partial class FunctionParser : StatementParser
 
          previousIf.Else = new Block(new FailedMatch());
 
-         state.AddStatement(new MatchFunction(functionName, parameters, previousIf, _typeConstraint, overriding, className) { IsFixed = isFixed });
+         state.AddStatement(new MatchFunction(functionName, parameters, isHidden, previousIf, _typeConstraint, overriding, className) { IsFixed = isFixed });
          state.RemoveReturnType();
 
          return unit;
