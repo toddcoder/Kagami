@@ -31,9 +31,12 @@ public class Machine
    protected bool running;
    protected Lazy<TableMaker> table = new(() =>
       new TableMaker(("Address", Justification.Left), ("Operation", Justification.Left), ("Stack", Justification.Left)));
-   protected DebugState debugState = DebugState.Starting;
    protected GlobalFrame globalFrame = new();
    protected IObject lastValue = KVoid.Value;
+   protected readonly Set<int> breakpoints = [];
+   protected readonly ManualResetEventSlim breakpointWait = new(false);
+   protected volatile bool paused;
+   protected volatile bool singleStep;
 
    public readonly MessageEvent<string> TraceOutput = new();
    public readonly MessageEvent<(int, Operation)> OperationStarting = new();
@@ -42,6 +45,7 @@ public class Machine
    public readonly MessageEvent<Frame> FramePopped = new();
    public readonly MessageEvent<Exception> UnhandledException = new();
    public readonly MessageEvent<string> DebugTrace = new();
+   public readonly MessageEvent<(int, Operation)> BreakpointHit = new();
 
    public Machine(IContext context)
    {
@@ -92,6 +96,7 @@ public class Machine
             trace(operations.Address, () => operation.ToString() ?? "");
 #endif
             OperationStarting.Invoke((operations.Address, operation));
+            checkBreakpoint(operations.Address, operation);
             var _result = operation.Execute(this);
             OperationFinished.Invoke((operations.Address, operation, _result));
 
@@ -342,6 +347,7 @@ public class Machine
             }
 
             OperationStarting.Invoke((operations.Address, operation));
+            checkBreakpoint(operations.Address, operation);
             var _result = operation.Execute(this);
             OperationFinished.Invoke((operations.Address, operation, _result));
 
@@ -685,7 +691,7 @@ public class Machine
       operations.Goto(0);
    }
 
-   public void Step()
+   /*public void Step()
    {
       if (debugState == DebugState.Starting)
       {
@@ -727,7 +733,7 @@ public class Machine
             return;
          }
       }
-   }
+   }*/
 
    public string PackageFolder { get; set; } = "";
 
@@ -782,6 +788,61 @@ public class Machine
       foreach (var (fieldName, field) in otherGlobalFrame.Fields)
       {
          globalFrame.Fields.AssignLocal(fieldName, FieldType.Assignment, field.Value, true).Force();
+      }
+   }
+
+   public void AddBreakpoint(int address) => breakpoints.Add(address);
+
+   public void RemoveBreakpoint(int address) => breakpoints.Remove(address);
+
+   public void ClearBreakpoints()
+   {
+      breakpoints.Clear();
+      Resume();
+   }
+
+   public bool HasBreakpoint(int address) => breakpoints.Contains(address);
+
+   public void Resume()
+   {
+      paused = false;
+      singleStep = false;
+      breakpointWait.Set();
+   }
+
+   public void Pause()
+   {
+      paused = true;
+      breakpointWait.Reset();
+   }
+
+   public void Step()
+   {
+      paused = true;
+      singleStep = true;
+      breakpointWait.Set();
+   }
+
+   protected void checkBreakpoint(int address, Operation operation)
+   {
+      if (breakpoints.Count == 0)
+      {
+         return;
+      }
+
+      if (breakpoints.Contains(address))
+      {
+         paused = true;
+         BreakpointHit.Invoke((address, operation));
+
+         breakpointWait.Wait();
+
+         if (singleStep)
+         {
+            singleStep = false;
+            paused = true;
+            breakpointWait.Reset();
+         }
       }
    }
 }

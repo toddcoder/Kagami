@@ -1,9 +1,8 @@
-﻿namespace Kagami.Library.Runtime
+﻿namespace Kagami.Library.Runtime;
+
+public enum DebugState
 {
-   public enum DebugState
-   {
-      Starting,
-      Active,
-      Stopped
-   }
+   Starting,
+   Active,
+   Stopped
 }
