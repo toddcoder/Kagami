@@ -36,6 +36,12 @@ public class Machine
    protected IObject lastValue = KVoid.Value;
 
    public readonly MessageEvent<string> TraceOutput = new();
+   public readonly MessageEvent<(int, Operation)> OperationStarting = new();
+   public readonly MessageEvent<(int, Operation, Optional<IObject>)> OperationFinished = new();
+   public readonly MessageEvent<Frame> FramePushed = new();
+   public readonly MessageEvent<Frame> FramePopped = new();
+   public readonly MessageEvent<Exception> UnhandledException = new();
+   public readonly MessageEvent<string> DebugTrace = new();
 
    public Machine(IContext context)
    {
@@ -52,7 +58,9 @@ public class Machine
    {
       if (Tracing)
       {
-         table.Value.Add(address.ToString("D5"), message().Truncate(80), StackImage.Truncate(80));
+         var text = message().Truncate(80);
+         table.Value.Add(address.ToString("D5"), text, StackImage.Truncate(80));
+         DebugTrace.Invoke(text);
       }
    }
 
@@ -83,7 +91,10 @@ public class Machine
 #if !NO_TRACE
             trace(operations.Address, () => operation.ToString() ?? "");
 #endif
+            OperationStarting.Invoke((operations.Address, operation));
             var _result = operation.Execute(this);
+            OperationFinished.Invoke((operations.Address, operation, _result));
+
             if (_result is (true, var result) && running && result.ClassName != "Void")
             {
                var address = operations.Address;
@@ -112,6 +123,7 @@ public class Machine
                }
                else
                {
+                  UnhandledException.Invoke(exception);
                   return exception;
                }
             }
@@ -307,6 +319,7 @@ public class Machine
                      }
                      else
                      {
+                        UnhandledException.Invoke(exception);
                         return exception;
                      }
                   }
@@ -328,7 +341,10 @@ public class Machine
                }
             }
 
+            OperationStarting.Invoke((operations.Address, operation));
             var _result = operation.Execute(this);
+            OperationFinished.Invoke((operations.Address, operation, _result));
+
             if (_result is (true, var result) && running)
             {
                var address = operations.Address;
@@ -348,6 +364,7 @@ public class Machine
                }
                else
                {
+                  UnhandledException.Invoke(exception);
                   return exception;
                }
             }
@@ -395,6 +412,7 @@ public class Machine
    public void PushFrame(Frame frame)
    {
       stack.Push(frame);
+      FramePushed.Invoke(frame);
       if (stack.Count > MAX_DEPTH)
       {
          throw fail("Max stack depth");
@@ -409,7 +427,16 @@ public class Machine
       }
    }
 
-   public Result<Frame> PopFrame() => tryTo(() => stack.Pop());
+   public Result<Frame> PopFrame()
+   {
+      var _result = tryTo(() => stack.Pop());
+      if (_result is (true, var frame))
+      {
+         FramePopped.Invoke(frame);
+      }
+
+      return _result;
+   }
 
    public FrameGroup PopFrames() => PopFramesUntil(f => f.FrameType == FrameType.Function);
 
@@ -445,10 +472,11 @@ public class Machine
 
    public FrameGroup PopFramesUntil(Predicate<Frame> predicate)
    {
-      var frames = new List<Frame>();
+      List<Frame> frames = [];
       while (stack.Count > 0)
       {
          var frame = stack.Pop();
+         FramePopped.Invoke(frame);
          frames.Add(frame);
          if (predicate(frame))
          {
@@ -456,7 +484,7 @@ public class Machine
          }
       }
 
-      return new FrameGroup(frames.ToArray());
+      return new FrameGroup([.. frames]);
    }
 
    public Result<int> GetErrorHandler()
@@ -753,7 +781,7 @@ public class Machine
       var otherGlobalFrame = otherMachine.CurrentFrame;
       foreach (var (fieldName, field) in otherGlobalFrame.Fields)
       {
-         globalFrame.Fields.AssignLocal(fieldName, FieldType.Assignment, field.Value,true).Force();
+         globalFrame.Fields.AssignLocal(fieldName, FieldType.Assignment, field.Value, true).Force();
       }
    }
 }
