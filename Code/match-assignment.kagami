@@ -1,0 +1,7 @@
+﻿open sys
+
+let res = match 10 {
+	|Int i => i
+	| _ => -1
+}
+println(res)

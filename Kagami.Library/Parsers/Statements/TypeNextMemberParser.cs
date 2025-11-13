@@ -7,7 +7,7 @@ using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public partial class EnumNextMemberParser(string enumClassName, Maybe<IObject> _previousOrdinal) : StatementParser
+public partial class TypeNextMemberParser(string typeClassName, Maybe<IObject> _previousOrdinal) : StatementParser
 {
    [GeneratedRegex(@$"^(\s*)(,)(\s*)({REGEX_CLASS})(\()?")]
    public override partial Regex Regex();
@@ -18,10 +18,10 @@ public partial class EnumNextMemberParser(string enumClassName, Maybe<IObject> _
       var hasParameters = tokens[5].Text == "(";
       state.Colorize(tokens, Color.Whitespace, Color.Structure, Color.Whitespace, Color.Class, Color.OpenParenthesis);
 
-      var _enumMember = EnumMemberParser.ParseEnumMember(state, className, hasParameters, enumClassName, _previousOrdinal);
+      var _enumMember = TypeMemberParser.ParseTypeMember(state, className, hasParameters, _previousOrdinal);
       if (_enumMember is (true, var (enumMemberData, _ordinal)))
       {
-         EnumMemberData = enumMemberData;
+         TypeMemberData = enumMemberData;
          Ordinal = _ordinal;
 
          return unit;
@@ -32,7 +32,7 @@ public partial class EnumNextMemberParser(string enumClassName, Maybe<IObject> _
       }
    }
 
-   public Maybe<TypeMemberData> EnumMemberData { get; set; } = nil;
+   public Maybe<TypeMemberData> TypeMemberData { get; set; } = nil;
 
    public Maybe<IObject> Ordinal { get; set; } = nil;
 }

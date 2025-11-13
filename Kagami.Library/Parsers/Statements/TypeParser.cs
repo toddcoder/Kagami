@@ -44,18 +44,18 @@ public partial class TypeParser : StatementParser
             return exception;
          }
 
-         var enumMemberParser = new EnumMemberParser(className, _ordinal);
-         var _enumMember = enumMemberParser.Scan(state);
-         if (_enumMember)
+         var typeMemberParser = new TypeMemberParser(_ordinal);
+         var _typeMember = typeMemberParser.Scan(state);
+         if (_typeMember)
          {
-            if (enumMemberParser.EnumMemberData is (true, var enumMemberData))
+            if (typeMemberParser.TypeMemberData is (true, var enumMemberData))
             {
                enumMembers.Add(enumMemberData);
             }
 
-            _ordinal = enumMemberParser.Ordinal;
+            _ordinal = typeMemberParser.Ordinal;
          }
-         else if (_enumMember.Exception is (true, var exception))
+         else if (_typeMember.Exception is (true, var exception))
          {
             return exception;
          }
@@ -63,18 +63,18 @@ public partial class TypeParser : StatementParser
          {
             while (state.More && scanning)
             {
-               var enumNextMemberParser = new EnumNextMemberParser(className, _ordinal);
-               _enumMember = enumNextMemberParser.Scan(state);
-               if (_enumMember)
+               var typeNextMemberParser = new TypeNextMemberParser(className, _ordinal);
+               _typeMember = typeNextMemberParser.Scan(state);
+               if (_typeMember)
                {
-                  if (enumNextMemberParser.EnumMemberData is (true, var enumMemberData))
+                  if (typeNextMemberParser.TypeMemberData is (true, var enumMemberData))
                   {
                      enumMembers.Add(enumMemberData);
                   }
 
-                  _ordinal = enumNextMemberParser.Ordinal;
+                  _ordinal = typeNextMemberParser.Ordinal;
                }
-               else if (_enumMember.Exception is (true, var exception2))
+               else if (_typeMember.Exception is (true, var exception2))
                {
                   return exception2;
                }

@@ -52,8 +52,7 @@ public class UserObject : IObject, IEquatable<UserObject>
 
    public bool IsEqualTo(IObject obj) => isEqualTo(this, obj);
 
-   public bool Match(IObject comparisand, Hash<string, IObject> bindings) =>
-      match(this, comparisand, bindings); //userObjectMatch(this, comparisand, bindings);
+   public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
    public bool IsTrue => KBoolean.BooleanObject(fields.Length > 0).IsTrue;
 

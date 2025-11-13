@@ -11,10 +11,9 @@ using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public partial class EnumMemberParser(string enumClassName, Maybe<IObject> _previousOrdinal) : StatementParser
+public partial class TypeMemberParser(Maybe<IObject> _previousOrdinal) : StatementParser
 {
-   public static Optional<(TypeMemberData, Maybe<IObject>)> ParseEnumMember(ParseState state, string className, bool hasParameters,
-      string enumClassName, Maybe<IObject> _previousOrdinal)
+   public static Optional<(TypeMemberData, Maybe<IObject>)> ParseTypeMember(ParseState state, string className, bool hasParameters, Maybe<IObject> _previousOrdinal)
    {
       Module.Global.Value.ForwardReference(className);
 
@@ -92,21 +91,21 @@ public partial class EnumMemberParser(string enumClassName, Maybe<IObject> _prev
       var hasParameters = tokens[5].Text == "(";
       state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Whitespace, Color.Class, Color.OpenParenthesis);
 
-      var _enumMember = ParseEnumMember(state, className, hasParameters, enumClassName, _previousOrdinal);
-      if (_enumMember is (true, var (enumMemberData, _ordinal)))
+      var _typeMember = ParseTypeMember(state, className, hasParameters, _previousOrdinal);
+      if (_typeMember is (true, var (typeMemberData, _ordinal)))
       {
-         EnumMemberData = enumMemberData;
+         TypeMemberData = typeMemberData;
          Ordinal = _ordinal;
 
          return unit;
       }
       else
       {
-         return _enumMember.Exception;
+         return _typeMember.Exception;
       }
    }
 
-   public Maybe<TypeMemberData> EnumMemberData { get; set; } = nil;
+   public Maybe<TypeMemberData> TypeMemberData { get; set; } = nil;
 
    public Maybe<IObject> Ordinal { get; set; } = nil;
 }
