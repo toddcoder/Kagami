@@ -105,7 +105,7 @@ public class Set : IObject, ICollection, IObjectCompare, IMutable
       return lazy ? new LazyIterator(this) : new Iterator(this);
    }
 
-   public Maybe<IObject> Next(int index) => maybe<IObject>() & index < set.Count & (() => list[index]);
+   public Maybe<IObject> Next(int index) => maybe<IObject>() & index < list.Count & (() => list[index]);
 
    public Maybe<IObject> Peek(int index) => Next(index);
 
@@ -129,7 +129,11 @@ public class Set : IObject, ICollection, IObjectCompare, IMutable
 
    public KString MakeString(string connector) => makeString(this, connector);
 
-   public IIterator GetIndexedIterator() => new IndexedIterator(this);
+   public IIterator GetIndexedIterator()
+   {
+      list = [.. set];
+      return new IndexedIterator(this);
+   }
 
    public IObject One() => set.Count == 1 ? set.Take(1).First() : this;
 

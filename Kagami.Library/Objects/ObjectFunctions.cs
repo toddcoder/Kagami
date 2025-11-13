@@ -346,22 +346,24 @@ public static class ObjectFunctions
 
    public static string userObjectString(UserObject obj)
    {
-      if (classOf(obj).RespondsTo("string".get()))
+      var stringMessage = "string".get();
+      if (classOf(obj).RespondsTo(stringMessage))
       {
-         return sendMessage(obj, "string".get()).AsString;
+         return sendMessage(obj, stringMessage).AsString;
       }
       else
       {
-         var parametersAndFields = obj.Parameters.Select(p => $"{p.Name} = {obj.Fields[p.Name].AsString}").ToString(", ");
+         var parametersAndFields = obj.Parameters.Select(p => $"{obj.Fields[p.Name].AsString}").ToString(", ");
          return $"{obj.ClassName}({parametersAndFields})";
       }
    }
 
    public static string userObjectImage(UserObject obj)
    {
-      if (classOf(obj).RespondsTo("image".get()))
+      var imageMessage = "image".get();
+      if (classOf(obj).RespondsTo(imageMessage))
       {
-         return sendMessage(obj, "image".get()).AsString;
+         return sendMessage(obj, imageMessage).AsString;
       }
       else
       {
