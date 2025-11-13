@@ -1,0 +1,38 @@
+﻿open sys
+
+class NamedShape(var name string) {
+	var numberOfSides = 0
+	get string => $"A shape with $numberOfSides sides."
+}
+
+class Square(var sideLength float, name string) : NamedShape(name) {
+	numberOfSides = 4
+	func area() => sideLength ^ 2
+	override get string => $"A square with sides of length $sideLength"
+}
+
+class Triangle(var sideLength float, name string) : NamedShape(name) {
+	numberOfSides = 3
+	get perimeter float => 3.0 * sideLength
+	set perimeter float => sideLength = value / 3.0
+	override get string => $"An equilateral triangle with sides of length $sideLength."
+}
+
+class TriangleAndSquare(size float, name string) {
+	var auto triangle Triangle = Triangle(size, name)
+	set {
+		square.sideLength = value.sideLength
+		field = value
+	}
+	var auto square Square = Square(size, name)
+	set {
+		triangle.sideLength = value.sideLength
+		field = value
+	}
+}
+
+var triangleAndSquare = TriangleAndSquare(10f, "another test shape")
+println(triangleAndSquare.square.sideLength)
+println(triangleAndSquare.triangle.sideLength)
+triangleAndSquare.square = Square(50f, "larger square")
+println(triangleAndSquare.triangle.sideLength)

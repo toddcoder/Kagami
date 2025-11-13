@@ -35,7 +35,7 @@ public partial class AutoPropertyParser : StatementParser
          var assignToNewField = new AssignToNewField(isReadWrite || type == "var", fieldName, expression, _typeConstraint, false) { Ignore = true };
          state.AddStatement(assignToNewField);
 
-         if (isReadWrite || type == "let")
+         if (isReadWrite || type is "let" or "var")
          {
             state.CreateYieldFlag();
             state.CreateReturnType();
