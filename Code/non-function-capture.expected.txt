@@ -1,2 +1,2 @@
-Numeric(number = 42)
-"Numeric(number = 42)" | String
+Numeric(42)
+"Numeric(42)" | String

@@ -8,6 +8,7 @@ using Kagami.Library.Objects;
 using Kagami.Library.Parsers.Expressions;
 using System.Collections;
 using System.Text.RegularExpressions;
+using Core.DataStructures;
 using Core.Numbers;
 using static Core.Monads.AttemptFunctions;
 using static Core.Monads.MonadFunctions;
@@ -29,7 +30,7 @@ public class ParseState : IEnumerable<Statement>
    protected List<Symbol> postGenerationSymbols = [];
    protected Maybe<int> _exceptionIndex = nil;
    protected Stack<bool> yieldingStack = new();
-   protected Stack<Maybe<TypeConstraint>> returnTypesStack = new();
+   protected MaybeStack<Maybe<TypeConstraint>> returnTypesStack = new();
    protected Hash<string, Expression> defExpressions = [];
    protected Hash<string, Function> macros = [];
    protected Stack<Maybe<IPrefixCode>> prefixCodes = new();
@@ -420,7 +421,7 @@ public class ParseState : IEnumerable<Statement>
 
    public bool RemoveYieldFlag() => yieldingStack.Pop();
 
-   public Maybe<TypeConstraint> GetReturnType() => returnTypesStack.Peek();
+   public Maybe<TypeConstraint> GetReturnType() => returnTypesStack.Peek().Map(p => p);
 
    public void RemoveReturnType() => returnTypesStack.Pop();
 
