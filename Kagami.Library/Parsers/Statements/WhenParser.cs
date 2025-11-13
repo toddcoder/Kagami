@@ -82,12 +82,12 @@ public partial class WhenParser : StatementParser
          var _expression = builder.ToExpression();
          if (_expression is (true, var expression))
          {
-            var caseParser = new WhenParser(assignmentField, mutable, assignment, fieldName, false, caseType);
+            var whenParser = new WhenParser(assignmentField, mutable, assignment, fieldName, false, caseType);
             Maybe<If> _ifStatement = nil;
-            var _scan = caseParser.Scan(state);
+            var _scan = whenParser.Scan(state);
             if (_scan)
             {
-               _ifStatement = caseParser.If;
+               _ifStatement = whenParser.If;
             }
             else if (_scan.Exception is (true, var exception))
             {
