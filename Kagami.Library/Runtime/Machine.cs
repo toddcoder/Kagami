@@ -19,7 +19,9 @@ namespace Kagami.Library.Runtime;
 
 public class Machine
 {
-   protected const int MAX_DEPTH = 1024;
+   protected const int MAX_FIELD_DEPTH = 1024;
+   protected const int MAX_STACK_DEPTH = 750;
+   public const string MAX_STACK_DEPTH_MESSAGE = "Max stack depth";
 
    public static LateLazy<Machine> Current { get; set; } = new(true);
 
@@ -96,6 +98,12 @@ public class Machine
             }
             else if (_result.Exception is (true, var exception))
             {
+               if (exception.Message == MAX_STACK_DEPTH_MESSAGE)
+               {
+                  running = false;
+                  operations.GoPastEnd();
+                  continue;
+               }
 #if !NO_TRACE
                if (Tracing)
                {
@@ -299,6 +307,14 @@ public class Machine
                   }
                   else if (_returnValue.Exception is (true, var exception))
                   {
+                     if (exception.Message == MAX_STACK_DEPTH_MESSAGE)
+                     {
+                        /*running = false;
+                        operations.GoPastEnd();
+                        continue;*/
+                        throw exception;
+                     }
+
                      var _address = GetErrorHandler();
                      if (_address is (true, var address))
                      {
@@ -340,6 +356,14 @@ public class Machine
             }
             else if (_result.Exception is (true, var exception))
             {
+               if (exception.Message == MAX_STACK_DEPTH_MESSAGE)
+               {
+                  /*running = false;
+                  operations.GoPastEnd();
+                  continue;*/
+                  throw exception;
+               }
+
                var _address = GetErrorHandler();
                if (_address is (true, var address))
                {
@@ -363,7 +387,7 @@ public class Machine
          }
       }
 
-      return fail("No return");
+      return running ? fail("No return") : fail(MAX_STACK_DEPTH_MESSAGE);
    }
 
    public bool Running
@@ -395,9 +419,9 @@ public class Machine
    public void PushFrame(Frame frame)
    {
       stack.Push(frame);
-      if (stack.Count > MAX_DEPTH)
+      if (stack.Count > MAX_STACK_DEPTH)
       {
-         throw fail("Max stack depth");
+         throw fail(MAX_STACK_DEPTH_MESSAGE);
       }
    }
 
@@ -503,7 +527,7 @@ public class Machine
          }
          else
          {
-            if (depth++ > MAX_DEPTH)
+            if (depth++ > MAX_FIELD_DEPTH)
             {
                return exceededMaxDepth();
             }
@@ -753,7 +777,7 @@ public class Machine
       var otherGlobalFrame = otherMachine.CurrentFrame;
       foreach (var (fieldName, field) in otherGlobalFrame.Fields)
       {
-         globalFrame.Fields.AssignLocal(fieldName, FieldType.Assignment, field.Value,true).Force();
+         globalFrame.Fields.AssignLocal(fieldName, FieldType.Assignment, field.Value, true).Force();
       }
    }
 }

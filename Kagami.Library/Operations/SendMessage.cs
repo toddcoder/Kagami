@@ -19,7 +19,13 @@ public class SendMessage : TwoOperandOperation
 
    public override Optional<IObject> Execute(Machine machine, IObject x, IObject y)
    {
-      try
+      return y switch
+      {
+         Arguments arguments when x is Class => classOf(x).SendClassMessage(selector, arguments).Just(),
+         Arguments arguments => classOf(x).SendMessage(x, selector, arguments).Just(),
+         _ => incompatibleClasses(y, "Arguments")
+      };
+      /*try
       {
          return y switch
          {
@@ -31,6 +37,6 @@ public class SendMessage : TwoOperandOperation
       catch (Exception exception)
       {
          return exception;
-      }
+      }*/
    }
 }

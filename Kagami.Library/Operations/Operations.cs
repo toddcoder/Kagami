@@ -43,6 +43,8 @@ public class Operations
 
    public Maybe<Operation> Current => maybe<Operation>() & address.Between(0).Until(length) & (() => operations[address]);
 
+   public void GoPastEnd() => address = length;
+
    public override string ToString()
    {
       var table = new TableMaker(("Loc", Justification.Right), ("Operation", Justification.Left));
