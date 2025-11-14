@@ -149,20 +149,7 @@ public class TypeCreator(string typeName, TypeMemberData[] typeMemberData, Block
       Hash<IObject, IObject> ordinals)
    {
       var localCommonBlock = commonBlock.Clone();
-      if (data.Ordinal is (true, var ordinal))
-      {
-         ordinals[ordinal] = new Objects.Class(data.Name);
-         localCommonBlock.Add(getOrdinalFunction(ordinal));
-      }
-      else
-      {
-         var value = KString.StringObject(data.Name.ToLower1());
-         ordinals[value] = new Objects.Class(data.Name);
-         localCommonBlock.Add(getOrdinalFunction(value));
-      }
-
-      return new ClassBuilder(data.Name, data.Parameters, typeClassName, [], false, localCommonBlock);
-      /*if (data.Parameters.Length > 0)
+      if (data.Parameters.Length > 0 || data.HasParameters)
       {
          if (data.Ordinal is (true, var ordinal))
          {
@@ -176,12 +163,12 @@ public class TypeCreator(string typeName, TypeMemberData[] typeMemberData, Block
             localCommonBlock.Add(getOrdinalFunction(value));
          }
 
-         return new ClassBuilder(data.Name, data.Parameters, enumClassName, [], false, localCommonBlock);
+         return new ClassBuilder(data.Name, data.Parameters, typeClassName, [], false, localCommonBlock);
       }
       else
       {
          return nil;
-      }*/
+      }
    }
 
    protected static (ClassBuilder, ClassBuilder) getMemberMetaClassBuilder(TypeMemberData data, string enumClassName, Block commonBlock,

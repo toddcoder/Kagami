@@ -77,7 +77,7 @@ public partial class TypeMemberParser(Maybe<IObject> _previousOrdinal) : Stateme
       var _block = getBlock(state).Maybe();
 
       Module.Global.Value.ForwardReference(className);
-      var enumMemberData = new TypeMemberData(className, parameters, _ordinal, _block);
+      var enumMemberData = new TypeMemberData(className, parameters, _ordinal, _block, hasParameters);
 
       return (enumMemberData, _ordinal);
    }

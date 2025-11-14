@@ -1,0 +1,32 @@
+﻿open sys
+
+type Rank {
+	|Ace()
+	|XNumber(n int)
+	|Jack()
+	|Queen()
+	|King()
+	get string {
+		match self {
+			|Ace() return "ace"
+			|Jack() return "jack"
+			|Queen() return "queen"
+			|King() return "king"
+			|XNumber(n) return n.string
+		}
+	}
+	get cardValue {
+		match self {
+			|Ace() return 1
+			|XNumber(n) return n
+			|Jack() return 11
+			|Queen() return 12
+			|King() return 13
+		}
+	}
+}
+
+let ace = Ace()
+println(ace)
+let aceValue = ace.cardValue
+println(aceValue)
