@@ -16,6 +16,7 @@ public class ValuesParser : MultiParser
          yield return new CallableExpressionParser(builder);
          yield return new EmptyMemoParser(builder);
          yield return new EmptyValueParser(builder);
+         yield return new EmptyTypedCollectionParser(builder);
          yield return new WhateverLambdaParser(builder);
          yield return new SimpleLambdaParser(builder);
          yield return new ZeroParameterLambdaParser(builder);

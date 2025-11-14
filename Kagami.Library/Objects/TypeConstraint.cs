@@ -25,6 +25,15 @@ public readonly struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
       this.comparisands = comparisands;
    }
 
+   public TypeConstraint Append(TypeConstraint otherTypeConstraint)
+   {
+      List<BaseClass> newComparisands = [];
+      newComparisands.AddRange(comparisands);
+      newComparisands.AddRange(otherTypeConstraint.comparisands);
+
+      return new TypeConstraint([.. newComparisands]);
+   }
+
    public void RefreshClasses()
    {
       for (var i = 0; i < comparisands.Length; i++)
