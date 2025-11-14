@@ -7,7 +7,7 @@ using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public partial class TypeNextMemberParser(string typeClassName, Maybe<IObject> _previousOrdinal) : StatementParser
+public partial class TypeNextMemberParser(Maybe<IObject> _previousOrdinal) : StatementParser
 {
    [GeneratedRegex(@$"^(\s*)(,)(\s*)({REGEX_CLASS})(\()?")]
    public override partial Regex Regex();

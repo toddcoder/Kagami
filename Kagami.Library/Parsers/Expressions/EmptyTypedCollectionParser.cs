@@ -27,15 +27,27 @@ public partial class EmptyTypedCollectionParser : SymbolParser
       var _possibleTypeConstraint = parseTypeConstraint(state);
       if (_possibleTypeConstraint is (true, { Maybe: (true, var typeConstraint) }))
       {
-         if (isSet && state.Scan("^(:)", Color.Collection))
+         if (isSet)
          {
             IObject collection;
-            var _possibleTypeConstraint2 = parseTypeConstraint(state);
-            if (_possibleTypeConstraint2 is (true, { Maybe: (true, var typeConstraint2) }))
+            if (state.Scan("^(:)", Color.Collection))
             {
-               var dictionary = Dictionary.Empty;
-               dictionary.TypeConstraint = typeConstraint.Append(typeConstraint2);
-               collection = dictionary;
+               var _possibleTypeConstraint2 = parseTypeConstraint(state);
+               if (_possibleTypeConstraint2 is (true, { Maybe: (true, var typeConstraint2) }))
+               {
+                  var dictionary = Dictionary.Empty;
+                  dictionary.TypeConstraint = typeConstraint.Append(typeConstraint2);
+                  collection = dictionary;
+               }
+               else if (_possibleTypeConstraint.Exception is (true, var exception))
+               {
+                  return exception;
+               }
+               else
+               {
+                  state.RollBackTransaction();
+                  return nil;
+               }
             }
             else
             {
@@ -44,17 +56,31 @@ public partial class EmptyTypedCollectionParser : SymbolParser
                collection = set;
             }
 
-            state.Scan("^(})", Color.Collection);
-            state.CommitTransaction();
-            builder.Add(new PushObjectSymbol(collection));
+            if (state.Scan("^(})", Color.Collection))
+            {
+               state.CommitTransaction();
+               builder.Add(new PushObjectSymbol(collection));
+            }
+            else
+            {
+               state.RollBackTransaction();
+               return nil;
+            }
          }
          else if (isArray)
          {
             var array = KArray.Empty;
             array.TypeConstraint = typeConstraint;
             builder.Add(new PushObjectSymbol(array));
-            state.Scan(@"^(\])", Color.Collection);
-            state.CommitTransaction();
+            if (state.Scan(@"^(\])", Color.Collection))
+            {
+               state.CommitTransaction();
+            }
+            else
+            {
+               state.RollBackTransaction();
+               return nil;
+            }
          }
       }
       else if (_possibleTypeConstraint.Exception is (true, var exception))

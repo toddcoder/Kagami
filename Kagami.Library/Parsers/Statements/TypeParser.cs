@@ -63,7 +63,7 @@ public partial class TypeParser : StatementParser
          {
             while (state.More && scanning)
             {
-               var typeNextMemberParser = new TypeNextMemberParser(className, _ordinal);
+               var typeNextMemberParser = new TypeNextMemberParser(_ordinal);
                _typeMember = typeNextMemberParser.Scan(state);
                if (_typeMember)
                {
