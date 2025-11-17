@@ -105,7 +105,11 @@ public class ClassBuilder
             case AssignToNewField { Ignore: false } assignToNewField:
             {
                var (mutable, fieldName, _typeConstraint, isHidden) = assignToNewField;
-               if (!isHidden)
+               if (isHidden)
+               {
+                  statements.Add(statement);
+               }
+               else
                {
                   processField(fieldName, _typeConstraint, mutable, statement);
                }
@@ -122,9 +126,16 @@ public class ClassBuilder
                   var function = Function.Getter(name);
                   statements.Add(function);
                   var (functionName, _, block, _, invokable, _, isHidden) = function;
-                  if (!isHidden && !userClass.RegisterMethod(functionName, new Lambda(invokable, false), true))
+                  if (isHidden)
                   {
-                     throw needsOverride(functionName);
+                     statements.Add(statement);
+                  }
+                  else
+                  {
+                     if (!userClass.RegisterMethod(functionName, new Lambda(invokable, false), true))
+                     {
+                        throw needsOverride(functionName);
+                     }
                   }
 
                   functions.Add((invokable, block, true));
@@ -134,9 +145,16 @@ public class ClassBuilder
                      function = Function.Setter(fieldName);
                      statements.Add(function);
                      (functionName, _, block, _, invokable, _, isHidden) = function;
-                     if (!isHidden && !userClass.RegisterMethod(functionName, new Lambda(invokable, false), true))
+                     if (isHidden)
                      {
-                        throw needsOverride(functionName);
+                        statements.Add(statement);
+                     }
+                     else
+                     {
+                        if (!userClass.RegisterMethod(functionName, new Lambda(invokable, false), true))
+                        {
+                           throw needsOverride(functionName);
+                        }
                      }
 
                      functions.Add((invokable, block, true));
@@ -151,7 +169,11 @@ public class ClassBuilder
             {
                var (mutable, fieldName, typeName, isHidden) = defineNewField;
                var typeConstraint = TypeConstraint.FromList(typeName);
-               if (!isHidden)
+               if (isHidden)
+               {
+                  statements.Add(statement);
+               }
+               else
                {
                   processField(fieldName, typeConstraint, mutable, statement);
                }
@@ -160,7 +182,11 @@ public class ClassBuilder
             }
             case CreateNewFields createNewFields:
             {
-               if (!createNewFields.IsHidden)
+               if (createNewFields.IsHidden)
+               {
+                  statements.Add(statement);
+               }
+               else
                {
                   var typeConstraint = TypeConstraint.FromList(createNewFields.ClassName);
                   foreach (var fieldName in createNewFields.Fields)
@@ -173,7 +199,11 @@ public class ClassBuilder
             }
             case LazyAssign lazyAssign:
             {
-               if (!lazyAssign.IsHidden)
+               if (lazyAssign.IsHidden)
+               {
+                  statements.Add(statement);
+               }
+               else
                {
                   processField(lazyAssign.FieldName, nil, false, statement);
                }
@@ -184,7 +214,11 @@ public class ClassBuilder
             {
                var (selector, _, block, _, invokable, overriding, isHidden) = function;
                var _typeConstraint = block.TypeConstraint;
-               if (!isHidden)
+               if (isHidden)
+               {
+                  statements.Add(statement);
+               }
+               else
                {
                   if (userClass.RegisterMethod(selector, new Lambda(invokable, false), overriding))
                   {
@@ -207,7 +241,11 @@ public class ClassBuilder
             case MatchFunction matchFunction when standard:
             {
                var (functionName, _, block, _, invokable, overriding, isHidden) = matchFunction;
-               if (!isHidden)
+               if (isHidden)
+               {
+                  statements.Add(statement);
+               }
+               else
                {
                   if (userClass.RegisterMethod(functionName, new Lambda(invokable, false), overriding))
                   {

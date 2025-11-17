@@ -285,7 +285,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable
       get
       {
          var image = dictionary.Count == 0 ? "{:}" : $"{{{dictionary.Select(i => $"{i.Key.Image} : {i.Value.Image}").ToString(", ")}}}";
-         return image + (DefaultLambda.Map(l => l.Image) | "");
+         return image + (DefaultLambda.Map(l => l.Image) | "") + (TypeConstraint.Map(tc => $" {tc.Image}") | "");
       }
    }
 

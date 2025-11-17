@@ -94,7 +94,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public virtual string AsString => list.Select(i => i.AsString).ToString(" ");
 
-   public virtual string Image => $"[{list.Select(i => i.Image).ToString(", ")}]";
+   public virtual string Image => $"[{list.Select(i => i.Image).ToString(", ")}]" + (TypeConstraint.Map(tc => $" {tc.Image}") | "");
 
    public int Hash => list.GetHashCode();
 

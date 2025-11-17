@@ -1,7 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using Core.Monads;
 using Kagami.Library.Nodes.Symbols;
-using Kagami.Library.Objects;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 using Regex = System.Text.RegularExpressions.Regex;
@@ -24,22 +23,60 @@ public partial class EmptyTypedCollectionParser : SymbolParser
       state.BeginTransaction();
       state.Colorize(tokens, Color.Whitespace, Color.Collection);
 
-      var _possibleTypeConstraint = parseTypeConstraint(state);
-      if (_possibleTypeConstraint is (true, { Maybe: (true, var typeConstraint) }))
+      if (isSet)
       {
-         if (isSet)
+         if (state.Scan("^(:})", Color.Collection))
          {
-            IObject collection;
+            var _parsedTypeConstraint = parseTypeConstraint(state);
+            if (_parsedTypeConstraint is (true, var possibleTypeConstraint))
+            {
+               builder.Add(new EmptyDictionarySymbol(possibleTypeConstraint.Maybe));
+               state.CommitTransaction();
+               return unit;
+            }
+         }
+
+         if (state.Scan("^(})", Color.Collection))
+         {
+            var _parsedTypeConstraint = parseTypeConstraint(state);
+            if (_parsedTypeConstraint is (true, var possibleTypeConstraint))
+            {
+               builder.Add(new EmptySetSymbol(possibleTypeConstraint.Maybe));
+               state.CommitTransaction();
+               return unit;
+            }
+         }
+
+         var _leftParsedTypeConstraint = parseTypeConstraint(state);
+         if (_leftParsedTypeConstraint is (true, { Maybe: (true, var leftTypeConstraint) }))
+         {
             if (state.Scan("^(:)", Color.Collection))
             {
-               var _possibleTypeConstraint2 = parseTypeConstraint(state);
-               if (_possibleTypeConstraint2 is (true, { Maybe: (true, var typeConstraint2) }))
+               var _rightParsedTypeConstraint = parseTypeConstraint(state);
+               if (_rightParsedTypeConstraint is (true, { Maybe: (true, var rightTypeConstraint) }))
                {
-                  var dictionary = Dictionary.Empty;
-                  dictionary.TypeConstraint = typeConstraint.Append(typeConstraint2);
-                  collection = dictionary;
+                  if (state.Scan("^(})", Color.Collection))
+                  {
+                     var _lambda = getAnyLambda(state, builder.Flags);
+                     if (_lambda is (true, var lambda))
+                     {
+                        builder.Add(new EmptyMemoSymbol(lambda, leftTypeConstraint.Append(rightTypeConstraint)));
+                     }
+                     else
+                     {
+                        builder.Add(new EmptyDictionarySymbol(leftTypeConstraint.Append(rightTypeConstraint)));
+                     }
+
+                     state.CommitTransaction();
+                     return unit;
+                  }
+                  else
+                  {
+                     state.RollBackTransaction();
+                     return nil;
+                  }
                }
-               else if (_possibleTypeConstraint.Exception is (true, var exception))
+               else if (_rightParsedTypeConstraint.Exception is (true, var exception))
                {
                   return exception;
                }
@@ -49,32 +86,43 @@ public partial class EmptyTypedCollectionParser : SymbolParser
                   return nil;
                }
             }
-            else
+            else if (state.Scan("^(})", Color.Collection))
             {
-               var set = Set.Empty;
-               set.TypeConstraint = typeConstraint;
-               collection = set;
-            }
-
-            if (state.Scan("^(})", Color.Collection))
-            {
+               builder.Add(new EmptySetSymbol(leftTypeConstraint));
                state.CommitTransaction();
-               builder.Add(new PushObjectSymbol(collection));
-            }
-            else
-            {
-               state.RollBackTransaction();
-               return nil;
+               return unit;
             }
          }
-         else if (isArray)
+         else if (_leftParsedTypeConstraint.Exception is (true, var exception))
          {
-            var array = KArray.Empty;
-            array.TypeConstraint = typeConstraint;
-            builder.Add(new PushObjectSymbol(array));
-            if (state.Scan(@"^(\])", Color.Collection))
+            return exception;
+         }
+         else
+         {
+            state.RollBackTransaction();
+            return nil;
+         }
+      }
+      else if (isArray)
+      {
+         var _possibleTypeConstraint = parseTypeConstraint(state);
+         if (_possibleTypeConstraint is (true, { Maybe: (true, var typeConstraint) }))
+         {
+            if (state.Scan("^(])", Color.Collection))
             {
+               builder.Add(new EmptyArraySymbol(typeConstraint));
                state.CommitTransaction();
+               return unit;
+            }
+            else if (_possibleTypeConstraint.Exception is (true, var exception))
+            {
+               return exception;
+            }
+            else if (state.Scan("^(])", Color.Collection) && parseTypeConstraint(state) is (true, var possibleTypeConstraint))
+            {
+               builder.Add(new EmptyArraySymbol(possibleTypeConstraint.Maybe));
+               state.CommitTransaction();
+               return unit;
             }
             else
             {
@@ -82,16 +130,24 @@ public partial class EmptyTypedCollectionParser : SymbolParser
                return nil;
             }
          }
-      }
-      else if (_possibleTypeConstraint.Exception is (true, var exception))
-      {
-         return exception;
-      }
-      else
-      {
-         state.RollBackTransaction();
+         else if (_possibleTypeConstraint.Exception is (true, var exception))
+         {
+            return exception;
+         }
+         else if (state.Scan("^(])", Color.Collection) && parseTypeConstraint(state) is (true, var possibleTypeConstraint))
+         {
+            builder.Add(new EmptyArraySymbol(possibleTypeConstraint.Maybe));
+            state.CommitTransaction();
+            return unit;
+         }
+         else
+         {
+            state.RollBackTransaction();
+            return nil;
+         }
       }
 
-      return unit;
+      state.RollBackTransaction();
+      return nil;
    }
 }

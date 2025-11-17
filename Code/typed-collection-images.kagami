@@ -1,0 +1,9 @@
+﻿open sys
+
+let a = [int]
+let s = {string}
+let d = {int:string}
+
+println(~a)
+println(~s)
+println(~d)

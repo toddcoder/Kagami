@@ -25,18 +25,5 @@ public class SendMessage : TwoOperandOperation
          Arguments arguments => classOf(x).SendMessage(x, selector, arguments).Just(),
          _ => incompatibleClasses(y, "Arguments")
       };
-      /*try
-      {
-         return y switch
-         {
-            Arguments arguments when x is Class => classOf(x).SendClassMessage(selector, arguments).Just(),
-            Arguments arguments => classOf(x).SendMessage(x, selector, arguments).Just(),
-            _ => incompatibleClasses(y, "Arguments")
-         };
-      }
-      catch (Exception exception)
-      {
-         return exception;
-      }*/
    }
 }

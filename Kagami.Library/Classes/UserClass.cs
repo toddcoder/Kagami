@@ -71,9 +71,7 @@ public class UserClass : BaseClass, IEquatable<UserClass>
       }
       else
       {
-         //return KVoid.Value;
-         //throw fail($"No value was returned by {lambda.Image}");
-         return KUnit.Value; //arguments[0];
+         return KUnit.Value;
       }
    }
 
