@@ -161,7 +161,7 @@ public static class ObjectFunctions
       switch (match0)
       {
          case Any:
-            break;//return true;
+            break; //return true;
          case Placeholder placeholder0 when head is Some some:
          {
             bindings[placeholder0.Name] = some.Value;
@@ -353,7 +353,7 @@ public static class ObjectFunctions
       }
       else
       {
-         var parametersAndFields = obj.Parameters.Select(p => $"{obj.Fields[p.Name].AsString}").ToString(", ");
+         var parametersAndFields = obj.Parameters.Where(p => !p.IsHidden).Select(p => $"{obj.Fields[p.Name].AsString}").ToString(", ");
          return $"{obj.ClassName}({parametersAndFields})";
       }
    }
@@ -367,33 +367,9 @@ public static class ObjectFunctions
       }
       else
       {
-         var parametersAndFields = obj.Parameters.Select(p => $"{p.Name} = {obj.Fields[p.Name].Image}").ToString(", ");
+         var parametersAndFields = obj.Parameters.Where(p => !p.IsHidden).Select(p => $"{p.Name} = {obj.Fields[p.Name].Image}").ToString(", ");
          return $"{obj.ClassName}({parametersAndFields})<{shortenedId(obj.Id)}>";
       }
-   }
-
-   private static bool userObjectMatches(UserObject source, UserObject comparisand, Hash<string, IObject> bindings)
-   {
-      if (source.ClassName == comparisand.ClassName)
-      {
-         if (source.Parameters.Length != comparisand.Parameters.Length)
-         {
-            return false;
-         }
-
-         foreach (var parameter in source.Parameters)
-         {
-            if (!comparisand.Fields.ContainsKey(parameter.Name) ||
-                !source.Fields[parameter.Name].Match(comparisand.Fields[parameter.Name], bindings))
-            {
-               return false;
-            }
-         }
-
-         return true;
-      }
-
-      return false;
    }
 
    public static bool isEqualTo(UserObject obj, IObject other)
@@ -454,35 +430,36 @@ public static class ObjectFunctions
             return false;
          }
       }
-      else if (comparisand is UserObjectPlaceholder userObjectPlaceholder)
+      else
       {
-         return userObjectPlaceholder.Match(obj, bindings);
-      }
-      else if (comparisand is UserObject uoComparisand)
-      {
-         if (obj.ClassName != uoComparisand.ClassName)
+         switch (comparisand)
          {
-            return false;
-         }
-
-         if (obj.Parameters.Length > 0)
-         {
-            foreach (var parameter in obj.Parameters)
+            case UserObject uoComparisand when obj.ClassName != uoComparisand.ClassName:
+               return false;
+            case UserObject uoComparisand:
             {
-               var name = parameter.Name;
-               if (obj.Fields.ContainsKey(name) && uoComparisand.Fields.ContainsKey(name))
+               if (obj.Parameters.Length > 0)
                {
-                  var value1 = obj.Fields[name];
-                  var value2 = uoComparisand.Fields[name];
-                  if (!value1.Match(value2, bindings))
+                  foreach (var parameter in obj.Parameters)
                   {
-                     return false;
+                     var name = parameter.Name;
+                     if (obj.Fields.ContainsKey(name) && uoComparisand.Fields.ContainsKey(name))
+                     {
+                        var value1 = obj.Fields[name];
+                        var value2 = uoComparisand.Fields[name];
+                        if (!value1.Match(value2, bindings))
+                        {
+                           return false;
+                        }
+                     }
+                     else
+                     {
+                        return false;
+                     }
                   }
                }
-               else
-               {
-                  return false;
-               }
+
+               break;
             }
          }
       }

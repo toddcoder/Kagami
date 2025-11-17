@@ -16,4 +16,4 @@ static {
 	func calculate(s string) int => cache[s]
 }
 
-println ChecksumAccumulator.calculate("foobar")
+println(ChecksumAccumulator.calculate("foobar"))
