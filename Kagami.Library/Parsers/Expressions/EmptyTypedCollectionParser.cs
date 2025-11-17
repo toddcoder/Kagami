@@ -58,13 +58,14 @@ public partial class EmptyTypedCollectionParser : SymbolParser
                   if (state.Scan("^(})", Color.Collection))
                   {
                      var _lambda = getAnyLambda(state, builder.Flags);
+                     var typeConstraint = leftTypeConstraint.Append(rightTypeConstraint);
                      if (_lambda is (true, var lambda))
                      {
-                        builder.Add(new EmptyMemoSymbol(lambda, leftTypeConstraint.Append(rightTypeConstraint)));
+                        builder.Add(new EmptyMemoSymbol(lambda, typeConstraint));
                      }
                      else
                      {
-                        builder.Add(new EmptyDictionarySymbol(leftTypeConstraint.Append(rightTypeConstraint)));
+                        builder.Add(new EmptyDictionarySymbol(typeConstraint));
                      }
 
                      state.CommitTransaction();
