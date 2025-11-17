@@ -511,4 +511,6 @@ public class KMath : Package
    }
 
    public KBoolean IsNumber(string value) => value.IsNumeric();
+
+   public Float Remainder(double x, double y) => Math.IEEERemainder(x, y);
 }

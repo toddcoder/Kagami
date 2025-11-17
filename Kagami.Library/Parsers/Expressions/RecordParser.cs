@@ -34,7 +34,7 @@ public partial class RecordParser : SymbolParser
          List<Expression> argumentList = [];
          foreach (var (tag, expression) in taggedExpressions)
          {
-            parameterList.Add(new Parameter(true, "", tag, nil, nil, false, false));
+            parameterList.Add(new Parameter(false, true, "", tag, nil, nil, false, false));
             argumentList.Add(expression);
          }
 

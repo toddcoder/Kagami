@@ -12,7 +12,7 @@ public class AutoConversion(string parameterName, string fromClass, string toCla
    public override void Generate(OperationsBuilder builder)
    {
       var @class = classOf(fromClass);
-      var parameter = new Parameter(false, "", parameterName, nil, new TypeConstraint([@class]), false, false);
+      var parameter = new Parameter(false, false, "", parameterName, nil, new TypeConstraint([@class]), false, false);
       var parameters = new Parameters(parameter);
       @class = classOf(toClass);
       block.TypeConstraint = new TypeConstraint([@class]);

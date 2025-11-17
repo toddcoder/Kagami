@@ -184,15 +184,15 @@ public class ExpressionBuilder(Bits32<ExpressionFlags> flags, bool acknowledgeIm
 
             var bodyExpression = new Expression(symbols);
             var block = new Block(bodyExpression);
-            var parameter1 = new Parameter(false, "", "__$0", nil, nil, false, false);
+            var parameter1 = new Parameter(false, false, "", "__$0", nil, nil, false, false);
             Parameter parameter2;
             if (sourceSymbol2 is FieldSymbol fieldSymbol)
             {
-               parameter2 = new Parameter(false, "", fieldSymbol.FieldName, nil, nil, false, false);
+               parameter2 = new Parameter(false, false, "", fieldSymbol.FieldName, nil, nil, false, false);
             }
             else
             {
-               parameter2 = new Parameter(false, "", "__$1", nil, nil, false, false);
+               parameter2 = new Parameter(false, false, "", "__$1", nil, nil, false, false);
             }
 
             var parameters = new Parameters(parameter1, parameter2);

@@ -26,11 +26,11 @@ public class Parameters : IEquatable<Parameters>, IEnumerable<Parameter>
    {
    }
 
-   public Parameters(int count) : this([.. Enumerable.Range(0, count).Select(i => Parameter.New(false, $"__${i}"))])
+   public Parameters(int count) : this([.. Enumerable.Range(0, count).Select(i => Parameter.New(false, false, $"__${i}"))])
    {
    }
 
-   public Parameters(params string[] parameterNames) : this([.. parameterNames.Select(n => Parameter.New(false, n))])
+   public Parameters(params string[] parameterNames) : this([.. parameterNames.Select(n => Parameter.New(false, false, n))])
    {
    }
 

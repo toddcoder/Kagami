@@ -113,7 +113,7 @@ public class UserClass : BaseClass, IEquatable<UserClass>
 
    public void RegisterParameters(Parameters parameters)
    {
-      foreach (var parameter in parameters)
+      foreach (var parameter in parameters.Where(p => !p.IsHidden))
       {
          var name = parameter.Name;
          Selector getter = name.get();

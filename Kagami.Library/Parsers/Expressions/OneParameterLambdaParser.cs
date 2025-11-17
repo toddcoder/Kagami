@@ -25,6 +25,6 @@ public partial class OneParameterLambdaParser : LambdaParser
 
       state.Colorize(tokens, Color.Whitespace, Color.Identifier);
 
-      return new Parameters(new Parameter(false, "", name, nil, nil, false, false));
+      return new Parameters(new Parameter(false, false, "", name, nil, nil, false, false));
    }
 }

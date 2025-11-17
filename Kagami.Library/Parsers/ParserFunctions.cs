@@ -607,6 +607,11 @@ public static class ParserFunctions
       return openArguments();
    }
 
+   private static Optional<bool> parseHidden(ParseState state)
+   {
+      return state.Scan(@"^(\s*hidden\s+)?", Color.Keyword).Map(s => s.IsNotEmpty());
+   }
+
    private static Optional<bool> parseReference(ParseState state)
    {
       return state.Scan(@"^(\s*ref\s+)?", Color.Keyword).Map(s => s.IsNotEmpty());
@@ -857,6 +862,7 @@ public static class ParserFunctions
    }
 
    private static Optional<Parameter> getParameter(ParseState state, bool defaultRequired) =>
+      from hidden in parseHidden(state)
       from reference in parseReference(state)
       from mutable in parseMutable(state)
       from label in parseLabel(state)
@@ -865,7 +871,7 @@ public static class ParserFunctions
       from typeConstraint in parseTypeConstraint(state)
       from variadic in parseVaraidic(state)
       from defaultValue in parseDefaultValue(state, defaultRequired)
-      select new Parameter(mutable || reference, label, name, defaultValue, typeConstraint, reference, noCapturing) { Variadic = variadic };
+      select new Parameter(hidden, mutable || reference, label, name, defaultValue, typeConstraint, reference, noCapturing) { Variadic = variadic };
 
    public static Optional<Block> getAnyBlock(ParseState state)
    {

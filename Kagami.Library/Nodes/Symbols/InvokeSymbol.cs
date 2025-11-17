@@ -38,7 +38,7 @@ public class InvokeSymbol : Symbol, IHasExpressions
             if (argument.Symbols[0] is AnySymbol)
             {
                var parameterName = $"__${parametersList.Count}";
-               parametersList.Add(Parameter.New(false, parameterName));
+               parametersList.Add(Parameter.New(false, false, parameterName));
                argumentsList.Add(new Expression(new FieldSymbol(parameterName)));
             }
             else

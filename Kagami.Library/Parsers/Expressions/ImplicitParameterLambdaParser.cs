@@ -32,7 +32,7 @@ public partial class ImplicitParameterLambdaParser : SymbolParser
                whateverCount.Add(whateverSymbol.FieldName);
             }
          });
-         var parameterNames = whateverCount.Order().Select(n => new Parameter(false, "", n, nil, nil, false, false));
+         var parameterNames = whateverCount.Order().Select(n => new Parameter(false, false, "", n, nil, nil, false, false));
          var parameters = new Parameters([ ..parameterNames]);
          var lambdaSymbol = new LambdaSymbol(parameters, expression);
          builder.Add(lambdaSymbol);

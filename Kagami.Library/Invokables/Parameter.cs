@@ -9,11 +9,12 @@ namespace Kagami.Library.Invokables;
 
 public class Parameter : IEquatable<Parameter>
 {
-   public static Parameter New(bool mutable, string name)
+   public static Parameter New(bool isHidden, bool mutable, string name)
    {
-      return new Parameter(mutable, "", name, nil, nil, false, false);
+      return new Parameter(isHidden, mutable, "", name, nil, nil, false, false);
    }
 
+   protected bool isHidden;
    protected bool mutable;
    protected readonly string label;
    protected readonly string name;
@@ -22,9 +23,10 @@ public class Parameter : IEquatable<Parameter>
    protected readonly bool reference;
    protected readonly bool noCapturing;
 
-   public Parameter(bool mutable, string label, string name, Maybe<IInvokable> defaultValue, Maybe<TypeConstraint> typeConstraint,
+   public Parameter(bool isHidden, bool mutable, string label, string name, Maybe<IInvokable> defaultValue, Maybe<TypeConstraint> typeConstraint,
       bool reference, bool noCapturing)
    {
+      this.isHidden = isHidden;
       this.mutable = mutable;
       this.label = label;
       this.name = name == "_" ? label : name;
@@ -34,9 +36,10 @@ public class Parameter : IEquatable<Parameter>
       this.noCapturing = noCapturing;
    }
 
-   public Parameter(bool mutable, string label, string name, PossibleInvokable defaultValue, PossibleTypeConstraint typeConstraint, bool reference,
-      bool noCapturing)
+   public Parameter(bool isHidden, bool mutable, string label, string name, PossibleInvokable defaultValue, PossibleTypeConstraint typeConstraint,
+      bool reference, bool noCapturing)
    {
+      this.isHidden = isHidden;
       this.mutable = mutable;
       this.label = label;
       this.name = name == "_" ? label : name;
@@ -45,6 +48,8 @@ public class Parameter : IEquatable<Parameter>
       this.reference = reference;
       this.noCapturing = noCapturing;
    }
+
+   public bool IsHidden => isHidden;
 
    public bool Mutable
    {
@@ -68,20 +73,26 @@ public class Parameter : IEquatable<Parameter>
 
    public bool Equals(Parameter? other)
    {
-      return other is not null && mutable == other.mutable && string.Equals(label, other.label) && string.Equals(name, other.name) &&
-         (bool)_defaultValue == (bool)other._defaultValue && (bool)_typeConstraint == (bool)other._typeConstraint &&
-         reference == other.reference;
+      return other is not null && isHidden == other.isHidden && mutable == other.mutable && string.Equals(label, other.label) &&
+         string.Equals(name, other.name) && (bool)_defaultValue == (bool)other._defaultValue &&
+         (bool)_typeConstraint == (bool)other._typeConstraint && reference == other.reference;
    }
 
    public override bool Equals(object? obj) => Equals((Parameter)obj!);
 
-   public override int GetHashCode() => HashCode.Combine(name, label, _defaultValue, _typeConstraint.Map(tc => tc.Hash) | 0, reference, noCapturing);
+   public override int GetHashCode() =>
+      HashCode.Combine(isHidden, name, label, _defaultValue, _typeConstraint.Map(tc => tc.Hash) | 0, reference, noCapturing);
 
    public string NameForFunction
    {
       get
       {
          var builder = new StringBuilder();
+         if (isHidden)
+         {
+            builder.Append("hidden ");
+         }
+
          if (label.IsNotEmpty())
          {
             builder.Append($"{label}:");

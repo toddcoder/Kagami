@@ -75,6 +75,8 @@ public class MathClass : PackageClass
       registerPackageFunction("factorial(_)", (obj, msg) => function<KMath, IObject>(obj, msg, (m, s) => m.Factorial(s)));
       registerPackageFunction("fibonacci(_)", (obj, msg) => function<KMath, Int>(obj, msg, (m, i) => m.Fibonacci(i.Value)));
       registerPackageFunction("isNumber(_<String>)", (obj, msg) => function<KMath, KString>(obj, msg, (m, s) => m.IsNumber(s.Value)));
+      registerPackageFunction("remainder(_<Float>,_<Float>)",
+         (obj, msg) => function<KMath, Float, Float>(obj, msg, (m, a, b) => m.Remainder(a.Value, b.Value)));
    }
 
    public override IObject DefaultValue => throw noDefaultValue("Math");

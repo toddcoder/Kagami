@@ -186,8 +186,8 @@ public class ExpressionParser : PatternlessParser
    protected static Result<Expression> getDualMessageWithLambda(string leftName, string rightName, Symbol leftSymbol, Symbol rightSymbol,
       Selector selector, Expression expression)
    {
-      var leftParameter = Parameter.New(false, leftName);
-      var rightParameter = Parameter.New(false, rightName);
+      var leftParameter = Parameter.New(false, false, leftName);
+      var rightParameter = Parameter.New(false, false, rightName);
       var parameters = new Parameters(leftParameter, rightParameter);
       var lambdaSymbol = new LambdaSymbol(parameters, new Block(new Return(expression, nil)));
       var sendMessage = new SendMessageSymbol(selector, lambdaSymbol.Some(), new Expression(rightSymbol));
