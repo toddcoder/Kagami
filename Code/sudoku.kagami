@@ -1,5 +1,7 @@
 ﻿open sys
 
+#pragma ALLOW_PRINT_STATEMENT true
+
 var sudoku = "0000000750000800940005006000100002000009000570060" ~
 	"03040001000023080000006063240000"
 sudoku .= .translate({'0': ' '})
@@ -9,11 +11,9 @@ var index = 0
 
 var ary = [i for i in sudoku] %(9, 9)
 for (i, line) in #^ary {
-	if i %% 3 do println(separator)
+	if i %% 3 println separator
 	print("|")
-	for trio in line.by(3) {
-		print(trio.join("") ~ "|")
-	}
-	println()
+	for trio in line.by(3) print trio.join("") ~ "|"
+	printline
 }
-println(separator)
+println separator

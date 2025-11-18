@@ -45,4 +45,4 @@ func findSquareCubes(x int) {
 	}
 }
 
-for elem in 1 .. 1000 do findSquareCubes(elem)
+for elem in 1 .. 1000 findSquareCubes(elem)

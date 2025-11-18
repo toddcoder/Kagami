@@ -8,4 +8,4 @@ func gy() {
 	yield z // x
 	yield z // y
 }
-for item in gy() do println(~item)
+for item in gy() println(~item)

@@ -1,7 +1,7 @@
 ﻿open sys
 
 func fib(m) {
-	if m < 2 do return 1
+	if m < 2 return 1
 	return fibs[m - 1] + fibs[m - 2]
 }
 var fibs = {:m -> fib(m)}

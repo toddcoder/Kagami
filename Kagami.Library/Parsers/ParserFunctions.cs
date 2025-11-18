@@ -1831,7 +1831,7 @@ public static class ParserFunctions
 
    public static Optional<Block> getRestOfLineBlock(ParseState state)
    {
-      var _scanned = state.Scan(@"^(\s*)(do)\b", Color.Whitespace, Color.Keyword);
+      var _scanned = state.Scan("^( +)(?!{)", Color.Whitespace);
       if (_scanned)
       {
          state.PushStatements();

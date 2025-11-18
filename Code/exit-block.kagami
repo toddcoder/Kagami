@@ -3,14 +3,14 @@
 var i = 0
 while i < 10; i++ {
 	println(i)
-	if i == 7 do exit
+	if i == 7 exit
 }
 exit {
 	println("exited while")
 }
 
 for i in 1 .. 100 {
-	if i %% 5 do exit
+	if i %% 5 exit
 	println(i)
 }
 exit {
@@ -20,7 +20,7 @@ exit {
 i = 1
 loop {
 	println(i)
-	if i %% 10 do exit
+	if i %% 10 exit
 	i++
 } until i > 100
 exit {
