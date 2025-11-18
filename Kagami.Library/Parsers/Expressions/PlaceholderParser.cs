@@ -38,7 +38,9 @@ public partial class PlaceholderParser : SymbolParser
          if (state.LookAhead(@"^\("))
          {
             state.Scan(@"^(\()", Color.OpenParenthesis);
-            var _arguments = getArguments(state, builder.Flags);
+            var newFlags = builder.Flags.Clone();
+            newFlags[ExpressionFlags.InSubExpression] = false;
+            var _arguments = getArguments(state, newFlags);
             if (_arguments is (true, var arguments))
             {
                if (state.LookAhead(IsParser.REGEX_FIELD_NAME, 2) is (true, var word) && !isAKeyword(word))
