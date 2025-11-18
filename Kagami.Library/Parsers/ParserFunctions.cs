@@ -483,7 +483,8 @@ public static class ParserFunctions
       while (state.More && scanning)
       {
          Bits32<ExpressionFlags> newFlags = flags | ExpressionFlags.InArgument;
-         newFlags[ExpressionFlags.OmitComma] = !flags[ExpressionFlags.InSubExpression];
+         newFlags[ExpressionFlags.InSubExpression] = false;
+         newFlags[ExpressionFlags.OmitComma] = true;
          var _expression = getExpression(state, newFlags);
          if (_expression is (true, var expression))
          {

@@ -1,0 +1,26 @@
+﻿open sys
+
+type Expr {
+	|Binary(s string, e1 Expr, e2 Expr)
+	|Var(s string)
+	|Const(i int)
+}
+
+pattern Commutative(x) {
+	match x {
+		|Binary("+", e1, e2) return ?("+", e1, e2)
+		|Binary("*", e1, e2) return ?("*", e1, e2)
+		| _ return nil
+	}
+}
+
+func equal(e1, e2) {
+	match (e1, e2) {
+		| (Commutative(o1, l1, r1), Commutative(o2, l2, r2)) return o1 == o2 and equal(l1, r2) and equal(r1, l2)
+		| _ return e1 == e2
+	}
+}
+
+let e1 = Binary("*", Binary("+", Const(10), Var("x")), Const(4))
+let e2 = Binary("*", Const(4), Binary("+", Var("x"), Const(10)))
+println(equal(e1, e2))
