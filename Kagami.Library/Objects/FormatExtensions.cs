@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Core.Matching;
 using Core.Objects;
 using Core.Strings;
 using Kagami.Library.Parsers;
@@ -20,6 +21,18 @@ public static class FormatExtensions
          var width = match.Groups[2].Value;
          var places = match.Groups[3].Value;
          var builder = new StringBuilder("{0");
+
+         if (!format.Contains("."))
+         {
+            if (specifier.IsMatch("^ ['efgnp']"))
+            {
+               places = "6";
+            }
+            else if (specifier == "c")
+            {
+               places = "2";
+            }
+         }
 
          if (width.IsNotEmpty())
          {

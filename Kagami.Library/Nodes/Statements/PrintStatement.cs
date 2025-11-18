@@ -13,7 +13,7 @@ public class PrintStatement(PrintStatementType type, Expression expression) : St
             expression.Generate(builder);
             builder.Print();
             break;
-         case PrintStatementType.Println:
+         case PrintStatementType.Println or PrintStatementType.PrintLine:
          {
             expression.Generate(builder);
             builder.PrintLine();

@@ -492,7 +492,7 @@ public static class ParserFunctions
             var _next = state.Scan(@"^(\s*)([,\)\]\}])", Color.Whitespace, Color.CloseParenthesis);
             if (_next is (true, var next))
             {
-               if (next.EndsWith(")") || next.EndsWith("]") || next.EndsWith("}"))
+               if (next.EndsWith(')') || next.EndsWith(']') || next.EndsWith('}'))
                {
                   return (Expression[])[.. arguments];
                }

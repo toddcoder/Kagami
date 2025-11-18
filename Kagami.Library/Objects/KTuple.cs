@@ -9,7 +9,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
 
-public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjectCompare, IComparable<KTuple>, IComparable, IFindIndex, IFormattable
+public struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjectCompare, IComparable<KTuple>, IComparable, IFindIndex, IFormattable
 {
    public static IObject NewTuple(IObject x, IObject y)
    {
@@ -38,6 +38,7 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
    private readonly IObject[] items = [];
    private readonly Hash<string, int> names = [];
    private readonly Hash<int, string> indexes = [];
+   private bool showNameInImage = false;
 
    public KTuple(IObject[] items) : this()
    {
@@ -101,6 +102,8 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
             indexes[i] = fieldName;
          }
       }
+
+      showNameInImage = names.Count == items.Length;
    }
 
    public KTuple(KTuple kTuple, IObject item) : this()
@@ -137,7 +140,7 @@ public readonly struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjec
       }
    }
 
-   private string getItemString(int index, string text) => indexes.Maybe[index].Map(n => $"{n}: {text}") | text;
+   private string getItemString(int index, string text) => showNameInImage ? indexes.Maybe[index].Map(n => $"{n}: {text}") | text : text;
 
    private string getItemString(int index) => getItemString(index, items[index].AsString);
 

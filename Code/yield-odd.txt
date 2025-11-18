@@ -1,4 +1,4 @@
-(x: 2, y: 3, 5)
+(2, 3, 5)
 6
 4
 lit collection | LazyIterator
