@@ -3,13 +3,14 @@ using Kagami.Library.Classes;
 using Kagami.Library.Runtime;
 using Core.Collections;
 using Core.Enumerables;
+using Core.Monads;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
 
-public readonly struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
+public struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
 {
    public static TypeConstraint FromList(params string[] classNames)
    {
@@ -24,6 +25,8 @@ public readonly struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
    {
       this.comparisands = comparisands;
    }
+
+   public Maybe<TypeConstraint> SubTypeConstraint { get; set; } = nil;
 
    public TypeConstraint Append(TypeConstraint otherTypeConstraint)
    {
@@ -42,9 +45,9 @@ public readonly struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
          if (comparisand is ForwardedClass forwardedClass)
          {
             var _actualClass = Module.Global.Value.Class(forwardedClass.Name);
-            if (_actualClass)
+            if (_actualClass is (true, var actualClass))
             {
-               comparisands[i] = _actualClass;
+               comparisands[i] = actualClass;
             }
             else
             {
@@ -58,7 +61,20 @@ public readonly struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
 
    public string AsString => comparisands.Select(c => c.Name).ToString(" or ");
 
-   public string Image => $"<{comparisands.Select(c => c.Name).ToString(" ")}>";
+   public string Image
+   {
+      get
+      {
+         if (SubTypeConstraint is (true, var subTypeConstraint))
+         {
+            return $"<{comparisands.Select(c => c.Name).ToString(" ")}{subTypeConstraint.Image}>";
+         }
+         else
+         {
+            return $"<{comparisands.Select(c => c.Name).ToString(" ")}>";
+         }
+      }
+   }
 
    public int Hash => HashCode.Combine(comparisands);
 
@@ -168,34 +184,38 @@ public readonly struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
       {
          return true;
       }
-      else if (baseClass is UserClass userClass)
-      {
-         var _parentClass = userClass.ParentClass;
-         if (_parentClass is (true, var parentClass))
-         {
-            var parentTypeConstraint = new TypeConstraint([parentClass]);
-            return parentTypeConstraint.IsEquivalentTo(typeConstraint);
-         }
-         else
-         {
-            return false;
-         }
-      }
-      else if (baseClass is IEquivalentClass equivalentClass)
-      {
-         foreach (var comparisand in equivalentClass.EquivalentTypeConstraint().comparisands)
-         {
-            if (typeConstraint.comparisands.Contains(comparisand))
-            {
-               return true;
-            }
-         }
-
-         return false;
-      }
       else
       {
-         return false;
+         switch (baseClass)
+         {
+            case UserClass userClass:
+            {
+               var _parentClass = userClass.ParentClass;
+               if (_parentClass is (true, var parentClass))
+               {
+                  var parentTypeConstraint = new TypeConstraint([parentClass]);
+                  return parentTypeConstraint.IsEquivalentTo(typeConstraint);
+               }
+               else
+               {
+                  return false;
+               }
+            }
+            case IEquivalentClass equivalentClass:
+            {
+               foreach (var comparisand in equivalentClass.EquivalentTypeConstraint().comparisands)
+               {
+                  if (typeConstraint.comparisands.Contains(comparisand))
+                  {
+                     return true;
+                  }
+               }
+
+               return false;
+            }
+            default:
+               return false;
+         }
       }
    }
 

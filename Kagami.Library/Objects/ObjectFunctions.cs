@@ -782,10 +782,22 @@ public static class ObjectFunctions
 
    public static Selector selector(string name, string[] labels, IObject[] objects)
    {
-      var enumerable = labels.Zip(objects, (l, o) => (l.IsNotEmpty() ? $"{l}:" : "") + $"_<{o.ClassName}>");
+      var enumerable = labels.Zip(objects, (l, o) => (l.IsNotEmpty() ? $"{l}:" : "") + $"_{getType(o)}");
       var selectItems = enumerable.Select(parseSelectorItem).ToArray();
 
       return new Selector(name, selectItems, selectorImage(name, selectItems));
+
+      static string getType(IObject obj)
+      {
+         var className = obj.ClassName;
+         return obj switch
+         {
+            KArray { TypeConstraint: (true, var typeConstraint) } => $"<{className}{typeConstraint.Image}>",
+            Set { TypeConstraint: (true, var typeConstraint) } => $"<{className}{typeConstraint.Image}>",
+            Dictionary { TypeConstraint: (true, var typeConstraint) } => $"<{className}{typeConstraint.Image}>",
+            _ => className
+         };
+      }
    }
 
    public static string formatNumber(int intValue, string format)

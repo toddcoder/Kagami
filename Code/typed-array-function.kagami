@@ -1,0 +1,7 @@
+﻿open sys
+
+func printAll(ary [int]) {
+	for i in ary println i
+}
+
+printAll([1 .. 10]<int>)

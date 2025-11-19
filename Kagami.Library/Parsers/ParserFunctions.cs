@@ -736,6 +736,62 @@ public static class ParserFunctions
       }
    }
 
+   public static Optional<PossibleTypeConstraint> parseCollectionTypeConstraint(ParseState state)
+   {
+      state.BeginTransaction();
+      var _begin = state.Scan(@"^(\s*)([\[\{{])", 2, Color.Whitespace, Color.Class);
+      if (_begin is (true, var begin))
+      {
+         var isSet = begin == "{";
+         var isArray = begin == "[";
+         if (isSet)
+         {
+            var _leftPossibleTypeConstraint = parseTypeConstraint(state);
+            if (_leftPossibleTypeConstraint is (true, { Maybe: (true, var leftTypeConstraint) }))
+            {
+               if (state.Scan("^(:)", Color.Class))
+               {
+                  var _rightPossibleTypeConstraint = parseTypeConstraint(state);
+                  if (_rightPossibleTypeConstraint is (true, { Maybe: (true, var rightTypeConstraint) }) && state.Scan("^(})", Color.Class))
+                  {
+                     var typeConstraint = new TypeConstraint([new DictionaryClass()])
+                     {
+                        SubTypeConstraint = leftTypeConstraint.Merge(rightTypeConstraint)
+                     };
+                     state.CommitTransaction();
+                     return new PossibleTypeConstraint.Some(typeConstraint);
+                  }
+               }
+               else if (state.Scan("^(})", Color.Class))
+               {
+                  var typeConstraint = new TypeConstraint([new SetClass()])
+                  {
+                     SubTypeConstraint = leftTypeConstraint
+                  };
+                  state.CommitTransaction();
+                  return new PossibleTypeConstraint.Some(typeConstraint);
+               }
+            }
+         }
+         else if (isArray)
+         {
+            var _possibleTypeConstraint = parseTypeConstraint(state);
+            if (_possibleTypeConstraint is (true, { Maybe: (true, var arrayTypeConstraint) }) && state.Scan("^(])", Color.Class))
+            {
+               var typeConstraint = new TypeConstraint([new ArrayClass()])
+               {
+                  SubTypeConstraint = arrayTypeConstraint
+               };
+               state.CommitTransaction();
+               return new PossibleTypeConstraint.Some(typeConstraint);
+            }
+         }
+      }
+
+      state.RollBackTransaction();
+      return nil;
+   }
+
    public static Optional<PossibleTypeConstraint> parseUnionTypeConstraint(ParseState state)
    {
       return
@@ -747,7 +803,13 @@ public static class ParserFunctions
 
    public static Optional<PossibleTypeConstraint> parseTypeConstraint(ParseState state)
    {
-      var _result = parseUnionTypeConstraint(state);
+      var _result = parseCollectionTypeConstraint(state);
+      if (_result)
+      {
+         return _result;
+      }
+
+      _result = parseUnionTypeConstraint(state);
       if (_result)
       {
          return _result;
