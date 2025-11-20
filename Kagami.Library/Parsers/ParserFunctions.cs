@@ -736,7 +736,7 @@ public static class ParserFunctions
       }
    }
 
-   public static Optional<PossibleTypeConstraint> parseCollectionTypeConstraint(ParseState state)
+   public static Optional<PossibleTypeConstraint> parseCollectionTypeConstraint(ParseState state, TypeTailEnd tailEnd = TypeTailEnd.None)
    {
       state.BeginTransaction();
       var _begin = state.Scan(@"^(\s*)([\[\{{])", 2, Color.Whitespace, Color.Class);
@@ -801,7 +801,7 @@ public static class ParserFunctions
          select (PossibleTypeConstraint)new PossibleTypeConstraint.Some(TypeConstraint.FromList(inner));
    }
 
-   public static Optional<PossibleTypeConstraint> parseTypeConstraint(ParseState state)
+   public static Optional<PossibleTypeConstraint> parseTypeConstraint(ParseState state, TypeTailEnd tailEnd = TypeTailEnd.None)
    {
       var _result = parseCollectionTypeConstraint(state);
       if (_result)
