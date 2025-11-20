@@ -1,7 +1,7 @@
 ﻿open sys
 
 func printAll(ary [int]) {
-	for i in ary println i
+	for i in ary println(i)
 }
 
-printAll([1 .. 10]<int>)
+printAll([1 .. 10][int])

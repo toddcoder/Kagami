@@ -754,22 +754,37 @@ public static class ParserFunctions
                   var _rightPossibleTypeConstraint = parseTypeConstraint(state);
                   if (_rightPossibleTypeConstraint is (true, { Maybe: (true, var rightTypeConstraint) }) && state.Scan("^(})", Color.Class))
                   {
-                     var typeConstraint = new TypeConstraint([new DictionaryClass()])
+                     var subTypeConstraint = leftTypeConstraint.Merge(rightTypeConstraint);
+                     if (tailEnd is TypeTailEnd.DictionaryOrSet)
                      {
-                        SubTypeConstraint = leftTypeConstraint.Merge(rightTypeConstraint)
-                     };
-                     state.CommitTransaction();
-                     return new PossibleTypeConstraint.Some(typeConstraint);
+                        return new PossibleTypeConstraint.Some(subTypeConstraint);
+                     }
+                     else
+                     {
+                        var typeConstraint = new TypeConstraint([new DictionaryClass()])
+                        {
+                           SubTypeConstraint = subTypeConstraint
+                        };
+                        state.CommitTransaction();
+                        return new PossibleTypeConstraint.Some(typeConstraint);
+                     }
                   }
                }
                else if (state.Scan("^(})", Color.Class))
                {
-                  var typeConstraint = new TypeConstraint([new SetClass()])
+                  if (tailEnd is TypeTailEnd.DictionaryOrSet)
                   {
-                     SubTypeConstraint = leftTypeConstraint
-                  };
-                  state.CommitTransaction();
-                  return new PossibleTypeConstraint.Some(typeConstraint);
+                     return new PossibleTypeConstraint.Some(leftTypeConstraint);
+                  }
+                  else
+                  {
+                     var typeConstraint = new TypeConstraint([new SetClass()])
+                     {
+                        SubTypeConstraint = leftTypeConstraint
+                     };
+                     state.CommitTransaction();
+                     return new PossibleTypeConstraint.Some(typeConstraint);
+                  }
                }
             }
          }
@@ -778,12 +793,19 @@ public static class ParserFunctions
             var _possibleTypeConstraint = parseTypeConstraint(state);
             if (_possibleTypeConstraint is (true, { Maybe: (true, var arrayTypeConstraint) }) && state.Scan("^(])", Color.Class))
             {
-               var typeConstraint = new TypeConstraint([new ArrayClass()])
+               if (tailEnd is TypeTailEnd.Array)
                {
-                  SubTypeConstraint = arrayTypeConstraint
-               };
-               state.CommitTransaction();
-               return new PossibleTypeConstraint.Some(typeConstraint);
+                  return new PossibleTypeConstraint.Some(arrayTypeConstraint);
+               }
+               else
+               {
+                  var typeConstraint = new TypeConstraint([new ArrayClass()])
+                  {
+                     SubTypeConstraint = arrayTypeConstraint
+                  };
+                  state.CommitTransaction();
+                  return new PossibleTypeConstraint.Some(typeConstraint);
+               }
             }
          }
       }
@@ -803,7 +825,7 @@ public static class ParserFunctions
 
    public static Optional<PossibleTypeConstraint> parseTypeConstraint(ParseState state, TypeTailEnd tailEnd = TypeTailEnd.None)
    {
-      var _result = parseCollectionTypeConstraint(state);
+      var _result = parseCollectionTypeConstraint(state, tailEnd);
       if (_result)
       {
          return _result;

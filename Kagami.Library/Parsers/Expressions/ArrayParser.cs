@@ -22,7 +22,7 @@ public partial class ArrayParser : SymbolParser
       var _expression = getExpression(state, @"^(\s*)(?<![:\.])(\])", builder.Flags & ~ExpressionFlags.OmitComma, Color.Whitespace, Color.Collection);
       if (_expression is (true, var expression))
       {
-         var _parsedTypeConstraint = parseTypeConstraint(state);
+         var _parsedTypeConstraint = parseTypeConstraint(state, TypeTailEnd.Array);
          if (_parsedTypeConstraint is (true, var possibleTypeConstraint))
          {
             builder.Add(new ArraySymbol(expression, possibleTypeConstraint.Maybe));

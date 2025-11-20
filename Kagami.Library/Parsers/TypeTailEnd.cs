@@ -4,6 +4,5 @@ public enum TypeTailEnd
 {
    None,
    Array,
-   Set,
-   Dictionary
+   DictionaryOrSet
 }
