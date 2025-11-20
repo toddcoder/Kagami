@@ -63,6 +63,8 @@ public interface IIterator : IEquivalentClass
 
    IObject MapAll(Lambda lambda);
 
+   IObject MapIf(Lambda lambda);
+
    IObject Replace(Lambda predicate, Lambda lambda);
 
    IObject If(Lambda predicate);

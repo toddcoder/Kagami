@@ -137,16 +137,7 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
    public Int Length => value.Length;
 
-   public IEnumerable<IObject> List
-   {
-      get
-      {
-         foreach (var c in value)
-         {
-            yield return (KChar)c;
-         }
-      }
-   }
+   public IEnumerable<IObject> List => value.Select(c => (KChar)c).Cast<IObject>();
 
    public Slice Slice(ICollection collection) => new(this, collection.GetIterator(false).List().ToArray());
 

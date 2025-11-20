@@ -201,6 +201,8 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
       return collectionClass.Revert(list, nil);
    }
 
+   public IObject MapIf(Lambda lambda) => copy(new SteamingMapIf(lambda));
+
    public IObject Replace(Lambda predicate, Lambda lambda) => terminate().Replace(predicate, lambda);
 
    public IObject If(Lambda predicate) => copy(new StreamingIf(predicate));

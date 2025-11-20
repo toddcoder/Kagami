@@ -327,6 +327,29 @@ public class Iterator : IObject, IIterator
       return collectionClass.Revert(list, nil);
    }
 
+   public IObject MapIf(Lambda lambda)
+   {
+      List<IObject> result = [];
+      foreach (var item in List())
+      {
+         var monad = lambda.Invoke(item);
+         switch (monad)
+         {
+            case Some some:
+               result.Add(some.Value);
+               break;
+            case Success success:
+               result.Add(success.Value);
+               break;
+            default:
+               result.Add(item);
+               break;
+         }
+      }
+
+      return collectionClass.Revert(result, _typeConstraint);
+   }
+
    public IObject Replace(Lambda predicate, Lambda lambda)
    {
       var list = new List<IObject>();

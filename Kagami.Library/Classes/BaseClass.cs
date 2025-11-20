@@ -429,6 +429,7 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerIterMessage("flatMap(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.FlatMap(l)));
       registerIterMessage("if(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.If(l)));
       registerIterMessage("mapAll(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.MapAll(l)));
+      registerIterMessage("mapIf(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.MapIf(l)));
       registerIterMessage("ifNot(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.IfNot(l)));
       registerIterMessage("skip(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Skip(j.Value)));
       registerIterMessage("-(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Skip(j.Value)));
