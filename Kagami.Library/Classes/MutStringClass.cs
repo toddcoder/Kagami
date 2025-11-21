@@ -13,6 +13,9 @@ public class MutStringClass : BaseClass, ICollectionClass
    {
       base.RegisterMessages();
 
+      registerMessage("[](_<Int>)", (obj, msg) => function<MutString, Int>(obj, msg, (m, i) => m[i.Value]));
+      registerMessage("[]=(_<Int>,_<Char>)", (obj, msg) => function<MutString, Int, KChar>(obj, msg, (m, i, v) => m[i.Value] = v));
+
       collectionMessages();
       sliceableMessages();
       compareMessages();
@@ -21,8 +24,8 @@ public class MutStringClass : BaseClass, ICollectionClass
       mutableCollectionMessages();
 
       registerMessage("<<", (obj, msg) => function<MutString, IObject>(obj, msg, (m, o) => m.Append(o)));
-      registerMessage("[](_<Int>)", (obj, msg) => function<MutString, Int>(obj, msg, (m, i) => m[i.Value]));
-      registerMessage("[]=(_<Int>,_<Char>)", (obj, msg) => function<MutString, Int, KChar>(obj, msg, (m, i, v) => m[i.Value] = v));
+      /*registerMessage("[](_<Int>)", (obj, msg) => function<MutString, Int>(obj, msg, (m, i) => m[i.Value]));
+      registerMessage("[]=(_<Int>,_<Char>)", (obj, msg) => function<MutString, Int, KChar>(obj, msg, (m, i, v) => m[i.Value] = v));*/
       registerMessage("fill(char:_<Char>,count:_<Int>)",
          (obj, msg) => function<MutString, KChar, Int>(obj, msg, (m, c, i) => m.Fill(c.Value, i.Value)));
       registerMessage("fill(count:_<Int>,char:_<Char>)",

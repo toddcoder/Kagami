@@ -66,7 +66,7 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
 
    Int ICollection.Length => Length;
 
-   public Slice Slice(ICollection collection) => new(this, collection.GetIterator(false).List().ToArray());
+   public Slice Slice(ICollection collection) => new(this, [.. collection.GetIterator(false).List()]);
 
    public Maybe<IObject> Get(IObject index)
    {
