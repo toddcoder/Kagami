@@ -35,6 +35,32 @@ public class GetField(string fieldName) : Operation
                machine.LastSuccess = (fieldName, success);
                break;
             }
+            case Singleton { CachedValue: (true, var cachedValue) }:
+            {
+               IObject newValue;
+               if (cachedValue is Lambda lambda)
+               {
+                  newValue = lambda.Invoke();
+               }
+               else
+               {
+                  newValue = cachedValue;
+               }
+
+               var className = newValue.ClassName;
+               if (Module.Global.Value.Class(className) is (true, var cls))
+               {
+                  var typeConstraint = new TypeConstraint([cls]);
+                  field.TypeConstraint = typeConstraint;
+                  field.Value = newValue;
+
+                  return newValue.Just();
+               }
+               else
+               {
+                  return classNotFound(className);
+               }
+            }
             case Singleton:
             {
                var lazyFieldName = lazyName(fieldName);

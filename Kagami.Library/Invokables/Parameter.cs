@@ -11,7 +11,7 @@ public class Parameter : IEquatable<Parameter>
 {
    public static Parameter New(bool isHidden, bool mutable, string name)
    {
-      return new Parameter(isHidden, mutable, "", name, nil, nil, false, false);
+      return new Parameter(isHidden, mutable, "", name, nil, nil, false, false, false);
    }
 
    protected bool isHidden;
@@ -22,9 +22,10 @@ public class Parameter : IEquatable<Parameter>
    protected readonly Maybe<TypeConstraint> _typeConstraint;
    protected readonly bool reference;
    protected readonly bool noCapturing;
+   protected readonly bool lazy;
 
    public Parameter(bool isHidden, bool mutable, string label, string name, Maybe<IInvokable> defaultValue, Maybe<TypeConstraint> typeConstraint,
-      bool reference, bool noCapturing)
+      bool reference, bool noCapturing, bool lazy)
    {
       this.isHidden = isHidden;
       this.mutable = mutable;
@@ -34,10 +35,11 @@ public class Parameter : IEquatable<Parameter>
       _typeConstraint = typeConstraint;
       this.reference = reference;
       this.noCapturing = noCapturing;
+      this.lazy = lazy;
    }
 
    public Parameter(bool isHidden, bool mutable, string label, string name, PossibleInvokable defaultValue, PossibleTypeConstraint typeConstraint,
-      bool reference, bool noCapturing)
+      bool reference, bool noCapturing, bool lazy)
    {
       this.isHidden = isHidden;
       this.mutable = mutable;
@@ -47,6 +49,7 @@ public class Parameter : IEquatable<Parameter>
       _typeConstraint = typeConstraint.Maybe;
       this.reference = reference;
       this.noCapturing = noCapturing;
+      this.lazy = lazy;
    }
 
    public bool IsHidden => isHidden;
@@ -71,17 +74,19 @@ public class Parameter : IEquatable<Parameter>
 
    public bool NoCapturing => noCapturing;
 
+   public bool Lazy => lazy;
+
    public bool Equals(Parameter? other)
    {
       return other is not null && isHidden == other.isHidden && mutable == other.mutable && string.Equals(label, other.label) &&
          string.Equals(name, other.name) && (bool)_defaultValue == (bool)other._defaultValue &&
-         (bool)_typeConstraint == (bool)other._typeConstraint && reference == other.reference;
+         (bool)_typeConstraint == (bool)other._typeConstraint && reference == other.reference && lazy == other.lazy;
    }
 
    public override bool Equals(object? obj) => Equals((Parameter)obj!);
 
    public override int GetHashCode() =>
-      HashCode.Combine(isHidden, name, label, _defaultValue, _typeConstraint.Map(tc => tc.Hash) | 0, reference, noCapturing);
+      HashCode.Combine(isHidden, name, label, _defaultValue, _typeConstraint.Map(tc => tc.Hash) | 0, reference, noCapturing, lazy);
 
    public string NameForFunction
    {

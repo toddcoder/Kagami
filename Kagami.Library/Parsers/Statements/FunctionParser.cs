@@ -102,7 +102,7 @@ public partial class FunctionParser : StatementParser
          if (isMatch)
          {
             var parameterName = "__$0";
-            var variadicParameter = new Parameter(false, false, "", parameterName, nil, nil, false, false)
+            var variadicParameter = new Parameter(false, false, "", parameterName, nil, nil, false, false, false)
             {
                Variadic = true,
                Singleton = true

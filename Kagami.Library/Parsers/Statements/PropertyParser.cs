@@ -23,7 +23,7 @@ public partial class PropertyParser : StatementParser
       else
       {
          propertyName = $"{propertyName}=";
-         parameters = new Parameters(new Parameter(false, false, "", "value", nil, _typeConstraint, false, false));
+         parameters = new Parameters(new Parameter(false, false, "", "value", nil, _typeConstraint, false, false, false));
       }
 
       return (propertyName, parameters);

@@ -10,7 +10,7 @@ public class LazyAssign(string fieldName, Block block, bool isHidden) : Statemen
    protected string lazyName = lazyName(fieldName);
 
    public string FieldName => fieldName;
-   
+
    public bool IsHidden => isHidden;
 
    public override void Generate(OperationsBuilder builder)

@@ -1,4 +1,6 @@
 ﻿using Core.Collections;
+using Core.Monads;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Objects;
 
@@ -21,4 +23,6 @@ public record Singleton : IObject
    public bool IsTrue => true;
 
    public Guid Id { get; init; } = Guid.NewGuid();
+
+   public Maybe<IObject> CachedValue { get; set; } = nil;
 }

@@ -258,6 +258,23 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
             return mustUseVariable();
          }
       }
+      else if (parameter.Lazy)
+      {
+         Remove(parameter.Name);
+         var _field = New(parameter.Name, FieldType.Parameter, parameter.TypeConstraint, parameter.Mutable, true);
+         if (_field is (true, var field))
+         {
+            var singleton = Singleton.Create();
+            singleton.CachedValue = value.Some();
+            field.Value = singleton;
+
+            return field;
+         }
+         else
+         {
+            return _field;
+         }
+      }
       else
       {
          Remove(parameter.Name);
