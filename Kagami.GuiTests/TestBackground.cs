@@ -1,6 +1,7 @@
 ﻿using Core.Applications.Messaging;
 using Core.Computers;
 using Core.DataStructures;
+using Core.Enumerables;
 using Core.Monads;
 using Core.WinForms;
 using Core.WinForms.Components;
@@ -96,7 +97,7 @@ public class TestBackground(Either<FolderName, FileName> source, ListView listVi
             var resultFile = file.Folder + $"{file.Name}.txt";
             if (resultFile)
             {
-               if (anyDifferentLines(resultFile, expectedFile))
+               if (anyDifferentLines(resultFile, expectedFile) || anyError(resultFile, expectedFile))
                {
                   var resultSubItem = item.SubItems.Add("Failed");
                   resultSubItem.ForeColor = Color.Black;
@@ -222,5 +223,11 @@ public class TestBackground(Either<FolderName, FileName> source, ListView listVi
       {
          return true;
       }
+   }
+
+   protected static bool anyError(FileName outputFile, FileName expectedFile)
+   {
+      return outputFile.Lines.Where(l => l.Contains("Execute error")).AtLeastOne() ||
+             expectedFile.Lines.Where(l => l.Contains("Execute error")).AtLeastOne();
    }
 }

@@ -10,7 +10,6 @@ using Kagami.Library.Runtime;
 using System.Text;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
-using static Kagami.Library.CommonFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Objects;
@@ -368,7 +367,7 @@ public static class ObjectFunctions
       else
       {
          var parametersAndFields = obj.Parameters.Where(p => !p.IsHidden).Select(p => $"{p.Name} = {obj.Fields[p.Name].Image}").ToString(", ");
-         return $"{obj.ClassName}({parametersAndFields})<{shortenedId(obj.Id)}>";
+         return $"{obj.ClassName}({parametersAndFields})";
       }
    }
 

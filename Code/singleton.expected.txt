@@ -1,1 +1,4 @@
-Execute error: Field println not found
+Creating singleton
+Point(0, 0)
+Point(0, 0)
+Point(x = 0.0, y = 0.0) | Point

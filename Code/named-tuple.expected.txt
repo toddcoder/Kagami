@@ -1,1 +1,10 @@
-Execute error: Field println not found
+The list: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+The list: [1, 2, 3]
+The list: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+The list: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm']
+The list: [(0, 0, 0), (1, 1, 1), (2, 4, 8), (3, 9, 27), (4, 16, 64)]
+The list: [1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
+The list: [15, 30, 45, 60, 75, 90]
+The list: [1, 2, 3, 4, 2, 3, 4, 5, 3, 4, 5, 6]
+[(single: 0, squared: 0, cubed: 0), (single: 1, squared: 1, cubed: 1), (single: 2, squared: 4, cubed: 8), (single: 3, squared: 9, cubed: 27), (single: 4, squared: 16, cubed: 64)]
+"[(single: 0, squared: 0, cubed: 0), (single: 1, squared: 1, cubed: 1), (single: 2, squared: 4, cubed: 8), (single: 3, squared: 9, cubed: 27), (single: 4, squared: 16, cubed: 64)]" | String
