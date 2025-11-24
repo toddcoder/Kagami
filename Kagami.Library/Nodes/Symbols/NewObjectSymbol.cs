@@ -17,9 +17,7 @@ public class NewObjectSymbol : Symbol, IHasExpressions
 
    public override void Generate(OperationsBuilder builder)
    {
-      //builder.NewField(tempObjectField, false, true);
       builder.Invoke(className, 0);
-      //builder.AssignField(tempObjectField, false);
       foreach (var (tag, expression) in taggedExpressions)
       {
          builder.Dup();

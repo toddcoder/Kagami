@@ -1,0 +1,11 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+func info(num float) => println $"Floating point: $num"
+func info(num int) => println $"Integer       : $num"
+func info(num string) => println $"String        : $num"
+
+info(1.2)
+info(3)
+info("hello")
