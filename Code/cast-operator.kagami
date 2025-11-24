@@ -1,0 +1,11 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+class Student(name string);
+
+implicit Student(name String) => Student(name)
+
+func salute(student Student) => println $"Hello, (student.name)"
+salute(/Student "Jane")
+println /int 1.1

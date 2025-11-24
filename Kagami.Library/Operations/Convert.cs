@@ -1,4 +1,5 @@
-﻿using Core.Monads;
+﻿using Core.Collections;
+using Core.Monads;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using static Core.Monads.MonadFunctions;
@@ -10,6 +11,16 @@ namespace Kagami.Library.Operations;
 public class Convert : Operation
 {
    protected bool increment = true;
+
+   protected static Hash<(string from, string to), Func<IObject, IObject>> conversions = [];
+
+   static Convert()
+   {
+      conversions[("Float", "Int")] = f => Int.IntObject(((Float)f).AsInt32());
+      conversions[("Int", "Byte")] = f => KByte.ByteObject(((Int)f).AsByte());
+      conversions[("Float", "Byte")] = f => KByte.ByteObject(((Float)f).AsByte());
+      conversions[("Long", "Int")] = l => Int.IntObject(((Long)l).AsInt32());
+   }
 
    public override Optional<IObject> Execute(Machine machine)
    {
@@ -32,6 +43,28 @@ public class Convert : Operation
             else
             {
                return fieldNotFound(selector);
+            }
+         }
+         else if (Module.AutoConversion(fromClass.AsString, toClass.AsString) is (true, var implicitConverter))
+         {
+            try
+            {
+               return implicitConverter(value).Just();
+            }
+            catch (Exception exception)
+            {
+               return exception;
+            }
+         }
+         else if (conversions.Maybe[(fromClass.AsString, toClass.AsString)] is (true, var converter))
+         {
+            try
+            {
+               return converter(value).Just();
+            }
+            catch (Exception exception)
+            {
+               return exception;
             }
          }
          else
