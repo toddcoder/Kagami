@@ -9,7 +9,9 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class CharParser : SymbolParser
 {
-   public CharParser(ExpressionBuilder builder) : base(builder) { }
+   public CharParser(ExpressionBuilder builder) : base(builder)
+   {
+   }
 
    [GeneratedRegex(@"^(\s*)('(?:\\[xu][a-f0-9]{1,6}|\\?.)')")]
    public override partial Regex Regex();
@@ -24,7 +26,7 @@ public partial class CharParser : SymbolParser
          case 1:
             builder.Add(new CharSymbol(source[0]));
             break;
-         case 2 when source.StartsWith("\\"):
+         case 2 when source.StartsWith('\\'):
          {
             var _ch = fromBackslash(source[1]);
             if (_ch is (true, var ch))

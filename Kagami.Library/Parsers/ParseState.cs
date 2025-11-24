@@ -142,9 +142,9 @@ public class ParseState : IEnumerable<Statement>
 
    public void AddToken(Color color, int length = 1, string text = "") => AddToken(index, length, color, text);
 
-   public Optional<Unit> BeginBlock()
+   public Optional<Unit> BeginBlock(Color beginBlockColor = Color.Block)
    {
-      return Scan(@"^(\s*)(\{)(?!\|)", Color.Whitespace, Color.Block).Map(_ => unit);
+      return Scan(@"^(\s*)(\{)(?!\|)", Color.Whitespace, beginBlockColor).Map(_ => unit);
    }
 
    public Optional<Unit> EndBlock(Color endBlockColor = Color.Block)

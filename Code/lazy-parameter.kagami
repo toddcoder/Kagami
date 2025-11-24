@@ -1,0 +1,13 @@
+﻿open sys
+
+func valueOfArgument() {
+	println("Calculating...")
+	return 1
+}
+
+func functionWithLazyParameter(lazy value) {
+	let res = value + value + value
+	println(res)
+}
+
+functionWithLazyParameter(^valueOfArgument())

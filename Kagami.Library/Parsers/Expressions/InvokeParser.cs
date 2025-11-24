@@ -33,7 +33,7 @@ public partial class InvokeParser : SymbolParser
          {
             if (!builder.Flags[ExpressionFlags.Comparisand] && functionName.IsMatch("^ ['A-Z']") && state.BlockFollows())
             {
-               var _result = state.BeginBlock();
+               var _result = state.BeginBlock(Color.OpenParenthesis);
                if (_result)
                {
                   var tempObjectField = newLabel("object");
