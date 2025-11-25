@@ -10,6 +10,7 @@ public class GreaterThanEqual : TwoOperandOperation
    public override Optional<IObject> Execute(Machine machine, IObject x, IObject y) => x switch
    {
       IObjectCompare xCompare when y is IObjectCompare => KBoolean.BooleanObject(xCompare.Compare(y) >= 0).Just(),
+      IObjectCompare when y is Junction junction => KBoolean.BooleanObject(junction.Apply(i => KBoolean.BooleanObject(compareObjects(x, i) >= 0)).IsTrue).Just(),
       IObjectCompare => greaterThanEqual(x, y),
       Junction junction when y is Junction otherJunction => KBoolean.BooleanObject(junction.Apply(otherJunction, (x, y) => KBoolean.BooleanObject(compareObjects(x, y) >= 0)).IsTrue).Just(),
       Junction junction => KBoolean.BooleanObject(junction.Apply(i => KBoolean.BooleanObject(compareObjects(i, y) >= 0)).IsTrue).Just(),

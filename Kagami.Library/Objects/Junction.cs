@@ -32,6 +32,25 @@ public struct Junction : IObject
 
    public int Hash => HashCode.Combine(items);
 
+   public bool IsEqualToOther(IObject obj)
+   {
+      if (obj is Junction otherJunction)
+      {
+         return compareEnumerables(otherJunction.items, items);
+      }
+      else
+      {
+         return junctionType switch
+         {
+            JunctionType.All => items.All(obj.IsEqualTo),
+            JunctionType.Any => items.Any(obj.IsEqualTo),
+            JunctionType.One => items.Count(obj.IsEqualTo) == 1,
+            JunctionType.None => items.All(i => !obj.IsEqualTo(i)),
+            _ => false
+         };
+      }
+   }
+
    public bool IsEqualTo(IObject obj)
    {
       if (obj is Junction otherJunction)
