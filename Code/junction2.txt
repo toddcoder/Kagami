@@ -1,0 +1,11 @@
+Don't get drunk on it!
+0 1 2 3 4 5 6 7 8 9
+Everybody passed!
+Someone in class A beat all of the people in class B!
+any[7, 8]
+all[foobar, foobaz]
+Hi Andrew
+Hi Jonathan
+Bye Andrew
+Bye Jonathan
+any[unit, unit, unit, unit] | Junction

@@ -1,4 +1,4 @@
 Floating point: 1.2
 Integer       : 3
 String        : hello
-"String        : hello" | String
+unit | Unit

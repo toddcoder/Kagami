@@ -6,4 +6,4 @@ Total: 39
 Mean: 19.5
 Standard Deviation: 6.5
 Variance: 42.25
-"Variance: 42.25" | String
+unit | Unit

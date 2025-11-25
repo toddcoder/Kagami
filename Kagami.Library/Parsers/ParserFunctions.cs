@@ -675,7 +675,7 @@ public static class ParserFunctions
       "byte" => "Byte",
       "bytes" => "ByteArray",
       "complex" => "Complex",
-      "rational" => "Rational",
+      "rat" => "Rational",
       "long" => "Long",
       "date" => "Date",
       "number" => "Number",

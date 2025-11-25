@@ -140,6 +140,10 @@ public partial class FunctionParser : StatementParser
             {
                var yielding = state.RemoveYieldFlag();
                state.RemoveReturnType();
+               if (!yielding)
+               {
+                  block.AddReturnUnitIf();
+               }
                var function = new Function(functionName, parameters, isHidden, block, yielding, overriding, className) {IsFixed = isFixed};
                _function = function;
                if (isMacro)

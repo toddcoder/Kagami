@@ -25,6 +25,11 @@ public class Convert : Operation
       conversions[("String", "Float")] = s => Float.FloatObject(double.Parse(s.AsString));
       conversions[("String", "Long")] = s => Long.LongObject(BigInteger.Parse(s.AsString));
       conversions[("String", "Byte")] = s => KByte.ByteObject(byte.Parse(s.AsString));
+      conversions[("Float", "Rational")] = f =>
+      {
+         var value = (Float)f;
+         return Rational.RationalObject(value.AsRational());
+      };
    }
 
    public override Optional<IObject> Execute(Machine machine)

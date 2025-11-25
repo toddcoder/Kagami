@@ -1,0 +1,5 @@
+all = [vodka, beer]
+vodka > all
+false
+true
+true | Boolean

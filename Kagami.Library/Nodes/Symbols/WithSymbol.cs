@@ -6,7 +6,7 @@ public class WithSymbol(TaggedExpression[] taggedExpressions) : Symbol
 {
    public override void Generate(OperationsBuilder builder)
    {
-      builder.SendMessage("clone()", 0);
+      builder.SendMessage("copy()", 0);
       foreach (var (tag, expression) in taggedExpressions)
       {
          builder.Dup();
