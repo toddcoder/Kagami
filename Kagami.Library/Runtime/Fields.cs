@@ -458,7 +458,7 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       StringSet keysToOmit = [..sourceFields.fields.Where(i => i.Value.Value.ClassName is "Lambda").Select(i => i.Key)];
       foreach (var (key, value) in sourceFields.fields.Where(i => !keysToOmit.Contains(i.Key)))
       {
-         fields[key] = value.Clone();
+         fields[key] = value.Copy();
       }
 
       foreach (var (key, value) in sourceFields.buckets.Where(i => !keysToOmit.Contains(i.Key)))
@@ -471,7 +471,7 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
    {
       foreach (var (key, value) in sourceFields.fields.Where(i => filter(i.Key, i.Value)))
       {
-         fields[key] = value.Clone();
+         fields[key] = value.Copy();
       }
 
       foreach (var (key, value) in sourceFields.buckets)
@@ -487,7 +487,7 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       Hash<string, Field> newFields = [];
       foreach (var (fieldName, field) in fields)
       {
-         newFields[fieldName] = field.Clone();
+         newFields[fieldName] = field.Copy();
       }
 
       Memo<string, List<string>> newBuckets = new Memo<string, List<string>>.Function(_ => []);

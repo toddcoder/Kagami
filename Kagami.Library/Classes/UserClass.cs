@@ -142,7 +142,7 @@ public class UserClass : BaseClass, IEquatable<UserClass>
       registerMessage("send(_<String>)",
          (obj, message) => function<IObject, KString>(obj, message, (o, n) => sendMessage(o, n.Value, Arguments.Empty)));
       registerMessage("with(_)", (obj, msg) => ((UserObject)obj).With(msg.Arguments[0]));
-      registerMessage("clone()", (obj, _) => ((UserObject)obj).Clone());
+      registerMessage("copy()", (obj, _) => ((UserObject)obj).Copy());
    }
 
    public override void RegisterClassMessages()

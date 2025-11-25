@@ -61,9 +61,9 @@ public class Field
 
    public required FieldType Type { get; set; }
 
-   public Field Clone() => new()
+   public Field Copy() => new()
    {
-      Value = Value,
+      Value = Value is ICollection collection ? collection.Copy() : Value,
       Mutable = Mutable,
       Visible = Visible,
       TypeConstraint = TypeConstraint,

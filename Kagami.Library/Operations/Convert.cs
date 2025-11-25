@@ -1,4 +1,5 @@
-﻿using Core.Collections;
+﻿using System.Numerics;
+using Core.Collections;
 using Core.Monads;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
@@ -20,6 +21,10 @@ public class Convert : Operation
       conversions[("Int", "Byte")] = f => KByte.ByteObject(((Int)f).AsByte());
       conversions[("Float", "Byte")] = f => KByte.ByteObject(((Float)f).AsByte());
       conversions[("Long", "Int")] = l => Int.IntObject(((Long)l).AsInt32());
+      conversions[("String", "Int")] = s => Int.IntObject(int.Parse(s.AsString));
+      conversions[("String", "Float")] = s => Float.FloatObject(double.Parse(s.AsString));
+      conversions[("String", "Long")] = s => Long.LongObject(BigInteger.Parse(s.AsString));
+      conversions[("String", "Byte")] = s => KByte.ByteObject(byte.Parse(s.AsString));
    }
 
    public override Optional<IObject> Execute(Machine machine)

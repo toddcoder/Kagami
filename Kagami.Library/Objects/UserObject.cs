@@ -76,7 +76,7 @@ public class UserObject : IObject, IEquatable<UserObject>
       }
    }
 
-   public UserObject Clone()
+   public UserObject Copy()
    {
       var newFields = fields.Clone();
       return new UserObject(className, newFields, parameters);
