@@ -92,9 +92,9 @@ public struct Rational : IObject, INumeric, IRangeItem, IComparable<Rational>, I
 
    public bool IsDecimal => false;
 
-   public KString ZFill(int count) => $"{zfill(numerator.ToString(), count)} / {zfill(denominator.ToString(), count)}";
+   public KString ZFill(int count) => $"{zfill(numerator.ToString(), count)} | {zfill(denominator.ToString(), count)}";
 
-   public string AsString => $"{numerator}/{denominator}";
+   public string AsString => $"{numerator}|{denominator}";
 
    public string Image => AsString;
 

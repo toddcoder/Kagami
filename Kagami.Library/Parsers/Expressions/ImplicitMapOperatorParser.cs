@@ -11,7 +11,7 @@ public partial class ImplicitMapOperatorParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\|)")]
+   [GeneratedRegex("^(`)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)

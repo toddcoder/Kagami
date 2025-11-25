@@ -1,0 +1,6 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+println [1 .. 5]` * 3
+println "x" ~ ["todd", "bennett"]`

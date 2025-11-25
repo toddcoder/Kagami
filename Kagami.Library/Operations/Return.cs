@@ -60,7 +60,7 @@ public class Return : Operation
          {
             ReturnValue.EmptyStack => emptyStack("return"),
             ReturnValue.NoValue => nil,
-            ReturnValue.Value value => value.Object.Just(), //copyFields(value.Object, frames).Just(),
+            ReturnValue.Value value => value.Object.Just(),
             _ => new ArgumentOutOfRangeException(nameof(returnValue))
          };
       }
@@ -72,7 +72,10 @@ public class Return : Operation
 
    protected bool returnTopOfStack;
 
-   public Return(bool returnTopOfStack) => this.returnTopOfStack = returnTopOfStack;
+   public Return(bool returnTopOfStack)
+   {
+      this.returnTopOfStack = returnTopOfStack;
+   }
 
    public override Optional<IObject> Execute(Machine machine) => ReturnAction(machine, returnTopOfStack);
 

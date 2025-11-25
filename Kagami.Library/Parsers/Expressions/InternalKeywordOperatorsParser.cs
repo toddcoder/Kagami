@@ -14,7 +14,7 @@ public partial class InternalKeywordOperatorsParser : SymbolParser
    }
 
    [GeneratedRegex(
-      @"^\b(if|map|join|sort|foldl|foldr|all|any|none|one|zip|skip|take|xor|bsl|bsr|while|until|min|max|does|x|r|each)\b")]
+      @"^\b(if|map|join|sort|foldl|foldr|all|any|none|one|zip|skip|take|xor|bsl|bsr|while|until|min|max|does|x|each)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -74,9 +74,9 @@ public partial class InternalKeywordOperatorsParser : SymbolParser
                case "x":
                   builder.Add(new SendBinaryMessageSymbol("cross(_)", Precedence.Concatenate));
                   break;
-               case "r":
+               /*case "r":
                   builder.Add(new RationalSymbol());
-                  break;
+                  break;*/
                case "xor":
                   state.PrefixCode = nil;
                   builder.Add(new XOrSymbol());

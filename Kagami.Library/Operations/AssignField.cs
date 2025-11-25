@@ -34,7 +34,7 @@ public class AssignField : OneOperandOperation
       }
       else
       {
-         return _self.Exception;
+         return _field.Exception;
       }
    }
 

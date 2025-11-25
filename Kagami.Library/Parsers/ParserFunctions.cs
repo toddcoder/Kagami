@@ -1653,8 +1653,8 @@ public static class ParserFunctions
          case "<>":
             _symbol = new CompareSymbol();
             break;
-         case "||":
-            _symbol = new MatchSymbol(false);
+         case "|":
+            _symbol = new RationalSymbol();
             break;
          case "~~":
             _symbol = new SendBinaryMessageSymbol("matches(_<String>)", Precedence.Boolean, true);
@@ -1668,24 +1668,12 @@ public static class ParserFunctions
          case ":-" when !flags[ExpressionFlags.OmitBind]:
             _symbol = new BindSymbol();
             break;
-         /*case "//":
-            _symbol = new RationalSymbol();
-            break;*/
-         /*case "<|":
-            _symbol = new SendBinaryMessageSymbol("<|(_)", Precedence.Shift);
-            break;*/
          case "/:":
             _symbol = new SendBinaryMessageSymbol("foldl(_)", Precedence.ChainedOperator);
             break;
          case "\\:":
             _symbol = new SendBinaryMessageSymbol("foldr(_)", Precedence.ChainedOperator);
             break;
-         /*case "=>":
-            _symbol = new SendBinaryMessageSymbol("map(_)", Precedence.ChainedOperator);
-            break;
-         case "??":
-            _symbol = new SendBinaryMessageSymbol("if(_)", Precedence.ChainedOperator);
-            break;*/
          case "|<<":
             _symbol = new SendBinaryMessageSymbol("|<<(_)", Precedence.Shift);
             break;
