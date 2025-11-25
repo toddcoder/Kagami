@@ -1,0 +1,34 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+let drink = "vodka"
+if drink == any["vodka", "beer"] println "Don't get drunk on it!"
+
+let lima = 10
+let limb = 20
+var count = 0
+
+while count < all[lima, limb]; ++count put count
+printline
+
+let scores = [89, 75, 100, 64]
+let passMark = 60
+
+if all(scores) > passMark println "Everybody passed!"
+
+let scoresa = [1, 1, 1, 100]
+let scoresb = [66, 77, 88]
+
+if any(scoresa) > all(scoresb) println "Someone in class A beat all of the people in class B!"
+
+var a = any[1, 2]
+a += 1
+a += 5
+println a
+
+let res = "foo" ~ all["bar", "baz"]
+println res
+
+func greet(greeting, name) => println $"$greeting $name"
+greet(all["Hi", "Bye"], all["Andrew", "Jonathan"])

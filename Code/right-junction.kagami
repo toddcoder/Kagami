@@ -1,0 +1,8 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+println "all = [vodka, beer]"
+println "vodka > all"
+println "vodka" > all["vodka", "beer"]
+println "vodka" > any["vodka", "beer"]
