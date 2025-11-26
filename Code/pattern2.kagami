@@ -12,7 +12,7 @@ match 42 {
 	| Odd() => println("odd")
 }
 
-pattern TwiceIsSquared(n int) => maybe n * 2 == n ^ 2 : (n * 2, n ^ 2)
+pattern TwiceIsSquared(n int) => n * 2 == n ^ 2 ?? (n * 2, n ^ 2)
 match 2 {
 	| TwiceIsSquared(twice, squared) => println($"(twice) = (squared)")
 }

@@ -23,6 +23,11 @@ public class ConjunctionParsers(ExpressionBuilder builder) : MultiParser
             yield return new AndParser(builder);
          }
 
+         if (!builder.Flags[ExpressionFlags.OmitMaybe])
+         {
+            yield return new MaybeParser2(builder);
+         }
+
          yield return new OrParser(builder);
 
          if (!builder.Flags[ExpressionFlags.Comparisand])
