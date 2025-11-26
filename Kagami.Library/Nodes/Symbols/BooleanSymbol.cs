@@ -7,7 +7,10 @@ public class BooleanSymbol : Symbol, IConstant
 {
    protected bool value;
 
-   public BooleanSymbol(bool value) => this.value = value;
+   public BooleanSymbol(bool value)
+   {
+      this.value = value;
+   }
 
    public override void Generate(OperationsBuilder builder) => builder.PushBoolean(value);
 
