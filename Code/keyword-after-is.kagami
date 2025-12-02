@@ -1,7 +1,7 @@
 ﻿open sys
 
 func greet(person) {
-	guard person["name"] is ?name else {
+	require person["name"] is ?name else {
 		return
 	}
 	println(name)

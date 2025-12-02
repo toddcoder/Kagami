@@ -28,7 +28,8 @@ public class StatementsParser : MultiParser
          yield return new ConditionalWhileParser();
          yield return new IfParser();
          yield return new WhenStatementParser();
-         yield return new GuardParser();
+         //yield return new GuardParser();
+         yield return new RequireParser();
          yield return new WhileParser();
          yield return new OldForParser();
          yield return new ForParser();

@@ -9,7 +9,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class GuardParser : EndingInExpressionParser
 {
-   [GeneratedRegex(@"^(\s*)(guard)\b")]
+   [GeneratedRegex(@"^(\s*)(require|reject)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)

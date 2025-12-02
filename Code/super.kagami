@@ -14,9 +14,7 @@ class Stats {
 	get total => xsum
 
 	get mean {
-		guard so numlist else {
-			return 0.0
-		}
+		reject numlist.isEmpty return 0.0
 		return total / numlist.length
 	}
 
