@@ -32,6 +32,8 @@ public class TupleClass : BaseClass, ICollectionClass
       messages["head".get()] = (obj, _) => function<KTuple>(obj, t => t.Head);
       messages["tail".get()] = (obj, _) => function<KTuple>(obj, t => t.Tail);
       messages["headTail".get()] = (obj, _) => function<KTuple>(obj, t => t.HeadTail);
+      messages["rotate()"] = (obj, _) => function<KTuple>(obj, t => t.Rotate());
+      messages["rotate(_<Int>)"] = (obj, msg) => function<KTuple, Int>(obj, msg, (t, i) => t.Rotate(i.Value));
    }
 
    public override IObject DefaultValue => KTuple.Empty;

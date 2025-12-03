@@ -455,4 +455,36 @@ public struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjectCompare,
 
       return formatted;
    }
+
+   public KTuple Rotate(int count = 1)
+   {
+      if (count == 0)
+      {
+         return this;
+      }
+
+      int start1;
+      if (count > 0)
+      {
+         start1 = count;
+      }
+      else
+      {
+         start1 = items.Length + count;
+      }
+
+      List<IObject> newList = [];
+
+      for (var i = start1; i < items.Length; i++)
+      {
+         newList.Add(items[i]);
+      }
+
+      for (var i = 0; i < start1; i++)
+      {
+         newList.Add(items[i]);
+      }
+
+      return new KTuple([.. newList], names, indexes);
+   }
 }

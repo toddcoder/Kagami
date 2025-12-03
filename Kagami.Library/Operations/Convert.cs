@@ -77,6 +77,14 @@ public class Convert : Operation
                return exception;
             }
          }
+         else if (toClass.AsString is "Boolean")
+         {
+            return KBoolean.BooleanObject(value.IsTrue).Just();
+         }
+         else if (toClass.AsString is "String")
+         {
+            return KString.StringObject(value.AsString).Just();
+         }
          else
          {
             return fail($"Conversion from {fromClass.AsString} to {toClass.AsString} not found");
