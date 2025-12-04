@@ -1,0 +1,7 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+def foobar = peek(2 * 2)
+println foobar
+println foobar

@@ -92,6 +92,10 @@ public class GetField(string fieldName) : Operation
                   return fieldNotFound(lazyFieldName);
                }
             }
+            case Definition definition:
+            {
+               return definition.Lambda.Invoke().Just();
+            }
          }
 
          return value.Just();

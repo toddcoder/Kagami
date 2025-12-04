@@ -210,6 +210,12 @@ public class ClassBuilder
 
                break;
             }
+            case AssignDefinition assignDefinition:
+            {
+               var (fieldName, _) = assignDefinition;
+               processField(fieldName, nil, false, statement);
+               break;
+            }
             case Function function when standard:
             {
                var (selector, _, block, _, invokable, overriding, isHidden) = function;

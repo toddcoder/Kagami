@@ -128,6 +128,7 @@ public class Module
       "Event" => new EventClass(),
       "Cons" => new ConsClass(),
       "Singleton" => new SingletonClass(),
+      "Definition" => new DefinitionClass(),
       _ => nil
    };
 

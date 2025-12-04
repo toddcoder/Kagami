@@ -431,6 +431,8 @@ public class OperationsBuilder
 
    public void Column() => add(new Column());
 
+   public void NewDefinition() => add(new NewDefinition());
+
    public Result<Operations> ToOperations(ParseState state)
    {
       operations.Add(new Stop());
