@@ -549,6 +549,7 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerIterMessage("seq()", (obj, _) => iteratorFunc(obj, i => i.Seq()));
       registerIterMessage("transpose()", (obj, _) => iteratorFunc(obj, i => i.Transpose()));
       registerIterMessage("assoc(_)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, c) => i.Assoc(c)));
+      registerIterMessage("at(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i1, i2) => i1.At(i2.Value)));
    }
 
    public virtual bool MatchCompatible(BaseClass otherClass) => Name == otherClass.Name;

@@ -254,4 +254,6 @@ public interface IIterator : IEquivalentClass
    IObject Transpose();
 
    IObject Assoc(IObject target);
+
+   IObject At(int index);
 }

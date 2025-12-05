@@ -416,5 +416,23 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
 
    public IObject Assoc(IObject target) => copy(new StreamingAssoc(target));
 
+   public IObject At(int index)
+   {
+      var returnValue = KNil.NilValue;
+      for (var i = 0; i <= index; i++)
+      {
+         if (Next() is (true, var value))
+         {
+            returnValue = value;
+         }
+         else
+         {
+            return KNil.NilValue;
+         }
+      }
+
+      return Some.Object(returnValue);
+   }
+
    public TypeConstraint EquivalentTypeConstraint() => Objects.TypeConstraint.FromList("Iterator");
 }

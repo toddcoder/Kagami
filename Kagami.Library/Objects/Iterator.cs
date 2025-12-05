@@ -1812,6 +1812,24 @@ public class Iterator : IObject, IIterator
       return KNil.NilValue;
    }
 
+   public IObject At(int index)
+   {
+      var returnValue = KNil.NilValue;
+      for (var i = 0; i <= index; i++)
+      {
+         if (Next() is (true, var value))
+         {
+            returnValue = value;
+         }
+         else
+         {
+            return KNil.NilValue;
+         }
+      }
+
+      return Some.Object(returnValue);
+   }
+
    protected static IEnumerable<IObject> applyAgainst(List<Lambda> lambdas, List<IObject> enumerable)
    {
       return lambdas.SelectMany(_ => enumerable, (lambda, item) => lambda.Invoke(item));
