@@ -24,6 +24,10 @@ public class LazyAssign(string fieldName, Block block, bool isHidden) : Statemen
          builder.PushObject(new Objects.Singleton());
          builder.StoreField(fieldName, true, true, nil);
       }
+      else
+      {
+         throw _index.Exception;
+      }
    }
 
    public override string ToString() => $"lazy {fieldName} = {block}";
