@@ -1,5 +1,7 @@
 ﻿open sys
 
+#pragma ALLOW_PRINT_STATEMENT true
+
 mixin Movement {
 	func run() => println "I'm running!"
 	func walk() => println "I'm walking a bit briskly!"

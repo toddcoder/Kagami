@@ -10,6 +10,7 @@ namespace Kagami.Library.Nodes.Statements;
 public class If : Statement
 {
    protected Expression expression;
+   protected bool not;
    protected Block block;
    protected Maybe<If> _elseIf;
    protected Maybe<Block> _elseBlock;
@@ -19,10 +20,12 @@ public class If : Statement
    protected bool top;
    protected bool retainExpressionFields;
 
-   public If(Expression expression, Block block, Maybe<If> _elseIf, Maybe<Block> _elseBlock, string fieldName, bool mutable, bool assignment,
+   public If(Expression expression, bool not, Block block, Maybe<If> _elseIf, Maybe<Block> _elseBlock, string fieldName, bool mutable,
+      bool assignment,
       bool top, bool retainExpressionFields = false)
    {
       this.expression = expression;
+      this.not = not;
       this.block = block;
       this._elseIf = _elseIf;
       this._elseBlock = _elseBlock;
@@ -36,6 +39,7 @@ public class If : Statement
    public If(Expression expression, Block block)
    {
       this.expression = expression;
+      not = false;
       this.block = block;
       _elseIf = nil;
       _elseBlock = nil;
@@ -86,7 +90,14 @@ public class If : Statement
       }
 
       expression.Generate(builder);
-      builder.GoToIfFalse(nextLabel);
+      if (not)
+      {
+         builder.GoToIfTrue(nextLabel);
+      }
+      else
+      {
+         builder.GoToIfFalse(nextLabel);
+      }
 
       builder.PushFrame();
 

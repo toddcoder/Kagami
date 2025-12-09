@@ -42,7 +42,7 @@ public partial class RequireParser : StatementParser
                select eBlock;
             if (_elseBlock is (true, var elseBlock))
             {
-               state.AddStatement(new If(expression, block, nil, elseBlock, "", false, false, true, true));
+               state.AddStatement(new If(expression, false, block, nil, elseBlock, "", false, false, true, true));
                return unit;
             }
             else

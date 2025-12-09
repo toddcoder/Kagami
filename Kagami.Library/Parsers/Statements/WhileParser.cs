@@ -11,13 +11,14 @@ public partial class WhileParser : StatementParser
 {
    protected Maybe<Statement> _statement = nil;
 
-   [GeneratedRegex(@"^(\s*)(while|until)(?![>\^])\b")]
+   [GeneratedRegex(@"^(\s*)(while)(?![>\^])\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      var isWhile = tokens[2].Text == "while";
       state.Colorize(tokens, Color.Whitespace, Color.Keyword);
+
+      var isWhile = !state.NotKeyword();
 
       var _result =
          from expression in getExpression(state, ExpressionFlags.Standard)

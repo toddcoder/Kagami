@@ -1,5 +1,7 @@
 ﻿open sys
 
+#pragma ALLOW_PRINT_STATEMENT true
+
 mixin AddSubtract {
 	get string => "add subtract"
 	func addSub() => self.add() ~ ":" ~ self.sub()

@@ -94,7 +94,7 @@ public partial class WhenParser : StatementParser
                return state.SetException(messageNoWhen("match"), exception);
             }
 
-            If = new If(expression, block, _ifStatement, nil, assignmentField, mutable, assignment, top, true);
+            If = new If(expression, false, block, _ifStatement, nil, assignmentField, mutable, assignment, top, true);
             return unit;
          }
          else
