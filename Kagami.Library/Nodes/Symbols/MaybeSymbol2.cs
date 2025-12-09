@@ -22,7 +22,7 @@ public class MaybeSymbol2(Expression expression) : Symbol
       builder.NoOp();
    }
 
-   public override Precedence Precedence => Precedence.ChainedOperator;
+   public override Precedence Precedence => Precedence.Pipeline;
 
    public override Arity Arity => Arity.Binary;
 
