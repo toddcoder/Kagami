@@ -5,7 +5,6 @@ using Kagami.Library.Runtime;
 using Core.Monads;
 using Kagami.Library.Nodes.Statements;
 using static Kagami.Library.Nodes.NodeFunctions;
-using static Kagami.Library.Objects.ObjectFunctions;
 using static Core.Monads.MonadFunctions;
 using Pattern = Core.Matching.Pattern;
 

@@ -32,7 +32,7 @@ public class Sys : Package
 
    public IObject Eol => fields["eol"];
 
-   public override void LoadTypes(Module module)
+   public override void LoadTypesOnce(Module module)
    {
       module.RegisterClass(new SysClass());
       module.RegisterClass(new RegexMatchClass());

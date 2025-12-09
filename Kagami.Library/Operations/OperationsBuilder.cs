@@ -444,7 +444,7 @@ public class OperationsBuilder
          invokable.Address = operations.Count;
          block.Generate(this);
          var lastOperation = operations[^1];
-         if (!(lastOperation is Return))
+         if (lastOperation is not Library.Operations.Return)
          {
             operations.Add(new Return(false));
          }

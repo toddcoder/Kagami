@@ -8,7 +8,7 @@ public class Drawing : Package
 {
    public override string ClassName => "Drawing";
 
-   public override void LoadTypes(Module module)
+   public override void LoadTypesOnce(Module module)
    {
       module.RegisterClass(new DrawingClass());
       module.RegisterClass(new PointClass());

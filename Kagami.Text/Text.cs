@@ -7,7 +7,7 @@ namespace Kagami.Text
    {
       public override string ClassName => "Text";
 
-      public override void LoadTypes(Module module)
+      public override void LoadTypesOnce(Module module)
       {
          module.RegisterClass(new TextClass());
          module.RegisterClass(new StringBufferClass());

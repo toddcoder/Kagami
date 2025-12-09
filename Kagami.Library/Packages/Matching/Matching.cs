@@ -6,7 +6,7 @@ public class Matching : Package
 {
    public override string ClassName => "Matching";
 
-   public override void LoadTypes(Module module)
+   public override void LoadTypesOnce(Module module)
    {
    }
 }

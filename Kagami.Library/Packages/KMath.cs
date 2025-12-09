@@ -24,7 +24,7 @@ public class KMath : Package
 
    public override string ClassName => "Math";
 
-   public override void LoadTypes(Module module)
+   public override void LoadTypesOnce(Module module)
    {
       module.RegisterClass(new MathClass());
    }

@@ -6,7 +6,7 @@ public class IO : Package
 {
    public override string ClassName => "IO";
 
-   public override void LoadTypes(Module module)
+   public override void LoadTypesOnce(Module module)
    {
       module.RegisterClass(new IOClass());
       module.RegisterClass(new FileClass());

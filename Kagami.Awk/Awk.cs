@@ -7,7 +7,7 @@ namespace Kagami.Awk
    {
       public override string ClassName => "Awk";
 
-      public override void LoadTypes(Module module)
+      public override void LoadTypesOnce(Module module)
       {
          module.RegisterClass(new AwkClass());
          module.RegisterClass(new AwkifierClass());

@@ -8,7 +8,7 @@ namespace Kagami.Plots
    {
       public override string ClassName => "Plots";
 
-      public override void LoadTypes(Module module)
+      public override void LoadTypesOnce(Module module)
       {
          module.RegisterClass(new PlotsClass());
          module.RegisterClass(new PlotClass());

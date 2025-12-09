@@ -138,6 +138,7 @@ public class ClassBuilder
                   if (isHidden)
                   {
                      statements.Add(statement);
+                     break;
                   }
                   else
                   {
@@ -157,6 +158,7 @@ public class ClassBuilder
                      if (isHidden)
                      {
                         statements.Add(statement);
+                        break;
                      }
                      else
                      {
@@ -232,6 +234,7 @@ public class ClassBuilder
                if (isHidden)
                {
                   statements.Add(statement);
+                  break;
                }
                else
                {
@@ -256,11 +259,7 @@ public class ClassBuilder
             case MatchFunction matchFunction when standard:
             {
                var (functionName, _, block, _, invokable, overriding, isHidden) = matchFunction;
-               if (isHidden)
-               {
-                  statements.Add(statement);
-               }
-               else
+               if (!isHidden)
                {
                   if (userClass.RegisterMethod(functionName, new Lambda(invokable, false), overriding))
                   {

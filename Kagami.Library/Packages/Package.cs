@@ -8,6 +8,7 @@ namespace Kagami.Library.Packages;
 public abstract class Package : IObject
 {
    protected Fields fields;
+   protected bool typesLoaded = false;
 
    public Package() => fields = new Fields();
 
@@ -29,5 +30,14 @@ public abstract class Package : IObject
 
    public Guid Id { get; init; } = Guid.NewGuid();
 
-   public abstract void LoadTypes(Module module);
+   public virtual void LoadTypes(Module module)
+   {
+      if (!typesLoaded)
+      {
+         LoadTypesOnce(module);
+         typesLoaded = true;
+      }
+   }
+
+   public abstract void LoadTypesOnce(Module module);
 }
