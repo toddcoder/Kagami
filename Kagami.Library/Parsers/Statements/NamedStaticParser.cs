@@ -12,11 +12,12 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class NamedStaticParser : StatementParser
 {
-   [GeneratedRegex(@$"^(\s*)(object)(\s+)({REGEX_CLASS})")]
+   [GeneratedRegex(@$"^(\s*)(object|mixin)(\s+)({REGEX_CLASS})")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
+      var isMixin = tokens[2].Text == "mixin";
       var className = tokens[4].Text;
       state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Class);
 
@@ -55,6 +56,11 @@ public partial class NamedStaticParser : StatementParser
                }
 
                var metaClass = new MetaClass(className, metaClassBuilder);
+               if (isMixin)
+               {
+                  Module.RegisterMixin(className, metaClass);
+               }
+
                state.AddStatement(metaClass);
 
                return unit;
@@ -69,6 +75,7 @@ public partial class NamedStaticParser : StatementParser
             return _block.Exception;
          }
       }
+
       return unit;
    }
 }

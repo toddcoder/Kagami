@@ -14,6 +14,7 @@ using static Kagami.Library.AllExceptions;
 using static Kagami.Library.CommonFunctions;
 using static Core.Monads.MonadFunctions;
 using DefineNewField = Kagami.Library.Nodes.Statements.DefineNewField;
+using Return = Kagami.Library.Nodes.Statements.Return;
 
 namespace Kagami.Library.Parsers.Statements;
 
@@ -31,6 +32,7 @@ public class ClassBuilder
    protected Set<RequireFunctionMatch> requiredFunctions = [];
    protected StringHash<Expression> delegates = [];
    protected StringHash<RequiredField> requiredFields = [];
+   protected List<Statement> mixinStatements = [];
 
    public ClassBuilder(string className, Parameters parameters, string parentClassName, Expression[] parentArguments,
       bool initialize, Block constructorBlock)
@@ -96,6 +98,13 @@ public class ClassBuilder
          {
             throw classNotFound(parentClassName);
          }
+      }
+
+      foreach (var statement in mixinStatements.Where(s =>
+                  s is AssignToNewField or AssignToNewField2 or DefineNewField or CreateNewFields or LazyAssign or AssignDefinition or Function
+                     or MatchFunction))
+      {
+         originalBlock.Add(statement);
       }
 
       foreach (var statement in originalBlock)
@@ -392,6 +401,11 @@ public class ClassBuilder
    }
 
    public void RegisterDelegate(string className, Expression constructor) => delegates[className] = constructor;
+
+   public void AddMixin(MetaClass metaClass)
+   {
+      mixinStatements.AddRange(metaClass.ClassBuilder.Statements.Where(s => s is not Return));
+   }
 
    public override string ToString()
    {

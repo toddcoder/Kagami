@@ -1,0 +1,16 @@
+﻿open sys
+
+mixin AddSubtract {
+	get string => "add subtract"
+	func addSub() => self.add() ~ ":" ~ self.sub()
+}
+
+class Foobar(a int, b int) {
+	func add() => a + b
+	func sub() => a - b
+}
+mixin AddSubtract
+
+let f = Foobar(10, 20)
+println f
+println f.addSub()

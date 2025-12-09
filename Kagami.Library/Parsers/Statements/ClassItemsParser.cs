@@ -14,7 +14,8 @@ public class ClassItemsParser : MultiParser
       get
       {
          yield return new ConstructorParser(builder);
-         yield return new NamedStaticParser();
+         yield return new MixinParser(builder);
+         //yield return new NamedStaticParser();
          yield return new StaticParser(builder);
          yield return new DelegateParser(builder);
       }

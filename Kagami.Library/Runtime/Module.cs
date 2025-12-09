@@ -5,6 +5,7 @@ using Core.Monads;
 using Core.Objects;
 using Kagami.Library.Inclusions;
 using Kagami.Library.Iterators;
+using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
 using Kagami.Library.Parsers;
@@ -18,6 +19,8 @@ public class Module
    public static LateLazy<Module> Global { get; set; } = new(true);
 
    protected static Hash<(string from, string to), Func<IObject, IObject>> autoConversions = [];
+
+   protected static Hash<string, MetaClass> mixins = [];
 
    static Module()
    {
@@ -260,4 +263,8 @@ public class Module
    public void RegisterConversion(string fromClass, string toClass, Selector selector) => conversionFunctions[(fromClass, toClass)] = selector;
 
    public Maybe<Selector> GetConversion(string fromClass, string toClass) => conversionFunctions.Maybe[(fromClass, toClass)];
+
+   public static void RegisterMixin(string name, MetaClass mixin) => mixins[name] = mixin;
+
+   public static Maybe<MetaClass> GetMixin(string name) => mixins.Maybe[name];
 }

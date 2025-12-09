@@ -20,5 +20,7 @@ public class MetaClass : Statement
       builder.AssignMetaObject(className, classBuilder.UserClass.Name);
    }
 
+   public ClassBuilder ClassBuilder => classBuilder;
+
    public override string ToString() => classBuilder.ToString();
 }
