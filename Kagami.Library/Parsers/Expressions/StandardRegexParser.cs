@@ -67,30 +67,32 @@ public partial class StandardRegexParser : SymbolParser
          {
             switch (ch)
             {
-               case 'i':
+               case 'i' or 'I':
                {
                   ignoreCase = true;
                   break;
                }
-               case 'm':
+               case 'm' or 'M':
                {
                   multiline = true;
                   break;
                }
-               case 'g':
+               case 'g' or 'G':
                {
                   global = true;
                   break;
                }
-               case 't':
+               case 't' or 'T':
                {
                   textOnly = true;
                   break;
                }
+               case ' ':
+                  break;
                case '\'':
                   state.AddToken(Color.Regex);
                   state.Move(1);
-                  pattern.Append("u");
+                  pattern.Append('u');
                   builder.Add(new RegexSymbol(pattern.ToString(), ignoreCase, multiline, global, textOnly));
                   return unit;
             }
