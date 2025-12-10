@@ -1,0 +1,9 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+var pattern = x'\s*\w\'\w\s*'
+println " a'a " ~~ pattern
+pattern = x"/s* /w [squote] /w /s*"
+println pattern
+println " a'a " ~~ pattern

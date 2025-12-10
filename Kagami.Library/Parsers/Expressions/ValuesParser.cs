@@ -93,6 +93,7 @@ public class ValuesParser : MultiParser
          yield return new SymbolObjectParser(builder);
          yield return new WhateverParser(builder);
          yield return new RegexParser(builder);
+         yield return new StandardRegexParser(builder);
          yield return new RefParser(builder);
          yield return new ImplicitParameterParser(builder);
          yield return new DollarFieldParser(builder);

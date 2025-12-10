@@ -118,7 +118,7 @@ public class Colorizer
       Library.Parsers.Color.OpenParenthesis => getParenthesisColor(color, ref parenthesesCount),
       Library.Parsers.Color.CloseParenthesis => getParenthesisColor(color, ref parenthesesCount),
       Library.Parsers.Color.Selector => Color.BlueViolet,
-      Library.Parsers.Color.Regex => Color.OrangeRed,
+      Library.Parsers.Color.Regex => Color.LightSalmon,
       Library.Parsers.Color.Lambda => Color.DarkGoldenrod,
       Library.Parsers.Color.Block => Color.LightCoral,
       _ => Color.Black

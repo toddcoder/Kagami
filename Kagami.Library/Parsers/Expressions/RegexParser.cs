@@ -111,7 +111,7 @@ public partial class RegexParser : SymbolParser
                      escaped = true;
                      break;
                   case '\'' when escaped:
-                     pattern.Append('\'');
+                     pattern.Append(@"\'");
                      state.AddToken(Color.String);
                      escaped = false;
                      break;
@@ -125,6 +125,7 @@ public partial class RegexParser : SymbolParser
                      state.AddToken(Color.String);
                      break;
                }
+
                break;
             case RegexParsingType.AwaitingOption:
                switch (ch)
