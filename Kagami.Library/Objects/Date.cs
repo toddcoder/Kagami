@@ -45,7 +45,12 @@ public readonly struct Date : IObject, IRangeItem, IFormattable
 
    private readonly DateTime value;
 
-   public Date(DateTime value) : this() => this.value = value;
+   public Date(DateTime value) : this()
+   {
+      this.value = value;
+   }
+
+   public DateTime Value => value;
 
    public string ClassName => "Date";
 
@@ -141,4 +146,6 @@ public readonly struct Date : IObject, IRangeItem, IFormattable
    public Float MJulian => Julian.Value - 2400000.5;
 
    public Date Utc() => value.ToUniversalTime();
+
+   public DateIncrement Shift(int amount) => new(this, amount);
 }

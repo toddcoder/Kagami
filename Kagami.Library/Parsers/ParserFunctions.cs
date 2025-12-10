@@ -962,7 +962,8 @@ public static class ParserFunctions
       from typeConstraint in parseTypeConstraint(state)
       from variadic in parseVaraidic(state)
       from defaultValue in parseDefaultValue(state, defaultRequired)
-      select new Parameter(hidden, mutable || reference, label, name, defaultValue, typeConstraint, reference, noCapturing, lazy) { Variadic = variadic };
+      select new Parameter(hidden, mutable || reference, label, name, defaultValue, typeConstraint, reference, noCapturing, lazy)
+         { Variadic = variadic };
 
    public static Optional<Block> getAnyBlock(ParseState state)
    {
@@ -1658,6 +1659,9 @@ public static class ParserFunctions
             break;
          case "~~":
             _symbol = new SendBinaryMessageSymbol("matches(_<String>)", Precedence.Boolean, true);
+            break;
+         case "~~~":
+            _symbol = new SendBinaryMessageSymbol("scan(_<String>)", Precedence.Boolean, true);
             break;
          case "!~":
             _symbol = new SendBinaryMessageSymbol("notMatches(_<String>)", Precedence.Boolean, true);

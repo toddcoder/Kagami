@@ -106,7 +106,8 @@ public class StringClass : BaseClass, ICollectionClass
       messages["replace(_<Dictionary>)"] = (obj, msg) => function<KString, Dictionary>(obj, msg, (s, d) => s.ReplaceAll(d));
       messages["squeeze()"] = (obj, _) => function<KString>(obj, s => s.Squeeze());
       messages["isMatch(_<Regex>)"] = (obj, msg) => function<KString, Regex>(obj, msg, (s, r) => r.IsMatch(s.Value));
-      messages["-(_)"] = (obj, msg) => function<KString, KString>(obj, msg, (s1, s2) => s1.Subtract(s2.Value));
+      messages["-(_<String>)"] = (obj, msg) => function<KString, KString>(obj, msg, (s1, s2) => s1.Subtract(s2.Value));
+      messages["-(_<Range>)"] = (obj, msg) => function<KString, KRange>(obj, msg, (s, r) => s.Subtract(r));
       messages["pad(left:_<Int>)"] = (obj, msg) => function<KString, Int>(obj, msg, (s, w) => s.PadLeft(w.Value));
       messages["pad(left:_<Int>,padding:_<Char>)"] = (obj, msg) => function<KString, Int, KChar>(obj, msg, (s, w, c) => s.PadLeft(w.Value, c.Value));
       messages["pad(right:_<Int>)"] = (obj, msg) => function<KString, Int>(obj, msg, (s, w) => s.PadRight(w.Value));
@@ -139,6 +140,7 @@ public class StringClass : BaseClass, ICollectionClass
       messages["expandTabs()"] = (obj, _) => function<KString>(obj, s => s.ExpandTabs());
       messages["expandTabs(_<Int>)"] = (obj, msg) => function<KString, Int>(obj, msg, (s, i) => s.ExpandTabs(i.Value));
       messages["read(_<String>)"] = (obj, msg) => function<KString, KString>(obj, msg, (s, f) => Read(f.Value, s.Value));
+      messages["capitalize()"] = (obj, _) => function<KString>(obj, s => s.Capitalize());
    }
 
    protected static IObject replaceString(KString kString, IObject possibleSkipTake, IObject source)

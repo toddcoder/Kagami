@@ -449,6 +449,17 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
    public KString Subtract(string substring) => value.Replace(substring, "");
 
+   public KString Subtract(KRange range)
+   {
+      StringBuilder builder = new(value);
+      foreach (var obj in range.GetIterator(false).List())
+      {
+         builder.Replace(obj.AsString, "");
+      }
+
+      return builder.ToString();
+   }
+
    public IRangeItem Successor => (KString)value.Succ();
 
    public IRangeItem Predecessor => (KString)value.Pred();
@@ -660,4 +671,6 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
       var expanded = " ".Repeat(size);
       return value.Replace("\t", expanded);
    }
+
+   public KString Capitalize() => value.Keep(1).ToUpper() + value.Drop(1).ToLower();
 }

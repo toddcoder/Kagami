@@ -5,7 +5,6 @@ using Core.Numbers;
 using Core.Strings;
 using System.Text;
 using static Kagami.Library.Objects.ObjectFunctions;
-using static Kagami.Library.Parsers.OperatorType;
 
 namespace Kagami.Library.Objects;
 
@@ -606,13 +605,6 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
          builder.Append(newSuffix);
 
          return builder.ToString();
-         /*var prefix = input.Keep(result.Index);
-         var suffix = input.Drop(result.Index + result.Length);
-         var mapped = onMatch.Invoke((KString)result.FirstMatch).AsString;
-         prefix = onNonMatch.Invoke((KString)prefix).AsString;
-         suffix = onNonMatch.Invoke((KString)suffix).AsString;
-
-         return prefix + mapped + suffix;*/
       }
       else
       {

@@ -132,6 +132,7 @@ public class Module
       "Cons" => new ConsClass(),
       "Singleton" => new SingletonClass(),
       "Definition" => new DefinitionClass(),
+      "DateIncrement" => new DateIncrementClass(),
       _ => nil
    };
 

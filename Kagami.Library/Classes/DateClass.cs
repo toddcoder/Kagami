@@ -32,6 +32,7 @@ public class DateClass : BaseClass
       messages["julian".get()] = (obj, _) => function<Date>(obj, d => d.Julian);
       messages["mjulian".get()] = (obj, _) => function<Date>(obj, d => d.MJulian);
       messages["utc()"] = (obj, _) => function<Date>(obj, d => d.Utc());
+      messages["<<(_<Int>)"] = (obj, msg) => function<Date, Int>(obj, msg, (d, i) => d.Shift(i.Value));
    }
 
    public override void RegisterClassMessages()
