@@ -26,12 +26,18 @@ public struct KRange : IObject, ICollection
       stopObj = this.stop.Object;
       this.inclusive = inclusive;
       this.increment = increment;
+      if (this.start.Compare(stopObj) > 0)
+      {
+         this.increment = -Math.Abs(this.increment);
+      }
+
       if (this.increment > 0)
       {
+         var self = this;
          next = i =>
          {
             var current = i;
-            for (var j = 0; j < increment; j++)
+            for (var j = 0; j < self.increment; j++)
             {
                current = current.Successor;
             }
@@ -49,10 +55,11 @@ public struct KRange : IObject, ICollection
       }
       else
       {
+         var self = this;
          next = i =>
          {
             var current = i;
-            for (var j = 0; j < -increment; j++)
+            for (var j = 0; j < -self.increment; j++)
             {
                current = current.Predecessor;
             }

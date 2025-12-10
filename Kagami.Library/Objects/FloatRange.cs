@@ -28,14 +28,20 @@ public struct FloatRange : IObject, ICollection
       startObj = start;
       stopObj = stop;
 
+      if (this.start.Compare(stopObj) > 0)
+      {
+         this.increment = -Math.Abs(this.increment);
+      }
+
       if (this.increment > 0)
       {
+         var self = this;
          next = i =>
          {
             var current = i;
-            for (var j = 0; j < increment; j++)
+            for (var j = 0; j < self.increment; j++)
             {
-               current = (Float)current.Successor;
+               current = current.Value + 1;
             }
 
             return current;
@@ -51,12 +57,13 @@ public struct FloatRange : IObject, ICollection
       }
       else
       {
+         var self = this;
          next = i =>
          {
             var current = i;
-            for (var j = 0; j < -increment; j++)
+            for (var j = 0; j < -self.increment; j++)
             {
-               current = (Float)current.Predecessor;
+               current = current.Value - 1;
             }
 
             return current;
