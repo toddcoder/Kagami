@@ -17,11 +17,16 @@ public readonly struct Arguments : IObject, IEnumerable<IObject>, IEquatable<Arg
       return new Arguments(newArguments);
    }
 
-   public static Arguments Empty => new([]);
+   public static Arguments Empty => new();
 
    private readonly IObject[] arguments;
    private readonly string[] labels;
 
+   public Arguments()
+   {
+      arguments = [];
+      labels = [];
+   }
    public Arguments(params IObject[] arguments) : this()
    {
       this.arguments = arguments.Select(a => a is NameValue nv ? nv.Value : a).ToArray();
