@@ -552,6 +552,12 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerIterMessage("at(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i1, i2) => i1.At(i2.Value)));
    }
 
+   public void typedCollectionMessages()
+   {
+      registerMessage("setType(_<TypeConstraint>)", (obj, msg) => ((ITypedCollection)obj).SetType((TypeConstraint)msg.Arguments[0]));
+      registerMessage("autoType()", (obj, _) => ((ITypedCollection)obj).AutoType());
+   }
+
    public virtual bool MatchCompatible(BaseClass otherClass) => Name == otherClass.Name;
 
    public virtual bool AssignCompatible(BaseClass otherClass) =>

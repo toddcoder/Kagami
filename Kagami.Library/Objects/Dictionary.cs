@@ -2,6 +2,7 @@
 using Core.Enumerables;
 using Core.Monads;
 using Core.Numbers;
+using Kagami.Library.Classes;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
@@ -10,7 +11,7 @@ using static Kagami.Library.Operations.OperationFunctions;
 
 namespace Kagami.Library.Objects;
 
-public class Dictionary : IObject, IMutableCollection, IMutable
+public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollection
 {
    public static IObject New(IObject defaultValue, KBoolean caching, Maybe<TypeConstraint> _typeConstraint)
    {
@@ -418,6 +419,37 @@ public class Dictionary : IObject, IMutableCollection, IMutable
          field = value;
       }
    } = nil;
+
+   public IObject SetType(TypeConstraint typeConstraint)
+   {
+      TypeConstraint = typeConstraint;
+      return this;
+   }
+
+   public IObject AutoType()
+   {
+      if (dictionary.Count == 0)
+      {
+         return this;
+      }
+
+      IObject[] allKeys = [.. dictionary.Keys];
+      IObject[] allValues = [.. dictionary.Values];
+      var keyType = allKeys[0].ClassName;
+      var valueType = allValues[0].ClassName;
+      for (var i = 1; i < allKeys.Length; i++)
+      {
+         var currentKey = allKeys[i].ClassName;
+         var currentValue = allValues[i].ClassName;
+         if (currentKey != keyType || currentValue!=valueType)
+         {
+            return this;
+         }
+      }
+
+      TypeConstraint = Objects.TypeConstraint.FromList(keyType, valueType);
+      return this;
+   }
 
    public IObject Swap(IObject key1, IObject key2)
    {

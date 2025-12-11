@@ -1,6 +1,7 @@
 ﻿using Core.Collections;
 using Core.Enumerables;
 using Core.Monads;
+using Kagami.Library.Classes;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.CollectionFunctions;
@@ -8,7 +9,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
 
-public class Set : IObject, ICollection, IObjectCompare, IMutable
+public class Set : IObject, ICollection, IObjectCompare, IMutable, ITypedCollection
 {
    public static Set Empty => new();
 
@@ -154,6 +155,32 @@ public class Set : IObject, ICollection, IObjectCompare, IMutable
          field = value;
       }
    } = nil;
+
+   public IObject SetType(TypeConstraint typeConstraint)
+   {
+      TypeConstraint = typeConstraint;
+      return this;
+   }
+
+   public IObject AutoType()
+   {
+      if (list.Count == 0)
+      {
+         return this;
+      }
+
+      var type = list[0].ClassName;
+      for (var i = 1; i < list.Count; i++)
+      {
+         if (list[i].ClassName != type)
+         {
+            return this;
+         }
+      }
+
+      TypeConstraint = Objects.TypeConstraint.FromList(type);
+      return this;
+   }
 
    protected void assertNotThisSet(IObject other)
    {

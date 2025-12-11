@@ -2,6 +2,7 @@
 using Core.Enumerables;
 using Core.Monads;
 using Core.Numbers;
+using Kagami.Library.Classes;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.CollectionFunctions;
@@ -10,7 +11,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 namespace Kagami.Library.Objects;
 
 public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<KArray>, IMutableCollection, ISliceable, IIndexed, IFindIndex,
-   IAccepting, IMutable
+   IAccepting, IMutable, ITypedCollection
 {
    public static IObject CreateObject(IEnumerable<IObject> items, Maybe<TypeConstraint> _typeConstraint)
    {
@@ -145,6 +146,32 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
          _typeConstraint = value;
          assertValuesAreEquivalent();
       }
+   }
+
+   public IObject SetType(TypeConstraint typeConstraint)
+   {
+      TypeConstraint = typeConstraint;
+      return this;
+   }
+
+   public IObject AutoType()
+   {
+      if (list.Count == 0)
+      {
+         return this;
+      }
+
+      var type = list[0].ClassName;
+      for (var i = 1; i < list.Count; i++)
+      {
+         if (list[i].ClassName != type)
+         {
+            return this;
+         }
+      }
+
+      TypeConstraint = Objects.TypeConstraint.FromList(type);
+      return this;
    }
 
    public Maybe<Lambda> DefaultLambda

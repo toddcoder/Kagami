@@ -13,6 +13,7 @@ public class SetClass : BaseClass, ICollectionClass
       base.RegisterMessages();
 
       collectionMessages();
+      typedCollectionMessages();
 
       messages["<<(_)"] = (obj, msg) => function<Set, IObject>(obj, msg, (s, i) => s.Append(i));
       messages[">>(_)"] = (obj, msg) => function<Set, IObject>(obj, msg, (s, i) => s.Remove(i));

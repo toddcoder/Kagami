@@ -23,14 +23,13 @@ public class PostfixParser(ExpressionBuilder builder) : MultiParser
          yield return new ReductionParser(builder);
          yield return new SliceAssignParser(builder);
          yield return new SliceParser(builder);
-         //yield return new WhereParser(builder);
          yield return new SkipOperatorParser(builder);
-         //yield return new AsOperatorParser(builder);
+         yield return new AsOperatorParser(builder);
+         yield return new TypedOperatorParser(builder);
 
          if (!builder.Flags[ExpressionFlags.OmitSendMessageAssign])
          {
             yield return new SendMessageAssignParser(builder);
-            //yield return new SendBindingMessageParser(builder);
          }
 
          yield return new FoldOperatorParser(builder);

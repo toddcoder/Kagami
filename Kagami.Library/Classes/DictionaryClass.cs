@@ -15,6 +15,7 @@ public class DictionaryClass : BaseClass, ICollectionClass
 
       collectionMessages();
       mutableCollectionMessages();
+      typedCollectionMessages();
 
       messages["[](_)"] = (obj, msg) => function<Dictionary>(obj, d => getKeyed(d, msg.Arguments[0]));
       messages["[]=(_,_)"] = (obj, msg) => function<Dictionary>(obj, d => setKeyed(d, msg.Arguments[0], msg.Arguments[1]));
