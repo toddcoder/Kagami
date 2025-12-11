@@ -27,10 +27,11 @@ public readonly struct Arguments : IObject, IEnumerable<IObject>, IEquatable<Arg
       arguments = [];
       labels = [];
    }
+
    public Arguments(params IObject[] arguments) : this()
    {
-      this.arguments = arguments.Select(a => a is NameValue nv ? nv.Value : a).ToArray();
-      labels = arguments.Select(a => a is NameValue nv ? nv.Name : "").ToArray();
+      this.arguments = [.. arguments.Select(a => a is NameValue nv ? nv.Value : a)];
+      labels = [.. arguments.Select(a => a is NameValue nv ? nv.Name : "")];
    }
 
    public string ClassName => "Arguments";
@@ -84,14 +85,14 @@ public readonly struct Arguments : IObject, IEnumerable<IObject>, IEquatable<Arg
 
    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-   public Arguments Pass(int count) => new(arguments.Skip(count).ToArray());
+   public Arguments Pass(int count) => new([..arguments.Skip(count)]);
 
    public Arguments Prepend(IObject prefix)
    {
-      var list = arguments.ToList();
+      List<IObject> list = [.. arguments];
       list.Insert(0, prefix);
 
-      return new Arguments(list.ToArray());
+      return new Arguments([.. list]);
    }
 
    public bool Equals(Arguments other) => Equals(arguments, other.arguments) && Equals(labels, other.labels);

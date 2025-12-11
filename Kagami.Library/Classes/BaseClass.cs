@@ -85,7 +85,7 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerMessage("seq(_)", (obj, message) => new OpenRange(obj, (Lambda)message.Arguments[0]));
       registerMessage("format(_<String>)", (obj, message) => format(obj, message.Arguments[0].AsString));
       registerMessage("format(_<Array>)", (obj, message) => formatArray(obj, message.Arguments[0]));
-      registerMessage("id".get(), (obj, _) => KString.StringObject(obj.Id.ToString()));
+      registerMessage("objId".get(), (obj, _) => KString.StringObject(obj.Id.ToString()));
       registerMessage("isTrue".get(), (obj, _) => KBoolean.BooleanObject(obj.IsTrue));
       registerMessage("numberize()", (_, _) => Undefined.Value);
    }
