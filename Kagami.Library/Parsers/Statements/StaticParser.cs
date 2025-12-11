@@ -32,7 +32,7 @@ public partial class StaticParser : StatementParser
          var _register = metaClassBuilder.Register();
          if (_register)
          {
-            var classItemsParser = new ClassItemsParser(metaClassBuilder);
+            var classItemsParser = new ClassItemsParser(metaClassBuilder, true);
             while (state.More)
             {
                var _scan = classItemsParser.Scan(state);

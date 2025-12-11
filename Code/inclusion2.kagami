@@ -3,7 +3,7 @@
 inclusion Polygon {
 	required var width int
 	required var height int
-	required area() int
+	required func area() int
 	func printArea() => println(self.class.name, area())
 }
 

@@ -38,7 +38,7 @@ public partial class NamedStaticParser : StatementParser
             _register = metaClassBuilder.Register();
             if (_register)
             {
-               var classItemsParser = new ClassItemsParser(metaClassBuilder);
+               var classItemsParser = new ClassItemsParser(metaClassBuilder, !isMixin);
                while (state.More)
                {
                   var _scan = classItemsParser.Scan(state);

@@ -1,0 +1,17 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+mixin M {
+	func first() => println "first"
+	abstract func second()
+}
+
+class Foo {
+	func second() => println "second"
+}
+mixin M
+
+let f = Foo()
+f.first()
+f.second()

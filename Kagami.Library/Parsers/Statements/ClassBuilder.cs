@@ -15,6 +15,7 @@ using static Kagami.Library.CommonFunctions;
 using static Core.Monads.MonadFunctions;
 using DefineNewField = Kagami.Library.Nodes.Statements.DefineNewField;
 using Return = Kagami.Library.Nodes.Statements.Return;
+using Slice = Core.Strings.Slice;
 
 namespace Kagami.Library.Parsers.Statements;
 
@@ -100,11 +101,62 @@ public class ClassBuilder
          }
       }
 
-      foreach (var statement in mixinStatements.Where(s =>
-                  s is AssignToNewField or AssignToNewField2 or DefineNewField or CreateNewFields or LazyAssign or AssignDefinition or Function
-                     or MatchFunction))
+      if (mixinStatements.Count > 0)
       {
-         originalBlock.Add(statement);
+         Set<Selector> abstracts = [];
+         Set<Selector> implemented = [];
+         foreach (var statement in mixinStatements.Where(isModifiable))
+         {
+            switch (statement)
+            {
+               case Function { IsAbstract: true } abstractFunction:
+               {
+                  abstracts.Add(abstractFunction.Selector);
+                  break;
+               }
+               case Function function when function.IsGetter || function.IsSetter:
+               {
+                  continue;
+               }
+               case Function function:
+               {
+                  implemented.Add(function.Selector);
+                  originalBlock.Add(function);
+                  break;
+               }
+               case MatchFunction matchFunction:
+               {
+                  implemented.Add(matchFunction.Selector);
+                  originalBlock.Add(matchFunction);
+                  break;
+               }
+               default:
+                  originalBlock.Add(statement);
+                  break;
+            }
+         }
+
+         foreach (var statement in originalBlock)
+         {
+            switch (statement)
+            {
+               case Function { IsAbstract: false } function:
+               {
+                  implemented.Add(function.Selector);
+                  break;
+               }
+               case MatchFunction matchFunction:
+               {
+                  implemented.Add(matchFunction.Selector);
+                  break;
+               }
+            }
+         }
+
+         foreach (var selector in abstracts.Where(selector => !implemented.Contains(selector)))
+         {
+            throw fail($"{selector} is not implemented");
+         }
       }
 
       foreach (var statement in originalBlock)
@@ -354,6 +406,9 @@ public class ClassBuilder
 
          statements.Add(statement);
       }
+
+      bool isModifiable(Statement statement) => statement is AssignToNewField or AssignToNewField2 or DefineNewField or CreateNewFields or LazyAssign
+         or AssignDefinition or Function or MatchFunction;
    }
 
    public Optional<Unit> Constructor(Parameters parameters, Block block, bool standard)

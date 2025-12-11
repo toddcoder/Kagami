@@ -1,7 +1,7 @@
 ﻿open sys
 
 inclusion Equal {
-	required isEqual(_)
+	required func isEqual(_)
 	func isNotEqual(x) => not isEqual(x)
 }
 

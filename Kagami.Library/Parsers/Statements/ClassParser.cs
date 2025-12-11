@@ -66,7 +66,7 @@ public partial class ClassParser : StatementParser
       {
          var builder = new ClassBuilder(className, parameters, parentClassName, arguments, initialize, block);
 
-         var classItemsParser = new ClassItemsParser(builder);
+         var classItemsParser = new ClassItemsParser(builder, true);
          while (state.More)
          {
             var _scan3 = classItemsParser.Scan(state);

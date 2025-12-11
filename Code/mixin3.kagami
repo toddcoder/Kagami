@@ -1,0 +1,25 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+mixin Week {
+	let first_day = "Sunday"
+	func weeks_in_month() => println "You have four weeks in a month"
+	func weeks_in_year() => println "You have 52 weeks in a year"
+}
+
+class Decade {
+	var no_of_yrs = 10
+	func no_of_months() {
+		println first_day
+		var num = 10 * 12
+		println num
+	}
+}
+mixin Week
+
+var d1 = Decade()
+println d1.first_day
+d1.weeks_in_month()
+d1.weeks_in_year()
+d1.no_of_months()

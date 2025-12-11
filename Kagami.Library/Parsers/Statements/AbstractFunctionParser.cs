@@ -37,7 +37,7 @@ public partial class AbstractFunctionParser : StatementParser
          {
             var _typeConstraint = possibleTypeConstraint.Maybe;
             var block = new Block(new AbstractFail(functionName), _typeConstraint);
-            var function = new Function(functionName, parameters, isHidden, block, false, false, "");
+            var function = new Function(functionName, parameters, isHidden, block, false, false, "") { IsAbstract = true };
             state.AddStatement(function);
 
             return unit;
