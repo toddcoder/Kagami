@@ -49,7 +49,7 @@ public partial class Playground : Form
    protected int firstEditorLine;
    protected Idle idle = new(1);
    protected bool isDirty;
-   protected UiAction uiValue = new() { AutoSizeText = true, UseEmojis = false };
+   protected UiAction uiValue = new() { AutoSizeText = true, UseEmojis = false, DrawNot = false };
    protected UiAction uiType = new() { AutoSizeText = true, LeftStripe = DashStyle.Dash };
    protected UiAction uiElapsed = new();
    protected UiAction uiStatus = new() { UseEmojis = false };
