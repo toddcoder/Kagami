@@ -51,7 +51,7 @@ public static class ParserFunctions
    public const string REGEX_SINGLE_BLOCK = @"(=>)(?=[\w\s])";
    public const string REGEX_HIDDEN = @"(?:(hidden)\s+)?";
 
-   public static StringSet keywords = ["do", "else", "true", "false", "return", "if", "print", "println", "printline", "put", "undef"];
+   public static StringSet keywords = ["do", "else", "true", "false", "return", "if", "print", "println", "printline", "put", "undef", "and", "or"];
 
    public static bool isAKeyword(string word) => keywords.Contains(word);
 
