@@ -55,6 +55,11 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
 
    protected void assertIncomingValueIsEquivalent(IObject value)
    {
+      if (value is KNil)
+      {
+         return;
+      }
+
       if (_valueTypeConstraint is (true, var valueTypeConstraint))
       {
          if (!valueTypeConstraint.Matches(classOf(value)))
@@ -441,7 +446,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
       {
          var currentKey = allKeys[i].ClassName;
          var currentValue = allValues[i].ClassName;
-         if (currentKey != keyType || currentValue!=valueType)
+         if (currentKey != keyType || currentValue != valueType)
          {
             return this;
          }
