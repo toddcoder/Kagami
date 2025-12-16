@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using Core.Collections;
 using Core.Monads;
+using Kagami.Library.Classes;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using static Core.Monads.MonadFunctions;
@@ -77,22 +78,41 @@ public class Convert : Operation
                return exception;
             }
          }
-         else if (toClass.AsString is "Boolean")
+         else if (fromClass.AsString == "Array" && toClass.AsString == "String")
          {
-            return KBoolean.BooleanObject(value.IsTrue).Just();
-         }
-         else if (toClass.AsString is "String")
-         {
-            return KString.StringObject(value.AsString).Just();
+            return fromCharArrayToString(value);
          }
          else
          {
-            return fail($"Conversion from {fromClass.AsString} to {toClass.AsString} not found");
+            return simpleConversions(fromClass.AsString, toClass.AsString, value);
          }
       }
       else
       {
          return emptyStack("convert");
+      }
+
+      static Optional<IObject> fromCharArrayToString(IObject value)
+      {
+         var auto = (KArray)((KArray)value).AutoType();
+         if (auto.TypeConstraint is (true, { Comparisands: [CharClass] }))
+         {
+            return new KString(new string([.. auto.List.Select(i => (KChar)i).Select(c => c.Value)]));
+         }
+         else
+         {
+            return fail("Must be an array of Char");
+         }
+      }
+
+      static Optional<IObject> simpleConversions(string fromClassName, string toClassName, IObject value)
+      {
+         return toClassName switch
+         {
+            "Boolean" => KBoolean.BooleanObject(value.IsTrue).Just(),
+            "String" => KString.StringObject(value.AsString).Just(),
+            _ => fail($"Conversion from {fromClassName} to {toClassName} not found")
+         };
       }
    }
 
