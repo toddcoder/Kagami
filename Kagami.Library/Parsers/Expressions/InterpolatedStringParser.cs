@@ -213,22 +213,44 @@ public partial class InterpolatedStringParser : SymbolParser
                var _field = state.Scan($"^({REGEX_FIELD})", Color.Identifier);
                if (_field is (true, var fieldName))
                {
-                  expressions.Add(new Expression(new FieldSymbol(fieldName)));
-                  index = state.Index;
-                  length = 0;
-                  var _format = state.ScanFormat();
-                  if (_format is (true, var format))
+                  var innerBuilder = new ExpressionBuilder(ExpressionFlags.Standard);
+                  innerBuilder.Add(new FieldSymbol(fieldName));
+
+                  while (state.Scan($@"^(\.)({REGEX_FIELD})(?(\()(\)))?", Color.Message, Color.Message, Color.OpenParenthesis,
+                            Color.CloseParenthesis) is (true, var message))
                   {
-                     formats.Add(format);
+                     if (!message.EndsWith("()"))
+                     {
+                        message = message.get();
+                     }
+
+                     innerBuilder.Add(new SendMessageSymbol(message, Precedence.SendMessage, []));
+                  }
+
+                  var _innerExpression = innerBuilder.ToExpression();
+                  if (_innerExpression is (true, var innerExpression))
+                  {
+                     expressions.Add(innerExpression);
                      index = state.Index;
                      length = 0;
+                     var _format = state.ScanFormat();
+                     if (_format is (true, var format))
+                     {
+                        formats.Add(format);
+                        index = state.Index;
+                        length = 0;
+                     }
+                     else
+                     {
+                        formats.Add("");
+                     }
+
+                     continue;
                   }
                   else
                   {
-                     formats.Add("");
+                     return _innerExpression.Exception;
                   }
-
-                  continue;
                }
                else if (_field.Exception is (true, var exception))
                {
