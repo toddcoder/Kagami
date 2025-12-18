@@ -8,8 +8,9 @@ public class LambdaSymbol : Symbol
 {
    protected Parameters parameters;
    protected Block block;
+   protected bool captures;
 
-   public LambdaSymbol(Parameters parameters, Block block, bool addReturnUnit = false)
+   public LambdaSymbol(Parameters parameters, Block block, bool addReturnUnit = false, bool captures = true)
    {
       this.parameters = parameters;
       this.block = block;
@@ -17,24 +18,29 @@ public class LambdaSymbol : Symbol
       {
          this.block.AddReturnUnitIf();
       }
+
+      this.captures = captures;
    }
 
-   public LambdaSymbol(Parameters parameters, Expression expression)
+   public LambdaSymbol(Parameters parameters, Expression expression, bool captures = true)
    {
       this.parameters = parameters;
       block = (Block)expression;
+      this.captures = captures;
    }
 
-   public LambdaSymbol(int unknownFieldCount, Expression expression)
+   public LambdaSymbol(int unknownFieldCount, Expression expression, bool captures = true)
    {
       parameters = new Parameters(unknownFieldCount);
       block = (Block)expression;
+      this.captures = captures;
    }
 
-   public LambdaSymbol(int unknownFieldCount, Block block)
+   public LambdaSymbol(int unknownFieldCount, Block block, bool captures = true)
    {
       parameters = new Parameters(unknownFieldCount);
       this.block = block;
+      this.captures = captures;
    }
 
    public override void Generate(OperationsBuilder builder)
@@ -43,7 +49,7 @@ public class LambdaSymbol : Symbol
       var _index = builder.RegisterInvokable(invokable, block, true);
       if (_index)
       {
-         builder.NewLambda(invokable, true);
+         builder.NewLambda(invokable, captures);
       }
       else
       {

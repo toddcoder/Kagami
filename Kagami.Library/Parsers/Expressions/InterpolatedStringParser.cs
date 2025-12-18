@@ -247,7 +247,7 @@ public partial class InterpolatedStringParser : SymbolParser
 
                   if (image)
                   {
-                     innerBuilder.Add(new SendMessageSymbol("image".get(), Precedence.SendMessage, []));
+                     innerBuilder.Add(new ImageSymbol());
                   }
 
                   var _innerExpression = innerBuilder.ToExpression();

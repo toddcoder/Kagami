@@ -13,6 +13,7 @@ namespace Kagami.Library.Parsers.Statements;
 public partial class AssignToNewFieldParser : StatementParser
 {
    protected const string REGEX_EQUAL = @"^(\s*)(=)(?![=>])";
+
    protected bool isHidden;
    protected bool mutable;
    protected string fieldName = "";
