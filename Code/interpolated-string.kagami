@@ -1,0 +1,11 @@
+﻿open sys
+
+var innerString = "foobar"
+var str = $"string length is $innerString.length"
+println str
+
+var n = -42
+println $"42 abs is $n.abs()"
+
+var x = 12.3
+println $"sqrt\(12.3) is $x.sqrt()[f.4]"
