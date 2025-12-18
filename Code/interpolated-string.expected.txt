@@ -1,0 +1,5 @@
+string length is 6
+42 abs is 42
+sqrt(12.3) is 3.5071
+(1, 1) is inside the box
+"(1, 1) is inside the box" | String

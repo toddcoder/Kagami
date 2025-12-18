@@ -213,9 +213,16 @@ public partial class InterpolatedStringParser : SymbolParser
 
                text.Clear();
 
-               var _field = state.Scan($"^({REGEX_FIELD})", Color.Identifier);
+               var _field = state.Scan($"^(~)?({REGEX_FIELD})", Color.Operator, Color.Identifier);
                if (_field is (true, var fieldName))
                {
+                  var image = false;
+                  if (fieldName.StartsWith("~"))
+                  {
+                     image = true;
+                     fieldName = fieldName.Drop(1);
+                  }
+
                   var innerBuilder = new ExpressionBuilder(ExpressionFlags.Standard);
                   innerBuilder.Add(new FieldSymbol(fieldName));
 
@@ -236,6 +243,11 @@ public partial class InterpolatedStringParser : SymbolParser
                      {
                         return exception;
                      }
+                  }
+
+                  if (image)
+                  {
+                     innerBuilder.Add(new SendMessageSymbol("image".get(), Precedence.SendMessage, []));
                   }
 
                   var _innerExpression = innerBuilder.ToExpression();

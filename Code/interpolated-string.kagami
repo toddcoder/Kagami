@@ -1,5 +1,7 @@
 ﻿open sys
 
+#pragma ALLOW_PRINT_STATEMENT true
+
 var innerString = "foobar"
 var str = $"string length is $innerString.length"
 println str
@@ -9,3 +11,11 @@ println $"42 abs is $n.abs()"
 
 var x = 12.3
 println $"sqrt\(12.3) is $x.sqrt()[f.4]"
+
+let somePoint = (1, 1)
+match somePoint {
+	|(0, 0) => println $"$~somePoint is at the origin"
+	|(_, 0) => println $"$~somePoint is on the x-axis"
+	|(0, _) => println $"$~somePoint is on the y-axis"
+	|(-2 to 2, -2 to 2) => println $"$~somePoint is inside the box"
+}
