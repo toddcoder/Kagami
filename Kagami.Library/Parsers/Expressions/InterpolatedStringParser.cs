@@ -3,9 +3,12 @@ using System.Text.RegularExpressions;
 using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
 using Core.Numbers;
+using Core.Strings;
+using Kagami.Library.Objects;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
+using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Expressions;
 
@@ -216,15 +219,23 @@ public partial class InterpolatedStringParser : SymbolParser
                   var innerBuilder = new ExpressionBuilder(ExpressionFlags.Standard);
                   innerBuilder.Add(new FieldSymbol(fieldName));
 
-                  while (state.Scan($@"^(\.)({REGEX_FIELD})(?(\()(\)))?", Color.Message, Color.Message, Color.OpenParenthesis,
-                            Color.CloseParenthesis) is (true, var message))
+                  while (state.Scan($@"^(\.)({REGEX_FIELD})(\(\))?", Color.Message, Color.Message, Color.Message) is (true, var message))
                   {
-                     if (!message.EndsWith("()"))
+                     try
                      {
-                        message = message.get();
-                     }
+                        message = message.Drop(1);
+                        if (!message.EndsWith("()"))
+                        {
+                           message = message.get();
+                        }
 
-                     innerBuilder.Add(new SendMessageSymbol(message, Precedence.SendMessage, []));
+                        Selector selector = message;
+                        innerBuilder.Add(new SendMessageSymbol(selector, Precedence.SendMessage, []));
+                     }
+                     catch (Exception exception)
+                     {
+                        return exception;
+                     }
                   }
 
                   var _innerExpression = innerBuilder.ToExpression();
