@@ -2,7 +2,7 @@
 
 namespace Kagami.Library.Objects;
 
-public struct Definition(Lambda lambda) : IObject
+public readonly struct Definition(Lambda lambda) : IObject
 {
    public Lambda Lambda => lambda;
 
