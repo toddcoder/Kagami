@@ -23,7 +23,7 @@ public class UserObject : IObject, IEquatable<UserObject>
          setField("self", this);
       }
 
-      setField("id", (KString)Id.ToString());
+      setField("objId", (KString)Id.ToString());
    }
 
    protected void setField(string fieldName, IObject value)
