@@ -1,0 +1,11 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+class Resolution {
+	param var width int
+	param var height int
+}
+
+let r = Resolution(width: 640, height: 280)
+println r

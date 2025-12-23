@@ -15,7 +15,6 @@ using static Kagami.Library.CommonFunctions;
 using static Core.Monads.MonadFunctions;
 using DefineNewField = Kagami.Library.Nodes.Statements.DefineNewField;
 using Return = Kagami.Library.Nodes.Statements.Return;
-using Slice = Core.Strings.Slice;
 
 namespace Kagami.Library.Parsers.Statements;
 
@@ -165,7 +164,7 @@ public class ClassBuilder
          {
             case AssignToNewField { Ignore: false } assignToNewField:
             {
-               var (mutable, fieldName, _typeConstraint, isHidden) = assignToNewField;
+               var (mutable, fieldName, _typeConstraint, isHidden, _) = assignToNewField;
                if (isHidden)
                {
                   statements.Add(statement);
@@ -230,7 +229,7 @@ public class ClassBuilder
             }
             case DefineNewField defineNewField:
             {
-               var (mutable, fieldName, typeName, isHidden) = defineNewField;
+               var (mutable, fieldName, typeName, isHidden, _) = defineNewField;
                var typeConstraint = TypeConstraint.FromList(typeName);
                if (isHidden)
                {

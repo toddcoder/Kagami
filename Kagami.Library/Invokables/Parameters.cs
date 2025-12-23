@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Core.Collections;
 using Kagami.Library.Objects;
 using Core.Enumerables;
 
@@ -22,7 +23,7 @@ public class Parameters : IEquatable<Parameters>, IEnumerable<Parameter>
       noCapturingParameters = [.. parameters.Where(p => p.NoCapturing)];
    }
 
-   public Parameters() : this((string[]) [])
+   public Parameters() : this((string[])[])
    {
    }
 
@@ -65,4 +66,32 @@ public class Parameters : IEquatable<Parameters>, IEnumerable<Parameter>
    public override string ToString() => parameters.ToString(", ");
 
    public Selector Selector(string name) => name.Selector([.. parameters.Select(p => p.NameForFunction)]);
+
+   public bool ContainsName(string name) => parameters.Any(p => p.Name == name);
+
+   public Parameters Append(Parameter parameter) => new([parameter, ..parameters]);
+
+   public Parameters Merge(StringHash<Parameter> newParameters)
+   {
+      if (parameters.Length == 0)
+      {
+         return new Parameters(newParameters.ValueArray());
+      }
+
+      List<Parameter> mergedParameters = [.. parameters];
+      foreach (var (newName, newParameter) in newParameters)
+      {
+         var _index = mergedParameters.FirstIndexOrNone(p => p.Name == newName);
+         if (_index is (true, var index))
+         {
+            mergedParameters[index] = newParameter;
+         }
+         else
+         {
+            mergedParameters.Add(newParameter);
+         }
+      }
+
+      return new Parameters([.. mergedParameters]);
+   }
 }

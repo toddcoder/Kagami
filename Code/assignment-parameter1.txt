@@ -1,0 +1,2 @@
+Resolution(640, 280)
+Resolution(width = 640, height = 280) | Resolution

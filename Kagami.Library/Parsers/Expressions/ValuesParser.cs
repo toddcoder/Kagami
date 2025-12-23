@@ -68,10 +68,12 @@ public class ValuesParser : MultiParser
             }
          }
 
-         if (!builder.Flags[ExpressionFlags.OmitColon])
+         /*if (!builder.Flags[ExpressionFlags.OmitColon])
          {
             yield return new NameValueParser(builder);
-         }
+         }*/
+
+         yield return new NameValueParser(builder);
 
          yield return new FormatParser(builder);
          yield return new WhitespaceParser(builder);

@@ -1,0 +1,11 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+var customersInLine = ["Chis", "Alex", "Ewa", "Barry", "Daniella"]
+println customersInLine.length
+
+def customerProvider = customersInLine.pop()&
+println customersInLine.length
+
+println $"Now serving $customerProvider"

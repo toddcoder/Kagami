@@ -50,12 +50,13 @@ public class AssignToNewField : Statement
 
    public override string ToString() => stream() / (mutable ? "var" : "let") / " " / fieldName / " = " / expression;
 
-   public void Deconstruct(out bool mutable, out string fieldName, out Maybe<TypeConstraint> _typeConstraint, out bool isHidden)
+   public void Deconstruct(out bool mutable, out string fieldName, out Maybe<TypeConstraint> _typeConstraint, out bool isHidden, out Expression expression)
    {
       mutable = this.mutable;
       fieldName = this.fieldName;
       _typeConstraint = this._typeConstraint;
       isHidden = this.isHidden;
+      expression = this.expression;
    }
 
    public bool Ignore { get; set; }

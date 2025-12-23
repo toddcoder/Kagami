@@ -10,6 +10,7 @@ using System.Collections;
 using System.Text.RegularExpressions;
 using Core.DataStructures;
 using Core.Numbers;
+using Kagami.Library.Invokables;
 using static Core.Monads.AttemptFunctions;
 using static Core.Monads.MonadFunctions;
 using Group = System.Text.RegularExpressions.Group;
@@ -38,6 +39,7 @@ public class ParseState : IEnumerable<Statement>
    protected Stack<ImplicitExpressionState> implicitExpressionStates = new();
    protected StringSet patterns = [];
    protected Maybe<Exception> _exception = nil;
+   protected StringHash<Parameter> parameters = [];
 
    public ParseState(string source)
    {
@@ -558,4 +560,37 @@ public class ParseState : IEnumerable<Statement>
    }
 
    public Maybe<Exception> Exception => _exception;
+
+   public void ClearParameters() => parameters.Clear();
+
+   public void RegisterParameter(DefineNewField defineNewField)
+   {
+      var (mutable, fieldName, className, isHidden, isParam) = defineNewField;
+      if (isParam)
+      {
+         var typeConstraint = TypeConstraint.FromList(className);
+         parameters[fieldName] = new Parameter(isHidden, mutable, fieldName, fieldName, nil, typeConstraint, false, false, false);
+      }
+   }
+
+   public void RegisterParameter(AssignToNewField assignToNewField)
+   {
+      var (mutable, fieldName, _typeConstraint, isHidden, expression) = assignToNewField;
+      var symbol = new InvokableExpressionSymbol(expression);
+      AddSymbol(symbol);
+      PossibleTypeConstraint possibleTypeConstraint;
+      if (_typeConstraint is (true, var typeConstraint))
+      {
+         possibleTypeConstraint = new PossibleTypeConstraint.Some(typeConstraint);
+      }
+      else
+      {
+         possibleTypeConstraint = new PossibleTypeConstraint.None();
+      }
+
+      var possibleInvokable = new PossibleInvokable.Some(symbol.Invokable);
+      parameters[fieldName] = new Parameter(isHidden, mutable, fieldName, fieldName, possibleInvokable, possibleTypeConstraint, false, false, false);
+   }
+
+   public StringHash<Parameter> Parameters => parameters;
 }

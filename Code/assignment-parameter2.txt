@@ -1,0 +1,2 @@
+Resolution(0, 0)
+Resolution(width = 0, height = 0) | Resolution

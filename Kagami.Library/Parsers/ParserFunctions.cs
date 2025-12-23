@@ -50,6 +50,7 @@ public static class ParserFunctions
    public const string REGEX_EXP_END = @"^(\s*)(\))";
    public const string REGEX_SINGLE_BLOCK = @"(=>)(?=[\w\s])";
    public const string REGEX_HIDDEN = @"(?:(hidden)\s+)?";
+   public const string REGEX_PARAM = @"(?:(param)\s+)?";
 
    public static StringSet keywords = ["do", "else", "true", "false", "return", "if", "print", "println", "printline", "put", "undef", "and", "or"];
 

@@ -17,6 +17,8 @@ public partial class ClassParser : StatementParser
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
+      state.ClearParameters();
+
       var className = tokens[4].Text;
       var hasParameters = tokens[5].Text == "(";
       state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Class, Color.OpenParenthesis);
@@ -64,6 +66,12 @@ public partial class ClassParser : StatementParser
       var _block = getBlock(state, true);
       if (_block is (true, var block))
       {
+         if (state.Parameters.Count > 0)
+         {
+            parameters = parameters.Merge(state.Parameters);
+            state.Parameters.Clear();
+         }
+
          var builder = new ClassBuilder(className, parameters, parentClassName, arguments, initialize, block);
 
          var classItemsParser = new ClassItemsParser(builder, true);

@@ -1,0 +1,19 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+class Resolution {
+	param var width = 0
+	param var height = 0
+}
+
+class VideoMode {
+	var resolution = Resolution()
+	var interlaced = false
+	var frameRate = 0.0
+	var name = nil
+}
+
+let vga = Resolution(width: 640, height: 480)
+let videoMode = VideoMode()
+println videoMode.resolution
