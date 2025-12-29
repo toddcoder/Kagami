@@ -23,7 +23,7 @@ public class UserObject : IObject, IEquatable<UserObject>
          setField("self", this);
       }
 
-      setField("objId", (KString)Id.ToString());
+      setMethod("objId".get(), (_, _) => KString.StringObject(Id.ToString()));
    }
 
    protected void setField(string fieldName, IObject value)
@@ -34,6 +34,12 @@ public class UserObject : IObject, IEquatable<UserObject>
       }
 
       fields.New(fieldName, FieldType.Assignment, value);
+   }
+
+   protected void setMethod(Selector selector, Func<IObject, Message, IObject> func)
+   {
+      var @class = classOf(className);
+      @class.RegisterMessage(selector, func);
    }
 
    public Fields Fields => fields;
