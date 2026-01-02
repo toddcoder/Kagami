@@ -631,5 +631,7 @@ public class OperationsBuilder
 
    public void RegisterAutoConversion(string fromClass, string toClass) => add(new RegisterAutoConversion(fromClass, toClass));
 
+   public void GetClass() => add(new GetClass());
+
    public override string ToString() => "operations";
 }

@@ -1,4 +1,8 @@
-﻿namespace Kagami.Library.Invokables;
+﻿using Core.Monads;
+using Kagami.Library.Objects;
+using static Core.Monads.MonadFunctions;
+
+namespace Kagami.Library.Invokables;
 
 public class LambdaInvokable : IInvokable
 {
@@ -19,6 +23,8 @@ public class LambdaInvokable : IInvokable
    public bool Constructing => false;
 
    public bool RequiresFunctionFrame => true;
+
+   public Maybe<Class> Class => nil;
 
    public override string ToString() => Image;
 }

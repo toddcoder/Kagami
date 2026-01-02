@@ -1,4 +1,6 @@
 ﻿using Core.Enumerables;
+using Core.Monads;
+using Kagami.Library.Objects;
 
 namespace Kagami.Library.Invokables;
 
@@ -23,4 +25,6 @@ public class ConstructorInvokable : IInvokable
    public bool Constructing => true;
 
    public bool RequiresFunctionFrame => true;
+
+   public Maybe<Class> Class => new Class(ClassName);
 }

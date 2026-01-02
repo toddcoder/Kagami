@@ -63,6 +63,7 @@ public class Invoke : OneOperandOperation
       var frame = new Frame(invokable.RequiresFunctionFrame ? machine.Address : nil, arguments);
       machine.PushFrame(frame);
       frame.SetFields(invokable.Parameters);
+      frame.CurrentClass = invokable.Class;
       machine.GoTo(invokable.Address);
    }
 

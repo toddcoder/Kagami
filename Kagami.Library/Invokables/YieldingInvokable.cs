@@ -40,6 +40,8 @@ public class YieldingInvokable : IInvokable, ICollection, IObject
 
    public bool RequiresFunctionFrame => true;
 
+   public Maybe<Class> Class => nil;
+
    public int Hash => selector.Hash;
 
    public bool IsEqualTo(IObject obj) => obj is YieldingInvokable yfi && selector.IsEqualTo(yfi.selector);

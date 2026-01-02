@@ -330,4 +330,6 @@ public class Frame
    public void Defer(Lambda lambda) => deferredLambdas.Push(lambda);
 
    public IEnumerable<Lambda> DeferredLambdas => deferredLambdas;
+
+   public Maybe<Class> CurrentClass { get; set; } = nil;
 }

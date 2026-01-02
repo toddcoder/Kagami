@@ -13,6 +13,8 @@ public class ValuesParser : MultiParser
    {
       get
       {
+         yield return new ClassSendMessageAssignParser(builder);
+         yield return new ClassSendMessageParser(builder);
          yield return new CallableExpressionParser(builder);
          yield return new EmptyMemoParser(builder);
          yield return new AltCharParser(builder);

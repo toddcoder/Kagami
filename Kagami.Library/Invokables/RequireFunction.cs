@@ -1,4 +1,8 @@
-﻿namespace Kagami.Library.Invokables;
+﻿using Core.Monads;
+using Kagami.Library.Objects;
+using static Core.Monads.MonadFunctions;
+
+namespace Kagami.Library.Invokables;
 
 public struct RequireFunction : IInvokable
 {
@@ -13,4 +17,6 @@ public struct RequireFunction : IInvokable
    public bool Constructing => false;
 
    public bool RequiresFunctionFrame => false;
+
+   public Maybe<Class> Class => nil;
 }

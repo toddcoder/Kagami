@@ -1,4 +1,6 @@
-﻿using Kagami.Library.Objects;
+﻿using Core.Monads;
+using Kagami.Library.Objects;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Invokables
 {
@@ -26,6 +28,8 @@ namespace Kagami.Library.Invokables
 	   public virtual bool Constructing => false;
 
       public bool RequiresFunctionFrame => true;
+
+      public Maybe<Class> Class => nil;
 
       public override string ToString() => Image;
 	}

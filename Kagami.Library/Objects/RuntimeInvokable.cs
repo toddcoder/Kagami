@@ -1,4 +1,6 @@
-﻿using Kagami.Library.Invokables;
+﻿using Core.Monads;
+using Kagami.Library.Invokables;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Objects;
 
@@ -25,4 +27,6 @@ public class RuntimeInvokable : IInvokable
    public bool Constructing => false;
 
    public bool RequiresFunctionFrame => false;
+
+   public Maybe<Class> Class => nil;
 }

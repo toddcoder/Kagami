@@ -97,6 +97,8 @@ public class Function : Statement, IOverridable
       set => className = value;
    }
 
+   public Maybe<Class> Class { get; set; } = nil;
+
    public bool Yielding => yielding;
 
    public bool Overriding => overriding;
