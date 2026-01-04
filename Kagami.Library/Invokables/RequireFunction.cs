@@ -6,6 +6,12 @@ namespace Kagami.Library.Invokables;
 
 public struct RequireFunction : IInvokable
 {
+   public RequireFunction()
+   {
+      Index = 0;
+      Address = 0;
+   }
+
    public int Index { get; set; }
 
    public int Address { get; set; }
@@ -18,5 +24,5 @@ public struct RequireFunction : IInvokable
 
    public bool RequiresFunctionFrame => false;
 
-   public Maybe<Class> Class => nil;
+   public Maybe<Class> Class { get; set; } = nil;
 }

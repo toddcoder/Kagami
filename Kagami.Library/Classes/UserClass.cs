@@ -60,6 +60,7 @@ public class UserClass : BaseClass, IEquatable<UserClass>
    public static IObject UserInvoke(UserObject userObject, Arguments arguments, Lambda lambda)
    {
       var machine = Machine.Current.Value;
+      lambda.Invokable.Class = new Class(userObject.ClassName);
       var _value = machine.Invoke(lambda.Invokable, arguments, userObject.Fields, false, true);
       if (_value is (true, var value))
       {

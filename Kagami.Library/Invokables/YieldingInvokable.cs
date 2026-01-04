@@ -40,7 +40,7 @@ public class YieldingInvokable : IInvokable, ICollection, IObject
 
    public bool RequiresFunctionFrame => true;
 
-   public Maybe<Class> Class => nil;
+   public Maybe<Class> Class { get; set; } = nil;
 
    public int Hash => selector.Hash;
 

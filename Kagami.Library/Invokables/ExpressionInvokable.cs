@@ -25,5 +25,5 @@ public class ExpressionInvokable : IInvokable
 
    public bool RequiresFunctionFrame => true;
 
-   public Maybe<Class> Class => nil;
+   public Maybe<Class> Class { get; set; } = nil;
 }

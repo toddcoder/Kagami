@@ -160,7 +160,10 @@ public class Machine
          fields.Remove(t => t is not FieldType.Capture);
       }
 
-      var frame = new Frame(invokable.RequiresFunctionFrame ? Address : nil, arguments, fields);
+      var frame = new Frame(invokable.RequiresFunctionFrame ? Address : nil, arguments, fields)
+      {
+         CurrentClass = invokable.Class
+      };
 
       if (invokable is YieldingInvokable yfi)
       {

@@ -28,5 +28,5 @@ public class RuntimeInvokable : IInvokable
 
    public bool RequiresFunctionFrame => false;
 
-   public Maybe<Class> Class => nil;
+   public Maybe<Class> Class { get; set; } = nil;
 }

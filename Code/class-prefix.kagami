@@ -1,0 +1,18 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+class Foo {
+	\count += 1
+	func reset() => \count = 0
+}
+static {
+	var count = 0
+}
+
+let foo1 = Foo()
+println Foo.count
+let foo2 = Foo()
+println Foo.count
+foo2.reset()
+println Foo.count

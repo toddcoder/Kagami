@@ -13,7 +13,7 @@ public partial class ClassSendMessageAssignParser : SymbolParser
    {
    }
 
-   [GeneratedRegex($@"^(\s*)(&)({REGEX_FUNCTION_NAME})(\s*)({REGEX_ASSIGN_OPS})?(=)(?![=>])")]
+   [GeneratedRegex($@"^(\s*)(\\)({REGEX_FUNCTION_NAME})(\s*)({REGEX_ASSIGN_OPS})?(=)(?![=>])")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -28,7 +28,7 @@ public partial class ClassSendMessageAssignParser : SymbolParser
          var _operation = matchOperator(operationSource);
          if (_operation is (true, var operation))
          {
-            builder.Add(new SendClassMessageSymbol(messageName.get(), nil, operation, expression));
+            builder.Add(new SendClassMessageSymbol(messageName.set(), nil, operation, expression));
          }
          else if (_operation.Exception is (true, var exception))
          {
@@ -37,7 +37,7 @@ public partial class ClassSendMessageAssignParser : SymbolParser
          else
          {
             Maybe<Operation> _nilOperation = nil;
-            builder.Add(new SendClassMessageSymbol(messageName.get(), nil, _nilOperation, expression));
+            builder.Add(new SendClassMessageSymbol(messageName.set(), nil, _nilOperation, expression));
          }
 
          return unit;

@@ -17,5 +17,5 @@ public interface IInvokable
 
    public bool RequiresFunctionFrame { get; }
 
-   public Maybe<Class> Class { get; }
+   public Maybe<Class> Class { get; set; }
 }

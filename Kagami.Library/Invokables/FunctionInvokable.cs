@@ -29,7 +29,7 @@ namespace Kagami.Library.Invokables
 
       public bool RequiresFunctionFrame => true;
 
-      public Maybe<Class> Class => nil;
+      public Maybe<Class> Class { get; set; } = nil;
 
       public override string ToString() => Image;
 	}
