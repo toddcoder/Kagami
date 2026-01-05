@@ -12,7 +12,7 @@ public partial class TryParser : EndingInExpressionParser
    }
 
 
-   [GeneratedRegex(@"^(\s*)(attempt)\b", RegexOptions.Compiled)]
+   [GeneratedRegex(@"^(\s*)(try)\b", RegexOptions.Compiled)]
    public override partial Regex Regex();
 
 

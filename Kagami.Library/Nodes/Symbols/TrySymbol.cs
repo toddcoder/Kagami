@@ -29,7 +29,7 @@ public class TrySymbol : Symbol, IHasExpression
 
    public override Arity Arity => Arity.Nullary;
 
-   public override string ToString() => $"attempt {expression}";
+   public override string ToString() => $"try {expression}";
 
    public Expression Expression => expression;
 }

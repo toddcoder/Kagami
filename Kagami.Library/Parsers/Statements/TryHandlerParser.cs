@@ -8,7 +8,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class TryHandlerParser : StatementParser
 {
-   [GeneratedRegex(@"^(\s*)(try)\b")]
+   [GeneratedRegex(@"^(\s*)(attempt)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)

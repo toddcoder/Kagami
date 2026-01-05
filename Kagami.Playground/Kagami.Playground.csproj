@@ -9,6 +9,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <ApplicationIcon>8556451_cabinet_decoration_standing_mirror_sink_icon.ico</ApplicationIcon>
+    <GenerateResourceWarnOnBinaryFormatterUse>false</GenerateResourceWarnOnBinaryFormatterUse>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="8556451_cabinet_decoration_standing_mirror_sink_icon.ico" />

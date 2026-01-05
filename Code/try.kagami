@@ -1,0 +1,18 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+func show(name string) string {
+	reject name.isEmpty throw "Name cannot be empty"
+	return name.upper()
+}
+
+let notEmpty = try show("foo")
+if notEmpty {
+	println notEmpty
+}
+
+let empty = try show("")
+if not empty {
+	println empty
+}
