@@ -63,6 +63,8 @@ public class IntClass : BaseClass, IParse, IEquivalentClass
       classMessages["parse(_)"] = (_, msg) => parse(msg.Arguments[0].AsString);
       classMessages["parse(hex:_)"] = (_, msg) => parseFromHex(msg.Arguments[0].AsString);
       classMessages["parse(bin:_)"] = (_, msg) => parseFromBinary(msg.Arguments[0].AsString);
+      classMessages["parse(float:_)"] = (_, msg) => parse(((Float)msg.Arguments[0]).Value);
+      classMessages["parse(exact:_)"] = (_, msg) => parseExact(((Float)msg.Arguments[0]).Value);
       classMessages["parse(_<String>,radix:_<Int>)"] = (_, msg) =>
          classFunc<IntClass, KString, Int>(this, msg, (_, s, r) => successOf(parseInt(s.Value, r.Value).Map(Int.IntObject)));
       classMessages["rand()"] = (_, _) => (Int)random.Value.Next();
@@ -99,6 +101,53 @@ public class IntClass : BaseClass, IParse, IEquivalentClass
    public static IObject parseFromBinary(string value) => parseFromNumberStyles(value.Drop("^ '0b'"), NumberStyles.AllowBinarySpecifier);
 
    public IObject Parse(string source) => Int.IntObject(source.Value().Int32());
+
+   public static IObject parse(double value)
+   {
+      try
+      {
+         return Success.Object(Int.IntObject(Convert.ToInt32(value)));
+      }
+      catch (Exception exception)
+      {
+         return Failure.Object(exception.Message);
+      }
+   }
+
+   public static IObject parseExact(double value)
+   {
+      if (double.IsNaN(value))
+      {
+         return Failure.Object("Value cannot be NaN");
+      }
+
+      if (double.IsInfinity(value))
+      {
+         return Failure.Object("Value cannot be infinity");
+      }
+
+      if (value is > int.MaxValue or < int.MinValue)
+      {
+         return Failure.Object("Value is out of range for Int");
+      }
+
+      try
+      {
+         var intValue = Convert.ToInt32(value);
+         if (intValue == value)
+         {
+            return Success.Object(Int.IntObject(intValue));
+         }
+         else
+         {
+            return Failure.Object("Value has a fractional part");
+         }
+      }
+      catch (Exception exception)
+      {
+         return Failure.Object(exception.Message);
+      }
+   }
 
    public override bool IsNumeric => true;
 
