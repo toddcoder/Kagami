@@ -7,13 +7,16 @@ public class TrySymbol : Symbol, IHasExpression
 {
    protected Expression expression;
 
-   public TrySymbol(Expression expression) => this.expression = expression;
+   public TrySymbol(Expression expression)
+   {
+      this.expression = expression;
+   }
 
    public override void Generate(OperationsBuilder builder)
    {
       var errorLabel = newLabel("error");
 
-      //builder.TryBegin();
+      builder.TryBegin(errorLabel);
       builder.SetErrorHandler(errorLabel);
       expression.Generate(builder);
       builder.TryEnd();
@@ -26,7 +29,7 @@ public class TrySymbol : Symbol, IHasExpression
 
    public override Arity Arity => Arity.Nullary;
 
-   public override string ToString() => $"try {expression}";
+   public override string ToString() => $"attempt {expression}";
 
    public Expression Expression => expression;
 }

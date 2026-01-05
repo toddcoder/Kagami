@@ -111,6 +111,7 @@ public class ValuesParser : MultiParser
          yield return new IterParser(builder);
          yield return new NameOfParser(builder);
          yield return new LastValueParser(builder);
+         yield return new TryParser(builder);
 
          yield return new FieldParser(builder);
       }
