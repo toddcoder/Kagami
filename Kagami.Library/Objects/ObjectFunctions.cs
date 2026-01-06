@@ -134,6 +134,11 @@ public static class ObjectFunctions
          {
             return false;
          }
+
+         if (comparisand.GetName(i) is (true, var name))
+         {
+            bindings[$"-{name}"] = item1;
+         }
       }
 
       return true;

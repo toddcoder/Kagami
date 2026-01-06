@@ -487,4 +487,6 @@ public struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjectCompare,
 
       return new KTuple([.. newList], names, indexes);
    }
+
+   public Maybe<string> GetName(int index) => indexes.Maybe[index].Map(name => name);
 }
