@@ -12,7 +12,10 @@ public class NewRange : TwoOperandOperation
 {
    protected bool inclusive;
 
-   public NewRange(bool inclusive) => this.inclusive = inclusive;
+   public NewRange(bool inclusive)
+   {
+      this.inclusive = inclusive;
+   }
 
    public override Optional<IObject> Execute(Machine machine, IObject x, IObject y) => x switch
    {
