@@ -1,0 +1,19 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+type Kind {|Negative, Zero, Positive}
+
+extension int {
+	func kind Kind {
+		match self {
+			|0 return Zero
+			|> 0 return Positive
+			|_ return Negative
+		}
+	}
+}
+
+println 12.kind
+println 0.kind
+println (-12).kind

@@ -31,6 +31,7 @@ public partial class FunctionParser : StatementParser
 
       var className = tokens[6].Text;
       (className, var color) = getClassNameWithColor(className);
+      className = ClassName | className;
 
       var functionName = tokens[8].Text;
       var type = tokens[9].Text;
@@ -169,7 +170,7 @@ public partial class FunctionParser : StatementParser
       }
    }
 
-   public string TraitName { get; set; } = "";
+   public Maybe<string> ClassName { get; set; } = nil;
 
    public static Optional<Parameters> GetAnyParameters(bool needsParameters, ParseState state)
    {

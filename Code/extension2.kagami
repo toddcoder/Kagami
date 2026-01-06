@@ -1,0 +1,28 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+class Foobar {
+	param var name string = ""
+}
+
+extension Foobar {
+	init(name string) {
+		if /bool name {
+			return ?Foobar(name: name)
+		}
+		else {
+			return nil
+		}
+	}
+}
+
+let notEmpty = Foobar("foobaz")
+if notEmpty {
+	println notEmpty.name
+}
+
+let empty = Foobar("")
+if not empty {
+	println "empty is nil"
+}
