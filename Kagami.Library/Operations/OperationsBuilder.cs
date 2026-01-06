@@ -331,7 +331,7 @@ public class OperationsBuilder
 
    public void GetIterator(bool lazy) => add(new GetIterator(lazy));
 
-   public void NewRange(bool inclusive) => add(new NewRange(inclusive));
+   public void NewRange(bool inclusive, bool down) => add(new NewRange(inclusive, down));
 
    public void IsClass(string className, bool pop) => add(new IsClass(className, pop));
 

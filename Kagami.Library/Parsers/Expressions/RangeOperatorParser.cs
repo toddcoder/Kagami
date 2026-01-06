@@ -19,7 +19,7 @@ public partial class RangeOperatorParser : SymbolParser
       var inclusive = tokens[2].Text == "..";
       state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Operator);
 
-      builder.Add(new RangeSymbol(inclusive));
+      builder.Add(new RangeSymbol(inclusive, false));
       return unit;
    }
 }

@@ -111,10 +111,16 @@ public partial class KeywordOperatorsParser : SymbolParser
                   builder.Add(new SendBinaryMessageSymbol("overlaps(_)", Precedence.Boolean));
                   break;
                case "to":
-                  builder.Add(new RangeSymbol(true));
+                  builder.Add(new RangeSymbol(true, false));
                   break;
                case "til":
-                  builder.Add(new RangeSymbol(false));
+                  builder.Add(new RangeSymbol(false, false));
+                  break;
+               case "downto":
+                  builder.Add(new RangeSymbol(true, true));
+                  break;
+               case "downtil":
+                  builder.Add(new RangeSymbol(false, true));
                   break;
                default:
                   return fail($"Keyword internal error for {keyword}");

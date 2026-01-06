@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using Kagami.Library.Objects;
+﻿using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Booleans;
 using Core.Monads;
@@ -11,22 +10,24 @@ namespace Kagami.Library.Operations;
 public class NewRange : TwoOperandOperation
 {
    protected bool inclusive;
+   protected int increment;
 
-   public NewRange(bool inclusive)
+   public NewRange(bool inclusive, bool down)
    {
       this.inclusive = inclusive;
+      increment = down ? -1 : 1;
    }
 
    public override Optional<IObject> Execute(Machine machine, IObject x, IObject y) => x switch
    {
-      Float start when y is Float stop => new FloatRange(start, stop, inclusive),
-      Long start when y is Long stop => new LongRange(start, stop, inclusive, BigInteger.One),
-      IRangeItem start when y is Any => new KRange(start, new Infinity(true), inclusive),
-      IRangeItem start when y is IObjectCompare stop => new KRange(start, stop, inclusive),
-      IRangeItem start when y is IRangeItem stop => new KRange(start, stop, inclusive),
-      KRange range when y is Int increment => new KRange(range, increment),
-      FloatRange range when y is Float increment => new FloatRange(range, increment.Value),
-      UserObject userObject when y is UserObject stop => new KRange(new UserRangeItem(userObject), new UserCompare(stop), inclusive),
+      Float start when y is Float stop => new FloatRange(start, stop, inclusive, increment),
+      Long start when y is Long stop => new LongRange(start, stop, inclusive, increment),
+      IRangeItem start when y is Any => new KRange(start, new Infinity(true), inclusive, increment),
+      IRangeItem start when y is IObjectCompare stop => new KRange(start, stop, inclusive, increment),
+      IRangeItem start when y is IRangeItem stop => new KRange(start, stop, inclusive, increment),
+      KRange range when y is Int intIncrement => new KRange(range, intIncrement),
+      FloatRange range when y is Float floatIncrement => new FloatRange(range, floatIncrement.Value),
+      UserObject userObject when y is UserObject stop => new KRange(new UserRangeItem(userObject), new UserCompare(stop), inclusive, increment),
       _ => incompatibleClasses(x, "RangeItem")
    };
 
