@@ -1,0 +1,4 @@
+Positive
+Zero
+Negative
+Negative | Negative

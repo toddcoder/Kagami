@@ -1,0 +1,13 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+attempt {
+	var x = 1
+	var y = 0
+	var res = x / y
+	println res
+}
+catch e {
+	println e
+}

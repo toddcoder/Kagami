@@ -12,7 +12,7 @@ public partial class KeywordOperatorsParser : SymbolParser
    }
 
    [GeneratedRegex(@"^(\s+)(if|map|join|sort|foldl|foldr|fold|all|any|none|one|zip|skip|take|while|until|min|max" +
-      @"|does|X|each|approx|same|xor|union|intersect|diff|symdiff|subsetof|supersetof|accum|overlaps|to|til|downto|downtil)(\s+)")]
+      @"|does|X|each|approx|same|xor|union|intersect|diff|symdiff|subsetof|supersetof|accum|overlaps|to|til|downto|downtil|dto|dtil)(\s+)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -116,10 +116,10 @@ public partial class KeywordOperatorsParser : SymbolParser
                case "til":
                   builder.Add(new RangeSymbol(false, false));
                   break;
-               case "downto":
+               case "downto" or "dto":
                   builder.Add(new RangeSymbol(true, true));
                   break;
-               case "downtil":
+               case "downtil" or "dtil":
                   builder.Add(new RangeSymbol(false, true));
                   break;
                default:

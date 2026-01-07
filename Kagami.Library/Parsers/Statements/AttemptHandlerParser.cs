@@ -6,7 +6,7 @@ using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public partial class TryHandlerParser : StatementParser
+public partial class AttemptHandlerParser : StatementParser
 {
    [GeneratedRegex(@"^(\s*)(attempt)\b")]
    public override partial Regex Regex();

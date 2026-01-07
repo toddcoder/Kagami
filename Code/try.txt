@@ -1,0 +1,3 @@
+FOO
+Name cannot be empty
+f"Name cannot be empty" | Failure

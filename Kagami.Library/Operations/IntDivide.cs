@@ -11,19 +11,26 @@ public class IntDivide : TwoOperandOperation
 
    public override Optional<IObject> Execute(Machine machine, IObject x, IObject y)
    {
-      switch (x)
+      try
       {
-         case Long l1 when y is Long l2:
-            return new Long(l1.AsBigInteger() / l2.AsBigInteger());
-         case INumeric n1 when y is INumeric n2 && n1.IsPrimitive && n2.IsPrimitive:
+         switch (x)
          {
-            var dx = n1.AsInt32();
-            var dy = n2.AsInt32();
+            case Long l1 when y is Long l2:
+               return new Long(l1.AsBigInteger() / l2.AsBigInteger());
+            case INumeric n1 when y is INumeric n2 && n1.IsPrimitive && n2.IsPrimitive:
+            {
+               var dx = n1.AsInt32();
+               var dy = n2.AsInt32();
 
-            return Int.IntObject(dx / dy).Just();
+               return Int.IntObject(dx / dy).Just();
+            }
+            default:
+               return sendMessage(x, "div(_)", y).Just();
          }
-         default:
-            return sendMessage(x, "div(_)", y).Just();
+      }
+      catch (Exception exception)
+      {
+         return exception;
       }
    }
 }

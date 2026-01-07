@@ -1,0 +1,2 @@
+Attempted to divide by zero.
+f"Attempted to divide by zero." | Failure

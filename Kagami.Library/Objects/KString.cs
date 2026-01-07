@@ -673,4 +673,24 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
    }
 
    public KString Capitalize() => value.Keep(1).ToUpper() + value.Drop(1).ToLower();
+
+   public KString Insert(string substring, int index)
+   {
+      var builder = new StringBuilder();
+      builder.Append(value.Keep(index));
+      builder.Append(substring);
+      builder.Append(value.Drop(index));
+
+      return builder.ToString();
+   }
+
+   public KString Delete(int index, int length)
+   {
+      var builder = new StringBuilder();
+      var kept = value.Keep(index);
+      builder.Append(kept);
+      builder.Append(value.Drop(index + length));
+
+      return new KString(builder.ToString());
+   }
 }

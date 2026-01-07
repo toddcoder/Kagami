@@ -92,7 +92,11 @@ public abstract class BaseClass : IEquatable<BaseClass>
 
    protected static KString format(IObject obj, string formattingString)
    {
-      if (formattingString.Contains(' '))
+      if (obj is Date date)
+      {
+         return date.Format(formattingString);
+      }
+      else if (formattingString.Contains(' '))
       {
          return formatArray(obj, formattingString.Split(' '));
       }

@@ -141,6 +141,10 @@ public class StringClass : BaseClass, ICollectionClass
       messages["expandTabs(_<Int>)"] = (obj, msg) => function<KString, Int>(obj, msg, (s, i) => s.ExpandTabs(i.Value));
       messages["read(_<String>)"] = (obj, msg) => function<KString, KString>(obj, msg, (s, f) => Read(f.Value, s.Value));
       messages["capitalize()"] = (obj, _) => function<KString>(obj, s => s.Capitalize());
+      messages["insert(value:_<String>,at:_<Int>)"] =
+         (obj, msg) => function<KString, KString, Int>(obj, msg, (s1, s2, i) => s1.Insert(s2.Value, i.Value));
+      messages["delete(from:_<Int>,length:_<Int>)"] =
+         (obj, msg) => function<KString, Int, Int>(obj, msg, (s1, i1, i2) => s1.Delete(i1.Value, i2.Value));
    }
 
    protected static IObject replaceString(KString kString, IObject possibleSkipTake, IObject source)
@@ -201,7 +205,8 @@ public class StringClass : BaseClass, ICollectionClass
       return new Dictionary(objectHash);
    }
 
-   public IObject Revert(IEnumerable<IObject> list, Maybe<TypeConstraint> _typeConstraint) => KString.StringObject(list.Select(i => i.AsString).ToString(""));
+   public IObject Revert(IEnumerable<IObject> list, Maybe<TypeConstraint> _typeConstraint) =>
+      KString.StringObject(list.Select(i => i.AsString).ToString(""));
 
    public TypeConstraint EquivalentTypeConstraint() => TypeConstraint.FromList("Collection", "TextFinding");
 
