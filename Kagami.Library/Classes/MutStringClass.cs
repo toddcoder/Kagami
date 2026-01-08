@@ -24,8 +24,6 @@ public class MutStringClass : BaseClass, ICollectionClass
       mutableCollectionMessages();
 
       registerMessage("<<", (obj, msg) => function<MutString, IObject>(obj, msg, (m, o) => m.Append(o)));
-      /*registerMessage("[](_<Int>)", (obj, msg) => function<MutString, Int>(obj, msg, (m, i) => m[i.Value]));
-      registerMessage("[]=(_<Int>,_<Char>)", (obj, msg) => function<MutString, Int, KChar>(obj, msg, (m, i, v) => m[i.Value] = v));*/
       registerMessage("fill(char:_<Char>,count:_<Int>)",
          (obj, msg) => function<MutString, KChar, Int>(obj, msg, (m, c, i) => m.Fill(c.Value, i.Value)));
       registerMessage("fill(count:_<Int>,char:_<Char>)",
@@ -37,6 +35,9 @@ public class MutStringClass : BaseClass, ICollectionClass
       registerMessage("put(_)", (obj, msg) => function<MutString, IObject>(obj, msg, (m, s) => m.Put(s.AsString)));
       registerMessage("put(_,_<String>)",
          (obj, msg) => function<MutString, IObject, KString>(obj, msg, (m, s1, s2) => m.Put(s1.AsString, s2.Value)));
+      registerMessage("at(_<Int>)", (obj, msg) => function<MutString, Int>(obj, msg, (m, i) => m.At(i.Value)));
+      registerMessage("at(_<Int>,_<String>)",
+         (obj, msg) => function<MutString, Int, KString>(obj, msg, (m, i, s) => m.At(i.Value, s.Value)));
    }
 
    public override IObject DefaultValue => new MutString("");

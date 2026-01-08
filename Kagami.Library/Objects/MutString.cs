@@ -84,8 +84,34 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
       set
       {
          index = wrapIndex(index, mutable.Length);
-         mutable[index] = value.Value;
+         if (value.Value == '\0')
+         {
+            mutable.Remove(index, 1);
+         }
+         else
+         {
+            mutable[index] = value.Value;
+         }
       }
+   }
+
+   public MutString At(int index)
+   {
+      index = wrapIndex(index, mutable.Length);
+      return mutable[index].ToString();
+   }
+
+   public MutString At(int index, string value)
+   {
+      index = wrapIndex(index, mutable.Length);
+      var builder = new StringBuilder();
+      var str = mutable.ToString();
+      builder.Append(str[..index]);
+      builder.Append(value);
+      builder.Append(str[(index + 1)..]);
+      mutable = builder;
+
+      return this;
    }
 
    public IObject Set(IObject index, IObject value)
