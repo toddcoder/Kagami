@@ -25,6 +25,7 @@ public class RangeClass : BaseClass, ICollectionClass
       messages["~(_)"] = (obj, msg) => function<KRange, KRange>(obj, msg, (r1, r2) => r1.Concatenate(r2));
       messages["min".get()] = (obj, _) => function<KRange>(obj, r => r.Min());
       messages["max".get()] = (obj, _) => function<KRange>(obj, r => r.Max());
+      messages["by(_<Int>)"] = (obj, msg) => function<KRange, Int>(obj, msg, (r, i) => r.By(i.Value));
    }
 
    public override IObject DefaultValue => new KRange((IRangeItem)Int.Zero, (IObjectCompare)Int.Zero, true);

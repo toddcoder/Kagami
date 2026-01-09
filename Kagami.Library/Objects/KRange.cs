@@ -234,4 +234,6 @@ public struct KRange : IObject, ICollection
    public IObject Max() => stopObj;
 
    public IObject Min() => startObj;
+
+   public KRange By(int increment) => new(this, increment);
 }
