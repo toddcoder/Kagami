@@ -12,12 +12,12 @@ public partial class IterParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(iter)\b")]
+   [GeneratedRegex(@"^(\s*)(\^)(?={)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      state.Colorize(tokens, Color.Whitespace, Color.Keyword);
+      state.Colorize(tokens, Color.Whitespace, Color.Operator);
 
       state.CreateYieldFlag();
       state.CreateReturnType();

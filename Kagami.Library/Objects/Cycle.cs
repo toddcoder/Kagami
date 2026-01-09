@@ -9,7 +9,7 @@ namespace Kagami.Library.Objects;
 
 public class Cycle : IObject, ICollection
 {
-   public static IObject CreateObject(IEnumerable<IObject> items) => new Cycle(items.ToArray());
+   public static IObject CreateObject(IEnumerable<IObject> items) => new Cycle([.. items]);
 
    protected IObject[] items;
    protected Maybe<(IObject, Lambda)> _seedLambda;
@@ -31,9 +31,9 @@ public class Cycle : IObject, ICollection
 
    public string ClassName => "Cycle";
 
-   public string AsString => $"?({items.Select(i => i.AsString).ToString(", ")})";
+   public string AsString => $"{items.Select(i => i.AsString).ToString(", ")}";
 
-   public string Image => $"?({items.Select(i => i.Image).ToString(", ")})";
+   public string Image => $"cyc[{items.Select(i => i.Image).ToString(", ")}]";
 
    public int Hash => items.GetHashCode();
 

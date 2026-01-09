@@ -19,7 +19,7 @@ public partial class KeywordOperatorsParser : SymbolParser
    {
       var keyword = tokens[2].Text;
       if ((builder.Flags[ExpressionFlags.OmitRange] || builder.Flags[ExpressionFlags.InLambda]) && keyword != "div" && keyword != "divmod" &&
-          keyword != "min" && keyword != "max")
+          keyword != "min" && keyword != "max" && keyword != "to" && keyword != "til" && keyword != "dto" && keyword != "dtil" && keyword != "by")
       {
          return nil;
       }

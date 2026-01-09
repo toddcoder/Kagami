@@ -693,4 +693,29 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
       return new KString(builder.ToString());
    }
+
+   public KString Mapping(string from, string to)
+   {
+      Hash<char, char> hash = [];
+      var length = value.Length.MinOf(from.Length);
+      for (var i = 0; i < length; i++)
+      {
+         hash[from[i]] = value[i];
+      }
+
+      var builder = new StringBuilder();
+      foreach (var ch in to)
+      {
+         if (hash.Maybe[ch] is (true, var found))
+         {
+            builder.Append(found);
+         }
+         else
+         {
+            builder.Append(ch);
+         }
+      }
+
+      return builder.ToString();
+   }
 }

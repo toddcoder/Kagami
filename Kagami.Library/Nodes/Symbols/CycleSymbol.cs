@@ -6,7 +6,10 @@ public class CycleSymbol : Symbol, IHasExpression
 {
    protected Expression expression;
 
-   public CycleSymbol(Expression expression) => this.expression = expression;
+   public CycleSymbol(Expression expression)
+   {
+      this.expression = expression;
+   }
 
    public override void Generate(OperationsBuilder builder)
    {
