@@ -34,6 +34,11 @@ public static class OperationFunctions
             var array = new KArray(internalList.List);
             return array.GetIterator(lazy).Success();
          }
+         case Junction junction:
+         {
+            var array = new KArray(junction.Items);
+            return array.GetIterator(lazy).Success();
+         }
          default:
             return fail($"{value.Image} isn't an iterator nor can it return one");
       }

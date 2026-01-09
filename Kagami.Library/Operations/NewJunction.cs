@@ -11,13 +11,11 @@ public class NewJunction(string junctionType) : OneOperandOperation
 
    public override Optional<IObject> Execute(Machine machine, IObject value)
    {
-      if (value is Sequence sequence)
+      return value switch
       {
-         return new Junction(junctionType, sequence);
-      }
-      else
-      {
-         return incompatibleClasses(value, "String");
-      }
+         Sequence sequence => new Junction(junctionType, sequence),
+         ICollection collection => new Junction(junctionType, new Sequence(collection.GetIterator(false).List())),
+         _ => incompatibleClasses(value, "String")
+      };
    }
 }

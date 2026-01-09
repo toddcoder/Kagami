@@ -7,14 +7,25 @@ public class JunctionSymbol(string junctionType, Expression[] expressions) : Sym
 {
    public override void Generate(OperationsBuilder builder)
    {
-      expressions[0].Generate(builder);
-      expressions[1].Generate(builder);
-      builder.NewSequence();
-
-      foreach (var expression in expressions.Skip(2))
+      switch (expressions.Length)
       {
-         expression.Generate(builder);
-         builder.NewSequence();
+         case 1:
+            expressions[0].Generate(builder);
+            break;
+         case > 1:
+         {
+            expressions[0].Generate(builder);
+            expressions[1].Generate(builder);
+            builder.NewSequence();
+
+            foreach (var expression in expressions.Skip(2))
+            {
+               expression.Generate(builder);
+               builder.NewSequence();
+            }
+
+            break;
+         }
       }
 
       builder.NewJunction(junctionType);

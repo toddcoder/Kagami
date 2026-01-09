@@ -23,10 +23,10 @@ public partial class JunctionParser : SymbolParser
       var _expressions = getExpressions(state, @"^(\s*)(\])");
       if (_expressions is (true, var expressions))
       {
-         if (expressions.Length <= 1)
+         /*if (expressions.Length <= 1)
          {
             return fail("Junctions must have at least 2 items");
-         }
+         }*/
 
          builder.Add(new JunctionSymbol(type, expressions));
          return unit;
