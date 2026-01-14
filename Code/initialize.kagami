@@ -1,0 +1,22 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+class Person(var surname, var forename, var address, var occupation) {
+	\population += 1
+	func initialize() {
+		\everyone << self
+	}
+}
+static {
+	var population = 0
+	var everyone = []
+}
+
+var object1 = Person("Galilei", "Galileo", "Pisa", "artist")
+println Person.population
+println Person.everyone
+
+var object2 = Person("Todd", "Bennett", "Texas", "programmer")
+println Person.population
+println Person.everyone

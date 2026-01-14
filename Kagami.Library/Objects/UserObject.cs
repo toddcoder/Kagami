@@ -24,6 +24,12 @@ public class UserObject : IObject, IEquatable<UserObject>
       }
 
       setMethod("objId".get(), (_, _) => KString.StringObject(Id.ToString()));
+
+      var @class = classOf(className);
+      if (@class.RespondsTo("initialize()"))
+      {
+         @class.SendMessage(this, "initialize()", Arguments.Empty);
+      }
    }
 
    protected void setField(string fieldName, IObject value)
