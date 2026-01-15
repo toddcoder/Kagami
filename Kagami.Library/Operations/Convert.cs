@@ -31,6 +31,7 @@ public class Convert : Operation
          var value = (Float)f;
          return Rational.RationalObject(value.AsRational());
       };
+      conversions[("Char", "Byte")] = c => KByte.ByteObject((byte)((KChar)c).Value);
    }
 
    public override Optional<IObject> Execute(Machine machine)
