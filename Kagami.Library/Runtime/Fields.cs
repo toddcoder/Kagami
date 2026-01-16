@@ -9,6 +9,7 @@ using Kagami.Library.Objects;
 using System.Collections;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
+using static Kagami.Library.Nodes.NodeFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Runtime;
@@ -264,9 +265,17 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
          var _field = New(parameter.Name, FieldType.Parameter, parameter.TypeConstraint, parameter.Mutable, true);
          if (_field is (true, var field))
          {
-            var singleton = Singleton.Create();
+            var oldLazyName = ((SymbolObject)value).AsString;
+            var _oldLazyField = Machine.Current.Value.Find(oldLazyName, true);
+            if (_oldLazyField is (true, var oldLazyField))
+            {
+               var newLazyName = lazyName(parameter.Name);
+               fields[newLazyName] = oldLazyField.Copy();
+               field.Value = new Singleton();
+            }
+            /*var singleton = Singleton.Create();
             singleton.CachedValue = value.Some();
-            field.Value = singleton;
+            field.Value = singleton;*/
 
             return field;
          }

@@ -1,0 +1,5 @@
+1
+Person(Galilei, Galileo, Pisa, artist)
+2
+Person(Galilei, Galileo, Pisa, artist) Person(Todd, Bennett, Texas, programmer)
+[Person(surname = "Galilei", forename = "Galileo", address = "Pisa", occupation = "artist"), Person(surname = "Todd", forename = "Bennett", address = "Texas", occupation = "programmer")] | Array

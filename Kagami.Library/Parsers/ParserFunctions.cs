@@ -466,6 +466,11 @@ public static class ParserFunctions
       return openParameters();
    }
 
+   private static Expression getSingleton(Expression expression)
+   {
+      return new Expression(new LazyAssignSymbol(expression));
+   }
+
    public static Optional<Expression[]> getArguments(ParseState state, Bits32<ExpressionFlags> flags)
    {
       var _scanned = state.Scan(@"^([\)\]\}])", Color.CloseParenthesis);
@@ -486,9 +491,15 @@ public static class ParserFunctions
          Bits32<ExpressionFlags> newFlags = flags | ExpressionFlags.InArgument;
          newFlags[ExpressionFlags.InSubExpression] = false;
          newFlags[ExpressionFlags.OmitComma] = true;
+         bool isLazy = state.Scan(@"^(\s*)(\*)", Color.Whitespace, Color.Structure);
          var _expression = getExpression(state, newFlags);
          if (_expression is (true, var expression))
          {
+            if (isLazy)
+            {
+               expression = getSingleton(expression);
+            }
+
             arguments.Add(expression);
             var _next = state.Scan(@"^(\s*)([,\)\]\}])", Color.Whitespace, Color.CloseParenthesis);
             if (_next is (true, var next))
@@ -516,10 +527,9 @@ public static class ParserFunctions
       return openArguments();
    }
 
-   public static Optional<(Expression[], Maybe<LambdaSymbol>)> getArgumentsPlusLambda(ParseState state,
-      Bits32<ExpressionFlags> flags)
+   public static Optional<(Expression[], Maybe<LambdaSymbol>)> getArgumentsPlusLambda(ParseState state, Bits32<ExpressionFlags> flags)
    {
-      var _arguments = getArguments(state, flags); // | ExpressionFlags.OmitColon);
+      var _arguments = getArguments(state, flags);
       if (_arguments is (true, var arguments))
       {
          var _lambda = getPossibleLambda(state, flags);

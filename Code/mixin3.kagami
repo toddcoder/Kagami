@@ -16,7 +16,7 @@ class Decade {
 		println num
 	}
 }
-mixin Week
+mix Week
 
 var d1 = Decade()
 println d1.first_day

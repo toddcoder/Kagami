@@ -1,0 +1,21 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+var assertionsEnabled = false
+
+func myAssert(lazy predicate) {
+	let res = try assertionsEnabled and not predicate
+	if res {
+		println res
+	}
+	else {
+		println res
+	}
+}
+
+let x = 10
+myAssert(*x / 0 == 0)
+
+assertionsEnabled = true;
+myAssert(*x / 0 == 0)

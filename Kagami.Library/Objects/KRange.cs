@@ -105,13 +105,13 @@ public struct KRange : IObject, ICollection
 
    private string stopImage(bool asString) => str(stopObj, asString);
 
-   private string inclusiveImage() => inclusive ? "" : "<";
+   private string inclusiveImage() => inclusive ? "to" : "til";
 
-   private string incrementImage() => $"{(increment >= 0 ? "+" : "-")} {Math.Abs(increment)}";
+   private string incrementImage() => increment != 1 ? $"by {increment}" : "";
 
-   public string AsString => $"{startImage(true)} ..{inclusiveImage()} {stopImage(true)} {incrementImage()}";
+   public string AsString => $"{startImage(true)} {inclusiveImage()} {stopImage(true)} {incrementImage()}";
 
-   public string Image => $"{startImage(false)} ..{inclusiveImage()} {stopImage(false)} {incrementImage()}";
+   public string Image => $"{startImage(false)} {inclusiveImage()} {stopImage(false)} {incrementImage()}";
 
    public int Hash => HashCode.Combine(startObj, stopObj, increment);
 

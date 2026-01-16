@@ -11,12 +11,12 @@ mixin Movement {
 class Man {
 	func jump() => println "I'm bipedal and I can jump like a fool!"
 }
-mixin Movement
+mix Movement
 
 class Sloth {
 	func flop() => println $"It's all a lie...all I can do is flop around."
 }
-mixin Movement
+mix Movement
 
 var mister_man = Man()
 mister_man.run()

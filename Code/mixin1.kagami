@@ -11,7 +11,7 @@ class Foobar(a int, b int) {
 	func add() => a + b
 	func sub() => a - b
 }
-mixin AddSubtract
+mix AddSubtract
 
 let f = Foobar(10, 20)
 println f

@@ -184,7 +184,7 @@ public class OperationsBuilder
       add(new ReturnType(returnTopOfStack, typeConstraint));
    }
 
-   public void GetField(string name) => add(new GetField(name));
+   public void GetField(string name, bool immediateSingleton = true) => add(new GetField(name, immediateSingleton));
 
    public void NewField(string name, bool mutable, bool visible, Maybe<TypeConstraint> _typeConstraint)
    {

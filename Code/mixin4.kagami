@@ -10,7 +10,7 @@ mixin M {
 class Foo {
 	func second() => println "second"
 }
-mixin M
+mix M
 
 let f = Foo()
 f.first()

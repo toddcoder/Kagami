@@ -9,7 +9,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class MixinParser(ClassBuilder builder) : StatementParser
 {
-   [GeneratedRegex(@$"^(\s*)(mixin)(\s+)({REGEX_CLASS})\b")]
+   [GeneratedRegex(@$"^(\s*)(mix)(\s+)({REGEX_CLASS})\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)

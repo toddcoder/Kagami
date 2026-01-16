@@ -8,7 +8,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Operations;
 
-public class GetField(string fieldName) : Operation
+public class GetField(string fieldName, bool immediateSingleton = true) : Operation
 {
    protected string fieldName = fieldName;
 
@@ -61,17 +61,17 @@ public class GetField(string fieldName) : Operation
                   return classNotFound(className);
                }
             }
-            case Singleton:
+            case Singleton when immediateSingleton:
             {
                var lazyFieldName = lazyName(fieldName);
                if (machine.Find(lazyFieldName, true) is (true, { Value: Lambda lambda }))
                {
-                  var result = lambda.Invoke();
-                  if (Module.Global.Value.Class(result.ClassName) is (true, var cls))
+                  if (machine.Find(fieldName, true) is (true, var singletonField))
                   {
-                     var typeConstraint = new TypeConstraint([cls]);
-                     if (machine.Find(fieldName, true) is (true, var singletonField))
+                     var result = lambda.Invoke();
+                     if (Module.Global.Value.Class(result.ClassName) is (true, var cls))
                      {
+                        var typeConstraint = new TypeConstraint([cls]);
                         singletonField.TypeConstraint = typeConstraint;
                         singletonField.Value = result;
 
@@ -79,12 +79,12 @@ public class GetField(string fieldName) : Operation
                      }
                      else
                      {
-                        return fieldNotFound(fieldName);
+                        return classNotFound(result.ClassName);
                      }
                   }
                   else
                   {
-                     return classNotFound(result.ClassName);
+                     return fieldNotFound(fieldName);
                   }
                }
                else
