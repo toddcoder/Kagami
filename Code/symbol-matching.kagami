@@ -1,0 +1,9 @@
+﻿open sys
+open math
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+match e {
+	|#pi => println $"strange math? Pi = $pi"
+	|#e => println $"e = $e"
+}

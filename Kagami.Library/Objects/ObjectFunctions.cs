@@ -52,6 +52,19 @@ public static class ObjectFunctions
             return true;
          case Class cls:
             return classOf(source).MatchCompatible(classOf(cls));
+         case SymbolObject symbol:
+         {
+            var fieldName = symbol.AsString;
+            var _field = Machine.Current.Value.Find(fieldName, true);
+            if (_field is (true, var field))
+            {
+               return match(source, field.Value, equalifier, bindings);
+            }
+            else
+            {
+               return false;
+            }
+         }
          case Placeholder ph:
             bindings[ph.Name] = source;
             return true;
