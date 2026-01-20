@@ -712,16 +712,14 @@ public static class ParserFunctions
 
       while (state.More)
       {
-         var _scanned = state.Scan(@$"^(\s*)({REGEX_CLASS_OR_ALIAS})", (g, i) => i switch
+         var _scanned = state.Scan($"^({REGEX_CLASS_OR_ALIAS})", (g, i) => i switch
          {
-            1 => Color.Whitespace,
-            2 when g.Value.IsMatch("^ ['A-Z']") => Color.Class,
-            2 => Color.Keyword,
+            1 when g.Value.IsMatch("^ ['A-Z']") => Color.Class,
+            1 => Color.Keyword,
             _ => Color.Whitespace
          });
          if (_scanned is (true, var name))
          {
-            name = name.Trim();
             if (getClassNameFromAlias(name) is (true, var className))
             {
                classNames.Add(className);
@@ -729,6 +727,19 @@ public static class ParserFunctions
             else
             {
                classNames.Add(name);
+            }
+
+            if (state.LookAhead("^>"))
+            {
+               break;
+            }
+
+            if (state.Scan(@"^(\s+)", Color.Whitespace))
+            {
+            }
+            else
+            {
+               break;
             }
          }
          else if (_scanned.Exception is (true, var exception))
@@ -833,9 +844,9 @@ public static class ParserFunctions
    public static Optional<PossibleTypeConstraint> parseUnionTypeConstraint(ParseState state)
    {
       return
-         from begin in state.Scan("^( *)(<)", Color.Whitespace, Color.Class)
+         from begin in state.Scan(@"^(\s*)(<)", Color.Whitespace, Color.Class)
          from inner in getListOfClassNames(state)
-         from end in state.Scan(@"^(\s*)(>)", Color.Whitespace, Color.Class)
+         from end in state.Scan("^(>)", Color.Class)
          select (PossibleTypeConstraint)new PossibleTypeConstraint.Some(TypeConstraint.FromList(inner));
    }
 
