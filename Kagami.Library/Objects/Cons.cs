@@ -5,15 +5,17 @@ namespace Kagami.Library.Objects;
 
 public class Cons(IObject head, IObject tail) : IObject
 {
+   public static IObject Null => new Cons(KUnit.Value, KUnit.Value) { IsNull = true };
+
    public static IObject Cons1(IObject head, IObject tail)
    {
-      if (tail.IsEqualTo(KUnit.Value))
+      if (tail is Cons { IsNull: true })
       {
          return new Cons(head, tail);
       }
       else
       {
-         return new Cons(head, new Cons(tail, KUnit.Value));
+         return new Cons(head, new Cons(tail, Null));
       }
    }
 
@@ -41,4 +43,6 @@ public class Cons(IObject head, IObject tail) : IObject
    public bool IsTrue => true;
 
    public Guid Id { get; init; } = Guid.NewGuid();
+
+   public bool IsNull { get; set; }
 }

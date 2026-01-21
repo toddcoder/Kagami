@@ -759,4 +759,24 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
       return this;
    }
+
+   public IObject CopyTo(KArray targetArray, int index)
+   {
+      var targetCount = targetArray.list.Count;
+      var wrappedIndex = wrapIndex(index, targetCount);
+      if (wrappedIndex.Between(0).Until(targetCount))
+      {
+         var length = (targetCount - wrappedIndex).MinOf(list.Count);
+         for (var i = 0; i < length; i++)
+         {
+            targetArray.list[wrappedIndex + i] = list[i];
+         }
+
+         return Some.Object(Int.IntObject(length));
+      }
+      else
+      {
+         return KNil.NilValue;
+      }
+   }
 }

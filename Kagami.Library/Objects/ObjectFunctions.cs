@@ -166,36 +166,48 @@ public static class ObjectFunctions
 
    private static bool matchArrayToCons(KArray source, Cons cons, Hash<string, IObject> bindings)
    {
-      var head1 = source.Head;
-      var head2 = cons.Head;
-
-      if (head1 is Some some1)
-      {
-         switch (head2)
-         {
-            case Any:
-               return match(source.Tail, cons.Tail, bindings);
-            case Placeholder ph when cons.Tail is KUnit:
-            {
-               bindings[ph.Name] = source;
-               return match(source.Tail, KArray.Empty, bindings);
-            }
-            case Placeholder ph:
-            {
-               bindings[ph.Name] = some1.Value;
-               return match(source.Tail, cons.Tail, bindings);
-            }
-            default:
-               return match(some1.Value, head2, bindings); // && match(source.Tail, cons.Tail, bindings);
-         }
-      }
-      else if (head1 is KNil && cons.Tail is not Cons)
+      if (cons.IsNull)
       {
          return true;
       }
       else
       {
-         return false;
+         var head1 = source.Head;
+         var head2 = cons.Head;
+
+         if (head1 is Some some1)
+         {
+            switch (head2)
+            {
+               case Any:
+                  return match(source.Tail, cons.Tail, bindings);
+               case Placeholder ph when cons.Tail is Cons { IsNull: true }:
+               {
+                  bindings[ph.Name] = source;
+                  return match(source.Tail, cons.Tail, bindings);
+               }
+               case Placeholder ph:
+               {
+                  bindings[ph.Name] = some1.Value;
+                  return match(source.Tail, cons.Tail, bindings);
+               }
+               default:
+                  return match(some1.Value, head2, bindings);
+            }
+         }
+         else
+         {
+            switch (head2)
+            {
+               case Placeholder ph:
+               {
+                  bindings[ph.Name] = KArray.Empty;
+                  return true;
+               }
+               default:
+                  return true;
+            }
+         }
       }
    }
 

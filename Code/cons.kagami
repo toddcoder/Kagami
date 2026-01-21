@@ -1,0 +1,25 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+var xs = [153, 49, 123, 73]
+
+while xs != [] {
+	println "head", ~xs.head
+	println "tail", ~xs.tail
+	printline
+	xs = xs.tail
+}
+
+match isort()
+	|[] return []
+	|h :: t return insert(h, isort(t))
+
+match insert()
+	|[x, []] return [x]
+	|[x, xs: h :: t] if x <= h return x :: xs
+	|[x, h :: t] return h :: insert(x, t)
+
+xs = [153, 49, 123, 73]
+
+println isort(xs)
