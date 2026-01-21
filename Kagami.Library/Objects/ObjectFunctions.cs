@@ -94,6 +94,8 @@ public static class ObjectFunctions
             return typeConstraint.Matches(classOf(source));
          case Cons cons when source is KArray array:
             return matchArrayToCons(array, cons, bindings);
+         case KUnit when source is KArray:
+            return true;
          case KTuple tuple when source is KArray array:
             return matchArrayToTuple(array, tuple, bindings);
          case KTuple tuple when source is KString kString:
@@ -164,49 +166,37 @@ public static class ObjectFunctions
 
    private static bool matchArrayToCons(KArray source, Cons cons, Hash<string, IObject> bindings)
    {
-      var head = source.Head;
-      if (head is KNil)
+      var head1 = source.Head;
+      var head2 = cons.Head;
+
+      if (head1 is Some some1)
+      {
+         switch (head2)
+         {
+            case Any:
+               return match(source.Tail, cons.Tail, bindings);
+            case Placeholder ph when cons.Tail is KUnit:
+            {
+               bindings[ph.Name] = source;
+               return match(source.Tail, KArray.Empty, bindings);
+            }
+            case Placeholder ph:
+            {
+               bindings[ph.Name] = some1.Value;
+               return match(source.Tail, cons.Tail, bindings);
+            }
+            default:
+               return match(some1.Value, head2, bindings); // && match(source.Tail, cons.Tail, bindings);
+         }
+      }
+      else if (head1 is KNil && cons.Tail is not Cons)
+      {
+         return true;
+      }
+      else
       {
          return false;
       }
-
-      var tail = source.Tail;
-
-      var match0 = cons.Head;
-      var match1 = cons.Tail;
-
-      switch (match0)
-      {
-         case Any:
-            break; //return true;
-         case Placeholder placeholder0 when head is Some some:
-         {
-            bindings[placeholder0.Name] = some.Value;
-            break;
-         }
-         default:
-         {
-            if (head is Some some && !some.Value.Match(match0, bindings))
-            {
-               return false;
-            }
-
-            break;
-         }
-      }
-
-      switch (match1)
-      {
-         case Any:
-            return true;
-         case Placeholder placeholder1:
-            bindings[placeholder1.Name] = tail;
-            return true;
-         case KArray array:
-            return tail.Match(array, bindings);
-      }
-
-      return false;
    }
 
    private static bool matchArrayToTuple(KArray source, KTuple comparisand, Hash<string, IObject> bindings)

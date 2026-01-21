@@ -5,6 +5,20 @@ namespace Kagami.Library.Objects;
 
 public class Cons(IObject head, IObject tail) : IObject
 {
+   public static IObject Cons1(IObject head, IObject tail)
+   {
+      if (tail.IsEqualTo(KUnit.Value))
+      {
+         return new Cons(head, tail);
+      }
+      else
+      {
+         return new Cons(head, new Cons(tail, KUnit.Value));
+      }
+   }
+
+   public static IObject Combine(IObject head, Cons cons) => new Cons(head, cons);
+
    public IObject Head => head;
 
    public IObject Tail => tail;
@@ -13,7 +27,7 @@ public class Cons(IObject head, IObject tail) : IObject
 
    public string AsString => $"{head.AsString}::{tail.AsString}";
 
-   public string Image => $"{head.Image}::{tail.Image}";
+   public string Image => $"({head.Image}::{tail.Image})";
 
    public int Hash => HashCode.Combine(head, tail);
 

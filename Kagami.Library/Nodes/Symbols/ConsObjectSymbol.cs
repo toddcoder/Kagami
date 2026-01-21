@@ -11,4 +11,6 @@ public class ConsObjectSymbol : Symbol
    public override Arity Arity => Arity.Binary;
 
    public override string ToString() => "::";
+
+   public override bool LeftToRight => false;
 }
