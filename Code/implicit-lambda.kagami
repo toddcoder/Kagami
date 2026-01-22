@@ -1,0 +1,5 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+println [1 to 5].partition() ($0 %% 2)
