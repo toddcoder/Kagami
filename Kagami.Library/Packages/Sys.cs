@@ -338,4 +338,6 @@ public class Sys : Package
 
       return machine.Execute().ForceValue();
    }
+
+   public IObject UniqueId() => KString.StringObject(Guid.NewGuid().ToString());
 }
