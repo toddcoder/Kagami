@@ -50,7 +50,7 @@ public partial class PropertyParser : StatementParser
 
          (propertyName, var parameters) = PropertyNameParameters(direction, propertyName, block.TypeConstraint);
 
-         state.AddStatement(new Function(propertyName, parameters, false, block, yielding, isOverride, ""));
+         state.AddStatement(new Function(propertyName, parameters, false, block, yielding, isOverride, ClassName));
          return unit;
       }
       else
@@ -58,4 +58,6 @@ public partial class PropertyParser : StatementParser
          return _block.Exception;
       }
    }
+
+   public string ClassName { get; set; } = "";
 }

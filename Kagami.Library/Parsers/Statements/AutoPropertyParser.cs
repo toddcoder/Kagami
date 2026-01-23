@@ -49,7 +49,7 @@ public partial class AutoPropertyParser : StatementParser
                state.RemoveReturnType();
                var assign = new AssignReferenceToNewField(fieldName, "field");
                getter.Unshift(assign);
-               state.AddStatement(new Function($"__${name}", Parameters.Empty, false, getter, false, false, ""));
+               state.AddStatement(new Function($"__${name}", Parameters.Empty, false, getter, false, false, ClassName));
             }
             else
             {
@@ -71,7 +71,7 @@ public partial class AutoPropertyParser : StatementParser
                state.RemoveReturnType();
                var assign = new AssignReferenceToNewField(fieldName, "field");
                setter.Unshift(assign);
-               state.AddStatement(new Function($"{name}=", new Parameters("value"), false, setter, false, false, ""));
+               state.AddStatement(new Function($"{name}=", new Parameters("value"), false, setter, false, false, ClassName));
             }
             else
             {
@@ -86,4 +86,6 @@ public partial class AutoPropertyParser : StatementParser
          return _result.Exception;
       }
    }
+   
+   public string ClassName { get; set; } = "";
 }

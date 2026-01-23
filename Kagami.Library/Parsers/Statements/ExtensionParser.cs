@@ -23,11 +23,12 @@ public partial class ExtensionParser : StatementParser
          {
             while (state.More)
             {
-               var functionParser = new FunctionParser { ClassName = className };
+               var functionParser = new FunctionAndPropertyParsers(className);
                var constructorParser = new ExtensionConstructorParser(className);
                var _scanned = functionParser.Scan(state);
                if (_scanned)
                {
+                  continue;
                }
                else if (_scanned.Exception is (true, var exception))
                {
