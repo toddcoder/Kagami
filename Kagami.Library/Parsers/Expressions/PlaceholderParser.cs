@@ -13,7 +13,7 @@ public partial class PlaceholderParser : SymbolParser
    {
    }
 
-   [GeneratedRegex($@"^(\s*)((?:use|var)\s*)?({REGEX_FIELD})\b(?!"")")]
+   [GeneratedRegex($@"^(\s*)((?:use|var)\s+)?({REGEX_FIELD})\b(?!"")")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
