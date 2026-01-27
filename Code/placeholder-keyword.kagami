@@ -1,0 +1,12 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+pattern Email(email string) => email ~~ x"^ /(.+) '@' /(.+) $" map m -> (m[0], m[1])
+
+let s = "toddcoder@comcast.net"
+
+match s {
+	|Email(user, domain) => println $"$user AT $domain"
+	| _ println "?"
+}
