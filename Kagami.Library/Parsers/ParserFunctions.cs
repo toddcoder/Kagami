@@ -1396,8 +1396,46 @@ public static class ParserFunctions
       }
    }
 
+   public static Optional<LambdaSymbol> getImplicitLambda(ParseState state, Bits32<ExpressionFlags> flags)
+   {
+      state.BeginTransaction();
+
+      var builder = new ExpressionBuilder(flags);
+      var _scanned = new SubexpressionParser(builder).Scan(state);
+      if (_scanned && builder.ToExpression() is (true, var expression))
+      {
+         if (expression.Symbols[0] is SubexpressionSymbol subexpressionSymbol &&
+             subexpressionSymbol.Expression.Symbols[0] is LambdaSymbol lambdaSymbol)
+         {
+            state.CommitTransaction();
+            return lambdaSymbol;
+         }
+         else
+         {
+            state.RollBackTransaction();
+            return nil;
+         }
+      }
+      else if (_scanned.Exception is (true, var exception))
+      {
+         state.RollBackTransaction();
+         return exception;
+      }
+      else
+      {
+         state.RollBackTransaction();
+         return nil;
+      }
+   }
+
    public static Optional<LambdaSymbol> getAnyLambda(ParseState state, Bits32<ExpressionFlags> flags)
    {
+      var _lambdaSymbol = getImplicitLambda(state, flags);
+      if (_lambdaSymbol is (true, var lambdaSymbol))
+      {
+         return lambdaSymbol;
+      }
+
       var builder = new ExpressionBuilder(flags);
       var _scanned = new AnyLambdaParser(builder).Scan(state);
       if (_scanned)
