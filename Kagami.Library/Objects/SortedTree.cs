@@ -2,10 +2,11 @@
 using Core.Monads;
 using Core.Numbers;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
 
-public class SortedTree : IEnumerable<IObject>
+public class SortedTree : IEnumerable<IObject>, IEquatable<SortedTree>
 {
    protected class Node(IObject key)
    {
@@ -310,4 +311,14 @@ public class SortedTree : IEnumerable<IObject>
    public IEnumerator<IObject> GetEnumerator() => inOrder(_root).GetEnumerator();
 
    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+   public bool Equals(SortedTree? other) => other is not null && compareEnumerables(this, other);
+
+   public override bool Equals(object? obj) => obj is SortedTree sortedTree && Equals(sortedTree);
+
+   public override int GetHashCode() => ((IObject[])[.. this]).GetHashCode();
+
+   public static bool operator ==(SortedTree? left, SortedTree? right) => Equals(left, right);
+
+   public static bool operator !=(SortedTree? left, SortedTree? right) => !Equals(left, right);
 }

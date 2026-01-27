@@ -1,12 +1,13 @@
 ﻿using Core.Collections;
+using Core.Enumerables;
 using Core.Monads;
-using Kagami.Library.Operations;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.CollectionFunctions;
+using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
 
-public class KSortedTree : IObject, ICollection
+public class KSortedTree : IObject, ICollection, IMutableCollection
 {
    protected readonly SortedTree tree;
    protected Maybe<IObject[]> _array = nil;
@@ -24,7 +25,7 @@ public class KSortedTree : IObject, ICollection
       }
    }
 
-   public KBoolean Add(IObject item)
+   public KBoolean Append(IObject item)
    {
       var added = tree.Add(item);
       if (added)
@@ -34,6 +35,8 @@ public class KSortedTree : IObject, ICollection
 
       return added;
    }
+
+   IObject IMutableCollection.Append(IObject obj) => Append(obj);
 
    public IObject Remove(IObject item)
    {
@@ -46,19 +49,37 @@ public class KSortedTree : IObject, ICollection
       return removed ? Some.Object(item) : KNil.NilValue;
    }
 
+   public IObject RemoveAt(int index) => TODO_IMPLEMENT_ME;
+
+   public IObject RemoveAll(IObject obj) => TODO_IMPLEMENT_ME;
+
+   public IObject InsertAt(int index, IObject obj) => TODO_IMPLEMENT_ME;
+
+   public KBoolean IsEmpty { get; }
+   public KBoolean IsNotEmpty { get; }
+   public IObject Assign(SkipTake skipTake, IEnumerable<IObject> values) => TODO_IMPLEMENT_ME;
+
+   public IObject Prepend(IObject obj) => TODO_IMPLEMENT_ME;
+
+   public IObject Clear() => TODO_IMPLEMENT_ME;
+
    public string ClassName => "SortedTree";
 
-   public string AsString { get; }
-   public string Image { get; }
-   public int Hash { get; }
-   public bool IsEqualTo(IObject obj) => TODO_IMPLEMENT_ME;
+   public string AsString => tree.Select(i => i.AsString).ToString(", ");
 
-   public bool Match(IObject comparisand, Hash<string, IObject> bindings) => TODO_IMPLEMENT_ME;
+   public string Image => $"[+{tree.Select(i => i.Image).ToString(", ")}]";
 
-   public bool IsTrue { get; }
+   public int Hash => tree.GetHashCode();
+
+   public bool IsEqualTo(IObject obj) => obj is KSortedTree kSortedTree && kSortedTree.tree.Equals(tree);
+
+   public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
+
+   public bool IsTrue => tree.Count > 0;
+
    public Guid Id { get; init; }
 
-   public IObject this[SkipTake skipTake] => TODO_IMPLEMENT_ME;
+   public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
 
    public IIterator GetIterator(bool lazy) => lazy ? new Iterator(this) : new LazyIterator(this);
 
@@ -84,11 +105,11 @@ public class KSortedTree : IObject, ICollection
 
    public IIterator GetIndexedIterator() => new IndexedIterator(this);
 
-   public IObject One() => TODO_IMPLEMENT_ME;
+   public IObject One() => tree.Count == 1 ? tree.FirstOrFailure() | KUnit.Value : this;
 
-   public IObject Copy() => TODO_IMPLEMENT_ME;
+   public IObject Copy() => new KSortedTree(tree);
 
-   public IIterator Following(IObject following) => TODO_IMPLEMENT_ME;
+   public IIterator Following(IObject following) => GetIterator(false);
 
-   public Maybe<TypeConstraint> TypeConstraint { get; }
+   public Maybe<TypeConstraint> TypeConstraint => nil;
 }
