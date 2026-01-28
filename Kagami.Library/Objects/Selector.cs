@@ -5,6 +5,7 @@ using Core.Enumerables;
 using Core.Monads;
 using Core.Numbers;
 using Core.Strings;
+using Kagami.Library.Runtime;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
@@ -43,6 +44,26 @@ public readonly struct Selector : IObject, IEquatable<Selector>
    public string Name => name;
 
    public SelectorItem[] SelectorItems => selectorItems;
+
+   public IEnumerable<KTuple> GetSelectorItems()
+   {
+      foreach (var selectorItem in selectorItems)
+      {
+         var label = selectorItem.Label;
+         var typeConstraint = selectorItem.TypeConstraint.Select(t => t.Comparisands.Select(c => c.Name).ToString(" ")) | "";
+         var type = selectorItem.SelectorItemType switch
+         {
+            SelectorItemType.Normal => "normal",
+            SelectorItemType.Variadic => "variadic",
+            SelectorItemType.Default => "default",
+            _ => "unknown"
+         };
+         var tuple = KTuple.Tuple3(label, typeConstraint, type);
+         yield return tuple;
+      }
+   }
+
+   public KArray GetSelectorItemArray() => new(GetSelectorItems().Select(t => (IObject)t));
 
    public bool AnyVariadic { get; }
 
@@ -179,5 +200,11 @@ public readonly struct Selector : IObject, IEquatable<Selector>
                break;
          }
       }
+   }
+
+   public IObject Assign(Lambda lambda)
+   {
+      Machine.Current.Value.Assign(this, lambda, true);
+      return this;
    }
 }

@@ -8,6 +8,8 @@ public class Expression : Symbol
 {
    public static explicit operator Block(Expression expression) => new(new ExpressionStatement(expression, true));
 
+   public static Expression FromSymbol(Symbol symbol) => new(symbol);
+
    public static Expression Empty => new();
 
    protected Symbol[] symbols;

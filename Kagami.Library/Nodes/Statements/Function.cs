@@ -11,7 +11,7 @@ using static Kagami.Library.AllExceptions;
 
 namespace Kagami.Library.Nodes.Statements;
 
-public class Function : Statement, IOverridable
+public class Function : Statement, IOverridable, IAnnotatable
 {
    public static Function Getter(string fieldName, Maybe<TypeConstraint> _typeConstraint)
    {
@@ -148,6 +148,8 @@ public class Function : Statement, IOverridable
             builder.LambdaCapture();
             builder.AssignSelector(selector, overriding);
          }
+
+         builder.ProcessAnnotations(this);
       }
       else
       {
@@ -181,4 +183,8 @@ public class Function : Statement, IOverridable
    public bool IsSetter { get; set; }
 
    public bool IsAbstract { get; set; }
+
+   public Lambda Lambda => lambda.Value;
+
+   public void Fix() => IsFixed = true;
 }

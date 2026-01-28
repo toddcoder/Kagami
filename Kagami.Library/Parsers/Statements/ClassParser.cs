@@ -63,6 +63,8 @@ public partial class ClassParser : StatementParser
 
       Module.Global.Value.ForwardReference(className);
 
+      var isFixed = (bool)state.Scan(@"^(\s+)(fixed)", Color.Whitespace, Color.Keyword);
+
       var _block = getBlock(state, true);
       if (_block is (true, var block))
       {
@@ -72,7 +74,7 @@ public partial class ClassParser : StatementParser
             state.Parameters.Clear();
          }
 
-         var builder = new ClassBuilder(className, parameters, parentClassName, arguments, initialize, block);
+         var builder = new ClassBuilder(className, parameters, parentClassName, arguments, initialize, block, isFixed);
 
          var classItemsParser = new ClassItemsParser(builder, true);
          while (state.More)

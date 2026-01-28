@@ -12,7 +12,7 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Operations;
 
-public class OperationsBuilder
+public class OperationsBuilder(ParseState state)
 {
    protected List<Operation> operations = [];
    protected Memo<string, int> labels = new Memo<string, int>.Value(-1);
@@ -24,6 +24,8 @@ public class OperationsBuilder
    protected Set<string> registeredBlocks = [];
    protected Stack<MacroParameters> macroParameters = new();
    protected Stack<string> returnLabels = new();
+
+   public void ProcessAnnotations(IAnnotatable annotatable) => state.ProcessAnnotations(annotatable, this);
 
    public Result<int> RegisterInvokable(IInvokable invokable, Block block, bool overriding)
    {
@@ -433,7 +435,7 @@ public class OperationsBuilder
 
    public void NewDefinition() => add(new NewDefinition());
 
-   public Result<Operations> ToOperations(ParseState state)
+   public Result<Operations> ToOperations()
    {
       operations.Add(new Stop());
       for (var i = 0; i < invokables.Count; i++)

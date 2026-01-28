@@ -17,4 +17,6 @@ public class Class : Statement
    public override void Generate(OperationsBuilder builder) => classBuilder.Generate(builder);
 
    public override string ToString() => classBuilder.ToString();
+
+   public bool IsFixed => classBuilder.IsFixed;
 }

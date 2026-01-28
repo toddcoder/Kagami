@@ -35,7 +35,7 @@ public class ClassBuilder
    protected List<Statement> mixinStatements = [];
 
    public ClassBuilder(string className, Parameters parameters, string parentClassName, Expression[] parentArguments,
-      bool initialize, Block constructorBlock)
+      bool initialize, Block constructorBlock, bool isFixed = false)
    {
       this.className = className;
       this.parameters = parameters;
@@ -43,6 +43,8 @@ public class ClassBuilder
       this.parentArguments = parentArguments;
       this.initialize = initialize;
       this.constructorBlock = constructorBlock;
+
+      IsFixed = isFixed;
    }
 
    public string ClassName => className;
@@ -464,4 +466,6 @@ public class ClassBuilder
    {
       return $"class {className}({parameters}){parentClassName.Map(s => $"{s} of ({parentArguments.ToString(", ")})")}";
    }
+
+   public bool IsFixed { get; set; }
 }

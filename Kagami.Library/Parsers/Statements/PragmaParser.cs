@@ -22,6 +22,11 @@ public partial class PragmaParser : StatementParser
             state.AllowPrintStatement = pragmaArgument.Equals("true", StringComparison.CurrentCultureIgnoreCase);
             break;
          }
+         case "ALLOW_REORDER":
+         {
+            state.AllowReorder = pragmaArgument.Equals("true", StringComparison.CurrentCultureIgnoreCase);
+            break;
+         }
          default:
             return fail($"Didn't understand pragma {pragmaName}");
       }

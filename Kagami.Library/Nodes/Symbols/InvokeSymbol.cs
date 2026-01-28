@@ -24,6 +24,14 @@ public class InvokeSymbol : Symbol, IHasExpressions
       this.inComparisand = inComparisand;
    }
 
+   public string FunctionName => functionName;
+
+   public Expression[] Arguments => arguments;
+
+   public Maybe<LambdaSymbol> Lambda => _lambda;
+
+   public bool InComparisand => inComparisand;
+
    public override void Generate(OperationsBuilder builder)
    {
       var noJunctionsLabel = newLabel("no-junctions");

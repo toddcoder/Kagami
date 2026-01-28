@@ -11,8 +11,10 @@ using System.Text.RegularExpressions;
 using Core.DataStructures;
 using Core.Numbers;
 using Kagami.Library.Invokables;
+using Kagami.Library.Operations;
 using static Core.Monads.AttemptFunctions;
 using static Core.Monads.MonadFunctions;
+using DefineNewField = Kagami.Library.Nodes.Statements.DefineNewField;
 using Group = System.Text.RegularExpressions.Group;
 
 namespace Kagami.Library.Parsers;
@@ -40,6 +42,7 @@ public class ParseState : IEnumerable<Statement>
    protected StringSet patterns = [];
    protected Maybe<Exception> _exception = nil;
    protected StringHash<Parameter> parameters = [];
+   protected MaybeStack<InvokeSymbol> annotations = [];
 
    public ParseState(string source)
    {
@@ -48,6 +51,8 @@ public class ParseState : IEnumerable<Statement>
    }
 
    public bool AllowPrintStatement { get; set; }
+
+   public bool AllowReorder { get; set; } = true;
 
    public Maybe<int> ExceptionIndex
    {
@@ -593,4 +598,24 @@ public class ParseState : IEnumerable<Statement>
    }
 
    public StringHash<Parameter> Parameters => parameters;
+
+   public void PushAnnotation(InvokeSymbol invokeSymbol) => annotations.Push(invokeSymbol);
+
+   public Maybe<InvokeSymbol> PopAnnotation() => annotations.Pop();
+
+   public void ProcessAnnotations(IAnnotatable annotatable, OperationsBuilder builder)
+   {
+      if (annotations.IsNotEmpty)
+      {
+         var selector = annotatable.Selector;
+         var lambda = annotatable.Lambda;
+         while (annotations.Pop() is (true, var invokeSymbol))
+         {
+            Expression[] implicitArguments = [Expression.FromSymbol(new SelectorSymbol(selector)), Expression.FromSymbol(new PushSymbol(lambda))];
+            Expression[] newArguments = [.. implicitArguments, .. invokeSymbol.Arguments];
+            var newInvokeSymbol = new InvokeSymbol(invokeSymbol.FunctionName, newArguments, invokeSymbol.Lambda, invokeSymbol.InComparisand);
+            newInvokeSymbol.Generate(builder);
+         }
+      }
+   }
 }

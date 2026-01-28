@@ -64,15 +64,15 @@ public class Compiler
 
       Tokens = state.Tokens;
 
-      var statements = reorderStatements(state.Statements());
-      var builder = new OperationsBuilder();
+      var statements = state.AllowReorder ? reorderStatements(state.Statements()) : state.Statements();
+      var builder = new OperationsBuilder(state);
       foreach (var statement in statements)
       {
          statement.Generate(builder);
          statement.AddBreak(builder);
       }
 
-      var _operations = builder.ToOperations(state);
+      var _operations = builder.ToOperations();
       if (_operations is (true, var operations))
       {
          var machine = new Machine(context) { Tracing = configuration.Tracing };
@@ -103,7 +103,7 @@ public class Compiler
             case MatchFunction { IsFixed: false } matchFunction:
                earlyStatements.Add(matchFunction);
                break;
-            case Class cls:
+            case Class { IsFixed: false } cls:
                earlyStatements.Add(cls);
                break;
             default:
