@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Objects;
+﻿using Kagami.Library.Nodes.Symbols;
+using Kagami.Library.Objects;
 
 namespace Kagami.Library.Nodes.Statements;
 
@@ -8,5 +9,5 @@ public interface IAnnotatable
 
    Lambda Lambda { get; }
 
-   void Fix();
+   List<InvokeSymbol> Annotations { get; }
 }

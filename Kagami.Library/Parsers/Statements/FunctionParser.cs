@@ -16,8 +16,10 @@ namespace Kagami.Library.Parsers.Statements;
 public partial class FunctionParser : StatementParser
 {
    protected Maybe<Function> _function = nil;
+   protected List<InvokeSymbol> annotations = [];
 
-   [GeneratedRegex($@"^(\s*){REGEX_HIDDEN}(override\s+)?(func|(?:infix\(\w+\))|prefix|postfix|macro|match)(\s+)(?:({REGEX_CLASS_GETTING_OR_ALIAS})(\.))?({REGEX_FUNCTION_NAME})(\()?")]
+   [GeneratedRegex(
+      $@"^(\s*){REGEX_HIDDEN}(override\s+)?(func|(?:infix\(\w+\))|prefix|postfix|macro|match)(\s+)(?:({REGEX_CLASS_GETTING_OR_ALIAS})(\.))?({REGEX_FUNCTION_NAME})(\()?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
@@ -35,6 +37,8 @@ public partial class FunctionParser : StatementParser
 
       var functionName = tokens[8].Text;
       var type = tokens[9].Text;
+
+      annotations = [.. state.Annotations];
 
       if (isOperator)
       {
@@ -84,12 +88,14 @@ public partial class FunctionParser : StatementParser
       var needsParameters = type == "(";
       if (needsParameters)
       {
-         state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Keyword, Color.Keyword, Color.Whitespace, color, Color.Structure, Color.Invokable,
+         state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Keyword, Color.Keyword, Color.Whitespace, color, Color.Structure,
+            Color.Invokable,
             Color.OpenParenthesis);
       }
       else
       {
-         state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Keyword, Color.Keyword, Color.Whitespace, color, Color.Structure, Color.Invokable);
+         state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Keyword, Color.Keyword, Color.Whitespace, color, Color.Structure,
+            Color.Invokable);
          functionName = $"__${functionName}";
       }
 
@@ -113,7 +119,7 @@ public partial class FunctionParser : StatementParser
          }
          else if (state.CurrentSource.StartsWith('('))
          {
-            var _curriedFunction = getCurriedFunction(state, functionName, parameters, overriding, className, isHidden);
+            var _curriedFunction = getCurriedFunction(state, functionName, parameters, overriding, className, isHidden, annotations);
             if (_curriedFunction is (true, var curriedFunction))
             {
                curriedFunction.IsFixed = isFixed;
@@ -145,7 +151,11 @@ public partial class FunctionParser : StatementParser
                {
                   block.AddReturnUnitIf();
                }
-               var function = new Function(functionName, parameters, isHidden, block, yielding, overriding, className) {IsFixed = isFixed};
+
+               var function = new Function(functionName, parameters, isHidden, block, yielding, overriding, className)
+               {
+                  IsFixed = isFixed, Annotations = annotations
+               };
                _function = function;
                if (isMacro)
                {
@@ -178,7 +188,7 @@ public partial class FunctionParser : StatementParser
    }
 
    protected static Optional<Function> getCurriedFunction(ParseState state, string functionName, Parameters firstParameters,
-      bool overriding, string className, bool isHidden)
+      bool overriding, string className, bool isHidden, List<InvokeSymbol> annotations)
    {
       var parametersStack = new Stack<Parameters>();
       while (state.More)
@@ -218,8 +228,8 @@ public partial class FunctionParser : StatementParser
 
          if (_lambdaSymbol is (true, var lambdaSymbol))
          {
-            return new Function(functionName, firstParameters, isHidden, new Block(new Return(new Expression(lambdaSymbol), nil)), yielding, overriding,
-               className);
+            return new Function(functionName, firstParameters, isHidden, new Block(new Return(new Expression(lambdaSymbol), nil)), yielding,
+               overriding, className) { Annotations = annotations };
          }
          else
          {
@@ -292,7 +302,8 @@ public partial class FunctionParser : StatementParser
 
          previousIf.Else = new Block(new FailedMatch());
 
-         state.AddStatement(new MatchFunction(functionName, parameters, isHidden, previousIf, _typeConstraint, overriding, className) { IsFixed = isFixed });
+         state.AddStatement(new MatchFunction(functionName, parameters, isHidden, previousIf, _typeConstraint, overriding, className)
+            { IsFixed = isFixed });
          state.RemoveReturnType();
 
          return unit;

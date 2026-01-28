@@ -6,8 +6,10 @@ using Kagami.Library.Runtime;
 using Core.Booleans;
 using Core.Monads;
 using Core.Strings;
+using Kagami.Library.Nodes.Symbols;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
+using static Kagami.Library.CommonFunctions;
 
 namespace Kagami.Library.Nodes.Statements;
 
@@ -105,6 +107,8 @@ public class Function : Statement, IOverridable, IAnnotatable
 
    public IInvokable Invokable => lambda.Value.Invokable;
 
+   public List<InvokeSymbol> Annotations { get; set; } = [];
+
    public IInvokable GetInvokable()
    {
       if (yielding)
@@ -149,7 +153,7 @@ public class Function : Statement, IOverridable, IAnnotatable
             builder.AssignSelector(selector, overriding);
          }
 
-         builder.ProcessAnnotations(this);
+         processAnnotations(this, builder);
       }
       else
       {

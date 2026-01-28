@@ -42,7 +42,7 @@ public class ParseState : IEnumerable<Statement>
    protected StringSet patterns = [];
    protected Maybe<Exception> _exception = nil;
    protected StringHash<Parameter> parameters = [];
-   protected MaybeStack<InvokeSymbol> annotations = [];
+   protected List<InvokeSymbol> annotations = [];
 
    public ParseState(string source)
    {
@@ -599,23 +599,23 @@ public class ParseState : IEnumerable<Statement>
 
    public StringHash<Parameter> Parameters => parameters;
 
-   public void PushAnnotation(InvokeSymbol invokeSymbol) => annotations.Push(invokeSymbol);
+   public void PushAnnotation(InvokeSymbol invokeSymbol) => annotations.Add(invokeSymbol);
 
-   public Maybe<InvokeSymbol> PopAnnotation() => annotations.Pop();
+   public IEnumerable<InvokeSymbol> Annotations
+   {
+      get
+      {
+         foreach (var invokeSymbol in annotations)
+         {
+            yield return invokeSymbol;
+         }
+
+         annotations.Clear();
+      }
+   }
 
    public void ProcessAnnotations(IAnnotatable annotatable, OperationsBuilder builder)
    {
-      if (annotations.IsNotEmpty)
-      {
-         var selector = annotatable.Selector;
-         var lambda = annotatable.Lambda;
-         while (annotations.Pop() is (true, var invokeSymbol))
-         {
-            Expression[] implicitArguments = [Expression.FromSymbol(new SelectorSymbol(selector)), Expression.FromSymbol(new PushSymbol(lambda))];
-            Expression[] newArguments = [.. implicitArguments, .. invokeSymbol.Arguments];
-            var newInvokeSymbol = new InvokeSymbol(invokeSymbol.FunctionName, newArguments, invokeSymbol.Lambda, invokeSymbol.InComparisand);
-            newInvokeSymbol.Generate(builder);
-         }
-      }
+
    }
 }
