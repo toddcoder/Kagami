@@ -26,6 +26,7 @@ public class ConjunctionParsers(ExpressionBuilder builder) : MultiParser
          if (!builder.Flags[ExpressionFlags.OmitMaybe])
          {
             yield return new MaybeParser2(builder);
+            yield return new SuccessParser(builder);
          }
 
          yield return new OrParser(builder);
@@ -34,6 +35,7 @@ public class ConjunctionParsers(ExpressionBuilder builder) : MultiParser
          {
             yield return new InlineIfParser(builder);
          }
+
          yield return new ImplicitCollectionExpressionParser(builder);
          yield return new DefaultToParser(builder);
       }
