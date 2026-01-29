@@ -1,0 +1,25 @@
+﻿open sys
+
+class Grab(sel Selector, lam lambda, x int) {
+	println $"Invoking $sel.name"
+	lam(x)
+}
+
+class Wrap(sel Selector, f lambda) {
+	let g = {(x)
+		let r = f(x)
+		println r
+		return r
+	}
+	println sel
+	sel.assign(g)
+}
+
+@Grab(10)
+func foobar(x int) => println x
+
+
+@Wrap
+func foobaz(s string) => s + s
+
+foobaz("?")

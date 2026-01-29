@@ -12,12 +12,18 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class ClassParser : StatementParser
 {
-   [GeneratedRegex($@"^(\s*)(class)(\s+)({REGEX_CLASS})(\()?")]
+   [GeneratedRegex($@"^(\s*)(class|annotation)(\s+)({REGEX_CLASS})(\()?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
       state.ClearParameters();
+
+      var isAnnotation = tokens[2].Text == "annotation";
+      if (isAnnotation)
+      {
+         state.AllowReorder = false;
+      }
 
       var className = tokens[4].Text;
       var hasParameters = tokens[5].Text == "(";
@@ -74,7 +80,7 @@ public partial class ClassParser : StatementParser
             state.Parameters.Clear();
          }
 
-         var builder = new ClassBuilder(className, parameters, parentClassName, arguments, initialize, block, isFixed);
+         var builder = new ClassBuilder(className, parameters, parentClassName, arguments, initialize, block, isFixed || isAnnotation);
 
          var classItemsParser = new ClassItemsParser(builder, true);
          while (state.More)

@@ -1,4 +1,5 @@
-﻿using Core.Monads;
+﻿using Core.Enumerables;
+using Core.Monads;
 using Core.Strings;
 using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
@@ -83,4 +84,6 @@ public class SendClassMessageSymbol(Selector selector, Maybe<LambdaSymbol> _lamb
    public override Precedence Precedence => Precedence.SendMessage;
 
    public override Arity Arity => Arity.Postfix;
+
+   public override string ToString() => $"{selector}({arguments.Select(e => e.ToString()).ToString(" ")}";
 }

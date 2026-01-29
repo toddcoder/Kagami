@@ -1,0 +1,20 @@
+﻿open sys
+
+annotation Record(selector Selector, f lambda) {
+	\names << selector.name
+}
+static {
+	let names = {}
+}
+
+@Record
+func alfa(x) => x * 2
+
+@Record
+func bravo(x) => x / 10
+
+@Record
+func charlie(x) => x * 7
+
+
+println Record.names
