@@ -1,0 +1,32 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+class Food(name string) {
+	get string => name
+}
+
+class Recipe(name string, ingredients array, instructions string) {
+	get string => name
+}
+
+object Apple : Food("Apple");
+object Orange : Food("Orange");
+object Cream : Food("Cream");
+object Sugar : Food("Sugar");
+object FruitSalad : Recipe("fruit salad", [Apple&, Orange&, Cream&, Sugar&], "Stir it all together");
+
+object SimpleDatabase {
+	let allFoods = [Apple&, Orange&, Cream&, Sugar&]
+	func foodNamed(name string) optional => allFoods.first() ($0.name == name)
+	let allRecipes = [FruitSalad&]
+}
+
+object SimpleBrowser {
+	func recipesUsing(food Food) => SimpleDatabase.allRecipes if recipe -> food in recipe.ingredients
+}
+
+let apple = SimpleDatabase.foodNamed("Apple")
+if apple {
+	println SimpleBrowser.recipesUsing(apple)
+}

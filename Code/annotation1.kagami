@@ -1,5 +1,7 @@
 ﻿open sys
 
+#pragma ALLOW_PRINT_STATEMENT true
+
 annotation Record(selector Selector, f lambda) {
 	\names << selector.name
 }

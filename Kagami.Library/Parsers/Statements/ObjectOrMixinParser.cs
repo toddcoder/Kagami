@@ -1,7 +1,9 @@
 ﻿using System.Text.RegularExpressions;
 using Core.Monads;
+using Core.Strings;
 using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
+using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Runtime;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
@@ -10,7 +12,7 @@ using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public partial class NamedStaticParser : StatementParser
+public partial class ObjectOrMixinParser : StatementParser
 {
    [GeneratedRegex(@$"^(\s*)(object|mixin)(\s+)({REGEX_CLASS})")]
    public override partial Regex Regex();
@@ -21,18 +23,38 @@ public partial class NamedStaticParser : StatementParser
       var className = tokens[4].Text;
       state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Class);
 
+      var parentClassParser = new ParentClassParser();
+
+      var parentClassName = "";
+      var initialize = false;
+      Expression[] arguments = [];
+      var _scan = parentClassParser.Scan(state);
+      if (_scan)
+      {
+         (parentClassName, initialize, arguments) = parentClassParser.Parent;
+      }
+      else if (_scan.Exception is (true, var exception))
+      {
+         return exception;
+      }
+
       Module.Global.Value.ForwardReference(className);
 
-      var builder = new ClassBuilder(className, Parameters.Empty, "", [], false, new Block());
+      var builder = new ClassBuilder(className, Parameters.Empty, parentClassName, arguments, initialize, new Block());
       var _register = builder.Register();
       if (_register)
       {
          var cls = new Class(builder);
          state.AddStatement(cls);
 
-         var _block = getBlock(state);
+         var _block = getBlock(state, true);
          if (_block is (true, var block))
          {
+            if (!isMixin && parentClassName.IsNotEmpty())
+            {
+               updateBuild(block, className);
+            }
+
             var metaClassName = $"__$meta{className}";
             var metaClassBuilder = new ClassBuilder(metaClassName, Parameters.Empty, "", [], false, block);
             _register = metaClassBuilder.Register();
@@ -41,7 +63,7 @@ public partial class NamedStaticParser : StatementParser
                var classItemsParser = new ClassItemsParser(metaClassBuilder, !isMixin);
                while (state.More)
                {
-                  var _scan = classItemsParser.Scan(state);
+                  _scan = classItemsParser.Scan(state);
                   if (_scan)
                   {
                   }
@@ -77,5 +99,12 @@ public partial class NamedStaticParser : StatementParser
       }
 
       return unit;
+   }
+
+   protected static void updateBuild(Block block, string className)
+   {
+      var expression = Expression.FromSymbol(new InvokeSymbol(className, [], nil, false));
+      var assignToNewField = new AssignToNewField(false, "value", expression, false);
+      block.Add(assignToNewField);
    }
 }
