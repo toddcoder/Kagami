@@ -1,8 +1,8 @@
 ﻿using Core.Monads;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
-using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
+using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Operations;
 
@@ -31,7 +31,7 @@ public class PostDecrement : Operation
             }
             else
             {
-               return fail($"{lastFieldName} couldn't be decremented");
+               return classOf(fieldValue).SendMessage(fieldValue, "dec()", Arguments.Empty).Just();
             }
          }
          else
@@ -41,7 +41,22 @@ public class PostDecrement : Operation
       }
       else
       {
-         return fail("No field available");
+         var _value = machine.Pop();
+         if (_value is (true, var value))
+         {
+            try
+            {
+               return classOf(value).SendMessage(value, "dec()", Arguments.Empty).Just();
+            }
+            catch (Exception exception)
+            {
+               return exception;
+            }
+         }
+         else
+         {
+            return _value.Exception;
+         }
       }
    }
 
