@@ -29,6 +29,8 @@ public partial class ClassParser : StatementParser
       var hasParameters = tokens[5].Text == "(";
       state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Class, Color.OpenParenthesis);
 
+      Module.Global.Value.ForwardReference(className);
+
       Parameters parameters;
 
       if (hasParameters)
@@ -66,8 +68,6 @@ public partial class ClassParser : StatementParser
       {
          return exception;
       }
-
-      Module.Global.Value.ForwardReference(className);
 
       var isFixed = (bool)state.Scan(@"^(\s+)(fixed)", Color.Whitespace, Color.Keyword);
 
