@@ -26,6 +26,6 @@ public class OptionalClass : BaseClass, IEquivalentClass
    public override bool AssignCompatible(BaseClass otherClass) => MatchCompatible(otherClass);
 
    public override IObject DefaultValue => KNil.NilValue;
-   
+
    public TypeConstraint EquivalentTypeConstraint() => OptionalTypeConstraint;
 }
