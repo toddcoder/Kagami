@@ -17,8 +17,8 @@ public class BooleanClass : BaseClass
 
    protected static IObject parse(string source) => source switch
    {
-      "false" => Success.Object(KBoolean.False),
-      "true" => Success.Object(KBoolean.True),
+      "false" => Success.Object(KBoolean.False, TypeConstraint.SingleType("Boolean")),
+      "true" => Success.Object(KBoolean.True, TypeConstraint.SingleType("Boolean")),
       _ => Failure.Object($"Couldn't understand {source}")
    };
 }

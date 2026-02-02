@@ -327,7 +327,7 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
          var ch = mutable[^1];
          mutable.Remove(mutable.Length - 1, 1);
 
-         return Some.Object(KChar.CharObject(ch));
+         return Some.Object(KChar.CharObject(ch), Objects.TypeConstraint.SingleType("Char"));
       }
    }
 
@@ -342,7 +342,7 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
          var ch = mutable[0];
          mutable.Remove(0, 1);
 
-         return Some.Object(KChar.CharObject(ch));
+         return Some.Object(KChar.CharObject(ch), Objects.TypeConstraint.SingleType("Char"));
       }
    }
 

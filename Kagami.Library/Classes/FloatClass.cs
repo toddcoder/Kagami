@@ -47,7 +47,7 @@ public class FloatClass : BaseClass, IParse, IEquivalentClass
       try
       {
          var number = double.Parse(value.Replace("_", ""));
-         return Success.Object(Float.FloatObject(number));
+         return Success.Object(Float.FloatObject(number), TypeConstraint.SingleType("Float"));
       }
       catch (Exception exception)
       {

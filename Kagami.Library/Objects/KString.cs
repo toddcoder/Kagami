@@ -416,13 +416,16 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
    public IObject Find(string input, int startIndex, bool reverse) => find(value, input, startIndex, reverse);
 
-   public IObject Int() => int.TryParse(value, out var result) ? new Some((Int)result) : KNil.NilValue;
+   public IObject Int() =>
+      int.TryParse(value, out var result) ? new Some((Int)result, Objects.TypeConstraint.SingleType(nameof(Int))) : KNil.NilValue;
 
-   public IObject Float() => double.TryParse(value, out var result) ? new Some((Float)result) : KNil.NilValue;
+   public IObject Float() => double.TryParse(value, out var result) ? new Some((Float)result, Objects.TypeConstraint.SingleType(nameof(Float)))
+      : KNil.NilValue;
 
-   public IObject Byte() => byte.TryParse(value, out var result) ? new Some((KByte)result) : KNil.NilValue;
+   public IObject Byte() => byte.TryParse(value, out var result) ? new Some((KByte)result, Objects.TypeConstraint.SingleType("Byte")) : KNil.NilValue;
 
-   public IObject Long() => BigInteger.TryParse(value, out var result) ? new Some((Long)result) : KNil.NilValue;
+   public IObject Long() => BigInteger.TryParse(value, out var result) ? new Some((Long)result, Objects.TypeConstraint.SingleType(nameof(Long)))
+      : KNil.NilValue;
 
    public KArray SplitRegex(Regex regex) => regex.Split(value);
 
@@ -507,7 +510,7 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
          var remainder = value.Drop(index + length);
          list.Add(remainder.TrimStart());
 
-         return Some.Object(new KTuple(list.Select(StringObject).ToArray()));
+         return Some.Object(new KTuple(list.Select(StringObject).ToArray()), Objects.TypeConstraint.SingleType("Tuple"));
       }
       else
       {
@@ -593,7 +596,7 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
    {
       try
       {
-         return Success.Object((Int)Convert.ToInt32(value, @base));
+         return Success.Object((Int)Convert.ToInt32(value, @base), Objects.TypeConstraint.SingleType(nameof(Objects.Int)));
       }
       catch (Exception exception)
       {

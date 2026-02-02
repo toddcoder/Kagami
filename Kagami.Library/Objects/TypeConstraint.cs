@@ -19,6 +19,8 @@ public struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
 
    public static TypeConstraint SingleType(BaseClass baseClass) => new([baseClass]);
 
+   public static TypeConstraint SingleType(string className) => new([classOf(className)]);
+
    private readonly BaseClass[] comparisands = [];
 
    public TypeConstraint(BaseClass[] comparisands) : this()
@@ -78,7 +80,7 @@ public struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
 
    public int Hash => HashCode.Combine(comparisands);
 
-   public bool IsEqualTo(IObject obj)
+   public readonly bool IsEqualTo(IObject obj)
    {
       if (obj is TypeConstraint typeConstraint)
       {

@@ -197,7 +197,7 @@ public static class CollectionFunctions
          switch (compare)
          {
             case 0:
-               return Some.Object((Int)mid);
+               return Some.Object((Int)mid, TypeConstraint.SingleType(nameof(Int)));
             case < 0:
                left = mid + 1;
                break;
@@ -225,7 +225,7 @@ public static class CollectionFunctions
             switch (index.Value)
             {
                case 0:
-                  return Some.Object((Int)mid);
+                  return Some.Object((Int)mid, TypeConstraint.SingleType(nameof(Int)));
                case < 0:
                   left = mid + 1;
                   break;

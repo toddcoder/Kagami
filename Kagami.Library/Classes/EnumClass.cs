@@ -27,7 +27,7 @@ public class EnumClass : UserClass
          isEnumeration = false;
       }
 
-      constructors[constructorSelector] = _ordinal.Map(Some.Object) | KNil.NilValue;
+      constructors[constructorSelector] = _ordinal.Map(o => Some.Object(o, TypeConstraint.SingleType(className))) | KNil.NilValue;
       RegisterClassMessage(messageSelector, (_, msg) => GetMember(constructorSelector, msg));
 
       var fieldName = constructorSelector.AsString.Substitute("^ /w+ '$' /(-['(']+) .* $", "$1").ToLower1();
@@ -96,7 +96,7 @@ public class EnumClass : UserClass
 
    public IObject FromOrdinal(IObject ordinal)
    {
-      return ordinalToSelector.Maybe[ordinal].Map(retrieveObject).Map(Some.Object) | KNil.NilValue;
+      return ordinalToSelector.Maybe[ordinal].Map(retrieveObject).Map(o => Some.Object(o, TypeConstraint.SingleType(className))) | KNil.NilValue;
    }
 
    public void Open()

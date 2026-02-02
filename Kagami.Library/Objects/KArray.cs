@@ -231,7 +231,8 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       set => index.SetToCollection(this, value);
    }
 
-   public IObject Get(int index) => index.Between(0).Until(list.Count) ? Some.Object(list[index]) : KNil.NilValue;
+   public IObject Get(int index) => index.Between(0).Until(list.Count)
+      ? Some.Object(list[index], Objects.TypeConstraint.SingleType(list[index].ClassName)) : KNil.NilValue;
 
    public IObject this[NumericOpenRange openRange]
    {
@@ -449,7 +450,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
          var obj = this[index];
          list.RemoveAt(index);
 
-         return Some.Object(obj);
+         return Some.Object(obj, Objects.TypeConstraint.SingleType(obj.ClassName));
       }
       else
       {
@@ -518,9 +519,9 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       return new KArray(newList) { TypeConstraint = _typeConstraint };
    }
 
-   public IObject Pop() => list.Count > 0 ? Some.Object(RemoveAt(list.Count - 1)) : KNil.NilValue;
+   public IObject Pop() => list.Count > 0 ? Some.Object(RemoveAt(list.Count - 1), Objects.TypeConstraint.SingleType(RemoveAt(list.Count - 1).ClassName)) : KNil.NilValue;
 
-   public IObject Pop(int index) => list.Count > 0 ? Some.Object(RemoveAt(wrapIndex(index, list.Count))) : KNil.NilValue;
+   public IObject Pop(int index) => list.Count > 0 ? Some.Object(RemoveAt(wrapIndex(index, list.Count)), Objects.TypeConstraint.SingleType(RemoveAt(wrapIndex(index, list.Count)).ClassName)) : KNil.NilValue;
 
    public IObject Unshift(IObject value) => InsertAt(0, value);
 
@@ -532,7 +533,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       var index = list.IndexOf(item);
       if (index > -1)
       {
-         return Some.Object((Int)index);
+         return Some.Object((Int)index, Objects.TypeConstraint.SingleType(nameof(Int)));
       }
       else
       {
@@ -547,7 +548,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
          var result = predicate.Invoke(list[i]);
          if (result.IsTrue)
          {
-            return Some.Object((Int)i);
+            return Some.Object((Int)i, Objects.TypeConstraint.SingleType(nameof(Int)));
          }
       }
 
@@ -561,7 +562,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
          var result = predicate.Invoke(list[i]);
          if (result.IsTrue)
          {
-            return Some.Object((Int)i);
+            return Some.Object((Int)i, Objects.TypeConstraint.SingleType(nameof(Int)));
          }
       }
 
@@ -574,7 +575,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       var index = list.LastIndexOf(item);
       if (index > -1)
       {
-         return Some.Object((Int)index);
+         return Some.Object((Int)index, Objects.TypeConstraint.SingleType(nameof(Int)));
       }
       else
       {
@@ -601,7 +602,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
    {
       foreach (var item in list.Where(item => lambda.Invoke(item).IsTrue))
       {
-         return Some.Object(item);
+         return Some.Object(item, Objects.TypeConstraint.SingleType(item.ClassName));
       }
 
       return KNil.NilValue;
@@ -613,7 +614,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       {
          if (lambda.Invoke(list[i]).IsTrue)
          {
-            return Some.Object(list[i]);
+            return Some.Object(list[i], Objects.TypeConstraint.SingleType(list[i].ClassName));
          }
       }
 
@@ -660,7 +661,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
 
-   public IObject Head => list.Count > 0 ? Some.Object(list[0]) : KNil.NilValue;
+   public IObject Head => list.Count > 0 ? Some.Object(list[0], Objects.TypeConstraint.SingleType(list[0].ClassName)) : KNil.NilValue;
 
    public KArray Tail => list.Count > 0 ? new KArray([.. list.Skip(1)]) { TypeConstraint = _typeConstraint }
       : new KArray([]) { TypeConstraint = _typeConstraint };
@@ -772,7 +773,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
             targetArray.list[wrappedIndex + i] = list[i];
          }
 
-         return Some.Object(Int.IntObject(length));
+         return Some.Object(Int.IntObject(length), Objects.TypeConstraint.SingleType(nameof(Int)));
       }
       else
       {

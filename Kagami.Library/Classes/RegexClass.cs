@@ -65,7 +65,7 @@ public class RegexClass : BaseClass, IEquivalentClass
                return new Failure("Only 1 or 3 parameters allowed");
          }
 
-         return Success.Object(new Regex(pattern, global, textOnly));
+         return Success.Object(new Regex(pattern, global, textOnly), TypeConstraint.SingleType("Regex"));
       }
       catch (Exception exception)
       {

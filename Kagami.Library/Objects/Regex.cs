@@ -165,7 +165,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
          var match = result2.GetMatch(0);
          var regexMatch = new RegexMatch(match, self.nameToIndex(result2), self.indexToName(result2), input.Keep(match.Index),
             input.Drop(match.Index + match.Length), input);
-         return Some.Object(getMatchOrText(regexMatch, self.textOnly));
+         return Some.Object(getMatchOrText(regexMatch, self.textOnly), TypeConstraint.SingleType("RegexMatch"));
       }
       else
       {
@@ -225,7 +225,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
       {
          if (startIndex.Between(0).Until(result.Matches.Length))
          {
-            return Some.Object(Int.IntObject(result.Matches[startIndex].Index));
+            return Some.Object(Int.IntObject(result.Matches[startIndex].Index), TypeConstraint.SingleType(nameof(Int)));
          }
          else
          {

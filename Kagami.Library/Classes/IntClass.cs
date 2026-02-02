@@ -75,7 +75,7 @@ public class IntClass : BaseClass, IParse, IEquivalentClass
       try
       {
          var number = int.Parse(value.Replace("_", "").Replace("`", ""));
-         return Success.Object(Int.IntObject(number));
+         return Success.Object(Int.IntObject(number), TypeConstraint.SingleType("Int"));
       }
       catch (Exception exception)
       {
@@ -88,7 +88,7 @@ public class IntClass : BaseClass, IParse, IEquivalentClass
       try
       {
          var number = int.Parse(value.Replace("_", "").Replace("`", ""), numberStyles);
-         return Success.Object(Int.IntObject(number));
+         return Success.Object(Int.IntObject(number), TypeConstraint.SingleType("Int"));
       }
       catch (Exception exception)
       {
@@ -106,7 +106,7 @@ public class IntClass : BaseClass, IParse, IEquivalentClass
    {
       try
       {
-         return Success.Object(Int.IntObject(Convert.ToInt32(value)));
+         return Success.Object(Int.IntObject(Convert.ToInt32(value)), TypeConstraint.SingleType("Int"));
       }
       catch (Exception exception)
       {
@@ -136,7 +136,7 @@ public class IntClass : BaseClass, IParse, IEquivalentClass
          var intValue = Convert.ToInt32(value);
          if (intValue == value)
          {
-            return Success.Object(Int.IntObject(intValue));
+            return Success.Object(Int.IntObject(intValue), TypeConstraint.SingleType("Int"));
          }
          else
          {

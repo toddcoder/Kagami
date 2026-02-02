@@ -51,7 +51,7 @@ public class CharClass : BaseClass, IEquivalentClass
    {
       try
       {
-         return Success.Object(KChar.CharObject((char)value));
+         return Success.Object(KChar.CharObject((char)value), TypeConstraint.SingleType("Char"));
       }
       catch (Exception exception)
       {

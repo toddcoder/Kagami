@@ -58,7 +58,7 @@ public class DateClass : BaseClass
    {
       try
       {
-         return Success.Object((Date)DateTime.Parse(source));
+         return Success.Object((Date)DateTime.Parse(source), TypeConstraint.SingleType("Date"));
       }
       catch (Exception exception)
       {

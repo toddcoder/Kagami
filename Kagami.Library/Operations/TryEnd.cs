@@ -13,7 +13,7 @@ public class TryEnd : Operation
       LazyResult<IObject> _value = nil;
       if (machine.IsEmpty)
       {
-         Optional<IObject> _result = new Objects.Success(KUnit.Value);
+         Optional<IObject> _result = new Objects.Success(KUnit.Value, TypeConstraint.SingleType("Unit"));
          machine.PopFramesUntil(f => f.FrameType == FrameType.Try);
 
          return _result;
@@ -24,7 +24,7 @@ public class TryEnd : Operation
          {
             Objects.Success success => success,
             Objects.Failure failure => failure,
-            _ => new Objects.Success(value)
+            _ => new Objects.Success(value, TypeConstraint.SingleType(value.ClassName))
          };
 
          return result.Just();

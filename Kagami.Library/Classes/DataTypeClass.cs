@@ -75,7 +75,7 @@ public class DataTypeClass : UserClass
       {
          if (ordinals.Maybe[ord] is (true, var name))
          {
-            return new Some(dataType.Value.GetDataComparisand(name, msg.Arguments.Value.Skip(1).ToArray()));
+            return new Some(dataType.Value.GetDataComparisand(name, msg.Arguments.Value.Skip(1).ToArray()), TypeConstraint.SingleType(className));
          }
          else
          {
@@ -92,7 +92,7 @@ public class DataTypeClass : UserClass
       {
          if (td.ordinals.Maybe[ord] is (true, var name))
          {
-            return new Some(dataType.Value.GetDataComparisand(name, msg.Arguments.Value.Skip(1).ToArray()));
+            return new Some(dataType.Value.GetDataComparisand(name, msg.Arguments.Value.Skip(1).ToArray()), TypeConstraint.SingleType(className));
          }
          else
          {

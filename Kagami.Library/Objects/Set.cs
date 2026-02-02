@@ -212,7 +212,7 @@ public class Set : IObject, ICollection, IObjectCompare, IMutable, ITypedCollect
       assertIncomingValueIsEquivalent(item);
       set.Remove(item);
 
-      return set.Contains(item) ? KNil.NilValue : Some.Object(item);
+      return set.Contains(item) ? KNil.NilValue : Some.Object(item, Objects.TypeConstraint.SingleType(item.ClassName));
    }
 
    public Set Union(Set other) => new(set.Union(other.set)) { TypeConstraint = TypeConstraint };

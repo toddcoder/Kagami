@@ -393,8 +393,8 @@ public abstract class BaseClass : IEquatable<BaseClass>
 
       registerIterMessage("collection".get(), (obj, _) => iteratorFunc(obj, i => (IObject)i.Collection));
       registerIterMessage("isLazy".get(), (obj, _) => iteratorFunc(obj, i => (KBoolean)i.IsLazy));
-      registerIterMessage("next()", (obj, _) => iteratorFunc(obj, i => i.Next().Map(Some.Object) | (() => KNil.NilValue)));
-      registerIterMessage("peek()", (obj, _) => iteratorFunc(obj, i => i.Peek().Map(Some.Object) | (() => KNil.NilValue)));
+      registerIterMessage("next()", (obj, _) => iteratorFunc(obj, i => i.Next().Map(o => Some.Object(o, TypeConstraint.SingleType(o.ClassName))) | (() => KNil.NilValue)));
+      registerIterMessage("peek()", (obj, _) => iteratorFunc(obj, i => i.Peek().Map(o => Some.Object(o, TypeConstraint.SingleType(o.ClassName))) | (() => KNil.NilValue)));
       registerIterMessage("reset()", (obj, _) => iteratorFunc(obj, i => i.Reset()));
       registerIterMessage("reverse()", (obj, _) => iteratorFunc(obj, i => i.Reverse()));
       registerIterMessage("join()", (obj, _) => iteratorFunc(obj, i => i.Join()));

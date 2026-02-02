@@ -603,13 +603,13 @@ public static class ObjectFunctions
 
    public static IEnumerable<IObject> list(ICollection collection) => collection.GetIterator(false).List();
 
-   public static IObject someOf(Maybe<IObject> maybe) => maybe.Map(Some.Object) | (() => KNil.NilValue);
+   public static IObject someOf(Maybe<IObject> maybe) => maybe.Map(i => Some.Object(i, TypeConstraint.SingleType(i.ClassName))) | (() => KNil.NilValue);
 
    public static IObject successOf(Result<IObject> result)
    {
       if (result is (true, var success))
       {
-         return Success.Object(success);
+         return Success.Object(success, TypeConstraint.SingleType(success.ClassName));
       }
       else
       {

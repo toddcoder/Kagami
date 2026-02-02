@@ -109,7 +109,7 @@ public readonly struct KChar : IObject, IComparable<KChar>, IEquatable<KChar>, I
    public IObject Find(string input, int startIndex, bool reverse)
    {
       var index = reverse ? input.LastIndexOf(value, startIndex) : input.IndexOf(value, startIndex);
-      return index > -1 ? Some.Object((Int)index) : KNil.NilValue;
+      return index > -1 ? Some.Object((Int)index, TypeConstraint.SingleType(nameof(Int))) : KNil.NilValue;
    }
 
    public KArray FindAll(string input) => new(input.FindAll(value.ToString()).Select(Int.IntObject));

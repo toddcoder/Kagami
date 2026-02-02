@@ -5,9 +5,13 @@ namespace Kagami.Library.Objects;
 
 public readonly struct Success : IObject, IResult, IMonad, IBoolean
 {
-   public static IObject Object(IObject value) => value is Failure ? value : new Success(value);
+   public static IObject Object(IObject value, TypeConstraint typeConstraint) => value is Failure ? value : new Success(value, typeConstraint);
 
-   public Success(IObject value) : this() => Value = value;
+   public Success(IObject value, TypeConstraint typeConstraint) : this()
+   {
+      Value = value;
+      TypeConstraint = typeConstraint;
+   }
 
    public string ClassName => "Success";
 
@@ -17,11 +21,11 @@ public readonly struct Success : IObject, IResult, IMonad, IBoolean
 
    public int Hash => Value.Hash;
 
-   public bool IsEqualTo(IObject obj) => obj is Success success && Value.IsEqualTo(success.Value);
+   public bool IsEqualTo(IObject obj) => obj is Success success && Value.IsEqualTo(success.Value) && TypeConstraint.IsEqualTo(success.TypeConstraint);
 
    public bool Match(IObject comparisand, Hash<string, IObject> bindings)
    {
-      return match(this, comparisand, (s1, s2) => s1.Value.Match(s2.Value, bindings), bindings);
+      return match(this, comparisand, (s1, s2) => s1.Value.Match(s2.Value, bindings) && s1.TypeConstraint.IsEqualTo(s2.TypeConstraint), bindings);
    }
 
    public bool IsTrue => true;
@@ -29,6 +33,8 @@ public readonly struct Success : IObject, IResult, IMonad, IBoolean
    public Guid Id { get; init; } = Guid.NewGuid();
 
    public IObject Value { get; }
+
+   public TypeConstraint TypeConstraint { get; }
 
    public Error Error => new("No error!");
 
@@ -41,21 +47,21 @@ public readonly struct Success : IObject, IResult, IMonad, IBoolean
       var result = lambda.Invoke(Value);
       return result switch
       {
-         Some some => new Success(some.Value),
+         Some some => new Success(some.Value, new TypeConstraint([classOf(result)])),
          KNil => new Failure("Nil value"),
          Success success => success,
          Failure failure => failure,
-         _ => new Success(result)
+         _ => new Success(result, new TypeConstraint([classOf(result)]))
       };
    }
 
    public IObject FlatMap(Lambda ifSuccess, Lambda ifFailure) => ifSuccess.Invoke(Value);
 
-   public IObject Optional() => new Some(Value);
+   public IObject Optional() => new Some(Value, TypeConstraint);
 
    public IObject Bind(Lambda map) => Map(map);
 
-   public IObject Unit(IObject obj) => new Success(obj);
+   public IObject Unit(IObject obj) => new Success(obj, new TypeConstraint([classOf(obj)]));
 
    public KBoolean CanBind => true;
 }

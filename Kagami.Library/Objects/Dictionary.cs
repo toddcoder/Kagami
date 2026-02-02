@@ -128,7 +128,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
          }
          else
          {
-            return Some.Object(value);
+            return Some.Object(value, Objects.TypeConstraint.SingleType(value.ClassName));
          }
       }
       else if (DefaultValue is (true, var defaultValue))
@@ -335,7 +335,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
       if (dictionary.Maybe[key] is (true, var value))
       {
          dictionary.Remove(key);
-         return new Some(value);
+         return new Some(value, Objects.TypeConstraint.SingleType(value.ClassName));
       }
       else
       {
@@ -489,7 +489,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
       if (dictionary.Maybe[key] is (true, var oldValue))
       {
          dictionary[key] = value;
-         return new Some(oldValue);
+         return new Some(oldValue, Objects.TypeConstraint.SingleType(oldValue.ClassName));
       }
       else
       {
@@ -518,7 +518,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
       if (dictionary.Maybe[obj] is (true, var oldValue))
       {
          dictionary.Remove(obj);
-         return new Some(oldValue);
+         return new Some(oldValue, Objects.TypeConstraint.SingleType(oldValue.ClassName));
       }
       else
       {

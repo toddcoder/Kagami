@@ -37,7 +37,7 @@ public static class CommonFunctions
    {
       if (_result is (true, var value))
       {
-         return Success.Object(value);
+         return Success.Object(value, TypeConstraint.SingleType(value.ClassName));
       }
       else
       {

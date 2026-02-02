@@ -318,7 +318,7 @@ public struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjectCompare,
          else
          {
             var head = items[0];
-            return new Some(head);
+            return new Some(head, Objects.TypeConstraint.SingleType(head.ClassName));
          }
       }
    }
@@ -329,7 +329,10 @@ public struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjectCompare,
 
    public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
 
-   public IObject IndexOf(IObject value) => items.IndexOf(value).Map(i => Some.Object(Int.IntObject(i))) | (() => KNil.NilValue);
+   public IObject IndexOf(IObject value)
+   {
+      return items.IndexOf(value).Map(i => Some.Object(Int.IntObject(i), Objects.TypeConstraint.SingleType(nameof(Int)))) | (() => KNil.NilValue);
+   }
 
    public IObject Index(Lambda predicate)
    {
@@ -338,7 +341,7 @@ public struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjectCompare,
          var result = predicate.Invoke(items[i]);
          if (result.IsTrue)
          {
-            return Some.Object((Int)i);
+            return Some.Object((Int)i, Objects.TypeConstraint.SingleType(nameof(Int)));
          }
       }
 
@@ -352,14 +355,17 @@ public struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjectCompare,
          var result = predicate.Invoke(items[i]);
          if (result.IsTrue)
          {
-            return Some.Object((Int)i);
+            return Some.Object((Int)i, Objects.TypeConstraint.SingleType(nameof(Int)));
          }
       }
 
       return KNil.NilValue;
    }
 
-   public IObject LastIndexOf(IObject value) => items.LastIndexOf(value).Map(i => Some.Object(Int.IntObject(i))) | (() => KNil.NilValue);
+   public IObject LastIndexOf(IObject value)
+   {
+      return items.LastIndexOf(value).Map(i => Some.Object(Int.IntObject(i), Objects.TypeConstraint.SingleType(nameof(Int)))) | (() => KNil.NilValue);
+   }
 
    public IObject FindAll(Lambda predicate)
    {
@@ -383,7 +389,7 @@ public struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjectCompare,
          var result = predicate.Invoke(item);
          if (result.IsTrue)
          {
-            return Some.Object(item);
+            return Some.Object(item, Objects.TypeConstraint.SingleType(item.ClassName));
          }
       }
 
@@ -397,7 +403,7 @@ public struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjectCompare,
          var result = predicate.Invoke(item);
          if (result.IsTrue)
          {
-            return Some.Object(item);
+            return Some.Object(item, Objects.TypeConstraint.SingleType(item.ClassName));
          }
       }
 

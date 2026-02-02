@@ -431,7 +431,7 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
          }
       }
 
-      return Some.Object(returnValue);
+      return Some.Object(returnValue, Objects.TypeConstraint.SingleType(returnValue.ClassName));
    }
 
    public TypeConstraint EquivalentTypeConstraint() => Objects.TypeConstraint.FromList("Iterator");

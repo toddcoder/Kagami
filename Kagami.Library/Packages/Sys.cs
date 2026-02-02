@@ -113,7 +113,7 @@ public class Sys : Package
    public IObject Readln()
    {
       return Machine.Current.Value.Context.ReadLine()
-         .Map(s => Success.Object(KString.StringObject(s)))
+         .Map(s => Success.Object(KString.StringObject(s), TypeConstraint.SingleType("String")))
          .Recover(e => Failure.Object(e.Message));
    }
 
@@ -121,7 +121,7 @@ public class Sys : Package
    {
       return Machine.Current.Value.Context.ReadLine()
          .Map(s => s.Result().Int32())
-         .Map(i => Success.Object(Int.IntObject(i)))
+         .Map(i => Success.Object(Int.IntObject(i), TypeConstraint.SingleType("Int")))
          .Recover(e => Failure.Object(e.Message));
    }
 
@@ -129,7 +129,7 @@ public class Sys : Package
    {
       return Machine.Current.Value.Context.ReadLine()
          .Map(s => s.Result().Double())
-         .Map(f => Success.Object(Float.FloatObject(f)))
+         .Map(f => Success.Object(Float.FloatObject(f), TypeConstraint.SingleType("Float")))
          .Recover(e => Failure.Object(e.Message));
    }
 

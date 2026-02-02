@@ -420,7 +420,7 @@ public class Iterator : IObject, IIterator
       {
          if (predicate.Invoke(value).IsTrue)
          {
-            return new Some((Int)i);
+            return new Some((Int)i, TypeConstraint.SingleType(nameof(Int)));
          }
 
          i++;
@@ -788,13 +788,13 @@ public class Iterator : IObject, IIterator
       return result;
    }
 
-   public IObject First() => List().FirstOrNone().Map(Some.Object) | (() => KNil.NilValue);
+   public IObject First() => List().FirstOrNone().Map(o => Some.Object(o, TypeConstraint.SingleType(o.ClassName))) | (() => KNil.NilValue);
 
    public IObject First(Lambda predicate)
    {
       foreach (var value in List().Where(value => predicate.Invoke(value).IsTrue))
       {
-         return new Some(value);
+         return new Some(value, TypeConstraint.SingleType(value.ClassName));
       }
 
       return KNil.NilValue;
@@ -803,7 +803,7 @@ public class Iterator : IObject, IIterator
    public IObject Last()
    {
       var reversed = List().Reverse();
-      return reversed.FirstOrNone().Map(Some.Object) | (() => KNil.NilValue);
+      return reversed.FirstOrNone().Map(o => Some.Object(o, TypeConstraint.SingleType(o.ClassName))) | (() => KNil.NilValue);
    }
 
    public IObject Last(Lambda predicate)
@@ -811,7 +811,7 @@ public class Iterator : IObject, IIterator
       var reversed = List().Reverse();
       foreach (var value in reversed.Where(value => predicate.Invoke(value).IsTrue))
       {
-         return new Some(value);
+         return new Some(value, TypeConstraint.SingleType(value.ClassName));
       }
 
       return KNil.NilValue;
@@ -1701,7 +1701,7 @@ public class Iterator : IObject, IIterator
       var _next = Next();
       if (_next is (true, var next))
       {
-         return new KTuple(new NameValue("head", Some.Object(next)), new NameValue("tail", this));
+         return new KTuple(new NameValue("head", Some.Object(next, TypeConstraint.SingleType(next.ClassName))), new NameValue("tail", this));
       }
       else
       {
@@ -1804,7 +1804,7 @@ public class Iterator : IObject, IIterator
             var first = innerCollection.GetIterator(false).First();
             if (first is Some some && some.Value.IsEqualTo(target))
             {
-               return Some.Object(item);
+               return Some.Object(item, TypeConstraint.SingleType(item.ClassName));
             }
          }
       }
@@ -1827,7 +1827,7 @@ public class Iterator : IObject, IIterator
          }
       }
 
-      return Some.Object(returnValue);
+      return Some.Object(returnValue, TypeConstraint.SingleType(returnValue.ClassName));
    }
 
    protected static IEnumerable<IObject> applyAgainst(List<Lambda> lambdas, List<IObject> enumerable)

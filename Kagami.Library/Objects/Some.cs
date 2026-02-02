@@ -5,19 +5,23 @@ namespace Kagami.Library.Objects;
 
 public readonly struct Some : IObject, IOptional, IBoolean, IEquatable<Some>, IMonad
 {
-   public static IObject Object(IObject value) => value switch
+   public static IObject Object(IObject value, TypeConstraint typeConstraint) => value switch
    {
       Some some => some,
       KNil kNil => kNil,
-      _ => new Some(value)
+      _ => new Some(value, typeConstraint)
    };
 
    private readonly IObject value;
+   private readonly TypeConstraint typeConstraint;
 
-   public Some(IObject value) : this()
+   public Some(IObject value, TypeConstraint typeConstraint) : this()
    {
       this.value = value;
+      this.typeConstraint = typeConstraint;
    }
+
+   public TypeConstraint TypeConstraint=> typeConstraint;
 
    public string ClassName => "Some";
 
@@ -27,11 +31,11 @@ public readonly struct Some : IObject, IOptional, IBoolean, IEquatable<Some>, IM
 
    public int Hash => value.Hash;
 
-   public bool IsEqualTo(IObject obj) => obj is Some s && value.IsEqualTo(s.value);
+   public bool IsEqualTo(IObject obj) => obj is Some s && value.IsEqualTo(s.value) && typeConstraint.IsEqualTo(s.typeConstraint);
 
    public bool Match(IObject comparisand, Hash<string, IObject> bindings)
    {
-      return match(this, comparisand, (s1, s2) => s1.value.Match(s2.value, bindings), bindings);
+      return match(this, comparisand, (s1, s2) => s1.value.Match(s2.value, bindings) && s1.typeConstraint.IsEqualTo(s2.typeConstraint), bindings);
    }
 
    public IObject Value => value;
@@ -47,8 +51,8 @@ public readonly struct Some : IObject, IOptional, IBoolean, IEquatable<Some>, IM
       {
          Some some => some,
          KNil or Failure => KNil.NilValue,
-         Success success => new Some(success.Value),
-         _ => new Some(result)
+         Success success => new Some(success.Value, new TypeConstraint([classOf(result)])),
+         _ => new Some(result, new TypeConstraint([classOf(result)]))
       };
    }
 
@@ -62,9 +66,9 @@ public readonly struct Some : IObject, IOptional, IBoolean, IEquatable<Some>, IM
 
    public IObject Bind(Lambda map) => Map(map);
 
-   public IObject Unit(IObject obj) => new Some(obj);
+   public IObject Unit(IObject obj) => new Some(obj, new TypeConstraint([classOf(obj)]));
 
    public KBoolean CanBind => true;
 
-   public IObject Result(KString message) => new Success(value);
+   public IObject Result(KString message) => new Success(value, new TypeConstraint([classOf(value)]));
 }
