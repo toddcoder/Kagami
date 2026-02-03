@@ -1,0 +1,27 @@
+﻿open sys
+
+class Table {
+	var rows = []
+	func append(row) {
+		rows << row
+		return self
+	}
+	get string => $"<table>(rows map r -> r.string |> :join(""))</table>"
+}
+
+class Tr {
+	var cols = []
+	func append(col) {
+		cols << col
+		return self
+	}
+	get string => $"<tr>(cols map c -> c.string |> :join(""))</tr>"
+}
+
+class Td(text string) {
+	get string => $"<td>$text</td>"
+}
+
+let t = Table {Tr {Td("foo")}, Tr {Td("bar")}}
+
+println t

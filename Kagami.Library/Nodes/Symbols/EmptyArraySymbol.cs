@@ -6,12 +6,7 @@ namespace Kagami.Library.Nodes.Symbols;
 
 public class EmptyArraySymbol(Maybe<TypeConstraint> _typeConstraint) : Symbol
 {
-   public override void Generate(OperationsBuilder builder)
-   {
-      var array = KArray.Empty;
-      array.TypeConstraint = _typeConstraint;
-      builder.PushObject(array);
-   }
+   public override void Generate(OperationsBuilder builder) => builder.EmptyArray(_typeConstraint);
 
    public override Precedence Precedence => Precedence.Value;
 

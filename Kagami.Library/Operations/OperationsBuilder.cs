@@ -635,5 +635,13 @@ public class OperationsBuilder(ParseState state)
 
    public void GetClass() => add(new GetClass());
 
+   public void EmptyArray(Maybe<TypeConstraint> _typeConstraint) => add(new EmptyArray(_typeConstraint));
+
+   public void EmptyDictionary(Maybe<TypeConstraint> _typeConstraint) => add(new EmptyDictionary(_typeConstraint));
+
+   public void EmptyTuple() => add(new EmptyTuple());
+
+   public void EmptySet(Maybe<TypeConstraint> _typeConstraint) => add(new EmptySet(_typeConstraint));
+
    public override string ToString() => "operations";
 }

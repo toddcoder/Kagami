@@ -6,12 +6,7 @@ namespace Kagami.Library.Nodes.Symbols;
 
 public class EmptySetSymbol(Maybe<TypeConstraint> _typeConstraint) : Symbol
 {
-   public override void Generate(OperationsBuilder builder)
-   {
-      var empty = Set.Empty;
-      empty.TypeConstraint = _typeConstraint;
-      builder.PushObject(empty);
-   }
+   public override void Generate(OperationsBuilder builder) => builder.EmptySet(_typeConstraint);
 
    public override Precedence Precedence => Precedence.Value;
 

@@ -8,7 +8,10 @@ public class PushObject : Operation
 {
    protected IObject obj;
 
-   public PushObject(IObject obj) => this.obj = obj;
+   public PushObject(IObject obj)
+   {
+      this.obj = obj;
+   }
 
    public override Optional<IObject> Execute(Machine machine) => obj.Just();
 

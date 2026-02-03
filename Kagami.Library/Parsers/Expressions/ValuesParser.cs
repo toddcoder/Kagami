@@ -66,14 +66,10 @@ public class ValuesParser : MultiParser
 
             if (!builder.Flags[ExpressionFlags.Comparisand])
             {
+               yield return new DslInvokeParser(builder);
                yield return new InvokeParser(builder);
             }
          }
-
-         /*if (!builder.Flags[ExpressionFlags.OmitColon])
-         {
-            yield return new NameValueParser(builder);
-         }*/
 
          yield return new NameValueParser(builder);
 
