@@ -36,9 +36,6 @@ public partial class KeywordValueParser : SymbolParser
          case "undef":
             builder.Add(new UndefinedSymbol());
             break;
-         case "unassigned":
-            builder.Add();
-            break;
          default:
             return nil;
       }
