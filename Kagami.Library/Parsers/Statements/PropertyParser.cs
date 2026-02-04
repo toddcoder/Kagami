@@ -50,7 +50,7 @@ public partial class PropertyParser : StatementParser
 
          (propertyName, var parameters) = PropertyNameParameters(direction, propertyName, block.TypeConstraint);
 
-         state.AddStatement(new Function(propertyName, parameters, false, block, yielding, isOverride, ClassName));
+         state.AddStatement(new Function(propertyName, parameters, false, block, yielding, isOverride, ClassName) { SelfAlias = SelfAlias });
          return unit;
       }
       else
@@ -60,4 +60,6 @@ public partial class PropertyParser : StatementParser
    }
 
    public string ClassName { get; set; } = "";
+
+   public string SelfAlias { get; set; } = "";
 }

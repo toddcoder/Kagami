@@ -1,0 +1,2 @@
+<table><tr><td>foo</td></tr><tr><td>bar</td></tr></table>
+Table() | Table

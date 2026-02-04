@@ -188,4 +188,12 @@ public class Block : Statement, IEnumerable<Statement>
 
       return block;
    }
+
+   public void InsertSelfAlias(string aliasName)
+   {
+      var symbol = new FieldSymbol("self");
+      var expression = new Expression(symbol);
+      var assignToNewField = new AssignToNewField(false, aliasName, expression, false);
+      statements.Insert(0, assignToNewField);
+   }
 }

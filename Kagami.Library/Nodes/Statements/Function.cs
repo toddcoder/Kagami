@@ -123,6 +123,11 @@ public class Function : Statement, IOverridable, IAnnotatable
 
    public override void Generate(OperationsBuilder builder)
    {
+      if (SelfAlias.IsNotEmpty())
+      {
+         block.InsertSelfAlias(SelfAlias);
+      }
+
       var _index = builder.RegisterInvokable(lambda.Value.Invokable, block, overriding);
       if (_index)
       {
@@ -191,4 +196,6 @@ public class Function : Statement, IOverridable, IAnnotatable
    public Lambda Lambda => lambda.Value;
 
    public void Fix() => IsFixed = true;
+
+   public string SelfAlias { get; set; } = "";
 }

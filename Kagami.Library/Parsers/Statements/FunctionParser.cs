@@ -115,11 +115,11 @@ public partial class FunctionParser : StatementParser
                Singleton = true
             };
             var newParameters = new Parameters(variadicParameter);
-            return getMatchFunction(state, functionName, newParameters, overriding, className, isFixed, isHidden);
+            return getMatchFunction(state, functionName, newParameters, overriding, className, isFixed, isHidden, SelfAlias);
          }
          else if (state.CurrentSource.StartsWith('('))
          {
-            var _curriedFunction = getCurriedFunction(state, functionName, parameters, overriding, className, isHidden, annotations);
+            var _curriedFunction = getCurriedFunction(state, functionName, parameters, overriding, className, isHidden, annotations, SelfAlias);
             if (_curriedFunction is (true, var curriedFunction))
             {
                curriedFunction.IsFixed = isFixed;
@@ -154,7 +154,7 @@ public partial class FunctionParser : StatementParser
 
                var function = new Function(functionName, parameters, isHidden, block, yielding, overriding, className)
                {
-                  IsFixed = isFixed, Annotations = annotations
+                  IsFixed = isFixed, Annotations = annotations, SelfAlias = SelfAlias
                };
                _function = function;
                if (isMacro)
@@ -188,7 +188,7 @@ public partial class FunctionParser : StatementParser
    }
 
    protected static Optional<Function> getCurriedFunction(ParseState state, string functionName, Parameters firstParameters,
-      bool overriding, string className, bool isHidden, List<InvokeSymbol> annotations)
+      bool overriding, string className, bool isHidden, List<InvokeSymbol> annotations, string selfAlias)
    {
       var parametersStack = new Stack<Parameters>();
       while (state.More)
@@ -229,7 +229,7 @@ public partial class FunctionParser : StatementParser
          if (_lambdaSymbol is (true, var lambdaSymbol))
          {
             return new Function(functionName, firstParameters, isHidden, new Block(new Return(new Expression(lambdaSymbol), nil)), yielding,
-               overriding, className) { Annotations = annotations };
+               overriding, className) { Annotations = annotations, SelfAlias = selfAlias };
          }
          else
          {
@@ -248,7 +248,7 @@ public partial class FunctionParser : StatementParser
    }
 
    protected static Optional<Unit> getMatchFunction(ParseState state, string functionName, Parameters parameters, bool overriding,
-      string className, bool isFixed, bool isHidden)
+      string className, bool isFixed, bool isHidden, string selfAlias)
    {
       List<If> list = [];
 
@@ -303,10 +303,12 @@ public partial class FunctionParser : StatementParser
          previousIf.Else = new Block(new FailedMatch());
 
          state.AddStatement(new MatchFunction(functionName, parameters, isHidden, previousIf, _typeConstraint, overriding, className)
-            { IsFixed = isFixed });
+            { IsFixed = isFixed, SelfAlias = selfAlias });
          state.RemoveReturnType();
 
          return unit;
       }
    }
+
+   public string SelfAlias { get; set; } = "";
 }

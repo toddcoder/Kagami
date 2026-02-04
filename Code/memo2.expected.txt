@@ -1,21 +1,11 @@
 Amazing
 	perl6
 	perl5
-	perl4
-	perl1
 Revolutionary
 	perl6
-	perl5
-	perl4
-	perl1
 Essentail
-	perl6
 	perl5
-	perl4
-	perl1
 Classic
-	perl6
-	perl5
 	perl4
 	perl1
 it collection | Iterator

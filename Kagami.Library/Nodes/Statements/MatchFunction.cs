@@ -36,6 +36,11 @@ public class MatchFunction : Statement, IOverridable
 
    public override void Generate(OperationsBuilder builder)
    {
+      if (SelfAlias.IsNotEmpty())
+      {
+         block.InsertSelfAlias(SelfAlias);
+      }
+
       var invokable = getInvokable();
       var lambda = new Lambda(invokable, true);
       var _index = builder.RegisterInvokable(invokable, block, overriding);
@@ -84,4 +89,6 @@ public class MatchFunction : Statement, IOverridable
    }
 
    public bool IsFixed { get; set; }
+
+   public string SelfAlias { get; set; } = "";
 }

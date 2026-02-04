@@ -7,12 +7,13 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class ExtensionParser : StatementParser
 {
-   [GeneratedRegex(@"^(\s*)(extension)\b")]
+   [GeneratedRegex(@$"^(\s*)(extension)(\()({REGEX_FIELD})(\))")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      state.Colorize(tokens, Color.Whitespace, Color.Keyword);
+      var parameterName = tokens[4].Text;
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.OpenParenthesis, Color.Identifier, Color.CloseParenthesis);
 
       var _possibleTypeConstraint = parseTypeConstraint(state);
       if (_possibleTypeConstraint is (true, PossibleTypeConstraint.Some { Maybe: (true, var typeConstraint) }))
@@ -23,7 +24,7 @@ public partial class ExtensionParser : StatementParser
          {
             while (state.More)
             {
-               var functionParser = new FunctionAndPropertyParsers(className);
+               var functionParser = new FunctionAndPropertyParsers(className, parameterName);
                var constructorParser = new ExtensionConstructorParser(className);
                var _scanned = functionParser.Scan(state);
                if (_scanned)

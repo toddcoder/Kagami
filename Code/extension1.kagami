@@ -4,9 +4,9 @@
 
 type Kind {|Negative, Zero, Positive}
 
-extension int {
+extension(i) int {
 	func kind Kind {
-		match self {
+		match i {
 			|0 return Zero
 			|> 0 return Positive
 			|_ return Negative
