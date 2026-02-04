@@ -7,7 +7,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class ExtensionParser : StatementParser
 {
-   [GeneratedRegex(@$"^(\s*)(extension)(\()({REGEX_FIELD})(\))")]
+   [GeneratedRegex(@$"^(\s*)(extension)(?:(\()({REGEX_FIELD})(\)))?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
