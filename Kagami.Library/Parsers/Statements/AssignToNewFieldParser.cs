@@ -19,7 +19,7 @@ public partial class AssignToNewFieldParser : StatementParser
    protected string fieldName = "";
    protected Maybe<TypeConstraint> _typeConstraint = nil;
 
-   [GeneratedRegex($@"^(\s*){REGEX_HIDDEN}{REGEX_PARAM}(let|var)(\s+)({REGEX_FIELD})\b")]
+   [GeneratedRegex($@"^(\s*){REGEX_HIDDEN}{REGEX_OVERRIDE}{REGEX_PARAM}(let|var)(\s+)({REGEX_FIELD})\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
@@ -27,11 +27,11 @@ public partial class AssignToNewFieldParser : StatementParser
       state.BeginTransaction();
 
       isHidden = tokens[2].Text.IsNotEmpty();
-      var isParam = tokens[3].Text.IsNotEmpty();
-      mutable = tokens[4].Text == "var";
-      fieldName = tokens[6].Text;
-      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Keyword, Color.Keyword, Color.Whitespace, Color.Identifier);
-
+      var isOverride = tokens[3].Text.IsNotEmpty();
+      var isParam = tokens[4].Text.IsNotEmpty();
+      mutable = tokens[5].Text == "var";
+      fieldName = tokens[7].Text;
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Keyword, Color.Keyword, Color.Keyword, Color.Whitespace, Color.Identifier);
       var _parsedTypeConstraint = parseTypeConstraint(state);
       if (_parsedTypeConstraint is (true, var parsedTypeConstraint))
       {
@@ -54,7 +54,7 @@ public partial class AssignToNewFieldParser : StatementParser
             select expressionValue;
          if (_expression is (true, var expression))
          {
-            var assignToNewField = new AssignToNewField(mutable, fieldName, expression, _typeConstraint, isHidden);
+            var assignToNewField = new AssignToNewField(mutable, fieldName, expression, _typeConstraint, isHidden, isOverride);
             if (isParam)
             {
                state.RegisterParameter(assignToNewField);
@@ -76,7 +76,7 @@ public partial class AssignToNewFieldParser : StatementParser
       else if (_typeConstraint is (true, var typeConstraint))
       {
          var className = typeConstraint.Comparisands[0].Name;
-         var defineNewField = new DefineNewField(mutable, fieldName, className, isHidden, isParam);
+         var defineNewField = new DefineNewField(mutable, fieldName, className, isHidden, isOverride, isParam);
          if (isParam)
          {
             state.RegisterParameter(defineNewField);

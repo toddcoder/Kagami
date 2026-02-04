@@ -15,22 +15,25 @@ public class AssignToNewField : Statement
    protected readonly Expression expression;
    protected readonly Maybe<TypeConstraint> _typeConstraint;
    protected readonly bool isHidden;
+   protected readonly bool isOverride;
 
-   public AssignToNewField(bool mutable, string fieldName, Expression expression, Maybe<TypeConstraint> _typeConstraint, bool isHidden)
+   public AssignToNewField(bool mutable, string fieldName, Expression expression, Maybe<TypeConstraint> _typeConstraint, bool isHidden, bool isOverride)
    {
       this.mutable = mutable;
       this.fieldName = fieldName;
       this.expression = expression;
       this._typeConstraint = _typeConstraint;
       this.isHidden = isHidden;
+      this.isOverride = isOverride;
    }
 
-   public AssignToNewField(bool mutable, string fieldName, Expression expression, bool isHidden)
+   public AssignToNewField(bool mutable, string fieldName, Expression expression, bool isHidden, bool isOverride)
    {
       this.mutable = mutable;
       this.fieldName = fieldName;
       this.expression = expression;
       this.isHidden = isHidden;
+      this.isOverride = isOverride;
 
       _typeConstraint = nil;
    }
@@ -41,6 +44,8 @@ public class AssignToNewField : Statement
 
    public bool IsHidden => isHidden;
 
+   public bool IsOverride => isOverride;
+
    public override void Generate(OperationsBuilder builder)
    {
       expression.Generate(builder);
@@ -50,12 +55,13 @@ public class AssignToNewField : Statement
 
    public override string ToString() => stream() / (mutable ? "var" : "let") / " " / fieldName / " = " / expression;
 
-   public void Deconstruct(out bool mutable, out string fieldName, out Maybe<TypeConstraint> _typeConstraint, out bool isHidden, out Expression expression)
+   public void Deconstruct(out bool mutable, out string fieldName, out Maybe<TypeConstraint> _typeConstraint, out bool isHidden, out bool isOverride, out Expression expression)
    {
       mutable = this.mutable;
       fieldName = this.fieldName;
       _typeConstraint = this._typeConstraint;
       isHidden = this.isHidden;
+      isOverride = this.isOverride;
       expression = this.expression;
    }
 

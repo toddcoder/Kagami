@@ -570,7 +570,7 @@ public class ParseState : IEnumerable<Statement>
 
    public void RegisterParameter(DefineNewField defineNewField)
    {
-      var (mutable, fieldName, className, isHidden, isParam) = defineNewField;
+      var (mutable, fieldName, className, isHidden, _, isParam) = defineNewField;
       if (isParam)
       {
          var typeConstraint = TypeConstraint.FromList(className);
@@ -580,7 +580,7 @@ public class ParseState : IEnumerable<Statement>
 
    public void RegisterParameter(AssignToNewField assignToNewField)
    {
-      var (mutable, fieldName, _typeConstraint, isHidden, expression) = assignToNewField;
+      var (mutable, fieldName, _typeConstraint, isHidden, _, expression) = assignToNewField;
       var symbol = new InvokableExpressionSymbol(expression);
       AddSymbol(symbol);
       PossibleTypeConstraint possibleTypeConstraint;

@@ -15,37 +15,37 @@ namespace Kagami.Library.Nodes.Statements;
 
 public class Function : Statement, IOverridable, IAnnotatable
 {
-   public static Function Getter(string fieldName, Maybe<TypeConstraint> _typeConstraint)
+   public static Function Getter(string fieldName, Maybe<TypeConstraint> _typeConstraint, bool isOverride)
    {
-      return new($"__${fieldName}", new Parameters(0), false, Block.Getter(fieldName, _typeConstraint), false, false, "") { IsGetter = true };
+      return new($"__${fieldName}", new Parameters(0), false, Block.Getter(fieldName, _typeConstraint), false, isOverride, "") { IsGetter = true };
    }
 
-   public static Function Getter(string fieldName) => Getter(fieldName, nil);
+   public static Function Getter(string fieldName, bool isOverride) => Getter(fieldName, nil, isOverride);
 
-   public static Function Getter(string getterName, string fieldName, Maybe<TypeConstraint> _typeConstraint)
+   public static Function Getter(string getterName, string fieldName, Maybe<TypeConstraint> _typeConstraint, bool isOverride)
    {
-      return new(getterName, new Parameters(0), false, Block.Getter(fieldName, _typeConstraint), false, false, "") { IsGetter = true };
+      return new(getterName, new Parameters(0), false, Block.Getter(fieldName, _typeConstraint), false, isOverride, "") { IsGetter = true };
    }
 
-   public static Function Getter(string getterName, string fieldName) => Getter(getterName, fieldName, nil);
+   public static Function Getter(string getterName, string fieldName, bool isOverride) => Getter(getterName, fieldName, nil, isOverride);
 
-   public static Function Setter(string fieldName, Maybe<TypeConstraint> _typeConstraint)
+   public static Function Setter(string fieldName, Maybe<TypeConstraint> _typeConstraint, bool isOverride)
    {
       var parameters = new Parameters(1);
-      return new Function($"{fieldName}=", parameters, false, Block.Setter(fieldName, parameters[0].Name, _typeConstraint), false, false, "")
+      return new Function($"{fieldName}=", parameters, false, Block.Setter(fieldName, parameters[0].Name, _typeConstraint), false, isOverride, "")
          { IsSetter = true };
    }
 
-   public static Function Setter(string fieldName) => Setter(fieldName, nil);
+   public static Function Setter(string fieldName, bool isOverride) => Setter(fieldName, nil, isOverride);
 
-   public static Function Setter(string setterName, string fieldName, Maybe<TypeConstraint> _typeConstraint)
+   public static Function Setter(string setterName, string fieldName, Maybe<TypeConstraint> _typeConstraint, bool isOverride)
    {
       var parameters = new Parameters(1);
-      return new Function(setterName, parameters, false, Block.Setter(fieldName, parameters[0].Name, _typeConstraint), false, false, "")
+      return new Function(setterName, parameters, false, Block.Setter(fieldName, parameters[0].Name, _typeConstraint), false, isOverride, "")
          { IsSetter = true };
    }
 
-   public static Function Setter(string setterName, string fieldName) => Setter(setterName, fieldName, nil);
+   public static Function Setter(string setterName, string fieldName, bool isOverride) => Setter(setterName, fieldName, nil, isOverride);
 
    protected Selector selector;
    protected Parameters parameters;

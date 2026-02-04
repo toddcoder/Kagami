@@ -10,20 +10,21 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class LazyAssignParser : StatementParser
 {
-   [GeneratedRegex(@$"^(\s*){REGEX_HIDDEN}(lazy)(\s+)({REGEX_FIELD})(\s*)(=)")]
+   [GeneratedRegex(@$"^(\s*){REGEX_HIDDEN}{REGEX_OVERRIDE}(lazy)(\s+)({REGEX_FIELD})(\s*)(=)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
       var isHidden = tokens[2].Text.IsNotEmpty();
-      var fieldName = tokens[5].Text;
-      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Keyword, Color.Whitespace, Color.Identifier, Color.Whitespace, Color.Structure);
+      var isOverride = tokens[3].Text.IsNotEmpty();
+      var fieldName = tokens[6].Text;
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Keyword, Color.Keyword, Color.Whitespace, Color.Identifier, Color.Whitespace, Color.Structure);
 
       var _expression = getExpression(state, ExpressionFlags.Standard);
       if (_expression is (true, var expression))
       {
          var block = new Block(expression);
-         state.AddStatement(new LazyAssign(fieldName, block, isHidden));
+         state.AddStatement(new LazyAssign(fieldName, block, isHidden, isOverride));
          return unit;
       }
       else if (_expression.Exception is (true, var exception))

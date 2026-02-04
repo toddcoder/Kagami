@@ -9,14 +9,15 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class CreateNewFieldsParser : StatementParser
 {
-   [GeneratedRegex(@$"^(\s*){REGEX_HIDDEN}(var)(\s+)({REGEX_FIELD})( *,)")]
+   [GeneratedRegex(@$"^(\s*){REGEX_HIDDEN}{REGEX_OVERRIDE}(var)(\s+)({REGEX_FIELD})( *,)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
       var isHidden = tokens[2].Text.IsNotEmpty();
-      var field1 = tokens[5].Text;
-      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Keyword, Color.Whitespace, Color.Identifier, Color.Structure);
+      var isOverride = tokens[3].Text.IsNotEmpty();
+      var field1 = tokens[6].Text;
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Keyword, Color.Keyword, Color.Whitespace, Color.Identifier, Color.Structure);
 
       List<string> fields = [field1];
 
@@ -48,7 +49,7 @@ public partial class CreateNewFieldsParser : StatementParser
       {
          (className, var color) = getClassNameWithColor(className);
          state.Tokens[^1].Color = color;
-         state.AddStatement(new CreateNewFields([.. fields], className, isHidden));
+         state.AddStatement(new CreateNewFields([.. fields], className, isHidden, isOverride));
 
          return unit;
       }

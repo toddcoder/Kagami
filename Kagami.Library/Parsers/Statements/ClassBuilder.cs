@@ -166,14 +166,14 @@ public class ClassBuilder
          {
             case AssignToNewField { Ignore: false } assignToNewField:
             {
-               var (mutable, fieldName, _typeConstraint, isHidden, _) = assignToNewField;
+               var (mutable, fieldName, _typeConstraint, isHidden, isOverride, _) = assignToNewField;
                if (isHidden)
                {
                   statements.Add(statement);
                }
                else
                {
-                  processField(fieldName, _typeConstraint, mutable, statement);
+                  processField(fieldName, _typeConstraint, mutable, isOverride, statement);
                }
 
                break;
@@ -185,7 +185,7 @@ public class ClassBuilder
                {
                   var fieldName = placeholder.Name;
                   var (bindingType, name) = fromBindingName(fieldName);
-                  var function = Function.Getter(name);
+                  var function = Function.Getter(name, false);
                   statements.Add(function);
                   var (functionName, _, block, _, invokable, _, isHidden) = function;
                   if (isHidden)
@@ -205,7 +205,7 @@ public class ClassBuilder
 
                   if (bindingType == BindingType.Mutable)
                   {
-                     function = Function.Setter(fieldName);
+                     function = Function.Setter(fieldName, false);
                      statements.Add(function);
                      (functionName, _, block, _, invokable, _, isHidden) = function;
                      if (isHidden)
@@ -231,7 +231,7 @@ public class ClassBuilder
             }
             case DefineNewField defineNewField:
             {
-               var (mutable, fieldName, typeName, isHidden, _) = defineNewField;
+               var (mutable, fieldName, typeName, isHidden, isOverride, _) = defineNewField;
                var typeConstraint = TypeConstraint.FromList(typeName);
                if (isHidden)
                {
@@ -239,7 +239,7 @@ public class ClassBuilder
                }
                else
                {
-                  processField(fieldName, typeConstraint, mutable, statement);
+                  processField(fieldName, typeConstraint, mutable, isOverride, statement);
                }
 
                break;
@@ -255,7 +255,7 @@ public class ClassBuilder
                   var typeConstraint = TypeConstraint.FromList(createNewFields.ClassName);
                   foreach (var fieldName in createNewFields.Fields)
                   {
-                     processField(fieldName, typeConstraint, true, statement);
+                     processField(fieldName, typeConstraint, true, false, statement);
                   }
                }
 
@@ -269,7 +269,7 @@ public class ClassBuilder
                }
                else
                {
-                  processField(lazyAssign.FieldName, nil, false, statement);
+                  processField(lazyAssign.FieldName, nil, false, false, statement);
                }
 
                break;
@@ -277,7 +277,7 @@ public class ClassBuilder
             case AssignDefinition assignDefinition:
             {
                var (fieldName, _) = assignDefinition;
-               processField(fieldName, nil, false, statement);
+               processField(fieldName, nil, false, false, statement);
                break;
             }
             case Function function when standard:
@@ -374,7 +374,7 @@ public class ClassBuilder
 
       return new Block(statements);
 
-      void processField(string fieldName, Maybe<TypeConstraint> _typeConstraint, bool mutable, Statement statement)
+      void processField(string fieldName, Maybe<TypeConstraint> _typeConstraint, bool mutable, bool isOverride, Statement statement)
       {
          if (requiredFields.Maybe[fieldName] is (true, var requiredField))
          {
@@ -382,27 +382,27 @@ public class ClassBuilder
             requiredFields.Maybe[fieldName] = _result ? nil : throw _result.Exception;
          }
 
-         var function = Function.Getter(fieldName);
+         var function = Function.Getter(fieldName, isOverride);
          statements.Add(function);
          var (functionName, _, block, _, invokable, _, isHidden) = function;
-         if (!isHidden && !userClass.RegisterMethod(functionName, new Lambda(invokable, false), false))
+         if (!isHidden && !userClass.RegisterMethod(functionName, new Lambda(invokable, false), isOverride))
          {
             throw needsOverride(functionName);
          }
 
-         functions.Add((invokable, block, true));
+         functions.Add((invokable, block, isOverride));
 
          if (mutable)
          {
-            function = Function.Setter(fieldName);
+            function = Function.Setter(fieldName, isOverride);
             statements.Add(function);
             (functionName, _, block, _, invokable, _, isHidden) = function;
-            if (!isHidden && !userClass.RegisterMethod(functionName, new Lambda(invokable, false), false))
+            if (!isHidden && !userClass.RegisterMethod(functionName, new Lambda(invokable, false), isOverride))
             {
                throw needsOverride(functionName);
             }
 
-            functions.Add((invokable, block, true));
+            functions.Add((invokable, block, isOverride));
          }
 
          statements.Add(statement);

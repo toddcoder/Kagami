@@ -104,7 +104,7 @@ public partial class ObjectOrMixinParser : StatementParser
    protected static void updateBuild(Block block, string className)
    {
       var expression = Expression.FromSymbol(new InvokeSymbol(className, [], nil, false));
-      var assignToNewField = new AssignToNewField(false, "value", expression, false);
+      var assignToNewField = new AssignToNewField(false, "value", expression, false, false);
       block.Add(assignToNewField);
    }
 }

@@ -137,12 +137,12 @@ public class TypeCreator(string typeName, TypeMemberData[] typeMemberData, Block
 
    protected static AssignToNewField getOrdinalFunction(IObject ordinal)
    {
-      return new AssignToNewField(false, "value", new Expression(new PushObjectSymbol(ordinal)), false);
+      return new AssignToNewField(false, "value", new Expression(new PushObjectSymbol(ordinal)), false, false);
    }
 
    protected static AssignToNewField getClassField(string className)
    {
-      return new AssignToNewField(false, "class", new Expression(new ClassSymbol(className)), false);
+      return new AssignToNewField(false, "class", new Expression(new ClassSymbol(className)), false, false);
    }
 
    protected static Maybe<ClassBuilder> getMemberClassBuilder(TypeMemberData data, string typeClassName, Block commonBlock,
