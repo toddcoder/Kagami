@@ -316,4 +316,22 @@ public class Set : IObject, ICollection, IObjectCompare, IMutable, ITypedCollect
 
       return this;
    }
+
+   public Set Retain(Lambda lambda)
+   {
+      List<IObject> newList = [];
+      newList.AddRange(list.Where(item => lambda.Invoke(item).IsTrue));
+
+      list = newList;
+      return this;
+   }
+
+   public Set Remove(Lambda lambda)
+   {
+      List<IObject> newList = [];
+      newList.AddRange(list.Where(item => !lambda.Invoke(item).IsTrue));
+
+      list = newList;
+      return this;
+   }
 }

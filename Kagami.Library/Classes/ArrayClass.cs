@@ -80,6 +80,8 @@ public class ArrayClass : BaseClass, ICollectionClass
       messages["read()"] = (obj, _) => function<KArray>(obj, a => a.Read());
       registerMessage("extend(_)", (obj, msg) => function<KArray, IObject>(obj, msg, (a, v) => a.Extend(v)));
       registerMessage("copy(to:_<Array>,from:_<Int>)", (obj, msg) => function<KArray, KArray, Int>(obj, msg, (a, t, f) => a.CopyTo(t, f.Value)));
+      registerMessage("retain(_<Lambda>)", (obj, msg) => function<KArray, Lambda>(obj, msg, (a, l) => a.Retain(l)));
+      registerMessage("remove(_<Lambda>)", (obj, msg) => function<KArray, Lambda>(obj, msg, (a, l) => a.Remove(l)));
    }
 
    protected static IObject getIndexed(KArray a, IObject i)

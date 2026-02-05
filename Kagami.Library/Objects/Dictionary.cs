@@ -30,7 +30,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
       return dictionary;
    }
 
-   public static Dictionary Empty => new Dictionary(Enumerable.Empty<IObject>());
+   public static Dictionary Empty => new(Enumerable.Empty<IObject>());
 
    public static IObject New(IEnumerable<IObject> objects, Maybe<TypeConstraint> _typeConstraint)
    {
@@ -803,5 +803,35 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
          Some some => some.Value,
          _ => obj
       };
+   }
+
+   public Dictionary Retain(Lambda lambda)
+   {
+      Hash<IObject, IObject> newDictionary = [];
+      foreach (var (key, value) in dictionary)
+      {
+         if (lambda.Invoke(key, value).IsTrue)
+         {
+            newDictionary[key] = value;
+         }
+      }
+
+      dictionary = newDictionary;
+      return this;
+   }
+
+   public Dictionary Remove(Lambda lambda)
+   {
+      Hash<IObject, IObject> newDictionary = [];
+      foreach (var (key, value) in dictionary)
+      {
+         if (!lambda.Invoke(key, value).IsTrue)
+         {
+            newDictionary[key] = value;
+         }
+      }
+
+      dictionary = newDictionary;
+      return this;
    }
 }

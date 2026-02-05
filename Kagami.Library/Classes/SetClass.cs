@@ -38,6 +38,8 @@ public class SetClass : BaseClass, ICollectionClass
       messages["overlaps(_)"] = (obj, msg) => function<Set, Set>(obj, msg, (s1, s2) => s1.Overlaps(s2));
       messages["isDisjointWith(_)"] = (obj, msg) => function<Set, Set>(obj, msg, (s1, s2) => s1.IsDisjointWith(s2));
       messages["extend(_)"] = (obj, msg) => function<Set, IObject>(obj, msg, (s, o) => s.Extend(o));
+      registerMessage("retain(_<Lambda>)", (obj, msg) => function<Set, Lambda>(obj, msg, (s, l) => s.Retain(l)));
+      registerMessage("remove(_<Lambda>)", (obj, msg) => function<Set, Lambda>(obj, msg, (s, l) => s.Remove(l)));
    }
 
    public override IObject DefaultValue => Set.Empty;

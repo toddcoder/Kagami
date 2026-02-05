@@ -779,4 +779,22 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
          return KNil.NilValue;
       }
    }
+
+   public KArray Retain(Lambda lambda)
+   {
+      List<IObject> newList = [];
+      newList.AddRange(list.Where(item => lambda.Invoke(item).IsTrue));
+
+      list = newList;
+      return this;
+   }
+
+   public KArray Remove(Lambda lambda)
+   {
+      List<IObject> newList = [];
+      newList.AddRange(list.Where(item => !lambda.Invoke(item).IsTrue));
+
+      list = newList;
+      return this;
+   }
 }
