@@ -643,5 +643,7 @@ public class OperationsBuilder(ParseState state)
 
    public void EmptySet(Maybe<TypeConstraint> _typeConstraint) => add(new EmptySet(_typeConstraint));
 
+   public void HasIterator() => add(new HasIterator());
+
    public override string ToString() => "operations";
 }
