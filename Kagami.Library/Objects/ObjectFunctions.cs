@@ -96,8 +96,8 @@ public static class ObjectFunctions
             return matchArrayToCons(array, cons, bindings);
          case KUnit when source is KArray:
             return true;
-         case KTuple tuple when source is KArray array:
-            return matchArrayToTuple(array, tuple, bindings);
+         /*case KTuple tuple when source is KArray array:
+            return matchArrayToTuple(array, tuple, bindings);*/
          case KTuple tuple when source is KString kString:
             return matchStringToTuple(kString, tuple, bindings);
          case KTuple tuple1 when source is KTuple tuple2:

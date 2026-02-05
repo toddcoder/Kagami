@@ -149,6 +149,11 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
 
    public IObject Join(Lambda lambda) => terminate().Join(lambda);
 
+   public KString Join(string connector, string prefix, string suffix)
+   {
+      return terminate().List().Select(i => i.AsString).Select(i => $"{prefix}{i}{suffix}").ToString(connector);
+   }
+
    public IObject Sort(Lambda lambda, bool ascending) => terminate().Sort(lambda, ascending);
 
    public IObject Sort(bool ascending) => terminate().Sort(ascending);

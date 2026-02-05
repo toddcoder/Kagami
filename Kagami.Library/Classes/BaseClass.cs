@@ -400,10 +400,12 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerIterMessage("join()", (obj, _) => iteratorFunc(obj, i => i.Join()));
       registerIterMessage("join(_<String>)", (obj, message) => iteratorFunc<KString>(obj, message, (i, s) => i.Join(s.Value)));
       registerIterMessage("join(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Join(l)));
-      registerIterMessage("join(_<String>,limit:_<Int>,truncated:_<String>)",
+      registerIterMessage("join(on:_<String>,limit:_<Int>,truncated:_<String>)",
          (obj, msg) => iteratorFunc<KString, Int, KString>(obj, msg, (i, c, l, t) => i.Join(c.Value, l.Value, t.Value)));
-      registerIterMessage("join(_<String>,limit:_<Int>)",
+      registerIterMessage("join(on:_<String>,limit:_<Int>)",
          (obj, msg) => iteratorFunc<KString, Int>(obj, msg, (i, c, l) => i.Join(c.Value, l.Value, "...")));
+      registerIterMessage("join(on:_<String>,prefix:_<String>,suffix:_<String>)",
+         (obj, msg) => iteratorFunc<KString, KString, KString>(obj, msg, (i, o, p, s) => i.Join(o.Value, p.Value, s.Value)));
       registerIterMessage("sort(_<Lambda>,asc:_<Boolean>)",
          (obj, message) => iteratorFunc<Lambda, KBoolean>(obj, message, (i, l, b) => i.Sort(l, b.Value)));
       registerIterMessage("sort(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Sort(l, true)));

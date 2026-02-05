@@ -31,6 +31,8 @@ public interface IIterator : IEquivalentClass
 
    IObject Join(Lambda lambda);
 
+   KString Join(string connector, string prefix, string suffix);
+
    IObject Sort(Lambda lambda, bool ascending);
 
    IObject Sort(bool ascending);

@@ -112,6 +112,11 @@ public class Iterator : IObject, IIterator
 
    public IObject Join(Lambda lambda) => FoldLeft(lambda);
 
+   public KString Join(string connector, string prefix, string suffix)
+   {
+      return List().Select(i => i.AsString).Select(i => $"{prefix}{i}{suffix}").ToString(connector);
+   }
+
    public IObject Sort(Lambda lambda, bool ascending)
    {
       switch (lambda.Invokable.Parameters.Length)
