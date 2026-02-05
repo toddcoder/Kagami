@@ -27,7 +27,7 @@ public class NewDictionaryOrSet(Maybe<TypeConstraint> _typeConstraint) : OneOper
          KArray array => array.List.Some(),
          KTuple tuple => tuple.List.Some(),
          ICollection { ExpandForArray: true } collection => collection.GetIterator(false).List().Some(),
-         Iterator iterator => iterator.List().Some(),
+         IIterator iterator => iterator.List().Some(),
          NameValue => new List<IObject> { value },
          _ => nil
       };
