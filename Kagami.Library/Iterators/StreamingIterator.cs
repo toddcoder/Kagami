@@ -216,15 +216,15 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
 
    public IObject Skip(int count) => copy(new StreamingSkip(count));
 
-   public IObject SkipWhile(Lambda predicate) => copy(new StreamingSkipWhile(predicate));
+   public IObject SkipWhile(Lambda predicate, bool back) => back ? terminate().SkipWhile(predicate, back) : copy(new StreamingSkipWhile(predicate));
 
-   public IObject SkipUntil(Lambda predicate) => copy(new StreamingSkipUntil(predicate));
+   public IObject SkipUntil(Lambda predicate, bool back) => back ? terminate().SkipUntil(predicate, back) : copy(new StreamingSkipUntil(predicate));
 
    public IObject Take(int count) => copy(new StreamingTake(count));
 
-   public IObject TakeWhile(Lambda predicate) => copy(new StreamingTakeWhile(predicate));
+   public IObject TakeWhile(Lambda predicate, bool back) => back ? terminate().TakeWhile(predicate, back) : copy(new StreamingTakeWhile(predicate));
 
-   public IObject TakeUntil(Lambda predicate) => copy(new StreamingTakeUntil(predicate));
+   public IObject TakeUntil(Lambda predicate, bool back) => back ? terminate().TakeUntil(predicate, back) : copy(new StreamingTakeUntil(predicate));
 
    public IObject Index(Lambda predicate) => terminate().Index(predicate);
 

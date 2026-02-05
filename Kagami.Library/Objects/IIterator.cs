@@ -75,15 +75,15 @@ public interface IIterator : IEquivalentClass
 
    IObject Skip(int count);
 
-   IObject SkipWhile(Lambda predicate);
+   IObject SkipWhile(Lambda predicate, bool back);
 
-   IObject SkipUntil(Lambda predicate);
+   IObject SkipUntil(Lambda predicate, bool back);
 
    IObject Take(int count);
 
-   IObject TakeWhile(Lambda predicate);
+   IObject TakeWhile(Lambda predicate, bool back);
 
-   IObject TakeUntil(Lambda predicate);
+   IObject TakeUntil(Lambda predicate, bool back);
 
    IObject Index(Lambda predicate);
 

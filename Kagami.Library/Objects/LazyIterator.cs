@@ -24,15 +24,26 @@ public class LazyIterator : Iterator
 
    public override IObject Skip(int count) => new StreamingIterator(this).Skip(count);
 
-   public override IObject SkipWhile(Lambda predicate) => new StreamingIterator(this).SkipWhile(predicate);
+   public override IObject SkipWhile(Lambda predicate, bool back)
+   {
+      return back ? base.SkipWhile(predicate, back) : new StreamingIterator(this).SkipWhile(predicate, back);
+   }
 
-   public override IObject SkipUntil(Lambda predicate) => new StreamingIterator(this).SkipUntil(predicate);
+   public override IObject SkipUntil(Lambda predicate, bool back)
+   {
+      return back ? base.SkipUntil(predicate, back) : new StreamingIterator(this).SkipUntil(predicate, back);
+   }
 
    public override IObject Take(int count) => new StreamingIterator(this).Take(count);
 
-   public override IObject TakeWhile(Lambda predicate) => new StreamingIterator(this).TakeWhile(predicate);
-
-   public override IObject TakeUntil(Lambda predicate) => new StreamingIterator(this).TakeUntil(predicate);
+   public override IObject TakeWhile(Lambda predicate, bool back)
+   {
+      return back ? base.TakeWhile(predicate, back) : new StreamingIterator(this).TakeWhile(predicate, back);
+   }
+   public override IObject TakeUntil(Lambda predicate, bool back)
+   {
+      return back ? base.TakeUntil(predicate, back) : new StreamingIterator(this).TakeUntil(predicate, back);
+   }
 
    public override IObject Zip(ICollection collection) => new StreamingIterator(this).Zip(collection);
 

@@ -385,14 +385,36 @@ public class Iterator : IObject, IIterator
       }
    }
 
-   public virtual IObject SkipWhile(Lambda predicate)
+   public virtual IObject SkipWhile(Lambda predicate, bool back)
    {
-      return collectionClass.Revert(List().SkipWhile(value => predicate.Invoke(value).IsTrue), _typeConstraint);
+      var list = List();
+      IEnumerable<IObject> result;
+      if (back)
+      {
+         result = list.Reverse().SkipWhile(value => predicate.Invoke(value).IsTrue).Reverse();
+      }
+      else
+      {
+         result = list.SkipWhile(value => predicate.Invoke(value).IsTrue);
+      }
+
+      return collectionClass.Revert(result, _typeConstraint);
    }
 
-   public virtual IObject SkipUntil(Lambda predicate)
+   public virtual IObject SkipUntil(Lambda predicate, bool back)
    {
-      return collectionClass.Revert(List().SkipWhile(value => !predicate.Invoke(value).IsTrue), _typeConstraint);
+      var list = List();
+      IEnumerable<IObject> result;
+      if (back)
+      {
+         result = list.Reverse().SkipWhile(value => !predicate.Invoke(value).IsTrue).Reverse();
+      }
+      else
+      {
+         result = list.SkipWhile(value => !predicate.Invoke(value).IsTrue);
+      }
+
+      return collectionClass.Revert(result, _typeConstraint);
    }
 
    public virtual IObject Take(int count)
@@ -408,14 +430,36 @@ public class Iterator : IObject, IIterator
       }
    }
 
-   public virtual IObject TakeWhile(Lambda predicate)
+   public virtual IObject TakeWhile(Lambda predicate, bool back)
    {
-      return collectionClass.Revert(List().TakeWhile(value => predicate.Invoke(value).IsTrue), _typeConstraint);
+      var list = List();
+      IEnumerable<IObject> result;
+      if (back)
+      {
+         result = list.Reverse().TakeWhile(value => predicate.Invoke(value).IsTrue).Reverse();
+      }
+      else
+      {
+         result = list.TakeWhile(value => predicate.Invoke(value).IsTrue);
+      }
+
+      return collectionClass.Revert(result, _typeConstraint);
    }
 
-   public virtual IObject TakeUntil(Lambda predicate)
+   public virtual IObject TakeUntil(Lambda predicate, bool back)
    {
-      return collectionClass.Revert(List().TakeWhile(value => !predicate.Invoke(value).IsTrue), _typeConstraint);
+      var list = List();
+      IEnumerable<IObject> result;
+      if (back)
+      {
+         result = list.Reverse().TakeWhile(value => !predicate.Invoke(value).IsTrue).Reverse();
+      }
+      else
+      {
+         result = list.TakeWhile(value => !predicate.Invoke(value).IsTrue);
+      }
+
+      return collectionClass.Revert(result, _typeConstraint);
    }
 
    public IObject Index(Lambda predicate)
