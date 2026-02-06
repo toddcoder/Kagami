@@ -40,7 +40,7 @@ public partial class InvokeParser : SymbolParser
                   var _taggedExpressions = getTaggedExpressions(state, REGEX_BLOCK_END);
                   if (_taggedExpressions is (true, var taggedExpressions))
                   {
-                     builder.Add(new NewObjectSymbol(tempObjectField, functionName, taggedExpressions));
+                     builder.Add(new NewObjectSymbol(tempObjectField, functionName, arguments, taggedExpressions));
                   }
                   else
                   {

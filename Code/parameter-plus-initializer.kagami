@@ -1,0 +1,12 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+class Person(name string) {
+	var age int
+	var city string
+	get string => $"name=\"$name\", age=$age, city=\"$city\""
+}
+
+let adam = Person("Adam"){age = 20, city = "London"}
+println adam

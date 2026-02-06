@@ -28,7 +28,7 @@ public partial class RecordParser : SymbolParser
       var _taggedExpressions = getTaggedExpressions(state, REGEX_BLOCK_END);
       if (_taggedExpressions is (true, var taggedExpressions))
       {
-         var className = taggedExpressions.Select(te => te.Tag.ToUpper1()).ToString("$");
+         var className = taggedExpressions.Select(te => te.Tag.ToUpper1()).ToString("_");
          Module.Global.Value.ForwardReference(className);
          List<Parameter> parameterList = [];
          List<Expression> argumentList = [];

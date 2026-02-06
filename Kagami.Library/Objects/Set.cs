@@ -319,19 +319,23 @@ public class Set : IObject, ICollection, IObjectCompare, IMutable, ITypedCollect
 
    public Set Retain(Lambda lambda)
    {
-      List<IObject> newList = [];
-      newList.AddRange(list.Where(item => lambda.Invoke(item).IsTrue));
+      Set<IObject> newSet = [];
+      newSet.AddRange(set.Where(item => lambda.Invoke(item).IsTrue));
 
-      list = newList;
+      set = newSet;
+      list = [.. set];
+
       return this;
    }
 
    public Set Remove(Lambda lambda)
    {
-      List<IObject> newList = [];
-      newList.AddRange(list.Where(item => !lambda.Invoke(item).IsTrue));
+      Set<IObject> newSet = [];
+      newSet.AddRange(set.Where(item => !lambda.Invoke(item).IsTrue));
 
-      list = newList;
+      set = newSet;
+      list = [.. set];
+
       return this;
    }
 }

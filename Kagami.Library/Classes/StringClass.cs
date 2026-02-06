@@ -147,6 +147,7 @@ public class StringClass : BaseClass, ICollectionClass
          (obj, msg) => function<KString, Int, Int>(obj, msg, (s1, i1, i2) => s1.Delete(i1.Value, i2.Value));
       messages["mapping(from:_<String>,to:_<String>)"] = (obj, msg) =>
          function<KString, KString, KString>(obj, msg, (s, f, t) => s.Mapping(f.Value, t.Value));
+      messages["compare(_<String>)"] = (obj, msg) => function<KString, KString>(obj, msg, (s1, s2) => s1.CompareI(s2));
    }
 
    protected static IObject replaceString(KString kString, IObject possibleSkipTake, IObject source)

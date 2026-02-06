@@ -718,4 +718,6 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
       return builder.ToString();
    }
+
+   public Int CompareI(KString other) => string.Compare(value, other.value, StringComparison.OrdinalIgnoreCase);
 }

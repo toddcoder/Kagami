@@ -6,18 +6,25 @@ public class NewObjectSymbol : Symbol, IHasExpressions
 {
    protected string tempObjectField;
    protected string className;
+   protected Expression[] arguments;
    protected TaggedExpression[] taggedExpressions;
 
-   public NewObjectSymbol(string tempObjectField, string className, TaggedExpression[] taggedExpressions)
+   public NewObjectSymbol(string tempObjectField, string className, Expression[] arguments, TaggedExpression[] taggedExpressions)
    {
       this.tempObjectField = tempObjectField;
       this.className = className;
+      this.arguments = arguments;
       this.taggedExpressions = taggedExpressions;
    }
 
    public override void Generate(OperationsBuilder builder)
    {
-      builder.Invoke(className, 0);
+      foreach (var argument in arguments)
+      {
+         argument.Generate(builder);
+      }
+
+      builder.Invoke(className, arguments.Length);
       foreach (var (tag, expression) in taggedExpressions)
       {
          builder.Dup();
