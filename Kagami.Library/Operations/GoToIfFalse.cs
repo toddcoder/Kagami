@@ -29,11 +29,18 @@ public class GoToIfFalse : AddressedOperation
                      from fieldName in Module.Global.Value.RetrievedFields.Maybe[some.Id]
                      from fieldValue in machine.Find(fieldName, true)
                      from classValue in Module.Global.Value.Class(some.Value.ClassName)
-                     select (classValue, fieldValue);
-                  if (_result is (true, var (baseClass, field)))
+                     select (classValue, fieldValue, fieldName);
+                  if (_result is (true, var (baseClass, field, name)))
                   {
-                     field.TypeConstraint = new TypeConstraint([baseClass]);
-                     field.Value = some.Value;
+                     if (machine.CurrentFrame.Fields.ContainsKey(name))
+                     {
+                        field.TypeConstraint = new TypeConstraint([baseClass]);
+                        field.Value = some.Value;
+                     }
+                     else
+                     {
+                        machine.CurrentFrame.Fields.New(name, FieldType.Assignment, some.Value);
+                     }
                   }
 
                   increment = true;

@@ -56,7 +56,18 @@ public class Set : IObject, ICollection, IObjectCompare, IMutable, ITypedCollect
 
    public Set(IObject[] items)
    {
-      set = [.. items];
+      set = [];
+      foreach (var obj in items)
+      {
+         if (obj is KRange range)
+         {
+            set.AddRange(range.GetIterator(false).List());
+         }
+         else
+         {
+            set.Add(obj);
+         }
+      }
       list = [];
    }
 
