@@ -2,7 +2,6 @@
 using Core.Computers;
 using Core.Monads;
 using Kagami.Library.Objects;
-using static Kagami.Library.Objects.ObjectFunctions;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.CollectionFunctions;
 
@@ -29,7 +28,32 @@ public class File : IObject, ICollection
 
    public bool IsEqualTo(IObject obj) => obj is File f && fileName.ToString() == f.AsString;
 
-   public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
+   public bool Match(IObject comparisand, Hash<string, IObject> bindings)
+   {
+      if (comparisand is KTuple { Length.Value: 3 } tuple)
+      {
+         if (tuple[0] is Placeholder p1)
+         {
+            bindings[p1.Name] = KString.StringObject(fileName.Folder.FullPath);
+         }
+
+         if (tuple[1] is Placeholder p2)
+         {
+            bindings[p2.Name] = KString.StringObject(fileName.Name);
+         }
+
+         if (tuple[2] is Placeholder p3)
+         {
+            bindings[p3.Name] = KString.StringObject(fileName.Extension);
+         }
+
+         return true;
+      }
+      else
+      {
+         return false;
+      }
+   }
 
    public bool IsTrue => fileName.Length > 0;
 
