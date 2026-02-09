@@ -53,7 +53,7 @@ public partial class AutoPropertyParser : StatementParser
             }
             else
             {
-               state.AddStatement(Function.Getter($"__${name}", fieldName, _typeConstraint));
+               state.AddStatement(Function.Getter($"__${name}", fieldName, _typeConstraint, false));
             }
          }
 

@@ -1,5 +1,7 @@
 ﻿open sys
 
-let dictionary = {"a": 10, "b": 11, "c": 12}
-dictionary each {|(key, value) println($"$key : $value")}
-dictionary each {(i) println(~i)}
+#pragma ALLOW_PRINT_STATEMENT true
+
+let d = {"a": 10, "b": 11, "c": 12}
+d each {|(key, value) println $"$key : $value"}
+d each {(i) println ~i}
