@@ -19,7 +19,7 @@ public partial class DictionaryOrSetParser : SymbolParser
    {
       state.Colorize(tokens, Color.Whitespace, Color.Collection, Color.Whitespace);
 
-      var flags = builder.Flags;
+      var flags = builder.Flags.Clone();
       flags[ExpressionFlags.OmitColon] = false;
       flags[ExpressionFlags.OmitComma] = false;
 
