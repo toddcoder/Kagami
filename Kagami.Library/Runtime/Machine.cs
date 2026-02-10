@@ -571,7 +571,8 @@ public class Machine
          }
       }
 
-      Selector variadicSelector = $"{selector.Name}(_...)";
+      //Selector variadicSelector = $"{selector.Name}(_...)";
+      var variadicSelector = selector.WithVariadic();
       return findExact(variadicSelector);
    }
 

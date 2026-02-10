@@ -66,4 +66,6 @@ public readonly struct SelectorItem : IEnumerable<SelectorItem>
       var typeConstraint = TypeConstraint.Map(tc => tc.Equivalent());
       return new SelectorItem(Label, typeConstraint, SelectorItemType);
    }
+
+   public SelectorItem AsVariadic() => new(Label, TypeConstraint, SelectorItemType.Variadic);
 }

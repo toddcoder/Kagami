@@ -207,4 +207,18 @@ public readonly struct Selector : IObject, IEquatable<Selector>
       Machine.Current.Value.Assign(this, lambda, true);
       return this;
    }
+
+   public Selector WithVariadic()
+   {
+      if (selectorItems.Length > 0)
+      {
+         var lastItem = selectorItems[^1];
+         selectorItems[^1] = lastItem.AsVariadic();
+         return new Selector(name, selectorItems, selectorImage(name, selectorItems));
+      }
+      else
+      {
+         return new Selector();
+      }
+   }
 }
