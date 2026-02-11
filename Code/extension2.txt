@@ -1,1 +1,3 @@
-Execute error: Foobar(name = "foobaz") is of class Foobar; expected Boolean
+foobaz
+empty is nil
+"empty is nil" | String

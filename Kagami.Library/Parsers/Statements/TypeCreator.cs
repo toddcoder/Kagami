@@ -193,7 +193,7 @@ public class TypeCreator(string typeName, TypeMemberData[] typeMemberData, Block
 
       localCommonBlock.Add(getClassField(data.Name));
 
-      var metaClassBuilder = new ClassBuilder($"__meta{data.Name}", Parameters.Empty, "", [], false, localCommonBlock);
+      var metaClassBuilder = new ClassBuilder(metaName(data.Name), Parameters.Empty, "", [], false, localCommonBlock);
       return (classBuilder, metaClassBuilder);
    }
 

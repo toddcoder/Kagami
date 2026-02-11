@@ -1,1 +1,2 @@
-Execute error: Couldn't find metaclass __$metaRecord
+alfa bravo charlie
+{"alfa", "bravo", "charlie"} | Set

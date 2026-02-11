@@ -415,21 +415,23 @@ public class ClassBuilder
    public Optional<Unit> Constructor(Parameters parameters, Block block, bool standard)
    {
       var invokable = new ConstructorInvokable(className, parameters);
-      if (constructorInvokables.ContainsKey(className))
+      var fullFunctionName = parameters.Selector(className);
+      if (constructorInvokables.ContainsKey(fullFunctionName))
       {
-         return fail($"Constructor {className} already exists");
+         return fail($"Constructor {fullFunctionName} already exists");
       }
       else
       {
-         constructorInvokables[className] = (invokable, modifyBlock(block, standard));
+         constructorInvokables[fullFunctionName] = (invokable, modifyBlock(block, standard));
          return unit;
       }
    }
 
    public void Generate(OperationsBuilder builder)
    {
-      foreach (var (fieldName, value) in constructorInvokables)
+      foreach (var (key, value) in constructorInvokables)
       {
+         Selector selector = key;
          var (invokable, block) = value;
          var _index = builder.RegisterInvokable(invokable, block, true);
          if (!_index)
@@ -437,9 +439,9 @@ public class ClassBuilder
             throw _index.Exception;
          }
 
-         builder.NewField(fieldName, false, true);
+         builder.NewSelector(selector, false, true);
          builder.PushObject(new Constructor(invokable));
-         builder.AssignField(fieldName, true);
+         builder.AssignSelector(selector, true);
       }
 
       foreach (var function in functions)

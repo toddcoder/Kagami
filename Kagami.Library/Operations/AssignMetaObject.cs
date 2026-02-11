@@ -22,7 +22,8 @@ public class AssignMetaObject : Operation
    {
       if (Module.Global.Value.Class(className) is (true, var targetClass))
       {
-         var _field = Machine.Current.Value.Find(metaClassName, true);
+         var selector = metaClassName.Selector(0);
+         var _field = Machine.Current.Value.Find(selector);
          if (_field is (true, var field))
          {
             if (field.Value is IInvokableObject io)
