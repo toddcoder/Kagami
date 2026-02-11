@@ -399,7 +399,7 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
          var result = dictionary[(KChar)ch];
          if (result is Some some)
          {
-            builder.Append(((KChar)some.Value).Value);
+            builder.Append(some.Value.AsString);
          }
          else if (!omit)
          {
