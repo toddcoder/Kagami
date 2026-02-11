@@ -1,4 +1,1 @@
-1
-2
-0
-0 | Int
+Execute error: Couldn't find metaclass __$metaFoo

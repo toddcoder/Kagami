@@ -1,3 +1,1 @@
-foobaz
-empty is nil
-"empty is nil" | String
+Execute error: Foobar(name = "foobaz") is of class Foobar; expected Boolean

@@ -4,6 +4,7 @@ using Kagami.Library.Nodes.Statements;
 using Core.Monads;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.CommonFunctions;
 
 namespace Kagami.Library.Parsers.Statements;
 
@@ -27,7 +28,7 @@ public partial class StaticParser : StatementParser
       if (_block is (true, var block))
       {
          var className = classBuilder.ClassName;
-         var metaClassName = $"__$meta{className}";
+         var metaClassName = metaName(className);
          var metaClassBuilder = new ClassBuilder(metaClassName, Parameters.Empty, "", [], false, block);
          var _register = metaClassBuilder.Register();
          if (_register)

@@ -8,6 +8,7 @@ using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using Kagami.Library.Parsers.Expressions;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.CommonFunctions;
 using Class = Kagami.Library.Nodes.Statements.Class;
 using Return = Kagami.Library.Nodes.Statements.Return;
 
@@ -85,7 +86,7 @@ public class TypeCreator(string typeName, TypeMemberData[] typeMemberData, Block
       }
 
       var staticBlock = new Block(statements);
-      var metaClassName = $"__$meta{typeName}";
+      var metaClassName = metaName(typeName);
       var metaClassBuilder = new ClassBuilder(metaClassName, Parameters.Empty, "", [], false, staticBlock);
       _registered = metaClassBuilder.Register();
       if (!_registered)

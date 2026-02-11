@@ -5,6 +5,7 @@ using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Runtime;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.CommonFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 using Class = Kagami.Library.Nodes.Statements.Class;
 using Regex = System.Text.RegularExpressions.Regex;
@@ -37,7 +38,7 @@ public partial class ModuleParser : StatementParser
          var _block = getBlock(state);
          if (_block is (true, var block))
          {
-            var metaClassName = $"__$meta{className}";
+            var metaClassName = metaName(className);
             var metaClassBuilder = new ClassBuilder(metaClassName, Parameters.Empty, "", [], false, block);
             _register = metaClassBuilder.Register();
             if (_register)

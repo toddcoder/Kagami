@@ -6,6 +6,7 @@ using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Runtime;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.CommonFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 using Class = Kagami.Library.Nodes.Statements.Class;
 using Regex = System.Text.RegularExpressions.Regex;
@@ -55,7 +56,7 @@ public partial class ObjectOrMixinParser : StatementParser
                updateBuild(block, className);
             }
 
-            var metaClassName = $"__$meta{className}";
+            var metaClassName = metaName(className);
             var metaClassBuilder = new ClassBuilder(metaClassName, Parameters.Empty, "", [], false, block);
             _register = metaClassBuilder.Register();
             if (_register)

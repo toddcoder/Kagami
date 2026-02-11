@@ -68,4 +68,6 @@ public static class CommonFunctions
          }
       }
    }
+
+   public static string metaName(string className) => $"meta_{className}";
 }

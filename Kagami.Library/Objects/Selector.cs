@@ -11,15 +11,15 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
 
-public readonly struct Selector : IObject, IEquatable<Selector>
+public struct Selector : IObject, IEquatable<Selector>
 {
    public static implicit operator Selector(string source) => parseSelector(source);
 
    public static implicit operator string(Selector selector) => selector.image;
 
-   private readonly string name;
-   private readonly SelectorItem[] selectorItems;
-   private readonly string image;
+   private string name = "";
+   private SelectorItem[] selectorItems = [];
+   private string image = "";
 
    public Selector(string name, SelectorItem[] selectorItems, string image) : this()
    {
