@@ -4,6 +4,7 @@ using Core.Monads;
 using Core.Numbers;
 using Core.Strings;
 using System.Text;
+using Kagami.Library.Runtime;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
@@ -165,6 +166,16 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
          var match = result2.GetMatch(0);
          var regexMatch = new RegexMatch(match, self.nameToIndex(result2), self.indexToName(result2), input.Keep(match.Index),
             input.Drop(match.Index + match.Length), input);
+         for (var index = 0; index < match.Groups.Length; index++)
+         {
+            setVariable(index, match.Groups[index].Text);
+         }
+
+         var prefix = input.Keep(result2.Index);
+         var suffix = input.Drop(result2.Index + result2.Length);
+         setVariable("`prefix", prefix);
+         setVariable("`suffix", suffix);
+
          return Some.Object(getMatchOrText(regexMatch, self.textOnly));
       }
       else
@@ -617,4 +628,13 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
    public Regex WithMultiline(bool multiline) => new(pattern.WithMultiline(multiline), global, textOnly);
 
    public Regex WithGlobal(bool global) => new(pattern, global, textOnly);
+
+   private void setVariable(int index, string text) => setVariable(index.ToString(), text);
+
+   private void setVariable(string name, string text)
+   {
+      var machine = Machine.Current.Value;
+      var fieldName = $"`{name}";
+      machine.CurrentFrame.Fields.NewOrAssign(fieldName, FieldType.Assignment, KString.StringObject(text));
+   }
 }

@@ -109,6 +109,19 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       });
    }
 
+   public Result<Field> NewOrAssign(string name, FieldType type, IObject value, bool mutable = false, bool visible = true)
+   {
+      if (fields.Maybe[name] is (true, var field))
+      {
+         field.Value = value;
+         return field;
+      }
+      else
+      {
+         return New(name, type, value, mutable, visible);
+      }
+   }
+
    public Result<Field> NewRefField(Field originalField, string name, FieldType type, Maybe<TypeConstraint> typeConstraint, bool mutable,
       bool visible)
    {
