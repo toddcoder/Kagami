@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using Core.Monads;
+using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using static Core.Monads.MonadFunctions;
@@ -15,25 +16,48 @@ public partial class LetFunctionParser : StatementParser
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
+      state.BeginTransaction();
+
       var fieldName = tokens[4].Text;
       state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Invokable, Color.OpenParenthesis);
-      var _result =
+      var _parametersType =
          from parametersValue in getParameters(state)
          from possibleTypConstraintValue in parseTypeConstraint(state)
-         from equal in state.Scan(@"^(\s*)(=)", Color.Whitespace, Color.Structure)
-         from blockValue in getSingleLine(state, possibleTypConstraintValue.Maybe)
-         select (parametersValue, blockValue);
-      if (_result is (true, var (parameters, block)))
+         select (parametersValue, possibleTypConstraintValue);
+      if (state.Scan(@"^(\s*)(=)", Color.Whitespace, Color.Structure) && _parametersType is (true, var (parameters, possibleTypeConstraint)) &&
+          getSingleLine(state, possibleTypeConstraint.Maybe) is (true, var block))
       {
          var lambdaSymbol = new LambdaSymbol(parameters, block);
          var function = new AssignLambda(fieldName, lambdaSymbol);
          state.AddStatement(function);
 
+         state.CommitTransaction();
          return unit;
       }
       else
       {
-         return _result.Exception;
+         state.CreateYieldFlag();
+         state.CreateReturnType();
+
+         var _block = getAnyBlock(state);
+         if (_block is (true, var block2))
+         {
+            state.RemoveYieldFlag();
+            state.RemoveReturnType();
+            block2.AddReturnUnitIf();
+
+            var lambdaSymbol = new LambdaSymbol(new Parameters(), block2);
+            var function = new AssignLambda(fieldName, lambdaSymbol);
+            state.AddStatement(function);
+
+            state.CommitTransaction();
+            return unit;
+         }
+         else
+         {
+            state.RollBackTransaction();
+            return _block.Exception;
+         }
       }
    }
 }
