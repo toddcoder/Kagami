@@ -1,0 +1,14 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+let f = {(n)
+	if n == 1 {
+		return 1
+	}
+	else {
+		return n * this(n - 1)
+	}
+}
+
+println f(5)

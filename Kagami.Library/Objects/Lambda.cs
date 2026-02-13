@@ -107,6 +107,15 @@ public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields
 
    public void Capture(Machine machine)
    {
+      if (fields.ContainsKey("this"))
+      {
+         fields.AssignLocal("this", FieldType.Assignment, this, true).Force();
+      }
+      else
+      {
+         fields.New("this", FieldType.Assignment, this).Force();
+      }
+
       if (!captures)
       {
          return;
@@ -155,6 +164,7 @@ public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields
          {
             innerDictionary[(KString)"type"] = (KString)type;
          }
+
          if (_defaultValue is (true, var defaultValue))
          {
             innerDictionary[(KString)"default"] = (KString)defaultValue;
@@ -165,6 +175,7 @@ public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields
          innerDictionary[(KString)"nameForFunction"] = nameForFunction;
          dictionary[(KString)parameter.Name] = innerDictionary;
       }
+
       return dictionary;
    }
 

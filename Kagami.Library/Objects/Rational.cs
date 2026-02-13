@@ -102,7 +102,27 @@ public struct Rational : IObject, INumeric, IRangeItem, IComparable<Rational>, I
 
    public bool IsEqualTo(IObject obj) => obj is Rational r && numerator == r.numerator && denominator == r.denominator;
 
-   public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
+   public bool Match(IObject comparisand, Hash<string, IObject> bindings)
+   {
+      if (comparisand is KTuple { Length.Value: 2 } tuple)
+      {
+         if (tuple[0] is Placeholder p1)
+         {
+            bindings[p1.Name] = Long.LongObject(numerator);
+         }
+
+         if (tuple[1] is Placeholder p2)
+         {
+            bindings[p2.Name] = Long.LongObject(denominator);
+         }
+
+         return true;
+      }
+      else
+      {
+         return match(this, comparisand, bindings);
+      }
+   }
 
    public bool IsTrue => numerator != 0;
 

@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Invokables;
+﻿using Core.Enumerables;
+using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using Kagami.Library.Packages;
 using Kagami.Library.Runtime;
@@ -50,6 +51,11 @@ public class Invoke : OneOperandOperation
          frame.SetFields(invokable.Parameters);
          if (_fields is (true, var fields))
          {
+            if (!fields.ContainsKey("this") && _lambda is (true, var lambda))
+            {
+               fields.New("this", FieldType.Assignment, lambda).Force();
+            }
+
             frame.SetFields(fields);
          }
 
@@ -111,6 +117,11 @@ public class Invoke : OneOperandOperation
       increment = false;
       if (value is Arguments arguments)
       {
+         if (fieldName == "this" && machine.PeekFramesUntil(f => f.Lambda).LastOrNone() is (true, { Lambda: (true, var lambda) }))
+         {
+            return InvokeObject(machine, lambda, arguments, ref increment);
+         }
+
          var _field = machine.Find(fieldName, true);
          if (_field is (true, var foundField))
          {

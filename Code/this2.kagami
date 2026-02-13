@@ -1,0 +1,19 @@
+﻿open sys
+
+func sum(f lambda) {
+	let sumf = {(a int, b int)
+		var total = 0
+		for i in a to b {
+			total += f(i)
+		}
+		return total
+	}
+	return sumf
+}
+
+let sumInts = sum(x -> x)
+println sumInts(1, 10)
+let sumSquares = sum(x -> x * x)
+println sumSquares(1, 10)
+let sumPowersOfTwo = sum(x -> x == 0 ? 1 : 2 * this(x - 1))
+println sumPowersOfTwo(1, 10)
