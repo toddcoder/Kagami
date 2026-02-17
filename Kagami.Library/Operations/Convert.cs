@@ -26,22 +26,10 @@ public class Convert : Operation
       conversions[("String", "Float")] = s => Float.FloatObject(double.Parse(s.AsString));
       conversions[("String", "Long")] = s => Long.LongObject(BigInteger.Parse(s.AsString));
       conversions[("String", "Byte")] = s => KByte.ByteObject(byte.Parse(s.AsString));
-      conversions[("Float", "Rational")] = f =>
-      {
-         var value = (Float)f;
-         return Rational.RationalObject(value.AsRational());
-      };
-      conversions[("Int", "Rational")] = i =>
-      {
-         var value = (Int)i;
-         return Rational.RationalObject(value.AsRational());
-      };
-      conversions[("Long", "Rational")] = l =>
-      {
-         var value = (Long)l;
-         return Rational.RationalObject(value.AsRational());
-      };
-        conversions[("Char", "Byte")] = c => KByte.ByteObject((byte)((KChar)c).Value);
+      conversions[("Float", "Rational")] = f => Rational.RationalObject(((Float)f).AsRational());
+      conversions[("Int", "Rational")] = i => Rational.RationalObject(((Int)i).AsRational());
+      conversions[("Long", "Rational")] = l => Rational.RationalObject(((Long)l).AsRational());
+      conversions[("Char", "Byte")] = c => KByte.ByteObject((byte)((KChar)c).Value);
    }
 
    public override Optional<IObject> Execute(Machine machine)
