@@ -14,7 +14,7 @@ public class Convert : Operation
 {
    protected bool increment = true;
 
-   protected static Hash<(string from, string to), Func<IObject, IObject>> conversions = [];
+   protected static readonly Hash<(string from, string to), Func<IObject, IObject>> conversions = [];
 
    static Convert()
    {
