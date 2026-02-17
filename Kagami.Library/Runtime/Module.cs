@@ -35,6 +35,21 @@ public class Module
       autoConversions[("Int", "Char")] = i => KChar.CharObject((char)((Int)i).AsInt32());
       autoConversions[("Char", "Int")] = c => Int.IntObject(((KChar)c).Value);
       autoConversions[("Junction", "Boolean")] = j => (KBoolean)j.IsTrue;
+      autoConversions[("Int", "Rational")] = i =>
+      {
+         var (numerator, denominator) = ((Int)i).AsRational();
+         return new Rational(numerator, denominator);
+      };
+      autoConversions[("Float", "Rational")] = f =>
+      {
+         var (numerator, denominator) = ((Float)f).AsRational();
+         return new Rational(numerator, denominator);
+      };
+      autoConversions[("Long", "Rational")] = l =>
+      {
+         var (numerator, denominator) = ((Long)l).AsRational();
+         return new Rational(numerator, denominator);
+      };
    }
 
    public static Maybe<Func<IObject, IObject>> AutoConversion(string from, string to) => autoConversions.Maybe[(from, to)];
