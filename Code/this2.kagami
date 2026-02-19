@@ -1,5 +1,7 @@
 ﻿open sys
 
+#pragma ALLOW_PRINT_STATEMENT true
+
 func sum(f lambda) {
 	let sumf = {(a int, b int)
 		var total = 0

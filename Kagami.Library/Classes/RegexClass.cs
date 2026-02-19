@@ -12,6 +12,7 @@ public class RegexClass : BaseClass, IEquivalentClass
       base.RegisterMessages();
 
       messages["matches(_<String>)"] = (obj, msg) => function<Regex, KString>(obj, msg, (r, s) => r.Matches(s.Value));
+      messages["matches(_<String>,_<Lambda>)"] = (obj, msg) => function<Regex, KString, Lambda>(obj, msg, (r, s, l) => r.Matches(s.Value, l));
       messages["notMatches(_<String>)"] = (obj, msg) => function<Regex, KString>(obj, msg, (r, s) => r.NotMatches(s.Value));
       messages["isMatch(_<String>)"] = (obj, msg) => function<Regex, KString>(obj, msg, (r, s) => r.IsMatch(s.Value));
       messages["replace(_<String>, _<String>)"] = (obj, msg) =>

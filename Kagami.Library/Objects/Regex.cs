@@ -184,6 +184,64 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
       }
    }
 
+   public IObject Matches(string input, Lambda lambda)
+   {
+      var self = this;
+      var _result = isMatch(input);
+
+      if (global)
+      {
+         if (_result is (true, var result))
+         {
+            RegexMatch[] enumerable =
+            [
+               .. result.Select(m => new RegexMatch(m, self.nameToIndex(result), self.indexToName(result), input.Keep(m.Index),
+                  input.Drop(m.Index + m.Length), input))
+            ];
+            List<IObject> returns = [];
+            foreach (var match in enumerable)
+            {
+               if (lambda.Invoke(match).IsTrue)
+               {
+                  returns.Add(getMatchOrText(match, self.textOnly));
+               }
+            }
+
+            return new KArray([.. returns]);
+         }
+         else
+         {
+            return KArray.Empty;
+         }
+      }
+      else if (isMatch(input) is (true, var result2))
+      {
+         var match = result2.GetMatch(0);
+         var regexMatch = new RegexMatch(match, self.nameToIndex(result2), self.indexToName(result2), input.Keep(match.Index),
+            input.Drop(match.Index + match.Length), input);
+         for (var index = 0; index < match.Groups.Length; index++)
+         {
+            setVariable(index, match.Groups[index].Text);
+         }
+
+         if (!lambda.Invoke(regexMatch).IsTrue)
+         {
+            return KNil.NilValue;
+         }
+
+         var prefix = input.Keep(result2.Index);
+         var suffix = input.Drop(result2.Index + result2.Length);
+         setVariable("`prefix", prefix);
+         setVariable("`suffix", suffix);
+
+         return Some.Object(getMatchOrText(regexMatch, self.textOnly));
+      }
+      else
+      {
+         return KNil.NilValue;
+      }
+   }
+
    public KBoolean NotMatches(string input) => !isMatch(input);
 
    private Core.Matching.Pattern getFixedPattern() => pattern.WithMultiline(multiline).WithIgnoreCase(ignoreCase);
