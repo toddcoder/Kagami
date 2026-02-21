@@ -169,7 +169,7 @@ public readonly struct Float : IObject, INumeric, IComparable<Float>, IEquatable
 
    public IObject Trunc() => (Float)Math.Truncate(value);
 
-   public string AsString => value.ToString();
+   public string AsString => floatImage(value);
 
    public string Image => floatImage(value);
 
@@ -253,6 +253,7 @@ public readonly struct Float : IObject, INumeric, IComparable<Float>, IEquatable
       {
          bits--;
       }
+
       return BitConverter.Int64BitsToDouble(bits);
    }
 
@@ -276,6 +277,7 @@ public readonly struct Float : IObject, INumeric, IComparable<Float>, IEquatable
       {
          bits++;
       }
+
       return BitConverter.Int64BitsToDouble(bits);
    }
 
