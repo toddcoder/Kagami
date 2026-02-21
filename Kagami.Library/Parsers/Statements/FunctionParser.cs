@@ -19,7 +19,7 @@ public partial class FunctionParser : StatementParser
    protected List<InvokeSymbol> annotations = [];
 
    [GeneratedRegex(
-      $@"^(\s*){REGEX_HIDDEN}(override\s+)?(func|(?:infix\(\w+\))|prefix|postfix|macro|match)(\s+)(?:({REGEX_CLASS_GETTING_OR_ALIAS})(\.))?({REGEX_FUNCTION_NAME})(\()?")]
+      $@"^(\s*){REGEX_HIDDEN}(override\s+)?(func|(?:infix\(\w+\))|prefix|postfix|match)(\s+)(?:({REGEX_CLASS_GETTING_OR_ALIAS})(\.))?({REGEX_FUNCTION_NAME})(\()?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
@@ -28,7 +28,6 @@ public partial class FunctionParser : StatementParser
       var overriding = tokens[3].Text.StartsWith("override");
       var operatorText = tokens[4].Text;
       var isOperator = operatorText.StartsWith("infix") || operatorText is "prefix" or "postfix";
-      var isMacro = tokens[4].Text == "macro";
       var isMatch = tokens[4].Text == "match";
 
       var className = tokens[6].Text;
@@ -124,14 +123,7 @@ public partial class FunctionParser : StatementParser
             {
                curriedFunction.IsFixed = isFixed;
                _function = curriedFunction;
-               if (isMacro)
-               {
-                  state.RegisterMacro(curriedFunction);
-               }
-               else
-               {
-                  state.AddStatement(curriedFunction);
-               }
+               state.AddStatement(curriedFunction);
 
                return unit;
             }
@@ -157,14 +149,7 @@ public partial class FunctionParser : StatementParser
                   IsFixed = isFixed, Annotations = annotations, SelfAlias = SelfAlias
                };
                _function = function;
-               if (isMacro)
-               {
-                  state.RegisterMacro(function);
-               }
-               else
-               {
-                  state.AddStatement(function);
-               }
+               state.AddStatement(function);
 
                return unit;
             }
