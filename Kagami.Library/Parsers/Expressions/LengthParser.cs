@@ -11,13 +11,13 @@ public partial class LengthParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(#)")]
+   [GeneratedRegex(@"^(\s*)(@)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
       state.Colorize(tokens, Color.Whitespace, Color.Operator);
-      builder.Add(new SendMessageSymbol("length".get(), false));
+      builder.Add(new SendMessageSymbol("length".get(), Precedence.PrefixOperator, false));
 
       return unit;
    }

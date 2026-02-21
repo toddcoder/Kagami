@@ -1767,6 +1767,9 @@ public static class ParserFunctions
          case @"\\":
             _symbol = new ForcedFloatDivide();
             break;
+         case "@":
+            _symbol = new CountSymbol();
+            break;
       }
 
       return _symbol;

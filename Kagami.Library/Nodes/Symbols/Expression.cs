@@ -1,6 +1,8 @@
 ﻿using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Operations;
 using Core.Enumerables;
+using Kagami.Library.Objects;
+using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Nodes.Symbols;
 
@@ -57,4 +59,18 @@ public class Expression : Symbol
    }
 
    public int SpecialComparisandIndex { get; set; } = -1;
+
+   public SelectorItem SelectorItem()
+   {
+      var symbol = symbols[0];
+      if (symbol is NameValueSymbol nameValue)
+      {
+         var (name, _) = nameValue;
+         return new SelectorItem(name, nil, SelectorItemType.Normal);
+      }
+      else
+      {
+         return new SelectorItem("", nil, SelectorItemType.Normal);
+      }
+   }
 }

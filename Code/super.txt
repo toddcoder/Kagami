@@ -1,8 +1,8 @@
 Results===
 Number of values: 2
-Minimum: 13
-Maximum: 26
-Total: 39
+Minimum: 13.0
+Maximum: 26.0
+Total: 39.0
 Mean: 19.5
 Standard Deviation: 6.5
 Variance: 42.25

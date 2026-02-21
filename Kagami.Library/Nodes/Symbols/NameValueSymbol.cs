@@ -1,5 +1,4 @@
-﻿using Kagami.Library.Objects;
-using Kagami.Library.Operations;
+﻿using Kagami.Library.Operations;
 
 namespace Kagami.Library.Nodes.Symbols;
 
@@ -19,13 +18,6 @@ public class NameValueSymbol : Symbol, IHasExpression
       builder.PushString(name);
       value.Generate(builder);
       builder.NewNameValue();
-      /*builder.ToArguments(2);
-      builder.NewValue("NameValue", t =>
-      {
-         var s = ((KString)t[0]).Value;
-         var o = t[1];
-         return new NameValue(s, o);
-      });*/
    }
 
    public override Precedence Precedence => Precedence.KeyValue;

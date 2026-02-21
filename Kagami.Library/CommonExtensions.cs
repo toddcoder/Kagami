@@ -9,30 +9,33 @@ namespace Kagami.Library;
 
 public static class CommonExtensions
 {
-   public static string get(this string name) => $"__${name}()";
-
-   public static string unget(this string name) => name.Substitute("^ '__$' /(.*) $", "$1");
-
-   public static string set(this string name) => $"{name}=(_)";
-
-   public static Selector Selector(this string baseName, params string[] selectorItemSources)
+   extension(string name)
    {
-      if (selectorItemSources.Length == 0)
-      {
-         return new Selector(baseName);
-      }
-      else
-      {
-         var selectorItems = selectorItemSources.Select(parseSelectorItem).ToArray();
-         var image = $"{baseName}({selectorItemSources.ToString(",")})";
+      public string get() => $"__${name}()";
 
-         return new Selector(baseName, selectorItems, image);
-      }
-   }
+      public string unget() => name.Substitute("^ '__$' /(.*) $", "$1");
 
-   public static Selector Selector(this string baseName, int count)
-   {
-      return baseName.Selector(Enumerable.Range(0, count).Select(_ => "_").ToArray());
+      public string set() => $"{name}=(_)";
+
+      public Selector Selector(params string[] selectorItemSources)
+      {
+         if (selectorItemSources.Length == 0)
+         {
+            return new Selector(name);
+         }
+         else
+         {
+            var selectorItems = selectorItemSources.Select(parseSelectorItem).ToArray();
+            var image = $"{name}({selectorItemSources.ToString(",")})";
+
+            return new Selector(name, selectorItems, image);
+         }
+      }
+
+      public Selector Selector(int count)
+      {
+         return name.Selector(Enumerable.Range(0, count).Select(_ => "_").ToArray());
+      }
    }
 
    public static IObject AsOptional<T>(this Maybe<T> maybe) where T : IObject

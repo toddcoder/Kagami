@@ -1,2 +1,2 @@
-Point(10, 42)
-"Point(10, 42)" | String
+Point(10.0, 42.0)
+"Point(10.0, 42.0)" | String
