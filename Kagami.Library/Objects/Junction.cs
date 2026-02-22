@@ -70,7 +70,14 @@ public struct Junction : IObject
       }
    }
 
-   public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
+   public bool Match(IObject comparisand, Hash<string, IObject> bindings) => junctionType switch
+   {
+      JunctionType.All => items.All(i => i.Match(comparisand, bindings)),
+      JunctionType.Any => items.Any(i => i.Match(comparisand, bindings)),
+      JunctionType.One => items.Count(i => i.Match(comparisand, bindings)) == 1,
+      JunctionType.None => items.All(i => !i.Match(comparisand, bindings)),
+      _ => false
+   };
 
    public bool IsTrue => junctionType switch
    {
