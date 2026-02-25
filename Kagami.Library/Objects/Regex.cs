@@ -13,8 +13,16 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
 {
    private static IObject getMatchOrText(RegexMatch match, bool textOnly) => textOnly ? match.Text : match;
 
+   private static Hash<PatternWithOptions, Core.Matching.Pattern> cachedPattern = [];
+
    private Core.Matching.Pattern getPattern(string originalPattern)
    {
+      var patternWithOptions = new PatternWithOptions(originalPattern, ignoreCase, multiline, global, textOnly);
+      if (cachedPattern.Maybe[patternWithOptions] is (true, var foundPattern))
+      {
+         return foundPattern;
+      }
+
       Core.Matching.Pattern pattern;
       if (originalPattern.Matches("-(<'\\') /('$') /(['A-Za-z_']['A-Za-z_0-9']*)") is (true, var results))
       {
@@ -42,7 +50,10 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
          pattern = originalPattern.Replace(@"\$", "$");
       }
 
-      return pattern.WithIgnoreCase(ignoreCase).WithMultiline(multiline);
+      pattern = pattern.WithIgnoreCase(ignoreCase).WithMultiline(multiline);
+      cachedPattern[patternWithOptions] = pattern;
+
+      return pattern;
    }
 
    private readonly string originalPattern;
