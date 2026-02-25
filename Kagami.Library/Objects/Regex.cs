@@ -13,7 +13,39 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
 {
    private static IObject getMatchOrText(RegexMatch match, bool textOnly) => textOnly ? match.Text : match;
 
-   private readonly Core.Matching.Pattern pattern;
+   private Core.Matching.Pattern getPattern(string originalPattern)
+   {
+      Core.Matching.Pattern pattern;
+      if (originalPattern.Matches("-(<'\\') /('$') /(['A-Za-z_']['A-Za-z_0-9']*)") is (true, var results))
+      {
+         var builder = new StringBuilder();
+         var lastIndex = 0;
+         foreach (var match in results)
+         {
+            var fieldName = match.SecondGroup;
+            var _field = Machine.Current.Value.Find(fieldName, true);
+            if (_field is (true, var field))
+            {
+               var fieldValue = field.Value;
+               var fieldString = fieldValue is Regex regex ? regex.originalPattern : fieldValue.AsString;
+               builder.Append(originalPattern.AsSpan(lastIndex, match.Index - lastIndex));
+               builder.Append(fieldString);
+               lastIndex = match.Index + match.Length;
+            }
+         }
+
+         builder.Append(originalPattern.AsSpan(lastIndex));
+         pattern = builder.ToString().Replace(@"\$", "$");
+      }
+      else
+      {
+         pattern = originalPattern.Replace(@"\$", "$");
+      }
+
+      return pattern.WithIgnoreCase(ignoreCase).WithMultiline(multiline);
+   }
+
+   private readonly string originalPattern;
    private readonly bool ignoreCase;
    private readonly bool multiline;
    private readonly bool global;
@@ -23,9 +55,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
 
    public Regex(string pattern, bool ignoreCase, bool multiline, bool global, bool textOnly) : this()
    {
-      this.pattern = pattern;
-      this.pattern = this.pattern.WithIgnoreCase(ignoreCase);
-      this.pattern = this.pattern.WithMultiline(multiline);
+      originalPattern = pattern;
       this.ignoreCase = ignoreCase;
       this.multiline = multiline;
       this.global = global;
@@ -37,7 +67,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
 
    public Regex(Core.Matching.Pattern pattern, bool global, bool textOnly)
    {
-      this.pattern = pattern;
+      originalPattern = pattern.ToString() ?? "";
       ignoreCase = pattern.IgnoreCase;
       multiline = pattern.Multiline;
       this.global = global;
@@ -49,14 +79,14 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
 
    public string ClassName => "Regex";
 
-   public string AsString => pattern.Regex;
+   public string AsString => getPattern(originalPattern).Regex;
 
    public string Image
    {
       get
       {
          var builder = new StringBuilder("x\"");
-         builder.Append(pattern.Regex);
+         builder.Append(getPattern(originalPattern).Regex);
          if (ignoreCase || multiline || global)
          {
             builder.Append(';');
@@ -99,13 +129,13 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
 
    public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
-   public bool IsTrue => pattern.Regex.Length > 0;
+   public bool IsTrue => getPattern(originalPattern).Regex.Length > 0;
 
    public Guid Id { get; init; } = Guid.NewGuid();
 
-   public Core.Matching.Pattern CorePattern => pattern;
+   public Core.Matching.Pattern CorePattern => getPattern(originalPattern);
 
-   private Maybe<MatchResult> isMatch(string input) => input.Matches(pattern);
+   private Maybe<MatchResult> isMatch(string input) => input.Matches(getPattern(originalPattern));
 
    public IObject MatchesIndex(string input)
    {
@@ -244,7 +274,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
 
    public KBoolean NotMatches(string input) => !isMatch(input);
 
-   private Core.Matching.Pattern getFixedPattern() => pattern.WithMultiline(multiline).WithIgnoreCase(ignoreCase);
+   private Core.Matching.Pattern getFixedPattern() => getPattern(originalPattern).WithMultiline(multiline).WithIgnoreCase(ignoreCase);
 
    public KString Replace(string input, string replacement)
    {
@@ -255,7 +285,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
       }
       else
       {
-         return input.Substitute(pattern, replacement, 1);
+         return input.Substitute(getPattern(originalPattern), replacement, 1);
       }
    }
 
@@ -328,7 +358,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
          {
             var matchIndex = result.Matches.Length - 1;
             var match = result.Matches[matchIndex];
-            var resultText = match.Text.Substitute(pattern, replacement);
+            var resultText = match.Text.Substitute(getPattern(originalPattern), replacement);
             result.Matches[matchIndex].Text = resultText;
 
             return result.Text;
@@ -585,18 +615,18 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
 
    public Regex Concatenate(IObject obj) => obj switch
    {
-      Regex regex => new Regex(pattern + regex.pattern, global, textOnly),
-      KString str => new Regex(pattern.Regex + str.Value, ignoreCase, multiline, global, textOnly),
-      _ => new Regex(pattern.Regex + obj.AsString, ignoreCase, multiline, global, textOnly)
+      Regex regex => new Regex(originalPattern + regex.originalPattern, global, textOnly),
+      KString str => new Regex(getPattern(originalPattern).Regex + str.Value, ignoreCase, multiline, global, textOnly),
+      _ => new Regex(getPattern(originalPattern).Regex + obj.AsString, ignoreCase, multiline, global, textOnly)
    };
 
-   public Regex Concatenate(string otherPattern) => new(pattern.Regex + otherPattern, ignoreCase, multiline, global, textOnly);
+   public Regex Concatenate(string otherPattern) => new(getPattern(originalPattern).Regex + otherPattern, ignoreCase, multiline, global, textOnly);
 
    public Optional<Match> MatchOne(string input) => getFixedPattern().MatchedBy(input).Map(r => r.Matches[0]);
 
    public IObject PendingRegex(KString input) => new PendingRegex(this, input);
 
-   public string Pattern => pattern.Regex;
+   public string Pattern => getPattern(originalPattern).Regex;
 
    public bool IgnoreCase => ignoreCase;
 
@@ -604,12 +634,13 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
 
    public bool Global => global;
 
-   public bool Equals(Regex other) => pattern.Equals(other.pattern) && ignoreCase == other.ignoreCase && multiline == other.multiline &&
+   public bool Equals(Regex other) => getPattern(originalPattern).Equals(other.getPattern(originalPattern)) && ignoreCase == other.ignoreCase &&
+      multiline == other.multiline &&
       global == other.global && textOnly == other.textOnly && nameToIndex.Equals(other.nameToIndex);
 
    public override bool Equals(object? obj) => obj is Regex other && Equals(other);
 
-   public override int GetHashCode() => HashCode.Combine(pattern, ignoreCase, multiline, global, textOnly, nameToIndex);
+   public override int GetHashCode() => HashCode.Combine(originalPattern, ignoreCase, multiline, global, textOnly, nameToIndex);
 
    public IObject Accept(IObject obj) => obj switch
    {
@@ -626,7 +657,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
       List<IObject> list = [];
       if (global)
       {
-         foreach (var match in input.AllMatches(pattern))
+         foreach (var match in input.AllMatches(getPattern(originalPattern)))
          {
             List<IObject> innerList = [];
             foreach (var group in match.Groups.Skip(1))
@@ -638,7 +669,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
             list.Add(kArray);
          }
       }
-      else if (input.Matches(pattern) is (true, var result))
+      else if (input.Matches(getPattern(originalPattern)) is (true, var result))
       {
          foreach (var group in result.Groups(0).Skip(1))
          {
@@ -651,7 +682,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
 
    public KString SplitMapJoin(string input, Lambda onMatch, Lambda onNonMatch)
    {
-      var _result = input.Matches(pattern);
+      var _result = input.Matches(getPattern(originalPattern));
       if (_result is (true, var result))
       {
          var builder = new StringBuilder();
@@ -681,11 +712,11 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
       }
    }
 
-   public Regex WithIgnoreCase(bool ignoreCase) => new(pattern.WithIgnoreCase(ignoreCase), global, textOnly);
+   public Regex WithIgnoreCase(bool ignoreCase) => new(getPattern(originalPattern).WithIgnoreCase(ignoreCase), global, textOnly);
 
-   public Regex WithMultiline(bool multiline) => new(pattern.WithMultiline(multiline), global, textOnly);
+   public Regex WithMultiline(bool multiline) => new(getPattern(originalPattern).WithMultiline(multiline), global, textOnly);
 
-   public Regex WithGlobal(bool global) => new(pattern, global, textOnly);
+   public Regex WithGlobal(bool global) => new(getPattern(originalPattern), global, textOnly);
 
    private void setVariable(int index, string text) => setVariable(index.ToString(), text);
 

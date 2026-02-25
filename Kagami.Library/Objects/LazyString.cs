@@ -11,11 +11,9 @@ namespace Kagami.Library.Objects;
 public readonly struct LazyString(string value) : IObject, IComparable<KString>, IEquatable<KString>, IFormattable,
    ICollection, IComparable, ISliceable, IRangeItem, ITextFinding
 {
-   private const string REGEX_DOLLAR_FIELD = "-(<'\\') /('$') /(['A-Za-z_']['A-Za-z_0-9']*) ('[' /(-[']']+) ']')?";
-
    private string getString()
    {
-      if (value.Matches(REGEX_DOLLAR_FIELD) is (true, var results))
+      if (value.Matches("-(<'\\') /('$') /(['A-Za-z_']['A-Za-z_0-9']*) ('[' /(-[']']+) ']')?") is (true, var results))
       {
          Slicer slicer = value;
          foreach (var match in results)
