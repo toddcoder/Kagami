@@ -203,8 +203,8 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
 
          var prefix = input.Keep(result2.Index);
          var suffix = input.Drop(result2.Index + result2.Length);
-         setVariable("`prefix", prefix);
-         setVariable("`suffix", suffix);
+         setVariable("prefix", prefix);
+         setVariable("suffix", suffix);
 
          return Some.Object(getMatchOrText(regexMatch, self.textOnly));
       }
@@ -261,8 +261,8 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
 
          var prefix = input.Keep(result2.Index);
          var suffix = input.Drop(result2.Index + result2.Length);
-         setVariable("`prefix", prefix);
-         setVariable("`suffix", suffix);
+         setVariable("prefix", prefix);
+         setVariable("suffix", suffix);
 
          return Some.Object(getMatchOrText(regexMatch, self.textOnly));
       }
