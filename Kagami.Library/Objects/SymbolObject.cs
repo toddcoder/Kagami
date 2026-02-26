@@ -13,7 +13,7 @@ public readonly struct SymbolObject : IObject, IObjectCompare, IEquatable<Symbol
 
    public string AsString => name;
 
-   public string Image => $"#{name}";
+   public string Image => $"@{name}";
 
    public int Hash => name.GetHashCode();
 

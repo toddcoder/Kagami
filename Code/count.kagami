@@ -3,6 +3,6 @@
 #pragma ALLOW_PRINT_STATEMENT true
 
 let x = a"xx yy z x"
-println @x
-println x @ "x"
-println x @ i -> i.startsWith("x")
+println #x
+println x # "x"
+println x # i -> i.startsWith("x")
