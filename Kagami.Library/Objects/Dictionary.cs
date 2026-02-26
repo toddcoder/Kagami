@@ -15,7 +15,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
 {
    public static IObject New(IObject defaultValue, KBoolean caching, Maybe<TypeConstraint> _typeConstraint)
    {
-      var dictionary = new Dictionary() { TypeConstraint = _typeConstraint };
+      var dictionary = new Dictionary { TypeConstraint = _typeConstraint };
       if (defaultValue is Lambda lambda)
       {
          dictionary.DefaultLambda = lambda.Some();
@@ -832,6 +832,29 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
       }
 
       dictionary = newDictionary;
+      return this;
+   }
+
+   public Dictionary Push(IObject key, IObject value)
+   {
+      if (dictionary.ContainsKey(key))
+      {
+         var existing = dictionary[key];
+         if (existing is IMutableCollection mutableCollection)
+         {
+            mutableCollection.Append(value);
+         }
+         else
+         {
+            var array = new KArray([existing, value]);
+            dictionary[key] = array;
+         }
+      }
+      else
+      {
+         dictionary[key] = value;
+      }
+
       return this;
    }
 }
