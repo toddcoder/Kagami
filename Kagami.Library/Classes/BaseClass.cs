@@ -85,6 +85,7 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerMessage("seq(_)", (obj, message) => new OpenRange(obj, (Lambda)message.Arguments[0]));
       registerMessage("format(_<String>)", (obj, message) => format(obj, message.Arguments[0].AsString));
       registerMessage("format(_<Array>)", (obj, message) => formatArray(obj, message.Arguments[0]));
+      registerMessage("format(_<Lambda>)", (obj, message) => formatLambda(obj, message));
       registerMessage("objId".get(), (obj, _) => KString.StringObject(obj.Id.ToString()));
       registerMessage("isTrue".get(), (obj, _) => KBoolean.BooleanObject(obj.IsTrue));
       registerMessage("numberize()", (_, _) => Undefined.Value);
@@ -152,6 +153,18 @@ public abstract class BaseClass : IEquatable<BaseClass>
       else
       {
          return KString.StringObject(obj.AsString);
+      }
+   }
+
+   protected static KString formatLambda(IObject obj, Message message)
+   {
+      if (obj is IFormattable formattable && message.Arguments.Length > 0 && message.Arguments[0] is Lambda lambda)
+      {
+         return formattable.Format(lambda);
+      }
+      else
+      {
+         return obj.AsString;
       }
    }
 
@@ -440,15 +453,19 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerIterMessage("skip(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Skip(j.Value)));
       registerIterMessage("-(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Skip(j.Value)));
       registerIterMessage("skipWhile(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.SkipWhile(l, false)));
-      registerIterMessage("skipWhile(back:_<Boolean>,_<Lambda>)", (obj, message) => iteratorFunc<KBoolean, Lambda>(obj, message, (i, b, l) => i.SkipWhile(l, b.Value)));
+      registerIterMessage("skipWhile(back:_<Boolean>,_<Lambda>)",
+         (obj, message) => iteratorFunc<KBoolean, Lambda>(obj, message, (i, b, l) => i.SkipWhile(l, b.Value)));
       registerIterMessage("skipUntil(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.SkipUntil(l, false)));
-      registerIterMessage("skipUntil(back:_<Boolean>,_<Lambda>)", (obj, message) => iteratorFunc<KBoolean, Lambda>(obj, message, (i, b, l) => i.SkipUntil(l, b.Value)));
+      registerIterMessage("skipUntil(back:_<Boolean>,_<Lambda>)",
+         (obj, message) => iteratorFunc<KBoolean, Lambda>(obj, message, (i, b, l) => i.SkipUntil(l, b.Value)));
       registerIterMessage("take(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Take(j.Value)));
       registerIterMessage("+(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Take(j.Value)));
       registerIterMessage("takeWhile(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.TakeWhile(l, false)));
-      registerIterMessage("takeWhile(back:_<Boolean>,_<Lambda>)", (obj, message) => iteratorFunc<KBoolean, Lambda>(obj, message, (i, b, l) => i.TakeWhile(l, b.Value)));
+      registerIterMessage("takeWhile(back:_<Boolean>,_<Lambda>)",
+         (obj, message) => iteratorFunc<KBoolean, Lambda>(obj, message, (i, b, l) => i.TakeWhile(l, b.Value)));
       registerIterMessage("takeUntil(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.TakeUntil(l, false)));
-      registerIterMessage("takeUntil(back:_<Boolean>,_<Lambda>)", (obj, message) => iteratorFunc<KBoolean, Lambda>(obj, message, (i, b, l) => i.TakeUntil(l, b.Value)));
+      registerIterMessage("takeUntil(back:_<Boolean>,_<Lambda>)",
+         (obj, message) => iteratorFunc<KBoolean, Lambda>(obj, message, (i, b, l) => i.TakeUntil(l, b.Value)));
       registerIterMessage("index(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Index(l)));
       registerIterMessage("indexes(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Indexes(l)));
       registerIterMessage("zip(_<Collection>,_<Lambda>)",

@@ -184,6 +184,8 @@ public readonly struct KDecimal : IObject, INumeric, IObjectCompare, IComparable
 
    public KString Format(string[] formats) => format(this, formats);
 
+   public KString Format(Lambda lambda) => format(this, lambda);
+
    public int CompareTo(object? obj) => CompareTo((KDecimal)obj!);
 
    public IObject Increment(int amount = 1) => (KDecimal)(value + amount);

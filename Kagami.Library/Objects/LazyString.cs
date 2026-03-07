@@ -78,6 +78,8 @@ public readonly struct LazyString(string value) : IObject, IComparable<KString>,
 
    public KString Format(string[] formats) => format(this, formats);
 
+   public KString Format(Lambda lambda) => format(this, lambda);
+
    public IObject this[SkipTake skipTake] => getKString()[skipTake];
 
    public IIterator GetIterator(bool lazy) => getKString().GetIterator(lazy);

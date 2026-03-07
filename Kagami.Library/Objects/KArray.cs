@@ -829,13 +829,5 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       {
          throw expectedType("Array");
       }
-      /*var result = lambda.Invoke(first, second);
-
-      for (var i = 2; i < list.Count; i++)
-      {
-         result = lambda.Invoke(result, list[i]);
-      }
-
-      return result;*/
    }
 }

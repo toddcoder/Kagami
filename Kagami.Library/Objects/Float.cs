@@ -217,6 +217,8 @@ public readonly struct Float : IObject, INumeric, IComparable<Float>, IEquatable
 
    public KString Format(string[] formats) => format(this, formats);
 
+   public KString Format(Lambda lambda) => format(this, lambda);
+
    public IObject Increment(int amount = 1) => new Float(value + amount);
 
    public IObject Decrement(int amount = 1) => new Float(value - amount);

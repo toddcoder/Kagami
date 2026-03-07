@@ -138,6 +138,8 @@ public readonly struct Int : IObject, INumeric, IComparable<Int>, IEquatable<Int
 
    public KString Format(string[] formats) => format(this, formats);
 
+   public KString Format(Lambda lambda) => format(this, lambda);
+
    public KBoolean IsEven => value % 2 == 0;
 
    public KBoolean IsOdd => value % 2 != 0;

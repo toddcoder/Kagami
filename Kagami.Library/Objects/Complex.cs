@@ -156,6 +156,8 @@ public readonly struct Complex : IObject, INumeric, IObjectCompare, IComparable<
 
    public KString Format(string[] formats) => format(this, formats);
 
+   public KString Format(Lambda lambda) => format(this, lambda);
+
    public IObject Negate() => (Complex)CComplex.Negate(value);
 
    public IObject Sign() => new Complex(Math.Sign(value.Real), Math.Sign(value.Imaginary));

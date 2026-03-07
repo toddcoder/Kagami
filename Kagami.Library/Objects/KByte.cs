@@ -121,6 +121,8 @@ public readonly struct KByte : IObject, INumeric, IObjectCompare, IComparable<KB
 
    public KString Format(string[] formats) => format(this, formats);
 
+   public KString Format(Lambda lambda) => format(this, lambda);
+
    public IObject Increment(int amount = 1) => (KByte)(value + amount);
 
    public IObject Decrement(int amount = 1) => (KByte)(value - amount);

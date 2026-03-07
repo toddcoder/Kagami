@@ -66,6 +66,8 @@ public readonly struct Formatter(LazyString lazyString, KArray array) : IObject,
 
    public KString Format(string[] formats) => getKString().Format(formats);
 
+   public KString Format(Lambda lambda) => format(this, lambda);
+
    public IObject this[SkipTake skipTake] => getKString()[skipTake];
 
    public IIterator GetIterator(bool lazy) => getKString().GetIterator(lazy);

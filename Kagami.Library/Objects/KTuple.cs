@@ -456,6 +456,8 @@ public struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjectCompare,
       return formatted;
    }
 
+   public KString Format(Lambda lambda) => format(this, lambda);
+
    public KTuple Rotate(int count = 1)
    {
       if (count == 0)

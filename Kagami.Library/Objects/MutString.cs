@@ -54,6 +54,8 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
 
    public KString Format(string[] formats) => format(this, formats);
 
+   public KString Format(Lambda lambda) => format(this, lambda);
+
    public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new Iterator(this);
 
    public Maybe<IObject> Next(int index)

@@ -928,6 +928,8 @@ public static class ObjectFunctions
       }
    }
 
+   public static KString format(IObject obj, Lambda lambda) => new(lambda.Invoke(obj).AsString);
+
    public static IObject assignToMutable(IObject collection, IObject possibleSkipTake, IObject source)
    {
       if (collection is IMutableCollection mutableCollection)

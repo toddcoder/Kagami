@@ -11,7 +11,7 @@ public partial class KeywordOperatorsParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s+)(if|map|join|sort|foldl|foldr|fold|all|any|none|one|zip|skip|take|while|until|min|max" +
+   [GeneratedRegex(@"^(\s+)(if|map|join|sort|foldl|foldr|fold|all|any|none|one|zip|Z|skip|take|while|until|min|max" +
       @"|does|X|each|approx|same|xor|union|intersect|diff|symdiff|subsetof|supersetof|accum|overlaps|to|til|downto|downtil|dto|dtil|by)(\s+)")]
    public override partial Regex Regex();
 
@@ -124,6 +124,9 @@ public partial class KeywordOperatorsParser : SymbolParser
                   break;
                case "by":
                   builder.Add(new SendBinaryMessageSymbol("by(_<Int>)", Precedence.Range));
+                  break;
+               case "Z":
+                  builder.Add(new SendBinaryMessageSymbol("zip(_)", Precedence.ChainedOperator));
                   break;
                default:
                   return fail($"Keyword internal error for {keyword}");
