@@ -797,4 +797,23 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       list = newList;
       return this;
    }
+
+   public IObject ZipAll(Lambda lambda)
+   {
+      if (list.Count <= 1)
+      {
+         return this;
+      }
+
+      var first = list[0];
+      var second = list[1];
+      var result = lambda.Invoke(first, second);
+
+      for (var i = 2; i < list.Count; i++)
+      {
+         result = lambda.Invoke(result, list[i]);
+      }
+
+      return result;
+   }
 }

@@ -82,6 +82,7 @@ public class ArrayClass : BaseClass, ICollectionClass
       registerMessage("copy(to:_<Array>,from:_<Int>)", (obj, msg) => function<KArray, KArray, Int>(obj, msg, (a, t, f) => a.CopyTo(t, f.Value)));
       registerMessage("retain(_<Lambda>)", (obj, msg) => function<KArray, Lambda>(obj, msg, (a, l) => a.Retain(l)));
       registerMessage("remove(_<Lambda>)", (obj, msg) => function<KArray, Lambda>(obj, msg, (a, l) => a.Remove(l)));
+      registerMessage("zipAll(_<Lambda>)", (obj, msg) => function<KArray, Lambda>(obj, msg, (a, l) => a.ZipAll(l)));
    }
 
    protected static IObject getIndexed(KArray a, IObject i)

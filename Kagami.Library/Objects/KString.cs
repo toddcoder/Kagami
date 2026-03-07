@@ -627,11 +627,17 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
    public PendingRegex PendingRegex(Regex regex) => new(regex, this);
 
-   public IObject Fields() => new FieldsIterator(this);
+   private KArray splitIntoFields(Core.Matching.Pattern pattern)
+   {
+      var fields = value.Unjoin(pattern);
+      return new KArray(fields.Select(StringObject));
+   }
 
-   public IObject Fields(Regex regex) => new FieldsIterator(this, regex);
+   public IObject Fields() => splitIntoFields("/s+; f");
 
-   public IObject Field(int index) => ((IIterator)Fields()).ToArray()[index];
+   public IObject Fields(Regex regex) => splitIntoFields(regex.CorePattern);
+
+   public IObject Field(int index) => ((KArray)Fields())[index];
 
    public IObject Numberize()
    {
