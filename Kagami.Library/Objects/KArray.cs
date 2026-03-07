@@ -807,13 +807,35 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
       var first = list[0];
       var second = list[1];
-      var result = lambda.Invoke(first, second);
+      if (first is KArray firstArray && second is KArray secondArray)
+      {
+         var result = firstArray.GetIterator(false).Zip(secondArray, lambda);
+
+         for (var i = 2; i < list.Count; i++)
+         {
+            if (list[i] is KArray array && result is KArray resultArray)
+            {
+               result = resultArray.GetIterator(false).Zip(array, lambda);
+            }
+            else
+            {
+               throw expectedType("Array");
+            }
+         }
+
+         return result;
+      }
+      else
+      {
+         throw expectedType("Array");
+      }
+      /*var result = lambda.Invoke(first, second);
 
       for (var i = 2; i < list.Count; i++)
       {
          result = lambda.Invoke(result, list[i]);
       }
 
-      return result;
+      return result;*/
    }
 }
