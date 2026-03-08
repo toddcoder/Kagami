@@ -80,4 +80,6 @@ public readonly struct ByteArray : IObject, ICollection, IObjectCompare
       var encoding = Encoding.GetEncoding(encodingName);
       return new KString(encoding.GetString(bytes));
    }
+
+   public KString Encode() => Encode("UTF-8");
 }

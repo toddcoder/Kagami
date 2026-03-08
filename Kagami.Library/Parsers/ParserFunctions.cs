@@ -1710,9 +1710,9 @@ public static class ParserFunctions
          case "<|" when !flags[ExpressionFlags.InLambda]:
             _symbol = new BackPipelineSymbol();
             break;
-         case "...":
+         /*case "...":
             _symbol = new OpenRangeSymbol();
-            break;
+            break;*/
          case "<>":
             _symbol = new CompareSymbol();
             break;

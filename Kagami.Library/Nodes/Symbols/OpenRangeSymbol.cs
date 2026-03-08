@@ -10,5 +10,5 @@ public class OpenRangeSymbol : Symbol
 
    public override Arity Arity => Arity.Binary;
 
-   public override string ToString() => "...";
+   public override string ToString() => "then";
 }

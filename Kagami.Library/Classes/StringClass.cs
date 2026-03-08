@@ -122,7 +122,8 @@ public class StringClass : BaseClass, ICollectionClass
       messages["margin()"] = (obj, _) => function<KString>(obj, s => s.Margin());
       messages["parse(base:_<Int>)"] = (obj, msg) => function<KString, Int>(obj, msg, (s, i) => s.ParseBase(i.Value));
       messages["wordCase()"] = (obj, _) => function<KString>(obj, s => s.WordCase());
-      messages["encode(_)"] = (obj, msg) => function<KString, KString>(obj, msg, (s, e) => s.Encode(e.Value));
+      messages["encode(_<String>)"] = (obj, msg) => function<KString, KString>(obj, msg, (s, e) => s.Encode(e.Value));
+      messages["encode()"] = (obj, _) => function<KString>(obj, s => s.Encode());
       messages["/(_<Regex>)"] = (obj, msg) => function<KString, Regex>(obj, msg, (s, r) => r.PendingRegex(s));
       messages["i".get()] = (obj, _) => function<KString>(obj, s => (Int)s.Value.Value().Int32());
       messages["f".get()] = (obj, _) => function<KString>(obj, s => (Float)s.Value.Value().Double());

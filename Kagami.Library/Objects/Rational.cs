@@ -94,9 +94,9 @@ public struct Rational : IObject, INumeric, IRangeItem, IComparable<Rational>, I
 
    public KString ZFill(int count) => $"{zfill(numerator.ToString(), count)} | {zfill(denominator.ToString(), count)}";
 
-   public string AsString => $"{numerator}|{denominator}";
+   public string AsString => Float.FloatObject(AsDouble()).AsString;
 
-   public string Image => AsString;
+   public string Image => $"{numerator}|{denominator}";
 
    public int Hash => (numerator.GetHashCode() + denominator.GetHashCode()).GetHashCode();
 

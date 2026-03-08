@@ -627,6 +627,8 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
       return new ByteArray(encoding.GetBytes(value));
    }
 
+   public ByteArray Encode() => Encode("UTF-8");
+
    public PendingRegex PendingRegex(Regex regex) => new(regex, this);
 
    private KArray splitIntoFields(Core.Matching.Pattern pattern)
