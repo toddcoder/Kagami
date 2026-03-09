@@ -210,6 +210,10 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
          for (var index = 0; index < match.Groups.Length; index++)
          {
             setVariable(index, match.Groups[index].Text);
+            if (result2.NameFromIndex(index) is (true, var name))
+            {
+               setVariable(name, match.Groups[index].Text);
+            }
          }
 
          var prefix = input.Keep(result2.Index);
