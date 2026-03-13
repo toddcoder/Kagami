@@ -11,7 +11,7 @@ public class SequenceIterator : Iterator
    protected IObject offset;
    protected int i;
 
-   public SequenceIterator(int count, IObject offset) : base((ICollection)KArray.Empty)
+   public SequenceIterator(int count, IObject offset) : base(KArray.Empty)
    {
       this.count = count;
       factor = Int.IntObject(1);
@@ -20,7 +20,7 @@ public class SequenceIterator : Iterator
       i = 0;
    }
 
-   public SequenceIterator(SequenceIterator sequenceIterator, IObject factor) : base((ICollection)KArray.Empty)
+   public SequenceIterator(SequenceIterator sequenceIterator, IObject factor) : base(KArray.Empty)
    {
       count = sequenceIterator.count;
       offset = sequenceIterator.offset;

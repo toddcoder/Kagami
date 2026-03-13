@@ -12,15 +12,13 @@ public partial class ZipOperatorParser : SymbolParser
    {
    }
 
-   //public override string Pattern => $"^ /(/s*) /'[|' /({REGEX_OPERATORS}1%2) /'|]'";
-
    [GeneratedRegex(@$"^(\s*)(\[\|)({REGEX_OPERATORS}{{1,2}})(\|\])")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
       var source = tokens[3].Text;
-      state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Operator, Color.Operator);
+      state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Operator);
 
       var _symbol = getOperator(state, source, builder.Flags);
       if (_symbol is (true, var symbol))

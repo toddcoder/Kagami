@@ -18,9 +18,9 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
 
    public string ClassName => "StreamingIterator";
 
-   public string AsString => $"{collectionAsObject.AsString}.{actions.ToString(".")}";
+   public string AsString => $"collection.{actions.ToString(".")}";
 
-   public string Image => $"{collectionAsObject.Image}.{actions.ToString(".")}";
+   public string Image => $"collection.{actions.ToString(".")}";
 
    public int Hash => actions.GetHashCode();
 

@@ -17,5 +17,5 @@ public class GreaterThanEqual : TwoOperandOperation
       _ => greaterThan(x, y)
    };
 
-   public override string ToString() => "greater.than.Equal";
+   public override string ToString() => "greater.than.equal";
 }

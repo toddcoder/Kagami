@@ -1,6 +1,7 @@
 ﻿using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Monads;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
 
 namespace Kagami.Library.Operations;
@@ -16,6 +17,7 @@ public class NewOpenRange : TwoOperandOperation
             {
                Lambda lambda1 => new OpenRange(x, lambda1),
                INumeric numeric => new NumericOpenRange(i, numeric),
+               Undefined => fail("new.open.range Int failed"),
                _ => new SequenceIterator(i.Value, y)
             };
          case INumeric seed:
@@ -23,6 +25,7 @@ public class NewOpenRange : TwoOperandOperation
             {
                INumeric incrementer => new NumericOpenRange(seed, incrementer),
                Lambda lambda1 => new OpenRange(Int.IntObject(seed.AsInt32()), lambda1),
+               Undefined => fail("new.open.range Numeric failed"),
                _ => new SequenceIterator(seed.AsInt32(), y)
             };
          case SequenceIterator seq:

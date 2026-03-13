@@ -27,5 +27,5 @@ public class ZipOperatorSymbol : Symbol
 
    public override Arity Arity => Arity.Binary;
 
-   public override string ToString() => $"[{operatorSymbol}]";
+   public override string ToString() => $"Z{operatorSymbol}";
 }
