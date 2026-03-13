@@ -6,7 +6,7 @@ match fact()
 
 println(fact(4))
 
-let naturalNumbers = 1...1
+let naturalNumbers = 1 then 1
 println(naturalNumbers take 10 join " ")
 
 let evenNumbers = naturalNumbers if n -> n %% 2

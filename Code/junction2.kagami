@@ -3,13 +3,13 @@
 #pragma ALLOW_PRINT_STATEMENT true
 
 let drink = "vodka"
-if drink == any["vodka", "beer"] println "Don't get drunk on it!"
+if drink == ("vodka" || "beer") println "Don't get drunk on it!"
 
 let lima = 10
 let limb = 20
 var count = 0
 
-while count < all[lima, limb]; ++count put count
+while count < (lima && limb); ++count put count
 printline
 
 let scores = [89, 75, 100, 64]
@@ -27,8 +27,8 @@ a += 1
 a += 5
 println a
 
-let res = "foo" ~ all["bar", "baz"]
+let res = "foo" ~ ("bar" && "baz")
 println res
 
 func greet(greeting, name) => println $"$greeting $name"
-greet(all["Hi", "Bye"], all["Andrew", "Jonathan"])
+greet(("Hi" && "Bye"), ("Andrew" && "Jonathan"))

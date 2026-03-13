@@ -6,8 +6,8 @@ yes
 2.1
 found 11
 [3, 5, 7, 5, 7, 9, 7, 9, 11]
-Hello Todd
-Hello Debra
-Bye Todd
-Bye Debra
-any["Hello Todd", "Hello Debra", "Bye Todd", "Bye Debra"] | Junction
+Hello, Todd
+Hello, Debra
+Bye, Todd
+Bye, Debra
+"Hello, Todd" || "Hello, Debra" || "Bye, Todd" || "Bye, Debra" | Junction
