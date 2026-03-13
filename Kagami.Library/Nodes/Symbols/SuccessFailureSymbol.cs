@@ -28,5 +28,5 @@ public class SuccessFailureSymbol(Expression successExpression, Expression failu
 
    public override Arity Arity => Arity.Binary;
 
-   public override string ToString() => $"!! {successExpression} : {failureExpression}";
+   public override string ToString() => $"!- {successExpression} : {failureExpression}";
 }

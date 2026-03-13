@@ -1,6 +1,6 @@
 ﻿namespace Kagami.Library.Objects;
 
-public enum JunctionType
+public enum  JunctionType
 {
    All,
    Any,

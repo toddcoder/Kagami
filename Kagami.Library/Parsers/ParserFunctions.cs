@@ -1770,6 +1770,18 @@ public static class ParserFunctions
          case "#":
             _symbol = new CountSymbol();
             break;
+         case "&&":
+            _symbol = new Junction2Symbol(JunctionType.All);
+            break;
+         case "||":
+            _symbol = new Junction2Symbol(JunctionType.Any);
+            break;
+         case "^^":
+            _symbol = new Junction2Symbol(JunctionType.One);
+            break;
+         case "!!":
+            _symbol = new Junction2Symbol(JunctionType.None);
+            break;
       }
 
       return _symbol;

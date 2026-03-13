@@ -9,17 +9,33 @@ public class Put : OneOperandOperation
 {
    public override Optional<IObject> Execute(Machine machine, IObject value)
    {
-      if (value is Sequence sequence)
+      switch (value)
       {
-         var list = sequence.List;
-         if (list.Count == 2)
+         case Sequence sequence:
          {
-            machine.Context.Put(stringOf(list[0]), stringOf(list[1]));
-            return list[0].Just();
+            var list = sequence.List;
+            if (list.Count == 2)
+            {
+               machine.Context.Put(stringOf(list[0]), stringOf(list[1]));
+               return list[0].Just();
+            }
+
+            break;
          }
+         case Junction junction:
+         {
+            foreach (var item in junction.Items)
+            {
+               machine.Context.Put(stringOf(item));
+            }
+
+            break;
+         }
+         default:
+            machine.Context.Put(stringOf(value));
+            break;
       }
 
-      machine.Context.Put(stringOf(value));
       return value.Just();
    }
 

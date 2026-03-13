@@ -38,13 +38,31 @@ public static class CommonExtensions
       }
    }
 
-   public static IObject AsOptional<T>(this Maybe<T> maybe) where T : IObject
+   extension<T>(Maybe<T> maybe) where T : IObject
    {
-      return maybe.Map(o => Some.Object(o)) | (() => KNil.NilValue);
+      public IObject AsOptional()
+      {
+         return maybe.Map(o => Some.Object(o)) | (() => KNil.NilValue);
+      }
    }
 
-   public static Maybe<T> AsMaybe<T>(this IOptional optional) where T : IObject
+   extension(IOptional optional)
    {
-      return optional is Some some ? (Maybe<T>)some.Value : nil;
+      public Maybe<T> AsMaybe<T>() where T : IObject
+      {
+         return optional is Some some ? (Maybe<T>)some.Value : nil;
+      }
+   }
+
+   extension(JunctionType junctionType)
+   {
+      public string OperatorString => junctionType switch
+      {
+         JunctionType.All => "&&",
+         JunctionType.Any => "||",
+         JunctionType.One => "^^",
+         JunctionType.None => "!!",
+         _ => ""
+      };
    }
 }

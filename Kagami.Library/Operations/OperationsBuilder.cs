@@ -621,6 +621,8 @@ public class OperationsBuilder(ParseState state)
 
    public void NewJunction(string junctionType) => add(new NewJunction(junctionType));
 
+   public void NewJunction2(JunctionType junctionType) => add(new NewJunction2(junctionType));
+
    public void HasAnyJunctions() => add(new HasAnyJunctions());
 
    public void JunctionInvoke(string functionName) => add(new JunctionInvoke(functionName));

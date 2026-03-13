@@ -9,7 +9,18 @@ public class Print : OneOperandOperation
 {
    public override Optional<IObject> Execute(Machine machine, IObject value)
    {
-      machine.Context.Print(stringOf(value));
+      if (value is Junction junction)
+      {
+         foreach (var item in junction.Items)
+         {
+            machine.Context.Print(stringOf(item));
+         }
+      }
+      else
+      {
+         machine.Context.Print(stringOf(value));
+      }
+
       return value.Just();
    }
 

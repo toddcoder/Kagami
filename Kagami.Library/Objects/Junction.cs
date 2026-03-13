@@ -26,11 +26,11 @@ public struct Junction : IObject
 
    public string ClassName => "Junction";
 
-   public string AsString => $"{junctionType.ToString().ToLower()}[{items.Select(i => i.AsString).ToString(", ")}]";
+   public string AsString => items.Select(i => i.AsString).ToString($" {junctionType.OperatorString} ");
 
-   public string Image => $"{junctionType.ToString().ToLower()}[{items.Select(i => i.Image).ToString(", ")}]";
+   public string Image => items.Select(i => i.Image).ToString($" {junctionType.OperatorString} ");
 
-   public int Hash => HashCode.Combine(items);
+    public int Hash => HashCode.Combine(items);
 
    public bool IsEqualToOther(IObject obj)
    {
@@ -91,6 +91,8 @@ public struct Junction : IObject
    public Guid Id { get; init; } = Guid.NewGuid();
 
    public Junction Append(IObject obj) => new(junctionType, items.Append(obj));
+
+   public Junction Append(IObject obj, JunctionType newJunctionType) => new(newJunctionType, items.Append(obj));
 
    public Junction NewJunction(IEnumerable<IObject> newItems) => new(junctionType, newItems);
 
