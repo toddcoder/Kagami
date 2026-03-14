@@ -11,5 +11,5 @@ pattern Regex3(input string, regex Regex) {
 }
 
 match "06/29/1964" {
-	| Regex3(x"/(/d2) '//' /(/d2) '//' /(/d4)", first, second, third) => println(first, second, third)
+	| Regex3(${ /(/d2) '//' /(/d2) '//' /(/d4) }, first, second, third) => println(first, second, third)
 }

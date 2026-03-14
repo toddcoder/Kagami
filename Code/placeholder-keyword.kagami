@@ -2,7 +2,7 @@
 
 #pragma ALLOW_PRINT_STATEMENT true
 
-pattern Email(email string) => email ~~ x"^ /(.+) '@' /(.+) $" map m -> (m[0], m[1])
+pattern Email(email string) => email ~~ ${ ^ /(.+) '@' /(.+) $ } map m -> (m[0], m[1])
 
 let s = "toddcoder@comcast.net"
 
