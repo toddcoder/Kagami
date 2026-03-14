@@ -96,7 +96,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
    {
       get
       {
-         var builder = new StringBuilder("x\"");
+         var builder = new StringBuilder("${");
          builder.Append(getPattern(originalPattern).Regex);
          if (ignoreCase || multiline || global)
          {
@@ -128,7 +128,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
             builder.Append('t');
          }
 
-         builder.Append('"');
+         builder.Append('}');
 
          return builder.ToString();
       }

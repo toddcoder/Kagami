@@ -12,7 +12,7 @@ public partial class RegexParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(x"")")]
+   [GeneratedRegex(@"^(\s*)(\${)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -44,12 +44,12 @@ public partial class RegexParser : SymbolParser
                   case '\\':
                      escaped = true;
                      break;
-                  case '"' when escaped:
+                  case '"':
                      pattern.Append('"');
                      state.AddToken(Color.String);
-                     escaped = false;
+                     type = RegexParsingType.DoubleQuote;
                      break;
-                  case '"':
+                  case '}':
                      state.AddToken(Color.Regex);
                      state.Move(1);
                      builder.Add(new RegexSymbol(pattern.ToString(), ignoreCase, multiline, global, textOnly));
@@ -127,6 +127,34 @@ public partial class RegexParser : SymbolParser
                }
 
                break;
+            case RegexParsingType.DoubleQuote:
+               switch (ch)
+               {
+                  case '\\' when escaped:
+                     pattern.Append(ch);
+                     state.AddToken(Color.String);
+                     escaped = false;
+                     break;
+                  case '\\':
+                     escaped = true;
+                     break;
+                  case '"' when escaped:
+                     pattern.Append(ch);
+                     state.AddToken(Color.String);
+                     escaped = false;
+                     break;
+                  case '"':
+                     pattern.Append(ch);
+                     state.AddToken(Color.String);
+                     type = RegexParsingType.Outside;
+                     break;
+                  default:
+                     pattern.Append(ch);
+                     state.AddToken(Color.String);
+                     break;
+               }
+
+               break;
             case RegexParsingType.AwaitingOption:
                switch (ch)
                {
@@ -148,7 +176,7 @@ public partial class RegexParser : SymbolParser
                      break;
                   case ' ':
                      break;
-                  case '"':
+                  case '}':
                      state.AddToken(Color.Regex);
                      state.Move(1);
                      builder.Add(new RegexSymbol(pattern.ToString(), ignoreCase, multiline, global, textOnly));

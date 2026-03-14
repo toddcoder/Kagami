@@ -3,10 +3,8 @@
    public enum RegexParsingType
    {
       Outside,
-      WaitingForSingleQuote,
-      WaitingForDoubleQuote,
       SingleQuote,
-      EscapedDoubleQuote,
+      DoubleQuote,
       AwaitingOption
    }
 }
