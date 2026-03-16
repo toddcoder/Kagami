@@ -20,6 +20,7 @@ public class Compiler
    protected string source;
    protected CompilerConfiguration configuration;
    protected IContext context;
+   protected Statement[] statements = [];
 
    public Compiler(string source, CompilerConfiguration configuration, IContext context)
    {
@@ -27,6 +28,8 @@ public class Compiler
       this.configuration = configuration;
       this.context = context;
    }
+
+   public Statement[] Statements => statements;
 
    public Result<Machine> Generate()
    {
@@ -64,7 +67,7 @@ public class Compiler
 
       Tokens = state.Tokens;
 
-      var statements = state.AllowReorder ? reorderStatements(state.Statements()) : state.Statements();
+      statements = state.AllowReorder ? [.. reorderStatements(state.Statements())] : state.Statements();
       var builder = new OperationsBuilder(state);
       foreach (var statement in statements)
       {
