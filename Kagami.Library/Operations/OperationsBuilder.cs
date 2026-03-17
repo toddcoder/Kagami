@@ -435,6 +435,8 @@ public class OperationsBuilder(ParseState state)
 
    public void NewDefinition() => add(new NewDefinition());
 
+   public void ForwardReduction(string operationSource) => add(new ForwardReduction(operationSource));
+
    public Result<Operations> ToOperations()
    {
       operations.Add(new Stop());

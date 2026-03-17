@@ -3,6 +3,7 @@ using Core.Monads;
 using Core.Numbers;
 using Core.Strings;
 using Kagami.Library.Nodes.Statements;
+using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using static Core.Monads.MonadFunctions;
 
@@ -71,23 +72,23 @@ public class Operations
       return index;
    }
 
-   public Optional<Operation> CreateOperationsFromExpression(string expressionSource, int returnIndex)
+   public Optional<Lambda> CreateOperationsFromExpression(string expressionSource, int returnIndex)
    {
       try
       {
-         var operation = new GoTo
-         {
-            Address = returnIndex
-         };
          var newOperations = runtimeOperations[expressionSource];
          var index = operations.Count;
+         Append(newOperations);
+         var 
+         /*var index = operations.Count;
          if (newOperations.operations[^1] is not GoTo)
          {
             newOperations.Append(operation);
+            Append(new Stop());
             Append(newOperations);
          }
 
-         return new GoTo { Address = index };
+         return new GoTo { Address = index };*/
       }
       catch (Exception exception)
       {
@@ -104,7 +105,10 @@ public class Operations
          var statements = compiler.Statements;
          if (statements.Length > 0 && statements[0] is ExpressionStatement)
          {
-            return compiler.Operations.Required("Operations not generated");
+            var operations = compiler.Operations.Required("Operations not generated");
+            operations.Append(new Return(true));
+
+            return compiler.Operations;
          }
          else
          {
