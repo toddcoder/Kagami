@@ -435,7 +435,7 @@ public class OperationsBuilder(ParseState state)
 
    public void NewDefinition() => add(new NewDefinition());
 
-   public void CreateLambda() => add(new CreateLambda());
+   public void ExecuteString() => add(new ExecuteString());
 
    public void Join() => add(new Join());
 

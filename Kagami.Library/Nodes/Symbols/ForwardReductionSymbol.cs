@@ -9,8 +9,7 @@ public class ForwardReductionSymbol(string operatorSource, Expression expression
       expression.Generate(builder);
       builder.PushString(operatorSource);
       builder.Join();
-      builder.CreateLambda();
-      builder.SendMessage("invoke()", 0);
+      builder.ExecuteString();
    }
 
    public override Precedence Precedence => Precedence.Value;

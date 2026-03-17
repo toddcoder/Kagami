@@ -23,15 +23,20 @@ public class Machine
    protected const int MAX_STACK_DEPTH = 750;
    public const string MAX_STACK_DEPTH_MESSAGE = "Max stack depth";
 
-   public static MaybeStack<Machine> Machines = [];
+   protected static MaybeStack<Machine> machines;
 
-   public static Machine Current { get; set; } = Machines.Peek().Required("Machine stack empty");
+   static Machine()
+   {
+      machines = [];
+   }
+
+   public static Machine Current => machines.Peek().Required("Machine stack empty");
 
    public static Fields Fields => Current.CurrentFrame.Fields;
 
-   public static void Register(Machine machine) => Machines.Push(machine);
+   public static void Register(Machine machine) => machines.Push(machine);
 
-   public static void Unregister() => Machines.Pop();
+   public static void Unregister() => machines.Pop();
 
    protected IContext context;
    protected Stack<Frame> stack = new();
