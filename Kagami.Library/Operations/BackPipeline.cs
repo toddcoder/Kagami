@@ -34,7 +34,7 @@ public class BackPipeline : TwoOperandOperation
          }
          case Selector selector:
          {
-            var _field = Machine.Current.Value.Find(selector);
+            var _field = Machine.Current.Find(selector);
             if (_field is (true, { Value: Lambda lambda }))
             {
                return lambda.Invoke(y).Just();

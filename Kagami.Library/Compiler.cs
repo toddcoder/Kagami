@@ -77,7 +77,7 @@ public class Compiler
       {
          var machine = new Machine(context) { Tracing = configuration.Tracing };
          machine.Load(operations);
-         Machine.Current.ActivateWith(() => machine);
+         Machine.Register(machine);
          Operations = operations;
 
          return machine;

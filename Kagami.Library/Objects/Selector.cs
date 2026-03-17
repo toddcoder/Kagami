@@ -204,7 +204,7 @@ public struct Selector : IObject, IEquatable<Selector>
 
    public IObject Assign(Lambda lambda)
    {
-      Machine.Current.Value.Assign(this, lambda, true);
+      Machine.Current.Assign(this, lambda, true);
       return this;
    }
 

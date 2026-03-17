@@ -247,7 +247,7 @@ public abstract class BaseClass : IEquatable<BaseClass>
       foreach (var junctionItem in junction.Items)
       {
          Selector newSelector = message.Selector.ToString().Replace("<Junction>", "");
-         var newMessage = new Message(newSelector, [junctionItem, .. message.Arguments.Value.Skip(1)]);
+         var newMessage = new Message(newSelector, [junctionItem, .. message.Arguments.Skip(1)]);
          var result = SendMessage(obj, newMessage);
          newItems.Add(result);
       }
@@ -620,7 +620,7 @@ public abstract class BaseClass : IEquatable<BaseClass>
          fields.Assign("self", obj);
       }
 
-      var _value = Machine.Current.Value.Invoke(lambda.Invokable, arguments, fields, bareLambda);
+      var _value = Machine.Current.Invoke(lambda.Invokable, arguments, fields, bareLambda);
       if (_value is (true, var value))
       {
          return value;
@@ -637,7 +637,7 @@ public abstract class BaseClass : IEquatable<BaseClass>
 
    public static IObject Invoke(UserClass userClass, Arguments arguments, Lambda lambda, bool bareLambda)
    {
-      return Machine.Current.Value.Invoke(lambda.Invokable, arguments, userClass.ClassFields, bareLambda)
+      return Machine.Current.Invoke(lambda.Invokable, arguments, userClass.ClassFields, bareLambda)
          .RequiredCast<IObject>(() => "Return value required");
    }
 

@@ -25,13 +25,13 @@ public struct Out() : IObject
 
    public IObject Append(IObject item)
    {
-      Machine.Current.Value.Context.Print(item.AsString);
+      Machine.Current.Context.Print(item.AsString);
       return this;
    }
 
    public IObject AppendLine(IObject item)
    {
-      Machine.Current.Value.Context.PrintLine(item.AsString);
+      Machine.Current.Context.PrintLine(item.AsString);
       return this;
    }
 }

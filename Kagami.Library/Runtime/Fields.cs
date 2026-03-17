@@ -199,7 +199,7 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
          {
             if (Module.Global.Value.RetrievedFields.Maybe[value.Id] is (true, var fieldName))
             {
-               if (Machine.Current.Value.Find(fieldName, true) is (true,
+               if (Machine.Current.Find(fieldName, true) is (true,
                    { Mutable: true } originalField))
                {
                   var reference = new Reference(originalField);
@@ -248,7 +248,7 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       {
          if (Module.Global.Value.RetrievedFields.Maybe[value.Id] is (true, var fieldName))
          {
-            if (Machine.Current.Value.Find(fieldName, true) is (true,
+            if (Machine.Current.Find(fieldName, true) is (true,
                 { Mutable: true } originalField))
             {
                Remove(parameter.Name);
@@ -279,7 +279,7 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
          if (_field is (true, var field))
          {
             var oldLazyName = ((SymbolObject)value).AsString;
-            var _oldLazyField = Machine.Current.Value.Find(oldLazyName, true);
+            var _oldLazyField = Machine.Current.Find(oldLazyName, true);
             if (_oldLazyField is (true, var oldLazyField))
             {
                var newLazyName = lazyName(parameter.Name);
@@ -338,7 +338,7 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
 
    public Result<Field> AssignToExisting(string name, IObject value, bool overriden = false)
    {
-      var _field = Machine.Current.Value.Find(name, false);
+      var _field = Machine.Current.Find(name, false);
       if (_field is (true, var field))
       {
          if (field.Mutable || field.Value is Unassigned || overriden)

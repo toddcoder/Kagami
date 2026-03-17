@@ -135,7 +135,7 @@ public class ArrayClass : BaseClass, ICollectionClass
       var index = 0;
       var last = KNil.NilValue;
       var running = true;
-      while (running && !Machine.Current.Value.Context.Cancelled())
+      while (running && !Machine.Current.Context.Cancelled())
       {
          var result = lambda.Invoke((Int)index, last);
          switch (result)

@@ -24,6 +24,6 @@ public class LambdaClass : BaseClass
 
    protected static IObject invoke(Lambda lambda, Arguments arguments)
    {
-      return Machine.Current.Value.Invoke(lambda.Invokable, arguments, lambda.Fields, true).Force();
+      return Machine.Current.Invoke(lambda.Invokable, arguments, lambda.Fields, true).Force();
    }
 }

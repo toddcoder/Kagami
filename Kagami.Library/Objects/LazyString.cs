@@ -21,7 +21,7 @@ public readonly struct LazyString(string value) : IObject, IComparable<KString>,
             var fieldName = match.SecondGroup;
             var format = match.ThirdGroup;
 
-            var _field = Machine.Current.Value.Find(fieldName, true);
+            var _field = Machine.Current.Find(fieldName, true);
             if (_field is (true, var field))
             {
                var fieldValue = field.Value;

@@ -13,7 +13,7 @@ public class Return : Operation
       ReturnValue returnValue;
       if (returnTopOfStack)
       {
-         var _value = Machine.Current.Value.CurrentFrame.Pop().Optional();
+         var _value = Machine.Current.CurrentFrame.Pop().Optional();
          if (_value is (true, var value))
          {
             switch (value)

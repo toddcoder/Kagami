@@ -55,7 +55,7 @@ public static class ObjectFunctions
          case SymbolObject symbol:
          {
             var fieldName = symbol.AsString;
-            var _field = Machine.Current.Value.Find(fieldName, true);
+            var _field = Machine.Current.Find(fieldName, true);
             if (_field is (true, var field))
             {
                return match(source, field.Value, equalifier, bindings);
@@ -965,7 +965,7 @@ public static class ObjectFunctions
 
    public static IObject getConstructor(Selector selector)
    {
-      var machine = Machine.Current.Value;
+      var machine = Machine.Current;
       var _field = machine.Find(selector);
       if (_field is (true, { Value: Constructor constructor }))
       {
@@ -983,7 +983,7 @@ public static class ObjectFunctions
 
    public static IObject createObject(Selector selector, Message message)
    {
-      var machine = Machine.Current.Value;
+      var machine = Machine.Current;
       var _field = machine.Find(selector);
       if (_field is (true, { Value: Constructor constructor }))
       {
@@ -1011,7 +1011,7 @@ public static class ObjectFunctions
             return classOf(argument).SendMessage(argument, message);
          case Selector selector:
          {
-            var _field = Machine.Current.Value.Find(selector);
+            var _field = Machine.Current.Find(selector);
             if (_field is (true, { Value: Lambda lambda }))
             {
                return lambda.Invoke(argument);

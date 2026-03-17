@@ -70,7 +70,7 @@ public class YieldingInvokable : IInvokable, ICollection, IObject
 
    public Maybe<IObject> Next(int index)
    {
-      var _result = Machine.Current.Value.Invoke(this);
+      var _result = Machine.Current.Invoke(this);
       if (_result is (true, var result))
       {
          switch (result)

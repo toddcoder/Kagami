@@ -42,7 +42,7 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
 
    public Maybe<IObject> Next()
    {
-      if (Machine.Current.Value.Context.Cancelled() || isTerminated)
+      if (Machine.Current.Context.Cancelled() || isTerminated)
       {
          return nil;
       }
@@ -81,7 +81,7 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
                }
             }
 
-            if (Machine.Current.Value.Context.Cancelled())
+            if (Machine.Current.Context.Cancelled())
             {
                return nil;
             }

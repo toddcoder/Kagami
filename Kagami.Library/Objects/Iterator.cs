@@ -74,7 +74,7 @@ public class Iterator : IObject, IIterator
             break;
          }
 
-         if (index % 1000 == 0 && Machine.Current.Value.Context.Cancelled())
+         if (index % 1000 == 0 && Machine.Current.Context.Cancelled())
          {
             yield break;
          }

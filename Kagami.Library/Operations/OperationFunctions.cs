@@ -71,7 +71,7 @@ public static class OperationFunctions
 
    public static IObject copyFields(IObject obj)
    {
-      var frames = Machine.Current.Value.PeekFramesUntil(f => f.FrameType == FrameType.Function);
+      var frames = Machine.Current.PeekFramesUntil(f => f.FrameType == FrameType.Function);
       if (frames.FunctionFrameIndex == -1)
       {
          frames.FunctionFrameIndex = frames.Count - 1;

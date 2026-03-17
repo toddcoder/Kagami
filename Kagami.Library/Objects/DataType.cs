@@ -68,7 +68,7 @@ public class DataType : IObject
             }
          }
 
-         Machine.Current.Value.CurrentFrame.Fields.SetBindings(bindings);
+         Machine.Current.CurrentFrame.Fields.SetBindings(bindings);
          return true;
       }
    }

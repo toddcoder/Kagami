@@ -15,7 +15,7 @@ public class ImportPackage : Operation
 {
    protected static Memo<string, Assembly> assemblyCache = new Memo<string, Assembly>.Function(packageName =>
    {
-      var fullPath = Path.Combine(Machine.Current.Value.PackageFolder, $"Kagami.{packageName}.dll");
+      var fullPath = Path.Combine(Machine.Current.PackageFolder, $"Kagami.{packageName}.dll");
       var assembly = Assembly.LoadFile(fullPath);
       return assembly;
    });

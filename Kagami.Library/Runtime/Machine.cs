@@ -1,8 +1,8 @@
 ﻿using Core.Applications.Messaging;
 using Core.Collections;
+using Core.DataStructures;
 using Core.Enumerables;
 using Core.Monads;
-using Core.Objects;
 using Core.Strings;
 using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
@@ -23,9 +23,15 @@ public class Machine
    protected const int MAX_STACK_DEPTH = 750;
    public const string MAX_STACK_DEPTH_MESSAGE = "Max stack depth";
 
-   public static LateLazy<Machine> Current { get; set; } = new(true);
+   public static MaybeStack<Machine> Machines = [];
 
-   public static Fields Fields => Current.Value.CurrentFrame.Fields;
+   public static Machine Current { get; set; } = Machines.Peek().Required("Machine stack empty");
+
+   public static Fields Fields => Current.CurrentFrame.Fields;
+
+   public static void Register(Machine machine) => Machines.Push(machine);
+
+   public static void Unregister() => Machines.Pop();
 
    protected IContext context;
    protected Stack<Frame> stack = new();
@@ -64,91 +70,98 @@ public class Machine
 
    public Result<IObject> Execute()
    {
-      stack.Clear();
-      globalFrame = new GlobalFrame();
-      stack.Push(globalFrame);
-      operations.Goto(0);
-      running = true;
-
-      if (Assignments.Count > 0)
+      try
       {
-         foreach (var (fieldName, value) in Assignments)
-         {
-            globalFrame.Fields.AssignLocal(fieldName, FieldType.Assignment, value).Force();
-         }
-      }
+         stack.Clear();
+         globalFrame = new GlobalFrame();
+         stack.Push(globalFrame);
+         operations.Goto(0);
+         running = true;
 
-      while (!context.Cancelled() && operations.More && running)
-      {
-         if (operations.Current is (true, var operation))
+         if (Assignments.Count > 0)
          {
-#if !NO_TRACE
-            trace(operations.Address, () => operation.ToString() ?? "");
-#endif
-            var _result = operation.Execute(this);
-            if (_result is (true, var result) && running && result.ClassName != "Void")
+            foreach (var (fieldName, value) in Assignments)
             {
-               var address = operations.Address;
-               stack.Peek().Push(result);
-               lastValue = result is Before ? KBoolean.True : result;
-               if (operations.Address != address)
-               {
-                  operations.Goto(address);
-               }
+               globalFrame.Fields.AssignLocal(fieldName, FieldType.Assignment, value).Force();
             }
-            else if (_result.Exception is (true, var exception))
+         }
+
+         while (!context.Cancelled() && operations.More && running)
+         {
+            if (operations.Current is (true, var operation))
             {
-               if (exception.Message == MAX_STACK_DEPTH_MESSAGE)
-               {
-                  running = false;
-                  operations.GoPastEnd();
-                  continue;
-               }
 #if !NO_TRACE
-               if (Tracing)
+               trace(operations.Address, () => operation.ToString() ?? "");
+#endif
+               var _result = operation.Execute(this);
+               if (_result is (true, var result) && running && result.ClassName != "Void")
                {
-                  TraceOutput.Invoke(table.Value.ToString());
+                  var address = operations.Address;
+                  stack.Peek().Push(result);
+                  lastValue = result is Before ? KBoolean.True : result;
+                  if (operations.Address != address)
+                  {
+                     operations.Goto(address);
+                  }
                }
+               else if (_result.Exception is (true, var exception))
+               {
+                  if (exception.Message == MAX_STACK_DEPTH_MESSAGE)
+                  {
+                     running = false;
+                     operations.GoPastEnd();
+                     continue;
+                  }
+#if !NO_TRACE
+                  if (Tracing)
+                  {
+                     TraceOutput.Invoke(table.Value.ToString());
+                  }
 
 #endif
-               var _errorHandler = GetErrorHandler();
-               if (_errorHandler is (true, var address))
-               {
-                  stack.Peek().Push(new Failure(exception.Message));
-                  operations.Goto(address);
-                  continue;
+                  var _errorHandler = GetErrorHandler();
+                  if (_errorHandler is (true, var address))
+                  {
+                     stack.Peek().Push(new Failure(exception.Message));
+                     operations.Goto(address);
+                     continue;
+                  }
+                  else
+                  {
+                     return exception;
+                  }
                }
                else
                {
-                  return exception;
+                  lastValue = stack.Peek().Peek() | lastValue;
+                  if (lastValue is Before)
+                  {
+                     lastValue = KBoolean.True;
+                  }
+               }
+
+               if (operation.Increment)
+               {
+                  operations.Advance(1);
                }
             }
             else
             {
-               lastValue = stack.Peek().Peek() | lastValue;
-               if (lastValue is Before)
-               {
-                  lastValue = KBoolean.True;
-               }
-            }
-
-            if (operation.Increment)
-            {
-               operations.Advance(1);
+               return addressOutOfRange();
             }
          }
-         else
+
+         if (Tracing)
          {
-            return addressOutOfRange();
+            TraceOutput.Invoke(table.Value.ToString());
          }
-      }
 
-      if (Tracing)
+         return lastValue.Success();
+      }
+      finally
       {
-         TraceOutput.Invoke(table.Value.ToString());
+         Unregister();
       }
-
-      return lastValue.Success();
    }
 
    public IObject LastValue => lastValue;

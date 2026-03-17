@@ -109,7 +109,7 @@ public class EnumClass : UserClass
          objects[name] = retrieveObject(constructorSelector);
       }
 
-      var machine = Machine.Current.Value;
+      var machine = Machine.Current;
       foreach (var (name, obj) in objects)
       {
          machine.CurrentFrame.Fields.New(name, FieldType.Assignment, obj);

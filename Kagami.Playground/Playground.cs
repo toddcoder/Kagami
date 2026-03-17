@@ -506,7 +506,6 @@ public partial class Playground : Form
                      value = "exception";
                      type = "";
                      status = (message: _result.Exception.Message, type: UiActionType.Failure);
-                     //fieldNames = [];
                   }
                }
 
@@ -598,9 +597,9 @@ public partial class Playground : Form
       }
    }
 
-   protected static void stepInto() => Machine.Current.Value.Step();
+   protected static void stepInto() => Machine.Current.Step();
 
-   protected static void stepOver() => Machine.Current.Value.Step();
+   protected static void stepOver() => Machine.Current.Step();
 
    protected int getRemainingLineIndex(int index)
    {

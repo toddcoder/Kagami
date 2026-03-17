@@ -21,7 +21,7 @@ public abstract class PackageClass : BaseClass
 
    public void CopyToGlobalFrame(Package package)
    {
-      var globalFrame = Machine.Current.Value.GlobalFrame;
+      var globalFrame = Machine.Current.GlobalFrame;
       var fields = globalFrame.Fields;
 
       foreach (var (functionName, func) in functions)

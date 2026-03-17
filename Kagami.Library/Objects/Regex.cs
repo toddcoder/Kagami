@@ -31,7 +31,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
          foreach (var match in results)
          {
             var fieldName = match.SecondGroup;
-            var _field = Machine.Current.Value.Find(fieldName, true);
+            var _field = Machine.Current.Find(fieldName, true);
             if (_field is (true, var field))
             {
                var fieldValue = field.Value;
@@ -737,7 +737,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
 
    private void setVariable(string name, string text)
    {
-      var machine = Machine.Current.Value;
+      var machine = Machine.Current;
       var fieldName = $"`{name}";
       machine.CurrentFrame.Fields.NewOrAssign(fieldName, FieldType.Assignment, KString.StringObject(text));
    }

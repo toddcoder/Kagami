@@ -46,7 +46,7 @@ public class Sys : Package
    public KString Println(Arguments arguments)
    {
       var value = arguments.Select(a => a.AsString).ToString(" ");
-      Machine.Current.Value.Context.PrintLine(value);
+      Machine.Current.Context.PrintLine(value);
 
       return value;
    }
@@ -54,7 +54,7 @@ public class Sys : Package
    public KString Print(Arguments arguments)
    {
       var value = arguments.Select(a => a.AsString).ToString(" ");
-      Machine.Current.Value.Context.Print(value);
+      Machine.Current.Context.Print(value);
 
       return value;
    }
@@ -66,7 +66,7 @@ public class Sys : Package
          case 1:
          {
             var value = arguments[0].AsString;
-            Machine.Current.Value.Context.Put(value);
+            Machine.Current.Context.Put(value);
 
             return value;
          }
@@ -74,7 +74,7 @@ public class Sys : Package
          {
             var value = arguments[0].AsString;
             var separator = arguments[1].AsString;
-            Machine.Current.Value.Context.Put(value, separator);
+            Machine.Current.Context.Put(value, separator);
 
             return value;
          }
@@ -84,7 +84,7 @@ public class Sys : Package
 
             foreach (var argument in arguments)
             {
-               Machine.Current.Value.Context.Put(argument.AsString);
+               Machine.Current.Context.Put(argument.AsString);
             }
 
             return value;
@@ -95,7 +95,7 @@ public class Sys : Package
    public IObject Column(IObject obj, int count)
    {
       var value = obj.AsString;
-      var context = Machine.Current.Value.Context;
+      var context = Machine.Current.Context;
       context.Put(value);
       if (context.WriteCount == count - 1)
       {
@@ -112,14 +112,14 @@ public class Sys : Package
 
    public IObject Readln()
    {
-      return Machine.Current.Value.Context.ReadLine()
+      return Machine.Current.Context.ReadLine()
          .Map(s => Success.Object(KString.StringObject(s)))
          .Recover(e => Failure.Object(e.Message));
    }
 
    public IObject ReadInt()
    {
-      return Machine.Current.Value.Context.ReadLine()
+      return Machine.Current.Context.ReadLine()
          .Map(s => s.Result().Int32())
          .Map(i => Success.Object(Int.IntObject(i)))
          .Recover(e => Failure.Object(e.Message));
@@ -127,7 +127,7 @@ public class Sys : Package
 
    public IObject ReadFloat()
    {
-      return Machine.Current.Value.Context.ReadLine()
+      return Machine.Current.Context.ReadLine()
          .Map(s => s.Result().Double())
          .Map(f => Success.Object(Float.FloatObject(f)))
          .Recover(e => Failure.Object(e.Message));
@@ -135,13 +135,13 @@ public class Sys : Package
 
    public IObject Peek(IObject obj)
    {
-      Machine.Current.Value.Context.PrintLine(obj.Image);
+      Machine.Current.Context.PrintLine(obj.Image);
       return obj;
    }
 
    public IObject Peek(IObject prefix, IObject obj)
    {
-      Machine.Current.Value.Context.PrintLine($"{prefix.AsString}: {obj.Image}");
+      Machine.Current.Context.PrintLine($"{prefix.AsString}: {obj.Image}");
       return obj;
    }
 
@@ -150,7 +150,7 @@ public class Sys : Package
       var bindings = new Hash<string, IObject>();
       if (x.Match(y, bindings))
       {
-         Machine.Current.Value.CurrentFrame.Fields.SetBindings(bindings);
+         Machine.Current.CurrentFrame.Fields.SetBindings(bindings);
          return KBoolean.True.Success();
       }
       else
@@ -167,7 +167,7 @@ public class Sys : Package
 
    public Result<IObject> GetReference(string fieldName)
    {
-      var _field = Machine.Current.Value.Find(fieldName, true);
+      var _field = Machine.Current.Find(fieldName, true);
       if (_field is (true, var field))
       {
          return new Reference(field);
@@ -240,7 +240,7 @@ public class Sys : Package
 
    public Dictionary XFields()
    {
-      return new(Machine.Current.Value.CurrentFrame.Fields.ToHash(t => KString.StringObject(t.fieldName), t => t.field.Value));
+      return new(Machine.Current.CurrentFrame.Fields.ToHash(t => KString.StringObject(t.fieldName), t => t.field.Value));
    }
 
    public Date Date(double floating) => DateTime.FromOADate(floating);
@@ -312,7 +312,7 @@ public class Sys : Package
 
    public IObject Eval(string source)
    {
-      var compiler = new Compiler(source, CompilerConfiguration.Empty, Machine.Current.Value.Context);
+      var compiler = new Compiler(source, CompilerConfiguration.Empty, Machine.Current.Context);
       var machine = compiler.Generate().ForceValue();
 
       return machine.Execute().ForceValue();
@@ -320,7 +320,7 @@ public class Sys : Package
 
    public IObject Eval(string source, Dictionary dictionary)
    {
-      var compiler = new Compiler(source, CompilerConfiguration.Empty, Machine.Current.Value.Context);
+      var compiler = new Compiler(source, CompilerConfiguration.Empty, Machine.Current.Context);
       var machine = compiler.Generate().ForceValue();
       if (dictionary.Length.Value > 0)
       {
