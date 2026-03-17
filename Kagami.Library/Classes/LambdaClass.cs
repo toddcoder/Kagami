@@ -1,6 +1,5 @@
 ﻿using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
-using Core.Objects;
 using Kagami.Library.Packages;
 using static Kagami.Library.Classes.ClassFunctions;
 
@@ -25,6 +24,6 @@ public class LambdaClass : BaseClass
 
    protected static IObject invoke(Lambda lambda, Arguments arguments)
    {
-      return Machine.Current.Value.Invoke(lambda.Invokable, arguments, lambda.Fields, true).RequiredCast<IObject>(() => "Return value required");
+      return Machine.Current.Value.Invoke(lambda.Invokable, arguments, lambda.Fields, true).Force();
    }
 }

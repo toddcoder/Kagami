@@ -435,6 +435,10 @@ public class OperationsBuilder(ParseState state)
 
    public void NewDefinition() => add(new NewDefinition());
 
+   public void CreateLambda() => add(new CreateLambda());
+
+   public void Join() => add(new Join());
+
    public Result<Operations> ToOperations()
    {
       operations.Add(new Stop());
@@ -484,7 +488,7 @@ public class OperationsBuilder(ParseState state)
          }
       }
 
-      return new Operations([.. operations]);
+      return new Operations(operations);
    }
 
    public void BeginMacro(Parameters parameters, Expression[] arguments, string returnLabel = "")

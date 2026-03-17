@@ -7,15 +7,15 @@ namespace Kagami.Library.Operations;
 
 public class Operations
 {
-   protected Operation[] operations;
+   protected List<Operation> operations;
    protected int address;
    protected int length;
 
-   public Operations(Operation[] operations)
+   public Operations(IEnumerable<Operation> operations)
    {
-      this.operations = operations;
+      this.operations = [.. operations];
       address = 0;
-      length = operations.Length;
+      length = this.operations.Count;
    }
 
    public Operations() : this([])
@@ -44,6 +44,20 @@ public class Operations
    public Maybe<Operation> Current => maybe<Operation>() & address.Between(0).Until(length) & (() => operations[address]);
 
    public void GoPastEnd() => address = length;
+
+   public void Append(Operations newOperations)
+   {
+      operations.AddRange(newOperations.operations);
+      length = operations.Count;
+   }
+
+   public void AppendStop()
+   {
+      operations.Add(new Stop());
+      length = operations.Count;
+   }
+
+   public int Count => length;
 
    public override string ToString()
    {

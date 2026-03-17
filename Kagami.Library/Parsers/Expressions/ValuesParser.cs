@@ -15,6 +15,7 @@ public class ValuesParser : MultiParser
       {
          yield return new ClassSendMessageAssignParser(builder);
          yield return new ClassSendMessageParser(builder);
+         yield return new ForwardReductionParser(builder);
          yield return new EmptyMemoParser(builder);
          yield return new AltCharParser(builder);
          yield return new EmptyTypedCollectionParser(builder);
