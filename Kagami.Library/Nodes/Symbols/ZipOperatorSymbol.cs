@@ -3,12 +3,8 @@ using static Kagami.Library.Nodes.NodeFunctions;
 
 namespace Kagami.Library.Nodes.Symbols;
 
-public class ZipOperatorSymbol : Symbol
+public class ZipOperatorSymbol(Symbol operatorSymbol) : Symbol
 {
-   protected Symbol operatorSymbol;
-
-   public ZipOperatorSymbol(Symbol operatorSymbol) => this.operatorSymbol = operatorSymbol;
-
    public override void Generate(OperationsBuilder builder)
    {
       var _lambda = operatorLambda(operatorSymbol, builder);

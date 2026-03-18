@@ -12,7 +12,7 @@ public partial class ZipOperatorParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@$"^(\s*)(\[\|)({REGEX_OPERATORS}{{1,2}})(\|\])")]
+   [GeneratedRegex(@$"^(\s*)(Z)({REGEX_OPERATORS}{{1,2}})")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)

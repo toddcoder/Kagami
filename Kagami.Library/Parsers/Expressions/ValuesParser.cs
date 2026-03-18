@@ -51,6 +51,7 @@ public class ValuesParser : MultiParser
          yield return new RawStringParser(builder);
          yield return new InterpolatedStringParser(builder);
          yield return new LazyStringParser(builder);
+         yield return new MonoTypeArrayParser(builder);
          yield return new StringArrayParser(builder);
          yield return new DateParser(builder);
          yield return new MultilineStringParser(builder);
