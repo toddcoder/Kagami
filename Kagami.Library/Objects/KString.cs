@@ -730,4 +730,36 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
    }
 
    public Int CompareI(KString other) => string.Compare(value, other.value, StringComparison.OrdinalIgnoreCase);
+
+   public KString SetRegex(Regex regex, Lambda lambda)
+   {
+      Slicer slicer = value;
+      var result = regex.Matches(value);
+      switch (result)
+      {
+         case Some { Value: RegexMatch match }:
+         {
+            slicer[match.Index.Value, match.Length.Value] = lambda.Invoke(match).AsString;
+            return slicer.ToString();
+         }
+         case KArray array:
+         {
+            foreach (var item in array.List)
+            {
+               if (item is RegexMatch match)
+               {
+                  slicer[match.Index.Value, match.Length.Value] = lambda.Invoke(match).AsString;
+               }
+            }
+
+            return slicer.ToString();
+         }
+      }
+
+      return this;
+   }
+
+   public IObject GetRegex(Regex regex) => regex.Matches(value);
+
+   public MutString SetRegex(Regex regex, string replacement) => value.Substitute(regex.CorePattern, replacement);
 }

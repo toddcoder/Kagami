@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using Core.Collections;
+using Core.Matching;
 using Core.Monads;
 using Core.Numbers;
 using Core.Objects;
@@ -373,6 +374,47 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
    public MutString Put(string value, string separator)
    {
       mutable.Append(putter.Put(value, separator));
+      return this;
+   }
+
+   public MutString SetRegex(Regex regex, Lambda value)
+   {
+      Slicer slicer = mutable.ToString();
+      var result = regex.Matches(slicer.ToString());
+      switch (result)
+      {
+         case Some { Value: RegexMatch match }:
+         {
+            slicer[match.Index.Value, match.Length.Value] = value.Invoke(match).AsString;
+            mutable = new StringBuilder(slicer.ToString());
+            break;
+         }
+         case KArray array:
+         {
+            foreach (var item in array.List)
+            {
+               if (item is RegexMatch match)
+               {
+                  slicer[match.Index.Value, match.Length.Value] = value.Invoke(match).AsString;
+               }
+            }
+
+            mutable = new StringBuilder(slicer.ToString());
+
+            break;
+         }
+      }
+
+      return this;
+   }
+
+   public IObject GetRegex(Regex regex) => regex.Matches(mutable.ToString());
+
+   public MutString SetRegex(Regex regex, string replacement)
+   {
+      var result = mutable.ToString().Substitute(regex.CorePattern, replacement);
+      mutable = new StringBuilder(result);
+
       return this;
    }
 }

@@ -35,6 +35,10 @@ public class StringClass : BaseClass, ICollectionClass
 
       messages["~(_)"] = (obj, msg) => function<KString, IObject>(obj, msg, (s1, s2) => s1.Concatenate(s2.AsString));
       messages["+(_)"] = (obj, msg) => function<KString, KString>(obj, msg, (s1, s2) => s1.Concatenate(s2.AsString));
+      registerMessage("[]=(_<Regex>,_<Lambda>)", (obj, msg) => function<KString, Regex, Lambda>(obj, msg, (kString, r, l) => kString.SetRegex(r, l)));
+      registerMessage("[](_<Regex>)", (obj, msg) => function<KString, Regex>(obj, msg, (kString, r) => kString.GetRegex(r)));
+      registerMessage("[]=(_<Regex>,_<String>)",
+         (obj, msg) => function<KString, Regex, KString>(obj, msg, (kString, regex, replacement) => kString.SetRegex(regex, replacement.Value)));
       messages["[](_)"] = (obj, msg) => function<KString, IObject>(obj, msg, getIndexed);
       messages["length".get()] = (obj, _) => function<KString>(obj, s => s.Length);
       messages["upper()"] = (obj, _) => function<KString>(obj, s => s.Upper());

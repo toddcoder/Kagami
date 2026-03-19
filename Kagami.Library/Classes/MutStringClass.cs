@@ -15,6 +15,10 @@ public class MutStringClass : BaseClass, ICollectionClass
 
       registerMessage("[](_<Int>)", (obj, msg) => function<MutString, Int>(obj, msg, (m, i) => m[i.Value]));
       registerMessage("[]=(_<Int>,_<Char>)", (obj, msg) => function<MutString, Int, KChar>(obj, msg, (m, i, v) => m[i.Value] = v));
+      registerMessage("[]=(_<Regex>,_<Lambda>)", (obj, msg) => function<MutString, Regex, Lambda>(obj, msg, (m, r, l) => m.SetRegex(r, l)));
+      registerMessage("[](_<Regex>)", (obj, msg) => function<MutString, Regex>(obj, msg, (m, r) => m.GetRegex(r)));
+      registerMessage("[]=(_<Regex>,_<String>)",
+         (obj, msg) => function<MutString, Regex, KString>(obj, msg, (m, regex, kString) => m.SetRegex(regex, kString.Value)));
 
       collectionMessages();
       sliceableMessages();

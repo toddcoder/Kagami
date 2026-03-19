@@ -1,0 +1,21 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+var input mstring = "todd e. bennett"
+input[${ /w+; g }] = m -> m.text.upper1()
+println input
+
+println ~input[${ /w+; g }]
+
+input[${ '.' }] = "!"
+println input
+
+var source = "FOOBAR"
+source = source[${ ^ .3 }] = m -> m.text.lower()
+println source
+
+println source[${ ... $}]
+
+source = source[${ ... $}] = "bar"
+println source

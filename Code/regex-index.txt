@@ -1,0 +1,7 @@
+Todd E. Bennett
+[Match("Todd", 0, 4), Match("E", 5, 1), Match("Bennett", 8, 7)]
+Todd E! Bennett
+fooBAR
+?BAR
+foobar
+m"foobar" | MutString

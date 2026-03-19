@@ -11,7 +11,7 @@ namespace Kagami.Library.Objects;
 
 public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccepting
 {
-   private static IObject getMatchOrText(RegexMatch match, bool textOnly) => textOnly ? match.Text : match;
+   public static IObject GetMatchOrText(RegexMatch match, bool textOnly) => textOnly ? match.Text : match;
 
    private static Hash<PatternWithOptions, Core.Matching.Pattern> cachedPattern = [];
 
@@ -195,7 +195,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
             return new KArray(result
                .Select(m => new RegexMatch(m, self.nameToIndex(result), self.indexToName(result), input.Keep(m.Index),
                   input.Drop(m.Index + m.Length), input))
-               .Select(m => getMatchOrText(m, self.textOnly)).ToArray());
+               .Select(m => GetMatchOrText(m, self.textOnly)).ToArray());
          }
          else
          {
@@ -221,7 +221,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
          setVariable("prefix", prefix);
          setVariable("suffix", suffix);
 
-         return Some.Object(getMatchOrText(regexMatch, self.textOnly));
+         return Some.Object(GetMatchOrText(regexMatch, self.textOnly));
       }
       else
       {
@@ -248,7 +248,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
             {
                if (lambda.Invoke(match).IsTrue)
                {
-                  returns.Add(getMatchOrText(match, self.textOnly));
+                  returns.Add(GetMatchOrText(match, self.textOnly));
                }
             }
 
@@ -279,7 +279,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
          setVariable("prefix", prefix);
          setVariable("suffix", suffix);
 
-         return Some.Object(getMatchOrText(regexMatch, self.textOnly));
+         return Some.Object(GetMatchOrText(regexMatch, self.textOnly));
       }
       else
       {
