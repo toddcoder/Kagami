@@ -14,10 +14,12 @@ public class StatementsParser : MultiParser
       {
          yield return new PragmaParser();
          yield return new PrintStatementParser();
+         yield return new YieldOperatorParser();
          yield return new AnnotationParser();
          yield return new MultilineCommentParser();
          yield return new NullStatementParser();
          yield return new CommentParser();
+         yield return new YieldParser();
          yield return new ClassParser();
          yield return new ObjectOrMixinParser();
          yield return new InclusionParser();

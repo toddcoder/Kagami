@@ -11,12 +11,12 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class YieldOperatorParser : StatementParser
 {
-   [GeneratedRegex(@"^(\s*)(\^)")]
+   [GeneratedRegex(@"^(\s*)(=|\*)(>)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      var all = tokens[3].Text == "!";
+      var all = tokens[2].Text == "*";
       state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Operator);
 
       var _expression = getExpression(state, ExpressionFlags.Standard);
