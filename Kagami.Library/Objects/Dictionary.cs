@@ -1,7 +1,9 @@
 ﻿using Core.Collections;
 using Core.Enumerables;
+using Core.Matching;
 using Core.Monads;
 using Core.Numbers;
+using Core.Strings;
 using Kagami.Library.Classes;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Core.Monads.MonadFunctions;
@@ -11,7 +13,7 @@ using static Kagami.Library.Operations.OperationFunctions;
 
 namespace Kagami.Library.Objects;
 
-public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollection
+public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollection, IFormattable
 {
    public static IObject New(IObject defaultValue, KBoolean caching, Maybe<TypeConstraint> _typeConstraint)
    {
@@ -857,4 +859,44 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
 
       return this;
    }
+
+   protected string formatTemplate(string template)
+   {
+      if (template.Matches(@"\$([`a-zA-Z_][a-zA-Z_0-9]*)(?:\[([^\]]+)\])?; u") is (true, var result))
+      {
+         Slicer slicer = template;
+         foreach (var match in result)
+         {
+            var key = match.FirstGroup;
+            var innerFormat = match.SecondGroup;
+            if (dictionary.Maybe[KString.StringObject(key)] is (true, var value))
+            {
+               if (innerFormat.IsNotEmpty() && value is IFormattable formattable)
+               {
+                  slicer[match.Index, match.Length] = formattable.Format(innerFormat).Value;
+               }
+               else
+               {
+                  slicer[match.Index, match.Length] = value.AsString;
+               }
+            }
+            else
+            {
+               slicer[match.Index, match.Length] = "";
+            }
+         }
+
+         return slicer.ToString();
+      }
+      else
+      {
+         return template;
+      }
+   }
+
+   public KString Format(string format) => formatTemplate(format);
+
+   public KString Format(string[] formats) => formats.Select(formatTemplate).ToString("");
+
+    public KString Format(Lambda lambda) => lambda.Invoke(this).AsString;
 }

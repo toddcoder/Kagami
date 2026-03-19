@@ -97,6 +97,10 @@ public abstract class BaseClass : IEquatable<BaseClass>
       {
          return date.Format(formattingString);
       }
+      else if (obj is IFormattable formattable)
+      {
+         return formattable.Format(formattingString);
+      }
       else if (formattingString.Contains(' '))
       {
          return formatArray(obj, formattingString.Split(' '));
@@ -104,10 +108,6 @@ public abstract class BaseClass : IEquatable<BaseClass>
       else if (formattingString == "i")
       {
          return obj.Image;
-      }
-      else if (obj is IFormattable formattable)
-      {
-         return formattable.Format(formattingString);
       }
       else
       {
