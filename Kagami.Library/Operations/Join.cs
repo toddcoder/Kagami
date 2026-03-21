@@ -8,7 +8,7 @@ namespace Kagami.Library.Operations;
 
 public class Join : TwoOperandOperation
 {
-   protected static KString join(IIterator iterator, string joinOn) => iterator.List().Select(i => i.AsString).ToString(joinOn);
+   protected static KString join(IIterator iterator, string joinOn) => iterator.List().Select(i => i.Image).ToString(joinOn);
 
    public override Optional<IObject> Execute(Machine machine, IObject x, IObject y) => x switch
    {

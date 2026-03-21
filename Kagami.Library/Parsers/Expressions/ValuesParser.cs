@@ -27,7 +27,7 @@ public class ValuesParser : MultiParser
          yield return new MultiParameterLambdaParser(builder);
          yield return new BlockValueParser(builder);
          yield return new BlockLambdaParser(builder);
-         yield return new TypeConstraintParser(builder);
+         //yield return new TypeConstraintParser(builder);
          yield return new ImplicitParameterLambdaParser(builder);
          yield return new SubexpressionParser(builder);
          yield return new EndOfExpressionParser(builder, this);

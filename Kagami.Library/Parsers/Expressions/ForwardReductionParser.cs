@@ -12,7 +12,7 @@ public partial class ForwardReductionParser : SymbolParser
    {
    }
 
-    [GeneratedRegex(@$"^(\s*)(\[)({REGEX_OPERATORS})(\])")]
+    [GeneratedRegex(@$"^(\s*)(\[)({REGEX_OPERATORS}+)(\])")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)

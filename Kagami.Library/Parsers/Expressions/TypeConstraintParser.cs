@@ -4,9 +4,9 @@ using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Runtime;
 using Core.Monads;
 using Core.Monads.Lazy;
-using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.AllExceptions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
