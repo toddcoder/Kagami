@@ -1,0 +1,20 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+func tryDivide(x, y) {
+	return do {
+		dividend <- x
+		divisor <- y
+		q <- try dividend / divisor
+		q
+	}
+}
+
+let x = !10
+var y = !0
+
+var quotient = tryDivide(x, y)
+println quotient
+
+y = !5
+quotient = tryDivide(x, y)
+println quotient
