@@ -12,18 +12,19 @@ public partial class ForwardReductionParser : SymbolParser
    {
    }
 
-    [GeneratedRegex(@$"^(\s*)(\[)({REGEX_OPERATORS}+)(\])")]
+    [GeneratedRegex(@$"^(\s*)(\[)(\\)?({REGEX_OPERATORS}+)(\])")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      var operatorSource = tokens[3].Text;
-      state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Operator, Color.Operator);
+      var cumulative = tokens[3].Text == @"\";
+      var operatorSource = tokens[4].Text;
+      state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Operator, Color.Operator, Color.Operator);
 
       var _expression = getExpression(state, builder.Flags);
       if (_expression is (true, var expression))
       {
-         builder.Add(new ForwardReductionSymbol(operatorSource, expression));
+         builder.Add(new ForwardReductionSymbol(operatorSource, expression, cumulative));
          return unit;
       }
       else

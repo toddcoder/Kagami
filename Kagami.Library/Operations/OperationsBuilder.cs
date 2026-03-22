@@ -437,7 +437,7 @@ public class OperationsBuilder(ParseState state)
 
    public void ExecuteString() => add(new ExecuteString());
 
-   public void Join() => add(new Join());
+   public void Join(bool cumulative) => add(new Join(cumulative));
 
    public Result<Operations> ToOperations()
    {
