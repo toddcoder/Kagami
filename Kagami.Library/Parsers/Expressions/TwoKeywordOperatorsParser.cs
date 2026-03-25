@@ -12,7 +12,7 @@ public partial class TwoKeywordOperatorsParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(skip|take|if|not|sort|map|group)(\s+)(while|until|not|same|desc|if|by)\b")]
+   [GeneratedRegex(@"^(\s*)(skip|take|if|not|sort|map|group|flat)(\s+)(while|until|not|same|desc|if|by|map)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -21,34 +21,34 @@ public partial class TwoKeywordOperatorsParser : SymbolParser
 
       var word1 = tokens[2].Text;
       var word2 = tokens[4].Text;
-      var message = "";
+      string message;
       state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Whitespace, Color.Operator);
 
-      switch (word1)
+      switch (word1, word2)
       {
-         case "skip":
-         case "take":
-            message = word2 switch
-            {
-               "while" or "until" => $"{word1}{word2.ToTitleCase()}".Selector(1),
-               _ => message
-            };
-
+         case ("skip", "while"):
+         case ("skip", "until"):
+         case ("take", "while"):
+         case ("take", "until"):
+            message = $"{word1}{word2.ToTitleCase()}".Selector(1);
             break;
-         case "if" when word2 == "not" && !builder.Flags[ExpressionFlags.OmitIf]:
+         case ("if", "not") when !builder.Flags[ExpressionFlags.OmitIf]:
             message = "ifNot(_)";
             break;
-         case "not" when word2 == "same":
+         case ("not", "same"):
             builder.Add(new SameSymbol(true));
             return unit;
-         case "sort" when word2 == "desc":
+         case ("sort", "desc"):
             message = "sortDesc(_<Lambda>)";
             break;
-         case "map" when word2 == "if" && !builder.Flags[ExpressionFlags.OmitIf]:
+         case ("map", "if") when !builder.Flags[ExpressionFlags.OmitIf]:
             message = "mapIf(_<Lambda>)";
             break;
-         case "group" when word2 == "by":
+         case ("group", "by"):
             message = "groupBy(_<Lambda>)";
+            break;
+         case ("flat", "map"):
+            message = "flatMap(_<Lambda>)";
             break;
          default:
             state.RollBackTransaction();
