@@ -174,31 +174,62 @@ public struct Selector : IObject, IEquatable<Selector>
 
    public IEnumerable<Selector> AllSelectors()
    {
-      yield return this;
-
-      var continuing = true;
-      var length = selectorItems.Length;
-      var take = length - 1;
-
-      for (var i = length - 1; i > -1 && continuing; i--)
+      List<SelectorItem> items = [.. SelectorItems];
+      if (items.Count == 0)
       {
-         SelectorItem[] items = [.. selectorItems.Take(take--)];
-         var newImage = selectorImage(name, items);
-         switch (selectorItems[i].SelectorItemType)
+         yield return getSelector(name);
+
+         yield break;
+      }
+
+      while (items.Count > 0)
+      {
+         switch (items[^1].SelectorItemType)
          {
+            case SelectorItemType.Normal:
+            {
+               yield return getSelector(name);
+
+               yield break;
+            }
             case SelectorItemType.Variadic:
-               continuing = false;
-               yield return new Selector(name, items, newImage);
+            {
+               yield return getSelector(name);
 
-               break;
+               items[^1] = items[^1].AsNormal();
+               yield return getSelector(name);
+
+               yield break;
+            }
             case SelectorItemType.Default:
-               yield return new Selector(name, items, newImage);
+            {
+               yield return getSelector(name);
+
+               items[^1] = items[^1].AsNormal();
+               yield return getSelector(name);
+
+               items.RemoveAt(items.Count - 1);
+
+               if (items.Count == 0)
+               {
+                  yield return getSelector(name);
+
+                  items = [.. SelectorItems.Select(i => i.AsNormal())];
+                  yield return getSelector(name);
+               }
 
                break;
-            default:
-               continuing = false;
-               break;
+            }
          }
+      }
+
+      yield break;
+
+      Selector getSelector(string name)
+      {
+         SelectorItem[] array = [.. items];
+         var newImage = selectorImage(name, array);
+         return new Selector(name, array, newImage);
       }
    }
 

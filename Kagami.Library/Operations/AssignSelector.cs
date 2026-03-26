@@ -19,7 +19,7 @@ public class AssignSelector : OneOperandOperation
    public override Optional<IObject> Execute(Machine machine, IObject value)
    {
       var createNewField = false;
-      foreach (var subSelector in selector.AllSelectors())
+      foreach (var subSelector in selector.AllSelectors().Distinct())
       {
          if (createNewField)
          {

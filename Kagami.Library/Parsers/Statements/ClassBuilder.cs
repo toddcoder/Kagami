@@ -26,7 +26,7 @@ public class ClassBuilder
    protected Expression[] parentArguments;
    protected bool initialize;
    protected Block constructorBlock;
-   protected Hash<string, (ConstructorInvokable, Block)> constructorInvokables = [];
+   protected Hash<Selector, (ConstructorInvokable, Block)> constructorInvokables = [];
    protected List<(IInvokable, Block, bool)> functions = [];
    protected UserClass userClass = new("", "");
    protected Set<RequireFunctionMatch> requiredFunctions = [];
@@ -429,10 +429,8 @@ public class ClassBuilder
 
    public void Generate(OperationsBuilder builder)
    {
-      foreach (var (key, value) in constructorInvokables)
+      foreach (var (selector, (invokable, block)) in constructorInvokables)
       {
-         Selector selector = key;
-         var (invokable, block) = value;
          var _index = builder.RegisterInvokable(invokable, block, true);
          if (!_index)
          {

@@ -85,8 +85,14 @@ public class UserClass : BaseClass, IEquatable<UserClass>
       else
       {
          var clone = lambda.Clone();
-         messages[selector] = (obj, msg) => UserInvoke((UserObject)obj, msg.Arguments, clone);
-         signatures.Add(selector);
+         Func<IObject, Message, IObject> invocation = (obj, msg) => UserInvoke((UserObject)obj, msg.Arguments, clone);
+         foreach (var subSelector in selector.AllSelectors())
+         {
+            messages[subSelector] = invocation;
+            signatures.Add(subSelector);
+         }
+
+         //signatures.Add(selector);
 
          return true;
       }

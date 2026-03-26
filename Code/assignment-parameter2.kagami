@@ -15,5 +15,6 @@ class VideoMode {
 }
 
 let vga = Resolution(width: 640, height: 480)
+println vga
 let videoMode = VideoMode()
 println videoMode.resolution

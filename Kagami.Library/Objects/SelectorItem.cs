@@ -74,4 +74,6 @@ public readonly struct SelectorItem : IEnumerable<SelectorItem>
    }
 
    public SelectorItem AsVariadic() => new(Label, TypeConstraint, SelectorItemType.Variadic);
+
+   public SelectorItem AsNormal() => new(Label, TypeConstraint, SelectorItemType.Normal);
 }
