@@ -22,7 +22,7 @@ public partial class AbstractPropertyParser : StatementParser
       {
          var _typeConstraint = possibleTypeConstraint.Maybe;
          var block = new Block(new AbstractFail(propertyName), _typeConstraint);
-         (propertyName, var parameters) = PropertyParser.PropertyNameParameters(direction, propertyName, _typeConstraint);
+         (propertyName, var parameters) = PropertyParser.PropertyNameParameters(state, direction, propertyName, _typeConstraint);
          var function = new Function(propertyName, parameters, false, block, false, false, "");
          state.AddStatement(function);
 

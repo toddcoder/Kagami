@@ -11,7 +11,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class PropertyParser : StatementParser
 {
-   public static (string propertyName, Parameters parameters) PropertyNameParameters(string direction, string propertyName,
+   public static (string propertyName, Parameters parameters) PropertyNameParameters(ParseState state, string direction, string propertyName,
       Maybe<TypeConstraint> _typeConstraint)
    {
       Parameters parameters;
@@ -23,6 +23,15 @@ public partial class PropertyParser : StatementParser
       else
       {
          propertyName = $"{propertyName}=";
+         if (state.Scan(@"^\("))
+         {
+            var _actualParameters = getParameters(state);
+            if (_actualParameters is (true, { Length: 1 } actualParameters))
+            {
+               return (propertyName, actualParameters);
+            }
+         }
+
          parameters = new Parameters(new Parameter(false, false, "", "value", nil, _typeConstraint, false, false, false));
       }
 
@@ -40,6 +49,28 @@ public partial class PropertyParser : StatementParser
 
       state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Keyword, Color.Whitespace, Color.Identifier);
 
+      Maybe<Parameters> _parameters = nil;
+
+      if (direction == "set" && state.Scan(@"^(\()", Color.OpenParenthesis))
+      {
+         var _setParameters = getParameters(state);
+         if (_setParameters is (true, var setParameters))
+         {
+            if (setParameters.Length == 1)
+            {
+               _parameters = setParameters;
+            }
+            else
+            {
+               return fail("Set can only have one parameter");
+            }
+         }
+         else
+         {
+            return _setParameters.Exception;
+         }
+      }
+
       state.CreateYieldFlag();
       state.CreateReturnType();
       var _block = getAnyBlock(state);
@@ -48,7 +79,14 @@ public partial class PropertyParser : StatementParser
          var yielding = state.RemoveYieldFlag();
          state.RemoveReturnType();
 
-         (propertyName, var parameters) = PropertyNameParameters(direction, propertyName, block.TypeConstraint);
+         if (_parameters is (true, var parameters))
+         {
+            propertyName = $"{propertyName}=";
+         }
+         else
+         {
+            (propertyName, parameters) = PropertyNameParameters(state, direction, propertyName, block.TypeConstraint);
+         }
 
          state.AddStatement(new Function(propertyName, parameters, false, block, yielding, isOverride, ClassName) { SelfAlias = SelfAlias });
          return unit;

@@ -1,0 +1,15 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+class Circle {
+	param var radius int
+
+	get diameter int => radius * 2
+	set diameter(d) int => radius = d / 2
+}
+
+let circle = Circle(radius: 2)
+println circle.diameter
+circle.diameter = 200
+println circle.diameter
