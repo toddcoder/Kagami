@@ -56,4 +56,8 @@ public class LazyIterator : Iterator
    public override IObject Each(Lambda action) => new StreamingIterator(this).Each(action);
 
    public override IObject By(int count) => new StreamingIterator(this).By(count);
+
+   public override IObject First() => base.First();
+
+   public override IObject First(Lambda predicate) => base.First(predicate);
 }

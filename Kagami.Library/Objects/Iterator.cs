@@ -225,7 +225,7 @@ public class Iterator : IObject, IIterator
    public IObject ReduceLeft(IObject initialValue, Lambda lambda)
    {
       var current = initialValue;
-      var result = new List<IObject> { current };
+      List<IObject> result = [current];
       foreach (var value in List())
       {
          current = lambda.Invoke(current, value);
@@ -239,7 +239,7 @@ public class Iterator : IObject, IIterator
    {
       var firstObtained = false;
       var current = Unassigned.Value;
-      var result = new List<IObject>();
+      List<IObject> result = [];
       foreach (var value in List())
       {
          if (firstObtained)
@@ -261,7 +261,7 @@ public class Iterator : IObject, IIterator
    public IObject ReduceRight(IObject initialValue, Lambda lambda)
    {
       var current = initialValue;
-      var result = new List<IObject> { current };
+      List<IObject> result = [current];
       var list = List().ToList();
       list.Reverse();
       foreach (var value in list)
@@ -277,7 +277,7 @@ public class Iterator : IObject, IIterator
    {
       var firstObtained = false;
       var current = Unassigned.Value;
-      var result = new List<IObject>();
+      List<IObject> result = [];
       foreach (var value in List())
       {
          if (firstObtained)
@@ -837,9 +837,9 @@ public class Iterator : IObject, IIterator
       return result;
    }
 
-   public IObject First() => List().FirstOrNone().Map(Some.Object) | (() => KNil.NilValue);
+   public virtual IObject First() => List().FirstOrNone().Map(Some.Object) | (() => KNil.NilValue);
 
-   public IObject First(Lambda predicate)
+   public virtual IObject First(Lambda predicate)
    {
       foreach (var value in List().Where(value => predicate.Invoke(value).IsTrue))
       {
