@@ -130,11 +130,11 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       return New(name, refField);
    }
 
-   public Result<Field> NewSelector(Selector selector, FieldType type, bool mutable = false, bool visible = true)
+   public Result<Field> NewSelector(Selector selector, FieldType type, bool mutable = false, bool visible = true, bool overriding = false)
    {
       if (fields.Maybe[selector] is (true, var foundField))
       {
-         if (foundField.Tolerant)
+         if (foundField.Tolerant || overriding)
          {
             return foundField;
          }
@@ -153,11 +153,11 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       }
    }
 
-   public Result<Field> NewSelector(Selector selector, FieldType type, IObject value, bool mutable = false, bool visible = true)
+   public Result<Field> NewSelector(Selector selector, FieldType type, IObject value, bool mutable = false, bool visible = true, bool overriding = false)
    {
       if (fields.Maybe[selector] is (true, var foundField))
       {
-         if (foundField.Tolerant)
+         if (foundField.Tolerant || overriding)
          {
             foundField.Value = value;
             return foundField;
