@@ -39,7 +39,7 @@ public class StringClass : BaseClass, ICollectionClass
       registerMessage("[](_<Regex>)", (obj, msg) => function<KString, Regex>(obj, msg, (kString, r) => kString.GetRegex(r)));
       registerMessage("[]=(_<Regex>,_<String>)",
          (obj, msg) => function<KString, Regex, KString>(obj, msg, (kString, regex, replacement) => kString.SetRegex(regex, replacement.Value)));
-      messages["[](_)"] = (obj, msg) => function<KString, IObject>(obj, msg, getIndexed);
+      messages["[](_<Int>)"] = (obj, msg) => function<KString, IObject>(obj, msg, getIndexed);
       messages["length".get()] = (obj, _) => function<KString>(obj, s => s.Length);
       messages["upper()"] = (obj, _) => function<KString>(obj, s => s.Upper());
       messages["lower()"] = (obj, _) => function<KString>(obj, s => s.Lower());
@@ -75,7 +75,10 @@ public class StringClass : BaseClass, ICollectionClass
       messages["isTitle".get()] = (obj, _) => function<KString>(obj, s => s.IsTitle);
       messages["translate(from:_<String>,to:_<String>)"] = (obj, msg) =>
          function<KString, KString, KString>(obj, msg, (s, f, t) => s.Translate(f.Value, t.Value));
+      messages["[]=(_<String>,_<String>)"] = (obj, msg) =>
+         function<KString, KString, KString>(obj, msg, (s, f, t) => s.Translate(f.Value, t.Value));
       messages["translate(_<Dictionary>)"] = (obj, msg) => function<KString, Dictionary>(obj, msg, (s, d) => s.Translate(d, false));
+      messages["[]=(_<Dictionary>)"] = (obj, msg) => function<KString, Dictionary>(obj, msg, (s, d) => s.Translate(d, false));
       messages["translate(_<Dictionary>,omit:_<Boolean>)"] =
          (obj, msg) => function<KString, Dictionary, KBoolean>(obj, msg, (s, d, o) => s.Translate(d, o.Value));
       messages["truncate".Selector("<Int>", "<Boolean>")] = (obj, msg) =>

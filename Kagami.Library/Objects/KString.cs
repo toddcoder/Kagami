@@ -761,5 +761,5 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
    public IObject GetRegex(Regex regex) => regex.Matches(value);
 
-   public MutString SetRegex(Regex regex, string replacement) => value.Substitute(regex.CorePattern, replacement);
+   public KString SetRegex(Regex regex, string replacement) => value.Substitute(regex.CorePattern, replacement);
 }
