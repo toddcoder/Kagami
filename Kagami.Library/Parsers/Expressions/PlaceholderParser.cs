@@ -20,7 +20,7 @@ public partial class PlaceholderParser : SymbolParser
    {
       var mutable = tokens[2].Text.Trim();
       var placeholderName = tokens[3].Text;
-      if (placeholderName is "false" or "true")
+      if (placeholderName is "false" or "true" or "nil")
       {
          return nil;
       }
