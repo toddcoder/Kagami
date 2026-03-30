@@ -4,4 +4,4 @@ Todd E! Bennett
 fooBAR
 ?BAR
 foobar
-m"foobar" | MutString
+"foobar" | String

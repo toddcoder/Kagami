@@ -16,4 +16,4 @@ Something else: Not matched.
 512 is a cube
 729 is a cube and a square
 1000 is a cube
-it collection | Iterator
+lit collection | LazyIterator

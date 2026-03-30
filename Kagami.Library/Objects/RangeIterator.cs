@@ -3,7 +3,7 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Objects;
 
-public class RangeIterator : Iterator
+public class RangeIterator : LazyIterator
 {
    protected KRange kRange;
    protected IRangeItem current;
