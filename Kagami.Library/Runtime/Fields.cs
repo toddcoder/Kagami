@@ -153,7 +153,8 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       }
    }
 
-   public Result<Field> NewSelector(Selector selector, FieldType type, IObject value, bool mutable = false, bool visible = true, bool overriding = false)
+   public Result<Field> NewSelector(Selector selector, FieldType type, IObject value, bool mutable = false, bool visible = true,
+      bool overriding = false)
    {
       if (fields.Maybe[selector] is (true, var foundField))
       {
@@ -239,9 +240,16 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
 
    public Result<Field> AssignParameter(Parameter parameter, IObject value)
    {
-      if (parameter.TypeConstraint is (true, var typeConstraint) && !typeConstraint.Matches(classOf(value)))
+      if (parameter.TypeConstraint is (true, var typeConstraint))
       {
-         return incompatibleClasses(value, typeConstraint.AsString);
+         if (convertToMonad(typeConstraint.Comparisands[0].Name, value) is (true, var newValue))
+         {
+            value = newValue;
+         }
+         else if (!typeConstraint.Matches(classOf(value)))
+         {
+            return incompatibleClasses(value, typeConstraint.AsString);
+         }
       }
 
       if (parameter.Reference)
@@ -286,9 +294,6 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
                fields[newLazyName] = oldLazyField.Copy();
                field.Value = new Singleton();
             }
-            /*var singleton = Singleton.Create();
-            singleton.CachedValue = value.Some();
-            field.Value = singleton;*/
 
             return field;
          }

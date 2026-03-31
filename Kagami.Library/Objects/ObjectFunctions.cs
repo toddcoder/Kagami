@@ -1168,4 +1168,15 @@ public static class ObjectFunctions
          _ => nil
       };
    }
+
+   public static bool isMonad(string className) => className switch
+   {
+      "Optional" => true,
+      "Result" => true,
+      "Some" => true,
+      "Nil" => true,
+      "Success" => true,
+      "Failure" => true,
+      _ => false
+   };
 }

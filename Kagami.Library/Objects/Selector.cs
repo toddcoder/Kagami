@@ -190,6 +190,16 @@ public struct Selector : IObject, IEquatable<Selector>
             {
                yield return getSelector(name);
 
+               if (items[^1].TypeConstraint is (true, var typeConstraint))
+               {
+                  var baseClass = typeConstraint.Comparisands[0];
+                  if (isMonad(baseClass.Name))
+                  {
+                     items[^1] = new SelectorItem(items[^1].Label, nil, SelectorItemType.Normal);
+                     yield return getSelector(name);
+                  }
+               }
+
                yield break;
             }
             case SelectorItemType.Variadic:
