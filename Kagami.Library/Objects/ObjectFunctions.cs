@@ -1146,4 +1146,26 @@ public static class ObjectFunctions
    }
 
    public static IObject[] tupleToArray(KTuple tuple) => [..tuple.List];
+
+   public static Maybe<IObject> convertToMonad(string className, IObject value)
+   {
+      return className switch
+      {
+         "Optional" => value switch
+         {
+            Some or KNil => value.Some(),
+            Success success => Some.Object(success.Value).Some(),
+            Failure => KNil.NilValue.Some(),
+            _ => Some.Object(value).Some()
+         },
+         "Result" => value switch
+         {
+            Success or Failure => value.Some(),
+            Some some => Success.Object(some.Value).Some(),
+            KNil => Failure.Object("No value provided").Some(),
+            _ => Success.Object(value).Some()
+         },
+         _ => nil
+      };
+   }
 }

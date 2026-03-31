@@ -439,6 +439,10 @@ public class OperationsBuilder(ParseState state)
 
    public void Join(bool cumulative) => add(new Join(cumulative));
 
+   public void ToOptional() => add(new ToOptional());
+
+   public void ToResult() => add(new ToResult());
+
    public Result<Operations> ToOperations()
    {
       operations.Add(new Stop());

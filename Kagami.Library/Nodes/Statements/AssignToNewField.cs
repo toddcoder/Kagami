@@ -17,7 +17,8 @@ public class AssignToNewField : Statement
    protected readonly bool isHidden;
    protected readonly bool isOverride;
 
-   public AssignToNewField(bool mutable, string fieldName, Expression expression, Maybe<TypeConstraint> _typeConstraint, bool isHidden, bool isOverride)
+   public AssignToNewField(bool mutable, string fieldName, Expression expression, Maybe<TypeConstraint> _typeConstraint, bool isHidden,
+      bool isOverride)
    {
       this.mutable = mutable;
       this.fieldName = fieldName;
@@ -49,13 +50,28 @@ public class AssignToNewField : Statement
    public override void Generate(OperationsBuilder builder)
    {
       expression.Generate(builder);
+
+      if (_typeConstraint is (true, var typeConstraint))
+      {
+         switch (typeConstraint.Comparisands[0].Name)
+         {
+            case "Optional":
+               builder.ToOptional();
+               break;
+            case "Result":
+               builder.ToResult();
+               break;
+         }
+      }
+
       Module.Global.Value.ForwardReference(fieldName);
       builder.StoreField(fieldName, mutable, true, _typeConstraint);
    }
 
    public override string ToString() => stream() / (mutable ? "var" : "let") / " " / fieldName / " = " / expression;
 
-   public void Deconstruct(out bool mutable, out string fieldName, out Maybe<TypeConstraint> _typeConstraint, out bool isHidden, out bool isOverride, out Expression expression)
+   public void Deconstruct(out bool mutable, out string fieldName, out Maybe<TypeConstraint> _typeConstraint, out bool isHidden, out bool isOverride,
+      out Expression expression)
    {
       mutable = this.mutable;
       fieldName = this.fieldName;

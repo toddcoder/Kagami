@@ -16,8 +16,15 @@ public class Field
       set
       {
          var valueClass = classOf(value);
+
          if (TypeConstraint is (true, var typeConstraint))
          {
+            if (convertToMonad(typeConstraint.Comparisands[0].Name, value) is (true, var monad))
+            {
+               this.value = monad;
+               return;
+            }
+
             if (typeConstraint.Matches(valueClass) || value is Placeholder)
             {
                this.value = value;

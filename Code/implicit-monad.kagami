@@ -1,0 +1,9 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+var foo result = "foo"
+println foo
+
+foo = "bar"
+println foo

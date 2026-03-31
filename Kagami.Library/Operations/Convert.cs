@@ -81,6 +81,16 @@ public class Convert : Operation
          {
             return fromCharArrayToString(value);
          }
+         else if (toClass.AsString == "Optional")
+         {
+            return value switch
+            {
+               Objects.Some or KNil => value.Just(),
+               Objects.Success success => Objects.Some.Object(success.Value).Just(),
+               Objects.Failure => KNil.NilValue.Just(),
+               _ => Objects.Some.Object(value).Just()
+            };
+         }
          else
          {
             return simpleConversions(fromClass.AsString, toClass.AsString, value);
