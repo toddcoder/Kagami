@@ -1,0 +1,11 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+func log(value number, base optional = nil) number {
+	let actualBase = base ?: 10
+	return math.log(value) / math.log(actualBase)
+}
+
+println log(20, 2)
+println log(20)

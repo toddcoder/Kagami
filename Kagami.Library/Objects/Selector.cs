@@ -190,14 +190,9 @@ public struct Selector : IObject, IEquatable<Selector>
             {
                yield return getSelector(name);
 
-               if (items[^1].TypeConstraint is (true, var typeConstraint))
+               if (getMonadSelector(name) is (true, var monadSelector))
                {
-                  var baseClass = typeConstraint.Comparisands[0];
-                  if (isMonad(baseClass.Name))
-                  {
-                     items[^1] = new SelectorItem(items[^1].Label, nil, SelectorItemType.Normal);
-                     yield return getSelector(name);
-                  }
+                  yield return monadSelector;
                }
 
                yield break;
@@ -217,6 +212,11 @@ public struct Selector : IObject, IEquatable<Selector>
 
                items[^1] = items[^1].AsNormal();
                yield return getSelector(name);
+
+               if (getMonadSelector(name) is (true, var monadSelector))
+               {
+                  yield return monadSelector;
+               }
 
                items.RemoveAt(items.Count - 1);
 
@@ -239,7 +239,23 @@ public struct Selector : IObject, IEquatable<Selector>
       {
          SelectorItem[] array = [.. items];
          var newImage = selectorImage(name, array);
+
          return new Selector(name, array, newImage);
+      }
+
+      Maybe<Selector> getMonadSelector(string name)
+      {
+         if (items[^1].TypeConstraint is (true, var typeConstraint))
+         {
+            var baseClass = typeConstraint.Comparisands[0];
+            if (isMonad(baseClass.Name))
+            {
+               items[^1] = new SelectorItem(items[^1].Label, nil, SelectorItemType.Normal);
+               return getSelector(name);
+            }
+         }
+
+         return nil;
       }
    }
 
