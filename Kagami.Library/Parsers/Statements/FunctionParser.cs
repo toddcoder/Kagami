@@ -5,7 +5,6 @@ using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Runtime;
 using System.Text.RegularExpressions;
-using Kagami.Library.Objects;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Parsers.ParserFunctions;
@@ -29,7 +28,6 @@ public partial class FunctionParser : StatementParser
       var operatorText = tokens[4].Text;
       var isOperator = operatorText.StartsWith("infix") || operatorText is "prefix" or "postfix";
       var isMacro = tokens[4].Text == "macro";
-      var isMatch = tokens[4].Text == "match";
 
       var className = tokens[6].Text;
       (className, var color) = getClassNameWithColor(className);
@@ -106,18 +104,7 @@ public partial class FunctionParser : StatementParser
       if (_parameters is (true, var parameters))
       {
          var isFixed = state.Scan(@"^(\s+)(fixed)\b", Color.Whitespace, Color.Keyword);
-         if (isMatch)
-         {
-            var parameterName = "__$0";
-            var variadicParameter = new Parameter(false, false, "", parameterName, nil, nil, false, false, false)
-            {
-               Variadic = true,
-               Singleton = true
-            };
-            var newParameters = new Parameters(variadicParameter);
-            return getMatchFunction(state, functionName, newParameters, overriding, className, isFixed, isHidden, SelfAlias);
-         }
-         else if (state.CurrentSource.StartsWith('('))
+         if (state.CurrentSource.StartsWith('('))
          {
             var _curriedFunction = getCurriedFunction(state, functionName, parameters, overriding, className, isHidden, annotations, SelfAlias);
             if (_curriedFunction is (true, var curriedFunction))
@@ -245,69 +232,6 @@ public partial class FunctionParser : StatementParser
    protected static LambdaSymbol getLambda(Parameters parameters, LambdaSymbol previousLambdaSymbol)
    {
       return new(parameters, new Block(new Return(new Expression(previousLambdaSymbol), nil)));
-   }
-
-   protected static Optional<Unit> getMatchFunction(ParseState state, string functionName, Parameters parameters, bool overriding,
-      string className, bool isFixed, bool isHidden, string selfAlias)
-   {
-      List<If> list = [];
-
-      Maybe<TypeConstraint> _typeConstraint = parseTypeConstraint(state).Map(ptc => ptc.Maybe);
-
-      state.CreateReturnType();
-      while (state.More)
-      {
-         var caseParser = new WhenParser(parameters[0].Name);
-         state.SkipEndOfLine();
-         var _scan = caseParser.Scan(state);
-         if (_scan)
-         {
-            if (caseParser.If is (true, var @if))
-            {
-               @if.AddReturnIf();
-               list.Add(@if);
-            }
-         }
-         else if (_scan.Exception is (true, var exception))
-         {
-            return exception;
-         }
-         else
-         {
-            break;
-         }
-      }
-
-      if (list.Count == 0)
-      {
-         state.RemoveReturnType();
-
-         return nil;
-      }
-      else
-      {
-         var stack = new Stack<If>();
-         foreach (var ifStatement in list)
-         {
-            stack.Push(ifStatement);
-         }
-
-         var previousIf = stack.Pop();
-         while (stack.Count > 0)
-         {
-            var current = stack.Pop();
-            current.ElseIf = previousIf.Some();
-            previousIf = current;
-         }
-
-         previousIf.Else = new Block(new FailedMatch());
-
-         state.AddStatement(new MatchFunction(functionName, parameters, isHidden, previousIf, _typeConstraint, overriding, className)
-            { IsFixed = isFixed, SelfAlias = selfAlias });
-         state.RemoveReturnType();
-
-         return unit;
-      }
    }
 
    public string SelfAlias { get; set; } = "";
