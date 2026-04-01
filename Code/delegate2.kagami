@@ -1,13 +1,13 @@
 ﻿open sys
 
 class Worker {
-	func work() => println("get work done")
-	func analyze() => println("analyze...")
-	func writeReport() => println("get report written")
+	fn work() => println("get work done")
+	fn analyze() => println("analyze...")
+	fn writeReport() => println("get report written")
 }
 
 class Export {
-	func analyze() => println("expert analysis...")
+	fn analyze() => println("expert analysis...")
 }
 
 class Manager {}

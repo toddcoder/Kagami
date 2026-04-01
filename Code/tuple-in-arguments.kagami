@@ -1,6 +1,6 @@
 ﻿open sys
 
-func fullNameToString(x) {
+fn fullNameToString(x) {
 	| (first, second) = x
 	return first + " " + second
 }

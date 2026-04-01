@@ -1,6 +1,6 @@
 ﻿#pragma ALLOW_PRINT_STATEMENT true
 
-func tryDivide(x, y) {
+fn tryDivide(x, y) {
 	return do {
 		dividend <- x
 		divisor <- y

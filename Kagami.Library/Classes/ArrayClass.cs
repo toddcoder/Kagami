@@ -26,6 +26,8 @@ public class ArrayClass : BaseClass, ICollectionClass
       acceptingMessages();
       typedCollectionMessages();
 
+      messages["[](_<Range>)"] = (obj, msg) => function<KArray, KRange>(obj, msg, (a, r) => a[r]);
+      messages["[]=(_<Range>,_)"] = (obj, msg) => function<KArray, KRange, IObject>(obj, msg, (a, r, v) => a[r] = v);
       messages["[](_)"] = (obj, msg) => function<KArray, IObject>(obj, msg, getIndexed);
       messages["[](_<NumericOpenRange>)"] = (obj, msg) => function<KArray, NumericOpenRange>(obj, msg, (a, o) => a[o]);
       messages["get(_)"] = (obj, msg) => function<KArray, IObject>(obj, msg, (a, i) => someOf(a.Get(i)));

@@ -1,7 +1,7 @@
 ﻿#pragma ALLOW_PRINT_STATEMENT true
 open sys
 
-func foo(a <int string>) <string int> {
+fn foo(a <int string>) <string int> {
 	if a is Int {
 		return "int"
 	}

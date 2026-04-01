@@ -5,7 +5,7 @@ class Stats {
 	var xsum = 0.0
 	var x2sum = 0.0
 
-	func addValue(`num float) {
+	fn addValue(`num float) {
 		numlist << `num
 		xsum += `num
 		x2sum += `num ^ 2
@@ -32,7 +32,7 @@ class Stats2 : Stats {
 	var min = float.max
 	var max = float.min
 
-	override func addValue(`num float) {
+	override fn addValue(`num float) {
 		min = `num min min
 		max = `num max max
 		super.addValue(`num)
@@ -45,7 +45,7 @@ class Stats2 : Stats {
 
 let stats = Stats2()
 
-func getResults() {
+fn getResults() {
 	println("Results===")
 	println($"Number of values: (stats.values.length)")
 	println($"Minimum: (stats.minimum)")

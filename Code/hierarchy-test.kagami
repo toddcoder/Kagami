@@ -11,7 +11,7 @@ init() => RecipeIngredient(name: "[Unnamed]", quantity: 1)
 
 class ShoppingListItem(var name: _ string, var quantity: _ int) : RecipeIngredient(name: name, quantity: quantity) {
 	var purchased = false
-	func description string => $"(quantity) x (name) (purchased ? "✔" : "✘")"
+	fn description string => $"(quantity) x (name) (purchased ? "✔" : "✘")"
 }
 init(var name: _ string) => ShoppingListItem(name: name, quantity: 1)
 init() => ShoppingListItem(name: "[Unnamed]", quantity: 1)

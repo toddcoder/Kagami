@@ -95,7 +95,7 @@ public class Parameter : IEquatable<Parameter>
          var builder = new StringBuilder();
          if (isHidden)
          {
-            builder.Append("hidden ");
+            builder.Append("hide ");
          }
 
          if (label.IsNotEmpty())

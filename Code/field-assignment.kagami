@@ -1,6 +1,6 @@
 ﻿open sys
 
-func sum_square(f, m, n) {
+fn sum_square(f, m, n) {
 	var sum = 0.0
 	for k in m..n sum += f(k) ^ 2
 	return sum

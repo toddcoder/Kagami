@@ -4,12 +4,12 @@
 
 mixin AddSubtract {
 	get string => "add subtract"
-	func addSub() => self.add() ~ ":" ~ self.sub()
+	fn addSub() => self.add() ~ ":" ~ self.sub()
 }
 
 class Foobar(a int, b int) {
-	func add() => a + b
-	func sub() => a - b
+	fn add() => a + b
+	fn sub() => a - b
 }
 mix AddSubtract
 

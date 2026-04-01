@@ -1,7 +1,7 @@
 ﻿open sys
 
 var i = 0;
-func term(x) {
+fn term(x) {
 	println($"term (i++)")
 	return x
 }

@@ -1,13 +1,13 @@
 ﻿open sys
 
 inclusion Equal {
-	required func isEqual(_)
-	func isNotEqual(x) => not isEqual(x)
+	required fn isEqual(_)
+	fn isNotEqual(x) => not isEqual(x)
 }
 
 class Point(var x, var y) {
 	include Equal
-	func isEqual(p) {
+	fn isEqual(p) {
 		match p {
 			| other: Point return other.x == x and other.y == y
 			| _ return false

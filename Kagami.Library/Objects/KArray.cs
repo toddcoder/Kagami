@@ -830,4 +830,78 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
          throw expectedType("Array");
       }
    }
+
+   public IObject this[KRange range]
+   {
+      get
+      {
+         List<IObject> result = [];
+         foreach (var index in indexList(range, list.Count))
+         {
+            result.Add(list[index]);
+         }
+
+         return new KArray(result) { TypeConstraint = _typeConstraint };
+      }
+      set
+      {
+         List<int> il = [.. indexList(range, list.Count)];
+         switch (value)
+         {
+            case KArray array when array.Id == Id:
+               return;
+            case ICollection { Length.Value: 0 }:
+               foreach (var index in il.OrderByDescending(i => i))
+               {
+                  list.RemoveAt(index);
+               }
+
+               break;
+            case ICollection collection and not KString:
+            {
+               var valueIterator = collection.GetIterator(false);
+               List<IObject> values = [.. valueIterator.List()];
+               var valueIndex = 0;
+               var lastIndex = -1;
+               foreach (var index in il)
+               {
+                  lastIndex = index;
+                  if (valueIndex < values.Count)
+                  {
+                     assertIncomingValueIsEquivalent(values[valueIndex]);
+                     list[index] = values[valueIndex];
+                     valueIndex++;
+                  }
+                  else
+                  {
+                     break;
+                  }
+               }
+
+               if (lastIndex > -1)
+               {
+                  for (var i = valueIndex; i < values.Count; i++)
+                  {
+                     assertIncomingValueIsEquivalent(values[i]);
+                     list.Insert(lastIndex + 1, values[i]);
+                     lastIndex++;
+                  }
+               }
+
+               break;
+            }
+
+            default:
+            {
+               assertIncomingValueIsEquivalent(value);
+               foreach (var index in il)
+               {
+                  list[index] = value;
+               }
+
+               break;
+            }
+         }
+      }
+   }
 }

@@ -1,6 +1,6 @@
 ﻿open sys
 
-func fib(m) {
+fn fib(m) {
 	if m < 2 return 1
 	return fibs[m - 1] + fibs[m - 2]
 }

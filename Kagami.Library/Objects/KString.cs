@@ -762,4 +762,18 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
    public IObject GetRegex(Regex regex) => regex.Matches(value);
 
    public KString SetRegex(Regex regex, string replacement) => value.Substitute(regex.CorePattern, replacement);
+
+   public KString this[KRange range]
+   {
+      get
+      {
+         var builder = new StringBuilder();
+         foreach (var index in indexList(range, value.Length))
+         {
+            builder.Append(value[index]);
+         }
+
+         return builder.ToString();
+        }
+   }
 }

@@ -5,7 +5,7 @@
 type Kind {|Negative, Zero, Positive}
 
 extension(i) int {
-	func kind Kind {
+	fn kind Kind {
 		match i {
 			|0 return Zero
 			|> 0 return Positive

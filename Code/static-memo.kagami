@@ -1,19 +1,19 @@
 ﻿open sys
 
 class ChecksumAccumulator {
-	hidden var sum = 0
+	hide var sum = 0
 
-	func add(b byte) => sum += b
+	fn add(b byte) => sum += b
 
-	func checksum() int => not (sum and 0xff) + 1
+	fn checksum() int => not (sum and 0xff) + 1
 }
 static {
-	hidden let cache = {string:int} {(s)
+	hide let cache = {string:int} {(s)
 		let acc = ChecksumAccumulator()
 		for c in s do acc.add(c.ord.b)
 		return acc.checksum()
 	}
-	func calculate(s string) int => cache[s]
+	fn calculate(s string) int => cache[s]
 }
 
 println(ChecksumAccumulator.calculate("foobar"))

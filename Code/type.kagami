@@ -3,7 +3,7 @@
 type Command {| Open, Closed, Pending, Approved, Denied}
 
 execute(Open)
-func execute(command Command) {
+fn execute(command Command) {
 	match command {
 		| Open return println("open")
 		| Closed return println("closed")

@@ -30,5 +30,5 @@ println a
 let res = "foo" ~ ("bar" && "baz")
 println res
 
-func greet(greeting, name) => println $"$greeting $name"
+fn greet(greeting, name) => println $"$greeting $name"
 greet(("Hi" && "Bye"), ("Andrew" && "Jonathan"))

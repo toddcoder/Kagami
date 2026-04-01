@@ -40,6 +40,7 @@ public class StringClass : BaseClass, ICollectionClass
       registerMessage("[]=(_<Regex>,_<String>)",
          (obj, msg) => function<KString, Regex, KString>(obj, msg, (kString, regex, replacement) => kString.SetRegex(regex, replacement.Value)));
       messages["[](_<Int>)"] = (obj, msg) => function<KString, IObject>(obj, msg, getIndexed);
+      messages["[](_<Range>)"] = (obj, msg) => function<KString, KRange>(obj, msg, (s, r) => s[r]);
       messages["length".get()] = (obj, _) => function<KString>(obj, s => s.Length);
       messages["upper()"] = (obj, _) => function<KString>(obj, s => s.Upper());
       messages["lower()"] = (obj, _) => function<KString>(obj, s => s.Lower());

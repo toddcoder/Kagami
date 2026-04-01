@@ -3,15 +3,15 @@
 class Boogeyman(var name, var location) {
 	println("Yes, master?")
 
-	func get_info() => println($"I am (name) in (location)")
+	fn get_info() => println($"I am (name) in (location)")
 
-	func change_location(newlocation) {
+	fn change_location(newlocation) {
 		location = newlocation
 		println($"I moved to (location)!")
 		get_info()
 	}
 
-	func change_name(newname) {
+	fn change_name(newname) {
 		name = newname
 		println($"I shall be called (name) from now on!")
 		get_info()

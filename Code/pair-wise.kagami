@@ -1,6 +1,6 @@
 ﻿open sys
 
-func pairWise(list, `lambda) {
+fn pairWise(list, `lambda) {
 	reject list.length < 2 return []
 	let next = `lambda(list[0], list[1])
 	return [next] ~ pairWise(list{2}, `lambda)

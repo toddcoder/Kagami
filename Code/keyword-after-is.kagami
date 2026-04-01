@@ -1,6 +1,6 @@
 ﻿open sys
 
-func greet(person) {
+fn greet(person) {
 	require person["name"] is ?name else {
 		return
 	}

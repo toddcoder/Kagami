@@ -3,12 +3,12 @@
 #pragma ALLOW_PRINT_STATEMENT true
 
 mixin M {
-	func first() => println "first"
-	abstract func second()
+	fn first() => println "first"
+	abstract fn second()
 }
 
 class Foo {
-	func second() => println "second"
+	fn second() => println "second"
 }
 mix M
 

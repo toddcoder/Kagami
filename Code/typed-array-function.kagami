@@ -1,6 +1,6 @@
 ﻿open sys
 
-func printAll(ary [int]) {
+fn printAll(ary [int]) {
 	for i in ary println(i)
 }
 

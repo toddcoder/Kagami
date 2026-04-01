@@ -12,7 +12,7 @@ let athletes = [
 	Athlete("Paula", "Radcliffe", d"1973-12-17", 'M', "GBR")
 ]
 
-func asDate(date) => date \ "yyyy-MM-dd"
+fn asDate(date) => date \ "yyyy-MM-dd"
 
 let bornSince70 = x -> x.dateOfBirth > d"1970-1-1"
 let excludingKh = x -> x.lastName <= "Kg" or x.lastName >= "Ki"

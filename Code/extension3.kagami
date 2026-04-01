@@ -3,13 +3,13 @@
 #pragma ALLOW_PRINT_STATEMENT true
 
 extension(str) string {
-	func upperLast() => str.skip(-1).lower() ~ str.take(-1).upper()
+	fn upperLast() => str.skip(-1).lower() ~ str.take(-1).upper()
 }
 
 println "foobar".upperLast()
 
 extension string {
-	func spaceToDash() => self.replace(" ", "-")
+	fn spaceToDash() => self.replace(" ", "-")
 }
 
 println "foo bar".spaceToDash()

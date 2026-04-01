@@ -39,7 +39,7 @@ public class GoToIfFalse : AddressedOperation
                      }
                      else
                      {
-                        machine.CurrentFrame.Fields.New(name, FieldType.Assignment, some.Value);
+                        machine.CurrentFrame.Fields.New(name, FieldType.Assignment, some.Value, mutable: true);
                      }
                   }
 

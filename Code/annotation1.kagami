@@ -10,13 +10,12 @@ static {
 }
 
 @Record
-func alfa(x) => x * 2
+fn alfa(x) => x * 2
 
 @Record
-func bravo(x) => x / 10
+fn bravo(x) => x / 10
 
 @Record
-func charlie(x) => x * 7
-
+fn charlie(x) => x * 7
 
 println Record.names

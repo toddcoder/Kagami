@@ -1,6 +1,6 @@
 ﻿open sys
 
-func gy() {
+fn gy() {
 	let x = 2
 	let y = 3
 	yield (x, y, x + y)

@@ -3,8 +3,8 @@
 #pragma ALLOW_PRINT_STATEMENT true
 
 class Coffee(name, strength = 1) {
-	func brew() => println $"brewing $name"
-	func pour(amount = 1) {
+	fn brew() => println $"brewing $name"
+	fn pour(amount = 1) {
 		if amount == 1 {
 			return "Poured a single cup"
 		}
@@ -17,8 +17,8 @@ class Coffee(name, strength = 1) {
 class MaxgoodHouse(name, strength = 0) : Coffee(name, strength) {
 	let brand = "Maxgood House"
 
-	override func brew() => println $"Brewing $brand $name"
-	override func pour(amount = 0) => $"(super.pour(amount)), but it sucks"
+	override fn brew() => println $"Brewing $brand $name"
+	override fn pour(amount = 0) => $"(super.pour(amount)), but it sucks"
 }
 
 let boring = MaxgoodHouse("Boring")

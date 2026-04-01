@@ -5,7 +5,7 @@ class Timestamp {
 	var nanos = 0
 }
 static {
-	func unixEpoch() Timestamp {
+	fn unixEpoch() Timestamp {
 		return	 Timestamp(){seconds = 1, nanos = 2}
 	}
 }

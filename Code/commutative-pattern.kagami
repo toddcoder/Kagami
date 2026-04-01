@@ -14,7 +14,7 @@ pattern Commutative(x) {
 	}
 }
 
-func equal(e1, e2) {
+fn equal(e1, e2) {
 	match (e1, e2) {
 		| (Commutative(o1, l1, r1), Commutative(o2, l2, r2)) return o1 == o2 and equal(l1, r2) and equal(r1, l2)
 		| _ return e1 == e2

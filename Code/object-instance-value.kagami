@@ -18,12 +18,12 @@ object FruitSalad : Recipe("fruit salad", [Apple&, Orange&, Cream&, Sugar&], "St
 
 object SimpleDatabase {
 	let allFoods = [Apple&, Orange&, Cream&, Sugar&]
-	func foodNamed(name string) optional => allFoods.first() ($0.name == name)
+	fn foodNamed(name string) optional => allFoods.first() ($0.name == name)
 	let allRecipes = [FruitSalad&]
 }
 
 object SimpleBrowser {
-	func recipesUsing(food Food) => SimpleDatabase.allRecipes if recipe -> food in recipe.ingredients
+	fn recipesUsing(food Food) => SimpleDatabase.allRecipes if recipe -> food in recipe.ingredients
 }
 
 let apple = SimpleDatabase.foodNamed("Apple")

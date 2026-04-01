@@ -1,6 +1,6 @@
 ﻿open sys
 
-func makeIncrementer(forIncrement: amount) {
+fn makeIncrementer(forIncrement: amount) {
 	var runningTotal = 0
 	var incrementer = -> {
 		runningTotal += amount

@@ -21,6 +21,13 @@ public class ReturnType : Return
    {
       if (machine.Peek() is (true, var value))
       {
+         if (convertToMonad(typeConstraint, value) is (true, var newValue))
+         {
+            value = newValue;
+            machine.Pop();
+            machine.Push(value);
+         }
+
          var valueClass = classOf(value);
          if (valueClass is BeforeClass)
          {

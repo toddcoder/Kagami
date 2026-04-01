@@ -1,6 +1,6 @@
 ﻿open sys
 
-func roots(a, b, c) {
+fn roots(a, b, c) {
 	let det = math.sqrt(b ^ 2 - 4 * a * c)
 	let twiceA = 2 * a
 	return (root1: (-b + det) / twiceA, root2: (-b - det) / twiceA)

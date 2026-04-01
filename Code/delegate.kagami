@@ -1,11 +1,11 @@
 ﻿open sys
 
 class Worker1(name string) {
-	func identify() => $"(name) is a worker"
+	fn identify() => $"(name) is a worker"
 }
 
 class Worker2(workerId int) {
-	func getId() => $"the id = (workerId)"
+	fn getId() => $"the id = (workerId)"
 }
 
 class Worker(name string, workerId int);

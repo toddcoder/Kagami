@@ -27,5 +27,5 @@ if merged == 11 {
 let ary = [merged]
 println(~ary)
 
-func greet(greeting, name) => $"(greeting), (name)"
+fn greet(greeting, name) => $"(greeting), (name)"
 println greet(("Hello" || "Bye"), ("Todd" || "Debra"))

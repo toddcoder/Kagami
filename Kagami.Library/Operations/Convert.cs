@@ -30,6 +30,7 @@ public class Convert : Operation
       conversions[("Int", "Rational")] = i => Rational.RationalObject(((Int)i).AsRational());
       conversions[("Long", "Rational")] = l => Rational.RationalObject(((Long)l).AsRational());
       conversions[("Char", "Byte")] = c => KByte.ByteObject((byte)((KChar)c).Value);
+      conversions[("Int", "Decimal")] = i => KDecimal.KDecimalObject(((Int)i).Value);
    }
 
    public override Optional<IObject> Execute(Machine machine)

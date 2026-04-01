@@ -10,7 +10,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class AbstractFunctionParser : StatementParser
 {
-   [GeneratedRegex($@"^(\s*){REGEX_HIDDEN}(abstract)(\s+)(func)(\s+)({REGEX_FUNCTION_NAME})(\()?")]
+   [GeneratedRegex($@"^(\s*){REGEX_HIDDEN}(abstract)(\s+)(fn)(\s+)({REGEX_FUNCTION_NAME})(\()?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)

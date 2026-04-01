@@ -7,7 +7,7 @@ class NamedShape(var name string) {
 
 class Square(var sideLength float, name string) : NamedShape(name) {
 	numberOfSides = 4
-	func area() => sideLength ^ 2
+	fn area() => sideLength ^ 2
 	override get string => $"A square with sides of length $sideLength"
 }
 

@@ -19,7 +19,7 @@ match 2 {
 
 pattern Integer(str string) => int.parse(str)
 pattern Floating(str string) => float.parse(str)
-func parseNumeric(str string) {
+fn parseNumeric(str string) {
 	match str {
 		| Integer(i) => println($"(i)[d]: Integer")
 		| Floating(f) => println($"(f)[f]: Floating point")
@@ -34,10 +34,10 @@ parseNumeric("10")
 parseNumeric("Something else")
 
 let err = 1.0e-10
-func isNearlyIntegral(x float) bool => math.abs(x - math.round(x, 0)) < err
+fn isNearlyIntegral(x float) bool => math.abs(x - math.round(x, 0)) < err
 pattern Square(x int) => isNearlyIntegral(math.sqrt(x))
 pattern Cube(x int) => isNearlyIntegral(x ^ (1f / 3f))
-func findSquareCubes(x int) {
+fn findSquareCubes(x int) {
 	match x {
 		| Cube() & Square() => println($"(x) is a cube and a square")
 		| Cube() => println($"(x) is a cube")

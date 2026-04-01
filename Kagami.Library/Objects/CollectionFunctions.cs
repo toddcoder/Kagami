@@ -80,6 +80,13 @@ public static class CollectionFunctions
          .Where(i => i.Between(0).Until(length));
    }
 
+   public static IEnumerable<int> indexList(KRange range, int length)
+   {
+      var start = wrapIndex(((Int)range.Start).Value, length);
+      var stop = wrapIndex(((Int)range.Stop).Value, length);
+      return new KRange((Int)start, (Int)stop, range.Inclusive, range.Increment).GetIterator(false).List().Cast<Int>().Select(i => i.Value);
+   }
+
    private static Sequence conditionContainer(Sequence sequence)
    {
       var list = new List<IObject>();

@@ -2,7 +2,7 @@
 
 #pragma ALLOW_PRINT_STATEMENT true
 
-func sum(f lambda) {
+fn sum(f lambda) {
 	let sumf = {(a int, b int)
 		var total = 0
 		for i in a to b {

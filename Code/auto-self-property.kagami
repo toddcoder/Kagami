@@ -5,7 +5,7 @@ class Foo {
 	get description string => _description
 	set description string => _description = value
 	get string string => $"This is (description)"
-	func updateDescription(newDescription string) => description = newDescription
+	fn updateDescription(newDescription string) => description = newDescription
 }
 
 let foo = Foo()

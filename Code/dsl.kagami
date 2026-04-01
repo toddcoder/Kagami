@@ -4,7 +4,7 @@
 
 class Table {
 	var rows = []
-	func append(row) {
+	fn append(row) {
 		rows << row
 		return self
 	}
@@ -13,7 +13,7 @@ class Table {
 
 class Tr {
 	var cols = []
-	func append(col) {
+	fn append(col) {
 		cols << col
 		return self
 	}

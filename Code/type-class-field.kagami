@@ -2,7 +2,7 @@
 
 type Rank {
 	| Ace = 1, Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King
-	func description() string {
+	fn description() string {
 		match class {
 			| Ace return "ace"
 			| Jack return "jack"

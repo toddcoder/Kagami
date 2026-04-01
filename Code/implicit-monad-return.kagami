@@ -1,0 +1,19 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+let numbers = <111 153 123>
+fn find(f lambda) optional {
+	for i in numbers {
+		if (f(i)) {
+			return i
+		}
+	}
+	return nil
+}
+
+let x = find(i -> i == 123)
+println x
+
+let y = find(i -> i == 0)
+println y

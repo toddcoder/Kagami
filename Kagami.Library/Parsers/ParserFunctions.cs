@@ -49,7 +49,7 @@ public static class ParserFunctions
    public const string REGEX_BLOCK_END = @"^(\s*)(\})";
    public const string REGEX_EXP_END = @"^(\s*)(\))";
    public const string REGEX_SINGLE_BLOCK = @"(=>)(?=[\w\s])";
-   public const string REGEX_HIDDEN = @"(?:(hidden)\s+)?";
+   public const string REGEX_HIDDEN = @"(?:(hide)\s+)?";
    public const string REGEX_OVERRIDE = @"(?:(override)\s+)?";
    public const string REGEX_PARAM = @"(?:(param)\s+)?";
 
@@ -623,7 +623,7 @@ public static class ParserFunctions
 
    private static Optional<bool> parseHidden(ParseState state)
    {
-      return state.Scan(@"^(\s*hidden\s+)?", Color.Keyword).Map(s => s.IsNotEmpty());
+      return state.Scan(@"^(\s*hide\s+)?", Color.Keyword).Map(s => s.IsNotEmpty());
    }
 
    private static Optional<bool> parseLazy(ParseState state)
@@ -649,7 +649,7 @@ public static class ParserFunctions
 
    private static Optional<bool> parseNoCapturing(ParseState state)
    {
-      return state.Scan(@"^(\s*nocap\s+)?", Color.Keyword).Map(s => s.IsNotEmpty());
+      return state.Scan(@"^(\s*\+\s*)?", Color.Operator).Map(s => s.IsNotEmpty());
    }
 
    private static Optional<string> parseParameterName(ParseState state)
@@ -1922,12 +1922,11 @@ public static class ParserFunctions
       var _end = state.Scan(@"^(\s*)([};])", colorize);
       if (_end is (true, var end))
       {
-         switch (end)
+         skipTake.Terminal = end switch
          {
-            case "}":
-               skipTake.Terminal = true;
-               return skipTake;
-         }
+            "}" => true,
+            _ => skipTake.Terminal
+         };
       }
       else if (_end.Exception is (true, var exception4))
       {

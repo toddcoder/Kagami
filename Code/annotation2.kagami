@@ -18,10 +18,10 @@ annotation Wrap(sel Selector, f lambda) {
 }
 
 @Grab(10)
-func foobar(x int) => println x
+fn foobar(x int) => println x
 
 
 @Wrap
-func foobaz(s string) => s + s
+fn foobaz(s string) => s + s
 
 foobaz("?")

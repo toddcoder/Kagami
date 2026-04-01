@@ -4,7 +4,7 @@
 
 class Foo {
 	\count += 1
-	func reset() => \count = 0
+	fn reset() => \count = 0
 }
 static {
 	var count = 0

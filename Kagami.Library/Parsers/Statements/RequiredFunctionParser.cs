@@ -11,7 +11,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class RequiredFunctionParser(Inclusion inclusion) : StatementParser
 {
-   [GeneratedRegex($@"^(\s*)(required)(\s+)(func)(\s+)({REGEX_SELECTOR})")]
+   [GeneratedRegex($@"^(\s*)(required)(\s+)(fn)(\s+)({REGEX_SELECTOR})")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)

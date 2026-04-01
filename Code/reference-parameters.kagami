@@ -1,6 +1,6 @@
 ﻿open sys
 
-func duplicate(ref a Int, ref b Int, ref c Int) {
+fn duplicate(ref a Int, ref b Int, ref c Int) {
 	a *= 2
 	b *= 2
 	c *= 2

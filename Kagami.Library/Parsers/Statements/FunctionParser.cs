@@ -19,7 +19,7 @@ public partial class FunctionParser : StatementParser
    protected List<InvokeSymbol> annotations = [];
 
    [GeneratedRegex(
-      $@"^(\s*){REGEX_HIDDEN}(override\s+)?(func|(?:infix\(\w+\))|prefix|postfix|macro|match)(\s+)(?:({REGEX_CLASS_GETTING_OR_ALIAS})(\.))?({REGEX_FUNCTION_NAME})(\()?")]
+      $@"^(\s*){REGEX_HIDDEN}(override\s+)?(fn|(?:infix\(\w+\))|prefix|postfix|macro|match)(\s+)(?:({REGEX_CLASS_GETTING_OR_ALIAS})(\.))?({REGEX_FUNCTION_NAME})(\()?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)

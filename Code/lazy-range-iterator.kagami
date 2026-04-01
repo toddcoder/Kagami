@@ -1,4 +1,4 @@
 ﻿open sys
 
-func primes(m) => ?^(1..<m) if x -> peek(x).isPrime
+fn primes(m) => 1 til m if x -> peek(x).isPrime
 [primes(100)]

@@ -3,18 +3,18 @@
 #pragma ALLOW_PRINT_STATEMENT true
 
 mixin Movement {
-	func run() => println "I'm running!"
-	func walk() => println "I'm walking a bit briskly!"
-	func crawl() => println "I'm so slowwww!"
+	fn run() => println "I'm running!"
+	fn walk() => println "I'm walking a bit briskly!"
+	fn crawl() => println "I'm so slowwww!"
 }
 
 class Man {
-	func jump() => println "I'm bipedal and I can jump like a fool!"
+	fn jump() => println "I'm bipedal and I can jump like a fool!"
 }
 mix Movement
 
 class Sloth {
-	func flop() => println $"It's all a lie...all I can do is flop around."
+	fn flop() => println $"It's all a lie...all I can do is flop around."
 }
 mix Movement
 

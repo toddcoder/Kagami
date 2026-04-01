@@ -1,6 +1,6 @@
 ﻿open sys
 
-func hanoi(n, start, end, extra, move_disk) {
+fn hanoi(n, start, end, extra, move_disk) {
 	if n == 1 {
 		move_disk(1, start, end)
 	}

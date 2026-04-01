@@ -2,7 +2,7 @@
 
 #pragma ALLOW_PRINT_STATEMENT true
 
-func show(name string) string {
+fn show(name string) string {
 	reject name.isEmpty throw "Name cannot be empty"
 	return name.upper()
 }

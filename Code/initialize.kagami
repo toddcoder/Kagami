@@ -4,7 +4,7 @@
 
 class Person(var surname, var forename, var address, var occupation) {
 	\population += 1
-	func initialize() {
+	fn initialize() {
 		\everyone << self
 	}
 }
