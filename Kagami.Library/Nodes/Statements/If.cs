@@ -21,8 +21,7 @@ public class If : Statement
    protected bool retainExpressionFields;
 
    public If(Expression expression, bool not, Block block, Maybe<If> _elseIf, Maybe<Block> _elseBlock, string fieldName, bool mutable,
-      bool assignment,
-      bool top, bool retainExpressionFields = false)
+      bool assignment, bool top, bool retainExpressionFields = false)
    {
       this.expression = expression;
       this.not = not;

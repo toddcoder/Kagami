@@ -2,8 +2,9 @@
 
 let ary = [1 .. 5]
 
-match sum()
+match sum(xs) {
 	| [] return 0
 	| h :: t return h + sum(t)
+}
 
 println(sum(ary))

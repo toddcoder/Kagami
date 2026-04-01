@@ -6,6 +6,7 @@ public class FunctionAndPropertyParsers(string className, string selfAlias) : Mu
    {
       get
       {
+         yield return new MatchFunctionParser { ClassName = className, SelfAlias = selfAlias };
          yield return new FunctionParser { ClassName = className, SelfAlias = selfAlias };
          yield return new PropertyParser { ClassName = className, SelfAlias = selfAlias };
          yield return new AutoPropertyParser { ClassName = className };

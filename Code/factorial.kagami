@@ -1,8 +1,9 @@
 ﻿open sys
 
-match fact()
+match fact(n) {
 	| 0 return 1
 	| n return n * fact(n - 1)
+}
 
 println(fact(4))
 

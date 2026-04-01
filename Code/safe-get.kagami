@@ -1,8 +1,9 @@
 ﻿open sys
 
-match safe_get()
-	| [?contents, _] return contents
-	| [Nil, default] return default
+match safe_get(value, defaultValue) {
+	| (?contents, _) return contents
+	| (nil, default) return default
+}
 
 let x = safe_get(?16, 2)
 println(x)

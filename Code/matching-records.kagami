@@ -1,21 +1,22 @@
 ﻿open sys
 
-class Couple(him String, her String);
+class Couple(him string, her string);
 
 let couples = [
 	Couple("Brad", "Angela"), Couple("Becks", "Posh"),
 	Couple("Chris", "Gwyneth"), Couple("Michael", "Catherine")
 ]
 
-match findDavid()
+match findDavid(couples) {
 	| [] return f"Couldn't find David"
 	| Couple(x, "Posh") :: tail return !x
 	| _ :: tail return findDavid(tail)
+}
 
-let `david = findDavid(couples)
-if `david is !david {
+let david = findDavid(couples)
+if david {
 	println(david)
 }
 else {
-	println(`david)
+	println(david)
 }
