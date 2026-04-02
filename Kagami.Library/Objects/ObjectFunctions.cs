@@ -441,8 +441,6 @@ public static class ObjectFunctions
             {
                bindings[key.AsString] = value;
             }
-
-            return true;
          }
          else
          {
@@ -1155,18 +1153,27 @@ public static class ObjectFunctions
          {
             Some or KNil => value.Some(),
             Success success => Some.Object(success.Value).Some(),
-            Failure => KNil.NilValue.Some(),
+            Failure or Error => KNil.NilValue.Some(),
+            _ when isSubClassOfError() => KNil.NilValue.Some(),
             _ => Some.Object(value).Some()
          },
          "Result" => value switch
          {
             Success or Failure => value.Some(),
+            Error error => new Failure(error),
             Some some => Success.Object(some.Value).Some(),
             KNil => Failure.Object("No value provided").Some(),
-            _ => Success.Object(value).Some()
+            _ when isSubClassOfError() => new Failure(value).Some(),
+             _ => Success.Object(value).Some()
          },
          _ => nil
       };
+
+      bool isSubClassOfError()
+      {
+         var @class = classOf(value);
+         return ((UserClass)@class).ParentClassName == "Error";
+      }
    }
 
    public static Maybe<IObject> convertToMonad(TypeConstraint typeConstraint, IObject value)
