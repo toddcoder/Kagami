@@ -8,7 +8,10 @@ public readonly struct Error : IObject
 {
    private readonly string message;
 
-   public Error(string message) : this() => this.message = message;
+   public Error(string message) : this()
+   {
+      this.message = message;
+   }
 
    public string ClassName => "Error";
 

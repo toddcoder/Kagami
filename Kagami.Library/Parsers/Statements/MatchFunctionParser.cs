@@ -31,6 +31,9 @@ public partial class MatchFunctionParser : StatementParser
          List<If> list = [];
          Maybe<TypeConstraint> _typeConstraint = parseTypeConstraint(state).Map(ptc => ptc.Maybe);
          state.SetReturnType(_typeConstraint);
+
+         var isFixed = (bool)state.Scan(@"^(\s+)(fixed)", Color.Whitespace, Color.Keyword);
+
          var _beginBlock = state.BeginBlock();
          if (_beginBlock)
          {
@@ -100,7 +103,10 @@ public partial class MatchFunctionParser : StatementParser
             previousIf.Else = new Block(new FailedMatch());
 
             var block = new Block([new MatchFunctionAssignment(fieldName, parameters), previousIf, new ReturnNothing()]);
-            var function = new Function(functionName, parameters, isHidden, block, false, overriding, ClassName | "") { SelfAlias = SelfAlias };
+            var function = new Function(functionName, parameters, isHidden, block, false, overriding, ClassName | "")
+            {
+               SelfAlias = SelfAlias, IsFixed = isFixed
+            };
             state.AddStatement(function);
             state.RemoveReturnType();
 
