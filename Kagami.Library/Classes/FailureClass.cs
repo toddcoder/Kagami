@@ -13,7 +13,7 @@ public class FailureClass : BaseClass, IEquivalentClass
 
       monadMessages();
 
-      messages["error".get()] = (obj, _) => function<Failure>(obj, f => f.Error);
+      messages["error".get()] = (obj, _) => function<Failure>(obj, f => f.ErrorObject);
       messages["isSuccess".get()] = (obj, _) => function<Failure>(obj, f => (KBoolean)f.IsSuccess);
       messages["isFailure".get()] = (obj, _) => function<Failure>(obj, f => (KBoolean)f.IsFailure);
       messages["map(_<Lambda>)"] = (obj, msg) => function<Failure, Lambda>(obj, msg, (f, l) => f.Map(l));

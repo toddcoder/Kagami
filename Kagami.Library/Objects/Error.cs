@@ -7,10 +7,12 @@ namespace Kagami.Library.Objects;
 public readonly struct Error : IObject
 {
    private readonly string message;
+   private readonly string callStack;
 
-   public Error(string message) : this()
+   public Error(string message, string callStack) : this()
    {
       this.message = message;
+      this.callStack = callStack;
    }
 
    public string ClassName => "Error";
@@ -30,4 +32,6 @@ public readonly struct Error : IObject
    public Guid Id { get; init; } = Guid.NewGuid();
 
    public KString Message => message;
+
+   public KString CallStack => callStack;
 }

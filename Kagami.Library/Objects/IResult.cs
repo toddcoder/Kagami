@@ -4,7 +4,7 @@ public interface IResult
 {
    IObject Value { get; }
 
-   Error Error { get; }
+   Protocols.Protocol Error { get; }
 
    bool IsSuccess { get; }
 

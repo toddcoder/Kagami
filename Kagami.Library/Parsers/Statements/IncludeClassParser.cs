@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using Core.Applications;
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
@@ -17,9 +18,10 @@ public partial class IncludeClassParser : StatementParser
 
       switch (className)
       {
-         case "Error":
+         case "BaseError":
          {
-            var innerState = new ParseState("class Error(message string);");
+            var source = getSource();
+            var innerState = new ParseState(source);
             var classParser = new ClassParser();
             var _scan = classParser.Scan(innerState);
             if (_scan)
@@ -38,6 +40,12 @@ public partial class IncludeClassParser : StatementParser
          }
          default:
             return fail($"Class {className} not understood");
+      }
+
+      string getSource()
+      {
+         var resources = new Resources<IncludeClassParser>();
+         return resources.String($"{className}.kagami");
       }
    }
 }

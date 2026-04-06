@@ -1162,10 +1162,17 @@ public static class ObjectFunctions
             Error error => new Failure(error),
             Some some => Success.Object(some.Value).Some(),
             KNil => Failure.Object("No value provided").Some(),
-             _ => Success.Object(value).Some()
+            _ when supportsErroring() => new Failure(value),
+            _ => Success.Object(value).Some()
          },
          _ => nil
       };
+
+      bool supportsErroring()
+      {
+         var erroring = Protocols.Protocols.GetOrThrow("Erroring");
+         return erroring.Supports(value);
+      }
    }
 
    public static Maybe<IObject> convertToMonad(TypeConstraint typeConstraint, IObject value)

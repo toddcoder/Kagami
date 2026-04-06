@@ -73,6 +73,8 @@ public class Machine
 
    public Hash<string, IObject> Assignments = [];
 
+   public string CallStack => stack.Peek().ToString();
+
    public Result<IObject> Execute()
    {
       try

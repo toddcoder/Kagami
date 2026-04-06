@@ -148,6 +148,7 @@ public class Module
       "Singleton" => new SingletonClass(),
       "Definition" => new DefinitionClass(),
       "DateIncrement" => new DateIncrementClass(),
+      "ProtocolWrapper" => new ProtocolWrapperClass(),
       _ => nil
    };
 

@@ -279,4 +279,14 @@ public static class AllExceptions
    public static string messageDictionaryKeyMustBeImmutable() => "Dictionary key must be an immutable object";
 
    public static Exception dictionaryKeyMustBeImmutable() => fail(messageDictionaryKeyMustBeImmutable());
+
+   public static string messageUnsupportedByProtocol(string protocolName, Selector selector) =>
+      $"Protocol {protocolName} does not support {selector}";
+
+   public static Exception unsupportedByProtocol(string protocolName, Selector selector) =>
+      fail(messageUnsupportedByProtocol(protocolName, selector));
+
+   public static string messageProtocolNotFound(string protocolName) => $"Protocol {protocolName} not found";
+
+   public static Exception protocolNotFound(string protocolName) => fail(messageProtocolNotFound(protocolName));
 }

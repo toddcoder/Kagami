@@ -54,6 +54,7 @@ public class SysClass : PackageClass
       registerPackageFunction("eval(_<String>,values:_<Dictionary>)",
          (obj, msg) => function<Sys, KString, Dictionary>(obj, msg, (sys, s, d) => sys.Eval(s.Value, d)));
       registerPackageFunction("uniqueId()", (obj, _) => function<Sys>(obj, sys => sys.UniqueId()));
+      registerPackageFunction("callStack()", (obj, _) => function<Sys>(obj, sys => sys.CallStack));
    }
 
    public override IObject DefaultValue => throw noDefaultValue("Sys");

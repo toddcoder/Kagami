@@ -1,4 +1,5 @@
 ﻿using Core.Collections;
+using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
@@ -30,7 +31,7 @@ public readonly struct Success : IObject, IResult, IMonad, IBoolean
 
    public IObject Value { get; }
 
-   public Error Error => new("No error!");
+   public Protocols.Protocol Error => throw protocolNotFound("Erroring");
 
    public bool IsSuccess => true;
 

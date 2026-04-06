@@ -39,4 +39,10 @@
     <Compile Remove="Parsers\Statements\IndentationParser.cs" />
     <Compile Remove="Parsers\Statements\MatchFunctionCaseParser.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="Parsers\Statements\BaseError.kagami" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Parsers\Statements\BaseError.kagami" />
+  </ItemGroup>
 </Project>

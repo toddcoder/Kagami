@@ -1,0 +1,3 @@
+﻿class BaseError(message string) {
+	get callStack => sys.callStack()
+}

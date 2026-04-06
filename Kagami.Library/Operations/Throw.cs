@@ -1,13 +1,30 @@
 ﻿using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Monads;
-using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Operations;
 
 public class Throw : OneOperandOperation
 {
-   public override Optional<IObject> Execute(Machine machine, IObject value) => fail(value.AsString);
+   public override Optional<IObject> Execute(Machine machine, IObject value)
+   {
+      try
+      {
+         var protocol = Protocols.Protocols.GetOrThrow("Erroring");
+         if (protocol.Supports(value))
+         {
+            return new Objects.Failure(value);
+         }
+         else
+         {
+            return Objects.Failure.Object(value.AsString).Just();
+         }
+      }
+      catch (Exception exception)
+      {
+         return exception;
+      }
+   }
 
    public override string ToString() => "throw";
 }

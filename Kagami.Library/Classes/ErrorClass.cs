@@ -12,7 +12,8 @@ public class ErrorClass : BaseClass
       base.RegisterMessages();
 
       messages["message".get()] = (obj, _) => function<Error>(obj, e => e.Message);
+      messages["callStack".get()] = (obj, _) => function<Error>(obj, e => e.CallStack);
    }
 
-   public override IObject DefaultValue => new Error("");
+   public override IObject DefaultValue => new Error("", "");
 }
