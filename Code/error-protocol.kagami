@@ -1,0 +1,16 @@
+﻿open sys
+include class BaseError
+
+class OutOfPaperError : BaseError("Out of paper");
+class NoTonerError : BaseError("No toner");
+class OnFireError : BaseError("On fire!");
+
+fn send(job int, toPrinter: printerName string) result {
+	reject printerName == "Never Has Toner" return NoTonerError()
+	return "Job sent"
+}
+
+let success = send(111, toPrinter: "foobar")
+println success
+let failure = send(153, toPrinter: "Never Has Toner")
+println failure.error.message

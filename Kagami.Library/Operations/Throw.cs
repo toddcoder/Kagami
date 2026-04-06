@@ -10,7 +10,7 @@ public class Throw : OneOperandOperation
    {
       try
       {
-         var protocol = Protocols.Protocols.GetOrThrow("Erroring");
+         var protocol = Protocols.Protocols.GetOrThrow("PError");
          if (protocol.Supports(value))
          {
             return new Objects.Failure(value);

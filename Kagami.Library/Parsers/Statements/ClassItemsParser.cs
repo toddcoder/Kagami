@@ -24,6 +24,7 @@ public class ClassItemsParser : MultiParser
 
          yield return new StaticParser(builder);
          yield return new DelegateParser(builder);
+         yield return new DoesParser(builder);
       }
    }
 }

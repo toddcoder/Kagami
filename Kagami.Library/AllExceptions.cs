@@ -289,4 +289,13 @@ public static class AllExceptions
    public static string messageProtocolNotFound(string protocolName) => $"Protocol {protocolName} not found";
 
    public static Exception protocolNotFound(string protocolName) => fail(messageProtocolNotFound(protocolName));
+
+   public static string messageProtocolAlreadyExists(string protocolName) => $"Protocol {protocolName} already exists";
+
+   public static Exception protocolAlreadyExists(string protocolName) => fail(messageProtocolAlreadyExists(protocolName));
+
+   public static string messageProtocolNotImplemented(string className, string protocolName) => $"{className} doesn't implement protocol {protocolName}";
+
+   public static Exception protocolNotImplemented(string className, string protocolName) =>
+      fail(messageProtocolNotImplemented(className, protocolName));
 }

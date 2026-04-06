@@ -31,7 +31,7 @@ public readonly struct Success : IObject, IResult, IMonad, IBoolean
 
    public IObject Value { get; }
 
-   public Protocols.Protocol Error => throw protocolNotFound("Erroring");
+   public Protocols.Protocol Error => throw protocolNotFound("PError");
 
    public bool IsSuccess => true;
 

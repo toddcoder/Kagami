@@ -1170,7 +1170,7 @@ public static class ObjectFunctions
 
       bool supportsErroring()
       {
-         var erroring = Protocols.Protocols.GetOrThrow("Erroring");
+         var erroring = Protocols.Protocols.GetOrThrow("PError");
          return erroring.Supports(value);
       }
    }

@@ -1,0 +1,15 @@
+﻿open sys
+
+protocol PExample {
+	var simpleDescription string
+	fn adjust()
+}
+
+class SimpleClass {
+	var simpleDescription string = "A very simple class."
+	var anotherProperty = 69105
+	fn adjust() {
+		simpleDescription += " Now 100% adjusted."
+	}
+}
+does PExample

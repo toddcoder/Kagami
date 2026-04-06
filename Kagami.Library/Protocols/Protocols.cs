@@ -7,12 +7,11 @@ namespace Kagami.Library.Protocols;
 
 public static class Protocols
 {
-   private static StringHash<Protocol> protocols;
+   private static StringHash<Protocol> protocols = [];
 
    static Protocols()
    {
-      protocols = [];
-      protocols["Erroring"] = new Protocol("Erroring", "message".get(), "callStack".get());
+      Clear();
    }
 
    public static Maybe<Protocol> Get(string protocolName) => protocols.Maybe[protocolName];
@@ -31,5 +30,11 @@ public static class Protocols
       {
          return false;
       }
+   }
+
+   public static void Clear()
+   {
+      protocols.Clear();
+      protocols["PError"] = new Protocol("PError", "message".get(), "callStack".get());
    }
 }

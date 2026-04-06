@@ -1,26 +1,22 @@
 ﻿using System.Text.RegularExpressions;
 using Core.Monads;
-using Kagami.Library.Inclusions;
-using Kagami.Library.Runtime;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public partial class InclusionParser : StatementParser
+public partial class ProtocolParser : StatementParser
 {
-   [GeneratedRegex(@$"^(\s*)(inclusion)(\s+)({REGEX_CLASS})\b")]
+   [GeneratedRegex(@$"^(\s*)(protocol)(\s+)({REGEX_CLASS})\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      var inclusionName = tokens[4].Text;
-      var inclusion = new Inclusion(inclusionName);
+      var protocolName = tokens[4].Text;
       state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Class);
+      var builder = new ProtocolBuilder(protocolName);
 
-      Module.Global.Value.ForwardReference(inclusionName);
-
-      var inheritedInclusionsParser = new InheritedInclusionsParser(inclusion);
+      var inheritedInclusionsParser = new InheritedProtocolsParser(builder);
       Optional<Unit> _result;
       while (state.More)
       {
@@ -44,7 +40,7 @@ public partial class InclusionParser : StatementParser
          return _result.Exception;
       }
 
-      var inclusionMembersParser = new InclusionMembersParser(inclusion);
+      var inclusionMembersParser = new ProtocolMembersParser(builder);
       while (state.More)
       {
          _result = inclusionMembersParser.Scan(state);
@@ -64,7 +60,16 @@ public partial class InclusionParser : StatementParser
       _result = state.EndBlock();
       if (_result)
       {
-         Module.Global.Value.RegisterInclusion(inclusion);
+         var _protocol = builder.Build();
+         if (_protocol is (true, var protocol))
+         {
+            Protocols.Protocols.Set(protocolName, protocol);
+         }
+         else if (_protocol.Exception is (true, var exception))
+         {
+            return exception;
+         }
+
          return unit;
       }
       else

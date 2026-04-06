@@ -33,6 +33,8 @@ public class ClassBuilder
    protected StringHash<Expression> delegates = [];
    protected StringHash<RequiredField> requiredFields = [];
    protected List<Statement> mixinStatements = [];
+   protected List<string> protocolNames = [];
+   protected Set<Selector> includedSelectors = [];
 
    public ClassBuilder(string className, Parameters parameters, string parentClassName, Expression[] parentArguments,
       bool initialize, Block constructorBlock, bool isFixed = false)
@@ -187,6 +189,7 @@ public class ClassBuilder
                   var (bindingType, name) = fromBindingName(fieldName);
                   var function = Function.Getter(name, false);
                   statements.Add(function);
+                  includedSelectors.Add(function.Selector);
                   var (functionName, _, block, _, invokable, _, isHidden) = function;
                   if (isHidden)
                   {
@@ -207,6 +210,7 @@ public class ClassBuilder
                   {
                      function = Function.Setter(fieldName, false);
                      statements.Add(function);
+                     includedSelectors.Add(function.Selector);
                      (functionName, _, block, _, invokable, _, isHidden) = function;
                      if (isHidden)
                      {
@@ -293,6 +297,7 @@ public class ClassBuilder
                {
                   if (userClass.RegisterMethod(selector, new Lambda(invokable, false), overriding))
                   {
+                     includedSelectors.Add(selector);
                      functions.Add((invokable, block, overriding));
                   }
                   else
@@ -342,6 +347,22 @@ public class ClassBuilder
          }
       }
 
+      foreach (var protocolName in protocolNames)
+      {
+         if (Protocols.Protocols.Get(protocolName) is (true, var protocol))
+         {
+            var supports = protocol.Supports(includedSelectors);
+            if (!supports)
+            {
+               throw protocolNotImplemented(className, protocolName);
+            }
+         }
+         else
+         {
+            throw protocolNotFound(protocolName);
+         }
+      }
+
       foreach (var parameter in parameters)
       {
          if (requiredFields.Maybe[parameter.Name] is (true, var requiredField))
@@ -384,6 +405,7 @@ public class ClassBuilder
 
          var function = Function.Getter(fieldName, isOverride);
          statements.Add(function);
+         includedSelectors.Add(function.Selector);
          var (functionName, _, block, _, invokable, _, isHidden) = function;
          if (!isHidden && !userClass.RegisterMethod(functionName, new Lambda(invokable, false), isOverride))
          {
@@ -394,8 +416,9 @@ public class ClassBuilder
 
          if (mutable)
          {
-            function = Function.Setter(fieldName, isOverride);
+            function = Function.Setter(fieldName, _typeConstraint, isOverride);
             statements.Add(function);
+            includedSelectors.Add(function.Selector);
             (functionName, _, block, _, invokable, _, isHidden) = function;
             if (!isHidden && !userClass.RegisterMethod(functionName, new Lambda(invokable, false), isOverride))
             {
@@ -459,6 +482,8 @@ public class ClassBuilder
    {
       mixinStatements.AddRange(metaClass.ClassBuilder.Statements.Where(s => s is not Return));
    }
+
+   public void AddProtocol(string protocolName) => protocolNames.Add(protocolName);
 
    public override string ToString()
    {

@@ -9,7 +9,7 @@ public struct Failure : IObject, IResult, IMonad, IBoolean
 {
    public static IObject Object(string message) => new Failure(message);
 
-   private Protocols.Protocol erroring = Protocols.Protocols.GetOrThrow("Erroring");
+   private Protocols.Protocol erroring = Protocols.Protocols.GetOrThrow("PError");
    private ProtocolWrapper wrapper;
 
    public Failure(Error error) : this()

@@ -31,7 +31,7 @@ public class Function : Statement, IOverridable, IAnnotatable
 
    public static Function Setter(string fieldName, Maybe<TypeConstraint> _typeConstraint, bool isOverride)
    {
-      var parameters = new Parameters(1);
+      var parameters = new Parameters(new Parameter(false, false, "", "$0", nil, _typeConstraint, false, false, false));
       return new Function($"{fieldName}=", parameters, false, Block.Setter(fieldName, parameters[0].Name, _typeConstraint), false, isOverride, "")
          { IsSetter = true };
    }
@@ -40,7 +40,7 @@ public class Function : Statement, IOverridable, IAnnotatable
 
    public static Function Setter(string setterName, string fieldName, Maybe<TypeConstraint> _typeConstraint, bool isOverride)
    {
-      var parameters = new Parameters(1);
+      var parameters = new Parameters(new Parameter(false, false, "", "$0", nil, _typeConstraint, false, false, false));
       return new Function(setterName, parameters, false, Block.Setter(fieldName, parameters[0].Name, _typeConstraint), false, isOverride, "")
          { IsSetter = true };
    }

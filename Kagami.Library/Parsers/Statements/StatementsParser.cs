@@ -23,7 +23,7 @@ public class StatementsParser : MultiParser
          yield return new ClassParser();
          yield return new ObjectOrMixinParser();
          yield return new IncludeClassParser();
-         yield return new InclusionParser();
+         yield return new ProtocolParser();
          yield return new IncludeParser();
          yield return new ModuleParser();
          yield return new PatternParser();
