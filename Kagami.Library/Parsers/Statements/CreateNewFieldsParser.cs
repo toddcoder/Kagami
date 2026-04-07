@@ -2,8 +2,10 @@
 using Core.Monads;
 using Core.Strings;
 using Kagami.Library.Nodes.Statements;
+using Kagami.Library.Objects;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
+using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Statements;
 
@@ -49,7 +51,7 @@ public partial class CreateNewFieldsParser : StatementParser
       {
          (className, var color) = getClassNameWithColor(className);
          state.Tokens[^1].Color = color;
-         state.AddStatement(new CreateNewFields([.. fields], className, isHidden, isOverride));
+         state.AddStatement(new CreateNewFields([.. fields], TypeConstraint.FromList(className), isHidden, isOverride));
 
          return unit;
       }

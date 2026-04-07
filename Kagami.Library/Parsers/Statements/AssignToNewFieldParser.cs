@@ -75,8 +75,7 @@ public partial class AssignToNewFieldParser : StatementParser
       }
       else if (_typeConstraint is (true, var typeConstraint))
       {
-         var className = typeConstraint.Comparisands[0].Name;
-         var defineNewField = new DefineNewField(mutable, fieldName, className, isHidden, isOverride, isParam);
+         var defineNewField = new DefineNewField(mutable, fieldName, typeConstraint, isHidden, isOverride, isParam);
          if (isParam)
          {
             state.RegisterParameter(defineNewField);

@@ -1,23 +1,24 @@
 ﻿using Core.Enumerables;
+using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 
 namespace Kagami.Library.Nodes.Statements;
 
-public class CreateNewFields(string[] fields, string className, bool isHidden, bool isOverride) : Statement
+public class CreateNewFields(string[] fields, TypeConstraint typeConstraint, bool isHidden, bool isOverride) : Statement
 {
    public override void Generate(OperationsBuilder builder)
    {
       foreach (var field in fields)
       {
-         builder.DefineNewField(true, field, className);
+         builder.DefineNewField(true, field, typeConstraint);
       }
    }
 
-   public override string ToString() => $"var {fields.ToString(", ")} {className}";
+   public override string ToString() => $"var {fields.ToString(", ")} {typeConstraint}";
 
    public string[] Fields => fields;
 
-   public string ClassName => className;
+   public string ClassName => typeConstraint.Comparisands[0].Name;
 
    public bool IsHidden => isHidden;
 

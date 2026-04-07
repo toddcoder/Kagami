@@ -235,8 +235,7 @@ public class ClassBuilder
             }
             case DefineNewField defineNewField:
             {
-               var (mutable, fieldName, typeName, isHidden, isOverride, _) = defineNewField;
-               var typeConstraint = TypeConstraint.FromList(typeName);
+               var (mutable, fieldName, typeConstraint, isHidden, isOverride, _) = defineNewField;
                if (isHidden)
                {
                   statements.Add(statement);

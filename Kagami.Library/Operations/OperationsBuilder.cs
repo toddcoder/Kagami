@@ -421,7 +421,7 @@ public class OperationsBuilder(ParseState state)
 
    public void LastValue() => add(new LastValue());
 
-   public void DefineNewField(bool mutable, string fieldName, string className) => add(new DefineNewField(mutable, fieldName, className));
+   public void DefineNewField(bool mutable, string fieldName, TypeConstraint typeConstraint) => add(new DefineNewField(mutable, fieldName, typeConstraint));
 
    public void Increment() => add(new Increment());
 

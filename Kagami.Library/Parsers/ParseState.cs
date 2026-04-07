@@ -570,10 +570,9 @@ public class ParseState : IEnumerable<Statement>
 
    public void RegisterParameter(DefineNewField defineNewField)
    {
-      var (mutable, fieldName, className, isHidden, _, isParam) = defineNewField;
+      var (mutable, fieldName, typeConstraint, isHidden, _, isParam) = defineNewField;
       if (isParam)
       {
-         var typeConstraint = TypeConstraint.FromList(className);
          parameters[fieldName] = new Parameter(isHidden, mutable, fieldName, fieldName, nil, typeConstraint, false, false, false);
       }
    }
