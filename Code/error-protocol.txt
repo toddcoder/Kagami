@@ -1,0 +1,3 @@
+!Job sent
+No toner
+"No toner" | String

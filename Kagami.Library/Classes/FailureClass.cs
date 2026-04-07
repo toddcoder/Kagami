@@ -22,6 +22,8 @@ public class FailureClass : BaseClass, IEquivalentClass
       messages["canBind".get()] = (obj, _) => function<Failure>(obj, f => f.CanBind);
       messages["value".get()] = (obj, _) => function<Failure>(obj, f => f.Value);
       messages["optional()"] = (obj, _) => function<IObject>(obj, s => ((IResult)s).Optional());
+      messages["message".get()] = (obj, _) => function<Failure>(obj, f => f.Message);
+      messages["callStack".get()] = (obj, _) => function<Failure>(obj, f => f.CallStack);
    }
 
    public override bool AssignCompatible(BaseClass otherClass) => otherClass is SuccessClass or FailureClass or ResultClass;

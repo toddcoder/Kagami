@@ -1,6 +1,8 @@
 ﻿using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Monads;
+using static Core.Monads.MonadFunctions;
+using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Operations;
 
@@ -13,11 +15,11 @@ public class Throw : OneOperandOperation
          var protocol = Protocols.Protocols.GetOrThrow("PError");
          if (protocol.Supports(value))
          {
-            return new Objects.Failure(value);
+            return fail(sendMessage(value, "message".get()).AsString);
          }
          else
          {
-            return Objects.Failure.Object(value.AsString).Just();
+            return fail(value.AsString);
          }
       }
       catch (Exception exception)

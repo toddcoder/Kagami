@@ -70,4 +70,8 @@ public struct Failure : IObject, IResult, IMonad, IBoolean
    public KBoolean CanBind => false;
 
    public IObject ErrorObject => wrapper;
+
+   public KString Message => new(sendMessage(wrapper.Object, "message".get()).AsString);
+
+   public KString CallStack => new(sendMessage(wrapper.Object, "callStack".get()).AsString);
 }

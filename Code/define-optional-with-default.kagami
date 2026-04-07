@@ -1,0 +1,12 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+var some optional
+some = "Test"
+if some {
+	println some
+}
+else {
+	println "Not set"
+}

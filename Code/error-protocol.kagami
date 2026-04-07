@@ -1,4 +1,7 @@
 ﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
 include class BaseError
 
 class OutOfPaperError : BaseError("Out of paper");

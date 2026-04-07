@@ -1,3 +1,0 @@
-Rectangle 20
-Triangle 10.0
-"Triangle 10.0" | String
