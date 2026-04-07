@@ -335,7 +335,6 @@ public class ClassBuilder
             case RequiredFunction requiredFunction:
             {
                requiredFunctions.Add(new RequireFunctionMatch(requiredFunction.Selector, requiredFunction.TypeConstraint));
-               userClass.RegisterInclusion(requiredFunction.Inclusion);
                break;
             }
             case RequiredField requiredField:
@@ -362,6 +361,7 @@ public class ClassBuilder
             throw protocolNotFound(protocolName);
          }
       }
+      userClass.RegisterProtocols(protocolNames);
 
       foreach (var parameter in parameters)
       {

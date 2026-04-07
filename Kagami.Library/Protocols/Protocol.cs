@@ -1,11 +1,13 @@
 ﻿using Core.Collections;
+using Kagami.Library.Classes;
 using Kagami.Library.Objects;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Protocols;
 
-public class Protocol(string name, params Selector[] selectors)
+public class Protocol(string name, params Selector[] selectors) : BaseClass
 {
    public static ProtocolResult FromObject(IObject obj, string protocolName)
    {
@@ -44,9 +46,11 @@ public class Protocol(string name, params Selector[] selectors)
       }
    }
 
-   public string Name => name;
+   public override string Name => name;
 
-   public Selector[] Selectors => selectors;
+   public override IObject DefaultValue => throw fail($"Protocol {name} does not have a default value");
+
+    public Selector[] Selectors => selectors;
 
    public IObject SendMessage(IObject obj, Selector selector, params IObject[] arguments)
    {

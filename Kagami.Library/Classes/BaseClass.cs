@@ -1,6 +1,5 @@
 ﻿using Core.Collections;
 using Core.Objects;
-using Kagami.Library.Inclusions;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using static Kagami.Library.AllExceptions;
@@ -22,7 +21,7 @@ public abstract class BaseClass : IEquatable<BaseClass>
    protected Func<IObject, Message, IObject> dynamicInvoke;
    protected Func<Message, IObject> classDynamicInvoke;
    protected Fields classFields = new();
-   protected StringHash<Inclusion> inclusions = [];
+   protected StringSet protocols = [];
 
    public BaseClass()
    {
@@ -171,7 +170,6 @@ public abstract class BaseClass : IEquatable<BaseClass>
    public virtual void RegisterClassMessages()
    {
       registerClassMessage("name".get(), (_, _) => KString.StringObject(Name));
-      registerClassMessage("includes(_<String>)", (_, message) => (KBoolean)inclusions.ContainsKey(message.Arguments[0].AsString));
       registerClassMessage("equals(_)", (bc, msg) => classFunc<BaseClass, KBoolean>(bc, msg, (b1, b2) => (KBoolean)b1.Equals(b2)));
    }
 
@@ -590,6 +588,8 @@ public abstract class BaseClass : IEquatable<BaseClass>
    public virtual bool AssignCompatible(BaseClass otherClass) =>
       otherClass.Name is "Placeholder" or "Undefined" or "Any" || MatchCompatible(otherClass);
 
+   public virtual bool SupportsProtocol(string protocolName) => protocols.Contains(protocolName);
+
    protected void rangeMessages()
    {
       registerMessage("succ".get(), (obj, _) => function<IObject>(obj, o => (IObject)((IRangeItem)o).Successor));
@@ -810,9 +810,9 @@ public abstract class BaseClass : IEquatable<BaseClass>
       RegisterMessage("accept(_)", (obj, msg) => ((IAccepting)obj).Accept(msg.Arguments[0]));
    }
 
-   public void RegisterInclusion(Inclusion inclusion) => inclusions[inclusion.Name] = inclusion;
+   public void RegisterProtocol(string protocolName) => protocols.Add(protocolName);
 
-   public bool Includes(string inclusionName) => inclusions.ContainsKey(inclusionName);
+   public void RegisterProtocols(IEnumerable<string> protocolNames) => protocols.AddRange(protocolNames);
 
    public abstract IObject DefaultValue { get; }
 
