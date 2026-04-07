@@ -1,0 +1,12 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+protocol PLength {
+	let length int
+}
+
+let length = //PLength "foobar"
+println length.length
+let rslt = try length.upper()
+println rslt

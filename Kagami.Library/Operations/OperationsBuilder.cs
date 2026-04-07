@@ -443,6 +443,8 @@ public class OperationsBuilder(ParseState state)
 
    public void ToResult() => add(new ToResult());
 
+   public void ProtocolWrap(string protocolName) => add(new ProtocolWrap(protocolName));
+
    public Result<Operations> ToOperations()
    {
       operations.Add(new Stop());

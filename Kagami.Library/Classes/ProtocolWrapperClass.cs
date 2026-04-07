@@ -1,7 +1,6 @@
 ﻿using Kagami.Library.Objects;
 using Kagami.Library.Protocols;
 using static Kagami.Library.Classes.ClassFunctions;
-using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Classes;
 
@@ -20,7 +19,9 @@ public class ProtocolWrapperClass : BaseClass
 
    public override IObject DynamicInvoke(IObject obj, Message message)
    {
-      var target = ((ProtocolWrapper)obj).Object;
-      return classOf(target).SendMessage(target, message);
+      var protocolWrapper = (ProtocolWrapper)obj;
+      var protocol = protocolWrapper.Protocol;
+
+      return protocol.SendMessage(protocolWrapper.Object, message);
    }
 }

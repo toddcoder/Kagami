@@ -24,4 +24,6 @@ public readonly struct ProtocolWrapper(IObject obj, Protocol protocol) : IObject
    public Guid Id { get; init; } = Guid.NewGuid();
 
    public IObject SendMessage(Selector selector, params IObject[] arguments) => protocol.SendMessage(obj, selector, arguments);
+
+   public Protocol Protocol => protocol;
 }

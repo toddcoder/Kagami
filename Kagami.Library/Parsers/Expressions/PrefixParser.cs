@@ -16,6 +16,7 @@ public class PrefixParser(ExpressionBuilder builder) : MultiParser
          }
 
          yield return new YieldPrefixParser(builder);
+         yield return new ProtocolWrapParser(builder);
          yield return new CastParser(builder);
          yield return new SlipParser(builder);
          yield return new PrefixIncrementParser(builder);
@@ -36,6 +37,7 @@ public class PrefixParser(ExpressionBuilder builder) : MultiParser
          yield return new ImplicitOperatorParser(builder);
          yield return new LambdaFromSelectorParser(builder);
          yield return new FlattenParser(builder);
+
          //yield return new BindingParser(builder);
          yield return new LengthParser(builder);
       }

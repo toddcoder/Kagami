@@ -60,6 +60,19 @@ public class Protocol(string name, params Selector[] selectors)
       }
    }
 
+   public IObject SendMessage(IObject obj, Message message)
+   {
+      var messageSelector = message.Selector;
+      if (selectors.Contains(messageSelector))
+      {
+         return sendMessage(obj, message);
+      }
+      else
+      {
+         throw unsupportedByProtocol(name, messageSelector);
+      }
+   }
+
    public bool Supports(IObject obj)
    {
       var @class = classOf(obj);
