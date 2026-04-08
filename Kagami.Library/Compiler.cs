@@ -31,6 +31,7 @@ public class Compiler
    public Result<Machine> Generate()
    {
       Module.Global.ActivateWith(() => new Module());
+      Protocols.Protocols.Clear();
 
       var state = new ParseState(source)
       {

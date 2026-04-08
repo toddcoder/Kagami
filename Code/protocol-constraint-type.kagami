@@ -1,0 +1,18 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+protocol PLength {
+	let length int
+}
+
+fn count(l PLength) int => l.length
+
+let length1 = try count("foo")
+println length1
+
+let length2 = try count(100)
+println length2
+
+let length3 = try count(<a b c d e>)
+println length3

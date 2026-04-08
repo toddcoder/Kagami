@@ -862,11 +862,15 @@ public static class ParserFunctions
 
    public static Optional<PossibleTypeConstraint> parseTypeConstraint(ParseState state, TypeTailEnd tailEnd = TypeTailEnd.None)
    {
+      state.BeginTransaction();
       var _result = parseProtocolTypeConstraint(state);
       if (_result)
       {
+         state.CommitTransaction();
          return _result;
       }
+
+      state.RollBackTransaction();
 
       _result = parseCollectionTypeConstraint(state, tailEnd);
       if (_result)

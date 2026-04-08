@@ -9,10 +9,12 @@ public static class Protocols
 {
    private static StringHash<Protocol> protocols = [];
 
+   /*
    static Protocols()
    {
       Clear();
    }
+   */
 
    public static Maybe<Protocol> Get(string protocolName) => protocols.Maybe[protocolName];
 
@@ -37,7 +39,7 @@ public static class Protocols
       protocols.Clear();
       protocols["PError"] = new Protocol("PError", "message".get(), "callStack".get());
 
-      Selector[] monadSelectors = ["bind(_<Lambda>)", "unit(_)"];
+      Selector[] monadSelectors = [(Selector)"bind(_<Lambda>)", (Selector)"unit(_)"];
       protocols["PMonad"] = new Protocol("PMonad", monadSelectors);
       protocols["POptional"] = new Protocol("POptional", monadSelectors);
       protocols["PResult"] = new Protocol("PResult", monadSelectors);

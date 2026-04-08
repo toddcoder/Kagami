@@ -50,8 +50,6 @@ public class Module
          var (numerator, denominator) = ((Long)l).AsRational();
          return new Rational(numerator, denominator);
       };
-
-      Protocols.Protocols.Clear();
    }
 
    public static Maybe<Func<IObject, IObject>> AutoConversion(string from, string to) => autoConversions.Maybe[(from, to)];

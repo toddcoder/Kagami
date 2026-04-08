@@ -114,41 +114,48 @@ public class Invoke : OneOperandOperation
 
    public override Optional<IObject> Execute(Machine machine, IObject value)
    {
-      increment = false;
-      if (value is Arguments arguments)
+      try
       {
-         if (fieldName == "this" && machine.PeekFramesUntil(f => f.Lambda).LastOrNone() is (true, { Lambda: (true, var lambda) }))
+         increment = false;
+         if (value is Arguments arguments)
          {
-            return InvokeObject(machine, lambda, arguments, ref increment);
-         }
-
-         var _field = machine.Find(fieldName, true);
-         if (_field is (true, var foundField))
-         {
-            return InvokeObject(machine, foundField.Value, arguments, ref increment);
-         }
-         else
-         {
-            var selector = arguments.Selector(fieldName);
-            var image = selector.Image;
-            _field = machine.Find(selector);
-            if (_field is (true, var selectedField))
+            if (fieldName == "this" && machine.PeekFramesUntil(f => f.Lambda).LastOrNone() is (true, { Lambda: (true, var lambda) }))
             {
-               return InvokeObject(machine, selectedField.Value, arguments, ref increment);
+               return InvokeObject(machine, lambda, arguments, ref increment);
             }
-            else if (_field.Exception is (true, var exception))
+
+            var _field = machine.Find(fieldName, true);
+            if (_field is (true, var foundField))
             {
-               return exception;
+               return InvokeObject(machine, foundField.Value, arguments, ref increment);
             }
             else
             {
-               return fieldNotFound(image);
+               var selector = arguments.Selector(fieldName);
+               var image = selector.Image;
+               _field = machine.Find(selector);
+               if (_field is (true, var selectedField))
+               {
+                  return InvokeObject(machine, selectedField.Value, arguments, ref increment);
+               }
+               else if (_field.Exception is (true, var exception))
+               {
+                  return exception;
+               }
+               else
+               {
+                  return fieldNotFound(image);
+               }
             }
          }
+         else
+         {
+            return incompatibleClasses(value, "Arguments");
+         }
       }
-      else
+      catch (Exception exception)
       {
-         return incompatibleClasses(value, "Arguments");
+         return exception;
       }
    }
 

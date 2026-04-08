@@ -33,7 +33,6 @@ public partial class ConvertParser : StatementParser
          state.RemoveYieldFlag();
          state.RemoveReturnType();
 
-
          if (type == "convert")
          {
             var functionName = convertFunctionName(fromClass, toClass);
