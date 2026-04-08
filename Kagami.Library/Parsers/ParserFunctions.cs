@@ -1961,8 +1961,6 @@ public static class ParserFunctions
       };
    }
 
-   public static Optional<Block> getPartialBlock(ParseState state, Color endBlockColor = Color.Block) => getPartialBlock(state, nil, endBlockColor);
-
    public static Optional<Block> getPartialBlock(ParseState state, Maybe<TypeConstraint> _typeConstraint, Color endBlockColor = Color.Block)
    {
       var statementsParser = new StatementsParser();

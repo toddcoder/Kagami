@@ -1,5 +1,4 @@
-﻿using System;
-using Kagami.Library.Objects;
+﻿using Kagami.Library.Objects;
 using Kagami.Library.Packages;
 using Kagami.Library.Runtime;
 using Core.Monads;

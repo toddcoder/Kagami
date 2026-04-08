@@ -19,7 +19,7 @@ public partial class BlockValueParser : SymbolParser
    {
       state.Colorize(tokens, Color.Whitespace, Color.Block);
 
-      var _block = getPartialBlock(state);
+      var _block = getPartialBlock(state, nil);
       if (_block is (true, var block))
       {
          var blockValueSymbol = new BlockValueSymbol(block);

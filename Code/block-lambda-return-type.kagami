@@ -1,0 +1,13 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+fn createAdder() lambda {
+	let adder = {(x int, y int) int
+		return x + y
+	}
+	return adder
+}
+
+let adder = createAdder()
+println adder(10, 42)

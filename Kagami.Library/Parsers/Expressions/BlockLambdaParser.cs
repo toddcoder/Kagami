@@ -18,13 +18,17 @@ public partial class BlockLambdaParser : SymbolParser
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
+      state.CreateYieldFlag();
+      state.CreateReturnType();
+
       var standardParameters = tokens[3].Text == "(";
       if (standardParameters)
       {
          state.Colorize(tokens, Color.Whitespace, Color.Lambda, Color.OpenParenthesis);
          var _result =
             from parameters in getParameters(state)
-            from block in getPartialBlock(state, Color.Lambda)
+            from possibleTypeConstraint in parseTypeConstraint(state)
+            from block in getPartialBlock(state, possibleTypeConstraint.Maybe, Color.Lambda)
             select new LambdaSymbol(parameters, block, true);
          if (_result is (true, var lambdaSymbol))
          {
@@ -41,7 +45,8 @@ public partial class BlockLambdaParser : SymbolParser
          state.Colorize(tokens, Color.Whitespace, Color.Lambda, Color.Operator);
          var _result =
             from c in getExpression(state, builder.Flags | ExpressionFlags.Comparisand)
-            from blockValue in getPartialBlock(state, Color.Lambda)
+            from possibleTypeConstraint in parseTypeConstraint(state)
+            from blockValue in getPartialBlock(state, possibleTypeConstraint.Maybe, Color.Lambda)
             select (c, blockValue);
          if (_result is (true, var (comparisand, block)))
          {
