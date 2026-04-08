@@ -254,9 +254,9 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
    {
       if (parameter.TypeConstraint is (true, var typeConstraint))
       {
-         if (convertToMonad(typeConstraint.Comparisands[0].Name, value) is (true, var newValue))
+         if (typeConstraint.ConvertToMonad(value) is (true, var monad))
          {
-            value = newValue;
+            value = monad;
          }
          else if (!typeConstraint.Matches(classOf(value)))
          {

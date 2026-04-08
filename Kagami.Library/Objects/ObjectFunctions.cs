@@ -1145,7 +1145,7 @@ public static class ObjectFunctions
 
    public static IObject[] tupleToArray(KTuple tuple) => [..tuple.List];
 
-   public static Maybe<IObject> convertToMonad(string className, IObject value)
+   /*public static Maybe<IObject> convertToMonad(string className, IObject value)
    {
       return className switch
       {
@@ -1173,12 +1173,12 @@ public static class ObjectFunctions
          var erroring = Protocols.Protocols.GetOrThrow("PError");
          return erroring.Supports(value);
       }
-   }
+   }*/
 
-   public static Maybe<IObject> convertToMonad(TypeConstraint typeConstraint, IObject value)
+   /*public static Maybe<IObject> convertToMonad(TypeConstraint typeConstraint, IObject value)
    {
       return convertToMonad(typeConstraint.Comparisands[0].Name, value);
-   }
+   }*/
 
    public static bool isMonad(string className) => className switch
    {

@@ -21,9 +21,9 @@ public class ReturnType : Return
    {
       if (machine.Peek() is (true, var value))
       {
-         if (convertToMonad(typeConstraint, value) is (true, var newValue))
+         if (typeConstraint.ConvertToMonad(value) is (true, var monad))
          {
-            value = newValue;
+            value = monad;
             machine.Pop();
             machine.Push(value);
          }

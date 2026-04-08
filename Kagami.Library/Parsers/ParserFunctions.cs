@@ -852,9 +852,23 @@ public static class ParserFunctions
          select (PossibleTypeConstraint)new PossibleTypeConstraint.Some(TypeConstraint.FromList(inner));
    }
 
+   private static Optional<PossibleTypeConstraint> parseProtocolTypeConstraint(ParseState state)
+   {
+      return
+         from protocolName in state.Scan(@$"^(\s*)({REGEX_CLASS})\b", 2, Color.Whitespace, Color.Class)
+         from protocol in Protocols.Protocols.Get(protocolName)
+         select (PossibleTypeConstraint)new PossibleTypeConstraint.Some(new ProtocolConstraint(protocolName));
+   }
+
    public static Optional<PossibleTypeConstraint> parseTypeConstraint(ParseState state, TypeTailEnd tailEnd = TypeTailEnd.None)
    {
-      var _result = parseCollectionTypeConstraint(state, tailEnd);
+      var _result = parseProtocolTypeConstraint(state);
+      if (_result)
+      {
+         return _result;
+      }
+
+      _result = parseCollectionTypeConstraint(state, tailEnd);
       if (_result)
       {
          return _result;

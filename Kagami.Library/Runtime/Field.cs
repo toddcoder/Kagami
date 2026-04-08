@@ -19,7 +19,7 @@ public class Field
 
          if (TypeConstraint is (true, var typeConstraint))
          {
-            if (convertToMonad(typeConstraint.Comparisands[0].Name, value) is (true, var monad))
+            if (typeConstraint.ConvertToMonad(value) is (true, var monad))
             {
                this.value = monad;
                return;

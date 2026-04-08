@@ -10,7 +10,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
 
-public struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
+public class TypeConstraint : IObject, IEnumerable<TypeConstraint>
 {
    public static TypeConstraint FromList(params string[] classNames)
    {
@@ -19,9 +19,9 @@ public struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
 
    public static TypeConstraint SingleType(BaseClass baseClass) => new([baseClass]);
 
-   private readonly BaseClass[] comparisands = [];
+   protected readonly BaseClass[] comparisands = [];
 
-   public TypeConstraint(BaseClass[] comparisands) : this()
+   public TypeConstraint(BaseClass[] comparisands)
    {
       this.comparisands = comparisands;
    }
@@ -59,9 +59,9 @@ public struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
 
    public string ClassName => "TypeConstraint";
 
-   public string AsString => comparisands.Select(c => c.Name).ToString(" or ");
+   public virtual string AsString => comparisands.Select(c => c.Name).ToString(" or ");
 
-   public string Image
+   public virtual string Image
    {
       get
       {
@@ -76,9 +76,9 @@ public struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
       }
    }
 
-   public int Hash => HashCode.Combine(comparisands);
+   public virtual int Hash => HashCode.Combine(comparisands);
 
-   public bool IsEqualTo(IObject obj)
+   public virtual bool IsEqualTo(IObject obj)
    {
       if (obj is TypeConstraint typeConstraint)
       {
@@ -106,9 +106,9 @@ public struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
       }
    }
 
-   public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
+   public virtual bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
 
-   public bool Matches(BaseClass baseClass)
+   public virtual bool Matches(BaseClass baseClass)
    {
       if (baseClass is UserClass userClass)
       {
@@ -128,12 +128,11 @@ public struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
       }
    }
 
-   public bool Matches(UserClass userClass) => comparisands.Any(c => c.AssignCompatible(userClass));
+   public virtual bool Matches(UserClass userClass) => comparisands.Any(c => c.AssignCompatible(userClass));
 
-   public bool Matches(TypeConstraint typeConstraint)
+   public virtual bool Matches(TypeConstraint typeConstraint)
    {
-      var self = this;
-      return typeConstraint.comparisands.Select(bc => self.Matches(bc)).Any(b => b);
+      return typeConstraint.comparisands.Select(Matches).Any(b => b);
    }
 
    public bool IsTrue => true;
@@ -149,7 +148,7 @@ public struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
       return FromList(set.ToArray());
    }
 
-   public TypeConstraint Equivalent()
+   public virtual TypeConstraint Equivalent()
    {
       var result = this;
       foreach (var comparisand in comparisands)
@@ -163,7 +162,7 @@ public struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
       return result;
    }
 
-   public IEnumerator<TypeConstraint> GetEnumerator()
+   public virtual IEnumerator<TypeConstraint> GetEnumerator()
    {
       foreach (var comparisand in comparisands)
       {
@@ -173,7 +172,7 @@ public struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
 
    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-   public bool IsEquivalentTo(TypeConstraint typeConstraint)
+   public virtual bool IsEquivalentTo(TypeConstraint typeConstraint)
    {
       var baseClass = comparisands[0];
       if (baseClass.Name is "Placeholder" or "Any")
@@ -220,4 +219,40 @@ public struct TypeConstraint : IObject, IEnumerable<TypeConstraint>
    }
 
    public BaseClass[] Comparisands => comparisands;
+
+   public virtual Maybe<IObject> ConvertToMonad(IObject value)
+   {
+      if (comparisands.Length > 0)
+      {
+         var className = comparisands[0].Name;
+         return className switch
+         {
+            "Optional" => value switch
+            {
+               Some or KNil => value.Some(),
+               Success success => Some.Object(success.Value).Some(),
+               Failure or Error => KNil.NilValue.Some(),
+               _ => Some.Object(value).Some()
+            },
+            "Result" => value switch
+            {
+               Success or Failure => value.Some(),
+               Error error => new Failure(error),
+               Some some => Success.Object(some.Value).Some(),
+               KNil => Failure.Object("No value provided").Some(),
+               _ when supportsErroring() => new Failure(value),
+               _ => Success.Object(value).Some()
+            },
+            _ => nil
+         };
+
+         bool supportsErroring()
+         {
+            var erroring = Protocols.Protocols.GetOrThrow("PError");
+            return erroring.Supports(value);
+         }
+      }
+
+      return nil;
+   }
 }

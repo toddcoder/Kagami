@@ -36,5 +36,10 @@ public static class Protocols
    {
       protocols.Clear();
       protocols["PError"] = new Protocol("PError", "message".get(), "callStack".get());
+
+      Selector[] monadSelectors = ["bind(_<Lambda>)", "unit(_)"];
+      protocols["PMonad"] = new Protocol("PMonad", monadSelectors);
+      protocols["POptional"] = new Protocol("POptional", monadSelectors);
+      protocols["PResult"] = new Protocol("PResult", monadSelectors);
    }
 }

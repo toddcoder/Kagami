@@ -1,4 +1,5 @@
 ﻿using Core.Collections;
+using Kagami.Library.Classes;
 using Kagami.Library.Objects;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
@@ -73,10 +74,12 @@ public class Protocol(string name, params Selector[] selectors)
       }
    }
 
+   public bool Supports(BaseClass baseClass) => selectors.All(baseClass.RespondsTo);
+
    public bool Supports(IObject obj)
    {
       var @class = classOf(obj);
-      return selectors.All(@class.RespondsTo);
+      return Supports(@class);
    }
 
    public bool Supports(IEnumerable<Selector> includedSelectors)
