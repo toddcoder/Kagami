@@ -34,6 +34,7 @@ public class StatementsParser : MultiParser
          yield return new WhenStatementParser();
          yield return new RequireParser();
          yield return new WhileParser();
+         yield return new ForMatchParser();
          yield return new OldForParser();
          yield return new ForParser();
          yield return new RepeatParser();
