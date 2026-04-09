@@ -1,5 +1,7 @@
 ﻿open sys
 
+#pragma ALLOW_PRINT_STATEMENT true
+
 class Subjects(var physics: _ string);
 
 class Chemistry(var physics: _ string, equations: _ string) : Subjects(physics: physics);
@@ -20,10 +22,11 @@ for match sa {
 	}
 }
 
-var examples = [12, 3.14159, "Example for any", Chemistry(physics: "solid physics", equations: "Hertz")]
-for match examples {
+var examples = [12, 3.14159, "Example for any", Chemistry(physics: "solid physics", equations: "Hertz"), 1 + 1i]
+for match item in examples {
 	| Int someInt => println $"Integer value is $someInt"
 	| Float someFloat if someFloat > 0 => println $"Pi value is $someFloat"
 	| String someString => println someString
 	| Chemistry chemistry => println $"Topics '$chemistry.physics', $chemistry.equations"
+	| _ => println item
 }

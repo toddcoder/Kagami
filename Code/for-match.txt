@@ -1,0 +1,8 @@
+Chemistry topics are: solid physics, Hertz
+Maths topics are: Fluid Dynamics, Giga Hertz
+Integer value is 12
+Pi value is 3.14159
+Example for any
+Topics 'solid physics', Hertz
+1 + 1i
+it collection | Iterator

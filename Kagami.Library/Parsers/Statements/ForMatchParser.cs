@@ -2,6 +2,7 @@
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Parsers.Expressions;
 using System.Text.RegularExpressions;
+using Core.Strings;
 using Kagami.Library.Nodes.Symbols;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
@@ -12,12 +13,13 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class ForMatchParser : StatementParser
 {
-   [GeneratedRegex(@"^(\s*)(for\s+match)\b")]
+   [GeneratedRegex(@$"^(\s*)(for\s+match)(?:(\s+)({REGEX_FIELD})(\s+in))?\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      state.Colorize(tokens, Color.Whitespace, Color.Keyword);
+      var matchField = tokens[4].Text;
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Identifier, Color.Keyword);
       var _result =
          from sourceValue in getExpression(state, ExpressionFlags.Standard | ExpressionFlags.OmitIf | ExpressionFlags.OmitNot)
          select sourceValue;
@@ -30,7 +32,11 @@ public partial class ForMatchParser : StatementParser
          }
 
          var forField = newLabel("for");
-         var matchField = newLabel("match");
+         if (matchField.IsEmpty())
+         {
+            matchField = newLabel("match");
+         }
+
          var comparisand = new Expression(new PlaceholderSymbol("-" + forField));
          var assignment = new Expression(new FieldSymbol(forField));
 
