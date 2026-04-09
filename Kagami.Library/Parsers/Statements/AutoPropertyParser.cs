@@ -12,17 +12,19 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class AutoPropertyParser : StatementParser
 {
-   [GeneratedRegex(@$"^(\s*)(?:(let|var)\s+)?(auto)(\s+)({REGEX_FIELD})")]
+   [GeneratedRegex($@"^(\s*){REGEX_HIDDEN}{REGEX_OVERRIDE}(auto)(\s+)(?:(let|var)\s+)?({REGEX_FIELD})\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      var type = tokens[2].Text;
-      var name = tokens[5].Text;
+      var isHidden = tokens[2].Text.IsNotEmpty();
+      var isOverriden = tokens[3].Text.IsNotEmpty();
+      var type = tokens[6].Text.Trim();
+      var name = tokens[7].Text;
       var isReadWrite = type.IsEmpty();
       var fieldName = $"_${name}";
 
-      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Keyword, Color.Whitespace, Color.Identifier);
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Keyword, Color.Keyword, Color.Whitespace, Color.Keyword, Color.Identifier);
 
       var _result =
          from possibleTypeConstraintValue in parseTypeConstraint(state)
@@ -32,7 +34,7 @@ public partial class AutoPropertyParser : StatementParser
 
       if (_result is (true, var (_typeConstraint, expression)))
       {
-         var assignToNewField = new AssignToNewField(isReadWrite || type == "var", fieldName, expression, _typeConstraint, false) { Ignore = true };
+         var assignToNewField = new AssignToNewField(isReadWrite || type == "var", fieldName, expression, _typeConstraint, isHidden, isOverriden) { Ignore = true };
          state.AddStatement(assignToNewField);
 
          if (isReadWrite || type is "let" or "var")
