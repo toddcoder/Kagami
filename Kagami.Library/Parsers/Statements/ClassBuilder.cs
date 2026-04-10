@@ -346,6 +346,15 @@ public class ClassBuilder
          }
       }
 
+      Set<Selector> constructorSelectors = [];
+      foreach (var (selector, _) in constructorInvokables)
+      {
+         var modifiedSelector = new Selector("init", selector.SelectorItems, selector.Image);
+         constructorSelectors.Add(modifiedSelector);
+      }
+
+      includedSelectors = includedSelectors.Union(constructorSelectors);
+
       foreach (var protocolName in protocolNames)
       {
          if (Protocols.Protocols.Get(protocolName) is (true, var protocol))

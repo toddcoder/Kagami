@@ -8,7 +8,10 @@ public class Constructor : IObject, IEquatable<Constructor>, IInvokableObject
 {
    protected IInvokable invokable;
 
-   public Constructor(IInvokable invokable) => this.invokable = invokable;
+   public Constructor(IInvokable invokable)
+   {
+      this.invokable = invokable;
+   }
 
    public string ClassName => "Constructor";
 
