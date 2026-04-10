@@ -2142,4 +2142,13 @@ public static class ParserFunctions
          return new PossibleBlock.None();
       }
    }
+
+   public static Parameter getSelfParameter(ParseState state, string alias)
+   {
+      var expression = new Expression(new FieldSymbol("self"));
+      var symbol = new InvokableExpressionSymbol(expression);
+      state.AddSymbol(symbol);
+
+      return new Parameter(true, false, "", alias, symbol.Invokable.Some(), nil, false, false, false);
+   }
 }

@@ -7,6 +7,7 @@ using Core.Booleans;
 using Core.Monads;
 using Core.Strings;
 using Kagami.Library.Nodes.Symbols;
+using Kagami.Library.Parsers;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.CommonFunctions;
@@ -123,11 +124,6 @@ public class Function : Statement, IOverridable, IAnnotatable
 
    public override void Generate(OperationsBuilder builder)
    {
-      if (SelfAlias.IsNotEmpty())
-      {
-         block.InsertSelfAlias(SelfAlias);
-      }
-
       var _index = builder.RegisterInvokable(lambda.Value.Invokable, block, overriding);
       if (_index)
       {

@@ -28,6 +28,11 @@ public partial class MatchFunctionParser : StatementParser
       var _parameters = getParameters(state);
       if (_parameters is (true, var parameters))
       {
+         if (SelfAlias.IsNotEmpty())
+         {
+            parameters.Append(getSelfParameter(state, SelfAlias));
+         }
+
          List<If> list = [];
          Maybe<TypeConstraint> _typeConstraint = parseTypeConstraint(state).Map(ptc => ptc.Maybe);
          state.SetReturnType(_typeConstraint);
@@ -105,7 +110,7 @@ public partial class MatchFunctionParser : StatementParser
             var block = new Block([new MatchFunctionAssignment(fieldName, parameters), previousIf, new ReturnNothing()]);
             var function = new Function(functionName, parameters, isHidden, block, false, overriding, ClassName | "")
             {
-               SelfAlias = SelfAlias, IsFixed = isFixed
+               IsFixed = isFixed
             };
             state.AddStatement(function);
             state.RemoveReturnType();

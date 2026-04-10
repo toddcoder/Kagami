@@ -139,9 +139,14 @@ public partial class FunctionParser : StatementParser
                   block.AddReturnUnitIf();
                }
 
+               if (SelfAlias.IsNotEmpty())
+               {
+                  parameters.Append(getSelfParameter(state, SelfAlias));
+               }
+
                var function = new Function(functionName, parameters, isHidden, block, yielding, overriding, className)
                {
-                  IsFixed = isFixed, Annotations = annotations, SelfAlias = SelfAlias
+                  IsFixed = isFixed, Annotations = annotations
                };
                _function = function;
                if (isMacro)
@@ -210,13 +215,18 @@ public partial class FunctionParser : StatementParser
          while (parametersStack.Count > 0)
          {
             var parameters = parametersStack.Pop();
+            if (selfAlias.IsNotEmpty())
+            {
+               parameters.Append(getSelfParameter(state, selfAlias));
+            }
+
             _lambdaSymbol = _lambdaSymbol.Map(l => getLambda(parameters, l)) | (() => new LambdaSymbol(parameters, block));
          }
 
          if (_lambdaSymbol is (true, var lambdaSymbol))
          {
             return new Function(functionName, firstParameters, isHidden, new Block(new Return(new Expression(lambdaSymbol), nil)), yielding,
-               overriding, className) { Annotations = annotations, SelfAlias = selfAlias };
+               overriding, className) { Annotations = annotations };
          }
          else
          {
