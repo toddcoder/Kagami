@@ -8,7 +8,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class InheritedProtocolsParser(ProtocolBuilder builder) : StatementParser
 {
-   [GeneratedRegex(@"^(\s*)(:)(\s+)({REGEX_CLASS})\b")]
+   [GeneratedRegex(@$"^(\s*)(:)(\s*)({REGEX_CLASS})")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)

@@ -1,0 +1,7 @@
+Protocols has score 98
+98
+true
+false
+Kagami Protocols
+Protocols
+"Protocols" | String

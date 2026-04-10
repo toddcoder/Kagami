@@ -3,7 +3,7 @@
 #pragma ALLOW_PRINT_STATEMENT true
 
 protocol PLength {
-	let length int
+	let length
 }
 
 fn count(l PLength) int => l.length

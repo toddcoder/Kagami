@@ -1,0 +1,38 @@
+﻿open sys
+
+#pragma ALLOW_PRINT_STATEMENT true
+
+protocol ClassA {
+	var marks int
+	let rslt
+
+	fn attendance()
+	fn marksSecured()
+}
+
+protocol ClassB : ClassA {
+	var present bool
+	var subject string
+	var stname string
+}
+
+class ClassC {
+	var marks int = 96
+	let rslt = true
+	var present bool = false
+	var subject string = "Kagami Protocols"
+	var stname string = "Protocols"
+
+	fn attendance() string => $"The $stname has secured 99% attendance"
+	fn marksSecured() string => $"$stname has score $marks"
+}
+does ClassB
+
+let c = ClassC()
+c.marks = 98
+println c.marksSecured()
+println c.marks
+println c.rslt
+println c.present
+println c.subject
+println c.stname

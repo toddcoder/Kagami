@@ -1,6 +1,9 @@
 ﻿using Core.Collections;
+using Core.Enumerables;
+using Core.Monads;
 using Kagami.Library.Classes;
 using Kagami.Library.Objects;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
@@ -82,17 +85,19 @@ public class Protocol(string name, params Selector[] selectors)
       return Supports(@class);
    }
 
-   public bool Supports(IEnumerable<Selector> includedSelectors)
+   public Maybe<string> Supports(IEnumerable<Selector> includedSelectors)
    {
       Set<Selector> includedSet = [.. includedSelectors];
+      List<string> missing = [];
       foreach (var selector in selectors)
       {
          if (!includedSet.Contains(selector))
          {
-            return false;
+            missing.Add(selector.AsString);
          }
       }
 
-      return true;
+      return maybe<string>() & missing.Count > 0 & (() => missing.ToString(", "));
+
    }
 }

@@ -294,8 +294,23 @@ public static class AllExceptions
 
    public static Exception protocolAlreadyExists(string protocolName) => fail(messageProtocolAlreadyExists(protocolName));
 
-   public static string messageProtocolNotImplemented(string className, string protocolName) => $"{className} doesn't implement protocol {protocolName}";
+   public static string messageProtocolNotImplemented(string className, string protocolName, string missingSelectors)
+   {
+      return $"{className} doesn't implement protocol {protocolName} [{missingSelectors}]";
+   }
 
-   public static Exception protocolNotImplemented(string className, string protocolName) =>
-      fail(messageProtocolNotImplemented(className, protocolName));
+   public static Exception protocolNotImplemented(string className, string protocolName, string missingSelectors)
+   {
+      return fail(messageProtocolNotImplemented(className, protocolName, missingSelectors));
+   }
+
+    public static string messageProtocolNotImplemented(string className, string protocolName)
+    {
+       return $"{className} doesn't implement protocol {protocolName}";
+    }
+
+    public static Exception protocolNotImplemented(string className, string protocolName)
+    {
+       return fail(messageProtocolNotImplemented(className, protocolName));
+    }
 }

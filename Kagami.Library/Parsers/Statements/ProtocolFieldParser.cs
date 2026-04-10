@@ -14,26 +14,26 @@ public partial class ProtocolFieldParser(ProtocolBuilder builder) : StatementPar
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      var mutable = tokens[2].Text == "var";
+      var createSetter = tokens[2].Text == "var";
       var fieldName = tokens[4].Text;
       state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Identifier);
 
-      var _possibleTypeConstraint = parseTypeConstraint(state);
-
       Selector getter = fieldName.get();
       builder.AddSelector(getter);
-      if (mutable)
+
+      if (createSetter)
       {
+         var _possibleTypeConstraint = parseTypeConstraint(state);
          if (_possibleTypeConstraint is (true, { Maybe: (true, var typeConstraint) }))
          {
             Selector typedSetter = $"{fieldName}=(_{typeConstraint.Image})";
             builder.AddSelector(typedSetter);
-
-            return unit;
          }
-
-         Selector setter = fieldName.set();
-         builder.AddSelector(setter);
+         else
+         {
+            Selector setter = fieldName.set();
+            builder.AddSelector(setter);
+         }
       }
 
       return unit;

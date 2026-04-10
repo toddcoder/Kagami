@@ -350,10 +350,10 @@ public class ClassBuilder
       {
          if (Protocols.Protocols.Get(protocolName) is (true, var protocol))
          {
-            var supports = protocol.Supports(includedSelectors);
-            if (!supports)
+            var _missing = protocol.Supports(includedSelectors);
+            if (_missing is (true, var missing))
             {
-               throw protocolNotImplemented(className, protocolName);
+               throw protocolNotImplemented(className, protocolName, missing);
             }
          }
          else
