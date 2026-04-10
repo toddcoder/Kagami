@@ -139,9 +139,14 @@ public partial class FunctionParser : StatementParser
                   block.AddReturnUnitIf();
                }
 
+               if (SelfAlias.IsNotEmpty())
+               {
+                  block.InsertSelfAlias(SelfAlias);
+               }
+
                var function = new Function(functionName, parameters, isHidden, block, yielding, overriding, className)
                {
-                  IsFixed = isFixed, Annotations = annotations, SelfAlias = SelfAlias
+                  IsFixed = isFixed, Annotations = annotations
                };
                _function = function;
                if (isMacro)
@@ -215,8 +220,13 @@ public partial class FunctionParser : StatementParser
 
          if (_lambdaSymbol is (true, var lambdaSymbol))
          {
+            if (selfAlias.IsNotEmpty())
+            {
+               block.InsertSelfAlias(selfAlias);
+            }
+
             return new Function(functionName, firstParameters, isHidden, new Block(new Return(new Expression(lambdaSymbol), nil)), yielding,
-               overriding, className) { Annotations = annotations, SelfAlias = selfAlias };
+               overriding, className) { Annotations = annotations };
          }
          else
          {

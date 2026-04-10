@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using Core.Monads;
+using Core.Strings;
 using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Objects;
@@ -88,7 +89,12 @@ public partial class PropertyParser : StatementParser
             (propertyName, parameters) = PropertyNameParameters(state, direction, propertyName, block.TypeConstraint);
          }
 
-         state.AddStatement(new Function(propertyName, parameters, false, block, yielding, isOverride, ClassName) { SelfAlias = SelfAlias });
+         if (SelfAlias.IsNotEmpty())
+         {
+            block.InsertSelfAlias(SelfAlias);
+         }
+
+         state.AddStatement(new Function(propertyName, parameters, false, block, yielding, isOverride, ClassName));
          return unit;
       }
       else

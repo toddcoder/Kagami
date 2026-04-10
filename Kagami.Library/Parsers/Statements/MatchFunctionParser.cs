@@ -103,9 +103,14 @@ public partial class MatchFunctionParser : StatementParser
             previousIf.Else = new Block(new FailedMatch());
 
             var block = new Block([new MatchFunctionAssignment(fieldName, parameters), previousIf, new ReturnNothing()]);
+            if (SelfAlias.IsNotEmpty())
+            {
+               block.InsertSelfAlias(SelfAlias);
+            }
+
             var function = new Function(functionName, parameters, isHidden, block, false, overriding, ClassName | "")
             {
-               SelfAlias = SelfAlias, IsFixed = isFixed
+               IsFixed = isFixed
             };
             state.AddStatement(function);
             state.RemoveReturnType();

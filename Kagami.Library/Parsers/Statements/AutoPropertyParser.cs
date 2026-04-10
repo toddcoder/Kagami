@@ -34,7 +34,8 @@ public partial class AutoPropertyParser : StatementParser
 
       if (_result is (true, var (_typeConstraint, expression)))
       {
-         var assignToNewField = new AssignToNewField(isReadWrite || type == "var", fieldName, expression, _typeConstraint, isHidden, isOverriden) { Ignore = true };
+         var assignToNewField = new AssignToNewField(isReadWrite || type == "var", fieldName, expression, _typeConstraint, isHidden, isOverriden)
+            { Ignore = true };
          state.AddStatement(assignToNewField);
 
          if (isReadWrite || type is "let" or "var")
@@ -51,7 +52,12 @@ public partial class AutoPropertyParser : StatementParser
                state.RemoveReturnType();
                var assign = new AssignReferenceToNewField(fieldName, "field");
                getter.Unshift(assign);
-               state.AddStatement(new Function($"__${name}", Parameters.Empty, false, getter, false, false, ClassName) { SelfAlias = SelfAlias });
+               if (SelfAlias.IsNotEmpty())
+               {
+                  getter.InsertSelfAlias(SelfAlias);
+               }
+
+               state.AddStatement(new Function($"__${name}", Parameters.Empty, false, getter, false, false, ClassName));
             }
             else
             {
@@ -73,7 +79,12 @@ public partial class AutoPropertyParser : StatementParser
                state.RemoveReturnType();
                var assign = new AssignReferenceToNewField(fieldName, "field");
                setter.Unshift(assign);
-               state.AddStatement(new Function($"{name}=", new Parameters("value"), false, setter, false, false, ClassName) { SelfAlias = SelfAlias });
+               if (SelfAlias.IsNotEmpty())
+               {
+                  setter.InsertSelfAlias(SelfAlias);
+               }
+
+               state.AddStatement(new Function($"{name}=", new Parameters("value"), false, setter, false, false, ClassName));
             }
             else
             {
