@@ -2,24 +2,22 @@
 using Core.Monads;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
-using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public partial class ProtocolFunctionParser(ProtocolBuilder builder) : StatementParser
+public partial class ProtocolInitParser(ProtocolBuilder builder) : StatementParser
 {
-   [GeneratedRegex($@"^(\s*)(fn)(\s+)({REGEX_FUNCTION_NAME})(\()")]
+    [GeneratedRegex(@"^(\s*)(init)(\()")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      var functionName = tokens[4].Text;
-      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Invokable, Color.OpenParenthesis);
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.OpenParenthesis);
 
       var _parameters = getParameters(state);
       if (_parameters is (true, var parameters))
       {
-         var selector = parameters.Selector(functionName);
+         var selector = parameters.Selector("init");
          builder.AddSelector(selector);
 
          return unit;
@@ -28,5 +26,5 @@ public partial class ProtocolFunctionParser(ProtocolBuilder builder) : Statement
       {
          return _parameters.Exception;
       }
-   }
+    }
 }

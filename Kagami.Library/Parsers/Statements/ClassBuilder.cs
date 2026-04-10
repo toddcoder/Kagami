@@ -346,28 +346,32 @@ public class ClassBuilder
          }
       }
 
-      Set<Selector> constructorSelectors = [];
-      foreach (var (selector, _) in constructorInvokables)
+      if (protocolNames.Count > 0)
       {
-         var modifiedSelector = new Selector("init", selector.SelectorItems, selector.Image);
-         constructorSelectors.Add(modifiedSelector);
-      }
-
-      includedSelectors = includedSelectors.Union(constructorSelectors);
-
-      foreach (var protocolName in protocolNames)
-      {
-         if (Protocols.Protocols.Get(protocolName) is (true, var protocol))
+         Set<Selector> constructorSelectors = [];
+         foreach (var (selector, (invokable, block)) in constructorInvokables)
          {
-            var _missing = protocol.Supports(includedSelectors);
-            if (_missing is (true, var missing))
-            {
-               throw protocolNotImplemented(className, protocolName, missing);
-            }
+            var modifiedSelector = new Selector("init", selector.SelectorItems, selector.Image);
+            constructorSelectors.Add(modifiedSelector);
+            statements.Add(new Function("init", ));
          }
-         else
+
+         includedSelectors = includedSelectors.Union(constructorSelectors);
+
+         foreach (var protocolName in protocolNames)
          {
-            throw protocolNotFound(protocolName);
+            if (Protocols.Protocols.Get(protocolName) is (true, var protocol))
+            {
+               var _missing = protocol.Supports(includedSelectors);
+               if (_missing is (true, var missing))
+               {
+                  throw protocolNotImplemented(className, protocolName, missing);
+               }
+            }
+            else
+            {
+               throw protocolNotFound(protocolName);
+            }
          }
       }
 
