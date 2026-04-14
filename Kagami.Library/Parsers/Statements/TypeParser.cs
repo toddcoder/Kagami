@@ -27,7 +27,7 @@ public partial class TypeParser : StatementParser
          return _beginBlock.Exception;
       }
 
-      List<TypeMemberData> enumMembers = [];
+      List<TypeMemberData> typeMembers = [];
       Optional<Unit> _endBlock = nil;
       Maybe<IObject> _ordinal = nil;
       var scanning = true;
@@ -50,7 +50,7 @@ public partial class TypeParser : StatementParser
          {
             if (typeMemberParser.TypeMemberData is (true, var enumMemberData))
             {
-               enumMembers.Add(enumMemberData);
+               typeMembers.Add(enumMemberData);
             }
 
             _ordinal = typeMemberParser.Ordinal;
@@ -69,7 +69,7 @@ public partial class TypeParser : StatementParser
                {
                   if (typeNextMemberParser.TypeMemberData is (true, var enumMemberData))
                   {
-                     enumMembers.Add(enumMemberData);
+                     typeMembers.Add(enumMemberData);
                   }
 
                   _ordinal = typeNextMemberParser.Ordinal;
@@ -98,7 +98,7 @@ public partial class TypeParser : StatementParser
 
       var commonBlock = _block | (() => new Block());
 
-      var enumCreator = new TypeCreator(className, [.. enumMembers], commonBlock);
+      var enumCreator = new TypeCreator(className, [.. typeMembers], commonBlock);
       var _result = enumCreator.Create();
       if (_result)
       {
