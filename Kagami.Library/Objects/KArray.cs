@@ -904,4 +904,13 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
          }
       }
    }
+
+   public KArray Swap(int i, int j)
+   {
+      var index1 = wrapIndex(i, list.Count);
+      var index2 = wrapIndex(j, list.Count);
+      (list[index1], list[index2]) = (list[index2], list[index1]);
+
+      return this;
+   }
 }

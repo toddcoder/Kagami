@@ -70,7 +70,6 @@ public class StatementsParser : MultiParser
          yield return new LazyAssignParser();
          yield return new ExtensionParser();
 
-         //yield return new AssignToMatchParser();
          yield return new DefAssignParser();
          yield return new DataTypeParser();
          yield return new AliasParser();
@@ -81,11 +80,9 @@ public class StatementsParser : MultiParser
          yield return new OpenPackageParser();
          yield return new UsePackageParser();
 
-         //yield return new ReassignmentParser();
-
          yield return new AssignWithNewTypeParser();
-         //yield return new AssignToNewFieldTolerantParser();
          yield return new AssignToFieldParser();
+         yield return new PassParser();
 
          yield return new ExpressionStatementParser(ReturnExpression, TypeConstraint);
       }
