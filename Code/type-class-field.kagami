@@ -1,13 +1,22 @@
 ﻿open sys
 
 type Rank {
-	| Ace = 1, Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King
+	| Ace, Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King
 	fn description() string {
 		match class {
 			| Ace return "ace"
 			| Jack return "jack"
 			| Queen return "queen"
 			| King return "king"
+			| Two return "2"
+			| Three return "3"
+			| Four return "4"
+			| Five return "5"
+			| Six return "6"
+			| Seven return "7"
+			| Eight return "8"
+			| Nine return "9"
+			| Ten return "10"
 			| _ return class.value
 		}
 	}

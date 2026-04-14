@@ -85,8 +85,6 @@ public partial class ObjectOrMixinParser : StatementParser
                }
 
                state.AddStatement(metaClass);
-
-               return unit;
             }
             else
             {
