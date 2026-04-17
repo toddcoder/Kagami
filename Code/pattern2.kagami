@@ -45,4 +45,4 @@ fn findSquareCubes(x int) {
 	}
 }
 
-for elem in 1 .. 1000 findSquareCubes(elem)
+for elem in 1 to 1000 findSquareCubes(elem)

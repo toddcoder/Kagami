@@ -1,5 +1,4 @@
 ﻿using Kagami.Library.Nodes.Symbols;
-using Kagami.Library.Parsers.Statements;
 
 namespace Kagami.Library.Parsers.Expressions;
 
@@ -12,7 +11,7 @@ public class InfixParser(ExpressionBuilder builder) : MultiParser
          yield return new UserOperatorParser(builder, Arity.Binary);
          yield return new ZipOperatorParser(builder);
          yield return new ZipLambdaParser(builder);
-         yield return new RangeOperatorParser(builder);
+         //yield return new RangeOperatorParser(builder);
 
          if (!builder.Flags[ExpressionFlags.OmitColon] && !builder.Flags[ExpressionFlags.OmitNameValue])
          {

@@ -6,4 +6,4 @@ fn pairWise(list, `lambda) {
 	return [next] ~ pairWise(list{2}, `lambda)
 }
 
-pairWise([1..5]) (+)
+pairWise([1 to 5]) (+)

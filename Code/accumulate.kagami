@@ -1,5 +1,5 @@
 ﻿open sys
 
-println([1..5].accumulate((+)))
-println([1..5].accumulate(init: 100, (+)))
-println([1..5].accumulate((*)))
+println([1 to 5].accumulate((+)))
+println([1 to 5].accumulate(init: 100, (+)))
+println([1 to 5].accumulate((*)))

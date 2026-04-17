@@ -1,9 +1,9 @@
 ﻿open sys
 
-var numbers = [1..10]
-var letters = ['a'..'j']
+var numbers = [1 to 10]
+var letters = ['a' to 'j']
 var i = ?^numbers zip letters
 println(~[i])
 
-i = ?^numbers.zip(letters) (l, r) -> $"(l)(r)"
+i = ?^numbers.zip(letters) (l, r) -> $"$l$r"
 println(~[i])

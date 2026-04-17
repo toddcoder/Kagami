@@ -1,5 +1,5 @@
 ﻿open sys
 
-var numbers = [1..10] % (2, 5)
+var numbers = [1 to 10] % (2, 5)
 var flattened = numbers.flatMap() i -> i ^ 2
 println(flattened)

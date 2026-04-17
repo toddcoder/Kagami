@@ -9,7 +9,7 @@ exit {
 	println("exited while")
 }
 
-for i in 1 .. 100 {
+for i in 1 to 100 {
 	if i %% 5 exit
 	println(i)
 }

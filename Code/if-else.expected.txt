@@ -13,4 +13,4 @@ unmatched 7
 8
 unmatched 9
 10
-it collection | Iterator
+lit collection | LazyIterator
