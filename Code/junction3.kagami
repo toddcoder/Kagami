@@ -2,4 +2,4 @@
 
 #pragma ALLOW_PRINT_STATEMENT true
 
-for i in any[1 to 2] + any[10 to 20 + 10] println i
+for i in any[1 to 2] + any[10 to 20 by 10] println i

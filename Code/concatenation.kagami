@@ -8,6 +8,6 @@ var a = 10
 var b = 20
 println($"(a)+(b)=(a + b)")
 
-var ary = [10 .. 100 + 10]
+var ary = [10 to 100 by 10]
 ary ~= [200]
 println(ary)
