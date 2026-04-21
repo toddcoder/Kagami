@@ -17,12 +17,12 @@ public partial class WhereParser : SymbolParser
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
-      state.Colorize(tokens, Color.Whitespace, Color.Operator);
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword);
 
       var _result =
-         from expressionValue in builder.ToExpression(true).Optional()
-         from scanned in state.Scan(@"^(\s*)(\{)", Color.Whitespace, Color.OpenParenthesis)
-         from taggedExpressionsValue in getTaggedExpressions(state, REGEX_BLOCK_END)
+         from expressionValue in getExpression(state, builder.Flags | ExpressionFlags.OmitIn)
+         from scanned in state.Scan(@"^(\s*)(in)\b", Color.Whitespace, Color.Keyword)
+         from taggedExpressionsValue in getTaggedExpressions(state)
          select (expressionValue, taggedExpressionsValue);
       if (_result is (true, var (expression, taggedExpressions)))
       {

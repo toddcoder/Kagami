@@ -10,7 +10,7 @@ public class ConjunctionParsers(ExpressionBuilder builder) : MultiParser
 
          yield return new IsParser(builder);
          yield return new AsOperatorParser(builder);
-         yield return new WhereParser(builder);
+         //yield return new WhereParser(builder);
          yield return new MatchExpressionParser(builder);
 
          if (!builder.Flags[ExpressionFlags.OmitComprehension])
