@@ -78,6 +78,11 @@ public class Convert : Operation
                return exception;
             }
          }
+         else if (toClass.AsString == "Tuple" && value is ICollection collection)
+         {
+            var iterator = collection.GetIterator(false);
+            return iterator.ToTuple();
+         }
          else if (fromClass.AsString == "Array" && toClass.AsString == "String")
          {
             return fromCharArrayToString(value);
