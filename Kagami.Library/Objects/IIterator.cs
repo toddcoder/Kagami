@@ -147,9 +147,13 @@ public interface IIterator : IEquivalentClass
 
    INumeric Sum();
 
+   IObject CumulativeSum();
+
    INumeric Average();
 
    INumeric Product();
+
+   IObject CumulativeProduct();
 
    IObject Cross(ICollection collection);
 

@@ -3,6 +3,7 @@ using Core.Dates.Now;
 using Core.Enumerables;
 using Core.Monads;
 using Kagami.Library.Classes;
+using Kagami.Library.Packages;
 using Kagami.Library.Runtime;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
@@ -999,6 +1000,34 @@ public class Iterator : IObject, IIterator
       }
    }
 
+   public IObject CumulativeSum()
+   {
+      List<IObject> cumulativeSums = [];
+      var (_head, tail) = List().HeadAndTail();
+      if (_head is (true, var head and INumeric))
+      {
+         var sum = (INumeric)head;
+         foreach (var value in tail)
+         {
+            if (value is INumeric numeric)
+            {
+               sum = (INumeric)apply(sum, numeric, (x, y) => x + y, (x, y) => x + y, (x, y) => x + y, (x, y) => x.Add(y), "+");
+               cumulativeSums.Add((IObject)sum);
+            }
+            else
+            {
+               throw incompatibleClasses(value, "Numeric");
+            }
+         }
+
+         return collectionClass.Revert(cumulativeSums, _typeConstraint);
+      }
+      else
+      {
+         return collectionClass.Revert([], _typeConstraint);
+      }
+   }
+
    public INumeric Average()
    {
       var sum = Sum();
@@ -1030,6 +1059,34 @@ public class Iterator : IObject, IIterator
       else
       {
          return one<Int>();
+      }
+   }
+
+   public IObject CumulativeProduct()
+   {
+      List<IObject> cumulativeProducts = [];
+      var (_head, tail) = List().HeadAndTail();
+      if (_head is (true, var head and INumeric))
+      {
+         var product = (INumeric)head;
+         foreach (var value in tail)
+         {
+            if (value is INumeric numeric)
+            {
+               product = (INumeric)apply(product, numeric, (x, y) => x * y, (x, y) => x * y, (x, y) => x * y, (x, y) => x.Multiply(y), "*");
+               cumulativeProducts.Add((IObject)product);
+            }
+            else
+            {
+               throw incompatibleClasses(value, "Numeric");
+            }
+         }
+
+         return collectionClass.Revert(cumulativeProducts, _typeConstraint);
+      }
+      else
+      {
+         return collectionClass.Revert([], _typeConstraint);
       }
    }
 

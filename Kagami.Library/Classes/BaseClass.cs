@@ -506,8 +506,10 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerIterMessage("any(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Any(l)));
       registerIterMessage("all(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.All(l)));
       registerIterMessage("sum()", (obj, _) => iteratorFunc(obj, i => (IObject)i.Sum()));
+      registerIterMessage("cumulSum()", (obj, _) => iteratorFunc(obj, i => i.CumulativeSum()));
       registerIterMessage("average()", (obj, _) => iteratorFunc(obj, i => (IObject)i.Average()));
       registerIterMessage("product()", (obj, _) => iteratorFunc(obj, i => (IObject)i.Product()));
+      registerIterMessage("cumulProduct()", (obj, _) => iteratorFunc(obj, i => i.CumulativeProduct()));
       registerIterMessage("cross(_)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, c) => i.Cross((ICollection)c)));
       registerIterMessage("cross(_,_)", (obj, message) => iteratorFunc<IObject, Lambda>(obj, message, (i, c, l) => i.Cross((ICollection)c, l)));
       registerIterMessage("by(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.By(j.Value)));

@@ -319,11 +319,7 @@ public partial class Playground : Form
       }
    }
 
-   protected void resetEditor()
-   {
-      textEditor.Text = "open sys\n\n";
-      textEditor.SelectionStart = textEditor.Text.Length;
-   }
+   protected void resetEditor() => textEditor.Text = "";
 
    protected void findRegex(Pattern pattern, bool ignoreCase)
    {

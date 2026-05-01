@@ -290,9 +290,13 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
 
    public INumeric Sum() => terminate().Sum();
 
+   public IObject CumulativeSum() => terminate().CumulativeSum();
+
    public INumeric Average() => terminate().Average();
 
    public INumeric Product() => terminate().Product();
+
+   public IObject CumulativeProduct() => terminate().CumulativeProduct();
 
    public IObject Cross(ICollection collection) => terminate().Cross(collection);
 
