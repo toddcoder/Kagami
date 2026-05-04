@@ -20,7 +20,8 @@ public partial class KeywordOperatorsParser : SymbolParser
    {
       var keyword = tokens[2].Text;
       if ((builder.Flags[ExpressionFlags.OmitRange] || builder.Flags[ExpressionFlags.InLambda]) && keyword != "div" && keyword != "divmod" &&
-          keyword != "min" && keyword != "max" && keyword != "to" && keyword != "til" && keyword != "dto" && keyword != "dtil" && keyword != "by")
+          keyword != "min" && keyword != "max" && keyword != "to" && keyword != "til" && keyword != "dto" && keyword != "dtil" && keyword != "by" ||
+          builder.Flags[ExpressionFlags.OmitWhileUntil] && keyword is "while" or "until")
       {
          return nil;
       }
@@ -59,12 +60,16 @@ public partial class KeywordOperatorsParser : SymbolParser
                case "take":
                   builder.Add(new SendBinaryMessageSymbol("take(_)", Precedence.ChainedOperator));
                   break;
-               case "while":
+               case "while" when !builder.Flags[ExpressionFlags.OmitWhileUntil]:
                   builder.Add(new SendBinaryMessageSymbol("takeWhile(_<Lambda>)", Precedence.ChainedOperator));
                   break;
-               case "until":
+               case "while":
+                  return nil;
+               case "until" when !builder.Flags[ExpressionFlags.OmitWhileUntil]:
                   builder.Add(new SendBinaryMessageSymbol("takeUntil(_)", Precedence.ChainedOperator));
                   break;
+               case "until":
+                  return nil;
                case "min":
                   builder.Add(new MinSymbol());
                   break;

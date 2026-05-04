@@ -1527,14 +1527,21 @@ public static class ParserFunctions
 
    public static Optional<PossibleIfExpression> getIfOrIfNo(ParseState state)
    {
-      var _scanned = state.Scan(@"^(\s+)(if)\b", Color.Whitespace, Color.Keyword);
-      if (_scanned)
+      var _scanned = state.Scan(@"^(\s+)(if|while|until)\b", 2, Color.Whitespace, Color.Keyword);
+      if (_scanned is (true, var keyword))
       {
          var not = state.NotKeyword();
          var _expression = getExpression(state, ExpressionFlags.OmitIf | ExpressionFlags.OmitComprehension);
          if (_expression is (true, var expression))
          {
-            return not ? new PossibleIfExpression.IfNot(expression) : new PossibleIfExpression.If(expression);
+            return keyword switch
+            {
+               "if" when not => new PossibleIfExpression.IfNot(expression),
+               "if" => new PossibleIfExpression.If(expression),
+               "while" => new PossibleIfExpression.While(expression),
+               "until" => new PossibleIfExpression.Until(expression),
+               _ => new Empty<PossibleIfExpression>()
+            };
          }
          else
          {

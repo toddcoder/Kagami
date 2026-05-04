@@ -24,5 +24,6 @@ public enum ExpressionFlags
    OmitMaybe = 131072,
    OmitNot = 262144,
    OmitLambda = 524288,
-   InSubExpression = 1048576
+   InSubExpression = 1048576,
+   OmitWhileUntil = 2097152
 }

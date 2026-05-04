@@ -1,0 +1,28 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+println "while"
+
+for i in 1 to 20 while i != 5 {
+	println i
+}
+
+printline
+println "until"
+
+for i in 1 to 20 until i == 5 {
+	println i
+}
+
+printline
+println "if"
+
+for i in 1 to 20 if i != 5 {
+	println i
+}
+
+printline
+println "if not"
+
+for i in 1 to 20 if not i == 5 {
+	println i
+}

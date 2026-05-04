@@ -87,6 +87,18 @@ namespace Kagami.Library.Nodes.Statements
                builder.GoToIfTrue(failedIfLabel);
                break;
             }
+            case PossibleIfExpression.While @while:
+            {
+               @while.Expression.Generate(builder);
+               builder.GoToIfFalse(exitLabel);
+               break;
+            }
+            case PossibleIfExpression.Until until:
+            {
+               until.Expression.Generate(builder);
+               builder.GoToIfTrue(exitLabel);
+               break;
+            }
          }
 
          block.Generate(builder);
