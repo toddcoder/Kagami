@@ -1,0 +1,5 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+var i = 10
+var x = 5.17
+println /complex (i, x)
