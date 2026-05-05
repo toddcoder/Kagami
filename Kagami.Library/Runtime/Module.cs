@@ -11,6 +11,7 @@ using Kagami.Library.Objects;
 using Kagami.Library.Parsers;
 using static Kagami.Library.AllExceptions;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.CommonFunctions;
 
 namespace Kagami.Library.Runtime;
 
@@ -50,6 +51,7 @@ public class Module
          var (numerator, denominator) = ((Long)l).AsRational();
          return new Rational(numerator, denominator);
       };
+      autoConversions[("Tuple", "Complex")] = t => tupleToComplex(t);
    }
 
    public static Maybe<Func<IObject, IObject>> AutoConversion(string from, string to) => autoConversions.Maybe[(from, to)];

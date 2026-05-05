@@ -262,4 +262,6 @@ public interface IIterator : IEquivalentClass
    IObject Assoc(IObject target);
 
    IObject At(int index);
+
+   IObject DotProduct(ICollection otherCollection);
 }

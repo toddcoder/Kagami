@@ -70,4 +70,25 @@ public static class CommonFunctions
    }
 
    public static string metaName(string className) => $"meta_{className}";
+
+   public static Complex tupleToComplex(IObject t)
+   {
+      if (t is KTuple { Length.Value: 2 } tuple)
+      {
+         var real = tuple[0];
+         var imaginary = tuple[1];
+         if (real is INumeric realNumeric && imaginary is INumeric imaginaryNumeric)
+         {
+            return new Complex(realNumeric.AsDouble(), imaginaryNumeric.AsDouble());
+         }
+         else
+         {
+            throw new Exception("Both elements of the tuple must be Number to convert to Complex.");
+         }
+      }
+      else
+      {
+         throw new Exception("Tuple must have exactly 2 elements to convert to Complex.");
+      }
+   }
 }

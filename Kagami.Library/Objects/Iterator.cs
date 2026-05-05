@@ -3,7 +3,7 @@ using Core.Dates.Now;
 using Core.Enumerables;
 using Core.Monads;
 using Kagami.Library.Classes;
-using Kagami.Library.Packages;
+using Kagami.Library.Operations;
 using Kagami.Library.Runtime;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
@@ -1934,6 +1934,20 @@ public class Iterator : IObject, IIterator
       }
 
       return Some.Object(returnValue);
+   }
+
+   public IObject DotProduct(ICollection otherCollection)
+   {
+      var rightIterator = otherCollection.GetIterator(false);
+      var result = Int.Zero;
+
+      while (Next() is (true, var left) && left is INumeric && rightIterator.Next() is (true, var right) && right is INumeric)
+      {
+         var multiplied = Multiply.Apply(left, right);
+         result = Add.Apply(result, multiplied);
+      }
+
+      return result;
    }
 
    protected static IEnumerable<IObject> applyAgainst(List<Lambda> lambdas, List<IObject> enumerable)

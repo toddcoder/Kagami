@@ -7,9 +7,11 @@ namespace Kagami.Library.Operations;
 
 public class Multiply : TwoOperandOperation
 {
-   public override Optional<IObject> Execute(Machine machine, IObject x, IObject y)
+   public override Optional<IObject> Execute(Machine machine, IObject x, IObject y) => Apply(x, y).Just();
+
+   public static IObject Apply(IObject x, IObject y)
    {
-      return apply(x, y, (a, b) => a * b, (a, b) => a * b, (a, b) => a * b, (a, b) => a.Multiply(b), "*(_)", (k, i) => k.Expand(i)).Just();
+      return apply(x, y, (a, b) => a * b, (a, b) => a * b, (a, b) => a * b, (a, b) => a.Multiply(b), "*(_)", (k, i) => k.Expand(i));
    }
 
    public override string ToString() => "multiply";

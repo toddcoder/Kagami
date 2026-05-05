@@ -579,6 +579,8 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerIterMessage("transpose()", (obj, _) => iteratorFunc(obj, i => i.Transpose()));
       registerIterMessage("assoc(_)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, c) => i.Assoc(c)));
       registerIterMessage("at(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i1, i2) => i1.At(i2.Value)));
+      registerIterMessage("dotProduct(_<Collection>)",
+         (obj, message) => iteratorFunc<IObject>(obj, message, (i1, i2) => i1.DotProduct((ICollection)i2)));
    }
 
    public void typedCollectionMessages()

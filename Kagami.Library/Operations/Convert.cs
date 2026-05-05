@@ -6,6 +6,7 @@ using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
+using static Kagami.Library.CommonFunctions;
 using Arguments = Kagami.Library.Objects.Arguments;
 using Complex = Kagami.Library.Objects.Complex;
 
@@ -32,26 +33,7 @@ public class Convert : Operation
       conversions[("Long", "Rational")] = l => Rational.RationalObject(((Long)l).AsRational());
       conversions[("Char", "Byte")] = c => KByte.ByteObject((byte)((KChar)c).Value);
       conversions[("Int", "Decimal")] = i => KDecimal.KDecimalObject(((Int)i).Value);
-      conversions[("Tuple", "Complex")] = t =>
-      {
-         if (t is KTuple { Length.Value: 2 } tuple)
-         {
-            var real = tuple[0];
-            var imaginary = tuple[1];
-            if (real is INumeric realNumeric && imaginary is INumeric imaginaryNumeric)
-            {
-               return new Complex(realNumeric.AsDouble(), imaginaryNumeric.AsDouble());
-            }
-            else
-            {
-               throw new Exception("Both elements of the tuple must be Number to convert to Complex.");
-            }
-         }
-         else
-         {
-            throw new Exception("Tuple must have exactly 2 elements to convert to Complex.");
-         }
-      };
+      conversions[("Tuple", "Complex")] = t => tupleToComplex(t);
    }
 
    public override Optional<IObject> Execute(Machine machine)

@@ -3,9 +3,11 @@ using Core.Enumerables;
 using Core.Monads;
 using Kagami.Library.Classes;
 using Kagami.Library.Objects;
+using Kagami.Library.Operations;
 using Kagami.Library.Runtime;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
+using Some = Kagami.Library.Objects.Some;
 
 namespace Kagami.Library.Iterators;
 
@@ -442,6 +444,20 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
 
       return Some.Object(returnValue);
    }
+
+   public IObject DotProduct(ICollection otherCollection)
+   {
+      var rightIterator = otherCollection.GetIterator(true);
+      var result = Int.Zero;
+
+      while (Next() is (true, var left) && left is INumeric && rightIterator.Next() is (true, var right) && right is INumeric)
+      {
+         var multiplied = Multiply.Apply(left, right);
+         result = Add.Apply(result, multiplied);
+      }
+
+      return result;
+    }
 
    public TypeConstraint EquivalentTypeConstraint() => Objects.TypeConstraint.FromList("Iterator");
 }
