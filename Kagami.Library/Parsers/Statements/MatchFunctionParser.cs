@@ -58,7 +58,7 @@ public partial class MatchFunctionParser : StatementParser
             }
             else
             {
-               var whenParser = new WhenParser(fieldName);
+               var whenParser = new WhenParser(fieldName, CaseType.Statement);
                var _scan = whenParser.Scan(state);
                if (_scan)
                {
