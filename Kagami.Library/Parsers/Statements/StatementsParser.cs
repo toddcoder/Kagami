@@ -20,6 +20,7 @@ public class StatementsParser : MultiParser
          yield return new NullStatementParser();
          yield return new CommentParser();
          yield return new YieldParser();
+         yield return new ErrorParser();
          yield return new ClassParser();
          yield return new ObjectOrMixinParser();
          yield return new IncludeClassParser();

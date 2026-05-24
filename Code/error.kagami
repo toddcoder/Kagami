@@ -1,0 +1,21 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+error Error1(message string);
+error Error2(message string, code int);
+
+fn erroring(x, y) {
+	if x == y {
+		return Error1("Equal Number Error")
+	}
+	else {
+		return Error2("Error Not detected", 100)
+	}
+}
+
+match function(erroring PError) {
+	| Error1(str) => println $"Error1 $str"
+	| Error2(str, i) => println $"Error2 $str, $i"
+}
+
+function(erroring(20, 10))
+function(erroring(5, 5))

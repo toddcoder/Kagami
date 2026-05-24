@@ -1,18 +1,18 @@
-﻿using Kagami.Library.Classes;
+﻿using Core.Collections;
+using Core.Enumerables;
+using Core.Monads;
+using Core.Numbers;
+using Core.Strings;
+using Kagami.Library.Classes;
 using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using Kagami.Library.Runtime;
-using Core.Collections;
-using Core.Enumerables;
-using Core.Monads;
-using Core.Numbers;
-using Core.Strings;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.CommonFunctions;
-using static Core.Monads.MonadFunctions;
 using DefineNewField = Kagami.Library.Nodes.Statements.DefineNewField;
 using Return = Kagami.Library.Nodes.Statements.Return;
 
@@ -78,9 +78,20 @@ public class ClassBuilder
       return parentArguments.Select(e => e.Symbols[0]).Cast<NameValueSymbol>().Select(nv => nv.Tuple()).ToArray();
    }
 
+   protected void registerParameters()
+   {
+      foreach (var parameter in parameters.Where(p => !p.IsHidden))
+      {
+         foreach (var selector in userClass.RegisterParameter(parameter))
+         {
+            includedSelectors.Add(selector);
+         }
+      }
+   }
+
    protected Block modifyBlock(Block originalBlock, bool standard)
    {
-      userClass.RegisterParameters(parameters);
+      registerParameters();
 
       List<Statement> statements = [];
 

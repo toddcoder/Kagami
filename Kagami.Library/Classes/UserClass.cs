@@ -118,6 +118,27 @@ public class UserClass : BaseClass, IEquatable<UserClass>
       }
    }
 
+   public IEnumerable<Selector> RegisterParameter(Parameter parameter)
+   {
+      var name = parameter.Name;
+      Selector getter = name.get();
+      messages[getter] = (obj, _) => ((UserObject)obj).Fields[name];
+      signatures.Add(getter);
+      yield return getter;
+
+      if (parameter.Mutable)
+      {
+         Selector setter = name.set();
+         messages[setter] = (obj, msg) =>
+         {
+            ((UserObject)obj).Fields[name] = msg.Arguments[0];
+            return msg.Arguments[0];
+         };
+         signatures.Add(setter);
+         yield return setter;
+      }
+   }
+
    public void RegisterParameters(Parameters parameters)
    {
       foreach (var parameter in parameters.Where(p => !p.IsHidden))

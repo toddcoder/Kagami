@@ -1,0 +1,21 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+error DivisionError {
+	override get message => "Divisor cannot be zero."
+}
+
+fn divisionFunc(x, y) result {
+	require y != 0 else return DivisionError()
+	return x / y
+}
+
+fn tryDivisionfunc(x, y) {
+	let res = divisionFunc(x, y)
+	match res {
+		| !x => println x
+		| Failure f => println f.error.message
+	}
+}
+
+tryDivisionfunc(100, 0)
+tryDivisionfunc(100, 4)

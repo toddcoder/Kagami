@@ -421,7 +421,8 @@ public class OperationsBuilder(ParseState state)
 
    public void LastValue() => add(new LastValue());
 
-   public void DefineNewField(bool mutable, string fieldName, TypeConstraint typeConstraint) => add(new DefineNewField(mutable, fieldName, typeConstraint));
+   public void DefineNewField(bool mutable, string fieldName, TypeConstraint typeConstraint) =>
+      add(new DefineNewField(mutable, fieldName, typeConstraint));
 
    public void Increment() => add(new Increment());
 
@@ -444,6 +445,8 @@ public class OperationsBuilder(ParseState state)
    public void ToResult() => add(new ToResult());
 
    public void ProtocolWrap(string protocolName) => add(new ProtocolWrap(protocolName));
+
+   public void PushCallStack() => add(new PushCallStack());
 
    public Result<Operations> ToOperations()
    {
