@@ -3,6 +3,7 @@ using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using System.Text.RegularExpressions;
+using Kagami.Library.Nodes.Symbols;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 using Regex = System.Text.RegularExpressions.Regex;
@@ -11,11 +12,12 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class TypeParser : StatementParser
 {
-   [GeneratedRegex(@$"^(\s*)(type)(\s+)({REGEX_CLASS})\b")]
+   [GeneratedRegex(@$"^(\s*)(type|error)(\s+)({REGEX_CLASS})\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
+      var isError = tokens[2].Text == "error";
       var className = tokens[4].Text;
       state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Class);
 
@@ -98,7 +100,13 @@ public partial class TypeParser : StatementParser
 
       var commonBlock = _block | (() => new Block());
 
-      var enumCreator = new TypeCreator(className, [.. typeMembers], commonBlock);
+      if (isError)
+      {
+         commonBlock.Insert(new AssignToNewField(false, "message", Expression.FromSymbol(new StringSymbol("")), false, false));
+         commonBlock.Insert(new AssignToNewField(false, "callStack", Expression.FromSymbol(new StringSymbol("")), false, false));
+      }
+
+      var enumCreator = new TypeCreator(className, [.. typeMembers], commonBlock, isError);
       var _result = enumCreator.Create();
       if (_result)
       {

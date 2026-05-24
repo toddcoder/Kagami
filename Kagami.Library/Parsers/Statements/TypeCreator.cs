@@ -14,7 +14,7 @@ using Return = Kagami.Library.Nodes.Statements.Return;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public class TypeCreator(string typeName, TypeMemberData[] typeMemberData, Block commonBlock) : Statement
+public class TypeCreator(string typeName, TypeMemberData[] typeMemberData, Block commonBlock, bool isError = false) : Statement
 {
    protected Class typeClass = null!;
    protected MetaClass metaClass = null!;
@@ -24,6 +24,7 @@ public class TypeCreator(string typeName, TypeMemberData[] typeMemberData, Block
    public Optional<Unit> Create()
    {
       var builder = new ClassBuilder(typeName, Parameters.Empty, "", [], false, new Block());
+
       var _registered = builder.Register();
       if (!_registered)
       {
@@ -45,6 +46,10 @@ public class TypeCreator(string typeName, TypeMemberData[] typeMemberData, Block
          if (_classBuilder is (true, var classBuilder))
          {
             builders.Add(classBuilder);
+            if (isError)
+            {
+               builder.AddProtocol("PError");
+            }
          }
          else
          {

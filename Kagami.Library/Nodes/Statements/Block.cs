@@ -189,6 +189,10 @@ public class Block : Statement, IEnumerable<Statement>
       return block;
    }
 
+   public void Insert(int index, Statement statement) => statements.Insert(index, statement);
+
+   public void Insert(Statement statement) => statements.Insert(0, statement);
+
    public void InsertSelfAlias(string aliasName)
    {
       var symbol = new FieldSymbol("self");
