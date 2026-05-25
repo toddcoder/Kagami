@@ -8,7 +8,6 @@ using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.CommonFunctions;
 using Arguments = Kagami.Library.Objects.Arguments;
-using Complex = Kagami.Library.Objects.Complex;
 
 namespace Kagami.Library.Operations;
 
@@ -34,6 +33,7 @@ public class Convert : Operation
       conversions[("Char", "Byte")] = c => KByte.ByteObject((byte)((KChar)c).Value);
       conversions[("Int", "Decimal")] = i => KDecimal.KDecimalObject(((Int)i).Value);
       conversions[("Tuple", "Complex")] = t => tupleToComplex(t);
+      conversions[("Long", "Float")] = l => Float.FloatObject(((Long)l).AsDouble());
    }
 
    public override Optional<IObject> Execute(Machine machine)
