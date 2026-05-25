@@ -1,0 +1,24 @@
+﻿protocol Protocol1 {
+	fn doubleIt(i int)
+}
+
+protocol Protocol2 {
+	fn tripleIt(i int)
+}
+
+protocol Protocol3 : Protocol1, Protocol2 {
+	fn printIt(i int)
+}
+
+class Multiplier {
+	fn doubleIt(a int) => 2 * a
+	fn tripleIt(a int) => 3 * a
+	fn printIt(a int) => a.string
+}
+does Protocol3
+
+let ml = Multiplier()
+let p3 = //Protocol3 ml
+println p3.doubleIt(5)
+println p3.tripleIt(5)
+println p3.printIt(5)
