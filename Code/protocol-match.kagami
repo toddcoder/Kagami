@@ -1,0 +1,13 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+match getType(x) string {
+	| String return "x is a string"
+	| Int return "x is an int"
+	| PError return "x is an error"
+}
+
+error Error1(message string);
+
+println getType("foobar")
+println getType(42)
+println getType(Error1("error"))

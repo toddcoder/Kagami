@@ -1,0 +1,4 @@
+x is a string
+x is an int
+x is an error
+"x is an error" | String
