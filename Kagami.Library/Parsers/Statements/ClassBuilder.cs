@@ -13,6 +13,7 @@ using Kagami.Library.Runtime;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.CommonFunctions;
+using static Kagami.Library.Objects.ObjectFunctions;
 using DefineNewField = Kagami.Library.Nodes.Statements.DefineNewField;
 using Return = Kagami.Library.Nodes.Statements.Return;
 
@@ -351,6 +352,11 @@ public class ClassBuilder
             case RequiredField requiredField:
                requiredFields[requiredField.FieldName] = requiredField;
                break;
+            case CreateEvent createEvent:
+            {
+               processField(createEvent.EventName, TypeConstraint.SingleType(classOf("Event")), false, false, statement);
+               break;
+            }
             default:
                statements.Add(statement);
                break;

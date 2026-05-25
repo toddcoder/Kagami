@@ -1,4 +1,6 @@
-﻿protocol Protocol1 {
+﻿open sys
+
+protocol Protocol1 {
 	fn doubleIt(i int)
 }
 
@@ -19,6 +21,6 @@ does Protocol3
 
 let ml = Multiplier()
 let p3 = //Protocol3 ml
-println p3.doubleIt(5)
-println p3.tripleIt(5)
-println p3.printIt(5)
+println(p3.doubleIt(5))
+println(p3.tripleIt(5))
+println(p3.printIt(5))

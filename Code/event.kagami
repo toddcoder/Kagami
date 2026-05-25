@@ -1,0 +1,27 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+class Worker(hide name string, hide shift string) {
+	event nameChanged
+	event shiftChanged
+
+	auto var name string = name
+	set {
+		field = value
+		nameChanged(field)
+	}
+
+	auto var shift string = shift
+	set {
+		field = value
+		shiftChanged(field)
+	}
+}
+
+let wk = Worker("Wilson", "Evening")
+wk.nameChanged.handler = {(n) println $"Changed name $n"}
+wk.shiftChanged.handler = {(s) println $"Changed shift $s"}
+
+wk.name = "William"
+wk.name = "Bill"
+wk.shift = "Morning"
+wk.shift = "Night"
