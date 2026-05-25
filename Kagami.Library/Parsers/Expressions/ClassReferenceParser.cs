@@ -2,8 +2,10 @@
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Runtime;
 using Core.Monads;
+using Kagami.Library.Objects;
 using static Kagami.Library.Parsers.ParserFunctions;
 using static Core.Monads.MonadFunctions;
+using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Expressions;
 
@@ -15,6 +17,7 @@ public partial class ClassReferenceParser : SymbolParser
       {
          builder.Add(new FieldSymbol(className));
       }
+
       if (Module.Global.Value.Class(className) is (true, var cls))
       {
          builder.Add(new ClassSymbol(cls.Name));
@@ -35,11 +38,17 @@ public partial class ClassReferenceParser : SymbolParser
          builder.Add(new FieldSymbol(className));
          return unit;
       }
+      else if (Protocols.Protocols.Get(className))
+      {
+         builder.Add(new PushObjectSymbol(new ProtocolConstraint(className)));
+         return unit;
+      }
       else
       {
          return nil;
       }
    }
+
    public ClassReferenceParser(ExpressionBuilder builder) : base(builder)
    {
    }

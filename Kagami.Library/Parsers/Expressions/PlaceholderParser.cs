@@ -2,8 +2,10 @@
 using Core.Matching;
 using Kagami.Library.Nodes.Symbols;
 using Core.Monads;
+using Kagami.Library.Objects;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
+using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Expressions;
 
@@ -49,7 +51,8 @@ public partial class PlaceholderParser : SymbolParser
                   if (_fieldResult is (true, var fieldName))
                   {
                      var expression =
-                        new Expression(new NameValueSymbol(fieldName.Trim(), new Expression(new InvokeSymbol(placeholderName, arguments, nil, true))));
+                        new Expression(new NameValueSymbol(fieldName.Trim(),
+                           new Expression(new InvokeSymbol(placeholderName, arguments, nil, true))));
                      builder.Add(expression);
                   }
                   else
@@ -84,6 +87,10 @@ public partial class PlaceholderParser : SymbolParser
                {
                   return _fieldResult.Exception;
                }
+            }
+            else if (Protocols.Protocols.Get(placeholderName))
+            {
+               builder.Add(new PushObjectSymbol(new ProtocolConstraint(placeholderName)));
             }
             else
             {
