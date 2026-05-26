@@ -1,0 +1,28 @@
+﻿enum ApplicationEnv {linux mac windows}
+
+var fireFox = {ApplicationEnv.linux, ApplicationEnv.windows}
+var superTux = {ApplicationEnv.linux}
+var delphi = {ApplicationEnv.windows}
+var lazarus = {ApplicationEnv.linux, ApplicationEnv.mac, ApplicationEnv.windows}
+
+if ApplicationEnv.linux in lazarus {
+	println "linux in lazarus"
+}
+else {
+	println "linux not in lazarus"
+}
+
+if ApplicationEnv.linux in superTux {
+	println "linux in supertux"
+}
+else {
+	println "linux not in supertux"
+}
+
+if ApplicationEnv.mac in superTux {
+	println "mac in supertux"
+}
+else {
+	println "mac not in supertux"
+}
+
