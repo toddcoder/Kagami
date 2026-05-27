@@ -1,4 +1,6 @@
-﻿enum ApplicationEnv {linux mac windows}
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+enum ApplicationEnv {linux mac windows}
 
 var fireFox = {ApplicationEnv.linux, ApplicationEnv.windows}
 var superTux = {ApplicationEnv.linux}

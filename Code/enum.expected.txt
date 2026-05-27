@@ -1,1 +1,4 @@
-Execute error: Field println not found
+linux in lazarus
+linux in supertux
+mac not in supertux
+"mac not in supertux" | String

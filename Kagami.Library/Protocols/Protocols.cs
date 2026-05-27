@@ -1,5 +1,6 @@
 ﻿using Core.Collections;
 using Core.Monads;
+using Kagami.Library.Classes;
 using Kagami.Library.Objects;
 using static Kagami.Library.AllExceptions;
 
@@ -8,13 +9,6 @@ namespace Kagami.Library.Protocols;
 public static class Protocols
 {
    private static StringHash<Protocol> protocols = [];
-
-   /*
-   static Protocols()
-   {
-      Clear();
-   }
-   */
 
    public static Maybe<Protocol> Get(string protocolName) => protocols.Maybe[protocolName];
 
@@ -27,6 +21,18 @@ public static class Protocols
       if (protocols.Maybe[protocolName] is (true, var protocol))
       {
          return protocol.Supports(obj);
+      }
+      else
+      {
+         return false;
+      }
+   }
+
+   public static bool Supports(string protocolName, BaseClass baseClass)
+   {
+      if (protocols.Maybe[protocolName] is (true, var protocol))
+      {
+         return protocol.Supports(baseClass);
       }
       else
       {

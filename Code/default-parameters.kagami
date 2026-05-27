@@ -1,0 +1,7 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+fn sumAll(a int, b int, c int = 0, d int = 0) int => a + b + c + d
+
+println sumAll(1, 2, 3, 4)
+println sumAll(1, 2, 3)
+println sumAll(1, 2)

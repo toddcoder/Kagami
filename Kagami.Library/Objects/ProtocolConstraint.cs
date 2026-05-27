@@ -36,6 +36,8 @@ public class ProtocolConstraint(string protocolName) : TypeConstraint([])
 
    public override string AsString => protocolName;
 
+   public override string Image => $"<{protocolName}>";
+
    public override Maybe<IObject> ConvertToMonad(IObject value)
    {
       return protocolName switch

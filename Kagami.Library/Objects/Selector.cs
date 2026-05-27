@@ -117,7 +117,7 @@ public struct Selector : IObject, IEquatable<Selector>
                   select (leftConstraint, rightConstraint);
                if (_result is (true, var (left, right)) && !left.IsEquivalentTo(right))
                {
-                  return false;
+                  return Protocols.Protocols.Supports(right.Comparisands[0].Name, left.Comparisands[0]);
                }
             }
 

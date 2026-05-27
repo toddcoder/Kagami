@@ -776,7 +776,7 @@ public static class ObjectFunctions
          source = match.Groups[2].Value;
       }
 
-      if (source.MatchOf("^<([^>]+)>(.*)$") is (true, var matches3))
+      if (source.MatchOf("<([^>]+)>(.*)$") is (true, var matches3))
       {
          var match = matches3[0];
          var classNames = match.Groups[1].Value.Unjoin("/s+");
@@ -802,7 +802,7 @@ public static class ObjectFunctions
       var labelArray = labels ?? [];
       var objectsArray = objects ?? [];
       var enumerable = labelArray.Zip(objectsArray, (l, o) => (l.IsNotEmpty() ? $"{l}:" : "") + $"_{getType(o)}");
-      var selectItems = enumerable.Select(parseSelectorItem).ToArray();
+      SelectorItem[] selectItems = [.. enumerable.Select(parseSelectorItem)];
 
       return new Selector(name, selectItems, selectorImage(name, selectItems));
 
