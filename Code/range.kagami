@@ -1,0 +1,4 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+var l = 1 range ($0 * 2)
+println [l{:17}]
