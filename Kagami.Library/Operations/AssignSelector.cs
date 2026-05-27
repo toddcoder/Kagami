@@ -18,10 +18,9 @@ public class AssignSelector : OneOperandOperation
 
    public override Optional<IObject> Execute(Machine machine, IObject value)
    {
-      var createNewField = false;
       foreach (var subSelector in selector.AllSelectors().Distinct())
       {
-         if (createNewField)
+         if (!machine.CurrentFrame.Fields.SelectorExists(subSelector))
          {
             var _fields = machine.CurrentFrame.Fields.NewSelector(subSelector, FieldType.Function, overriding: overriding);
             if (!_fields)
@@ -31,11 +30,7 @@ public class AssignSelector : OneOperandOperation
          }
 
          var _field = machine.Assign(subSelector, value, overriding);
-         if (_field)
-         {
-            createNewField = true;
-         }
-         else
+         if (!_field)
          {
             return _field.Exception;
          }

@@ -1,4 +1,4 @@
-!3
-100 is of class Int; expected PLength
-!5
-!5 | Success
+Unassigned is of class Unassigned; expected Invokable object
+Unassigned is of class Unassigned; expected Invokable object
+Unassigned is of class Unassigned; expected Invokable object
+f"Unassigned is of class Unassigned; expected Invokable object" | Failure

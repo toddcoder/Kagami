@@ -142,6 +142,8 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       return New(name, refField);
    }
 
+   public bool SelectorExists(Selector selector) => fields.Maybe[selector];
+
    public Result<Field> NewSelector(Selector selector, FieldType type, bool mutable = false, bool visible = true, bool overriding = false)
    {
       if (fields.Maybe[selector] is (true, var foundField))

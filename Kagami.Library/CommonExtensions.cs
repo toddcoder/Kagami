@@ -65,4 +65,20 @@ public static class CommonExtensions
          _ => ""
       };
    }
+
+   extension<T>(List<T> list) where T : notnull
+   {
+      public bool RemoveLast()
+      {
+         if (list.Count == 0)
+         {
+            return false;
+         }
+         else
+         {
+            list.RemoveAt(list.Count - 1);
+            return true;
+         }
+      }
+   }
 }

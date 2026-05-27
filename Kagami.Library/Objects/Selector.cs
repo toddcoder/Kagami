@@ -182,7 +182,52 @@ public struct Selector : IObject, IEquatable<Selector>
          yield break;
       }
 
-      while (items.Count > 0)
+      if (items[^1].SelectorItemType == SelectorItemType.Variadic)
+      {
+         yield return getSelector(name);
+
+         items[^1] = items[^1].AsNormal();
+         yield return getSelector(name);
+
+         if (!items.RemoveLast())
+         {
+            yield break;
+         }
+      }
+
+      if (items.FirstIndexOrNone(i => i.SelectorItemType == SelectorItemType.Default) is (true, var defaultIndex))
+      {
+         for (var i = defaultIndex; i < items.Count; i++)
+         {
+            items[i] = items[i].AsNormal();
+         }
+
+         var countLimit = defaultIndex;
+
+         while (items.Count >= countLimit)
+         {
+            yield return getSelector(name);
+
+            if (getMonadSelector(name) is (true, var defaultMonadSelector))
+            {
+               yield return defaultMonadSelector;
+            }
+
+            if (!items.RemoveLast())
+            {
+               break;
+            }
+         }
+      }
+
+      yield return getSelector(name);
+
+      if (getMonadSelector(name) is (true, var monadSelector))
+      {
+         yield return monadSelector;
+      }
+
+      /*while (items.Count > 0)
       {
          switch (items[^1].SelectorItemType)
          {
@@ -231,7 +276,7 @@ public struct Selector : IObject, IEquatable<Selector>
                break;
             }
          }
-      }
+      }*/
 
       yield break;
 
@@ -245,7 +290,7 @@ public struct Selector : IObject, IEquatable<Selector>
 
       Maybe<Selector> getMonadSelector(string name)
       {
-         if (items[^1].TypeConstraint is (true, var typeConstraint))
+         if (items.Count > 0 && items[^1].TypeConstraint is (true, var typeConstraint))
          {
             var baseClass = typeConstraint.Comparisands[0];
             if (isMonad(baseClass.Name))
