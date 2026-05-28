@@ -172,7 +172,7 @@ public partial class Playground : Form
          menus.Menu("put", (_, _) => insertText("put ", 0, 0));
          menus.Menu("peek()", (_, _) => surround("peek(", ")"), "^K");
          menus.Menu("Triple quotes", (_, _) => insertText("\"\"\"\n\"\"\"", -3), "^Q");
-         menus.Menu("Insert Pragma", (_, _) => insertText("\n#pragma ALLOW_PRINT_STATEMENT true\n", 0, 0));
+         menus.Menu("Insert Pragma", (_, _) => insertText("#pragma ALLOW_PRINT_STATEMENT true\n\n", 0, 0));
 
          menus.Menu("&Debug");
          menus.Menu("Step Into", (_, _) => stepInto(), "F11");
