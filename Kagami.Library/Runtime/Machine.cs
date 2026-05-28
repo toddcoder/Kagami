@@ -75,6 +75,18 @@ public class Machine
 
    public string CallStack => stack.Peek().ToString();
 
+   protected Optional<IObject> execute(Operation operation)
+   {
+      try
+      {
+         return operation.Execute(this);
+      }
+      catch (Exception exception)
+      {
+         return exception;
+      }
+   }
+
    public Result<IObject> Execute()
    {
       try
@@ -100,7 +112,7 @@ public class Machine
 #if !NO_TRACE
                trace(operations.Address, () => operation.ToString() ?? "");
 #endif
-               var _result = operation.Execute(this);
+               var _result = execute(operation);
                if (_result is (true, var result) && running && result.ClassName != "Void")
                {
                   var address = operations.Address;
@@ -367,7 +379,7 @@ public class Machine
                }
             }
 
-            var _result = operation.Execute(this);
+            var _result = execute(operation);
             if (_result is (true, var result) && running)
             {
                var address = operations.Address;

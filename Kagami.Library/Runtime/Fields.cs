@@ -7,6 +7,7 @@ using Core.Strings;
 using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using System.Collections;
+using Kagami.Library.Nodes.Symbols;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Nodes.NodeFunctions;
@@ -109,19 +110,35 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       });
    }
 
-    public Result<Field> New(string name, FieldType type, Maybe<TypeConstraint> typeConstraint, IObject value, bool mutable, bool visible)
-    {
-       return New(name, new Field
-       {
-          Value = value,
-          Mutable = mutable,
-          Visible = visible,
-          TypeConstraint = typeConstraint,
-          Type = type
-       });
-    }
+   public Result<Field> NewGuarded(string name, FieldType type, Maybe<TypeConstraint> typeConstraint, Lambda predicate, bool mutable = false,
+      bool visible = true)
+   {
+      var field = new GuardedField(name, predicate)
+         { Value = Unassigned.Value, Mutable = mutable, Visible = visible, TypeConstraint = typeConstraint, Type = type };
+      if (fields.ContainsKey(name) && !field.Tolerant)
+      {
+         return fieldAlreadyExists(name);
+      }
+      else
+      {
+         fields[name] = field;
+         return field;
+      }
+   }
 
-    public Result<Field> NewOrAssign(string name, FieldType type, IObject value, bool mutable = false, bool visible = true)
+   public Result<Field> New(string name, FieldType type, Maybe<TypeConstraint> typeConstraint, IObject value, bool mutable, bool visible)
+   {
+      return New(name, new Field
+      {
+         Value = value,
+         Mutable = mutable,
+         Visible = visible,
+         TypeConstraint = typeConstraint,
+         Type = type
+      });
+   }
+
+   public Result<Field> NewOrAssign(string name, FieldType type, IObject value, bool mutable = false, bool visible = true)
    {
       if (fields.Maybe[name] is (true, var field))
       {

@@ -304,13 +304,17 @@ public static class AllExceptions
       return fail(messageProtocolNotImplemented(className, protocolName, missingSelectors));
    }
 
-    public static string messageProtocolNotImplemented(string className, string protocolName)
-    {
-       return $"{className} doesn't implement protocol {protocolName}";
-    }
+   public static string messageProtocolNotImplemented(string className, string protocolName)
+   {
+      return $"{className} doesn't implement protocol {protocolName}";
+   }
 
-    public static Exception protocolNotImplemented(string className, string protocolName)
-    {
-       return fail(messageProtocolNotImplemented(className, protocolName));
-    }
+   public static Exception protocolNotImplemented(string className, string protocolName)
+   {
+      return fail(messageProtocolNotImplemented(className, protocolName));
+   }
+
+   public static string messageGuardedFieldPredicateFailed(string fieldName) => $"Guarded field {fieldName} predicate failed";
+
+   public static Exception guardedFieldPredicateFailed(string fieldName) => fail(messageGuardedFieldPredicateFailed(fieldName));
 }
