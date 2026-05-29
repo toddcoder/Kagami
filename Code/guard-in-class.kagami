@@ -1,0 +1,36 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+subtype NotEmpty(s string) => s.isNotEmpty
+
+class Employee(hide ename string) {
+	guard var name NotEmpty = ename
+	guard var id int = 0 if id.string.endsWith("0")
+	get string => $"Employee $name \($id)"
+}
+
+attempt {
+	let employee = Employee("Bob")
+	employee.id = 100
+	println employee
+}
+catch e {
+	println $"error 1: $e"
+}
+
+attempt {
+	let employee = Employee("Erin")
+	employee.id = 101
+	println employee
+}
+catch e {
+	println $"error 2: $e"
+}
+
+attempt {
+	let employee = Employee("")
+	employee.id = 200
+	println employee
+}
+catch e {
+	println $"error 3: $e"
+}

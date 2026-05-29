@@ -357,6 +357,12 @@ public class ClassBuilder
                processField(createEvent.EventName, TypeConstraint.SingleType(classOf("Event")), false, false, statement);
                break;
             }
+            case AssignToNewGuardedField assignToNewGuardedField:
+            {
+               processField(assignToNewGuardedField.FieldName, assignToNewGuardedField.TypeConstraint, assignToNewGuardedField.Mutable,
+                  assignToNewGuardedField.IsOverride, statement);
+               break;
+            }
             default:
                statements.Add(statement);
                break;

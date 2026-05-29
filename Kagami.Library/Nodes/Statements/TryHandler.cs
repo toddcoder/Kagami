@@ -12,7 +12,7 @@ public class TryHandler(Block block, Block handler, Maybe<string> _errorField, M
       var errorLabel = newLabel("error");
       var endLabel = newLabel("end");
 
-      builder.TryBegin(tryLabel);
+      builder.TryBegin(endLabel);
       builder.SetErrorHandler(errorLabel);
       block.Generate(builder);
       builder.Label(tryLabel);

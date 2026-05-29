@@ -16,6 +16,8 @@ public class AssignToNewGuardedField : AssignToNewField
       this.predicate = predicate;
    }
 
+   public Maybe<TypeConstraint> TypeConstraint => _typeConstraint;
+
    public override void Generate(OperationsBuilder builder)
    {
       predicate.Generate(builder);
