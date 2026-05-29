@@ -317,4 +317,8 @@ public static class AllExceptions
    public static string messageGuardedFieldPredicateFailed(string fieldName) => $"Guarded field {fieldName} predicate failed";
 
    public static Exception guardedFieldPredicateFailed(string fieldName) => fail(messageGuardedFieldPredicateFailed(fieldName));
+
+   public static string messageSubtypeNotFound(string subtypeName) => $"Subtype {subtypeName} not found";
+
+   public static Exception subtypeNotFound(string subtypeName) => fail(messageSubtypeNotFound(subtypeName));
 }
