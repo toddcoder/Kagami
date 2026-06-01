@@ -58,9 +58,9 @@ public partial class AssignToNewFieldParser : StatementParser
             if (_typeConstraint is (true, SubtypeConstraint subtypeConstraint))
             {
                var subtype = subtypeConstraint.Subtype;
-               var (lambdaSymbol, typeConstraint) = subtype;
+               var (lambdaSymbol, typeConstraint, failure) = subtype;
                var assignToNewGuardedField =
-                  new AssignToNewGuardedField(mutable, fieldName, expression, typeConstraint, isHidden, isOverride, lambdaSymbol);
+                  new AssignToNewGuardedField(mutable, fieldName, expression, typeConstraint, isHidden, isOverride, lambdaSymbol, failure);
                if (isParam)
                {
                   state.RegisterParameter(assignToNewGuardedField);
@@ -97,8 +97,8 @@ public partial class AssignToNewFieldParser : StatementParser
          if (typeConstraint is SubtypeConstraint subtypeConstraint && subtypeConstraint.Subtype.typeConstraint)
          {
             var subtype = subtypeConstraint.Subtype;
-            var (lambdaSymbol, subtypeTypeConstraint) = subtype;
-            var defineNewGuardedField = new DefineNewGuardedField(mutable, fieldName, subtypeTypeConstraint, isHidden, isOverride, lambdaSymbol);
+            var (lambdaSymbol, subtypeTypeConstraint, failure) = subtype;
+            var defineNewGuardedField = new DefineNewGuardedField(mutable, fieldName, subtypeTypeConstraint, isHidden, isOverride, lambdaSymbol, failure);
             if (isParam)
             {
                state.RegisterParameter(defineNewGuardedField);

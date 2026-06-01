@@ -110,10 +110,10 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       });
    }
 
-   public Result<Field> NewGuarded(string name, FieldType type, Maybe<TypeConstraint> typeConstraint, Lambda predicate, bool mutable = false,
-      bool visible = true)
+   public Result<Field> NewGuarded(string name, FieldType type, Maybe<TypeConstraint> typeConstraint, Lambda predicate, Maybe<IObject> _failure,
+      bool mutable = false, bool visible = true)
    {
-      var field = new GuardedField(name, predicate)
+      var field = new GuardedField(name, predicate, _failure)
          { Value = Unassigned.Value, Mutable = mutable, Visible = visible, TypeConstraint = typeConstraint, Type = type };
       if (fields.ContainsKey(name) && !field.Tolerant)
       {

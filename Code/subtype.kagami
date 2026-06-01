@@ -1,13 +1,19 @@
-﻿#pragma ALLOW_PRINT_STATEMENT true
-
-subtype DivByTen(x int) => x %% 10
-var x DivByTen = 10
-println x
-
-attempt {
-	x = 11
-	println x
+﻿protocol PFigure3D {
+	get area
+	get depth
+	get volume
 }
-catch err {
-	println err
+
+class Cube(width float) {
+	get area => width ^ 2
+	get depth => width
+	get volume => area * depth
 }
+does PFigure3D
+
+class Cylinder(radius int, hide depth float) {
+	get area => math.pi * radius ^ 2
+	get depth => depth
+	get volume => area * depth
+}
+does PFigure3D

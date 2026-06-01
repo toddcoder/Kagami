@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Nodes.Symbols;
+﻿using Core.Monads;
+using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using Kagami.Library.Runtime;
@@ -6,7 +7,7 @@ using Kagami.Library.Runtime;
 namespace Kagami.Library.Nodes.Statements;
 
 public class DefineNewGuardedField(bool mutable, string fieldName, TypeConstraint typeConstraint, bool isHidden, bool isOverride,
-   LambdaSymbol predicate) : DefineNewField(mutable, fieldName, typeConstraint, isHidden, isOverride, false)
+   LambdaSymbol predicate, Maybe<Expression> failure) : DefineNewField(mutable, fieldName, typeConstraint, isHidden, isOverride, false)
 {
    public override void Generate(OperationsBuilder builder)
    {
@@ -24,6 +25,6 @@ public class DefineNewGuardedField(bool mutable, string fieldName, TypeConstrain
       }
 
       Module.Global.Value.ForwardReference(fieldName);
-      builder.StoreGuardedField(fieldName, mutable, true, typeConstraint);
+      builder.StoreGuardedField(fieldName, mutable, true, typeConstraint, failure);
    }
 }

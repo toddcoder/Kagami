@@ -6,14 +6,22 @@ using static Kagami.Library.AllExceptions;
 
 namespace Kagami.Library.Operations;
 
-public class StoreGuardedField(string fieldName, bool mutable, bool visible, Maybe<TypeConstraint> _typeConstraint) : TwoOperandOperation
+public class StoreGuardedField(string fieldName, bool mutable, bool visible, Maybe<TypeConstraint> _typeConstraint, bool popFailure)
+   : TwoOperandOperation
 {
    public override Optional<IObject> Execute(Machine machine, IObject x, IObject y)
    {
+      Maybe<IObject> _failure = nil;
+      if (popFailure)
+      {
+         _failure = machine.Pop().Maybe();
+      }
+
       if (x is Lambda predicate)
       {
          var _result =
-            from newField in machine.CurrentFrame.Fields.NewGuarded(fieldName, FieldType.Assignment, _typeConstraint, predicate, mutable, visible)
+            from newField in machine.CurrentFrame.Fields.NewGuarded(fieldName, FieldType.Assignment, _typeConstraint, predicate, _failure, mutable,
+               visible)
             from assigned in machine.Assign(fieldName, y, false)
             select unit;
          if (_result)

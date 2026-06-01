@@ -868,6 +868,26 @@ public static class ParserFunctions
          select (PossibleTypeConstraint)new PossibleTypeConstraint.Some(new SubtypeConstraint(subtypeName));
    }
 
+   public static Optional<PossibleFailure> parseFailure(ParseState state)
+   {
+      var _result =
+         from scanned in state.Scan(@"^(\s*)(but)\b", Color.Whitespace, Color.Keyword)
+         from expression in getExpression(state, ExpressionFlags.Standard)
+         select (PossibleFailure)new PossibleFailure.Some(expression);
+      if (_result)
+      {
+         return _result;
+      }
+      else if (_result.Exception is (true, var exception))
+      {
+         return exception;
+      }
+      else
+      {
+         return new PossibleFailure.None();
+      }
+   }
+
    public static Optional<PossibleTypeConstraint> parseTypeConstraint(ParseState state, TypeTailEnd tailEnd = TypeTailEnd.None)
    {
       state.BeginTransaction();

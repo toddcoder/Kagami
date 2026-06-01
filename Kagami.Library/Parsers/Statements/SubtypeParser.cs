@@ -30,14 +30,15 @@ public partial class SubtypeParser : StatementParser
          var _block =
             from scanned in state.Scan(@"^(\s*)(=)")
             from blockValue in getAnyBlock(state)
-            select blockValue;
-         if (_block is (true, var block))
+            from possibleFailure in parseFailure(state)
+            select (blockValue, possibleFailure);
+         if (_block is (true, var (block, failure)))
          {
             state.RemoveReturnType();
             state.RemoveYieldFlag();
 
             block.AddReturnIf();
-            Guards.Subtype.Set(subtypeName, new LambdaSymbol(parameters, block), parameters[0].TypeConstraint);
+            Guards.Subtype.Set(subtypeName, new LambdaSymbol(parameters, block), parameters[0].TypeConstraint, failure.Maybe);
 
             return unit;
          }

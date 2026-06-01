@@ -198,7 +198,7 @@ public class OperationsBuilder(ParseState state)
       add(new NewField(name, mutable, visible, nil));
    }
 
-   public void NewFieldTolerant(string name, bool mutable, bool visible, Maybe<TypeConstraint> _typeConstraint) =>
+   public void NewFieldTolerant(string name, bool mutable, bool visible, Maybe<TypeConstraint> _typeConstraint, Maybe<IObject> _failure) =>
       add(new NewFieldTolerant(name, mutable, visible, _typeConstraint));
 
    public void NewFieldTolerant(string name, bool mutable, bool visible) => add(new NewFieldTolerant(name, mutable, visible, nil));
@@ -207,11 +207,15 @@ public class OperationsBuilder(ParseState state)
 
    public void AssignField(string name, bool overriding) => add(new AssignField(name, overriding));
 
-   public void StoreField(string name, bool mutable, bool visible, Maybe<TypeConstraint> _typeConstraint) =>
+   public void StoreField(string name, bool mutable, bool visible, Maybe<TypeConstraint> _typeConstraint)
+   {
       add(new StoreField(name, mutable, visible, _typeConstraint));
+   }
 
-   public void StoreGuardedField(string name, bool mutable, bool visible, Maybe<TypeConstraint> _typeConstraint) =>
-      add(new StoreGuardedField(name, mutable, visible, _typeConstraint));
+   public void StoreGuardedField(string name, bool mutable, bool visible, Maybe<TypeConstraint> _typeConstraint, bool failure)
+   {
+      add(new StoreGuardedField(name, mutable, visible, _typeConstraint, failure));
+   }
 
    public void AssignSelector(Selector selector, bool overriding) => add(new AssignSelector(selector, overriding));
 

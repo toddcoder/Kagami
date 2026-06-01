@@ -6,9 +6,9 @@ namespace Kagami.Library.Objects;
 
 public class SubtypeConstraint(string subtypeName) : TypeConstraint([])
 {
-   protected Lazy<(LambdaSymbol lambdaSymbol, Maybe<TypeConstraint> typeConstraint)> subtype = new(() => Guards.Subtype.GetOrThrow(subtypeName));
+   protected Lazy<(LambdaSymbol lambdaSymbol, Maybe<TypeConstraint> typeConstraint, Maybe<Expression> failure)> subtype = new(() => Guards.Subtype.GetOrThrow(subtypeName));
 
-   public (LambdaSymbol lambdaSymbol, Maybe<TypeConstraint> typeConstraint) Subtype => subtype.Value;
+   public (LambdaSymbol lambdaSymbol, Maybe<TypeConstraint> typeConstraint, Maybe<Expression> failure) Subtype => subtype.Value;
 
    public override int Hash => subtype.Value.GetHashCode();
 

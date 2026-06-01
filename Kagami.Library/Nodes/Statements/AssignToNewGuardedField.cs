@@ -9,17 +9,25 @@ namespace Kagami.Library.Nodes.Statements;
 public class AssignToNewGuardedField : AssignToNewField
 {
    protected LambdaSymbol predicate;
+   protected Maybe<Expression> _failure;
 
    public AssignToNewGuardedField(bool mutable, string fieldName, Expression expression, Maybe<TypeConstraint> _typeConstraint, bool isHidden,
-      bool isOverride, LambdaSymbol predicate) : base(mutable, fieldName, expression, _typeConstraint, isHidden, isOverride)
+      bool isOverride, LambdaSymbol predicate, Maybe<Expression> _failure) : base(mutable, fieldName, expression, _typeConstraint, isHidden,
+      isOverride)
    {
       this.predicate = predicate;
+      this._failure = _failure;
    }
 
    public Maybe<TypeConstraint> TypeConstraint => _typeConstraint;
 
    public override void Generate(OperationsBuilder builder)
    {
+      if (_failure is (true, var failure))
+      {
+         failure.Generate(builder);
+      }
+
       predicate.Generate(builder);
       expression.Generate(builder);
 
@@ -37,6 +45,6 @@ public class AssignToNewGuardedField : AssignToNewField
       }
 
       Module.Global.Value.ForwardReference(fieldName);
-      builder.StoreGuardedField(fieldName, mutable, true, _typeConstraint);
+      builder.StoreGuardedField(fieldName, mutable, true, _typeConstraint, _failure);
    }
 }
