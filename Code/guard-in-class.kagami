@@ -1,10 +1,11 @@
 ﻿#pragma ALLOW_PRINT_STATEMENT true
 
 subtype NotEmpty(s string) => s.isNotEmpty
+subtype EndsIn0(i int) => i.string.endsWith("0")
 
 class Employee(hide ename string) {
-	guard var name NotEmpty = ename
-	guard var id int = 0 if id.string.endsWith("0")
+	var name NotEmpty = ename
+	var id EndsIn0
 	get string => $"Employee $name \($id)"
 }
 

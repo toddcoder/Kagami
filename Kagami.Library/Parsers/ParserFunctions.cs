@@ -860,10 +860,30 @@ public static class ParserFunctions
          select (PossibleTypeConstraint)new PossibleTypeConstraint.Some(new ProtocolConstraint(protocolName));
    }
 
+   private static Optional<PossibleTypeConstraint> parseSubtypeTypeConstraint(ParseState state)
+   {
+      return
+         from subtypeName in state.Scan(@$"^(\s*)({REGEX_CLASS})\b", 2, Color.Whitespace, Color.Class)
+         from subtype in Guards.Subtype.Get(subtypeName)
+         select (PossibleTypeConstraint)new PossibleTypeConstraint.Some(new SubtypeConstraint(subtypeName));
+   }
+
    public static Optional<PossibleTypeConstraint> parseTypeConstraint(ParseState state, TypeTailEnd tailEnd = TypeTailEnd.None)
    {
       state.BeginTransaction();
+
       var _result = parseProtocolTypeConstraint(state);
+      if (_result)
+      {
+         state.CommitTransaction();
+         return _result;
+      }
+
+      state.RollBackTransaction();
+
+      state.BeginTransaction();
+
+      _result = parseSubtypeTypeConstraint(state);
       if (_result)
       {
          state.CommitTransaction();

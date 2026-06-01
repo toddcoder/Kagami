@@ -1,11 +1,12 @@
-﻿using System.Text.RegularExpressions;
+﻿using Core.Monads;
+using Core.Strings;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Objects;
-using Core.Monads;
-using Core.Strings;
 using Kagami.Library.Parsers.Expressions;
-using static Kagami.Library.Parsers.ParserFunctions;
+using System.Text.RegularExpressions;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.Parsers.ParserFunctions;
+using DefineNewField = Kagami.Library.Nodes.Statements.DefineNewField;
 using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Statements;
@@ -54,14 +55,32 @@ public partial class AssignToNewFieldParser : StatementParser
             select expressionValue;
          if (_expression is (true, var expression))
          {
-            var assignToNewField = new AssignToNewField(mutable, fieldName, expression, _typeConstraint, isHidden, isOverride);
-            if (isParam)
+            if (_typeConstraint is (true, SubtypeConstraint subtypeConstraint))
             {
-               state.RegisterParameter(assignToNewField);
+               var subtype = subtypeConstraint.Subtype;
+               var (lambdaSymbol, typeConstraint) = subtype;
+               var assignToNewGuardedField =
+                  new AssignToNewGuardedField(mutable, fieldName, expression, typeConstraint, isHidden, isOverride, lambdaSymbol);
+               if (isParam)
+               {
+                  state.RegisterParameter(assignToNewGuardedField);
+               }
+               else
+               {
+                  state.AddStatement(assignToNewGuardedField);
+               }
             }
             else
             {
-               state.AddStatement(assignToNewField);
+               var assignToNewField = new AssignToNewField(mutable, fieldName, expression, _typeConstraint, isHidden, isOverride);
+               if (isParam)
+               {
+                  state.RegisterParameter(assignToNewField);
+               }
+               else
+               {
+                  state.AddStatement(assignToNewField);
+               }
             }
 
             state.CommitTransaction();
@@ -75,14 +94,31 @@ public partial class AssignToNewFieldParser : StatementParser
       }
       else if (_typeConstraint is (true, var typeConstraint))
       {
-         var defineNewField = new DefineNewField(mutable, fieldName, typeConstraint, isHidden, isOverride, isParam);
-         if (isParam)
+         if (typeConstraint is SubtypeConstraint subtypeConstraint && subtypeConstraint.Subtype.typeConstraint)
          {
-            state.RegisterParameter(defineNewField);
+            var subtype = subtypeConstraint.Subtype;
+            var (lambdaSymbol, subtypeTypeConstraint) = subtype;
+            var defineNewGuardedField = new DefineNewGuardedField(mutable, fieldName, subtypeTypeConstraint, isHidden, isOverride, lambdaSymbol);
+            if (isParam)
+            {
+               state.RegisterParameter(defineNewGuardedField);
+            }
+            else
+            {
+               state.AddStatement(defineNewGuardedField);
+            }
          }
          else
          {
-            state.AddStatement(defineNewField);
+            var defineNewField = new DefineNewField(mutable, fieldName, typeConstraint, isHidden, isOverride, isParam);
+            if (isParam)
+            {
+               state.RegisterParameter(defineNewField);
+            }
+            else
+            {
+               state.AddStatement(defineNewField);
+            }
          }
 
          state.CommitTransaction();

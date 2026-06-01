@@ -1,8 +1,7 @@
 ﻿#pragma ALLOW_PRINT_STATEMENT true
 
 subtype DivByTen(x int) => x %% 10
-
-guard var x DivByTen = 10
+var x DivByTen = 10
 println x
 
 attempt {

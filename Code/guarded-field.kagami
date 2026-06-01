@@ -1,6 +1,7 @@
 ﻿#pragma ALLOW_PRINT_STATEMENT true
 
-guard var x = 10 if x %% 2
+subtype Even(x int) => x %% 2
+var x Even = 10
 println x
 
 x = 12
