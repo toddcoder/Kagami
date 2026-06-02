@@ -1,24 +1,12 @@
-﻿mixin Figure3D {
-	fn volume => area * depth
-}
+﻿subtype Even(i int) => i %% 2 but f"Value must be even"
 
-protocol PFigure3D {
-	get area
-	get depth
-	get volume
-}
+var x Even = 2
+println x
 
-class Cube(width float) {
-	get area => width ^ 2
-	get depth => width
+attempt {
+	var y Even = 3
+	println y
 }
-does PFigure3D
-mix Figure3D
-
-class Cylinder(radius int, hide depth float) {
-	get area => math.pi * radius ^ 2
-	get depth => depth
+catch e {
+	println e
 }
-does PFigure3D
-mix Figure3D
-
