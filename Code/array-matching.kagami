@@ -2,7 +2,7 @@
 
 let arr = [1 to 5]
 
-match sum(xs) {
+fn match sum(xs) {
 	| [] return 0
 	| h :: t return h + sum(t)
 }

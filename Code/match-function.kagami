@@ -1,6 +1,6 @@
 ﻿open sys
 
-match save_get(value, defaultValue) {
+fn match save_get(value, defaultValue) {
 	| (?contents, _) return contents
 	| (nil, default) return default
 }

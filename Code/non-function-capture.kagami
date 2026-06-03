@@ -7,7 +7,7 @@ type Expr {
 	| BinOp(op, left, right)
 }
 
-match simplifyTop(expr Expr) {
+fn match simplifyTop(expr Expr) {
 	| UnOp("-", UnOp("-", e)) return e
 	| BinOp("+", e, Numeric(0)) return e
 	| BinOp("*", e, Numeric(1)) return e

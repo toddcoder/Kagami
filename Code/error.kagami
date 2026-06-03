@@ -12,7 +12,7 @@ fn erroring(x, y) {
 	}
 }
 
-match function(erroring PError) {
+fn match function(erroring PError) {
 	| Error1(str) => println $"Error1 $str"
 	| Error2(str, i) => println $"Error2 $str, $i"
 }

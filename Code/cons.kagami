@@ -11,12 +11,12 @@ while xs != [] {
 	xs = xs.tail
 }
 
-match isort(xs) {
+fn match isort(xs) {
 	|[] return []
 	|h :: t return insert(h, isort(t))
 }
 
-match insert(x, xs) {
+fn match insert(x, xs) {
 	|(x, []) return [x]
 	|(x, h :: t) if x <= h return x :: xs
 	|(x, h :: t) return h :: insert(x, t)

@@ -1,4 +1,6 @@
-﻿subtype Even(i int) => i %% 2 but f"Value must be even"
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+subtype Even(i int) => i %% 2 but f"Value must be even"
 
 var x Even = 2
 println x

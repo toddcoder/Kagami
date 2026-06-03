@@ -1,6 +1,6 @@
 ﻿open sys
 
-match safe_get(value, defaultValue) {
+fn match safe_get(value, defaultValue) {
 	| (?contents, _) return contents
 	| (nil, default) return default
 }

@@ -1,6 +1,6 @@
 ﻿open sys
 
-match sign(x int, y bool) {
+fn match sign(x int, y bool) {
 	| (< 0, true) return println($"x is negative; y is (y)")
 	| (0, true) return println($"x is zero; y is (y)")
 	| (> 0, true) return println($"x is positive; y is (y)")

@@ -1,6 +1,6 @@
 ﻿open sys
 
-match fact(n) {
+fn match fact(n) {
 	| 0 return 1
 	| n return n * fact(n - 1)
 }

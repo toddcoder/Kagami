@@ -7,7 +7,7 @@ type Tree {
 
 let t1 = Node(7, Node(3, Nilt, Nilt), Node(4, Nilt, Nilt))
 
-match mirror(tree Tree) {
+fn match mirror(tree Tree) {
 	| Nilt return Nilt
 	| Node(a, x, y) return Node(a, mirror(y), mirror(x))
 }

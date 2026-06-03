@@ -12,7 +12,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class MatchFunctionParser : StatementParser
 {
-   [GeneratedRegex($@"^(\s*){REGEX_HIDDEN}(override\s+)?(match)(\s+)({REGEX_FUNCTION_NAME})(\()")]
+   [GeneratedRegex($@"^(\s*){REGEX_HIDDEN}(override\s+)?(fn\s+match)(\s+)({REGEX_FUNCTION_NAME})(\()")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
