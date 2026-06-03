@@ -6,40 +6,24 @@ namespace Kagami.Library.Packages;
 
 public class FolderIterator : Iterator
 {
-   protected Folder folder;
-   protected List<File> files;
-   protected List<Folder> folders;
-   protected int fileIndex;
-   protected int folderIndex;
+   protected IIterator files;
+   protected IIterator folders;
 
    public FolderIterator(Folder folder) : base(folder)
    {
-      this.folder = folder;
-      files = [];
-      folders = [];
-      fileIndex = -1;
-      folderIndex = -1;
+      files = folder.Files;
+      folders = folder.Folders;
    }
 
    public override Maybe<IObject> Next()
    {
-      if (fileIndex == -1)
+      if (files.Next() is (true, var file))
       {
-         files = folder.Files;
-         folders = folder.Folders;
-         fileIndex = 0;
-         folderIndex = 0;
+         return file.Some();
       }
-
-      if (fileIndex < files.Count)
+      else if (folders.Next() is (true, var folder))
       {
-         var file = files[fileIndex++];
-         return file;
-      }
-      else if (folderIndex < folders.Count)
-      {
-         var currentFolder = folders[folderIndex++];
-         return currentFolder;
+         return folder.Some();
       }
       else
       {

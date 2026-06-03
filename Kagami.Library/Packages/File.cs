@@ -30,28 +30,38 @@ public class File : IObject, ICollection
 
    public bool Match(IObject comparisand, Hash<string, IObject> bindings)
    {
-      if (comparisand is KTuple { Length.Value: 3 } tuple)
+      switch (comparisand)
       {
-         if (tuple[0] is Placeholder p1)
+         case Placeholder placeholder:
          {
-            bindings[p1.Name] = KString.StringObject(fileName.Folder.FullPath);
+            bindings[placeholder.Name] = this;
+            return true;
          }
-
-         if (tuple[1] is Placeholder p2)
+         case KTuple { Length.Value: 3 } tuple:
          {
-            bindings[p2.Name] = KString.StringObject(fileName.Name);
-         }
+            if (tuple[0] is Placeholder p1)
+            {
+               bindings[p1.Name] = KString.StringObject(fileName.Folder.FullPath);
+            }
 
-         if (tuple[2] is Placeholder p3)
+            if (tuple[1] is Placeholder p2)
+            {
+               bindings[p2.Name] = KString.StringObject(fileName.Name);
+            }
+
+            if (tuple[2] is Placeholder p3)
+            {
+               bindings[p3.Name] = KString.StringObject(fileName.Extension);
+            }
+
+            return true;
+         }
+         case File otherFile:
          {
-            bindings[p3.Name] = KString.StringObject(fileName.Extension);
+            return fileName.ToString() == otherFile.AsString;
          }
-
-         return true;
-      }
-      else
-      {
-         return false;
+         default:
+            return false;
       }
    }
 

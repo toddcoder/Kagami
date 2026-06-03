@@ -2,7 +2,6 @@
 using Core.Computers;
 using Core.Monads;
 using Kagami.Library.Objects;
-using static Kagami.Library.Objects.ObjectFunctions;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.CollectionFunctions;
 
@@ -17,9 +16,9 @@ public class Folder : IObject, ICollection
       this.folderName = folderName;
    }
 
-   public List<File> Files => folderName.Files.Select(f => new File(f.ToString())).ToList();
+   public IIterator Files => new EnumerableIterator(folderName.Files.Select(f => new File(f.ToString())));
 
-   public List<Folder> Folders => folderName.Folders.ToArray().Select(f => new Folder(f.FullPath)).ToList();
+   public IIterator Folders => new EnumerableIterator(folderName.Folders.Select(f => new Folder(f.FullPath)));
 
    public string ClassName => "Folder";
 
@@ -31,7 +30,19 @@ public class Folder : IObject, ICollection
 
    public bool IsEqualTo(IObject obj) => obj is Folder f && folderName.FullPath == f.AsString;
 
-   public bool Match(IObject comparisand, Hash<string, IObject> bindings) => match(this, comparisand, bindings);
+   public bool Match(IObject comparisand, Hash<string, IObject> bindings)
+   {
+      switch (comparisand)
+      {
+         case Placeholder placeholder:
+            bindings[placeholder.Name] = this;
+            return true;
+         case Folder otherFolder:
+            return folderName.FullPath == otherFolder.AsString;
+         default:
+            return false;
+      }
+   }
 
    public bool IsTrue => false;
 
