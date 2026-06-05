@@ -18,7 +18,7 @@ public partial class DefParser : StatementParser
       var fieldName = tokens[4].Text;
       state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Identifier, Color.Whitespace, Color.Structure);
 
-      var _expression = getExpression(state, ExpressionFlags.InLambda);
+      var _expression = getExpression(state, ExpressionFlags.Standard);
       if (_expression is (true, var expression))
       {
          var lambdaSymbol = new LambdaSymbol(0, expression);
