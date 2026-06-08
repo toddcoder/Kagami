@@ -225,12 +225,6 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       }
    }
 
-   public IObject this[KIndex index]
-   {
-      get => index.GetFromCollection(this);
-      set => index.SetToCollection(this, value);
-   }
-
    public IObject Get(int index) => index.Between(0).Until(list.Count) ? Some.Object(list[index]) : KNil.NilValue;
 
    public IObject this[NumericOpenRange openRange]
@@ -361,11 +355,11 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    int IIndexed.Length => list.Count;
 
-   public KIndex Start => KIndex.StartIndex(this);
+   public KRange Start => KRange.StartIndex(0);
 
-   public KIndex End => KIndex.EndIndex(this);
+   public KRange End => KRange.EndIndex(list.Count - 1);
 
-   public KIndex Indexes => KIndex.FullIndex(this);
+   public KRange Indexes => KRange.FullIndex(0, list.Count - 1);
 
    public Int Length => list.Count;
 

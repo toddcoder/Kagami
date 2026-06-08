@@ -10,7 +10,7 @@ namespace Kagami.Library.Operations;
 public static class NumericFunctions
 {
    public static IObject apply(IObject x, IObject y, Func<int, int, Int> int32Func, Func<double, double, Float> doubleFunc,
-      Func<byte, byte, Int> byteFunc, Func<IMessageNumber, INumeric, IObject> message, string messageName, Func<KIndex, int, IObject> indexFunc)
+      Func<byte, byte, Int> byteFunc, Func<IMessageNumber, INumeric, IObject> message, string messageName)
    {
       if (x is INumeric n1 && y is INumeric n2)
       {
@@ -34,11 +34,6 @@ public static class NumericFunctions
                var bx = cx.AsByte();
                var by = cy.AsByte();
                return byteFunc(bx, by);
-            }
-            case "Index" when x is KIndex index:
-            {
-               var i = cy.AsInt32();
-               return indexFunc(index, i);
             }
             default:
 

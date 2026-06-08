@@ -8,12 +8,12 @@ public static class DrawingFunctions
 {
    public static IObject add(IObject x, IObject y)
    {
-      return apply(x, y, (a, b) => a + b, (a, b) => a + b, (a, b) => a + b, (a, b) => a.Add(b), "+", (k, _) => k);
+      return apply(x, y, (a, b) => a + b, (a, b) => a + b, (a, b) => a + b, (a, b) => a.Add(b), "+");
    }
 
    public static IObject subtract(IObject x, IObject y)
    {
-      return apply(x, y, (a, b) => a - b, (a, b) => a - b, (a, b) => a - b, (a, b) => a.Subtract(b), "-", (k, _) => k);
+      return apply(x, y, (a, b) => a - b, (a, b) => a - b, (a, b) => a - b, (a, b) => a.Subtract(b), "-");
    }
 
    public static int compare(IObject x, IObject y)

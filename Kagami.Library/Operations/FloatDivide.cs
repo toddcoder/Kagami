@@ -24,8 +24,6 @@ public class FloatDivide : TwoOperandOperation
 
                return Float.FloatObject(dx / dy).Just();
             }
-            case KIndex index when y is Int i:
-               return index.Contract(i.Value);
             default:
                return sendMessage(x, "/(_)", y).Just();
          }

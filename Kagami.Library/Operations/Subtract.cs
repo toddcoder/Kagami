@@ -9,7 +9,7 @@ public class Subtract : TwoOperandOperation
 {
    public override Optional<IObject> Execute(Machine machine, IObject x, IObject y)
    {
-      return apply(x, y, (a, b) => a - b, (a, b) => a - b, (a, b) => a - b, (a, b) => a.Subtract(b), "-(_)", (k, i) => k.Shift(-i)).Just();
+      return apply(x, y, (a, b) => a - b, (a, b) => a - b, (a, b) => a - b, (a, b) => a.Subtract(b), "-(_)").Just();
    }
 
    public override string ToString() => "subtract";

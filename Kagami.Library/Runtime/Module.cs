@@ -129,7 +129,6 @@ public class Module
       "Monad" => new MonadClass(),
       "Unit" => new UnitClass(),
       "YieldReturn" => new YieldReturnClass(),
-      "Index" => new IndexClass(),
       "Cycle" => new CycleClass(),
       "Set" => new SetClass(),
       "Decimal" => new DecimalClass(),

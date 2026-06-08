@@ -8,6 +8,12 @@ namespace Kagami.Library.Objects;
 
 public struct KRange : IObject, ICollection
 {
+   public static KRange StartIndex(int start) => new(start, start, true);
+
+   public static KRange EndIndex(int end) => new(end, end, true);
+
+   public static KRange FullIndex(int start, int end) => new(start, end, true);
+
    private IRangeItem start;
    private IObject startObj;
    private IObjectCompare stop;
@@ -17,6 +23,10 @@ public struct KRange : IObject, ICollection
    private Func<IRangeItem, IRangeItem> next;
    private Func<IRangeItem, IObject, bool> compare;
    private Maybe<IIterator> _currentIterator = nil;
+
+   public KRange(int start, int stop, bool inclusive, int increment = 1) : this((Int)start, (Int)stop, inclusive, increment)
+   {
+   }
 
    public KRange(IRangeItem start, IObjectCompare stop, bool inclusive, int increment = 1) : this()
    {

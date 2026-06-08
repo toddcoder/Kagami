@@ -121,21 +121,15 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
       set => throw fail("String is immutable");
    }
 
-   public IObject this[KIndex index]
-   {
-      get => index.GetFromCollection(this);
-      set => throw fail("String is immutable");
-   }
-
    public int LastIndex => value.Length - 1;
 
    int IIndexed.Length => value.Length;
 
-   public KIndex Start => KIndex.StartIndex(this);
+   public KRange Start => KRange.StartIndex(0);
 
-   public KIndex End => KIndex.EndIndex(this);
+   public KRange End => KRange.EndIndex(value.Length - 1);
 
-   public KIndex Indexes => KIndex.FullIndex(this);
+   public KRange Indexes => KRange.FullIndex(0, value.Length - 1);
 
    public Int Length => value.Length;
 
@@ -763,7 +757,7 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
    public KString SetRegex(Regex regex, string replacement) => value.Substitute(regex.CorePattern, replacement);
 
-   public KString this[KRange range]
+   public IObject this[KRange range]
    {
       get
       {
@@ -773,7 +767,8 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
             builder.Append(value[index]);
          }
 
-         return builder.ToString();
-        }
+         return StringObject(builder.ToString());
+      }
+      set => throw immutableValue("String");
    }
 }

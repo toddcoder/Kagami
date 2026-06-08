@@ -4,15 +4,15 @@ public interface IIndexed
 {
    IObject this[int index] { get; set; }
 
-   IObject this[KIndex index] { get; set; }
+   IObject this[KRange range] { get; set; }
 
    int LastIndex { get; }
 
    int Length { get; }
 
-   KIndex Start { get; }
+   KRange Start { get; }
 
-   KIndex End { get; }
+   KRange End { get; }
 
-   KIndex Indexes { get; }
+   KRange Indexes { get; }
 }

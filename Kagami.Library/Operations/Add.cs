@@ -11,7 +11,7 @@ public class Add : TwoOperandOperation
 
    public static IObject Apply(IObject x, IObject y)
    {
-      return apply(x, y, (a, b) => a + b, (a, b) => a + b, (a, b) => a + b, (a, b) => a.Add(b), "+(_)", (k, i) => k.Shift(i));
+      return apply(x, y, (a, b) => a + b, (a, b) => a + b, (a, b) => a + b, (a, b) => a.Add(b), "+(_)");
    }
 
    public override string ToString() => "add";

@@ -11,7 +11,7 @@ public class Multiply : TwoOperandOperation
 
    public static IObject Apply(IObject x, IObject y)
    {
-      return apply(x, y, (a, b) => a * b, (a, b) => a * b, (a, b) => a * b, (a, b) => a.Multiply(b), "*(_)", (k, i) => k.Expand(i));
+      return apply(x, y, (a, b) => a * b, (a, b) => a * b, (a, b) => a * b, (a, b) => a.Multiply(b), "*(_)");
    }
 
    public override string ToString() => "multiply";
