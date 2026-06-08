@@ -3,6 +3,7 @@ using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
+using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Operations;
 
@@ -25,7 +26,7 @@ public class PreIncrement : Operation
             }
             else
             {
-               return fail($"{lastFieldName} couldn't be incremented");
+               return sendMessage(fieldValue, "preInc()").Just();
             }
          }
          else

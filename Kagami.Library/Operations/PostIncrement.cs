@@ -25,7 +25,7 @@ public class PostIncrement : Operation
             }
             else
             {
-               return classOf(fieldValue).SendMessage(fieldValue, "inc()", Arguments.Empty).Just();
+               return sendMessage(fieldValue, "postInc()").Just();
             }
          }
          else
@@ -40,7 +40,7 @@ public class PostIncrement : Operation
          {
             try
             {
-               return classOf(value).SendMessage(value, "inc()", Arguments.Empty).Just();
+               return sendMessage(value, "postInc()").Just();
             }
             catch (Exception exception)
             {

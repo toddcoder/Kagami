@@ -25,7 +25,7 @@ public class PostDecrement : Operation
             }
             else
             {
-               return classOf(fieldValue).SendMessage(fieldValue, "dec()", Arguments.Empty).Just();
+               return sendMessage(fieldValue, "postDec()").Just();
             }
          }
          else
@@ -40,7 +40,7 @@ public class PostDecrement : Operation
          {
             try
             {
-               return classOf(value).SendMessage(value, "dec()", Arguments.Empty).Just();
+               return sendMessage(value, "postDec()").Just();
             }
             catch (Exception exception)
             {
