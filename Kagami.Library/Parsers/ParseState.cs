@@ -593,7 +593,8 @@ public class ParseState : IEnumerable<Statement>
       }
 
       var possibleInvokable = new PossibleInvokable.Some(symbol.Invokable);
-      parameters[fieldName] = new Parameter(isHidden, mutable, fieldName, fieldName, possibleInvokable, possibleTypeConstraint, false, false, false);
+      parameters[fieldName] = new Parameter(isHidden, mutable, fieldName, fieldName, possibleInvokable, possibleTypeConstraint, false, false, false,
+         new PossibleGuard.None());
    }
 
    public StringHash<Parameter> Parameters => parameters;

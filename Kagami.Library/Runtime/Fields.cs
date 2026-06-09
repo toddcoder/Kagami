@@ -7,7 +7,6 @@ using Core.Strings;
 using Kagami.Library.Invokables;
 using Kagami.Library.Objects;
 using System.Collections;
-using Kagami.Library.Nodes.Symbols;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Nodes.NodeFunctions;
@@ -280,6 +279,18 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
          else if (!typeConstraint.Matches(classOf(value)))
          {
             return incompatibleClasses(value, typeConstraint.AsString);
+         }
+      }
+
+      if (parameter.Guard is (true, var guard))
+      {
+         var _passes = guard.Passes(parameter.Name, value);
+         if (_passes)
+         {
+         }
+         else
+         {
+            return _passes.Exception;
          }
       }
 

@@ -2,6 +2,7 @@
 using Kagami.Library.Objects;
 using Core.Monads;
 using Core.Strings;
+using Kagami.Library.Guards;
 using Kagami.Library.Parsers;
 using static Core.Monads.MonadFunctions;
 
@@ -23,6 +24,7 @@ public class Parameter : IEquatable<Parameter>
    protected readonly bool reference;
    protected readonly bool noCapturing;
    protected readonly bool lazy;
+   protected readonly Maybe<Guard> _guard;
 
    public Parameter(bool isHidden, bool mutable, string label, string name, Maybe<IInvokable> defaultValue, Maybe<TypeConstraint> typeConstraint,
       bool reference, bool noCapturing, bool lazy)
@@ -36,10 +38,11 @@ public class Parameter : IEquatable<Parameter>
       this.reference = reference;
       this.noCapturing = noCapturing;
       this.lazy = lazy;
+      _guard = nil;
    }
 
    public Parameter(bool isHidden, bool mutable, string label, string name, PossibleInvokable defaultValue, PossibleTypeConstraint typeConstraint,
-      bool reference, bool noCapturing, bool lazy)
+      bool reference, bool noCapturing, bool lazy, PossibleGuard guard)
    {
       this.isHidden = isHidden;
       this.mutable = mutable;
@@ -50,6 +53,7 @@ public class Parameter : IEquatable<Parameter>
       this.reference = reference;
       this.noCapturing = noCapturing;
       this.lazy = lazy;
+      _guard = guard.Guard;
    }
 
    public bool IsHidden => isHidden;
@@ -76,11 +80,14 @@ public class Parameter : IEquatable<Parameter>
 
    public bool Lazy => lazy;
 
+   public Maybe<Guard> Guard => _guard;
+
    public bool Equals(Parameter? other)
    {
       return other is not null && isHidden == other.isHidden && mutable == other.mutable && string.Equals(label, other.label) &&
          string.Equals(name, other.name) && (bool)_defaultValue == (bool)other._defaultValue &&
-         (bool)_typeConstraint == (bool)other._typeConstraint && reference == other.reference && lazy == other.lazy;
+         (bool)_typeConstraint == (bool)other._typeConstraint && reference == other.reference && lazy == other.lazy &&
+         (bool)_guard == (bool)other._guard;
    }
 
    public override bool Equals(object? obj) => Equals((Parameter)obj!);

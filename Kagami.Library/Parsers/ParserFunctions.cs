@@ -221,8 +221,7 @@ public static class ParserFunctions
    {
       if (checkForSemicolon)
       {
-         var _semicolon = state.Scan(@"^(\s*)(;)", Color.Whitespace, Color.Structure);
-         if (_semicolon)
+         if (state.Scan(@"^(\s*)(;)", Color.Whitespace, Color.Structure) || !state.LookAhead(@"^\s*{"))
          {
             return new Block();
          }
@@ -1002,7 +1001,7 @@ public static class ParserFunctions
       var _scanned = state.Scan(@"^(\s*=)(?!=)", Color.Structure);
       if (_scanned)
       {
-         var _expression = getExpression(state, ExpressionFlags.OmitComma);
+         var _expression = getExpression(state, ExpressionFlags.OmitComma | ExpressionFlags.OmitIf);
          if (_expression is (true, var expression))
          {
             var symbol = new InvokableExpressionSymbol(expression);
@@ -1033,6 +1032,51 @@ public static class ParserFunctions
       }
    }
 
+   private static Optional<PossibleGuard> parseGuard(ParseState state)
+   {
+      var _scanned = state.Scan(@"^(\s*)(if)\b", Color.Whitespace, Color.Keyword);
+      if (_scanned)
+      {
+         var _expression = getExpression(state, ExpressionFlags.OmitComma);
+         if (_expression is (true, var expression))
+         {
+            var symbol = new InvokableExpressionSymbol(expression);
+            state.AddSymbol(symbol);
+
+            _scanned = state.Scan(@"^(\s*)(but)\b", Color.Whitespace, Color.Keyword);
+            if (_scanned)
+            {
+               _expression = getExpression(state, ExpressionFlags.OmitComma);
+               if (_expression is (true, var exceptionExpression))
+               {
+                  var failureSymbol = new InvokableExpressionSymbol(exceptionExpression);
+                  state.AddSymbol(failureSymbol);
+
+                  return new PossibleGuard.Some(symbol.Invokable, failureSymbol.Invokable.Some());
+               }
+            }
+
+            return new PossibleGuard.Some(symbol.Invokable, nil);
+         }
+         else if (_expression.Exception is (true, var exception))
+         {
+            return exception;
+         }
+         else
+         {
+            return new PossibleGuard.None();
+         }
+      }
+      else if (_scanned.Exception is (true, var exception))
+      {
+         return exception;
+      }
+      else
+      {
+         return new PossibleGuard.None();
+      }
+   }
+
    private static Optional<Parameter> getParameter(ParseState state, bool defaultRequired) =>
       from hidden in parseHidden(state)
       from lazy in parseLazy(state)
@@ -1044,7 +1088,8 @@ public static class ParserFunctions
       from typeConstraint in parseTypeConstraint(state)
       from variadic in parseVaraidic(state)
       from defaultValue in parseDefaultValue(state, defaultRequired)
-      select new Parameter(hidden, mutable || reference, label, name, defaultValue, typeConstraint, reference, noCapturing, lazy)
+      from possibleGuard in parseGuard(state)
+      select new Parameter(hidden, mutable || reference, label, name, defaultValue, typeConstraint, reference, noCapturing, lazy, possibleGuard)
          { Variadic = variadic };
 
    public static Optional<Block> getAnyBlock(ParseState state)

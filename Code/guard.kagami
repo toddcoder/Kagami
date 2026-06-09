@@ -1,0 +1,29 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+fn decimalDigitValue(c char if c in ('0' to '9') but "Out of range") int {
+	return /int c - /int '0'
+}
+
+println decimalDigitValue('0')
+attempt {
+	println decimalDigitValue('A')
+}
+catch e {
+	println e
+}
+
+error OutOfRange() {
+	override get message => "Out of range"
+}
+
+override fn decimalDigitValue(c char if c in ('0' to '9') but OutOfRange()) int {
+	return /int c - /int '0'
+}
+
+println decimalDigitValue('1')
+attempt {
+	println decimalDigitValue('B')
+}
+catch e {
+	println e
+}
