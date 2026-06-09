@@ -43,6 +43,11 @@ public partial class ClassReferenceParser : SymbolParser
          builder.Add(new PushObjectSymbol(new ProtocolConstraint(className)));
          return unit;
       }
+      else if (Guards.Subtype.Get(className))
+      {
+         builder.Add(new PushObjectSymbol(new SubtypeConstraint(className)));
+         return unit;
+      }
       else
       {
          return nil;
