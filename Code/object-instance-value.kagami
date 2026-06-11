@@ -10,11 +10,11 @@ class Recipe(name string, ingredients array, instructions string) {
 	get string => name
 }
 
-object Apple : Food("Apple");
-object Orange : Food("Orange");
-object Cream : Food("Cream");
-object Sugar : Food("Sugar");
-object FruitSalad : Recipe("fruit salad", [Apple&, Orange&, Cream&, Sugar&], "Stir it all together");
+object Apple is Food("Apple");
+object Orange is Food("Orange");
+object Cream is Food("Cream");
+object Sugar is Food("Sugar");
+object FruitSalad is Recipe("fruit salad", [Apple&, Orange&, Cream&, Sugar&], "Stir it all together");
 
 object SimpleDatabase {
 	let allFoods = [Apple&, Orange&, Cream&, Sugar&]

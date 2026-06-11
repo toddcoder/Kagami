@@ -5,11 +5,11 @@ open sys
 class Food(var name: _ string);
 init() => Food(name: "[Unnamed]")
 
-class RecipeIngredient(var name: _ string, var quantity: _ int) : Food(name: name);
+class RecipeIngredient(var name: _ string, var quantity: _ int) is Food(name: name);
 init(var name: _ string) => RecipeIngredient(name: name, quantity: 1)
 init() => RecipeIngredient(name: "[Unnamed]", quantity: 1)
 
-class ShoppingListItem(var name: _ string, var quantity: _ int) : RecipeIngredient(name: name, quantity: quantity) {
+class ShoppingListItem(var name: _ string, var quantity: _ int) is RecipeIngredient(name: name, quantity: quantity) {
 	var purchased = false
 	fn description string => $"(quantity) x (name) (purchased ? "✔" : "✘")"
 }

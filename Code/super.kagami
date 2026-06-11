@@ -28,7 +28,7 @@ class Stats {
 	get values => numlist
 }
 
-class Stats2 : Stats {
+class Stats2 is Stats {
 	var min = float.max
 	var max = float.min
 

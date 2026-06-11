@@ -4,9 +4,9 @@
 
 include class BaseError
 
-class OutOfPaperError : BaseError("Out of paper");
-class NoTonerError : BaseError("No toner");
-class OnFireError : BaseError("On fire!");
+class OutOfPaperError is BaseError("Out of paper");
+class NoTonerError is BaseError("No toner");
+class OnFireError is BaseError("On fire!");
 
 fn send(job int, toPrinter: printerName string) result {
 	reject printerName == "Never Has Toner" return NoTonerError()

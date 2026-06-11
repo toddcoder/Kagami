@@ -5,13 +5,13 @@ class NamedShape(var name string) {
 	get string => $"A shape with $numberOfSides sides."
 }
 
-class Square(var sideLength float, name string) : NamedShape(name) {
+class Square(var sideLength float, name string) is NamedShape(name) {
 	numberOfSides = 4
 	fn area() => sideLength ^ 2
 	override get string => $"A square with sides of length $sideLength"
 }
 
-class Triangle(var sideLength float, name string) : NamedShape(name) {
+class Triangle(var sideLength float, name string) is NamedShape(name) {
 	numberOfSides = 3
 	get perimeter float => 3.0 * sideLength
 	set perimeter float => sideLength = value / 3.0

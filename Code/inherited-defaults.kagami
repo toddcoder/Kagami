@@ -14,7 +14,7 @@ class Coffee(name, strength = 1) {
 	}
 }
 
-class MaxgoodHouse(name, strength = 0) : Coffee(name, strength) {
+class MaxgoodHouse(name, strength = 0) is Coffee(name, strength) {
 	let brand = "Maxgood House"
 
 	override fn brew() => println $"Brewing $brand $name"

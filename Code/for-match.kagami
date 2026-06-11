@@ -2,11 +2,11 @@
 
 #pragma ALLOW_PRINT_STATEMENT true
 
-class Subjects(var physics: _ string);
+class Subjects(var physics: _ string)
 
-class Chemistry(var physics: _ string, equations: _ string) : Subjects(physics: physics);
+class Chemistry(var physics: _ string, equations: _ string) is Subjects(physics: physics);
 
-class Maths(var physics: _ string, formulae: _ string) : Subjects(physics: physics);
+class Maths(var physics: _ string, formulae: _ string) is Subjects(physics: physics);
 
 let sa = [
 	Chemistry(physics: "solid physics", equations: "Hertz"),

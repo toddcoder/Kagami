@@ -1,0 +1,5 @@
+0
+Out of range
+1
+Out of range
+f"Out of range" | Failure
