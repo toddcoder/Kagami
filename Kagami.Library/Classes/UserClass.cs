@@ -171,6 +171,7 @@ public class UserClass : BaseClass, IEquatable<UserClass>
          (obj, message) => function<IObject, KString>(obj, message, (o, n) => sendMessage(o, n.Value, Arguments.Empty)));
       registerMessage("with(_)", (obj, msg) => ((UserObject)obj).With(msg.Arguments[0]));
       registerMessage("copy()", (obj, _) => ((UserObject)obj).Copy());
+      registerMessage("hash".get(), (o, _) => Int.IntObject(o.Hash));
    }
 
    public override void RegisterClassMessages()

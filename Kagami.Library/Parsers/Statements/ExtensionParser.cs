@@ -1,7 +1,10 @@
 ﻿using System.Text.RegularExpressions;
 using Core.Monads;
+using Kagami.Library.Runtime;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.CommonFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
+using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Statements;
 
@@ -15,10 +18,15 @@ public partial class ExtensionParser : StatementParser
       var parameterName = tokens[4].Text;
       state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.OpenParenthesis, Color.Identifier, Color.CloseParenthesis);
 
+      var isStatic = state.Scan(@"^(\s*)(static)(\s+)", Color.Whitespace, Color.Keyword, Color.Whitespace);
       var _possibleTypeConstraint = parseTypeConstraint(state);
       if (_possibleTypeConstraint is (true, PossibleTypeConstraint.Some { Maybe: (true, var typeConstraint) }))
       {
          var className = typeConstraint.Comparisands[0].Name;
+         if (isStatic)
+         {
+            className = metaName(className);
+         }
 
          if (state.BeginBlock())
          {

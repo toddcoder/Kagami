@@ -1,0 +1,12 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+class A
+static {}
+
+extension(a) static A {
+	fn show() string {
+		return "learning"
+	}
+}
+
+println A.show()
