@@ -1,0 +1,18 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+let args = <Mary had a little lamb>
+
+cover i in args
+	first {
+		println $"first: $i"
+	}
+	middle {
+		println $"middle: $i"
+	}
+	last {
+		println $"last: $i"
+	}
+
+printline
+
+cover word in args first { print word } middle { print $", $word" }

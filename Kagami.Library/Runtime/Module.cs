@@ -150,6 +150,7 @@ public class Module
       "Definition" => new DefinitionClass(),
       "DateIncrement" => new DateIncrementClass(),
       "ProtocolWrapper" => new ProtocolWrapperClass(),
+      "Cover" => new CoverClass(),
       _ => nil
    };
 

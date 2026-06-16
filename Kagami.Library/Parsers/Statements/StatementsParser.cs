@@ -86,6 +86,7 @@ public class StatementsParser : MultiParser
          yield return new AssignWithNewTypeParser();
          yield return new AssignToFieldParser();
          yield return new PassParser();
+         yield return new CoverParser();
 
          yield return new ExpressionStatementParser(ReturnExpression, TypeConstraint);
       }

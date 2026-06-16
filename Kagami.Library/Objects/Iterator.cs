@@ -856,7 +856,7 @@ public class Iterator : IObject, IIterator
       return reversed.FirstOrNone().Map(Some.Object) | (() => KNil.NilValue);
    }
 
-   public IObject Last(Lambda predicate)
+   public virtual IObject Last(Lambda predicate)
    {
       var reversed = List().Reverse();
       foreach (var value in reversed.Where(value => predicate.Invoke(value).IsTrue))

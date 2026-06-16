@@ -667,5 +667,9 @@ public class OperationsBuilder(ParseState state)
 
    public void HasIterator() => add(new HasIterator());
 
+   public void NewCover() => add(new NewCover());
+
+   public void Iterate() => add(new Iterator());
+
    public override string ToString() => "operations";
 }
