@@ -767,7 +767,7 @@ public static class ParserFunctions
    public static Optional<PossibleTypeConstraint> parseCollectionTypeConstraint(ParseState state, TypeTailEnd tailEnd = TypeTailEnd.None)
    {
       state.BeginTransaction();
-      var _begin = state.Scan(@"^(\s*)([\[\{{])", 2, Color.Whitespace, Color.Class);
+      var _begin = state.Scan(@"^( *)([\[\{{])", 2, Color.Whitespace, Color.Class);
       if (_begin is (true, var begin))
       {
          var isSet = begin == "{";
@@ -845,7 +845,7 @@ public static class ParserFunctions
    public static Optional<PossibleTypeConstraint> parseUnionTypeConstraint(ParseState state)
    {
       return
-         from begin in state.Scan(@"^(\s*)(<)", Color.Whitespace, Color.Class)
+         from begin in state.Scan(@"^( *)(<)", Color.Whitespace, Color.Class)
          from inner in getListOfClassNames(state)
          from end in state.Scan("^(>)", Color.Class)
          select (PossibleTypeConstraint)new PossibleTypeConstraint.Some(TypeConstraint.FromList(inner));
@@ -854,7 +854,7 @@ public static class ParserFunctions
    private static Optional<PossibleTypeConstraint> parseProtocolTypeConstraint(ParseState state)
    {
       return
-         from protocolName in state.Scan(@$"^(\s*)({REGEX_CLASS})\b", 2, Color.Whitespace, Color.Class)
+         from protocolName in state.Scan(@$"^( *)({REGEX_CLASS})\b", 2, Color.Whitespace, Color.Class)
          from protocol in Protocols.Protocols.Get(protocolName)
          select (PossibleTypeConstraint)new PossibleTypeConstraint.Some(new ProtocolConstraint(protocolName));
    }
@@ -862,7 +862,7 @@ public static class ParserFunctions
    private static Optional<PossibleTypeConstraint> parseSubtypeTypeConstraint(ParseState state)
    {
       return
-         from subtypeName in state.Scan(@$"^(\s*)({REGEX_CLASS})\b", 2, Color.Whitespace, Color.Class)
+         from subtypeName in state.Scan(@$"^( *)({REGEX_CLASS})\b", 2, Color.Whitespace, Color.Class)
          from subtype in Guards.Subtype.Get(subtypeName)
          select (PossibleTypeConstraint)new PossibleTypeConstraint.Some(new SubtypeConstraint(subtypeName));
    }

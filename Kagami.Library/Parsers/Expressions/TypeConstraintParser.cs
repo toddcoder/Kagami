@@ -16,7 +16,7 @@ public partial class TypeConstraintParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(<)(?=[A-Z])", RegexOptions.Compiled)]
+   [GeneratedRegex(@"^( *)(<)(?=[A-Z])", RegexOptions.Compiled)]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
