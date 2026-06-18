@@ -118,6 +118,11 @@ public class Machine
                   var address = operations.Address;
                   stack.Peek().Push(result);
                   lastValue = result is Before ? KBoolean.True : result;
+                  if (lastValue is UserObject userObject)
+                  {
+                     LastImage = userObject.Image;
+                  }
+
                   if (operations.Address != address)
                   {
                      operations.Goto(address);
@@ -184,6 +189,8 @@ public class Machine
    }
 
    public IObject LastValue => lastValue;
+
+   public Maybe<string> LastImage { get; set; } = nil;
 
    public Optional<IObject> Invoke(IInvokable invokable, Arguments arguments, Fields fields, bool bareLambda, bool extraFrame = false)
    {

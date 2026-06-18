@@ -487,7 +487,7 @@ public partial class Playground : Form
                   {
                      cancelled = context.Cancelled();
                      context.Reset();
-                     value = result.Image;
+                     value = machine.LastImage | (() => result.Image);
                      type = result.ClassName;
                      fieldNames = [.. machine.AllFieldNames()];
                   }
