@@ -1,7 +1,6 @@
 ﻿using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using Core.Monads;
-using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Operations;
@@ -40,7 +39,7 @@ public static class OperationFunctions
             return array.GetIterator(lazy).Success();
          }
          default:
-            return fail($"{value.Image} isn't an iterator nor can it return one");
+            return AllExceptions.notAnIterator(value);
       }
    }
 

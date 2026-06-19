@@ -15,6 +15,12 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
 
    private static Hash<PatternWithOptions, Core.Matching.Pattern> cachedPattern = [];
 
+   public static IObject FromString(string source)
+   {
+      Core.Matching.Pattern pattern = source;
+      return new Regex(pattern, false, false);
+   }
+
    private Core.Matching.Pattern getPattern(string originalPattern)
    {
       var patternWithOptions = new PatternWithOptions(originalPattern, ignoreCase, multiline, global, textOnly);

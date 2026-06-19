@@ -34,6 +34,7 @@ public class Convert : Operation
       conversions[("Int", "Decimal")] = i => KDecimal.KDecimalObject(((Int)i).Value);
       conversions[("Tuple", "Complex")] = t => tupleToComplex(t);
       conversions[("Long", "Float")] = l => Float.FloatObject(((Long)l).AsDouble());
+      conversions[("String", "Regex")] = s => Regex.FromString(s.AsString);
    }
 
    public override Optional<IObject> Execute(Machine machine)

@@ -73,7 +73,7 @@ public class Machine
 
    public Hash<string, IObject> Assignments = [];
 
-   public string CallStack => stack.Peek().ToString();
+   public string CallStack => stack.Select(frame => frame.ToString()).ToString(Environment.NewLine);
 
    protected Optional<IObject> execute(Operation operation)
    {
