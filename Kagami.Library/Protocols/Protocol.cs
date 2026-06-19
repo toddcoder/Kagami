@@ -9,7 +9,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Protocols;
 
-public class Protocol(string name, params Selector[] selectors)
+public class Protocol(string name, params SelectorWithType[] selectors)
 {
    public static ProtocolResult FromObject(IObject obj, string protocolName)
    {
@@ -50,24 +50,24 @@ public class Protocol(string name, params Selector[] selectors)
 
    public string Name => name;
 
-   public Selector[] Selectors => selectors;
+   public SelectorWithType[] Selectors => selectors;
 
-   public IObject SendMessage(IObject obj, Selector selector, params IObject[] arguments)
+   public IObject SendMessage(IObject obj, SelectorWithType selector, params IObject[] arguments)
    {
       if (selectors.Contains(selector))
       {
-         return sendMessage(obj, selector, arguments);
+         return sendMessage(obj, selector.Selector, arguments);
       }
       else
       {
-         throw unsupportedByProtocol(name, selector);
+         throw unsupportedByProtocol(name, selector.Selector);
       }
    }
 
    public IObject SendMessage(IObject obj, Message message)
    {
       var messageSelector = message.Selector;
-      if (selectors.Contains(messageSelector))
+      if (selectors.Select(s => s.Selector).Contains(messageSelector))
       {
          return sendMessage(obj, message);
       }
@@ -77,7 +77,7 @@ public class Protocol(string name, params Selector[] selectors)
       }
    }
 
-   public bool Supports(BaseClass baseClass) => selectors.All(baseClass.RespondsTo);
+   public bool Supports(BaseClass baseClass) => selectors.All(s => baseClass.RespondsTo(s.Selector));
 
    public bool Supports(IObject obj)
    {
@@ -98,6 +98,5 @@ public class Protocol(string name, params Selector[] selectors)
       }
 
       return maybe<string>() & missing.Count > 0 & (() => missing.ToString(", "));
-
    }
 }
