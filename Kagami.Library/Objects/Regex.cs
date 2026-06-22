@@ -53,7 +53,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
       }
       else
       {
-         pattern = originalPattern.Replace(@"\$", "$");
+         pattern = originalPattern.Replace(@"\$", "$") + "; u" + getOptions();
       }
 
       pattern = pattern.WithIgnoreCase(ignoreCase).WithMultiline(multiline);
@@ -69,6 +69,8 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
    private readonly bool textOnly;
    private readonly Func<MatchResult, Func<string, Maybe<int>>> nameToIndex;
    private readonly Func<MatchResult, Func<int, Maybe<string>>> indexToName;
+   private readonly string asString;
+   private readonly string image;
 
    public Regex(string pattern, bool ignoreCase, bool multiline, bool global, bool textOnly) : this()
    {
@@ -80,11 +82,14 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
 
       nameToIndex = m => m.IndexFromName;
       indexToName = m => m.NameFromIndex;
+
+      asString = getAsString();
+      image = getImage();
    }
 
    public Regex(Core.Matching.Pattern pattern, bool global, bool textOnly)
    {
-      originalPattern = pattern.ToString() ?? "";
+      originalPattern = pattern.Regex;
       ignoreCase = pattern.IgnoreCase;
       multiline = pattern.Multiline;
       this.global = global;
@@ -92,53 +97,59 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
 
       nameToIndex = m => m.IndexFromName;
       indexToName = m => m.NameFromIndex;
+
+      asString = getAsString();
+      image = getImage();
+   }
+
+   private string getOptions() => (ignoreCase ? "i" : "") + (multiline ? "m" : "") + (global ? "g" : "") + (textOnly ? "t" : "");
+
+   private string getAsString() => getPattern(originalPattern).Regex + "; " + getOptions();
+
+   private string getImage()
+   {
+      var builder = new StringBuilder("${");
+      builder.Append(getPattern(originalPattern).Regex);
+      if (ignoreCase || multiline || global)
+      {
+         builder.Append(';');
+      }
+
+      if (ignoreCase)
+      {
+         builder.Append('i');
+      }
+
+      if (multiline)
+      {
+         builder.Append('m');
+      }
+
+      if (global)
+      {
+         builder.Append('g');
+      }
+
+      if (textOnly)
+      {
+         builder.Append('t');
+      }
+
+      if (textOnly)
+      {
+         builder.Append('t');
+      }
+
+      builder.Append('}');
+
+      return builder.ToString();
    }
 
    public string ClassName => "Regex";
 
-   public string AsString => getPattern(originalPattern).Regex;
+   public string AsString => asString;
 
-   public string Image
-   {
-      get
-      {
-         var builder = new StringBuilder("${");
-         builder.Append(getPattern(originalPattern).Regex);
-         if (ignoreCase || multiline || global)
-         {
-            builder.Append(';');
-         }
-
-         if (ignoreCase)
-         {
-            builder.Append('i');
-         }
-
-         if (multiline)
-         {
-            builder.Append('m');
-         }
-
-         if (global)
-         {
-            builder.Append('g');
-         }
-
-         if (textOnly)
-         {
-            builder.Append('t');
-         }
-
-         if (textOnly)
-         {
-            builder.Append('t');
-         }
-
-         builder.Append('}');
-
-         return builder.ToString();
-      }
-   }
+   public string Image => image;
 
    public int Hash => Image.GetHashCode();
 

@@ -52,6 +52,7 @@ public class Module
          return new Rational(numerator, denominator);
       };
       autoConversions[("Tuple", "Complex")] = t => tupleToComplex(t);
+      autoConversions[("String", "Regex")] = s => Regex.FromString(s.AsString);
    }
 
    public static Maybe<Func<IObject, IObject>> AutoConversion(string from, string to) => autoConversions.Maybe[(from, to)];
