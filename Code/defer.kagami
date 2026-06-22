@@ -1,0 +1,16 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+class PrintWriter(file string) {
+	fn println(x) => println x
+	fn close() => println "closing..."
+}
+
+fn withPrintWriter(file string, op lambda) {
+	let writer = PrintWriter(file)
+	try op(writer)
+	println "before defer"
+	defer { writer.close() }
+	println "after defer"
+}
+
+withPrintWriter("date.txt", writer -> writer.println(date.now))
