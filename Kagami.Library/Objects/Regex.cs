@@ -53,7 +53,7 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
       }
       else
       {
-         pattern = originalPattern.Replace(@"\$", "$") + "; u" + getOptions();
+         pattern = originalPattern.Replace(@"\$", "$");
       }
 
       pattern = pattern.WithIgnoreCase(ignoreCase).WithMultiline(multiline);

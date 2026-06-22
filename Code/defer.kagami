@@ -13,4 +13,4 @@ fn withPrintWriter(file string, op lambda) {
 	println "after defer"
 }
 
-withPrintWriter("date.txt", writer -> writer.println(date.now))
+withPrintWriter("date.txt", writer -> writer.println(d"06/22/2026"))
