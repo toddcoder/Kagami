@@ -10,7 +10,7 @@ using static Kagami.Library.AllExceptions;
 
 namespace Kagami.Library.Nodes.Statements;
 
-public class MatchFunction : Statement, IOverridable
+public class MatchFunction : Statement, IOverridable, IHasSelector
 {
    protected Selector selector;
    protected Parameters parameters;
@@ -33,6 +33,8 @@ public class MatchFunction : Statement, IOverridable
    public IInvokable getInvokable() => new FunctionInvokable(selector, parameters, ToString());
 
    public Selector Selector => selector;
+
+   public bool Overriding => overriding;
 
    public override void Generate(OperationsBuilder builder)
    {

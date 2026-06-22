@@ -122,6 +122,10 @@ public class Machine
                   {
                      LastImage = userObject.Image;
                   }
+                  else
+                  {
+                     LastImage = nil;
+                  }
 
                   if (operations.Address != address)
                   {

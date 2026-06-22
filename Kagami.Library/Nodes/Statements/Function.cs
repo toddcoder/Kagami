@@ -13,7 +13,7 @@ using static Kagami.Library.CommonFunctions;
 
 namespace Kagami.Library.Nodes.Statements;
 
-public class Function : Statement, IOverridable, IAnnotatable
+public class Function : Statement, IOverridable, IAnnotatable, IHasSelector
 {
    public static Function Getter(string fieldName, Maybe<TypeConstraint> _typeConstraint, bool isOverride)
    {

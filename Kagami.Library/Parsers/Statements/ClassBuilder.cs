@@ -136,13 +136,15 @@ public class ClassBuilder
                case Function function:
                {
                   implemented.Add(function.Selector);
-                  originalBlock.Add(function);
+                  //originalBlock.Add(function);
+                  addNonOverride(originalBlock, function);
                   break;
                }
                case MatchFunction matchFunction:
                {
                   implemented.Add(matchFunction.Selector);
-                  originalBlock.Add(matchFunction);
+                  //originalBlock.Add(matchFunction);
+                  addNonOverride(originalBlock, matchFunction);
                   break;
                }
                default:
@@ -455,6 +457,26 @@ public class ClassBuilder
 
       bool isModifiable(Statement statement) => statement is AssignToNewField or AssignToNewField2 or DefineNewField or CreateNewFields or LazyAssign
          or AssignDefinition or Function or MatchFunction;
+
+      void addNonOverride(Block block, Statement statement)
+      {
+         if (statement is IHasSelector hasSelector)
+         {
+            foreach (var dummy in block.OfType<IHasSelector>().Where(hs => hasSelector.Selector == hs.Selector && hs.Overriding))
+            {
+               return;
+            }
+         }
+
+         block.Add(statement);
+         /*if (statement is IHasSelector { Overriding: false })
+         {
+            if (block.WhereIs<IHasSelector>(hs => hs.Overriding))
+            {
+               block.Add(statement);
+            }
+         }*/
+      }
    }
 
    public Optional<Unit> Constructor(Parameters parameters, Block block, bool standard)
