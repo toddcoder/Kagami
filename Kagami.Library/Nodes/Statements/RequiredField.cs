@@ -9,9 +9,11 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Nodes.Statements;
 
-public class RequiredField(string fieldName, bool mutable, Maybe<TypeConstraint> _typeConstraint) : Statement
+public class RequiredField(string fieldName, bool mutable, Maybe<TypeConstraint> _typeConstraint) : Statement, IFieldStatement
 {
    public string FieldName => fieldName;
+
+   public string Name => fieldName;
 
    public bool Mutable => mutable;
 

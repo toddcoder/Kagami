@@ -1,9 +1,11 @@
-﻿using Kagami.Library.Objects;
+﻿using Core.Monads;
+using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 
 namespace Kagami.Library.Nodes.Statements;
 
-public class DefineNewField(bool mutable, string fieldName, TypeConstraint typeConstraint, bool isHidden, bool isOverride, bool isParam) : Statement
+public class DefineNewField(bool mutable, string fieldName, TypeConstraint typeConstraint, bool isHidden, bool isOverride, bool isParam)
+   : Statement, IFieldStatement
 {
    protected bool mutable = mutable;
    protected string fieldName = fieldName;
@@ -26,4 +28,10 @@ public class DefineNewField(bool mutable, string fieldName, TypeConstraint typeC
       isOverride = this.isOverride;
       isParam = this.isParam;
    }
+
+   public string Name => fieldName;
+
+   public bool Mutable => mutable;
+
+   public Maybe<TypeConstraint> TypeConstraint => typeConstraint;
 }

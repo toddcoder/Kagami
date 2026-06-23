@@ -19,7 +19,7 @@ public class AssignToNewGuardedField : AssignToNewField
       this._failure = _failure;
    }
 
-   public Maybe<TypeConstraint> TypeConstraint => _typeConstraint;
+   //public Maybe<TypeConstraint> TypeConstraint => _typeConstraint;
 
    public override void Generate(OperationsBuilder builder)
    {

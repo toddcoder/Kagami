@@ -1,11 +1,13 @@
-﻿using Kagami.Library.Invokables;
+﻿using Core.Monads;
+using Kagami.Library.Invokables;
+using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Nodes.NodeFunctions;
 
 namespace Kagami.Library.Nodes.Statements;
 
-public class LazyAssign(string fieldName, Block block, bool isHidden, bool isOverride) : Statement
+public class LazyAssign(string fieldName, Block block, bool isHidden, bool isOverride) : Statement, IFieldStatement
 {
    protected string lazyName = lazyName(fieldName);
 
@@ -33,4 +35,10 @@ public class LazyAssign(string fieldName, Block block, bool isHidden, bool isOve
    }
 
    public override string ToString() => $"lazy {fieldName} = {block}";
+
+   public string Name => fieldName;
+
+   public bool Mutable => false;
+
+   public Maybe<TypeConstraint> TypeConstraint => nil;
 }

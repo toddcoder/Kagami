@@ -1,7 +1,9 @@
-﻿using Kagami.Library.Objects;
+﻿using Core.Computers;
 using Core.Enumerables;
-using Core.Monads;
 using Core.Matching;
+using Core.Monads;
+using Kagami.Library.Nodes.Statements;
+using Kagami.Library.Objects;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
@@ -16,6 +18,8 @@ public static class CommonExtensions
       public string unget() => name.Substitute("^ '__$' /(.*) $", "$1");
 
       public string set() => $"{name}=(_)";
+
+      public string set(TypeConstraint typeConstraint) => $"{name}=(_{typeConstraint.Image})";
 
       public Selector Selector(params string[] selectorItemSources)
       {
@@ -79,6 +83,26 @@ public static class CommonExtensions
             list.RemoveAt(list.Count - 1);
             return true;
          }
+      }
+   }
+
+   extension(IFieldStatement fieldStatement)
+   {
+      public IEnumerable<Selector> Selectors()
+      {
+         if (fieldStatement.Mutable)
+         {
+            if (fieldStatement.TypeConstraint is (true, var typeConstraint))
+            {
+               yield return fieldStatement.Name.set(typeConstraint);
+            }
+            else
+            {
+               yield return fieldStatement.Name.set();
+            }
+         }
+
+         yield return fieldStatement.Name.get();
       }
    }
 }

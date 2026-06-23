@@ -8,7 +8,7 @@ using static Core.Strings.StringStreamFunctions;
 
 namespace Kagami.Library.Nodes.Statements;
 
-public class AssignToNewField : Statement
+public class AssignToNewField : Statement, IFieldStatement
 {
    protected readonly bool mutable;
    protected readonly string fieldName;
@@ -51,7 +51,7 @@ public class AssignToNewField : Statement
    {
       expression.Generate(builder);
 
-      if (_typeConstraint is (true, var typeConstraint))
+      if (_typeConstraint is (true, var typeConstraint and not ProtocolConstraint))
       {
          switch (typeConstraint.Comparisands[0].Name)
          {
@@ -82,4 +82,8 @@ public class AssignToNewField : Statement
    }
 
    public bool Ignore { get; set; }
+
+   public string Name => fieldName;
+
+   public Maybe<TypeConstraint> TypeConstraint => _typeConstraint;
 }

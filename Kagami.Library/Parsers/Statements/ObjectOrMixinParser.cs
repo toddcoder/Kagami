@@ -82,6 +82,17 @@ public partial class ObjectOrMixinParser : StatementParser
                if (isMixin)
                {
                   Module.RegisterMixin(className, metaClass);
+
+                  var _scanned = state.Scan(@$"^(\s+)(as\s+protocol)(\s+)({REGEX_CLASS})", 4, Color.Whitespace, Color.Keyword, Color.Whitespace,
+                     Color.Class);
+                  if (_scanned is (true, var protocolName))
+                  {
+                     Protocols.Protocols.Create(protocolName, metaClass);
+                  }
+                  else if (_scanned.Exception is (true, var exception))
+                  {
+                     return exception;
+                  }
                }
 
                state.AddStatement(metaClass);

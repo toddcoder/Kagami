@@ -4,7 +4,7 @@ using Kagami.Library.Operations;
 
 namespace Kagami.Library.Nodes.Statements;
 
-public class CreateNewFields(string[] fields, TypeConstraint typeConstraint, bool isHidden, bool isOverride) : Statement
+public class CreateNewFields(string[] fields, TypeConstraint typeConstraint, bool isHidden, bool isOverride) : Statement, IFieldsStatement
 {
    public override void Generate(OperationsBuilder builder)
    {
@@ -15,6 +15,9 @@ public class CreateNewFields(string[] fields, TypeConstraint typeConstraint, boo
    }
 
    public override string ToString() => $"var {fields.ToString(", ")} {typeConstraint}";
+
+   public IEnumerable<IFieldStatement> FieldStatements() =>
+      fields.Select(field => new DefineNewField(true, field, typeConstraint, isHidden, isOverride, false));
 
    public string[] Fields => fields;
 
