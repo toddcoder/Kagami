@@ -30,7 +30,7 @@ public partial class PlaceholderParser : SymbolParser
       if (placeholderName.StartsWith('`'))
       {
          state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Identifier);
-         builder.Add(new FieldSymbol(placeholderName));
+         builder.Add(new FieldSymbol(placeholderName[1..]));
          return unit;
       }
 
