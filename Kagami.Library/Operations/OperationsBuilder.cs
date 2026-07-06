@@ -671,5 +671,7 @@ public class OperationsBuilder(ParseState state)
 
    public void Iterate() => add(new Iterator());
 
+   public void BindComparisand() => add(new BindComparisand());
+
    public override string ToString() => "operations";
 }

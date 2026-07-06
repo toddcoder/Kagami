@@ -41,6 +41,12 @@ public static class ObjectFunctions
          bindings[name] = source;
       }
 
+      _name = Module.Global.Value.Bindings.Maybe[source.Id];
+      if (_name is (true, var name2))
+      {
+         bindings["-" + name2] = comparisand;
+      }
+
       if (comparisand.ClassName == "Number" && source is INumeric)
       {
          return true;

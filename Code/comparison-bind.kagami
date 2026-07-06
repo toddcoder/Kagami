@@ -1,0 +1,11 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+type Expr {
+	| UnOp(op string, n Expr)
+	| Nothing()
+}
+
+let expr = UnOp("abs", UnOp("abs", Nothing()))
+match expr {
+	| UnOp("abs", e: UnOp("abs", _)) => println e
+}

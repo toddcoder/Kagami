@@ -25,7 +25,15 @@ public partial class NameValueParser : SymbolParser
       var _expression = getExpression(state, builder.Flags | ExpressionFlags.OmitColon | ExpressionFlags.OmitComma);
       if (_expression is (true, var expression))
       {
-         builder.Add(new NameValueSymbol(name, expression));
+         if (!builder.Flags[ExpressionFlags.Comparisand])
+         {
+            builder.Add(new NameValueSymbol(name, expression));
+         }
+         else
+         {
+            builder.Add(new BindComparisandSymbol(name, expression));
+         }
+
          return unit;
       }
       else
