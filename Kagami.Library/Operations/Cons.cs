@@ -21,8 +21,7 @@ public class Cons : TwoOperandOperation
          };
       }
       else
-      {
-         return new KArray([x, y]);
+      { return new KArray([x, y]);
       }
    }
 

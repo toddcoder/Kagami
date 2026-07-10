@@ -1,0 +1,12 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+fn match second(a array) optional {
+	| _ :: y :: _ return ?y
+	| _ return nil
+}
+
+println second([])
+println second([1])
+println second([1, 2])
+println second([1, 2, 3])
+println second([1, 2, 3, 4])

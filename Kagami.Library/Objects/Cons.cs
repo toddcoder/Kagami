@@ -1,25 +1,18 @@
 ﻿using Core.Collections;
-using static Kagami.Library.Objects.ObjectFunctions;
+using Core.Monads;
 
 namespace Kagami.Library.Objects;
 
 public class Cons(IObject head, IObject tail) : IObject
 {
-   public static IObject Null => new Cons(KUnit.Value, KUnit.Value) { IsNull = true };
-
-   public static IObject Cons1(IObject head, IObject tail)
+   public static IObject Combine(IObject head, IObject tail) => tail switch
    {
-      if (tail is Cons { IsNull: true })
-      {
-         return new Cons(head, tail);
-      }
-      else
-      {
-         return new Cons(head, new Cons(tail, Null));
-      }
-   }
-
-   public static IObject Combine(IObject head, Cons cons) => new Cons(head, cons);
+      Placeholder => new Cons(head, tail),
+      KArray { IsNotEmpty.Value: true } array => new Cons(head, new KArray(head).Concatenate(array)),
+      KArray => new Cons(head, tail),
+      Cons cons => new Cons(head, cons.ToArray()),
+      _ => new Cons(head, tail)
+   };
 
    public IObject Head => head;
 
@@ -35,14 +28,36 @@ public class Cons(IObject head, IObject tail) : IObject
 
    public bool IsEqualTo(IObject obj) => obj is Cons otherCons && head.IsEqualTo(otherCons.Head) && tail.IsEqualTo(otherCons.Tail);
 
-   public bool Match(IObject comparisand, Hash<string, IObject> bindings)
+   public bool Match(IObject comparisand, Hash<string, IObject> bindings) => comparisand switch
    {
-      return match(comparisand, comparisand, bindings);
-   }
+      Cons cons => cons.Head.Match(head, bindings) && cons.Tail.Match(tail, bindings),
+      KArray { IsNotEmpty.Value: true } array => head.Match(array[0], bindings) && ((Cons)tail).ToArray().Match(array.Tail, bindings),
+      _ => false
+   };
 
    public bool IsTrue => true;
 
    public Guid Id { get; init; } = Guid.NewGuid();
 
-   public bool IsNull { get; set; }
+   public IEnumerable<IObject> Enumerable()
+   {
+      yield return head;
+
+      if (tail is ICollection collection)
+      {
+         var iterator = collection.GetIterator(false);
+         while (iterator.Next() is (true, var item))
+         {
+            yield return item;
+         }
+      }
+      else
+      {
+         yield return tail;
+      }
+   }
+
+   public KArray ToArray() => new(Enumerable());
+
+   public KArray ToArray(Maybe<TypeConstraint> typeConstraint) => new(Enumerable()) { TypeConstraint = typeConstraint };
 }

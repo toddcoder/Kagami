@@ -907,4 +907,25 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
       return this;
    }
+
+   public Maybe<Cons> Cons()
+   {
+      if (list.Count > 0)
+      {
+         var head = list[0];
+         var _tail = new KArray(list.Skip(1)) { TypeConstraint = _typeConstraint }.Cons();
+         if (_tail is (true, var tail))
+         {
+            return new Cons(head, tail);
+         }
+         else
+         {
+            return new Cons(head, Empty);
+         }
+      }
+      else
+      {
+         return nil;
+      }
+   }
 }
