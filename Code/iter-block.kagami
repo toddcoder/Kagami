@@ -1,0 +1,11 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+let pre = '<'
+let post = '>'
+let sep = "Hello, world"
+let mkString = iter{
+	yield pre
+	for c in sep yield c
+	yield post
+}
+println mkString join ""

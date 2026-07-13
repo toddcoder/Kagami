@@ -12,15 +12,15 @@ public partial class KeywordOperatorsParser : SymbolParser
    }
 
    [GeneratedRegex(@"^(\s+)(if|map|join|sort|foldl|foldr|fold|all|any|none|one|zip|Z|skip|take|while|until|min|max" +
-      "|does|X|each|approx|same|xor|union|intersect|diff|symdiff|subsetof|supersetof|accum|overlaps|to|til|downto|" +
-      @"downtil|dto|dtil|by|range)(\s+)")]
+      "|does|X|each|approx|same|xor|union|intersect|diff|symdiff|subsetof|supersetof|accum|overlaps|to|till|downto|" +
+      @"downtill|dto|dtill|by|range)(\s+)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
       var keyword = tokens[2].Text;
       if ((builder.Flags[ExpressionFlags.OmitRange] || builder.Flags[ExpressionFlags.InLambda]) && keyword != "div" && keyword != "divmod" &&
-          keyword != "min" && keyword != "max" && keyword != "to" && keyword != "til" && keyword != "dto" && keyword != "dtil" && keyword != "by" ||
+          keyword != "min" && keyword != "max" && keyword != "to" && keyword != "till" && keyword != "dto" && keyword != "dtill" && keyword != "by" ||
           builder.Flags[ExpressionFlags.OmitWhileUntil] && keyword is "while" or "until")
       {
          return nil;
@@ -119,13 +119,13 @@ public partial class KeywordOperatorsParser : SymbolParser
                case "to":
                   builder.Add(new RangeSymbol(true, false));
                   break;
-               case "til":
+               case "till":
                   builder.Add(new RangeSymbol(false, false));
                   break;
                case "downto" or "dto":
                   builder.Add(new RangeSymbol(true, true));
                   break;
-               case "downtil" or "dtil":
+               case "downtill" or "dtill":
                   builder.Add(new RangeSymbol(false, true));
                   break;
                case "by":

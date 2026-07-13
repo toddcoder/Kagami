@@ -3,7 +3,7 @@
 var s mstring = "hello"
 println(s)
 
-for i in 0 til s.length // 2 {
+for i in 0 till s.length // 2 {
 	let temp = s[i]
 	s[i] = s[s.length - 1 - i]
 	s[s.length - 1 - i] = temp

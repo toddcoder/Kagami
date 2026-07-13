@@ -115,7 +115,7 @@ public struct KRange : IObject, ICollection
 
    private string stopImage(bool asString) => str(stopObj, asString);
 
-   private string inclusiveImage() => inclusive ? "to" : "til";
+   private string inclusiveImage() => inclusive ? "to" : "till";
 
    private string incrementImage() => increment != 1 ? $"by {increment}" : "";
 
