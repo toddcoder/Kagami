@@ -37,7 +37,6 @@ public static class ParserFunctions
    public const string REGEX_ASSIGN_OPS = @"\+|-|\*|//|/%|/|/|\^|~|%|:\b";
    public const string REGEX_FUNCTION_NAME = $@"(?:(?:{REGEX_INVOKABLE})|(?:[~`!@\#\$%\^\*\+=\|\\;<>/\?&-]+)|\[\])=?(?![=>])";
    public const string REGEX_FUNCTION_NAME2 = $@"(?:(?:{REGEX_INVOKABLE2})|(?:[~`!@\#\$%\^\*\+=\|\\;<>/\?&-]+)|\[\])=?(?![=>])";
-   public const string REGEX_SELECTOR = @$"(?:__\$)?{REGEX_FUNCTION_NAME}(?:\(.*\))?=?(?![=>])";
    public const string REGEX_EOL = @"\r\n|\r|\n|$";
    public const string REGEX_ANTICIPATE_END = $"(?=(?:{REGEX_EOL}))";
    public const string REGEX_OPERATORS = @"[-\+\*/\\%<=>!\.~\|\?\#@&\^,;:]";
