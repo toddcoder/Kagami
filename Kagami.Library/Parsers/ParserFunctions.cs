@@ -703,6 +703,7 @@ public static class ParserFunctions
       "result" => "Result",
       "lazy" => "Lazy",
       "event" => "Event",
+      "type" => "TypeConstraint",
       _ => nil
    };
 

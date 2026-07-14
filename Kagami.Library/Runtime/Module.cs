@@ -270,6 +270,11 @@ public class Module
          classes[alias] = @class;
          return unit;
       }
+      else if (Objects.ObjectFunctions.anyClassOf(className) is (true, var anyClass))
+      {
+         classes[alias] = anyClass;
+         return unit;
+      }
       else
       {
          return classNotFound(className);

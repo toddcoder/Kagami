@@ -6,8 +6,9 @@ public class ProtocolMembersParser(ProtocolBuilder builder) : MultiParser
    {
       get
       {
-         yield return new ProtocolFieldParser(builder);
-         yield return new ProtocolGetterParser(builder);
+         yield return new TypeDeclarationParser();
+         //yield return new ProtocolFieldParser(builder);
+         //yield return new ProtocolGetterParser(builder);
          yield return new ProtocolSetterParser(builder);
          yield return new ProtocolFunctionParser(builder);
       }

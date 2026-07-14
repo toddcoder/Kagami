@@ -67,8 +67,9 @@ public class StatementsParser : MultiParser
          yield return new DefParser();
          yield return new AssignReferenceToNewFieldParser();
          yield return new AutoPropertyParser();
-         //yield return new AssignToNewGuardedFieldParser();
          yield return new SubtypeParser();
+         yield return new TypeAssignmentParser();
+         yield return new TypeDeclarationParser();
          yield return new AssignToNewFieldParser();
          yield return new LazyAssignParser();
          yield return new ExtensionParser();

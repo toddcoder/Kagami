@@ -26,6 +26,14 @@ public static class ObjectFunctions
 
    public static BaseClass classOf(string className) => Module.Global.Value.Class(className).Required(messageClassNotFound(className));
 
+   public static Maybe<BaseClass> anyClassOf(IObject value)
+   {
+      var className = value.ClassName;
+      return anyClassOf(className);
+   }
+
+   public static Maybe<BaseClass> anyClassOf(string className) => Module.Global.Value.Class(className);
+
    public static bool match<T>(T source, IObject comparisand, Func<T, T, bool> equalifier, Hash<string, IObject> bindings)
       where T : IObject
    {
