@@ -1,10 +1,12 @@
 ﻿using System.Collections;
+using Core.Collections;
 using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using Kagami.Library.Parsers.Expressions;
 using Core.Enumerables;
 using Core.Monads;
+using Kagami.Library.Classes;
 using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Nodes.Statements;
@@ -71,6 +73,7 @@ public class Block : Statement, IEnumerable<Statement>
 
    protected List<Statement> statements;
    protected Maybe<TypeConstraint> _typeConstraint;
+   protected Hash<Guid, ReplacementTypeConstraint> replacementTypeConstraints = [];
 
    public Block(List<Statement> statements, Maybe<TypeConstraint> _typeConstraint)
    {
@@ -199,5 +202,18 @@ public class Block : Statement, IEnumerable<Statement>
       var expression = new Expression(symbol);
       var assignToNewField = new AssignToNewField(false, aliasName, expression, false, false);
       statements.Insert(0, assignToNewField);
+   }
+
+   public void RegisterReplacementTypeConstraint(ReplacementTypeConstraint replacementTypeConstraint)
+   {
+      replacementTypeConstraints[replacementTypeConstraint.Id] = replacementTypeConstraint;
+   }
+
+   public void ReplaceTypes(BaseClass originalClass, BaseClass newClass)
+   {
+      foreach (var replacementTypeConstraint in replacementTypeConstraints.Values.Where(r => r.Comparisands[0] == originalClass))
+      {
+         replacementTypeConstraint.Replace(newClass);
+      }
    }
 }

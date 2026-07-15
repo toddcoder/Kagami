@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using Core.Monads;
+using Kagami.Library.Runtime;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
@@ -15,6 +16,7 @@ public partial class ProtocolParser : StatementParser
       var protocolName = tokens[4].Text;
       state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Class);
       var builder = new ProtocolBuilder(protocolName);
+      Module.Global.Value.ForwardReference(protocolName);
 
       var inheritedInclusionsParser = new InheritedProtocolsParser(builder);
       Optional<Unit> _result;
