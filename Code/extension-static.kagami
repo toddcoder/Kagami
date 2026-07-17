@@ -3,7 +3,7 @@
 class A
 static {}
 
-extension(a) static A {
+static extension a A {
 	fn show() string {
 		return "learning"
 	}

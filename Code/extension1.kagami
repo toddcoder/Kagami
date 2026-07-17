@@ -4,7 +4,7 @@
 
 type Kind {|Negative, Zero, Positive}
 
-extension(i) int {
+extension i int {
 	fn kind Kind {
 		match i {
 			|0 return Zero

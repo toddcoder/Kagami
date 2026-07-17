@@ -17,7 +17,7 @@ public partial class StaticParser : StatementParser
       this.classBuilder = classBuilder;
    }
 
-   [GeneratedRegex(@"^(\s*)(static)\b")]
+   [GeneratedRegex(@"^(\s*)(static)\b(?!\s+extension\b)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)

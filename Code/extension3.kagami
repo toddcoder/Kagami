@@ -2,14 +2,14 @@
 
 #pragma ALLOW_PRINT_STATEMENT true
 
-extension(str) string {
+extension str string {
 	fn upperLast() => str.skip(-1).lower() ~ str.take(-1).upper()
 }
 
 println "foobar".upperLast()
 
-extension string {
-	fn spaceToDash() => self.replace(" ", "-")
+extension s string {
+	fn spaceToDash() => s.replace(" ", "-")
 }
 
 println "foo bar".spaceToDash()

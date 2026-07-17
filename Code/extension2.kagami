@@ -6,7 +6,7 @@ class Foobar {
 	param var name string = ""
 }
 
-extension(foobar) Foobar {
+extension foobar Foobar {
 	init(name string) {
 		if /bool name {
 			return ?Foobar(name: name)
