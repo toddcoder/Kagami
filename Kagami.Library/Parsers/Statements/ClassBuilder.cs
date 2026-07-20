@@ -504,9 +504,19 @@ public class ClassBuilder
             throw _index.Exception;
          }
 
-         builder.NewSelector(selector, false, true);
-         builder.PushObject(new Constructor(invokable));
-         builder.AssignSelector(selector, true);
+         if (invokable.Parameters.Length > 0 && invokable.Parameters[^1].Variadic)
+         {
+            var name = selector.Name;
+            builder.NewField(name, false, true);
+            builder.PushObject(new Constructor(invokable));
+            builder.AssignField(name, true);
+         }
+         else
+         {
+            builder.NewSelector(selector, false, true);
+            builder.PushObject(new Constructor(invokable));
+            builder.AssignSelector(selector, true);
+         }
       }
 
       foreach (var function in functions)
