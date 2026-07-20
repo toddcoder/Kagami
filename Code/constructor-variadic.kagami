@@ -1,0 +1,8 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+fn sum(text string, items...) => text ~ " " ~ items.sum()
+println sum("sum = ", 1, 2, 3)
+class Book(title string, authors...) {
+	let string = $"$title: \($authors)"
+}
+println Book("Structure and Interpretation of Computer Programs", "Abelson, Harold", "Sussman, Gerald J.")

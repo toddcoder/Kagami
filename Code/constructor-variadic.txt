@@ -1,0 +1,3 @@
+sum =  6
+Structure and Interpretation of Computer Programs: (Abelson, Harold Sussman, Gerald J.)
+Book(title = "Structure and Interpretation of Computer Programs", authors = ["Abelson, Harold", "Sussman, Gerald J."]) | Book
