@@ -25,7 +25,7 @@ public partial class MatchLambdaParser : SymbolParser
          from c in getExpression(state, builder.Flags | ExpressionFlags.Comparisand)
          from scanned in state.Scan(@"^(\))(\s*)(->)", Color.CloseParenthesis, Color.Whitespace, Color.Lambda)
          from typeConstraint in parseTypeConstraint(state)
-         from b in getLambdaBlock(!state.CurrentSource.IsMatch("^ /s* '{'"), scanned.EndsWith("=>"), state, builder.Flags, typeConstraint.Maybe)
+         from b in getLambdaBlock(!state.CurrentSource.IsMatch("^ /s* '{'"), scanned.EndsWith("=>"), state, builder.Flags | ExpressionFlags.InLambda, typeConstraint.Maybe)
          select (c, b);
 
       if (_result is (true, var (comparisand, block)))
