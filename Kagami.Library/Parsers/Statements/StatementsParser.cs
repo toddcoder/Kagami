@@ -21,6 +21,7 @@ public class StatementsParser : MultiParser
          yield return new CommentParser();
          yield return new YieldParser();
          yield return new ErrorParser();
+         yield return new ForwardParser();
          yield return new ClassParser();
          yield return new ObjectOrMixinParser();
          yield return new IncludeClassParser();
@@ -67,12 +68,10 @@ public class StatementsParser : MultiParser
          yield return new DefParser();
          yield return new AssignReferenceToNewFieldParser();
          yield return new AutoPropertyParser();
-         //yield return new AssignToNewGuardedFieldParser();
          yield return new SubtypeParser();
          yield return new AssignToNewFieldParser();
          yield return new LazyAssignParser();
          yield return new ExtensionParser();
-
          yield return new DefAssignParser();
          yield return new DataTypeParser();
          yield return new AliasParser();
@@ -82,12 +81,10 @@ public class StatementsParser : MultiParser
          yield return new OpenEnumParser();
          yield return new OpenPackageParser();
          yield return new UsePackageParser();
-
          yield return new AssignWithNewTypeParser();
          yield return new AssignToFieldParser();
          yield return new PassParser();
          yield return new CoverParser();
-
          yield return new ExpressionStatementParser(ReturnExpression, TypeConstraint);
       }
    }
