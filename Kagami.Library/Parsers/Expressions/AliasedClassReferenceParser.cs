@@ -9,7 +9,7 @@ public partial class AliasedClassReferenceParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(int|float|string|char|bytes|byte|complex|rational|long|date|number|mstring|lambda|bool|decimal|tuple|array|set|dict|optional|monad|result|lazy|event)\b")]
+   [GeneratedRegex(@"^(\s*)(int|float|string|char|bytes|byte|complex|rational|long|date|num|mstring|lambda|bool|decimal|tuple|array|set|dict|optional|monad|result|lazy|event)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)

@@ -12,8 +12,8 @@ class Decade {
 	var no_of_yrs = 10
 	fn no_of_months() {
 		println first_day
-		var num = 10 * 12
-		println num
+		var number = 10 * 12
+		println number
 	}
 }
 mix Week

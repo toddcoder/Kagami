@@ -689,7 +689,7 @@ public static class ParserFunctions
       "rat" => "Rational",
       "long" => "Long",
       "date" => "Date",
-      "number" => "Number",
+      "num" => "Number",
       "mstring" => "MutString",
       "lambda" => "Lambda",
       "bool" => "Boolean",

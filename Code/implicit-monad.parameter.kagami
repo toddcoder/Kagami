@@ -2,7 +2,7 @@
 
 #pragma ALLOW_PRINT_STATEMENT true
 
-fn log(value number, base optional = nil) number {
+fn log(value num, base optional = nil) num {
 	let actualBase = base ?: 10
 	return math.log(value) / math.log(actualBase)
 }
