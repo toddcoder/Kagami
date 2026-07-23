@@ -13,7 +13,8 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class TypeMemberParser(Maybe<IObject> _previousOrdinal) : StatementParser
 {
-   public static Optional<(TypeMemberData, Maybe<IObject>)> ParseTypeMember(ParseState state, string className, bool hasParameters, Maybe<IObject> _previousOrdinal)
+   public static Optional<(TypeMemberData, Maybe<IObject>)> ParseTypeMember(ParseState state, string className, bool hasParameters,
+      Maybe<IObject> _previousOrdinal)
    {
       Module.Global.Value.ForwardReference(className);
 
@@ -31,7 +32,7 @@ public partial class TypeMemberParser(Maybe<IObject> _previousOrdinal) : Stateme
          }
          else
          {
-            parameters = new Parameters(0);
+            parameters = [with(0)];
          }
       }
       else
@@ -50,7 +51,14 @@ public partial class TypeMemberParser(Maybe<IObject> _previousOrdinal) : Stateme
          var firstSymbol = expression.Symbols[0];
          if (firstSymbol is IConstant { Object: IRangeItem rangeItem })
          {
-            _ordinal = ((IObject)rangeItem).Some();
+            var defaultValue = (IObject)rangeItem;
+            _ordinal = defaultValue.Some();
+
+            var symbol = new PushSymbol(defaultValue);
+            var defaultExpression = new Expression(symbol);
+            var expressionSymbol = new InvokableExpressionSymbol(defaultExpression);
+            var parameter = new Parameter(false, false, "", "ordinal", expressionSymbol.Invokable.Some(), nil, false, false, false);
+            parameters.Append(parameter);
          }
          else
          {
