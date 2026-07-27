@@ -101,12 +101,12 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       return New(name, type, Unassigned.Value, mutable, visible);
    }
 
-   public Result<Field> New(string name, FieldType type, Maybe<TypeConstraint> typeConstraint, bool mutable, bool visible)
+   public Result<Field> New(string name, FieldType type, Maybe<TypeConstraint> typeConstraint, bool mutable, bool visible, bool overriden = false)
    {
       return New(name, new Field
       {
          Value = Unassigned.Value, Mutable = mutable, Visible = visible, TypeConstraint = typeConstraint, Type = type
-      });
+      }, overriden);
    }
 
    public Result<Field> NewGuarded(string name, FieldType type, Maybe<TypeConstraint> typeConstraint, Lambda predicate, Maybe<IObject> _failure,
@@ -208,9 +208,9 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
       }
    }
 
-   public Result<Field> New(string name, Field field)
+   public Result<Field> New(string name, Field field, bool overriden = false)
    {
-      if (fields.ContainsKey(name) && !field.Tolerant)
+      if (fields.ContainsKey(name) && !field.Tolerant && !overriden)
       {
          return fieldAlreadyExists(name);
       }

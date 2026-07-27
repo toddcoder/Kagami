@@ -13,7 +13,7 @@ public class CreateEvent(string eventName) : Statement, IFieldStatement
    {
       var kEvent = new KEvent();
       builder.PushObject(kEvent);
-      builder.StoreField(eventName, false, true, typeConstraint);
+      builder.StoreField(eventName, false, true, false, typeConstraint);
    }
 
    public string EventName => eventName;

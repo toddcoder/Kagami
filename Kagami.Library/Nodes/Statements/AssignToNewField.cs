@@ -65,7 +65,7 @@ public class AssignToNewField : Statement, IFieldStatement
       }
 
       Module.Global.Value.ForwardReference(fieldName);
-      builder.StoreField(fieldName, mutable, true, _typeConstraint);
+      builder.StoreField(fieldName, mutable, true, isOverride, _typeConstraint);
    }
 
    public override string ToString() => stream() / (mutable ? "var" : "let") / " " / fieldName / " = " / expression;

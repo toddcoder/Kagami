@@ -12,7 +12,7 @@ public class MatchFunctionAssignment(string fieldName, Parameters parameters) : 
       {
          case 1:
             builder.GetField(parameters[0].Name);
-            builder.StoreField(fieldName, false, true, parameters[0].TypeConstraint);
+            builder.StoreField(fieldName, false, true, false, parameters[0].TypeConstraint);
             break;
          case >= 2:
          {
@@ -29,7 +29,7 @@ public class MatchFunctionAssignment(string fieldName, Parameters parameters) : 
             }
 
             builder.NewTuple();
-            builder.StoreField(fieldName, false, true, nil);
+            builder.StoreField(fieldName, false, true, false, nil);
             break;
          }
       }

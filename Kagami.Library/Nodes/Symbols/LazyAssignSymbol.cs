@@ -20,9 +20,9 @@ public class LazyAssignSymbol(Expression expression) : Symbol
       if (_index)
       {
          builder.NewLambda(invokable, true);
-         builder.StoreField(lazyName, false, true, nil);
+         builder.StoreField(lazyName, false, true, false, nil);
          builder.PushObject(new Objects.Singleton());
-         builder.StoreField(fieldName, true, true, nil);
+         builder.StoreField(fieldName, true, true, false, nil);
          builder.PushObject(new SymbolObject(lazyName));
       }
    }

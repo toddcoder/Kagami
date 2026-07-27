@@ -20,7 +20,7 @@ public class Singleton(string identifier, Block block, TypeConstraint typeConstr
       builder.GoToIfTrue(fieldExistsLabel);
 
       builder.Invoke(functionName, 0);
-      builder.StoreField(identifier, false, true, typeConstraint);
+      builder.StoreField(identifier, false, true, false, typeConstraint);
 
       builder.Label(fieldExistsLabel);
       builder.GetField(identifier);

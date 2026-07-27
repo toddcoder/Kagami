@@ -1,10 +1,8 @@
 ﻿using System.Text.RegularExpressions;
 using Core.Matching;
 using Kagami.Library.Nodes.Statements;
-using Kagami.Library.Parsers.Expressions;
 using Core.Monads;
 using Core.Monads.Lazy;
-using Kagami.Library.Nodes.Symbols;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
 
@@ -20,7 +18,7 @@ public partial class DeferParser : StatementParser
       state.Colorize(tokens, Color.Whitespace, Color.Keyword);
 
       Block block;
-      LazyOptional<Expression> _expression = nil;
+      LazyOptional<Statement> _statement = nil;
       if (state.CurrentSource.IsMatch("/s* '{'"))
       {
          var _block = getBlock(state);
@@ -33,13 +31,13 @@ public partial class DeferParser : StatementParser
             return _block.Exception;
          }
       }
-      else if (_expression.ValueOf(getExpression(state, ExpressionFlags.Standard)) is (true, var expression))
+      else if (_statement.ValueOf(getStatement(state)) is (true, var statement))
       {
-         block = new Block(new ExpressionStatement(expression, true));
+         block = [statement];
       }
       else
       {
-         return _expression.Exception;
+         return _statement.Exception;
       }
 
       block.AddReturnIf();

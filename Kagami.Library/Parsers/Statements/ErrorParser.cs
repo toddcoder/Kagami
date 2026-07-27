@@ -41,7 +41,7 @@ public partial class ErrorParser : StatementParser
          }
          else
          {
-            parameters = new Parameters(0);
+            parameters = [with(0)];
          }
       }
       else

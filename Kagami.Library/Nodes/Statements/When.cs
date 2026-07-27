@@ -35,7 +35,7 @@ public class When((Expression, Block)[] expressionBlock, string fieldName, bool 
       if (fieldName.IsNotEmpty())
       {
          builder.PopFrameWithValue();
-         builder.StoreField(fieldName, mutable, true, nil);
+         builder.StoreField(fieldName, mutable, true, false, nil);
       }
       else
       {

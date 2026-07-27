@@ -128,7 +128,7 @@ public class ParseState : IEnumerable<Statement>
 
       if (ForExpression is (true, var (fieldName, expression)))
       {
-         statements.Add(new For(new PlaceholderSymbol("+" + fieldName), expression, new Block(statement), new PossibleIfExpression.None()));
+         statements.Add(new For(new PlaceholderSymbol("+" + fieldName), expression, [with(statement)], new PossibleIfExpression.None()));
          ForExpression = nil;
       }
       else

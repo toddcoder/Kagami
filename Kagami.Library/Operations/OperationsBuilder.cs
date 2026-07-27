@@ -207,9 +207,9 @@ public class OperationsBuilder(ParseState state)
 
    public void AssignField(string name, bool overriding) => add(new AssignField(name, overriding));
 
-   public void StoreField(string name, bool mutable, bool visible, Maybe<TypeConstraint> _typeConstraint)
+   public void StoreField(string name, bool mutable, bool visible, bool overriden, Maybe<TypeConstraint> _typeConstraint)
    {
-      add(new StoreField(name, mutable, visible, _typeConstraint));
+      add(new StoreField(name, mutable, visible, overriden, _typeConstraint));
    }
 
    public void StoreGuardedField(string name, bool mutable, bool visible, Maybe<TypeConstraint> _typeConstraint, bool failure)

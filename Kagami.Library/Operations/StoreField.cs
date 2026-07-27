@@ -5,12 +5,12 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Operations;
 
-public class StoreField(string fieldName, bool mutable, bool visible, Maybe<TypeConstraint> _typeConstraint) : OneOperandOperation
+public class StoreField(string fieldName, bool mutable, bool visible, bool overriden, Maybe<TypeConstraint> _typeConstraint) : OneOperandOperation
 {
    public override Optional<IObject> Execute(Machine machine, IObject value)
    {
       var _result =
-         from newField in machine.CurrentFrame.Fields.New(fieldName, FieldType.Assignment, _typeConstraint, mutable, visible)
+         from newField in machine.CurrentFrame.Fields.New(fieldName, FieldType.Assignment, _typeConstraint, mutable, visible, overriden)
          from assigned in machine.Assign(fieldName, value, false)
          select unit;
       if (_result)
@@ -23,5 +23,5 @@ public class StoreField(string fieldName, bool mutable, bool visible, Maybe<Type
       }
    }
 
-   public override string ToString() => $"store.field({fieldName}, {mutable.ToString().ToLower()}, {visible.ToString().ToLower()})";
+   public override string ToString() => $"store.field({fieldName}, {mutable.ToString().ToLower()}, {visible.ToString().ToLower()}, {overriden.ToString().ToLower()})";
 }

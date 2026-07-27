@@ -24,9 +24,9 @@ public class LazyAssign(string fieldName, Block block, bool isHidden, bool isOve
       if (_index)
       {
          builder.NewLambda(invokable, true);
-         builder.StoreField(lazyName, false, true, nil);
+         builder.StoreField(lazyName, false, true, isOverride, nil);
          builder.PushObject(new Objects.Singleton());
-         builder.StoreField(fieldName, true, true, nil);
+         builder.StoreField(fieldName, true, true, isOverride, nil);
       }
       else
       {

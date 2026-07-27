@@ -78,6 +78,21 @@ public static class ParserFunctions
       _ => fail($"Didn't understand {original}")
    };
 
+   public static Optional<Statement> getStatement(ParseState state)
+   {
+      state.PushStatements();
+      var statementsParser = new StatementsParser();
+      var _scan = statementsParser.Scan(state);
+      if (_scan)
+      {
+         return state.PopStatement().Optional();
+      }
+      else
+      {
+         return _scan.Exception;
+      }
+   }
+
    public static Optional<Expression> getExpression(ParseState state, Bits32<ExpressionFlags> flags)
    {
       var expressionParser = new ExpressionParser(flags);

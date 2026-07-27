@@ -69,7 +69,7 @@ public struct Failure : IObject, IResult, IMonad, IBoolean
 
    public KBoolean CanBind => false;
 
-   public IObject ErrorObject => wrapper;
+   public IObject ErrorObject => wrapper.Object;
 
    public KString Message => new(sendMessage(wrapper.Object, "message".get()).AsString);
 
