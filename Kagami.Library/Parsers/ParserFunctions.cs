@@ -372,35 +372,52 @@ public static class ParserFunctions
       List<Parameter> parameters = [];
       var defaultRequired = false;
       var continuing = true;
+      var noCapture = false;
 
       while (state.More && continuing)
       {
-         var _parameter = getParameter(state, defaultRequired);
-         if (_parameter is (true, var parameter))
+         if (!noCapture && state.Scan(@"^(\s*)(;)", Color.Whitespace, Color.Structure))
          {
-            if (parameter.DefaultValue)
-            {
-               defaultRequired = true;
-            }
+            noCapture = true;
+         }
 
-            parameters.Add(parameter);
-            if (parameter.Variadic)
-            {
-               continuing = false;
-            }
+         if (noCapture && getNoCapturingParameter(state) is (true, var noCaptureParameter))
+         {
+            parameters.Add(noCaptureParameter);
          }
          else
          {
-            return _parameter.Exception;
+            var _parameter = getParameter(state, defaultRequired);
+            if (_parameter is (true, var parameter))
+            {
+               if (parameter.DefaultValue)
+               {
+                  defaultRequired = true;
+               }
+
+               parameters.Add(parameter);
+               if (parameter.Variadic)
+               {
+                  continuing = false;
+               }
+            }
+            else
+            {
+               return _parameter.Exception;
+            }
          }
 
          var _next = state.Scan(@"^(\s*)([,\)])", Color.Whitespace, Color.CloseParenthesis);
          if (_next is (true, var next))
          {
-            if (next.EndsWith(")"))
+            if (next.EndsWith(')'))
             {
                return new Parameters([.. parameters]);
             }
+         }
+         else if (state.Scan(@"^(\s*)(;)", Color.Whitespace, Color.Structure))
+         {
+            noCapture = true;
          }
          else
          {
@@ -1103,8 +1120,16 @@ public static class ParserFunctions
       from variadic in parseVaraidic(state)
       from defaultValue in parseDefaultValue(state, defaultRequired)
       from possibleGuard in parseGuard(state)
-      select new Parameter(hidden, mutable || reference, label, name, defaultValue, typeConstraint, reference, noCapturing, lazy, possibleGuard)
-         { Variadic = variadic };
+      select new Parameter(hidden, mutable || reference, label, name, defaultValue, typeConstraint, reference, false, lazy, possibleGuard)
+      {
+         Variadic = variadic
+      };
+
+   private static Optional<Parameter> getNoCapturingParameter(ParseState state)
+   {
+      return state.Scan(@$"^(\s*)({REGEX_FIELD})\b", 2, Color.Whitespace, Color.Identifier)
+         .Map(pn => new Parameter(false, false, "", pn, nil, nil, false, true, false));
+   }
 
    public static Optional<Block> getAnyBlock(ParseState state)
    {

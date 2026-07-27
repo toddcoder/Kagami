@@ -1,0 +1,5 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+var sum = 0
+1 to 10 each {(i; sum) sum += i}
+println sum
