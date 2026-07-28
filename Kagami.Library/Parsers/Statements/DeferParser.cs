@@ -18,7 +18,6 @@ public partial class DeferParser : StatementParser
       state.Colorize(tokens, Color.Whitespace, Color.Keyword);
 
       Block block;
-      LazyOptional<Statement> _statement = nil;
       if (state.CurrentSource.IsMatch("/s* '{'"))
       {
          var _block = getBlock(state);
@@ -31,13 +30,9 @@ public partial class DeferParser : StatementParser
             return _block.Exception;
          }
       }
-      else if (_statement.ValueOf(getStatement(state)) is (true, var statement))
-      {
-         block = [statement];
-      }
       else
       {
-         return _statement.Exception;
+         return fail("Defer requires a block structure");
       }
 
       block.AddReturnIf();

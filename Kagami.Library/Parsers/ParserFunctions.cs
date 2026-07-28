@@ -1114,7 +1114,7 @@ public static class ParserFunctions
       from reference in parseReference(state)
       from mutable in parseMutable(state)
       from label in parseLabel(state)
-      from noCapturing in parseNoCapturing(state)
+      //from noCapturing in parseNoCapturing(state)
       from name in parseParameterName(state)
       from typeConstraint in parseTypeConstraint(state)
       from variadic in parseVaraidic(state)

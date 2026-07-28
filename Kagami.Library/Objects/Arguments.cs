@@ -85,14 +85,14 @@ public readonly struct Arguments : IObject, IEnumerable<IObject>, IEquatable<Arg
 
    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-   public Arguments Pass(int count) => new([..arguments.Skip(count)]);
+   public Arguments Pass(int count) => [with([.. arguments.Skip(count)])];
 
    public Arguments Prepend(IObject prefix)
    {
       List<IObject> list = [.. arguments];
       list.Insert(0, prefix);
 
-      return new Arguments([.. list]);
+      return [with([.. list])];
    }
 
    public bool Equals(Arguments other) => Equals(arguments, other.arguments) && Equals(labels, other.labels);

@@ -31,14 +31,14 @@ public class LambdaSymbol : Symbol
 
    public LambdaSymbol(int unknownFieldCount, Expression expression, bool captures = true)
    {
-      parameters = new Parameters(unknownFieldCount);
+      parameters = [with(unknownFieldCount)];
       block = (Block)expression;
       this.captures = captures;
    }
 
    public LambdaSymbol(int unknownFieldCount, Block block, bool captures = true)
    {
-      parameters = new Parameters(unknownFieldCount);
+      parameters = [with(unknownFieldCount)];
       this.block = block;
       this.captures = captures;
    }
