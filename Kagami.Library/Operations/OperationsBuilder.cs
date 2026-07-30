@@ -88,7 +88,7 @@ public class OperationsBuilder(ParseState state)
 
    public void Label(LabelType type) => Label(PeekLabel(type));
 
-   public void CallSysFunction0(Func<Sys, Result<IObject>> func, string image) => add(new CallSysFunction0(func, image));
+   public void GetReference(string fieldName) => add(new GetReference(fieldName));
 
    public void CallSysFunction1(Func<Sys, IObject, Result<IObject>> func, string image) => add(new CallSysFunction1(func, image));
 

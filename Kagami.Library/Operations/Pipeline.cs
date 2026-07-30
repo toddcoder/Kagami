@@ -32,6 +32,11 @@ public class Pipeline : TwoOperandOperation
          {
             return classOf(x).SendMessage(x, message).Just();
          }
+         case Reference reference:
+         {
+            reference.Field.Value = x;
+            return reference.Field.Value.Just();
+         }
          case Selector selector:
          {
             var _field = Machine.Current.Find(selector);

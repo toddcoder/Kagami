@@ -20,7 +20,7 @@ public partial class RefParser : SymbolParser
       var fieldName = tokens[4].Text;
       state.Colorize(tokens, Color.Whitespace, Color.Operator, Color.Whitespace, Color.Identifier);
 
-      builder.Add(new CallSysFunctionSymbol0(s => s.GetReference(fieldName), $"ref {fieldName}"));
+      builder.Add(new GetReferenceSymbol(fieldName));
       return unit;
    }
 }

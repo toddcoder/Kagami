@@ -165,23 +165,6 @@ public class Sys : Package
 
    public IObject Second(KTuple kTuple) => kTuple[1];
 
-   public Result<IObject> GetReference(string fieldName)
-   {
-      var _field = Machine.Current.Find(fieldName, true);
-      if (_field is (true, var field))
-      {
-         return new Reference(field);
-      }
-      else if (_field.Exception is (true, var exception))
-      {
-         return exception;
-      }
-      else
-      {
-         return fieldNotFound(fieldName);
-      }
-   }
-
    public IObject Tuple(IObject value) => new KTuple(value);
 
    public IObject Tuple(IObject value1, IObject value2) => new KTuple(value1, value2);
