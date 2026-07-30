@@ -569,10 +569,10 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerIterMessage("anyTrue(_)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, c) => i.AnyTrue(c)));
       registerIterMessage("noneTrue(_)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, c) => i.NoneTrue(c)));
       registerIterMessage("headTail()", (obj, _) => iteratorFunc(obj, i => i.HeadTail()));
-      registerIterMessage("junctionAll()", (obj, _) => iteratorFunc(obj, i => i.JunctionAll()));
-      registerIterMessage("junctionAny()", (obj, _) => iteratorFunc(obj, i => i.JunctionAny()));
-      registerIterMessage("junctionNone()", (obj, _) => iteratorFunc(obj, i => i.JunctionNone()));
-      registerIterMessage("junctionOne()", (obj, _) => iteratorFunc(obj, i => i.JunctionOne()));
+      registerIterMessage("all".get(), (obj, _) => iteratorFunc(obj, i => i.JunctionAll()));
+      registerIterMessage("any".get(), (obj, _) => iteratorFunc(obj, i => i.JunctionAny()));
+      registerIterMessage("none".get(), (obj, _) => iteratorFunc(obj, i => i.JunctionNone()));
+      registerIterMessage("one".get(), (obj, _) => iteratorFunc(obj, i => i.JunctionOne()));
       registerIterMessage("step(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Step(c.Value)));
       registerIterMessage("[](_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i[c.Value]));
       registerIterMessage("seq()", (obj, _) => iteratorFunc(obj, i => i.Seq()));
