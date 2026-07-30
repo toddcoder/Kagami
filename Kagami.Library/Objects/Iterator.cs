@@ -1311,7 +1311,29 @@ public class Iterator : IObject, IIterator
       return array[i];
    }
 
-   public IObject Collect() => collectionClass.Revert(List(), _typeConstraint);
+   public IObject Collect()
+   {
+      List<IObject> result = [.. collect(this)];
+      return collectionClass.Revert(result, _typeConstraint);
+
+      static IEnumerable<IObject> collect(IIterator iterator)
+      {
+         foreach (var item in iterator.List())
+         {
+            if (item is ICollection collection)
+            {
+               foreach (var innerItem in collect(collection.GetIterator(false)))
+               {
+                  yield return innerItem;
+               }
+            }
+            else
+            {
+               yield return item;
+            }
+         }
+      }
+   }
 
    public KArray ToArray() => new(List());
 
@@ -1361,7 +1383,7 @@ public class Iterator : IObject, IIterator
       if (count > 0)
       {
          var rotatedList = list.Take(count);
-         List<IObject> retainedList = [..list.Skip(count)];
+         List<IObject> retainedList = [.. list.Skip(count)];
          retainedList.AddRange(rotatedList);
          list = retainedList;
       }
@@ -1418,7 +1440,7 @@ public class Iterator : IObject, IIterator
 
       if (count > 0)
       {
-         List<IObject> retainedList = [..list.Skip(count)];
+         List<IObject> retainedList = [.. list.Skip(count)];
          for (var i = 0; i < count; i++)
          {
             retainedList.Add(defaultValue);
@@ -1466,11 +1488,11 @@ public class Iterator : IObject, IIterator
             List<IObject> list = [.. items];
             foreach (var item in list)
             {
-               List<IObject> remainingItems = [..list];
+               List<IObject> remainingItems = [.. list];
                remainingItems.Remove(item);
                foreach (var permutation in permutations(remainingItems, length - 1))
                {
-                  yield return [item, ..permutation];
+                  yield return [item, .. permutation];
                }
             }
          }
@@ -1498,7 +1520,7 @@ public class Iterator : IObject, IIterator
                var remainingItems = itemList.Skip(i + 1);
                foreach (var combination in combinations(remainingItems, length - 1))
                {
-                  yield return [currentItem, ..combination];
+                  yield return [currentItem, .. combination];
                }
             }
          }
@@ -1553,7 +1575,7 @@ public class Iterator : IObject, IIterator
 
    public IObject Apply(ICollection collection)
    {
-      List<Lambda> lambdas = [..List().Select(l => (Lambda)l)];
+      List<Lambda> lambdas = [.. List().Select(l => (Lambda)l)];
       List<IObject> list = [.. collection.GetIterator(false).List()];
 
       var result = applyAgainst(lambdas, list);
