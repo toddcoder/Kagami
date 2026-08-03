@@ -14,7 +14,7 @@ public class TypeConstraint : IObject, IEnumerable<TypeConstraint>
 {
    public static TypeConstraint FromList(params string[] classNames)
    {
-      return new([.. classNames.Select(cn => Module.Global.Value.Class(cn).Required(messageClassNotFound(cn)))]);
+      return [with([.. classNames.Select(cn => Module.Global.Value.Class(cn).Required(messageClassNotFound(cn)))])];
    }
 
    public static TypeConstraint SingleType(BaseClass baseClass) => new([baseClass]);
@@ -30,11 +30,13 @@ public class TypeConstraint : IObject, IEnumerable<TypeConstraint>
 
    public TypeConstraint Append(TypeConstraint otherTypeConstraint)
    {
-      List<BaseClass> newComparisands = [];
-      newComparisands.AddRange(comparisands);
-      newComparisands.AddRange(otherTypeConstraint.comparisands);
+      List<BaseClass> newComparisands =
+      [
+         .. comparisands,
+         .. otherTypeConstraint.comparisands
+      ];
 
-      return new TypeConstraint([.. newComparisands]);
+      return [with([.. newComparisands])];
    }
 
    public void RefreshClasses()
@@ -110,6 +112,14 @@ public class TypeConstraint : IObject, IEnumerable<TypeConstraint>
 
    public virtual bool Matches(BaseClass baseClass)
    {
+      /*
+      var unassigned = classOf("Unassigned");
+      if (comparisands.Any(c => c == unassigned))
+      {
+         return true;
+      }
+      */
+
       if (baseClass is UserClass userClass)
       {
          foreach (var comparisand in comparisands)

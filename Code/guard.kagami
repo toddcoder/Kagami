@@ -1,6 +1,6 @@
 ﻿#pragma ALLOW_PRINT_STATEMENT true
 
-fn decimalDigitValue(c char if c in ('0' to '9') but "Out of range") int {
+fn decimalDigitValue(c char if c in ('0' to '9') else "Out of range") int {
 	return /int c - /int '0'
 }
 
@@ -16,7 +16,7 @@ error OutOfRange() {
 	override get message => "Out of range"
 }
 
-override fn decimalDigitValue(c char if c in ('0' to '9') but OutOfRange()) int {
+override fn decimalDigitValue(c char if c in ('0' to '9') else OutOfRange()) int {
 	return /int c - /int '0'
 }
 

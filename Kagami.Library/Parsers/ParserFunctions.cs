@@ -1074,7 +1074,7 @@ public static class ParserFunctions
             var symbol = new InvokableExpressionSymbol(expression);
             state.AddSymbol(symbol);
 
-            _scanned = state.Scan(@"^(\s*)(but)\b", Color.Whitespace, Color.Keyword);
+            _scanned = state.Scan(@"^(\s*)(else)\b", Color.Whitespace, Color.Keyword);
             if (_scanned)
             {
                _expression = getExpression(state, ExpressionFlags.OmitComma);
