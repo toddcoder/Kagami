@@ -1,0 +1,16 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+type DayOfWeek {|Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday}
+
+type TWorkingHour {
+	|Hour(d DayOfWeek, i int)
+}
+
+fn match isWorkingHour(day TWorkingHour) {
+	|Hour(Sunday, _) return false
+	|Hour(Saturday, _) return false
+	|Hour(_, time) return 9 <= time <= 17
+}
+
+println isWorkingHour(Hour(Sunday, 9))
+println isWorkingHour(Hour(Monday, 10))

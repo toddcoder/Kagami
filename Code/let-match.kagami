@@ -1,0 +1,4 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+let match swap (x, y) = (y, x)
+swap((10, 20))

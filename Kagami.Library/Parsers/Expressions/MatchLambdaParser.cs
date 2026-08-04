@@ -38,11 +38,9 @@ public partial class MatchLambdaParser : SymbolParser
          var _comparison = expressionBuilder.ToExpression();
          if (_comparison is (true, var comparison))
          {
-            var list = new List<Statement> { new If(comparison, block) };
-            var lambdaSymbol = new LambdaSymbol(1, new Block(list));
+            List<Statement> list = [new If(comparison, block)];
+            var lambdaSymbol = new LambdaSymbol(1, [with(list)]);
             builder.Add(lambdaSymbol);
-
-            return unit;
          }
          else
          {

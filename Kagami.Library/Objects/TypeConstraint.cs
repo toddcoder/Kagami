@@ -112,29 +112,30 @@ public class TypeConstraint : IObject, IEnumerable<TypeConstraint>
 
    public virtual bool Matches(BaseClass baseClass)
    {
-      /*
       var unassigned = classOf("Unassigned");
       if (comparisands.Any(c => c == unassigned))
       {
          return true;
       }
-      */
 
-      if (baseClass is UserClass userClass)
+      switch (baseClass)
       {
-         foreach (var comparisand in comparisands)
+         case AnyClass:
+            return true;
+         case UserClass userClass:
          {
-            if (userClass.AssignCompatible(comparisand))
+            foreach (var comparisand in comparisands)
             {
-               return true;
+               if (userClass.AssignCompatible(comparisand))
+               {
+                  return true;
+               }
             }
-         }
 
-         return false;
-      }
-      else
-      {
-         return comparisands.Any(c => c.AssignCompatible(baseClass));
+            return false;
+         }
+         default:
+            return comparisands.Any(c => c.AssignCompatible(baseClass));
       }
    }
 
