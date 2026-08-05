@@ -1,0 +1,21 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+let symbols = [('a', 'Z'), ('Z', 'a')]
+
+class CharMapEncoder(symbols Collection) {
+	let match swap (x, y) = (y, x)
+
+	let fwd = {key : value for (key, value) in symbols}
+	let bwd = {key : value for (key, value) in symbols map swap}
+
+	fn encode(s string) => [(fwd[c] ?: c) for c in s] join ""
+	fn decode(s string) => [(bwd[c] ?: c) for c in s] join ""
+}
+
+fn rot13(c char) char => /char (/int 'a' + ((/int c - /int 'a' + 13) % 26))
+let encoder = CharMapEncoder([(c, rot13(c)) for c in 'a' to 'z'])
+
+let encoded = encoder.encode("Kagami is fun!")
+println encoded
+let decoded = encoder.decode(encoded)
+println decoded
