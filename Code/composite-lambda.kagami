@@ -1,0 +1,11 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+let square(x) = x * x
+let toString(x int) = x.string
+let strLen(x string) = x.length
+let lenOfSquare = square >> toString >> strLen
+println lenOfSquare(10)
+
+let double(x) = 2 * x
+let tenTimes(x) = 10 * x
+println [1 to 10] map double >> tenTimes

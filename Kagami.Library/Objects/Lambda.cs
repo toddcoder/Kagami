@@ -103,7 +103,7 @@ public class Lambda : IObject, IEquatable<Lambda>, IInvokableObject, ICopyFields
 
    public Lambda Clone() => new(invokable, captures);
 
-   public IObject Join(Lambda otherLambda) => new CompositeLambda(invokable, otherLambda.Invokable);
+   public IObject Join(Lambda otherLambda) => new CompositeLambda(this, otherLambda);
 
    public void Capture(Machine machine)
    {
