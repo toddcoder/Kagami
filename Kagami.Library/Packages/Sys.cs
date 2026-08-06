@@ -278,7 +278,7 @@ public class Sys : Package
          Hash<IObject, IObject> hash = [];
          foreach (DictionaryEntry entry in System.Environment.GetEnvironmentVariables())
          {
-            hash[KString.StringObject(entry.Key.ToString() ?? "")] = KString.StringObject(entry.Value?.ToString() ?? "");
+            hash[KString.StringObject(entry.Key.ToString()?.ToLower() ?? "")] = KString.StringObject(entry.Value?.ToString() ?? "");
          }
 
          return new Dictionary(hash);

@@ -1,0 +1,9 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+infix(add) +-(x, y) => (x, y)
+postfix !(x long) => x == 1L ? 1L : x * (x - 1L)!
+prefix ~~(x) => x ~ x
+
+println 10 +- 20 \ $i
+println 69L!
+println ~~[1 to 5]
