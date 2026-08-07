@@ -27,6 +27,7 @@ public class CharClass : BaseClass, IEquivalentClass
       messages["isSpace".get()] = (obj, _) => function<KChar>(obj, c => c.IsSpace);
       messages["isVowel".get()] = (obj, _) => function<KChar>(obj, c => c.IsVowel);
       messages["isConsonant".get()] = (obj, _) => function<KChar>(obj, c => c.IsConsonant);
+      messages["isLetter".get()] = (obj, _) => function<KChar>(obj, c => c.IsLetter);
       messages["ord".get()] = (obj, _) => function<KChar>(obj, c => c.Ord);
       messages["byte()"] = (obj, _) => function<KChar>(obj, c => c.Byte());
       messages["succ".get()] = (obj, _) => function<KChar>(obj, c => c.Succ());

@@ -14,7 +14,7 @@ public readonly struct Arguments : IObject, IEnumerable<IObject>, IEquatable<Arg
       Array.Copy(arguments.arguments, newArguments, arguments.Length);
       newArguments[^1] = item;
 
-      return new Arguments(newArguments);
+      return [with(newArguments)];
    }
 
    public static Arguments Empty => new();

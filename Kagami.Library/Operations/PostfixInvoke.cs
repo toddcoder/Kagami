@@ -8,10 +8,19 @@ namespace Kagami.Library.Operations;
 
 public class PostfixInvoke : TwoOperandOperation
 {
+   protected bool increment;
+
    public override Optional<IObject> Execute(Machine machine, IObject x, IObject y)
    {
       switch (y)
       {
+         case Arguments arguments when x is CompositeLambda compositeLambda:
+         {
+            var result = compositeLambda.Invoke(arguments.Value);
+            increment = true;
+
+            return result.Just();
+         }
          case Arguments arguments when x is IInvokableObject io:
             Invoke.InvokeInvokableObject(machine, io, arguments);
             return nil;
@@ -34,7 +43,7 @@ public class PostfixInvoke : TwoOperandOperation
       }
    }
 
-   public override bool Increment => false;
+   public override bool Increment => increment;
 
    public override string ToString() => "postfix.invoke";
 }

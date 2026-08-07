@@ -98,6 +98,8 @@ public readonly struct KChar : IObject, IComparable<KChar>, IEquatable<KChar>, I
 
    public KBoolean IsConsonant => value.ToString().IsMatch("['bcdfghjklmnpqrstvwxyz']; i");
 
+   public KBoolean IsLetter => char.IsLetter(value);
+
    public IRangeItem Successor => (KChar)(value + 1);
 
    public IRangeItem Predecessor => (KChar)(value - 1);

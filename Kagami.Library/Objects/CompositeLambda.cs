@@ -16,4 +16,8 @@ public class CompositeLambda : Lambda
       var result = lambda1.Invoke(arguments);
       return lambda2.Invoke(result);
    }
+
+   public override string AsString => $"{lambda1.AsString} >> {lambda2.AsString}";
+
+   public override string Image => $"{lambda1.Image} >> {lambda2.Image}";
 }
