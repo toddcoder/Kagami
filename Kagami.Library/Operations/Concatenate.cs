@@ -2,6 +2,7 @@
 using Kagami.Library.Objects;
 using Kagami.Library.Runtime;
 using static Kagami.Library.AllExceptions;
+using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Operations;
 
@@ -30,7 +31,14 @@ public class Concatenate : TwoOperandOperation
             var _class = Module.Global.Value.Class(x.ClassName);
             if (_class is (true, var @class))
             {
-               return @class.SendMessage(x, "~(_)", new Arguments(y)).Just();
+               if (@class.RespondsTo("~(_)"))
+               {
+                  return @class.SendMessage(x, "~(_)", new Arguments(y)).Just();
+               }
+               else
+               {
+                  return KString.StringObject(stringOf(x) + stringOf(y)).Just();
+               }
             }
             else
             {

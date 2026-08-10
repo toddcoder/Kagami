@@ -33,7 +33,7 @@ public partial class PropertyParser : StatementParser
             }
          }
 
-         parameters = new Parameters(new Parameter(false, false, "", "value", nil, _typeConstraint, false, false, false));
+         parameters = [with(new Parameter(false, false, "", "value", nil, _typeConstraint, false, false, false))];
       }
 
       return (propertyName, parameters);
