@@ -50,6 +50,8 @@ public partial class PropertyParser : StatementParser
 
       state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Keyword, Color.Whitespace, Color.Identifier);
 
+      var exposed = (bool)state.Scan(@"^(\s+)(unhide)\b", Color.Whitespace, Color.Keyword);
+
       Maybe<Parameters> _parameters = nil;
 
       if (direction == "set" && state.Scan(@"^(\()", Color.OpenParenthesis))
@@ -69,6 +71,27 @@ public partial class PropertyParser : StatementParser
          else
          {
             return _setParameters.Exception;
+         }
+      }
+
+      if (exposed)
+      {
+         switch (direction)
+         {
+            case "get":
+            {
+               var getter = Function.Getter(propertyName, isOverride);
+               state.AddStatement(getter);
+               return unit;
+            }
+            case "set":
+            {
+               var setter = Function.Setter(propertyName, isOverride);
+               state.AddStatement(setter);
+               return unit;
+            }
+            default:
+               return fail($"Unexpected direction: {direction}");
          }
       }
 

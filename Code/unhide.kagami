@@ -1,0 +1,17 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+class BaseClass(x int) {
+	hide var field1 = x
+	get field1 unhide
+}
+
+class Derived(hide field1 int, hide field2 int) is BaseClass(field1) {
+	get field2 unhide
+}
+
+let bc = BaseClass(42)
+println bc.field1
+
+let d = Derived(153, 469)
+println d.field1
+println d.field2
