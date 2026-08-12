@@ -34,11 +34,17 @@ public class Folder : IObject, ICollection
    {
       switch (comparisand)
       {
+         case Any:
+            return true;
          case Placeholder placeholder:
+         {
             bindings[placeholder.Name] = this;
             return true;
+         }
          case Folder otherFolder:
+         {
             return folderName.FullPath == otherFolder.AsString;
+         }
          default:
             return false;
       }

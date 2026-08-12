@@ -32,6 +32,8 @@ public class File : IObject, ICollection
    {
       switch (comparisand)
       {
+         case Any:
+            return true;
          case Placeholder placeholder:
          {
             bindings[placeholder.Name] = this;
