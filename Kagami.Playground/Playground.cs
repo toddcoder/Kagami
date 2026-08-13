@@ -914,8 +914,8 @@ public partial class Playground : Form
       switch (e.KeyCode)
       {
          case Keys.Escape:
-            if ( /*textAtInsert(1) == "'" && textAtInsert(1, -1) == "'" || */textAtInsert(1) == "\"" && textAtInsert(1, -1) == "\"" ||
-                textAtInsert(1) == ")" && textAtInsert(1, -1) == "(" || textAtInsert(1) == "]" && textAtInsert(1, -1) == "[")
+            if (textAtInsert(1) == "\"" && textAtInsert(1, -1) == "\"" || textAtInsert(1) == ")" && textAtInsert(1, -1) == "(" ||
+                textAtInsert(1) == "]" && textAtInsert(1, -1) == "[")
             {
                e.Handled = true;
                setTextAtInsert(1);
@@ -954,9 +954,44 @@ public partial class Playground : Form
             e.Handled = true;
             break;
          }
-         /*case Keys.Enter:
-            update(true, false, true);
-            break;*/
+         case Keys.J when e.Control && textEditor.SelectionLength > 0:
+         {
+            var selectedLines = textEditor.SelectedLines();
+            var item1 = selectedLines.Item1;
+            var tabbedLines = item1.Select(l => $"\t{l}");
+            var textEditorSelectedText = tabbedLines.ToString("\n");
+            textEditor.SelectedText = textEditorSelectedText;
+            e.Handled = true;
+
+            break;
+         }
+         case Keys.M when e.Control && textEditor.SelectionLength > 0:
+         {
+            var selectedLines = textEditor.SelectedLines();
+            var item1 = selectedLines.Item1;
+            var tabbedLines = item1.Select(l => l.Substitute("^ /t; f", ""));
+            var textEditorSelectedText = tabbedLines.ToString("\n");
+            textEditor.SelectedText = textEditorSelectedText;
+            e.Handled = true;
+
+            break;
+         }
+         case Keys.Y when e.Control:
+         {
+            var currentIndex = textEditor.SelectionStart;
+            var lineIndex = textEditor.GetLineFromCharIndex(currentIndex);
+            var lineStart = textEditor.GetFirstCharIndexFromLine(lineIndex);
+            var lineEnd = textEditor.GetFirstCharIndexFromLine(lineIndex + 1);
+            if (lineEnd == -1)
+            {
+               lineEnd = textEditor.TextLength;
+            }
+
+            textEditor.Select(lineStart, lineEnd - lineStart);
+            textEditor.SelectedText = "";
+
+            break;
+         }
       }
    }
 
@@ -997,6 +1032,15 @@ public partial class Playground : Form
          context.Cancel();
          e.Handled = true;
       }
+      /*else if (e is { KeyCode: Keys.J, Control: true } && textEditor.SelectionLength > 0)
+      {
+         var selectedLines = textEditor.SelectedLines();
+         var item1 = selectedLines.Item1;
+         var tabbedLines = item1.Select(l => $"\t{l}");
+         var textEditorSelectedText = tabbedLines.ToString("\n");
+         textEditor.SelectedText = textEditorSelectedText;
+         e.Handled = true;
+      }*/
    }
 
    protected void textEditor_SelectionChanged(object sender, EventArgs e)
