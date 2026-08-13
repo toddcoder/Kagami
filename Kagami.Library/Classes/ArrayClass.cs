@@ -33,7 +33,7 @@ public class ArrayClass : BaseClass, ICollectionClass
       messages["get(_)"] = (obj, msg) => function<KArray, IObject>(obj, msg, (a, i) => someOf(a.Get(i)));
       messages["[]=(_,_)"] = (obj, msg) => function<KArray, IObject, IObject>(obj, msg, setIndexed);
       messages["~(_)"] = (obj, msg) => function<KArray, KArray>(obj, msg, (a1, a2) => a1.Concatenate(a2));
-      registerMessage("push(_)", (obj, msg) => function<KArray, IObject>(obj, msg, (a, v) => a.Append(v)));
+      registerMessage("push(_)", (obj, msg) => function<KArray, IObject>(obj, msg, (a, v) => a.Push(v)));
       registerMessage("pop()", (obj, _) => function<KArray>(obj, a => a.Pop()));
       registerMessage("pop(at:_<Int>)", (obj, msg) => function<KArray, Int>(obj, msg, (a, i) => a.Pop(i.Value)));
       registerMessage("unshift(_)", (obj, msg) => function<KArray, IObject>(obj, msg, (a, v) => a.Unshift(v)));

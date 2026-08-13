@@ -428,6 +428,15 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       return this;
    }
 
+   public virtual IObject Push(IObject obj)
+   {
+      throwIfSelf(obj);
+      assertIncomingValueIsEquivalent(obj);
+      list.Insert(0, obj);
+
+      return this;
+   }
+
    public virtual IObject Remove(IObject obj)
    {
       assertIncomingValueIsEquivalent(obj);
