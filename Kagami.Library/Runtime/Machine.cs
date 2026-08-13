@@ -335,8 +335,14 @@ public class Machine
             var currentAddress = operations.Address;
             switch (operation)
             {
+               case ReturnType returnType:
+               {
+                  return returnType.Execute(this);
+               }
                case Return rtn:
+               {
                   return Return.ReturnAction(this, rtn.ReturnTopOfStack);
+               }
                case Yield:
                   return Yield.YieldAction(this).Just();
                case Invoke invoke:
