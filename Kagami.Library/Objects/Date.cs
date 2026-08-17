@@ -150,4 +150,6 @@ public readonly struct Date : IObject, IRangeItem, IFormattable
    public Date Utc() => value.ToUniversalTime();
 
    public DateIncrement Shift(int amount) => new(this, amount);
+
+   public Date AddMonths(int increment) => new(value.AddMonths(increment));
 }

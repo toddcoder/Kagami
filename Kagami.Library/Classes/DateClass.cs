@@ -33,6 +33,7 @@ public class DateClass : BaseClass
       messages["mjulian".get()] = (obj, _) => function<Date>(obj, d => d.MJulian);
       messages["utc()"] = (obj, _) => function<Date>(obj, d => d.Utc());
       messages["<<(_<Int>)"] = (obj, msg) => function<Date, Int>(obj, msg, (d, i) => d.Shift(i.Value));
+      messages["addMonths(_<Int>)"] = (obj, msg) => function<Date, Int>(obj, msg, (d, i) => d.AddMonths(i.Value));
    }
 
    public override void RegisterClassMessages()
@@ -66,7 +67,7 @@ public class DateClass : BaseClass
       }
    }
 
-   protected static Int daysInMonth(int year, int month) => DateTime.DaysInMonth(month, month);
+   protected static Int daysInMonth(int year, int month) => DateTime.DaysInMonth(year, month);
 
    protected static KArray daysInMonth()
    {
