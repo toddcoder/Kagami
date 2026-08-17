@@ -241,7 +241,7 @@ public partial class FunctionParser : StatementParser
 
    protected static LambdaSymbol getLambda(Parameters parameters, LambdaSymbol previousLambdaSymbol)
    {
-      return new(parameters, new Block(new Return(new Expression(previousLambdaSymbol), nil)));
+      return new(parameters, [with(new Return(new Expression(previousLambdaSymbol), nil))]);
    }
 
    public string SelfAlias { get; set; } = "";

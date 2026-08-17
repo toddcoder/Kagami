@@ -1,0 +1,10 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+fn test() {
+	let x = 'a'
+	scope x = x ~ " string"
+	scope x = 3
+	return x
+}
+
+println test()

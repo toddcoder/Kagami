@@ -1,0 +1,8 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+pattern ToUpper(input string) => ?input.upper()
+
+fn f |ToUpper(x) => $"x = $x"
+fn f |_ => "?"
+
+println f("foobar")

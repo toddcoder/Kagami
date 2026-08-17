@@ -48,10 +48,11 @@ public class StatementsParser : MultiParser
          yield return new AbstractFunctionParser();
          yield return new AbstractPropertyParser();
          yield return new SingletonParser();
+         yield return new ScopeParser();
+         yield return new OnParser();
          yield return new MatchFunctionParser();
          yield return new FunctionParser();
          yield return new PropertyParser();
-         yield return new OnParser();
          yield return new MatchParser();
          yield return new YieldParser();
          yield return new CalculatedReturnParser();
