@@ -41,6 +41,10 @@ public class Folder : IObject, ICollection
             bindings[placeholder.Name] = this;
             return true;
          }
+         case Pattern pattern:
+         {
+            return pattern.Match(this, bindings);
+         }
          case Folder otherFolder:
          {
             return folderName.FullPath == otherFolder.AsString;

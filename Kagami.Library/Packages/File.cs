@@ -58,6 +58,10 @@ public class File : IObject, ICollection
 
             return true;
          }
+         case Pattern pattern:
+         {
+            return pattern.Match(this, bindings);
+         }
          case File otherFile:
          {
             return fileName.ToString() == otherFile.AsString;

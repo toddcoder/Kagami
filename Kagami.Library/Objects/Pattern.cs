@@ -68,10 +68,8 @@ public class Pattern : IObject
 
                return true;
             }
-            else
-            {
-               return false;
-            }
+
+            return false;
          }
          case Some { Value: KTuple kTuple }:
          {
