@@ -673,5 +673,7 @@ public class OperationsBuilder(ParseState state)
 
    public void BindComparisand() => add(new BindComparisand());
 
+   public void RegisterMessage(Selector selector, Func<IObject, Message, IObject> func) => add(new RegisterMessage(selector, func));
+
    public override string ToString() => "operations";
 }

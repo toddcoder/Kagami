@@ -14,11 +14,14 @@ public class CreateEvent(string eventName) : Statement, IFieldStatement
       var kEvent = new KEvent();
       builder.PushObject(kEvent);
       builder.StoreField(eventName, false, true, false, typeConstraint);
+      builder.GetClass();
+      builder.RegisterMessage($"{eventName}(_)", (_, message) => kEvent.Invoke(message.Arguments));
    }
 
    public string EventName => eventName;
 
    public override string ToString() => $"event {eventName}";
+
    public string Name => eventName;
 
    public bool Mutable => false;

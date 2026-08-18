@@ -179,6 +179,9 @@ public abstract class BaseClass : IEquatable<BaseClass>
 
    public virtual void RegisterMessage(Selector selector, Func<IObject, Message, IObject> func) => messages[selector] = func;
 
+   public virtual void RegisterMessage(Selector selector, Lambda lambda) =>
+      messages[selector] = (obj, message) => lambda.Invoke(obj, message.Arguments);
+
    public void RegisterClassMessage(Selector selector, Func<BaseClass, Message, IObject> func) => classMessages[selector] = func;
 
    protected virtual void registerIfUnregistered()

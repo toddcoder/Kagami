@@ -39,6 +39,12 @@ public class KEvent : IObject, IInvokableObject
       }
    }
 
+   public KEvent SetHandler(Lambda lambda)
+   {
+      Handler = lambda;
+      return this;
+   }
+
    public IObject Add(Lambda lambda)
    {
       messageEvent.Add(o => lambda.Invoke(o));

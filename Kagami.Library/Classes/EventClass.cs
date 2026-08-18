@@ -15,8 +15,9 @@ public class EventClass : BaseClass
 
       registerMessage("handler".get(), (obj, _) => function<KEvent>(obj, e => e.GetHandler()));
       registerMessage("handler".set(), (obj, msg) => function<KEvent, Lambda>(obj, msg, (e, l) => e.Handler = l));
-      registerMessage("<<(_<Lambda>)", (obj, msg) => function<KEvent, Lambda>(obj, msg, (e, l) => e.Add(l)));
-      registerMessage(">>(_<Lambda>)", (obj, msg) => function<KEvent, Lambda>(obj, msg, (e, l) => e.Remove(l)));
+      registerMessage("<<(_<Lambda>)", (obj, msg) => function<KEvent, Lambda>(obj, msg, (e, l) => e.SetHandler(l)));
+      registerMessage("+(_<Lambda>)", (obj, msg) => function<KEvent, Lambda>(obj, msg, (e, l) => e.Add(l)));
+      registerMessage("-(_<Lambda>)", (obj, msg) => function<KEvent, Lambda>(obj, msg, (e, l) => e.Remove(l)));
       registerMessage("invoke(_)", (obj, msg) => function<KEvent, IObject>(obj, msg, (e, o) => e.Invoke(o)));
    }
 }
