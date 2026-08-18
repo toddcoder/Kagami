@@ -93,25 +93,27 @@ public abstract class BaseClass : IEquatable<BaseClass>
 
    protected static KString format(IObject obj, string formattingString)
    {
-      if (obj is Date date)
+      switch (obj)
       {
-         return date.Format(formattingString);
-      }
-      else if (obj is IFormattable formattable)
-      {
-         return formattable.Format(formattingString);
-      }
-      else if (formattingString.Contains(' '))
-      {
-         return formatArray(obj, formattingString.Split(' '));
-      }
-      else if (formattingString == "i")
-      {
-         return obj.Image;
-      }
-      else
-      {
-         return obj.AsString;
+         case Date date:
+            return date.Format(formattingString);
+         case IFormattable formattable:
+            return formattable.Format(formattingString);
+         default:
+         {
+            if (formattingString.Contains(' '))
+            {
+               return formatArray(obj, formattingString.Split(' '));
+            }
+            else if (formattingString == "i")
+            {
+               return obj.Image;
+            }
+            else
+            {
+               return obj.AsString;
+            }
+         }
       }
    }
 
