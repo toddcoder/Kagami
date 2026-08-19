@@ -1,0 +1,24 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+class NoisySet {
+	var `set = {}
+	event added
+	event removed
+
+	fn <<(x) {
+		`set << x
+		added(x)
+		return self
+	}
+
+	fn >>(x) {
+		`set >> x
+		removed(x)
+		return self
+	}
+}
+
+let s = NoisySet()
+s.added << {(x) println $"Added $x"}
+s.removed << {(x) println $"Removed $x"}
+s << 1 >> 1

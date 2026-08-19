@@ -325,4 +325,10 @@ public class Sys : Package
    public IObject UniqueId() => KString.StringObject(Guid.NewGuid().ToString());
 
    public IObject CallStack => KString.StringObject(Machine.Current.CallStack);
+
+   public IObject Sleep(int length)
+   {
+      Thread.Sleep(length);
+      return KString.StringObject($"Slept for {length} milliseconds");
+   }
 }

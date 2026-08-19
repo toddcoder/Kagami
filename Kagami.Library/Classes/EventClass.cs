@@ -12,6 +12,7 @@ public class EventClass : BaseClass
    public override void RegisterMessages()
    {
       base.RegisterMessages();
+      collectionMessages();
 
       registerMessage("handler".get(), (obj, _) => function<KEvent>(obj, e => e.GetHandler()));
       registerMessage("handler".set(), (obj, msg) => function<KEvent, Lambda>(obj, msg, (e, l) => e.Handler = l));

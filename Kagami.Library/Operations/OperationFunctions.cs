@@ -38,6 +38,11 @@ public static class OperationFunctions
             var array = new KArray(junction.Items);
             return array.GetIterator(lazy).Success();
          }
+         case KNil:
+         {
+            var array = KArray.Empty;
+            return array.GetIterator(lazy).Success();
+         }
          default:
             return AllExceptions.notAnIterator(value);
       }
