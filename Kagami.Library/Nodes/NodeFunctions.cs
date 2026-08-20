@@ -4,6 +4,7 @@ using Kagami.Library.Objects;
 using Kagami.Library.Operations;
 using Kagami.Library.Parsers.Expressions;
 using Core.Monads;
+using static Core.Strings.StringFunctions;
 using static Kagami.Library.CommonFunctions;
 
 namespace Kagami.Library.Nodes;
@@ -12,7 +13,7 @@ public static class NodeFunctions
 {
    private static int uniqueId;
 
-   public static string newLabel(string name) => mangled(name, uniqueId++);
+   public static string newLabel(string name) => mangled(name, shortUniqueId());
 
    public static void ResetFieldUniqueID() => uniqueId = 0;
 
