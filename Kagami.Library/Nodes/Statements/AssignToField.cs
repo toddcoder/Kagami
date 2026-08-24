@@ -1,11 +1,13 @@
 ﻿using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Operations;
 using Core.Monads;
+using Kagami.Library.Objects;
+using static Core.Monads.MonadFunctions;
 using static Core.Strings.StringStreamFunctions;
 
 namespace Kagami.Library.Nodes.Statements;
 
-public class AssignToField : Statement
+public class AssignToField : Statement, IFieldStatement, IHasExpression
 {
    protected string fieldName;
    protected Maybe<Operation> _operation;
@@ -39,4 +41,12 @@ public class AssignToField : Statement
    {
       return stream() / fieldName / " " / (_operation.Map(o => o.ToString() ?? "") | (() => "")) / "= " / expression;
    }
+
+   public string Name => fieldName;
+
+   public bool Mutable => true;
+
+   public Maybe<TypeConstraint> TypeConstraint => nil;
+
+   public Expression Expression => expression;
 }

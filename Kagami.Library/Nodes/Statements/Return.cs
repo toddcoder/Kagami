@@ -5,7 +5,7 @@ using Core.Monads;
 
 namespace Kagami.Library.Nodes.Statements;
 
-public class Return : Statement
+public class Return : Statement, IHasExpression
 {
    protected Expression expression;
    protected Maybe<TypeConstraint> _typeConstraint;
@@ -22,4 +22,6 @@ public class Return : Statement
    }
 
    public override string ToString() => $"return {expression}";
+
+   public Expression Expression => expression;
 }

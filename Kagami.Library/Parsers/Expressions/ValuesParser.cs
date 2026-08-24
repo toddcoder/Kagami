@@ -100,7 +100,8 @@ public class ValuesParser : MultiParser
          yield return new RefParser(builder);
          yield return new ImplicitParameterParser(builder);
          yield return new DollarFieldParser(builder);
-         yield return new DoParser(builder);
+         //yield return new DoParser(builder);
+         yield return new BuilderParser(builder);
          yield return new ThrowParser(builder);
          yield return new RecordParser(builder);
 

@@ -1,11 +1,10 @@
-﻿namespace Kagami.Library.Objects
+﻿namespace Kagami.Library.Objects;
+
+public interface IMonad
 {
-	public interface IMonad
-	{
-		IObject Bind(Lambda map);
+   IObject Bind(Lambda map);
 
-		IObject Unit(IObject obj);
+   IObject Unit(IObject obj);
 
-		KBoolean CanBind { get; }
-	}
+   KBoolean CanBind { get; }
 }
