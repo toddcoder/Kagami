@@ -46,7 +46,7 @@ public partial class ClassParser : StatementParser
          }
          else
          {
-            parameters = new Parameters(0);
+            parameters = [with(0)];
          }
       }
       else

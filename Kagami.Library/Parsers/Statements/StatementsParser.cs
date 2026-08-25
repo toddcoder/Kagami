@@ -22,6 +22,7 @@ public class StatementsParser : MultiParser
          yield return new YieldParser();
          yield return new ErrorParser();
          yield return new ForwardParser();
+         yield return new BuilderParser();
          yield return new ClassParser();
          yield return new ObjectOrMixinParser();
          yield return new IncludeClassParser();

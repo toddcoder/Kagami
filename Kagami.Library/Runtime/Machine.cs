@@ -32,6 +32,8 @@ public class Machine
 
    public static Machine Current => machines.Peek().Required("Machine stack empty");
 
+   public static string CurrentCallStack => machines.Peek().Map(s => s.CallStack) | "";
+
    public static Fields Fields => Current.CurrentFrame.Fields;
 
    public static void Register(Machine machine) => machines.Push(machine);

@@ -10,6 +10,7 @@ public struct Failure : IObject, IResult, IMonad, IBoolean
    public static IObject Object(string message) => new Failure(message);
 
    private Protocols.Protocol erroring = Protocols.Protocols.GetOrThrow("PError");
+
    private ProtocolWrapper wrapper;
 
    public Failure(Error error) : this()
@@ -18,7 +19,7 @@ public struct Failure : IObject, IResult, IMonad, IBoolean
       wrapper = new ProtocolWrapper(error, erroring);
    }
 
-   public Failure(string message) : this(new Error(message, Machine.Current.CallStack))
+   public Failure(string message) : this(new Error(message, Machine.CurrentCallStack))
    {
    }
 

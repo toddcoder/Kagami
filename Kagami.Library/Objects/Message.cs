@@ -16,7 +16,7 @@ public readonly struct Message : IObject, IEquatable<Message>
 
    public Message(Selector selector, params IObject[] arguments) : this()
    {
-      this.arguments = new Arguments(arguments);
+      this.arguments = [with(arguments)];
       this.selector = this.arguments.Selector(selector.Name);
    }
 
