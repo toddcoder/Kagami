@@ -14,6 +14,8 @@ public class BuilderAssignSymbol(string fieldName, Expression expression, string
 
       var lambdaSymbol = new LambdaSymbol(Parameters.Empty, expression);
       lambdaSymbol.Generate(builder);
+      builder.Dup();
+      builder.SetRegister(2);
 
       builder.SendMessage("assign(_<Lambda>)", 1);
       builder.Dup();
@@ -21,6 +23,10 @@ public class BuilderAssignSymbol(string fieldName, Expression expression, string
       builder.SetRegister(0);
       builder.GoToIfFalse(failureLabel);
       builder.StoreField(fieldName, false, false, false, nil);
+
+      builder.GetRegister(2);
+      builder.LambdaCapture();
+      builder.Drop();
    }
 
    public override Precedence Precedence => Precedence.ChainedOperator;
