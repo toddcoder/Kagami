@@ -7,7 +7,7 @@ using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Statements;
 
-public partial class BuilderAssignParser(BuilderState builderState, bool first) : StatementParser
+public partial class BuilderAssignParser(BuilderState builderState) : StatementParser
 {
    [GeneratedRegex($@"^(\s*)(let)(\s+)({REGEX_FIELD})(\s*=)")]
    public override partial Regex Regex();
@@ -20,7 +20,7 @@ public partial class BuilderAssignParser(BuilderState builderState, bool first) 
       var _expression = getExpression(state, ExpressionFlags.Standard);
       if (_expression is (true, var expression))
       {
-         state.AddStatement(new BuilderAssign(builderState, fieldName, expression, first));
+         state.AddStatement(new BuilderAssign(builderState, fieldName, expression));
       }
       else
       {

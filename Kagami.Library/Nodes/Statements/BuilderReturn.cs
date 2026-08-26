@@ -4,18 +4,17 @@ using Kagami.Library.Parsers.Statements;
 
 namespace Kagami.Library.Nodes.Statements;
 
-public class BuilderReturn(BuilderState state, Expression expression) : Statement
+public class BuilderReturn(BuilderState builderState, Expression expression) : BuilderStatement(builderState)
 {
    public override void Generate(OperationsBuilder builder)
    {
-      builder.GetField(state.ResultFieldName);
-      builder.GoToIfFalse(state.FailureLabel, false);
+      Prefix(builder);
 
       expression.Generate(builder);
       builder.Success();
-      builder.AssignField(state.ResultFieldName, false);
+      Assign(builder);
 
-      builder.Label(state.FailureLabel);
+      builder.Label(builderState.FailureLabel);
       builder.NoOp();
    }
 

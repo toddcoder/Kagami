@@ -1,16 +1,18 @@
-﻿using Kagami.Library.Operations;
+﻿using Kagami.Library.Objects;
+using Kagami.Library.Operations;
 using Kagami.Library.Parsers.Statements;
 
 namespace Kagami.Library.Nodes.Statements;
 
-public class BuilderDo(BuilderState state, Block block) : Statement
+public class BuilderDo(BuilderState builderState, Block block) : BuilderStatement(builderState)
 {
    public override void Generate(OperationsBuilder builder)
    {
-      builder.GetField(state.ResultFieldName);
-      builder.GoToIfFalse(state.FailureLabel, false);
+      Prefix(builder);
 
       block.Generate(builder);
+
+      Assign(builder, KUnit.Value);
    }
 
    public override string ToString() => $"do {{{block}}} [builder]";

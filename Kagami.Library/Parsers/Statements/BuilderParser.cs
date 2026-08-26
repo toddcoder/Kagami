@@ -50,8 +50,7 @@ public partial class BuilderParser : StatementParser
       }
 
       var defaultExpression = new Expression(new PushObjectSymbol(new Failure("No value")));
-      var builderState = new BuilderState("value", newLabel("failure"));
-      var first = true;
+      var builderState = new BuilderState("value", newLabel("failure"), true);
       state.PushStatements();
 
       var _scan = state.BeginBlock();
@@ -72,11 +71,14 @@ public partial class BuilderParser : StatementParser
             return exception;
          }
 
-         var builderMembersParser = new BuilderMembersParser(builderState, first);
+         var builderMembersParser = new BuilderMembersParser(builderState);
          _scan = builderMembersParser.Scan(state);
          if (_scan)
          {
-            first = false;
+            if (builderState.First)
+            {
+               builderState = builderState with { First = false };
+            }
          }
          else
          {

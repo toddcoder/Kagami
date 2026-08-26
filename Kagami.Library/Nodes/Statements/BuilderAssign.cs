@@ -7,22 +7,19 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Nodes.Statements;
 
-public class BuilderAssign(BuilderState state, string fieldName, Expression expression, bool first) : Statement, IFieldStatement, IHasExpression
+public class BuilderAssign(BuilderState builderState, string fieldName, Expression expression)
+   : BuilderStatement(builderState), IFieldStatement, IHasExpression
 {
    protected string fieldName = fieldName;
    protected Expression expression = expression;
 
    public override void Generate(OperationsBuilder builder)
    {
-      if (!first)
-      {
-         builder.GetField(state.ResultFieldName);
-         builder.GoToIfFalse(state.FailureLabel, false);
-      }
+      Prefix(builder);
 
       var trySymbol = new TrySymbol(expression);
       trySymbol.Generate(builder);
-      builder.AssignField(state.ResultFieldName, false);
+      Assign(builder);
       builder.UnwrapMonad();
       builder.StoreField(fieldName, false, false, true, nil);
    }
