@@ -8,6 +8,7 @@ public class BuilderMembersParser(BuilderState builderState, bool first) : State
       {
          yield return new BuilderAssignParser(builderState, first);
          yield return new BuilderReturnParser(builderState);
+         yield return new BuilderDoParser(builderState);
       }
    }
 }
