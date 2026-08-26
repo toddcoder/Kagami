@@ -27,6 +27,8 @@ public class TryEnd : Operation
             _ => new Objects.Success(value)
          };
 
+         machine.PopFramesUntil(f => f.FrameType == FrameType.Try);
+
          return result.Just();
       }
       else

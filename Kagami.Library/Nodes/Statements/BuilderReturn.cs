@@ -9,9 +9,10 @@ public class BuilderReturn(BuilderState state, Expression expression) : Statemen
    public override void Generate(OperationsBuilder builder)
    {
       builder.GetField(state.ResultFieldName);
-      builder.GoToIfFalse(state.FailureLabel);
+      builder.GoToIfFalse(state.FailureLabel, false);
 
       expression.Generate(builder);
+      builder.Success();
       builder.AssignField(state.ResultFieldName, false);
 
       builder.Label(state.FailureLabel);

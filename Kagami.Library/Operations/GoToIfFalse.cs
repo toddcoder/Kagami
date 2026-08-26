@@ -6,7 +6,7 @@ using static Kagami.Library.AllExceptions;
 
 namespace Kagami.Library.Operations;
 
-public class GoToIfFalse : AddressedOperation
+public class GoToIfFalse(bool unwrap = true) : AddressedOperation
 {
    protected Predicate<IBoolean> predicate = b => !b.IsTrue;
 
@@ -25,21 +25,24 @@ public class GoToIfFalse : AddressedOperation
             {
                if (some.IsTrue)
                {
-                  var _result =
-                     from fieldName in Module.Global.Value.RetrievedFields.Maybe[some.Id]
-                     from fieldValue in machine.Find(fieldName, true)
-                     from classValue in Module.Global.Value.Class(some.Value.ClassName)
-                     select (classValue, fieldValue, fieldName);
-                  if (_result is (true, var (baseClass, field, name)))
+                  if (unwrap)
                   {
-                     if (machine.CurrentFrame.Fields.ContainsKey(name))
+                     var _result =
+                        from fieldName in Module.Global.Value.RetrievedFields.Maybe[some.Id]
+                        from fieldValue in machine.Find(fieldName, true)
+                        from classValue in Module.Global.Value.Class(some.Value.ClassName)
+                        select (classValue, fieldValue, fieldName);
+                     if (_result is (true, var (baseClass, field, name)))
                      {
-                        field.TypeConstraint = new TypeConstraint([baseClass]);
-                        field.Value = some.Value;
-                     }
-                     else
-                     {
-                        machine.CurrentFrame.Fields.New(name, FieldType.Assignment, some.Value, mutable: true);
+                        if (machine.CurrentFrame.Fields.ContainsKey(name))
+                        {
+                           field.TypeConstraint = new TypeConstraint([baseClass]);
+                           field.Value = some.Value;
+                        }
+                        else
+                        {
+                           machine.CurrentFrame.Fields.New(name, FieldType.Assignment, some.Value, mutable: true);
+                        }
                      }
                   }
 
@@ -55,15 +58,18 @@ public class GoToIfFalse : AddressedOperation
             {
                if (success.IsTrue)
                {
-                  var _result =
-                     from fieldName in Module.Global.Value.RetrievedFields.Maybe[success.Id]
-                     from fieldValue in machine.Find(fieldName, true)
-                     from classValue in Module.Global.Value.Class(success.Value.ClassName)
-                     select (classValue, fieldValue);
-                  if (_result is (true, var (baseClass, field)))
+                  if (unwrap)
                   {
-                     field.TypeConstraint = new TypeConstraint([baseClass]);
-                     field.Value = success.Value;
+                     var _result =
+                        from fieldName in Module.Global.Value.RetrievedFields.Maybe[success.Id]
+                        from fieldValue in machine.Find(fieldName, true)
+                        from classValue in Module.Global.Value.Class(success.Value.ClassName)
+                        select (classValue, fieldValue);
+                     if (_result is (true, var (baseClass, field)))
+                     {
+                        field.TypeConstraint = new TypeConstraint([baseClass]);
+                        field.Value = success.Value;
+                     }
                   }
 
                   increment = true;

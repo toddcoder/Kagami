@@ -98,7 +98,7 @@ public partial class TypeParser : StatementParser
          _block = getPartialBlock(state, nil).Maybe();
       }
 
-      var commonBlock = _block | (() => new Block());
+      var commonBlock = _block | [];
 
       if (isError)
       {

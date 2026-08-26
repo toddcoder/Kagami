@@ -15,15 +15,6 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class BuilderParser : StatementParser
 {
-   protected static Result<IObject> getDefaultValue(ParseState state)
-   {
-      return
-         from possibleTypeConstraint in parseTypeConstraint(state).Result()
-         from typeConstraint in possibleTypeConstraint.Maybe.Result("Type required")
-         let firstType = typeConstraint.Comparisands[0]
-         select firstType.DefaultValue;
-   }
-
    [GeneratedRegex(@$"^(\s*)(builder)(\s+)({REGEX_CLASS})(\()?")]
    public override partial Regex Regex();
 
@@ -58,8 +49,7 @@ public partial class BuilderParser : StatementParser
          parameters = Parameters.Empty;
       }
 
-      var defaultValue = getDefaultValue(state) | Unassigned.Value;
-      var defaultExpression = new Expression(new PushObjectSymbol(defaultValue));
+      var defaultExpression = new Expression(new PushObjectSymbol(new Failure("No value")));
       var builderState = new BuilderState("value", newLabel("failure"));
       var first = true;
       state.PushStatements();

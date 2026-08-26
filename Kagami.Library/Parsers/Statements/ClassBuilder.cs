@@ -365,6 +365,12 @@ public class ClassBuilder
                   assignToNewGuardedField.IsOverride, statement);
                break;
             }
+            case BuilderAssign builderAssign:
+            {
+               var fieldName = builderAssign.Name;
+               processField(fieldName, nil, false, false, builderAssign);
+               break;
+            }
             default:
                statements.Add(statement);
                break;

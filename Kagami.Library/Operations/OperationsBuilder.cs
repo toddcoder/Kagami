@@ -139,7 +139,7 @@ public class OperationsBuilder(ParseState state)
 
    public void GoToIfTrue(string label) => add(new GoToIfTrue(), label);
 
-   public void GoToIfFalse(string label) => add(new GoToIfFalse(), label);
+   public void GoToIfFalse(string label, bool unwrap = true) => add(new GoToIfFalse(unwrap), label);
 
    public void GoToIfSome(string label) => add(new GoToIfSome(), label);
 

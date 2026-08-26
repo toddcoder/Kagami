@@ -152,6 +152,7 @@ public class Machine
                   var _errorHandler = GetErrorHandler();
                   if (_errorHandler is (true, var address))
                   {
+                     PopTopTry();
                      stack.Peek().Push(new Failure(exception.Message));
                      operations.Goto(address);
                      continue;
@@ -372,6 +373,7 @@ public class Machine
                      var _address = GetErrorHandler();
                      if (_address is (true, var address))
                      {
+                        PopTopTry();
                         stack.Peek().Push(new Failure(exception.Message));
                         operations.Goto(address);
                      }
@@ -495,7 +497,7 @@ public class Machine
    {
       if (precheckPredicate && !stack.AtLeastOne(f => predicate(f)))
       {
-         return new FrameGroup([]);
+         return [with([])];
       }
 
       List<Frame> frames = [];
@@ -508,7 +510,7 @@ public class Machine
          }
       }
 
-      return new FrameGroup([..frames]);
+      return [with([.. frames])];
    }
 
    public Maybe<Frame> FunctionFrame()
@@ -523,7 +525,7 @@ public class Machine
 
    public FrameGroup PopFramesUntil(Predicate<Frame> predicate)
    {
-      var frames = new List<Frame>();
+      List<Frame> frames = [];
       while (stack.Count > 0)
       {
          var frame = stack.Pop();
@@ -534,7 +536,15 @@ public class Machine
          }
       }
 
-      return new FrameGroup(frames.ToArray());
+      return [with([.. frames])];
+   }
+
+   public void PopTopTry()
+   {
+      if (stack.Peek().FrameType == FrameType.Try)
+      {
+         stack.Pop();
+      }
    }
 
    public Result<int> GetErrorHandler()
