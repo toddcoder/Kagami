@@ -1,5 +1,6 @@
 ﻿using Core.Collections;
 using Core.Enumerables;
+using Core.Monads;
 using Core.Numbers;
 using Kagami.Library.Invokables;
 using Kagami.Library.Runtime;
@@ -101,6 +102,8 @@ public class Pattern : IObject
 
             return true;
          }
+         case Nil:
+            return false;
          case Success { Value: KTuple kTuple }:
          {
             var length = kTuple.Length.Value.MinOf(arguments.Length);
@@ -131,12 +134,24 @@ public class Pattern : IObject
 
             return true;
          }
+         case Failure:
+            return false;
          default:
             if (result is Some { Value: KTuple tuple } && tuple.Length.Value == arguments.Length)
             {
                return tuple.Value.Zip(arguments, (l, r) => match(l, r, bindings)).All(b => b);
             }
-
+            else
+            {
+               if (isPlaceholder(0))
+               {
+                  bindings[getPlaceholder(0)] = result;
+               }
+               else if (getValue(0).Match(result, bindings))
+               {
+                  return true;
+               }
+            }
             break;
       }
 
