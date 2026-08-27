@@ -2,8 +2,8 @@
 
 fn test() {
 	let x = 'a'
-	scope x = x ~ " string"
-	scope x = 3
+	but x = x ~ " string"
+	but x = 3
 	return x
 }
 
