@@ -9,7 +9,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class ScopeParser : StatementParser
 {
-   [GeneratedRegex(@$"^(\s*)(scope)(\s+)({REGEX_FIELD})(\s*)(=)")]
+   [GeneratedRegex(@$"^(\s*)(but)(\s+)({REGEX_FIELD})(\s*)(=)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
