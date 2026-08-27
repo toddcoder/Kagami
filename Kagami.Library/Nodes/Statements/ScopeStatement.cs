@@ -12,4 +12,6 @@ public class ScopeStatement(string fieldName, Expression expression) : Statement
       var assignToNewField = new AssignToNewField(false, fieldName, expression, nil, false, false);
       assignToNewField.Generate(builder);
    }
+
+   public override string ToString() => $"but {fieldName} = {expression}";
 }
