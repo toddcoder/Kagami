@@ -1,6 +1,5 @@
 ﻿using Core.Collections;
 using Core.Enumerables;
-using Core.Monads;
 using Core.Numbers;
 using Kagami.Library.Invokables;
 using Kagami.Library.Runtime;
@@ -102,7 +101,7 @@ public class Pattern : IObject
 
             return true;
          }
-         case Nil:
+         case KNil:
             return false;
          case Success { Value: KTuple kTuple }:
          {
