@@ -27,6 +27,13 @@ public partial class PlaceholderParser : SymbolParser
          return nil;
       }
 
+      if (state.DefExpression(placeholderName) is (true, var defExpression))
+      {
+         state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Identifier);
+         builder.Add(defExpression);
+         return unit;
+      }
+
       if (placeholderName.StartsWith('`'))
       {
          state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Identifier);

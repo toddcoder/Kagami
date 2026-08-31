@@ -10,7 +10,7 @@ public partial class DefAssignParser : EndingInExpressionParser
 {
    protected string fieldName = "";
 
-   [GeneratedRegex($@"^(\s*)(def)(\s+)({REGEX_FIELD})(\s*)(=)(?!=)")]
+   [GeneratedRegex($@"^(\s*)(literal)(\s+)({REGEX_FIELD})(\s*)(=)(?!=)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Prefix(ParseState state, Token[] tokens)

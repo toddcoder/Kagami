@@ -1,0 +1,11 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+literal case1 = 1
+literal case2 = 100
+
+let res = match 100 {
+	|case1 => "Case1"
+	|case2 => "Case2"
+	|_ => "Some other case"
+}
+println res
