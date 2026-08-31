@@ -40,14 +40,24 @@ public class Pattern : IObject
 
    protected string getPlaceholder(int index) => arguments[index].AsString;
 
-   protected bool isPlaceholder(int index) => arguments[index] is Placeholder;
+   protected bool isPlaceholder(int index) => index.Between(0).Until(arguments.Length) && arguments[index] is Placeholder;
 
-   protected IObject getValue(int index) => arguments[index];
+   protected IObject getValue(int index)
+   {
+      if (index.Between(0).Until(arguments.Length))
+      {
+         return arguments[index];
+      }
+      else
+      {
+         throw new IndexOutOfRangeException($"Placeholder required at index {index}");
+      }
+   }
 
    public bool Match(IObject comparisand, Hash<string, IObject> bindings)
    {
       lambda.CopyFields(fields);
-      var result = lambda.Invoke([comparisand, ..argumentsToUse]);
+      var result = lambda.Invoke([comparisand, .. argumentsToUse]);
 
       switch (result)
       {
@@ -151,6 +161,7 @@ public class Pattern : IObject
                   return true;
                }
             }
+
             break;
       }
 

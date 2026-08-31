@@ -1,0 +1,4 @@
+positive, n = 3
+negative, n = 3
+zero
+it collection | Iterator
