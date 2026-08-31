@@ -1,0 +1,19 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+class X(hide a int) {
+	var currentA = a
+	var currentB = 0
+	fn getResult() => currentA + currentB
+	get a => currentA
+	set a => currentA = value
+	get b => currentB
+	set b => currentB = value
+
+	init {
+		b = a + 3
+	}
+}
+
+let x = X(153)
+println x.a
+println x.b

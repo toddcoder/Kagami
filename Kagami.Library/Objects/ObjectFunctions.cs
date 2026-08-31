@@ -108,6 +108,8 @@ public static class ObjectFunctions
             return matchStringToTuple(kString, tuple, bindings);
          case KTuple tuple1 when source is KTuple tuple2:
             return matchTupleToTuple(tuple2, tuple1, bindings);
+         case KTuple tuple when source is Date date:
+            return matchDate(date, tuple, bindings);
          case SpecialComparisand specialComparisand:
             return specialComparisand.Match(source, bindings);
          case UserObject userObjectSource when source is UserObject userObject:
@@ -278,6 +280,82 @@ public static class ObjectFunctions
       }
 
       return false;
+   }
+
+   private static bool matchDate(Date date, KTuple tuple, Hash<string, IObject> bindings)
+   {
+      switch (tuple.Length.Value)
+      {
+         case 3:
+         {
+            for (var i = 0; i < 3; i++)
+            {
+               var dateValue = i switch
+               {
+                  0 => date.Year,
+                  1 => date.Month,
+                  2 => date.Day,
+                  _ => -1
+               };
+               if (dateValue.IsEqualTo(Int.IntObject(-1)))
+               {
+                  return false;
+               }
+
+               if (tuple[i] is Placeholder placeholder)
+               {
+                  bindings[placeholder.Name] = dateValue;
+               }
+               else if (tuple[i].IsEqualTo(dateValue))
+               {
+               }
+               else
+               {
+                  return false;
+               }
+            }
+
+            return true;
+         }
+         case 7:
+         {
+            for (var i = 0; i < 7; i++)
+            {
+               var dateValue = i switch
+               {
+                  0 => date.Year,
+                  1 => date.Month,
+                  2 => date.Day,
+                  3 => date.Hour,
+                  4 => date.Minute,
+                  5 => date.Second,
+                  6 => date.Millisecond,
+                  _ => -1
+               };
+               if (dateValue.IsEqualTo(Int.IntObject(-1)))
+               {
+                  return false;
+               }
+
+               if (tuple[i] is Placeholder placeholder)
+               {
+                  bindings[placeholder.Name] = dateValue;
+               }
+               else if (tuple[i].IsEqualTo(dateValue))
+               {
+               }
+               else
+               {
+                  return false;
+               }
+            }
+
+            return true;
+         }
+         default:
+            return false;
+      }
+
    }
 
    public static bool match<T>(T source, IObject comparisand, Hash<string, IObject> bindings)
@@ -1114,7 +1192,7 @@ public static class ObjectFunctions
       }
    }
 
-   public static IObject[] tupleToArray(KTuple tuple) => [..tuple.List];
+   public static IObject[] tupleToArray(KTuple tuple) => [.. tuple.List];
 
    /*public static Maybe<IObject> convertToMonad(string className, IObject value)
    {
