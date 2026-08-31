@@ -1,0 +1,13 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+patterns(i int) {
+	|Positive => i > 0 ?? i
+	|Negative => i < 0 ?? -i
+	|Zero => ?0
+}
+
+for match n in [3, -3, 0] {
+	|Positive(n) => println $"positive, n = $n"
+	|Negative(n) => println $"negative, n = $n"
+	|Zero(_) => println "zero"
+}
