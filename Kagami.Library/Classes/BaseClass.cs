@@ -175,6 +175,7 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerClassMessage("name".get(), (_, _) => KString.StringObject(Name));
       registerClassMessage("includes(_<String>)", (_, message) => (KBoolean)inclusions.ContainsKey(message.Arguments[0].AsString));
       registerClassMessage("equals(_)", (bc, msg) => classFunc<BaseClass, KBoolean>(bc, msg, (b1, b2) => (KBoolean)b1.Equals(b2)));
+      registerClassMessage("defaultValue".get(), (_, _) => DefaultValue);
    }
 
    public virtual void RegisterMessage(Selector selector, Func<IObject, Message, IObject> func) => messages[selector] = func;

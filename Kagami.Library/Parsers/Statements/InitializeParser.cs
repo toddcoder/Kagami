@@ -3,6 +3,7 @@ using Core.Monads;
 using Kagami.Library.Invokables;
 using Kagami.Library.Nodes.Statements;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Statements;
 
@@ -15,7 +16,7 @@ public partial class InitializeParser : StatementParser
    {
       state.Colorize(tokens, Color.Whitespace, Color.Keyword);
       state.CreateReturnType();
-      var _block = ParserFunctions.getAnyBlock(state);
+      var _block = getAnyBlock(state);
       if (_block is (true, var block))
       {
          state.RemoveReturnType();
