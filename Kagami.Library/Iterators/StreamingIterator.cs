@@ -266,9 +266,9 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
 
    public IObject Max(Lambda lambda) => terminate().Max(lambda);
 
-   public IObject First() => terminate().First();
+   public IObject First() => copy(new StreamingFirst());
 
-   public IObject First(Lambda predicate) => terminate().First(predicate);
+   public IObject First(Lambda predicate) => copy(new StreamingFirstPredicate(predicate));
 
    public IObject Last() => terminate().Last();
 
