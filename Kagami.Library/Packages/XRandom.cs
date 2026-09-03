@@ -25,7 +25,7 @@ public class XRandom : IObject, ICollection
 
    public Int Next() => random.Next();
 
-   public IIterator GetIterator(bool lazy) => lazy ? new Iterator(this) : new LazyIterator(this);
+   public IIterator GetIterator(bool lazy) => lazy ? new LazyIterator(this) : new Iterator(this);
 
    Maybe<IObject> ICollection.Next(int index)
    {
