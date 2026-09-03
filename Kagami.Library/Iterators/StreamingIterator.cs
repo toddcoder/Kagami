@@ -141,6 +141,18 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
 
    protected IIterator terminate() => new KArray(List()).GetIterator(false);
 
+   protected IObject singleItem()
+   {
+      if (Next() is (true, var item))
+      {
+         return Some.Object(item);
+      }
+      else
+      {
+         return KNil.NilValue;
+      }
+   }
+
    public IObject Reverse() => terminate().Reverse();
 
    public KString Join() => terminate().Join();
@@ -266,9 +278,17 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
 
    public IObject Max(Lambda lambda) => terminate().Max(lambda);
 
-   public IObject First() => copy(new StreamingFirst());
+   public IObject First()
+   {
+      var copied = (StreamingIterator)copy(new StreamingFirst());
+      return copied.singleItem();
+   }
 
-   public IObject First(Lambda predicate) => copy(new StreamingFirstPredicate(predicate));
+   public IObject First(Lambda predicate)
+   {
+      var copied = (StreamingIterator)copy(new StreamingFirstPredicate(predicate));
+      return copied.singleItem();
+   }
 
    public IObject Last() => terminate().Last();
 
