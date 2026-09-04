@@ -77,6 +77,7 @@ public class MathClass : PackageClass
       registerPackageFunction("isNumber(_<String>)", (obj, msg) => function<KMath, KString>(obj, msg, (m, s) => m.IsNumber(s.Value)));
       registerPackageFunction("remainder(_<Float>,_<Float>)",
          (obj, msg) => function<KMath, Float, Float>(obj, msg, (m, a, b) => m.Remainder(a.Value, b.Value)));
+      registerPackageFunction("primes()", (obj, _) => function<KMath>(obj, _ => new PrimeIterator()));
    }
 
    public override IObject DefaultValue => throw noDefaultValue("Math");
