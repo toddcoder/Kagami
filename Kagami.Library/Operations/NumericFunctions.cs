@@ -247,8 +247,6 @@ public static class NumericFunctions
       }
    }
 
-   public static INumeric toNumeric(IObject obj) => obj is INumeric numeric ? numeric : throw incompatibleClasses(obj, "Numeric");
-
    public static string floatImage(double value)
    {
       if (double.IsNaN(value))
@@ -456,5 +454,87 @@ public static class NumericFunctions
       {
          throw expectedType("Numeric");
       }
+   }
+
+   private static BigInteger power(BigInteger x, BigInteger y, BigInteger p)
+   {
+      var r = new BigInteger(1);
+      x %= p;
+
+      while (y > 0)
+      {
+         if ((y & 1) == 1)
+         {
+            r = r * x % p;
+         }
+
+         y >>= 1;
+         x = x * x % p;
+      }
+
+      return r;
+   }
+
+   private static bool millerTest(BigInteger d, BigInteger n)
+   {
+      var a = new BigInteger(new Random().Next(2, (int)n - 2));
+      var x = power(a, d, n);
+      if (x == 1 || x == n - 1)
+      {
+         return true;
+      }
+
+      while (d != n - 1)
+      {
+         x = x * x % n;
+         d *= 2;
+         if (x == 1)
+         {
+            return false;
+         }
+
+         if (x == n - 1)
+         {
+            return true;
+         }
+      }
+
+      return false;
+   }
+
+   public static bool isPrime(INumeric numeric)
+   {
+      if (numeric.IsInt || numeric.IsLong || numeric.IsByte)
+      {
+         var n = numeric.AsBigInteger();
+         if (n <= 1 || n == 4)
+         {
+            return false;
+         }
+
+         if (n <= 3)
+         {
+            return true;
+         }
+
+         var d = n - 1;
+
+         while (d % 2 == 0)
+         {
+            d /= 2;
+         }
+
+         for (var i = 0; i < 5; i++)
+         {
+            if (!millerTest(d, n))
+            {
+               return false;
+            }
+         }
+
+         return true;
+      }
+
+      return false;
    }
 }

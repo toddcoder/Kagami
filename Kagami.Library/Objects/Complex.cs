@@ -159,6 +159,8 @@ public readonly struct Complex : IObject, INumeric, IObjectCompare, IComparable<
    public KString Format(Lambda lambda) => format(this, lambda);
 
    public IObject Negate() => (Complex)CComplex.Negate(value);
+   
+   public KBoolean IsPrime => (KBoolean)isPrime(this);
 
    public IObject Sign() => new Complex(Math.Sign(value.Real), Math.Sign(value.Imaginary));
 

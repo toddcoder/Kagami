@@ -121,6 +121,8 @@ public readonly struct Long : IObject, INumeric, IComparable<Long>, IEquatable<L
 
    public IObject Negate() => (Long)(-value);
 
+   public KBoolean IsPrime => isPrime(this);
+
    public IObject Sign() => (Int)value.Sign;
 
    public IObject Raise(INumeric other) => (Long)BigInteger.Pow(value, other.AsInt32());

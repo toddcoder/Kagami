@@ -66,4 +66,6 @@ public interface INumeric : IIncrementDecrement
    IObject Abs();
 
    IObject Negate();
+
+   KBoolean IsPrime { get; }
 }

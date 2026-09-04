@@ -73,6 +73,8 @@ public readonly struct Infinity : IObject, IObjectCompare, INumeric
 
    public IObject Negate() => new Infinity(!positive);
 
+   public KBoolean IsPrime => isPrime(this);
+
    public string AsString => "_";
 
    public string Image => "_";

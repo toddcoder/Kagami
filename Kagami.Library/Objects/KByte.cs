@@ -85,6 +85,8 @@ public readonly struct KByte : IObject, INumeric, IObjectCompare, IComparable<KB
 
    public IObject Negate() => throw fail("Bytes cannot be negative");
 
+   public KBoolean IsPrime => isPrime(this);
+
    public string AsString => ((char)value).ToString();
 
    public string Image => $"{value}b";

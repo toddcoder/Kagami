@@ -107,6 +107,8 @@ public readonly struct Float : IObject, INumeric, IComparable<Float>, IEquatable
 
    public IObject Negate() => (Float)(-value);
 
+   public KBoolean IsPrime => isPrime(this);
+
    public IObject Sign() => (Float)Math.Sign(value);
 
    public IObject Raise(INumeric power) => raise(this, power);

@@ -152,6 +152,8 @@ public struct Rational : IObject, INumeric, IRangeItem, IComparable<Rational>, I
 
    public IObject Negate() => (Rational)(-numerator, denominator);
 
+   public KBoolean IsPrime => isPrime(this);
+
    public IObject Sign() => (Rational)(numerator.Sign, denominator.Sign);
 
    public IObject Raise(INumeric other)

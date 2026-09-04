@@ -342,6 +342,7 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerMessage("zfill(_<Int>)",
          (obj, message) => function<IObject, Int>(obj, message, (numeric, i) => ((INumeric)numeric).ZFill(i.Value)));
       registerMessage("negate()", (obj, _) => function(obj, x => -x, x => -x, x => x, x => x.Negate(), "negate()"));
+      registerMessage("isPrime".get(), (obj, _) => function(obj, numeric => (KBoolean)isPrime(numeric)));
    }
 
    protected void numericConversionMessages()

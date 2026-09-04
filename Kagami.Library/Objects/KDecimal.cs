@@ -106,6 +106,8 @@ public readonly struct KDecimal : IObject, INumeric, IObjectCompare, IComparable
 
    public IObject Negate() => new KDecimal(-value);
 
+   public KBoolean IsPrime => isPrime(this);
+
    public IObject Sign() => value > 0 ? new KDecimal(1) : value < 0 ? new KDecimal(-1) : new KDecimal(0);
 
    public IObject Raise(INumeric power) => raise(this, power);
