@@ -98,4 +98,8 @@ public class XRandom : IObject, ICollection
    public IObject this[SkipTake skipTake] => Objects.CollectionFunctions.skipTake(this, skipTake);
 
    public KBoolean IterateFloats { get; set; }
+
+   public IIterator Ints() => new RandomIntsIterator(random);
+
+   public IIterator Floats() => new RandomFloatsIterator(random);
 }

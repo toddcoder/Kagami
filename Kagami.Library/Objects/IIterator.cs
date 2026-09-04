@@ -264,4 +264,6 @@ public interface IIterator : IEquivalentClass
    IObject At(int index);
 
    IObject DotProduct(ICollection otherCollection);
+
+   IObject Peek(Lambda action);
 }

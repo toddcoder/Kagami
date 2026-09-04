@@ -479,5 +479,7 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
       return result;
     }
 
+   public IObject Peek(Lambda action) => copy(new StreamingPeek(action));
+
    public TypeConstraint EquivalentTypeConstraint() => Objects.TypeConstraint.FromList("Iterator");
 }

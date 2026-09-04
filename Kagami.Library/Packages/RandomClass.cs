@@ -27,6 +27,8 @@ public class RandomClass : BaseClass
          r.IterateFloats = b;
          return b;
       });
+      messages["ints()"] = (obj, _) => function<XRandom>(obj, r => (IObject)r.Ints());
+      messages["floats()"] = (obj, _) => function<XRandom>(obj, r => (IObject)r.Floats());
    }
 
    public override IObject DefaultValue => new XRandom();

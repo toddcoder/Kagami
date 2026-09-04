@@ -588,6 +588,7 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerIterMessage("at(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i1, i2) => i1.At(i2.Value)));
       registerIterMessage("dotProduct(_<Collection>)",
          (obj, message) => iteratorFunc<IObject>(obj, message, (i1, i2) => i1.DotProduct((ICollection)i2)));
+      registerIterMessage("peek(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Peek(l)));
    }
 
    public void typedCollectionMessages()

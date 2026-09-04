@@ -1972,6 +1972,16 @@ public class Iterator : IObject, IIterator
       return result;
    }
 
+   public IObject Peek(Lambda action)
+   {
+      foreach (var item in List())
+      {
+         action.Invoke(item);
+      }
+
+      return this;
+   }
+
    protected static IEnumerable<IObject> applyAgainst(List<Lambda> lambdas, List<IObject> enumerable)
    {
       return lambdas.SelectMany(_ => enumerable, (lambda, item) => lambda.Invoke(item));
@@ -1979,7 +1989,7 @@ public class Iterator : IObject, IIterator
 
    protected IObject shuffle(IObject[] array, int count)
    {
-      var result = new Hash<int, IObject>();
+      Hash<int, IObject> result = [];
       var random = new Random(NowServer.Now.Millisecond);
       for (var i = 0; i < count; i++)
       {
