@@ -22,7 +22,7 @@ public struct KRange : IObject, ICollection
    private int increment;
    private Func<IRangeItem, IRangeItem> next;
    private Func<IRangeItem, IObject, bool> compare;
-   private Maybe<IIterator> _currentIterator = nil;
+   private Maybe<IRangeItem> _current = nil;
 
    public KRange(int start, int stop, bool inclusive, int increment = 1) : this((Int)start, (Int)stop, inclusive, increment)
    {
@@ -143,23 +143,19 @@ public struct KRange : IObject, ICollection
    {
       if (index == 0)
       {
-         _currentIterator = GetIterator(false).Some();
+         _current = start.Some();
       }
 
-      if (_currentIterator is (true, var currentIterator))
+      if (_current is (true, var current))
       {
-         var _next = currentIterator.Next();
-         if (!_next)
+         if (compare(current, stopObj))
          {
-            _currentIterator = nil;
+            _current = next(current).Some();
+            return current.Object.Some();
          }
+      }
 
-         return _next;
-      }
-      else
-      {
-         return nil;
-      }
+      return nil;
    }
 
    public Maybe<IObject> Peek(int index) => nil;

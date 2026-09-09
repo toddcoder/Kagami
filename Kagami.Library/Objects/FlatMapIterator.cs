@@ -23,6 +23,10 @@ public class FlatMapIterator : Iterator
                yield return item;
             }
          }
+         else if (next is Some some)
+         {
+            yield return some.Value;
+         }
          else
          {
             yield return next;

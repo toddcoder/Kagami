@@ -1311,29 +1311,7 @@ public class Iterator : IObject, IIterator
       return array[i];
    }
 
-   public IObject Collect()
-   {
-      List<IObject> result = [.. collect(this)];
-      return collectionClass.Revert(result, _typeConstraint);
-
-      static IEnumerable<IObject> collect(IIterator iterator)
-      {
-         foreach (var item in iterator.List())
-         {
-            if (item is ICollection collection)
-            {
-               foreach (var innerItem in collect(collection.GetIterator(false)))
-               {
-                  yield return innerItem;
-               }
-            }
-            else
-            {
-               yield return item;
-            }
-         }
-      }
-   }
+   public IObject Collect() => collectionClass.Revert(List(), _typeConstraint);
 
    public KArray ToArray() => new(List());
 
@@ -1972,7 +1950,7 @@ public class Iterator : IObject, IIterator
       return result;
    }
 
-   public IObject Peek(Lambda action)
+   public virtual IObject Peek(Lambda action)
    {
       foreach (var item in List())
       {

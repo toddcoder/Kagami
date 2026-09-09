@@ -20,9 +20,9 @@ public partial class CoverParser : StatementParser
       var _expression = getExpression(state, ExpressionFlags.Standard);
       if (_expression is (true, var expression))
       {
-         var _first = getBlock(state, "first");
+         var _first = getBlock(state, "begin");
          var _middle = getBlock(state, "middle");
-         var _last = getBlock(state, "last");
+         var _last = getBlock(state, "end");
 
          state.AddStatement(new CoverStatement(expression, identifier, _first, _middle, _last));
          return unit;

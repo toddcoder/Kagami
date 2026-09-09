@@ -7,7 +7,7 @@ namespace Kagami.Library.Parsers.Expressions;
 
 public partial class PostfixOperatorsParser : SymbolParser
 {
-   [GeneratedRegex(@"^([&]{1,2})(?![\w])")]
+   [GeneratedRegex(@"^([&!]{1,2})(?![\w])")]
    public override partial Regex Regex();
 
    public PostfixOperatorsParser(ExpressionBuilder builder) : base(builder)
@@ -23,6 +23,9 @@ public partial class PostfixOperatorsParser : SymbolParser
       {
          case "&":
             builder.Add(new SendMessageSymbol("value".get(), false));
+            break;
+         case "!":
+            builder.Add(new SendMessageSymbol("collect()", Precedence.PostfixOperator, false));
             break;
          default:
             return nil;

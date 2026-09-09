@@ -13,7 +13,7 @@ public partial class KeywordOperatorsParser : SymbolParser
 
    [GeneratedRegex(@"^(\s+)(if|map|join|sort|foldl|foldr|fold|all|any|none|one|zip|Z|skip|take|while|until|min|max" +
       "|does|X|each|approx|same|xor|union|intersect|diff|symdiff|subsetof|supersetof|accum|overlaps|to|till|downto|" +
-      @"downtill|dto|dtill|by|range|peek)(\s+)")]
+      @"downtill|dto|dtill|by|range|peek|first|last)(\s+)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -21,7 +21,7 @@ public partial class KeywordOperatorsParser : SymbolParser
       var keyword = tokens[2].Text;
       if ((builder.Flags[ExpressionFlags.OmitRange] || builder.Flags[ExpressionFlags.InLambda]) && keyword != "div" && keyword != "divmod" &&
           keyword != "min" && keyword != "max" && keyword != "to" && keyword != "till" && keyword != "dto" && keyword != "dtill" && keyword != "by" &&
-          keyword != "each" && keyword != "peek" || builder.Flags[ExpressionFlags.OmitWhileUntil] && keyword is "while" or "until")
+          keyword != "each" || builder.Flags[ExpressionFlags.OmitWhileUntil] && keyword is "while" or "until")
       {
          return nil;
       }
@@ -139,6 +139,12 @@ public partial class KeywordOperatorsParser : SymbolParser
                   break;
                case "peek":
                   builder.Add(new SendBinaryMessageSymbol("peek(_<Lambda>)", Precedence.ChainedOperator));
+                  break;
+               case "first":
+                  builder.Add(new SendBinaryMessageSymbol("first(_<Lambda>)", Precedence.ChainedOperator));
+                  break;
+               case "last":
+                  builder.Add(new SendBinaryMessageSymbol("last(_<Lambda>)", Precedence.ChainedOperator));
                   break;
                default:
                   return fail($"Keyword internal error for {keyword}");

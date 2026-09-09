@@ -16,20 +16,7 @@ public class RangeIterator : LazyIterator
       stop = kRange.StopObj;
    }
 
-   public override Maybe<IObject> Next()
-   {
-      if (kRange.Compare(current, stop))
-      {
-         var result = current;
-         current = kRange.NextValue(current);
-
-         return result.Object.Some();
-      }
-      else
-      {
-         return nil;
-      }
-   }
+   public override Maybe<IObject> Next() => kRange.Next(index++);
 
    public override Maybe<IObject> Peek() => maybe<IObject>() & kRange.Compare(current, stop) & (() => current.Object);
 

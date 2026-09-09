@@ -3,16 +3,16 @@
 let args = <Mary had a little lamb>
 
 cover i in args
-	first {
+	begin {
 		println $"first: $i"
 	}
 	middle {
 		println $"middle: $i"
 	}
-	last {
+	end {
 		println $"last: $i"
 	}
 
 printline
 
-cover word in args first { print word } middle { print $", $word" }
+cover word in args begin { print word } middle { print $", $word" }

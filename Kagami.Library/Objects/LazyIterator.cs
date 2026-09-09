@@ -60,4 +60,6 @@ public class LazyIterator : Iterator
    public override IObject First() => new StreamingIterator(this).First();
 
    public override IObject First(Lambda predicate) => new StreamingIterator(this).First(predicate);
+
+   public override IObject Peek(Lambda action) => new StreamingIterator(this).Peek(action);
 }
