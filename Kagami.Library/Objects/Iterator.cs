@@ -712,23 +712,23 @@ public class Iterator : IObject, IIterator
 
    public IObject Min()
    {
-      var result = Unassigned.Value;
+      var result = KNil.NilValue;
       foreach (var value in List())
       {
-         if (result is Unassigned)
+         if (result is KNil)
          {
             switch (value)
             {
                case IObjectCompare:
-                  result = value;
+                  result = Some.Object(value);
                   break;
                default:
-                  return Unassigned.Value;
+                  return KNil.NilValue;
             }
          }
          else if (value is IObjectCompare oc && oc.Compare(result) < 0)
          {
-            result = value;
+            result = Some.Object(value);
          }
       }
 
@@ -737,22 +737,22 @@ public class Iterator : IObject, IIterator
 
    public IObject Min(Lambda lambda)
    {
-      var result = Unassigned.Value;
+      var result = KNil.NilValue;
       if (lambda.Invokable.Parameters.Length == 2)
       {
          foreach (var value in List())
          {
-            if (result is Unassigned || ((Int)lambda.Invoke(value, result)).Value < 0)
+            if (result is KNil || ((Int)lambda.Invoke(value, result)).Value < 0)
             {
-               result = value;
+               result = Some.Object(value);
             }
          }
       }
       else
       {
          var list = List().ToList();
-         result = list[0];
-         var compareResult = lambda.Invoke(result);
+         result = Some.Object(list[0]);
+         var compareResult = lambda.Invoke(list[0]);
          foreach (var value in list.Skip(1))
          {
             var valueResult = lambda.Invoke(value);
@@ -760,7 +760,7 @@ public class Iterator : IObject, IIterator
             {
                if (oc.Compare(compareResult) < 0)
                {
-                  result = value;
+                  result = Some.Object(value);
                   compareResult = valueResult;
                }
             }
@@ -776,23 +776,23 @@ public class Iterator : IObject, IIterator
 
    public IObject Max()
    {
-      var result = Unassigned.Value;
+      var result = KNil.NilValue;
       foreach (var value in List())
       {
-         if (result is Unassigned)
+         if (result is KNil)
          {
             switch (value)
             {
                case IObjectCompare:
-                  result = value;
+                  result = Some.Object(value);
                   break;
                default:
-                  return Unassigned.Value;
+                  return KNil.NilValue;
             }
          }
          else if (value is IObjectCompare oc && oc.Compare(result) > 0)
          {
-            result = value;
+            result = Some.Object(value);
          }
       }
 
@@ -801,22 +801,22 @@ public class Iterator : IObject, IIterator
 
    public IObject Max(Lambda lambda)
    {
-      var result = Unassigned.Value;
+      var result = KNil.NilValue;
       if (lambda.Invokable.Parameters.Length == 2)
       {
          foreach (var value in List())
          {
-            if (result is Unassigned || ((Int)lambda.Invoke(value, result)).Value < 0)
+            if (result is KNil || ((Int)lambda.Invoke(value, result)).Value < 0)
             {
-               result = value;
+               result = Some.Object(value);
             }
          }
       }
       else
       {
          var list = List().ToList();
-         result = list[0];
-         var compareResult = lambda.Invoke(result);
+         result = Some.Object(list[0]);
+         var compareResult = lambda.Invoke(list[0]);
          foreach (var value in list.Skip(1))
          {
             var valueResult = lambda.Invoke(value);
@@ -824,7 +824,7 @@ public class Iterator : IObject, IIterator
             {
                if (oc.Compare(compareResult) > 0)
                {
-                  result = value;
+                  result = Some.Object(value);
                   compareResult = valueResult;
                }
             }

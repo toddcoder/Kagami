@@ -218,6 +218,11 @@ public static class NumericFunctions
 
    public static int compatibleCompare(IObject x, IObject y)
    {
+      if (y is Objects.Some some)
+      {
+         y = some.Value;
+      }
+
       if (y is Infinity inf)
       {
          return inf.IsPositive ? -1 : 1;
