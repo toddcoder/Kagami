@@ -152,6 +152,7 @@ public class Module
       "DateIncrement" => new DateIncrementClass(),
       "ProtocolWrapper" => new ProtocolWrapperClass(),
       "Cover" => new CoverClass(),
+      "Statistics" => new StatisticsClass(),
       _ => nil
    };
 

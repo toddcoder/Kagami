@@ -112,12 +112,39 @@ public static class ObjectFunctions
             return matchDate(date, tuple, bindings);
          case SpecialComparisand specialComparisand:
             return specialComparisand.Match(source, bindings);
+         case KTuple tuple when source is Statistics statistics:
+            return matchStatistics(tuple, statistics, bindings);
          case UserObject userObjectSource when source is UserObject userObject:
          {
             return userObjectMatch(userObjectSource, userObject, bindings);
          }
          default:
             return classOf(source).MatchCompatible(classOf(comparisand)) && equalifier(source, (T)comparisand);
+      }
+   }
+
+   private static bool matchStatistics(KTuple tuple, Statistics statistics, Hash<string, IObject> bindings)
+   {
+      if (tuple.Length.Value == 5)
+      {
+         IObject[] items = [statistics.Sum, statistics.Count, statistics.Average, statistics.Min | KNil.NilValue, statistics.Max | KNil.NilValue];
+         for (var i = 0; i < 5; i++)
+         {
+            if (tuple[i] is Placeholder placeholder)
+            {
+               bindings[placeholder.Name] = items[i];
+            }
+            else if (!tuple[i].Match(items[i], bindings))
+            {
+               return false;
+            }
+         }
+
+         return true;
+      }
+      else
+      {
+         return false;
       }
    }
 
@@ -355,7 +382,6 @@ public static class ObjectFunctions
          default:
             return false;
       }
-
    }
 
    public static bool match<T>(T source, IObject comparisand, Hash<string, IObject> bindings)

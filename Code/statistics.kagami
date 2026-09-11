@@ -1,0 +1,25 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+fn fib() {
+	var previous = 0
+	var current = 1
+
+	while true {
+		var oldPrevious = previous
+		var nextValue = previous + current
+		previous = current
+		current = nextValue
+		yield oldPrevious
+	}
+}
+
+var statistics = fib() take 10 #statistics()
+if statistics {
+	match statistics {
+		|(sum, count, average, min, max) => println $"$sum, $count, $average, $min, $max"
+		|_ => println "failed"
+	}
+}
+else {
+	println statistics
+}

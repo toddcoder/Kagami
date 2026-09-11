@@ -558,6 +558,8 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerIterMessage("%(_<Int>)", (obj, msg) => iteratorFunc<Int>(obj, msg, (i, cols) => i.Shape(0, cols.Value)));
       registerIterMessage("column(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Column(c.Value)));
       registerIterMessage("partition(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Partition(l)));
+      registerIterMessage("partition(_<Lambda>,_<Lambda>)", (obj, message) => iteratorFunc<Lambda, Lambda>(obj, message, (i, l1, l2) => i.Partition(l1, l2)));
+      registerIterMessage("partition(_<Lambda>,_<Lambda>,_<Lambda>)", (obj, message) => iteratorFunc<Lambda, Lambda, Lambda>(obj, message, (i, l1, l2, l3) => i.Partition(l1, l2, l3)));
       registerIterMessage("pick(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Pick(c.Value)));
       registerIterMessage("pick()", (obj, _) => iteratorFunc(obj, i => i.Pick()));
       registerIterMessage("roll(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Roll(c.Value)));
@@ -589,6 +591,7 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerIterMessage("dotProduct(_<Collection>)",
          (obj, message) => iteratorFunc<IObject>(obj, message, (i1, i2) => i1.DotProduct((ICollection)i2)));
       registerIterMessage("peek(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Peek(l)));
+      registerIterMessage("statistics()", (obj, _) => iteratorFunc(obj, i => (IObject)i.Statistics()));
    }
 
    public void typedCollectionMessages()

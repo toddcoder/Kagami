@@ -382,6 +382,10 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
 
    public IObject Partition(Lambda lambda) => terminate().Partition(lambda);
 
+   public IObject Partition(Lambda predicate, Lambda result) => terminate().Partition(predicate, result);
+
+   public IObject Partition(Lambda predicate, Lambda trueResult, Lambda falseResult) => terminate().Partition(predicate, trueResult, falseResult);
+
    public IObject Pick(int count) => terminate().Pick(count);
 
    public IObject Pick() => terminate().Pick();
@@ -477,9 +481,11 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
       }
 
       return result;
-    }
+   }
 
    public IObject Peek(Lambda action) => copy(new StreamingPeek(action));
+
+   public IResult Statistics() => (IResult)new Statistics(this).Evaluate();
 
    public TypeConstraint EquivalentTypeConstraint() => Objects.TypeConstraint.FromList("Iterator");
 }

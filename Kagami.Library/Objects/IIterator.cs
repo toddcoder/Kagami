@@ -217,6 +217,10 @@ public interface IIterator : IEquivalentClass
 
    IObject Partition(Lambda lambda);
 
+   IObject Partition(Lambda predicate, Lambda result);
+
+   IObject Partition(Lambda predicate, Lambda trueResult, Lambda falseResult);
+
    IObject Pick(int count);
 
    IObject Pick();
@@ -266,4 +270,6 @@ public interface IIterator : IEquivalentClass
    IObject DotProduct(ICollection otherCollection);
 
    IObject Peek(Lambda action);
+
+   IResult Statistics();
 }

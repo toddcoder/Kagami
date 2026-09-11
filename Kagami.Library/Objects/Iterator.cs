@@ -1609,6 +1609,65 @@ public class Iterator : IObject, IIterator
          _typeConstraint);
    }
 
+   public IObject Partition(Lambda predicate, Lambda result)
+   {
+      List<IObject> matched = [];
+      List<IObject> notMatched = [];
+
+      foreach (var obj in List())
+      {
+         var returned = predicate.Invoke(obj);
+         if (returned.IsTrue)
+         {
+            returned = result.Invoke(returned, obj);
+            matched.Add(returned);
+         }
+         else
+         {
+            returned = result.Invoke(returned, obj);
+            notMatched.Add(returned);
+         }
+      }
+
+      return collectionClass.Revert([collectionClass.Revert(matched, _typeConstraint), collectionClass.Revert(notMatched, _typeConstraint)],
+         _typeConstraint);
+   }
+
+   public IObject Partition(Lambda predicate, Lambda trueResult, Lambda falseResult)
+   {
+      List<IObject> matched = [];
+      List<IObject> notMatched = [];
+
+      foreach (var obj in List())
+      {
+         var returned = predicate.Invoke(obj);
+         if (returned.IsTrue)
+         {
+            matched.Add(obj);
+         }
+         else
+         {
+            notMatched.Add(obj);
+         }
+      }
+
+      var isTrue = trueResult.Invoke(KArray.CreateObject(matched, _typeConstraint));
+      var isFalse = falseResult.Invoke(KArray.CreateObject(notMatched, _typeConstraint));
+      if (isTrue is ICollection trueCollection && isFalse is ICollection falseCollection)
+      {
+         IEnumerable<IObject> enumerable =
+         [
+            collectionClass.Revert(trueCollection.GetIterator(false).List(), _typeConstraint),
+            collectionClass.Revert(falseCollection.GetIterator(false).List(), _typeConstraint)
+         ];
+         return collectionClass.Revert(enumerable, _typeConstraint);
+      }
+      else
+      {
+         throw expectedType("Collection");
+      }
+   }
+
    public IObject Pick(int count)
    {
       var random = new Random(NowServer.Now.Millisecond);
@@ -1959,6 +2018,8 @@ public class Iterator : IObject, IIterator
 
       return this;
    }
+
+   public IResult Statistics() => (IResult)new Statistics(this).Evaluate();
 
    protected static IEnumerable<IObject> applyAgainst(List<Lambda> lambdas, List<IObject> enumerable)
    {
