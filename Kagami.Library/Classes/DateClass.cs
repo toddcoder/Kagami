@@ -34,6 +34,7 @@ public class DateClass : BaseClass
       messages["utc()"] = (obj, _) => function<Date>(obj, d => d.Utc());
       messages["<<(_<Int>)"] = (obj, msg) => function<Date, Int>(obj, msg, (d, i) => d.Shift(i.Value));
       messages["addMonths(_<Int>)"] = (obj, msg) => function<Date, Int>(obj, msg, (d, i) => d.AddMonths(i.Value));
+      messages["lengthOfMonth".get()] = (obj, _) => function<Date>(obj, d => d.LengthOfMonth);
    }
 
    public override void RegisterClassMessages()
@@ -51,6 +52,7 @@ public class DateClass : BaseClass
       classMessages["daysInMonth(year:_<Int>,month:_<Int>)"] =
          (bc, msg) => classFunc<DateClass, Int, Int>(bc, msg, (_, y, m) => daysInMonth(y.Value, m.Value));
       classMessages["daysInMonth".get()] = (_, _) => daysInMonth();
+      classMessages["time".get()] = (_, _) => getTime();
    }
 
    public override IObject DefaultValue => new Date(DateTime.MinValue);
@@ -73,5 +75,11 @@ public class DateClass : BaseClass
    {
       IEnumerable<IObject> days = [.. ((int[])[31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]).Select(i => (Int)i)];
       return new KArray(days);
+   }
+
+   protected static Date getTime()
+   {
+      var now = DateTime.Now;
+      return new Date(DateTime.MinValue + new TimeSpan(now.Day, now.Hour, now.Minute, now.Second, now.Millisecond));
    }
 }

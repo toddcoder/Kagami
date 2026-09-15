@@ -24,5 +24,11 @@ public abstract class BuilderStatement(BuilderState builderState) : Statement
       Assign(builder);
    }
 
+   public void AssignFailure(OperationsBuilder builder)
+   {
+      builder.Failure();
+      Assign(builder);
+   }
+
    public void Assign(OperationsBuilder builder) => builder.AssignField(builderState.ResultFieldName, false);
 }

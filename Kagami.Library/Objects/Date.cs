@@ -152,4 +152,6 @@ public readonly struct Date : IObject, IRangeItem, IFormattable
    public DateIncrement Shift(int amount) => new(this, amount);
 
    public Date AddMonths(int increment) => new(value.AddMonths(increment));
+
+   public Int LengthOfMonth => DateTime.DaysInMonth(value.Year, value.Month);
 }
