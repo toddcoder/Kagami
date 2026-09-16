@@ -822,7 +822,7 @@ public static class ObjectFunctions
          else
          {
             var sourceItems = rest.Unjoin("/s* ',' /s*");
-            items = sourceItems.Select(parseSelectorItem).ToArray();
+            items = [.. sourceItems.Select(parseSelectorItem)];
          }
 
          return new Selector(name, items, selectorImage(name, items));
@@ -838,7 +838,9 @@ public static class ObjectFunctions
       var label = "";
       Maybe<TypeConstraint> _typeConstraint = nil;
 
-      if (source.MatchOf($"^({REGEX_FIELD}):(.*)$") is (true, var matches))
+      source = source.Drop("/b 'hide' /s+; f");
+
+      if (source.MatchOf($"({REGEX_FIELD}):(.*)$") is (true, var matches))
       {
          var match = matches[0];
          label = match.Groups[1].Value;
@@ -867,7 +869,7 @@ public static class ObjectFunctions
          _ => SelectorItemType.Normal
       };
 
-      return new SelectorItem(label, _typeConstraint, selectorItemType);
+      return [with(label, _typeConstraint, selectorItemType)];
    }
 
    public static string selectorImage(string name, SelectorItem[] selectorItems) => $"{name}({selectorItems.ToString(",")})";

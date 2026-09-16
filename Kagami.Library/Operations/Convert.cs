@@ -35,6 +35,7 @@ public class Convert : Operation
       conversions[("Tuple", "Complex")] = t => tupleToComplex(t);
       conversions[("Long", "Float")] = l => Float.FloatObject(((Long)l).AsDouble());
       conversions[("String", "Regex")] = s => Regex.FromString(s.AsString);
+      conversions[("Rational", "Float")] = s => Float.FloatObject(((Rational)s).AsDouble());
    }
 
    public override Optional<IObject> Execute(Machine machine)
