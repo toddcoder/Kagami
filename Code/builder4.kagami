@@ -1,0 +1,28 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+builder SafeDivision(a int, b int) {
+	let x = a
+	let y = b
+	require y != 0 else f"Dividing by 0!"
+	return x / y
+}
+
+var x = 10
+var y = 5
+var quotient1 = SafeDivision(x, y)&
+if quotient1 {
+	println $"$x / $y = $quotient1"
+}
+else {
+	println quotient1
+}
+
+x = 10
+y = 0
+var quotient2 = SafeDivision(x, y)&
+if quotient2 {
+	println $"$x / $y = $quotient2"
+}
+else {
+	println quotient2
+}
