@@ -9,6 +9,7 @@ public class BuilderMembersParser(BuilderState builderState) : StatementsParser
          yield return new BuilderAssignParser(builderState);
          yield return new BuilderReturnParser(builderState);
          yield return new BuilderDoParser(builderState);
+         yield return new BuilderDoParser2(builderState);
       }
    }
 }

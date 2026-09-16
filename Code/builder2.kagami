@@ -3,7 +3,7 @@
 builder IntParsing(s1 string, s2 string) {
 	let i1 = int.parse(s1)
 	let i2 = int.parse(s2)
-	do for i in i1 downto i2 println i
+	do {for i in i1 downto i2 println i}
 	return i1 * i2
 }
 

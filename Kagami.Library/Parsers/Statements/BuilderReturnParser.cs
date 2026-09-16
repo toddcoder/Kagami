@@ -3,6 +3,7 @@ using Core.Monads;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Parsers.Expressions;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.Parsers.ParserFunctions;
 
 namespace Kagami.Library.Parsers.Statements;
 
@@ -15,7 +16,7 @@ public partial class BuilderReturnParser(BuilderState builderState) : StatementP
    {
       state.Colorize(tokens, Color.Whitespace, Color.Keyword);
 
-      var _expression = ParserFunctions.getExpression(state, ExpressionFlags.Standard);
+      var _expression = getExpression(state, ExpressionFlags.Standard);
       if (_expression is (true, var expression))
       {
          state.AddStatement(new BuilderReturn(builderState, expression));
