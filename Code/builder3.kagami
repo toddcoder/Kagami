@@ -1,10 +1,10 @@
 ﻿#pragma ALLOW_PRINT_STATEMENT true
 
-builder Set5(a array, i int) {
+builder set5(a array, i int) {
 	let arr = a
 	do arr[i] = 'N'
 	return arr
 }
 
-println Set5(['a', 'b'], 0)& \ $i
-println Set5(['a', 'b'], 15)& \ $i
+println set5(['a', 'b'], 0) \ $i
+println set5(['a', 'b'], 15) \ $i

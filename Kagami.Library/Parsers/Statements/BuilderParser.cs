@@ -1,30 +1,28 @@
 ﻿using Core.Monads;
 using Kagami.Library.Invokables;
-using Kagami.Library.Runtime;
 using System.Text.RegularExpressions;
 using Kagami.Library.Nodes.Statements;
 using Kagami.Library.Nodes.Symbols;
-using Kagami.Library.Objects;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Nodes.NodeFunctions;
 using static Kagami.Library.Parsers.ParserFunctions;
-using Class = Kagami.Library.Nodes.Statements.Class;
+using Failure = Kagami.Library.Objects.Failure;
 using Regex = System.Text.RegularExpressions.Regex;
 
 namespace Kagami.Library.Parsers.Statements;
 
 public partial class BuilderParser : StatementParser
 {
-   [GeneratedRegex(@$"^(\s*)(builder)(\s+)({REGEX_CLASS})(\()?")]
+   [GeneratedRegex(@$"^(\s*)(builder)(\s+)({REGEX_FUNCTION_NAME})(\()?")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
    {
-      var className = tokens[4].Text;
+      var builderName = tokens[4].Text;
       var hasParameters = tokens[5].Text == "(";
       state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Class, Color.OpenParenthesis);
 
-      Module.Global.Value.ForwardReference(className);
+      //Module.Global.Value.ForwardReference(builderName);
 
       Parameters parameters;
 
@@ -99,9 +97,15 @@ public partial class BuilderParser : StatementParser
             }
          }
 
-         //block.Add(new ExpressionStatement(new SendMessageSymbol(builderState.ResultFieldName.get(), Precedence.SendMessage, true, nil, nil), true));
+         var fieldSymbol = new FieldSymbol(builderState.ResultFieldName);
+         block.Add(new ExpressionStatement(fieldSymbol, true));
 
-         var builder = new ClassBuilder(className, parameters, "", [], false, block);
+         var function = new Function(builderName, parameters, false, block, false, false, "");
+         state.AddStatement(function);
+
+         return unit;
+
+         /*var builder = new ClassBuilder(builderName, parameters, "", [], false, block);
          var _register = builder.Register();
          if (_register)
          {
@@ -113,7 +117,7 @@ public partial class BuilderParser : StatementParser
          else
          {
             return _register.Exception;
-         }
+         }*/
       }
       else
       {
