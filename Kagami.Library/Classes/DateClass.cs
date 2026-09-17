@@ -48,7 +48,7 @@ public class DateClass : BaseClass
       classMessages["utcNow".get()] = (_, _) => new Date(DateTime.UtcNow);
       classMessages["parse(_)"] = (_, msg) => parse(msg.Arguments[0].AsString);
       classMessages["months".get()] = (_, _) => Date.Months;
-      classMessages["daysOfTheWeek".get()] = (_, _) => Date.DaysOfTheWeek;
+      classMessages["days".get()] = (_, _) => Date.Days;
       classMessages["daysInMonth(year:_<Int>,month:_<Int>)"] =
          (bc, msg) => classFunc<DateClass, Int, Int>(bc, msg, (_, y, m) => daysInMonth(y.Value, m.Value));
       classMessages["daysInMonth".get()] = (_, _) => daysInMonth();

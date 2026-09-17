@@ -26,7 +26,7 @@ public readonly struct Date : IObject, IRangeItem, IFormattable
       }
    }
 
-   public static KArray DaysOfTheWeek
+   public static KArray Days
    {
       get
       {

@@ -2,6 +2,7 @@
 using System.Numerics;
 using System.Text;
 using Core.Collections;
+using Core.Enumerables;
 using Core.Monads;
 using Core.Objects;
 using Core.Strings;
@@ -639,17 +640,14 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
    public IObject Numberize()
    {
-      if (value.IsMatch("['.e']"))
+      var number = value.Where(c => char.IsDigit(c) || c == '.' || c == '+' || c == '-').ToString("");
+      if (number.Contains('.'))
       {
-         return Objects.Float.FloatObject(value.Value().Double());
-      }
-      else if (value.IsDate())
-      {
-         return Date.DateObject(value.Value().DateTime());
+         return Objects.Float.FloatObject(number.Result().Double().ForceValue());
       }
       else
       {
-         return Objects.Int.IntObject(value.Value().Int32());
+         return Objects.Int.IntObject(number.Result().Int32().ForceValue());
       }
    }
 
