@@ -99,6 +99,8 @@ public partial class BuilderParser : StatementParser
             }
          }
 
+         //block.Add(new ExpressionStatement(new SendMessageSymbol(builderState.ResultFieldName.get(), Precedence.SendMessage, true, nil, nil), true));
+
          var builder = new ClassBuilder(className, parameters, "", [], false, block);
          var _register = builder.Register();
          if (_register)
