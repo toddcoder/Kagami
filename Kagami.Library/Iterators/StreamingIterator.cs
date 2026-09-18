@@ -324,7 +324,7 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
 
    public IObject Cross(ICollection collection, Lambda lambda) => terminate().Cross(collection, lambda);
 
-   public IObject By(int count) => copy(new StreamingBy(count));
+   public IObject Sub(int count) => copy(new StreamingSub(count));
 
    public IObject Window(int count) => terminate().Window(count);
 

@@ -159,7 +159,7 @@ public interface IIterator : IEquivalentClass
 
    IObject Cross(ICollection collection, Lambda lambda);
 
-   IObject By(int count);
+   IObject Sub(int count);
 
    IObject Window(int count);
 

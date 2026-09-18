@@ -1112,7 +1112,7 @@ public class Iterator : IObject, IIterator
       return collectionClass.Revert(result, _typeConstraint);
    }
 
-   public virtual IObject By(int count)
+   public virtual IObject Sub(int count)
    {
       switch (count)
       {

@@ -519,8 +519,7 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerIterMessage("cumulProduct()", (obj, _) => iteratorFunc(obj, i => i.CumulativeProduct()));
       registerIterMessage("cross(_)", (obj, message) => iteratorFunc<IObject>(obj, message, (i, c) => i.Cross((ICollection)c)));
       registerIterMessage("cross(_,_)", (obj, message) => iteratorFunc<IObject, Lambda>(obj, message, (i, c, l) => i.Cross((ICollection)c, l)));
-      registerIterMessage("by(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.By(j.Value)));
-      registerIterMessage("/(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.By(j.Value)));
+      registerIterMessage("sub(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Sub(j.Value)));
       registerIterMessage("window(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Window(j.Value)));
       registerIterMessage("//(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Window(j.Value)));
       registerIterMessage("unique()", (obj, _) => iteratorFunc(obj, i => i.Unique()));

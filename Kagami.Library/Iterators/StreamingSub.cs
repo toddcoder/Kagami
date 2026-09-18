@@ -3,7 +3,7 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Iterators;
 
-public class StreamingBy(int count) : StreamingAction
+public class StreamingSub(int count) : StreamingAction
 {
    private List<IObject> accumulated = [];
 
@@ -23,5 +23,5 @@ public class StreamingBy(int count) : StreamingAction
       }
    }
 
-   public override string ToString() => $"by({count})";
+   public override string ToString() => $"sub({count})";
 }
