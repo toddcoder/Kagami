@@ -8,6 +8,7 @@ using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.CommonFunctions;
 using Arguments = Kagami.Library.Objects.Arguments;
+using Complex = Kagami.Library.Objects.Complex;
 
 namespace Kagami.Library.Operations;
 
@@ -36,6 +37,7 @@ public class Convert : Operation
       conversions[("Long", "Float")] = l => Float.FloatObject(((Long)l).AsDouble());
       conversions[("String", "Regex")] = s => Regex.FromString(s.AsString);
       conversions[("Rational", "Float")] = s => Float.FloatObject(((Rational)s).AsDouble());
+      conversions[("Float", "Complex")] = f => Complex.ComplexObject((((Float)f).Value, 0.0));
    }
 
    public override Optional<IObject> Execute(Machine machine)
