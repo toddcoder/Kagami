@@ -99,7 +99,7 @@ public class XRandom : IObject, ICollection
 
    public KBoolean IterateFloats { get; set; }
 
-   //todo public IIterator Ints() => new RandomIntsIterator(random);
+   public IIterator Ints() => new RandomIntsIterator(random);
 
-   //todo public IIterator Floats() => new RandomFloatsIterator(random);
+   public IIterator Floats() => new RandomFloatsIterator(random);
 }
