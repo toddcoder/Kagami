@@ -1,27 +1,25 @@
-﻿open sys
-
-#pragma ALLOW_PRINT_STATEMENT true
+﻿#pragma ALLOW_PRINT_STATEMENT true
 
 let diceSum = 7
 if (7 || 11) == diceSum {
-	println("natural")
+	println "natural"
 }
 
-println(("a" ^^ "b" ^^ "c") == "a")
+println ("a" ^^ "b" ^^ "c") == "a"
 
 let j = (1 || 2)
 if j + 1 == 3 {
-	println("yes")
+	println "yes"
 }
 
-var k = +("not a number" || "42" || "2.1")
-println(k)
+var k = +("42" || "2.1")
+println k
 
 let odd = (1 || 3 || 5)
 let even = (2 || 4 || 6)
 let merged = odd + even
 if merged == 11 {
-	println("found 11")
+	println "found 11"
 }
 
 let ary = [merged]

@@ -7,13 +7,16 @@ public readonly struct SymbolObject : IObject, IObjectCompare, IEquatable<Symbol
 {
    private readonly string name;
 
-   public SymbolObject(string name) : this() => this.name = name;
+   public SymbolObject(string name) : this()
+   {
+      this.name = name;
+   }
 
    public string ClassName => "Symbol";
 
    public string AsString => name;
 
-   public string Image => $"@{name}";
+   public string Image => $"*{name}";
 
    public int Hash => name.GetHashCode();
 

@@ -1,5 +1,5 @@
 ﻿open sys
 
 var numbers = [1 to 20]
-var i = ?^numbers.by(5)
+var i = ?^numbers.sub(5)
 println(~[i])

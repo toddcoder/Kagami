@@ -13,7 +13,7 @@ var ary = [i for i in sudoku] %(9, 9)
 for (i, line) in #^ary {
 	if i %% 3 println separator
 	print("|")
-	for trio in line.by(3) print trio.join("") ~ "|"
+	for trio in line.sub(3) print trio.join("") ~ "|"
 	printline
 }
 println separator
