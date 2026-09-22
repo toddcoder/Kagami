@@ -9,13 +9,10 @@ public class NewJunction(string junctionType) : OneOperandOperation
 {
    public override string ToString() => $"new.junction({junctionType})";
 
-   public override Optional<IObject> Execute(Machine machine, IObject value)
+   public override Optional<IObject> Execute(Machine machine, IObject value) => value switch
    {
-      return value switch
-      {
-         Sequence sequence => new Junction(junctionType, sequence),
-         ICollection collection => new Junction(junctionType, new Sequence(collection.GetIterator(false).List())),
-         _ => incompatibleClasses(value, "String")
-      };
-   }
+      Sequence sequence => new Junction(junctionType, sequence),
+      ICollection collection => new Junction(junctionType, new Sequence(collection.GetIterator(false).List())),
+      _ => incompatibleClasses(value, "String")
+   };
 }

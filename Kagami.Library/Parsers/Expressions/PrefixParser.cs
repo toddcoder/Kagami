@@ -24,6 +24,7 @@ public class PrefixParser(ExpressionBuilder builder) : MultiParser
          yield return new NegateParser(builder);
          yield return new ImageParser(builder);
          yield return new IteratorParser(builder);
+         yield return new JunctionParser(builder);
 
          yield return new SomeSuccessParser(builder);
 

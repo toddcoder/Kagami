@@ -20,9 +20,9 @@ if all(scores) > passMark println "Everybody passed!"
 let scoresa = [1, 1, 1, 100]
 let scoresb = [66, 77, 88]
 
-if any(scoresa) > all(scoresb) println "Someone in class A beat all of the people in class B!"
+if |:(scoresa) > &:(scoresb) println "Someone in class A beat all of the people in class B!"
 
-var a = any[1, 2]
+var a = |:[1, 2]
 a += 1
 a += 5
 println a
