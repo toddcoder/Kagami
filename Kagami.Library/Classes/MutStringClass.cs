@@ -42,9 +42,11 @@ public class MutStringClass : BaseClass, ICollectionClass
       registerMessage("at(_<Int>)", (obj, msg) => function<MutString, Int>(obj, msg, (m, i) => m.At(i.Value)));
       registerMessage("at(_<Int>,_<String>)",
          (obj, msg) => function<MutString, Int, KString>(obj, msg, (m, i, s) => m.At(i.Value, s.Value)));
-      messages["[](_<String>)"] = (obj, msg) => function<MutString, KString>(obj, msg, (m, needle) => m[needle.Value]);
+      messages["[](_<String>)"] = (obj, msg) => function<MutString, KString>(obj, msg, (m, needle) => m[needle]);
       messages["[]=(_<String>,_<String>)"] =
-         (obj, msg) => function<MutString, KString, KString>(obj, msg, (m, needle, value) => m[needle.Value] = value);
+         (obj, msg) => function<MutString, KString, KString>(obj, msg, (m, needle, value) => m[needle] = value);
+      messages["[]=(_<Int>,_<String>)"] =
+         (obj, msg) => function<MutString, Int, KString>(obj, msg, (m, i, value) => m.SetString(i.Value, value.Value));
    }
 
    public override IObject DefaultValue => new MutString("");

@@ -32,6 +32,7 @@ public class Compiler
    {
       Module.Global.ActivateWith(() => new Module());
       Protocols.Protocols.Clear();
+      Module.ClearTags();
 
       var state = new ParseState(source)
       {

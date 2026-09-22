@@ -13,6 +13,7 @@ using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.CollectionFunctions;
 using Core.Matching;
 using Core.Numbers;
+using Kagami.Library.Runtime;
 
 namespace Kagami.Library.Objects;
 
@@ -793,12 +794,22 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
       set => throw immutableValue("String");
    }
 
-   public IObject this[string needle]
+   public IObject this[KString needle]
    {
       get
       {
-         var _index = value.Find(needle);
-         return someOf(_index.Map(Objects.Int.IntObject));
+         if (Module.TagExists(needle, "global"))
+         {
+            var indexes = value.FindAll(needle.value);
+            IObject[] indexList = [.. indexes.Select(i => (Int)i)];
+
+            return new KArray(indexList);
+         }
+         else
+         {
+            var _index = value.Find(needle.value);
+            return someOf(_index.Map(Objects.Int.IntObject));
+         }
       }
    }
 }

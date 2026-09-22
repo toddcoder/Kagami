@@ -34,6 +34,7 @@ public class PostfixParser(ExpressionBuilder builder) : MultiParser
 
          yield return new FoldOperatorParser(builder);
          yield return new SendMessageParser(builder);
+         yield return new TagParser(builder);
       }
    }
 }

@@ -5,6 +5,7 @@ using Core.Monads;
 using Core.Numbers;
 using Core.Objects;
 using Core.Strings;
+using Kagami.Library.Runtime;
 using static Kagami.Library.Objects.ObjectFunctions;
 using static Kagami.Library.Objects.TextFindingFunctions;
 using static Core.Monads.MonadFunctions;
@@ -430,21 +431,58 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
       return this;
    }
 
-   public IObject this[string needle]
+   public IObject this[KString needle]
    {
       get
       {
-         var _index = mutable.ToString().Find(needle);
-         return someOf(_index.Map(Int.IntObject));
+         if (Module.TagExists(needle, "global"))
+         {
+            var indexes = mutable.ToString().FindAll(needle.Value);
+            IObject[] indexList = [.. indexes.Select(i => (Int)i)];
+
+            return new KArray(indexList);
+         }
+         else
+         {
+            var _index = mutable.ToString().Find(needle.Value);
+            return someOf(_index.Map(Int.IntObject));
+         }
       }
       set
       {
-         var _index = mutable.ToString().Find(needle);
-         if (_index is (true, var index))
+         if (Module.TagExists(value, "global"))
          {
-            mutable.Remove(index, needle.Length);
-            mutable.Insert(index, value.AsString);
+            Slicer slicer = mutable.ToString();
+            var indexes = mutable.ToString().FindAll(needle.Value);
+            foreach (var index in indexes)
+            {
+               slicer[index, needle.Length.Value] = value.AsString;
+            }
+
+            mutable = new StringBuilder(slicer.ToString());
+         }
+         else
+         {
+            var _index = mutable.ToString().Find(needle.Value);
+            if (_index is (true, var index))
+            {
+               mutable.Remove(index, needle.Length.Value);
+               mutable.Insert(index, value.AsString);
+            }
          }
       }
+   }
+
+   public IObject SetString(int index, string value)
+   {
+      index = wrapIndex(index, mutable.Length);
+      var builder = new StringBuilder();
+      var str = mutable.ToString();
+      builder.Append(str[..index]);
+      builder.Append(value);
+      builder.Append(str[(index + 1)..]);
+      mutable = builder;
+
+      return this;
    }
 }

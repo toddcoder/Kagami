@@ -1,0 +1,13 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+var s = m"hello"
+while s["l"] is ?i {
+	s[i] = "L"
+}
+println s
+
+println ~s["L":<global>]
+
+s = m"foobar"
+s["o"] = "O":<global>
+println s

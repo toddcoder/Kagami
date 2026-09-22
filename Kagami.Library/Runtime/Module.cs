@@ -178,6 +178,7 @@ public class Module
    protected Hash<Guid, string> bindings = [];
    protected Hash<Guid, string> retrievedFields = [];
    protected Hash<(string from, string to), Selector> conversionFunctions = [];
+   protected static Set<IdTag> tags = [];
 
    public Maybe<BaseClass> Class(string name, bool forwardsIncluded = false)
    {
@@ -288,4 +289,10 @@ public class Module
    public static void RegisterMixin(string name, MetaClass mixin) => mixins[name] = mixin;
 
    public static Maybe<MetaClass> GetMixin(string name) => mixins.Maybe[name];
+
+   public static void RegisterTag(IObject obj, string tag) => tags.Add(new IdTag(obj.Id, tag));
+
+   public static bool TagExists(IObject obj, string tag) => tags.Contains(new IdTag(obj.Id, tag));
+
+   public static void ClearTags() => tags.Clear();
 }

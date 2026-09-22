@@ -675,5 +675,7 @@ public class OperationsBuilder(ParseState state)
 
    public void RegisterMessage(Selector selector, Func<IObject, Message, IObject> func) => add(new RegisterMessage(selector, func));
 
+   public void NewTag(string tag) => add(new NewTag(tag));
+
    public override string ToString() => "operations";
 }
