@@ -237,6 +237,10 @@ public readonly struct Float : IObject, INumeric, IComparable<Float>, IEquatable
 
    public KRange Range() => new((Int)0, this, false);
 
+   public IRangeItem Offset(int offset) => (Float)(value + offset);
+
+   public IRangeItem Factor(int factor) => (Float)(value * factor);
+
    public Float Next()
    {
       switch (value)

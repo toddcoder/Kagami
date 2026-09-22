@@ -18,6 +18,7 @@ public struct KRange : IObject, ICollection
    private IObject startObj;
    private IObjectCompare stop;
    private IObject stopObj;
+   private IRangeItem stopItem;
    private bool inclusive;
    private int increment;
    private Func<IRangeItem, IRangeItem> next;
@@ -34,6 +35,7 @@ public struct KRange : IObject, ICollection
       startObj = this.start.Object;
       this.stop = stop;
       stopObj = this.stop.Object;
+      stopItem = (IRangeItem)stopObj;
       this.inclusive = inclusive;
       this.increment = increment;
       if (this.start.Compare(stopObj) > 0)
@@ -213,11 +215,11 @@ public struct KRange : IObject, ICollection
 
    public Maybe<TypeConstraint> TypeConstraint => nil;
 
-   public IObject Add(int increment) => new KRange(this, increment);
+   public IObject Offset(int offset) => new KRange(start.Offset(offset), stopItem.Offset(offset), inclusive, increment);
 
-   public IObject Subtract(int increment) => new KRange(this, -increment);
+   public IObject Factor(int factor) => new KRange(start.Factor(factor), stopItem.Factor(factor), inclusive, increment * factor);
 
-   public KRange Reverse() => new((IRangeItem)stop, start, true, -increment);
+   public KRange Reverse() => new(stopItem, start, inclusive, -increment);
 
    public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
 

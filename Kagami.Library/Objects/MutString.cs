@@ -180,6 +180,18 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
 
    public KRange Range() => new(this, (MutString)"z".Repeat(mutable.Length), true);
 
+   public IRangeItem Offset(int offset)
+   {
+      KString kString = AsString;
+      return new MutString(((KString)kString.Offset(offset)).Value);
+   }
+
+   public IRangeItem Factor(int factor)
+   {
+      KString kString = AsString;
+      return new MutString(((KString)kString.Factor(factor)).Value);
+   }
+
    public IObject Find(string input, int startIndex, bool reverse) => find(AsString, input, startIndex, reverse);
 
    public KArray FindAll(string input) => findAll(AsString, input);
@@ -416,5 +428,23 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
       mutable = new StringBuilder(result);
 
       return this;
+   }
+
+   public IObject this[string needle]
+   {
+      get
+      {
+         var _index = mutable.ToString().Find(needle);
+         return someOf(_index.Map(Int.IntObject));
+      }
+      set
+      {
+         var _index = mutable.ToString().Find(needle);
+         if (_index is (true, var index))
+         {
+            mutable.Remove(index, needle.Length);
+            mutable.Insert(index, value.AsString);
+         }
+      }
    }
 }

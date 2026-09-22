@@ -75,4 +75,8 @@ public class UserRangeItem : IRangeItem
          throw incompatibleClasses(result, "Range");
       }
    }
+
+   public IRangeItem Offset(int offset) => (IRangeItem)sendMessage(userObject, "+(_<Int>)", (Int)offset);
+
+   public IRangeItem Factor(int factor) => (IRangeItem)sendMessage(userObject, "*(_<Int>)", (Int)factor);
 }

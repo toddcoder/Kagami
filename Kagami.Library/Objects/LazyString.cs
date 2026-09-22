@@ -134,6 +134,10 @@ public readonly struct LazyString(string value) : IObject, IComparable<KString>,
 
    public KRange Range() => getKString().Range();
 
+   public IRangeItem Offset(int offset) => getKString().Offset(offset);
+
+   public IRangeItem Factor(int factor) => getKString().Factor(factor);
+
    public IObject Find(string input, int startIndex, bool reverse) => getKString().Find(input, startIndex, reverse);
 
    public KArray FindAll(string input) => getKString().FindAll(input);

@@ -26,12 +26,12 @@ namespace Kagami.Library.Parsers;
 
 public static class ParserFunctions
 {
-   public const string REGEX_FIELD = "`?[A-Za-z_`][A-Za-z_0-9]*";
-   public const string REGEX_PARAMETER = "`?[a-z_][A-Za-z_0-9]*";
-   public const string REGEX_INVOKABLE = "`?[A-Za-z_][A-Za-z_0-9]*";
-   public const string REGEX_INVOKABLE2 = @"`?[A-Za-z_][A-Za-z_0-9\$]*";
-   public const string REGEX_CLASS = "[A-Z][A-Za-z_0-9]*";
-   public const string REGEX_CLASS_OR_ALIAS = "[A-Za-z][A-Za-z_0-9]*";
+   public const string REGEX_FIELD = "[A-Za-z_`][A-Za-z_0-9`]*";
+   public const string REGEX_PARAMETER = "[a-z_`][A-Za-z_0-9`]*";
+   public const string REGEX_INVOKABLE = "[A-Za-z_`][A-Za-z_0-9`]*";
+   public const string REGEX_INVOKABLE2 = @"[A-Za-z_`][A-Za-z_0-9`\$]*";
+   public const string REGEX_CLASS = "[A-Z][A-Za-z_0-9`]*";
+   public const string REGEX_CLASS_OR_ALIAS = "[A-Za-z][A-Za-z_0-9`]*";
    public const string REGEX_CLASS_GETTING = $@"{REGEX_CLASS}(?:\. {REGEX_CLASS})?";
    public const string REGEX_CLASS_GETTING_OR_ALIAS = $@"{REGEX_CLASS_OR_ALIAS}(?:\. {REGEX_CLASS_OR_ALIAS})?";
    public const string REGEX_ASSIGN_OPS = @"\+|-|\*|//|/%|/|/|\^|~|%|:\b";
@@ -523,14 +523,14 @@ public static class ParserFunctions
          Bits32<ExpressionFlags> newFlags = flags | ExpressionFlags.InArgument;
          newFlags[ExpressionFlags.InSubExpression] = false;
          newFlags[ExpressionFlags.OmitComma] = true;
-         bool isLazy = state.Scan(@"^(\s*)(\*)", Color.Whitespace, Color.Structure);
+         //bool isLazy = state.Scan(@"^(\s*)(lazy)\b", Color.Whitespace, Color.Keyword);
          var _expression = getExpression(state, newFlags);
          if (_expression is (true, var expression))
          {
-            if (isLazy)
+            /*if (isLazy)
             {
                expression = getSingleton(expression);
-            }
+            }*/
 
             arguments.Add(expression);
             var _next = state.Scan(@"^(\s*)([,\)\]\}])", Color.Whitespace, Color.CloseParenthesis);

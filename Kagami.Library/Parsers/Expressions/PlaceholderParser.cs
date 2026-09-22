@@ -34,13 +34,6 @@ public partial class PlaceholderParser : SymbolParser
          return unit;
       }
 
-      if (placeholderName.StartsWith('`'))
-      {
-         state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Identifier);
-         builder.Add(new FieldSymbol(placeholderName[1..]));
-         return unit;
-      }
-
       if (placeholderName.IsMatch("^ ['A-Z']"))
       {
          state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Invokable);

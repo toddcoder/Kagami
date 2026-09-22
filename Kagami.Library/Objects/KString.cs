@@ -463,6 +463,29 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
    public KRange Range() => new(this, (KString)"z".Repeat(value.Length), true);
 
+   public IRangeItem Offset(int offset)
+   {
+      var result = value;
+      if (offset > 0)
+      {
+         for (var i = 0; i < offset; i++)
+         {
+            result = result.Succ();
+         }
+      }
+      else
+      {
+         for (var i = 0; i < -offset; i++)
+         {
+            result = result.Pred();
+         }
+      }
+
+      return (KString)result;
+   }
+
+   public IRangeItem Factor(int factor) => (KString)value.Repeat(factor);
+
    public KString Get() => value.get();
 
    public KString Set() => value.set();
@@ -768,5 +791,14 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
          return StringObject(builder.ToString());
       }
       set => throw immutableValue("String");
+   }
+
+   public IObject this[string needle]
+   {
+      get
+      {
+         var _index = value.Find(needle);
+         return someOf(_index.Map(Objects.Int.IntObject));
+      }
    }
 }

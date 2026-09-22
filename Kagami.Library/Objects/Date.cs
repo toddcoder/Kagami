@@ -124,6 +124,10 @@ public readonly struct Date : IObject, IRangeItem, IFormattable
 
    public KRange Range() => new(new Date(value.Truncate()), this, true);
 
+   public IRangeItem Offset(int offset) => Add(new Interval(TimeSpan.FromDays(offset)));
+
+   public IRangeItem Factor(int factor) => Add(new Interval(TimeSpan.FromDays(factor)));
+
    public Date Add(Interval interval) => new(value.Add(interval.Value));
 
    public IObject Subtract(IObject obj) => obj switch

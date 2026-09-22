@@ -142,6 +142,10 @@ public struct Rational : IObject, INumeric, IRangeItem, IComparable<Rational>, I
 
    public KRange Range() => new((Rational)0.0, this, false);
 
+   public IRangeItem Offset(int offset) => (IRangeItem)Add((Rational)(offset, BigInteger.One));
+
+   public IRangeItem Factor(int factor) => (IRangeItem)Multiply((Rational)(factor, BigInteger.One));
+
    public int CompareTo(Rational other) => (numerator * other.denominator - other.numerator * denominator).Sign;
 
    public KString Format(string format) => $"{numerator.ToString(format)}//{denominator.ToString(format)}";

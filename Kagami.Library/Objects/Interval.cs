@@ -68,6 +68,10 @@ public readonly struct Interval : IObject, IRangeItem
 
    public KRange Range() => new((Interval)value.Add(-value.Seconds.Seconds()), this, true);
 
+   public IRangeItem Offset(int offset) => (Interval)value.Add(offset.Seconds());
+
+   public IRangeItem Factor(int factor) => (Interval)value.Add(factor.Seconds());
+
    public Int Milliseconds => value.Milliseconds;
 
    public Float TotalMilliseconds => value.TotalMilliseconds;

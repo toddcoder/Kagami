@@ -201,6 +201,10 @@ public readonly struct Int : IObject, INumeric, IComparable<Int>, IEquatable<Int
 
    public KRange Range() => new((Int)0, this, false);
 
+   public IRangeItem Offset(int offset) => (Int)(value + offset);
+
+   public IRangeItem Factor(int factor) => (Int)(value * factor);
+
    public Interval Millisecond => value.Millisecond();
 
    public Interval Second => value.Second();

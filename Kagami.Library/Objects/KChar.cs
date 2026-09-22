@@ -106,6 +106,10 @@ public readonly struct KChar : IObject, IComparable<KChar>, IEquatable<KChar>, I
 
    public KRange Range() => new((KChar)'a', this, false);
 
+   public IRangeItem Offset(int offset) => (KChar)(value + offset);
+
+   public IRangeItem Factor(int factor) => (KChar)(value * factor);
+
    public Int Ord => value;
 
    public IObject Find(string input, int startIndex, bool reverse)

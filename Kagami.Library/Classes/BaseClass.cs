@@ -557,8 +557,10 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerIterMessage("%(_<Int>)", (obj, msg) => iteratorFunc<Int>(obj, msg, (i, cols) => i.Shape(0, cols.Value)));
       registerIterMessage("column(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Column(c.Value)));
       registerIterMessage("partition(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Partition(l)));
-      registerIterMessage("partition(_<Lambda>,_<Lambda>)", (obj, message) => iteratorFunc<Lambda, Lambda>(obj, message, (i, l1, l2) => i.Partition(l1, l2)));
-      registerIterMessage("partition(_<Lambda>,_<Lambda>,_<Lambda>)", (obj, message) => iteratorFunc<Lambda, Lambda, Lambda>(obj, message, (i, l1, l2, l3) => i.Partition(l1, l2, l3)));
+      registerIterMessage("partition(_<Lambda>,_<Lambda>)",
+         (obj, message) => iteratorFunc<Lambda, Lambda>(obj, message, (i, l1, l2) => i.Partition(l1, l2)));
+      registerIterMessage("partition(_<Lambda>,_<Lambda>,_<Lambda>)",
+         (obj, message) => iteratorFunc<Lambda, Lambda, Lambda>(obj, message, (i, l1, l2, l3) => i.Partition(l1, l2, l3)));
       registerIterMessage("pick(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Pick(c.Value)));
       registerIterMessage("pick()", (obj, _) => iteratorFunc(obj, i => i.Pick()));
       registerIterMessage("roll(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, c) => i.Roll(c.Value)));
@@ -609,6 +611,8 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerMessage("succ".get(), (obj, _) => function<IObject>(obj, o => (IObject)((IRangeItem)o).Successor));
       registerMessage("pred".get(), (obj, _) => function<IObject>(obj, o => (IObject)((IRangeItem)o).Predecessor));
       registerMessage("range()", (obj, _) => function<IObject>(obj, o => ((IRangeItem)o).Range()));
+      registerMessage("+(_<Int>)", (obj, msg) => function<IObject, Int>(obj, msg, (o, i) => (IObject)((IRangeItem)o).Offset(i.Value)));
+      registerMessage("*(_<Int>)", (obj, msg) => function<IObject, Int>(obj, msg, (o, i) => (IObject)((IRangeItem)o).Factor(i.Value)));
    }
 
    protected void indexedMessages()

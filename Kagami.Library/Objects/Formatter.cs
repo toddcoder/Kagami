@@ -122,6 +122,10 @@ public readonly struct Formatter(LazyString lazyString, KArray array) : IObject,
 
    public KRange Range() => getKString().Range();
 
+   public IRangeItem Offset(int offset) => (IRangeItem)sendMessage(getKString(), "+(_<Int>)", (Int)offset);
+
+   public IRangeItem Factor(int factor) => (IRangeItem)sendMessage(getKString(), "*(_<Int>)", (Int)factor);
+
    public IObject Find(string input, int startIndex, bool reverse) => getKString().Find(input, startIndex, reverse);
 
    public KArray FindAll(string input) => getKString().FindAll(input);

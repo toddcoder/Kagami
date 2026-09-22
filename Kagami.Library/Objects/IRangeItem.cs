@@ -7,4 +7,8 @@ public interface IRangeItem : IObjectCompare
    IRangeItem Predecessor { get; }
 
    KRange Range();
+
+   IRangeItem Offset(int offset);
+
+   IRangeItem Factor(int factor);
 }

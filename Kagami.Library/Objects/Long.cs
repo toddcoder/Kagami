@@ -119,6 +119,10 @@ public readonly struct Long : IObject, INumeric, IComparable<Long>, IEquatable<L
 
    public KRange Range() => new(new Long(0), this, false);
 
+   public IRangeItem Offset(int offset) => (Long)(value + offset);
+
+   public IRangeItem Factor(int factor) => (Long)(value * factor);
+
    public IObject Negate() => (Long)(-value);
 
    public KBoolean IsPrime => isPrime(this);

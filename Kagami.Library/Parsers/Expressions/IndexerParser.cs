@@ -32,8 +32,6 @@ public partial class IndexerParser : SymbolParser
                opSource = opSource.DropWhile(" ").Keep(1);
                var operation = matchOperator(opSource) | nil;
                builder.Add(new IndexSetterSymbol(expressions, expression, operation.Maybe()));
-
-               return unit;
             }
             else
             {
