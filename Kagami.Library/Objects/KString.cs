@@ -14,6 +14,7 @@ using static Kagami.Library.Objects.CollectionFunctions;
 using Core.Matching;
 using Core.Numbers;
 using Kagami.Library.Runtime;
+using Convert = System.Convert;
 
 namespace Kagami.Library.Objects;
 
@@ -822,4 +823,6 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
          }
       }
    }
+
+   public Selector Selector => value;
 }

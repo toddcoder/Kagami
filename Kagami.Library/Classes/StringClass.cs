@@ -158,6 +158,7 @@ public class StringClass : BaseClass, ICollectionClass
          function<KString, KString, KString>(obj, msg, (s, f, t) => s.Mapping(f.Value, t.Value));
       messages["compare(_<String>)"] = (obj, msg) => function<KString, KString>(obj, msg, (s1, s2) => s1.CompareI(s2));
       messages["[](_<String>)"] = (obj, msg) => function<KString, KString>(obj, msg, (s, needle) => s[needle]);
+      messages["sel".get()] = (obj, _) => function<KString>(obj, s => s.Selector);
    }
 
    protected static IObject replaceString(KString kString, IObject possibleSkipTake, IObject source)
