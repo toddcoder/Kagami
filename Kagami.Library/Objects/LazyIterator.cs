@@ -22,6 +22,8 @@ public class LazyIterator : Iterator
 
    public override IObject If(Lambda predicate) => new StreamingIterator(this).If(predicate);
 
+   public override IObject IfNot(Lambda predicate) => new StreamingIterator(this).IfNot(predicate);
+
    public override IObject Skip(int count) => new StreamingIterator(this).Skip(count);
 
    public override IObject SkipWhile(Lambda predicate, bool back)
