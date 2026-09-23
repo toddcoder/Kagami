@@ -777,7 +777,17 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
    public IObject GetRegex(Regex regex) => regex.Matches(value);
 
-   public KString SetRegex(Regex regex, string replacement) => value.Substitute(regex.CorePattern, replacement);
+   public KString SetRegex(Regex regex, string replacement)
+   {
+      if (regex.Global)
+      {
+         return value.Substitute(regex.CorePattern, replacement);
+      }
+      else
+      {
+         return value.Substitute(regex.CorePattern, replacement, 1);
+      }
+   }
 
    public IObject this[KRange range]
    {

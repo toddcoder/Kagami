@@ -425,7 +425,8 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
 
    public MutString SetRegex(Regex regex, string replacement)
    {
-      var result = mutable.ToString().Substitute(regex.CorePattern, replacement);
+      var s = mutable.ToString();
+      var result = regex.Global ? s.Substitute(regex.CorePattern, replacement) : s.Substitute(regex.CorePattern, replacement, 1);
       mutable = new StringBuilder(result);
 
       return this;

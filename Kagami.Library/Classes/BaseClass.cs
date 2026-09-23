@@ -89,6 +89,7 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerMessage("objId".get(), (obj, _) => KString.StringObject(obj.Id.ToString()));
       registerMessage("isTrue".get(), (obj, _) => KBoolean.BooleanObject(obj.IsTrue));
       registerMessage("numberize()", (_, _) => Undefined.Value);
+      registerMessage("tagged(_<String>)", (obj, message) => KBoolean.BooleanObject(Module.TagExists(obj, message.Arguments[0].AsString)));
    }
 
    protected static KString format(IObject obj, string formattingString)
