@@ -1,4 +1,5 @@
 ﻿using Kagami.Library.Objects;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Classes.ClassFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
@@ -37,11 +38,12 @@ public class JunctionClass : BaseClass
                }
             }
 
-            return junction.NewJunction(result).Flatten();
+            return junction.JunctionType == JunctionType.Mappable ? KArray.CreateObject(result, nil) : junction.NewJunction(result).Flatten();
          }
          else
          {
-            return junction.Apply(message).Flatten();
+            var flattened = junction.Apply(message).Flatten();
+            return junction.JunctionType == JunctionType.Mappable ? KArray.CreateObject(flattened.Items, nil) : flattened;
          }
       }
       else

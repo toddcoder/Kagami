@@ -179,6 +179,8 @@ public interface IIterator : IEquivalentClass
 
    IObject Collect();
 
+   IObject Collect(Lambda lambda);
+
    KArray ToArray();
 
    List ToList();

@@ -14,6 +14,7 @@ public class JunctionSymbol2(string type) : Symbol
          "|" => "Any",
          "^" => "One",
          "!" => "None",
+         "@" => "Mappable",
          _ => nil
       };
       if (_junctionType is (true, var junctionType))
@@ -29,4 +30,6 @@ public class JunctionSymbol2(string type) : Symbol
    public override Precedence Precedence => Precedence.TightPrefixOperator;
 
    public override Arity Arity => Arity.Prefix;
+
+   public override string ToString() => $"{type}:";
 }

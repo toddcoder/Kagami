@@ -1,5 +1,4 @@
-﻿using Core.Computers;
-using Core.Enumerables;
+﻿using Core.Enumerables;
 using Core.Matching;
 using Core.Monads;
 using Kagami.Library.Nodes.Statements;
@@ -66,6 +65,7 @@ public static class CommonExtensions
          JunctionType.Any => "||",
          JunctionType.One => "^^",
          JunctionType.None => "!!",
+         JunctionType.Mappable => ",",
          _ => ""
       };
    }

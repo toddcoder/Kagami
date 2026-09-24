@@ -1313,6 +1313,30 @@ public class Iterator : IObject, IIterator
 
    public IObject Collect() => collectionClass.Revert(List(), _typeConstraint);
 
+   public IObject Collect(Lambda lambda)
+   {
+      List<IObject> results = [];
+      foreach (var item in List())
+      {
+         var result = lambda.Invoke(item);
+         switch (result)
+         {
+            case Some some:
+            {
+               results.Add(some.Value);
+               break;
+            }
+            case Success success:
+            {
+               results.Add(success.Value);
+               break;
+            }
+         }
+      }
+
+      return collectionClass.Revert(results, _typeConstraint);
+   }
+
    public KArray ToArray() => new(List());
 
    public List ToList() => Objects.List.NewList(List());

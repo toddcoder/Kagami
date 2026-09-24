@@ -545,6 +545,7 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerIterMessage("flatten()", (obj, _) => iteratorFunc(obj, i => i.Flatten()));
       registerIterMessage("copy()", (obj, _) => iteratorFunc(obj, i => i.Copy()));
       registerIterMessage("collect()", (obj, _) => iteratorFunc(obj, i => i.Collect()));
+      registerIterMessage("collect(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Collect(l)));
       registerIterMessage("*(_)", (obj, message) => iteratorFunc<IObject>(obj, message, (i1, i2) => i1.Apply((ICollection)i2)));
       //registerIterMessage("format(_)", (obj, message) => iteratorFunc<KIndex>(obj, message, (i, index) => index.GetFromCollection(i.Collection)));
       registerIterMessage("replace(_<Lambda>,_<Lambda>)",

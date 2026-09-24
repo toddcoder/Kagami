@@ -30,7 +30,9 @@ public struct Junction : IObject
 
    public string Image => items.Select(i => i.Image).ToString($" {junctionType.OperatorString} ");
 
-    public int Hash => HashCode.Combine(items);
+   public int Hash => HashCode.Combine(items);
+
+   public JunctionType JunctionType => junctionType;
 
    public bool IsEqualToOther(IObject obj)
    {

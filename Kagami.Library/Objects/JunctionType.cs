@@ -5,5 +5,6 @@ public enum  JunctionType
    All,
    Any,
    One,
-   None
+   None,
+   Mappable
 }

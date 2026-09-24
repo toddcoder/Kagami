@@ -344,6 +344,8 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
 
    public IObject Collect() => terminate().Collect();
 
+   public IObject Collect(Lambda lambda) => terminate().Collect(lambda);
+
    public KArray ToArray() => terminate().ToArray();
 
    public List ToList() => terminate().ToList();
