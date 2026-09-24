@@ -1341,14 +1341,7 @@ public class Iterator : IObject, IIterator
    {
       foreach (var item in List())
       {
-         if (item is KTuple tuple)
-         {
-            action.Invoke(tuple.Value);
-         }
-         else
-         {
-            action.Invoke(item);
-         }
+         action.Invoke(item);
       }
 
       return this;
@@ -1361,8 +1354,11 @@ public class Iterator : IObject, IIterator
       if (count > 0)
       {
          var rotatedList = list.Take(count);
-         List<IObject> retainedList = [.. list.Skip(count)];
-         retainedList.AddRange(rotatedList);
+         List<IObject> retainedList =
+         [
+            .. list.Skip(count),
+            .. rotatedList
+         ];
          list = retainedList;
       }
       else
