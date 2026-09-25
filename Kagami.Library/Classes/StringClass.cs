@@ -159,6 +159,9 @@ public class StringClass : BaseClass, ICollectionClass
       messages["compare(_<String>)"] = (obj, msg) => function<KString, KString>(obj, msg, (s1, s2) => s1.CompareI(s2));
       messages["[](_<String>)"] = (obj, msg) => function<KString, KString>(obj, msg, (s, needle) => s[needle]);
       messages["sel".get()] = (obj, _) => function<KString>(obj, s => s.Selector);
+      messages["threePart(_)"] = (obj, msg) => function<KString, IObject>(obj, msg, (s, criterion) => s.ThreePart(criterion));
+      messages["threePart(_,right: _<Boolean>)"] = (obj, msg) =>
+         function<KString, IObject, KBoolean>(obj, msg, (s, criterion, right) => s.ThreePart(criterion, right.Value));
    }
 
    protected static IObject replaceString(KString kString, IObject possibleSkipTake, IObject source)

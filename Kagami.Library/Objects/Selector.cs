@@ -227,57 +227,6 @@ public struct Selector : IObject, IEquatable<Selector>
          yield return monadSelector;
       }
 
-      /*while (items.Count > 0)
-      {
-         switch (items[^1].SelectorItemType)
-         {
-            case SelectorItemType.Normal:
-            {
-               yield return getSelector(name);
-
-               if (getMonadSelector(name) is (true, var monadSelector))
-               {
-                  yield return monadSelector;
-               }
-
-               yield break;
-            }
-            case SelectorItemType.Variadic:
-            {
-               yield return getSelector(name);
-
-               items[^1] = items[^1].AsNormal();
-               yield return getSelector(name);
-
-               yield break;
-            }
-            case SelectorItemType.Default:
-            {
-               yield return getSelector(name);
-
-               items[^1] = items[^1].AsNormal();
-               yield return getSelector(name);
-
-               if (getMonadSelector(name) is (true, var monadSelector))
-               {
-                  yield return monadSelector;
-               }
-
-               items.RemoveAt(items.Count - 1);
-
-               if (items.Count == 0)
-               {
-                  yield return getSelector(name);
-
-                  items = [.. SelectorItems.Select(i => i.AsNormal())];
-                  yield return getSelector(name);
-               }
-
-               break;
-            }
-         }
-      }*/
-
       yield break;
 
       Selector getSelector(string name)

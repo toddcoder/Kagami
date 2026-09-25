@@ -1,7 +1,7 @@
 a : 10
 b : 11
 c : 12
-["a", 10]
-["b", 11]
-["c", 12]
+(key: "a", value: 10)
+(key: "b", value: 11)
+(key: "c", value: 12)
 it collection | Iterator

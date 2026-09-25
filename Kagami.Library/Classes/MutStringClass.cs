@@ -47,6 +47,11 @@ public class MutStringClass : BaseClass, ICollectionClass
          (obj, msg) => function<MutString, KString, KString>(obj, msg, (m, needle, value) => m[needle] = value);
       messages["[]=(_<Int>,_<String>)"] =
          (obj, msg) => function<MutString, Int, KString>(obj, msg, (m, i, value) => m.SetString(i.Value, value.Value));
+      messages["insert(value:_<String>,at:_<Int>)"] =
+         (obj, msg) => function<MutString, KString, Int>(obj, msg, (m, s, i) => m.Insert(s.Value, i.Value));
+      messages["delete(from:_<Int>,length:_<Int>)"] =
+         (obj, msg) => function<MutString, Int, Int>(obj, msg, (m, i1, i2) => m.Delete(i1.Value, i2.Value));
+
    }
 
    public override IObject DefaultValue => new MutString("");

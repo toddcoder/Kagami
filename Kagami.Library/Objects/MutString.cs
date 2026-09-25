@@ -486,4 +486,30 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
 
       return this;
    }
+
+   public MutString Insert(string substring, int index)
+   {
+      var builder = new StringBuilder();
+      var value = mutable.ToString();
+      builder.Append(value.Keep(index));
+      builder.Append(substring);
+      builder.Append(value.Drop(index));
+
+      mutable = builder;
+
+      return this;
+   }
+
+   public MutString Delete(int index, int length)
+   {
+      var builder = new StringBuilder();
+      var value = mutable.ToString();
+      var kept = value.Keep(index);
+      builder.Append(kept);
+      builder.Append(value.Drop(index + length));
+
+      mutable = builder;
+
+      return this;
+   }
 }

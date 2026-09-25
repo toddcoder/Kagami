@@ -825,4 +825,95 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
    }
 
    public Selector Selector => value;
+
+   public KArray ThreePart(IObject criterion, bool fromRight)
+   {
+      if (fromRight)
+      {
+         return ThreePartRight(criterion);
+      }
+      else
+      {
+         return ThreePart(criterion);
+      }
+   }
+
+   public KArray ThreePart(IObject criterion)
+   {
+      switch (criterion)
+      {
+         case KString sCriterion:
+         {
+            var _index = value.Find(sCriterion.value);
+            if (_index is (true, var index))
+            {
+               var before = value.Keep(index);
+               var after = value.Drop(index + sCriterion.value.Length);
+
+               return new KArray([new KString(before), new KString(sCriterion.value), new KString(after)]);
+            }
+            else
+            {
+               return new KArray([new KString(value), new KString(""), new KString("")]);
+            }
+         }
+         case Regex regex:
+         {
+            var _matchResult = value.Matches(regex.CorePattern);
+            if (_matchResult is (true, var matchResult))
+            {
+               var before = value.Keep(matchResult.Index);
+               var after = value.Drop(matchResult.Index + matchResult.Length);
+
+               return new KArray([new KString(before), new KString(matchResult.Text), new KString(after)]);
+            }
+            else
+            {
+               return new KArray([new KString(value), new KString(""), new KString("")]);
+            }
+         }
+         default:
+            throw cannotAccept(criterion);
+      }
+   }
+
+   public KArray ThreePartRight(IObject criterion)
+   {
+      switch (criterion)
+      {
+         case KString sCriterion:
+         {
+            var _index = value.FindBackward(sCriterion.value);
+            if (_index is (true, var index))
+            {
+               var before = value.Keep(index);
+               var after = value.Drop(index + sCriterion.value.Length);
+
+               return new KArray([new KString(before), new KString(sCriterion.value), new KString(after)]);
+            }
+            else
+            {
+               return new KArray([new KString(value), new KString(""), new KString("")]);
+            }
+         }
+         case Regex regex:
+         {
+            var _matchResult = value.Matches(regex.CorePattern);
+            if (_matchResult is (true, var matchResult))
+            {
+               var match = matchResult.Matches[^1];
+               var before = value.Keep(match.Index);
+               var after = value.Drop(match.Index + match.Length);
+
+               return new KArray([new KString(before), new KString(match.Text), new KString(after)]);
+            }
+            else
+            {
+               return new KArray([new KString(value), new KString(""), new KString("")]);
+            }
+         }
+         default:
+            throw cannotAccept(criterion);
+      }
+   }
 }

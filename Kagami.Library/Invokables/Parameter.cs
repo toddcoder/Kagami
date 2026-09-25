@@ -100,10 +100,12 @@ public class Parameter : IEquatable<Parameter>
       get
       {
          var builder = new StringBuilder();
+         /*
          if (isHidden)
          {
             builder.Append("hide ");
          }
+         */
 
          if (label.IsNotEmpty())
          {
