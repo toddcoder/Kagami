@@ -13,7 +13,7 @@ public struct Out() : IObject
 
    public string Image => "Out";
 
-   public int Hash => HashCode.Combine(ClassName);
+   public int Hash => System.HashCode.Combine(ClassName);
 
    public bool IsEqualTo(IObject obj) => obj is Out;
 

@@ -59,12 +59,15 @@ public class StringClass : BaseClass, ICollectionClass
       messages["center(_<Int>,_<Char>)"] =
          (obj, msg) => function<KString, Int, KChar>(obj, msg, (s, w, p) => s.Center(w.Value, p.Value));
       messages["center(_<Int>)"] = (obj, msg) => function<KString, Int>(obj, msg, (s, w) => s.Center(w.Value));
+      messages["center(_<String>)"] = (obj, msg) => function<KString, KString>(obj, msg, (s, b) => s.Center(b.Value));
       messages["ljust(_<Int>,_<Char>)"] = (obj, msg) =>
          function<KString, Int, KChar>(obj, msg, (s, w, p) => s.LJust(w.Value, p.Value));
       messages["ljust(_<Int>)"] = (obj, msg) => function<KString, Int>(obj, msg, (s, w) => s.LJust(w.Value));
+      messages["ljust(_<String>)"] = (obj, msg) => function<KString, KString>(obj, msg, (s, b) => s.LJust(b.Value));
       messages["rjust(_<Int>,_<Char>)"] = (obj, msg) =>
          function<KString, Int, KChar>(obj, msg, (s, w, p) => s.RJust(w.Value, p.Value));
       messages["rjust(_<Int>)"] = (obj, msg) => function<KString, Int>(obj, msg, (s, w) => s.RJust(w.Value));
+      messages["rjust(_<String>)"] = (obj, msg) => function<KString, KString>(obj, msg, (s, b) => s.RJust(b.Value));
       messages["isEmpty".get()] = (obj, _) => function<KString>(obj, s => s.IsEmpty);
       messages["isNotEmpty".get()] = (obj, _) => function<KString>(obj, s => s.IsNotEmpty);
       messages["isAlphaDigit".get()] = (obj, _) => function<KString>(obj, s => s.IsAlphaDigit);
@@ -158,6 +161,14 @@ public class StringClass : BaseClass, ICollectionClass
          function<KString, KString, KString>(obj, msg, (s, f, t) => s.Mapping(f.Value, t.Value));
       messages["compare(_<String>)"] = (obj, msg) => function<KString, KString>(obj, msg, (s1, s2) => s1.CompareI(s2));
       messages["[](_<String>)"] = (obj, msg) => function<KString, KString>(obj, msg, (s, needle) => s[needle]);
+      messages["[]=(_<String>,_<String>)"] = (obj, msg) => function<KString, KString, KString>(obj, msg, (s, needle, v) =>
+      {
+         var mstring = new MutString(s.Value)
+         {
+            [needle] = v
+         };
+         return mstring;
+      });
       messages["sel".get()] = (obj, _) => function<KString>(obj, s => s.Selector);
       messages["threePart(_)"] = (obj, msg) => function<KString, IObject>(obj, msg, (s, criterion) => s.ThreePart(criterion));
       messages["threePart(_,right: _<Boolean>)"] = (obj, msg) =>

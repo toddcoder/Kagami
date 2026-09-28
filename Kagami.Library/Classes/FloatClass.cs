@@ -18,7 +18,6 @@ public class FloatClass : BaseClass, IParse, IEquivalentClass
       numericConversionMessages();
       compareMessages();
 
-      //messages["round(_<Int>)"] = (obj, msg) => function(obj, msg, (a, b) => Math.Round(a, (int)b), (a, b) => a.Round(b), "round");
       messages["rand()"] = (obj, _) => ((Float)obj).Rand(random.Value);
       messages["rand(_<Float>)"] = (obj, msg) => ((Float)obj).Rand(random.Value, (Float)msg.Arguments[0]);
       messages["isNan".get()] = (obj, _) => KBoolean.BooleanObject(double.IsNaN(((Float)obj).Value));
@@ -40,6 +39,7 @@ public class FloatClass : BaseClass, IParse, IEquivalentClass
       classMessages["max".get()] = (_, _) => Float.FloatObject(double.MaxValue);
       classMessages["min".get()] = (_, _) => Float.FloatObject(double.MinValue);
       classMessages["rand()"] = (_, _) => (Float)random.Value.NextDouble();
+      classMessages["epsilon".get()] = (_, _) => (Float)double.Epsilon;
    }
 
    public static IObject parse(string value)

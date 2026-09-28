@@ -162,8 +162,22 @@ public struct Rational : IObject, INumeric, IRangeItem, IComparable<Rational>, I
 
    public IObject Raise(INumeric other)
    {
-      var power = other.AsInt32();
-      return (Rational)(BigInteger.Pow(numerator, power), BigInteger.Pow(denominator, power));
+      if (other.IsRational)
+      {
+         var (baseN, baseD) = AsRational();
+         var (powerN, powerD) = other.AsRational();
+         var @base = (double)baseN / (double)baseD;
+         var root = (double)powerN / (double)powerD;
+         var power = Math.Pow(@base, root);
+         var aFloat = (Float)power;
+         var (aNumerator, aDenominator) = aFloat.AsRational();
+
+         return new Rational(aNumerator, aDenominator);
+      }
+      else
+      {
+         return (Float)Math.Pow(AsDouble(), other.AsDouble());
+      }
    }
 
    public IObject Remainder(INumeric other) => ((Rational)(1, 0)).Subtract((INumeric)Divide(other));

@@ -285,11 +285,62 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
    public KString Center(int width, char padding) => value.Center(width, padding);
 
+   public KString Center(string background)
+   {
+      var length = value.Length;
+      if (length >= background.Length)
+      {
+         return value;
+      }
+      else
+      {
+         var totalPadding = background.Length - length;
+         var leftPadding = totalPadding / 2;
+         var rightPadding = totalPadding - leftPadding;
+         var leftPart = background[..leftPadding];
+         var rightPart = background[^rightPadding..];
+
+         return new KString(leftPart + value + rightPart);
+      }
+   }
+
    public KString Center(int width) => value.Center(width);
 
    public KString LJust(int width, char padding) => value.LeftJustify(width, padding);
 
    public KString LJust(int width) => value.LeftJustify(width);
+
+   public KString LJust(string background)
+   {
+      var length = value.Length;
+      if (length >= background.Length)
+      {
+         return value;
+      }
+      else
+      {
+         var rightPadding = background.Length - length;
+         var rightPart = background[^rightPadding..];
+
+         return new KString(value + rightPart);
+      }
+   }
+
+   public KString RJust(string background)
+   {
+      var length = value.Length;
+      if (length >= background.Length)
+      {
+         return value;
+      }
+      else
+      {
+         var leftPadding = background.Length - length;
+         var leftPart = background[..leftPadding];
+
+         return new KString(leftPart + value);
+      }
+   }
 
    public KString RJust(int width, char padding) => value.RightJustify(width, padding);
 

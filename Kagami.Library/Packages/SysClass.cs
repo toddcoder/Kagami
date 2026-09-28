@@ -56,6 +56,7 @@ public class SysClass : PackageClass
       registerPackageFunction("uniqueId()", (obj, _) => function<Sys>(obj, sys => sys.UniqueId()));
       registerPackageFunction("callStack()", (obj, _) => function<Sys>(obj, sys => sys.CallStack));
       registerPackageFunction("sleep(_<Int>)", (obj, msg) => function<Sys, Int>(obj, msg, (sys, i) => sys.Sleep(i.Value)));
+      registerPackageFunction("HashCode()", (obj, _) => function<Sys>(obj, sys => sys.HashCode()));
    }
 
    public override IObject DefaultValue => throw noDefaultValue("Sys");

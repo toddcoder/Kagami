@@ -39,6 +39,7 @@ public class Sys : Package
       module.RegisterClass(new RegexGroupClass());
       module.RegisterClass(new RandomClass());
       module.RegisterClass(new OutClass());
+      module.RegisterClass(new HashCodeClass());
 
       fields.New("out", FieldType.Package, new Out());
    }
@@ -331,4 +332,6 @@ public class Sys : Package
       Thread.Sleep(length);
       return KString.StringObject($"Slept for {length} milliseconds");
    }
+
+   public HashCode HashCode() => new();
 }

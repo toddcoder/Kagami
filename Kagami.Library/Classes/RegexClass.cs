@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Objects;
+﻿using Core.Matching;
+using Kagami.Library.Objects;
 using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Classes;
@@ -38,6 +39,7 @@ public class RegexClass : BaseClass, IEquivalentClass
 
       classMessages["parse(_<String>,global:_<Boolean>,textOnly:_<Boolean>)"] = (_, msg) => parseRegex(msg.Arguments);
       classMessages["parse(_<String>)"] = (_, msg) => parseRegex(msg.Arguments);
+      classMessages["escape(_<String>)"] = (_, msg) => KString.StringObject(msg.Arguments[0].AsString.Escape());
    }
 
    public override IObject DefaultValue => new Regex("", false, false);

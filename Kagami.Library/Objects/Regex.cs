@@ -209,10 +209,12 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
       {
          if (_result is (true, var result))
          {
-            return new KArray(result
-               .Select(m => new RegexMatch(m, self.nameToIndex(result), self.indexToName(result), input.Keep(m.Index),
-                  input.Drop(m.Index + m.Length), input))
-               .Select(m => GetMatchOrText(m, self.textOnly)).ToArray());
+            return new KArray([
+               .. result
+                  .Select(m => new RegexMatch(m, self.nameToIndex(result), self.indexToName(result), input.Keep(m.Index),
+                     input.Drop(m.Index + m.Length), input))
+                  .Select(m => GetMatchOrText(m, self.textOnly))
+            ]);
          }
          else
          {

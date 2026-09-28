@@ -46,7 +46,7 @@ public class PackageFunction : IObject, IEquatable<PackageFunction>, IMayInvoke
 
    public override bool Equals(object? obj) => obj is not null && obj.GetType() == GetType() && Equals((PackageFunction)obj);
 
-   public override int GetHashCode() => HashCode.Combine(package, name, function);
+   public override int GetHashCode() => System.HashCode.Combine(package, name, function);
 
    public IObject Invoke(IObject[] arguments) => Invoke(new Arguments(arguments));
 

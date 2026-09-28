@@ -50,11 +50,7 @@ public readonly struct Complex : IObject, INumeric, IObjectCompare, IComparable<
 
    public (INumeric, INumeric) Compatible(INumeric obj) => obj.ClassName switch
    {
-      "Int" => (this, obj.ToComplex()),
-      "Float" => (this, obj.ToComplex()),
-      "Byte" => (this, obj.ToComplex()),
-      "Long" => (this, obj.ToComplex()),
-      "Complex" => (this, obj.ToComplex()),
+      "Int" or "Float" or "Byte" or "Long" or "Complex" => (this, obj.ToComplex()),
       "Rational" => (ToRational(), obj.ToRational()),
       "Decimal" => (this, obj.ToDecimal()),
       _ => (this, obj.ToComplex())
@@ -159,8 +155,8 @@ public readonly struct Complex : IObject, INumeric, IObjectCompare, IComparable<
    public KString Format(Lambda lambda) => format(this, lambda);
 
    public IObject Negate() => (Complex)CComplex.Negate(value);
-   
-   public KBoolean IsPrime => (KBoolean)isPrime(this);
+
+   public KBoolean IsPrime => isPrime(this);
 
    public IObject Sign() => new Complex(Math.Sign(value.Real), Math.Sign(value.Imaginary));
 
