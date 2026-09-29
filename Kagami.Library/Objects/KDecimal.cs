@@ -26,14 +26,12 @@ public readonly struct KDecimal : IObject, INumeric, IObjectCompare, IComparable
 
    public (INumeric, INumeric) Compatible(INumeric obj) => obj.ClassName switch
    {
-      "Int" => (this, obj.ToFloat()),
-      "Float" => (this, obj.ToFloat()),
-      "Byte" => (this, obj.ToFloat()),
-      "Long" => (ToLong(), obj.ToLong()),
+      "Int" => (this, obj.ToDecimal()),
+      "Float" => (ToFloat(), obj),
+      "Byte" or "Long" => (this, obj.ToDecimal()),
       "Complex" => (ToComplex(), obj.ToComplex()),
       "Rational" => (ToRational(), obj.ToRational()),
-      "Decimal" => (this, obj.ToDecimal()),
-      _ => (this, obj.ToFloat())
+      _ => (this, obj.ToDecimal())
    };
 
    public string ClassName => "Decimal";

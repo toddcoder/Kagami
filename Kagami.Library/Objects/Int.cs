@@ -49,13 +49,13 @@ public readonly struct Int : IObject, INumeric, IComparable<Int>, IEquatable<Int
 
    public (INumeric, INumeric) Compatible(INumeric obj) => obj.ClassName switch
    {
-      "Int" => (this, obj.ToInt()),
-      "Float" => (ToFloat(), obj.ToFloat()),
-      "Byte" => (this, obj.ToByte()),
-      "Long" => (ToLong(), obj.ToLong()),
+      "Int" => (this, obj),
+      "Float" => (ToFloat(), obj),
+      "Byte" => (this, obj.ToInt()),
+      "Long" => (ToLong(), obj),
       "Complex" => (ToComplex(), obj.ToComplex()),
       "Rational" => (ToRational(), obj.ToRational()),
-      "Decimal" => (this, obj.ToDecimal()),
+      "Decimal" => (ToDecimal(), obj),
       _ => (this, obj.ToInt())
    };
 
