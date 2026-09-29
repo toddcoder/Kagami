@@ -326,6 +326,8 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
 
    public IObject Sub(int count) => copy(new StreamingSub(count));
 
+   public IObject Sub(int count, bool partial) => partial ? terminate().Sub(count, partial) : copy(new StreamingSub(count));
+
    public IObject Window(int count) => terminate().Window(count);
 
    public IObject Shape(int rows, int columns) => terminate().Shape(rows, columns);

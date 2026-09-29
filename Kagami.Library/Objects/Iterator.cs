@@ -1112,7 +1112,9 @@ public class Iterator : IObject, IIterator
       return collectionClass.Revert(result, _typeConstraint);
    }
 
-   public virtual IObject Sub(int count)
+   public virtual IObject Sub(int count) => Sub(count, false);
+
+   public IObject Sub(int count, bool partial)
    {
       switch (count)
       {
@@ -1132,7 +1134,7 @@ public class Iterator : IObject, IIterator
                }
             }
 
-            if (inner.Count > 0)
+            if (partial && inner.Count > 0)
             {
                outer.Add(collectionClass.Revert(inner, _typeConstraint));
             }

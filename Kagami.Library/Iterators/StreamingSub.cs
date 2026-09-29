@@ -5,7 +5,7 @@ namespace Kagami.Library.Iterators;
 
 public class StreamingSub(int count) : StreamingAction
 {
-   private List<IObject> accumulated = [];
+   protected List<IObject> accumulated = [];
 
    public override StreamingCondition Execute(StreamingState state)
    {

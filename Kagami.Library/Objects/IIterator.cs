@@ -161,6 +161,8 @@ public interface IIterator : IEquivalentClass
 
    IObject Sub(int count);
 
+   IObject Sub(int count, bool partial);
+
    IObject Window(int count);
 
    IObject Shape(int rows, int columns);
