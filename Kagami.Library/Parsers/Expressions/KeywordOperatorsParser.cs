@@ -12,7 +12,7 @@ public partial class KeywordOperatorsParser : SymbolParser
    }
 
    [GeneratedRegex(@"^(\s+)(if|map|join|sort|foldl|foldr|fold|all|any|none|one|zip|Z|skip|take|while|until|min|max" +
-      "|does|X|each|approx|same|xor|union|intersect|diff|symdiff|subsetof|supersetof|accum|overlaps|to|till|downto|" +
+      "|does|cross|each|approx|same|xor|union|intersect|diff|symdiff|subsetof|supersetof|accum|overlaps|to|till|downto|" +
       @"downtill|dto|dtill|by|range|peek|first|last|collect)(\s+)")]
    public override partial Regex Regex();
 
@@ -79,7 +79,7 @@ public partial class KeywordOperatorsParser : SymbolParser
                case "does":
                   builder.Add(new SendBinaryMessageSymbol("respondsTo(_)", Precedence.Boolean));
                   break;
-               case "X":
+               case "cross":
                   builder.Add(new SendBinaryMessageSymbol("cross(_)", Precedence.Concatenate));
                   break;
                case "approx":

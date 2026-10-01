@@ -370,8 +370,12 @@ public class Iterator : IObject, IIterator
    public virtual IObject If(Lambda predicate) =>
       collectionClass.Revert(List().Where(value => predicate.Invoke(value).IsTrue), _typeConstraint);
 
+   public IObject If(Regex regex) => collectionClass.Revert(List().Where(value => regex.Matches(value.AsString).IsTrue), _typeConstraint);
+
    public virtual IObject IfNot(Lambda predicate) =>
       collectionClass.Revert(List().Where(value => !predicate.Invoke(value).IsTrue), _typeConstraint);
+
+   public IObject IfNot(Regex regex) => collectionClass.Revert(List().Where(value => !regex.Matches(value.AsString).IsTrue), _typeConstraint);
 
    public virtual IObject Skip(int count)
    {
@@ -726,7 +730,7 @@ public class Iterator : IObject, IIterator
                   return KNil.NilValue;
             }
          }
-         else if (value is IObjectCompare oc && oc.Compare(result) < 0)
+         else if (value is IObjectCompare oc && oc.Compare(((Some)result).Value) < 0)
          {
             result = Some.Object(value);
          }
@@ -742,7 +746,7 @@ public class Iterator : IObject, IIterator
       {
          foreach (var value in List())
          {
-            if (result is KNil || ((Int)lambda.Invoke(value, result)).Value < 0)
+            if (result is KNil || ((Int)lambda.Invoke(value, ((Some)result).Value)).Value < 0)
             {
                result = Some.Object(value);
             }
@@ -790,7 +794,7 @@ public class Iterator : IObject, IIterator
                   return KNil.NilValue;
             }
          }
-         else if (value is IObjectCompare oc && oc.Compare(result) > 0)
+         else if (value is IObjectCompare oc && oc.Compare(((Some)result).Value) > 0)
          {
             result = Some.Object(value);
          }
@@ -806,7 +810,7 @@ public class Iterator : IObject, IIterator
       {
          foreach (var value in List())
          {
-            if (result is KNil || ((Int)lambda.Invoke(value, result)).Value < 0)
+            if (result is KNil || ((Int)lambda.Invoke(value, ((Some)result).Value)).Value > 0)
             {
                result = Some.Object(value);
             }
@@ -836,6 +840,123 @@ public class Iterator : IObject, IIterator
       }
 
       return result;
+   }
+
+   public IObject MinMax()
+   {
+      var min = KNil.NilValue;
+      var max = KNil.NilValue;
+      foreach (var value in List())
+      {
+         if (min is KNil)
+         {
+            switch (value)
+            {
+               case IObjectCompare:
+                  min = Some.Object(value);
+                  break;
+               default:
+                  return KNil.NilValue;
+            }
+         }
+         else if (value is IObjectCompare oc && oc.Compare(((Some)min).Value) < 0)
+         {
+            min = Some.Object(value);
+         }
+
+         if (max is KNil)
+         {
+            switch (value)
+            {
+               case IObjectCompare:
+                  max = Some.Object(value);
+                  break;
+               default:
+                  return KNil.NilValue;
+            }
+         }
+         else if (value is IObjectCompare oc && oc.Compare(((Some)max).Value) > 0)
+         {
+            max = Some.Object(value);
+         }
+      }
+
+      if (min is Some minSome && max is Some maxSome)
+      {
+         return collectionClass.Revert([minSome.Value, maxSome.Value], _typeConstraint);
+      }
+      else
+      {
+         return collectionClass.Revert([], _typeConstraint);
+      }
+   }
+
+   public IObject MinMax(Lambda lambda)
+   {
+      var min = KNil.NilValue;
+      var max = KNil.NilValue;
+      if (lambda.Invokable.Parameters.Length == 2)
+      {
+         foreach (var value in List())
+         {
+            if (min is KNil || ((Int)lambda.Invoke(value, ((Some)min).Value)).Value < 0)
+            {
+               min = Some.Object(value);
+            }
+
+            if (max is KNil || ((Int)lambda.Invoke(value, ((Some)max).Value)).Value > 0)
+            {
+               max = Some.Object(value);
+            }
+         }
+      }
+      else
+      {
+         var list = List().ToList();
+         min = Some.Object(list[0]);
+         max = Some.Object(list[0]);
+         var compareMin = lambda.Invoke(list[0]);
+         var compareMax = lambda.Invoke(list[0]);
+         foreach (var value in list.Skip(1))
+         {
+
+            var valueResult = lambda.Invoke(value);
+            if (valueResult is IObjectCompare ocMin)
+            {
+               if (ocMin.Compare(compareMin) < 0)
+               {
+                  min = Some.Object(value);
+                  compareMin = valueResult;
+               }
+            }
+            else
+            {
+               throw incompatibleClasses(valueResult, "Object compare");
+            }
+            valueResult = lambda.Invoke(value);
+            if (valueResult is IObjectCompare ocMax)
+            {
+               if (ocMax.Compare(compareMax) > 0)
+               {
+                  max = Some.Object(value);
+                  compareMax = valueResult;
+               }
+            }
+            else
+            {
+               throw incompatibleClasses(valueResult, "Object compare");
+            }
+         }
+      }
+
+      if (min is Some someMin && max is Some someMax)
+      {
+         return collectionClass.Revert([someMin.Value, someMax.Value], _typeConstraint);
+      }
+      else
+      {
+         return collectionClass.Revert([], _typeConstraint);
+      }
    }
 
    public virtual IObject First() => List().FirstOrNone().Map(Some.Object) | (() => KNil.NilValue);

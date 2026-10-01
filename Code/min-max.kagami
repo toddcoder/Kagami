@@ -1,0 +1,9 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+let oneToOneHundred = 1 to 100
+println oneToOneHundred.minMax() \ $i
+println oneToOneHundred.minMax(:string) \ $i
+
+var words = <alfa bravo charlie delta echo foxtrot>
+println words.max()
+println words.max(:length)

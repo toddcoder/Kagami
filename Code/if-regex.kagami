@@ -1,0 +1,4 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+var langs = <java perl python ruby kagami>
+println langs if ${^ . 'a'} map :title()

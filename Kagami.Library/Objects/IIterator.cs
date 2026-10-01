@@ -71,7 +71,11 @@ public interface IIterator : IEquivalentClass
 
    IObject If(Lambda predicate);
 
+   IObject If(Regex regex);
+
    IObject IfNot(Lambda predicate);
+
+   IObject IfNot(Regex regex);
 
    IObject Skip(int count);
 
@@ -120,6 +124,10 @@ public interface IIterator : IEquivalentClass
    IObject Max();
 
    IObject Max(Lambda lambda);
+
+   IObject MinMax();
+
+   IObject MinMax(Lambda lambda);
 
    IObject First();
 

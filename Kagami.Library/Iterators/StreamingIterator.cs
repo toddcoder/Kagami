@@ -226,7 +226,11 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
 
    public IObject If(Lambda predicate) => copy(new StreamingIf(predicate));
 
+   public IObject If(Regex regex) => copy(new StreamingIfRegex(regex));
+
    public IObject IfNot(Lambda predicate) => copy(new StreamingIfNot(predicate));
+
+   public IObject IfNot(Regex regex) => copy(new StreamingIfNotRegex(regex));
 
    public IObject Skip(int count) => copy(new StreamingSkip(count));
 
@@ -277,6 +281,10 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
    public IObject Max() => terminate().Max();
 
    public IObject Max(Lambda lambda) => terminate().Max(lambda);
+
+   public IObject MinMax() => terminate().MinMax();
+
+   public IObject MinMax(Lambda lambda) => terminate().MinMax(lambda);
 
    public IObject First()
    {

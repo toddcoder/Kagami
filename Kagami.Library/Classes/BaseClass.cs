@@ -455,9 +455,11 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerIterMessage("bind(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Map(l)));
       registerIterMessage("flatMap(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.FlatMap(l)));
       registerIterMessage("if(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.If(l)));
+      registerIterMessage("if(_<Regex>)", (obj, message) => iteratorFunc<Regex>(obj, message, (i, r) => i.If(r)));
       registerIterMessage("mapAll(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.MapAll(l)));
       registerIterMessage("mapIf(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.MapIf(l)));
       registerIterMessage("ifNot(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.IfNot(l)));
+      registerIterMessage("ifNot(_<Regex>)", (obj, message) => iteratorFunc<Regex>(obj, message, (i, r) => i.IfNot(r)));
       registerIterMessage("skip(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Skip(j.Value)));
       registerIterMessage("-(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Skip(j.Value)));
       registerIterMessage("skipWhile(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.SkipWhile(l, false)));
@@ -499,6 +501,8 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerIterMessage("min(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Min(l)));
       registerIterMessage("max()", (obj, _) => iteratorFunc(obj, i => i.Max()));
       registerIterMessage("max(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Max(l)));
+      registerIterMessage("minMax()", (obj, _) => iteratorFunc(obj, i => i.MinMax()));
+      registerIterMessage("minMax(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.MinMax(l)));
       registerIterMessage("first()", (obj, _) => iteratorFunc(obj, i => i.First()));
       registerIterMessage("first".Selector("_<Lambda>"), (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.First(l)));
       registerIterMessage("last()", (obj, _) => iteratorFunc(obj, i => i.Last()));
