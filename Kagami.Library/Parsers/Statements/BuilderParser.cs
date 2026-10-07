@@ -22,8 +22,6 @@ public partial class BuilderParser : StatementParser
       var hasParameters = tokens[5].Text == "(";
       state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Whitespace, Color.Class, Color.OpenParenthesis);
 
-      //Module.Global.Value.ForwardReference(builderName);
-
       Parameters parameters;
 
       if (hasParameters)
