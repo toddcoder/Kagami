@@ -11,9 +11,9 @@ public partial class KeywordOperatorsParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s+)(if|map|join|sort|foldl|foldr|fold|all|any|none|one|zip|Z|skip|take|while|until|min|max" +
+   [GeneratedRegex(@"^(\s+)(if|map|flatmap|join|sort|foldl|foldr|fold|all|any|none|one|zip|Z|skip|take|while|until|min|max" +
       "|does|cross|each|approx|same|xor|union|intersect|diff|symdiff|subsetof|supersetof|accum|overlaps|to|till|downto|" +
-      @"downtill|dto|dtill|by|range|peek|first|last|collect)(\s+)")]
+      @"downtill|dto|dtill|by|range|peek|first|last|collect|partition)(\s+)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -42,7 +42,11 @@ public partial class KeywordOperatorsParser : SymbolParser
                case "one":
                case "zip":
                case "each":
+               case "partition":
                   builder.Add(new SendBinaryMessageSymbol($"{keyword}(_)", Precedence.ChainedOperator));
+                  break;
+               case "flatmap":
+                  builder.Add(new SendBinaryMessageSymbol("flatMap(_)", Precedence.ChainedOperator));
                   break;
                case "sort":
                   builder.Add(new SendBinaryMessageSymbol("sort(_<Lambda>)", Precedence.ChainedOperator));

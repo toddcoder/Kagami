@@ -12,7 +12,7 @@ public partial class TwoKeywordOperatorsParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@"^(\s*)(skip|take|if|not|sort|map|group|flat)(\s+)(while|until|not|same|desc|if|by|map)\b")]
+   [GeneratedRegex(@"^(\s*)(skip|take|if|not|sort|map|group)(\s+)(while|until|not|same|desc|if|by)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
@@ -46,9 +46,6 @@ public partial class TwoKeywordOperatorsParser : SymbolParser
             break;
          case ("group", "by"):
             message = "groupBy(_<Lambda>)";
-            break;
-         case ("flat", "map"):
-            message = "flatMap(_<Lambda>)";
             break;
          default:
             state.RollBackTransaction();

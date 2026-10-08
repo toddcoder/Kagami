@@ -1884,10 +1884,10 @@ public static class ParserFunctions
             _symbol = new BindSymbol();
             break;
          case "/:":
-            _symbol = new SendBinaryMessageSymbol("foldl(_)", Precedence.ChainedOperator);
+            _symbol = new FoldSymbol2(true);
             break;
          case "\\:":
-            _symbol = new SendBinaryMessageSymbol("foldr(_)", Precedence.ChainedOperator);
+            _symbol = new FoldSymbol2(false);
             break;
          case "|<<":
             _symbol = new SendBinaryMessageSymbol("|<<(_)", Precedence.Shift);

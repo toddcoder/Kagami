@@ -7,6 +7,12 @@ namespace Kagami.Library.Operations;
 
 public static class OperationFunctions
 {
+   public static bool canIterate(IObject value) => value switch
+   {
+      ICollection or IIterator or Int or UserObject or Sequence or Junction or KNil => true,
+      _ => false
+   };
+
    public static Result<IIterator> getIterator(IObject value, bool lazy)
    {
       switch (value)

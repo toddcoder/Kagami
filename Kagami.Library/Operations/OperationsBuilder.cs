@@ -677,5 +677,7 @@ public class OperationsBuilder(ParseState state)
 
    public void NewTag(string tag) => add(new NewTag(tag));
 
+   public void Fold(bool left) => add(new Fold(left));
+
    public override string ToString() => "operations";
 }

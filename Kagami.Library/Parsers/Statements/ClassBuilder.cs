@@ -136,14 +136,12 @@ public class ClassBuilder
                case Function function:
                {
                   implemented.Add(function.Selector);
-                  //originalBlock.Add(function);
                   addNonOverride(originalBlock, function);
                   break;
                }
                case MatchFunction matchFunction:
                {
                   implemented.Add(matchFunction.Selector);
-                  //originalBlock.Add(matchFunction);
                   addNonOverride(originalBlock, matchFunction);
                   break;
                }
