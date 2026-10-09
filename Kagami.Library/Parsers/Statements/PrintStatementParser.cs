@@ -10,7 +10,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class PrintStatementParser : StatementParser
 {
-   [GeneratedRegex(@"^(\s*)(printline|println|print|put|column)\b")]
+   [GeneratedRegex(@"^(\s*)(printline|println|print|put|column)\b(?!`)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
