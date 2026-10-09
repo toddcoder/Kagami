@@ -689,7 +689,7 @@ public static class ParserFunctions
 
    private static Optional<PossibleTypeConstraint> parseAliasedTypeConstraint(ParseState state)
    {
-      var _alias = state.Scan(@"^( *)([a-z0-9]+)\b(?!\.)", 2, Color.Whitespace, Color.Keyword);
+      var _alias = state.Scan(@"^( *)([a-z0-9]+)\b(?![\.`])", 2, Color.Whitespace, Color.Keyword);
       return
          from alias in _alias
          from className in getClassNameFromAlias(alias)

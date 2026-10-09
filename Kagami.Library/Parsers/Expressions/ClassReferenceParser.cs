@@ -58,7 +58,7 @@ public partial class ClassReferenceParser : SymbolParser
    {
    }
 
-   [GeneratedRegex(@$"^(\s*)({REGEX_CLASS_GETTING})\b")]
+   [GeneratedRegex(@$"^(\s*)({REGEX_CLASS_GETTING})\b(?!`)")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)

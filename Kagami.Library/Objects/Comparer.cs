@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
 
@@ -11,11 +12,19 @@ public class Comparer : IComparer
    {
       if (ascending)
       {
-         function = (x, y) => ((IObjectCompare)x).Compare((IObject)y);
+         function = (x, y) =>
+         {
+            var comparer = new ObjectComparer();
+            return comparer.Compare((IObject)x, (IObject)y);
+         };
       }
       else
       {
-         function = (x, y) => ((IObjectCompare)y).Compare((IObject)x);
+         function = (x, y) =>
+         {
+            var comparer = new ObjectComparer();
+            return comparer.Compare((IObject)y, (IObject)x);
+         };
       }
    }
 
@@ -37,7 +46,7 @@ public class ObjectComparer : IComparer<IObject>
       }
       else
       {
-         throw fail("Doesn't implement object compare");
+         return ((Int)classOf(x).SendMessage(x, "<>(_)", new Arguments(y))).Value;
       }
    }
 }
