@@ -1,0 +1,6 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+var inc = (x int) -> x + 1
+var x = inc(7) - 1
+var mul = (x int, y int) -> x * y
+println mul(3, 4)

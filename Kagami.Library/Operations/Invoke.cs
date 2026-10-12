@@ -48,7 +48,7 @@ public class Invoke : OneOperandOperation
       {
          var frame = new Frame(invokable.RequiresFunctionFrame ? machine.Address : nil, arguments);
          machine.PushFrame(frame);
-         frame.SetFields(invokable.Parameters);
+
          if (_fields is (true, var fields))
          {
             if (!fields.ContainsKey("this") && _lambda is (true, var lambda))
@@ -58,6 +58,8 @@ public class Invoke : OneOperandOperation
 
             frame.SetFields(fields);
          }
+
+         frame.SetFields(invokable.Parameters);
 
          frame.Lambda = _lambda;
          machine.GoTo(invokable.Address);
