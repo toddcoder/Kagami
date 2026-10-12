@@ -87,7 +87,7 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
       if (format.StartsWith("s."))
       {
          var amount = format.Drop(2);
-         if (amount.StartsWith("-"))
+         if (amount.StartsWith('-'))
          {
             amount = amount.Drop(1);
          }
@@ -178,14 +178,14 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
    public KBoolean In(IObject item) => item switch
    {
       KString other => value.Contains(other.value),
-      KChar c => value.IndexOf(c.Value) >= 0,
+      KChar c => value.Contains(c.Value),
       _ => false
    };
 
    public KBoolean NotIn(IObject item) => item switch
    {
       KString other => !value.Contains(other.value),
-      KChar c => value.IndexOf(c.Value) == -1,
+      KChar c => !value.Contains(c.Value),
       _ => false
    };
 
@@ -641,7 +641,7 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
 
    public KString Squeeze()
    {
-      var set = new Set<char>();
+      Set<char> set = [];
       foreach (var ch in value)
       {
          set.Add(ch);
