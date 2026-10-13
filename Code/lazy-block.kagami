@@ -3,7 +3,7 @@
 open sys
 
 class ExampleDate() {
-	singleton `string {
+	let `string = lazy {
 		println "Initializing string..."
 		return "...string"
 	}

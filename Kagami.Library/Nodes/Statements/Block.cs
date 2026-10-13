@@ -154,6 +154,14 @@ public class Block : Statement, IEnumerable<Statement>
       }
    }
 
+   public void AddReturnValueIf()
+   {
+      if (statements.Count > 0 && statements[^1] is ExpressionStatement expressionStatement)
+      {
+         expressionStatement.ReturnExpression = true;
+      }
+   }
+
    public void AddReturnIf(Symbol symbol)
    {
       if (statements.Count > 0 && statements[^1] is not Return)

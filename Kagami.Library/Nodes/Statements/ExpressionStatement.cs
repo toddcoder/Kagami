@@ -53,7 +53,11 @@ namespace Kagami.Library.Nodes.Statements
 
       public Expression Expression => expression;
 
-      public bool ReturnExpression => returnExpression;
+      public bool ReturnExpression
+      {
+         get => returnExpression;
+         set => returnExpression = value;
+      }
 
       public override string ToString() => $"{returnExpression.Extend("return ")}{expression}";
    }

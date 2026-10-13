@@ -9,7 +9,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class SingletonParser : StatementParser
 {
-   [GeneratedRegex($@"^(\s*){REGEX_HIDDEN}{REGEX_OVERRIDE}(singleton)(\s+)({REGEX_FIELD})")]
+   [GeneratedRegex($@"^(\s*){REGEX_HIDDEN}{REGEX_OVERRIDE}(let)(\s+)({REGEX_FIELD})(\s*=\s*)(lazy)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)
@@ -17,7 +17,7 @@ public partial class SingletonParser : StatementParser
       var isHidden = tokens[2].Text.IsNotEmpty();
       var isOverride = tokens[3].Text.IsNotEmpty();
       var singletonName = tokens[6].Text;
-      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Keyword, Color.Keyword, Color.Whitespace, Color.Identifier);
+      state.Colorize(tokens, Color.Whitespace, Color.Keyword, Color.Keyword, Color.Keyword, Color.Whitespace, Color.Identifier, Color.Structure, Color.Keyword);
 
       state.CreateYieldFlag();
       state.CreateReturnType();
@@ -26,6 +26,7 @@ public partial class SingletonParser : StatementParser
       if (_block is (true, var block))
       {
          state.RemoveYieldFlag();
+         block.AddReturnValueIf();
          state.AddStatement(new LazyAssign(singletonName, block, isHidden, isOverride));
 
          return unit;
