@@ -284,4 +284,8 @@ public interface IIterator : IEquivalentClass
    IObject Peek(Lambda action);
 
    IResult Statistics();
+
+   IObject ZipWithNext();
+
+   IObject ZipWithNext(Lambda lambda);
 }

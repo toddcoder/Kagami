@@ -5,18 +5,41 @@ using Kagami.Library.Parsers.Statements;
 using System.Text.RegularExpressions;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Nodes.NodeFunctions;
+using static Kagami.Library.Parsers.ParserFunctions;
 using Return = Kagami.Library.Nodes.Statements.Return;
 
 namespace Kagami.Library.Parsers.Expressions;
 
 public partial class AnonymousBuilderParser(ExpressionBuilder builder) : SymbolParser(builder)
 {
-   [GeneratedRegex(@"^(\s*)(do)\b(?=\s*\{)")]
+   [GeneratedRegex(@"^(\s*)(do)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
       state.Colorize(tokens, Color.Whitespace, Color.Keyword);
+
+      List<string> noCaptures = [];
+      if (state.Scan(@"^(\s*)(;)", Color.Whitespace, Color.Structure))
+      {
+         if (state.Scan($@"^(\s*)({REGEX_FIELD})", 2, Color.Whitespace, Color.Identifier) is (true, var noCapture))
+         {
+            noCaptures.Add(noCapture);
+         }
+
+         while (state.More)
+         {
+            if (state.Scan($@"^(\s*)(,\s*)({REGEX_FIELD})", 3, Color.Whitespace, Color.Structure, Color.Identifier) is (true, var noCapture2))
+            {
+               noCaptures.Add(noCapture2);
+            }
+            else
+            {
+               break;
+            }
+         }
+      }
+
       var defaultExpression = new Expression(new PushObjectSymbol(new Objects.Failure("No value")));
       var builderState = new BuilderState("value", newLabel("failure"), true);
       state.PushStatements();
@@ -74,7 +97,7 @@ public partial class AnonymousBuilderParser(ExpressionBuilder builder) : SymbolP
          }
 
          block.Add(new Return(new Expression(new FieldSymbol(builderState.ResultFieldName)), nil));
-         builder.Add(new BuilderSymbol(block));
+         builder.Add(new BuilderSymbol(block, [.. noCaptures]));
          return unit;
       }
       else

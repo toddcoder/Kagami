@@ -10,7 +10,7 @@ class ChecksumAccumulator {
 static {
 	hide let cache = {string:int} {(s)
 		let acc = ChecksumAccumulator()
-		for c in s do acc.add(c.ord.b)
+		for c in s acc.add(c.ord.b)
 		return acc.checksum()
 	}
 	fn calculate(s string) int => cache[s]

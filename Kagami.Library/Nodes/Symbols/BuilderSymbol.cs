@@ -11,10 +11,21 @@ public class BuilderSymbol : Symbol
    protected Function function;
    protected InvokeSymbol invoke;
 
-   public BuilderSymbol(Block block)
+   public BuilderSymbol(Block block, string[] noCaptures)
    {
       var functionName = newLabel("builder");
-      function = new Function(functionName, Parameters.Empty, false, block, false, false, "", true);
+
+      List<Parameter> parameters = [];
+      if (noCaptures.Length > 0)
+      {
+         foreach (var noCapture in noCaptures)
+         {
+            var parameter = new Parameter(false, false, "", noCapture, nil, nil, false, true, false);
+            parameters.Add(parameter);
+         }
+      }
+
+      function = new Function(functionName, new Parameters([.. parameters]), false, block, false, false, "");
       invoke = new InvokeSymbol(functionName, [], nil, false);
    }
 

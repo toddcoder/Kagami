@@ -10,7 +10,7 @@ class ChecksumAccumulator {
 static {
 	let cache = {:}.memo() s -> {
 		var acc = ChecksumAccumulator()
-		for c in s do acc.add(math.byte(c.ord))
+		for c in s acc.add(math.byte(c.ord))
 		return acc.checksum()
 	}
 

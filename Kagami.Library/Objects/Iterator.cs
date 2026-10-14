@@ -1,4 +1,5 @@
-﻿using Core.Collections;
+﻿using Core.Assertions;
+using Core.Collections;
 using Core.Dates.Now;
 using Core.Enumerables;
 using Core.Monads;
@@ -919,7 +920,6 @@ public class Iterator : IObject, IIterator
          var compareMax = lambda.Invoke(list[0]);
          foreach (var value in list.Skip(1))
          {
-
             var valueResult = lambda.Invoke(value);
             if (valueResult is IObjectCompare ocMin)
             {
@@ -933,6 +933,7 @@ public class Iterator : IObject, IIterator
             {
                throw incompatibleClasses(valueResult, "Object compare");
             }
+
             valueResult = lambda.Invoke(value);
             if (valueResult is IObjectCompare ocMax)
             {
@@ -2163,6 +2164,38 @@ public class Iterator : IObject, IIterator
    }
 
    public IResult Statistics() => (IResult)new Statistics(this).Evaluate();
+
+   public IObject ZipWithNext()
+   {
+      IObject[] source = [.. List()];
+      List<IObject> result = [];
+      for (var i = 0; i < source.Length - 1; i++)
+      {
+         List<IObject> innerResult =
+         [
+            source[i],
+            source[i + 1]
+         ];
+         var innerCollection = collectionClass.Revert(innerResult, _typeConstraint);
+         result.Add(innerCollection);
+      }
+
+      return collectionClass.Revert(result, _typeConstraint);
+   }
+
+   public IObject ZipWithNext(Lambda lambda)
+   {
+      lambda.ParameterCount.Value.Must().Equal(2).OrThrow("Lambda must have 2 parameters");
+      IObject[] source = [.. List()];
+      List<IObject> result = [];
+      for (var i = 0; i < source.Length - 1; i++)
+      {
+         var value = lambda.Invoke(source[i], source[i + 1]);
+         result.Add(value);
+      }
+
+      return collectionClass.Revert(result, _typeConstraint);
+   }
 
    protected static IEnumerable<IObject> applyAgainst(List<Lambda> lambdas, List<IObject> enumerable)
    {

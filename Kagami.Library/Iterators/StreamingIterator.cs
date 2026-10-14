@@ -499,5 +499,9 @@ public class StreamingIterator(IIterator iterator) : IObject, IIterator
 
    public IResult Statistics() => (IResult)new Statistics(this).Evaluate();
 
+   public IObject ZipWithNext() => terminate().ZipWithNext();
+
+   public IObject ZipWithNext(Lambda lambda) => terminate().ZipWithNext(lambda);
+
    public TypeConstraint EquivalentTypeConstraint() => Objects.TypeConstraint.FromList("Iterator");
 }

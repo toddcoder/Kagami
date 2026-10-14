@@ -601,6 +601,8 @@ public abstract class BaseClass : IEquatable<BaseClass>
          (obj, message) => iteratorFunc<IObject>(obj, message, (i1, i2) => i1.DotProduct((ICollection)i2)));
       registerIterMessage("peek(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.Peek(l)));
       registerIterMessage("statistics()", (obj, _) => iteratorFunc(obj, i => (IObject)i.Statistics()));
+      registerIterMessage("zipWithNext()", (obj, _) => iteratorFunc(obj, i => i.ZipWithNext()));
+      registerIterMessage("zipWithNext(_<Lambda>)", (obj, message) => iteratorFunc<Lambda>(obj, message, (i, l) => i.ZipWithNext(l)));
    }
 
    public void typedCollectionMessages()
