@@ -2,7 +2,7 @@
 
 builder set5(a array, i int) {
 	let arr = a
-	do arr[i] = 'N'
+	exec arr[i] = 'N'
 	return arr
 }
 
