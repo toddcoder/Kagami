@@ -24,6 +24,7 @@ public class FloatClass : BaseClass, IParse, IEquivalentClass
       messages["next()"] = (obj, _) => function<Float>(obj, f => f.Next());
       messages["prev()"] = (obj, _) => function<Float>(obj, f => f.Previous());
       messages["bits".get()] = (obj, _) => function<Float>(obj, f => f.Bits);
+      messages["wholeFrac()"] = (obj, _) => function<Float>(obj, f => f.WholeFrac());
 
       messageNumberMessages();
    }

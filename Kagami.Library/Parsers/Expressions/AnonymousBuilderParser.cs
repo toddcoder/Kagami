@@ -20,8 +20,10 @@ public partial class AnonymousBuilderParser(ExpressionBuilder builder) : SymbolP
       state.Colorize(tokens, Color.Whitespace, Color.Keyword);
 
       List<string> noCaptures = [];
+      var capturing = false;
       if (state.Scan(@"^(\s*)(;)", Color.Whitespace, Color.Structure))
       {
+         capturing = true;
          if (state.Scan($@"^(\s*)({REGEX_FIELD})", 2, Color.Whitespace, Color.Identifier) is (true, var noCapture))
          {
             noCaptures.Add(noCapture);
@@ -97,7 +99,7 @@ public partial class AnonymousBuilderParser(ExpressionBuilder builder) : SymbolP
          }
 
          block.Add(new Return(new Expression(new FieldSymbol(builderState.ResultFieldName)), nil));
-         builder.Add(new BuilderSymbol(block, [.. noCaptures]));
+         builder.Add(new BuilderSymbol(block, [.. noCaptures], capturing));
          return unit;
       }
       else

@@ -11,7 +11,7 @@ public class BuilderSymbol : Symbol
    protected Function function;
    protected InvokeSymbol invoke;
 
-   public BuilderSymbol(Block block, string[] noCaptures)
+   public BuilderSymbol(Block block, string[] noCaptures, bool capturing)
    {
       var functionName = newLabel("builder");
 
@@ -25,7 +25,7 @@ public class BuilderSymbol : Symbol
          }
       }
 
-      function = new Function(functionName, new Parameters([.. parameters]), false, block, false, false, "");
+      function = new Function(functionName, new Parameters([.. parameters]), false, block, false, false, "", capturing);
       invoke = new InvokeSymbol(functionName, [], nil, false);
    }
 

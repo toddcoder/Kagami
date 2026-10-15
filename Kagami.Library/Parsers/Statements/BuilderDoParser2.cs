@@ -8,7 +8,7 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class BuilderDoParser2(BuilderState builderState) : StatementParser
 {
-   [GeneratedRegex(@"^(\s*)(do)\b")]
+   [GeneratedRegex(@"^(\s*)(exec)\b")]
    public override partial Regex Regex();
 
    public override Optional<Unit> ParseStatement(ParseState state, Token[] tokens)

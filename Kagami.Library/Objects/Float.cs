@@ -187,9 +187,7 @@ public readonly struct Float : IObject, INumeric, IComparable<Float>, IEquatable
 
    public (INumeric, INumeric) Compatible(INumeric obj) => obj.ClassName switch
    {
-      "Int" => (this, obj.ToFloat()),
-      "Float" => (this, obj.ToFloat()),
-      "Byte" => (this, obj.ToFloat()),
+      "Int" or "Float" or "Byte" => (this, obj.ToFloat()),
       "Long" => (ToLong(), obj.ToLong()),
       "Complex" => (ToComplex(), obj.ToComplex()),
       "Rational" => (ToRational(), obj.ToRational()),
@@ -296,5 +294,13 @@ public readonly struct Float : IObject, INumeric, IComparable<Float>, IEquatable
          var bits = BitConverter.DoubleToInt64Bits(value);
          return Convert.ToString(bits, 2).PadLeft(64, '0');
       }
+   }
+
+   public KTuple WholeFrac()
+   {
+      var asLong = Long.LongObject(new BigInteger(value));
+      var frac = FloatObject(value - double.Truncate(value));
+
+      return new KTuple(new NameValue("whole", asLong), new NameValue("frac", frac));
    }
 }
