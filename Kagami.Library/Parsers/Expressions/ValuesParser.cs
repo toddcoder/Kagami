@@ -112,6 +112,7 @@ public class ValuesParser : MultiParser
          yield return new LastValueParser(builder);
          yield return new TryParser(builder);
 
+         yield return new AssignOperatorParser(builder);
          yield return new FieldParser(builder);
       }
    }

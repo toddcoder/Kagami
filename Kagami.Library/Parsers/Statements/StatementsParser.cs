@@ -33,8 +33,8 @@ public class StatementsParser : MultiParser
          yield return new PatternsParser();
          yield return new PatternParser();
          yield return new ConvertParser();
-         yield return new ConditionalAssignParser();
-         yield return new ConditionalWhileParser();
+         //yield return new ConditionalAssignParser();
+         //yield return new ConditionalWhileParser();
          yield return new IfParser();
          yield return new WhenStatementParser();
          yield return new RequireParser();

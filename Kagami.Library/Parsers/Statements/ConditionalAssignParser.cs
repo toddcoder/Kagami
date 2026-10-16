@@ -9,7 +9,6 @@ namespace Kagami.Library.Parsers.Statements;
 
 public partial class ConditionalAssignParser : StatementParser
 {
-   //public override string Pattern => "^ /'if' /(/s+)";
 
    [GeneratedRegex(@"^(if)(\s+)")]
    public override partial Regex Regex();
