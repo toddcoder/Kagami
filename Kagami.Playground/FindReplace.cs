@@ -8,8 +8,8 @@ namespace Kagami.Playground;
 [System.Runtime.Versioning.SupportedOSPlatform("windows")]
 public partial class FindReplace : Form
 {
-   protected LabelText ltFind = new("Find");
-   protected LabelText ltReplace = new("Replace");
+   protected LabelText ltFind = new() { Label = "Find" };
+   protected LabelText ltReplace = new() { Label = "Replace" };
    protected UiAction uiRegex = new();
    protected UiAction uiIgnoreCase = new();
    protected UiAction uiFind = new();

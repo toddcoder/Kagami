@@ -69,6 +69,13 @@ public partial class ClassParser : StatementParser
          return exception;
       }
 
+      (string functionName, Expression constructor)[] uses = [];
+      var multiDelegateParser = new MultiDelegateParser();
+      if (multiDelegateParser.Scan(state))
+      {
+         uses = multiDelegateParser.Uses;
+      }
+
       var isFixed = (bool)state.Scan(@"^(\s+)(fixed)", Color.Whitespace, Color.Keyword);
 
       var _block = getBlock(state, true);
@@ -97,6 +104,11 @@ public partial class ClassParser : StatementParser
             {
                break;
             }
+         }
+
+         foreach (var (functionName, constructor) in uses)
+         {
+            builder.RegisterDelegate(functionName, constructor);
          }
 
          var _register = builder.Register();

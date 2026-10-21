@@ -31,7 +31,8 @@ public partial class InvokeParser : SymbolParser
          var _argumentsPlusLambda = getArgumentsPlusLambda(state, builder.Flags);
          if (_argumentsPlusLambda is (true, var (arguments, possibleLambda)))
          {
-            if (!builder.Flags[ExpressionFlags.Comparisand] && functionName.IsMatch("^ ['A-Z']") && state.BlockFollows())
+            if (!builder.Flags[ExpressionFlags.Comparisand] && !builder.Flags[ExpressionFlags.OmitFollowingBlock] &&
+                functionName.IsMatch("^ ['A-Z']") && state.BlockFollows())
             {
                var _result = state.BeginBlock(Color.OpenParenthesis);
                if (_result)
