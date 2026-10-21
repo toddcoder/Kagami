@@ -10,9 +10,7 @@ class Export {
 	fn analyze() => println("expert analysis...")
 }
 
-class Manager
-delegate Export()
-delegate Worker()
+class Manager uses Export(), Worker()
 
 var bernie = Manager()
 bernie.analyze()
