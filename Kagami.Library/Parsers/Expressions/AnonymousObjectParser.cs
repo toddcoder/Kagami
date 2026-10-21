@@ -86,7 +86,7 @@ public partial class AnonymousObjectParser : SymbolParser
          Expression[] callArguments = [];
          if (hasParameters)
          {
-            var _open = state.Scan(@"^(\()", Color.Whitespace, Color.OpenParenthesis);
+            var _open = state.Scan(@"^(\()", Color.OpenParenthesis);
             if (!_open)
             {
                return _open.Exception;
