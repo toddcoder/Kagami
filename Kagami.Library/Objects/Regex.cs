@@ -746,11 +746,11 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
       }
    }
 
-   public Regex WithIgnoreCase(bool ignoreCase) => new(getPattern(originalPattern).WithIgnoreCase(ignoreCase), global, textOnly);
+   public Regex WithIgnoreCase(bool ignoreCase) => new(originalPattern, ignoreCase, multiline, global, textOnly);
 
-   public Regex WithMultiline(bool multiline) => new(getPattern(originalPattern).WithMultiline(multiline), global, textOnly);
+   public Regex WithMultiline(bool multiline) => new(originalPattern, ignoreCase, multiline, global, textOnly);
 
-   public Regex WithGlobal(bool global) => new(getPattern(originalPattern), global, textOnly);
+   public Regex WithGlobal(bool global) => new(originalPattern, ignoreCase, multiline, global, textOnly);
 
    private void setVariable(int index, string text) => setVariable(index.ToString(), text);
 
