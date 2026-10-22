@@ -1,0 +1,9 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+var a = [1, 2]
+a = [..a, 3, 4]
+println ~a
+
+var b = [5 to 10]
+var c = [..a, ..b]
+println ~c

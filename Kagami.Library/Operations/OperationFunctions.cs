@@ -7,13 +7,15 @@ namespace Kagami.Library.Operations;
 
 public static class OperationFunctions
 {
-   public static bool canIterate(IObject value) => value switch
+   public static bool canIterate(IObject value, bool includeInt = true, bool includeString = true) => value switch
    {
-      ICollection or IIterator or Int or UserObject or Sequence or Junction or KNil => true,
+      Int when !includeInt => false,
+      KString when !includeString => false,
+      ICollection or IIterator or UserObject or Sequence or Junction or KNil => true,
       _ => false
    };
 
-   public static Result<IIterator> getIterator(IObject value, bool lazy)
+   public static Result<IIterator> getIterator(IObject value, bool lazy, bool includeInt = true)
    {
       switch (value)
       {
@@ -25,7 +27,7 @@ public static class OperationFunctions
          {
             return iterator.Success();
          }
-         case Int i:
+         case Int i when includeInt:
          {
             return new KRange((Int)0, i, false).GetIterator(lazy).Success();
          }
