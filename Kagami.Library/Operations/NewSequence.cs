@@ -18,7 +18,6 @@ public class NewSequence : TwoOperandOperation
 
       var _iterator = y switch
       {
-         //Sequence ySequence => new KArray(ySequence.List).GetIterator(false).Some(),
          Slip ySlip => ySlip.GetIterator().Some(),
          _ => nil
       };

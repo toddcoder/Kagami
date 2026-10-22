@@ -14,6 +14,7 @@ public class NewArray(Maybe<TypeConstraint> _typeConstraint) : OneOperandOperati
       ICollection { ExpandForArray: true } collection => KArray.CreateObject([.. collection.GetIterator(false).List()], _typeConstraint).Just(),
       IIterator iterator => KArray.CreateObject([.. iterator.List()], _typeConstraint).Just(),
       Junction junction => KArray.CreateObject(junction.Items, _typeConstraint).Just(),
+      UserObject uo => KArray.CreateObject(new ObjectCollection(uo).GetIterator(false).List(), _typeConstraint).Just(),
       _ => new KArray(value) { TypeConstraint = _typeConstraint }
    };
 
