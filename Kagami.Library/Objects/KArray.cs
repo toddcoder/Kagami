@@ -43,30 +43,11 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       }
    }
 
-   protected void assertIncomingValuesAreEquivalent(IEnumerable<IObject> values)
-   {
-      foreach (var value in values)
-      {
-         assertIncomingValueIsEquivalent(value);
-      }
-   }
-
    protected void assertValuesAreEquivalent()
    {
       foreach (var value in list)
       {
          assertIncomingValueIsEquivalent(value);
-      }
-   }
-
-   protected void assertTypeConstraintIsEquivalent(TypeConstraint otherTypeConstraint)
-   {
-      if (_typeConstraint is (true, var typeConstraint))
-      {
-         if (!typeConstraint.IsEquivalentTo(otherTypeConstraint))
-         {
-            throw fail($"{typeConstraint.AsString} is incompatible with {otherTypeConstraint.AsString}");
-         }
       }
    }
 
@@ -143,6 +124,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       get => _typeConstraint;
       set
       {
+         requireToBeUnlocked(this, "typeConstraint");
          _typeConstraint = value;
          assertValuesAreEquivalent();
       }
@@ -150,12 +132,14 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public IObject SetType(TypeConstraint typeConstraint)
    {
+      requireToBeUnlocked(this, "setType");
       TypeConstraint = typeConstraint;
       return this;
    }
 
    public IObject AutoType()
    {
+      requireToBeUnlocked(this, "autoType");
       if (list.Count == 0)
       {
          return this;
@@ -177,13 +161,21 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
    public Maybe<Lambda> DefaultLambda
    {
       get => _defaultLambda;
-      set => _defaultLambda = value;
+      set
+      {
+         requireToBeUnlocked(this, "defaultLambda");
+         _defaultLambda = value;
+      }
    }
 
    public Maybe<IObject> DefaultValue
    {
       get => _defaultValue;
-      set => _defaultValue = value;
+      set
+      {
+         requireToBeUnlocked(this, "defaultValue");
+         _defaultValue = value;
+      }
    }
 
    public virtual IObject this[int index]
@@ -210,6 +202,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       }
       set
       {
+         requireToBeUnlocked(this, "[]");
          throwIfSelf(value);
 
          var wrappedIndex = wrapIndex(index, list.Count);
@@ -263,6 +256,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       }
       set
       {
+         requireToBeUnlocked(this, "[]");
          List<int> il = [.. indexList(sequence, list.Count)];
          switch (value)
          {
@@ -371,6 +365,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public virtual IObject Set(IObject index, IObject value)
    {
+      requireToBeUnlocked(this, "set");
       var intIndex = wrapIndex(((Int)index).Value, list.Count);
       assertIncomingValueIsEquivalent(value);
       list[intIndex] = value;
@@ -421,6 +416,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public virtual IObject Append(IObject obj)
    {
+      requireToBeUnlocked(this, "<<");
       throwIfSelf(obj);
       assertIncomingValueIsEquivalent(obj);
       list.Add(obj);
@@ -430,6 +426,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public virtual IObject Push(IObject obj)
    {
+      requireToBeUnlocked(this, "push");
       throwIfSelf(obj);
       assertIncomingValueIsEquivalent(obj);
       list.Insert(0, obj);
@@ -439,6 +436,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public virtual IObject Remove(IObject obj)
    {
+      requireToBeUnlocked(this, "remove");
       assertIncomingValueIsEquivalent(obj);
       list.Remove(obj);
       return this;
@@ -446,6 +444,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public IObject RemoveAt(int index)
    {
+      requireToBeUnlocked(this, "removeAt");
       index = wrapIndex(index, list.Count);
       if (index.Between(0).Until(list.Count))
       {
@@ -462,6 +461,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public IObject RemoveAll(IObject obj)
    {
+      requireToBeUnlocked(this, "removeAll");
       assertIncomingValueIsEquivalent(obj);
       list.RemoveAll(o => o.IsEqualTo(obj));
       return this;
@@ -469,6 +469,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public virtual IObject InsertAt(int index, IObject obj)
    {
+      requireToBeUnlocked(this, "insertAt");
       throwIfSelf(obj);
       assertIncomingValueIsEquivalent(obj);
       index = wrapIndex(index, list.Count);
@@ -483,6 +484,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public virtual IObject Assign(SkipTake skipTake, IEnumerable<IObject> values)
    {
+      requireToBeUnlocked(this, "assign");
       var left = list.Take(skipTake.Skip);
       var right = list.Skip(skipTake.Skip + skipTake.Take);
 
@@ -515,19 +517,38 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
          throw fail("RHS array has a type constraint");
       }
 
-      List<IObject> newList = [.. list];
-      newList.AddRange(kArray.list);
+      List<IObject> newList =
+      [
+         .. list,
+         .. kArray.list
+      ];
 
       return new KArray(newList) { TypeConstraint = _typeConstraint };
    }
 
-   public IObject Pop() => list.Count > 0 ? Some.Object(RemoveAt(list.Count - 1)) : KNil.NilValue;
+   public IObject Pop()
+   {
+      requireToBeUnlocked(this, "pop");
+      return list.Count > 0 ? Some.Object(RemoveAt(list.Count - 1)) : KNil.NilValue;
+   }
 
-   public IObject Pop(int index) => list.Count > 0 ? Some.Object(RemoveAt(wrapIndex(index, list.Count))) : KNil.NilValue;
+   public IObject Pop(int index)
+   {
+      requireToBeUnlocked(this, "pop");
+      return list.Count > 0 ? Some.Object(RemoveAt(wrapIndex(index, list.Count))) : KNil.NilValue;
+   }
 
-   public IObject Unshift(IObject value) => InsertAt(0, value);
+   public IObject Unshift(IObject value)
+   {
+      requireToBeUnlocked(this, "unshift");
+      return InsertAt(0, value);
+   }
 
-   public IObject Shift() => list.Count > 0 ? RemoveAt(0) : KNil.NilValue;
+   public IObject Shift()
+   {
+      requireToBeUnlocked(this, "shift");
+      return list.Count > 0 ? RemoveAt(0) : KNil.NilValue;
+   }
 
    public virtual IObject IndexOf(IObject item)
    {
@@ -639,7 +660,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
    {
       if (list.All(i => i is KArray) && list.Count > 0)
       {
-         IObject[][] listOfLists = [..list.Select(i => (IObject[])[.. ((KArray)i).list])];
+         IObject[][] listOfLists = [.. list.Select(i => (IObject[])[.. ((KArray)i).list])];
          var minLength = listOfLists.Min(a => a.Length);
          List<IObject> outerList = [];
          for (var i = 0; i < minLength; i++)
@@ -682,6 +703,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public virtual IObject Prepend(IObject item)
    {
+      requireToBeUnlocked(this, "prepend");
       assertIncomingValueIsEquivalent(item);
       list.Insert(0, item);
 
@@ -690,6 +712,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public IObject Clear()
    {
+      requireToBeUnlocked(this, "clear");
       list.Clear();
       return this;
    }
@@ -730,6 +753,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public IObject Read()
    {
+      requireToBeUnlocked(this, "read");
       if (list.Count > 0)
       {
          var obj = this[0];
@@ -751,6 +775,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public KArray Extend(IObject obj)
    {
+      requireToBeUnlocked(this, "extend");
       if (obj is ICollection collection)
       {
          list.AddRange(collection.GetIterator(false).List());
@@ -785,8 +810,11 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public KArray Retain(Lambda lambda)
    {
-      List<IObject> newList = [];
-      newList.AddRange(list.Where(item => lambda.Invoke(item).IsTrue));
+      requireToBeUnlocked(this, "retain");
+      List<IObject> newList =
+      [
+         .. list.Where(item => lambda.Invoke(item).IsTrue)
+      ];
 
       list = newList;
       return this;
@@ -794,8 +822,11 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public KArray Remove(Lambda lambda)
    {
-      List<IObject> newList = [];
-      newList.AddRange(list.Where(item => !lambda.Invoke(item).IsTrue));
+      requireToBeUnlocked(this, "remove");
+      List<IObject> newList =
+      [
+         .. list.Where(item => !lambda.Invoke(item).IsTrue)
+      ];
 
       list = newList;
       return this;
@@ -848,6 +879,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
       }
       set
       {
+         requireToBeUnlocked(this, "[]");
          List<int> il = [.. indexList(range, list.Count)];
          switch (value)
          {
@@ -910,6 +942,7 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
 
    public KArray Swap(int i, int j)
    {
+      requireToBeUnlocked(this, "swap");
       var index1 = wrapIndex(i, list.Count);
       var index2 = wrapIndex(j, list.Count);
       (list[index1], list[index2]) = (list[index2], list[index1]);
@@ -937,4 +970,6 @@ public class KArray : IObject, IObjectCompare, IComparable<KArray>, IEquatable<K
          return nil;
       }
    }
+
+   public bool IsLocked { get; set; }
 }

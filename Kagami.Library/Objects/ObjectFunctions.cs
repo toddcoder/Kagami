@@ -102,8 +102,6 @@ public static class ObjectFunctions
             return matchArrayToCons(array, cons, bindings);
          case KUnit when source is KArray:
             return true;
-         /*case KTuple tuple when source is KArray array:
-            return matchArrayToTuple(array, tuple, bindings);*/
          case KTuple tuple when source is KString kString:
             return matchStringToTuple(kString, tuple, bindings);
          case KTuple tuple1 when source is KTuple tuple2:
@@ -402,19 +400,6 @@ public static class ObjectFunctions
       return sendMessage(obj, selector, new Arguments(arguments));
    }
 
-   public static IObject sendMessage(IObject obj, Message message, Func<IObject> defaultFunc)
-   {
-      var cls = classOf(obj);
-      if (cls.RespondsTo(message.Selector))
-      {
-         return cls.SendMessage(obj, message);
-      }
-      else
-      {
-         return defaultFunc();
-      }
-   }
-
    public static IObject sendMessage(IObject obj, Selector selector, Func<IObject> defaultFunc, Arguments arguments)
    {
       var cls = classOf(obj);
@@ -426,11 +411,6 @@ public static class ObjectFunctions
       {
          return defaultFunc();
       }
-   }
-
-   public static IObject sendMessage(IObject obj, Selector selector, Func<IObject> defaultFunc, params IObject[] arguments)
-   {
-      return sendMessage(obj, selector, defaultFunc, new Arguments(arguments));
    }
 
    public static IObject sendMessage(IObject obj, Selector selector, IObject argument)
@@ -623,7 +603,7 @@ public static class ObjectFunctions
             list.Add(s[i]);
          }
 
-         target[lastIndex] = new KTuple(list.ToArray());
+         target[lastIndex] = new KTuple([.. list]);
       }
 
       return target;
@@ -1222,41 +1202,6 @@ public static class ObjectFunctions
 
    public static IObject[] tupleToArray(KTuple tuple) => [.. tuple.List];
 
-   /*public static Maybe<IObject> convertToMonad(string className, IObject value)
-   {
-      return className switch
-      {
-         "Optional" => value switch
-         {
-            Some or KNil => value.Some(),
-            Success success => Some.Object(success.Value).Some(),
-            Failure or Error => KNil.NilValue.Some(),
-            _ => Some.Object(value).Some()
-         },
-         "Result" => value switch
-         {
-            Success or Failure => value.Some(),
-            Error error => new Failure(error),
-            Some some => Success.Object(some.Value).Some(),
-            KNil => Failure.Object("No value provided").Some(),
-            _ when supportsErroring() => new Failure(value),
-            _ => Success.Object(value).Some()
-         },
-         _ => nil
-      };
-
-      bool supportsErroring()
-      {
-         var erroring = Protocols.Protocols.GetOrThrow("PError");
-         return erroring.Supports(value);
-      }
-   }*/
-
-   /*public static Maybe<IObject> convertToMonad(TypeConstraint typeConstraint, IObject value)
-   {
-      return convertToMonad(typeConstraint.Comparisands[0].Name, value);
-   }*/
-
    public static bool isMonad(string className) => className switch
    {
       "Optional" => true,
@@ -1267,4 +1212,12 @@ public static class ObjectFunctions
       "Failure" => true,
       _ => false
    };
+
+   public static void requireToBeUnlocked(IMutable mutable, string location)
+   {
+      if (mutable.IsLocked)
+      {
+         throw fail($"Mutable object is locked and cannot be modified. Location: {location}");
+      }
+   }
 }

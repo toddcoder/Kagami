@@ -27,30 +27,11 @@ public class Set : IObject, ICollection, IObjectCompare, IMutable, ITypedCollect
       }
    }
 
-   protected void assertIncomingValuesAreEquivalent(IEnumerable<IObject> values)
-   {
-      foreach (var value in values)
-      {
-         assertIncomingValueIsEquivalent(value);
-      }
-   }
-
    protected void assertValuesAreEquivalent()
    {
       foreach (var value in list)
       {
          assertIncomingValueIsEquivalent(value);
-      }
-   }
-
-   protected void assertTypeConstraintIsEquivalent(TypeConstraint otherTypeConstraint)
-   {
-      if (TypeConstraint is (true, var typeConstraint))
-      {
-         if (!typeConstraint.IsEquivalentTo(otherTypeConstraint))
-         {
-            throw fail($"{typeConstraint.AsString} is incompatible with {otherTypeConstraint.AsString}");
-         }
       }
    }
 
@@ -162,6 +143,7 @@ public class Set : IObject, ICollection, IObjectCompare, IMutable, ITypedCollect
       get;
       set
       {
+         requireToBeUnlocked(this, "typeConstraint");
          assertValuesAreEquivalent();
          field = value;
       }
@@ -169,12 +151,14 @@ public class Set : IObject, ICollection, IObjectCompare, IMutable, ITypedCollect
 
    public IObject SetType(TypeConstraint typeConstraint)
    {
+      requireToBeUnlocked(this, "setType");
       TypeConstraint = typeConstraint;
       return this;
    }
 
    public IObject AutoType()
    {
+      requireToBeUnlocked(this, "autoType");
       if (list.Count == 0)
       {
          return this;
@@ -203,6 +187,7 @@ public class Set : IObject, ICollection, IObjectCompare, IMutable, ITypedCollect
 
    public Set Append(IObject item)
    {
+      requireToBeUnlocked(this, "<<");
       assertIncomingValueIsEquivalent(item);
       assertNotThisSet(item);
       set.Add(item);
@@ -212,6 +197,7 @@ public class Set : IObject, ICollection, IObjectCompare, IMutable, ITypedCollect
 
    public Set Remove(IObject item)
    {
+      requireToBeUnlocked(this, ">>");
       assertIncomingValueIsEquivalent(item);
       set.Remove(item);
 
@@ -220,6 +206,7 @@ public class Set : IObject, ICollection, IObjectCompare, IMutable, ITypedCollect
 
    public IObject RemoveAndReturn(IObject item)
    {
+      requireToBeUnlocked(this, "remove");
       assertIncomingValueIsEquivalent(item);
       set.Remove(item);
 
@@ -247,16 +234,13 @@ public class Set : IObject, ICollection, IObjectCompare, IMutable, ITypedCollect
       return this;
    }
 
-   public int Compare(IObject obj)
+   public int Compare(IObject obj) => obj switch
    {
-      return obj switch
-      {
-         Set otherSet when set.IsProperSubsetOf(otherSet.set) => -1,
-         Set otherSet when set.IsSubsetOf(otherSet.set) => 0,
-         Set => 1,
-         _ => throw unableToConvert(obj.Image, "Set")
-      };
-   }
+      Set otherSet when set.IsProperSubsetOf(otherSet.set) => -1,
+      Set otherSet when set.IsSubsetOf(otherSet.set) => 0,
+      Set => 1,
+      _ => throw unableToConvert(obj.Image, "Set")
+   };
 
    public KBoolean IsSubsetOf(Set otherSet) => new(set.IsSubsetOf(otherSet.set));
 
@@ -312,6 +296,7 @@ public class Set : IObject, ICollection, IObjectCompare, IMutable, ITypedCollect
 
    public Set Extend(IObject obj)
    {
+      requireToBeUnlocked(this, "extend");
       if (obj is ICollection collection)
       {
          foreach (var item in collection.GetIterator(false).List())
@@ -330,8 +315,11 @@ public class Set : IObject, ICollection, IObjectCompare, IMutable, ITypedCollect
 
    public Set Retain(Lambda lambda)
    {
-      Set<IObject> newSet = [];
-      newSet.AddRange(set.Where(item => lambda.Invoke(item).IsTrue));
+      requireToBeUnlocked(this, "retain");
+      Set<IObject> newSet =
+      [
+         .. set.Where(item => lambda.Invoke(item).IsTrue)
+      ];
 
       set = newSet;
       list = [.. set];
@@ -341,12 +329,17 @@ public class Set : IObject, ICollection, IObjectCompare, IMutable, ITypedCollect
 
    public Set Remove(Lambda lambda)
    {
-      Set<IObject> newSet = [];
-      newSet.AddRange(set.Where(item => !lambda.Invoke(item).IsTrue));
+      requireToBeUnlocked(this, "remove");
+      Set<IObject> newSet =
+      [
+         .. set.Where(item => !lambda.Invoke(item).IsTrue)
+      ];
 
       set = newSet;
       list = [.. set];
 
       return this;
    }
+
+   public bool IsLocked { get; set; }
 }

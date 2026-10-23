@@ -178,6 +178,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
       }
       set
       {
+         requireToBeUnlocked(this, "[]");
          assertIncomingKeyIsEquivalent(key);
          assertIncomingValueIsEquivalent(value);
          switch (value)
@@ -216,6 +217,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
       }
       set
       {
+         requireToBeUnlocked(this, "[]");
          assertIncomingValueIsEquivalent(value);
          switch (value)
          {
@@ -333,6 +335,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
 
    public IObject Delete(IObject key)
    {
+      requireToBeUnlocked(this, "delete");
       assertIncomingKeyIsEquivalent(key);
       if (dictionary.Maybe[key] is (true, var value))
       {
@@ -398,6 +401,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
       get;
       set
       {
+         requireToBeUnlocked(this, "typeConstraint");
          if (value is (true, var typeConstraint))
          {
             var comparisands = typeConstraint.Comparisands;
@@ -429,12 +433,14 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
 
    public IObject SetType(TypeConstraint typeConstraint)
    {
+      requireToBeUnlocked(this, "setType");
       TypeConstraint = typeConstraint;
       return this;
    }
 
    public IObject AutoType()
    {
+      requireToBeUnlocked(this, "autoType");
       if (dictionary.Count == 0)
       {
          return this;
@@ -460,6 +466,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
 
    public IObject Swap(IObject key1, IObject key2)
    {
+      requireToBeUnlocked(this, "swap");
       assertIncomingKeyIsEquivalent(key1);
       assertIncomingKeyIsEquivalent(key2);
       var value1 = getValue(key1);
@@ -472,6 +479,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
 
    public IObject Clear()
    {
+      requireToBeUnlocked(this, "clear");
       dictionary.Clear();
       return this;
    }
@@ -480,6 +488,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
 
    public IObject Update(IObject key, IObject value)
    {
+      requireToBeUnlocked(this, "update");
       assertIncomingKeyIsEquivalent(key);
       assertIncomingValueIsEquivalent(value);
 
@@ -502,6 +511,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
 
    public IObject Append(IObject obj)
    {
+      requireToBeUnlocked(this, "<<");
       if (obj is KTuple t)
       {
          var key = t[0];
@@ -516,6 +526,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
 
    public IObject Remove(IObject obj)
    {
+      requireToBeUnlocked(this, ">>");
       assertIncomingKeyIsEquivalent(obj);
       if (dictionary.Maybe[obj] is (true, var oldValue))
       {
@@ -531,6 +542,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
 
    public IObject RemoveAt(int index)
    {
+      requireToBeUnlocked(this, "removeAt");
       var keyArray = dictionary.KeyArray();
       return index.Between(0).Until(keyArray.Length) ? Remove(keyArray[index]) : KNil.NilValue;
    }
@@ -539,6 +551,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
 
    public IObject RemoveKeys(IObject keys)
    {
+      requireToBeUnlocked(this, "removeKeys");
       switch (keys)
       {
          case ICollection collection:
@@ -574,6 +587,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
 
    public IObject InsertAt(int index, IObject obj)
    {
+      requireToBeUnlocked(this, "insertAt");
       assertIncomingValueIsEquivalent(obj);
       var keyArray = dictionary.KeyArray();
       return index.Between(0).Until(keyArray.Length) ? Update(keyArray[index], obj) : KNil.NilValue;
@@ -587,6 +601,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
 
    public IObject Prepend(IObject obj)
    {
+      requireToBeUnlocked(this, "prepend");
       switch (obj)
       {
          case KTuple t:
@@ -621,6 +636,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
 
    public Dictionary Merge(Dictionary other)
    {
+      requireToBeUnlocked(this, "merge");
       Hash<IObject, IObject> hash = [];
       foreach (var (key, value) in dictionary)
       {
@@ -639,6 +655,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
 
    public Dictionary Merge(Dictionary other, Lambda lambda)
    {
+      requireToBeUnlocked(this, "merge");
       Hash<IObject, IObject> hash = [];
       foreach (var (key, value) in dictionary)
       {
@@ -664,6 +681,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
 
    public Dictionary ForEach(Lambda lambda)
    {
+      requireToBeUnlocked(this, "forEach");
       var keyArray = KeyArray;
       foreach (var key in keyArray)
       {
@@ -781,6 +799,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
 
    public Dictionary UpdateIfNil(IObject key, IObject value)
    {
+      requireToBeUnlocked(this, "updateIfNil");
       assertIncomingKeyIsEquivalent(key);
       assertIncomingValueIsEquivalent(value);
       if (!dictionary.ContainsKey(key))
@@ -809,6 +828,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
 
    public Dictionary Retain(Lambda lambda)
    {
+      requireToBeUnlocked(this, "retain");
       Hash<IObject, IObject> newDictionary = [];
       foreach (var (key, value) in dictionary)
       {
@@ -824,6 +844,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
 
    public Dictionary Remove(Lambda lambda)
    {
+      requireToBeUnlocked(this, "remove");
       Hash<IObject, IObject> newDictionary = [];
       foreach (var (key, value) in dictionary)
       {
@@ -839,6 +860,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
 
    public Dictionary Push(IObject key, IObject value)
    {
+      requireToBeUnlocked(this, "push");
       if (dictionary.ContainsKey(key))
       {
          var existing = dictionary[key];
@@ -898,5 +920,7 @@ public class Dictionary : IObject, IMutableCollection, IMutable, ITypedCollectio
 
    public KString Format(string[] formats) => formats.Select(formatTemplate).ToString("");
 
-    public KString Format(Lambda lambda) => lambda.Invoke(this).AsString;
+   public KString Format(Lambda lambda) => lambda.Invoke(this).AsString;
+
+   public bool IsLocked { get; set; }
 }

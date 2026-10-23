@@ -1,3 +1,6 @@
 ﻿namespace Kagami.Library.Objects;
 
-public interface IMutable;
+public interface IMutable
+{
+   bool IsLocked { get; set; }
+}
