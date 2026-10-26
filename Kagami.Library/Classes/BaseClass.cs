@@ -853,4 +853,8 @@ public abstract class BaseClass : IEquatable<BaseClass>
    public static bool operator ==(BaseClass? left, BaseClass? right) => Equals(left, right);
 
    public static bool operator !=(BaseClass? left, BaseClass? right) => !Equals(left, right);
+
+   public virtual bool Satisfies(BaseClass baseClass) => Name == baseClass.Name;
+
+   public virtual bool Satisfies(TypeConstraint typeConstraint) => typeConstraint.Any(bc => bc.Equals(this));
 }

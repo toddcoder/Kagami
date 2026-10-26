@@ -274,4 +274,8 @@ public class UserClass : BaseClass, IEquatable<UserClass>
    public static bool operator ==(UserClass? left, UserClass? right) => Equals(left, right);
 
    public static bool operator !=(UserClass? left, UserClass? right) => !Equals(left, right);
+
+   public override bool Satisfies(BaseClass baseClass) => MatchCompatible(baseClass);
+
+   public override bool Satisfies(TypeConstraint typeConstraint) => typeConstraint.Comparisands.Any(MatchCompatible);
 }

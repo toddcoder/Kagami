@@ -16,6 +16,7 @@ using Kagami.Library.Classes;
 using static System.Int32;
 using static Kagami.Library.AllExceptions;
 using static Core.Monads.MonadFunctions;
+using static Kagami.Library.Objects.ObjectFunctions;
 using Array = System.Array;
 using Complex = Kagami.Library.Objects.Complex;
 using Group = System.Text.RegularExpressions.Group;
@@ -738,7 +739,7 @@ public static class ParserFunctions
       _ => nil
    };
 
-   public static Optional<string[]> getListOfClassNames(ParseState state)
+   public static Optional<string[]> getListOfClassNames(ParseState state, string lookAhead = "^>", bool scanComma = false)
    {
       List<string> classNames = [];
 
@@ -761,12 +762,15 @@ public static class ParserFunctions
                classNames.Add(name);
             }
 
-            if (state.LookAhead("^>"))
+            if (state.LookAhead(lookAhead))
             {
                break;
             }
 
             if (state.Scan(@"^(\s+)", Color.Whitespace))
+            {
+            }
+            else if (scanComma && state.Scan(@"^(\s*,)", Color.Structure))
             {
             }
             else
@@ -798,11 +802,12 @@ public static class ParserFunctions
    public static Optional<PossibleTypeConstraint> parseCollectionTypeConstraint(ParseState state, TypeTailEnd tailEnd = TypeTailEnd.None)
    {
       state.BeginTransaction();
-      var _begin = state.Scan(@"^( *)([\[\{{])", 2, Color.Whitespace, Color.Class);
+      var _begin = state.Scan(@"^( *)([\[\{{\(])", 2, Color.Whitespace, Color.Class);
       if (_begin is (true, var begin))
       {
          var isSet = begin == "{";
          var isArray = begin == "[";
+         var isTuple = begin == "(";
          if (isSet)
          {
             var _leftPossibleTypeConstraint = parseTypeConstraint(state);
@@ -867,6 +872,23 @@ public static class ParserFunctions
                }
             }
          }
+         else if (isTuple)
+         {
+            var _baseClasses = getListOfClassNames(state, @"^\)", true).Map(a => a.Select(classOf));
+            if (_baseClasses is (true, var baseClasses) && state.Scan(@"^(\))", Color.Class))
+            {
+               var typeConstraint = new TypeConstraint([new TupleClass()])
+               {
+                  SubTypeConstraint = new TypeConstraint([.. baseClasses])
+               };
+               state.CommitTransaction();
+               return new PossibleTypeConstraint.Some(typeConstraint);
+            }
+            else if (_baseClasses.Exception is (true, var exception))
+            {
+               return exception;
+            }
+         }
       }
 
       state.RollBackTransaction();
@@ -876,7 +898,7 @@ public static class ParserFunctions
    public static Optional<PossibleTypeConstraint> parseUnionTypeConstraint(ParseState state)
    {
       return
-         from begin in state.Scan(@"^( *)(<)", Color.Whitespace, Color.Class)
+         from begin in state.Scan("^( *)(<)", Color.Whitespace, Color.Class)
          from inner in getListOfClassNames(state)
          from end in state.Scan("^(>)", Color.Class)
          select (PossibleTypeConstraint)new PossibleTypeConstraint.Some(TypeConstraint.FromList(inner));

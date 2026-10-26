@@ -1,4 +1,5 @@
-﻿using Kagami.Library.Operations;
+﻿using Kagami.Library.Objects;
+using Kagami.Library.Operations;
 using static Kagami.Library.Nodes.NodeFunctions;
 
 namespace Kagami.Library.Nodes.Symbols;
@@ -6,10 +7,12 @@ namespace Kagami.Library.Nodes.Symbols;
 public class SubexpressionSymbol : Symbol, IHasExpression
 {
    protected Expression expression;
+   protected TypeConstraint[] typeConstraints;
 
-   public SubexpressionSymbol(Expression expression)
+   public SubexpressionSymbol(Expression expression, TypeConstraint[] typeConstraints)
    {
       this.expression = expression;
+      this.typeConstraints = typeConstraints;
    }
 
    public override void Generate(OperationsBuilder builder)

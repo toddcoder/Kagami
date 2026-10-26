@@ -241,7 +241,7 @@ public class ExpressionBuilder(Bits32<ExpressionFlags> flags, bool acknowledgeIm
       var builder = new ExpressionBuilder(flags, acknowledgeImplicit);
       if (ToExpression() is (true, var oldExpression))
       {
-         builder.Add(new SubexpressionSymbol(oldExpression));
+         builder.Add(new SubexpressionSymbol(oldExpression, []));
       }
 
       return builder;

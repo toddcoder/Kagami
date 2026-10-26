@@ -1,7 +1,6 @@
 ﻿using Kagami.Library.Nodes.Symbols;
 using Kagami.Library.Operations;
 using Kagami.Library.Parsers;
-using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Nodes.Statements;
 
@@ -12,8 +11,8 @@ public class Repeat : Statement
    public Repeat(Expression expression, Block block)
    {
       var symbol = new AnySymbol();
-      var list = new List<Symbol> { new SubexpressionSymbol(expression), new SendPrefixMessage("range()") };
-      var source = new Expression(list.ToArray());
+      List<Symbol> list = [new SubexpressionSymbol(expression, []), new SendPrefixMessage("range()")];
+      var source = new Expression([.. list]);
       @for = new For(symbol, source, block, new PossibleIfExpression.None());
    }
 

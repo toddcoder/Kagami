@@ -139,6 +139,24 @@ public class TypeConstraint : IObject, IEnumerable<TypeConstraint>
       }
    }
 
+   public bool Matches(KTuple kTuple)
+   {
+      if (comparisands.Length != kTuple.Length.Value)
+      {
+         return false;
+      }
+
+      for (var i = 0; i < comparisands.Length; i++)
+      {
+         if (!comparisands[i].AssignCompatible(classOf(kTuple[i])))
+         {
+            return false;
+         }
+      }
+
+      return true;
+   }
+
    public virtual bool Matches(UserClass userClass) => comparisands.Any(c => c.AssignCompatible(userClass));
 
    public virtual bool Matches(TypeConstraint typeConstraint)
@@ -266,4 +284,6 @@ public class TypeConstraint : IObject, IEnumerable<TypeConstraint>
 
       return nil;
    }
+
+   public string TupleStyleRepresentation => comparisands.Length == 1 ? comparisands[0].Name : Image;
 }

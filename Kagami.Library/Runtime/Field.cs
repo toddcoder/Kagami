@@ -19,6 +19,12 @@ public class Field
 
          if (TypeConstraint is (true, var typeConstraint))
          {
+            if (value is KTuple kTuple && typeConstraint.Matches(kTuple))
+            {
+               this.value = kTuple;
+               return;
+            }
+
             if (typeConstraint.ConvertToMonad(value) is (true, var monad))
             {
                this.value = monad;

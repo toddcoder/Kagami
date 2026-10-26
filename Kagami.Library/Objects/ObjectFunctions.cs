@@ -871,6 +871,7 @@ public static class ObjectFunctions
             KArray { TypeConstraint: (true, var typeConstraint) } => $"<{className}{typeConstraint.Image}>",
             Set { TypeConstraint: (true, var typeConstraint) } => $"<{className}{typeConstraint.Image}>",
             Dictionary { TypeConstraint: (true, var typeConstraint) } => $"<{className}{typeConstraint.Image}>",
+            KTuple { TypeConstraint: (true, var typeConstraint) } => $"{typeConstraint.Image}",
             _ => $"<{className}>"
          };
       }
@@ -1225,5 +1226,10 @@ public static class ObjectFunctions
    {
       var cls = classOf(userObject);
       return cls.RespondsTo("next(_)") || cls.RespondsTo("getIterator(_)");
+   }
+
+   public static string tupleTypeConstraintsRepresentation(TypeConstraint[] typeConstraints)
+   {
+      return $"{typeConstraints.Select(tc => tc.TupleStyleRepresentation).ToString(" * ")}";
    }
 }

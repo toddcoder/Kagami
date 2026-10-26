@@ -44,7 +44,7 @@ public partial class SubexpressionParser : SymbolParser
             state[closeIndex] = Color.Collection;
          }
 
-         builder.Add(new SubexpressionSymbol(expression));
+         builder.Add(new SubexpressionSymbol(expression, []));
          state.CommitTransaction();
 
          builder.Flags = flags;

@@ -276,6 +276,9 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
          {
             value = monad;
          }
+         else if(value is KTuple kTuple)
+         {
+         }
          else if (!typeConstraint.Matches(classOf(value)))
          {
             return incompatibleClasses(value, typeConstraint.AsString);
