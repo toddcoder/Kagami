@@ -5,9 +5,9 @@ using static Core.Monads.MonadFunctions;
 
 namespace Kagami.Library.Parsers.Expressions;
 
-public partial class LengthParser : SymbolParser
+public partial class LockParser : SymbolParser
 {
-   public LengthParser(ExpressionBuilder builder) : base(builder)
+   public LockParser(ExpressionBuilder builder) : base(builder)
    {
    }
 
@@ -17,7 +17,7 @@ public partial class LengthParser : SymbolParser
    public override Optional<Unit> Parse(ParseState state, Token[] tokens, ExpressionBuilder builder)
    {
       state.Colorize(tokens, Color.Whitespace, Color.Operator);
-      builder.Add(new SendMessageSymbol("length".get(), Precedence.PrefixOperator, false));
+      builder.Add(new LockSymbol());
 
       return unit;
    }

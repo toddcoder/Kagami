@@ -21,7 +21,6 @@ object SimpleDatabase {
 	fn foodNamed(name string) optional => allFoods.first() ($0.name == name)
 	let allRecipes = [FruitSalad&]
 }
-
 object SimpleBrowser {
 	fn recipesUsing(food Food) => SimpleDatabase.allRecipes if recipe -> food in recipe.ingredients
 }

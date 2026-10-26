@@ -40,7 +40,7 @@ public class PrefixParser(ExpressionBuilder builder) : MultiParser
          yield return new FlattenParser(builder);
 
          //yield return new BindingParser(builder);
-         yield return new LengthParser(builder);
+         yield return new LockParser(builder);
          //yield return new AssignOperatorParser(builder);
       }
    }

@@ -679,5 +679,7 @@ public class OperationsBuilder(ParseState state)
 
    public void Fold(bool left) => add(new Fold(left));
 
+   public void Lock() => add(new Lock());
+
    public override string ToString() => "operations";
 }

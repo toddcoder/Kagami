@@ -14,7 +14,7 @@ using static Kagami.Library.Objects.CollectionFunctions;
 namespace Kagami.Library.Objects;
 
 public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>, IFormattable, IComparable, ISliceable,
-   IRangeItem, ITextFinding, IMutableCollection
+   IRangeItem, ITextFinding, IMutableCollection, IHasReadOnlyFriend
 {
    public static implicit operator MutString(string source) => new(source);
 
@@ -512,4 +512,6 @@ public class MutString : IObject, IComparable<MutString>, IEquatable<MutString>,
 
       return this;
    }
+
+   public IObject ReadOnlyFriend => new KString(mutable.ToString());
 }

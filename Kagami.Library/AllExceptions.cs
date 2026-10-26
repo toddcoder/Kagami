@@ -325,4 +325,8 @@ public static class AllExceptions
    public static string messageNotAnIterator(IObject obj) => $"{obj.Image} isn't an iterator nor can it return one";
 
    public static Exception notAnIterator(IObject obj) => fail(messageNotAnIterator(obj));
+
+   public static string messageObjectIsNotLockable(IObject obj) => $"{obj.Image} is not lockable";
+
+   public static Exception objectIsNotLockable(IObject obj) => fail(messageObjectIsNotLockable(obj));
 }

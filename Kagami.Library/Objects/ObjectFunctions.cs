@@ -1220,4 +1220,10 @@ public static class ObjectFunctions
          throw fail($"Mutable object is locked and cannot be modified. Location: {location}");
       }
    }
+
+   public static bool supportsIteration(UserObject userObject)
+   {
+      var cls = classOf(userObject);
+      return cls.RespondsTo("next(_)") || cls.RespondsTo("getIterator(_)");
+   }
 }

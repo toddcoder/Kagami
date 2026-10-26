@@ -1,0 +1,25 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+let x = #[1 to 5]
+attempt {
+	x[0] = 2
+}
+catch err {
+	println err
+}
+
+let y = #{"one": 1, "two": 2, "three": 3}
+attempt {
+	y["one"] = nil
+}
+catch err {
+	println err
+}
+
+let z = #{"a", "b", "c"}
+attempt {
+	z << "d"
+}
+catch err {
+	println err
+}
