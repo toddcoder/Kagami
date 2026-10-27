@@ -17,7 +17,7 @@ public class TypeConstraint : IObject, IEnumerable<TypeConstraint>
       return [with([.. classNames.Select(cn => Module.Global.Value.Class(cn).Required(messageClassNotFound(cn)))])];
    }
 
-   public static TypeConstraint SingleType(BaseClass baseClass) => new([baseClass]);
+   public static TypeConstraint SingleType(BaseClass baseClass) => [with([baseClass])];
 
    protected readonly BaseClass[] comparisands = [];
 
@@ -174,7 +174,7 @@ public class TypeConstraint : IObject, IEnumerable<TypeConstraint>
       set.AddRange(comparisands.Select(bc => bc.Name));
       set.AddRange(other.comparisands.Select(bc => bc.Name));
 
-      return FromList(set.ToArray());
+      return FromList([.. set]);
    }
 
    public virtual TypeConstraint Equivalent()
@@ -201,8 +201,28 @@ public class TypeConstraint : IObject, IEnumerable<TypeConstraint>
 
    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
+   public bool IsTuple { get; set; }
+
    public virtual bool IsEquivalentTo(TypeConstraint typeConstraint)
    {
+      if (IsTuple)
+      {
+         if (comparisands.Length != typeConstraint.comparisands.Length)
+         {
+            return false;
+         }
+
+         for (var i = 0; i < comparisands.Length; i++)
+         {
+            if (!comparisands[i].MatchCompatible(typeConstraint.comparisands[i]))
+            {
+               return false;
+            }
+         }
+
+         return true;
+      }
+
       var baseClass = comparisands[0];
       if (baseClass.Name is "Placeholder" or "Any")
       {

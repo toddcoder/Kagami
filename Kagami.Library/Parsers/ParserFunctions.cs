@@ -767,10 +767,10 @@ public static class ParserFunctions
                break;
             }
 
-            if (state.Scan(@"^(\s+)", Color.Whitespace))
+            if (state.Scan(@"^(\s+)(?!\*)", Color.Whitespace))
             {
             }
-            else if (scanComma && state.Scan(@"^(\s*,)", Color.Structure))
+            else if (scanComma && state.Scan(@"^(\s*\*\s*)", Color.Structure))
             {
             }
             else
@@ -807,7 +807,7 @@ public static class ParserFunctions
       {
          var isSet = begin == "{";
          var isArray = begin == "[";
-         var isTuple = begin == "(";
+         var isTuple = begin == "(" && state.LookAhead(@"\s*\w+\s\*");
          if (isSet)
          {
             var _leftPossibleTypeConstraint = parseTypeConstraint(state);
@@ -879,7 +879,8 @@ public static class ParserFunctions
             {
                var typeConstraint = new TypeConstraint([new TupleClass()])
                {
-                  SubTypeConstraint = new TypeConstraint([.. baseClasses])
+                  SubTypeConstraint = new TypeConstraint([.. baseClasses]),
+                  IsTuple = true
                };
                state.CommitTransaction();
                return new PossibleTypeConstraint.Some(typeConstraint);
