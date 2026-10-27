@@ -69,7 +69,7 @@ public class ValuesParser : MultiParser
 
             if (!builder.Flags[ExpressionFlags.Comparisand])
             {
-               yield return new DslInvokeParser(builder);
+               //yield return new DslInvokeParser(builder);
                yield return new InvokeParser(builder);
             }
          }

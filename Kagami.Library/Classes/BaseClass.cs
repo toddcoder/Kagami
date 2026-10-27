@@ -559,7 +559,7 @@ public abstract class BaseClass : IEquatable<BaseClass>
       registerIterMessage("set()", (obj, _) => iteratorFunc(obj, i => i.ToSet()));
       registerIterMessage("shape(_<Int>,_<Int>)",
          (obj, message) => iteratorFunc<Int, Int>(obj, message, (i, j, k) => i.Shape(j.Value, k.Value)));
-      registerIterMessage("%(_<Tuple>)",
+      registerIterMessage("%(_<Tuple<Int Int>>)",
          (obj, msg) => iteratorFunc<KTuple>(obj, msg, (i, t) => i.Shape(((Int)t.Value[0]).Value, ((Int)t.Value[1]).Value)));
       registerIterMessage("shape(_<Int>)", (obj, message) => iteratorFunc<Int>(obj, message, (i, j) => i.Shape(0, j.Value)));
       registerIterMessage("%(_<Int>)", (obj, msg) => iteratorFunc<Int>(obj, msg, (i, cols) => i.Shape(0, cols.Value)));
