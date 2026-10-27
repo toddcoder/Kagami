@@ -795,14 +795,72 @@ public static class ParserFunctions
       }
    }
 
+   public static Optional<string[]> getTupleOfClassNames(ParseState state)
+   {
+      List<string> classNames = [];
+
+      while (state.More)
+      {
+         var _scanned = state.Scan($"^({REGEX_CLASS_OR_ALIAS})", (g, i) => i switch
+         {
+            1 when g.Value.IsMatch("^ ['A-Z']") => Color.Class,
+            1 => Color.Keyword,
+            _ => Color.Whitespace
+         });
+         if (_scanned is (true, var name))
+         {
+            if (getClassNameFromAlias(name) is (true, var className))
+            {
+               classNames.Add(className);
+            }
+            else
+            {
+               classNames.Add(name);
+            }
+
+            if (state.LookAhead("^>"))
+            {
+               break;
+            }
+
+            if (state.Scan(@"^(\s*)(\*)(\s*)", Color.Whitespace, Color.Structure, Color.Whitespace))
+            {
+            }
+            else
+            {
+               break;
+            }
+         }
+         else if (_scanned.Exception is (true, var exception))
+         {
+            return exception;
+         }
+         else
+         {
+            break;
+         }
+      }
+
+      if (classNames.Count == 0)
+      {
+         return nil;
+      }
+      else
+      {
+         string[] result = [.. classNames];
+         return result;
+      }
+   }
+
    public static Optional<PossibleTypeConstraint> parseCollectionTypeConstraint(ParseState state, TypeTailEnd tailEnd = TypeTailEnd.None)
    {
       state.BeginTransaction();
-      var _begin = state.Scan(@"^( *)([\[\{{])", 2, Color.Whitespace, Color.Class);
+      var _begin = state.Scan(@"^( *)([\[\{\(])", 2, Color.Whitespace, Color.Class);
       if (_begin is (true, var begin))
       {
          var isSet = begin == "{";
          var isArray = begin == "[";
+         var isTuple = begin == "(" && state.LookAhead(@"^\s*\w+\s*\*");
          if (isSet)
          {
             var _leftPossibleTypeConstraint = parseTypeConstraint(state);
@@ -865,6 +923,19 @@ public static class ParserFunctions
                   state.CommitTransaction();
                   return new PossibleTypeConstraint.Some(typeConstraint);
                }
+            }
+         }
+         else if (isTuple)
+         {
+            var _classNames = getTupleOfClassNames(state);
+            if (_classNames is (true, var classNames) && state.Scan(@"^(\s*)(\))", Color.Whitespace, Color.Class))
+            {
+               var typeConstraint = new TypeConstraint([new TupleClass()])
+               {
+                  SubTypeConstraint = TypeConstraint.FromList(classNames)
+               };
+               state.CommitTransaction();
+               return new PossibleTypeConstraint.Some(typeConstraint);
             }
          }
       }

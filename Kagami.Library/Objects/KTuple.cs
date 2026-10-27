@@ -1,6 +1,7 @@
 ﻿using Core.Collections;
 using Core.Enumerables;
 using Core.Monads;
+using Kagami.Library.Classes;
 using Kagami.Library.Runtime;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
@@ -9,7 +10,8 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
 
-public struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjectCompare, IComparable<KTuple>, IComparable, IFindIndex, IFormattable
+public struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjectCompare, IComparable<KTuple>, IComparable, IFindIndex, IFormattable,
+   ITypedCollection
 {
    public static IObject NewTuple(IObject x, IObject y)
    {
@@ -44,7 +46,7 @@ public struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjectCompare,
    {
       if (items is [Sequence { ExpandInTuple: true } il])
       {
-         this.items = [..il.List];
+         this.items = [.. il.List];
       }
       else
       {
@@ -55,6 +57,7 @@ public struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjectCompare,
       indexes = [];
 
       denameify();
+      setTypeConstraint();
    }
 
    public KTuple(IObject[] items, Hash<string, int> names, Hash<int, string> indexes) : this(items)
@@ -70,6 +73,7 @@ public struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjectCompare,
       indexes = [];
 
       denameify();
+      setTypeConstraint();
    }
 
    public KTuple(params (string name, IObject obj)[] input)
@@ -79,6 +83,7 @@ public struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjectCompare,
       indexes = [];
 
       denameify();
+      setTypeConstraint();
    }
 
    public KTuple(IObject value) : this([value])
@@ -104,6 +109,15 @@ public struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjectCompare,
       }
 
       showNameInImage = names.Count == items.Length;
+   }
+
+   private void setTypeConstraint()
+   {
+      if (!TypeConstraint && items.Length > 0)
+      {
+         BaseClass[] baseClasses = [.. items.Select(classOf)];
+         TypeConstraint = new TypeConstraint(baseClasses);
+      }
    }
 
    public KTuple(KTuple kTuple, IObject item) : this()
@@ -151,7 +165,7 @@ public struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjectCompare,
       get
       {
          var self = this;
-         return maybe<IObject[]>() & items.Length > 0 & (() => [..self.items.Take(self.items.Length - 1)]);
+         return maybe<IObject[]>() & items.Length > 0 & (() => [.. self.items.Take(self.items.Length - 1)]);
       }
    }
 
@@ -252,7 +266,7 @@ public struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjectCompare,
          result.AddRange(items);
       }
 
-      return new KTuple([..result]);
+      return new KTuple([.. result]);
    }
 
    public KString MakeString(string connector) => makeString(this, connector);
@@ -269,7 +283,19 @@ public struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjectCompare,
 
    public IIterator Following(IObject following) => new MultiIterator(this, following);
 
-   public Maybe<TypeConstraint> TypeConstraint => nil;
+   public Maybe<TypeConstraint> TypeConstraint { get; set; } = nil;
+
+   public IObject SetType(TypeConstraint typeConstraint)
+   {
+      TypeConstraint = typeConstraint;
+      return this;
+   }
+
+   public IObject AutoType()
+   {
+      setTypeConstraint();
+      return this;
+   }
 
    public int Compare(IObject obj)
    {
@@ -323,7 +349,7 @@ public struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjectCompare,
       }
    }
 
-   public IObject Tail => items.Length == 0 ? Empty : new KTuple([..items.Skip(1)]);
+   public IObject Tail => items.Length == 0 ? Empty : new KTuple([.. items.Skip(1)]);
 
    public IObject HeadTail => new KTuple(Head, Tail);
 
@@ -421,7 +447,7 @@ public struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjectCompare,
          obj = value;
       }
 
-      return new KTuple([..items, obj], names, indexes);
+      return new KTuple([.. items, obj], names, indexes);
    }
 
    public KTuple Concatenate(KTuple otherTuple)
@@ -435,7 +461,7 @@ public struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjectCompare,
          indexes[index + offset] = name;
       }
 
-      return new KTuple([..items, ..otherTuple.items], names, indexes);
+      return new KTuple([.. items, .. otherTuple.items], names, indexes);
    }
 
    public Maybe<string> Rename(int index) => indexes.Maybe[index].Map(name => name);
@@ -491,4 +517,6 @@ public struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjectCompare,
    }
 
    public Maybe<string> GetName(int index) => indexes.Maybe[index].Map(name => name);
+
+   Maybe<TypeConstraint> ITypedCollection.TypeConstraint { get; set; } = nil;
 }

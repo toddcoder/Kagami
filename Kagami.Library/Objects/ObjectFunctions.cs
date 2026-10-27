@@ -871,6 +871,7 @@ public static class ObjectFunctions
             KArray { TypeConstraint: (true, var typeConstraint) } => $"<{className}{typeConstraint.Image}>",
             Set { TypeConstraint: (true, var typeConstraint) } => $"<{className}{typeConstraint.Image}>",
             Dictionary { TypeConstraint: (true, var typeConstraint) } => $"<{className}{typeConstraint.Image}>",
+            KTuple{TypeConstraint: (true, var typeConstraint) } => $"<{className}{typeConstraint.Image}>",
             _ => $"<{className}>"
          };
       }

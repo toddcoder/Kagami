@@ -1,0 +1,7 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+var tup = (id: 1, name: "")
+
+fn open(user (int * string)) (int * string) => (id: user.id + 1, name: user.name + "foo")
+
+println ~open(tup)
