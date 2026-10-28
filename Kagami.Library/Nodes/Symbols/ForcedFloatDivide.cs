@@ -8,7 +8,7 @@ public class ForcedFloatDivide : Symbol
    {
       builder.PushFloat(1.0);
       builder.Multiply();
-      builder.FloatDivide();
+      builder.Divide();
    }
 
    public override Precedence Precedence => Precedence.MultiplyDivide;

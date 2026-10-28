@@ -125,7 +125,7 @@ public class OperationsBuilder(ParseState state)
 
    public void Multiply() => add(new Multiply());
 
-   public void FloatDivide() => add(new FloatDivide());
+   public void Divide() => add(new Divide());
 
    public void IntDivide() => add(new IntDivide());
 

@@ -4,7 +4,7 @@ namespace Kagami.Library.Nodes.Symbols;
 
 public class FloatDivideSymbol : Symbol
 {
-   public override void Generate(OperationsBuilder builder) => builder.FloatDivide();
+   public override void Generate(OperationsBuilder builder) => builder.Divide();
 
    public override Precedence Precedence => Precedence.MultiplyDivide;
 

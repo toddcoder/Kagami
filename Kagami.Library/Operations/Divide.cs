@@ -5,7 +5,7 @@ using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Operations;
 
-public class FloatDivide : TwoOperandOperation
+public class Divide : TwoOperandOperation
 {
    public override Optional<IObject> Execute(Machine machine, IObject x, IObject y)
    {
@@ -34,5 +34,5 @@ public class FloatDivide : TwoOperandOperation
       }
    }
 
-   public override string ToString() => "float.divide";
+   public override string ToString() => "divide";
 }

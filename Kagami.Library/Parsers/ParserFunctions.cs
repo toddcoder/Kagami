@@ -221,7 +221,7 @@ public static class ParserFunctions
       "+" => new Add(),
       "-" => new Subtract(),
       "*" => new Multiply(),
-      "/" => new FloatDivide(),
+      "/" => new Divide(),
       "//" => new IntDivide(),
       "/%" => new DivRem(),
       "^" => new Raise(),
@@ -1978,13 +1978,10 @@ public static class ParserFunctions
          case "===":
             _symbol = new SendBinaryMessageSymbol("accept(_)", Precedence.Boolean);
             break;
-         case "//":
-            _symbol = new IntDivideSymbol();
-            break;
          case "/%":
             _symbol = new DivModSymbol();
             break;
-         case @"\\":
+         case "//":
             _symbol = new ForcedFloatDivide();
             break;
          case "#":
