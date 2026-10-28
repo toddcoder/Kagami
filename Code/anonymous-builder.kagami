@@ -1,0 +1,18 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+literal number = 23
+print "Enter an integer: "
+let guess = do{
+	let raw = !"24"
+	let i = int.parse(raw)
+	return i
+}
+
+if guess {
+	println guess
+	match guess {
+		|number => println "Matches"
+		|< number => println "Higher"
+		|> number => println "Lower"
+	}
+}
