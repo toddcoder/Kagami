@@ -26,7 +26,8 @@ public partial class ZeroParameterLambdaParser : SymbolParser
 
       var _result =
          from typeConstraint in parseTypeConstraint(state)
-         from block in getLambdaBlock(!state.CurrentSource.IsMatch("^ /s* '{' -(>'}')"), false, state, builder.Flags & ~ExpressionFlags.Comparisand | ExpressionFlags.InLambda, typeConstraint.Maybe)
+         from block in getLambdaBlock(!state.CurrentSource.IsMatch("^ /s* '{' -(>'}')"), false, state,
+            builder.Flags & ~ExpressionFlags.Comparisand | ExpressionFlags.InLambda | ExpressionFlags.OmitComma, typeConstraint.Maybe)
          select new LambdaSymbol(Parameters.Empty, block);
       if (_result is (true, var lambdaSymbol))
       {
