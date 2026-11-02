@@ -25,9 +25,9 @@ public class Column : OneOperandOperation
                if (machine.Context.WriteCount == columnIndex - 1)
                {
                   machine.Context.PrintLine("");
+                  machine.Context.WriteCount = 0;
                }
-
-               if (columnIndex > 0)
+               else if (columnIndex > 0)
                {
                   machine.Context.WriteCount = (machine.Context.WriteCount + 1) % columnIndex;
                }
