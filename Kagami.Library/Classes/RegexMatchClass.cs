@@ -15,12 +15,14 @@ public class RegexMatchClass : BaseClass
       messages["index".get()] = (obj, _) => function<RegexMatch>(obj, m => m.Index);
       messages["length".get()] = (obj, _) => function<RegexMatch>(obj, m => m.Length);
       messages["groups".get()] = (obj, _) => function<RegexMatch>(obj, m => m.Groups);
-      messages["prefix".get()]=(obj, _) => function<RegexMatch>(obj, m => m.Prefix);
+      messages["prefix".get()] = (obj, _) => function<RegexMatch>(obj, m => m.Prefix);
       messages["suffix".get()] = (obj, _) => function<RegexMatch>(obj, m => m.Suffix);
       messages["captures".get()] = (obj, _) => function<RegexMatch>(obj, m => m.Captures);
       messages["input".get()] = (obj, _) => function<RegexMatch>(obj, m => m.Input);
       messages["[](_<Int>)"] = (obj, msg) => function<RegexMatch, Int>(obj, msg, (m, i) => m[i.Value]);
       messages["[](_<String>)"] = (obj, msg) => function<RegexMatch, KString>(obj, msg, (m, s) => m[s.Value]);
+      messages["replace(with:_<String>)"] = (obj, msg) => function<RegexMatch, KString>(obj, msg, (m, s) => m.Replace(s.Value));
+      messages["replace(_<Lambda>)"] = (obj, msg) => function<RegexMatch, Lambda>(obj, msg, (m, l) => m.Replace(l));
    }
 
    public override IObject DefaultValue => new RegexMatch([]);

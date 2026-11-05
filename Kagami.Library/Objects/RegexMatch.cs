@@ -1,6 +1,7 @@
 ﻿using Core.Collections;
 using Core.Monads;
 using Core.Numbers;
+using Core.Strings;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Objects.ObjectFunctions;
 
@@ -154,4 +155,39 @@ public readonly struct RegexMatch : IObject, IProcessPlaceholders, IEquatable<Re
    public override bool Equals(object? obj) => obj is RegexMatch other && Equals(other);
 
    public override int GetHashCode() => HashCode.Combine(text, index, length, groups);
+
+   public KString Replace(string replacement)
+   {
+      var replaced = replacement;
+      var i = 1;
+      foreach (var group in groups.Skip(1))
+      {
+         var dollar = $"/{i++}";
+         replaced = replaced.Replace(dollar, group.Text.Value);
+      }
+
+      return replaced;
+   }
+
+   public KString Replace(Lambda lambda)
+   {
+      Slicer slicer = input;
+      foreach (var group in groups.Skip(1))
+      {
+         var obj = lambda.Invoke(group);
+         switch (obj)
+         {
+            case Some { Value: KString kString }:
+               slicer[group.Index.Value, group.Length.Value] = kString.Value;
+               break;
+            case Nil:
+               break;
+            default:
+               slicer[group.Index.Value, group.Length.Value] = obj.AsString;
+               break;
+         }
+      }
+
+      return slicer.ToString();
+   }
 }

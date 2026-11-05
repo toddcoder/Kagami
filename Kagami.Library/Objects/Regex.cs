@@ -3,8 +3,8 @@ using Core.Matching;
 using Core.Monads;
 using Core.Numbers;
 using Core.Strings;
-using System.Text;
 using Kagami.Library.Runtime;
+using System.Text;
 using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Objects;
@@ -310,44 +310,52 @@ public readonly struct Regex : IObject, ITextFinding, IEquatable<Regex>, IAccept
 
    private Core.Matching.Pattern getFixedPattern() => getPattern(originalPattern).WithMultiline(multiline).WithIgnoreCase(ignoreCase);
 
-   public KString Replace(string input, string replacement)
+   private IEnumerable<Group> getGroups(string input)
    {
-      var fixedPattern = getFixedPattern();
-      if (global)
+      if (input.Matches(getFixedPattern()) is (true, var result))
       {
-         return input.Substitute(fixedPattern, replacement);
+         var match = result.Matches[0];
+         return match.Groups.Skip(1);
       }
       else
       {
-         return input.Substitute(getPattern(originalPattern), replacement, 1);
+         return [];
       }
+   }
+
+   public KString Replace(string input, string replacement)
+   {
+      var replaced = replacement;
+      var index = 1;
+      foreach (var group in getGroups(input))
+      {
+         var dollar = $"/{index++}";
+         replaced = replaced.Replace(dollar, group.Text);
+      }
+
+      return replaced;
    }
 
    public KString Replace(string input, Lambda lambda)
    {
-      var _result = input.Matches(getFixedPattern());
-      if (_result is (true, var result))
+      Slicer slicer = input;
+      foreach (var group in getGroups(input))
       {
-         var builder = new StringBuilder();
-         var lastIndex = 0;
-
-         foreach (var match in result)
+         var obj = lambda.Invoke(new RegexGroup(group, input));
+         switch (obj)
          {
-            builder.Append(input.AsSpan(lastIndex, match.Index - lastIndex));
-            var regexMatch = new RegexMatch(match, nameToIndex(result), indexToName(result), input.Keep(match.Index),
-               input.Drop(match.Index + match.Length), input);
-            var replacement = lambda.Invoke(regexMatch);
-            builder.Append(replacement.AsString);
-            lastIndex = match.Index + match.Length;
+            case Some { Value: KString kString }:
+               slicer[group.Index, group.Length] = kString.Value;
+               break;
+            case Nil:
+               break;
+            default:
+               slicer[group.Index, group.Length] = obj.AsString;
+               break;
          }
+      }
 
-         builder.Append(input.Drop(lastIndex));
-         return new KString(builder.ToString());
-      }
-      else
-      {
-         return input;
-      }
+      return slicer.ToString();
    }
 
    public KBoolean IsMatch(string input) => input.IsMatch(getFixedPattern());
