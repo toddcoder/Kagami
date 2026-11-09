@@ -1,6 +1,7 @@
 ﻿using Kagami.Library.Objects;
 using Core.Collections;
 using static Kagami.Library.Objects.ObjectFunctions;
+using System.ComponentModel;
 
 namespace Kagami.Plots;
 
@@ -43,6 +44,7 @@ public class Plot : Form, IObject
 
    public bool IsTrue => true;
 
+   [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
    public Guid Id { get; init; } = Guid.NewGuid();
 
    public IObject ShowPlot()

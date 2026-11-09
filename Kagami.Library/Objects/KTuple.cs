@@ -355,7 +355,7 @@ public struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjectCompare,
 
    public IObject this[SkipTake skipTake] => CollectionFunctions.skipTake(this, skipTake);
 
-   public IObject IndexOf(IObject value) => items.IndexOf(value).Map(i => Some.Object(Int.IntObject(i))) | (() => KNil.NilValue);
+   public IObject IndexOf(IObject value) => items.Find(value).Map(i => Some.Object(Int.IntObject(i))) | (() => KNil.NilValue);
 
    public IObject Index(Lambda predicate)
    {
@@ -385,7 +385,7 @@ public struct KTuple : IObject, IEquatable<KTuple>, ICollection, IObjectCompare,
       return KNil.NilValue;
    }
 
-   public IObject LastIndexOf(IObject value) => items.LastIndexOf(value).Map(i => Some.Object(Int.IntObject(i))) | (() => KNil.NilValue);
+   public IObject LastIndexOf(IObject value) => items.FindLast(value).Map(i => Some.Object(Int.IntObject(i))) | (() => KNil.NilValue);
 
    public IObject FindAll(Lambda predicate)
    {
