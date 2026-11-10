@@ -151,7 +151,7 @@ public class StringClass : BaseClass, ICollectionClass
       registerMessage("assign(_,_)", (obj, message) => function<KString, IObject, IObject>(obj, message, replaceString));
       messages["expandTabs()"] = (obj, _) => function<KString>(obj, s => s.ExpandTabs());
       messages["expandTabs(_<Int>)"] = (obj, msg) => function<KString, Int>(obj, msg, (s, i) => s.ExpandTabs(i.Value));
-      messages["read(_<String>)"] = (obj, msg) => function<KString, KString>(obj, msg, (s, f) => Read(f.Value, s.Value));
+      messages["parse(_<String>)"] = (obj, msg) => function<KString, KString>(obj, msg, (s, f) => Read(f.Value, s.Value));
       messages["capitalize()"] = (obj, _) => function<KString>(obj, s => s.Capitalize());
       messages["insert(value:_<String>,at:_<Int>)"] =
          (obj, msg) => function<KString, KString, Int>(obj, msg, (s1, s2, i) => s1.Insert(s2.Value, i.Value));
@@ -311,6 +311,12 @@ public class StringClass : BaseClass, ICollectionClass
                i++;
                break;
             }
+            case 'W' when source.Matches(@"^(\s+); u") is (true, var wsResult):
+            {
+               source = source.Drop(wsResult.Length);
+               i++;
+               break;
+            }
             case '/':
             {
                source = source.Drop(1);
@@ -327,12 +333,54 @@ public class StringClass : BaseClass, ICollectionClass
                result.Add(digitsValue);
                break;
             }
+            case '@':
+            {
+               result.Add((KString)source);
+               return new KArray(result);
+            }
+            case ':' when getUpToLiteral() is (true, var literalValue):
+            {
+               result.Add(literalValue);
+               break;
+            }
             default:
-               return result.Count == 1 ? result[0] : new KArray(result);
+               return new KArray(result);
          }
       }
 
-      return result.Count == 1 ? result[0] : new KArray(result);
+      return new KArray(result);
+
+      Maybe<KString> getUpToLiteral()
+      {
+         var kept = format.Drop(1).Keep(1);
+         if (kept.Length > 0)
+         {
+            var literal = kept[0];
+            var builder = new StringBuilder();
+            var j = 0;
+            while (j < source.Length)
+            {
+               if (literal != source[j])
+               {
+                  builder.Append(source[j]);
+                  j++;
+               }
+               else
+               {
+                  break;
+               }
+            }
+
+            i += 2;
+            source = source.Drop(j + 1);
+
+            return (KString)builder.ToString();
+         }
+         else
+         {
+            return nil;
+         }
+      }
 
       Maybe<Float> getFloat()
       {

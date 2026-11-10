@@ -1,0 +1,4 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+println "This is a sentence.".parse("zWzW@") \ $i
+println "To be, or not to be?".parse(":,WzWzW@") \ $i
