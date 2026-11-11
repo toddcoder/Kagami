@@ -364,7 +364,7 @@ public class StringClass : BaseClass, ICollectionClass
             return result.Count switch
             {
                0 => KString.StringObject(""),
-               1 => new KArray(result[0]),
+               1 => new KString(result[0].AsString),
                _ => new KArray(result)
             };
          }
