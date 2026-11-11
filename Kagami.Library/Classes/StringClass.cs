@@ -152,9 +152,13 @@ public class StringClass : BaseClass, ICollectionClass
       registerMessage("assign(_,_)", (obj, message) => function<KString, IObject, IObject>(obj, message, replaceString));
       messages["expandTabs()"] = (obj, _) => function<KString>(obj, s => s.ExpandTabs());
       messages["expandTabs(_<Int>)"] = (obj, msg) => function<KString, Int>(obj, msg, (s, i) => s.ExpandTabs(i.Value));
-      messages["parse(_<String>)"] = (obj, msg) => function<KString, KString>(obj, msg, (s, f) => Read(f.Value, s.Value));
+      messages["parse(_<String>)"] = (obj, msg) => function<KString, KString>(obj, msg, (s, f) => Parse(f.Value, s.Value));
       messages["parse(_<String>,unwrap:_<Boolean>)"] =
-         (obj, msg) => function<KString, KString, KBoolean>(obj, msg, (s, f, b) => Read(f.Value, s.Value, b.Value));
+         (obj, msg) => function<KString, KString, KBoolean>(obj, msg, (s, f, b) => Parse(f.Value, s.Value, b.Value));
+      messages["parse(_<Regex>)"] = (obj, msg) => function<KString, Regex>(obj, msg, (s, r) => Parse(r, s.Value));
+      messages["parse(_<Regex>,unwrap:_<Boolean>)"] =
+         (obj, msg) => function<KString, Regex, KBoolean>(obj, msg, (s, r, b) => Parse(r, s.Value, b.Value));
+      messages["parse()"] = (obj, _) => function<KString>(obj, s => s.Parse());
       messages["capitalize()"] = (obj, _) => function<KString>(obj, s => s.Capitalize());
       messages["insert(value:_<String>,at:_<Int>)"] =
          (obj, msg) => function<KString, KString, Int>(obj, msg, (s1, s2, i) => s1.Insert(s2.Value, i.Value));
@@ -248,7 +252,7 @@ public class StringClass : BaseClass, ICollectionClass
 
    public override IObject DefaultValue => KString.Empty;
 
-   public static IObject Read(string format, string source, bool unwrap = false)
+   public static IObject Parse(string format, string source, bool unwrap = false)
    {
       List<IObject> result = [];
 
@@ -350,6 +354,11 @@ public class StringClass : BaseClass, ICollectionClass
                result.Add(literalValue);
                break;
             }
+            case '$' when getWord() is (true, var word):
+            {
+               result.Add(word);
+               break;
+            }
             default:
                return getResult();
          }
@@ -376,7 +385,7 @@ public class StringClass : BaseClass, ICollectionClass
 
       Maybe<KString> getUpToLiteral()
       {
-         var kept = format.Drop(1).Keep(1);
+         var kept = format.Drop(i + 1).Keep(1);
          if (kept.Length > 0)
          {
             var literal = kept[0];
@@ -641,6 +650,21 @@ public class StringClass : BaseClass, ICollectionClass
          }
       }
 
+      Maybe<KString> getWord()
+      {
+         if (source.Matches(@"^(\s*)(\w+)\b; u") is (true, var result))
+         {
+            var word = result.SecondGroup;
+            source = source.Drop(result.Length);
+            i++;
+            return (KString)word;
+         }
+         else
+         {
+            return nil;
+         }
+      }
+
       Maybe<KString> getLetters()
       {
          var builder = new StringBuilder();
@@ -685,6 +709,36 @@ public class StringClass : BaseClass, ICollectionClass
          source = source.Drop(j);
 
          return (KString)builder.ToString();
+      }
+   }
+
+   public static IObject Parse(Regex regex, string source, bool unwrap = false)
+   {
+      if (regex.CorePattern.MatchedBy(source) is (true, var result))
+      {
+         List<IObject> list = [];
+         foreach (var group in result.Groups(0).Skip(1))
+         {
+            list.Add((KString)group);
+         }
+
+         if (unwrap)
+         {
+            return list.Count switch
+            {
+               0 => KString.StringObject(""),
+               1 => new KString(list[0].AsString),
+               _ => new KArray(list)
+            };
+         }
+         else
+         {
+            return new KArray(list);
+         }
+      }
+      else
+      {
+         return KArray.Empty;
       }
    }
 }

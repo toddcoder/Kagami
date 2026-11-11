@@ -987,4 +987,17 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
          return "";
       }
    }
+
+   public KArray Parse()
+   {
+      if (value.Matches(@"(\w+); u") is (true, var result))
+      {
+         string[] words = [.. result.Matches.Select(m => m.Groups[1].Text)];
+         return new KArray(words.Select(StringObject));
+      }
+      else
+      {
+         return KArray.Empty;
+      }
+   }
 }
