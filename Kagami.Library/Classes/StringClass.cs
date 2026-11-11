@@ -153,6 +153,8 @@ public class StringClass : BaseClass, ICollectionClass
       messages["expandTabs()"] = (obj, _) => function<KString>(obj, s => s.ExpandTabs());
       messages["expandTabs(_<Int>)"] = (obj, msg) => function<KString, Int>(obj, msg, (s, i) => s.ExpandTabs(i.Value));
       messages["parse(_<String>)"] = (obj, msg) => function<KString, KString>(obj, msg, (s, f) => Read(f.Value, s.Value));
+      messages["parse(_<String>,unwrap:_<Boolean>)"] =
+         (obj, msg) => function<KString, KString, KBoolean>(obj, msg, (s, f, b) => Read(f.Value, s.Value, b.Value));
       messages["capitalize()"] = (obj, _) => function<KString>(obj, s => s.Capitalize());
       messages["insert(value:_<String>,at:_<Int>)"] =
          (obj, msg) => function<KString, KString, Int>(obj, msg, (s1, s2, i) => s1.Insert(s2.Value, i.Value));
@@ -246,7 +248,7 @@ public class StringClass : BaseClass, ICollectionClass
 
    public override IObject DefaultValue => KString.Empty;
 
-   public static IObject Read(string format, string source)
+   public static IObject Read(string format, string source, bool unwrap = false)
    {
       List<IObject> result = [];
 
@@ -329,6 +331,10 @@ public class StringClass : BaseClass, ICollectionClass
                result.Add(lettersValue);
                break;
             }
+            case 'Z' when getLetters():
+            {
+               break;
+            }
             case '9' when getDigits() is (true, var digitsValue):
             {
                result.Add(digitsValue);
@@ -337,7 +343,7 @@ public class StringClass : BaseClass, ICollectionClass
             case '@':
             {
                result.Add((KString)source);
-               return new KArray(result);
+               return getResult();
             }
             case '?' when getUpToLiteral() is (true, var literalValue):
             {
@@ -345,11 +351,28 @@ public class StringClass : BaseClass, ICollectionClass
                break;
             }
             default:
-               return new KArray(result);
+               return getResult();
          }
       }
 
-      return new KArray(result);
+      return getResult();
+
+      IObject getResult()
+      {
+         if (unwrap)
+         {
+            return result.Count switch
+            {
+               0 => KString.StringObject(""),
+               1 => new KArray(result[0]),
+               _ => new KArray(result)
+            };
+         }
+         else
+         {
+            return new KArray(result);
+         }
+      }
 
       Maybe<KString> getUpToLiteral()
       {
