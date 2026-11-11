@@ -580,7 +580,7 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
          var remainder = value.Drop(index + length);
          list.Add(remainder.TrimStart());
 
-         return Some.Object(new KTuple(list.Select(StringObject).ToArray()));
+         return Some.Object(new KTuple([.. list.Select(StringObject)]));
       }
       else
       {
@@ -965,6 +965,26 @@ public readonly struct KString : IObject, IComparable<KString>, IEquatable<KStri
          }
          default:
             throw cannotAccept(criterion);
+      }
+   }
+
+   public KString WordAt(int index)
+   {
+      var _result = value.Matches("/w+");
+      if (_result is (true, var result))
+      {
+         if (index.Between(0).Until(result.MatchCount))
+         {
+            return new KString(result[index]);
+         }
+         else
+         {
+            return "";
+         }
+      }
+      else
+      {
+         return "";
       }
    }
 }

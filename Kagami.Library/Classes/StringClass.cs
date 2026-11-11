@@ -100,6 +100,7 @@ public class StringClass : BaseClass, ICollectionClass
       messages["fields(_<Regex>)"] = (obj, msg) => function<KString, Regex>(obj, msg, (s, regex) => s.Fields(regex));
       messages["field(at:_<Int>)"] = (obj, msg) => function<KString, Int>(obj, msg, (s, i) => s.Field(i.Value));
       messages["words(at:_<Int>)"] = (obj, msg) => function<KString, Int>(obj, msg, (s, i) => s.Words(i.Value));
+      messages["%(_<Int>)"] = (obj, msg) => function<KString, Int>(obj, msg, (s, i) => s.WordAt(i.Value));
       messages["words()"] = (obj, _) => function<KString>(obj, s => s.Words());
       messages["word(at:_<Int>)"] = (obj, msg) => function<KString, Int>(obj, msg, (s, i) => s.Word(i.Value));
       messages["<<(_)"] = (obj, msg) => function<KString, IObject>(obj, msg, (s, o) => s.Append(o));
@@ -338,7 +339,7 @@ public class StringClass : BaseClass, ICollectionClass
                result.Add((KString)source);
                return new KArray(result);
             }
-            case ':' when getUpToLiteral() is (true, var literalValue):
+            case '?' when getUpToLiteral() is (true, var literalValue):
             {
                result.Add(literalValue);
                break;
@@ -384,7 +385,7 @@ public class StringClass : BaseClass, ICollectionClass
 
       Maybe<Float> getFloat()
       {
-         if (source.Matches(@"^(\s*)(\d[\d_`]*\.\d[\d_`]*)(?:([eE])([-\+]?\d+))?(f)?; u") is (true, var result))
+         if (source.Matches(@"^(\s*)(-?\d[\d_`]*\.\d[\d_`]*)(?:([eE])([-\+]?\d+))?(f)?; u") is (true, var result))
          {
             var floatSource = result.SecondGroup.Replace("_", "").Replace("`", "") + result.ThirdGroup + result.FourthGroup;
             var _float = floatSource.Maybe().Double().Map(d => (Float)d);
@@ -404,7 +405,7 @@ public class StringClass : BaseClass, ICollectionClass
 
       Maybe<KDecimal> getDecimal()
       {
-         if (source.Matches(@"^(\s*)(\d[\d_`]*\.\d[\d_`]*)(?:([eE])([-\+]?\d+))?(d); u") is (true, var result))
+         if (source.Matches(@"^(\s*)(-?\d[\d_`]*\.\d[\d_`]*)(?:([eE])([-\+]?\d+))?(d); u") is (true, var result))
          {
             var decimalSource = result.SecondGroup.Replace("_", "").Replace("`", "") + result.ThirdGroup + result.FourthGroup;
             var _decimal = decimalSource.Maybe().Decimal().Map(d => (KDecimal)d);
@@ -424,7 +425,7 @@ public class StringClass : BaseClass, ICollectionClass
 
       Maybe<Complex> getComplex()
       {
-         if (source.Matches(@"^(\s*)(\d[\d_`]*\.\d[\d_`]*)(?:([eE])([-\+]?\d+))?(i); u") is (true, var result))
+         if (source.Matches(@"^(\s*)(-?\d[\d_`]*\.\d[\d_`]*)(?:([eE])([-\+]?\d+))?(i); u") is (true, var result))
          {
             var complexSource = result.SecondGroup.Replace("_", "").Replace("`", "") + result.ThirdGroup + result.FourthGroup;
             if (System.Numerics.Complex.TryParse(complexSource, CultureInfo.InvariantCulture, out var complex))
@@ -447,7 +448,7 @@ public class StringClass : BaseClass, ICollectionClass
 
       Maybe<Int> getInt()
       {
-         if (source.Matches(@"^(\s*)(\d[\d_`]*)(i)?\b; u") is (true, var result))
+         if (source.Matches(@"^(\s*)(-?\d[\d_`]*)(i)?\b; u") is (true, var result))
          {
             var intSource = result.SecondGroup.Replace("_", "").Replace("`", "");
             var _int = intSource.Maybe().Int32().Map(i => (Int)i);
@@ -467,7 +468,7 @@ public class StringClass : BaseClass, ICollectionClass
 
       Maybe<Long> getLong()
       {
-         if (source.Matches(@"^(\s*)(\d[\d_`]*)(L); u") is (true, var result))
+         if (source.Matches(@"^(\s*)(-?\d[\d_`]*)(L); u") is (true, var result))
          {
             var longSource = result.SecondGroup.Replace("_", "").Replace("`", "");
             if (BigInteger.TryParse(longSource, out var bigInteger))
@@ -490,7 +491,7 @@ public class StringClass : BaseClass, ICollectionClass
 
       Maybe<IObject> getHex()
       {
-         if (source.Matches(@"^(\s*)(0x)([0-9a-fA-F][0-9a-fA-F_`]*)([Li])?\b; u") is (true, var result))
+         if (source.Matches(@"^(\s*)(-?0x)([0-9a-fA-F][0-9a-fA-F_`]*)([Li])?\b; u") is (true, var result))
          {
             var hexSource = result.ThirdGroup;
             var type = result.FourthGroup;
@@ -522,7 +523,7 @@ public class StringClass : BaseClass, ICollectionClass
 
       Maybe<IObject> getOctal()
       {
-         if (source.Matches(@"^(\s*)(0o)([0-7][0-7_`]*)([Li])?\b; u") is (true, var result))
+         if (source.Matches(@"^(\s*)(-?0o)([0-7][0-7_`]*)([Li])?\b; u") is (true, var result))
          {
             var octalSource = result.ThirdGroup;
             var type = result.FourthGroup;
@@ -554,7 +555,7 @@ public class StringClass : BaseClass, ICollectionClass
 
       Maybe<IObject> getBinary()
       {
-         if (source.Matches(@"^(\s*)(0b)([01][01_`]*)([Li])?\b; u") is (true, var result))
+         if (source.Matches(@"^(\s*)(-?0b)([01][01_`]*)([Li])?\b; u") is (true, var result))
          {
             var binarySource = result.ThirdGroup;
             var type = result.FourthGroup;
