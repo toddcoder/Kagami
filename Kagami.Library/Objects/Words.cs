@@ -22,7 +22,8 @@ public struct Words() : IObject, ICollection, IEqualityComparer<Word>
       {
          foreach (var match in result)
          {
-            words.Add(new Word(match.FirstGroup, match.SecondGroup, match.ThirdGroup));
+            var group = match.Groups[2];
+            words.Add(new Word(match.FirstGroup, match.SecondGroup, match.ThirdGroup, group.Index, group.Length));
          }
       }
 
