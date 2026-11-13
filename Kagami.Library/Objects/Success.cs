@@ -8,7 +8,13 @@ public readonly struct Success : IObject, IResult, IMonad, IBoolean
 {
    public static IObject Object(IObject value) => value is Failure ? value : new Success(value);
 
-   public Success(IObject value) : this() => Value = value;
+   public Success(IObject value) : this()
+   {
+      Value = value;
+      TypeConstraint = [with([classOf(value)])];
+   }
+
+   public TypeConstraint TypeConstraint { get; }
 
    public string ClassName => "Success";
 

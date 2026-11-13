@@ -944,10 +944,36 @@ public static class ParserFunctions
       return nil;
    }
 
+   public static Optional<PossibleTypeConstraint> parseMonadTypeConstraint(ParseState state, PossibleTypeConstraint possibleTypeConstraint)
+   {
+      var _scanned = state.Scan(@"^([\?!])", 1, Color.Operator);
+      if (_scanned is (true, var @operator))
+      {
+         var isSome = @operator == "?";
+         return possibleTypeConstraint switch
+         {
+            PossibleTypeConstraint.Keyword keyword => new PossibleTypeConstraint.Keyword(keyword.Word,
+               TypeConstraint.SingleType(getMonad(keyword.TypeConstraint, isSome))),
+            PossibleTypeConstraint.None => possibleTypeConstraint,
+            PossibleTypeConstraint.Some some => new PossibleTypeConstraint.Some(TypeConstraint.SingleType(getMonad(some.TypeConstraint, isSome))),
+            _ => throw new ArgumentOutOfRangeException(nameof(possibleTypeConstraint))
+         };
+      }
+      else
+      {
+         return possibleTypeConstraint;
+      }
+
+      static BaseClass getMonad(TypeConstraint typeConstraint, bool isSome)
+      {
+         return isSome ? new OptionalClass { TypeConstraint = typeConstraint } : new ResultClass { TypeConstraint = typeConstraint };
+      }
+   }
+
    public static Optional<PossibleTypeConstraint> parseUnionTypeConstraint(ParseState state)
    {
       return
-         from begin in state.Scan(@"^( *)(<)", Color.Whitespace, Color.Class)
+         from begin in state.Scan("^( *)(<)", Color.Whitespace, Color.Class)
          from inner in getListOfClassNames(state)
          from end in state.Scan("^(>)", Color.Class)
          select (PossibleTypeConstraint)new PossibleTypeConstraint.Some(TypeConstraint.FromList(inner));
@@ -1016,13 +1042,13 @@ public static class ParserFunctions
       _result = parseCollectionTypeConstraint(state, tailEnd);
       if (_result)
       {
-         return _result;
+         return _result.Map(p => parseMonadTypeConstraint(state, p));
       }
 
       _result = parseUnionTypeConstraint(state);
       if (_result)
       {
-         return _result;
+         return _result.Map(p => parseMonadTypeConstraint(state, p));
       }
       else if (_result.Exception is (true, var exception))
       {
@@ -1034,7 +1060,7 @@ public static class ParserFunctions
       if (_possibleTypeConstraint is (true, var possibleTypeConstraint))
       {
          state.CommitTransaction();
-         return possibleTypeConstraint;
+         return parseMonadTypeConstraint(state, possibleTypeConstraint);
       }
 
       state.RollBackTransaction();
@@ -1045,11 +1071,11 @@ public static class ParserFunctions
          var _baseClass = Module.Global.Value.Class(className);
          if (_baseClass is (true, var baseClass))
          {
-            return new PossibleTypeConstraint.Some(new TypeConstraint([baseClass]));
+            return parseMonadTypeConstraint(state, new PossibleTypeConstraint.Some(new TypeConstraint([baseClass])));
          }
          else if (Module.Global.Value.Forwarded(className))
          {
-            return new PossibleTypeConstraint.Some(new TypeConstraint([new ForwardedClass(className)]));
+            return parseMonadTypeConstraint(state, new PossibleTypeConstraint.Some(new TypeConstraint([new ForwardedClass(className)])));
          }
          else
          {
@@ -1068,7 +1094,7 @@ public static class ParserFunctions
          if (_scanned)
          {
             var typeConstraint = (TypeConstraint)((IConstant)builder.Ordered.ToArray()[0]).Object;
-            return new PossibleTypeConstraint.Some(typeConstraint);
+            return parseMonadTypeConstraint(state, new PossibleTypeConstraint.Some(typeConstraint));
          }
          else if (_scanned.Exception is (true, var exception2))
          {

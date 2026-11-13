@@ -1,4 +1,6 @@
-﻿using Kagami.Library.Objects;
+﻿using Core.Monads;
+using Kagami.Library.Objects;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Classes.ClassFunctions;
 
@@ -6,6 +8,8 @@ namespace Kagami.Library.Classes;
 
 public class ResultClass : BaseClass, IEquivalentClass
 {
+   public Maybe<TypeConstraint> TypeConstraint { get; set; } = nil;
+
    public static TypeConstraint ResultTypeConstraint => [with([new ResultClass(), new SuccessClass(), new FailureClass()])];
 
    public override string Name => "Result";

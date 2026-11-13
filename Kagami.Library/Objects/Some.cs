@@ -17,7 +17,10 @@ public readonly struct Some : IObject, IOptional, IBoolean, IEquatable<Some>, IM
    public Some(IObject value) : this()
    {
       this.value = value;
+      TypeConstraint = [with([classOf(value)])];
    }
+
+   public TypeConstraint TypeConstraint { get; }
 
    public string ClassName => "Some";
 

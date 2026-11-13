@@ -36,6 +36,27 @@ public class TupleClass : BaseClass, ICollectionClass
       messages["rotate(_<Int>)"] = (obj, msg) => function<KTuple, Int>(obj, msg, (t, i) => t.Rotate(i.Value));
    }
 
+   public Maybe<TypeConstraint> TypeConstraint { get; set; } = nil;
+
+   public override bool AssignCompatible(BaseClass otherClass)
+   {
+      if (TypeConstraint is (true, var typeConstraint))
+      {
+         if (otherClass is TupleClass { TypeConstraint: (true, var otherTypeConstraint) })
+         {
+            return typeConstraint.Matches(otherTypeConstraint);
+         }
+         else
+         {
+            return false;
+         }
+      }
+      else
+      {
+         return base.AssignCompatible(otherClass);
+      }
+   }
+
    public override IObject DefaultValue => KTuple.Empty;
 
    protected static IObject indexed(KTuple kTuple, IObject index) => index switch
@@ -62,7 +83,7 @@ public class TupleClass : BaseClass, ICollectionClass
       }
    }
 
-   public IObject Revert(IEnumerable<IObject> list, Maybe<TypeConstraint> _typeConstraint) => new KTuple(list.ToArray());
+   public IObject Revert(IEnumerable<IObject> list, Maybe<TypeConstraint> _typeConstraint) => new KTuple([.. list]);
 
-   public TypeConstraint EquivalentTypeConstraint() => TypeConstraint.FromList("Collection");
+   public TypeConstraint EquivalentTypeConstraint() => Objects.TypeConstraint.FromList("Collection");
 }

@@ -1,10 +1,14 @@
-﻿using Kagami.Library.Objects;
+﻿using Core.Monads;
+using Kagami.Library.Objects;
+using static Core.Monads.MonadFunctions;
 using static Kagami.Library.Classes.ClassFunctions;
 
 namespace Kagami.Library.Classes;
 
 public class OptionalClass : BaseClass, IEquivalentClass
 {
+   public Maybe<TypeConstraint> TypeConstraint { get; set; } = nil;
+
    public static TypeConstraint OptionalTypeConstraint => [with([new OptionalClass(), new SomeClass(), new NilClass()])];
 
    public override string Name => "Optional";
