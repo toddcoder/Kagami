@@ -930,10 +930,11 @@ public static class ParserFunctions
             var _classNames = getTupleOfClassNames(state);
             if (_classNames is (true, var classNames) && state.Scan(@"^(\s*)(\))", Color.Whitespace, Color.Class))
             {
-               var typeConstraint = new TypeConstraint([new TupleClass()])
+               var tupleClass = new TupleClass
                {
-                  SubTypeConstraint = TypeConstraint.FromList(classNames)
+                  TypeConstraint = TypeConstraint.FromList(classNames)
                };
+               var typeConstraint = new TypeConstraint([tupleClass]);
                state.CommitTransaction();
                return new PossibleTypeConstraint.Some(typeConstraint);
             }

@@ -18,6 +18,16 @@ public static class AllExceptions
       return fail(messageIncompatibleClasses(value, expectedClassName));
    }
 
+   public static string messageIncompatibleClasses(IObject value, string typeImage, string expectedClassName)
+   {
+      return $"{value.Image} is of class {typeImage}; expected {expectedClassName}";
+   }
+
+   public static Exception incompatibleClasses(IObject value, string typeImage, string expectedClassName)
+   {
+      return fail(messageIncompatibleClasses(value, typeImage, expectedClassName));
+   }
+
    public static string messageBadAddress(int address) => $"Address {address} is invalid";
 
    public static Exception badAddress(int address) => fail(messageBadAddress(address));

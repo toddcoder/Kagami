@@ -69,7 +69,7 @@ public class Parameters : IEquatable<Parameters>, IEnumerable<Parameter>
 
    public bool ContainsName(string name) => parameters.Any(p => p.Name == name);
 
-   public Parameters Append(Parameter parameter) => new([parameter, ..parameters]);
+   public Parameters Append(Parameter parameter) => [with([parameter, .. parameters])];
 
    public Parameters Merge(StringHash<Parameter> newParameters)
    {

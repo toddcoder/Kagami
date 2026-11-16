@@ -272,14 +272,18 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
    {
       if (parameter.TypeConstraint is (true, var typeConstraint))
       {
-         if (typeConstraint.ConvertToMonad(value) is (true, var monad))
+         if (Field.GetFieldValue(value, typeConstraint) is (true, var (newValue, newTypeConstraint)))
+         {
+            value = newValue;
+         }
+         /*if (typeConstraint.ConvertToMonad(value) is (true, var monad))
          {
             value = monad;
          }
          else if (!typeConstraint.Matches(classOf(value)))
          {
             return incompatibleClasses(value, typeConstraint.AsString);
-         }
+         }*/
       }
 
       if (parameter.Guard is (true, var guard))

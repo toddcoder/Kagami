@@ -17,7 +17,7 @@ public class TypeConstraint : IObject, IEnumerable<TypeConstraint>
       return [with([.. classNames.Select(cn => Module.Global.Value.Class(cn).Required(messageClassNotFound(cn)))])];
    }
 
-   public static TypeConstraint SingleType(BaseClass baseClass) => new([baseClass]);
+   public static TypeConstraint SingleType(BaseClass baseClass) => [with([baseClass])];
 
    protected readonly BaseClass[] comparisands = [];
 
@@ -67,13 +67,25 @@ public class TypeConstraint : IObject, IEnumerable<TypeConstraint>
    {
       get
       {
-         if (SubTypeConstraint is (true, var subTypeConstraint))
+         switch (comparisands[0])
          {
-            return $"<{comparisands.Select(c => c.Name).ToString(" ")}{subTypeConstraint.Image}>";
-         }
-         else
-         {
-            return $"<{comparisands.Select(c => c.Name).ToString(" ")}>";
+            case TupleClass tupleClass:
+               return $"<{comparisands.Select(c => c.Name).ToString(" ")}{tupleClass.TypeConstraint.Map(t => t.Image) | ""}>";
+            case OptionalClass optionalClass:
+               return $"<{comparisands.Select(c => c.Name).ToString(" ")}{optionalClass.TypeConstraint.Map(t => t.Image) | ""}>";
+            case ResultClass resultClass:
+               return $"<{comparisands.Select(c => c.Name).ToString(" ")}{resultClass.TypeConstraint.Map(t => t.Image) | ""}>";
+            default:
+            {
+               if (SubTypeConstraint is (true, var subTypeConstraint))
+               {
+                  return $"<{comparisands.Select(c => c.Name).ToString(" ")}{subTypeConstraint.Image}>";
+               }
+               else
+               {
+                  return $"<{comparisands.Select(c => c.Name).ToString(" ")}>";
+               }
+            }
          }
       }
    }

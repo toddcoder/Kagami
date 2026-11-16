@@ -2,7 +2,7 @@
 
 #pragma ALLOW_PRINT_STATEMENT true
 
-var foo result = "foo"
+var foo string! = "foo"
 println foo
 
 foo = "bar"

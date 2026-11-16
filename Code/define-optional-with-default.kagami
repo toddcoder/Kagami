@@ -2,7 +2,7 @@
 
 #pragma ALLOW_PRINT_STATEMENT true
 
-var some optional
+var some string?
 some = "Test"
 if some {
 	println some

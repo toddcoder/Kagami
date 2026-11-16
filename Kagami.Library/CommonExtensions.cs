@@ -37,7 +37,7 @@ public static class CommonExtensions
 
       public Selector Selector(int count)
       {
-         return name.Selector(Enumerable.Range(0, count).Select(_ => "_").ToArray());
+         return name.Selector([.. Enumerable.Range(0, count).Select(_ => "_")]);
       }
    }
 
