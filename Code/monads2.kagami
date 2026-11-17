@@ -1,0 +1,16 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+fn minMax(`array [int]) (int * int)? {
+	if `array.isEmpty return nil
+	var currentMin = int.max
+	var currentMax = int.min
+	for value in `array {
+		currentMin = currentMin min value
+		currentMax = currentMax max value
+	}
+	return (min: currentMin, max: currentMax)
+}
+
+if minMax([8, -6, 2, 109, 3, 71]) is ?bounds {
+	println $"min is $bounds.min and max is $bounds.max"
+}

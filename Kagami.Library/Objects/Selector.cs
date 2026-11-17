@@ -17,6 +17,92 @@ public struct Selector : IObject, IEquatable<Selector>
 
    public static implicit operator string(Selector selector) => selector.image;
 
+   public static IEnumerable<Selector> GetAllSelectors(Selector baseSelector)
+   {
+      List<SelectorItem> items = [.. baseSelector.selectorItems];
+
+      yield return baseSelector;
+
+      var name = baseSelector.Name;
+
+      if (items.Count == 0)
+      {
+         yield return getSelector(name);
+
+         yield break;
+      }
+
+      if (items[^1].SelectorItemType == SelectorItemType.Variadic)
+      {
+         yield return getSelector(name);
+
+         items[^1] = items[^1].AsNormal();
+         yield return getSelector(name);
+
+         if (!items.RemoveLast())
+         {
+            yield break;
+         }
+      }
+
+      if (items.FirstIndexOrNone(i => i.SelectorItemType == SelectorItemType.Default) is (true, var defaultIndex))
+      {
+         for (var i = defaultIndex; i < items.Count; i++)
+         {
+            items[i] = items[i].AsNormal();
+         }
+
+         var countLimit = defaultIndex;
+
+         while (items.Count >= countLimit)
+         {
+            yield return getSelector(name);
+
+            if (getMonadSelector(name) is (true, var defaultMonadSelector))
+            {
+               yield return defaultMonadSelector;
+            }
+
+            if (!items.RemoveLast())
+            {
+               break;
+            }
+         }
+      }
+
+      yield return getSelector(name);
+
+      if (getMonadSelector(name) is (true, var monadSelector))
+      {
+         yield return monadSelector;
+      }
+
+      yield break;
+
+      Selector getSelector(string name)
+      {
+         SelectorItem[] array = [.. items];
+         var newImage = selectorImage(name, array);
+
+         return new Selector(name, array, newImage);
+      }
+
+      Maybe<Selector> getMonadSelector(string name)
+      {
+         if (items.Count > 0 && items[^1].TypeConstraint is (true, var typeConstraint))
+         {
+            var baseClass = typeConstraint.Comparisands[0];
+            if (isMonad(baseClass.Name))
+            {
+               items[^1] = [with(items[^1].Label, nil, SelectorItemType.Normal)];
+               return getSelector(name);
+            }
+         }
+
+         return nil;
+      }
+   }
+
    private string name = "";
    private SelectorItem[] selectorItems = [];
    private string image = "";
@@ -174,7 +260,10 @@ public struct Selector : IObject, IEquatable<Selector>
 
    public IEnumerable<Selector> AllSelectors()
    {
-      List<SelectorItem> items = [.. SelectorItems];
+      List<SelectorItem> items = [.. selectorItems];
+
+      yield return this;
+
       if (items.Count == 0)
       {
          yield return getSelector(name);
@@ -244,7 +333,7 @@ public struct Selector : IObject, IEquatable<Selector>
             var baseClass = typeConstraint.Comparisands[0];
             if (isMonad(baseClass.Name))
             {
-               items[^1] = new SelectorItem(items[^1].Label, nil, SelectorItemType.Normal);
+               items[^1] = [with(items[^1].Label, nil, SelectorItemType.Normal)];
                return getSelector(name);
             }
          }

@@ -224,6 +224,9 @@ public class OperationsBuilder(ParseState state)
       add(new AssignFieldReference(sourceFieldName, targetFieldName));
    }
 
+   public void AssignFunction(Selector selector, Lambda lambda, bool isOverriding) =>
+      add(new AssignFunction(selector, lambda, isOverriding));
+
    public void SendMessage(Selector selector, params Expression[] arguments)
    {
       foreach (var argument in arguments)

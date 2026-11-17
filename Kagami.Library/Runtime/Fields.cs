@@ -10,7 +10,6 @@ using System.Collections;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Nodes.NodeFunctions;
-using static Kagami.Library.Objects.ObjectFunctions;
 
 namespace Kagami.Library.Runtime;
 
@@ -272,18 +271,10 @@ public class Fields : IEquatable<Fields>, IEnumerable<(string fieldName, Field f
    {
       if (parameter.TypeConstraint is (true, var typeConstraint))
       {
-         if (Field.GetFieldValue(value, typeConstraint) is (true, var (newValue, newTypeConstraint)))
+         if (Field.GetFieldValue(value, typeConstraint) is (true, var (newValue, _)))
          {
             value = newValue;
          }
-         /*if (typeConstraint.ConvertToMonad(value) is (true, var monad))
-         {
-            value = monad;
-         }
-         else if (!typeConstraint.Matches(classOf(value)))
-         {
-            return incompatibleClasses(value, typeConstraint.AsString);
-         }*/
       }
 
       if (parameter.Guard is (true, var guard))

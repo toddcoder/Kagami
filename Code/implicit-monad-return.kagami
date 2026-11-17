@@ -3,7 +3,7 @@
 #pragma ALLOW_PRINT_STATEMENT true
 
 let numbers = <111 153 123>
-fn find(f lambda) optional {
+fn find(f lambda) int? {
 	for i in numbers {
 		if (f(i)) {
 			return i

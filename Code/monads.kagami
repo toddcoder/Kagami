@@ -1,0 +1,34 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+var t string? = nil
+t = "foo"
+if t {
+	println t
+}
+
+var x int! = nil
+x = 153
+if x {
+	println x
+}
+
+var optionalName string? = "John"
+var greeting = "Hello!"
+if optionalName is ?name {
+	greeting = $"Hello, $name"
+}
+println greeting
+
+var nickname string? = nil
+let fullname = "John"
+let informalGreeting = $"Hi (nickname ?: fullname)"
+println informalGreeting
+
+nickname = "Johnny"
+if nickname {
+	println nickname
+}
+
+var possibleInteger int? = nil
+possibleInteger = 100
+println possibleInteger

@@ -817,6 +817,7 @@ public static class ObjectFunctions
    {
       var label = "";
       Maybe<TypeConstraint> _typeConstraint = nil;
+      var end = source.MatchOf(@"(\.\.\.|=)$").Map(m => m[0].Groups[1].Value) | "";
 
       source = source.Drop("/b 'hide' /s+; f");
 
@@ -842,7 +843,7 @@ public static class ObjectFunctions
          source = match.Groups[2].Value.Trim();
       }
 
-      var selectorItemType = source switch
+      var selectorItemType = end switch
       {
          "..." => SelectorItemType.Variadic,
          "=" => SelectorItemType.Default,

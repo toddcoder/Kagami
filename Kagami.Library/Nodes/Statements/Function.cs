@@ -141,7 +141,7 @@ public class Function : Statement, IOverridable, IAnnotatable, IHasSelector
          }
          else
          {
-            string fullFunctionName = selector;
+            /*string fullFunctionName = selector;
             _ = className.IsNotEmpty() ? $"{className}.{fullFunctionName}" : fullFunctionName;
             if (!overriding)
             {
@@ -150,7 +150,8 @@ public class Function : Statement, IOverridable, IAnnotatable, IHasSelector
 
             builder.PushObject(lambda.Value);
             builder.LambdaCapture();
-            builder.AssignSelector(selector, overriding);
+            builder.AssignSelector(selector, overriding);*/
+            builder.AssignFunction(selector, lambda.Value, overriding);
          }
 
          processAnnotations(this, builder);

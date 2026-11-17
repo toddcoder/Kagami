@@ -7,5 +7,5 @@ fn log(value num, base int? = nil) num {
 	return math.log(value) / math.log(actualBase)
 }
 
-println log(20, 2)
+println log(20, ?2)
 println log(20)

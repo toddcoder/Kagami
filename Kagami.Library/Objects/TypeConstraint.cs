@@ -4,6 +4,7 @@ using Kagami.Library.Runtime;
 using Core.Collections;
 using Core.Enumerables;
 using Core.Monads;
+using Core.Strings;
 using static Core.Monads.MonadFunctions;
 using static Kagami.Library.AllExceptions;
 using static Kagami.Library.Objects.ObjectFunctions;
@@ -46,10 +47,13 @@ public class TypeConstraint : IObject, IEnumerable<TypeConstraint>
          var comparisand = comparisands[i];
          if (comparisand is ForwardedClass forwardedClass)
          {
-            var _actualClass = Module.Global.Value.Class(forwardedClass.Name);
+            var _actualClass = Module.Global.Value.Class(forwardedClass.Name.KeepUntil("<"));
             if (_actualClass is (true, var actualClass))
             {
                comparisands[i] = actualClass;
+            }
+            else if (Protocols.Protocols.Get(forwardedClass.Name))
+            {
             }
             else
             {
@@ -168,7 +172,7 @@ public class TypeConstraint : IObject, IEnumerable<TypeConstraint>
       set.AddRange(comparisands.Select(bc => bc.Name));
       set.AddRange(other.comparisands.Select(bc => bc.Name));
 
-      return FromList(set.ToArray());
+      return FromList([.. set]);
    }
 
    public virtual TypeConstraint Equivalent()
@@ -197,6 +201,7 @@ public class TypeConstraint : IObject, IEnumerable<TypeConstraint>
 
    public virtual bool IsEquivalentTo(TypeConstraint typeConstraint)
    {
+      typeConstraint.RefreshClasses();
       var baseClass = comparisands[0];
       if (baseClass.Name is "Placeholder" or "Any")
       {
@@ -222,6 +227,22 @@ public class TypeConstraint : IObject, IEnumerable<TypeConstraint>
                {
                   return false;
                }
+            }
+            case SomeClass when typeConstraint.Comparisands.Any(c => c is OptionalClass):
+            {
+               return true;
+            }
+            case SomeClass when typeConstraint.Comparisands.Any(c => c is NilClass):
+            {
+               return true;
+            }
+            case SuccessClass when typeConstraint.Comparisands.Any(c => c is ResultClass):
+            {
+               return true;
+            }
+            case SuccessClass when typeConstraint.Comparisands.Any(c => c is FailureClass):
+            {
+               return true;
             }
             case IEquivalentClass equivalentClass:
             {
