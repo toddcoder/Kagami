@@ -1,0 +1,11 @@
+﻿#pragma ALLOW_PRINT_STATEMENT true
+
+fn nonZero(f int?) int? {
+	match f {
+		|?0 return nil
+		|?i return i
+	}
+}
+
+println nonZero(?1)
+println nonZero(?0)

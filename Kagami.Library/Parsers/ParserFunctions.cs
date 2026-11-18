@@ -349,6 +349,21 @@ public static class ParserFunctions
       }
    }
 
+   public static Optional<Block> getSingleLineBlock(ParseState state)
+   {
+      var _expression = getExpression(state, ExpressionFlags.Standard);
+      if (_expression is (true, var expression))
+      {
+         var _typeConstraint = state.GetReturnType();
+         var returnStatement = new Return(expression, _typeConstraint);
+         return new Block(returnStatement, _typeConstraint);
+      }
+      else
+      {
+         return _expression.Exception;
+      }
+   }
+
    public static Optional<Symbol> getValue(ParseState state, Bits32<ExpressionFlags> flags)
    {
       var builder = new ExpressionBuilder(flags);
@@ -1855,7 +1870,7 @@ public static class ParserFunctions
       }
       else if (state.Scan(@"^(\s*)(return)(\s*)", Color.Whitespace, Color.Keyword, Color.Whitespace))
       {
-         return getSingleLineBlock(state, nil);
+         return getSingleLineBlock(state);
       }
       else
       {
