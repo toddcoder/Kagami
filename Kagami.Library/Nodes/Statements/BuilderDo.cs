@@ -12,14 +12,16 @@ public class BuilderDo(BuilderState builderState, Block block) : BuilderStatemen
       Prefix(builder);
 
       var tryLabel = newLabel("try");
+      var successLabel = newLabel("success");
       var errorLabel = newLabel("error");
       var endLabel = newLabel("end");
 
-      builder.TryBegin(endLabel);
+      builder.TryBegin(successLabel);
       builder.SetErrorHandler(errorLabel);
       block.Generate(builder);
       builder.Label(tryLabel);
       builder.PopTryFrame();
+      builder.Label(successLabel);
       Assign(builder, KUnit.Value);
       builder.GoTo(endLabel);
 
@@ -30,5 +32,5 @@ public class BuilderDo(BuilderState builderState, Block block) : BuilderStatemen
       builder.NoOp();
    }
 
-   public override string ToString() => $"do {{{block}}} [builder]";
+   public override string ToString() => $"exec {{{block}}} [builder]";
 }

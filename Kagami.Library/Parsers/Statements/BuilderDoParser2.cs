@@ -38,4 +38,6 @@ public partial class BuilderDoParser2(BuilderState builderState) : StatementPars
          return _scanned.Exception;
       }
    }
+
+   public override string ToString() => "exec";
 }
