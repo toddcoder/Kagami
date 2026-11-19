@@ -1,8 +1,8 @@
 ﻿#pragma ALLOW_PRINT_STATEMENT true
 
 builder set5(a array, i int) {
-	let arr = a
-	exec arr[i] = 'N'
+	let arr = !a
+	do arr[i] = 'N'
 	return arr
 }
 
